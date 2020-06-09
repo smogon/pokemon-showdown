@@ -14,7 +14,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
+
 		if (species.battleOnly && typeof species.battleOnly === 'string') forme = species.battleOnly;
+
+		if (species.cosmeticFormes) {
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
+		}
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool = [];
@@ -143,7 +148,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (!counter.setupType) rejected = true;
 					break;
 				case 'rest':
-					if (movePool.includes('sleeptalk') || !hasMove['sleeptalk'] && movePool.includes('curse')) rejected = true;
+					if (movePool.includes('sleeptalk')) rejected = true;
+					if (!hasMove['sleeptalk'] && (!!counter['recovery'] || movePool.includes('curse'))) rejected = true;
 					break;
 				case 'solarbeam':
 					if (!hasMove['sunnyday']) rejected = true;
@@ -196,9 +202,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				case 'morningsun':
 					if (counter['speedsetup'] >= 1) rejected = true;
 					break;
-				case 'overheat':
-					if (hasMove['substitute']) rejected = true;
-					break;
 				case 'quickattack':
 					if (!!counter['speedsetup'] || hasMove['substitute'] || !hasType['Normal'] && !!counter.Status) rejected = true;
 					break;
@@ -222,7 +225,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'toxic':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['raindance'] || hasMove['substitute']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['endure'] || hasMove['raindance'] || hasMove['substitute']) rejected = true;
 					if (hasMove['hypnosis'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'trick':
@@ -249,6 +252,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				case 'flamethrower':
 					if (hasMove['fireblast'] && !counter.Status) rejected = true;
 					break;
+				case 'overheat':
+					if (hasMove['flamethrower'] || hasMove['substitute']) rejected = true;
+					break;
 				case 'hydropump':
 					if (hasMove['surf'] && !!counter.Status) rejected = true;
 					break;
@@ -263,7 +269,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (!hasType[move.type] && (hasMove['substitute'] || hasMove['toxic'] || hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
-					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
+					if (hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))) rejected = true;
 					if ((hasMove['endure'] || hasMove['substitute']) && hasMove['reversal']) rejected = true;
 					break;
 				case 'earthquake':
@@ -415,7 +421,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		} else if ((hasMove['bellydrum'] && counter.Physical - counter['priority'] > 1) || (hasMove['swordsdance'] && counter.Status < 2)) {
 			item = 'Salac Berry';
 		} else if (hasMove['endure'] || (hasMove['substitute'] && (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']))) {
-			item = (species.baseStats.spe < 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
+			item = (species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
 			item = 'Petaya Berry';
 		} else if (counter.Physical >= 4) {

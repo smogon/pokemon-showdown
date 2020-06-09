@@ -5,7 +5,7 @@
  * Written by mia-pi, with some code / design concepts from Asheviere.
  */
 
-import * as https from 'https';
+import {Net} from '../../lib/net';
 import {FS} from '../../lib/fs';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
@@ -21,21 +21,18 @@ try {
 
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
+	intervalTime: number;
 	constructor() {
 		this.interval = null;
+		this.intervalTime = 0;
 	}
-	async getChannelData(channel: string, username?: string) {
-		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(channel)}&key=${Config.youtubeKey}`;
-		const query = new Promise((resolve, reject) => {
-			https.get(queryUrl, res => {
-				const data: string[] = [];
-				res.setEncoding('utf8');
-				res.on('data', chunk => data.push(chunk));
-				res.on('end', () => resolve(JSON.parse(data.join(''))));
-			}).on('error', reject);
-		});
-		const res: any = await query.catch(() => {});
-		if (!res) return null;
+	async getChannelData(link: string, username?: string) {
+		const id = this.getId(link);
+		if (!id) return null;
+		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
+		const raw = await Net(queryUrl).get();
+		const res = JSON.parse(raw);
+		if (!res || !res.items) return null;
 		const data = res.items[0];
 		const cache = {
 			name: data.snippet.title,
@@ -47,11 +44,13 @@ export class YoutubeInterface {
 			views: Number(data.statistics.viewCount),
 			username: username,
 		};
-		channelData[channel] = {...cache};
+		channelData[id] = {...cache};
 		FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 		return cache;
 	}
-	async generateChannelDisplay(id: string) {
+	async generateChannelDisplay(link: string) {
+		const id = this.getId(link);
+		if (!id) return;
 		// url isn't needed but it destructures wrong without it
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const {name, description, url, icon, videos, subs, views, username} = await this.get(id);
@@ -97,19 +96,29 @@ export class YoutubeInterface {
 		}
 		return channel;
 	}
-	async generateVideoDisplay(link: string) {
-		let [, id] = link.split('v=');
+	getId(link: string) {
+		let id;
+		if (channelData[link]) return link;
+		if (!link.includes('channel')) {
+			if (link.includes('youtube')) {
+				id = link.split('v=')[1];
+			} else if (link.includes('youtu.be')) {
+				id = link.split('/')[3];
+			} else {
+				return null;
+			}
+		} else {
+			id = link.split('channel/')[1];
+		}
 		if (id.includes('&')) id = id.split('&')[0];
+		return id;
+	}
+	async generateVideoDisplay(link: string) {
+		const id = this.getId(link);
+		if (!id) return null;
 		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const query = new Promise((resolve, reject) => {
-			https.get(queryUrl, res => {
-				const data: string[] = [];
-				res.setEncoding('utf8');
-				res.on('data', chunk => data.push(chunk));
-				res.on('end', () => resolve(JSON.parse(data.join(''))));
-			}).on('error', reject);
-		});
-		const res: any = await query.catch(() => {});
+		const raw = await Net(queryUrl).get();
+		const res = JSON.parse(raw);
 		if (!res.items) return;
 		const video = res.items[0];
 		const info = {
@@ -133,47 +142,29 @@ export class YoutubeInterface {
 		buf += `#white;width:100%;border-bottom:0px;vertical-align:top;">`;
 		buf += `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `${info.likes} likes | ${info.dislikes} dislikes | ${info.views} video views<br><br>`;
-		buf += `<small>Published on ${info.date} | ID: ${id}</small></p>`;
+		buf += `<small>Published on ${info.date} | ID: ${id}</small><br>Uploaded by: ${info.channel}</p>`;
 		buf += `<br><details><summary>Video Description</p></summary>`;
 		buf += `<p style="background: #e22828;max-width:500px;padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `<i>${info.description.slice(0, 400).replace(/\n/g, ' ')}${info.description.length > 400 ? '(...)' : ''}</p><i></details></td>`;
 		return buf;
-	}
-	randomize() {
-		const rearranged: string[] = [];
-		const keys = Object.keys(channelData);
-		while (keys.length > 1) {
-			const item = keys[Math.floor(Math.random() * keys.length)];
-			if (rearranged.includes(item)) continue;
-			const index = keys.indexOf(item);
-			if (index > -1) {
-				keys.splice(index, 1);
-			}
-			rearranged.push(item);
-		}
-		if (rearranged.length !== keys.length) {
-			for (const key of keys) {
-				if (!rearranged.includes(key)) rearranged.push(key);
-			}
-		}
-		return rearranged;
 	}
 }
 
 const YouTube = new YoutubeInterface();
 
 export const commands: ChatCommands = {
-	randchannel(target, room, user) {
+	async randchannel(target, room, user) {
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+		if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 		this.runBroadcast();
+		const data = await YouTube.randChannel();
+		if (!data) return this.errorReply(`Error in getting channel data.`);
 		if (this.broadcasting) {
 			if (!this.can('broadcast', null, room)) return false;
-			return YouTube.randChannel().then(res => {
-				this.addBox(res);
-				room.update();
-			});
+			this.addBox(data);
+			room.update();
 		} else {
-			return YouTube.randChannel().then(res => this.sendReplyBox(res));
+			return this.sendReplyBox(data);
 		}
 	},
 	randchannelhelp: [`/randchannel - View data of a random channel from the YouTube database.`],
@@ -182,17 +173,16 @@ export const commands: ChatCommands = {
 	youtube: {
 		async addchannel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			let [id, name] = target.split(',');
-			if (id.includes('youtu')) id = id.split('channel/')[1];
+			const [id, name] = target.split(',');
 			if (!id) return this.errorReply('Specify a channel ID.');
-			if (!(await YouTube.getChannelData(id, name))) {
+			const data = await YouTube.getChannelData(id, name);
+			if (!data) {
 				return this.errorReply(`Error in retrieving channel data.`);
 			}
 			this.modlog('ADDCHANNEL', null, `${id} ${name ? `username: ${name}` : ''}`);
-			this.privateModAction(`(${user.name} added channel with ID ${id} to the random channel pool.)`);
-			return this.sendReply(`Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.`);
+			return this.privateModAction(`(Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.)`);
 		},
-		addchannelhelp: [`/addchannel - Add channel data to the Youtube database. Requires: % @ # ~`],
+		addchannelhelp: [`/addchannel - Add channel data to the YouTube database. Requires: % @ #`],
 
 		removechannel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
@@ -204,20 +194,20 @@ export const commands: ChatCommands = {
 			this.privateModAction(`(${user.name} deleted channel with ID or name ${target}.)`);
 			return this.modlog(`REMOVECHANNEL`, null, id);
 		},
-		removechannelhelp: [`/youtube removechannel - Delete channel data from the YouTube database. Requires: % @ # ~`],
+		removechannelhelp: [`/youtube removechannel - Delete channel data from the YouTube database. Requires: % @ #`],
 
-		channel(target, room, user) {
+		async channel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			const channel = YouTube.channelSearch(target);
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
+			const data = await YouTube.generateChannelDisplay(channel);
+			if (!data) return this.errorReply(`Error in getting channel data.`);
 			this.runBroadcast();
 			if (this.broadcasting) {
-				return YouTube.generateChannelDisplay(channel).then(res => {
-					this.addBox(res);
-					room.update();
-				});
+				this.addBox(data);
+				return room.update();
 			} else {
-				return YouTube.generateChannelDisplay(channel).then(res => this.sendReplyBox(res));
+				return this.sendReplyBox(data);
 			}
 		},
 		channelhelp: [
@@ -227,7 +217,7 @@ export const commands: ChatCommands = {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!target) return this.errorReply(`Provide a valid youtube link.`);
 			const html = await YouTube.generateVideoDisplay(target);
-			if (!html) return this.errorReply(`No such video found.`);
+			if (!html) return this.errorReply(`This url is invalid. Please use a youtu.be link or a youtube.com link.`);
 			this.runBroadcast();
 			if (this.broadcasting) {
 				this.addBox(html);
@@ -258,21 +248,28 @@ export const commands: ChatCommands = {
 			this.privateModAction(`(${user.name} updated channel ${id}'s username to ${name}.)`);
 			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 		},
-		repeat(target, room, user) {
+		interval: 'repeat',
+		async repeat(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('declare', null, room)) return false;
-			if (!target || isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
+			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime)}.`);
+			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
+			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
 			let interval = Number(target);
 			if (interval < 10) return this.errorReply(`${interval} is too low - set it above 10 minutes.`);
 			interval = interval * 60 * 1000;
+			const channel = await YouTube.randChannel();
+			// no channels
+			if (!channel) return this.errorReply(`Error in getting channel data.`);
+			YouTube.intervalTime = interval;
 			if (YouTube.interval) clearInterval(YouTube.interval);
-			YouTube.interval = setInterval(
-				() => void YouTube.randChannel().then(data => {
-					this.addBox(data);
+			YouTube.interval = setInterval(() => {
+				void (async () => {
+					const res = await YouTube.randChannel();
+					this.addBox(res!);
 					room.update();
-				}),
-				interval
-			);
+				})();
+			 }, interval);
 			this.privateModAction(`(${user.name} set a randchannel interval to ${target} minutes)`);
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
 		},
@@ -281,12 +278,12 @@ export const commands: ChatCommands = {
 	youtubehelp: [
 		`YouTube commands:`,
 		`/randchannel - View data of a random channel from the YouTube database.`,
-		`/youtube addchannel [channel[- Add channel data to the Youtube database. Requires: % @ # ~`,
-		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ # ~`,
+		`/youtube addchannel [channel] - Add channel data to the YouTube database. Requires: % @ #`,
+		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ #`,
 		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,
 		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
-		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ # ~`,
-		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # & ~`,
+		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ #`,
+		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # &`,
 	],
 };
 
@@ -294,13 +291,15 @@ export const pages: PageTable = {
 	async channels(args, user) {
 		const all = toID(args[0]) === 'all';
 		this.title = `[Channels] ${all ? 'All' : ''}`;
-		let buffer = `<div class="pad"><h4>Channels in the Youtube database:`;
-		buffer += `<button class="button" name="send" value="/join view-channels${all ? '-all' : ''}"" style="float: right">`;
-		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
+		let buffer = `<div class="pad"><h4>Channels in the YouTube database:`;
 		if (all) buffer += `(All)`;
+		buffer += `<br/ ><button class="button" name="send" value="/join view-channels${all ? '' : '-all'}"">`;
+		buffer += `<i class="fa fa-refresh"></i>${all ? 'Usernames only' : 'All channels'}</button>`;
+		buffer += `<button class="button" name="send" value="/join view-channels${all ? '-all' : ''}"">`;
+		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		buffer += `</h4><hr />`;
 		const isStaff = user.can('mute', null, Rooms.get('youtube'));
-		for (const id of YouTube.randomize()) {
+		for (const id of Dex.shuffle(Object.keys(channelData))) {
 			const name = YouTube.get(id).name;
 			const psid = YouTube.get(id).username;
 			if (!all && !psid) continue;

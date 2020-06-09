@@ -535,7 +535,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.settings.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(user);
 			}
 		}
@@ -595,7 +595,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.settings.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(userid);
 			}
 		}
@@ -1325,8 +1325,8 @@ export const Punishments = new class {
 
 		for (const curRoom of Rooms.global.chatRooms) {
 			if (
-				!curRoom || curRoom.isPrivate === true ||
-				(options.publicOnly && (curRoom.isPersonal || curRoom.battle))
+				!curRoom || curRoom.settings.isPrivate === true ||
+				(options.publicOnly && (curRoom.settings.isPersonal || curRoom.battle))
 			) continue;
 			let punishment = Punishments.roomUserids.nestedGet(curRoom.roomid, userid);
 			if (punishment) {
@@ -1478,7 +1478,7 @@ export const Punishments = new class {
 				if (typeof user !== 'string') {
 					(user as User).popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
-						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
+						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
 						`Your lock will expire in a few days.`
 					);
 				}

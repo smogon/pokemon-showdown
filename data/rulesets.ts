@@ -301,16 +301,21 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		},
 		onStart() {
 			// @ts-ignore
-			this.format.teamLength = {battle: 1};
+			if (this.format.gameType === 'singles') this.format.teamLength = {battle: 1};
 		},
 	},
 	twovstwo: {
 		effectType: 'Rule',
 		name: 'Two vs Two',
 		desc: "Only allows two Pok&eacute;mon in battle",
+		onValidateTeam(team, format) {
+			if (format.gameType === 'triples') {
+				return [`Two vs Two is for non-triples formats.`];
+			}
+		},
 		onStart() {
 			// @ts-ignore
-			this.format.teamLength = {battle: 2};
+			if (this.format.gameType !== 'triples') this.format.teamLength = {battle: 2};
 		},
 	},
 	littlecup: {
@@ -322,8 +327,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 			if (species.prevo && this.dex.getSpecies(species.prevo).gen <= this.gen) {
 				return [set.species + " isn't the first in its evolution family."];
 			}
-			const futureGenEvo = species.evos && this.dex.getSpecies(species.evos[0]).gen > this.gen;
-			if (!species.nfe || futureGenEvo) {
+			if (!species.nfe) {
 				return [set.species + " doesn't have an evolution family."];
 			}
 			// Temporary hack for LC past-gen formats and other mashups
@@ -869,6 +873,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		onBegin() {
 			this.add('rule', 'Inverse Mod: Weaknesses become resistances, while resistances and immunities become weaknesses.');
 		},
+		onEffectivenessPriority: 1,
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
@@ -930,8 +935,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Bans all NFE Pokemon",
 		onValidateSet(set) {
 			const species = this.dex.getSpecies(set.species || set.name);
-			const feInCurrentGen = species.evos && this.dex.getSpecies(species.evos[0]).gen > this.gen;
-			if (species.nfe && !feInCurrentGen) {
+			if (species.nfe) {
 				if (this.ruleTable.has(`+pokemon:${species.id}`)) return;
 				return [`${set.species} is banned due to NFE Clause.`];
 			}

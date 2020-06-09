@@ -36,14 +36,11 @@ export class Jeopardy extends Rooms.RoomGame {
 	order: string[];
 	points: Map<JeopardyGamePlayer, number>;
 	finals: boolean;
+	gameNumber: number;
 
 	constructor(room: ChatRoom | GameRoom, user: User, categoryCount: number, questionCount: number) {
 		super(room);
-		if (room.gameNumber) {
-			room.gameNumber++;
-		} else {
-			room.gameNumber = 1;
-		}
+		this.gameNumber = room.nextGameNumber();
 		this.playerTable = Object.create(null);
 		this.host = user;
 		this.allowRenames = true;
@@ -181,16 +178,16 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	display() {
-		this.room.add(`|uhtml|jeopardy${this.room.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+		this.room.add(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 	}
 
 	update(dontMove = false) {
 		if (dontMove) {
-			this.room.uhtmlchange(`jeopardy${this.room.gameNumber}-${this.numUpdates}`, this.getGrid());
+			this.room.add(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		} else {
-			this.room.uhtmlchange(`jeopardy${this.room.gameNumber}-${this.numUpdates}`, '');
+			this.room.add(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|`);
 			this.numUpdates++;
-			this.room.add(`|uhtml|jeopardy${this.room.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.add(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		}
 	}
 
@@ -567,28 +564,22 @@ export const commands: ChatCommands = {
 		off: 'disable',
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.jeopardyDisabled) {
+			if (room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already disabled in this room.");
 			}
-			room.jeopardyDisabled = true;
-			if (room.chatRoomData) {
-				room.chatRoomData.jeopardyDisabled = true;
-				Rooms.global.writeChatRoomData();
-			}
+			room.settings.jeopardyDisabled = true;
+			room.saveSettings();
 			return this.sendReply("Jeopardy has been disabled for this room.");
 		},
 
 		on: 'enable',
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.jeopardyDisabled) {
+			if (!room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already enabled in this room.");
 			}
-			delete room.jeopardyDisabled;
-			if (room.chatRoomData) {
-				delete room.chatRoomData.jeopardyDisabled;
-				Rooms.global.writeChatRoomData();
-			}
+			delete room.settings.jeopardyDisabled;
+			room.saveSettings();
 			return this.sendReply("Jeopardy has been enabled for this room.");
 		},
 
@@ -866,8 +857,8 @@ export const commands: ChatCommands = {
 		},
 	},
 	jeopardyhelp: [
-		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # & ~`,
-		`/jp end - End the current game of Jeopardy. Requires: % @ # & ~`,
+		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # &`,
+		`/jp end - End the current game of Jeopardy. Requires: % @ # &`,
 		`/jp start - Start the game of Jeopardy. Must be the host.`,
 		`/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.`,
 		`/jp category [Category Number], [Category Name] - Set a specific category of the jeopardy game. Must be the host.`,
@@ -893,7 +884,7 @@ export const roomSettings: SettingsHandler = room => ({
 	label: "Jeopardy",
 	permission: 'editroom',
 	options: [
-		[`disabled`, room.jeopardyDisabled || 'jeopardy disable'],
-		[`enabled`, !room.jeopardyDisabled || 'jeopardy enable'],
+		[`disabled`, room.settings.jeopardyDisabled || 'jeopardy disable'],
+		[`enabled`, !room.settings.jeopardyDisabled || 'jeopardy enable'],
 	],
 });

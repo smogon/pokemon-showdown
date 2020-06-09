@@ -8,7 +8,7 @@ import {Dex} from './dex';
 global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
-import {Pokemon, EffectState} from './pokemon';
+import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
@@ -147,6 +147,7 @@ export class Battle {
 
 		this.zMoveTable = {};
 		this.maxMoveTable = {};
+		this.trunc = this.dex.trunc;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
@@ -210,7 +211,6 @@ export class Battle {
 		this.SILENT_FAIL = null;
 
 		this.send = options.send || (() => {});
-		this.trunc = this.dex.trunc;
 
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
@@ -1077,12 +1077,16 @@ export class Battle {
 			side.activeRequest = null;
 		}
 
-		const maxTeamSize = this.getMaxTeamSize();
+		const teamLengthData = this.format.teamLength;
+		const maxTeamSize = teamLengthData?.battle;
 		if (type === 'teampreview') {
-			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
+			// Send the specified team size to the client even if it's our
+			// default team size of 6 as this means that the format wants
+			// the user to select the team order instead of just their lead.
+			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
 		}
 
-		const requests = this.getRequests(type, maxTeamSize);
+		const requests = this.getRequests(type, maxTeamSize || 6);
 		for (let i = 0; i < this.sides.length; i++) {
 			this.sides[i].emitRequest(requests[i]);
 		}
@@ -1521,7 +1525,7 @@ export class Battle {
 	private maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
-		if (!this.ruleTable.has('endlessbattleclause')) return;
+		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1558,26 +1562,26 @@ export class Battle {
 		// Endless Battle Clause activates - we determine the winner by looking at each side's sets.
 		const losers: Side[] = [];
 		for (const side of this.sides) {
-			let leppa = false; // Leppa Berry
+			let berry = false; // Restorative Berry
 			let cycle = false; // Harvest or Recycle
 			for (const pokemon of side.pokemon) {
-				if (toID(pokemon.set.item) === 'leppaberry') leppa = true;
+				berry = RESTORATIVE_BERRIES.has(toID(pokemon.set.item));
 				if (['harvest', 'pickup'].includes(toID(pokemon.set.ability)) ||
 					pokemon.set.moves.map(toID).includes('recycle' as ID)) {
 					cycle = true;
 				}
-				if (leppa && cycle) break;
+				if (berry && cycle) break;
 			}
-			if (leppa && cycle) losers.push(side);
+			if (berry && cycle) losers.push(side);
 		}
 
 		if (losers.length === 1) {
 			const loser = losers[0];
-			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform Leppa Berry cycling and thus loses.`);
+			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform restorative berry-cycling and thus loses.`);
 			return this.win(loser.foe);
 		}
 		if (losers.length === this.sides.length) {
-			this.add('-message', `Each side's team started with the rudimentary means to perform Leppa Berry cycling.`);
+			this.add('-message', `Each side's team started with the rudimentary means to perform restorative berry-cycling.`);
 		}
 
 		return this.tie();
@@ -1611,7 +1615,6 @@ export class Battle {
 		}
 
 		if (format.onBegin) format.onBegin.call(this);
-		if (format.trunc) this.trunc = format.trunc;
 		for (const rule of this.ruleTable.keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			const subFormat = this.dex.getFormat(rule);
@@ -1637,8 +1640,6 @@ export class Battle {
 
 	restart(send?: (type: string, data: string | string[]) => void) {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
-
-		if (this.format.trunc) this.trunc = this.format.trunc;
 
 		// @ts-ignore - readonly
 		this.send = send;

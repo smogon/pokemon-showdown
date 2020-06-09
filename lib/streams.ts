@@ -415,12 +415,40 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 	nodeWritableStream: NodeJS.WritableStream | null;
 	drainListeners: (() => void)[];
 
-	constructor(options = {}) {
+	constructor(options: AnyObject = {}) {
 		super(options);
 		this.isReadable = true;
 		this.isWritable = true;
 		this.nodeWritableStream = null;
 		this.drainListeners = [];
+
+		if (options.nodeStream) {
+			const nodeStream: NodeJS.WritableStream = options.nodeStream;
+			this.nodeWritableStream = nodeStream;
+			options.write = function (data: string | Buffer) {
+				const result = this.nodeWritableStream!.write(data);
+				if (result !== false) return undefined;
+				if (!this.drainListeners.length) {
+					this.nodeWritableStream!.once('drain', () => {
+						for (const listener of this.drainListeners) listener();
+						this.drainListeners = [];
+					});
+				}
+				return new Promise(resolve => {
+					this.drainListeners.push(resolve);
+				});
+			};
+			// Prior to Node v10.12.0, attempting to close STDOUT or STDERR will throw
+			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
+				options.end = function () {
+					return new Promise(resolve => {
+						this.nodeWritableStream!.end(() => resolve());
+					});
+				};
+			}
+		}
+		if (options.write) this._write = options.write;
+		if (options.end) this._end = options.end;
 	}
 
 	write(chunk: Buffer | string): Promise<void> | void {
@@ -440,7 +468,7 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 	 * because it's valid for the read stream buffer to be filled only by
 	 * `_write`.
 	 */
-	_read() {}
+	_read(size?: number) {}
 
 	_end(): void | Promise<void> {}
 
@@ -497,7 +525,7 @@ export class ObjectReadStream<T> {
 				this.nodeReadableStream!.resume();
 			};
 
-			options.pause = function (this: ReadStream, unusedBytes: number) {
+			options.pause = function (this: ReadStream) {
 				this.nodeReadableStream!.pause();
 			};
 		}
@@ -760,11 +788,11 @@ export function stdout() {
 
 export function stdpipe(stream: WriteStream | ReadStream | ReadWriteStream) {
 	const promises = [];
-	if ('pipeTo' in stream) {
-		promises.push(stream.pipeTo(stdout()));
+	if ((stream as ReadStream | WriteStream & {pipeTo: undefined}).pipeTo) {
+		promises.push((stream as ReadStream).pipeTo(stdout()));
 	}
-	if ('write' in stream) {
-		promises.push(stdin().pipeTo(stream));
+	if ((stream as WriteStream | ReadStream & {write: undefined}).write) {
+		promises.push(stdin().pipeTo(stream as WriteStream));
 	}
 	return Promise.all(promises);
 }

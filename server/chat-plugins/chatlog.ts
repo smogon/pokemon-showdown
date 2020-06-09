@@ -13,6 +13,7 @@ import * as Dashycode from '../../lib/dashycode';
 
 const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
+const MAX_RESULTS = 3000;
 
 class LogReaderRoom {
 	roomid: RoomID;
@@ -75,7 +76,7 @@ const LogReader = new class {
 			const room = Rooms.get(roomid);
 			const forceShow = room && (
 				// you are authed in the room
-				(room.auth && user.id in room.auth && user.can('mute', null, room)) ||
+				(room.auth.has(user.id) && user.can('mute', null, room)) ||
 				// you are staff and currently in the room
 				(isStaff && user.inRooms.has(room.roomid))
 			);
@@ -83,7 +84,7 @@ const LogReader = new class {
 				if (!isStaff) continue;
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
-				if (room.isPrivate === true) continue;
+				if (room.settings.isPrivate === true) continue;
 			}
 
 			atLeastOne = true;
@@ -94,11 +95,11 @@ const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.isOfficial) {
+			} else if (room.settings.isOfficial) {
 				official.push(roomid);
-			} else if (!room.isPrivate) {
+			} else if (!room.settings.isPrivate) {
 				normal.push(roomid);
-			} else if (room.isPrivate === 'hidden') {
+			} else if (room.settings.isPrivate === 'hidden') {
 				hidden.push(roomid);
 			} else {
 				secret.push(roomid);
@@ -109,12 +110,24 @@ const LogReader = new class {
 		return {official, normal, hidden, secret, deleted, personal, deletedPersonal};
 	}
 
-	async read(roomid: RoomID, day: string) {
-		const month = day.slice(0, -3);
-		const log = FS(`logs/chat/${roomid}/${month}/${day}.txt`);
-		if (!await log.exists()) return null;
-		const text = await log.read();
-		return text;
+	async read(roomid: RoomID, day: string, limit: number) {
+		const roomLog = await LogReader.get(roomid);
+		const stream = await roomLog!.getLog(day);
+		let buf = '';
+		let i = LogViewer.results || 0;
+		if (!stream) {
+			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
+		} else {
+			let line;
+			while ((line = await stream.readLine()) !== null && i < limit) {
+				const rendered = LogViewer.renderLine(line);
+				if (rendered) {
+					buf += `${line}\n`;
+					i++;
+				}
+			}
+		}
+		return buf;
 	}
 
 	getMonth(day: string) {
@@ -143,6 +156,10 @@ const LogReader = new class {
 };
 
 export const LogViewer = new class {
+	results: number;
+	constructor() {
+		this.results = 0;
+	}
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -180,26 +197,31 @@ export const LogViewer = new class {
 		return this.linkify(buf);
 	}
 
-	renderDayResults(results: {[day: string]: SearchMatch[]}) {
-		const renderResult = (match: SearchMatch) => (
-			this.renderLine(match[0]) +
-			this.renderLine(match[1]) +
-			`<div class="chat chatmessage highlighted">${this.renderLine(match[2])}</div>` +
-			this.renderLine(match[3]) +
-			this.renderLine(match[4])
-		);
+	renderDayResults(results: {[day: string]: SearchMatch[]}, roomid: RoomID) {
+		const renderResult = (match: SearchMatch) => {
+			this.results++;
+			return (
+				this.renderLine(match[0]) +
+				this.renderLine(match[1]) +
+				`<div class="chat chatmessage highlighted">${this.renderLine(match[2])}</div>` +
+				this.renderLine(match[3]) +
+				this.renderLine(match[4])
+			);
+		};
+
 		let buf = ``;
 		for (const day in results) {
 			const dayResults = results[day];
 			const plural = dayResults.length !== 1 ? "es" : "";
-			buf += `<details><summary>${dayResults.length} match${plural} on ${day}</summary><br /><hr />`;
-			buf += `<p>${dayResults.map(result => renderResult(result)).join(`<hr />`)}</p>`;
+			buf += `<details><summary>${dayResults.length} match${plural} on `;
+			buf += `<a href="view-chatlog-${roomid}--${day}">${day}</a></summary><br /><hr />`;
+			buf += `<p>${dayResults.filter(Boolean).map(result => renderResult(result)).join(`<hr />`)}</p>`;
 			buf += `</details><hr />`;
 		}
 		return buf;
 	}
 
-	async searchMonth(roomid: RoomID, month: string, search: string, limit?: number | null, year = false) {
+	async searchMonth(roomid: RoomID, month: string, search: string, limit: number, year = false) {
 		const {results, total} = await LogSearcher.fsSearchMonth(roomid, month, search, limit);
 		if (!total) {
 			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
@@ -208,36 +230,43 @@ export const LogViewer = new class {
 		let buf = (
 			`<br><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr>`
 		);
-		buf += this.renderDayResults(results);
-		if (limit && total > limit) {
+		buf += this.renderDayResults(results, roomid);
+		if (total > limit) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
 			buf += `<br><div style="text-align:center">`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
+			if (total < MAX_RESULTS) {
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
+			}
 		}
 		buf += `</div>`;
+		this.results = 0;
 		return buf;
 	}
 
-	async searchYear(roomid: RoomID, year: string | null, search: string, limit?: number | null) {
+	async searchYear(roomid: RoomID, year: string | null, search: string, limit: number) {
 		const {results, total} = await LogSearcher.fsSearchYear(roomid, year, search, limit);
 		if (!total) {
 			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
 		}
 		let buf = '';
 		if (year) {
-			buf += `<strong><br>Searching year: ${year}: </strong><hr>`;
+			buf += `<div class="pad"><strong><br>Searching year: ${year}: </strong><hr>`;
 		}	else {
-			buf += `<strong><br>Searching all logs: </strong><hr>`;
+			buf += `<div class="pad"><strong><br>Searching all logs: </strong><hr>`;
 		}
-		buf += this.renderDayResults(results);
-		if (limit && total > limit) {
-			// cap has been met in a previous loop, add the buttons and break.
-			buf += `<br /><div style="text-align:center">`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
+		buf += this.renderDayResults(results, roomid);
+		if (total > limit) {
+			// cap is met
+			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><div style="text-align:center">`;
+			if (total < MAX_RESULTS) {
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
+			}
 		}
+		this.results = 0;
 		return buf;
 	}
 
@@ -403,11 +432,11 @@ export const LogViewer = new class {
 type SearchMatch = readonly [string, string, string, string, string];
 
 const LogSearcher = new class {
-	fsSearch(roomid: RoomID, search: string, date: string, limit?: number | null) {
+	fsSearch(roomid: RoomID, search: string, date: string, limit: number | null) {
 		const isAll = (date === 'all');
-		const isYear = (date.length < 0 && date.length > 7);
+		const isYear = (date.length === 4);
 		const isMonth = (date.length === 7);
-
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		if (isAll) {
 			return LogViewer.searchYear(roomid, null, search, limit);
 		} else if (isYear) {
@@ -422,7 +451,8 @@ const LogSearcher = new class {
 	}
 
 	async fsSearchDay(roomid: RoomID, day: string, search: string, limit?: number | null) {
-		const text = await LogReader.read(roomid, day);
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
+		const text = await LogReader.read(roomid, day, limit);
 		if (!text) return [];
 		const lines = text.split('\n');
 		const matches: SearchMatch[] = [];
@@ -442,13 +472,14 @@ const LogSearcher = new class {
 					lines[i + 1],
 					lines[i + 2],
 				]);
-				if (limit && matches.length > limit) break;
+				if (matches.length > limit) break;
 			}
 		}
 		return matches;
 	}
 
-	async fsSearchMonth(roomid: RoomID, month: string, search: string, limit?: number | null) {
+	async fsSearchMonth(roomid: RoomID, month: string, search: string, limit: number) {
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const log = await LogReader.get(roomid);
 		if (!log) return {results: {}, total: 0};
 		const days = await log.listDays(month);
@@ -460,50 +491,60 @@ const LogSearcher = new class {
 			if (!dayResults.length) continue;
 			total += dayResults.length;
 			results[day] = dayResults;
-			if (limit && total > limit) break;
+			if (total > limit) break;
 		}
 		return {results, total};
 	}
 
 	/** pass a null `year` to search all-time */
 	async fsSearchYear(roomid: RoomID, year: string | null, search: string, limit?: number | null) {
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const log = await LogReader.get(roomid);
 		if (!log) return {results: {}, total: 0};
-		const months = await log.listMonths();
+		let months = await log.listMonths();
+		months = months.reverse();
 		const results: {[k: string]: SearchMatch[]} = {};
 		let total = 0;
 
 		for (const month of months) {
 			if (year && !month.includes(year)) continue;
-			const monthSearch = await this.fsSearchMonth(roomid, month, search, limit ? limit - total : null);
+			const monthSearch = await this.fsSearchMonth(roomid, month, search, limit);
 			const {results: monthResults, total: monthTotal} = monthSearch;
 			if (!monthTotal) continue;
 			total += monthTotal;
 			Object.assign(results, monthResults);
-			if (limit && total > limit) break;
+			if (total > limit) break;
 		}
 		return {results, total};
 	}
 
 	async ripgrepSearch(roomid: RoomID, search: string, limit?: number | null) {
 		let output;
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		try {
 			const options = [
 				'-e', `[^a-zA-Z0-9]${search.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`,
 				`${__dirname}/../../logs/chat/${roomid}`,
 				'-C', '3',
+				'-m', `${limit}`,
 			];
 			output = await execFile('rg', options, {maxBuffer: Infinity, cwd: path.normalize(`${__dirname}/../`)});
 		} catch (error) {
 			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
 			return LogViewer.error(`${error.message}`);
 		}
-		return this.render(output.stdout.split('--'), roomid, search, limit);
+		return this.render(
+			output.stdout.split('--').reverse(),
+			roomid,
+			search,
+			limit
+		);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, limit?: number | null) {
+	render(results: string[], roomid: RoomID, search: string, limit: number) {
 		const exactMatches = [];
 		let curDate = '';
+		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const searchRegex = new RegExp(search, "i");
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
@@ -528,7 +569,7 @@ const LogSearcher = new class {
 				if (matched.includes('chat chatmessage highlighted')) {
 					exactMatches.push(matched);
 				}
-				if (limit && exactMatches.length > limit) return null;
+				if (exactMatches.length > limit) return null;
 				return matched;
 			}).filter(Boolean).join(' ');
 			return section;
@@ -587,6 +628,7 @@ export const pages: PageTable = {
 			let [input, limitString] = opts.split('--limit-');
 			input = input.slice(7);
 			search = Dashycode.decode(input);
+			if (search.length < 3) return LogViewer.error(`Too short of a search query.`);
 			if (limitString) {
 				limit = parseInt(limitString) || null;
 			} else {
@@ -636,8 +678,9 @@ export const commands: ChatCommands = {
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
 		target = target.trim();
-		const [search, tarRoom, limit, date] = target.split(',');
+		const [search, tarRoom, limit, date] = target.split(',').map(str => str.trim());
 		if (!target) return this.parse('/help searchlogs');
+		if (search.length < 3) return this.errorReply(`Too short of a search query.`);
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		let limitString;
 		if (/^[0-9]+$/.test(limit)) {
@@ -660,6 +703,8 @@ export const commands: ChatCommands = {
 		"/searchlogs [search], [room], [cap], [date] - searches logs in the current room for [search].",
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
-		"Requires: % @ # & ~",
+		"The delimiter | can be used to space searching for multiple terms.",
+		"Date formatting is ISO formatting (YYYY-MM-DD.) E.g 2020-05, 2020, or `all`.",
+		"Requires: % @ # &",
 	],
 };

@@ -258,11 +258,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
-		onHit(target, source, move) {
+		onHit(target) {
 			if (target.side.active.length < 2) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (action) {
-				this.queue.prioritizeAction(action, move);
+				this.queue.prioritizeAction(action);
 				this.add('-activate', target, 'move: After You');
 			} else {
 				return false;
@@ -4627,6 +4627,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
 				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
+				if (target.side !== source.side) target.staleness = 'external';
 				return;
 			}
 			return false;
@@ -5580,7 +5581,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side.id !== source.side.id) {
+			if (success && target.side !== source.side) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -7880,7 +7881,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured.",
+		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		name: "Heal Bell",
 		pp: 5,
@@ -7891,7 +7892,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const side = pokemon.side;
 			let success = false;
 			for (const ally of side.pokemon) {
-				if (ally.hasAbility('soundproof')) continue;
+				if (ally !== source && ally.hasAbility('soundproof')) continue;
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
@@ -8026,7 +8027,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side.id !== source.side.id) {
+			if (success && target.side !== source.side) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -14016,7 +14017,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		category: "Physical",
 		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Parting Shot, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over; if an opponent faints from this, the replacement Pokemon does not become active until the end of the turn.",
-		shortDesc: "Power doubles if a foe is switching out.",
+		shortDesc: "If a foe is switching out, hits it at 2x power.",
 		isNonstandard: "Past",
 		name: "Pursuit",
 		pp: 20,
@@ -16120,6 +16121,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				target.ability = sourceAbility.id;
 				source.abilityData = {id: toID(source.ability), target: source};
 				target.abilityData = {id: toID(target.ability), target: target};
+				if (target.side !== source.side) target.staleness = 'external';
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
@@ -18454,11 +18456,12 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
+			onEffectivenessPriority: -2,
 			onEffectiveness(typeMod, target, type, move) {
+				if (move.type !== 'Fire') return;
 				if (!target) return;
-				if (move.type === 'Fire') {
-					return this.dex.getEffectiveness('Fire', target) + 1;
-				}
+				if (type !== target.getTypes()[0]) return;
+				return typeMod + 1;
 			},
 		},
 		boosts: {

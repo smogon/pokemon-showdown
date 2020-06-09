@@ -253,7 +253,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
-	 * Base list of rule names as specified in "./config/formats.js".
+	 * Base list of rule names as specified in "./config/formats.ts".
 	 * Used in a custom format to correctly display the altered ruleset.
 	 */
 	readonly baseRuleset: string[];
@@ -705,7 +705,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.evoType = data.evoType || undefined;
 		this.evoMove = data.evoMove || undefined;
 		this.evoLevel = data.evoLevel || undefined;
-		this.nfe = !!this.evos.length;
+		this.nfe = data.nfe || false;
 		this.eggGroups = data.eggGroups || [];
 		this.gender = data.gender || '';
 		this.genderRatio = data.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
