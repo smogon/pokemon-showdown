@@ -60,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'GET OFF MY LAWN!',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	Elgino: {
+		species: 'Celebi', ability: 'Magic Guard', item: 'Life Orb', gender: 'M',
+		moves: ['Leaf Storm', 'Nasty Plot', 'Power Gem'],
+		signatureMove: 'Navi\'s Grace',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+	},
 	Flare: {
 		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
 		moves: ['Earthquake', 'Knock Off', ['Play Rough', 'U-turn']],

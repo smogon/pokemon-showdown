@@ -180,6 +180,32 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Elgino
+	navisgrace: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "This move is super effective on Steel- and Poison-type Pokemon.",
+		shortDesc: "Super effective on Steel and Poison types.",
+		name: "Navi's Grace",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: null,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dazzling Gleam', target);
+			this.add('-anim', source, 'Earth Power', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Poison' || type === 'Steel') return 1;
+		},
+		target: 'normal',
+		type: 'Fairy',
+	},
+
 	// Flare
 	krisenbon: {
 		accuracy: 100,

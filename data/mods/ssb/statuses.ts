@@ -83,6 +83,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	elgino: {
+		noCopy: true,
+		onStart(target, pokemon) {
+			this.add(`c|${getName('Elgino')}|Time to save Hyrule!`);
+			if (pokemon.illusion) return;
+			this.add('-start', pokemon, 'typechange', 'Grass/Fairy');
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Elgino')}|Hold on I need to stock up on ${this.sample(['Bombs', 'Arrows', 'Magic', 'Seeds'])}`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Elgino')}|I'm out of fairies D:!`);
+		},
+	},
 	flare: {
 		noCopy: true,
 		onStart() {
