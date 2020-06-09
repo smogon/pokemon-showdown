@@ -118,9 +118,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Flare')}|Shunshin No Jutsu!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Flare')}|Sorry, things were initially better, but ¯\_(ツ)_/¯`);
-    },
-  },
+			this.add(`c|${getName('Flare')}|Sorry, things were initially better, but ¯\\_(ツ)_/¯`);
+		},
+	},
 	frostyicelad: {
 		noCopy: true,
 		onStart(source) {
@@ -499,7 +499,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	// Custom side condition to allow the ability to track what mon was last in for Darth's Ability.
 	tracker: {
 		onStart(source) {
-			let mon = source.active[0];
+			const mon = source.active[0];
 			if (mon.name !== 'Darth') {
 				this.effectData.storedTypes = mon.getTypes();
 			}

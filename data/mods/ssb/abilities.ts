@@ -78,10 +78,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const possibleTypes = [];
 			const newTypes = [];
-			let types = pokemon.side.sideConditions['tracker'].storedTypes;
+			const types = pokemon.side.sideConditions['tracker'].storedTypes;
 			for (const u in types) {
 				for (const type in this.dex.data.TypeChart) {
-					let typeCheck = this.dex.data.TypeChart[type].damageTaken[pokemon.side.sideConditions['tracker'].storedTypes[u]];
+					const typeCheck = this.dex.data.TypeChart[type].damageTaken[pokemon.side.sideConditions['tracker'].storedTypes[u]];
 					if (typeCheck === 2 || typeCheck === 3) {
 						possibleTypes.push(type);
 					}
@@ -96,7 +96,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 
 			if (!pokemon.setType(newTypes)) return;
 			this.add('-start', pokemon, 'typechange', newTypes.join('/'));
-		}
+		},
 	},
 
 	// drampa's grandpa
@@ -135,7 +135,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			this.boost({def: 1, spd: 1});
 		},
-  },
+	},
 
 	// Flare
 	permafrostarmor: {

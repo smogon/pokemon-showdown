@@ -129,13 +129,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(target, source) {
-				let mons = [];
+				const mons = [];
 				for (const foe of target.side.foe.pokemon) {
 					if (foe.m.identified) continue;
 					mons.push(foe);
 				}
 				if (mons.length < 1) return;
-				let randNo = this.random(mons.length);
+				const randNo = this.random(mons.length);
 				this.add('-message', `${source.name} identified that the opposing team has ${mons[randNo].species}!`);
 				this.add(`c|${getName('cleann')}|Your team's information has been LEAKED!`);
 				mons[randNo].m.identified = true;
@@ -166,27 +166,27 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Whirlwind', source);
 		},
 		onModifyType(move, pokemon) {
-			let type = pokemon.types[1] ? pokemon.types[1] : pokemon.types[0];
+			const type = pokemon.types[1] ? pokemon.types[1] : pokemon.types[0];
 			move.type = type;
 		},
 		onHit(target, source, move) {
 			if (source && source !== target && target.hp) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
-					if (source.switchFlag === true) return;
-					target.switchFlag = true;
+				if (source.switchFlag === true) return;
+				target.switchFlag = true;
 			}
 		},
 		effect: {
 			onSwap(target) {
 				if (!target.fainted && target.hp < target.maxhp) {
 					target.heal(target.maxhp);
-					this.add('-heal', target, 33, '[from] move: Archangel\'s Requiem')
+					this.add('-heal', target, 33, '[from] move: Archangel\'s Requiem');
 				}
 			},
 		},
 		selfSwitch: true,
-		target: "normal", 
-		type: "Normal", 
+		target: "normal",
+		type: "Normal",
 	},
 
 	// drampa's grandpa
