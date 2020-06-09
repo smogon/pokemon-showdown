@@ -65,6 +65,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Earthquake', 'Knock Off', ['Play Rough', 'U-turn']],
 		signatureMove: 'Kōri Senbon',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+  },
+  Frostyicelad: {
+		species: 'Frosmoth', ability: 'Ice Shield', item: 'Ice Stone', gender: 'M',
+		moves: ['Quiver Dance', 'Bug Buzz', ['Earth Power', 'Sparkling Aria']],
+		signatureMove: 'Frosty Wave',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	GXS: {
 		species: 'Porygon-Z', ability: 'Virus Upload', item: 'Life Orb', gender: 'N',

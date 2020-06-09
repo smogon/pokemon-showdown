@@ -206,6 +206,31 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// frostyicelad
+	frostywave: {
+		accuracy: 100,
+		basePower: 95,
+		category: "Special",
+		desc: "This move and its effects ignore the Abilities of other Pokemon.",
+		shortDesc: "Ignores abilities. Hits adjacent opponents.",
+		name: "Frosty Wave",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		ignoreAbility: true,
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Boomburst', target);
+			this.add('-anim', source, 'Blizzard', target);
+		},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Ice",
+	},
+
 	// GXS
 	datacorruption: {
 		accuracy: 90,

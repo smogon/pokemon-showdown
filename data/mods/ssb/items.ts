@@ -1,4 +1,18 @@
 export const BattleItems: {[k: string]: ModdedItemData} = {
+	// Frostyicelad
+	icestone: {
+		inherit: true,
+		megaStone: "Frosmoth-Mega",
+		megaEvolves: "Frosmoth",
+		itemUser: ["Frosmoth"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		fling: undefined,
+		shortDesc: "If held by an Frosmoth, this item allows it to Mega Evolve in battle.",
+	},
+
 	// phiwings99
 	boatiumz: {
 		name: "Boatium Z",

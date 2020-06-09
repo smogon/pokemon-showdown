@@ -27,6 +27,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		// Overneat gains the fairy type when mega evolving
 		if (pokemon.name === 'Overneat' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fairy');
+		// Custom mega without tooltips support currently
+		if (pokemon.name === 'frostyicelad ❆' && !pokemon.illusion) this.add('-start', pokemon, 'typechange', 'Bug/Ice');
 
 		return true;
 	},

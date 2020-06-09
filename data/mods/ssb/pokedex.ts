@@ -11,12 +11,32 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 40, atk: 70, def: 70, spa: 80, spd: 90, spe: 70},
 	},
+	// Frostyicelad
+	frosmoth: {
+		inherit: true,
+		otherFormes: ["Frosmoth-Mega"],
+		formeOrder: ["Frosmoth", "Frosmoth-Mega"],
+	},
+	frosmothmega: {
+		num: 873,
+		name: "Frosmoth-Mega",
+		baseSpecies: "Frosmoth",
+		forme: "Mega",
+		types: ["Ice", "Bug"],
+		baseStats: {hp: 70, atk: 75, def: 100, spa: 130, spd: 100, spe: 100},
+		abilities: {0: "Punk Rock"},
+		heightm: 1.3,
+		weightkg: 42,
+		color: "White",
+		eggGroups: ["Bug"],
+		requiredItem: "Ice Stone",
+	},
 	// Kaiju Bunny
 	lopunnymega: {
 		inherit: true,
 		abilities: {0: 'Second Wind'},
 		types: ['Normal', 'Fairy'],
-	},
+  },
 	// Kris
 	unown: {
 		inherit: true,
