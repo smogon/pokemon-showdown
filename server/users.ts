@@ -1606,7 +1606,6 @@ export const Users = {
 	isTrusted,
 	PLAYER_SYMBOL,
 	HOST_SYMBOL,
-	WHITELISTED_SYMBOL,
 	connections,
 	User,
 	Connection,

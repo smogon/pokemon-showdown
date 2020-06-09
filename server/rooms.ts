@@ -100,6 +100,8 @@ export interface RoomSettings {
 	staffMessage?: string | null;
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
+	approvalsEnabled?: boolean | null;
+	showimages?: GroupSymbol | null;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -1091,7 +1093,6 @@ export class BasicChatRoom extends BasicRoom {
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
-	rulesLink: string | null;
 	pendingApprovals: Map<string, string> | null;
 	approvalsEnabled: boolean;
 	showimages: string | null;
@@ -1151,9 +1152,9 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		this.pendingApprovals = !!options.approvalsEnabled ? new Map() : null;
+		this.pendingApprovals = options.approvalsEnabled ? new Map() : null;
 		this.approvalsEnabled = !!options.approvalsEnabled;
-		this.showimages = options.showimages ? options.showimages : false;
+		this.showimages = options.showimages ? options.showimages : null;
 		this.tour = null;
 		this.game = null;
 		this.battle = null;

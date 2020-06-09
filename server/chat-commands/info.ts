@@ -2436,7 +2436,7 @@ export const commands: ChatCommands = {
 
 	requestshow(target, room, user) {
 		if (!this.canTalk()) return false;
-		if (!room.approvalsEnabled || !room.pendingApprovals) {
+		if (!room.settings.approvalsEnabled || !room.pendingApprovals) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
@@ -2456,7 +2456,7 @@ export const commands: ChatCommands = {
 
 	async approveshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (!room.approvalsEnabled || !room.pendingApprovals) {
+		if (!room.settings.approvalsEnabled || !room.pendingApprovals) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
@@ -2500,10 +2500,10 @@ export const commands: ChatCommands = {
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
 	async show(target, room, user) {
-		if (!this.can('showimage', null, room)) return false;
+		if (!this.can('broadcastimage', null, room)) return false;
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = target.split(',');
-		this.runBroadcast(undefined, null, this.can('showimage', null, room));
+		this.runBroadcast(undefined, null, this.can('broadcastimage', null, room));
 		const YouTube = new YoutubeInterface();
 		if (link.includes('youtu')) {
 			let buf = await YouTube.generateVideoDisplay(link);
