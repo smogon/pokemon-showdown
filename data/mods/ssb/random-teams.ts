@@ -46,6 +46,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	cleann: {
+		species: 'Dragapult', ability: 'Frisk', item: ['Life Orb', 'Dragon Fang'], gender: '',
+		moves: ['Dragon Dance', 'Dragon Darts', 'Fire Punch'],
+		signatureMove: 'Malicious Intent',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	Darth: {
 		species: 'Articuno', ability: 'Guardian Angel', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Revelation Dance', ['Recover', 'Roost'], 'U-turn'],

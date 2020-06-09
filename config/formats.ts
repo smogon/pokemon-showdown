@@ -842,6 +842,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
+			pokemon.m.identified = true;
 			let name: string = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.getSpecies(name).exists || name === 'perishsong') {
 				// Certain pokemon have volatiles named after their id
