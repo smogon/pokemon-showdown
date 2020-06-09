@@ -69,6 +69,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	darth: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Darth')}|Let the Guardian Angel protect thee!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Darth')}|Well, everyone needs a break at some point.`);
+		},
+		onTryMove(attacker, defender, move) {
+			if (move.id === 'angelsrequiem') {
+				this.add(`c|${getName('Darth')}|Take my place, serve the Angel of Stall!`);
+			}
+		},
+	},
 	flare: {
 		noCopy: true,
 		onStart() {
@@ -78,7 +92,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Flare')}|Shunshin No Jutsu!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Flare')}|Sorry, things were initially better, but ¯\\_(ツ)_/¯`);
+			this.add(`c|${getName('Flare')}|Sorry, things were initially better, but ¯\_(ツ)_/¯`);
 		},
 	},
 	gxs: {
@@ -439,6 +453,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add('-end', target, 'Raindrop');
 			if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
 				this.hint("Raindrop keeps track of how many times it successfully altered each stat individually.");
+			}
+		},
+	},
+	// Custom side condition to allow the ability to track what mon was last in for Darth's Ability.
+	tracker: {
+		onStart(source) {
+			let mon = source.active[0];
+			if (mon.name !== 'Darth') {
+				this.effectData.storedTypes = mon.getTypes();
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.name !== 'Darth') {
+				this.effectData.storedTypes = pokemon.getTypes();
 			}
 		},
 	},

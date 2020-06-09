@@ -46,6 +46,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Darth: {
+		species: 'Articuno', ability: 'Guardian Angel', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Revelation Dance', ['Recover', 'Roost'], 'U-turn'],
+		signatureMove: 'Archangel\'s Requiem',
+		evs: {hp: 252, def: 128, spd: 128}, nature: 'Bold',
+	},
 	Flare: {
 		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
 		moves: ['Earthquake', 'Knock Off', ['Play Rough', 'U-turn']],

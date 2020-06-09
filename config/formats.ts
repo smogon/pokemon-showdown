@@ -856,6 +856,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
+			if (!pokemon.side.sideConditions['tracker']) {
+				// Initialize the tracker side condition for Darth's ability
+				pokemon.side.addSideCondition('tracker');
+			}
 		},
 	},
 	{

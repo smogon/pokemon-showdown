@@ -108,6 +108,49 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Darth
+	archangelsrequiem: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "This move type is always the user's secondary typing. If this move is successful, both the target and the user ar forced out, and the user's replacement gets 1/3 of its maximum health restored.",
+		shortDesc: "Type=2nd type,both mons switch,replacement: heal.",
+		name: "Archangel's Requiem",
+		pp: 10,
+		priority: -5,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Roost', source);
+			this.add('-anim', source, 'Whirlwind', target);
+			this.add('-anim', source, 'Whirlwind', source);
+		},
+		onModifyType(move, pokemon) {
+			let type = pokemon.types[1] ? pokemon.types[1] : pokemon.types[0];
+			move.type = type;
+		},
+		onHit(target, source, move) {
+			if (source && source !== target && target.hp) {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
+					if (source.switchFlag === true) return;
+					target.switchFlag = true;
+			}
+		},
+		effect: {
+			onSwap(target) {
+				if (!target.fainted && target.hp < target.maxhp) {
+					target.heal(target.maxhp);
+					this.add('-heal', target, 33, '[from] move: Archangel\'s Requiem')
+				}
+			},
+		},
+		selfSwitch: true,
+		target: "normal", 
+		type: "Normal", 
+	},
+
 	// Flare
 	krisenbon: {
 		accuracy: 100,

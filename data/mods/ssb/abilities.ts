@@ -67,6 +67,38 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Darth
+	guardianangel: {
+		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last Pokemon in before it.",
+		shortDesc: "Switching out: Regenerator. Switching in: Resists Weaknesses of last Pokemon.",
+		name: "Guardian Angel",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onStart(pokemon) {
+			const possibleTypes = [];
+			const newTypes = [];
+			let types = pokemon.side.sideConditions['tracker'].storedTypes;
+			for (const u in types) {
+				for (const type in this.dex.data.TypeChart) {
+					let typeCheck = this.dex.data.TypeChart[type].damageTaken[pokemon.side.sideConditions['tracker'].storedTypes[u]];
+					if (typeCheck === 2 || typeCheck === 3) {
+						possibleTypes.push(type);
+					}
+				}
+			}
+			if (possibleTypes.length < 2) return;
+
+			newTypes.push(this.sample(possibleTypes), this.sample(possibleTypes));
+			while (newTypes[0] === newTypes[1] && possibleTypes.length > 1) {
+				newTypes[1] = this.sample(possibleTypes);
+			}
+
+			if (!pokemon.setType(newTypes)) return;
+			this.add('-start', pokemon, 'typechange', newTypes.join('/'));
+		}
+	},
+
 	// Flare
 	permafrostarmor: {
 		desc: "This Pokemon takes 1/10 less damage from direct attacks. This Pokemon can only be damaged by direct attacks.",
