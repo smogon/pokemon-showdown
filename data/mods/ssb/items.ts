@@ -24,6 +24,17 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Froslass with Moongeist Beam, it can use Ghost of 1v1 Past.",
 	},
+	// Robb576
+	modium6z: {
+		name: "Modium-6 Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Integer Overflow",
+		zMoveFrom: "Photon Geyser",
+		itemUser: ["Necrozma-Ultra"],
+		gen: 8,
+		desc: "If held by a Robb576 with Photon Geyser, it can use Integer Overflow.",
+	},
 	// Custom support for Perish Song's ability (Snowstorm)
 	safetygoggles: {
 		inherit: true,

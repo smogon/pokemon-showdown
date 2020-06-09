@@ -162,6 +162,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psycho Drive',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
+	Robb576: {
+		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',
+		moves: ['Moongeist Beam', 'Psystrike', 'Thunder Wave'],
+		signatureMove: 'Mode [5: Offensive]',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	Segmr: {
 		species: 'Ninetales-Alola', ability: 'wAll In', item: 'Light Clay', gender: 'M',
 		moves: ['Recover', 'Will-O-Wisp', 'Freeze-Dry'],

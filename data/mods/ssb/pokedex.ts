@@ -65,4 +65,17 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ["Ghost", "Ice"],
 	},
+	// Robb576
+	necrozmadawnwings: {
+		inherit: true,
+		abilities: {0: "The Numbers Game"},
+	},
+	necrozmaduskmane: {
+		inherit: true,
+		abilities: {0: "The Numbers Game"},
+	},
+	necrozmaultra: {
+		inherit: true,
+		abilities: {0: "The Numbers Game"},
+	},
 };

@@ -350,6 +350,30 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
+	robb576: {
+		noCopy: true,
+		onStart(target, pokemon) {
+			if (pokemon.side.pokemonLeft === 1) {
+				this.add(`c|${getName('Robb576')}|This is our last stand. Give it everything you got ${pokemon.side.name}!`);
+			} else {
+				this.add(`c|${getName('Robb576')}|1, 2, 3, 4, dunno how to count no more!`);
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.side.pokemonLeft === 1) { // pls contacc
+				this.add(`c|${getName('Robb576')}|Something went wrong. Please contact HoeenHero to fix this`);
+			} else {
+				this.add(`c|${getName('Robb576')}|5, 7, 6, I will be right back into the mix!`);
+			}
+		},
+		onFaint(pokemon) {
+			if (pokemon.species.name === "Necrozma-Ultra") {
+				this.add(`c|${getName('Robb576')}|gg better luck next time. Sorry I couldn't handle them all :^(`);
+			} else {
+				this.add(`c|${getName('Robb576')}|8, 9, 10, it has been a pleasure man!`);
+			}
+		},
+	},
 	segmr: {
 		noCopy: true,
 		onStart() {
