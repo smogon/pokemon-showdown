@@ -38,6 +38,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	aethernum: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Aethernum')}|Hlelo ^_^ Lotad is so cute, don't you think? But don't underestimate him!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Aethernum')}|Sinking in this sea of possibilities for now...but i'll float back once again!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Aethernum')}|Ok, ok, i have procrastinated enough here, time to go ^_^' See ya around!`);
+		},
+	},
 	cantsay: {
 		noCopy: true,
 		onStart() {
@@ -373,11 +385,48 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			// @ts-ignore
 			const hitMove: ActiveMove = new this.dex.Data.Move(data.moveData);
 
+			// Support for Segmr's custom move
+			if (move.name === 'Disconnect') this.add(`j|${getName('Segmr')}`);
 			this.trySpreadMoveHit([target], data.source, hitMove);
 			// Support for Segmr's custom move
-			if (move.name === 'Disconnect') {
-				this.add(`j|${getName('Segmr')}`);
-				this.add(`c|${getName('Segmr')}|so as i was saying, then move hits`);
+			if (move.name === 'Disconnect') this.add(`c|${getName('Segmr')}|so as i was saying, then move hits`);
+		},
+	},
+	raindrop: {
+		name: 'Raindrop',
+		noCopy: true,
+		onStart(target) {
+			if (target.activeTurns < 1) return;
+			this.effectData.layers = 1;
+			this.effectData.def = 0;
+			this.effectData.spd = 0;
+			this.add('-start', target, 'Raindrop');
+			const [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
+			this.boost({def: 1, spd: 1}, target, target);
+			if (curDef !== target.boosts.def) this.effectData.def--;
+			if (curSpD !== target.boosts.spd) this.effectData.spd--;
+		},
+		onResidual(target) {
+			if (this.effectData.def >= 6 && this.effectData.spd >= 6) return false;
+			if (target.activeTurns < 1) return;
+			this.effectData.layers++;
+			this.add('-start', target, 'Raindrop');
+			const curDef = target.boosts.def;
+			const curSpD = target.boosts.spd;
+			this.boost({def: 1, spd: 1}, target, target);
+			if (curDef !== target.boosts.def) this.effectData.def--;
+			if (curSpD !== target.boosts.spd) this.effectData.spd--;
+		},
+		onEnd(target) {
+			if (this.effectData.def || this.effectData.spd) {
+				const boosts: SparseBoostsTable = {};
+				if (this.effectData.def) boosts.def = this.effectData.def;
+				if (this.effectData.spd) boosts.spd = this.effectData.spd;
+				this.boost(boosts, target, target);
+			}
+			this.add('-end', target, 'Raindrop');
+			if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
+				this.hint("Raindrop keeps track of how many times it successfully altered each stat individually.");
 			}
 		},
 	},

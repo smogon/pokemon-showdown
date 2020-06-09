@@ -37,6 +37,37 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Aethernum
+	lilypadoverflow: {
+		accuracy: 100,
+		basePower: 60,
+		basePowerCallback(source, target, move) {
+			if (!source.volatiles['raindrop'] || !source.volatiles['raindrop'].layers) return move.basePower;
+			return move.basePower + (source.volatiles['raindrop'].layers * 20);
+		},
+		category: "Special",
+		desc: "Power is equal to 60 + (Number of Raindrops collected * 20). Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Raindrop had increased them, and the user's Raindrop count resets to 0.",
+		shortDesc: "More power with more collected Raindrops.",
+		name: "Lilypad Overflow",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Water Spout', target);
+			this.add('-anim', source, 'Max Geyser', target);
+		},
+		onAfterMove(pokemon) {
+			if (pokemon.volatiles['raindrop']) pokemon.removeVolatile('raindrop');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+
 	// cant say
 	neverlucky: {
 		accuracy: 85,
@@ -138,6 +169,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+
 	// Instruct
 	hypergoner: {
 		accuracy: 85,
@@ -163,6 +195,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "???",
 	},
+
 	// Kaiju Bunny
 	cozycuddle: {
 		accuracy: 95,
@@ -676,12 +709,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onTry(pokemon, target) {
-				pokemon.m.bigstormcoming = true;
-				this.useMove("Hurricane", pokemon);
-				this.useMove("Thunder", pokemon);
-				this.useMove("Blizzard", pokemon);
-				this.useMove("Weather Ball", pokemon);
-				pokemon.m.bigstormcoming = false;
+			pokemon.m.bigstormcoming = true;
+			this.useMove("Hurricane", pokemon);
+			this.useMove("Thunder", pokemon);
+			this.useMove("Blizzard", pokemon);
+			this.useMove("Weather Ball", pokemon);
+			pokemon.m.bigstormcoming = false;
 		},
 		secondary: null,
 		target: "normal",

@@ -34,6 +34,12 @@ export const ssbSets: SSBSets = {
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	Aethernum: {
+		species: 'Lotad', ability: 'Rainy Season', item: 'Big Root', gender: 'M',
+		moves: ['Giga Drain', 'Muddy Water', 'Hurricane'],
+		signatureMove: 'Lilypad Overflow',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
+	},
 	'cant say': {
 		species: 'Volcarona', ability: 'Rage Quit', item: 'Kee Berry', gender: 'M',
 		moves: ['Quiver Dance', 'Roost', 'Will-O-Wisp'],
