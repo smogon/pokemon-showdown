@@ -409,6 +409,36 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Bird",
 	},
 
+	// Majorbowman
+	corrosivecloud: {
+		accuracy: true,
+		basePower: 90,
+		category: "Special",
+		desc: "Has a 30% chance to burn the target. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is.",
+		shortDesc: "30% chance to burn. Super effective on Steel.",
+		name: "Corrosive Cloud",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Poison Gas', target);
+			this.add('-anim', source, 'Fire Spin', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		ignoreImmunity: {'Poison': true},
+		secondary: {
+			chance: 30,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Poison",
+	},
+
 	// Mitsuki
 	terraforming: {
 		accuracy: 100,

@@ -189,6 +189,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	majorbowman: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('MajorBowman')}|Aaaand Cracktion!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('MajorBowman')}|This isn't Maury Povich!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('MajorBowman')}|Never loved ya.`);
+		},
+	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {
