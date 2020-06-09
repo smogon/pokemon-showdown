@@ -11,7 +11,7 @@ for (const row of usergroupData) {
 	usergroups[toID(cells[0])] = cells[1] || ' ';
 }
 
-function getName(name: string): string {
+export function getName(name: string): string {
 	const userid = toID(name);
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
 
