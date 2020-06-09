@@ -13,6 +13,7 @@ import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
+import {Utils} from '../lib/utils';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -149,7 +150,7 @@ export class Battle {
 		this.zMoveTable = {};
 		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
-		this.clampIntRange = this.dex.clampIntRange;
+		this.clampIntRange = Utils.clampIntRange;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
