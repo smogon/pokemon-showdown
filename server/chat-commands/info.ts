@@ -44,10 +44,10 @@ export const commands: ChatCommands = {
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		const roomauth = usedRoom.auth.getDirect(targetUser.id);
 		if (Config.groups[roomauth]?.name) {
-			buf += Chat.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
+			buf += Utils.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group]?.name) {
-			buf += Chat.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
+			buf += Utils.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
