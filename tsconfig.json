@@ -19,7 +19,7 @@
         "./data/mods/*/*",
         "./dev-tools/*.ts",
         "./lib/*",
-        "./server/**/*",
+        "./server/**/*.ts",
         "./sim/**/*",
         "./tools/set-import/*.ts"
     ]
