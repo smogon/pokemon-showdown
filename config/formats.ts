@@ -1,5 +1,6 @@
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.js
+import {Utils} from '../lib/utils';
 
 export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
@@ -449,7 +450,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			let statName: StatName;
 			for (statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
-				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.baseStats[statName] = Utils.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
 			return pokemon;
 		},
