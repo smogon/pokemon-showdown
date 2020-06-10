@@ -34,11 +34,13 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	_write(message: string) {
 		if (!this.process.connected) {
 			this.pushError(new Error(`Process disconnected (possibly crashed?)`));
-			this.push(null);
 			return;
 		}
 		this.process.send(`${this.taskId}\nWRITE\n${message}`);
 		// responses are handled in ProcessWrapper
+	}
+	_writeEnd() {
+		this.process.send(`${this.taskId}\nWRITEEND`);
 	}
 	_destroy() {
 		if (!this.process.connected) return;
@@ -201,7 +203,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
-				void stream.end();
+				void stream.pushEnd();
 				this.deleteStream(taskId);
 				return;
 			} else if (messageType === 'PUSH') {
@@ -209,7 +211,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			} else if (messageType === 'THROW') {
 				const error = new Error();
 				error.stack = message;
-				stream.pushError(error);
+				stream.pushError(error, true);
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}
@@ -565,6 +567,9 @@ export class StreamProcessManager extends ProcessManager {
 			} else if (messageType === 'WRITE') {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
 				void stream.write(message);
+			} else if (messageType === 'WRITEEND') {
+				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
+				void stream.writeEnd();
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}

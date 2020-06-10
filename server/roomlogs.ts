@@ -149,7 +149,7 @@ export class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
-		if (this.roomlogStream) void this.roomlogStream.end();
+		if (this.roomlogStream) void this.roomlogStream.writeEnd();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
@@ -313,11 +313,11 @@ export class Roomlog {
 			this.modlogStream = null;
 		}
 		if (this.modlogStream) {
-			promises.push(this.modlogStream.end());
+			promises.push(this.modlogStream.writeEnd());
 			this.modlogStream = null;
 		}
 		if (this.roomlogStream) {
-			promises.push(this.roomlogStream.end());
+			promises.push(this.roomlogStream.writeEnd());
 			this.roomlogStream = null;
 		}
 		Roomlogs.roomlogs.delete(this.roomid);
