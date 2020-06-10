@@ -57,6 +57,8 @@ export const commands: ChatCommands = {
 
 	'!roompromote': true,
 	roomdemote: 'roompromote',
+	forceroompromote: 'roompromote',
+	forceroomdemote: 'roompromote',
 	roompromote(target, room, user, connection, cmd) {
 		if (!room) {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
@@ -65,8 +67,7 @@ export const commands: ChatCommands = {
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help roompromote');
 
-		const force = target.startsWith('!!!');
-		if (force) target = target.slice(3);
+		const force = cmd.startsWith('force');
 		target = this.splitTarget(target, true);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
@@ -92,8 +93,12 @@ export const commands: ChatCommands = {
 		}
 		if (!Config.groups[nextSymbol]) {
 			if (!force || !user.can('bypassall')) {
-				return this.errorReply(`Group '${nextSymbol}' does not exist.`);
-			} else if (nextSymbol.length !== 1) {
+				this.errorReply(`Group '${nextSymbol}' does not exist.`);
+				if (user.can('bypassall')) {
+					this.errorReply(`If you want to promote to a nonexistent group, use /forceroompromote`);
+				}
+				return;
+			} else if (!Users.Auth.isValidSymbol(nextSymbol)) {
 				// yes I know this excludes astral-plane characters and includes combining characters
 				return this.errorReply(`Admins can forcepromote to nonexistent groups only if they are one character long`);
 			}
