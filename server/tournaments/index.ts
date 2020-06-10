@@ -1,5 +1,6 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
+import {Utils} from '../../lib/utils';
 
 interface TourCommands {
 	[k: string]: string | TourCommand;
@@ -235,10 +236,10 @@ export class Tournament extends Rooms.RoomGame {
 			}
 		}
 		const html = [];
-		if (bans.length) html.push(Chat.html`<b>Bans</b> - ${bans.join(', ')}`);
-		if (unbans.length) html.push(Chat.html`<b>Unbans</b> - ${unbans.join(', ')}`);
-		if (addedRules.length) html.push(Chat.html`<b>Added rules</b> - ${addedRules.join(', ')}`);
-		if (removedRules.length) html.push(Chat.html`<b>Removed rules</b> - ${removedRules.join(', ')}`);
+		if (bans.length) html.push(Utils.html`<b>Bans</b> - ${bans.join(', ')}`);
+		if (unbans.length) html.push(Utils.html`<b>Unbans</b> - ${unbans.join(', ')}`);
+		if (addedRules.length) html.push(Utils.html`<b>Added rules</b> - ${addedRules.join(', ')}`);
+		if (removedRules.length) html.push(Utils.html`<b>Removed rules</b> - ${removedRules.join(', ')}`);
 		return html.join(`<br />`);
 	}
 
@@ -493,7 +494,7 @@ export class Tournament extends Rooms.RoomGame {
 			matchPlayer.isBusy = false;
 
 			matchPlayer.inProgressMatch.room.addRaw(
-				Chat.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />` +
+				Utils.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />` +
 				`You can finish playing, but this battle is no longer considered a tournament battle.</div>`
 			).update();
 			matchPlayer.inProgressMatch.room.parent = null;
@@ -1180,7 +1181,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			const users = usersToNames(tournament.getRemainingPlayers().sort());
 			this.sendReplyBox(
 				`<strong>${users.length}/${tournament.players.length}` +
-				Chat.html` users remain in this tournament:</strong><br />${users.join(', ')}`
+				Utils.html` users remain in this tournament:</strong><br />${users.join(', ')}`
 			);
 		},
 		getupdate(tournament, user) {
@@ -1548,7 +1549,7 @@ export const commands: ChatCommands = {
 	tournaments: 'tournament',
 	tournament(target, room, user, connection) {
 		let cmd;
-		[cmd, target] = Chat.splitFirst(target, ' ');
+		[cmd, target] = Utils.splitFirst(target, ' ');
 		cmd = toID(cmd);
 
 		let params = target.split(',').map(param => param.trim());
@@ -1651,7 +1652,7 @@ export const commands: ChatCommands = {
 					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
-							Chat.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
+							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
 							`<strong>${Dex.getFormat(tour.name).name}</strong> tournament created in` +
 							` <strong>${room.title}</strong>.</a></div>`
 						).update();
@@ -1667,9 +1668,9 @@ export const commands: ChatCommands = {
 				const name = format.name.startsWith(`[Gen ${Dex.gen}] `) ? format.name.slice(8) : format.name;
 				if (format.section !== section) {
 					section = format.section;
-					buf += Chat.html`<br /><strong>${section}:</strong><br />&bull; ${name}`;
+					buf += Utils.html`<br /><strong>${section}:</strong><br />&bull; ${name}`;
 				} else {
-					buf += Chat.html`<br />&bull; ${name}`;
+					buf += Utils.html`<br />&bull; ${name}`;
 				}
 			}
 			this.sendReplyBox(`<div class="chat"><details class="readmore"><summary>Valid Formats: </summary>${buf}</details></div>`);

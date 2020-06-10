@@ -10,6 +10,7 @@
  */
 import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
+import {Utils} from '../../lib/utils';
 
 export const commands: ChatCommands = {
 	'!whois': true,
@@ -32,7 +33,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
-		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
+		let buf = Utils.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
 		if (ac && showAll) {
 			buf += ` <small style="color:gray">(ac${targetUser.id === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
@@ -44,10 +45,10 @@ export const commands: ChatCommands = {
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		const roomauth = usedRoom.auth.getDirect(targetUser.id);
 		if (Config.groups[roomauth]?.name) {
-			buf += Chat.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
+			buf += Utils.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group]?.name) {
-			buf += Chat.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
+			buf += Utils.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
@@ -93,7 +94,7 @@ export const commands: ChatCommands = {
 				const punishment = Punishments.userids.get(userid);
 				return `${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || `punished`}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ``})` : ``}`;
 			}).join(", ");
-			if (prevNames) buf += Chat.html`<br />Previous names: ${prevNames}`;
+			if (prevNames) buf += Utils.html`<br />Previous names: ${prevNames}`;
 
 			for (const targetAlt of targetUser.getAltUsers(true)) {
 				if (!targetAlt.named && !targetAlt.connected) continue;
@@ -102,7 +103,7 @@ export const commands: ChatCommands = {
 				const punishment = Punishments.userids.get(targetAlt.id);
 				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}` +
 					`${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '';
-				buf += Chat.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
+				buf += Utils.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = Object.keys(targetAlt.prevNames).map(userid => {
 					const p = Punishments.userids.get(userid);
@@ -118,7 +119,7 @@ export const commands: ChatCommands = {
 				if (punishment) {
 					const expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += Chat.html` (reason: ${punishment[3]})`;
+					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
 				}
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
@@ -134,7 +135,7 @@ export const commands: ChatCommands = {
 				if (punishment) {
 					const expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += Chat.html` (reason: ${punishment[3]})`;
+					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
 				}
 			}
 			const battlebanned = Punishments.isBattleBanned(targetUser);
@@ -149,7 +150,7 @@ export const commands: ChatCommands = {
 					expiresText = `soon`;
 				}
 				if (expiresIn > 1) buf += ` (expires ${expiresText})`;
-				if (battlebanned[3]) buf += Chat.html` (reason: ${battlebanned[3]})`;
+				if (battlebanned[3]) buf += Utils.html` (reason: ${battlebanned[3]})`;
 			}
 			if (targetUser.semilocked) {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
@@ -177,7 +178,7 @@ export const commands: ChatCommands = {
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
-				buf += Chat.html`<br />Host: ${targetUser.latestHost} [${targetUser.latestHostType}]`;
+				buf += Utils.html`<br />Host: ${targetUser.latestHost} [${targetUser.latestHostType}]`;
 			}
 		} else if (user === targetUser) {
 			buf += `<br /> IP: <a href="https://whatismyipaddress.com/ip/${connection.ip}" target="_blank">${connection.ip}</a>`;
@@ -203,7 +204,7 @@ export const commands: ChatCommands = {
 		if (gameRooms.length) {
 			buf += `<br />Recent games: ${gameRooms.map(id => {
 				const shortId = id.startsWith('battle-') ? id.slice(7) : id;
-				return Chat.html`<a href="/${id}">${shortId}</a>`;
+				return Utils.html`<a href="/${id}">${shortId}</a>`;
 			}).join(' | ')}`;
 		}
 
@@ -244,7 +245,7 @@ export const commands: ChatCommands = {
 		const userid = toID(target);
 		if (!userid) return this.errorReply("Please enter a valid username.");
 		const targetUser = Users.get(userid);
-		let buf = Chat.html`<strong class="username">${target}</strong>`;
+		let buf = Utils.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
 		const roomauth = room?.auth.getDirect(userid);
@@ -266,7 +267,7 @@ export const commands: ChatCommands = {
 			buf += `${punishName}: ${punishUserid}`;
 			const expiresIn = Punishments.checkLockExpiration(userid);
 			if (expiresIn) buf += expiresIn;
-			if (reason) buf += Chat.html` (reason: ${reason})`;
+			if (reason) buf += Utils.html` (reason: ${reason})`;
 			buf += '<br />';
 			atLeastOne = true;
 		}
@@ -326,9 +327,9 @@ export const commands: ChatCommands = {
 
 		if (!battles.length) return this.sendReply(`${targetUsername1} and ${targetUsername2} have no common battles.`);
 
-		this.sendReplyBox(Chat.html`Common battles between ${targetUsername1} and ${targetUsername2}:<br />` + battles.map(id => {
+		this.sendReplyBox(Utils.html`Common battles between ${targetUsername1} and ${targetUsername2}:<br />` + battles.map(id => {
 			const shortId = id.startsWith('battle-') ? id.slice(7) : id;
-			return Chat.html`<a href="/${id}">${shortId}</a>`;
+			return Utils.html`<a href="/${id}">${shortId}</a>`;
 		}).join(' | '));
 	},
 	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ &`],
@@ -438,7 +439,7 @@ export const commands: ChatCommands = {
 		if (user1Challs) {
 			for (const chall of user1Challs) {
 				if (chall.from === user1.id && Users.get(chall.to) === user2) {
-					challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(chall.formatid).name}.`);
+					challenges.push(Utils.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(chall.formatid).name}.`);
 					break;
 				}
 			}
@@ -447,13 +448,13 @@ export const commands: ChatCommands = {
 		if (user2Challs) {
 			for (const chall of user2Challs) {
 				if (chall.from === user2.id && Users.get(chall.to) === user1) {
-					challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(chall.formatid).name}.`);
+					challenges.push(Utils.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(chall.formatid).name}.`);
 					break;
 				}
 			}
 		}
 		if (!challenges.length) {
-			return this.sendReplyBox(Chat.html`${user1.name} and ${user2.name} are not challenging each other.`);
+			return this.sendReplyBox(Utils.html`${user1.name} and ${user2.name} are not challenging each other.`);
 		}
 		this.sendReplyBox(challenges.join(`<br />`));
 	},
@@ -848,7 +849,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or Pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
 			species = {types: types};
 			target = types.join("/");
@@ -1282,7 +1283,7 @@ export const commands: ChatCommands = {
 					ivSet = true;
 
 					if (isNaN(iv)) {
-						return this.sendReplyBox('Invalid value for IVs: ' + Chat.escapeHTML(arg));
+						return this.sendReplyBox('Invalid value for IVs: ' + Utils.escapeHTML(arg));
 					}
 
 					continue;
@@ -1305,7 +1306,7 @@ export const commands: ChatCommands = {
 					evSet = true;
 
 					if (isNaN(ev)) {
-						return this.sendReplyBox('Invalid value for EVs: ' + Chat.escapeHTML(arg));
+						return this.sendReplyBox('Invalid value for EVs: ' + Utils.escapeHTML(arg));
 					}
 					if (ev > 255 || ev < 0) {
 						return this.sendReplyBox('The amount of EVs should be between 0 and 255.');
@@ -1338,7 +1339,7 @@ export const commands: ChatCommands = {
 					modSet = true;
 				}
 				if (isNaN(modifier)) {
-					return this.sendReplyBox('Invalid value for modifier: ' + Chat.escapeHTML(String(modifier)));
+					return this.sendReplyBox('Invalid value for modifier: ' + Utils.escapeHTML(String(modifier)));
 				}
 				if (modifier > 6) {
 					return this.sendReplyBox('Modifier should be a number between -6 and +6');
@@ -1363,7 +1364,7 @@ export const commands: ChatCommands = {
 					realSet = true;
 
 					if (isNaN(realStat)) {
-						return this.sendReplyBox('Invalid value for target real stat: ' + Chat.escapeHTML(arg));
+						return this.sendReplyBox('Invalid value for target real stat: ' + Utils.escapeHTML(arg));
 					}
 					if (realStat < 0) {
 						return this.sendReplyBox('The target real stat must be greater than 0.');
@@ -1813,16 +1814,16 @@ export const commands: ChatCommands = {
 			const subformat = Dex.getFormat(Object.values(sections)[0].formats[0]);
 			if (['Format', 'Rule', 'ValidatorRule'].includes(subformat.effectType)) {
 				if (subformat.ruleset?.length) {
-					rules.push(`<b>Ruleset</b> - ${Chat.escapeHTML(subformat.ruleset.join(", "))}`);
+					rules.push(`<b>Ruleset</b> - ${Utils.escapeHTML(subformat.ruleset.join(", "))}`);
 				}
 				if (subformat.banlist?.length) {
-					rules.push(`<b>Bans</b> - ${Chat.escapeHTML(subformat.banlist.join(", "))}`);
+					rules.push(`<b>Bans</b> - ${Utils.escapeHTML(subformat.banlist.join(", "))}`);
 				}
 				if (subformat.unbanlist?.length) {
-					rules.push(`<b>Unbans</b> - ${Chat.escapeHTML(subformat.unbanlist.join(", "))}`);
+					rules.push(`<b>Unbans</b> - ${Utils.escapeHTML(subformat.unbanlist.join(", "))}`);
 				}
 				if (subformat.restricted?.length) {
-					rules.push(`<b>Restricted</b> - ${Chat.escapeHTML(subformat.restricted.join(", "))}`);
+					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(subformat.restricted.join(", "))}`);
 				}
 				if (rules.length > 0) {
 					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
@@ -1853,10 +1854,10 @@ export const commands: ChatCommands = {
 		const buf = [`<table style="${tableStyle}" cellspacing="0" cellpadding="5">`];
 		for (const sectionId in sections) {
 			if (exactMatch && sectionId !== exactMatch) continue;
-			buf.push(Chat.html`<th style="border:1px solid gray" colspan="2">${sections[sectionId].name}</th>`);
+			buf.push(Utils.html`<th style="border:1px solid gray" colspan="2">${sections[sectionId].name}</th>`);
 			for (const section of sections[sectionId].formats) {
 				const subformat = Dex.getFormat(section);
-				const nameHTML = Chat.escapeHTML(subformat.name);
+				const nameHTML = Utils.escapeHTML(subformat.name);
 				const desc = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
 				const descHTML = desc.length ? desc.join("<br />") : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
@@ -1949,7 +1950,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
-				`${room?.settings.rulesLink ? Chat.html`- <a href="${room.settings.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
+				`${room?.settings.rulesLink ? Utils.html`- <a href="${room.settings.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
 				`- <a href="https://${Config.routes.root}${this.tr('/rules')}">${this.tr("Global Rules")}</a>`
 			);
 			return;
@@ -2127,16 +2128,16 @@ export const commands: ChatCommands = {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a id to the proper page
 				this.sendReplyBox(
-					Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=${supportedLanguages[room.settings.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`
+					Utils.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=${supportedLanguages[room.settings.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`
 				);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
 				this.sendReplyBox(
-					Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
+					Utils.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
 					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=it">Italiano</a>, ` +
 					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=pt">Português</a>`
 				);
 			} else {
-				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Utils.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2185,7 +2186,7 @@ export const commands: ChatCommands = {
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${formatName} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Utils.html`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${formatName} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2410,11 +2411,11 @@ export const commands: ChatCommands = {
 		if (!target.includes(',')) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
 		if (this.broadcasting) {
-			[, target] = Chat.splitFirst(this.message, ' ');
+			[, target] = Utils.splitFirst(this.message, ' ');
 		}
 		const options = target.split(',');
 		const pickedOption = options[Math.floor(Math.random() * options.length)].trim();
-		return this.sendReplyBox(Chat.html`<em>We randomly picked:</em> ${pickedOption}`);
+		return this.sendReplyBox(Utils.html`<em>We randomly picked:</em> ${pickedOption}`);
 	},
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
@@ -2423,8 +2424,8 @@ export const commands: ChatCommands = {
 		if (!target || !target.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
 		if (!this.runBroadcast(true)) return false;
-		const results = Dex.shuffle(args.map(arg => arg.trim()));
-		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
+		const results = Utils.shuffle(args.map(arg => arg.trim()));
+		return this.sendReplyBox(Utils.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
 	},
 	shufflehelp: [
 		`/shuffle [option], [option], [option], ... - Randomly shuffles a list of 2 or more elements.`,
@@ -2442,7 +2443,7 @@ export const commands: ChatCommands = {
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
-		if (!/^https?:\/\//.test(target)) target = `http://${Chat.escapeHTML(target)}`;
+		if (!/^https?:\/\//.test(target)) target = `http://${Utils.escapeHTML(target)}`;
 		room.pendingApprovals.set(user.id, target);
 		this.sendReply(`You have requested for the link ${target} to be displayed.`);
 		room.sendMods(
@@ -2475,7 +2476,7 @@ export const commands: ChatCommands = {
 			room.update();
 		} else {
 			void Chat.fitImage(id).then(([width, height]) => {
-				this.addBox(Chat.html`<img src="${id}" style="width: ${width}px; height: ${height}px" />`);
+				this.addBox(Utils.html`<img src="${id}" style="width: ${width}px; height: ${height}px" />`);
 				room.add(`|uhtmlchange|request-${target}|`);
 				room.update();
 			});
@@ -2509,13 +2510,13 @@ export const commands: ChatCommands = {
 			let buf = await YouTube.generateVideoDisplay(link);
 			room.add(`|uhtmlchange|request-${target}|`).update();
 			buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
-			buf += `(Suggested by ${Chat.escapeHTML(user.name)})</p></small>`;
-			if (comment) buf += `<br>(${Chat.escapeHTML(comment)})</div>`;
+			buf += `(Suggested by ${Utils.escapeHTML(user.name)})</p></small>`;
+			if (comment) buf += `<br>(${Utils.escapeHTML(comment)})</div>`;
 			this.addBox(buf!);
 			room.update();
 		} else {
 			void Chat.fitImage(link).then(([width, height]) => {
-				let buf = Chat.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
+				let buf = Utils.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
 				if (comment) buf += `<br>(${comment})</div>`;
 				if (!this.broadcasting) return this.sendReplyBox(buf);
 				this.addBox(buf);
@@ -2556,7 +2557,7 @@ export const commands: ChatCommands = {
 		let cutoff = 3;
 		for (const param of params) {
 			if (output.length < 3 && param.length > 80) cutoff = 2;
-			output.push(Chat.escapeHTML(param));
+			output.push(Utils.escapeHTML(param));
 		}
 
 		let code;

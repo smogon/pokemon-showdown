@@ -1,4 +1,5 @@
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 type FilterWord = [RegExp, string, string, string | null, number];
 
@@ -388,7 +389,7 @@ export const loginfilter: LoginFilter = user => {
 		const manualForceRename = Chat.forceRenames.get(toID(user.trackRename));
 		Rooms.global.notifyRooms(
 			['staff'],
-			Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`
+			Utils.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`
 		);
 		user.trackRename = '';
 	}
@@ -397,7 +398,7 @@ export const loginfilter: LoginFilter = user => {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
 		Rooms.global.notifyRooms(
 			['staff'],
-			Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
+			Utils.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
 		);
 	}
 };

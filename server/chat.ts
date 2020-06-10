@@ -92,6 +92,7 @@ const BROADCAST_TOKEN = '!';
 const TRANSLATION_DIRECTORY = 'translations/';
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
@@ -1598,38 +1599,11 @@ export const Chat = new class {
 	}
 
 	/**
-	 * Escapes HTML in a string.
-	 */
-	escapeHTML(str: string) {
-		if (!str) return '';
-		return ('' + str)
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;')
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, '&apos;')
-			.replace(/\//g, '&#x2f;');
-	}
-
-	/**
 	 * Strips HTML from a string.
 	 */
 	stripHTML(htmlContent: string) {
 		if (!htmlContent) return '';
 		return htmlContent.replace(/<[^>]*>/g, '');
-	}
-
-	/**
-	 * Species string tag function for escaping HTML
-	 */
-	html(strings: TemplateStringsArray, ...args: any) {
-		let buf = strings[0];
-		let i = 0;
-		while (i < args.length) {
-			buf += this.escapeHTML(args[i]);
-			buf += strings[++i];
-		}
-		return buf;
 	}
 
 	/**
@@ -1675,33 +1649,6 @@ export const Chat = new class {
 		}
 		const space = singular.startsWith('<') ? '' : ' ';
 		return `${num}${space}${num > 1 ? pluralSuffix : singular}`;
-	}
-
-	/**
-	 * Like string.split(delimiter), but only recognizes the first `limit`
-	 * delimiters (default 1).
-	 *
-	 * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
-	 *
-	 * `Chat.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
-	 *
-	 * Returns an array of length exactly limit + 1.
-	 *
-	 */
-	splitFirst(str: string, delimiter: string, limit = 1) {
-		const splitStr: string[] = [];
-		while (splitStr.length < limit) {
-			const delimiterIndex = str.indexOf(delimiter);
-			if (delimiterIndex >= 0) {
-				splitStr.push(str.slice(0, delimiterIndex));
-				str = str.slice(delimiterIndex + delimiter.length);
-			} else {
-				splitStr.push(str);
-				str = '';
-			}
-		}
-		splitStr.push(str);
-		return splitStr;
 	}
 
 	/**
@@ -1877,62 +1824,6 @@ export const Chat = new class {
 	}
 
 	/**
-	 * Visualizes eval output in a slightly more readable form
-	 */
-	stringify(value: any, depth = 0): string {
-		if (value === undefined) return `undefined`;
-		if (value === null) return `null`;
-		if (typeof value === 'number' || typeof value === 'boolean') {
-			return `${value}`;
-		}
-		if (typeof value === 'string') {
-			return `"${value}"`; // NOT ESCAPED
-		}
-		if (typeof value === 'symbol') {
-			return value.toString();
-		}
-		if (Array.isArray(value)) {
-			if (depth > 10) return `[array]`;
-			return `[` + value.map(elem => Chat.stringify(elem, depth + 1)).join(`, `) + `]`;
-		}
-		if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
-			if (depth && value instanceof Function) return `Function`;
-			return `${value}`;
-		}
-		let constructor = '';
-		if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
-			constructor = value.constructor.name;
-			if (constructor === 'Object') constructor = '';
-		} else {
-			constructor = 'null';
-		}
-		if (value.toString) {
-			try {
-				const stringValue = value.toString();
-				if (typeof stringValue === 'string' &&
-						stringValue !== '[object Object]' &&
-						stringValue !== `[object ${constructor}]`) {
-					return `${constructor}(${stringValue})`;
-				}
-			} catch (e) {}
-		}
-		let buf = '';
-		for (const key in value) {
-			if (!Object.prototype.hasOwnProperty.call(value, key)) continue;
-			if (depth > 2 || (depth && constructor)) {
-				buf = '...';
-				break;
-			}
-			if (buf) buf += `, `;
-			let displayedKey = key;
-			if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
-			buf += `${displayedKey}: ` + Chat.stringify(value[key], depth + 1);
-		}
-		if (constructor && !buf && constructor !== 'null') return constructor;
-		return `${constructor}{${buf}}`;
-	}
-
-	/**
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
 	getImageDimensions(url: string): Promise<{height: number, width: number, err?: Error}> {
@@ -1983,12 +1874,12 @@ export const Chat = new class {
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.blockPMsNotified) {
-				targetUser.send(`${prefix}The user '${this.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
 				targetUser.blockPMsNotified = true;
 			}
 		} else if (blocked === 'challenge') {
 			if (!targetUser.blockChallengesNotified) {
-				targetUser.send(`${prefix}The user '${this.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
 				targetUser.blockChallengesNotified = true;
 			}
 		}
@@ -2014,6 +1905,12 @@ export const Chat = new class {
 		return (new PageContext({pageid, user, connection})).resolve();
 	}
 };
+
+// backwards compatibility; don't actually use these
+// they're just there so forks have time to slowly transition
+(Chat as any).escapeHTML = Utils.escapeHTML;
+(Chat as any).html = Utils.html;
+(Chat as any).splitFirst = Utils.splitFirst;
 
 /**
  * Used by ChatMonitor.

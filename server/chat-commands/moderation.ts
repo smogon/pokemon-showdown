@@ -8,6 +8,7 @@
  *
  * @license MIT
  */
+import {Utils} from '../../lib/utils';
 
 /* eslint no-else-return: "error" */
 
@@ -184,13 +185,10 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		if (!targetRoom.persist) {
-			return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
-		}
 		const showAll = user.can('lock', null, room);
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
-		for (const [id, rank] of room.auth) {
+		for (const [id, rank] of targetRoom.auth) {
 			if (rank === ' ' && !showAll) continue;
 			if (!rankLists[rank]) rankLists[rank] = [];
 			rankLists[rank].push(id);
@@ -244,8 +242,7 @@ export const commands: ChatCommands = {
 		let innerBuffer = [];
 		const group = Users.globalAuth.get(targetId);
 		if (group) {
-			if (group === ' ') (group as string) = 'trusted';
-			buffer.push(`Global auth: ${group}`);
+			buffer.push(`Global auth: ${group === ' ' ? 'trusted' : group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.settings.isPrivate) continue;
@@ -560,7 +557,7 @@ export const commands: ChatCommands = {
 
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Chat.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Chat.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
+				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Utils.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
@@ -1133,7 +1130,7 @@ export const commands: ChatCommands = {
 		} else {
 			Users.globalAuth.set(targetUser ? targetUser.id : userid, nextGroup);
 		}
-		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+		if (Users.Auth.getGroup(nextGroup).rank < Users.Auth.getGroup(currentGroup).rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
 			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
@@ -1249,7 +1246,7 @@ export const commands: ChatCommands = {
 		for (const id in room.users) {
 			room.users[id].sendTo(room, `|notify|${room.title} announcement!|${target}`);
 		}
-		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
+		this.add(Utils.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
 		this.modlog('DECLARE', null, target);
 	},
 	declarehelp: [`/declare [message] - Anonymously announces a message. Requires: # * &`],
@@ -1264,7 +1261,7 @@ export const commands: ChatCommands = {
 		for (const u in room.users) {
 			Users.get(u)?.sendTo(
 				room,
-				`|notify|${room.title} announcement!|${Chat.stripHTML(target)}`
+				`|notify|${room.title} announcement!|${Utils.stripHTML(target)}`
 			);
 		}
 		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
@@ -1386,7 +1383,7 @@ export const commands: ChatCommands = {
 		const rankMessage = targetUser.getAccountStatusString();
 		Rooms.global.notifyRooms(
 			['staff'],
-			`|html|${roomMessage}` + Chat.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`
+			`|html|${roomMessage}` + Utils.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`
 		);
 
 		targetUser.resetName(true);
@@ -1479,7 +1476,7 @@ export const commands: ChatCommands = {
 		if (/^[0-9]+\s*(,|$)/.test(target)) {
 			if (hasLineCount) {
 				let lineCountString;
-				[lineCountString, target] = Chat.splitFirst(target, ',');
+				[lineCountString, target] = Utils.splitFirst(target, ',');
 				lineCount = parseInt(lineCountString);
 			} else if (!cmd.includes('force')) {
 				return this.errorReply(`Your reason was a number; use /hidelines if you wanted to clear a specific number of lines, or /forcehidetext if you really wanted your reason to be a number.`);
@@ -1581,7 +1578,7 @@ export const commands: ChatCommands = {
 
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Chat.escapeHTML(user.name)} has blacklisted you from the room ${room.roomid}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Chat.escapeHTML(target)}</p>` +
+				`|modal||html|<p>${Utils.escapeHTML(user.name)} has blacklisted you from the room ${room.roomid}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Utils.escapeHTML(target)}</p>` +
 				`<p>To appeal the ban, PM the staff member that blacklisted you${room.persist ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
@@ -1823,7 +1820,7 @@ export const commands: ChatCommands = {
 		}
 
 		const soonExpiring = (cmd === 'expiringblacklists' || cmd === 'expiringbls');
-		let buf = Chat.html`Blacklist for ${room.title}${soonExpiring ? ` (expiring within 3 months)` : ''}:<br />`;
+		let buf = Utils.html`Blacklist for ${room.title}${soonExpiring ? ` (expiring within 3 months)` : ''}:<br />`;
 
 		for (const [userid, data] of blMap) {
 			const [expireTime, ...alts] = data;

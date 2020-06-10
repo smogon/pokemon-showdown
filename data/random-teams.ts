@@ -2,6 +2,7 @@
 
 import {Dex} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
+import {Utils} from '../lib/utils';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -1294,7 +1295,7 @@ export class RandomTeams {
 			} else if (ability === 'Slow Start') {
 				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			}
-			level = 70 + Math.floor(((640 - this.dex.clampIntRange(bst, 330, 640)) / 10.3));
+			level = 70 + Math.floor(((640 - Utils.clampIntRange(bst, 330, 640)) / 10.3));
 		}
 
 		// Prepare optimal HP

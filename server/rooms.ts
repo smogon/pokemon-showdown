@@ -26,6 +26,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
@@ -68,6 +69,7 @@ export interface RoomSettings {
 	title: string;
 	auth: {[userid: string]: GroupSymbol};
 
+	readonly staffAutojoin?: string | boolean;
 	aliases?: string[];
 	banwords?: string[];
 	isPrivate?: boolean | 'hidden' | 'voice';
@@ -85,11 +87,8 @@ export interface RoomSettings {
 	unoDisabled?: boolean;
 	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
-	giveaway?: QuestionGiveaway | LotteryGiveaway | null;
-	gtsga?: GTSGiveaway | null;
 	toursEnabled?: '%' | boolean;
 	tourAnnouncements?: boolean;
-	privacySetter?: Set<ID> | null;
 	gameNumber?: number;
 	highTraffic?: boolean;
 	isOfficial?: boolean;
@@ -147,6 +146,7 @@ export abstract class BasicRoom {
 	 */
 	tour: Tournament | null;
 
+	auth: RoomAuth;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
 
@@ -163,8 +163,10 @@ export abstract class BasicRoom {
 
 	scavgame: ScavengerGameTemplate | null;
 	scavLeaderboard: AnyObject;
+	giveaway?: QuestionGiveaway | LotteryGiveaway | null;
+	gtsga?: GTSGiveaway | null;
+	privacySetter?: Set<ID> | null;
 	hideReplay: boolean;
-	auth: RoomAuth;
 
 	reportJoins: boolean;
 	batchJoins: number;
@@ -547,7 +549,7 @@ export class GlobalRoom extends BasicRoom {
 			}
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoinList.push(id);
-			if (room.staffAutojoin) this.staffAutojoinList.push(id);
+			if (room.settings.staffAutojoin) this.staffAutojoinList.push(id);
 		}
 		Rooms.lobby = Rooms.rooms.get('lobby') as ChatRoom;
 
@@ -888,8 +890,8 @@ export class GlobalRoom extends BasicRoom {
 				i--;
 				continue;
 			}
-			if (room.staffAutojoin === true && user.isStaff ||
-					typeof room.staffAutojoin === 'string' && room.staffAutojoin.includes(user.group) ||
+			if (room.settings.staffAutojoin === true && user.isStaff ||
+					typeof room.settings.staffAutojoin === 'string' && room.settings.staffAutojoin.includes(user.group) ||
 					room.auth.has(user.id)) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
@@ -940,7 +942,7 @@ export class GlobalRoom extends BasicRoom {
 		if (this.lockdown && err) return;
 		const devRoom = Rooms.get('development');
 		// @ts-ignore
-		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		const stack = (err ? Utils.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global') continue;
 			if (err) {
@@ -1022,7 +1024,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 		this.lastReportedCrash = time;
 		// @ts-ignore
-		const stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
+		const stackLines = (err ? Utils.escapeHTML(err.stack).split(`\n`) : []);
 		const stack = stackLines.slice(1).join(`<br />`);
 
 		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
@@ -1080,7 +1082,6 @@ export class GlobalRoom extends BasicRoom {
 export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	readonly autojoin: boolean;
-	readonly staffAutojoin: string | boolean;
 	/** Only available in groupchats */
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
@@ -1109,7 +1110,6 @@ export class BasicChatRoom extends BasicRoom {
 		this.log = Roomlogs.create(this, options);
 
 		this.autojoin = false;
-		this.staffAutojoin = false;
 		this.creationTime = null;
 		this.type = 'chat';
 		this.banwordRegex = null;
@@ -1154,8 +1154,6 @@ export class BasicChatRoom extends BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
-
-		this.auth = new RoomAuth(this);
 	}
 
 	/**
@@ -1265,7 +1263,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.roomlog(entry);
 	}
 	getIntroMessage(user: User) {
-		let message = Chat.html`\n|raw|<div class="infobox"> You joined ${this.title}`;
+		let message = Utils.html`\n|raw|<div class="infobox"> You joined ${this.title}`;
 		if (this.settings.modchat) {
 			message += ` [${this.settings.modchat} or higher to talk]`;
 		}
@@ -1536,9 +1534,9 @@ export class GameRoom extends BasicChatRoom {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
 		options.isMultichannel = true;
-		options.reportJoins = !!Config.reportbattlejoins;
 		options.batchJoins = 0;
 		super(roomid, title, options);
+		this.reportJoins = !!Config.reportbattlejoins;
 		this.settings.modchat = (Config.battlemodchat || null);
 
 		this.type = 'battle';
@@ -1776,7 +1774,7 @@ export const Rooms = {
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
 				room.settings.modjoin = '%';
 				room.settings.isPrivate = 'hidden';
-				room.settings.privacySetter = new Set(inviteOnly);
+				room.privacySetter = new Set(inviteOnly);
 				room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
 			}
 		}
