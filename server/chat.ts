@@ -492,7 +492,7 @@ export class CommandContext extends MessageContext {
 				} else if (fullCmd === 'room' + groupid) {
 					return this.splitCommand(`/roompromote ${target}, ${g}`, true);
 				} else if (fullCmd === 'forceroom' + groupid) {
-					return this.splitCommand(`/roompromote !!!${target}, ${g}`, true);
+					return this.splitCommand(`/forceroompromote ${target}, ${g}`, true);
 				} else if (fullCmd === 'roomde' + groupid || fullCmd === 'deroom' + groupid || fullCmd === 'roomun' + groupid) {
 					return this.splitCommand(`/roomdemote ${target}`, true);
 				}
