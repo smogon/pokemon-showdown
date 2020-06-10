@@ -6064,7 +6064,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!pokemon.volatiles.furycutter || move.hit === 1) {
 				pokemon.addVolatile('furycutter');
 			}
-			return this.dex.clampIntRange(move.basePower * pokemon.volatiles.furycutter.multiplier, 1, 160);
+			return this.clampIntRange(move.basePower * pokemon.volatiles.furycutter.multiplier, 1, 160);
 		},
 		category: "Physical",
 		desc: "Power doubles with each successful hit, up to a maximum of 160 power. The power is reset if this move misses or another move is used.",
@@ -6892,7 +6892,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				// so we're going to test the damage of a Steel-type Stealth Rock instead.
 				const steelHazard = this.dex.getActiveMove('Stealth Rock');
 				steelHazard.type = 'Steel';
-				const typeMod = this.dex.clampIntRange(pokemon.runEffectiveness(steelHazard), -6, 6);
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(steelHazard), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
 		},
@@ -7566,9 +7566,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				target.volatiles['spikyshield'] || target.side.getSideCondition('matblock')
 			) {
 				this.add('-zbroken', target);
-				return this.dex.clampIntRange(Math.ceil(hp75 / 4 - 0.5), 1);
+				return this.clampIntRange(Math.ceil(hp75 / 4 - 0.5), 1);
 			}
-			return this.dex.clampIntRange(hp75, 1);
+			return this.clampIntRange(hp75, 1);
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
@@ -12265,7 +12265,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.dex.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
+			return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
@@ -13344,7 +13344,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryMove(pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
-					this.damage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
+					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
 			},
@@ -17366,7 +17366,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
-				const typeMod = this.dex.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
 		},
@@ -18000,7 +18000,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.dex.clampIntRange(target.getUndynamaxedHP() / 2, 1);
+			return this.clampIntRange(target.getUndynamaxedHP() / 2, 1);
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",

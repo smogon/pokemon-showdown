@@ -12,6 +12,7 @@
 
 import * as child_process from 'child_process';
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
 
@@ -49,7 +50,7 @@ export const commands: ChatCommands = {
 		if (!this.can('addhtml', null, room)) return;
 		target = Chat.collapseLineBreaksHTML(target);
 		if (!user.can('addhtml')) {
-			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			target += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		return `/raw <div class="infobox">${target}</div>`;
@@ -67,7 +68,7 @@ export const commands: ChatCommands = {
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
@@ -87,7 +88,7 @@ export const commands: ChatCommands = {
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		if (cmd === 'changeuhtml') {
@@ -116,7 +117,7 @@ export const commands: ChatCommands = {
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
@@ -955,9 +956,9 @@ export const commands: ChatCommands = {
 			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
 
 			if (result?.then) {
-				result = `Promise -> ${Chat.stringify(await result)}`;
+				result = `Promise -> ${Utils.visualize(await result)}`;
 			} else {
-				result = Chat.stringify(result);
+				result = Utils.visualize(result);
 			}
 			result = result.replace(/\n/g, '\n||');
 			this.sendReply('||<< ' + result);

@@ -7,6 +7,7 @@
 
 
 import {Net} from '../../lib/net';
+import {Utils} from '../../lib/utils';
 
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
@@ -55,12 +56,12 @@ export const commands: ChatCommands = {
 			const entryUrl = Dex.getString(data.url);
 			const entryTitle = Dex.getString(data.title);
 			const id = Dex.getString(data.id);
-			let htmlReply = Chat.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
+			let htmlReply = Utils.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
 				getCardDetails(subdomain, id).then((card: {thumbnail: unknown}) => {
 					const thumb = Dex.getString(card.thumbnail);
 					if (thumb) {
-						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Chat.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
+						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Utils.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
 					}
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();

@@ -449,7 +449,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			let statName: StatName;
 			for (statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
-				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
 			return pokemon;
 		},

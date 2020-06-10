@@ -480,7 +480,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (target.runImmunity('Fighting')) {
 				const damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("HJK recoil failed");
-				this.damage(this.dex.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
 		},
 	},
@@ -506,7 +506,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (target.runImmunity('Fighting')) {
 				const damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Jump Kick didn't recoil");
-				this.damage(this.dex.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
 		},
 	},

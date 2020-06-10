@@ -143,7 +143,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(this.dex.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectData.stage);
 		},
 	},
 	confusion: {

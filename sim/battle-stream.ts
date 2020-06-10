@@ -18,7 +18,7 @@ import {Battle} from './battle';
  *
  * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
  *
- * `Chat.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
+ * `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
  *
  * Returns an array of length exactly limit + 1.
  */

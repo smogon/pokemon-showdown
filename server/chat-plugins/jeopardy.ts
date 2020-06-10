@@ -1,3 +1,5 @@
+import {Utils} from '../../lib/utils';
+
 const BACKGROUND_COLOR = "#0000FF";
 const HEIGHT = 40;
 const MAX_CATEGORY_COUNT = 5;
@@ -155,7 +157,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	getGrid() {
 		let buffer = `<div class="infobox"><html><body><table align="center" border="2" style="table-layout: fixed; width: 100%"><tr>`;
 		for (let i = 0; i < this.categoryCount; i++) {
-			buffer += `<td style="word-wrap: break-word" bgcolor="${BACKGROUND_COLOR}"; height="${HEIGHT}px"; width="30px" align="center"><font color="white">${Chat.escapeHTML(this.categories[i])}</font></td>`;
+			buffer += `<td style="word-wrap: break-word" bgcolor="${BACKGROUND_COLOR}"; height="${HEIGHT}px"; width="30px" align="center"><font color="white">${Utils.escapeHTML(this.categories[i])}</font></td>`;
 		}
 		buffer += `</tr>`;
 		for (let i = 0; i < this.questionCount; i++) {
@@ -171,7 +173,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		}
 		for (const userID in this.playerTable) {
 			const player = this.playerTable[userID];
-			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Chat.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
+			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Utils.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
 		}
 		buffer += `</body></html></div>`;
 		return buffer;
@@ -265,7 +267,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	revealAnswer() {
-		this.room.addRaw(`<div class="broadcast-blue">The answer was: ${Chat.escapeHTML(this.question.answer)}</div>`);
+		this.room.addRaw(`<div class="broadcast-blue">The answer was: ${Utils.escapeHTML(this.question.answer)}</div>`);
 		this.question.answered = true;
 	}
 
@@ -366,7 +368,7 @@ export class Jeopardy extends Rooms.RoomGame {
 					highest.push(player.name);
 				}
 			}
-			this.room.add(`|raw|<div class=broadcast-green>Congratulations to ${highest.map(n => Chat.escapeHTML(n)).join(", ")} for winning the game of Jeopardy with ${maxpoints} points!`);
+			this.room.add(`|raw|<div class=broadcast-green>Congratulations to ${highest.map(n => Utils.escapeHTML(n)).join(", ")} for winning the game of Jeopardy with ${maxpoints} points!`);
 			this.destroy();
 			return;
 		} else {
@@ -374,7 +376,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			this.curPlayer = this.playerTable[index];
 			const answer = this.curPlayer.finalAnswer;
 			if (answer) {
-				this.room.add(`${this.curPlayer.name} has answered ${Chat.escapeHTML(answer)}!`);
+				this.room.add(`${this.curPlayer.name} has answered ${Utils.escapeHTML(answer)}!`);
 				this.state = "checking";
 			} else {
 				const wager = this.curPlayer.wager;
@@ -393,13 +395,13 @@ export class Jeopardy extends Rooms.RoomGame {
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (this.finals) {
 			if (player.finalAnswer) return "You have already answered the final jeopardy";
-			player.answer = Chat.escapeHTML(target);
-			player.send(`You have selected your answer as ${Chat.escapeHTML(target)}`);
+			player.answer = Utils.escapeHTML(target);
+			player.send(`You have selected your answer as ${Utils.escapeHTML(target)}`);
 		} else {
 			if (this.timeout) clearTimeout(this.timeout);
 			if (!this.curPlayer || this.curPlayer.id !== user.id) return "It is not your turn to answer.";
 			this.state = "checking";
-			this.room.add(`${user.name} has answered ${Chat.escapeHTML(target)}!`);
+			this.room.add(`${user.name} has answered ${Utils.escapeHTML(target)}!`);
 		}
 	}
 
@@ -494,7 +496,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	getQuestion(categoryNumber: number, questionNumber: number) {
 		const question = this.questions[questionNumber][categoryNumber];
 		if (question.question) {
-			return `<strong>Question: </strong>${Chat.escapeHTML(question.question)}<br><strong>Answer: </strong>${Chat.escapeHTML(question.answer)}`;
+			return `<strong>Question: </strong>${Utils.escapeHTML(question.question)}<br><strong>Answer: </strong>${Utils.escapeHTML(question.answer)}`;
 		} else {
 			return "That question has not yet been imported.";
 		}

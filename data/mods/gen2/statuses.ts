@@ -96,7 +96,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			const damage = this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter;
+			const damage = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter;
 			this.damage(damage, pokemon, pokemon);
 		},
 		onSwitchIn(pokemon) {
@@ -105,7 +105,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add('-status', pokemon, 'psn', '[silent]');
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	confusion: {
@@ -228,13 +228,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 
 function residualdmg(battle: Battle, pokemon: Pokemon) {
 	if (pokemon.volatiles['residualdmg']) {
-		const residualDmg = battle.dex.clampIntRange(
+		const residualDmg = battle.clampIntRange(
 			Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1
 		);
 		battle.damage(residualDmg, pokemon);
 		battle.hint("In Gen 2, Toxic's counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.", true);
 	} else {
-		battle.damage(battle.dex.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
+		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
 	}
 }
 

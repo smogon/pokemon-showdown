@@ -2082,7 +2082,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add('-sidestart', side, 'move: Stealth Rock');
 		},
 		onSwitchIn(pokemon) {
-			const typeMod = this.dex.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+			const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 			this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 		},
 	},

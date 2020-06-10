@@ -1,4 +1,5 @@
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
@@ -110,7 +111,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
 		// /viewfaq doesn't show source
 		if (!this.broadcasting && user.can('ban', null, room) && cmd !== 'viewfaq') {
-			const src = Chat.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
+			const src = Utils.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
 			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
 			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === topic);
 			if (aliases.length) {

@@ -2,6 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
+import {Utils} from '../../lib/utils';
 
 interface QuestionData {
 	source: string; supportHTML: boolean;
@@ -122,7 +123,7 @@ export class Poll {
 			const pendingVotes = (user && this.pendingVotes[user.id]) || [];
 			for (const [num, option] of this.options) {
 				const selected = pendingVotes.includes(num);
-				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
+				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Utils.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
 			}
 			// eslint-disable-next-line max-len
 			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="Submit your vote"><strong>Submit</strong></button>` : `<button class="button" value="/poll results" name="send" title="View results - you will not be able to vote after viewing results">(View results)</button`;
@@ -130,7 +131,7 @@ export class Poll {
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
-				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="Vote for ${num}. ${Chat.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
+				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="Vote for ${num}. ${Utils.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
 			}
 			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>`;
 			output += `</div>`;
@@ -166,12 +167,12 @@ export class Poll {
 
 	getQuestionMarkup() {
 		if (this.supportHTML) return this.question;
-		return Chat.escapeHTML(this.question);
+		return Utils.escapeHTML(this.question);
 	}
 
 	getOptionMarkup(option: Option) {
 		if (this.supportHTML) return option.name;
-		return Chat.escapeHTML(option.name);
+		return Utils.escapeHTML(option.name);
 	}
 
 	update() {

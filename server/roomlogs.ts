@@ -8,6 +8,7 @@
  */
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 
 interface RoomlogOptions {
 	isMultichannel?: boolean;
@@ -236,7 +237,7 @@ export class Roomlog {
 		const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
 		const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		if (line.startsWith(messageStart)) {
-			const parts = Chat.splitFirst(line, '|', section);
+			const parts = Utils.splitFirst(line, '|', section);
 			return {user: parts[section - 1], message: parts[section]};
 		}
 	}

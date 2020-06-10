@@ -560,7 +560,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					residualdmg.counter++;
 					toxicCounter = residualdmg.counter;
 				}
-				const toLeech = this.dex.clampIntRange(Math.floor(pokemon.baseMaxhp / 16), 1) * toxicCounter;
+				const toLeech = this.clampIntRange(Math.floor(pokemon.baseMaxhp / 16), 1) * toxicCounter;
 				const damage = this.damage(toLeech, pokemon, leecher);
 				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (!damage || toLeech > damage) {

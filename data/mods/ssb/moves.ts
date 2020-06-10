@@ -2018,7 +2018,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					const moves = [];
-					const pool = this.dex.shuffle(Object.keys(this.dex.data.Movedex));
+					const pool = Object.keys(this.dex.data.Movedex);
+					this.prng.shuffle(pool);
 					const metronome = this.dex.getMove('metronome');
 					for (const id of pool) {
 						const move = this.dex.getMove(id);

@@ -6,6 +6,7 @@
  *
  * @license MIT license
  */
+import {Utils} from '../../lib/utils';
 
 type RoomEvent = NonNullable<import('../rooms').RoomSettings['events']>[''];
 
@@ -19,10 +20,10 @@ function formatEvent(event: RoomEvent, showAliases?: boolean) {
 		explanation = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
 	}
 	let ret = `<tr title="${explanation}">`;
-	ret += Chat.html`<td>${event.eventName}</td>`;
-	ret += showAliases ? Chat.html`<td>${event.aliases?.join(", ")}</td>` : ``;
+	ret += Utils.html`<td>${event.eventName}</td>`;
+	ret += showAliases ? Utils.html`<td>${event.aliases?.join(", ")}</td>` : ``;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
-	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
+	ret += Utils.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
 }
 
@@ -153,13 +154,13 @@ export const commands: ChatCommands = {
 				if (activeUser?.connected) {
 					activeUser.sendTo(
 						room,
-						Chat.html`|notify|A new roomevent in ${room.title} has started!|` +
+						Utils.html`|notify|A new roomevent in ${room.title} has started!|` +
 						`The "${event.eventName}" roomevent has started!`
 					);
 				}
 			}
 			this.add(
-				Chat.html`|raw|<div class="broadcast-blue"><b>The "${event.eventName}" roomevent has started!</b></div>`
+				Utils.html`|raw|<div class="broadcast-blue"><b>The "${event.eventName}" roomevent has started!</b></div>`
 			);
 			this.modlog('ROOMEVENT', null, `started "${toID(event.eventName)}"`);
 			event.started = true;
@@ -198,8 +199,8 @@ export const commands: ChatCommands = {
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
-					Chat.html`<code>/roomevents add ${event.eventName} |` +
-					Chat.html`${event.date} | ${event.desc}</code>`
+					Utils.html`<code>/roomevents add ${event.eventName} |` +
+					Utils.html`${event.date} | ${event.desc}</code>`
 				);
 			}
 		},

@@ -2,6 +2,7 @@
 * Hangman chat plugin
 * By bumbadadabum and Zarel. Art by crobat.
 */
+import {Utils} from '../../lib/utils';
 
 const maxMistakes = 6;
 
@@ -150,21 +151,21 @@ export class Hangman extends Rooms.RoomGame {
 			);
 		}
 
-		if (this.hint) output += Chat.html`<div>(Hint: ${this.hint})</div>`;
+		if (this.hint) output += Utils.html`<div>(Hint: ${this.hint})</div>`;
 		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(
-					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Chat.escapeHTML(g[0])}</strong>`
+					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Utils.escapeHTML(g[0])}</strong>`
 				).join(', ');
 			}
 			if (result === 2) {
-				output += Chat.html`<br />Winner: ${this.lastGuesser}`;
+				output += Utils.html`<br />Winner: ${this.lastGuesser}`;
 			} else if (this.guesses[this.guesses.length - 1].length === 1) {
 				// last guess was a letter
-				output += Chat.html` <small>&ndash; ${this.lastGuesser}</small>`;
+				output += Utils.html` <small>&ndash; ${this.lastGuesser}</small>`;
 			} else {
-				output += Chat.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} ` +
+				output += Utils.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} ` +
 					`<small>&ndash; ${this.lastGuesser}</small>`;
 			}
 		}

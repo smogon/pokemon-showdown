@@ -6,6 +6,7 @@
  *
  * @license MIT license
  */
+import {Utils} from '../../lib/utils';
 
 type Color = 'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black';
 interface Card {
@@ -118,7 +119,7 @@ export class UnoGame extends Rooms.RoomGame {
 
 		this.state = 'signups';
 		this.currentPlayerid = '';
-		this.deck = Dex.shuffle(createDeck());
+		this.deck = Utils.shuffle(createDeck());
 		this.discards = [];
 		this.topCard = null;
 		this.awaitUno = null;
@@ -244,7 +245,7 @@ export class UnoGame extends Rooms.RoomGame {
 					throw new Error(`No top card in the discard pile.`);
 				}
 				this.topCard.changedColor = this.discards[1].changedColor || this.discards[1].color;
-				this.sendToRoom(`|raw|${Chat.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
+				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 
 			if (this.timer) clearTimeout(this.timer);
@@ -280,12 +281,12 @@ export class UnoGame extends Rooms.RoomGame {
 	getPlayers(showCards?: boolean): string[] {
 		let playerList = Object.keys(this.playerTable);
 		if (!showCards) {
-			return playerList.sort().map(id => Chat.escapeHTML(this.playerTable[id].name));
+			return playerList.sort().map(id => Utils.escapeHTML(this.playerTable[id].name));
 		}
 		if (this.direction === -1) playerList = playerList.reverse();
 		return playerList.map(
 			id => `${(this.currentPlayerid === id ? '<strong>' : '')}` +
-				`${Chat.escapeHTML(this.playerTable[id].name)} (${this.playerTable[id].hand.length})` +
+				`${Utils.escapeHTML(this.playerTable[id].name)} (${this.playerTable[id].hand.length})` +
 				`${(this.currentPlayerid === id ? '</strong>' : "")}`
 		);
 	}
@@ -401,7 +402,7 @@ export class UnoGame extends Rooms.RoomGame {
 
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
 
-		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${textColors[card.color]}">${card.name}</span>.`);
+		this.sendToRoom(`|raw|${Utils.escapeHTML(player.name)} has played a <span style="color: ${textColors[card.color]}">${card.name}</span>.`);
 
 		// handle hand size
 		if (!player.hand.length) {
@@ -506,7 +507,7 @@ export class UnoGame extends Rooms.RoomGame {
 		for (let i = 0; i < count; i++) {
 			if (!this.deck.length) {
 				// shuffle the cards back into the deck, or if there are no discards, add another deck into the game.
-				this.deck = this.discards.length ? Dex.shuffle(this.discards) : Dex.shuffle(createDeck());
+				this.deck = this.discards.length ? Utils.shuffle(this.discards) : Utils.shuffle(createDeck());
 				this.discards = []; // clear discard pile
 			}
 			drawnCards.push(this.deck[this.deck.length - 1]);
@@ -518,7 +519,7 @@ export class UnoGame extends Rooms.RoomGame {
 	onUno(player: UnoGamePlayer, unoId: ID) {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || player.id !== this.awaitUno) return false;
-		this.sendToRoom(Chat.html`|raw|<strong>UNO!</strong> ${player.name} is down to their last card!`);
+		this.sendToRoom(Utils.html`|raw|<strong>UNO!</strong> ${player.name} is down to their last card!`);
 		this.awaitUno = null;
 		this.unoId = null;
 	}
@@ -543,7 +544,7 @@ export class UnoGame extends Rooms.RoomGame {
 
 	onWin(player: UnoGamePlayer) {
 		this.sendToRoom(
-			Chat.html`|raw|<div class="broadcast-green">Congratulations to ${player.name} for winning the game of UNO!</div>`,
+			Utils.html`|raw|<div class="broadcast-green">Congratulations to ${player.name} for winning the game of UNO!</div>`,
 			true
 		);
 		this.destroy();
