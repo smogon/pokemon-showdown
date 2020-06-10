@@ -536,6 +536,18 @@ export class GlobalRoom extends BasicRoom {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
+
+			// convert from old RoomEvent.aliases format to RoomEventAlias format
+			if (settings.events) {
+				for (const event of Object.values(settings.events).map(e => e as AnyObject)) {
+					if (!event.aliases) continue;
+					for (const alias of event.aliases) {
+						settings.events[alias] = {id: alias, eventID: toID(event.eventName)};
+					}
+					delete event.aliases;
+				}
+			}
+
 			// We're okay with assinging type `ID` to `RoomID` here
 			// because the hyphens in chatrooms don't have any special
 			// meaning, unlike in helptickets, groupchats, battles etc
@@ -548,6 +560,7 @@ export class GlobalRoom extends BasicRoom {
 					Rooms.aliases.set(alias, id);
 				}
 			}
+
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoinList.push(id);
 			if (room.settings.staffAutojoin) this.staffAutojoinList.push(id);
