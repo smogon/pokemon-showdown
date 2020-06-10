@@ -1,5 +1,17 @@
 export const BattleItems: {[k: string]: ModdedItemData} = {
-	// Frostyicelad
+	// Alpha
+	caioniumz: {
+		name: "Caionium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Blistering Ice Age",
+		zMoveFrom: "Blizzard",
+		itemUser: ["Aurorus"],
+		gen: 8,
+		desc: "If held by an Aurorus with Blizzard, it can use Blistering Ice Age.",
+	},
+
+	// frostyicelad ❆
 	icestone: {
 		inherit: true,
 		megaStone: "Frosmoth-Mega",
@@ -41,8 +53,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		onImmunity(type, pokemon) {
 			if (['sandstorm', 'hail', 'snowstorm', 'powder'].includes(type)) return false;
 		},
-		desc: "Holder is immune to powder moves and damage from Sandstorm Hail, and Snowstorm.",
+		desc: "Holder is immune to powder moves and damage from Sandstorm, Hail, and Snowstorm.",
 	},
 };
-
-exports.BattleItems = BattleItems;

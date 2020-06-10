@@ -40,6 +40,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Lilypad Overflow',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
 	},
+	Alpha: {
+		species: 'Aurorus', ability: 'Snow Warning', item: 'Caionium Z', gender: 'M',
+		moves: ['Freeze-Dry', 'Ancient Power', 'Earth Power'],
+		signatureMove: 'Blizzard',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+	},
 	'cant say': {
 		species: 'Volcarona', ability: 'Rage Quit', item: 'Kee Berry', gender: 'M',
 		moves: ['Quiver Dance', 'Roost', 'Will-O-Wisp'],
@@ -78,7 +84,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Kōri Senbon',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	Frostyicelad: {
+	'frostyicelad ❆': {
 		species: 'Frosmoth', ability: 'Ice Shield', item: 'Ice Stone', gender: 'M',
 		moves: ['Quiver Dance', 'Bug Buzz', ['Earth Power', 'Sparkling Aria']],
 		signatureMove: 'Frosty Wave',
@@ -111,7 +117,7 @@ export const ssbSets: SSBSets = {
 	Kris: {
 		species: 'Unown', ability: 'Protean', item: 'Life Orb', gender: 'N',
 		moves: ['Light of Ruin', 'Psystrike', ['Secret Sword', 'Mind Blown', 'Seed Flare']],
-		signatureMove: 'ebhewbnjgWEGAER',
+		signatureMove: 'Alphabet Soup',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	MajorBowman: {
