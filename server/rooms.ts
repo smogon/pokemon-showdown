@@ -80,7 +80,7 @@ export interface RoomSettings {
 	staffRoom?: boolean;
 	language?: string | false;
 	slowchat?: number | false;
-	events?: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases?: string[]}};
+	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
 	filterStretching?: boolean;
 	filterEmojis?: boolean;
 	filterCaps?: boolean;
@@ -176,36 +176,6 @@ export abstract class BasicRoom {
 	reportJoins: boolean;
 	batchJoins: number;
 	reportJoinsInterval: NodeJS.Timer | null;
-<<<<<<< HEAD
-=======
-	logTimes: boolean;
-	modjoin: string | true | null;
-	modchat: string | null;
-	staffRoom: boolean;
-	language: string | false;
-	slowchat: number | false;
-	events: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
-	filterStretching: boolean;
-	filterEmojis: boolean;
-	filterCaps: boolean;
-	jeopardyDisabled: boolean;
-	mafiaDisabled: boolean;
-	unoDisabled: boolean;
-	blackjackDisabled: boolean;
-	hangmanDisabled: boolean;
-	giveaway: QuestionGiveaway | LotteryGiveaway | null;
-	gtsga: GTSGiveaway | null;
-	scavgame: null | ScavengerGameTemplate;
-	scavSettings: null | AnyObject;
-	scavQueue: null | QueuedHunt[];
-	scavLeaderboard: null | AnyObject;
-	toursEnabled: '%' | boolean;
-	tourAnnouncements: boolean;
-	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
-	privacySetter: Set<ID> | null;
-	gameNumber: number;
-	highTraffic: boolean;
->>>>>>> Roomevents: Support adding events to categories
 
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
