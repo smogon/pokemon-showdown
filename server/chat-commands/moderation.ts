@@ -174,6 +174,47 @@ export const commands: ChatCommands = {
 		`/roomdeauth [username] - Removes all room rank from the user. Requires: @ # &`,
 	],
 
+	'!authority': true,
+	auth: 'authority',
+	stafflist: 'authority',
+	globalauth: 'authority',
+	authlist: 'authority',
+	authority(target, room, user, connection) {
+		if (target && target !== '+') {
+			const targetRoom = Rooms.search(target);
+			const availableRoom = targetRoom?.checkModjoin(user);
+			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
+			return this.parse(`/userauth ${target}`);
+		}
+		const showAll = !!target;
+		const rankLists: {[k: string]: string[]} = {};
+		for (const [id, symbol] of Users.globalAuth) {
+			if (symbol === ' ' || (symbol === '+' && !showAll)) continue;
+			if (!rankLists[symbol]) rankLists[symbol] = [];
+			rankLists[symbol].push(Users.globalAuth.usernames.get(id) || id);
+		}
+
+		const buffer = Utils.sortBy(
+			Object.entries(rankLists) as [GroupSymbol, string[]][],
+			([symbol]) => -Users.Auth.getGroup(symbol).rank
+		).map(
+			([symbol, names]) => (
+				`${(Config.groups[symbol] ? `**${Config.groups[symbol].name}s** (${symbol})` : symbol)}:\n` +
+				Utils.sortBy(names, name => toID(name)).join(", ")
+			)
+		);
+		if (!showAll) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
+
+		if (!buffer.length) return connection.popup("This server has no global authority.");
+		connection.popup(buffer.join("\n\n"));
+	},
+	authhelp: [
+		`/auth - Show global staff for the server.`,
+		`/auth + - Show global staff for the server, including voices.`,
+		`/auth [room] - Show what roomauth a room has.`,
+		`/auth [user] - Show what global and roomauth a user has.`,
+	],
+
 	'!roomauth': true,
 	roomstaff: 'roomauth',
 	roomauth1: 'roomauth',
@@ -194,18 +235,17 @@ export const commands: ChatCommands = {
 			rankLists[rank].push(id);
 		}
 
-		const buffer = Object.keys(rankLists).sort(
-			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
-		).map(groupSymbol => {
-			let roomRankList: string[] = rankLists[groupSymbol].sort();
-			roomRankList = roomRankList.map(userid => {
-				const curUser = Users.get(userid);
-				const isAway = curUser?.statusType !== 'online';
-				return userid in targetRoom.users && !isAway ? `**${userid}**` : userid;
-			});
-			let group = Config.groups[groupSymbol] ? `${Config.groups[groupSymbol].name}s (${groupSymbol})` : groupSymbol;
-			if (groupSymbol === ' ') group = 'Whitelisted';
-			return `${group}:\n${roomRankList.join(", ")}`;
+		const buffer = Utils.sortBy(
+			Object.entries(rankLists) as [GroupSymbol, ID[]][],
+			([symbol]) => -Users.Auth.getGroup(symbol).rank
+		).map(([symbol, names]) => {
+			let group = Config.groups[symbol] ? `${Config.groups[symbol].name}s (${symbol})` : symbol;
+			if (symbol === ' ') group = 'Whitelisted';
+			return `${group}:\n` +
+				Utils.sortBy(names).map(userid => {
+					const isOnline = Users.get(userid)?.statusType === 'online';
+					return userid in targetRoom.users && isOnline ? `**${userid}**` : userid;
+				}).join(', ');
 		});
 
 		let curRoom = targetRoom;
