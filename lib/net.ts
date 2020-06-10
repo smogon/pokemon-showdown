@@ -85,9 +85,9 @@ export class NetStream extends Streams.ReadWriteStream {
 			response.setEncoding('utf-8');
 			this.nodeReadableStream = response;
 			this.response = response;
-			resolveResponse(response);
 			this.statusCode = response.statusCode || null;
 			this.headers = response.headers;
+			resolveResponse(response);
 			response.on('data', data => {
 				this.push(data);
 			});
