@@ -92,7 +92,7 @@ export class NetStream extends Streams.ReadWriteStream {
 				this.push(data);
 			});
 			response.on('end', () => {
-				this.push(null);
+				this.pushEnd();
 			});
 		});
 		request.on('error', error => {

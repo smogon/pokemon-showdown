@@ -100,7 +100,7 @@ export class LadderStore {
 		for (const row of ladder) {
 			void stream.write(row.slice(1).join('\t') + '\r\n');
 		}
-		void stream.end();
+		void stream.writeEnd();
 		this.saving = false;
 	}
 
