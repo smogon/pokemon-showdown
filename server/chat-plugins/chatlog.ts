@@ -6,6 +6,7 @@
  */
 
 import {FS} from "../../lib/fs";
+import {Utils} from '../../lib/utils';
 import * as child_process from 'child_process';
 import * as util from 'util';
 import * as path from 'path';
@@ -288,7 +289,7 @@ export const LogViewer = new class {
 		const cmd = line.slice(0, line.indexOf('|'));
 		switch (cmd) {
 		case 'c': {
-			const [, name, message] = Chat.splitFirst(line, '|', 2);
+			const [, name, message] = Utils.splitFirst(line, '|', 2);
 			if (name.length <= 1) {
 				return `<div class="chat"><small>[${timestamp}] </small><q>${Chat.formatText(message)}</q></div>`;
 			}
@@ -307,20 +308,20 @@ export const LogViewer = new class {
 			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${name.slice(1)}:</strong> <q>${Chat.formatText(message)}</q></div>`;
 		}
 		case 'html': case 'raw': {
-			const [, html] = Chat.splitFirst(line, '|', 1);
+			const [, html] = Utils.splitFirst(line, '|', 1);
 			return `<div class="notice">${html}</div>`;
 		}
 		case 'uhtml': case 'uhtmlchange': {
 			if (cmd !== 'uhtml') return ``;
-			const [, , html] = Chat.splitFirst(line, '|', 2);
+			const [, , html] = Utils.splitFirst(line, '|', 2);
 			return `<div class="notice">${html}</div>`;
 		}
 		case '!NT':
-			return `<div class="chat">${Chat.escapeHTML(fullLine)}</div>`;
+			return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
 		case '':
-			return `<div class="chat"><small>[${timestamp}] </small>${Chat.escapeHTML(line.slice(1))}</div>`;
+			return `<div class="chat"><small>[${timestamp}] </small>${Utils.escapeHTML(line.slice(1))}</div>`;
 		default:
-			return `<div class="chat"><small>[${timestamp}] </small><code>${'|' + Chat.escapeHTML(line)}</code></div>`;
+			return `<div class="chat"><small>[${timestamp}] </small><code>${'|' + Utils.escapeHTML(line)}</code></div>`;
 		}
 	}
 
@@ -595,7 +596,7 @@ export const pages: PageTable = {
 		if (!user.trusted) {
 			return LogViewer.error("Access denied");
 		}
-		let [roomid, date, opts] = Chat.splitFirst(args.join('-'), '--', 2) as
+		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';

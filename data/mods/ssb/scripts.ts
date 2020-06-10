@@ -327,7 +327,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);

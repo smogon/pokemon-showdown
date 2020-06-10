@@ -6,6 +6,7 @@
  *
  * @license MIT
  */
+import {Utils} from '../../lib/utils';
 
 const RANKS: string[] = Config.groupsranking;
 
@@ -28,7 +29,7 @@ export const commands: ChatCommands = {
 			uhtml = 'uhtmlchange';
 		}
 
-		let output = Chat.html`<div class="infobox">Room Settings for ${room.title}<br />`;
+		let output = Utils.html`<div class="infobox">Room Settings for ${room.title}<br />`;
 		for (const handler of Chat.roomSettings) {
 			const setting = handler(room, user, connection);
 			if (typeof setting.permission === 'string') setting.permission = user.can(setting.permission, null, room);
@@ -38,13 +39,13 @@ export const commands: ChatCommands = {
 			for (const option of setting.options) {
 				// disabled button
 				if (option[1] === true) {
-					output += Chat.html`<button class="button disabled" style="font-weight:bold;color:#575757;` +
+					output += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;` +
 						`font-weight:bold;background-color:#d3d3d3;">${option[0]}</button> `;
 				} else {
 					// only show proper buttons if we have the permissions to use them
 					if (!setting.permission) continue;
 
-					output += Chat.html`<button class="button" name="send" value="/roomsetting ${option[1]}">${option[0]}</button> `;
+					output += Utils.html`<button class="button" name="send" value="/roomsetting ${option[1]}">${option[0]}</button> `;
 				}
 			}
 			output += `<br />`;
@@ -115,7 +116,7 @@ export const commands: ChatCommands = {
 		if (!room.settings.modchat) {
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
 		} else {
-			const modchatSetting = Chat.escapeHTML(room.settings.modchat);
+			const modchatSetting = Utils.escapeHTML(room.settings.modchat);
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
 		if ((room as GameRoom).requestModchat && !room.settings.modchat) (room as GameRoom).requestModchat(null);
@@ -551,17 +552,17 @@ export const commands: ChatCommands = {
 			room.saveSettings();
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
 			}
 			this.sendReply(`The private chat room '${target}' was created.`);
 		} else {
 			const staffRoom = Rooms.get('staff');
 			if (staffRoom) {
-				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
 			}
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
 			}
 			this.sendReply(`The chat room '${target}' was created.`);
 		}
@@ -620,7 +621,7 @@ export const commands: ChatCommands = {
 			return;
 		}
 
-		const titleMsg = Chat.html`Welcome to ${parent ? room.title : user.name}'s` +
+		const titleMsg = Utils.html`Welcome to ${parent ? room.title : user.name}'s` +
 			`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
 		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
@@ -673,7 +674,7 @@ export const commands: ChatCommands = {
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply(`The room '${target}' was deregistered.`);
 			this.sendReply("It will be deleted as of the next server restart.");
-			target = Chat.escapeHTML(target);
+			target = Utils.escapeHTML(target);
 			if (isPrivate) {
 				if (upperStaffRoom) {
 					upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
@@ -727,19 +728,19 @@ export const commands: ChatCommands = {
 				const upperStaffRoom = Rooms.get('upperstaff');
 				if (upperStaffRoom) {
 					upperStaffRoom.add(
-						Chat.html`|raw|<div class="broadcast-red">Private chat room ` +
+						Utils.html`|raw|<div class="broadcast-red">Private chat room ` +
 						`deleted by ${user.id}: <b>${title}</b></div>`
 					).update();
 				}
 			} else {
 				const staffRoom = Rooms.get('staff');
 				if (staffRoom) {
-					staffRoom.add(Chat.html`|raw|<div class="broadcast-red">Public chat room deleted: <b>${title}</b></div>`).update();
+					staffRoom.add(Utils.html`|raw|<div class="broadcast-red">Public chat room deleted: <b>${title}</b></div>`).update();
 				}
 				const upperStaffRoom = Rooms.get('upperstaff');
 				if (upperStaffRoom) {
 					upperStaffRoom.add(
-						Chat.html`|raw|<div class="broadcast-red">Public chat ` +
+						Utils.html`|raw|<div class="broadcast-red">Public chat ` +
 						`room deleted by ${user.id}: <b>${title}</b></div>`
 					).update();
 				}
@@ -794,14 +795,14 @@ export const commands: ChatCommands = {
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
 			`${room.settings.isPrivate.charAt(0).toUpperCase()}${room.settings.isPrivate.slice(1)}`;
-		const message = Chat.html`
+		const message = Utils.html`
 			|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>
 		`;
 
 		const toNotify: RoomID[] = ['upperstaff'];
 		if (room.settings.isPrivate !== true) toNotify.push('staff');
 		Rooms.global.notifyRooms(toNotify, message);
-		room.add(Chat.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
+		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
 	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
 
@@ -1040,10 +1041,10 @@ export const commands: ChatCommands = {
 
 		const subRoomText = subRooms.map(
 			subRoom =>
-				Chat.html`<a href="/${subRoom.roomid}">${subRoom.title}</a><br/><small>${subRoom.settings.desc}</small>`
+				Utils.html`<a href="/${subRoom.roomid}">${subRoom.title}</a><br/><small>${subRoom.settings.desc}</small>`
 		);
 
-		return this.sendReplyBox(`<p style="font-weight:bold;">${Chat.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
+		return this.sendReplyBox(`<p style="font-weight:bold;">${Utils.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
 	},
 
 	subroomhelp: [
@@ -1057,7 +1058,7 @@ export const commands: ChatCommands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.desc) return this.sendReply(`This room does not have a description set.`);
-			this.sendReplyBox(Chat.html`The room description is: ${room.settings.desc}`);
+			this.sendReplyBox(Utils.html`The room description is: ${room.settings.desc}`);
 			return;
 		}
 		if (!this.can('declare')) return false;
@@ -1091,7 +1092,7 @@ export const commands: ChatCommands = {
 			if (!room.settings.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.settings.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
-				const code = Chat.escapeHTML(room.settings.introMessage).replace(/\n/g, '<br />');
+				const code = Utils.escapeHTML(room.settings.introMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
 			}
 			return;
@@ -1137,7 +1138,7 @@ export const commands: ChatCommands = {
 			if (!room.settings.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
 			this.sendReply(`|raw|<div class="infobox">${room.settings.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
-				const code = Chat.escapeHTML(room.settings.staffMessage).replace(/\n/g, '<br />');
+				const code = Utils.escapeHTML(room.settings.staffMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/staffintro ${code}</code></details>`);
 			}
 			return;

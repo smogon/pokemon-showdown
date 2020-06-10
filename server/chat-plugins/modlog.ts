@@ -19,6 +19,7 @@ import * as util from 'util';
 import * as Dashycode from '../../lib/dashycode';
 
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 import {QueryProcessManager} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {Dex} from '../../sim/dex';
@@ -122,7 +123,7 @@ function getMoreButton(
 	if (!newLines || lines < maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
-		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
+		if (useExactSearch) search = Utils.escapeHTML(`"${search}"`);
 		return `<br /><div style="text-align:center"><button class="button" name="send" value="/${onlyPunishments ? 'punish' : 'mod'}log ${roomid}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
 	}
 }
@@ -246,7 +247,7 @@ function prettifyResults(
 		if (line) {
 			if (hideIps) line = line.replace(/[([][0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[)\]]/g, '');
 			bracketIndex = line.indexOf(']');
-			if (bracketIndex < 0) return Chat.escapeHTML(line);
+			if (bracketIndex < 0) return Utils.escapeHTML(line);
 			time = new Date(line.slice(1, bracketIndex));
 		} else {
 			time = new Date();
@@ -267,7 +268,7 @@ function prettifyResults(
 			const url = Config.modloglink(time, thisRoomID);
 			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 		}
-		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
+		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Utils.escapeHTML(line.slice(parenIndex + 1))}`;
 	}).join(`<br />`);
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');

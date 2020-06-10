@@ -7,6 +7,8 @@
 
 import {Net} from '../../lib/net';
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
+
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
@@ -75,7 +77,7 @@ export class YoutubeInterface {
 	}
 	randChannel() {
 		const keys = Object.keys(channelData);
-		const id = Dex.shuffle(keys)[0].trim();
+		const id = Utils.shuffle(keys)[0].trim();
 		return this.generateChannelDisplay(id);
 	}
 	get(id: string, username?: string) {
@@ -299,7 +301,7 @@ export const pages: PageTable = {
 		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		buffer += `</h4><hr />`;
 		const isStaff = user.can('mute', null, Rooms.get('youtube'));
-		for (const id of Dex.shuffle(Object.keys(channelData))) {
+		for (const id of Utils.shuffle(Object.keys(channelData))) {
 			const name = YouTube.get(id).name;
 			const psid = YouTube.get(id).username;
 			if (!all && !psid) continue;

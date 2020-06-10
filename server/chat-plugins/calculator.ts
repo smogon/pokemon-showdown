@@ -1,3 +1,5 @@
+import {Utils} from '../../lib/utils';
+
 type Operator = '^' | '%' | '/' | '*' | '+' | '-';
 interface Operators {
 	precedence: number;
@@ -178,7 +180,7 @@ export const commands: ChatCommands = {
 			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
 		} catch (e) {
 			this.sendReplyBox(
-				Chat.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
+				Utils.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
 			);
 		}
 	},
