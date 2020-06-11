@@ -1,5 +1,7 @@
 // Other Metas plugin by Spandan
 
+import {Utils} from '../../lib/utils';
+
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};
 	weighthg: number;
@@ -71,7 +73,7 @@ export const commands: ChatCommands = {
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ # & ~`,
+		`!om - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!mixandmega': true,
@@ -136,7 +138,7 @@ export const commands: ChatCommands = {
 		}
 		let statName: StatName;
 		for (statName in species.baseStats) { // Add the changed stats and weight
-			mixedSpecies.baseStats[statName] = Dex.clampIntRange(
+			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
 		}
@@ -354,7 +356,7 @@ export const commands: ChatCommands = {
 		const boost = boosts[tier as TierShiftTiers];
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
-			species.baseStats[statName] = Dex.clampIntRange(species.baseStats[statName] + boost, 1, 255);
+			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -399,7 +401,7 @@ export const commands: ChatCommands = {
 		const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
 		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
 		for (const stat of stats) {
-			species.baseStats[stat] = Dex.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
+			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},

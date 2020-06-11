@@ -2,6 +2,7 @@
 
 import {RandomTeams, TeamData} from '../../random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {Utils} from '../../../lib/utils';
 
 export class RandomGen7Teams extends RandomTeams {
 	randomFactorySets: AnyObject;
@@ -20,7 +21,7 @@ export class RandomGen7Teams extends RandomTeams {
 			forme = species.battleOnly;
 		}
 		if (species.cosmeticFormes) {
-			species = this.dex.getSpecies(this.sample([species.name].concat(species.cosmeticFormes)));
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
 		const randMoves = !isDoubles ? species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);
@@ -986,7 +987,7 @@ export class RandomGen7Teams extends RandomTeams {
 			} else if (item === 'Light Ball') {
 				bst += baseStats.atk + baseStats.spa;
 			}
-			level = 70 + Math.floor(((600 - this.dex.clampIntRange(bst, 300, 600)) / 10.34));
+			level = 70 + Math.floor(((600 - Utils.clampIntRange(bst, 300, 600)) / 10.34));
 		}
 
 		// Prepare optimal HP

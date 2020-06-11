@@ -1860,13 +1860,11 @@ export class TeamValidator {
 					}
 
 					// Gen 8 egg moves can be taught to any pokemon from any source
-					if (learned === '8E') learned = '8T';
-
-					if ('LMTR'.includes(learned.charAt(1))) {
+					if (learned === '8E' || 'LMTR'.includes(learned.charAt(1))) {
 						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
-							if (babyOnly) setSources.babyOnly = babyOnly;
+							if (learned !== '8E' && babyOnly) setSources.babyOnly = babyOnly;
 							if (!moveSources.moveEvoCarryCount) return null;
 						}
 						// past-gen level-up, TM, or tutor moves:
@@ -1998,6 +1996,8 @@ export class TeamValidator {
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
+		} else if (species.baseSpecies === 'Pumpkaboo') {
+			return this.dex.getSpecies('Pumpkaboo');
 		}
 		return null;
 	}

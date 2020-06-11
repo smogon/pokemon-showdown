@@ -8,11 +8,12 @@ import {Dex} from './dex';
 global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
-import {Pokemon, EffectState} from './pokemon';
+import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
+import {Utils} from '../lib/utils';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -137,6 +138,7 @@ export class Battle {
 	readonly send: (type: string, data: string | string[]) => void;
 
 	trunc: (num: number, bits?: number) => number;
+	clampIntRange: (num: any, min?: number, max?: number) => number;
 
 	constructor(options: BattleOptions) {
 		const format = options.format || Dex.getFormat(options.formatid, true);
@@ -148,6 +150,7 @@ export class Battle {
 		this.zMoveTable = {};
 		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
+		this.clampIntRange = Utils.clampIntRange;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
@@ -1077,12 +1080,16 @@ export class Battle {
 			side.activeRequest = null;
 		}
 
-		const maxTeamSize = this.getMaxTeamSize();
+		const teamLengthData = this.format.teamLength;
+		const maxTeamSize = teamLengthData?.battle;
 		if (type === 'teampreview') {
-			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
+			// Send the specified team size to the client even if it's our
+			// default team size of 6 as this means that the format wants
+			// the user to select the team order instead of just their lead.
+			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
 		}
 
-		const requests = this.getRequests(type, maxTeamSize);
+		const requests = this.getRequests(type, maxTeamSize || 6);
 		for (let i = 0; i < this.sides.length; i++) {
 			this.sides[i].emitRequest(requests[i]);
 		}
@@ -1521,7 +1528,7 @@ export class Battle {
 	private maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
-		if (!this.ruleTable.has('endlessbattleclause')) return;
+		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1558,26 +1565,26 @@ export class Battle {
 		// Endless Battle Clause activates - we determine the winner by looking at each side's sets.
 		const losers: Side[] = [];
 		for (const side of this.sides) {
-			let leppa = false; // Leppa Berry
+			let berry = false; // Restorative Berry
 			let cycle = false; // Harvest or Recycle
 			for (const pokemon of side.pokemon) {
-				if (toID(pokemon.set.item) === 'leppaberry') leppa = true;
+				berry = RESTORATIVE_BERRIES.has(toID(pokemon.set.item));
 				if (['harvest', 'pickup'].includes(toID(pokemon.set.ability)) ||
 					pokemon.set.moves.map(toID).includes('recycle' as ID)) {
 					cycle = true;
 				}
-				if (leppa && cycle) break;
+				if (berry && cycle) break;
 			}
-			if (leppa && cycle) losers.push(side);
+			if (berry && cycle) losers.push(side);
 		}
 
 		if (losers.length === 1) {
 			const loser = losers[0];
-			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform Leppa Berry cycling and thus loses.`);
+			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform restorative berry-cycling and thus loses.`);
 			return this.win(loser.foe);
 		}
 		if (losers.length === this.sides.length) {
-			this.add('-message', `Each side's team started with the rudimentary means to perform Leppa Berry cycling.`);
+			this.add('-message', `Each side's team started with the rudimentary means to perform restorative berry-cycling.`);
 		}
 
 		return this.tie();
@@ -1741,7 +1748,7 @@ export class Battle {
 				retVals[i] = false;
 				continue;
 			}
-			if (targetDamage !== 0) targetDamage = this.dex.clampIntRange(targetDamage, 1);
+			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
@@ -1756,7 +1763,7 @@ export class Battle {
 					continue;
 				}
 			}
-			if (targetDamage !== 0) targetDamage = this.dex.clampIntRange(targetDamage, 1);
+			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (this.gen <= 1) {
 				if (this.dex.currentMod === 'stadium' ||
@@ -1793,11 +1800,11 @@ export class Battle {
 
 			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
-					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
 				}
 				if (this.gen <= 4 && effect.drain && source) {
-					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
 					this.heal(amount, source, target, 'drain');
 				}
 				if (this.gen > 4 && effect.drain && source) {
@@ -1845,7 +1852,7 @@ export class Battle {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = this.dex.clampIntRange(damage, 1);
+		damage = this.clampIntRange(damage, 1);
 
 		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
 
@@ -2025,15 +2032,15 @@ export class Battle {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		let critMult;
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
 		if (this.gen <= 5) {
-			critRatio = this.dex.clampIntRange(critRatio, 0, 5);
+			critRatio = this.clampIntRange(critRatio, 0, 5);
 			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
-			critRatio = this.dex.clampIntRange(critRatio, 0, 4);
+			critRatio = this.clampIntRange(critRatio, 0, 4);
 			if (this.gen === 6) {
 				critMult = [0, 16, 8, 2, 1];
 			} else {
@@ -2057,7 +2064,7 @@ export class Battle {
 		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
 		if (!basePower) return 0;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		const level = pokemon.level;
 
@@ -2122,7 +2129,7 @@ export class Battle {
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 		if (this.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
-			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		const tr = this.trunc;
@@ -2172,7 +2179,7 @@ export class Battle {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);

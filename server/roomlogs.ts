@@ -8,6 +8,13 @@
  */
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
+
+interface RoomlogOptions {
+	isMultichannel?: boolean;
+	noAutoTruncate?: boolean;
+	noLogTimes?: boolean;
+}
 
 /**
  * Most rooms have three logs:
@@ -37,11 +44,11 @@ export class Roomlog {
 	 * Chat rooms auto-truncate, which means it only stores the recent
 	 * messages, if there are more.
 	 */
-	readonly autoTruncate: boolean;
+	readonly noAutoTruncate: boolean;
 	/**
 	 * Chat rooms include timestamps.
 	 */
-	readonly logTimes: boolean;
+	readonly noLogTimes: boolean;
 	roomid: RoomID;
 	/**
 	 * Scrollback log
@@ -60,12 +67,12 @@ export class Roomlog {
 	roomlogStream?: Streams.WriteStream | null;
 	sharedModlog: boolean;
 	roomlogFilename: string;
-	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
+	constructor(room: BasicChatRoom, options: RoomlogOptions = {}) {
 		this.roomid = room.roomid;
 
 		this.isMultichannel = !!options.isMultichannel;
-		this.autoTruncate = !!options.autoTruncate;
-		this.logTimes = !!options.logTimes;
+		this.noAutoTruncate = !!options.noAutoTruncate;
+		this.noLogTimes = !!options.noLogTimes;
 
 		this.log = [];
 		this.broadcastBuffer = '';
@@ -83,7 +90,7 @@ export class Roomlog {
 	}
 	getScrollback(channel = 0) {
 		let log = this.log;
-		if (this.logTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
+		if (!this.noLogTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
 		if (!this.isMultichannel) {
 			return log.join('\n') + '\n';
 		}
@@ -142,7 +149,7 @@ export class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
-		if (this.roomlogStream) void this.roomlogStream.end();
+		if (this.roomlogStream) void this.roomlogStream.writeEnd();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
@@ -163,7 +170,7 @@ export class Roomlog {
 		return this;
 	}
 	private withTimestamp(message: string) {
-		if (this.logTimes && message.startsWith('|c|')) {
+		if (!this.noLogTimes && message.startsWith('|c|')) {
 			return `|c:|${Math.trunc(Date.now() / 1000)}|${message.slice(3)}`;
 		} else {
 			return message;
@@ -227,10 +234,10 @@ export class Roomlog {
 		this.broadcastBuffer += fullMessage + '\n';
 	}
 	private parseChatLine(line: string) {
-		const messageStart = this.logTimes ? '|c:|' : '|c|';
-		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
+		const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
+		const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		if (line.startsWith(messageStart)) {
-			const parts = Chat.splitFirst(line, '|', section);
+			const parts = Utils.splitFirst(line, '|', section);
 			return {user: parts[section - 1], message: parts[section]};
 		}
 	}
@@ -294,7 +301,7 @@ export class Roomlog {
 		Roomlogs.rollLogTimer = setTimeout(() => void Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {
-		if (!this.autoTruncate) return;
+		if (this.noAutoTruncate) return;
 		if (this.log.length > 100) {
 			this.log.splice(0, this.log.length - 100);
 		}
@@ -306,11 +313,11 @@ export class Roomlog {
 			this.modlogStream = null;
 		}
 		if (this.modlogStream) {
-			promises.push(this.modlogStream.end());
+			promises.push(this.modlogStream.writeEnd());
 			this.modlogStream = null;
 		}
 		if (this.roomlogStream) {
-			promises.push(this.roomlogStream.end());
+			promises.push(this.roomlogStream.writeEnd());
 			this.roomlogStream = null;
 		}
 		Roomlogs.roomlogs.delete(this.roomid);

@@ -14,7 +14,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
+
 		if (species.battleOnly && typeof species.battleOnly === 'string') forme = species.battleOnly;
+
+		if (species.cosmeticFormes) {
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
+		}
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool = [];
@@ -220,7 +225,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'toxic':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['raindance'] || hasMove['substitute']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['endure'] || hasMove['raindance'] || hasMove['substitute']) rejected = true;
 					if (hasMove['hypnosis'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'trick':
@@ -264,7 +269,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (!hasType[move.type] && (hasMove['substitute'] || hasMove['toxic'] || hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
-					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
+					if (hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))) rejected = true;
 					if ((hasMove['endure'] || hasMove['substitute']) && hasMove['reversal']) rejected = true;
 					break;
 				case 'earthquake':

@@ -2,6 +2,7 @@
 
 import {Dex} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
+import {Utils} from '../lib/utils';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -161,11 +162,12 @@ export class RandomTeams {
 			let moves;
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = Object.keys(this.dex.data.Movedex).filter(
-					moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || moveid.startsWith('hiddenpower') && moveid !== 'hiddenpower')
-				);
+				pool = Object.keys(this.dex.data.Movedex).filter(moveid => {
+					const move = this.dex.data.Movedex[moveid];
+					return !(move.isNonstandard || move.isZ || move.isMax || move.realMove);
+				});
 			} else {
-				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset ?
+				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset && !['pumpkaboosuper', 'zygarde10'].includes(species.id) ?
 					this.dex.data.Learnsets[species.id].learnset :
 					this.dex.data.Learnsets[this.dex.getSpecies(species.baseSpecies).id].learnset;
 				if (learnset) {
@@ -173,8 +175,9 @@ export class RandomTeams {
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
 				}
-				if (species.changesFrom) {
-					learnset = this.dex.data.Learnsets[toID(species.changesFrom)].learnset;
+				const changesFrom = species.id === 'pumpkaboosuper' ? 'pumpkaboo' : species.changesFrom;
+				if (changesFrom) {
+					learnset = this.dex.data.Learnsets[toID(changesFrom)].learnset;
 					const basePool = Object.keys(learnset!).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
@@ -583,7 +586,7 @@ export class RandomTeams {
 			forme = species.battleOnly;
 		}
 		if (species.cosmeticFormes) {
-			species = this.dex.getSpecies(this.sample([species.name].concat(species.cosmeticFormes)));
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
 		const randMoves = !isDoubles ? species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);
@@ -838,6 +841,9 @@ export class RandomTeams {
 				case 'focusblast':
 					if ((hasMove['superpower'] && counter.setupType !== 'Special') || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
+				case 'hammerarm':
+					if (hasMove['fakeout']) rejected = true;
+					break;
 				case 'poisonjab':
 					if (!hasType['Poison'] && counter.Status >= 2) rejected = true;
 					break;
@@ -914,7 +920,7 @@ export class RandomTeams {
 				case 'haze':
 					if (hasMove['stealthrock'] || movePool.includes('stealthrock') && !teamDetails.stealthRock) rejected = true;
 					break;
-				case 'yawn':
+				case 'hypnosis': case 'yawn':
 					if (hasMove['thunderwave'] || hasMove['toxic']) rejected = true;
 					break;
 				case 'defog':
@@ -1289,7 +1295,7 @@ export class RandomTeams {
 			} else if (ability === 'Slow Start') {
 				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			}
-			level = 70 + Math.floor(((640 - this.dex.clampIntRange(bst, 330, 640)) / 10.3));
+			level = 70 + Math.floor(((640 - Utils.clampIntRange(bst, 330, 640)) / 10.3));
 		}
 
 		// Prepare optimal HP

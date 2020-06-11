@@ -13,6 +13,7 @@
 
 import {execSync} from "child_process";
 import {FS} from "../lib/fs";
+import {Utils} from '../lib/utils';
 import {StreamProcessManager} from "../lib/process-manager";
 import {Repl} from "../lib/repl";
 import {BattleStream} from "../sim/battle-stream";
@@ -691,7 +692,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 
 		this.updatePlayer(player, null);
-		this.room.auth[user.id] = '+';
+		this.room.auth.set(user.id, '+');
 		this.room.update();
 		return true;
 	}
@@ -835,8 +836,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		// If the room's replay was hidden, disable users from joining after the game is over
 		if (this.room.hideReplay) {
-			this.room.modjoin = '%';
-			this.room.isPrivate = 'hidden';
+			this.room.settings.modjoin = '%';
+			this.room.settings.isPrivate = 'hidden';
 		}
 		this.room.update();
 	}
@@ -1013,7 +1014,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
-		if (user) this.room.auth[user.id] = Users.PLAYER_SYMBOL;
+		if (user) this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}
@@ -1172,7 +1173,7 @@ export class RoomBattleStream extends BattleStream {
 
 				if (result?.then) {
 					result.then((unwrappedResult: any) => {
-						unwrappedResult = Chat.stringify(unwrappedResult);
+						unwrappedResult = Utils.visualize(unwrappedResult);
 						battle.add('', 'Promise -> ' + unwrappedResult);
 						battle.sendUpdates();
 					}, (error: Error) => {
@@ -1180,7 +1181,7 @@ export class RoomBattleStream extends BattleStream {
 						battle.sendUpdates();
 					});
 				} else {
-					result = Chat.stringify(result);
+					result = Utils.visualize(result);
 					result = result.replace(/\n/g, '\n||');
 					battle.add('', '<<< ' + result);
 				}

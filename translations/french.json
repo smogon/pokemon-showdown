@@ -15,8 +15,7 @@
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Mêmes pouvoirs que les Global Moderators, mais sont des bots",
-		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "&amp; <strong>Global Leader</strong> - Comme les précédents, en plus de pouvoir promouvoir jusqu'au rang de Global Moderator et forcer des matchs nuls",
-		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
 		"<strong>Room ranks</strong>": "<strong>Rangs des room</strong>",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
@@ -36,9 +35,9 @@
 		"DATA COMMANDS": "COMMANDES DES DONNÉES",
 		"DRIVER COMMANDS": "COMMANDES DES DRIVERS",
 		"MODERATOR COMMANDS": "COMMANDES DES MODERATEURS",
-		"LEADER COMMANDS": "COMMANDES DES LEADERS",
+		"ADMIN COMMANDS": "COMMANDES DES ADMINISTRATEURS",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "(Remplace / par ! pour afficher publiquement les commandes. Les afficher publiquement requiert : + % @ & ~)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(Remplace / par ! pour afficher publiquement les commandes. Les afficher publiquement requiert : + % @ &)",
 
 		"<strong>Room punishments</strong>:": "<strong>Punitions des rooms</strong>",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Affiche une fen&ecirc;tre avec les r&egrave;gles.",

@@ -1,4 +1,5 @@
 import {FS, FSPath} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
@@ -241,7 +242,7 @@ class OtdHandler {
 		const namesHTML = `<table><tr>${content}</tr></table></p></div>`;
 
 		this.room.add(
-			Chat.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
+			Utils.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
 			`Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">` +
 			`Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner!` +
 			`(Nomination by ${winner.name})</p><p style="font-weight:bold;">Thanks to today's participants:` + namesHTML
@@ -314,44 +315,44 @@ class OtdHandler {
 		if (!this.winners.length) return false;
 		const winner = this.winners[this.winners.length - 1];
 
-		let output = Chat.html `<div class="broadcast-blue" style="text-align:center;">` +
+		let output = Utils.html `<div class="broadcast-blue" style="text-align:center;">` +
 		`<p><span style="font-weight:bold;font-size:11pt">The ${this.name} of the ${this.timeLabel} is ` +
 		`${winner[this.keys[0]]}${winner.author ? ` by ${winner.author}` : ''}.</span>`;
 
-		if (winner.quote) output += Chat.html `<br/><span style="font-style:italic;">"${winner.quote}"</span>`;
-		if (winner.tagline) output += Chat.html `<br/>${winner.tagline}`;
+		if (winner.quote) output += Utils.html `<br/><span style="font-style:italic;">"${winner.quote}"</span>`;
+		if (winner.tagline) output += Utils.html `<br/>${winner.tagline}`;
 		output += `</p><table style="margin:auto;"><tr>`;
 		if (winner.image) {
 			const [width, height] = await Chat.fitImage(winner.image, 100, 100);
-			output += Chat.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
+			output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
 		}
 		output += `<td style="text-align:right;margin:5px;">`;
-		if (winner.event) output += Chat.html `<b>Event:</b> ${winner.event}<br/>`;
+		if (winner.event) output += Utils.html `<b>Event:</b> ${winner.event}<br/>`;
 		if (winner.song) {
 			output += `<b>Song:</b> `;
 			if (winner.link) {
-				output += Chat.html `<a href="${winner.link}">${winner.song}</a>`;
+				output += Utils.html `<a href="${winner.link}">${winner.song}</a>`;
 			} else {
-				output += Chat.escapeHTML(winner.song);
+				output += Utils.escapeHTML(winner.song);
 			}
 			output += `<br/>`;
 		} else if (winner.link) {
-			output += Chat.html `<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br/>`;
+			output += Utils.html `<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br/>`;
 		}
 
 		// Batch these together on 2 lines. Order intentional.
 		const athleteDetails = [];
-		if (winner.sport) athleteDetails.push(Chat.html `<b>Sport:</b> ${winner.sport}`);
-		if (winner.team) athleteDetails.push(Chat.html `<b>Team:</b> ${winner.team}`);
-		if (winner.age) athleteDetails.push(Chat.html `<b>Age:</b> ${winner.age}`);
-		if (winner.country) athleteDetails.push(Chat.html `<b>Nationality:</b> ${winner.country}`);
+		if (winner.sport) athleteDetails.push(Utils.html `<b>Sport:</b> ${winner.sport}`);
+		if (winner.team) athleteDetails.push(Utils.html `<b>Team:</b> ${winner.team}`);
+		if (winner.age) athleteDetails.push(Utils.html `<b>Age:</b> ${winner.age}`);
+		if (winner.country) athleteDetails.push(Utils.html `<b>Nationality:</b> ${winner.country}`);
 
 		if (athleteDetails.length) {
 			output += athleteDetails.slice(0, 2).join(' | ') + '<br/>';
 			if (athleteDetails.length > 2) output += athleteDetails.slice(2).join(' | ') + '<br/>';
 		}
 
-		output += Chat.html `Nominated by ${winner.nominator}.`;
+		output += Utils.html `Nominated by ${winner.nominator}.`;
 		output += `</td></tr></table></div>`;
 
 		return output;
@@ -387,7 +388,7 @@ class OtdHandler {
 
 					const pad = (num: number) => num < 10 ? '0' + num : num;
 
-					return Chat.html `${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
+					return Utils.html `${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
 				case 'song':
 					if (!this.winners[i].link) return val;
 					// falls through
@@ -397,9 +398,9 @@ class OtdHandler {
 					val = `${val}${this.winners[i].author ? ` by ${this.winners[i].author}` : ''}`;
 					// falls through
 				case columns[0]:
-					return `${Chat.escapeHTML(val)}${this.winners[i].nominator ? Chat.html `<br/><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
+					return `${Utils.escapeHTML(val)}${this.winners[i].nominator ? Utils.html `<br/><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
 				default:
-					return Chat.escapeHTML(val);
+					return Utils.escapeHTML(val);
 				}
 			});
 			content += `<tr>${entry.map(val => `<td style="max-width:${600 / columns.length}px;word-wrap:break-word;">${val}</td>`).join('')}</tr>`;
@@ -451,7 +452,7 @@ export const otdCommands: ChatCommands = {
 		this.privateModAction(`(${user.name} has started nominations for the ${handler.name} of the ${handler.timeLabel}.)`);
 		this.modlog(`${handler.id.toUpperCase()} START`, null);
 	},
-	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
+	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`],
 
 	end(target, room, user) {
 		if (!this.canTalk()) return;
@@ -474,7 +475,7 @@ export const otdCommands: ChatCommands = {
 		this.modlog(`${handler.id.toUpperCase()} END`, null);
 	},
 	endhelp: [
-		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
+		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
 	],
 
 	nom(target, room, user) {
@@ -531,7 +532,7 @@ export const otdCommands: ChatCommands = {
 	},
 	removehelp: [
 		`/-otd remove [username] - Remove a user's nomination for the Thing of the Day.`,
-		 `Prevents them from voting again until the next round. Requires: % @ # & ~`,
+		 `Prevents them from voting again until the next round. Requires: % @ # &`,
 	],
 
 	force(target, room, user) {
@@ -553,7 +554,7 @@ export const otdCommands: ChatCommands = {
 		room.add(`The ${handler.name} of the ${handler.timeLabel} was forcibly set to '${target}'`);
 	},
 	forcehelp: [
-		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
+		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
 	],
 
 	delay(target, room, user) {
@@ -573,7 +574,7 @@ export const otdCommands: ChatCommands = {
 		this.privateModAction(`(${user.name} disabled the ${handler.name} of the ${handler.timeLabel} timer.)`);
 	},
 	delayhelp: [
-		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
+		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
 	],
 
 	set(target, room, user) {
@@ -650,7 +651,7 @@ export const otdCommands: ChatCommands = {
 	},
 	sethelp: [
 		`/-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day.`,
-		`Requires: % @ # & ~`,
+		`Requires: % @ # &`,
 	],
 
 	winners(target, room, user, connection) {
@@ -685,13 +686,13 @@ export const otdCommands: ChatCommands = {
 const help = [
 	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
 	`- /-otd - View the current Thing of the Day.`,
-	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
+	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
-	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # & ~`,
-	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
-	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
-	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
-	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # & ~`,
+	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
+	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
+	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
+	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
 	`- /-otd winners - Displays a list of previous things of the day.`,
 ];
 

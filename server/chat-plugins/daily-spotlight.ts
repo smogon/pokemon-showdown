@@ -72,7 +72,7 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	removedaily(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
@@ -102,7 +102,7 @@ export const commands: ChatCommands = {
 	},
 	queuedaily: 'setdaily',
 	async setdaily(target, room, user, connection, cmd) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, ...rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
@@ -140,7 +140,7 @@ export const commands: ChatCommands = {
 		saveSpotlights();
 	},
 	async daily(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const key = toID(target);
 		if (!key) return this.parse('/help daily');
 
@@ -157,17 +157,17 @@ export const commands: ChatCommands = {
 		room.update();
 	},
 	viewspotlights(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-spotlights-${room.roomid}`);
 	},
 
 	dailyhelp: [
 		`Daily spotlights plugin:`,
 		`- /daily [name] - Shows the daily spotlight.`,
-		`- !daily [name] - Shows the daily spotlight to everyone. Requires: + % @ # & ~`,
-		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ # & ~`,
-		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # & ~`,
-		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # & ~`,
+		`- !daily [name] - Shows the daily spotlight to everyone. Requires: + % @ # &`,
+		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ # &`,
+		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # &`,
+		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # &`,
 		`- /viewspotlights - Shows all current spotlights in the room. For staff, also shows queued spotlights.`,
 	],
 };

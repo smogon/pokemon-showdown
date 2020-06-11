@@ -14,6 +14,7 @@
  */
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -99,7 +100,7 @@ export class LadderStore {
 		for (const row of ladder) {
 			void stream.write(row.slice(1).join('\t') + '\r\n');
 		}
-		void stream.end();
+		void stream.writeEnd();
 		this.saving = false;
 	}
 
@@ -285,13 +286,13 @@ export class LadderStore {
 			let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 			room.addRaw(
-				Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`
+				Utils.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`
 			);
 
 			reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
 			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 			room.addRaw(
-				Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`
+				Utils.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`
 			);
 
 			room.update();

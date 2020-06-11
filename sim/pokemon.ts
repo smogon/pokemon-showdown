@@ -26,6 +26,12 @@ export interface EffectState {
 	[k: string]: any;
 }
 
+// Berries which restore PP/HP and thus inflict external staleness when given to an opponent as
+// there are very few non-malicious competitive reasons to do so
+export const RESTORATIVE_BERRIES = new Set([
+	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
+] as ID[]);
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -263,12 +269,12 @@ export class Pokemon {
 		this.name = set.name.substr(0, 20);
 		this.fullname = this.side.id + ': ' + this.name;
 
-		set.level = this.battle.dex.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
+		set.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
 		const genders: {[key: string]: GenderName} = {M: 'M', F: 'F', N: 'N'};
 		this.gender = genders[set.gender] || this.species.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
 		if (this.gender === 'N') this.gender = '';
-		this.happiness = typeof set.happiness === 'number' ? this.battle.dex.clampIntRange(set.happiness, 0, 255) : 255;
+		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
 
 		this.baseMoveSlots = [];
@@ -317,10 +323,10 @@ export class Pokemon {
 			if (!this.set.ivs[stat] && this.set.ivs[stat] !== 0) this.set.ivs[stat] = 31;
 		}
 		for (stat in this.set.evs) {
-			this.set.evs[stat] = this.battle.dex.clampIntRange(this.set.evs[stat], 0, 255);
+			this.set.evs[stat] = this.battle.clampIntRange(this.set.evs[stat], 0, 255);
 		}
 		for (stat in this.set.ivs) {
-			this.set.ivs[stat] = this.battle.dex.clampIntRange(this.set.ivs[stat], 0, 31);
+			this.set.ivs[stat] = this.battle.clampIntRange(this.set.ivs[stat], 0, 31);
 		}
 		if (this.battle.gen && this.battle.gen <= 2) {
 			// We represent DVs using even IVs. Ensure they are in fact even.
@@ -544,7 +550,7 @@ export class Pokemon {
 		}
 		const combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) +
 			(Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
-		return this.battle.dex.clampIntRange(combatPower, 0, 10000);
+		return this.battle.clampIntRange(combatPower, 0, 10000);
 	}
 	*/
 
@@ -1506,7 +1512,7 @@ export class Pokemon {
 			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, null, null, item);
 
-			if (item.id === 'leppaberry') {
+			if (RESTORATIVE_BERRIES.has(item.id)) {
 				switch (this.pendingStaleness) {
 				case 'internal':
 					if (this.staleness !== 'external') this.staleness = 'internal';
@@ -1588,7 +1594,7 @@ export class Pokemon {
 		if (typeof item === 'string') item = this.battle.dex.getItem(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
-		if (item.id === 'leppaberry') {
+		if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 			const inflicted = ['trick', 'switcheroo'].includes(effectid);
 			const external = inflicted && source && source.side.id !== this.side.id;
 			this.pendingStaleness = external ? 'external' : 'internal';

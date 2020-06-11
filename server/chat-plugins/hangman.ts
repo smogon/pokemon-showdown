@@ -2,6 +2,7 @@
 * Hangman chat plugin
 * By bumbadadabum and Zarel. Art by crobat.
 */
+import {Utils} from '../../lib/utils';
 
 const maxMistakes = 6;
 
@@ -20,7 +21,7 @@ export class Hangman extends Rooms.RoomGame {
 	constructor(room: ChatRoom | GameRoom, user: User, word: string, hint = '') {
 		super(room);
 
-		this.gameNumber = ++room.gameNumber;
+		this.gameNumber = room.nextGameNumber();
 
 		this.gameid = 'hangman' as ID;
 		this.title = 'Hangman';
@@ -150,21 +151,21 @@ export class Hangman extends Rooms.RoomGame {
 			);
 		}
 
-		if (this.hint) output += Chat.html`<div>(Hint: ${this.hint})</div>`;
+		if (this.hint) output += Utils.html`<div>(Hint: ${this.hint})</div>`;
 		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(
-					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Chat.escapeHTML(g[0])}</strong>`
+					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Utils.escapeHTML(g[0])}</strong>`
 				).join(', ');
 			}
 			if (result === 2) {
-				output += Chat.html`<br />Winner: ${this.lastGuesser}`;
+				output += Utils.html`<br />Winner: ${this.lastGuesser}`;
 			} else if (this.guesses[this.guesses.length - 1].length === 1) {
 				// last guess was a letter
-				output += Chat.html` <small>&ndash; ${this.lastGuesser}</small>`;
+				output += Utils.html` <small>&ndash; ${this.lastGuesser}</small>`;
 			} else {
-				output += Chat.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} ` +
+				output += Utils.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} ` +
 					`<small>&ndash; ${this.lastGuesser}</small>`;
 			}
 		}
@@ -212,7 +213,7 @@ export const commands: ChatCommands = {
 			const params = text.split(',');
 
 			if (!this.can('minigame', null, room)) return false;
-			if (room.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
+			if (room.settings.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
 			if (!this.canTalk()) return;
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
@@ -238,7 +239,7 @@ export const commands: ChatCommands = {
 			this.modlog('HANGMAN');
 			return this.addModAction(`A game of hangman was started by ${user.name}.`);
 		},
-		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~"],
+		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &"],
 
 		guess(target, room, user) {
 			if (!target) return this.parse('/help guess');
@@ -264,31 +265,25 @@ export const commands: ChatCommands = {
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`(The game of hangman was ended by ${user.name}.)`);
 		},
-		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~"],
+		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &"],
 
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.hangmanDisabled) {
+			if (room.settings.hangmanDisabled) {
 				return this.errorReply("Hangman is already disabled.");
 			}
-			room.hangmanDisabled = true;
-			if (room.chatRoomData) {
-				room.chatRoomData.hangmanDisabled = true;
-				Rooms.global.writeChatRoomData();
-			}
+			room.settings.hangmanDisabled = true;
+			room.saveSettings();
 			return this.sendReply("Hangman has been disabled for this room.");
 		},
 
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.hangmanDisabled) {
+			if (!room.settings.hangmanDisabled) {
 				return this.errorReply("Hangman is already enabled.");
 			}
-			delete room.hangmanDisabled;
-			if (room.chatRoomData) {
-				delete room.chatRoomData.hangmanDisabled;
-				Rooms.global.writeChatRoomData();
-			}
+			delete room.settings.hangmanDisabled;
+			room.saveSettings();
 			return this.sendReply("Hangman has been enabled for this room.");
 		},
 
@@ -309,12 +304,12 @@ export const commands: ChatCommands = {
 	hangmanhelp: [
 		`/hangman allows users to play the popular game hangman in PS rooms.`,
 		`Accepts the following commands:`,
-		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~`,
+		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &`,
 		`/hangman guess [letter] - Makes a guess for the letter entered.`,
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 		`/hangman display - Displays the game.`,
-		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~`,
-		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~`,
+		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &`,
+		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # &`,
 	],
 
 	guess(target, room, user) {
@@ -335,7 +330,7 @@ export const roomSettings: SettingsHandler = room => ({
 	label: "Hangman",
 	permission: 'editroom',
 	options: [
-		[`disabled`, room.hangmanDisabled || 'hangman disable'],
-		[`enabled`, !room.hangmanDisabled || 'hangman enable'],
+		[`disabled`, room.settings.hangmanDisabled || 'hangman disable'],
+		[`enabled`, !room.settings.hangmanDisabled || 'hangman enable'],
 	],
 });

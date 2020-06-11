@@ -835,7 +835,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
-			this.damage(this.dex.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 		},
 	},
 	iciclespear: {
@@ -871,7 +871,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
-			this.damage(this.dex.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 		},
 	},
 	knockoff: {

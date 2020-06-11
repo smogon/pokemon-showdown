@@ -2,6 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
+import {Utils} from '../../lib/utils';
 
 interface QuestionData {
 	source: string; supportHTML: boolean;
@@ -27,7 +28,7 @@ export class Poll {
 	options: Map<number, Option>;
 	constructor(room: ChatRoom | GameRoom, questionData: QuestionData, options: string[], multi: boolean) {
 		this.activityId = 'poll';
-		this.pollNumber = ++room.gameNumber;
+		this.pollNumber = room.nextGameNumber();
 		this.room = room;
 		this.question = questionData.source;
 		this.supportHTML = questionData.supportHTML;
@@ -122,7 +123,7 @@ export class Poll {
 			const pendingVotes = (user && this.pendingVotes[user.id]) || [];
 			for (const [num, option] of this.options) {
 				const selected = pendingVotes.includes(num);
-				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
+				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Utils.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
 			}
 			// eslint-disable-next-line max-len
 			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="Submit your vote"><strong>Submit</strong></button>` : `<button class="button" value="/poll results" name="send" title="View results - you will not be able to vote after viewing results">(View results)</button`;
@@ -130,7 +131,7 @@ export class Poll {
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
-				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="Vote for ${num}. ${Chat.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
+				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="Vote for ${num}. ${Utils.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
 			}
 			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>`;
 			output += `</div>`;
@@ -166,12 +167,12 @@ export class Poll {
 
 	getQuestionMarkup() {
 		if (this.supportHTML) return this.question;
-		return Chat.escapeHTML(this.question);
+		return Utils.escapeHTML(this.question);
 	}
 
 	getOptionMarkup(option: Option) {
 		if (this.supportHTML) return option.name;
-		return Chat.escapeHTML(option.name);
+		return Utils.escapeHTML(option.name);
 	}
 
 	update() {
@@ -315,8 +316,8 @@ export const commands: ChatCommands = {
 			return this.addModAction(`A poll was started by ${user.name}.`);
 		},
 		newhelp: [
-			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
-			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
+			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
+			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
 
@@ -390,8 +391,8 @@ export const commands: ChatCommands = {
 			}
 		},
 		timerhelp: [
-			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~`,
-			`/poll timer clear - Clears the poll's timer. Requires: % @ # & ~`,
+			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # &`,
+			`/poll timer clear - Clears the poll's timer. Requires: % @ # &`,
 		],
 
 		results(target, room, user) {
@@ -422,7 +423,7 @@ export const commands: ChatCommands = {
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
-		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`],
+		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
 
 		show: '',
 		display: '',
@@ -446,14 +447,14 @@ export const commands: ChatCommands = {
 		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
 		`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		`Accepts the following commands:`,
-		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
-		`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
-		`/poll htmlcreate(multi) [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
+		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
+		`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
+		`/poll htmlcreate(multi) [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # &`,
 		`/poll vote [number] - Votes for option [number].`,
-		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~`,
+		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # &`,
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
-		`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`,
+		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
 	],
 };
 

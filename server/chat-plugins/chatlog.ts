@@ -6,6 +6,7 @@
  */
 
 import {FS} from "../../lib/fs";
+import {Utils} from '../../lib/utils';
 import * as child_process from 'child_process';
 import * as util from 'util';
 import * as path from 'path';
@@ -76,7 +77,7 @@ const LogReader = new class {
 			const room = Rooms.get(roomid);
 			const forceShow = room && (
 				// you are authed in the room
-				(room.auth && user.id in room.auth && user.can('mute', null, room)) ||
+				(room.auth.has(user.id) && user.can('mute', null, room)) ||
 				// you are staff and currently in the room
 				(isStaff && user.inRooms.has(room.roomid))
 			);
@@ -84,7 +85,7 @@ const LogReader = new class {
 				if (!isStaff) continue;
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
-				if (room.isPrivate === true) continue;
+				if (room.settings.isPrivate === true) continue;
 			}
 
 			atLeastOne = true;
@@ -95,11 +96,11 @@ const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.isOfficial) {
+			} else if (room.settings.isOfficial) {
 				official.push(roomid);
-			} else if (!room.isPrivate) {
+			} else if (!room.settings.isPrivate) {
 				normal.push(roomid);
-			} else if (room.isPrivate === 'hidden') {
+			} else if (room.settings.isPrivate === 'hidden') {
 				hidden.push(roomid);
 			} else {
 				secret.push(roomid);
@@ -288,7 +289,7 @@ export const LogViewer = new class {
 		const cmd = line.slice(0, line.indexOf('|'));
 		switch (cmd) {
 		case 'c': {
-			const [, name, message] = Chat.splitFirst(line, '|', 2);
+			const [, name, message] = Utils.splitFirst(line, '|', 2);
 			if (name.length <= 1) {
 				return `<div class="chat"><small>[${timestamp}] </small><q>${Chat.formatText(message)}</q></div>`;
 			}
@@ -307,20 +308,20 @@ export const LogViewer = new class {
 			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${name.slice(1)}:</strong> <q>${Chat.formatText(message)}</q></div>`;
 		}
 		case 'html': case 'raw': {
-			const [, html] = Chat.splitFirst(line, '|', 1);
+			const [, html] = Utils.splitFirst(line, '|', 1);
 			return `<div class="notice">${html}</div>`;
 		}
 		case 'uhtml': case 'uhtmlchange': {
 			if (cmd !== 'uhtml') return ``;
-			const [, , html] = Chat.splitFirst(line, '|', 2);
+			const [, , html] = Utils.splitFirst(line, '|', 2);
 			return `<div class="notice">${html}</div>`;
 		}
 		case '!NT':
-			return `<div class="chat">${Chat.escapeHTML(fullLine)}</div>`;
+			return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
 		case '':
-			return `<div class="chat"><small>[${timestamp}] </small>${Chat.escapeHTML(line.slice(1))}</div>`;
+			return `<div class="chat"><small>[${timestamp}] </small>${Utils.escapeHTML(line.slice(1))}</div>`;
 		default:
-			return `<div class="chat"><small>[${timestamp}] </small><code>${'|' + Chat.escapeHTML(line)}</code></div>`;
+			return `<div class="chat"><small>[${timestamp}] </small><code>${'|' + Utils.escapeHTML(line)}</code></div>`;
 		}
 	}
 
@@ -595,7 +596,7 @@ export const pages: PageTable = {
 		if (!user.trusted) {
 			return LogViewer.error("Access denied");
 		}
-		let [roomid, date, opts] = Chat.splitFirst(args.join('-'), '--', 2) as
+		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
@@ -705,6 +706,6 @@ export const commands: ChatCommands = {
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
 		"The delimiter | can be used to space searching for multiple terms.",
 		"Date formatting is ISO formatting (YYYY-MM-DD.) E.g 2020-05, 2020, or `all`.",
-		"Requires: % @ # & ~",
+		"Requires: % @ # &",
 	],
 };

@@ -4,6 +4,7 @@
  */
 
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 const MAIN_CATEGORIES: {[k: string]: string} = {
 	ae: 'Arts and Entertainment',
@@ -485,7 +486,7 @@ class Trivia extends Rooms.RoomGame {
 	 */
 	formatPlayerList(settings: {max: number | null, requirePoints?: boolean}) {
 		return this.getTopPlayers(settings).map(player => {
-			const buf = Chat.html`${player.name} (${player.player.points || "0"})`;
+			const buf = Utils.html`${player.name} (${player.player.points || "0"})`;
 			return player.player.isAbsent ? `<span style="color: #444444">${buf}</span>` : buf;
 		}).join(', ');
 	}
@@ -603,7 +604,7 @@ class Trivia extends Rooms.RoomGame {
 	verifyAnswer(targetAnswer: string) {
 		return this.curAnswers.some(answer => {
 			const mla = this.maxLevenshteinAllowed(answer.length);
-			return (answer === targetAnswer) || (Dex.levenshtein(targetAnswer, answer, mla) <= mla);
+			return (answer === targetAnswer) || (Utils.levenshtein(targetAnswer, answer, mla) <= mla);
 		});
 	}
 
@@ -712,15 +713,15 @@ class Trivia extends Rooms.RoomGame {
 	getWinningMessage(winners: TopPlayer[]) {
 		const prizes = this.getPrizes();
 		const [p1, p2, p3] = winners;
-		const initialPart = Chat.html`${p1.name} won the game with a final score of <strong>${p1.player.points}</strong>, and `;
+		const initialPart = Utils.html`${p1.name} won the game with a final score of <strong>${p1.player.points}</strong>, and `;
 		switch (winners.length) {
 		case 1:
 			return `${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
 		case 2:
 			return `${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
-				Chat.html`${p2.name} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
+				Utils.html`${p2.name} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
 		case 3:
-			return initialPart + Chat.html`${p2.name} and ${p3.name} were runners-up. ` +
+			return initialPart + Utils.html`${p2.name} and ${p3.name} were runners-up. ` +
 				`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
 		}
 	}
@@ -742,7 +743,7 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	end(user: User) {
-		this.broadcast(Chat.html`The game was forcibly ended by ${user.name}.`);
+		this.broadcast(Utils.html`The game was forcibly ended by ${user.name}.`);
 		this.destroy();
 	}
 }
@@ -774,7 +775,7 @@ class FirstModeTrivia extends Trivia {
 		player.setAnswer(answer);
 		player.incrementPoints(points, this.questionNumber);
 
-		const buffer = Chat.html`Correct: ${user.name}<br />` +
+		const buffer = Utils.html`Correct: ${user.name}<br />` +
 			`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 			'They gained <strong>5</strong> points!<br />' +
 			`The top 5 players are: ${this.formatPlayerList({max: 5})}`;
@@ -870,7 +871,7 @@ class TimerModeTrivia extends Trivia {
 			player.incrementPoints(points, this.questionNumber);
 
 			const pointBuffer = innerBuffer.get(points) || [];
-			pointBuffer.push([Chat.escapeHTML(player.name), playerAnsweredAt]);
+			pointBuffer.push([Utils.escapeHTML(player.name), playerAnsweredAt]);
 
 			if (player.points >= this.getCap()) {
 				winner = true;
@@ -945,7 +946,7 @@ class NumberModeTrivia extends Trivia {
 			.filter(id => !!this.playerTable[id].isCorrect)
 			.map(id => {
 				const player = this.playerTable[id];
-				return [Chat.escapeHTML(player.name), hrtimeToNanoseconds(player.currentAnsweredAt)];
+				return [Utils.escapeHTML(player.name), hrtimeToNanoseconds(player.currentAnsweredAt)];
 			})
 			.sort((a, b) => (a[1] as number) - (b[1] as number));
 
@@ -1018,7 +1019,7 @@ class TriumvirateModeTrivia extends Trivia {
 		for (const player of correctPlayers) {
 			const points = this.calculatePoints(correctPlayers.indexOf(player));
 			player.incrementPoints(points, this.questionNumber);
-			playersWithPoints.push(`${Chat.escapeHTML(player.name)} (${points})`);
+			playersWithPoints.push(`${Utils.escapeHTML(player.name)} (${points})`);
 			if (player.points >= this.getCap()) {
 				winner = true;
 			}
@@ -1060,7 +1061,7 @@ const commands: ChatCommands = {
 		let mode: string = toID(targets[0]);
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			mode = Dex.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
+			mode = Utils.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
@@ -1107,10 +1108,10 @@ const commands: ChatCommands = {
 			_Trivia = TimerModeTrivia;
 		}
 
-		questions = Dex.shuffle(questions);
+		questions = Utils.shuffle(questions);
 		room.game = new _Trivia(room, mode, category, length, questions, isRandomMode);
 	},
-	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~`],
+	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # &`],
 
 	join(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1136,7 +1137,7 @@ const commands: ChatCommands = {
 		if (res) return this.errorReply(res);
 		// ...
 	},
-	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~`],
+	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # &`],
 
 	leave(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1158,7 +1159,7 @@ const commands: ChatCommands = {
 		if (res) return this.errorReply(res);
 		// ...
 	},
-	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~`],
+	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # &`],
 
 	answer(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1182,7 +1183,7 @@ const commands: ChatCommands = {
 		if (!game) return;
 		game.end(user);
 	},
-	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # & ~`],
+	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # &`],
 
 	'': 'status',
 	players: 'status',
@@ -1241,7 +1242,7 @@ const commands: ChatCommands = {
 				continue;
 			}
 
-			const question = Chat.escapeHTML(param[1].trim());
+			const question = Utils.escapeHTML(param[1].trim());
 			if (!question) {
 				this.errorReply(`'${param[1].trim()}' is not a valid question.`);
 				continue;
@@ -1290,8 +1291,8 @@ const commands: ChatCommands = {
 			}
 		}
 	},
-	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # & ~`],
-	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Adds question(s) to the question database. Requires: % @ # & ~`],
+	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`],
+	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Adds question(s) to the question database. Requires: % @ # &`],
 
 	review(target, room) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1315,7 +1316,7 @@ const commands: ChatCommands = {
 
 		this.sendReply(buffer);
 	},
-	reviewhelp: [`/trivia review - View the list of submitted questions. Requires: @ # & ~`],
+	reviewhelp: [`/trivia review - View the list of submitted questions. Requires: @ # &`],
 
 	reject: 'accept',
 	accept(target, room, user, connection, cmd) {
@@ -1401,8 +1402,8 @@ const commands: ChatCommands = {
 
 		this.errorReply(`'${target}' is an invalid argument. View /trivia help questions for more information.`);
 	},
-	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`],
-	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`],
+	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`],
+	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`],
 
 	delete(target, room, user) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1412,7 +1413,7 @@ const commands: ChatCommands = {
 		target = target.trim();
 		if (!target) return false;
 
-		const question = Chat.escapeHTML(target);
+		const question = Utils.escapeHTML(target);
 		if (!question) {
 			return this.errorReply(`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 		}
@@ -1430,7 +1431,7 @@ const commands: ChatCommands = {
 
 		this.errorReply(`Question '${target}' was not found in the question database.`);
 	},
-	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`],
+	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # &`],
 
 	move(target, room, user) {
 		if (room.roomid !== 'questionworkshop') {
@@ -1455,7 +1456,7 @@ const commands: ChatCommands = {
 				continue;
 			}
 
-			const questionID = toID(Chat.escapeHTML(param[1].trim()));
+			const questionID = toID(Utils.escapeHTML(param[1].trim()));
 			if (!questionID) {
 				this.errorReply(`'${param[1].trim()}' is not a valid question.`);
 				continue;
@@ -1480,7 +1481,7 @@ const commands: ChatCommands = {
 		}
 	},
 	movehelp: [
-		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`,
+		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # &`,
 	],
 
 	qs(target, room, user) {
@@ -1540,7 +1541,7 @@ const commands: ChatCommands = {
 	},
 	qshelp: [
 		"/trivia qs - View the distribution of questions in the question database.",
-		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
+		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # &",
 	],
 
 	search(target, room, user) {
@@ -1574,7 +1575,7 @@ const commands: ChatCommands = {
 
 		this.sendReply(buffer);
 	},
-	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
+	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * &`],
 
 	rank(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1582,11 +1583,11 @@ const commands: ChatCommands = {
 		let name;
 		let userid;
 		if (!target) {
-			name = Chat.escapeHTML(user.name);
+			name = Utils.escapeHTML(user.name);
 			userid = user.id;
 		} else {
 			this.splitTarget(target, true);
-			name = Chat.escapeHTML(this.targetUsername);
+			name = Utils.escapeHTML(this.targetUsername);
 			userid = toID(name);
 		}
 
@@ -1626,7 +1627,7 @@ const commands: ChatCommands = {
 			for (const leader of leaders) {
 				const rank = leaderboard[leader as unknown as string];
 				const leaderObj = Users.getExact(leader as unknown as string);
-				const leaderid = leaderObj ? Chat.escapeHTML(leaderObj.name) : leader as unknown as string;
+				const leaderid = leaderObj ? Utils.escapeHTML(leaderObj.name) : leader as unknown as string;
 				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${leaderid}</td><td>${rank[0]}</td><td>${rank[1]}</td><td>${rank[2]}</td></tr>`;
 			}
 		}
@@ -1654,7 +1655,7 @@ const commands: ChatCommands = {
 			return this.errorReply(`'${category}' is an invalid category.`);
 		}
 	},
-	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # & ~`],
+	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # &`],
 
 	help(target, room, user) {
 		return this.parse(`${this.cmdToken}help trivia`);
@@ -1676,27 +1677,27 @@ const commands: ChatCommands = {
 			`- Long: 50 point score cap. The winner gains 5 leaderboard points.`,
 			``,
 			`<strong>Game commands:</strong>`,
-			Chat.html`- <code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # & ~`,
+			Utils.html`- <code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &`,
 			`- <code>/trivia join</code> - Join a trivia game during signups.`,
-			Chat.html`- <code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # & ~`,
+			Utils.html`- <code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &`,
 			`- <code>/ta [answer]</code> - Answer the current question.`,
-			Chat.html`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # & ~`,
+			Utils.html`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &`,
 			`- <code>/trivia leave</code> - Makes the player leave the game.`,
-			Chat.html`- <code>/trivia end</code> - End a trivia game. Requires: + % @ # ~`,
+			Utils.html`- <code>/trivia end</code> - End a trivia game. Requires: + % @ #`,
 			``,
 			`<strong>Question-modifying commands:</strong>`,
-			Chat.html`- <code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # & ~`,
-			Chat.html`- <code>/trivia review</code> - View the list of submitted questions. Requires: @ # & ~`,
-			Chat.html`- <code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`,
-			Chat.html`- <code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`,
-			Chat.html`- <code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # & ~`,
-			Chat.html`- <code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # & ~`,
+			Utils.html`- <code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`,
+			Utils.html`- <code>/trivia review</code> - View the list of submitted questions. Requires: @ # &`,
+			Utils.html`- <code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`,
+			Utils.html`- <code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`,
+			Utils.html`- <code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # &`,
+			Utils.html`- <code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &`,
 			`- <code>/trivia qs</code> - View the distribution of questions in the question database.`,
-			Chat.html`- <code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # & ~`,
-			Chat.html`- <code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # & ~`,
+			Utils.html`- <code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &`,
+			Utils.html`- <code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &`,
 			``,
 			`<strong>Informational commands:</strong>`,
-			Chat.html`- <code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # & ~`,
+			Utils.html`- <code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # &`,
 			`- <code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
 			`- <code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.`,
 			`- <code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.`,

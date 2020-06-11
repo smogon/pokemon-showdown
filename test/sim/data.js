@@ -138,4 +138,72 @@ describe('Dex data', function () {
 			assert.equal(toID(entry.name), formatid, `Mismatched Format/Ruleset key "${formatid}" of "${entry.name}"`);
 		}
 	});
+
+	it('should have valid Learnsets entries', function () {
+		const learnsetsArray = [Dex.mod('gen2').data.Learnsets, Dex.mod('letsgo').data.Learnsets, Dex.data.Learnsets];
+		for (const Learnsets of learnsetsArray) {
+			for (const speciesid in Learnsets) {
+				const species = Dex.getSpecies(speciesid);
+				assert.equal(speciesid, species.id, `Key "${speciesid}" in Learnsets should be a Species ID`);
+				assert(species.exists, `Key "${speciesid}" in Learnsets should be a pokemon`);
+				let entry = Learnsets[speciesid];
+				if (!entry.learnset) entry = Learnsets[toID(species.changesFrom || species.baseSpecies)];
+				for (const moveid in entry.learnset) {
+					const move = Dex.getMove(moveid);
+					assert.equal(moveid, move.id, `Move key "${moveid}" of Learnsets entry ${species.name} should be a Move ID`);
+					assert(move.exists && !move.realMove, `Move key "${moveid}" of Learnsets entry ${species.name} should be a real move`);
+
+					let prevLearnedGen = 10;
+					let prevLearnedTypeIndex = -1;
+					const LEARN_ORDER = 'MTLREDSVC';
+					for (const learned of entry.learnset[moveid]) {
+						// See the definition of MoveSource in sim/global-types
+						assert(/^[1-8][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
+
+						// the move validator uses early exits, so this isn't purely a consistency thing
+						// MTL must be before REDSVC, and generations must be ordered newest to oldest
+						const learnedGen = parseInt(learned.charAt(0));
+						const learnedTypeIndex = LEARN_ORDER.indexOf(learned.charAt(1));
+						assert(learnedGen <= prevLearnedGen, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in order from newest to oldest gen`);
+						if (learnedGen === prevLearnedGen) {
+							assert(learnedTypeIndex >= prevLearnedTypeIndex, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in MTLREDSVC order`);
+						}
+						prevLearnedGen = learnedGen;
+						prevLearnedTypeIndex = learnedTypeIndex;
+
+						switch (learned.charAt(1)) {
+						case 'L':
+							assert(/^[0-9]+$/.test(learned.slice(2)), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: a level-up move should have the level`);
+							const level = parseInt(learned.slice(2));
+							assert(level >= 0 && level <= 100, `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: level should be between 0 and 100`);
+							break;
+						case 'S':
+							assert(/^[0-9]+$/.test(learned.slice(2)), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: an event move should have the event number`);
+							const eventNum = parseInt(learned.slice(2));
+							const eventEntry = entry.eventData[eventNum];
+							assert(eventEntry, `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: an event move's event number should be available in entry.eventData`);
+							assert(eventEntry.moves.includes(moveid), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: an event move's event entry should include that move`);
+							break;
+						default:
+							assert.strictEqual(learned, learned.slice(0, 2), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: it should be 2 characters long`);
+							break;
+						}
+					}
+				}
+
+				if (entry.eventData) {
+					if (speciesid.startsWith('pokestar')) continue;
+					for (const [i, eventEntry] of entry.eventData.entries()) {
+						if (eventEntry.moves) {
+							const learned = `${eventEntry.generation}S${i}`;
+							for (const eventMove of eventEntry.moves) {
+								assert(entry.learnset, `${species.name} has event moves but no learnset`);
+								assert(entry.learnset[eventMove].includes(learned), `${species.name}'s event move ${Dex.getMove(eventMove).name} should exist as "${learned}"`);
+							}
+						}
+					}
+				}
+			}
+		}
+	});
 });

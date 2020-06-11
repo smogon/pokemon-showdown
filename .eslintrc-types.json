@@ -31,7 +31,7 @@
         "max-len": ["error", {
           "code": 120, "tabWidth": 0,
           // see bottom of .eslintrc-no-types.json for source
-          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Utils\\.html|\\$\\()?['\"`/]"
         }],
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],

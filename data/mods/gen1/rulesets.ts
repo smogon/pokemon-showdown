@@ -19,7 +19,7 @@ export const BattleFormats: {[k: string]: ModdedFormatsData} = {
 			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
 			const scale = 500 - newSpecies.baseStats['hp'];
 			for (const stat of stats) {
-				newSpecies.baseStats[stat] = this.dex.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 			}
 			return newSpecies;
 		},
