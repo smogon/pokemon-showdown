@@ -99,7 +99,8 @@ export class YoutubeInterface {
 		return channel;
 	}
 	getId(link: string) {
-		let id;
+		let id = '';
+		if (!link) return null;
 		if (channelData[link]) return link;
 		if (!link.includes('channel')) {
 			if (link.includes('youtube')) {
@@ -113,6 +114,7 @@ export class YoutubeInterface {
 			id = link.split('channel/')[1];
 		}
 		if (id.includes('&')) id = id.split('&')[0];
+		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
