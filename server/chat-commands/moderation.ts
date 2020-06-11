@@ -1322,7 +1322,7 @@ export const commands: ChatCommands = {
 		if (!target) return;
 
 		for (const u of Users.users.values()) {
-			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
+			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		}
 		this.modlog(`GLOBALDECLARE`, null, target);
 	},
