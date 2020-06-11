@@ -286,7 +286,7 @@ export const commands: ChatCommands = {
 		const buffer = [];
 		let innerBuffer = [];
 		const group = Users.globalAuth.get(targetId);
-		if (group) {
+		if (group !== ' ' || Users.isTrusted(targetId)) {
 			buffer.push(`Global auth: ${group === ' ' ? 'trusted' : group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
