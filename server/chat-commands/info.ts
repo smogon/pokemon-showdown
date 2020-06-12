@@ -2437,15 +2437,16 @@ export const commands: ChatCommands = {
 
 	requestshow(target, room, user) {
 		if (!this.canTalk()) return false;
-		if (!room.settings.approvalsEnabled || !room.pendingApprovals) {
+		if (!room.settings.approvalsEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
-		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
+		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
-		if (!/^https?:\/\//.test(target)) target = `http://${Utils.escapeHTML(target)}`;
+		if (!/^https?:\/\//.test(target)) target = `https://${Utils.escapeHTML(target)}`;
+		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, target);
-		this.sendReply(`You have requested for the link ${target} to be displayed.`);
+		this.sendReply(`You have requested to show the link: ${target}`);
 		room.sendMods(
 			`|uhtml|request-${user.id}|<div class="infobox">${user.name} has requested approval to show <a href="${target}">${target}</a><br>` +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
@@ -2457,17 +2458,17 @@ export const commands: ChatCommands = {
 
 	async approveshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (!room.settings.approvalsEnabled || !room.pendingApprovals) {
+		if (!room.settings.approvalsEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
 		if (!target) return this.parse(`/help approvelink`);
-		const id = room.pendingApprovals.get(target);
+		const id = room.pendingApprovals?.get(target);
 		if (!id) return this.errorReply(`${target} has no pending request.`);
 		this.privateModAction(`(${user.name} approved ${target}'s media display request.)`);
 		this.modlog(`APPROVESHOW`, null, `${target} (${id})`);
 		const YouTube = new YoutubeInterface();
-		room.pendingApprovals.delete(target);
+		room.pendingApprovals!.delete(target);
 		if (id.includes('youtu')) {
 			let res = await YouTube.generateVideoDisplay(id);
 			room.add(`|uhtmlchange|request-${target}|`).update();
@@ -2486,12 +2487,12 @@ export const commands: ChatCommands = {
 
 	denyshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (!room.settings.approvalsEnabled || !room.pendingApprovals) {
+		if (!room.settings.approvalsEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
 		if (!target) return this.parse(`/help denylink`);
-		const id = room.pendingApprovals.get(target);
+		const id = room.pendingApprovals?.get(target);
 		if (!id) return this.errorReply(`${target} has no pending request.`);
 		room.pendingApprovals.delete(target);
 		room.add(`|uhtmlchange|request-${target}|`).update();
@@ -2510,14 +2511,14 @@ export const commands: ChatCommands = {
 			let buf = await YouTube.generateVideoDisplay(link);
 			room.add(`|uhtmlchange|request-${target}|`).update();
 			buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
-			buf += `(Suggested by ${Utils.escapeHTML(user.name)})</p></small>`;
-			if (comment) buf += `<br>(${Utils.escapeHTML(comment)})</div>`;
+			buf += Utils.html`(Suggested by ${user.name})</p></small>`;
+			if (comment) buf += Utils.html`<br>(${comment})</div>`;
 			this.addBox(buf!);
 			room.update();
 		} else {
 			void Chat.fitImage(link).then(([width, height]) => {
 				let buf = Utils.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
-				if (comment) buf += `<br>(${comment})</div>`;
+				if (comment) buf += Utils.html`<br>(${comment})</div>`;
 				if (!this.broadcasting) return this.sendReplyBox(buf);
 				this.addBox(buf);
 				room.update();
