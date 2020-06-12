@@ -70,6 +70,7 @@ export interface RoomSettings {
 	auth: {[userid: string]: GroupSymbol};
 
 	readonly staffAutojoin?: string | boolean;
+	readonly autojoin?: boolean;
 	aliases?: string[];
 	banwords?: string[];
 	isPrivate?: boolean | 'hidden' | 'voice';
@@ -546,7 +547,7 @@ export class GlobalRoom extends BasicRoom {
 				}
 			}
 			this.chatRooms.push(room);
-			if (room.autojoin) this.autojoinList.push(id);
+			if (room.settings.autojoin) this.autojoinList.push(id);
 			if (room.settings.staffAutojoin) this.staffAutojoinList.push(id);
 		}
 		Rooms.lobby = Rooms.rooms.get('lobby') as ChatRoom;
@@ -1079,7 +1080,6 @@ export class GlobalRoom extends BasicRoom {
  */
 export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
-	readonly autojoin: boolean;
 	/** Only available in groupchats */
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
@@ -1110,7 +1110,6 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.log = Roomlogs.create(this, options);
 
-		this.autojoin = false;
 		this.creationTime = null;
 		this.type = 'chat';
 		this.banwordRegex = null;
