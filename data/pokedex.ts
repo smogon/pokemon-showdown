@@ -15941,7 +15941,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		evos: ["Volkraken"],
 		eggGroups: ["Water 1", "Water 2"],
-		gen: 5,
+		gen: 6,
 	},
 	volkraken: {
 		num: -33,
@@ -15955,7 +15955,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Volkritter",
 		evoLevel: 34,
 		eggGroups: ["Water 1", "Water 2"],
-		gen: 5,
+		gen: 6,
 	},
 	snugglow: {
 		num: -34,
