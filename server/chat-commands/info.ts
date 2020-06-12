@@ -2494,7 +2494,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse(`/help denylink`);
 		const id = room.pendingApprovals?.get(target);
 		if (!id) return this.errorReply(`${target} has no pending request.`);
-		room.pendingApprovals.delete(target);
+		room.pendingApprovals!.delete(target);
 		room.add(`|uhtmlchange|request-${target}|`).update();
 		this.privateModAction(`(${user.name} denied ${target}'s media display request.)`);
 		this.modlog(`DENYSHOW`, null, `${target} (${id})`);
@@ -2502,7 +2502,8 @@ export const commands: ChatCommands = {
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
 	async show(target, room, user) {
-		if (!this.can('broadcastimage', null, room)) return false;
+		if (!this.can('showmedia', null, room)) return false;
+		if (!room.persist) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = Utils.splitFirst(target, ',');
 		this.runBroadcast(undefined, null, this.can('broadcastimage', null, room));

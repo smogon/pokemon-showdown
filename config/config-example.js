@@ -607,7 +607,7 @@ exports.grouplist = [
 		inherit: ' ',
 		alts: 's',
 		broadcast: true,
-		broadcastimage: true,
+		showmedia: true,
 	},
 	{
 		symbol: 'whitelist',
@@ -617,7 +617,7 @@ exports.grouplist = [
 		roomonly: true,
 		alts: 's',
 		broadcast: true,
-		broadcastimage: true,
+		showmedia: true,
 	},
 	{
 		symbol: ' ',
