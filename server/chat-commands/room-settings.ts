@@ -505,14 +505,14 @@ export const commands: ChatCommands = {
 		}
 		if (this.meansNo(target)) {
 			if (!room.settings.approvalsEnabled) return this.errorReply(`Approvals are already disabled.`);
-			room.settings.approvalsEnabled = false;
+			room.settings.approvalsEnabled = undefined;
 			this.privateModAction(`${user.name} disabled approvals in this room.`);
 		} else if (this.meansYes(target)) {
 			if (room.settings.approvalsEnabled) return this.errorReply(`Approvals are already enabled.`);
 			room.settings.approvalsEnabled = true;
 			this.privateModAction(`${user.name} enabled approvals in this room.`);
 		} else {
-			return this.errorReply(`Unrecognized settingfor approvals. Use 'enable' or 'disable.'`);
+			return this.errorReply(`Unrecognized setting for approvals. Use 'on' or 'off'.`);
 		}
 		room.saveSettings();
 		return this.modlog(`APPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
