@@ -203,7 +203,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
-				void stream.pushEnd();
+				stream.pushEnd();
 				this.deleteStream(taskId);
 				return;
 			} else if (messageType === 'PUSH') {
@@ -531,6 +531,10 @@ export class StreamProcessManager extends ProcessManager {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
 			}
 		}
+		if (!this.activeStreams.has(taskId)) {
+			// stream.destroy() was called, don't send an END message
+			return;
+		}
 		process.send!(`${taskId}\nEND`);
 		this.activeStreams.delete(taskId);
 	}
@@ -568,7 +572,7 @@ export class StreamProcessManager extends ProcessManager {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
 				void stream.write(message);
 			} else if (messageType === 'WRITEEND') {
-				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
+				if (!stream) throw new Error(`WRITEEND: Invalid taskId ${taskId}`);
 				void stream.writeEnd();
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
