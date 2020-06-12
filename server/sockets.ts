@@ -569,19 +569,19 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	if (Config.ofe) {
+	if (Config.sockets) {
 		try {
 			require.resolve('node-oom-heapdump');
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 			throw new Error(
-				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofesockets is set to true! ' +
 				'Run npm install node-oom-heapdump and restart the server.'
 			);
 		}
 
 		// Create a heapdump if the process runs out of memory.
-		(require as any)('node-oom-heapdump')({
+		(global as any).nodeOomHeapdump = (require as any)('node-oom-heapdump')({
 			addTimestamp: true,
 		});
 	}

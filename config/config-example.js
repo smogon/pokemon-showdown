@@ -89,12 +89,17 @@ Main's SSL deploy script from Let's Encrypt looks like:
 exports.proxyip = false;
 
 /**
- * ofe - write heapdumps if sockets.js workers run out of memory.
+ * ofe - write heapdumps if the main process or sockets processes run out of memory.
  *   If you wish to enable this, you will need to install node-oom-heapdump,
  *   as it is sometimes not installed by default:
  *     $ npm install node-oom-heapdump
+ *
+ * You might want to signal processes to put them in debug mode, for completeness
+ *
+ * kill -s SIGUSR1 [pid]
  */
-exports.ofe = false;
+exports.ofemain = false;
+exports.ofesockets = false;
 
 /**
  * Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
