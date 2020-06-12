@@ -860,6 +860,50 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// PiraTe Princess
+	dungeonsdragons: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Prevents the target from switching out and adds Dragon to the target's type. Has a 5% chance to either confuse the user or guarantee that the next attack is a critical hit, 15% chance to raise the user's Attack, Defense, Special Attack, Special Defense, or Speed by 1 stage, and a 15% chance to raise user's Special Attack and Speed by 1 stage.",
+		shortDesc: "Target: can't switch,+Dragon. Does other things.",
+		name: "Dungeons & Dragons",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Imprison', target);
+			this.add('-anim', source, 'Trick-or-Treat', target);
+			this.add('-anim', source, 'Shell Smash', source);
+		},
+		onHit(target, source, move) {
+			this.add(`c|${getName('PiraTe Princess')}|did someone say d&d?`);
+			target.addVolatile('trapped', source, move, 'trapper');
+			if (!target.hasType('Dragon') && target.addType('Dragon')) {
+				this.add('-start', target, 'typeadd', 'Dragon', '[from] move: Dungeons & Dragons');
+			}
+			const result = this.random(21);
+			if (result === 20) {
+				source.addVolatile('laserfocus');
+			} else if (result >= 2 && result <= 16) {
+				const boost: BoostsTable = {};
+				const stats: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+				boost[stats[this.random(5)]] = 1;
+				this.boost(boost, source);
+			} else if (result >= 17 && result <= 19) {
+				this.boost({spa: 1, spe: 1}, source);
+			} else {
+				source.addVolatile('confusion');
+			}
+		},
+		target: "normal",
+		type: "Dragon",
+	},
+
 	// Rabia
 	psychodrive: {
 		accuracy: 100,

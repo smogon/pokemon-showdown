@@ -348,6 +348,29 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// PiraTe Princess
+	wildmagicsurge: {
+		desc: "Randomly changes the Pokemon's type at the end of every turn to the type of one of its moves; same-type attack bonus (STAB) is 2 instead of 1.5.",
+		shortDesc: "Adaptability + Randomly changes the Pokemon’s type to the type of one of its moves every turn.",
+		name: "Wild Magic Surge",
+		onModifyMove(move) {
+			move.stab = 2;
+		},
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			const moves = Object.values(pokemon.getMoves()).map(move =>  move.id);
+			const types: string[] = [];
+			for (const move of moves) {
+				types.push(this.dex.getMove(move).type);
+			}
+			let type = this.sample(types);
+			while (!pokemon.setType(type)) {
+				type = this.sample(types);
+			}
+			this.add('-start', pokemon, 'typechange', type);
+		},
+	},
+
 	// Robb576
 	thenumbersgame: {
 		desc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team; Necrozma-Dusk-Mane if 3 or fewer, Necrozma-Ultra if it is the last Pokemon left on the team.",

@@ -367,6 +367,23 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
 		},
 	},
+	pirateprincess: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('PiraTe Princess')}|Ahoy! o/`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('PiraTe Princess')}|brb making tea`);
+		},
+		onFaint() {
+			this.add(`c|${getName('PiraTe Princess')}|I failed my death save`);
+		},
+		onHit (target, source, move) {
+			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
+				this.add(`c|${getName('PiraTe Princess')}|NATURAL 20!!!`);
+			}
+		},
+	},
 	rabia: {
 		noCopy: true,
 		onStart() {

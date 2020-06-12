@@ -168,6 +168,16 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Moongeist Beam',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	'PiraTe Princess': {
+		species: 'Polteageist', ability: 'Wild Magic Surge', item: 'Expert Belt', gender: 'F',
+		moves: [
+			'Moongeist Beam', 'Spacial Rend', [
+				'Tri Attack', 'Fiery Dance', 'Scald', 'Discharge', 'Apple Acid', 'Ice Beam', 'Aura Sphere', 'Sludge Bomb', 'Earth Power', 'Oblivion Wing', 'Psyshock', 'Bug Buzz', 'Power Gem', 'Dark Pulse', 'Flash Cannon', 'Dazzling Gleam',
+			],
+		],
+		signatureMove: 'Dungeons & Dragons',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	Rabia: {
 		species: 'Mew', ability: 'Psychic Surge', item: 'Life Orb', gender: 'M',
 		moves: ['Nasty Plot', ['Flamethrower', 'Fire Blast'], 'Roost'],
