@@ -2501,9 +2501,10 @@ export const commands: ChatCommands = {
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
+	'!show': true,
 	async show(target, room, user) {
 		if (!this.can('showmedia', null, room)) return false;
-		if (!room.persist) return this.errorReply(`/show cannot be used in temporary rooms.`);
+		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = Utils.splitFirst(target, ',');
 		this.runBroadcast(undefined, null, this.can('broadcastimage', null, room));

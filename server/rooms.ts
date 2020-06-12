@@ -1150,7 +1150,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		this.pendingApprovals = new Map();
+		this.pendingApprovals = null;
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
