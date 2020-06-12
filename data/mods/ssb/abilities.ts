@@ -137,6 +137,19 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Emeri
+	dracovoice: {
+		desc: "This Pokemon's sound-based moves become Dragon-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's sound-based moves become Dragon type.",
+		name: "Draco Voice",
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles.dynamax) { // hardcode
+				move.type = 'Dragon';
+			}
+		},
+	},
+
 	// Flare
 	permafrostarmor: {
 		desc: "This Pokemon takes 1/10 less damage from direct attacks. This Pokemon can only be damaged by direct attacks.",

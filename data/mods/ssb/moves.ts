@@ -269,6 +269,32 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: 'Fairy',
 	},
 
+	// Emeri
+	forcedlanding: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
+		shortDesc: "Restore 50% HP + set Gravity.",
+		name: "Forced Landing",
+		pp: 10,
+		priority: 0,
+		flags: {heal: 1},
+		heal: [1, 2],
+		pseudoWeather: 'gravity',
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Roost', source);
+			this.add('-anim', source, 'Gravity', source);
+		},
+		secondary: null,
+		target: "self",
+		type: "Flying",
+	},
+
 	// Flare
 	krisenbon: {
 		accuracy: 100,

@@ -128,6 +128,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Elgino')}|I'm out of fairies D:!`);
 		},
 	},
+	emeri: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Emeri')}|hey !`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Emeri')}|//busy`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Emeri')}|don't forget to chall SFG or Agarica in gen8ou`);
+		},
+	},
 	flare: {
 		noCopy: true,
 		onStart() {

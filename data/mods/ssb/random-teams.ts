@@ -78,6 +78,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Navi\'s Grace',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	Emeri: {
+		species: 'Flygon', ability: 'Draco Voice', item: 'Throat Spray', gender: 'M',
+		moves: ['Boomburst', 'Earth Power', 'Agility'],
+		signatureMove: 'Forced Landing',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	Flare: {
 		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
 		moves: ['Earthquake', 'Knock Off', ['Play Rough', 'U-turn']],
