@@ -2504,7 +2504,7 @@ export const commands: ChatCommands = {
 	async show(target, room, user) {
 		if (!this.can('broadcastimage', null, room)) return false;
 		if (!toID(target).trim()) return this.parse(`/help link`);
-		const [link, comment] = target.split(',');
+		const [link, comment] = Utils.splitFirst(target, ',');
 		this.runBroadcast(undefined, null, this.can('broadcastimage', null, room));
 		const YouTube = new YoutubeInterface();
 		if (link.includes('youtu')) {
@@ -2516,13 +2516,12 @@ export const commands: ChatCommands = {
 			this.addBox(buf!);
 			room.update();
 		} else {
-			void Chat.fitImage(link).then(([width, height]) => {
-				let buf = Utils.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
-				if (comment) buf += Utils.html`<br>(${comment})</div>`;
-				if (!this.broadcasting) return this.sendReplyBox(buf);
-				this.addBox(buf);
-				room.update();
-			});
+			const [width, height] = await Chat.fitImage(link);
+			let buf = Utils.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
+			if (comment) buf += Utils.html`<br>(${comment})</div>`;
+			if (!this.broadcasting) return this.sendReplyBox(buf);
+			this.addBox(buf);
+			room.update();
 		}
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # & ~`],
