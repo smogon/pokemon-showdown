@@ -45,14 +45,14 @@ function cardHTML(card: Card, fullsize: boolean) {
 }
 
 function createDeck() {
-	const colors = ['Red', 'Blue', 'Green', 'Yellow'];
+	const colors: Color[] = ['Red', 'Blue', 'Green', 'Yellow'];
 	const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'Reverse', 'Skip', '+2'];
 
 	const basic: Card[] = [];
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			const c: Card = {value: v, color: color as Color, name: color + " " + v};
+			const c: Card = {value: v, color: color, name: `${color} ${v}`};
 			return c;
 		}));
 	}
@@ -63,7 +63,7 @@ function createDeck() {
 		...basic,
 		// The four 0s
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: colors[v] as Color, value: '0', name: colors[v] + ' 0'};
+			const c: Card = {color: colors[v], value: '0', name: `${colors[v]} 0`};
 			return c;
 		}),
 		 // Wild cards
@@ -744,14 +744,12 @@ export const commands: ChatCommands = {
 			if (disqualified === false) return this.errorReply(`Unable to disqualify ${target}.`);
 			this.privateModAction(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
 			this.modlog('UNO DQ', toID(target));
-			room.add(`${target} has been disqualified from the UNO game.`).update();
+			room.add(`${disqualified} has been disqualified from the UNO game.`).update();
 		},
 
 		// player/user commands
-		j: 'unojoin',
-		// TypeScript doesn't like 'join' being defined as a function
-		join: 'unojoin',
-		unojoin(target, room, user) {
+		j: 'join',
+		join(target, room, user) {
 			const game = room.getGame(UnoGame);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.canTalk()) return false;
