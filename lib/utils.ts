@@ -208,6 +208,23 @@ export const Utils = new class Utils {
 		return num;
 	}
 
+	clearRequireCache(options: {exclude?: string[]} = {}) {
+		const excludes = options?.exclude || [];
+		excludes.push('/node_modules/');
+
+		for (const path in require.cache) {
+			let skip = false;
+			for (const exclude of excludes) {
+				if (path.includes(exclude)) {
+					skip = true;
+					break;
+				}
+			}
+
+			if (!skip) delete require.cache[path];
+		}
+	}
+
 	levenshtein(s: string, t: string, l: number): number {
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
 		const d: number[][] = [];

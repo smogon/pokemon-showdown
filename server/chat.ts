@@ -1475,40 +1475,6 @@ export const Chat = new class {
 
 	packageData: AnyObject = {};
 
-	uncacheTree(root: string) {
-		let toUncache = [require.resolve('../' + root)];
-		do {
-			const newuncache: string[] = [];
-			for (const target of toUncache) {
-				if (require.cache[target]) {
-					// cachedModule
-					const children: {id: string}[] = require.cache[target]!.children;
-					newuncache.push(
-						...(children
-							.filter(cachedModule => !cachedModule.id.endsWith('.node'))
-							.map(cachedModule => cachedModule.id))
-					);
-					delete require.cache[target];
-				}
-			}
-			toUncache = newuncache;
-		} while (toUncache.length > 0);
-	}
-
-	uncacheDir(root: string, followSymlink?: boolean) {
-		const absoluteRoot = followSymlink ? FS(root).realpathSync() : FS(root).path;
-		for (const key in require.cache) {
-			if (key.startsWith(absoluteRoot)) {
-				delete require.cache[key];
-			}
-		}
-	}
-
-	uncache(path: string) {
-		const absolutePath = require.resolve('../' + path);
-		delete require.cache[absolutePath];
-	}
-
 	loadPlugin(file: string) {
 		let plugin;
 		if (file.endsWith('.ts')) {
