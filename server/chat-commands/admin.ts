@@ -283,7 +283,7 @@ export const commands: ChatCommands = {
 						manager.filename.startsWith(FS('server/chat-plugins').path) ||
 						manager.filename.startsWith(FS('.server-dist/chat-plugins').path)
 					) {
-						manager.destroy();
+						void manager.destroy();
 					}
 				}
 
