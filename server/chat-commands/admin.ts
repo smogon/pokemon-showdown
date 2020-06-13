@@ -253,6 +253,7 @@ export const commands: ChatCommands = {
 
 		let patch = target;
 		try {
+			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
 				if (lock['all']) {
 					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
@@ -276,7 +277,7 @@ export const commands: ChatCommands = {
 
 				Chat.destroy();
 
-				const processManagers = require('../../lib/process-manager').processManagers;
+				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
 					if (
 						manager.filename.startsWith(FS('server/chat-plugins').path) ||
@@ -286,19 +287,9 @@ export const commands: ChatCommands = {
 					}
 				}
 
-				Chat.uncache('./.server-dist/chat');
-				Chat.uncacheDir('./server/chat-commands');
-				Chat.uncacheDir('./.server-dist/chat-commands');
-				Chat.uncacheDir('./server/chat-plugins');
-				Chat.uncacheDir('./.server-dist/chat-plugins');
-				if (await FS('./server/chat-plugins/private').exists()) {
-					Chat.uncacheDir('./server/chat-plugins/private', true);
-				}
-				Chat.uncacheDir('./translations');
 				global.Chat = require('../chat').Chat;
-
-				Chat.uncacheDir('./.server-dist/tournaments');
 				global.Tournaments = require('../tournaments').Tournaments;
+
 				this.sendReply("Chat commands have been hot-patched.");
 				Chat.loadPlugins();
 				this.sendReply("Chat plugins have been loaded.");
@@ -308,7 +299,6 @@ export const commands: ChatCommands = {
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				Chat.uncacheDir('./.server-dist/tournaments');
 				global.Tournaments = require('../tournaments').Tournaments;
 				Chat.loadPluginData(Tournaments);
 				this.sendReply("Tournaments have been hot-patched.");
@@ -325,10 +315,6 @@ export const commands: ChatCommands = {
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				// uncache the .sim-dist/dex.js dependency tree
-				Chat.uncacheDir('./.sim-dist');
-				Chat.uncacheDir('./.data-dist');
-				Chat.uncache('./.config-dist/formats');
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
 				// rebuild the formats list
@@ -344,7 +330,6 @@ export const commands: ChatCommands = {
 			} else if (target === 'loginserver') {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 				FS('config/custom.css').unwatch();
-				Chat.uncache('./.server-dist/loginserver');
 				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
@@ -366,14 +351,12 @@ export const commands: ChatCommands = {
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				Chat.uncache('./.server-dist/punishments');
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				Chat.uncache('./.server-dist/ip-tools');
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadDatacenters();
 				this.sendReply("IPTools has been hot-patched.");
