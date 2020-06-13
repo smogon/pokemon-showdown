@@ -11654,7 +11654,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Inkay",
 		evoLevel: 30,
-		evoCondition: "with an console turned upside-down",
+		evoCondition: "with the console turned upside-down",
 		eggGroups: ["Water 1", "Water 2"],
 	},
 	binacle: {
