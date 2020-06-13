@@ -608,10 +608,10 @@ export const commands: ChatCommands = {
 								evos.push(`${evo.name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
-								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : evo.evoCondition ? ` ${evo.evoCondition}` : ``})`);
+								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
 								break;
 							default:
-								evos.push(`${evo.name} (${evo.evoLevel})`);
+								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
 							}
 						}
 					}
