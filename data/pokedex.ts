@@ -2281,6 +2281,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Tyrogue",
 		evoLevel: 20,
+		evoCondition: "with an Atk stat > its Def stat",
 		eggGroups: ["Human-Like"],
 	},
 	hitmonchan: {
@@ -2295,6 +2296,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Tyrogue",
 		evoLevel: 20,
+		evoCondition: "with an Atk stat < its Def stat",
 		eggGroups: ["Human-Like"],
 	},
 	lickitung: {
@@ -4302,6 +4304,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Tyrogue",
 		evoLevel: 20,
+		evoCondition: "with an Atk stat equal to its Def stat",
 		eggGroups: ["Human-Like"],
 	},
 	smoochum: {
@@ -11445,6 +11448,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Pancham",
 		evoLevel: 32,
+		evoCondition: "with a Dark-type in the party",
 		eggGroups: ["Field", "Human-Like"],
 	},
 	furfrou: {
@@ -11650,6 +11654,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Inkay",
 		evoLevel: 30,
+		evoCondition: "with an console turned upside-down",
 		eggGroups: ["Water 1", "Water 2"],
 	},
 	binacle: {
