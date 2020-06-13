@@ -2483,7 +2483,7 @@ export const commands: ChatCommands = {
 			});
 		}
 	},
-	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # & ~`],
+	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
 	denyshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
@@ -2499,7 +2499,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} denied ${target}'s media display request.)`);
 		this.modlog(`DENYSHOW`, null, `${target} (${id})`);
 	},
-	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
+	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
 	'!show': true,
 	async show(target, room, user) {
@@ -2507,7 +2507,7 @@ export const commands: ChatCommands = {
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = Utils.splitFirst(target, ',');
-		this.runBroadcast(undefined, null, this.can('broadcastimage', null, room));
+		this.runBroadcast();
 		const YouTube = new YoutubeInterface();
 		if (link.includes('youtu')) {
 			let buf = await YouTube.generateVideoDisplay(link);
@@ -2526,7 +2526,7 @@ export const commands: ChatCommands = {
 			room.update();
 		}
 	},
-	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # & ~`],
+	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
 
 	'!pi': true,
 	pi(target, room, user) {
