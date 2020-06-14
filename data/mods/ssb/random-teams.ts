@@ -78,12 +78,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'GET OFF MY LAWN!',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-  dream: {
+	dream: {
 		species: 'Klefki', ability: 'Greed Punisher', item: 'Life Orb', gender: 'N',
 		moves: ['Light of Ruin', 'Steel Beam', 'Mind Blown'],
 		signatureMove: 'Lock and Key',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
-  },
+	},
 	Elgino: {
 		species: 'Celebi', ability: 'Magic Guard', item: 'Life Orb', gender: 'M',
 		moves: ['Leaf Storm', 'Nasty Plot', 'Power Gem'],
@@ -208,7 +208,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Disconnect',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
 	},
-	Sundar: {
+	Sunny: {
 		species: 'Charizard', ability: 'Blaze', item: 'Charizardite X', gender: 'M',
 		moves: ['Earthquake', ['Double Edge', 'Flare Blitz'], 'Roost'],
 		signatureMove: 'One For All: Full Cowl - 100%',

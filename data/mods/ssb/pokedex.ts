@@ -83,7 +83,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "The Numbers Game"},
 	},
-	// Sundar
+	// Sunny
 	charizardmegax: {
 		inherit: true,
 		abilities: {0: "One For All"},

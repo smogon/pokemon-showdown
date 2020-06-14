@@ -302,7 +302,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Steel",
-  },
+	},
 
 	// Elgino
 	navisgrace: {
@@ -1132,7 +1132,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
-	// Sundar
+	// Sunny
 	oneforallfullcowl100: {
 		accuracy: 100,
 		basePower: 120,

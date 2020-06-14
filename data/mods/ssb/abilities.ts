@@ -183,9 +183,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 					this.boost(boost, pokemon);
 				} else {
 					return false;
-        }
-     },
-  },
+				}
+			}
+		},
+	},
 
 	// Emeri
 	dracovoice: {
@@ -496,10 +497,11 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// Sundar
+	// Sunny
 	oneforall: {
 		desc: "This Pokemon's contact moves have their power multiplied by 1.3. If this Pokemon KOes the target with a recoil move, it regains 25% of its max HP.",
 		shortDesc: "Tough Claws + recovers 25% max HP when foe is KOed with a recoil move.",
+		name: "One For All",
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['contact']) {
