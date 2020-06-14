@@ -1155,6 +1155,33 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Dragon",
 	},
 
+	// Teclis
+	ten: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. Raises the user's Special Attack by 1 stage.",
+		shortDesc: "Heals user by 50% and raises Sp. Atk 1 stage.",
+		name: "Ten",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		heal: [1, 2],
+		onTryMove(target) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Calm Mind', source);
+			this.add('-anim', source, 'Recover', source);
+		},
+		boosts: {
+			spa: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+
 	// Zodiax
 	bigstormcoming: {
 		accuracy: 100,

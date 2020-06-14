@@ -474,6 +474,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Sunny')}|All men are not created equal. That was the reality I learned about society in general.`);
 		},
 	},
+	teclis: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Teclis')}|A little magic can go a long way.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Teclis')}|But magic can sometimes just be an illusion.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Teclis')}|Magic never dies. It merely fades away.`);
+		},
+	},
 	zodiax: {
 		noCopy: true,
 		onStart() {
