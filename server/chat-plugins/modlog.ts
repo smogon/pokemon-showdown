@@ -273,7 +273,7 @@ function prettifyResults(
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
-		const searchStringDescription = `${exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`}`;
+		const searchStringDescription = `${exactSearch ? `containing the string "${Utils.escapeHTML(searchString)}"` : `matching the username "${Utils.escapeHTML(searchString)}"`}`;
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
 			`|pagehtml|<div class="pad"><p>The last ${scope}${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
 			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
