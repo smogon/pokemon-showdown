@@ -18,6 +18,26 @@
 		"nature": "Adamant",
 		"moves": ["Mach Punch", "Aqua Jet", "Earthquake", "Knock Off"]
 	}],
+	"Astrolotl": [{
+		"item": "Choice Band",
+		"ability": "Vital Spirit",
+		"evs": {"hp": 32, "atk": 252, "spe": 224},
+		"nature": "Jolly",
+		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Trick"]
+	}, {
+		"item": "Choice Specs",
+		"ability": "Vital Spirit",
+		"evs": {"hp": 32, "spa": 252, "spe": 224},
+		"nature": "Timid",
+		"ivs": {"atk": 0},
+		"moves": ["Draco Meteor", "Overheat", "Dazzling Gleam", "Trick"]
+	}, {
+		"item": "Shuca Berry",
+		"ability": "Vital Spirit",
+		"evs": {"hp": 252, "spd": 32, "spe": 224},
+		"nature": "Jolly",
+		"moves": ["Fire Lash", "Yawn", "Wish", "Protect"]
+	}],
 	"Aurumoth": [{
 		"item": "Choice Scarf",
 		"ability": "No Guard",
@@ -55,10 +75,10 @@
 	}],
 	"Cawmodore": [{
 		"item": "Sitrus Berry",
-		"ability": "Intimidate",
-		"evs": {"hp": 4, "atk": 252, "spe": 252},
+		"ability": "Volt Absorb",
+		"evs": {"hp": 28, "atk": 252, "spe": 228},
 		"nature": "Jolly",
-		"moves": ["Belly Drum", "Bullet Punch", "Iron Head", "Acrobatics"]
+		"moves": ["Belly Drum", "Bullet Punch", "Drain Punch", "Acrobatics"]
 	}, {
 		"item": "Petaya Berry",
 		"ability": "Volt Absorb",
@@ -72,7 +92,7 @@
 		"evs": {"def": 28, "spa": 252, "spe": 228},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Surf", "Hurricane", "Flash Cannon", "Hyper Beam"]
+		"moves": ["Surf", "Hurricane", "Steel Beam", "Hyper Beam"]
 	}, {
 		"item": "Choice Band",
 		"ability": "Volt Absorb",
@@ -141,7 +161,14 @@
 		"evs": {"hp": 248, "def": 40, "spa": 160, "spd": 60},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": ["Earth Power", "Steel Beam", "Aura Sphere", "Doom Desire"]
+		"moves": ["Earth Power", "Flash Cannon", "Aura Sphere", "Doom Desire"]
+	}, {
+		"item": "Life Orb",
+		"ability": "Levitate",
+		"evs": {"hp": 252, "spa": 168, "spd": 88},
+		"nature": "Quiet",
+		"ivs": {"atk": 0, "spe": 0},
+		"moves": ["Trick Room", "Earth Power", "Flash Cannon", "Aura Sphere"]
 	}],
 	"Fidgit": [{
 		"item": "Sitrus Berry",
@@ -268,7 +295,7 @@
 		"evs": {"hp": 92, "def": 164, "spe": 252},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": [["Eruption", "Fire Blast"], "Sludge Bomb", "Thunderbolt", "Trick"]
+		"moves": ["Eruption", "Sludge Bomb", "Thunderbolt", "Trick"]
 	}, {
 		"item": "Power Herb",
 		"ability": "Dry Skin",
@@ -347,7 +374,7 @@
 	"Plasmanta": [{
 		"item": "Life Orb",
 		"ability": "Storm Drain",
-		"evs": {"hp": 40, "spa": 252, "spe": 216},
+		"evs": {"hp": 24, "spa": 252, "spe": 232},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
 		"moves": ["Magnet Rise", "Aura Sphere", "Psychic", "Sludge Wave"]
@@ -369,7 +396,7 @@
 	}, {
 		"item": "Choice Specs",
 		"ability": "White Smoke",
-		"evs": {"hp": 248, "spa": 252, "spd": 8},
+		"evs": {"hp": 248, "spa": 124, "spd": 132},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
 		"moves": ["Overheat", "Giga Drain", "Earth Power", "Fire Blast"]
@@ -440,7 +467,7 @@
 		"evs": {"hp": 16, "spa": 252, "spe": 240},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Blizzard", "Focus Blast", "Bug Buzz", "Hyper Beam"]
+		"moves": ["Blizzard", "Focus Blast", "Bug Buzz", "Earth Power"]
 	}, {
 		"item": "Life Orb",
 		"ability": "Compound Eyes",
@@ -451,9 +478,9 @@
 	}, {
 		"item": "Choice Band",
 		"ability": "Compound Eyes",
-		"evs": {"atk": 252, "spd": 4, "spe": 252},
-		"nature": ["Adamant", "Jolly"],
-		"moves": ["Icicle Crash", "Leech Life", "Superpower", ["Earthquake", "Stone Edge"]]
+		"evs": {"hp": 16, "atk": 252, "spe": 240},
+		"nature": "Adamant",
+		"moves": ["Icicle Crash", "Leech Life", "Stone Edge", "Earthquake"]
 	}],
 	"Tomohawk": [{
 		"item": "Leftovers",
