@@ -735,6 +735,27 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 			}
 		},
 	},
+	stadiumsleepclausemod: {
+		effectType: 'Rule',
+		name: 'Stadium Sleep Clause Mod',
+		desc: "Prevents players from putting one of their opponent's Pok&eacute;mon to sleep if any of the opponent's other Pok&eacute;mon are asleep",
+		onBegin() {
+			this.add('rule', 'Stadium Sleep Clause Mod: Limit one foe put to sleep');
+		},
+		onSetStatus(status, target, source) {
+			if (source && source.side === target.side) {
+				return;
+			}
+			if (status.id === 'slp') {
+				for (const pokemon of target.side.pokemon) {
+					if (pokemon.hp && pokemon.status === 'slp') {
+						this.add('-message', "Sleep Clause Mod activated. (In Stadium, Sleep Clause activates if any of the opponent's Pokemon are asleep, even if self-inflicted from Rest)");
+						return false;
+					}
+				}
+			}
+		},
+	},
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
