@@ -461,6 +461,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me`);
 		},
 	},
+	sundar: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Sundar')}|I will live up to the hopes of those who supported me. That's why I'm giving it everything I got, for everyone!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Sundar')}|I can't just keep getting help from others. I have to hurry and learn to control my powers.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Sundar')}|All men are not created equal. That was the reality I learned about society in general.`);
+		},
+	},
 	zodiax: {
 		noCopy: true,
 		onStart() {

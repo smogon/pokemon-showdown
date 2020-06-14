@@ -208,6 +208,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Disconnect',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
 	},
+	Sundar: {
+		species: 'Charizard', ability: 'Blaze', item: 'Charizardite X', gender: 'M',
+		moves: ['Earthquake', ['Double Edge', 'Flare Blitz'], 'Roost'],
+		signatureMove: 'One For All: Full Cowl - 100%',
+		evs: {atk: 252, spd: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
+	},
 	Zodiax: {
 		species: 'Oricorio-Pom-Pom', ability: 'Primordial Sea', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Quiver Dance', 'Hurricane', 'Thunder'],

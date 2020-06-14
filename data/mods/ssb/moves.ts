@@ -1132,6 +1132,29 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Sundar
+	oneforallfullcowl100: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "User takes 40% recoil damage.",
+		shortDesc: "Has 40% recoil.",
+		name: "One For All: Full Cowl - 100%",
+		pp: 30,
+		priority: 0,
+		flags: {contact: 1, protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'All Out Pummeling', target);
+		},
+		recoil: [4, 10],
+		target: "normal",
+		type: "Dragon",
+	},
+
 	// Zodiax
 	bigstormcoming: {
 		accuracy: 100,
