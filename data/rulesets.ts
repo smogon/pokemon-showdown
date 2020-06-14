@@ -738,7 +738,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 	stadiumsleepclause: {
 		effectType: 'Rule',
 		name: 'Stadium Sleep Clause',
-		desc: "Prevents players from putting one of their opponent's Pok&eacute;mon to sleep if any of the opponent's other Pok&eacute;mon are asleep",
+		desc: "Prevents players from putting one of their opponent's Pok\u00E9mon to sleep if any of the opponent's other Pok\u00E9mon are asleep (different from Sleep Clause Mod because putting your own Pok\u00E9mon to sleep is enough to prevent opponents from putting your others to sleep).",
 		onBegin() {
 			this.add('rule', 'Stadium Sleep Clause: Limit one foe put to sleep');
 		},
