@@ -279,6 +279,31 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// dream
+	lockandkey: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Special Attack and Special Defense stats by 1 stage and prevents the target from switching out.",
+		shortDesc: "Raises user's SpA and SpD by 1 Prevents foe from switching.",
+		name: "Lock and Key",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onHit(target, source, move) {
+			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		},
+		self: {
+			boosts: {
+				spa: 1,
+				spd: 1,
+			},
+		},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Steel",
+  },
+
 	// Elgino
 	navisgrace: {
 		accuracy: 100,

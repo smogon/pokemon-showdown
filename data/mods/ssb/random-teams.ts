@@ -78,6 +78,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'GET OFF MY LAWN!',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
+  dream: {
+		species: 'Klefki', ability: 'Greed Punisher', item: 'Life Orb', gender: 'N',
+		moves: ['Light of Ruin', 'Steel Beam', 'Mind Blown'],
+		signatureMove: 'Lock and Key',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+  },
 	Elgino: {
 		species: 'Celebi', ability: 'Magic Guard', item: 'Life Orb', gender: 'M',
 		moves: ['Leaf Storm', 'Nasty Plot', 'Power Gem'],

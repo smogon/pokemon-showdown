@@ -126,6 +126,17 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('drampa\'s grandpa')}|Bah humbug!`);
 		},
 	},
+	dream: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('dream')}|It's Prime Time`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('dream')}|oh no please god tell me we're dreaming`);
+		},
+		onFaint() {
+			this.add(`c|${getName('dream')}|perdemos`);
+  },    
 	elgino: {
 		noCopy: true,
 		onStart(target, pokemon) {
