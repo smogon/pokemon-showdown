@@ -10,6 +10,24 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Aeonic
+	arsene: {
+		desc: "On switch-in, this Pokemon summons Sandstorm. If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "Sand Stream + Sand Rush.",
+		name: "Arsene",
+		onStart(source) {
+			this.field.setWeather('sandstorm');
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather('sandstorm')) {
+				return this.chainModify(2);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm') return false;
+		},
+	},
+
 	// Aethernum
 	rainyseason: {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Snowstorm. If Rain Dance is active, this Pokemon restores 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Big Root, it will restore 1/6 of its maximum HP, rounded down, at the end of the turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored. This Pokemon collects raindrops.",
@@ -358,7 +376,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			const moves = Object.values(pokemon.getMoves()).map(move =>  move.id);
+			const moves = Object.values(pokemon.getMoves()).map(move => move.id);
 			const types: string[] = [];
 			for (const move of moves) {
 				types.push(this.dex.getMove(move).type);

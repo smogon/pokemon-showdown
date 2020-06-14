@@ -39,6 +39,42 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Aeonic
+	lookingcool: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Sets up Stealth Rock on the opposing side of the field and boosts the user's Attack by 2 stages. Can only be used once per the user's time on the field.",
+		shortDesc: "1 use per switchin. +2 Atk + Stealth Rock.",
+		name: "Looking Cool",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'lookingcool',
+		onTryMovePriority: 100,
+		onTryMove(target) {
+			if (target.volatiles['lookingcool']) return false;
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			const foe = source.side.foe.active[0];
+			this.add('-anim', source, 'Smokescreen', source);
+			this.add('-anim', source, 'Stealth Rock', foe);
+		},
+		onHit(target, source, move) {
+			const foe = source.side.foe;
+			if (!foe.getSideCondition('stealthrock')) {
+				foe.addSideCondition('stealthrock');
+			}
+		},
+		boosts: {
+			atk: 2,
+		},
+		secondary: null,
+		target: "self",
+		type: "Dark",
+	},
+
 	// Aethernum
 	lilypadoverflow: {
 		accuracy: 100,
@@ -890,7 +926,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (result === 20) {
 				source.addVolatile('laserfocus');
 			} else if (result >= 2 && result <= 16) {
-				const boost: BoostsTable = {};
+				const boost: SparseBoostsTable = {};
 				const stats: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 				boost[stats[this.random(5)]] = 1;
 				this.boost(boost, source);

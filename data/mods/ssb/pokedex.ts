@@ -6,6 +6,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	// Aeonic
+	nosepass: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 85, def: 135, spa: 45, spd: 90, spe: 70},
+	},
 	// Aethernum
 	lotad: {
 		inherit: true,
