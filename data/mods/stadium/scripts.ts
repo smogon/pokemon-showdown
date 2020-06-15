@@ -97,7 +97,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 
-		// If rival fainted
+		// If target fainted
 		if (target && target.hp <= 0) {
 			// We remove screens
 			target.side.removeSideCondition('reflect');
@@ -105,6 +105,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		} else {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
+		if (pokemon.volatiles['mustrecharge']) this.add('-mustrecharge', pokemon);
 
 		// For partial trapping moves, we are saving the target.
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
@@ -124,7 +125,15 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		let doSelfDestruct = true;
 		let damage: number | false | undefined = 0;
 
-		// First, check if the Pokémon is immune to this move.
+		// First, check if the target is semi-invulnerable
+		let hitResult = this.runEvent('Invulnerability', target, pokemon, move);
+		if (hitResult === false) {
+			if (!move.spreadHit) this.attrLastMove('[miss]');
+			this.add('-miss', pokemon);
+			return false;
+		}
+
+		// Then, check if the PokÃ©mon is immune to this move.
 		if (
 			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
 			!target.runImmunity(move.type, true)
@@ -132,6 +141,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
+			return false;
+		}
+		hitResult = this.singleEvent('TryImmunity', move, null, target, pokemon, move);
+		if (hitResult === false) {
+			this.add('-immune', target);
 			return false;
 		}
 
@@ -219,8 +233,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
-		// Checking if substitute fainted
-		if (target.subFainted) doSelfDestruct = false;
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
