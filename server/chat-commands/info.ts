@@ -2469,16 +2469,16 @@ export const commands: ChatCommands = {
 		this.modlog(`APPROVESHOW`, null, `${target} (${id})`);
 		const YouTube = new YoutubeInterface();
 		room.pendingApprovals!.delete(target);
-		if (id.includes('youtu')) {
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(id)) {
 			let res = await YouTube.generateVideoDisplay(id);
-			room.add(`|uhtmlchange|request-${target}|`).update();
+			room.sendMods(`|uhtmlchange|request-${target}|`);
 			res += `<br><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${target})</p>`;
 			this.addBox(res as string);
 			room.update();
 		} else {
 			void Chat.fitImage(id).then(([width, height]) => {
 				this.addBox(Utils.html`<img src="${id}" style="width: ${width}px; height: ${height}px" />`);
-				room.add(`|uhtmlchange|request-${target}|`);
+				room.sendMods(`|uhtmlchange|request-${target}|`);
 				room.update();
 			});
 		}
@@ -2495,7 +2495,8 @@ export const commands: ChatCommands = {
 		const id = room.pendingApprovals?.get(target);
 		if (!id) return this.errorReply(`${target} has no pending request.`);
 		room.pendingApprovals!.delete(target);
-		room.add(`|uhtmlchange|request-${target}|`).update();
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		room.update();
 		this.privateModAction(`(${user.name} denied ${target}'s media display request.)`);
 		this.modlog(`DENYSHOW`, null, `${target} (${id})`);
 	},
@@ -2509,9 +2510,8 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 		this.runBroadcast();
 		const YouTube = new YoutubeInterface();
-		if (link.includes('youtu')) {
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
 			let buf = await YouTube.generateVideoDisplay(link);
-			room.add(`|uhtmlchange|request-${target}|`).update();
 			buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
 			buf += Utils.html`(Suggested by ${user.name})</p></small>`;
 			if (comment) buf += Utils.html`<br>(${comment})</div>`;
