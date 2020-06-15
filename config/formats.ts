@@ -188,6 +188,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		name: "[Gen 8] CAP",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656824/">CAP Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3662655/">CAP Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658514/">CAP Viability Rankings</a>`,
 		],
 
