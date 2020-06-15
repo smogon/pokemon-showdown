@@ -99,8 +99,8 @@ export interface RoomSettings {
 	staffMessage?: string | null;
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
-	approvalsEnabled?: boolean | null;
-	showimages?: GroupSymbol | null;
+	requestShowEnabled?: boolean | null;
+	showPermission?: GroupSymbol | null;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];

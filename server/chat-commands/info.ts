@@ -2437,18 +2437,20 @@ export const commands: ChatCommands = {
 
 	requestshow(target, room, user) {
 		if (!this.canTalk()) return false;
-		if (!room.settings.approvalsEnabled) {
+		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
+		if (this.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
+
 		if (!/^https?:\/\//.test(target)) target = `https://${Utils.escapeHTML(target)}`;
+
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, target);
 		this.sendReply(`You have requested to show the link: ${target}`);
 		room.sendMods(
-			`|uhtml|request-${user.id}|<div class="infobox">${user.name} has requested approval to show <a href="${target}">${target}</a><br>` +
+			`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${target}">${target}</a><br>` +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
@@ -2458,73 +2460,68 @@ export const commands: ChatCommands = {
 
 	async approveshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (!room.settings.approvalsEnabled) {
+		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		target = toID(target);
-		if (!target) return this.parse(`/help approvelink`);
-		const id = room.pendingApprovals?.get(target);
-		if (!id) return this.errorReply(`${target} has no pending request.`);
-		this.privateModAction(`(${user.name} approved ${target}'s media display request.)`);
-		this.modlog(`APPROVESHOW`, null, `${target} (${id})`);
-		const YouTube = new YoutubeInterface();
-		room.pendingApprovals!.delete(target);
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(id)) {
-			let res = await YouTube.generateVideoDisplay(id);
-			room.sendMods(`|uhtmlchange|request-${target}|`);
-			res += `<br><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${target})</p>`;
-			this.addBox(res as string);
-			room.update();
+		const userid = toID(target);
+		if (!userid) return this.parse(`/help approveshow`);
+		const link = room.pendingApprovals?.get(userid);
+		if (!link) return this.errorReply(`${userid} has no pending request.`);
+		room.pendingApprovals!.delete(userid);
+		room.sendMods(`|uhtmlchange|request-${userid}|`);
+
+		let buf;
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			const YouTube = new YoutubeInterface();
+			buf = await YouTube.generateVideoDisplay(link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
-			void Chat.fitImage(id).then(([width, height]) => {
-				this.addBox(Utils.html`<img src="${id}" style="width: ${width}px; height: ${height}px" />`);
-				room.sendMods(`|uhtmlchange|request-${target}|`);
-				room.update();
-			});
+			const [width, height] = await Chat.fitImage(link);
+			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
 		}
+		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:white"><small>(Requested by ${user.name})</small></p>`;
+		this.addBox(buf);
+		room.update();
 	},
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
 	denyshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (!room.settings.approvalsEnabled) {
+		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
-		if (!target) return this.parse(`/help denylink`);
-		const id = room.pendingApprovals?.get(target);
-		if (!id) return this.errorReply(`${target} has no pending request.`);
+		if (!target) return this.parse(`/help denyshow`);
+
+		const link = room.pendingApprovals?.get(target);
+		if (!link) return this.errorReply(`${target} has no pending request.`);
+
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
-		room.update();
-		this.privateModAction(`(${user.name} denied ${target}'s media display request.)`);
-		this.modlog(`DENYSHOW`, null, `${target} (${id})`);
+		this.privateModAction(`(${user.name} denied ${target}'s request to display ${link}.)`);
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
 	'!show': true,
 	async show(target, room, user) {
-		if (!this.can('showmedia', null, room)) return false;
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help link`);
+
 		const [link, comment] = Utils.splitFirst(target, ',');
-		this.runBroadcast();
-		const YouTube = new YoutubeInterface();
+
+		let buf;
 		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
-			let buf = await YouTube.generateVideoDisplay(link);
-			buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
-			buf += Utils.html`(Suggested by ${user.name})</p></small>`;
-			if (comment) buf += Utils.html`<br>(${comment})</div>`;
-			this.addBox(buf!);
-			room.update();
+			const YouTube = new YoutubeInterface();
+			buf = await YouTube.generateVideoDisplay(link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
 			const [width, height] = await Chat.fitImage(link);
-			let buf = Utils.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
-			if (comment) buf += Utils.html`<br>(${comment})</div>`;
-			if (!this.broadcasting) return this.sendReplyBox(buf);
-			this.addBox(buf);
-			room.update();
+			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
 		}
+		if (comment) buf += Utils.html`<br>(${comment})</div>`;
+
+		this.runBroadcast();
+		this.sendReplyBox(buf);
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
 

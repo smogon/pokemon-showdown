@@ -501,15 +501,15 @@ export const commands: ChatCommands = {
 		if (!this.can('declare', null, room)) return false;
 		target = toID(target);
 		if (!target) {
-			return this.sendReply(`Approvals are currently ${room.settings.approvalsEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
+			return this.sendReply(`Approvals are currently ${room.settings.requestShowEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.settings.approvalsEnabled) return this.errorReply(`Approvals are already disabled.`);
-			room.settings.approvalsEnabled = undefined;
+			if (!room.settings.requestShowEnabled) return this.errorReply(`Approvals are already disabled.`);
+			room.settings.requestShowEnabled = undefined;
 			this.privateModAction(`${user.name} disabled approvals in this room.`);
 		} else if (this.meansYes(target)) {
-			if (room.settings.approvalsEnabled) return this.errorReply(`Approvals are already enabled.`);
-			room.settings.approvalsEnabled = true;
+			if (room.settings.requestShowEnabled) return this.errorReply(`Approvals are already enabled.`);
+			room.settings.requestShowEnabled = true;
 			this.privateModAction(`${user.name} enabled approvals in this room.`);
 		} else {
 			return this.errorReply(`Unrecognized setting for approvals. Use 'on' or 'off'.`);
@@ -525,13 +525,13 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${target} is not a valid setting. Use a group symbol or 'OFF' instead.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.settings.showimages) return this.errorReply(`/show is already disabled.`);
-			room.settings.showimages = null;
+			if (!room.settings.showPermission) return this.errorReply(`/show is already disabled.`);
+			room.settings.showPermission = null;
 		} else {
-			if (room.settings.showimages === target) {
+			if (room.settings.showPermission === target) {
 				return this.errorReply(`/show permissions are already set to ${target}.`);
 			}
-			room.settings.showimages = target as GroupSymbol;
+			room.settings.showPermission = target as GroupSymbol;
 		}
 		room.saveSettings();
 		this.modlog(`SHOWIMAGES`, null, `to ${target}`);
@@ -1415,8 +1415,8 @@ export const roomSettings: SettingsHandler[] = [
 		label: "/requestapproval usage",
 		permission: 'declare',
 		options: [
-			[`Off`, room.settings.approvalsEnabled === false || `approvals off`],
-			[`On`, room.settings.approvalsEnabled === true || `approvals on`],
+			[`Off`, room.settings.requestShowEnabled === false || `approvals off`],
+			[`On`, room.settings.requestShowEnabled === true || `approvals on`],
 		],
 	}),
 ];
