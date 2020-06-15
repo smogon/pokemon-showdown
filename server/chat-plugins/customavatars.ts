@@ -11,7 +11,7 @@ import * as http from 'http';
 import * as url from 'url';
 
 
-export const avatarManager = new class {
+export const AvatarManager = new class {
 	dir: string;
 	constructor() {
 		this.dir = 'config/avatars/';
