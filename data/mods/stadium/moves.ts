@@ -21,6 +21,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
+	hyperbeam: {
+		inherit: true,
+		onMoveFail(target, source, move) {
+			source.addVolatile('mustrecharge', target, move, 'trapper');
+		},
+	},
 	jumpkick: {
 		inherit: true,
 		desc: "If this attack misses the target, the user 1HP of damage.",
