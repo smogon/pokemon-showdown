@@ -400,6 +400,26 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 	},
 	{
+		name: "[Gen 8] National Dex UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660920/">National Dex UU</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] National Dex'],
+		banlist: [
+			// National Dex OU
+			'Blacephalon', 'Chansey', 'Clefable', 'Darmanitan-Galar', 'Dracovish', 'Dragapult', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Garchomp-Mega',
+			'Gliscor', 'Greninja', 'Greninja-Ash', 'Heatran', 'Kartana', 'Kommo-o', 'Landorus-Therian', 'Lopunny-Mega', 'Magearna', 'Magnezone', 'Melmetal',
+			'Metagross-Mega', 'Pelipper', 'Rotom-Heat', 'Scizor-Mega', 'Serperior', 'Slowbro', 'Slowbro-Mega', 'Swampert-Mega', 'Tangrowth', 'Tapu Fini',
+			'Tapu Koko', 'Tapu Lele', 'Tornadus-Therian', 'Toxapex', 'Volcarona', 'Zapdos',
+			'nduubl', // National Dex UUBL
+			'Aegislash', 'Alakazam-Mega', 'Azumarill', 'Charizard-Mega-X', 'Charizard-Mega-Y', 'Cinderace', 'Deoxys-Defense', 'Dragonite', 'Gallade-Mega',
+			'Grimmsnarl', 'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mawile-Mega', 'Medicham-Mega',
+			'Mew', 'Pinsir-Mega', 'Staraptor', 'Thundurus-Base', 'Victini', 'Drizzle', 'Drought', 'Aurora Veil',
+		],
+	},
+	{
 		name: "[Gen 8] National Dex AG",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656779/">AG Metagame Discussion</a>`,
