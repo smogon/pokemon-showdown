@@ -52,6 +52,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	Cake: {
+		species: 'Dunsparce', ability: 'h', item: 'Leftovers', gender: 'M',
+		moves: ['Toxic', 'Spiky Shield', 'Skill Swap'],
+		signatureMove: 'Kevin',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
 	'cant say': {
 		species: 'Volcarona', ability: 'Rage Quit', item: 'Kee Berry', gender: 'M',
 		moves: ['Quiver Dance', 'Roost', 'Will-O-Wisp'],

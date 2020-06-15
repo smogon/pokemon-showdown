@@ -75,6 +75,21 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	cake: {
+		noCopy: true,
+		onStart(target, source) {
+			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
+			if (source.illusion) return;
+			// Cake innate
+			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Cake')}|${pokemon.side.name} is a nerd`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Cake')}|Chowder was a good show`);
+		},
+	},
 	cantsay: {
 		noCopy: true,
 		onStart() {

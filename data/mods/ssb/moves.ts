@@ -132,6 +132,46 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+// Cake
+	kevin: {
+		accuracy: 100,
+		basePower: 111,
+		category: "Physical",
+		desc: "This move combines the user's current typing in its type effectiveness against the target.",
+		shortDesc: "Combines current types in its type effectiveness.",
+		name: "Kevin",
+		pp: 10,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Brave Bird', target);
+		},
+		onModifyType(move, pokemon, target) {
+			move.type = pokemon.types[0];
+		},
+		onTryImmunityPriority: -2,
+		onTryImmunity(target, pokemon) {
+			if (pokemon.types[1]) {
+				if (!target.runImmunity(pokemon.types[1])) return false;
+			}
+			return true;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
+			let pokemon = target.side.foe.active[0];
+			if (pokemon.types[1]) {
+				return typeMod + this.dex.getEffectiveness(pokemon.types[1], type);
+			}
+			return typeMod;
+		},
+		priority: 0,
+		secondary: null,
+		target: "normal",
+		type: "Bird",
+	},
+
 	// cant say
 	neverlucky: {
 		accuracy: 85,
