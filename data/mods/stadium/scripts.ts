@@ -122,7 +122,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 	},
 	tryMoveHit(target, pokemon, move) {
-		let doSelfDestruct = true;
 		let damage: number | false | undefined = 0;
 
 		// First, check if the target is semi-invulnerable
@@ -233,7 +232,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
-		if (move.selfdestruct && doSelfDestruct) {
+		if (move.selfdestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
 
