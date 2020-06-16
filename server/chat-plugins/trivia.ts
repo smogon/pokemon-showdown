@@ -235,7 +235,7 @@ class Ladder {
 					if (!ladder[rank]) ladder[rank] = [];
 					ladder[rank].push(leader as unknown as TriviaRank);
 				}
-				ranks[leader].push(rank + 1);
+				ranks[leader][i] = rank + 1;
 			}
 		}
 		return {ladder, ranks};
