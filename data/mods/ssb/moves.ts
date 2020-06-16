@@ -211,7 +211,27 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
-
+	// Chloe
+	vsni: {
+		accuracy: 55,
+		basePower: 100,
+		category: "Special",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
+		name: "Víðsýni",
+		pp: 5,
+		priority: 1,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Seed Flare', target);
+		},
+		target: "normal",
+		type: "Grass", 
+	},
 	// cleann
 	maliciousintent: {
 		accuracy: 100,

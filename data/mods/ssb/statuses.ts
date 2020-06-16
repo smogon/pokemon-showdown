@@ -109,6 +109,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	chloe: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Chloe')}|hlelo`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Chloe')}|bubye`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Chloe')}|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
+		},
+	},
 	cleann: {
 		noCopy: true,
 		onStart() {

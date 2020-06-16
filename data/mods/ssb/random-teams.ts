@@ -64,6 +64,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Chloe: {
+		species: 'Delphox', ability: 'No Guard', item: 'Heavy-Duty Boots', gender: 'F',
+		moves: ['Nasty Plot', 'Inferno', 'Psystrike'],
+		signatureMove: 'Víðsýni',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
+	},
 	cleann: {
 		species: 'Dragapult', ability: 'Frisk', item: ['Life Orb', 'Dragon Fang'], gender: '',
 		moves: ['Dragon Dance', 'Dragon Darts', 'Fire Punch'],
