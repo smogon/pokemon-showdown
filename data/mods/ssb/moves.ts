@@ -44,8 +44,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
-		desc: "If this move is successful and the user has not fainted, all hazards are removed from the user's side of the field. Raises the user's Speed by 1 stage.",
-		shortDesc: "Free user from hazards; +1 Spe.",
+		desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field. Raises the user's Speed by 1 stage.",
+		shortDesc: "Free user from hazards/bind/Leech Seed; +1 Spe.",
 		name: "Skystriker",
 		pp: 30,
 		priority: 0,
@@ -67,6 +67,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
 				}
 			}
+			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+				pokemon.removeVolatile('partiallytrapped');
+			}
 		},
 		onAfterSubDamage(damage, target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
@@ -77,6 +80,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
 				}
+			}
+			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+				pokemon.removeVolatile('partiallytrapped');
 			}
 		},
 		self: {
