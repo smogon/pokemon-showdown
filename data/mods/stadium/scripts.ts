@@ -132,7 +132,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		// Then, check if the PokÃ©mon is immune to this move.
+		// Then, check if the Pokemon is immune to this move.
 		if (
 			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
 			!target.runImmunity(move.type, true)
