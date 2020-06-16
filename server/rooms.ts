@@ -100,7 +100,9 @@ export interface RoomSettings {
 	staffMessage?: string | null;
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
-	creationTime?: number;
+	requestShowEnabled?: boolean | null;
+	showEnabled?: GroupSymbol | true;
+	creationTime?: number | null;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -1117,6 +1119,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.subRooms = new Map();
 
 		this.settings = options as RoomSettings;
+		if (!this.settings.creationTime) this.settings.creationTime = Date.now();
 		this.auth.load();
 
 		if (!options.isPersonal) this.persist = true;
@@ -1687,7 +1690,6 @@ export const Rooms = {
 	},
 	createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
-		if (!options.creationTime) options.creationTime = Date.now();
 		const room = new BasicChatRoom(roomid, title, options) as ChatRoom;
 		Rooms.rooms.set(roomid, room);
 		return room;
