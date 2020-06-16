@@ -309,7 +309,10 @@ async function getModlog(
 	const addModlogLinks = !!(
 		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
-
+	if (hideIps && /^[0-9.*]+$/.test(searchString)) {
+		connection.popup(`You cannot search for IPs.`);
+		return;
+	}
 	if (searchString.length > MAX_QUERY_LENGTH) {
 		connection.popup(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
 		return;
