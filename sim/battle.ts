@@ -1723,6 +1723,7 @@ export class Battle {
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
+		if (success && Object.values(boost).some(x => x! > 0)) target.boostedThisTurn = true;
 		return success;
 	}
 

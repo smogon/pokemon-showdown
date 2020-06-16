@@ -609,7 +609,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 					const moveid = moveSlot.id;
 					if (noAssist.includes(moveid)) continue;
 					const move = this.dex.getMove(moveid);
-					if (move.isZ || move.isMax) {
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
 						continue;
 					}
 					moves.push(moveid);
@@ -991,7 +991,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -1992,6 +1992,32 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+	burningjealousy: {
+		num: 436,
+		// NOT CONFIRMED
+		accuracy: 100,
+		// NOT CONFIRMED
+		basePower: 80,
+		// NOT CONFIRMED
+		category: "Special",
+		desc: "Burns all Pokemon on the field that have boosted a stat during the same turn.",
+		shortDesc: "Burns all that set up in the same turn.",
+		name: "Burning Jealousy",
+		// NOT CONFIRMED
+		pp: 15,
+		// NOT CONFIRMED
+		priority: 0,
+		// NOT CONFIRMED
+		flags: {protect: 1, mirror: 1},
+		onHit(target, source, move) {
+			if (target?.boostedThisTurn) {
+				target.trySetStatus('brn', source, move);
+			}
+		},
+		target: "allAdjacent",
+		type: "Fire",
+		contestType: "Tough",
+	},
 	burnup: {
 		num: 682,
 		accuracy: 100,
@@ -2822,7 +2848,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Switches the Mist, Light Screen, Reflect, Spikes, Safeguard, Tailwind, Toxic Spikes, Stealth Rock, Water Pledge, Fire Pledge, Grass Pledge, Sticky Web, Aurora Veil, G-Max Steelsurge, and G-Max Wildfire effects from the user's side to the opposing side and vice versa.",
+		desc: "Switches the Mist, Light Screen, Reflect, Spikes, Safeguard, Tailwind, Toxic Spikes, Stealth Rock, Water Pledge, Fire Pledge, Grass Pledge, Sticky Web, Aurora Veil, G-Max Steelsurge, G-Max Cannonade, G-Max Vine Lash, and G-Max Wildfire effects from the user's side to the opposing side and vice versa.",
 		shortDesc: "Swaps user's field effects with the opposing side.",
 		name: "Court Change",
 		pp: 10,
@@ -2832,7 +2858,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const sourceSide = source.side;
 			const targetSide = source.side.foe;
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxwildfire',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];
 			let success = false;
 			for (const id of sideConditions) {
@@ -6470,6 +6496,47 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+	gmaxcannonade: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Water-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
+		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
+		name: "G-Max Cannonade",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Blastoise",
+		self: {
+			onHit(source) {
+				source.side.foe.addSideCondition('gmaxcannonade');
+			},
+		},
+		effect: {
+			duration: 4,
+			onStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Cannonade');
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1.1,
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				}
+			},
+			onEnd(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				}
+				this.add('-sideend', targetSide, 'G-Max Cannonade');
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Water",
+		contestType: "Cool",
+	},
 	gmaxcentiferno: {
 		num: 1000,
 		accuracy: true,
@@ -6729,6 +6796,40 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Steel",
+		contestType: "Cool",
+	},
+	gmaxoneblow: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
+		shortDesc: "Base move affects power. Breaks all protection.",
+		name: "G-Max One Blow",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Urshifu",
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Dark",
+		contestType: "Cool",
+	},
+	gmaxrapidflow: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
+		shortDesc: "Base move affects power. Breaks all protection.",
+		name: "G-Max Rapid Flow",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Urshifu-Rapid-Strike",
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Water",
 		contestType: "Cool",
 	},
 	gmaxreplenish: {
@@ -7017,6 +7118,47 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+	gmaxvinelash: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Grass-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
+		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
+		name: "G-Max Vine Lash",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Venusaur",
+		self: {
+			onHit(source) {
+				source.side.foe.addSideCondition('gmaxvinelash');
+			},
+		},
+		effect: {
+			duration: 4,
+			onStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Vine Lash');
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1.1,
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				}
+			},
+			onEnd(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				}
+				this.add('-sideend', targetSide, 'G-Max Vine Lash');
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Grass",
+		contestType: "Cool",
+	},
 	gmaxvolcalith: {
 		num: 1000,
 		accuracy: true,
@@ -7297,6 +7439,35 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
+	},
+	grassyglide: {
+		// NOT CONFIRMED
+		num: 99999,
+		// NOT CONFIRMED
+		accuracy: 100,
+		// NOT CONFIRMED
+		basePower: 80,
+		// NOT CONFIRMED
+		category: "Physical",
+		desc: "If this move is used while Grassy Terrain is active, its user will nearly always move first.",
+		shortDesc: "+2 Priority under Grassy Terrain.",
+		name: "Grassy Glide",
+		// NOT CONFIRMED
+		pp: 5,
+		priority: 0,
+		// NOT CONFIRMED
+		flags: {contact: 1, protect: 1},
+		onModifyMove(move, pokemon) {
+			if (this.field.getTerrain().name === "Grassy Terrain") {
+				move.priority = 2;
+			}
+		},
+		// NOT CONFIRMED
+		secondary: null,
+		// NOT CONFIRMED
+		target: "normal",
+		type: "Grass",
+		contestType: "Cool",
 	},
 	grassyterrain: {
 		num: 580,
@@ -9562,7 +9733,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -10650,7 +10821,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
@@ -11531,7 +11702,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
 				return false;
 			}
-			if (move.isZ || move.isMax) return false;
+			if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
 
@@ -12516,7 +12687,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -13629,7 +13800,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -14150,7 +14321,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
 				if (move.priority <= 0.1) return;
 				if (!move.flags['protect']) {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
@@ -15775,23 +15946,30 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	shellsidearm: {
-		num: 801,
+		num: 99999,
+		// NOT CONFIRMED
 		accuracy: 100,
-		basePower: 90,
+		// NOT CONFIRMED
+		basePower: 100,
+		// NOT CONFIRMED
 		category: "Special",
-		desc: "Has a 20% chance to poison the target.",
-		shortDesc: "20% chance to poison the target.",
+		desc: "This move becomes a physical attack if the target's Defense is lower than its Special Defense, including stat stage changes. This move has a 10% chance to poison the target.",
+		shortDesc: "Physical if target's Def > Sp. Def. 10% poison chance.",
 		name: "Shell Side Arm",
-		pp: 10,
+		// NOT CONFIRMED
+		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {},
+		onModifyMove(move, pokemon, target) {
+			if (target.getStat('def', false, true) > pokemon.getStat('spd', false, true)) move.category = 'Physical';
+		},
 		secondary: {
-			chance: 20,
-			volatileStatus: 'psn',
+			// CHANCE NOT CONFIRMED
+			chance: 10,
+			status: 'psn',
 		},
 		target: "normal",
 		type: "Poison",
-		contestType: "Tough",
 	},
 	shellsmash: {
 		num: 504,
@@ -17116,7 +17294,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -18092,6 +18270,30 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "allAdjacent",
 		type: "Water",
 		contestType: "Beautiful",
+	},
+	surgingstrikes: {
+		// NOT CONFIRMED
+		num: 99999,
+		// NOT CONFIRMED
+		accuracy: 30,
+		// NOT CONFIRMED
+		basePower: 100,
+		category: "Physical",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities. This move hits the target three times.",
+		shortDesc: "Always results in a critical hit. Hits 3 times.",
+		name: "Surging Strikes",
+		// NOT CONFIRMED
+		pp: 20,
+		priority: 0,
+		// NOT CONFIRMED
+		flags: {contact: 1, protect: 1},
+		willCrit: true,
+		multihit: 3,
+		secondary: null,
+		// NOT CONFIRMED
+		target: "normal",
+		// NOT CONFIRMED
+		type: "Water",
 	},
 	swagger: {
 		num: 207,
@@ -20026,6 +20228,29 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+	wickedblow: {
+		// NOT CONFIRMED
+		num: 99999,
+		// NOT CONFIRMED
+		accuracy: 100,
+		// NOT CONFIRMED
+		basePower: 100,
+		category: "Physical",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
+		name: "Wicked Blow",
+		// NOT CONFIRMED
+		pp: 20,
+		priority: 0,
+		// NOT CONFIRMED
+		flags: {contact: 1, protect: 1},
+		willCrit: true,
+		secondary: null,
+		// NOT CONFIRMED
+		target: "normal",
+		// NOT CONFIRMED
+		type: "Dark",
+	},
 	wideguard: {
 		num: 469,
 		accuracy: true,
@@ -20055,7 +20280,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				if (move?.target !== 'allAdjacent' && move.target !== 'allAdjacentFoes') {
 					return;
 				}
-				if (move.isZ || move.isMax) {
+				if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
 					target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
