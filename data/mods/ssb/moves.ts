@@ -211,6 +211,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+
 	// Chloe
 	vsni: {
 		accuracy: 55,
@@ -232,6 +233,36 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Grass", 
 	},
+
+	// c.kilgannon
+	theswirlixmove: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "Lowers the target's Attack by 1 stage. The user restores its HP equal to the target's Attack stat calculated with its stat stage before this move was used. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Fails if the target's Attack stat stage is -6.",
+		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
+		name: "The Swirlix Move",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, heal: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Supersonic Skystrike', target);
+		},
+		onHit(target, source) {
+			if (target.boosts.atk === -6) return false;
+			const atk = target.getStat('atk', false, true);
+			const success = this.boost({atk: -1}, target, source, null, false, true);
+			return !!(this.heal(atk, source, target) || success);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
+
 	// cleann
 	maliciousintent: {
 		accuracy: 100,

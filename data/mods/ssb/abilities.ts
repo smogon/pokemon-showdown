@@ -132,6 +132,23 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// c.kilgannon
+	pestilence: {
+		desc: "All active Pokemon lose 12% of their maximum health at the end of each turn while this Pokemon is out. Fairy-types take 18% damage.",
+		shortDesc: "Active Pokemon lose 12% health each turn while this Pokemon is out. Fairy-types take 18%.",
+		name: "Pestilence",
+		onResidualOrder: 100,
+		onResidual() {
+			for (const curMon of this.getAllActive()) {
+				if (curMon.hasType('Fairy')) {
+					this.damage(Math.floor(curMon.baseMaxhp * 0.18), curMon);
+				} else {
+					this.damage(Math.floor(curMon.baseMaxhp * 0.12), curMon);
+				}
+			}
+		},
+	},
+
 	// Darth
 	guardianangel: {
 		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last Pokemon in before it.",

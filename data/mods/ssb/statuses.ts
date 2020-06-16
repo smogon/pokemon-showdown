@@ -121,6 +121,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Chloe')}|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
 		},
 	},
+	ckilgannon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('c.kilgannon')}|Take a look to the sky just before you die`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('c.kilgannon')}|/me growls`);
+		},
+		onFaint() {
+			this.add(`c|${getName('c.kilgannon')}|Your time will come.`);
+		},
+	},
 	cleann: {
 		noCopy: true,
 		onStart() {

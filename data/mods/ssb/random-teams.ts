@@ -70,6 +70,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Víðsýni',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	'c.kilgannon': {
+		species: 'Yveltal', ability: 'Pestilence', item: 'Choice Scarf', gender: 'N',
+		moves: ['Knock Off', 'Steel Wing', 'U-turn'],
+		signatureMove: 'The Swirlix Move',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
+	},
 	cleann: {
 		species: 'Dragapult', ability: 'Frisk', item: ['Life Orb', 'Dragon Fang'], gender: '',
 		moves: ['Dragon Dance', 'Dragon Darts', 'Fire Punch'],
