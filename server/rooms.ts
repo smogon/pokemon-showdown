@@ -100,7 +100,7 @@ export interface RoomSettings {
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
-	showPermission?: GroupSymbol | null;
+	showEnabled?: GroupSymbol | true;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];

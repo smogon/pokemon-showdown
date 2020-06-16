@@ -497,7 +497,7 @@ export const commands: ChatCommands = {
 		`/banword list - Shows the list of banned words in the current room. Requires: % @ # &`,
 	],
 
-	approvals(target, room, user) {
+	showapprovals(target, room, user) {
 		if (!this.can('declare', null, room)) return false;
 		target = toID(target);
 		if (!target) {
@@ -511,31 +511,44 @@ export const commands: ChatCommands = {
 			if (room.settings.requestShowEnabled) return this.errorReply(`Approvals are already enabled.`);
 			room.settings.requestShowEnabled = true;
 			this.privateModAction(`${user.name} enabled approvals in this room.`);
+			if (!room.settings.showEnabled || room.settings.showEnabled === '@') {
+				this.privateModAction(`Note: Drivers aren't allowed to use /show directly, but will be able to request and approve each other's /requestshow`);
+			}
 		} else {
 			return this.errorReply(`Unrecognized setting for approvals. Use 'on' or 'off'.`);
 		}
 		room.saveSettings();
-		return this.modlog(`APPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
+		return this.modlog(`SHOWAPPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
 	},
 
-	showrank(target, room, user) {
+	showmedia(target, room, user) {
 		if (!this.can('declare', null, room)) return false;
 		target = target.trim();
 		if (!(target in Config.groups) && !this.meansNo(target)) {
 			return this.errorReply(`${target} is not a valid setting. Use a group symbol or 'OFF' instead.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.settings.showPermission) return this.errorReply(`/show is already disabled.`);
-			room.settings.showPermission = null;
+			if (!room.settings.showEnabled) return this.errorReply(`/show is already disabled.`);
+			room.settings.showEnabled = undefined;
+			target = 'ROs only';
+		} else if (this.meansYes(target)) {
+			if (!room.settings.showEnabled) return this.errorReply(`/show is already allowed for whitelisted users.`);
+			room.settings.showEnabled = true;
+			target = 'whitelist';
+		} else if (!Config.groups[target]) {
+			return this.errorReply(`/show must be set to on (whitelisted and up), off (ROs only), or a group symbol.`);
 		} else {
-			if (room.settings.showPermission === target) {
-				return this.errorReply(`/show permissions are already set to ${target}.`);
+			if (room.settings.showEnabled === target) {
+				return this.errorReply(`/show is already allowed for ${target} and above.`);
 			}
-			room.settings.showPermission = target as GroupSymbol;
+			room.settings.showEnabled = target as GroupSymbol;
 		}
 		room.saveSettings();
-		this.modlog(`SHOWIMAGES`, null, `to ${target}`);
+		this.modlog(`SHOWMEDIA`, null, `to ${target}`);
 		this.privateModAction(`(${user.name} set /show permissions to ${target}.)`);
+		if (room.settings.requestShowEnabled && (!room.settings.showEnabled || room.settings.showEnabled === '@')) {
+			this.privateModAction(`Note: Drivers aren't allowed to use /show directly, but will be able to request and approve each other's /requestshow`);
+		}
 	},
 
 	hightraffic(target, room, user) {
@@ -1412,11 +1425,22 @@ export const roomSettings: SettingsHandler[] = [
 		],
 	}),
 	room => ({
-		label: "/requestapproval usage",
+		label: "/requestshow",
 		permission: 'declare',
 		options: [
-			[`Off`, room.settings.requestShowEnabled === false || `approvals off`],
-			[`On`, room.settings.requestShowEnabled === true || `approvals on`],
+			[`Off`, !room.settings.requestShowEnabled || `showapprovals off`],
+			[`On`, room.settings.requestShowEnabled || `showapprovals on`],
+		],
+	}),
+	room => ({
+		label: "/show",
+		permission: 'declare',
+		options: [
+			[`Off`, !room.settings.showEnabled || `showmedia off`],
+			[`Whitelisted`, room.settings.showEnabled === true || `showmedia on`],
+			[`+`, room.settings.showEnabled === '+' || `showmedia +`],
+			[`%`, room.settings.showEnabled === '%' || `showmedia %`],
+			[`@`, room.settings.showEnabled === '@' || `showmedia @`],
 		],
 	}),
 ];

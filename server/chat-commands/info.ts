@@ -2467,6 +2467,9 @@ export const commands: ChatCommands = {
 		if (!userid) return this.parse(`/help approveshow`);
 		const link = room.pendingApprovals?.get(userid);
 		if (!link) return this.errorReply(`${userid} has no pending request.`);
+		if (userid === user.id) {
+			return this.errorReply(`You can't approve your own /show request.`);
+		}
 		room.pendingApprovals!.delete(userid);
 		room.sendMods(`|uhtmlchange|request-${userid}|`);
 
@@ -2520,6 +2523,17 @@ export const commands: ChatCommands = {
 		}
 		if (comment) buf += Utils.html`<br>(${comment})</div>`;
 
+		if (this.canBroadcast()) {
+			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
+			const auth = room?.auth || Users.globalAuth;
+			if (minGroup !== true && !auth.atLeast(user, minGroup)) {
+				this.errorReply(`You must be at least group ${minGroup} to use /show`);
+				if (auth.atLeast(user, '%')) {
+					this.errorReply(`The limit can be changed in /roomsettings`);
+				}
+				return;
+			}
+		}
 		this.runBroadcast();
 		this.sendReplyBox(buf);
 	},

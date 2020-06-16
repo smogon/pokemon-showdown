@@ -769,9 +769,7 @@ export class CommandContext extends MessageContext {
 			return false;
 		}
 
-		if (this.cmd === 'show' && !this.can('showmedia', null, this.room)) {
-			return false;
-		} else if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
+		if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
 			this.errorReply(`You need to be voiced to broadcast this command's information.`);
 			this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
 			return false;
