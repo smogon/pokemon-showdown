@@ -40,8 +40,8 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Ivysaur",
 		evoLevel: 32,
 		eggGroups: ["Monster", "Grass"],
-		otherFormes: ["Venusaur-Mega"],
-		formeOrder: ["Venusaur", "Venusaur-Mega"],
+		otherFormes: ["Venusaur-Mega", "Venusaur-Gmax"],
+		formeOrder: ["Venusaur", "Venusaur-Mega", "Venusaur-Gmax"],
 	},
 	venusaurmega: {
 		num: 3,
@@ -57,6 +57,20 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Venusaurite",
+	},
+	venusaurgmax: {
+		num: 3,
+		name: "Venusaur-Gmax",
+		baseSpecies: "Venusaur",
+		forme: "Gmax",
+		types: ["Grass", "Poison"],
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80},
+		abilities: {0: "Overgrow", H: "Chlorophyll"},
+		heightm: 0,
+		weightkg: 0,
+		color: "Green",
+		eggGroups: ["Monster", "Grass"],
 	},
 	charmander: {
 		num: 4,
@@ -188,8 +202,8 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Wartortle",
 		evoLevel: 36,
 		eggGroups: ["Monster", "Water 1"],
-		otherFormes: ["Blastoise-Mega"],
-		formeOrder: ["Blastoise", "Blastoise-Mega"],
+		otherFormes: ["Blastoise-Mega", "Blastoise-Gmax"],
+		formeOrder: ["Blastoise", "Blastoise-Mega", "Blastoise-Gmax"],
 	},
 	blastoisemega: {
 		num: 9,
@@ -205,6 +219,21 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Blastoisinite",
+	},
+	blastoisegmax: {
+		num: 9,
+		name: "Blastoise-Gmax",
+		baseSpecies: "Blastoise",
+		forme: "Gmax",
+		types: ["Water"],
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78},
+		abilities: {0: "Torrent", H: "Rain Dish"},
+		heightm: 1.6,
+		weightkg: 85.5,
+		color: "Blue",
+		eggGroups: ["Monster", "Water 1"],
+		isGigantamax: "G-Max Cannonade",
 	},
 	caterpie: {
 		num: 10,
@@ -1794,22 +1823,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Slowbro-Mega", "Slowbro-Galar"],
 		formeOrder: ["Slowbro", "Slowbro-Mega", "Slowbro-Galar"],
 	},
-	slowbrogalar: {
-		num: 80,
-		name: "Slowbro-Galar",
-		baseSpecies: "Slowbro",
-		forme: "Galar",
-		types: ["Poison", "Psychic"],
-		baseStats: {hp: 95, atk: 100, def: 95, spa: 100, spd: 70, spe: 30},
-		abilities: {0: "Quick Draw", 1: "Own Tempo", H: "Regenerator"},
-		heightm: 1.6,
-		weightkg: 70.5,
-		color: "Pink",
-		prevo: "Slowpoke-Galar",
-		evoType: "useItem",
-		evoItem: "",
-		eggGroups: ["Monster", "Water 1"],
-	},
 	slowbromega: {
 		num: 80,
 		name: "Slowbro-Mega",
@@ -1823,6 +1836,25 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Slowbronite",
+	},
+	slowbrogalar: {
+		num: 80,
+		name: "Slowbro-Galar",
+		baseSpecies: "Slowbro",
+		forme: "Galar",
+		types: ["Psychic", "Poison"],
+		// NOT CONFIRMED
+		baseStats: {hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30},
+		// NOT CONFIRMED
+		abilities: {0: "Quick Draw", 1: "Own Tempo", H: "Regenerator"},
+		heightm: 1.6,
+		weightkg: 70.5,
+		// NOT CONFIRMED
+		color: "Pink",
+		prevo: "Slowpoke-Galar",
+		// NOT CONFIRMED
+		evoLevel: 37,
+		eggGroups: ["Monster", "Water 1"],
 	},
 	magnemite: {
 		num: 81,
@@ -14743,7 +14775,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		num: 849,
 		name: "Toxtricity-Low-Key-Gmax",
 		baseSpecies: "Toxtricity",
-		forme: "Gmax",
+		forme: "Low-Key-Gmax",
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
@@ -15521,6 +15553,110 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+	},
+	kubfu: {
+		// NOT CONFIRMED
+		num: 891,
+		name: "Kubfu",
+		types: ["Fighting"],
+		// NOT CONFIRMED
+		gender: "N",
+		// NOT CONFIRMED
+		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		abilities: {0: "Inner Focus"},
+		heightm: 0.6,
+		weightkg: 12,
+		// NOT CONFIRMED
+		color: "Gray",
+		evos: ["Urshifu", "Urshifu-Rapid-Strike"],
+		// NOT CONFIRMED
+		eggGroups: ["Undiscovered"],
+	},
+	urshifu: {
+		// NOT CONFIRMED
+		num: 892,
+		name: "Urshifu",
+		baseForme: "Single Strike",
+		types: ["Fighting", "Dark"],
+		// NOT CONFIRMED
+		gender: "N",
+		// NOT CONFIRMED
+		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		abilities: {0: "Unseen Fist"},
+		heightm: 1.9,
+		weightkg: 105,
+		// NOT CONFIRMED
+		color: "Gray",
+		prevo: "Kubfu",
+		// NOT CONFIRMED
+		evoCondition: "Defeat the Single Strike Tower",
+		// NOT CONFIRMED
+		eggGroups: ["Undiscovered"],
+		otherFormes: ["Urshifu-Rapid-Strike", "Urshifu-Gmax", "Urshifu-Rapid-Strike-Gmax"],
+		formeOrder: ["Urshifu", "Urshifu-Gmax", "Urshifu-Rapid-Strike", "Urshifu-Rapid-Strike-Gmax"],
+	},
+	urshifurapidstrike: {
+		// NOT CONFIRMED
+		num: 892,
+		name: "Urshifu-Rapid-Strike",
+		baseSpecies: "Urshifu",
+		forme: "Rapid-Strike",
+		types: ["Fighting", "Water"],
+		// NOT CONFIRMED
+		gender: "N",
+		// NOT CONFIRMED
+		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		abilities: {0: "Unseen Fist"},
+		heightm: 1.9,
+		weightkg: 105,
+		// NOT CONFIRMED
+		color: "Gray",
+		prevo: "Kubfu",
+		// NOT CONFIRMED
+		evoCondition: "Defeat the Rapid Strike Tower",
+		// NOT CONFIRMED
+		eggGroups: ["Undiscovered"],
+	},
+	urshifugmax: {
+		// NOT CONFIRMED
+		num: 892,
+		name: "Urshifu-Gmax",
+		baseSpecies: "Urshifu",
+		forme: "Gmax",
+		types: ["Fighting", "Dark"],
+		// NOT CONFIRMED
+		gender: "N",
+		// NOT CONFIRMED
+		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		abilities: {0: "Unseen Fist"},
+		heightm: 0,
+		weightkg: 0,
+		// NOT CONFIRMED
+		color: "Gray",
+		// NOT CONFIRMED
+		eggGroups: ["Undiscovered"],
+		isGigantamax: "G-Max One Blow",
+	},
+	urshifurapidstrikegmax: {
+		// NOT CONFIRMED
+		num: 892,
+		name: "Urshifu-Rapid-Strike",
+		baseSpecies: "Urshifu",
+		forme: "Rapid-Strike-Gmax",
+		types: ["Fighting", "Water"],
+		// NOT CONFIRMED
+		gender: "N",
+		// NOT CONFIRMED
+		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		abilities: {0: "Unseen Fist"},
+		heightm: 1.9,
+		weightkg: 105,
+		// NOT CONFIRMED
+		color: "Gray",
+		// NOT CONFIRMED
+		eggGroups: ["Undiscovered"],
+		isGigantamax: "G-Max Rapid Flow",
+		battleOnly: "Urshifu-Rapid-Strike",
 	},
 	missingno: {
 		num: 0,

@@ -16,6 +16,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
+	venusaurgmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
 	charmander: {
 		tier: "LC",
 	},
@@ -58,6 +62,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	blastoisemega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
+	},
+	blastoisegmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	caterpie: {
 		tier: "LC",
@@ -595,6 +603,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		unreleasedHidden: true,
 		tier: "OU",
+		doublesTier: "DOU",
 	},
 	slowking: {
 		randomBattleMoves: ["dragontail", "fireblast", "icebeam", "psyshock", "scald", "slackoff", "toxic", "trickroom"],
@@ -840,7 +849,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	happiny: {
-		isNonstandard: "Past",
 		tier: "LC",
 	},
 	chansey: {
@@ -4297,6 +4305,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	rockruff: {
 		tier: "LC",
 	},
+	// Unsure if this is getting released into gen 8
 	rockruffdusk: {
 		tier: "LC",
 	},
@@ -4314,6 +4323,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
+	// Unsure if this is getting released into gen 8
 	lycanrocdusk: {
 		randomBattleMoves: ["closecombat", "psychicfangs", "stoneedge", "suckerpunch", "swordsdance"],
 		randomBattleLevel: 84,
@@ -5344,6 +5354,25 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	eternatuseternamax: {
 		isNonstandard: "Unobtainable",
 		tier: "Illegal",
+	},
+	kubfu: {
+		tier: "LC",
+	},
+	urshifu: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	urshifurapidstrike: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	urshifugmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
+	urshifurapidstrikegmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	missingno: {
 		isNonstandard: "Custom",
