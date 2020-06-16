@@ -497,6 +497,59 @@ export const commands: ChatCommands = {
 		`/banword list - Shows the list of banned words in the current room. Requires: % @ # &`,
 	],
 
+	showapprovals(target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		target = toID(target);
+		if (!target) {
+			return this.sendReply(`Approvals are currently ${room.settings.requestShowEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
+		}
+		if (this.meansNo(target)) {
+			if (!room.settings.requestShowEnabled) return this.errorReply(`Approvals are already disabled.`);
+			room.settings.requestShowEnabled = undefined;
+			this.privateModAction(`${user.name} disabled approvals in this room.`);
+		} else if (this.meansYes(target)) {
+			if (room.settings.requestShowEnabled) return this.errorReply(`Approvals are already enabled.`);
+			room.settings.requestShowEnabled = true;
+			this.privateModAction(`${user.name} enabled approvals in this room.`);
+			if (!room.settings.showEnabled || room.settings.showEnabled === '@') {
+				this.privateModAction(`Note: Drivers aren't allowed to use /show directly, but will be able to request and approve each other's /requestshow`);
+			}
+		} else {
+			return this.errorReply(`Unrecognized setting for approvals. Use 'on' or 'off'.`);
+		}
+		room.saveSettings();
+		return this.modlog(`SHOWAPPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
+	},
+
+	showmedia(target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		target = target.trim();
+		if (this.meansNo(target)) {
+			if (!room.settings.showEnabled) return this.errorReply(`/show is already disabled.`);
+			room.settings.showEnabled = undefined;
+			target = 'ROs only';
+		} else if (this.meansYes(target)) {
+			if (room.settings.showEnabled === true) {
+				return this.errorReply(`/show is already allowed for whitelisted users.`);
+			}
+			room.settings.showEnabled = true;
+			target = 'whitelist';
+		} else if (!Config.groups[target]) {
+			return this.errorReply(`/show must be set to on (whitelisted and up), off (ROs only), or a group symbol.`);
+		} else {
+			if (room.settings.showEnabled === target) {
+				return this.errorReply(`/show is already allowed for ${target} and above.`);
+			}
+			room.settings.showEnabled = target as GroupSymbol;
+		}
+		room.saveSettings();
+		this.modlog(`SHOWMEDIA`, null, `to ${target}`);
+		this.privateModAction(`(${user.name} set /show permissions to ${target}.)`);
+		if (room.settings.requestShowEnabled && (!room.settings.showEnabled || room.settings.showEnabled === '@')) {
+			this.privateModAction(`Note: Drivers aren't allowed to use /show directly, but will be able to request and approve each other's /requestshow`);
+		}
+	},
+
 	hightraffic(target, room, user) {
 		if (!target) {
 			return this.sendReply(`This room is: ${!room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
@@ -1368,6 +1421,25 @@ export const roomSettings: SettingsHandler[] = [
 			[`tiers`, (room.settings.dataCommandTierDisplay ?? 'tiers') === 'tiers' || `roomtierdisplay tiers`],
 			[`doubles tiers`, room.settings.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
 			[`numbers`, room.settings.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
+		],
+	}),
+	room => ({
+		label: "/requestshow",
+		permission: 'declare',
+		options: [
+			[`Off`, !room.settings.requestShowEnabled || `showapprovals off`],
+			[`On`, room.settings.requestShowEnabled || `showapprovals on`],
+		],
+	}),
+	room => ({
+		label: "/show",
+		permission: 'declare',
+		options: [
+			[`Off`, !room.settings.showEnabled || `showmedia off`],
+			[`Whitelisted`, room.settings.showEnabled === true || `showmedia on`],
+			[`+`, room.settings.showEnabled === '+' || `showmedia +`],
+			[`%`, room.settings.showEnabled === '%' || `showmedia %`],
+			[`@`, room.settings.showEnabled === '@' || `showmedia @`],
 		],
 	}),
 ];

@@ -100,6 +100,8 @@ export interface RoomSettings {
 	staffMessage?: string | null;
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
+	requestShowEnabled?: boolean | null;
+	showEnabled?: GroupSymbol | true;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -1092,10 +1094,7 @@ export class BasicChatRoom extends BasicRoom {
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
-	game: RoomGame | null;
-	battle: RoomBattle | null;
-	tour: Tournament | null;
-
+	pendingApprovals: Map<string, string> | null;
 	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		super(roomid, title);
 
@@ -1150,6 +1149,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
+		this.pendingApprovals = null;
 		this.tour = null;
 		this.game = null;
 		this.battle = null;

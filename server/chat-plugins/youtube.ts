@@ -29,6 +29,7 @@ export class YoutubeInterface {
 		this.intervalTime = 0;
 	}
 	async getChannelData(link: string, username?: string) {
+		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
@@ -118,6 +119,7 @@ export class YoutubeInterface {
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
+		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
