@@ -991,7 +991,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				if (move.smartTarget) {
@@ -1993,6 +1995,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	burningjealousy: {
+		// NOT CONFIRMED
 		num: 436,
 		// NOT CONFIRMED
 		accuracy: 100,
@@ -9733,7 +9736,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				if (move.smartTarget) {
@@ -10821,7 +10826,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
@@ -12687,7 +12694,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				if (move.smartTarget) {
@@ -13800,7 +13809,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				if (move.smartTarget) {
@@ -14321,7 +14332,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
 				if (move.priority <= 0.1) return;
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
@@ -17294,7 +17307,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || (move.isMax && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id))) {
+						target.getMoveHitData(move).zBrokeProtect = true;
+					}
 					return;
 				}
 				if (move.smartTarget) {
