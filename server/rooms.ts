@@ -100,6 +100,7 @@ export interface RoomSettings {
 	staffMessage?: string | null;
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
+	creationTime?: number;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -201,6 +202,7 @@ export abstract class BasicRoom {
 		this.settings = {
 			title: this.title,
 			auth: Object.create(null),
+			creationTime: Date.now(),
 		};
 		this.persist = false;
 		this.hideReplay = false;
@@ -790,6 +792,7 @@ export class GlobalRoom extends BasicRoom {
 
 		const settings = {
 			title,
+			creationTime: Date.now(),
 		};
 		const room = Rooms.createChatRoom(id, title, settings);
 		if (id === 'lobby') Rooms.lobby = room;
@@ -1081,7 +1084,6 @@ export class GlobalRoom extends BasicRoom {
 export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	/** Only available in groupchats */
-	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
 	banwordRegex: RegExp | true | null;
@@ -1110,7 +1112,6 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.log = Roomlogs.create(this, options);
 
-		this.creationTime = null;
 		this.type = 'chat';
 		this.banwordRegex = null;
 		this.subRooms = new Map();
@@ -1686,6 +1687,7 @@ export const Rooms = {
 	},
 	createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
+		if (!options.creationTime) options.creationTime = Date.now();
 		const room = new BasicChatRoom(roomid, title, options) as ChatRoom;
 		Rooms.rooms.set(roomid, room);
 		return room;
