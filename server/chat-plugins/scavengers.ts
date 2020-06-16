@@ -648,7 +648,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		if (this.runEvent('SendQuestion', player, showHints)) return;
 
-		const questionDisplay = this.getQuestion(player.getCurrentQuestion().number);
+		const questionDisplay = this.getQuestion(player.getCurrentQuestion().number, showHints);
 
 		player.sendRoom(questionDisplay);
 		return true;
