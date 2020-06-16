@@ -2523,7 +2523,8 @@ export const commands: ChatCommands = {
 		}
 		if (comment) buf += Utils.html`<br>(${comment})</div>`;
 
-		if (this.canBroadcast()) {
+		if (!this.canBroadcast()) return false;
+		if (this.broadcastMessage) {
 			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
 			const auth = room?.auth || Users.globalAuth;
 			if (minGroup !== true && !auth.atLeast(user, minGroup)) {

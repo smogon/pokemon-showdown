@@ -389,7 +389,9 @@ export class CommandContext extends MessageContext {
 
 		// Output the message
 
-		if (message && message !== true && typeof message.then !== 'function') {
+		if (typeof message.then === 'function') {
+			message.then(() => this.update());
+		} else if (message && message !== true) {
 			if (this.pmTarget) {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {

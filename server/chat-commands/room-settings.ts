@@ -524,15 +524,14 @@ export const commands: ChatCommands = {
 	showmedia(target, room, user) {
 		if (!this.can('declare', null, room)) return false;
 		target = target.trim();
-		if (!(target in Config.groups) && !this.meansNo(target)) {
-			return this.errorReply(`${target} is not a valid setting. Use a group symbol or 'OFF' instead.`);
-		}
 		if (this.meansNo(target)) {
 			if (!room.settings.showEnabled) return this.errorReply(`/show is already disabled.`);
 			room.settings.showEnabled = undefined;
 			target = 'ROs only';
 		} else if (this.meansYes(target)) {
-			if (!room.settings.showEnabled) return this.errorReply(`/show is already allowed for whitelisted users.`);
+			if (room.settings.showEnabled === true) {
+				return this.errorReply(`/show is already allowed for whitelisted users.`);
+			}
 			room.settings.showEnabled = true;
 			target = 'whitelist';
 		} else if (!Config.groups[target]) {
