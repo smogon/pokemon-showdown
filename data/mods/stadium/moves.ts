@@ -24,7 +24,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	hyperbeam: {
 		inherit: true,
 		onMoveFail(target, source, move) {
-			source.addVolatile('mustrecharge', target, move, 'trapper');
+			source.addVolatile('mustrecharge');
 		},
 	},
 	jumpkick: {
