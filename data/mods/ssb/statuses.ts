@@ -39,6 +39,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	adri: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Adri')}|This time will definitely be the one !`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Adri')}|//afk`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Adri')}|Until next time...`);
+		},
+	},
 	aeonic: {
 		noCopy: true,
 		onStart() {
