@@ -1800,8 +1800,10 @@ export class Battle {
 
 			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
-					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
-					this.damage(amount, source, target, 'recoil');
+					if (this.dex.currentMod !== 'stadium' || target.hp > 0) {
+						const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
+						this.damage(amount, source, target, 'recoil');
+					}
 				}
 				if (this.gen <= 4 && effect.drain && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
