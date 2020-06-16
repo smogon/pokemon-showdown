@@ -656,7 +656,8 @@ export const commands: ChatCommands = {
 	roomuptime(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!room) return this.errorReply(`Can only be used in a room.`);
-		// legacy handling
+
+		// for hotpatching
 		if (!room.settings.creationTime) room.settings.creationTime = Date.now();
 		const uptime = Chat.toDurationString(Date.now() - room.settings.creationTime);
 		this.sendReplyBox(`Room uptime: <b>${uptime}</b>`);

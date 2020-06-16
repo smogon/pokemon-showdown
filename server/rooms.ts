@@ -68,6 +68,7 @@ interface UserTable {
 export interface RoomSettings {
 	title: string;
 	auth: {[userid: string]: GroupSymbol};
+	creationTime: number;
 
 	readonly staffAutojoin?: string | boolean;
 	readonly autojoin?: boolean;
@@ -102,7 +103,6 @@ export interface RoomSettings {
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
 	showEnabled?: GroupSymbol | true;
-	creationTime?: number | null;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
