@@ -9,6 +9,7 @@
  * @license MIT
  */
 import * as net from 'net';
+import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 
 export const commands: ChatCommands = {
@@ -1884,6 +1885,9 @@ export const commands: ChatCommands = {
 				`- /announce OR /wall <em>message</em>: make an announcement`,
 				`- /modlog <em>username</em>: search the moderator log of the room`,
 				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+				`- !show [image or youtube link]: display given media in chat.`,
+				`- /whitelist [user]: whitelist a non-staff user to use !show.`,
+				`- /unwhitelist [user]: removes the user from !show whitelist.`,
 			],
 			[
 				`<strong>Room moderators (@)</strong> can also use:`,
@@ -1903,7 +1907,6 @@ export const commands: ChatCommands = {
 				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
 				`- /declare <em>message</em>: make a large blue declaration to the room`,
 				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
-				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
 				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
@@ -2429,52 +2432,113 @@ export const commands: ChatCommands = {
 	],
 
 	showimage(target, room, user) {
-		if (!target) return this.parse('/help showimage');
-		if (!this.can('declare', null, room)) return false;
-		if (this.room.settings.isPersonal && !this.user.can('announce')) {
-			return this.errorReply(`Images are not allowed in personal rooms.`);
-		}
-
-		const targets = target.split(',');
-
-		if (targets.length !== 1 && targets.length !== 3) {
-			return this.parse('/help showimage');
-		}
-
-		let image: string | null = targets[0].trim();
-		if (!image) return this.errorReply(`No image URL was provided!`);
-		image = this.canEmbedURI(image, true);
-
-		if (!image) return false;
-
-		if (!this.runBroadcast()) return;
-
-		if (targets.length === 3) {
-			let width = targets[1].trim();
-			if (!width) return this.errorReply(`No width for the image was provided!`);
-			if (!isNaN(parseInt(width))) width += `px`;
-
-			let height = targets[2].trim();
-			if (!height) return this.errorReply(`No height for the image was provided!`);
-			if (!isNaN(parseInt(height))) height += `px`;
-
-			const unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
-			if (!unitRegex.test(width)) {
-				return this.errorReply(`"${width}" is not a valid width value!`);
-			}
-			if (!unitRegex.test(height)) {
-				return this.errorReply(`"${height}" is not a valid height value!`);
-			}
-
-			return this.sendReply(Utils.html`|raw|<img src="${image}" style="width: ${width}; height: ${height}" />`);
-		}
-
-		void Chat.fitImage(image).then(([width, height]) => {
-			this.sendReply(Utils.html`|raw|<img src="${image}" style="width: ${width}px; height: ${height}px" />`);
-			room.update();
-		});
+		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
 	},
-	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # &`],
+
+	requestshow(target, room, user) {
+		if (!this.canTalk()) return false;
+		if (!room.settings.requestShowEnabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
+		if (this.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
+		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
+		if (!toID(target)) return this.parse(`/help requestshow`);
+
+		if (!/^https?:\/\//.test(target)) target = `https://${Utils.escapeHTML(target)}`;
+
+		if (!room.pendingApprovals) room.pendingApprovals = new Map();
+		room.pendingApprovals.set(user.id, target);
+		this.sendReply(`You have requested to show the link: ${target}`);
+		room.sendMods(
+			`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${target}">${target}</a><br>` +
+			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
+			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
+		);
+		return room.update();
+	},
+	requestshowhelp: [`/requestshow [link], [comment] - Requests permission to show media in the room.`],
+
+	async approveshow(target, room, user) {
+		if (!this.can('mute', null, room)) return false;
+		if (!room.settings.requestShowEnabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
+		const userid = toID(target);
+		if (!userid) return this.parse(`/help approveshow`);
+		const link = room.pendingApprovals?.get(userid);
+		if (!link) return this.errorReply(`${userid} has no pending request.`);
+		if (userid === user.id) {
+			return this.errorReply(`You can't approve your own /show request.`);
+		}
+		room.pendingApprovals!.delete(userid);
+		room.sendMods(`|uhtmlchange|request-${userid}|`);
+
+		let buf;
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			const YouTube = new YoutubeInterface();
+			buf = await YouTube.generateVideoDisplay(link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
+		} else {
+			const [width, height] = await Chat.fitImage(link);
+			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
+		}
+		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:white"><small>(Requested by ${user.name})</small></p>`;
+		this.addBox(buf);
+		room.update();
+	},
+	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
+
+	denyshow(target, room, user) {
+		if (!this.can('mute', null, room)) return false;
+		if (!room.settings.requestShowEnabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
+		target = toID(target);
+		if (!target) return this.parse(`/help denyshow`);
+
+		const link = room.pendingApprovals?.get(target);
+		if (!link) return this.errorReply(`${target} has no pending request.`);
+
+		room.pendingApprovals!.delete(target);
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		this.privateModAction(`(${user.name} denied ${target}'s request to display ${link}.)`);
+	},
+	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
+
+	'!show': true,
+	async show(target, room, user) {
+		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
+		if (!toID(target).trim()) return this.parse(`/help link`);
+
+		const [link, comment] = Utils.splitFirst(target, ',');
+
+		let buf;
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			const YouTube = new YoutubeInterface();
+			buf = await YouTube.generateVideoDisplay(link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
+		} else {
+			const [width, height] = await Chat.fitImage(link);
+			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
+		}
+		if (comment) buf += Utils.html`<br>(${comment})</div>`;
+
+		if (!this.canBroadcast()) return false;
+		if (this.broadcastMessage) {
+			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
+			const auth = room?.auth || Users.globalAuth;
+			if (minGroup !== true && !auth.atLeast(user, minGroup)) {
+				this.errorReply(`You must be at least group ${minGroup} to use /show`);
+				if (auth.atLeast(user, '%')) {
+					this.errorReply(`The limit can be changed in /roomsettings`);
+				}
+				return;
+			}
+		}
+		this.runBroadcast();
+		this.sendReplyBox(buf);
+	},
+	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
 
 	'!pi': true,
 	pi(target, room, user) {

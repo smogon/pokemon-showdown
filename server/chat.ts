@@ -389,7 +389,9 @@ export class CommandContext extends MessageContext {
 
 		// Output the message
 
-		if (message && message !== true && typeof message.then !== 'function') {
+		if (typeof message.then === 'function') {
+			message.then(() => this.update());
+		} else if (message && message !== true) {
 			if (this.pmTarget) {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
@@ -759,38 +761,41 @@ export class CommandContext extends MessageContext {
 		return this.cmdToken === BROADCAST_TOKEN;
 	}
 	canBroadcast(ignoreCooldown?: boolean, suppressMessage?: string | null) {
-		if (!this.broadcasting && this.shouldBroadcast()) {
-			if (this.room instanceof Rooms.GlobalRoom) {
-				this.errorReply(`You have no one to broadcast this to.`);
-				this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
-				return false;
-			}
-			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
-				this.errorReply(`You need to be voiced to broadcast this command's information.`);
-				this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
-				return false;
-			}
-
-			// broadcast cooldown
-			const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-
-			if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
-				this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
-				!this.user.can('bypassall')) {
-				this.errorReply("You can't broadcast this because it was just broadcasted.");
-				return false;
-			}
-
-			const message = this.canTalk(suppressMessage || this.message);
-			if (!message) {
-				this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
-				return false;
-			}
-
-			// canTalk will only return true with no message
-			this.message = message;
-			this.broadcastMessage = broadcastMessage;
+		if (this.broadcasting || !this.shouldBroadcast()) {
+			return true;
 		}
+
+		if (this.room instanceof Rooms.GlobalRoom) {
+			this.errorReply(`You have no one to broadcast this to.`);
+			this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
+			return false;
+		}
+
+		if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
+			this.errorReply(`You need to be voiced to broadcast this command's information.`);
+			this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
+			return false;
+		}
+
+		// broadcast cooldown
+		const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+
+		if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
+			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
+			!this.user.can('bypassall')) {
+			this.errorReply("You can't broadcast this because it was just broadcasted.");
+			return false;
+		}
+
+		const message = this.canTalk(suppressMessage || this.message);
+		if (!message) {
+			this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
+			return false;
+		}
+
+		// canTalk will only return true with no message
+		this.message = message;
+		this.broadcastMessage = broadcastMessage;
 		return true;
 	}
 	runBroadcast(ignoreCooldown = false, suppressMessage: string | null = null) {
