@@ -594,6 +594,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["calmmind", "fireblast", "icebeam", "psychic", "scald", "slackoff", "trickroom"],
 		tier: "OU",
+		doublesTier: "DOU",
 	},
 	slowbromega: {
 		isNonstandard: "Past",
