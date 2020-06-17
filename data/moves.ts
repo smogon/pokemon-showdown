@@ -2004,10 +2004,13 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
-		onHit(target, source, move) {
-			if (target?.boostedThisTurn) {
-				target.trySetStatus('brn', source, move);
-			}
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (target?.statsRaisedThisTurn) {
+					target.trySetStatus('brn', source, move);
+				}
+			},
 		},
 		target: "allAdjacent",
 		type: "Fire",
@@ -2452,6 +2455,25 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+	coaching: {
+		num: 811,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the target's Attack and Defense by 1 stage.",
+		shortDesc: "Raises the target's Attack and Defense by 1.",
+		name: "Coaching",
+		pp: 10,
+		priority: 0,
+		flags: {authentic: 1},
+		secondary: null,
+		boosts: {
+			atk: 1,
+			def: 1,
+		},
+		target: "allies",
+		type: "Fighting",
+	},
 	coil: {
 		num: 489,
 		accuracy: true,
@@ -2729,6 +2751,31 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 		contestType: "Cool",
+	},
+	corrosivegas: {
+		num: 810,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		// Needs research for Sticky Hold interaction
+		desc: "If the target is holding an item that can be removed from it, ignoring the Sticky Hold Ability. If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		shortDesc: "Removes the target's item.",
+		name: "Corrosive Gas",
+		pp: 40,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
+		onAfterHit(target, source) {
+			// Needs research
+			if (source.hp) {
+				const item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
+				}
+			}
+		},
+		secondary: null,
+		target: "allAdjacent",
+		type: "Poison",
 	},
 	cosmicpower: {
 		num: 322,
@@ -4131,6 +4178,23 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+	dualwingbeat: {
+		num: 814,
+		accuracy: 90,
+		basePower: 40,
+		category: "Physical",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
+		shortDesc: "Hits 2 times in one turn.",
+		name: "Dual Wingbeat",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		multihit: 2,
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+		maxMove: {basePower: 130},
+	},
 	dynamaxcannon: {
 		num: 744,
 		accuracy: 100,
@@ -4691,6 +4755,32 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
+	},
+	expandingforce: {
+		num: 797,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "If the current active terrain is Psychic Terrain, this move's base power is boosted, and this move hits all opposing Pokemon.",
+		shortDesc: "Psychic Terrain:Boosted power+hits all foes.",
+		name: "Expanding Force",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onBasePower(basePower) {
+			if (this.field.getTerrain().id === 'psychicterrain') {
+				this.debug('terrain buff');
+				return this.chainModify(2);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (this.field.getTerrain().id === 'psychicterrain') {
+				move.target = 'allAdjacentFoes';
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
 	},
 	explosion: {
 		num: 153,
@@ -9872,6 +9962,26 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
+	lashout: {
+		num: 808,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		desc: "This move's base power is doubles if one of its stats were lowered this turn.",
+		shortDesc: "2x power if stat lowered on same turn.",
+		name: "Lash Out",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onBasePower(basePower, source) {
+			if (source.statsLoweredThisTurn) {
+				this.debug('lashout buff');
+				return this.chainModify(2);
+			}
+		},
+		target: "normal",
+		type: "Dark",
+	},
 	lastresort: {
 		num: 387,
 		accuracy: 100,
@@ -11626,6 +11736,33 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+	meteorbeam: {
+		num: 800,
+		accuracy: 90,
+		basePower: 120,
+		category: "Special",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Special Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
+		name: "Meteor Beam",
+		pp: 10,
+		priority: 0,
+		flags: {charge: 1, protect: 1, mirror: 1},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name, defender);
+			this.boost({spa: 1}, attacker, attacker, move);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
 	meteormash: {
 		num: 309,
 		accuracy: 90,
@@ -12029,6 +12166,30 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Clever",
+	},
+	mistyexplosion: {
+		num: 802,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		// Boost needs research
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability. If Misty Terrain is active, this move's power is doubled.",
+		shortDesc: "Hits all Pokemon. Stronger in terrain.",
+		name: "Explosion",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		selfdestruct: "always",
+		onBasePower(basePower) {
+			if (this.field.getTerrain().id === 'mistyterrain') {
+				this.debug('misty terrain boost');
+				// Boost not confirmed
+				return this.chainModify(2);
+			}
+		},
+		secondary: null,
+		target: "allAdjacent",
+		type: "Fairy",
 	},
 	mistyterrain: {
 		num: 581,
@@ -13490,6 +13651,28 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+	poltergeist: {
+		num: 809,
+		accuracy: 90,
+		basePower: 110,
+		category: "Physical",
+		desc: "This move fails if the target doesn't have an item or is afflicted with Embargo. Additionally, this move fails if Magic Room is up, or the target has the ability Klutz and is not holding an item that ignores Klutz.",
+		shortDesc: "Fails if the target has no item.",
+		name: "Poltergeist",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit(target, source, move) {
+			if (source.ignoringItem()) return false;
+			const item = source.getItem();
+			if (!this.singleEvent('TakeItem', item, source.itemData, source, source, move, item)) return false;
+			if (!item.id) return false;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		contestType: "Cute",
+	},
 	pound: {
 		num: 1,
 		accuracy: 100,
@@ -14927,6 +15110,27 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 160},
 		contestType: "Cool",
 	},
+	risingvoltage: {
+		num: 804,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "If the current active terrain is Electric Terrain, this move's base power is doubled.",
+		shortDesc: "2x power in Electric Terrain.",
+		name: "Rising Voltage",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onBasePower(basePower) {
+			if (this.field.getTerrain().id === 'electricterrain') {
+				this.debug('terrain buff');
+				return this.chainModify(2);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+	},
 	roar: {
 		num: 46,
 		accuracy: true,
@@ -15535,6 +15739,30 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+	scaleshot: {
+		num: 799,
+		accuracy: 90,
+		basePower: 25,
+		category: "Physical",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. This move has a 100% chance to raise the user's Speed by 1 stage and lower the user's Defense by 1 stage after each successful hit.",
+		shortDesc: "Raises Spe, Lowers Def. Hits 2-5 times.",
+		name: "Scale Shot",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		multihit: [2, 5],
+		self: {
+			boosts: {
+				spe: 1,
+				def: -1,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
+	},
 	scaryface: {
 		num: 184,
 		accuracy: 100,
@@ -15554,6 +15782,25 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
+	},
+	scorchingsands: {
+		num: 815,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen.",
+		shortDesc: "30% chance to burn the target. Thaws target.",
+		name: "Scorching Sands",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, defrost: 1},
+		thawsTarget: true,
+		secondary: {
+			chance: 30,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Ground",
 	},
 	scratch: {
 		num: 10,
@@ -16335,6 +16582,26 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
+	},
+	skittersmack: {
+		num: 806,
+		accuracy: 90,
+		basePower: 70,
+		category: "Physical",
+		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage.",
+		shortDesc: "100% chance to lower target's Sp. Atk by 1.",
+		name: "Skitter Smack",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			boosts: {
+				spa: -1,
+			},
+		},
+		target: "normal",
+		type: "Bug",
 	},
 	skullbash: {
 		num: 130,
@@ -17643,6 +17910,25 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+	steelroller: {
+		num: 798,
+		accuracy: 100,
+		basePower: 130,
+		category: "Physical",
+		desc: "Ends the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain. This move fails if there is not a terrain active.",
+		shortDesc: "Fails if no terrain. Ends terrain.",
+		name: "Steel Roller",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit() {
+			if (!this.field.getTerrain()) return false;
+			this.field.clearTerrain();
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
 	steelwing: {
 		num: 211,
 		accuracy: 90,
@@ -18914,6 +19200,49 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		zMove: {effect: 'heal'},
 		contestType: "Cool",
+	},
+	terrainpulse: {
+		num: 805,
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		desc: "Power doubles if a terrain is active, and this move's type changes to match. Electric type during Electric Terrain, Grass type during Grassy Terrain, Fairy type during Misty Terrain, and Psychic type during Psychic Terrain.",
+		shortDesc: "Power doubles and type varies in each terrain.",
+		name: "Terrain Pulse",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyType(move, pokemon) {
+			switch (this.field.terrain) {
+			case 'electricterrain':
+				move.type = 'Electric';
+				break;
+			case 'grassyterrain':
+				move.type = 'Grass';
+				break;
+			case 'mistyterrain':
+				move.type = 'Fairy';
+				break;
+			case 'psychicterrain':
+				move.type = 'Psychic';
+				break;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			switch (this.field.terrain) {
+			case 'electricterrain':
+			case 'grassyterrain':
+			case 'mistyterrain':
+			case 'psychicterrain':
+				move.basePower *= 2;
+				break;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 	},
 	thief: {
 		num: 168,
