@@ -534,11 +534,12 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		evos: ["Raichu", "Raichu-Alola"],
 		eggGroups: ["Field", "Fairy"],
-		otherFormes: ["Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-Gmax"],
+		otherFormes: ["Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-Gmax", "Pikachu-World"],
 		formeOrder: [
 			"Pikachu",
 			"Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", // Gen 7 formes
 			"Pikachu-Starter", // forme 8 in LGPE
+			"Pikachu-World", // Gen 8 forme (indexed as Pikachu 9 in datamine)
 			"Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay", // formes 1-6 from Gen 6
 			"Pikachu-Gmax", // not a true forme
 		],
@@ -769,6 +770,21 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
 		isGigantamax: "G-Max Volt Crash",
+	},
+	pikachuworld: {
+		num: 25,
+		name: "Pikachu-World",
+		baseSpecies: "Pikachu",
+		forme: "World",
+		types: ["Electric"],
+		gender: "M",
+		baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+		abilities: {0: "Static", H: "Lightning Rod"},
+		heightm: 0.4,
+		weightkg: 6,
+		color: "Yellow",
+		eggGroups: ["Undiscovered"],
+		gen: 8,
 	},
 	raichu: {
 		num: 26,

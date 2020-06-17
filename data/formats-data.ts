@@ -227,6 +227,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
+	pikachuworld: {
+		tier: "PU",
+		doublesTier: "(DUU)",
+	},
 	raichu: {
 		randomBattleMoves: ["encore", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
 		randomBattleLevel: 88,
