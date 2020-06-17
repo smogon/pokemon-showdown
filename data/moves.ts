@@ -15970,26 +15970,21 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	shellsidearm: {
-		num: 99999,
-		// NOT CONFIRMED
+		num: 801,
 		accuracy: 100,
-		// NOT CONFIRMED
-		basePower: 100,
-		// NOT CONFIRMED
+		basePower: 90,
 		category: "Special",
 		desc: "This move becomes a physical attack if the target's Defense is lower than its Special Defense, including stat stage changes. This move has a 10% chance to poison the target.",
 		shortDesc: "Physical if target's Def > Sp. Def. 10% poison chance.",
 		name: "Shell Side Arm",
-		// NOT CONFIRMED
-		pp: 5,
+		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
 			if (target.getStat('def', false, true) > target.getStat('spd', false, true)) move.category = 'Physical';
 		},
 		secondary: {
-			// CHANCE NOT CONFIRMED
-			chance: 10,
+			chance: 20,
 			status: 'psn',
 		},
 		target: "normal",
