@@ -16,6 +16,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
+	venusaurgmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
 	charmander: {
 		tier: "LC",
 	},
@@ -58,6 +62,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	blastoisemega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
+	},
+	blastoisegmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	caterpie: {
 		tier: "LC",
@@ -218,6 +226,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["extremespeed", "fakeout", "knockoff", "surf", "volttackle"],
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
+	},
+	pikachuworld: {
+		tier: "PU",
+		doublesTier: "(DUU)",
 	},
 	raichu: {
 		randomBattleMoves: ["encore", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
@@ -586,6 +598,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["calmmind", "fireblast", "icebeam", "psychic", "scald", "slackoff", "trickroom"],
 		tier: "OU",
+		doublesTier: "DOU",
 	},
 	slowbromega: {
 		isNonstandard: "Past",
@@ -595,12 +608,14 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		unreleasedHidden: true,
 		tier: "OU",
+		doublesTier: "DOU",
 	},
 	slowking: {
 		randomBattleMoves: ["dragontail", "fireblast", "icebeam", "psyshock", "scald", "slackoff", "toxic", "trickroom"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["fireblast", "icebeam", "nastyplot", "psychic", "scald", "slackoff", "trickroom"],
 		tier: "OU",
+		doublesTier: "DOU",
 	},
 	magnemite: {
 		tier: "LC",
@@ -840,7 +855,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	happiny: {
-		isNonstandard: "Past",
 		tier: "LC",
 	},
 	chansey: {
@@ -4847,6 +4861,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DUU",
 	},
+	rillaboomgmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
 	scorbunny: {
 		tier: "LC",
 	},
@@ -4860,6 +4878,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
+	cinderacegmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
 	sobble: {
 		tier: "LC",
 	},
@@ -4872,6 +4894,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["airslash", "hydropump", "icebeam", "muddywater", "shadowball", "uturn"],
 		tier: "RUBL",
 		doublesTier: "DUU",
+	},
+	inteleongmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	skwovet: {
 		unreleasedHidden: true,
@@ -5344,6 +5370,29 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	eternatuseternamax: {
 		isNonstandard: "Unobtainable",
 		tier: "Illegal",
+	},
+	kubfu: {
+		tier: "LC",
+	},
+	urshifu: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	urshifurapidstrike: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	urshifugmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
+	urshifurapidstrikegmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
+	zarude: {
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	missingno: {
 		isNonstandard: "Custom",

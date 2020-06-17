@@ -256,9 +256,14 @@ export class Pokemon {
 		let gMax: string | null = null;
 		if (this.baseSpecies.isGigantamax) {
 			gMax = this.baseSpecies.name;
-			if (set.species && toID(set.species) === this.baseSpecies.id) set.species = this.baseSpecies.baseSpecies;
-			if (set.name && toID(set.name) === this.baseSpecies.id) set.name = this.baseSpecies.baseSpecies;
-			this.baseSpecies = this.battle.dex.getSpecies(this.baseSpecies.baseSpecies);
+			if (set.species && toID(set.species) === this.baseSpecies.id) {
+				set.species = this.baseSpecies.battleOnly || this.baseSpecies.baseSpecies;
+			}
+			if (set.name && toID(set.name) === this.baseSpecies.id) {
+				set.name = this.baseSpecies.battleOnly || this.baseSpecies.baseSpecies;
+			}
+			// Species#battleOnly type checking is handled in team-validator.ts
+			this.baseSpecies = this.battle.dex.getSpecies(this.baseSpecies.battleOnly as string || this.baseSpecies.baseSpecies);
 		}
 		this.set = set as PokemonSet;
 
