@@ -2451,7 +2451,7 @@ export const commands: ChatCommands = {
 		room.pendingApprovals.set(user.id, target);
 		this.sendReply(`You have requested to show the link: ${target}`);
 		room.sendMods(
-			`|uhtml|request-${user.id}|<div class="infobox">${Chat.escapeHTML(user.name)} wants to show <a href="${target}">${target}</a><br>` +
+			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${target}">${target}</a><br>` +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
