@@ -4305,8 +4305,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Unseen Fist",
 		rating: 3,
-		// NOT CONFIRMED
-		num: 99999,
+		num: 260,
 	},
 	victorystar: {
 		shortDesc: "This Pokemon and its allies' moves have their accuracy multiplied by 1.1.",
