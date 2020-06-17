@@ -4857,6 +4857,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DUU",
 	},
+	rillaboomgmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
 	scorbunny: {
 		tier: "LC",
 	},
@@ -4870,6 +4874,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
+	cinderacegmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
+	},
 	sobble: {
 		tier: "LC",
 	},
@@ -4882,6 +4890,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["airslash", "hydropump", "icebeam", "muddywater", "shadowball", "uturn"],
 		tier: "RUBL",
 		doublesTier: "DUU",
+	},
+	inteleongmax: {
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	skwovet: {
 		unreleasedHidden: true,

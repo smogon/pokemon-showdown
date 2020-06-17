@@ -74322,7 +74322,16 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 		eventOnly: true,
 	},
 	kubfu: {
-		learnset: {},
+		learnset: {
+			endure: ["8S0"],
+			focusenergy: ["8S0"],
+			leer: ["8S0"],
+			rocksmash: ["8S0"],
+		},
+		eventData: [
+			{generation: 8, perfectIVs: 3, moves: ["rocksmash", "leer", "endure", "focusenergy"]},
+		],
+		eventOnly: true,
 	},
 	urshifu: {
 		learnset: {},
