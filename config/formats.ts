@@ -189,12 +189,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Crucibelle-Mega'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8cap') {
-				this.add('html', `<div class="broadcast-blue"><strong>Create-A-Pok&eacute;mon is currently suspecting Clefable! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3665394/">suspect thread</a>.</strong></div>`);
-			}
-		},
+		banlist: ['Clefable', 'Crucibelle-Mega'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
