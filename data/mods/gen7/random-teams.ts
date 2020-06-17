@@ -734,8 +734,6 @@ export class RandomGen7Teams extends RandomTeams {
 			}
 
 		// First, the extra high-priority items
-		} else if (species.baseSpecies === 'Marowak') {
-			item = 'Thick Club';
 		} else if (species.name === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Decidium Z';
 		} else if (species.name === 'Dedenne') {
@@ -751,6 +749,8 @@ export class RandomGen7Teams extends RandomTeams {
 			item = hasMove['clangingscales'] ? 'Kommonium Z' : 'Dragonium Z';
 		} else if (species.name === 'Lycanroc' && hasMove['stoneedge'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Lycanium Z';
+		} else if (species.baseSpecies === 'Marowak') {
+			item = 'Thick Club';
 		} else if (species.name === 'Marshadow' && hasMove['spectralthief'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Marshadium Z';
 		} else if (species.name === 'Mimikyu' && hasMove['playrough'] && counter.setupType && !teamDetails.zMove) {
