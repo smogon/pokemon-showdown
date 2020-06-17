@@ -4301,8 +4301,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "All of this Pokemon's moves that make contact bypass protection.",
 		shortDesc: "All contact moves hit through protection.",
 		onModifyMove(move) {
-			if (!move.flags['contact']) return;
-			if (move.flags['protect']) delete move.flags['protect'];
+			if (move.flags['contact']) delete move.flags['protect'];
 		},
 		name: "Unseen Fist",
 		rating: 3,
