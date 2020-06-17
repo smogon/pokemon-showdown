@@ -19283,13 +19283,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			switch (this.field.terrain) {
-			case 'electricterrain':
-			case 'grassyterrain':
-			case 'mistyterrain':
-			case 'psychicterrain':
+			if (this.field.terrain) {
 				move.basePower *= 2;
-				break;
 			}
 		},
 		secondary: null,
