@@ -611,6 +611,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["fireblast", "icebeam", "nastyplot", "psychic", "scald", "slackoff", "trickroom"],
 		tier: "OU",
+		doublesTier: "DOU",
 	},
 	magnemite: {
 		tier: "LC",
@@ -4306,7 +4307,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	rockruff: {
 		tier: "LC",
 	},
-	// Unsure if this is getting released into gen 8
 	rockruffdusk: {
 		tier: "LC",
 	},
@@ -4324,7 +4324,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	// Unsure if this is getting released into gen 8
 	lycanrocdusk: {
 		randomBattleMoves: ["closecombat", "psychicfangs", "stoneedge", "suckerpunch", "swordsdance"],
 		randomBattleLevel: 84,
@@ -5374,6 +5373,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	urshifurapidstrikegmax: {
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
+	},
+	zarude: {
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	missingno: {
 		isNonstandard: "Custom",

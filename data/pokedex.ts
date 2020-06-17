@@ -1843,17 +1843,14 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Slowbro",
 		forme: "Galar",
 		types: ["Psychic", "Poison"],
-		// NOT CONFIRMED
-		baseStats: {hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30},
-		// NOT CONFIRMED
+		baseStats: {hp: 95, atk: 100, def: 95, spa: 100, spd: 70, spe: 30},
 		abilities: {0: "Quick Draw", 1: "Own Tempo", H: "Regenerator"},
 		heightm: 1.6,
 		weightkg: 70.5,
-		// NOT CONFIRMED
 		color: "Pink",
 		prevo: "Slowpoke-Galar",
 		// NOT CONFIRMED
-		evoLevel: 37,
+		evoItem: "Not sure",
 		eggGroups: ["Monster", "Water 1"],
 	},
 	magnemite: {
@@ -15555,108 +15552,109 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 	},
 	kubfu: {
-		// NOT CONFIRMED
 		num: 891,
 		name: "Kubfu",
 		types: ["Fighting"],
-		// NOT CONFIRMED
-		gender: "N",
-		// NOT CONFIRMED
-		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 60, atk: 90, def: 60, spa: 53, spd: 50, spe: 73},
 		abilities: {0: "Inner Focus"},
 		heightm: 0.6,
 		weightkg: 12,
-		// NOT CONFIRMED
 		color: "Gray",
 		evos: ["Urshifu", "Urshifu-Rapid-Strike"],
-		// NOT CONFIRMED
 		eggGroups: ["Undiscovered"],
 	},
 	urshifu: {
-		// NOT CONFIRMED
 		num: 892,
 		name: "Urshifu",
-		baseForme: "Single Strike",
+		baseForme: "Single-Strike",
 		types: ["Fighting", "Dark"],
-		// NOT CONFIRMED
-		gender: "N",
-		// NOT CONFIRMED
-		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
 		abilities: {0: "Unseen Fist"},
 		heightm: 1.9,
 		weightkg: 105,
-		// NOT CONFIRMED
 		color: "Gray",
 		prevo: "Kubfu",
-		// NOT CONFIRMED
 		evoCondition: "Defeat the Single Strike Tower",
-		// NOT CONFIRMED
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Urshifu-Rapid-Strike", "Urshifu-Gmax", "Urshifu-Rapid-Strike-Gmax"],
 		formeOrder: ["Urshifu", "Urshifu-Gmax", "Urshifu-Rapid-Strike", "Urshifu-Rapid-Strike-Gmax"],
 	},
 	urshifurapidstrike: {
-		// NOT CONFIRMED
 		num: 892,
 		name: "Urshifu-Rapid-Strike",
 		baseSpecies: "Urshifu",
 		forme: "Rapid-Strike",
 		types: ["Fighting", "Water"],
-		// NOT CONFIRMED
-		gender: "N",
-		// NOT CONFIRMED
-		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
 		abilities: {0: "Unseen Fist"},
 		heightm: 1.9,
 		weightkg: 105,
-		// NOT CONFIRMED
 		color: "Gray",
 		prevo: "Kubfu",
-		// NOT CONFIRMED
 		evoCondition: "Defeat the Rapid Strike Tower",
-		// NOT CONFIRMED
 		eggGroups: ["Undiscovered"],
 	},
 	urshifugmax: {
-		// NOT CONFIRMED
 		num: 892,
 		name: "Urshifu-Gmax",
 		baseSpecies: "Urshifu",
 		forme: "Gmax",
 		types: ["Fighting", "Dark"],
-		// NOT CONFIRMED
-		gender: "N",
-		// NOT CONFIRMED
-		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
 		abilities: {0: "Unseen Fist"},
 		heightm: 0,
 		weightkg: 0,
-		// NOT CONFIRMED
 		color: "Gray",
-		// NOT CONFIRMED
 		eggGroups: ["Undiscovered"],
 		isGigantamax: "G-Max One Blow",
 	},
 	urshifurapidstrikegmax: {
-		// NOT CONFIRMED
 		num: 892,
 		name: "Urshifu-Rapid-Strike",
 		baseSpecies: "Urshifu",
 		forme: "Rapid-Strike-Gmax",
 		types: ["Fighting", "Water"],
-		// NOT CONFIRMED
-		gender: "N",
-		// NOT CONFIRMED
-		baseStats: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+		genderRatio: {M: 0.875, F: 0.125},
+		baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
 		abilities: {0: "Unseen Fist"},
 		heightm: 1.9,
 		weightkg: 105,
-		// NOT CONFIRMED
 		color: "Gray",
-		// NOT CONFIRMED
 		eggGroups: ["Undiscovered"],
 		isGigantamax: "G-Max Rapid Flow",
 		battleOnly: "Urshifu-Rapid-Strike",
+	},
+	zarude: {
+		num: 893,
+		name: "Zarude",
+		types: ["Dark", "Grass"],
+		gender: "N",
+		baseStats: {hp: 105, atk: 120, def: 105, spa: 70, spd: 95, spe: 105},
+		abilities: {0: "Leaf Guard"},
+		heightm: 1.8,
+		weightkg: 70,
+		color: "Green",
+		eggGroups: ["Undiscovered"],
+		otherFormes: ["Zarude-Dada"],
+		formeOrder: ["Zarude", "Zarude-Dada"],
+	},
+	zarudedada: {
+		num: 893,
+		name: "Zarude-Dada",
+		baseSpecies: "Zarude",
+		forme: "Dada",
+		types: ["Dark", "Grass"],
+		gender: "N",
+		baseStats: {hp: 105, atk: 120, def: 105, spa: 70, spd: 95, spe: 105},
+		abilities: {0: "Leaf Guard"},
+		heightm: 1.8,
+		weightkg: 70,
+		color: "Green",
+		eggGroups: ["Undiscovered"],
 	},
 	missingno: {
 		num: 0,

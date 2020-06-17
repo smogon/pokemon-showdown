@@ -74330,6 +74330,9 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 	urshifurapidstrike: {
 		learnset: {},
 	},
+	zarude: {
+		learnset: {},
+	},
 	tomohawk: {
 		learnset: {
 			acrobatics: ["8M", "7M", "5M"],
