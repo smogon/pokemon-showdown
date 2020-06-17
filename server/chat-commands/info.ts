@@ -2444,7 +2444,8 @@ export const commands: ChatCommands = {
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
-		if (!/^https?:\/\//.test(target)) target = `https://${Utils.escapeHTML(target)}`;
+		if (!/^https?:\/\//.test(target)) target = `https://${target}`;
+		target = encodeURI(target);
 
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, target);
