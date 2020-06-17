@@ -7601,14 +7601,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 70,
 		category: "Physical",
 		desc: "If this move is used while Grassy Terrain is active, its user will nearly always move first.",
-		shortDesc: "+2 Priority under Grassy Terrain.",
+		shortDesc: "+1 Priority under Grassy Terrain.",
 		name: "Grassy Glide",
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mystery: 1},
 		onModifyMove(move, pokemon) {
-			if (this.field.getTerrain().name === "Grassy Terrain") {
-				move.priority = 2;
+			if (this.field.isTerrain('grassyterrain')) {
+				move.priority = 1;
 			}
 		},
 		secondary: null,
@@ -17977,6 +17977,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryHit() {
 			if (!this.field.getTerrain()) return false;
+		},
+		onHit() {
 			this.field.clearTerrain();
 		},
 		secondary: null,
