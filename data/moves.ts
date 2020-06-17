@@ -20288,8 +20288,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				if (move?.target !== 'allAdjacent' && move.target !== 'allAdjacentFoes') {
 					return;
 				}
-				if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) {
+				if (move.isZ || move.isMax) {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
 					target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
