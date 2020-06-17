@@ -2445,13 +2445,12 @@ export const commands: ChatCommands = {
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
 		if (!/^https?:\/\//.test(target)) target = `https://${target}`;
-		target = Utils.escapeHTML(target);
 
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, target);
 		this.sendReply(`You have requested to show the link: ${target}`);
 		room.sendMods(
-			`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${target}">${target}</a><br>` +
+			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${target}">${target}</a><br>` +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
