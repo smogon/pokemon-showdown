@@ -1865,6 +1865,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 70.5,
 		color: "Pink",
 		prevo: "Slowpoke-Galar",
+		evoType: "useItem",
 		// NOT CONFIRMED
 		evoItem: "Not sure",
 		eggGroups: ["Monster", "Water 1"],
