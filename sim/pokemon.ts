@@ -135,6 +135,8 @@ export class Pokemon {
 	lastMove: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
+	statsRaisedThisTurn: boolean;
+	statsLoweredThisTurn: boolean;
 	/**
 	 * The result of the last move used on the previous turn by this
 	 * Pokemon. Stomping Tantrum checks this property for a value of false
@@ -382,6 +384,8 @@ export class Pokemon {
 
 		this.lastMove = null;
 		this.moveThisTurn = '';
+		this.statsRaisedThisTurn = false;
+		this.statsLoweredThisTurn = false;
 		this.hurtThisTurn = false;
 		this.lastDamage = 0;
 		this.attackedBy = [];
