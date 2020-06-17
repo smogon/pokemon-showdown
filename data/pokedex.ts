@@ -1866,8 +1866,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		prevo: "Slowpoke-Galar",
 		evoType: "useItem",
-		// NOT CONFIRMED
-		evoItem: "Not sure",
+		evoItem: "Galarica Cuff",
 		eggGroups: ["Monster", "Water 1"],
 	},
 	magnemite: {
@@ -7896,8 +7895,8 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 180,
 		color: "Gray",
 		prevo: "Magneton",
-		evoType: "levelExtra",
-		evoCondition: "in a special magnetic field",
+		evoType: "useItem",
+		evoItem: "Thunder Stone",
 		eggGroups: ["Mineral"],
 	},
 	lickilicky: {
@@ -12740,6 +12739,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Rockruff",
 		evoLevel: 25,
+		evoCondition: "during the day",
 		eggGroups: ["Field"],
 		otherFormes: ["Lycanroc-Midnight", "Lycanroc-Dusk"],
 		formeOrder: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
@@ -12757,6 +12757,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Rockruff",
 		evoLevel: 25,
+		evoCondition: "during the night",
 		eggGroups: ["Field"],
 	},
 	lycanrocdusk: {
@@ -12772,6 +12773,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Rockruff",
 		evoLevel: 25,
+		evoCondition: "from a special Rockruff",
 		eggGroups: ["Field"],
 	},
 	wishiwashi: {
