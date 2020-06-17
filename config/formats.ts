@@ -1,6 +1,6 @@
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.js
-import {Utils} from '../lib/utils';
+import {Utils} from './../lib/utils';
 
 export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
@@ -118,13 +118,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Sneasel', 'Swirlix', 'Vulpix', 'Vulpix-Alola',
-			'Moody', 'Baton Pass',
+			'Chlorophyll', 'Moody', 'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8lc') {
-				this.add('html', `<div class="broadcast-blue"><strong>Little Cup is currently suspecting Chlorophyll! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3665545/">suspect thread</a>.</strong></div>`);
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Monotype",
