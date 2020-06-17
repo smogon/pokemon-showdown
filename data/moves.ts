@@ -2012,7 +2012,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				}
 			},
 		},
-		target: "allAdjacent",
+		target: "allAdjacentFoes",
 		type: "Fire",
 		contestType: "Tough",
 	},
@@ -2758,7 +2758,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		// Needs research for Sticky Hold interaction
-		desc: "If the target is holding an item that can be removed from it, ignoring the Sticky Hold Ability. If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		desc: "Removes the target's item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		shortDesc: "Removes the target's item.",
 		name: "Corrosive Gas",
 		pp: 40,
@@ -4768,13 +4768,13 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower) {
-			if (this.field.getTerrain().id === 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain')) {
 				this.debug('terrain buff');
 				return this.chainModify(2);
 			}
 		},
 		onModifyMove(move, pokemon, target) {
-			if (this.field.getTerrain().id === 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain')) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
@@ -12235,7 +12235,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		selfdestruct: "always",
 		onBasePower(basePower) {
-			if (this.field.getTerrain().id === 'mistyterrain') {
+			if (this.field.isTerrain('mistyterrain')) {
 				this.debug('misty terrain boost');
 				// Boost not confirmed
 				return this.chainModify(2);
@@ -15176,7 +15176,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower) {
-			if (this.field.getTerrain().id === 'electricterrain') {
+			if (this.field.isTerrain('electricterrain')) {
 				this.debug('terrain buff');
 				return this.chainModify(2);
 			}
@@ -17975,7 +17975,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit() {
+		onTryHit() {
 			if (!this.field.getTerrain()) return false;
 			this.field.clearTerrain();
 		},
