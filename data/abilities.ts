@@ -4304,7 +4304,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (move.flags['contact']) delete move.flags['protect'];
 		},
 		name: "Unseen Fist",
-		rating: 3,
+		rating: 2,
 		num: 260,
 	},
 	victorystar: {
