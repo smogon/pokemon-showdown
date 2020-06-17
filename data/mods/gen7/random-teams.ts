@@ -215,7 +215,7 @@ export class RandomGen7Teams extends RandomTeams {
 					if (!hasAbility['Parental Bond'] && (counter.damagingMoves.length > 1 || counter.setupType)) rejected = true;
 					break;
 				case 'protect':
-					if (counter.setupType && !hasMove['wish']) rejected = true;
+					if (!isDoubles && counter.setupType && !hasMove['wish']) rejected = true;
 					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
 					if (isDoubles && (hasMove['tailwind'] && hasMove['roost']) || hasMove['fakeout'] || movePool.includes('bellydrum') || movePool.includes('shellsmash')) rejected = true;
 					break;
