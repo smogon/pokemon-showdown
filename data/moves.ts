@@ -12229,7 +12229,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		// Boost needs research
 		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability. If Misty Terrain is active, this move's power is doubled.",
 		shortDesc: "Hits all Pokemon. Stronger in terrain.",
-		name: "Explosion",
+		name: "Misty Explosion",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
