@@ -72,10 +72,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	bonemerang: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	bouncybubble: {
 		inherit: true,
 		basePower: 90,
@@ -132,14 +128,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	continentalcrush: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	conversion: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	conversion2: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -226,10 +214,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	dragonhammer: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	dragonrage: {
 		inherit: true,
 		isNonstandard: null,
@@ -308,23 +292,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	fierydance: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	flameburst: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	flash: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	fleurcannon: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	floralhealing: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -422,10 +394,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
 	},
 	guardianofalola: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	headcharge: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -627,10 +595,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	kinesis: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	kingsshield: {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
@@ -745,10 +709,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		noMetronome: [
 			"After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V-create", "Wide Guard",
 		],
-	},
-	milkdrink: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	mindblown: {
 		inherit: true,
@@ -1005,10 +965,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	shadowbone: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	shadowforce: {
 		inherit: true,
 		isNonstandard: null,
@@ -1018,10 +974,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	shatteredpsyche: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	shoreup: {
 		inherit: true,
 		isNonstandard: null,
 	},
