@@ -4842,8 +4842,8 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	melmetalgmax: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	grookey: {
 		tier: "LC",
