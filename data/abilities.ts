@@ -2966,6 +2966,19 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 214,
 	},
+	quickdraw: {
+		shortDesc: "This Pokemon has a 20% chance to move first in its priority bracket.",
+		onFractionalPriorityPriority: -1,
+		onFractionalPriority(priority, pokemon) {
+			if (this.randomChance(1, 5)) {
+				this.add('-activate', pokemon, 'ability: Quick Draw');
+				return Math.round(priority) + 0.1;
+			}
+		},
+		name: "Quick Draw",
+		rating: 1.5,
+		num: 259,
+	},
 	quickfeet: {
 		desc: "If this Pokemon has a major status condition, its Speed is multiplied by 1.5; the Speed drop from paralysis is ignored.",
 		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",

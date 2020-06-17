@@ -577,23 +577,26 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	slowpoke: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "LC",
 	},
 	slowpokegalar: {
 		unreleasedHidden: true,
-		tier: "(PU)",
-		doublesTier: "(DUU)",
+		tier: "LC",
 	},
 	slowbro: {
 		randomBattleMoves: ["calmmind", "icebeam", "psyshock", "scald", "slackoff", "teleport"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["calmmind", "fireblast", "icebeam", "psychic", "scald", "slackoff", "trickroom"],
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
 	},
 	slowbromega: {
 		isNonstandard: "Past",
+	},
+	slowbrogalar: {
+		randomBattleMoves: ["fireblast", "psyshock", "shellsidearm", "trick", "trickroom"],
+		randomBattleLevel: 82,
+		unreleasedHidden: true,
+		tier: "OU",
 	},
 	slowking: {
 		randomBattleMoves: ["dragontail", "fireblast", "icebeam", "psyshock", "scald", "slackoff", "toxic", "trickroom"],
