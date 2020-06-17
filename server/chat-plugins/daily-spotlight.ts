@@ -36,8 +36,10 @@ async function renderSpotlight(description: string, image?: string) {
 	let imgHTML = '';
 
 	if (image) {
-		const [width, height] = await Chat.fitImage(image, 150, 300);
-		imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+		try {
+			const [width, height] = await Chat.fitImage(image, 150, 300);
+			imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+		} catch (err) {}
 	}
 
 	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
@@ -115,8 +117,11 @@ export const commands: ChatCommands = {
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {
 			[img, ...rest] = rest;
 			img = img.trim();
-			const ret = await Chat.getImageDimensions(img);
-			if (ret.err) return this.errorReply(`Invalid image url: ${img}`);
+			try {
+				await Chat.getImageDimensions(img);
+			} catch (e) {
+				return this.errorReply(`Invalid image url: ${img}`);
+			}
 		}
 		const desc = rest.join(',');
 		if (Chat.stripFormatting(desc).length > 500) {

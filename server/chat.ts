@@ -1794,10 +1794,8 @@ export const Chat = new class {
 	/**
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
-	getImageDimensions(url: string): Promise<{height: number, width: number, err?: Error}> {
-		return new Promise(resolve => {
-			probe(url).then(dimensions => resolve(dimensions), (err: Error) => resolve({height: 0, width: 0, err}));
-		});
+	getImageDimensions(url: string): Promise<{height: number, width: number}> {
+		return probe(url);
 	}
 
 	/**
@@ -1818,20 +1816,17 @@ export const Chat = new class {
 	/**
 	 * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
 	 * preserving aspect ratio.
+	 *
+	 * @return [width, height, resized]
 	 */
-	async fitImage(url: string, maxHeight = 300, maxWidth = 300) {
+	async fitImage(url: string, maxHeight = 300, maxWidth = 300): Promise<[number, number, boolean]> {
 		const {height, width} = await Chat.getImageDimensions(url);
 
-		if (width <= maxWidth && height <= maxHeight) return [width, height];
+		if (width <= maxWidth && height <= maxHeight) return [width, height, false];
 
-		let ratio;
-		if (height * (maxWidth / maxHeight) > width) {
-			ratio = maxHeight / height;
-		} else {
-			ratio = maxWidth / width;
-		}
+		const ratio = Math.min(maxHeight / height, maxWidth / width);
 
-		return [Math.round(width * ratio), Math.round(height * ratio)];
+		return [Math.round(width * ratio), Math.round(height * ratio), true];
 	}
 
 	/**

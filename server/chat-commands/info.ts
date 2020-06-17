@@ -2480,8 +2480,13 @@ export const commands: ChatCommands = {
 			buf = await YouTube.generateVideoDisplay(link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
-			const [width, height] = await Chat.fitImage(link);
-			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
+			try {
+				const [width, height, resized] = await Chat.fitImage(link);
+				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
+				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+			} catch (err) {
+				return this.errorReply('Invalid image');
+			}
 		}
 		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:white"><small>(Requested by ${userid})</small></p>`;
 		this.addBox(buf);
@@ -2509,7 +2514,7 @@ export const commands: ChatCommands = {
 	'!show': true,
 	async show(target, room, user) {
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
-		if (!toID(target).trim()) return this.parse(`/help link`);
+		if (!toID(target).trim()) return this.parse(`/help show`);
 
 		const [link, comment] = Utils.splitFirst(target, ',');
 
@@ -2519,8 +2524,13 @@ export const commands: ChatCommands = {
 			buf = await YouTube.generateVideoDisplay(link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
-			const [width, height] = await Chat.fitImage(link);
-			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
+			try {
+				const [width, height, resized] = await Chat.fitImage(link);
+				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
+				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+			} catch (err) {
+				return this.errorReply('Invalid image');
+			}
 		}
 		if (comment) buf += Utils.html`<br>(${comment})</div>`;
 
