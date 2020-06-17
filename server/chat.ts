@@ -388,8 +388,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		// Output the message
-
-		if (typeof message.then === 'function') {
+		if (message && typeof message.then === 'function') {
 			message.then(() => this.update());
 		} else if (message && message !== true) {
 			if (this.pmTarget) {
