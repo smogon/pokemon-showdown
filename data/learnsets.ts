@@ -64911,13 +64911,13 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 		eventData: [
 			{generation: 6, level: 70, moves: ["crunch", "earthquake", "camouflage", "dragonpulse"]},
 			{generation: 6, level: 100, moves: ["landswrath", "extremespeed", "glare", "outrage"], pokeball: "cherishball"},
-			{generation: 7, level: 30, moves: ["safeguard", "dig", "bind", "landswrath"]},
+			{generation: 7, level: 30, moves: ["safeguard", "dig", "bind", "landswrath"]}, // 10%
 			{generation: 7, level: 50, moves: ["bind", "landswrath", "sandstorm", "haze"]},
 			{generation: 7, level: 50, isHidden: true, moves: ["bind", "landswrath", "sandstorm", "haze"]},
 			{generation: 7, level: 60, shiny: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"}, // 10%
 			{generation: 7, level: 100, shiny: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"},
-			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"}, // 10%
 		],
 		eventOnly: true,
 	},
@@ -75859,7 +75859,8 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M"],
 		},
 		eventData: [
-			{generation: 8, perfectIVs: 3, moves: ["rocksmash", "leer", "endure", "focusenergy"]},
+			// TODO get actual event data
+			{generation: 8, level: 10, perfectIVs: 3, moves: ["rocksmash", "leer", "endure", "focusenergy"]},
 		],
 		eventOnly: true,
 	},
