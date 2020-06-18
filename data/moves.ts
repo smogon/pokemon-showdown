@@ -2470,7 +2470,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			atk: 1,
 			def: 1,
 		},
-		target: "allies",
+		target: "adjacentAlly",
 		type: "Fighting",
 	},
 	coil: {
