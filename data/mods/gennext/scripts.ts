@@ -141,10 +141,5 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		// Vespiquen
 		this.modData('Pokedex', 'vespiquen').abilities['1'] = 'Swarm';
-
-		// Every hidden ability becomes released
-		for (const i in this.data.FormatsData) {
-			this.modData('FormatsData', i).unreleasedHidden = false;
-		}
 	},
 };

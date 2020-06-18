@@ -1127,6 +1127,8 @@ interface SpeciesData {
 	battleOnly?: string | string[];
 	isGigantamax?: string;
 	changesFrom?: string;
+	maleOnlyHidden?: boolean;
+	unreleasedHidden?: boolean | 'Past';
 }
 
 type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
@@ -1137,13 +1139,11 @@ interface SpeciesFormatsData {
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	isNonstandard?: Nonstandard | null;
-	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: string;
-	unreleasedHidden?: boolean | 'Past';
 }
 
 type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
