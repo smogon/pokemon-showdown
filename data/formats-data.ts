@@ -5372,7 +5372,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	kubfu: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	urshifu: {
 		tier: "OU",
