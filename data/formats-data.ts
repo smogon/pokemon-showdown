@@ -591,7 +591,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	slowpokegalar: {
-		unreleasedHidden: true,
 		tier: "LC",
 	},
 	slowbro: {
@@ -608,7 +607,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	slowbrogalar: {
 		randomBattleMoves: ["fireblast", "psyshock", "shellsidearm", "trick", "trickroom"],
 		randomBattleLevel: 82,
-		unreleasedHidden: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
