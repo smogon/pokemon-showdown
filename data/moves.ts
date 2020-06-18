@@ -15805,11 +15805,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		multihit: [2, 5],
-		self: {
-			boosts: {
-				spe: 1,
-				def: -1,
-			},
+		onAfterMove(source, target, move) {
+			this.boost({spe: 1, def: -1}, source, source, move);
 		},
 		secondary: null,
 		target: "normal",
@@ -19915,17 +19912,22 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		num: 167,
 		accuracy: 90,
 		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return 20 * move.hit;
+		},
 		category: "Physical",
-		desc: "Hits three times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
-		shortDesc: "Hits 3 times.",
+		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
+		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
 		name: "Triple Axel",
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		multihit: 3,
+		multiaccuracy: true,
 		secondary: null,
 		target: "normal",
 		type: "Ice",
+		zMove: {basePower: 120},
 		maxMove: {basePower: 140},
 	},
 	triplekick: {
