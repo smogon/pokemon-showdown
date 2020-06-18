@@ -344,7 +344,7 @@ export const commands: ChatCommands = {
 
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
-			if (!this.can('mute', null, room)) return false
+			if (!this.can('mute', null, room)) return false;
 			if (!room.queuedActivity) room.queuedActivity = [];
 			const queue = room.queuedActivity;
 			if (cmd === 'clearqueue') {
