@@ -929,8 +929,10 @@ export const commands: ChatCommands = {
 	async eval(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
+		const logRoom = Rooms.get('development');
 
-		if (!this.broadcasting) this.sendReply(`||>> ${target}`);
+		room.add(`||>> ${target}`).update();
+		logRoom?.roomlog(`>> ${target}`);
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
 			const battle = room.battle;
@@ -943,11 +945,20 @@ export const commands: ChatCommands = {
 			} else {
 				result = Utils.visualize(result);
 			}
-			result = result.replace(/\n/g, '\n||');
-			this.sendReply('||<< ' + result);
+			result = result.length > 200 ? Chat.collapseLineBreaksHTML(`<details class="readmore code" style="white-space: ` +
+				`pre-wrap; display: table; tab-size: 3"><summary>${result.slice(0, 200)}</summary>` +
+				`${result}</details>`) : result.replace(/\n/g, '\n||');
+			room.add(`|html|<< ${result}`).update();
+			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
-			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||');
-			this.sendReply(`|| << ${message}`);
+			let message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
+			logRoom?.roomlog(`<< ${target}`);
+			message = message.length > 200 ? Chat.collapseLineBreaksHTML(
+				`<details class="readmore code" style="white-space: ` +
+				`pre-wrap; display: table; tab-size: 3"><summary>${message.slice(0, 200)}</summary>` +
+				`${message.slice(200)}</details>`
+			).replace(/\n/, '<br>') : message.replace(/\n/g, '\n||');
+			room.add(`|html|<< ${message}`).update();
 		}
 	},
 
