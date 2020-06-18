@@ -209,15 +209,15 @@ export class RandomGen7Teams extends RandomTeams {
 					break;
 				case 'leechseed': case 'roar': case 'whirlwind':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
-					if (isDoubles && movePool.includes('protect') || movePool.includes('spikyshield')) rejected = true;
+					if (isDoubles && (movePool.includes('protect') || movePool.includes('spikyshield'))) rejected = true;
 					break;
 				case 'nightshade': case 'seismictoss': case 'superfang':
 					if (!hasAbility['Parental Bond'] && (counter.damagingMoves.length > 1 || counter.setupType)) rejected = true;
 					break;
 				case 'protect':
-					if (!isDoubles && counter.setupType && !hasMove['wish']) rejected = true;
+					if (counter.setupType && !hasMove['wish'] && !isDoubles) rejected = true;
 					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
-					if (isDoubles && (hasMove['tailwind'] && hasMove['roost']) || hasMove['fakeout'] || movePool.includes('bellydrum') || movePool.includes('shellsmash')) rejected = true;
+					if (isDoubles && (hasMove['fakeout'] || movePool.includes('bellydrum') || movePool.includes('shellsmash') || hasMove['tailwind'] && hasMove['roost'])) rejected = true;
 					break;
 				case 'pursuit':
 					if (counter.setupType || counter.Status > 1 || counter['Dark'] > 2 || hasMove['knockoff'] && !hasType['Dark']) rejected = true;
@@ -442,7 +442,7 @@ export class RandomGen7Teams extends RandomTeams {
 					if (hasMove['scald'] && ((counter.Special < 4 && !hasMove['uturn']) || (species.types.length > 1 && counter.stab < 3))) rejected = true;
 					break;
 				case 'muddywater':
-					if (isDoubles && hasMove['scald'] || hasMove['hydropump']) rejected = true;
+					if (isDoubles && (hasMove['scald'] || hasMove['hydropump'])) rejected = true;
 					break;
 				case 'originpulse': case 'surf':
 					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
@@ -734,7 +734,7 @@ export class RandomGen7Teams extends RandomTeams {
 				if (abilities.includes('Guts') && ability !== 'Intimidate') ability = 'Guts';
 				if (abilities.includes('Storm Drain')) ability = 'Storm Drain';
 				if (abilities.includes('Harvest')) ability = 'Harvest';
-				if (abilities.includes('Unburden') && ability !== 'Prankster' && species.name !== 'Sceptile-Mega') ability = 'Unburden';
+				if (abilities.includes('Unburden') && ability !== 'Prankster' && !species.isMega) ability = 'Unburden';
 			}
 			if (species.name === 'Ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
@@ -818,8 +818,6 @@ export class RandomGen7Teams extends RandomTeams {
 		} else if (ability === 'Harvest' || ability === 'Emergency Exit' && !!counter['Status']) {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
-			item = 'Choice Scarf';
-		} else if (isDoubles && counter.Special === 4 && hasMove['waterspout'] || hasMove['eruption']) {
 			item = 'Choice Scarf';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
 			if (ability === 'Klutz') {
@@ -905,6 +903,8 @@ export class RandomGen7Teams extends RandomTeams {
 			item = 'Life Orb';
 		} else if (isDoubles && hasMove['uturn'] && counter.Physical === 4) {
 			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
+		} else if (isDoubles && counter.Special === 4 && hasMove['waterspout'] || hasMove['eruption']) {
+			item = 'Choice Scarf';
 		} else if (counter.Physical >= 4 && !hasMove['bodyslam'] && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !hasMove['suckerpunch'] && !isDoubles) {
 			item = (species.baseStats.atk >= 100 || ability === 'Huge Power') && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['fierydance'] && !isDoubles) {
@@ -920,7 +920,7 @@ export class RandomGen7Teams extends RandomTeams {
 		} else if (hasMove['outrage'] && counter.setupType) {
 			item = 'Lum Berry';
 		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 70 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['electroweb'] && !hasMove['fakeout'] &&
-		!hasMove['feint'] && !hasMove['flamecharge'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']) {
+			!hasMove['feint'] && !hasMove['flamecharge'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']) {
 			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length > 2 && !!counter['drain'] ? 'Life Orb' : 'Leftovers';
@@ -938,7 +938,7 @@ export class RandomGen7Teams extends RandomTeams {
 			item = (!!counter['Dragon'] || !!counter['Dark'] || !!counter['Normal']) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (!isDoubles && isLead && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 275) {
+		} else if (isLead && !isDoubles && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 275) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
