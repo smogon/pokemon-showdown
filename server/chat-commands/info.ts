@@ -2484,10 +2484,10 @@ export const commands: ChatCommands = {
 			buf = await YouTube.generateVideoDisplay(info.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
-      try {
-				const [width, height, resized] = await Chat.fitImage(link);
-				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+      	try {
+				const [width, height, resized] = await Chat.fitImage(info.link);
+				buf = Utils.html`<img src="${info.link}" width="${width}" height="${height}" />`;
+				if (resized) buf += Utils.html`<br /><a href="${info.link}" target="_blank">full-size image</a>`;
 			} catch (err) {
 				return this.errorReply('Invalid image');
 			}
