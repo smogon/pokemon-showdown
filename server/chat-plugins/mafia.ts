@@ -2537,11 +2537,12 @@ export const commands: ChatCommands = {
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			let revealAs = '';
+			let revealedRole = null;
 			if (cmd === 'revealas') {
 				if (!args[0]) {
 					return this.parse('/help mafia revealas');
 				} else {
-					const revealedRole = MafiaTracker.parseRole(args.pop()!);
+					revealedRole = MafiaTracker.parseRole(args.pop()!);
 					const color = MafiaData.alignments[revealedRole.role.alignment].color;
 					revealAs = `<span style="font-weight:bold;color:${color}">${revealedRole.role.safeName}</span>`;
 				}
@@ -2552,7 +2553,10 @@ export const commands: ChatCommands = {
 				if (!player) player = game.dead[toID(targetUsername)];
 				if (player) {
 					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getRole()}`);
-					game.logAction(user, `${cmd === 'revealas' ? 'fake' : ''}revealed ${player.name}`);
+					game.logAction(user, `revealed ${player.name}`);
+					if (cmd === 'revealas') {
+						game.secretLogAction(user, `$fakerevealed ${player.name} as ${revealedRole!.role.safeName}`);
+					}
 				} else {
 					user.sendTo(this.room, `|error|${targetUsername} is not a player.`);
 				}
