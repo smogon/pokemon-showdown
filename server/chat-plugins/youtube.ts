@@ -105,17 +105,17 @@ export class YoutubeInterface {
 		if (channelData[link]) return link;
 		if (!link.includes('channel')) {
 			if (link.includes('youtube')) {
-				id = link.split('v=')[1];
+				id = (link.split('v=')[1] || '');
 			} else if (link.includes('youtu.be')) {
-				id = link.split('/')[3];
+				id = (link.split('/')[3] || '');
 			} else {
 				return null;
 			}
 		} else {
-			id = link.split('channel/')[1];
+			id = (link.split('channel/')[1] || '');
 		}
-		if (id?.includes('&')) id = id.split('&')[0];
-		if (id?.includes('?')) id = id.split('?')[0];
+		if (id?.includes('&')) id = (id.split('&')[0] || '');
+		if (id?.includes('?')) id = (id.split('?')[0] || '');
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
