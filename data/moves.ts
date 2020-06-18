@@ -16272,13 +16272,13 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 90,
 		category: "Special",
 		desc: "This move becomes a physical attack if the target's Defense is lower than its Special Defense, including stat stage changes. This move has a 20% chance to poison the target.",
-		shortDesc: "Physical if target Def > Sp. Def. 20% poison chance.",
+		shortDesc: "Physical if target Def < Sp. Def. 20% poison chance.",
 		name: "Shell Side Arm",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
-			if (target.getStat('def', false, true) > target.getStat('spd', false, true)) move.category = 'Physical';
+			if (target.getStat('def', false, true) < target.getStat('spd', false, true)) move.category = 'Physical';
 		},
 		secondary: {
 			chance: 20,
