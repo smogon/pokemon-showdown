@@ -1102,11 +1102,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (options.isHelp) options.noAutoTruncate = true;
 		this.reportJoins = !!(Config.reportjoins || options.isPersonal);
 		this.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
-		if (options.auth) {
-			Object.setPrototypeOf(options.auth, null);
-		} else {
-			options.auth = Object.create(null);
-		}
+		if (!options.auth) options.auth = {};
 		this.log = Roomlogs.create(this, options);
 
 		this.creationTime = null;
