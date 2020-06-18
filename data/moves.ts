@@ -13724,8 +13724,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Dark",
-		contestType: "Cute",
+		type: "Ghost",
 	},
 	pound: {
 		num: 1,
@@ -19909,7 +19908,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	tripleaxel: {
-		num: 167,
+		num: 813,
 		accuracy: 90,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
