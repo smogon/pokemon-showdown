@@ -2443,15 +2443,19 @@ export const commands: ChatCommands = {
 		if (this.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
-
-		if (!/^https?:\/\//.test(target)) target = `https://${target}`;
-		target = encodeURI(target);
-
+		let [link, comment] = target.split(',');
+		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
+		link = encodeURI(link);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
-		room.pendingApprovals.set(user.id, target);
-		this.sendReply(`You have requested to show the link: ${target}`);
+		const info = {
+			name: user.name,
+			link: link,
+			comment: comment,
+		};
+		room.pendingApprovals.set(user.id, info);
+		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		room.sendMods(
-			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${target}">${target}</a><br>` +
+			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
@@ -2466,8 +2470,8 @@ export const commands: ChatCommands = {
 		}
 		const userid = toID(target);
 		if (!userid) return this.parse(`/help approveshow`);
-		const link = room.pendingApprovals?.get(userid);
-		if (!link) return this.errorReply(`${userid} has no pending request.`);
+		const info = room.pendingApprovals?.get(userid);
+		if (!info) return this.errorReply(`${userid} has no pending request.`);
 		if (userid === user.id) {
 			return this.errorReply(`You can't approve your own /show request.`);
 		}
@@ -2475,15 +2479,20 @@ export const commands: ChatCommands = {
 		room.sendMods(`|uhtmlchange|request-${userid}|`);
 
 		let buf;
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(info.link)) {
 			const YouTube = new YoutubeInterface();
-			buf = await YouTube.generateVideoDisplay(link);
+			buf = await YouTube.generateVideoDisplay(info.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
-			const [width, height] = await Chat.fitImage(link);
-			buf = Utils.html`<img src="${link}" style="width:${width}px;height:${height}px" />`;
+			const [width, height] = await Chat.fitImage(info.link);
+			buf = Utils.html`<img src="${info.link}" style="width:${width}px;height:${height}px" />`;
 		}
-		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:white"><small>(Requested by ${userid})</small></p>`;
+		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray"><small>(Requested by ${info.name})</small>`;
+		if (info.comment) {
+			buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray">${info.comment}</p>`;
+		} else {
+			buf += `</small></p>`;
+		}
 		this.addBox(buf);
 		room.update();
 	},
