@@ -950,10 +950,10 @@ export const commands: ChatCommands = {
 			} else {
 				result = Utils.visualize(result);
 			}
-			result = show && result.length > 200 ? Chat.collapseLineBreaksHTML(
-				`<details class="readmore code" style="white-space: ` +
-				`pre-wrap; display: table; tab-size: 3"><summary>${result.slice(0, 200)}</summary>` +
-				`${result}</details>`) : result.replace(/\n/g, '\n||');
+			result = show && result.length > 200 ? (`<details class="readmore code" style="` +
+				Utils.html`display: table; tab-size: 3"><summary>${result.slice(0, 200)}</summary>` +
+				Utils.html`${result.slice(200)}</details>`
+			).replace(/\n/g, '<br>') : result.replace(/\n/g, '\n||');
 			if (show) {
 				room.add(`|html|<< ${result}`).update();
 			} else {
@@ -963,11 +963,11 @@ export const commands: ChatCommands = {
 		} catch (e) {
 			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			logRoom?.roomlog(`<< ${target}`);
-			msg = show && msg.length > 200 ? Chat.collapseLineBreaksHTML(
-				`<details class="readmore code" style="white-space: ` +
-				`pre-wrap; display: table; tab-size: 3"><summary>${msg.slice(0, 200)}</summary>` +
-				`${msg.slice(200)}</details>`
-			) : msg.replace(/\n/g, '\n||');
+			msg = show && msg.length > 200 ? (
+				`<details class="readmore code" style="display: table; tab-size: 3">` +
+				Utils.html`<summary>${msg.slice(0, 200)}</summary>` +
+				Utils.html`${msg.slice(200)}</details>`
+			).replace(/\n/g, '<br>') : msg.replace(/\n/g, '\n||');
 			if (show) {
 				room.add(`|html|<< ${msg}`).update();
 			} else {
