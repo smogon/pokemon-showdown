@@ -71539,7 +71539,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T"],
 		},
 		eventData: [
-			{generation: 8, level: 50, nature: "Mild", moves: ["fleurcannon", "flashcannon", "defensecurl", "rest"], pokeball: "cherishball"},
+			{generation: 8, level: 50, nature: "Mild", ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 31, spe: 0}, moves: ["fleurcannon", "flashcannon", "defensecurl", "rest"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
