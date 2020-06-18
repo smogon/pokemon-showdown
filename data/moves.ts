@@ -15791,15 +15791,18 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 90,
 		basePower: 25,
 		category: "Physical",
-		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. This move has a 100% chance to raise the user's Speed by 1 stage and lower the user's Defense by 1 stage after each successful hit.",
-		shortDesc: "Raises Spe, Lowers Def. Hits 2-5 times.",
+		desc: "Hits two to five times. Lowers the user's Defense by 1 stage and raises the user's Speed by 1 stage after the last hit. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times. User: -1 Def, +1 Spe after last hit.",
 		name: "Scale Shot",
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		multihit: [2, 5],
-		onAfterMove(source, target, move) {
-			this.boost({spe: 1, def: -1}, source, source, move);
+		selfBoost: {
+			boosts: {
+				def: -1,
+				spe: 1,
+			},
 		},
 		secondary: null,
 		target: "normal",
