@@ -931,7 +931,12 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('development');
 
-		room.add(`||>> ${target}`).update();
+		const show = this.message.startsWith('>>');
+		if (show) {
+			room.add(`||>> ${target}`).update();
+		} else {
+			this.sendReply(`||>> ${target}`);
+		}
 		logRoom?.roomlog(`>> ${target}`);
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
@@ -945,20 +950,29 @@ export const commands: ChatCommands = {
 			} else {
 				result = Utils.visualize(result);
 			}
-			result = result.length > 200 ? Chat.collapseLineBreaksHTML(`<details class="readmore code" style="white-space: ` +
+			result = show && result.length > 200 ? Chat.collapseLineBreaksHTML(
+				`<details class="readmore code" style="white-space: ` +
 				`pre-wrap; display: table; tab-size: 3"><summary>${result.slice(0, 200)}</summary>` +
 				`${result}</details>`) : result.replace(/\n/g, '\n||');
-			room.add(`|html|<< ${result}`).update();
+			if (show) {
+				room.add(`|html|<< ${result}`).update();
+			} else {
+				this.sendReply(`|| << ${result}`);
+			}
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
-			let message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
+			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			logRoom?.roomlog(`<< ${target}`);
-			message = message.length > 200 ? Chat.collapseLineBreaksHTML(
+			msg = show && msg.length > 200 ? Chat.collapseLineBreaksHTML(
 				`<details class="readmore code" style="white-space: ` +
-				`pre-wrap; display: table; tab-size: 3"><summary>${message.slice(0, 200)}</summary>` +
-				`${message.slice(200)}</details>`
-			).replace(/\n/, '<br>') : message.replace(/\n/g, '\n||');
-			room.add(`|html|<< ${message}`).update();
+				`pre-wrap; display: table; tab-size: 3"><summary>${msg.slice(0, 200)}</summary>` +
+				`${msg.slice(200)}</details>`
+			).replace(/\n/, '<br>') : msg.replace(/\n/g, '\n||');
+			if (show) {
+				room.add(`|html|<< ${msg}`).update();
+			} else {
+				this.sendReply(`|| << ${msg}`);
+			}
 		}
 	},
 
