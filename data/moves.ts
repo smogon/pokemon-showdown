@@ -4763,7 +4763,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "If the current active terrain is Psychic Terrain, this move's base power is boosted by 1.5x, and this move hits all opposing Pokemon.",
 		shortDesc: "1.5x power and hits all foes under Psychic Terrain.",
 		name: "Expanding Force",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower) {
