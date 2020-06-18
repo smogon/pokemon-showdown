@@ -4760,8 +4760,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "If the current active terrain is Psychic Terrain, this move's base power is boosted, and this move hits all opposing Pokemon.",
-		shortDesc: "Psychic Terrain:Boosted power+hits all foes.",
+		desc: "If the current active terrain is Psychic Terrain, this move's base power is boosted by 1.5x, and this move hits all opposing Pokemon.",
+		shortDesc: "1.5x power and hits all foes under Psychic Terrain.",
 		name: "Expanding Force",
 		pp: 20,
 		priority: 0,
@@ -4769,7 +4769,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onBasePower(basePower) {
 			if (this.field.isTerrain('psychicterrain')) {
 				this.debug('terrain buff');
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifyMove(move, pokemon, target) {
@@ -12227,8 +12227,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Special",
 		// Boost needs research
-		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability. If Misty Terrain is active, this move's power is doubled.",
-		shortDesc: "The user explodes. Stronger in Misty Terrain.",
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability. If Misty Terrain is active, this move's power is boosted by 1.5x.",
+		shortDesc: "The user explodes. 1.5x power in Misty Terrain.",
 		name: "Misty Explosion",
 		pp: 5,
 		priority: 0,
@@ -12237,8 +12237,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onBasePower(basePower) {
 			if (this.field.isTerrain('mistyterrain')) {
 				this.debug('misty terrain boost');
-				// Boost not confirmed
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 		secondary: null,
