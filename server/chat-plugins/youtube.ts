@@ -114,8 +114,8 @@ export class YoutubeInterface {
 		} else {
 			id = link.split('channel/')[1];
 		}
-		if (id.includes('&')) id = id.split('&')[0];
-		if (id.includes('?')) id = id.split('?')[0];
+		if (id?.includes('&')) id = id.split('&')[0];
+		if (id?.includes('?')) id = id.split('?')[0];
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
