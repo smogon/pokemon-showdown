@@ -26,6 +26,12 @@ export interface EffectState {
 	[k: string]: any;
 }
 
+// Berries which restore PP/HP and thus inflict external staleness when given to an opponent as
+// there are very few non-malicious competitive reasons to do so
+export const RESTORATIVE_BERRIES = new Set([
+	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
+] as ID[]);
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -126,7 +132,7 @@ export class Pokemon {
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
 
-	lastMove: Move | null;
+	lastMove: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
 	/**
@@ -273,25 +279,26 @@ export class Pokemon {
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
-		if (this.set.moves) {
-			for (const moveid of this.set.moves) {
-				let move = this.battle.dex.getMove(moveid);
-				if (!move.id) continue;
-				if (move.id === 'hiddenpower' && move.type !== 'Normal') {
-					if (!set.hpType) set.hpType = move.type;
-					move = this.battle.dex.getMove('hiddenpower');
-				}
-				this.baseMoveSlots.push({
-					move: move.name,
-					id: move.id,
-					pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-					maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-					target: move.target,
-					disabled: false,
-					disabledSource: '',
-					used: false,
-				});
+		if (!this.set.moves || !this.set.moves.length) {
+			throw new Error(`Set ${this.name} has no moves`);
+		}
+		for (const moveid of this.set.moves) {
+			let move = this.battle.dex.getMove(moveid);
+			if (!move.id) continue;
+			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
+				if (!set.hpType) set.hpType = move.type;
+				move = this.battle.dex.getMove('hiddenpower');
 			}
+			this.baseMoveSlots.push({
+				move: move.name,
+				id: move.id,
+				pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				target: move.target,
+				disabled: false,
+				disabledSource: '',
+				used: false,
+			});
 		}
 
 		this.position = 0;
@@ -743,7 +750,7 @@ export class Pokemon {
 		return amount;
 	}
 
-	moveUsed(move: Move, targetLoc?: number) {
+	moveUsed(move: ActiveMove, targetLoc?: number) {
 		this.lastMove = move;
 		this.lastMoveTargetLoc = targetLoc;
 		this.moveThisTurn = move.id;
@@ -1097,8 +1104,17 @@ export class Pokemon {
 		for (boostName in pokemon.boosts) {
 			this.boosts[boostName] = pokemon.boosts[boostName]!;
 		}
-		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
-		if (pokemon.volatiles['laserfocus']) this.addVolatile('laserfocus');
+		if (this.battle.gen >= 6) {
+			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+			for (const volatile of volatilesToCopy) {
+				if (pokemon.volatiles[volatile]) {
+					this.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') this.volatiles[volatile].layers = pokemon.volatiles[volatile].layers;
+				} else {
+					this.removeVolatile(volatile);
+				}
+			}
+		}
 		if (effect) {
 			this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 		} else {
@@ -1496,7 +1512,7 @@ export class Pokemon {
 			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, null, null, item);
 
-			if (item.id === 'leppaberry') {
+			if (RESTORATIVE_BERRIES.has(item.id)) {
 				switch (this.pendingStaleness) {
 				case 'internal':
 					if (this.staleness !== 'external') this.staleness = 'internal';
@@ -1578,7 +1594,7 @@ export class Pokemon {
 		if (typeof item === 'string') item = this.battle.dex.getItem(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
-		if (item.id === 'leppaberry') {
+		if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 			const inflicted = ['trick', 'switcheroo'].includes(effectid);
 			const external = inflicted && source && source.side.id !== this.side.id;
 			this.pendingStaleness = external ? 'external' : 'internal';

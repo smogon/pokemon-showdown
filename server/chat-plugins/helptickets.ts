@@ -181,8 +181,8 @@ export class HelpTicket extends Rooms.RoomGame {
 			'help', 'yes',
 		];
 		if ((!user.isStaff || this.ticket.userid === user.id) && blockedMessages.includes(toID(message))) {
-			this.room.add(`|c|~Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
-			this.room.add(`|c|~Staff|Please post the information I requested above so a global staff member can come to help.`);
+			this.room.add(`|c|&Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
+			this.room.add(`|c|&Staff|Please post the information I requested above so a global staff member can come to help.`);
 			this.room.update();
 			return false;
 		}
@@ -191,7 +191,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			this.activationTime = Date.now();
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
-			this.room.add(`|c|~Staff|Thank you for the information, global staff will be here shortly. Please stay in the room.`).update();
+			this.room.add(`|c|&Staff|Thank you for the information, global staff will be here shortly. Please stay in the room.`).update();
 		}
 	}
 
@@ -1211,7 +1211,7 @@ export const commands: ChatCommands = {
 				ticketGame.addPlayer(user);
 			}
 			if (contexts[ticket.type]) {
-				helpRoom.add(`|c|~Staff|${contexts[ticket.type]}`);
+				helpRoom.add(`|c|&Staff|${contexts[ticket.type]}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {
@@ -1229,14 +1229,14 @@ export const commands: ChatCommands = {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-tickets');
 		},
-		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ & ~`],
+		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
 		'!stats': true,
 		stats(target, room, user) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-stats');
 		},
-		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ & ~`],
+		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
 
 		'!close': true,
 		close(target, room, user) {
@@ -1261,7 +1261,7 @@ export const commands: ChatCommands = {
 			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
 		},
-		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ & ~`],
+		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
 		ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
@@ -1363,7 +1363,7 @@ export const commands: ChatCommands = {
 			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			return true;
 		},
-		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ & ~`],
+		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
 
 		unban(target, room, user) {
 			if (!target) return this.parse('/help helpticket unban');
@@ -1395,7 +1395,7 @@ export const commands: ChatCommands = {
 			this.globalModlog("UNTICKETBAN", target, ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},
-		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ & ~`],
+		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
 		ignore(target, room, user) {
 			if (!this.can('lock')) return;
@@ -1406,7 +1406,7 @@ export const commands: ChatCommands = {
 			user.update('ignoreTickets');
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
-		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ & ~`],
+		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
 
 		unignore(target, room, user) {
 			if (!this.can('lock')) return;
@@ -1417,7 +1417,7 @@ export const commands: ChatCommands = {
 			user.update('ignoreTickets');
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
-		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ & ~`],
+		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
@@ -1435,18 +1435,18 @@ export const commands: ChatCommands = {
 			}
 			this.sendReply(`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: [`/helpticket delete [user] - Deletes a users ticket. Requires: & ~`],
+		deletehelp: [`/helpticket delete [user] - Deletes a users ticket. Requires: &`],
 
 	},
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
-		`/helpticket list - Lists all tickets. Requires: % @ & ~`,
-		`/helpticket close [user] - Closes an open ticket. Requires: % @ & ~`,
-		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ & ~`,
-		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ & ~`,
-		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ & ~`,
-		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ & ~`,
-		`/helpticket delete [user] - Deletes a user's ticket. Requires: & ~`,
+		`/helpticket list - Lists all tickets. Requires: % @ &`,
+		`/helpticket close [user] - Closes an open ticket. Requires: % @ &`,
+		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`,
+		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`,
+		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`,
+		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
+		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
 	],
 };
 exports.commands = commands;

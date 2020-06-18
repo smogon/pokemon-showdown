@@ -3,19 +3,19 @@
 const assert = require('./../assert');
 
 describe('Mod loader', function () {
-	it.skip('should work fine in any order', function () {
+	it('should work fine in any order', function () {
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
-			const Dex = require('./../../../.sim-dist/dex').Dex;
-			assert.equal(Dex.mod('gen2').getSpecies('nidoking').learnset.bubblebeam.join(','), '1M');
+			const Dex = require('./../../.sim-dist/dex').Dex;
+			assert.equal(Dex.mod('gen2').getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
-			const Dex = require('./../../../.sim-dist/dex').Dex;
-			Dex.mod('gen2').getSpecies('nidoking');
+			const Dex = require('./../../.sim-dist/dex').Dex;
+			Dex.mod('gen2').getLearnsetData('nidoking');
 			Dex.mod('gen4').getMove('crunch');
-			assert.equal(Dex.mod('gen2').getSpecies('nidoking').learnset.bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 	});
@@ -43,7 +43,18 @@ describe('Dex#getSpecies', function () {
 	});
 
 	it.skip('should handle Rockruff-Dusk', function () {
-		assert.equal(Dex.getSpecies('Rockruff-Dusk').name, 'Rockruff-Dusk');
+		assert.equal(Dex.getSpecies('rockruffdusk').name, 'Rockruff-Dusk');
+	});
+
+	it('should handle Pikachu forme numbering', function () {
+		assert.deepEqual(
+			Dex.forGen(6).getSpecies('Pikachu').formeOrder.slice(0, 7),
+			["Pikachu", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay"]
+		);
+		assert.deepEqual(
+			Dex.forGen(7).getSpecies('Pikachu').formeOrder.slice(0, 9),
+			["Pikachu", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter"]
+		);
 	});
 });
 

@@ -201,7 +201,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	leechlife: {
 		inherit: true,
 		basePower: 20,
-		isViable: false,
 		pp: 15,
 	},
 	lightscreen: {

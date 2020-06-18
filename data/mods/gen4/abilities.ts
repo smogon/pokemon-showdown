@@ -22,16 +22,15 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "blaze",
 		name: "Blaze",
 		rating: 2,
 		num: 66,
 	},
 	colorchange: {
 		inherit: true,
-		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after each hit from a multi-hit move.",
+		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after each hit from a multi-hit move. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		onDamagingHit(damage, target, source, move) {
-			if (!target.hp) return;
+			if (!damage || !target.hp) return;
 			const type = move.type;
 			if (target.isActive && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
@@ -40,10 +39,22 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onAfterMoveSecondary() {},
 	},
+	cutecharm: {
+		inherit: true,
+		desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender. This effect does not happen if this Pokemon did not lose HP from the attack.",
+		onDamagingHit(damage, target, source, move) {
+			if (damage && move.flags['contact']) {
+				if (this.randomChance(3, 10)) {
+					source.addVolatile('attract', this.effectData.target);
+				}
+			}
+		},
+	},
 	effectspore: {
 		inherit: true,
+		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && !source.status) {
+			if (damage && move.flags['contact'] && !source.status) {
 				const r = this.random(100);
 				if (r < 10) {
 					source.setStatus('slp', target);
@@ -51,6 +62,17 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 					source.setStatus('par', target);
 				} else if (r < 30) {
 					source.setStatus('psn', target);
+				}
+			}
+		},
+	},
+	flamebody: {
+		inherit: true,
+		desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
+		onDamagingHit(damage, target, source, move) {
+			if (damage && move.flags['contact']) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('brn', target);
 				}
 			}
 		},
@@ -193,7 +215,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		id: "magicguard",
 		name: "Magic Guard",
 		rating: 4.5,
 		num: 98,
@@ -212,7 +233,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		id: "minus",
 		name: "Minus",
 		rating: 0,
 		num: 58,
@@ -248,7 +268,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "overgrow",
 		name: "Overgrow",
 		rating: 2,
 		num: 65,
@@ -256,7 +275,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	pickup: {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
-		id: "pickup",
 		name: "Pickup",
 		rating: 0,
 		num: 53,
@@ -275,10 +293,20 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		id: "plus",
 		name: "Plus",
 		rating: 0,
 		num: 57,
+	},
+	poisonpoint: {
+		inherit: true,
+		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned. This effect does not happen if this Pokemon did not lose HP from the attack.",
+		onDamagingHit(damage, target, source, move) {
+			if (damage && move.flags['contact']) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('psn', target);
+				}
+			}
+		},
 	},
 	pressure: {
 		desc: "If this Pokemon is the target of another Pokemon's move, that move loses one additional PP.",
@@ -290,10 +318,18 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			if (target === source) return;
 			return 1;
 		},
-		id: "pressure",
 		name: "Pressure",
 		rating: 1.5,
 		num: 46,
+	},
+	roughskin: {
+		inherit: true,
+		desc: "Pokemon making contact with this Pokemon lose 1/16 of their maximum HP, rounded down. This effect does not happen if this Pokemon did not lose HP from the attack.",
+		onDamagingHit(damage, target, source, move) {
+			if (damage && move.flags['contact']) {
+				this.damage(source.baseMaxhp / 16, source, target);
+			}
+		},
 	},
 	serenegrace: {
 		inherit: true,
@@ -314,7 +350,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		id: "simple",
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -323,10 +358,20 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 	},
+	static: {
+		inherit: true,
+		desc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed. This effect does not happen if this Pokemon did not lose HP from the attack.",
+		onDamagingHit(damage, target, source, move) {
+			if (damage && move.flags['contact']) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('par', target);
+				}
+			}
+		},
+	},
 	stench: {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
-		id: "stench",
 		name: "Stench",
 		rating: 0,
 		num: 1,
@@ -365,7 +410,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "swarm",
 		name: "Swarm",
 		rating: 2,
 		num: 68,
@@ -390,7 +434,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		id: "thickfat",
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,
@@ -405,7 +448,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "torrent",
 		name: "Torrent",
 		rating: 2,
 		num: 67,

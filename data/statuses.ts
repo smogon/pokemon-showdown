@@ -1,8 +1,6 @@
 export const BattleStatuses: {[k: string]: PureEffectData} = {
 	brn: {
 		name: 'brn',
-		id: 'brn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'flameorb') {
@@ -21,8 +19,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	par: {
 		name: 'par',
-		id: 'par',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -46,8 +42,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	slp: {
 		name: 'slp',
-		id: 'slp',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -80,8 +74,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	frz: {
 		name: 'frz',
-		id: 'frz',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -117,8 +109,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	psn: {
 		name: 'psn',
-		id: 'psn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -134,8 +124,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	tox: {
 		name: 'tox',
-		id: 'tox',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			this.effectData.stage = 0;
@@ -160,8 +148,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	confusion: {
 		name: 'confusion',
-		id: 'confusion',
-		num: 0,
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
@@ -195,8 +181,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	flinch: {
 		name: 'flinch',
-		id: 'flinch',
-		num: 0,
 		duration: 1,
 		onBeforeMovePriority: 8,
 		onBeforeMove(pokemon) {
@@ -207,8 +191,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	trapped: {
 		name: 'trapped',
-		id: 'trapped',
-		num: 0,
 		noCopy: true,
 		onTrapPokemon(pokemon) {
 			pokemon.tryTrap();
@@ -219,14 +201,10 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	trapper: {
 		name: 'trapper',
-		id: 'trapper',
-		num: 0,
 		noCopy: true,
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
-		id: 'partiallytrapped',
-		num: 0,
 		duration: 5,
 		durationCallback(target, source) {
 			if (source?.hasItem('gripclaw')) return 8;
@@ -234,35 +212,31 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		},
 		onStart(pokemon, source) {
 			this.add('-activate', pokemon, 'move: ' + this.effectData.sourceEffect, '[of] ' + source);
+			this.effectData.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 		},
 		onResidualOrder: 11,
 		onResidual(pokemon) {
 			const source = this.effectData.source;
-			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-				// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
-				if (['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id)) return;
+			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id);
+			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
 				delete pokemon.volatiles['partiallytrapped'];
 				this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
 			}
-			if (source.hasItem('bindingband')) {
-				this.damage(pokemon.baseMaxhp / 6);
-			} else {
-				this.damage(pokemon.baseMaxhp / 8);
-			}
+			this.damage(pokemon.baseMaxhp / this.effectData.boundDivisor);
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 		onTrapPokemon(pokemon) {
-			if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id);
+			if (this.effectData.source?.isActive || gmaxEffect) pokemon.tryTrap();
 		},
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		name: 'lockedmove',
-		id: 'lockedmove',
-		num: 0,
 		duration: 2,
 		onResidual(target) {
 			if (target.status === 'slp') {
@@ -292,8 +266,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	twoturnmove: {
 		// Skull Bash, SolarBeam, Sky Drop...
 		name: 'twoturnmove',
-		id: 'twoturnmove',
-		num: 0,
 		duration: 2,
 		onStart(target, source, effect) {
 			this.effectData.move = effect.id;
@@ -312,8 +284,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	choicelock: {
 		name: 'choicelock',
-		id: 'choicelock',
-		num: 0,
 		noCopy: true,
 		onStart(pokemon) {
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
@@ -354,8 +324,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	mustrecharge: {
 		name: 'mustrecharge',
-		id: 'mustrecharge',
-		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 11,
 		onBeforeMove(pokemon) {
@@ -372,8 +340,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	futuremove: {
 		// this is a slot condition
 		name: 'futuremove',
-		id: 'futuremove',
-		num: 0,
 		duration: 3,
 		onResidualOrder: 3,
 		onEnd(target) {
@@ -407,8 +373,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	healreplacement: {
 		// this is a slot condition
 		name: 'healreplacement',
-		id: 'healreplacement',
-		num: 0,
 		onStart(side, source, sourceEffect) {
 			this.effectData.sourceEffect = sourceEffect;
 			this.add('-activate', source, 'healreplacement');
@@ -425,8 +389,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	stall: {
 		// Protect, Detect, Endure counter
 		name: 'stall',
-		id: 'stall',
-		num: 0,
 		duration: 2,
 		counterMax: 729,
 		onStart() {
@@ -451,8 +413,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	gem: {
 		name: 'gem',
-		id: 'gem',
-		num: 0,
 		duration: 1,
 		affectsFainted: true,
 		onBasePowerPriority: 14,
@@ -466,8 +426,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 
 	raindance: {
 		name: 'RainDance',
-		id: 'raindance',
-		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -506,8 +464,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	primordialsea: {
 		name: 'PrimordialSea',
-		id: 'primordialsea',
-		num: 0,
 		effectType: 'Weather',
 		duration: 0,
 		onTryMovePriority: 1,
@@ -540,8 +496,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	sunnyday: {
 		name: 'SunnyDay',
-		id: 'sunnyday',
-		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -584,8 +538,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	desolateland: {
 		name: 'DesolateLand',
-		id: 'desolateland',
-		num: 0,
 		effectType: 'Weather',
 		duration: 0,
 		onTryMovePriority: 1,
@@ -622,8 +574,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	sandstorm: {
 		name: 'Sandstorm',
-		id: 'sandstorm',
-		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -662,8 +612,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	hail: {
 		name: 'Hail',
-		id: 'hail',
-		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -694,10 +642,9 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	deltastream: {
 		name: 'DeltaStream',
-		id: 'deltastream',
-		num: 0,
 		effectType: 'Weather',
 		duration: 0,
+		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');
@@ -719,8 +666,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 
 	dynamax: {
 		name: 'Dynamax',
-		id: 'dynamax',
-		num: 0,
 		noCopy: true,
 		duration: 3,
 		onStart(pokemon) {
@@ -780,8 +725,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
 	arceus: {
 		name: 'Arceus',
-		id: 'arceus',
-		num: 493,
 		onTypePriority: 1,
 		onType(types, pokemon) {
 			if (pokemon.transformed || pokemon.ability !== 'multitype' && this.gen >= 8) return types;
@@ -797,8 +740,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 	},
 	silvally: {
 		name: 'Silvally',
-		id: 'silvally',
-		num: 773,
 		onTypePriority: 1,
 		onType(types, pokemon) {
 			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8) return types;

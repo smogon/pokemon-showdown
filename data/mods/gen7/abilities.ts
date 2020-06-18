@@ -110,7 +110,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				this.boost({spe: 1});
 			}
 		},
-		id: "rattled",
 		name: "Rattled",
 		rating: 1.5,
 		num: 155,

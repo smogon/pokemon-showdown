@@ -235,11 +235,11 @@ export const commands: ChatCommands = {
 			}
 			const canSeeIps = user.can('ban');
 			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
-				return `${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
+				return `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
 			});
 			let buf = '';
 			if (user.can('declare', null, room)) {
-				buf += `<b>List of participants (${participants.length}):</b><p>${participants.join(', ')}</p>`;
+				buf += `<details class="readmore"><summary><b>List of participants (${participants.length}):</b></summary><p>${participants.join('\n')}</p></details>`;
 			} else {
 				buf += `${participants.length} participant(s) joined this lottery.`;
 			}
@@ -251,10 +251,10 @@ export const commands: ChatCommands = {
 	},
 	lotteryhelp: [
 		`/lottery - opens the current lottery, if it exists.`,
-		`/lottery create max winners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # & ~`,
-		`/lottery delete - deletes the current lottery without declaring a winner. Requires # & ~`,
-		`/lottery end - ends the current lottery, declaring a random participant as the winner. Requires # & ~`,
-		`/lottery edit max winners, name, html - edits the lottery with the provided parameters. Requires # & ~`,
+		`/lottery create max winners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # &`,
+		`/lottery delete - deletes the current lottery without declaring a winner. Requires # &`,
+		`/lottery end - ends the current lottery, declaring a random participant as the winner. Requires # &`,
+		`/lottery edit max winners, name, html - edits the lottery with the provided parameters. Requires # &`,
 		`/lottery join - joins the current lottery, if it exists, you need to be not currently punished in any public room, not locked and be autoconfirmed.`,
 		`/lottery leave - leaves the current lottery, if it exists.`,
 		`/lottery participants - shows the current participants in the lottery.`,

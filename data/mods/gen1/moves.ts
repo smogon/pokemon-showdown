@@ -577,8 +577,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "While the user remains active, its Special is doubled when taking damage. Critical hits ignore this effect. If any Pokemon uses Haze, this effect ends.",
 		shortDesc: "While active, user's Special is 2x when damaged.",
-		id: "lightscreen",
-		isViable: true,
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
@@ -600,7 +598,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		desc: "A random move is selected for use, other than Metronome or Struggle.",
-		noMetronome: ['metronome', 'struggle'],
+		noMetronome: ["Metronome", "Struggle"],
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -747,8 +745,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "While the user remains active, its Defense is doubled when taking damage. Critical hits ignore this protection. This effect can be removed by Haze.",
 		shortDesc: "While active, the user's Defense is doubled.",
-		id: "reflect",
-		isViable: true,
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
@@ -773,11 +769,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process. This does not remove the user's stat penalty for burn or paralysis. Fails if the user has full HP.",
 		onTryMove() {},
 		onHit(target, source, move) {
-			// Fails if the difference between
-			// max HP and current HP is 0, 255, or 511
-			if (target.hp >= target.maxhp ||
-			target.hp === (target.maxhp - 255) ||
-			target.hp === (target.maxhp - 511)) return false;
+			if (target.hp === target.maxhp) return false;
+			// Fail when health is 255 or 511 less than max
+			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
+				return false;
+			}
 			if (!target.setStatus('slp', source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
@@ -788,7 +785,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
-		isViable: false,
 		forceSwitch: false,
 		onTryHit() {},
 		priority: 0,
@@ -900,8 +896,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute has 1 HP plus the HP used to create it, and is removed once enough damage is inflicted on it or 255 damage is inflicted at once, or if the user switches out or faints. Until the substitute is broken, it receives damage from all attacks made by the opposing Pokemon and shields the user from status effects and stat stage changes caused by the opponent, unless the effect is Disable, Leech Seed, sleep, primary paralysis, or secondary confusion and the user's substitute did not break. The user still takes normal damage from status effects while behind its substitute, unless the effect is confusion damage, which is applied to the opposing Pokemon's substitute instead. If the substitute breaks during a multi-hit attack, the attack ends. Fails if the user does not have enough HP remaining to create a substitute, or if it already has a substitute. The user will create a substitute and then faint if its current HP is exactly 1/4 of its maximum HP.",
 		shortDesc: "User takes 1/4 its max HP to put in a Substitute.",
-		id: "substitute",
-		isViable: true,
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
@@ -989,6 +983,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
+		flags: {},
 	},
 	superfang: {
 		inherit: true,
@@ -1050,7 +1045,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: 85,
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
-		isViable: false,
 		forceSwitch: false,
 		onTryHit() {},
 		priority: 0,

@@ -51,7 +51,7 @@ const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
 const DATA_DIR = path.resolve(__dirname, '../.data-dist');
 const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
-const FORMATS = path.resolve(__dirname, '../config/formats');
+const FORMATS = path.resolve(__dirname, '../.config-dist/formats');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
@@ -82,8 +82,8 @@ const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
 
 export interface Nature {
 	name: string;
-	plus?: keyof StatsTable;
-	minus?: keyof StatsTable;
+	plus?: StatNameExceptHP;
+	minus?: StatNameExceptHP;
 	[k: string]: any;
 }
 
@@ -449,6 +449,7 @@ export class ModdedDex {
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
+			species.nfe = species.evos.length && this.getSpecies(species.evos[0]).gen <= this.gen;
 		} else {
 			species = new Data.Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
@@ -456,12 +457,6 @@ export class ModdedDex {
 		}
 		if (species.exists) this.speciesCache.set(id, species);
 		return species;
-	}
-
-	getOutOfBattleSpecies(species: Species) {
-		return !species.battleOnly ? species.name :
-			species.changesFrom ? this.getSpecies(species.changesFrom).name :
-			species.baseSpecies;
 	}
 
 	getLearnsetData(id: ID): LearnsetData {
@@ -1562,7 +1557,7 @@ export class ModdedDex {
 			}
 		}
 		if (!Array.isArray(Formats)) {
-			throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
+			throw new TypeError(`Exported property 'Formats' from "./config/formats.ts" must be an array`);
 		}
 		let section = '';
 		let column = 1;

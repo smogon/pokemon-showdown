@@ -7,17 +7,17 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	partiallytrapped: {
 		inherit: true,
+		onStart(pokemon, source) {
+			this.add('-activate', pokemon, 'move: ' + this.effectData.sourceEffect, '[of] ' + source);
+			this.effectData.boundDivisor = source.hasItem('bindingband') ? 8 : 16;
+		},
 		onResidual(pokemon) {
 			const trapper = this.effectData.source;
 			if (trapper && (!trapper.isActive || trapper.hp <= 0 || !trapper.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
-			if (trapper.hasItem('bindingband')) {
-				this.damage(pokemon.baseMaxhp / 8);
-			} else {
-				this.damage(pokemon.baseMaxhp / 16);
-			}
+			this.damage(pokemon.baseMaxhp / this.effectData.boundDivisor);
 		},
 	},
 	stall: {

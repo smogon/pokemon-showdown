@@ -11,7 +11,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical", // "Physical", "Special", or "Status"
 		desc: "", // long description
 		shortDesc: "", // short description, shows up in /dt
-		id: "moveid",
 		name: "Move Name",
 		pp: 10, // unboosted PP count
 		priority: 0, // move priority, -6 -> 6
@@ -26,8 +25,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		// Other useful things
 		noPPBoosts: true, // add this to not boost the PP of a move, not needed for Z moves, dont include it otherwise
 		isZ: "crystalname", // marks a move as a z move, list the crystal name inside
-		zMoveEffect: '', // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
-		zMoveBoost: {atk: 2}, // for status moves, stat boost given when used as a z move
+		zMove: {effect: ''}, // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
+		zMove: {boost: {atk: 2}}, // for status moves, stat boost given when used as a z move
 		critRatio: 2, // The higher the number (above 1) the higher the ratio, lowering it lowers the crit ratio
 		drain: [1, 2], // recover first num / second num % of the damage dealt
 		heal: [1, 2], // recover first num / second num % of the target's HP
@@ -41,7 +40,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack by two stages and cures the user of burns, paralysis, and poison. Removes Reflect, Light Screen, Aurora Veil, Safeguard, and Mist from the opponent's side and removes Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides.",
 		shortDesc: "Raises Attack by 2, clears hazards/user status.",
-		id: "noblehowl",
 		name: "Noble Howl",
 		isNonstandard: "Custom",
 		pp: 3,
@@ -93,7 +91,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Base Power doubles if the foe switches out the turn this move is used.",
 		shortDesc: "Power doubles if foe switches out.",
-		id: "toomuchsaws",
 		name: "Too Much Saws",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -116,7 +113,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Has a 40% chance to paralyze the target. Lowers the user's Special Attack, Special Defense, and Speed by one stage.",
 		shortDesc: "40% to paralyze. Lowers user's SpA, SpD, Spe.",
-		id: "energyfield",
 		name: "Energy Field",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -136,7 +132,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 200,
+		zMove: {basePower: 200},
 	},
 	// Aeonic
 	shitpost: {
@@ -145,7 +141,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "50% chance to OHKO the user, 50% chance to OHKO the target.",
 		shortDesc: "OHKOs user or target (50% chance each).",
-		id: "shitpost",
 		name: "Shitpost",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -182,7 +177,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "After dealing damage, resets all of the user's boosts to 0, then Attack, Defense, and Speed get lowered by one stage.",
 		shortDesc: "Clears user's boosts; lowers Atk, Def and Spe.",
-		id: "cataclysm",
 		name: "Cataclysm",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -212,7 +206,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move and its effects ignore the abilities and stat changes of other Pokemon.",
 		shortDesc: "Phys if Atk > SpA; ignores boosts, abilities.",
-		id: "x1",
 		isNonstandard: "Custom",
 		name: "x1",
 		pp: 10,
@@ -241,7 +234,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user recovers half its HP. If any Pokemon fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
 		shortDesc: "Heal 50%, Heal Bell; any fainted: Wish.",
-		id: "compost",
 		name: "Compost",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -279,10 +271,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user sets up Light Screen, Reflect, and Sunny Day for 5 turns. The effects of Light Screen and reflect are extended to 8 turns if the user is holding Light Clay, and Sunny Day remains for 8 turns if the user is holding a Heat Rock.",
 		shortDesc: "Light Screen, Reflect, and Sunny Day for 5 turns.",
-		id: "nekoveil",
 		name: "Neko Veil",
 		isNonstandard: "Custom",
 		pp: 5,
+		priority: 0,
 		flags: {snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -306,7 +298,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user is protected from most moves made by other Pokemon during this turn, and if targeted with a move, the opposing Pokemon is forced to switch to a random ally. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard, or this move, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from moves. Targeted: Force switch foe.",
-		id: "backoffgrrr",
 		name: "Back Off! GRRR!",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -364,7 +355,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Lava Terrain. During the effect, the power of Fire-type attacks made by Pokemon is multiplied by 1.5 and the power of Water-type attacks made by Pokemon is halved. Quilava's defense is doubled under Lava Terrain. Fire-type Pokemon have 1/16 of their maximum HP restored at the end of each turn, and all other Pokemon lose 1/16 of their maximum HP at the end of each turn.",
 		shortDesc: "Damages non-Fire-types. +Fire, -Water power.",
-		id: "lavaterrain",
 		name: "Lava Terrain",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -430,7 +420,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The target is replaced with a new randomly generated Super Staff Bros Brawl set. The new Pokemon retains the old pokemon's HP percentage, power point percentages, and status condition.",
 		shortDesc: "Target is replaced with random SSBB set.",
-		id: "hereticsmark",
 		name: "Heretic's Mark",
 		isNonstandard: "Custom",
 		pp: 2,
@@ -500,7 +489,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Sets Distortion World for 5 turns. The power of Ghost type moves is boosted by 1.5x, and all Pokemon on the field have an effective Speed of 0. This terrain affects floating Pokemon.",
 		shortDesc: "5 turns: +Ghost power, all Pokemon Speed tie.",
-		id: "distortionworld",
 		name: "Distortion World",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -545,7 +533,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Fails unless the user is hit by a physical move from an opponent this turn before it can execute the move. The foe's move has its secondary effects suppressed and damage halved. If the user was hit and has not fainted, it attacks and the effect ends. This move can affect Flying-type Pokemon.",
 		shortDesc: "Prepares for foe's attack, then retaliates.",
-		id: "murkyambush",
 		name: "Murky Ambush",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -609,7 +596,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move suppresses the foe's ability and has a 70% chance to boost the user's Special Attack and Speed by one stage.",
 		shortDesc: "70% SpA & Spe +1. Suppresses foe's ability.",
-		id: "flock",
 		name: "Flock",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -652,10 +638,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "This move's Base Power increases by 20 for every foe that is not holding an item.",
 		shortDesc: "+20 Base Power for each itemless foe.",
-		id: "trashalanche",
 		name: "Trashalanche",
 		isNonstandard: "Custom",
 		pp: 10,
+		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -674,7 +660,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move's type depends on the user's held Plate. If the target has the same type as this move, its Base Power is boosted by 1.5x.",
 		shortDesc: "Type = Plate. 1.5x power for same-type targets.",
-		id: "comeonyougunners",
 		name: "Come on you Gunners",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -710,7 +695,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets. This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not Asheviere.",
 		shortDesc: "Replaces user's team with random SSBB sets.",
-		id: "wondertrade",
 		name: "Wonder Trade",
 		isNonstandard: "Custom",
 		pp: 2,
@@ -807,7 +791,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "This Pokemon takes 50% of the damage it deals as recoil.",
 		shortDesc: "50% recoil.",
-		id: "dragonsmash",
 		name: "Dragon Smash",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -832,7 +815,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 20% chance to cause the target to flinch.",
 		shortDesc: "20% chance to flinch.",
-		id: "buzzingoftheswarm",
 		name: "Buzzing of the Swarm",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -858,7 +840,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "If both the user and the target have not fainted, the target is forced to switch out to a random non-fainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups ability, or is behind a Substitute.",
 		shortDesc: "Forces the target to switch to a random ally.",
-		id: "foodrush",
 		name: "Food Rush",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -883,7 +864,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Uses a random dance move other than Lunar Dance twice in a row and then restores 1/3 of its max HP.",
 		shortDesc: "Uses random dance move twice; heals 1/3 HP.",
-		id: 'justdance',
 		name: "Just Dance",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -916,7 +896,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "If the target is a Ground-type and is immune to Electric due to its typing, this move deals neutral damage regardless of other types, and the target loses its type-based immunity to Electric.",
 		shortDesc: "First hit neutral on Ground; removes its immunity.",
-		id: "thousandcircuitoverload",
 		name: "Thousand Circuit Overload",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -957,7 +936,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides, and it removes any active weather condition or terrain.",
 		shortDesc: "Removes all field conditions and hazards.",
-		id: "blusterywinds",
 		name: "Blustery Winds",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1000,7 +978,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Boosts the user's Attack, Defense, and Speed by one stage.",
 		shortDesc: "+1 Atk, Def, and Spe.",
-		id: "sparcedance",
 		name: "Sparce Dance",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -1024,7 +1001,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move's category becomes physical if the opponent's Defense stat is lower than its Special Defense stat. This move's Base Power is 1.5x if this move is physical.",
 		shortDesc: "Physical and power x1.5 if foe's Def < SpD.",
-		id: "insidiousassault",
 		name: "Insidious Assault",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1054,7 +1030,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Summons Grassy Terrain. If the user is an Aegislash, it changes to Blade forme, attacks, then goes back to Shield forme.",
 		shortDesc: "Summons Grassy Terrain. Aegislash transforms.",
-		id: "aesthetislash",
 		name: "a e s t h e t i s l a s h",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1085,7 +1060,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Resets the stat stages of all active Pokemon to 0, then lowers target's evasion by one stage and removes hazards.",
 		shortDesc: "Resets stats; target's evasion -1; clears hazards.",
-		id: "birbtotherescue",
 		name: "Birb to the Rescue",
 		pp: 15,
 		priority: 1,
@@ -1134,7 +1108,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Has a 50% chance to cause the target to fall asleep. Sets one layer of Spikes on the opponent's side of the field and randomly boosts the user's Speed or Special Attack by one stage.",
 		shortDesc: "50% sleep; sets Spikes; Spe or SpA +1.",
-		id: "bringerofdarkness",
 		name: "Bringer of Darkness",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1167,7 +1140,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Confuses the target and subjects it to the effects of Taunt, Torment, Heal Block, and Embargo.",
 		shortDesc: "Ensures domination of the opponent.",
-		id: "forcewin",
 		name: "Forcewin",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -1206,7 +1178,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user faints, sets Reflect, Light Screen, and Safeguard, and lowers the target's Attack and Special Attack by 2 stages.",
 		shortDesc: "Faint; +Screens & Safeguard; foe -2 Atk & SpA.",
-		id: "beskyttelsesnet",
 		name: "beskyttelsesnet",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1237,7 +1208,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Applies Leech Seed to the foe, then switches out",
 		shortDesc: "Leech Seeds foe, then switches out.",
-		id: "leechswap",
 		name: "Leech Swap",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1265,10 +1235,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// DaWoblefet
 	superegoinflation: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "User heals 25% HP. The target's Attack and Special Attack increase by two stages, and the target becomes affected by Taunt.",
 		shortDesc: "User heals 25% HP; target Atk & SpA +2; Taunt.",
-		id: "superegoinflation",
 		name: "Super Ego Inflation",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1298,7 +1268,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "If this move hits, the Pokemon that was hit is affected with the Gooey status. Gooey causes the affected Pokemon to lose 1/6 of its max HP until it switches out. The user switches out.",
 		shortDesc: "Target loses 1/6 of HP per turn, user switches.",
-		id: "hitandrun",
 		name: "Hit and Run",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1325,7 +1294,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Power doubles if the user is burned, paralyzed, or poisoned. The physical damage halving effect from the user's burn is ignored. Has a 30% chance to paralyze the target.",
 		shortDesc: "Power x2 if burn/poison/paralyze; 30% paralyze.",
-		id: "galvanizedstrike",
 		name: "Galvanized Strike",
 		isNonstandard: "Custom",
 		pp: 20,
@@ -1357,7 +1325,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Damages the target and restores user's HP by 15% of its total health.",
 		shortDesc: "Damages the target and heals 15% total HP.",
-		id: "hyperforcestrike",
 		name: "Hyperforce Strike",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1383,7 +1350,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Sets Gravity, raises the user's Attack by 2 stages, and cures the user's burn, paralysis, or poison. Fails if Gravity is already in effect.",
 		shortDesc: "Sets Gravity, raises Attack by 2, cures status.",
-		id: "earthsblessing",
 		name: "Earth's Blessing",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1406,7 +1372,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Ground",
-		zMoveEffect: 'healhalf',
+		zMove: {effect: 'healhalf'},
 	},
 	// E4 Flint
 	fangofthefireking: {
@@ -1416,7 +1382,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Deals 111 HP of damage and burns the target. If the target already has a status ailment, it is replaced with a burn. Fails if the target is a Fire-type or if the user is not a Fire-type.",
 		shortDesc: "111 damage & target burned; fails on Fire-type.",
-		id: "fangofthefireking",
 		name: "Fang of the Fire King",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1449,7 +1414,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user's Attack and Special Attack are raised by one stage, it transforms into a different Pokemon, and it uses two moves dependent on the Pokemon; Celebi (Future Sight and Recover), Jirachi (Doom Desire and Wish), Manaphy (Tail Glow and Surf), Shaymin (Seed Flare and Leech Seed), or Victini (V-create and Blue Flare). Reverts to Mew and loses the initial raises of one stage to Attack and Special Attack at the end of the turn.",
 		shortDesc: "For turn: transforms, boosts, uses linked moves.",
-		id: "ancestralpower",
 		name: "Ancestral Power",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1488,7 +1452,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Power doubles if the target is not fully evolved.",
 		shortDesc: "Power doubles if the target is NFE.",
-		id: "roughsnuggle",
 		name: "Rough Snuggle",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1508,7 +1471,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 175,
+		zMove: {basePower: 175},
 	},
 	// eternally
 	quack: {
@@ -1517,7 +1480,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Boosts the user's Special Attack and accuracy by one stage.",
 		shortDesc: "Raises the user's SpA and accuracy by 1.",
-		id: "quack",
 		name: "Quack",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1542,7 +1504,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Summons Sunny Day after doing damage.",
 		shortDesc: "Summons Sunny Day after doing damage.",
-		id: "doom",
 		name: "DOOM!",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -1569,7 +1530,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Does not check accuracy. KOes the foe. User faints afterwards if move hits.",
 		shortDesc: "KOes foe. Always hits. User faints on success.",
-		id: "frck",
 		name: "fr*ck",
 		isNonstandard: "Custom",
 		pp: 6,
@@ -1599,7 +1559,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "This move is either a Water-, Fire-, or Grass-type move. The selected type is added to the user of this move.",
 		shortDesc: "Changes user/move type to Fire, Water, or Grass.",
-		id: "soupstealing7starstrike",
 		name: "Soup-Stealing 7-Star Strike",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -1637,7 +1596,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Uses Defog and then attempts to use U-Turn.",
 		shortDesc: "Uses Defog, then U-Turn.",
-		id: "quickreload",
 		name: "Quick Reload",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -1663,7 +1621,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Until they switch out, Pokemon hit by this move will have all status effects and secondary move effects target themselves.",
 		shortDesc: "Hit Pokemon have status/secondaries self-target.",
-		id: "distortionblast",
 		name: "Distortion Blast",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1706,7 +1663,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Raises the user's Speed by two stages and has a 30% chance to confuse the target.",
 		shortDesc: "Speed +2; 30% chance to confuse target.",
-		id: "rickrollout",
 		name: "Rickrollout",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -1749,7 +1705,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Hits three times. Each hit has a 10% chance to drop the target's Defense and a 10% chance to burn. Each hit is always a critical hit. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits.",
 		shortDesc: "Hits thrice; 10% Def -1; 10% burn; always crits.",
-		id: "stormassaultogs",
 		isNonstandard: "Custom",
 		name: "Storm Assault OGs",
 		pp: 10,
@@ -1784,7 +1739,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack, Defense, and Special Defense by one stage. Weather becomes Hail.",
 		shortDesc: "Atk, Def, and SpD +1; weather becomes Hail.",
-		id: "slavsquat",
 		name: "Slav Squat",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1815,7 +1769,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Increases this Pokemon's Attack, Special Attack, and Speed by two stages while also decreasing this Pokemon's Defense and Special Defense by one stage. If this Pokemon is a Minior in its Meteor forme, it will permanently transform into one of the Minior colors and have a special effect based on that color. Red burns the foe, orange confuses it, yellow paralyzes it, green applies Leech Seed, blue gives the user Aqua Ring status, indigo poisons the foe, and violet badly poisons it.",
 		shortDesc: "+2 Atk, SpA, Spe. -1 Def, SpD. Meteor -> Core.",
-		id: "tastetherainbow",
 		name: "Taste the Rainbow",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1904,10 +1857,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "Stronger if user is heavier. Heals 50% of damage.",
-		id: "paintrain",
 		name: "Pain Train",
 		isNonstandard: "Custom",
 		pp: 10,
+		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1927,7 +1880,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "50% chance to confuse the foe.",
 		shortDesc: "50% chance to confuse the foe.",
-		id: "dadjoke",
 		name: "Dad Joke",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -1952,9 +1904,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		pp: 20,
+		priority: 0,
 		desc: "The user sets two of Stealth Rock, Spikes (1 layer), Toxic Spikes (1 layer), and Sticky Web on the foe's side of the field and then switches out.",
 		shortDesc: "Sets 2 random hazards, then switches out.",
-		id: "hazardpass",
 		name: "Hazard Pass",
 		isNonstandard: "Custom",
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
@@ -2000,7 +1952,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 	},
 	// HoeenHero
 	scriptedterrain: {
@@ -2009,7 +1961,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Sets Scripted Terrain for 5 turns. The power of Bug-type moves is boosted by 1.5, and there is a 5% chance for every move used to become Glitch Out instead. At the end of a turn, every Pokemon has a 5% chance to transform into a MissingNo. with 3 random moves and Glitch Out. Switching out will restore the Pokemon to its normal state. This terrain affects floating Pokemon.",
 		shortDesc: "5 turns: +Bug power, glitchy effects.",
-		id: "scriptedterrain",
 		name: "Scripted Terrain",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2069,12 +2020,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					const moves = [];
 					const pool = this.dex.shuffle(Object.keys(this.dex.data.Movedex));
 					const metronome = this.dex.getMove('metronome');
-					for (const i of pool) {
-						const move = this.dex.getMove(i);
-						if (i !== move.id) continue;
+					for (const id of pool) {
+						const move = this.dex.getMove(id);
+						if (move.realMove) continue;
 						if (move.isZ || move.isNonstandard) continue;
-						if (metronome.noMetronome && metronome.noMetronome.includes(move.id)) continue;
-						if (this.dex.getMove(i).gen > this.gen) continue;
+						if (metronome.noMetronome && metronome.noMetronome.includes(move.name)) continue;
+						if (this.dex.getMove(id).gen > this.gen) continue;
 						moves.push(move);
 						if (moves.length >= 3) break;
 					}
@@ -2116,14 +2067,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "A random move is selected for use, other than After You, Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Endure, Feint, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Hold Hands, Hyperspace Hole, Ice Burn, Instruct, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Nature Power, Photon Geyser, Plasma Fists, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spotlight, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, Trump Card, V-create, or Wide Guard. The selected move's Base Power is increased by 20.",
 		shortDesc: "Uses a random move with Base Power +20.",
-		id: "glitchout",
 		name: "Glitch Out",
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
 		flags: {},
 		noMetronome: [
-			'afteryou', 'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'diamondstorm', 'dragonascent', 'endure', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lightofruin', 'matblock', 'mefirst', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'naturepower', 'originpulse', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spotlight', 'steameruption', 'struggle', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'trumpcard', 'vcreate', 'wideguard',
+			"After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "Trump Card", "V-create", "Wide Guard",
 		],
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2135,18 +2085,18 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const i in this.dex.data.Movedex) {
-				const move = this.dex.data.Movedex[i];
-				if (i !== move.id) continue;
+			for (const id in this.dex.data.Movedex) {
+				const move = this.dex.data.Movedex[id];
+				if (move.realMove) continue;
 				if (move.isZ || move.isNonstandard) continue;
-				if (effect.noMetronome && effect.noMetronome.includes(move.id)) continue;
-				if (this.dex.getMove(i).gen > this.gen) continue;
+				if (effect.noMetronome && effect.noMetronome.includes(move.name)) continue;
+				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
 			let randomMove = '';
 			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = this.sample(moves).id;
+				moves.sort((a, b) => (a.num || 0) - (b.num || 0));
+				randomMove = this.sample(moves).name;
 			}
 			if (!randomMove) {
 				return false;
@@ -2164,7 +2114,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Has a 20% chance to either poison the target or cause it to fall asleep.",
 		shortDesc: "20% chance to either poison or sleep target.",
-		id: "flowertornado",
 		name: "Flower Tornado",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2198,7 +2147,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack by two stages. Traps and paralyzes the foe.",
 		shortDesc: "Raises user's Atk by 2; traps and paralyzes foe.",
-		id: "petrifyinggaze",
 		name: "Petrifying Gaze",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -2227,7 +2175,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 30% chance to paralyze the target and a 10% chance to confuse it.",
 		shortDesc: "30% chance to paralyze. 10% chance to confuse.",
-		id: "pureskill",
 		name: "Pure Skill",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2258,10 +2205,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Cures the user's party of all status conditions, then poisons the user.",
 		shortDesc: "Cures party's statuses, then poisons self.",
-		id: "rosarosa",
 		name: "Rosa Rosa",
 		isNonstandard: "Custom",
 		pp: 5,
+		priority: 0,
 		flags: {mirror: 1, snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2292,7 +2239,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases.",
-		id: "bestialstrike",
 		name: "Bestial Strike",
 		isNonstandard: "Custom",
 		onTryMove() {
@@ -2315,7 +2261,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. Both of these effects persist for their normal duration even if the user switches out or faints. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if the target leaves the field or uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps/damages 4-5 turns, even if user switches.",
-		id: "maelstrm",
 		name: "Maelström",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2368,7 +2313,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by one stage. Summons Sunny Day.",
 		shortDesc: "User's SpA, SpD, Spe +1. Sets Sunny Day.",
-		id: "w",
 		name: ">w<",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2399,7 +2343,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Lowers the user's Defense, Special Defense, and Speed by one stage.",
 		shortDesc: "Lowers the user's Def, Sp. Def, and Spe by 1.",
-		id: "inkzooka",
 		name: "Inkzooka",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2429,10 +2372,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Before the user attacks, its Attack is increased by one stage. After the user attacks, one of its stats other than accuracy and evasion is boosted by one stage. This move has a 50% chance to confuse the target.",
 		shortDesc: "Atk +1, attacks. Random stat +1. 50% confuse.",
-		id: "chaotic",
 		name: "Chaotic",
 		isNonstandard: "Custom",
 		pp: 10,
+		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2464,7 +2407,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. Raises the user's Attack by one stage.",
 		shortDesc: "User recovers 50% of the damage dealt; Atk +1.",
-		id: "dragonwarriortouch",
 		name: "Dragon Warrior Touch",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2493,7 +2435,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. The user also swaps its Defense and Special Defense stat stage changes with the target. Fails if the user moves last this turn.",
 		shortDesc: "Blocks attacks; contact: Atk -2; Guard Swap.",
-		id: "salutethecolonel",
 		isNonstandard: "Custom",
 		name: "Salute the Colonel",
 		pp: 15,
@@ -2542,7 +2483,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move's type is equal to the user's secondary type. Has a 10% chance to lower the user's Special Defense by 1.",
 		shortDesc: "Attack is user's 2nd type. 10% SpD -1.",
-		id: "ectoplasm",
 		isNonstandard: "Custom",
 		name: "Ectoplasm",
 		pp: 15,
@@ -2600,7 +2540,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user gains 5 levels upon using this move, which persist upon switching out.",
 		shortDesc: "User gains 5 levels.",
-		id: "nextlevelstrats",
 		name: "Next Level Strats",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2614,8 +2553,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			const species = pokemon.species;
-			let level = pokemon.level;
-			level += 5;
+			const level = pokemon.level + 5;
+			(pokemon as any).level = level;
 			pokemon.set.level = level;
 			pokemon.formeChange(species);
 
@@ -2644,7 +2583,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Raises both the user's and the target's Attack by three stages, lowers the Defense of both by three stages, confuses both Pokemon, and has a 100% chance to cause the target to flinch. Only works on the user's first turn on the field.",
 		shortDesc: "First turn: +3 Atk, -3 Def, flinch, both confused.",
-		id: "barfight",
 		name: "Bar Fight",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2683,7 +2621,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move's type effectiveness is inverted, meaning that it's super effective on Water-types but not very effective on Grass-types, and so forth. 20% chance to paralyze the target.",
 		shortDesc: "Type effectiveness is inverted; 20% paralyze.",
-		id: "shuffleramendance",
 		name: "Shuffle Ramen Dance",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2704,7 +2641,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 	},
 	// MacChaeger
 	naptime: {
@@ -2713,7 +2650,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user falls asleep for the next turn, restoring 50% of its HP and curing itself of any major status condition. If the user falls asleep in this way, all other active Pokemon that are not asleep or frozen also try to use Nap Time. Fails if the user has full HP, if the user is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "Active Pokemon sleep 1 turn, restoring HP/status.",
-		id: "naptime",
 		name: "Nap Time",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -2761,7 +2697,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "self",
 		type: "Fairy",
-		zMoveEffect: 'clearnegativeboosts',
+		zMove: {effect: 'clearnegativeboosts'},
 	},
 	// Mad Monty ¾°
 	llamacide: {
@@ -2770,9 +2706,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 40% chance to lower target's Defense by one stage and a 10% chance to freeze it.",
 		shortDesc: "40% target's Def -1. 10% chance of freeze.",
-		id: "llamacide",
 		name: "Llamacide",
 		pp: 10,
+		priority: 0,
 		flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2817,7 +2753,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "The user's HP is restored to maximum, and the user then faints. The target then takes damage equal to the amount of HP the user lost. This move does not check accuracy.",
 		shortDesc: "Does damage equal to user's max HP. User faints.",
-		id: "blazeofglory",
 		name: "Blaze of Glory",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -2844,7 +2779,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user heals 1/4 of their HP rounded down, is protected from most attacks made by other Pokemon during this turn, and changes the weather. The selected weather depends on the current weather. Rain: Hail, Sun: Rain, Hail: Sun, Other: Randomly pick one of Rain, Sun, and Hail. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protect + Heal 1/4 + change weather.",
-		id: "weatherforecast",
 		name: "Weather Forecast",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2890,7 +2824,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Has a 50% chance to raise the user's Special Attack by one stage.",
 		shortDesc: "50% chance to raise the user's SpA by 1.",
-		id: "crystalboost",
 		name: "Crystal Boost",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2920,7 +2853,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "If the user is a Silvally, its item becomes a random Memory whose type matches one of the target's weaknesses, it changes forme, and it uses Multi-Attack. This move and its effects ignore the abilities of other Pokemon. Fails if the target has no weaknesses or if the user's species is not Silvally.",
 		shortDesc: "Changes user/move type to target's weakness.",
-		id: "typeanalysis",
 		name: "Type Analysis",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -2962,7 +2894,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 	},
 	// Meicoo
 	scavengesu: {
@@ -2971,7 +2903,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Lowers the user's Attack and Special Attack by two stages and then swaps all of its stat changes with the target.",
 		shortDesc: "Atk/SpA -2, then swaps all stats with foe.",
-		id: "scavengesu",
 		name: "/scavenges u",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3016,7 +2947,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Base Power rises by 20 for each of the user's positive stat stage changes. The user loses any defensive boosts not from Stockpile.",
 		shortDesc: "+20 BP per boost. Lose non-Stockpile +Def/SpD.",
-		id: "tippingover",
 		name: "Tipping Over",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3048,7 +2978,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Lowers the user's Special Attack, Special Defense, and Speed by one stage.",
 		shortDesc: "Lowers the user's SpA, SpD, and Spe by 1.",
-		id: "pythonivy",
 		name: "Python Ivy",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3079,7 +3008,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "If Trick Room is not already in play, sets Trick Room for 5 turns and raises the user's Attack by one stage.",
 		shortDesc: "User Attack +1; sets Trick Room.",
-		id: "e",
 		name: "E",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3111,7 +3039,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Prismatic Terrain. During the effect, the power of Ice-type attacks is multiplied by 0.5, even if the user is not grounded. Hazards and screens are removed and cannot be set while Prismatic Terrain is active. Fails if the current terrain is Prismatic Terrain.",
 		shortDesc: "5 turns. No hazards, -Ice power even if floating.",
-		id: "prismaticterrain",
 		name: "Prismatic Terrain",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3169,7 +3096,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "If the target has not fainted, both the user and the target are forced to switch out and be replaced with a chosen unfainted ally. The target's replacement has its Speed lowered by 1 stage. Fails if either Pokemon is under the effect of Ingrain or Suction Cups.",
 		shortDesc: "Both Pokemon switch. Opp. replacement: Spe -1.",
-		id: "pyramidingsong",
 		name: "Pyramiding Song",
 		isNonstandard: "Custom",
 		pp: 20,
@@ -3200,7 +3126,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMoveEffect: "boostreplacement",
+		zMove: {effect: "boostreplacement"},
 	},
 	// OM
 	omboom: {
@@ -3209,7 +3135,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 50% chance to raise the user's Speed by two stages and a 5% chance to raise the user's Attack by one stage. Only one will ever activate on a single use",
 		shortDesc: "50% chance of Spe +2 or 5% chance of Atk +1.",
-		id: "omboom",
 		name: "OM Boom",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -3245,7 +3170,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated. If the user has not fainted, the target loses its held item.",
 		shortDesc: "Destroys screens. Removes foe's item.",
-		id: "ultimateslash",
 		name: "Ultimate Slash",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3284,7 +3208,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move has a 50% change to paralyze the target and prevents the target from switching out or using any moves that the user also knows while the user is active.",
 		shortDesc: "50% chance to paralyze. Traps and imprisons.",
-		id: "jailshell",
 		name: "Jail Shell",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3314,7 +3237,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Badly poisons the target, even if they are Poison-type or Steel-type. This move does not check accuracy.",
 		shortDesc: "Badly poisons the target, regardless of type.",
-		id: "corrosivetoxic",
 		name: "Corrosive Toxic",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3339,7 +3261,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user attempts to use Toxic followed by Venoshock, then Rest and Sleep Talk.",
 		shortDesc: "Toxic -> Venoshock -> Rest -> Sleep Talk.",
-		id: "teabreak",
 		name: "Tea Break",
 		pp: 5,
 		priority: 0,
@@ -3365,7 +3286,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For 5 turns, the weather becomes Acid Rain. Pokemon that are not Poison-type take damage every turn. Special Defense of Poison-type pokemon is multiplied by 1.5.",
 		shortDesc: "5 turns: +Poison SpD, corrosive damage.",
-		id: "acidrain",
 		name: "Acid Rain",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3389,7 +3309,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "100% chance to burn the target.",
 		shortDesc: "100% chance to burn the target.",
-		id: "grammarhammer",
 		name: "Grammar Hammer",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3419,7 +3338,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		id: "greateqake",
 		name: "Great Eqake",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -3443,7 +3361,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user swaps all its stat stage changes with the target, then takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle.",
 		shortDesc: "Swaps all stat changes with target + Substitute.",
-		id: "refactor",
 		name: "Refactor",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3495,7 +3412,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user is protected from most moves made by other Pokemon during this turn, and if a Pokemon makes contact with the user, the user restores 1/4 of its maximum HP, rounded half up. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard, or this move, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from moves. Contact: restores 25% HP.",
-		id: "lilypadshield",
 		name: "Lilypad Shield",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3540,7 +3456,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				return null;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.heal(target.baseMaxhp / 4, target, target);
 				}
 			},
@@ -3556,7 +3472,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Speed by one stage. Gives Focus Energy.",
 		shortDesc: "Raises user's Speed by 1; Focus Energy.",
-		id: "resolve",
 		name: "Resolve",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3585,7 +3500,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For seven turns, any Pokemon that has one of their stats boosted through any manner loses all PP on the last move they used.",
 		shortDesc: "7 turns: boosting stat: lose all PP from last move.",
-		id: "literallycheating",
 		name: "Literally Cheating",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3638,7 +3552,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 50% chance to raise the user's Attack by one stage and a 20% chance to paralyze the foe or cause them to flinch.",
 		shortDesc: "50% user's Atk +1. 20% flinch or paralyze foe.",
-		id: "stunner",
 		name: "Stunner",
 		pp: 10,
 		priority: 0,
@@ -3678,7 +3591,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "The user becomes affected with the effects of Rage and Endure. The opponent's next attack will hit 2 to 5 times with a Base Power of 25.",
 		shortDesc: "Rage + Endure. Foe: next move 2-5 hits at 25 BP.",
-		id: "rageeeee",
 		name: "Rageeeee",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3710,7 +3622,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Raises the user's accuracy by one stage. 50% chance to raise Attack by one stage.",
 		shortDesc: "Accuracy +1. 50% chance to raise Atk by 1.",
-		id: "mashupmotive",
 		name: "Mashup Motive",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3746,7 +3657,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Before doing damage, the target's stat boosts are inverted. The user switches out after damaging the target.",
 		shortDesc: "Inverts target's boosts, then switches.",
-		id: "switchoff",
 		name: "Switch Off",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3782,7 +3692,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack and accuracy by one stage.",
 		shortDesc: "Raises the user's Attack and accuracy by 1.",
-		id: "thicc",
 		name: "Thicc",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -3809,7 +3718,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack and accuracy by one stage. Summons Hail and Aurora Veil.",
 		shortDesc: "User's Atk and acc +1. Sets Hail and Aurora Veil.",
-		id: "extrathicc",
 		name: "Extra T h i c c",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -3845,7 +3753,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		desc: "The user is healed for 50% of its HP. All Pokemon in the team's party get healed by 12.5% of their maximum HP.",
 		shortDesc: "User heals 50% HP. User's team heals 12.5% HP.",
-		id: "expressyourself",
 		name: "Express Yourself",
 		pp: 5,
 		priority: 0,
@@ -3878,7 +3785,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 10% chance, calculated separately per effect, to apply any of Taunt, confusion, flinch, Heal Block, or Focus Energy to the target. Afterwards, the user is switched out for another Pokemon in its party. The selected Pokemon has the user's stat stage changes, confusion, and certain move effects transferred to it. ",
 		shortDesc: "Multiple status effects, then uses Baton Pass.",
-		id: "plurshift",
 		name: "Plurshift",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -3928,7 +3834,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		id: "geomagneticstorm",
 		name: "Geomagnetic Storm",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -3951,7 +3856,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack by two stages and Speed by one stage.",
 		shortDesc: "Raises the user's Attack by 2 and Speed by 1.",
-		id: "goinda",
 		name: "GO INDA",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3978,7 +3882,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For 5 turns, slower Pokemon move first. Psychic-type attacks can hit if the target is a Dark-type.",
 		shortDesc: "5 turns: Trick Room; Psychic hits Dark.",
-		id: "alienwave",
 		name: "Alien Wave",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4019,7 +3922,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePower: 1,
 		desc: "The user creates a substitute to take its place in battle. This substitute is a Pokemon selected from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon the substitute's creation, this Pokemon's ability is suppressed until it switches out. The substitute Pokemon is generated with a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. The substitute uses its species's base stats, types, Ability, and weight but retains the user's max HP, stat stages, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves but does not reset the counter of Toxic poison when broken and cannot be transferred through Baton Pass. Transforming into this substitute will not fail. If the user switches out while the substitute is up, the substitute will be removed and the user will revert to the state in which it used this move. This move's properties are based on the move Fake Claim is inheriting from.",
 		shortDesc: "Uses a Random Battle Pokemon as a Substitute.",
-		id: "fakeclaim",
 		name: "Fake Claim",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -4045,7 +3947,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onAfterMoveSecondarySelf(pokemon, move) {
 			const claims: {[move: string]: string[]} = {
 				bravebird: [
-					'Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\'d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon',
+					'Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\u2019d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon',
 				],
 				superpower: [
 					'Absol', 'Aggron', 'Armaldo', 'Avalugg', 'Azumarill', 'Barbaracle', 'Basculin', 'Beartic', 'Bewear', 'Bibarel', 'Bouffalant', 'Braviary', 'Breloom', 'Buzzwole', 'Cacturne', 'Carracosta', 'Celesteela', 'Chesnaught', 'Cobalion', 'Conkeldurr', 'Crabominable', 'Crawdaunt', 'Darmanitan', 'Diggersby', 'Donphan', 'Dragonite', 'Drampa', 'Druddigon', 'Durant', 'Eelektross', 'Emboar', 'Exeggutor-Alola', 'Feraligatr', 'Flareon', 'Flygon', 'Gigalith', 'Gogoat', 'Golem', 'Golurk', 'Goodra', 'Granbull', 'Gurdurr', 'Hariyama', 'Hawlucha', 'Haxorus', 'Heatmor', 'Hippowdon', 'Hitmonlee', 'Hydreigon', 'Incineroar', 'Kabutops', 'Keldeo', 'Kingler', 'Komala', 'Kommo-o', 'Krookodile', 'Landorus-Therian', 'Lurantis', 'Luxray', 'Machamp', 'Malamar', 'Mamoswine', 'Mew', 'Mudsdale', 'Nidoking', 'Nidoqueen', 'Pangoro', 'Passimian', 'Piloswine', 'Pinsir', 'Rampardos', 'Regice', 'Regigigas', 'Regirock', 'Registeel', 'Reuniclus', 'Rhydon', 'Rhyperior', 'Samurott', 'Sawk', 'Scizor', 'Scolipede', 'Simipour', 'Simisage', 'Simisear', 'Smeargle', 'Snorlax', 'Spinda', 'Stakataka', 'Stoutland', 'Swampert', 'Tapu Bulu', 'Terrakion', 'Throh', 'Thundurus', 'Torkoal', 'Tornadus', 'Torterra', 'Tyranitar', 'Tyrantrum', 'Ursaring', 'Virizion', 'Zeraora',
@@ -4111,7 +4013,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "The user faints after using this move, even if this move fails for having no target. Has a 10% chance to paralyze the target.",
 		shortDesc: "The user faints. 10% chance to paralyze target.",
-		id: "kratosmana",
 		name: "Kratosmana",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -4140,7 +4041,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Lowers the user's accuracy by 2 stages.",
 		shortDesc: "Lowers the user's accuracy by 2.",
-		id: "leafblaster",
 		name: "Leaf Blaster",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -4168,7 +4068,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Puts the foe to sleep. Summons a Nightmare Field with the effects of Nightmare for 4 turns.",
 		shortDesc: "Puts foe to sleep. Nightmare for 4 turns.",
-		id: "absoluteconfiguration",
 		name: "Absolute Configuration",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -4196,7 +4095,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For 4 turns, Nightmare Field is active. During the effect, sleeping Pokemon suffer from the effects of Nightmare.",
 		shortDesc: "4 turns. Sleeping Pokemon suffer Nightmare.",
-		id: "nightmarefield",
 		name: "Nightmare Field",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4236,7 +4134,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move's type effectiveness against Ground is changed to be super effective no matter what this move's type is.",
 		shortDesc: "Super effective on Ground.",
-		id: "groundsurge",
 		name: "Ground Surge",
 		isNonstandard: "Custom",
 		pp: 15,
@@ -4264,7 +4161,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "The user's replacement will switch out at the end of next turn if the replacement's move is successful.",
 		shortDesc: "User's replacement switches after using its move.",
-		id: "rotate",
 		name: "Rotate",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4304,7 +4200,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 100% chance to raise the user's Speed by one stage.",
 		shortDesc: "100% chance to raise the user's Speed by 1.",
-		id: "ultrasucc",
 		name: "Ultra Succ",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -4341,7 +4236,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Base Power is equal to (25 * target's current Speed / user's current Speed) + 1, rounded down, but not more than 150. If the user's current Speed is 0, this move's power is 1. Summons Trick Room unless Trick Room is already active.",
 		shortDesc: "More power if slower; sets Trick Room.",
-		id: "gyroballin",
 		name: "Gyro Ballin'",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -4362,7 +4256,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 		contestType: "Cool",
 	},
 	// Tony
@@ -4372,7 +4266,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "If there is no Stealth Rock on the foe's side of the field, sets Stealth Rock and one layer of Spikes. Otherwise, it sets two layers of Spikes.",
 		shortDesc: "SR present: Spikes x2; otherwise: SR + Spikes.",
-		id: "greed",
 		name: "Greed",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4408,7 +4301,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Moves all hazards that are on the user's side of the field to the foe's side of the field. Sets Stealth Rock on the foe's side, after which the user switches out.",
 		shortDesc: "Hazards -> foe side. Set SR. User switches out.",
-		id: "smokebomb",
 		name: "Smoke Bomb",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4469,7 +4361,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "This move's Base Power is 20 if the target weighs less than 10 kg, 40 if its weight is less than 25 kg, 60 if its weight is less than 50 kg, 80 if its weight is less than 100 kg, 100 if its weight is less than 200 kg, and 120 if its weight is greater than or equal to 200 kg. Before doing damage, the target's item is replaced with an Iron Ball, and the target's weight is doubled.",
 		shortDesc: "BP:weight; +foe weight; foe item = Iron Ball.",
-		id: "minisingularity",
 		name: "Mini Singularity",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -4508,7 +4399,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Before the turn starts, this Pokemon uses Taunt against the foe. When this move hits, the user is healed by 50% of its max HP.",
 		shortDesc: "Foe is Taunted; user heals 50% of Max HP.",
-		id: "ceilingsabsent",
 		name: "CEILINGS ABSENT",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4538,7 +4428,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "The user recovers half the HP lost by the target, rounded half up. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
-		id: "explosivedrain",
 		name: "Explosive Drain",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4563,7 +4452,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Has a 20% chance to make the target flinch and a 50% chance to paralyze the target.",
 		shortDesc: "20% to flinch; 50% to paralyze.",
-		id: "feathersnare",
 		name: "Feather Snare",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4587,7 +4475,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				status: 'par',
 			},
 		],
-		zMovePower: 175,
+		zMove: {basePower: 175},
 		target: "normal",
 		type: "Flying",
 	},
@@ -4598,7 +4486,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Uses 2-5 random moves.  Does not include Z-Moves that have 1 Base Power or Glitzer Popping.",
 		shortDesc: "Uses 2-5 random moves; avoids 1 BP Z-Moves.",
-		id: 'glitzerpopping',
 		name: "glitzer popping",
 		isNonstandard: "Custom",
 		pp: 3.14,
@@ -4618,18 +4505,18 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const i in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[i];
-				if (i !== move.id || move.id === 'glitzerpopping') continue;
+			for (const id in exports.BattleMovedex) {
+				const move = exports.BattleMovedex[id];
+				if (move.realMove || move.id === 'glitzerpopping') continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
-				if (this.dex.getMove(i).gen > this.gen) continue;
+				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
 			let randomMove: string;
 			if (moves.length) {
-				randomMove = this.sample(moves).id;
+				randomMove = this.sample(moves).name;
 			} else {
 				return false;
 			}
@@ -4647,7 +4534,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Has a 35% chance to burn the target.",
 		shortDesc: "35% chance to burn the target.",
-		id: "lavabone",
 		name: "Lava Bone",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -4674,7 +4560,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "No additional effect.",
 		shortDesc: "Usually goes first.",
-		id: "blehflame",
 		name: "Bleh Flame",
 		isNonstandard: "Custom",
 		pp: 1,
@@ -4699,7 +4584,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		desc: "The user is replaced with another Pokemon in its party. The foe is confused, trapped, and infatuated regardless of the replacement's gender. This move fails unless the user already took damage this turn.",
 		shortDesc: "If hit; switches out + confuses, traps, infatuates.",
-		id: "cutieescape",
 		name: "Cutie Escape",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4750,7 +4634,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Hits twice. Each hit has a 20% chance to poison the target and heals the user for 30% damage dealt. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits.",
 		shortDesc: "2 hits, 20% poison each, heals 30% of damage.",
-		id: "twinweedle",
 		isNonstandard: "Custom",
 		name: "TwinWeedle",
 		pp: 25,
@@ -4779,7 +4662,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Hits twice and ignores type immunities. Before the second hit, the user switches to its Pirouette forme, and this move's second hit deals physical Fighting-type damage. After the second hit, the user reverts to its Aria forme. Fails unless the user is Meloetta.",
 		shortDesc: "Attacks in Aria forme, then in Pirouette forme.",
-		id: "relicsongdance",
 		name: "Relic Song Dance",
 		isNonstandard: "Custom",
 		pp: 10,
@@ -4836,7 +4718,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "Both the user and target are badly poisoned.",
 		shortDesc: "Badly poisons the user and target.",
-		id: "thelifeofzyg",
 		name: "The Life of Zyg",
 		isNonstandard: "Custom",
 		pp: 10,

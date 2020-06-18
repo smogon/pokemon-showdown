@@ -1,8 +1,6 @@
 export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	brn: {
 		name: 'brn',
-		id: 'brn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'brn');
@@ -17,8 +15,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	par: {
 		name: 'par',
-		id: 'par',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'par');
@@ -41,8 +37,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	slp: {
 		name: 'slp',
-		id: 'slp',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
@@ -67,8 +61,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	frz: {
 		name: 'frz',
-		id: 'frz',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'frz');
@@ -87,8 +79,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	psn: {
 		name: 'psn',
-		id: 'psn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'psn');
@@ -103,8 +93,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	tox: {
 		name: 'tox',
-		id: 'tox',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'tox');
@@ -123,8 +111,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
-		id: 'partiallytrapped',
-		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 1,
 		onStart(target, source, effect) {

@@ -283,8 +283,14 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			const originalHp = pokemon.hp;
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+			if (pokemon && pokemon !== target && move && move.category !== 'Status') {
+				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
+					this.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
 		}
 
 		return true;
@@ -712,8 +718,13 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 		if (move.struggleRecoil) {
-			// @ts-ignore
-			this.directDamage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
+			let recoilDamage;
+			if (this.dex.gen >= 5) {
+				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
+			} else {
+				recoilDamage = this.trunc(pokemon.maxhp / 4);
+			}
+			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as PureEffect);
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -917,7 +928,7 @@ export const BattleScripts: BattleScriptsData = {
 				}
 				if (moveData.heal && !target.fainted) {
 					if (target.hp >= target.maxhp) {
-						this.add('-fail', pokemon, 'heal');
+						this.add('-fail', target, 'heal');
 						this.attrLastMove('[still]');
 						damage[i] = this.combineResults(damage[i], false);
 						didAnything = this.combineResults(didAnything, null);
@@ -1118,7 +1129,7 @@ export const BattleScripts: BattleScriptsData = {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else if (move.zMovePower) {
+				} else if (move.zMove?.basePower) {
 					return this.zMoveTable[move.type];
 				}
 			}
@@ -1131,7 +1142,7 @@ export const BattleScripts: BattleScriptsData = {
 			if (move.name === item.zMoveFrom) {
 				// @ts-ignore
 				const zMove = this.dex.getActiveMove(item.zMove);
-				zMove.isZPowered = true;
+				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
 		}
@@ -1139,16 +1150,15 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.category === 'Status') {
 			const zMove = this.dex.getActiveMove(move);
 			zMove.isZ = true;
-			zMove.isZPowered = true;
+			zMove.isZOrMaxPowered = true;
 			return zMove;
 		}
 		const zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
-		// @ts-ignore
-		zMove.basePower = move.zMovePower;
+		zMove.basePower = move.zMove!.basePower!;
 		zMove.category = move.category;
 		// copy the priority for Quick Guard
 		zMove.priority = move.priority;
-		zMove.isZPowered = true;
+		zMove.isZOrMaxPowered = true;
 		return zMove;
 	},
 
@@ -1233,6 +1243,7 @@ export const BattleScripts: BattleScriptsData = {
 
 	getMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
+		if (move.name === 'Struggle') return move;
 		if (pokemon.canGigantamax && move.category !== 'Status') {
 			const gMaxSpecies = this.dex.getSpecies(pokemon.canGigantamax);
 			const gMaxMove = this.dex.getMove(gMaxSpecies.isGigantamax);
@@ -1244,6 +1255,7 @@ export const BattleScripts: BattleScriptsData = {
 
 	getActiveMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
+		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
 		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
 		if (move.category !== 'Status') {
 			if (pokemon.canGigantamax) {
@@ -1251,12 +1263,12 @@ export const BattleScripts: BattleScriptsData = {
 				const gMaxMove = this.dex.getActiveMove(gMaxSpecies.isGigantamax ? gMaxSpecies.isGigantamax : '');
 				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 			}
-			if (!move.gmaxPower) throw new Error(`${move.name} doesn't have a gmaxPower`);
-			maxMove.basePower = move.gmaxPower;
+			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
+			maxMove.basePower = move.maxMove.basePower;
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;
-		maxMove.maxPowered = true;
+		maxMove.isZOrMaxPowered = true;
 		return maxMove;
 	},
 
@@ -1292,10 +1304,10 @@ export const BattleScripts: BattleScriptsData = {
 		const zPower = this.dex.getEffect('zpower');
 		if (move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
-		} else if (move.zMoveBoost) {
-			this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
-		} else {
-			switch (move.zMoveEffect) {
+		} else if (move.zMove?.boost) {
+			this.boost(move.zMove.boost, pokemon, pokemon, zPower);
+		} else if (move.zMove?.effect) {
+			switch (move.zMove.effect) {
 			case 'heal':
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;

@@ -186,9 +186,9 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	update(dontMove = false) {
 		if (dontMove) {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.uhtmlchange(`jeopardy${this.room.gameNumber}-${this.numUpdates}`, this.getGrid());
 		} else {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.gameNumber}-${this.numUpdates}|`);
+			this.room.uhtmlchange(`jeopardy${this.room.gameNumber}-${this.numUpdates}`, '');
 			this.numUpdates++;
 			this.room.add(`|uhtml|jeopardy${this.room.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		}
@@ -866,8 +866,8 @@ export const commands: ChatCommands = {
 		},
 	},
 	jeopardyhelp: [
-		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # & ~`,
-		`/jp end - End the current game of Jeopardy. Requires: % @ # & ~`,
+		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # &`,
+		`/jp end - End the current game of Jeopardy. Requires: % @ # &`,
 		`/jp start - Start the game of Jeopardy. Must be the host.`,
 		`/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.`,
 		`/jp category [Category Number], [Category Name] - Set a specific category of the jeopardy game. Must be the host.`,

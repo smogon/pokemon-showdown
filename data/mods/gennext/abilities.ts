@@ -493,7 +493,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				source.addVolatile('curse');
 			}
 		},
-		id: "cursedbody",
 		name: "Cursed Body",
 		rating: 3,
 		num: 130,

@@ -1,7 +1,6 @@
 export const BattleItems: {[k: string]: ModdedItemData} = {
 	// Aeonic
 	noseiumz: {
-		id: "noseiumz",
 		name: "Noseium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -25,7 +24,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// FOMG
 	astleyiumz: {
-		id: "astleyiumz",
 		name: "Astleyium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -37,7 +35,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// inactive
 	dusknoiriumz: {
-		id: "dusknoiriumz",
 		name: "Dusknoirium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -63,7 +60,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// MajorBowman
 	victiniumz: {
-		id: "victiniumz",
 		name: "Victinium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -75,7 +71,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// Pohjis
 	marowakiumz: {
-		id: "marowakiumz",
 		name: "Marowakium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -87,7 +82,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// SamJo
 	thicciniumz: {
-		id: "thicciniumz",
 		name: "Thiccinium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -99,7 +93,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// Schiavetto
 	mariahcariumz: {
-		id: "mariahcariumz",
 		name: "Mariahcarium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -111,7 +104,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// Snaquaza
 	fakeclaimiumz: {
-		id: "fakeclaimiumz",
 		name: "Fakeclaimium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -124,7 +116,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// The Immortal
 	buzzniumz: {
-		id: "buzzniumz",
 		name: "Buzznium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
@@ -136,7 +127,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	// Teclis
 	darkrainiumz: {
-		id: "darkrainiumz",
 		name: "Darkrainium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,

@@ -2,7 +2,8 @@ import {FS, FSPath} from '../../lib/fs';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
-const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling', 'animeandmanga', 'sports'];
+const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary',
+	'prowrestling', 'animeandmanga', 'sports', 'videogames'];
 
 const rooms: {[k: string]: ChatRoom} = {};
 
@@ -20,6 +21,7 @@ const BOTWS_FILE = 'config/chat-plugins/thelibrary.tsv';
 const MOTWS_FILE = 'config/chat-plugins/prowrestling-matches.tsv';
 const ANOTDS_FILE = 'config/chat-plugins/animeandmanga-shows.tsv';
 const ATHOTDS_FILE = 'config/chat-plugins/sports-athletes.tsv';
+const VGOTDS_FILE = 'config/chat-plugins/videogames-games.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 let prenoms: {[k: string]: [string, AnyObject][]} = {};
@@ -210,7 +212,11 @@ class OtdHandler {
 	}
 
 	display(update = false) {
-		this.room.add(`|uhtml${update ? 'change' : ''}|otd|${this.generateNomWindow()}`);
+		if (update) {
+			this.room.uhtmlchange('otd', this.generateNomWindow());
+		} else {
+			this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
+		}
 	}
 
 	displayTo(connection: Connection) {
@@ -416,6 +422,7 @@ otds.set('botw', new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['
 otds.set('motw', new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true));
 otds.set('anotd', new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
 otds.set('athotd', new OtdHandler('athotd', 'Athlete', rooms.sports, ATHOTDS_FILE, ['athlete', 'nominator', 'image', 'sport', 'team', 'country', 'age', 'quote', 'time'], ['Athlete', 'Nominator', 'Image', 'Sport', 'Team', 'Country', 'Age', 'Quote', 'Timestamp']));
+otds.set('vgotd', new OtdHandler('vgotd', 'Video Game', rooms.videogames, VGOTDS_FILE, ['game', 'nominator', 'link', 'tagline', 'image', 'time'], ['Video Game', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
 
 function selectHandler(message: string) {
 	const id = toID(message.substring(1).split(' ')[0]);
@@ -444,7 +451,7 @@ export const otdCommands: ChatCommands = {
 		this.privateModAction(`(${user.name} has started nominations for the ${handler.name} of the ${handler.timeLabel}.)`);
 		this.modlog(`${handler.id.toUpperCase()} START`, null);
 	},
-	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
+	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`],
 
 	end(target, room, user) {
 		if (!this.canTalk()) return;
@@ -467,7 +474,7 @@ export const otdCommands: ChatCommands = {
 		this.modlog(`${handler.id.toUpperCase()} END`, null);
 	},
 	endhelp: [
-		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
+		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
 	],
 
 	nom(target, room, user) {
@@ -524,7 +531,7 @@ export const otdCommands: ChatCommands = {
 	},
 	removehelp: [
 		`/-otd remove [username] - Remove a user's nomination for the Thing of the Day.`,
-		 `Prevents them from voting again until the next round. Requires: % @ # & ~`,
+		 `Prevents them from voting again until the next round. Requires: % @ # &`,
 	],
 
 	force(target, room, user) {
@@ -546,7 +553,7 @@ export const otdCommands: ChatCommands = {
 		room.add(`The ${handler.name} of the ${handler.timeLabel} was forcibly set to '${target}'`);
 	},
 	forcehelp: [
-		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
+		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
 	],
 
 	delay(target, room, user) {
@@ -566,7 +573,7 @@ export const otdCommands: ChatCommands = {
 		this.privateModAction(`(${user.name} disabled the ${handler.name} of the ${handler.timeLabel} timer.)`);
 	},
 	delayhelp: [
-		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
+		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
 	],
 
 	set(target, room, user) {
@@ -643,7 +650,7 @@ export const otdCommands: ChatCommands = {
 	},
 	sethelp: [
 		`/-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day.`,
-		`Requires: % @ # & ~`,
+		`Requires: % @ # &`,
 	],
 
 	winners(target, room, user, connection) {
@@ -678,13 +685,13 @@ export const otdCommands: ChatCommands = {
 const help = [
 	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
 	`- /-otd - View the current Thing of the Day.`,
-	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
+	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
-	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # & ~`,
-	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
-	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
-	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
-	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # & ~`,
+	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
+	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
+	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
+	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
 	`- /-otd winners - Displays a list of previous things of the day.`,
 ];
 

@@ -108,7 +108,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip('should request switch-out after taking Life Orb recoil', function () {
+	it('should request switch-out after taking Life Orb recoil', function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", item: "lifeorb", ability: 'emergencyexit', moves: ['peck']},
 			{species: "Wynaut", moves: ['sleeptalk']},
@@ -216,5 +216,37 @@ describe(`Emergency Exit`, function () {
 		battle.makeChoices('move sleeptalk', 'move thunder');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'move');
+	});
+
+	it('should not request switchout if its HP is already below 50%', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", evs: {hp: 4}, ability: 'emergencyexit', moves: ['sleeptalk', 'tackle']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "stufful", ability: 'compoundeyes', moves: ['superfang', 'sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2');
+
+		// Switch Goliosopod back in
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move tackle', 'move sleeptalk');
+		assert.equal(battle.requestState, 'move');
+	});
+
+	it('should request switchout if its HP was restored to above 50% and brought down again', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", evs: {hp: 4}, ability: 'emergencyexit', moves: ['sleeptalk']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "stufful", ability: 'compoundeyes', moves: ['superfang', 'healpulse']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2');
+
+		// Switch Goliosopod back in and heal it before switching it back out again
+		battle.makeChoices('switch 2', 'move healpulse');
+		battle.makeChoices('auto', 'move superfang');
+		assert.equal(battle.requestState, 'switch');
 	});
 });

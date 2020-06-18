@@ -74,7 +74,7 @@ class Giveaway {
 	}
 
 	changeUhtml(content: string) {
-		this.room.add(`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${content}</div>`);
+		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div class="broadcast-blue">${content}</div>`);
 		this.room.update();
 	}
 
@@ -150,15 +150,15 @@ class Giveaway {
 			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
 				if (value.cosmeticFormes) {
-					for (const form of value.cosmeticFormes) {
-						if (text.includes(form)) {
-							spriteid += '-' + form.substr(key.length);
+					for (const forme of value.cosmeticFormes.map(toID)) {
+						if (text.includes(forme)) {
+							spriteid += '-' + forme.slice(key.length);
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
 				}
 				if (value.otherFormes) {
-					for (const forme of value.otherFormes) {
+					for (const forme of value.otherFormes.map(toID)) {
 						// Allow "alolan <name>" to match as well.
 						if (forme.endsWith('alola')) {
 							if (/alolan?/.test(text)) {
@@ -205,7 +205,7 @@ class Giveaway {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
 			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Chat.escapeHTML(this.host.name)}</p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Chat.formatText(this.prize, true)}<br />OT: ${Chat.escapeHTML(this.ot)}, TID: ${this.tid}</td>` +
-			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch and Pokémon Sword/Shield to receive the prize. Do not join if you are currently unable to trade.</p>`;
+			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch, Pokémon Sword/Shield, and Nintendo Switch Online to receive the prize. Do not join if you are currently unable to trade.</p>`;
 	}
 }
 
@@ -521,7 +521,7 @@ export class GTSGiveaway {
 	}
 
 	changeUhtml(content: string) {
-		this.room.add(`|uhtmlchange|gtsga${this.gtsNumber}|<div class="broadcast-blue">${content}</div>`);
+		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, `<div class="broadcast-blue">${content}</div>`);
 		this.room.update();
 	}
 
@@ -625,7 +625,7 @@ const cmds: ChatCommands = {
 			param => param.trim()
 		);
 		if (!(giver && ot && tid && prize && question && answers.length)) {
-			return this.errorReply("Invalid arguments specified - /question giver | ot | tid | prize | question | answer(s)");
+			return this.errorReply("Invalid arguments specified - /qg giver | ot | tid | prize | question | answer(s)");
 		}
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
@@ -863,7 +863,7 @@ const cmds: ChatCommands = {
 	end(target, room, user) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (!this.can('warn', null, room) && user.id !== room.giveaway.host.id) return false;
+		if (user.id !== room.giveaway.host.id && !this.can('warn', null, room)) return false;
 
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
@@ -908,23 +908,23 @@ const cmds: ChatCommands = {
 		case 'staff':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-					'- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
-					'- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
+					'- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
+					'- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
 					'- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
 					'- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # & ~)<br />' +
-					'- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />' +
+					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # &)<br />' +
+					'- end - Forcibly ends the current giveaway (Requires: % @ # &)<br />' +
 					'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
 			break;
 		case 'gts':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>GTS giveaway commands:</strong><br />' +
-					'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # & ~)<br />' +
+					'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # &)<br />' +
 					'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
 					'- gts sent <em>IGN</em> - Adds an ign to the list of latest winners, and updates left count accordingly.<br />' +
 					'- gts full - Signifies enough mons have been received, and will update the GTS giveaway to reflect that.<br />' +
-					'- gts end - Forcibly ends the current gts giveaway (Requires: % @ # & ~)<br />';
+					'- gts end - Forcibly ends the current gts giveaway (Requires: % @ # &)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
@@ -941,8 +941,8 @@ const cmds: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ # & ~)<br />' +
-			'- help gts - shows gts giveaway commands (Requires: + % @ # & ~)';
+			'- help staff - shows giveaway staff commands (Requires: + % @ # &)<br />' +
+			'- help gts - shows gts giveaway commands (Requires: + % @ # &)';
 		}
 		this.sendReplyBox(reply);
 	},

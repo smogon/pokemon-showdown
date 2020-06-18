@@ -570,7 +570,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	explosion: {
 		inherit: true,
 		desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		basePower: 500,
+		shortDesc: "Deals double damage. The user faints.",
 	},
 	extremespeed: {
 		inherit: true,
@@ -1050,7 +1050,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		desc: "A random move is selected for use, other than Assist, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, or Trick.",
-		noMetronome: ['assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick'],
+		noMetronome: [
+			"Assist", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Protect", "Sketch", "Sleep Talk", "Snatch", "Struggle", "Switcheroo", "Thief", "Trick",
+		],
 	},
 	milkdrink: {
 		inherit: true,
@@ -1357,7 +1359,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	roleplay: {
 		inherit: true,
-		desc: "The user's Ability changes to match the target's Ability. Fails if the user's Ability is Multitype or already matches the target, or if the target's Ability is Multitype or Wonder Guard.",
+		desc: "The user's Ability changes to match the target's Ability. Fails if the user's Ability is Multitype or already matches the target, if the target's Ability is Multitype or Wonder Guard, or if the user is holding a Griseous Orb.",
+		onTryHit(target, source) {
+			if (target.ability === source.ability || source.hasItem('griseousorb')) return false;
+			const bannedTargetAbilities = ['multitype', 'wonderguard'];
+			if (bannedTargetAbilities.includes(target.ability) || source.ability === 'multitype') {
+				return false;
+			}
+		},
 	},
 	roost: {
 		inherit: true,
@@ -1386,7 +1395,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	selfdestruct: {
 		inherit: true,
 		desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		basePower: 400,
+		shortDesc: "Deals double damage. The user faints.",
 	},
 	sketch: {
 		inherit: true,
@@ -1416,11 +1425,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	skillswap: {
 		inherit: true,
-		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Multitype or Wonder Guard, or if both have the same Ability.",
+		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Multitype or Wonder Guard, if both have the same Ability, or if either is holding a Griseous Orb.",
 		onHit(target, source) {
 			const targetAbility = target.ability;
 			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility) {
+			if (targetAbility === sourceAbility || source.hasItem('griseousorb') || target.hasItem('griseousorb')) {
 				return false;
 			}
 			this.add('-activate', source, 'move: Skill Swap');
@@ -1494,7 +1503,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
-		desc: "Deals typeless damage to a random opposing Pokemon. If this move was successful, the user loses 1/4 of its maximum HP, rounded half up, and the Rock Head Ability does not prevent this. This move is automatically used if none of the user's known moves can be selected.",
+		desc: "Deals typeless damage to a random opposing Pokemon. If this move was successful, the user loses 1/4 of its maximum HP, rounded down, and the Rock Head Ability does not prevent this. This move is automatically used if none of the user's known moves can be selected.",
 		onModifyMove(move) {
 			move.type = '???';
 		},
@@ -1815,10 +1824,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	worryseed: {
 		inherit: true,
-		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Multitype or Truant.",
+		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Multitype or Truant, or if the target is holding a Griseous Orb.",
 		onTryHit(pokemon) {
 			const bannedAbilities = ['multitype', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
+			if (bannedAbilities.includes(pokemon.ability) || pokemon.hasItem('griseousorb')) {
 				return false;
 			}
 		},

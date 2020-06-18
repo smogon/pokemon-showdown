@@ -49,7 +49,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (!target || target === 'all') {
-			buffer += `- <a href="https://www.smogon.com/forums/forums/394/">Other Metagames Forum</a><br />`;
+			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
@@ -71,7 +71,7 @@ export const commands: ChatCommands = {
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ # & ~`,
+		`!om - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!mixandmega': true,

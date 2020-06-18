@@ -31,7 +31,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	energypowder: {
-		id: "energypowder",
 		name: "Energy Powder",
 		spritenum: 123,
 		fling: {

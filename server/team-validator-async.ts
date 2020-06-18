@@ -56,8 +56,8 @@ export const PM = new QueryProcessManager<{
 			team,
 		});
 		problems = [
-			`Your team crashed the team validator. We've been automatically notified and will fix this crash,` +
-			` but you should use a different team for now.`,
+			`Your team crashed the validator. We'll fix this crash within a few minutes (we're automatically notified),` +
+			` but if you don't want to wait, just use a different team for now.`,
 		];
 	}
 

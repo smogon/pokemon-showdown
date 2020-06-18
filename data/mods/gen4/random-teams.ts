@@ -4,10 +4,14 @@ import RandomGen5Teams from '../gen5/random-teams';
 
 export class RandomGen4Teams extends RandomGen5Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {
-		const baseSpecies = (species = this.dex.getSpecies(species));
+		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
 		if (species.battleOnly && species.battleOnly === 'string') forme = species.battleOnly;
+
+		if (species.cosmeticFormes) {
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
+		}
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id].learnset!)).slice();
 		const rejectedPool: string[] = [];
@@ -461,7 +465,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
-		const abilities = Object.values(baseSpecies.abilities);
+		const abilities = Object.values(species.abilities);
 		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
 		let ability0 = this.dex.getAbility(abilities[0]);
 		let ability1 = this.dex.getAbility(abilities[1]);
@@ -547,7 +551,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item = species.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (species.name === 'Farfetch\'d') {
+		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Stick';
 		} else if (species.name === 'Marowak') {
 			item = 'Thick Club';
@@ -637,7 +641,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Uber: 71,
 		};
 		const customScale: {[k: string]: number} = {
-			Delibird: 99, Ditto: 99, 'Farfetch\'d': 99, Unown: 99,
+			Delibird: 99, Ditto: 99, 'Farfetch\u2019d': 99, Unown: 99,
 		};
 		const tier = species.tier;
 		let level = levelScale[tier] || 75;

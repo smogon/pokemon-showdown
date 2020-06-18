@@ -11,16 +11,15 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	}
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {
-		const baseSpecies = (species = this.dex.getSpecies(species));
+		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
 		if (species.battleOnly && typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
 		}
-		const battleForme = this.checkBattleForme(species);
-		if (battleForme?.randomBattleMoves && species.otherFormes && (battleForme?.isMega ? !teamDetails.megaStone : this.random(2))) {
-			species = this.dex.getSpecies(species.otherFormes.length >= 2 ? this.sample(species.otherFormes) : species.otherFormes[0]);
+		if (species.cosmeticFormes) {
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
@@ -574,6 +573,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
+		const baseSpecies: Species = species.battleOnly && !species.requiredAbility ? this.dex.getSpecies(species.battleOnly as string) : species;
 		const abilities = Object.values(baseSpecies.abilities);
 		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
 		let ability0 = this.dex.getAbility(abilities[0]);
@@ -717,7 +717,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Petaya Berry';
 		} else if (species.name === 'Deoxys-Attack') {
 			item = (isLead && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
-		} else if (species.name === 'Farfetch\'d') {
+		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Stick';
 		} else if (species.name === 'Genesect' && hasMove['technoblast']) {
 			item = 'Douse Drive';

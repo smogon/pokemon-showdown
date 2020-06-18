@@ -492,12 +492,6 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert.equal(illegal, null);
-
-		team = [
-			{species: 'pikachu-gmax', ability: 'static', moves: ['volttackle'], evs: {hp: 1}},
-		];
-		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert(illegal);
 	});
 
 	it('should reject exclusive G-Max moves added directly to a Pokemon\'s moveset', function () {
@@ -507,6 +501,42 @@ describe('Team Validator', function () {
 		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);
 		illegal = TeamValidator.get('gen8customgame@@@-nonexistent').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should reject Gmax Pokemon from formats with Dynamax Clause', function () {
+		const team = [
+			{species: 'gengar-gmax', ability: 'cursedbody', moves: ['shadowball'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen8customgame@@@dynamaxclause').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should reject Pokemon that cannot obtain moves in a particular forme', function () {
+		let team = [
+			{species: 'toxicrity', ability: 'punkrock', moves: ['venomdrench, magneticflux'], evs: {hp: 1}},
+			{species: 'toxicrity-low-key', ability: 'punkrock', moves: ['venoshock, shiftgear'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'rotom-wash', ability: 'levitate', moves: ['overheat'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'kyurem-black', ability: 'teravolt', moves: ['glaciate'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		// Scary Face is a TM in Gen 8, so use Gen 7 to test
+		team = [
+			{species: 'kyurem-white', ability: 'turboblaze', moves: ['scaryface'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert(illegal);
 	});
 

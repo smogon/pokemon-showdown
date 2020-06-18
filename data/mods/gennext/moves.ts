@@ -1259,7 +1259,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePowerCallback() {
 			return 80;
 		},
-		isViable: true,
 		ignoreImmunity: true,
 		onHit(target, source) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
@@ -2016,6 +2015,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (user.illusion) {
 				const illusionMoves = user.illusion.moves.filter(m => this.dex.getMove(m).category !== 'Status');
 				if (!illusionMoves.length) return;
+				// @ts-ignore I'll figure out a better fix for this later
 				move.name = this.dex.getMove(this.sample(illusionMoves)).name;
 			}
 		},
