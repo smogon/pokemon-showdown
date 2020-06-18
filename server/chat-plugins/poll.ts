@@ -4,8 +4,6 @@
  */
 import {Utils} from '../../lib/utils';
 
-import {Utils} from '../../lib/utils';
-
 interface QuestionData {
 	source: string; supportHTML: boolean;
 }
