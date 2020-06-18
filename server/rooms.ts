@@ -1086,7 +1086,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
-	queuedActivity: Poll[];
+	queuedActivity: Poll[] | null;
 	banwordRegex: RegExp | true | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
