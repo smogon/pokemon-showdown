@@ -160,7 +160,7 @@ async function runModlog(
 		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	} else {
 		searchString = toID(searchString);
-		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
+		regexString = `[^a-zA-Z0-9]${[...searchString].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 	if (onlyPunishments) regexString = `${PUNISHMENTS_REGEX_STRING}${regexString}`;
 
@@ -378,7 +378,7 @@ async function runBattleSearch(userid: ID, turnLimit: number, month: string, tie
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
 		// in a user's name so the userid can case-insensitively be matched to the name.
-		const regexString = `("p1":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
+		const regexString = `("p1":"${[...userid].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${[...userid].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
 		let output;
 		try {
 			output = await execFile('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', pathString]);
