@@ -323,8 +323,10 @@ class OtdHandler {
 		if (winner.tagline) output += Utils.html `<br/>${winner.tagline}`;
 		output += `</p><table style="margin:auto;"><tr>`;
 		if (winner.image) {
-			const [width, height] = await Chat.fitImage(winner.image, 100, 100);
-			output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
+			try {
+				const [width, height] = await Chat.fitImage(winner.image, 100, 100);
+				output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
+			} catch (err) {}
 		}
 		output += `<td style="text-align:right;margin:5px;">`;
 		if (winner.event) output += Utils.html `<b>Event:</b> ${winner.event}<br/>`;
