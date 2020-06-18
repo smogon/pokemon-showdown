@@ -5420,6 +5420,9 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
+	zarudedada: {
+		isNonstandard: "Unobtainable",
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
