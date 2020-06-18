@@ -15626,7 +15626,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Kubfu",
 		types: ["Fighting"],
 		genderRatio: {M: 0.875, F: 0.125},
-		baseStats: {hp: 60, atk: 90, def: 60, spa: 53, spd: 50, spe: 73},
+		baseStats: {hp: 60, atk: 90, def: 60, spa: 53, spd: 50, spe: 72},
 		abilities: {0: "Inner Focus"},
 		heightm: 0.6,
 		weightkg: 12,
