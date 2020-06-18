@@ -170,7 +170,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		},
 		// onResidual(pokemon) {
 		// 	if (pokemon.species.name === 'Shuckle') {
-		// 		this.heal(this.dex.clampIntRange(pokemon.maxhp / 16, 1));
+		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
 		desc: "Raises Farfetch\u2019d's critical hit rate two stages.",

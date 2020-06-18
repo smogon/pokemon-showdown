@@ -13,6 +13,7 @@ import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
+import {Utils} from '../lib/utils';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -137,6 +138,7 @@ export class Battle {
 	readonly send: (type: string, data: string | string[]) => void;
 
 	trunc: (num: number, bits?: number) => number;
+	clampIntRange: (num: any, min?: number, max?: number) => number;
 
 	constructor(options: BattleOptions) {
 		const format = options.format || Dex.getFormat(options.formatid, true);
@@ -148,6 +150,7 @@ export class Battle {
 		this.zMoveTable = {};
 		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
+		this.clampIntRange = Utils.clampIntRange;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
@@ -1720,6 +1723,8 @@ export class Battle {
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
+		if (success && Object.values(boost).some(x => x! > 0)) target.statsRaisedThisTurn = true;
+		if (success && Object.values(boost).some(x => x! < 0)) target.statsLoweredThisTurn = true;
 		return success;
 	}
 
@@ -1745,7 +1750,7 @@ export class Battle {
 				retVals[i] = false;
 				continue;
 			}
-			if (targetDamage !== 0) targetDamage = this.dex.clampIntRange(targetDamage, 1);
+			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
@@ -1760,7 +1765,7 @@ export class Battle {
 					continue;
 				}
 			}
-			if (targetDamage !== 0) targetDamage = this.dex.clampIntRange(targetDamage, 1);
+			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (this.gen <= 1) {
 				if (this.dex.currentMod === 'stadium' ||
@@ -1797,11 +1802,13 @@ export class Battle {
 
 			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
-					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
-					this.damage(amount, source, target, 'recoil');
+					if (this.dex.currentMod !== 'stadium' || target.hp > 0) {
+						const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
+						this.damage(amount, source, target, 'recoil');
+					}
 				}
 				if (this.gen <= 4 && effect.drain && source) {
-					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
 					this.heal(amount, source, target, 'drain');
 				}
 				if (this.gen > 4 && effect.drain && source) {
@@ -1849,7 +1856,7 @@ export class Battle {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = this.dex.clampIntRange(damage, 1);
+		damage = this.clampIntRange(damage, 1);
 
 		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
 
@@ -2029,15 +2036,15 @@ export class Battle {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		let critMult;
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
 		if (this.gen <= 5) {
-			critRatio = this.dex.clampIntRange(critRatio, 0, 5);
+			critRatio = this.clampIntRange(critRatio, 0, 5);
 			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
-			critRatio = this.dex.clampIntRange(critRatio, 0, 4);
+			critRatio = this.clampIntRange(critRatio, 0, 4);
 			if (this.gen === 6) {
 				critMult = [0, 16, 8, 2, 1];
 			} else {
@@ -2061,7 +2068,7 @@ export class Battle {
 		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
 		if (!basePower) return 0;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		const level = pokemon.level;
 
@@ -2126,7 +2133,7 @@ export class Battle {
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 		if (this.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
-			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		const tr = this.trunc;
@@ -2176,7 +2183,7 @@ export class Battle {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
@@ -2464,6 +2471,8 @@ export class Battle {
 			// take priority from the base move, so abilities like Prankster only apply once
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.getMove(move.id).priority;
+			// Grassy Glide priority
+			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
 			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 			action.priority = priority + action.fractionalPriority;
 			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.

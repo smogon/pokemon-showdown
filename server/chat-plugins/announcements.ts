@@ -2,6 +2,7 @@
  * Announcements chat plugin
  * By Spandamn
  */
+import {Utils} from '../../lib/utils';
 
 export class Announcement {
 	readonly activityId: 'announcement';
@@ -12,7 +13,7 @@ export class Announcement {
 	timeoutMins: number;
 	constructor(room: ChatRoom | GameRoom, source: string) {
 		this.activityId = 'announcement';
-		this.announcementNumber = ++room.gameNumber;
+		this.announcementNumber = room.nextGameNumber();
 		this.room = room;
 		this.source = source;
 		this.timeout = null;
@@ -64,7 +65,7 @@ export const commands: ChatCommands = {
 			if (!this.canTalk()) return;
 			if (room.minorActivity) return this.errorReply("There is already a poll or announcement in progress in this room.");
 
-			const source = supportHTML ? this.canHTML(target) : Chat.escapeHTML(target);
+			const source = supportHTML ? this.canHTML(target) : Utils.escapeHTML(target);
 			if (!source) return;
 
 			room.minorActivity = new Announcement(room, source);

@@ -36,10 +36,11 @@ export class NetStream extends Streams.ReadWriteStream {
 	uri: string;
 	request: http.ClientRequest;
 	/** will be a Promise before the response is received, and the response itself after */
-	response: Promise<http.IncomingMessage> | http.IncomingMessage;
+	response: Promise<http.IncomingMessage | null> | http.IncomingMessage | null;
 	statusCode: number | null;
 	/** response headers */
 	headers: http.IncomingHttpHeaders | null;
+	state: 'pending' | 'open' | 'timeout' | 'success' | 'error';
 
 	constructor(uri: string, opts: NetRequestOptions | null = null) {
 		super();
@@ -48,7 +49,8 @@ export class NetStream extends Streams.ReadWriteStream {
 		this.uri = uri;
 		this.opts = opts;
 		// make request
-		this.response = null!;
+		this.response = null;
+		this.state = 'pending';
 		this.request = this.makeRequest(opts);
 	}
 	makeRequest(opts: NetRequestOptions | null) {
@@ -76,28 +78,52 @@ export class NetStream extends Streams.ReadWriteStream {
 		const protocol = url.parse(this.uri).protocol as string;
 		const net = protocol === 'https:' ? https : http;
 
-		let resolveResponse: (value: http.IncomingMessage) => void;
+		let resolveResponse: ((value: http.IncomingMessage | null) => void) | null;
 		this.response = new Promise(resolve => {
 			resolveResponse = resolve;
 		});
 
 		const request = net.request(this.uri, opts, response => {
-			response.setEncoding('utf-8');
+			this.state = 'open';
 			this.nodeReadableStream = response;
 			this.response = response;
-			resolveResponse(response);
 			this.statusCode = response.statusCode || null;
 			this.headers = response.headers;
+
+			response.setEncoding('utf-8');
+			resolveResponse!(response);
+			resolveResponse = null;
+
 			response.on('data', data => {
 				this.push(data);
 			});
 			response.on('end', () => {
-				this.push(null);
+				if (this.state === 'open') this.state = 'success';
+				this.pushEnd();
 			});
 		});
-		request.on('error', error => {
-			this.pushError(error);
+		request.on('close', () => {
+			if (!this.atEOF) {
+				this.state = 'error';
+				this.pushError(new Error("Unexpected connection close"));
+			}
+			if (resolveResponse) {
+				this.response = null;
+				resolveResponse(null);
+				resolveResponse = null;
+			}
 		});
+		request.on('error', error => {
+			if (!this.atEOF) this.pushError(error, true);
+		});
+		if (opts.timeout || opts.timeout === undefined) {
+			request.setTimeout(opts.timeout || 5000, () => {
+				this.state = 'timeout';
+				this.pushError(new Error("Request timeout"));
+				request.abort();
+			});
+		}
+
 		if (body) {
 			request.write(body);
 			request.end();
@@ -108,11 +134,6 @@ export class NetStream extends Streams.ReadWriteStream {
 			this.nodeWritableStream = request;
 		} else {
 			request.end();
-		}
-		if (opts.timeout || opts.timeout === undefined) {
-			request.setTimeout(opts.timeout || 5000, () => {
-				request.abort();
-			});
 		}
 
 		return request;
@@ -180,7 +201,7 @@ export class NetRequest {
 	async get(opts: NetRequestOptions = {}): Promise<string> {
 		const stream = this.getStream(opts);
 		const response = await stream.response;
-		if (response.statusCode !== 200) {
+		if (response && response.statusCode !== 200) {
 			throw new HttpError(response.statusMessage || "Connection error", response.statusCode, await stream.readAll());
 		}
 		return stream.readAll();

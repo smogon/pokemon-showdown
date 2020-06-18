@@ -7,6 +7,8 @@
 
 import {Net} from '../../lib/net';
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
+
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
@@ -27,6 +29,7 @@ export class YoutubeInterface {
 		this.intervalTime = 0;
 	}
 	async getChannelData(link: string, username?: string) {
+		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
@@ -75,7 +78,7 @@ export class YoutubeInterface {
 	}
 	randChannel() {
 		const keys = Object.keys(channelData);
-		const id = Dex.shuffle(keys)[0].trim();
+		const id = Utils.shuffle(keys)[0].trim();
 		return this.generateChannelDisplay(id);
 	}
 	get(id: string, username?: string) {
@@ -97,23 +100,26 @@ export class YoutubeInterface {
 		return channel;
 	}
 	getId(link: string) {
-		let id;
+		let id = '';
+		if (!link) return null;
 		if (channelData[link]) return link;
 		if (!link.includes('channel')) {
 			if (link.includes('youtube')) {
-				id = link.split('v=')[1];
+				id = link.split('v=')[1] || '';
 			} else if (link.includes('youtu.be')) {
-				id = link.split('/')[3];
+				id = link.split('/')[3] || '';
 			} else {
 				return null;
 			}
 		} else {
-			id = link.split('channel/')[1];
+			id = link.split('channel/')[1] || '';
 		}
 		if (id.includes('&')) id = id.split('&')[0];
+		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
+		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
@@ -299,7 +305,7 @@ export const pages: PageTable = {
 		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		buffer += `</h4><hr />`;
 		const isStaff = user.can('mute', null, Rooms.get('youtube'));
-		for (const id of Dex.shuffle(Object.keys(channelData))) {
+		for (const id of Utils.shuffle(Object.keys(channelData))) {
 			const name = YouTube.get(id).name;
 			const psid = YouTube.get(id).username;
 			if (!all && !psid) continue;

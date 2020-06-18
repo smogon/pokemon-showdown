@@ -8,6 +8,7 @@
  */
 
 import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
+import {Utils} from '../../lib/utils';
 
 export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {
@@ -122,7 +123,7 @@ const TWISTS: {[k: string]: Twist} = {
 		onAfterEnd() {
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) {
-				this.announce(Chat.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
+				this.announce(Utils.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
 			}
 		},
 	},
@@ -147,7 +148,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
 			const blitz = now - this.startTime <= 60000 &&
-				(this.room.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
+				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
 
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
@@ -194,7 +195,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
 			const blitz = now - this.startTime <= 60000 &&
-				(this.room.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
+				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
 
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
@@ -448,8 +449,8 @@ const MODES: {[k: string]: GameMode | string} = {
 			onCreateCallback() {
 				if (this.answerLock) {
 					return `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) ? 'An' : 'A'} ${this.gameType} ` +
-						`Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> ` +
-						`has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.` +
+						`Scavenger Hunt by <em>${Utils.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> ` +
+						`has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Utils.escapeHTML(this.staffHostName)}</em>`)}.` +
 						`<br />The first hint is currently being handed out to early finishers.`;
 				}
 			},
@@ -602,7 +603,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				if (player.currentQuestion + 1 < this.questions.length) {
 					game.teamAnnounce(
 						player,
-						Chat.html`<strong>${player.name}</strong> has gotten the correct answer (${value}) for question #${player.currentQuestion + 1}.`
+						Utils.html`<strong>${player.name}</strong> has gotten the correct answer (${value}) for question #${player.currentQuestion + 1}.`
 					);
 					game.advanceTeam(player);
 
@@ -623,7 +624,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				if (player.completed) return;
 
 				if (team.answers.includes(value)) return;
-				game.teamAnnounce(player, Chat.html`${player.name} has guessed "${value}".`);
+				game.teamAnnounce(player, Utils.html`${player.name} has guessed "${value}".`);
 				team.answers.push(value);
 			},
 
@@ -644,7 +645,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 				game.teamAnnounce(
 					player,
-					Chat.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`
+					Utils.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`
 				);
 			},
 

@@ -9,6 +9,7 @@
  */
 
 import {QueryProcessManager} from '../../lib/process-manager';
+import {Utils} from '../../lib/utils';
 
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
@@ -105,7 +106,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'dexsearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -171,7 +172,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
@@ -217,7 +218,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
@@ -260,7 +261,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'movesearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -320,7 +321,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'itemsearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -365,7 +366,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'abilitysearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -408,7 +409,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'learn',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: cmd,
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -1019,7 +1020,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
-				if (!validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (move.gen <= maxGen && !validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
@@ -1040,7 +1041,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	if (randomOutput && randomOutput < results.length) {
-		results = Dex.shuffle(results).slice(0, randomOutput);
+		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
@@ -1761,7 +1762,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	}
 	if (randomOutput && randomOutput < results.length) {
-		results = Dex.shuffle(results).slice(0, randomOutput);
+		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 	if (results.length > 1) {
 		results.sort();
@@ -2383,6 +2384,9 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
 
 const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
+		if (Config.debugdexsearchprocesses && process.send) {
+			process.send('DEBUG\n' + JSON.stringify(query));
+		}
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':

@@ -36,8 +36,10 @@ async function renderSpotlight(description: string, image?: string) {
 	let imgHTML = '';
 
 	if (image) {
-		const [width, height] = await Chat.fitImage(image, 150, 300);
-		imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+		try {
+			const [width, height] = await Chat.fitImage(image, 150, 300);
+			imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+		} catch (err) {}
 	}
 
 	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
@@ -72,7 +74,7 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	removedaily(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
@@ -102,7 +104,7 @@ export const commands: ChatCommands = {
 	},
 	queuedaily: 'setdaily',
 	async setdaily(target, room, user, connection, cmd) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, ...rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
@@ -115,8 +117,11 @@ export const commands: ChatCommands = {
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {
 			[img, ...rest] = rest;
 			img = img.trim();
-			const ret = await Chat.getImageDimensions(img);
-			if (ret.err) return this.errorReply(`Invalid image url: ${img}`);
+			try {
+				await Chat.getImageDimensions(img);
+			} catch (e) {
+				return this.errorReply(`Invalid image url: ${img}`);
+			}
 		}
 		const desc = rest.join(',');
 		if (Chat.stripFormatting(desc).length > 500) {
@@ -140,7 +145,7 @@ export const commands: ChatCommands = {
 		saveSpotlights();
 	},
 	async daily(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const key = toID(target);
 		if (!key) return this.parse('/help daily');
 
@@ -157,7 +162,7 @@ export const commands: ChatCommands = {
 		room.update();
 	},
 	viewspotlights(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-spotlights-${room.roomid}`);
 	},
 
