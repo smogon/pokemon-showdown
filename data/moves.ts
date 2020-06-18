@@ -13714,8 +13714,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryHit(target, source, move) {
-			if (source.ignoringItem()) return false;
 			if (!target.item) return false;
+			if (target.ignoringItem()) return false;
+			this.add('-activate', target, 'move: Poltergeist', this.dex.getItem(target.item).name);
 		},
 		secondary: null,
 		target: "normal",
