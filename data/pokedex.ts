@@ -71,6 +71,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
+		isGigantamax: "G-Max Vine Lash",
 	},
 	charmander: {
 		num: 4,
