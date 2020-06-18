@@ -17968,7 +17968,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryHit() {
-			if (!this.field.getTerrain()) return false;
+			if (this.field.isTerrain('')) return false;
 		},
 		onHit() {
 			this.field.clearTerrain();
