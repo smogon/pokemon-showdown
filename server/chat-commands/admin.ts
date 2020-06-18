@@ -967,7 +967,7 @@ export const commands: ChatCommands = {
 				`<details class="readmore code" style="white-space: ` +
 				`pre-wrap; display: table; tab-size: 3"><summary>${msg.slice(0, 200)}</summary>` +
 				`${msg.slice(200)}</details>`
-			).replace(/\n/, '<br>') : msg.replace(/\n/g, '\n||');
+			) : msg.replace(/\n/g, '\n||');
 			if (show) {
 				room.add(`|html|<< ${msg}`).update();
 			} else {
