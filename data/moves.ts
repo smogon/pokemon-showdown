@@ -2764,7 +2764,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
-		onAfterHit(target, source) {
+		onHit(target, source) {
 			// Needs research
 			if (source.hp) {
 				const item = target.takeItem();
@@ -7606,9 +7606,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mystery: 1},
-		onModifyMove(move, pokemon) {
+		onModifyPriority(priority, source, target, move) {
 			if (this.field.isTerrain('grassyterrain')) {
-				move.priority = 1;
+				return priority + 1;
 			}
 		},
 		secondary: null,
@@ -13716,11 +13716,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit(target, source, move) {
+		onTryHit(target, source, move) {
 			if (source.ignoringItem()) return false;
-			const item = source.getItem();
-			if (!this.singleEvent('TakeItem', item, source.itemData, source, source, move, item)) return false;
-			if (!item.id) return false;
+			if (!target.item) return false;
 		},
 		secondary: null,
 		target: "normal",
