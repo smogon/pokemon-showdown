@@ -13724,8 +13724,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Dark",
-		contestType: "Cute",
+		type: "Ghost",
 	},
 	pound: {
 		num: 1,
