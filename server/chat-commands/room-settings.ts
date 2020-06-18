@@ -67,7 +67,7 @@ export const commands: ChatCommands = {
 		// 'makeroom' lets you set any rank, no limit
 		const threshold = user.can('makeroom') ? Infinity :
 			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id)) :
-			(Config.groupsranking.indexOf('+') || 2);
+			Math.max(Config.groupsranking.indexOf('+'), 1);
 
 		if (room.settings.modchat &&
 				room.settings.modchat.length <= 1 &&
