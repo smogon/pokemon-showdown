@@ -513,7 +513,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.breaksProtect) {
 			for (const target of targets) {
 				let broke = false;
-				for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
+				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
 				if (this.gen >= 6 || target.side !== pokemon.side) {
@@ -522,8 +522,8 @@ export const BattleScripts: BattleScriptsData = {
 					}
 				}
 				if (broke) {
-					if (move.id === 'feint') {
-						this.add('-activate', target, 'move: Feint');
+					if (['feint', 'gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
+						this.add('-activate', target, 'move: ' + move.name);
 					} else {
 						this.add('-activate', target, 'move: ' + move.name, '[broken]');
 					}
