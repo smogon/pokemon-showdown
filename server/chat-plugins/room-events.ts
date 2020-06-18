@@ -116,7 +116,7 @@ export const commands: ChatCommands = {
 			const [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
 
 			if (!(eventName && date && desc)) {
-				return this.errorReply("You're missing a command parameter - to see this .");
+				return this.errorReply("You're missing a command parameter - to see this command's syntax, use /help roomevents.");
 			}
 
 			const dateActual = date.trim();
