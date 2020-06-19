@@ -932,7 +932,7 @@ export const commands: ChatCommands = {
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
 
 		const broadcasting = this.broadcasting || this.message.startsWith('>>');
-		if (show) {
+		if (broadcasting) {
 			room.add(`||>> ${target}`).update();
 		} else {
 			this.sendReply(`||>> ${target}`);
@@ -950,11 +950,12 @@ export const commands: ChatCommands = {
 			} else {
 				result = Utils.visualize(result);
 			}
-			result = show && result.length > 200 ? (`<details class="readmore code" style="` +
-				Utils.html`display: table; tab-size: 3"><summary>${result.slice(0, 200)}</summary>` +
-				Utils.html`${result.slice(200)}</details>`
+			const newlineIdx = result.indexOf('\n');
+			result = broadcasting && newlineIdx > -1 ? (`<details class="readmore code" style="` +
+				Utils.html`display: table; tab-size: 3"><summary>${result.slice(0, newlineIdx)}</summary>` +
+				Utils.html`${result.slice(newlineIdx + 1)}</details>`
 			).replace(/\n/g, '<br>') : result.replace(/\n/g, '\n||');
-			if (show) {
+			if (broadcasting) {
 				room.add(`|html|<< ${result}`).update();
 			} else {
 				this.sendReply(`|| << ${result}`);
@@ -962,12 +963,13 @@ export const commands: ChatCommands = {
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			msg = show && msg.length > 200 ? (
+			const newlineIdx = msg.indexOf('\n');
+			msg = broadcasting && newlineIdx > -1 ? (
 				`<details class="readmore code" style="display: table; tab-size: 3">` +
-				Utils.html`<summary>${msg.slice(0, 200)}</summary>` +
-				Utils.html`${msg.slice(200)}</details>`
+				Utils.html`<summary>${msg.slice(0, newlineIdx)}</summary>` +
+				Utils.html`${msg.slice(newlineIdx + 1)}</details>`
 			).replace(/\n/g, '<br>') : msg.replace(/\n/g, '\n||');
-			if (show) {
+			if (broadcasting) {
 				room.add(`|html|<< ${msg}`).update();
 			} else {
 				this.sendReply(`|| << ${msg}`);
