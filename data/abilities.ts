@@ -2992,7 +2992,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Quick Draw",
-		rating: 1.5,
+		rating: 2,
 		num: 259,
 	},
 	quickfeet: {
