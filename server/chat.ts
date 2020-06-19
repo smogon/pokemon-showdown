@@ -1701,6 +1701,31 @@ export const Chat = new class {
 		htmlContent = htmlContent.replace(/\n/g, '&#10;');
 		return htmlContent;
 	}
+	/**
+	 * Takes a string of code and transforms it into a block of html using the details tag.
+	 * If it has a newline, will make the 3 lines the preview, and fill the rest in.
+	 * @param str string to block
+	 */
+	getReadmoreCodeBlock(str: string, cutoff = 3) {
+		const params = str.slice(+str.startsWith('\n')).split('\n');
+		const output = [];
+		for (const param of params) {
+			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
+			output.push(Utils.escapeHTML(param));
+		}
+
+		if (output.length > cutoff) {
+			return `<details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
+				output.slice(0, cutoff).join('<br />')
+			}</summary>${
+				output.slice(cutoff).join('<br />')
+			}</details>`;
+		} else {
+			return `<code style="white-space: pre-wrap; display: table; tab-size: 3">${
+				output.join('<br />')
+			}</code>`;
+		}
+	}
 
 	getDataPokemonHTML(species: Species, gen = 7, tier = '') {
 		if (typeof species === 'string') species = Dex.deepClone(Dex.getSpecies(species));
