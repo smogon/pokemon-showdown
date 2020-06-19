@@ -931,12 +931,11 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
 
-		const broadcasting = this.broadcasting || this.message.startsWith('>>');
-		if (broadcasting) {
-			room.add(`||>> ${target}`).update();
-		} else {
-			this.sendReply(`||>> ${target}`);
+		if (this.message.startsWith('>>') && room) {
+			this.broadcasting = true;
+			this.broadcastToRoom = true;
 		}
+		this.sendReply(`|html|<table><tr><td>&raquo;</td><td>${Chat.getReadmoreCodeBlock(target)}</td></tr><table>`);
 		logRoom?.roomlog(`>> ${target}`);
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
