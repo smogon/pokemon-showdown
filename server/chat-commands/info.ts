@@ -2572,7 +2572,9 @@ export const commands: ChatCommands = {
 		if (target.length < 80 && !target.includes('\n') && !target.includes('```') && this.shouldBroadcast()) {
 			return this.canTalk(`\`\`\`${target}\`\`\``);
 		}
+
 		if (!this.canBroadcast(true, '!code')) return;
+
 		const code = Chat.getReadmoreCodeBlock(target);
 		this.runBroadcast(true);
 		if (this.broadcasting) {
