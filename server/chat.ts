@@ -1701,6 +1701,11 @@ export const Chat = new class {
 		htmlContent = htmlContent.replace(/\n/g, '&#10;');
 		return htmlContent;
 	}
+	/**
+	 * Takes a string of code and transforms it into a block of html using the details tag.
+	 * If it has a newline, will make the 3 lines the preview, and fill the rest in.
+	 * @param str string to block
+	 */
 	getReadmoreCodeBlock(str: string) {
 		const params = str.substr(+str.startsWith('\n')).split('\n');
 		const output = [];
