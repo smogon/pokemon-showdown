@@ -1096,7 +1096,7 @@ export class BasicChatRoom extends BasicRoom {
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
-	pendingApprovals: Map<string, {[k: string]: string}> | null;
+	pendingApprovals: Map<string, {name: string, link: string, comment: string}> | null;
 	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		super(roomid, title);
 
