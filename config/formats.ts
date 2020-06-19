@@ -288,10 +288,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU', 'VGC Timer'],
-		banlist: [
-			// Can't obtain in Galar without transferring
-			'Cobalion', 'Raichu-Alola', 'Terrakion', 'Virizion', 'Weezing-Base',
-		],
 		minSourceGen: 8,
 	},
 	{
