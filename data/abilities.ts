@@ -1697,6 +1697,12 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'flinch') return null;
 		},
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate') {
+				delete boost.atk;
+				this.add('-immune', target, '[from] ability: Inner Focus');
+			}
+		},
 		name: "Inner Focus",
 		rating: 1.5,
 		num: 39,
@@ -1733,8 +1739,6 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				}
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
-				} else if (target.hasAbility(['Inner Focus', 'Oblivious', 'Own Tempo', 'Scrappy'])) {
-					this.add('-immune', target, `[from] ability: ${target.getAbility().name}`);
 				} else {
 					this.boost({atk: -1}, target, pokemon, null, true);
 				}
@@ -2485,6 +2489,12 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate') {
+				delete boost.atk;
+				this.add('-immune', target, '[from] ability: Oblivious');
+			}
+		},
 		name: "Oblivious",
 		rating: 1.5,
 		num: 12,
@@ -2541,6 +2551,12 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onHit(target, source, move) {
 			if (move?.volatileStatus === 'confusion') {
 				this.add('-immune', target, 'confusion', '[from] ability: Own Tempo');
+			}
+		},
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate') {
+				delete boost.atk;
+				this.add('-immune', target, '[from] ability: Own Tempo');
 			}
 		},
 		name: "Own Tempo",
@@ -3318,6 +3334,12 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (move.ignoreImmunity !== true) {
 				move.ignoreImmunity['Fighting'] = true;
 				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate') {
+				delete boost.atk;
+				this.add('-immune', target, '[from] ability: Scrappy');
 			}
 		},
 		name: "Scrappy",
