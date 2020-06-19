@@ -11174,7 +11174,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				const overrideBypassProtect = [
 					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'teatime', 'transform',
 				];
-				const blockedByMaxGuard = move.flags['protect'] || move.isZ || move.isMax || overrideBypassProtect.includes(move.id);
+				const blockedByMaxGuard = (this.dex.getMove(move.id).flags['protect'] ||
+						move.isZ || move.isMax || overrideBypassProtect.includes(move.id));
 				if (!blockedByMaxGuard) {
 					return;
 				}
