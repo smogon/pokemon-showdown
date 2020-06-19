@@ -2443,16 +2443,16 @@ export const commands: ChatCommands = {
 		if (this.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
+
 		let [link, comment] = target.split(',');
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
-		const info = {
+		room.pendingApprovals.set(user.id, {
 			name: user.name,
 			link: link,
 			comment: comment,
-		};
-		room.pendingApprovals.set(user.id, info);
+		});
 		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		room.sendMods(
 			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
@@ -2470,8 +2470,8 @@ export const commands: ChatCommands = {
 		}
 		const userid = toID(target);
 		if (!userid) return this.parse(`/help approveshow`);
-		const info = room.pendingApprovals?.get(userid);
-		if (!info) return this.errorReply(`${userid} has no pending request.`);
+		const request = room.pendingApprovals?.get(userid);
+		if (!request) return this.errorReply(`${userid} has no pending request.`);
 		if (userid === user.id) {
 			return this.errorReply(`You can't approve your own /show request.`);
 		}
@@ -2479,22 +2479,22 @@ export const commands: ChatCommands = {
 		room.sendMods(`|uhtmlchange|request-${userid}|`);
 
 		let buf;
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(info.link)) {
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(request.link)) {
 			const YouTube = new YoutubeInterface();
-			buf = await YouTube.generateVideoDisplay(info.link);
+			buf = await YouTube.generateVideoDisplay(request.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
 			try {
-				const [width, height, resized] = await Chat.fitImage(info.link);
-				buf = Utils.html`<img src="${info.link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${info.link}" target="_blank">full-size image</a>`;
+				const [width, height, resized] = await Chat.fitImage(request.link);
+				buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
+				if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 			} catch (err) {
 				return this.errorReply('Invalid image');
 			}
 		}
-		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray"><small>(Requested by ${info.name})</small>`;
-		if (info.comment) {
-			buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray">${info.comment}</p>`;
+		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray"><small>(Requested by ${request.name})</small>`;
+		if (request.comment) {
+			buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray">${request.comment}</p>`;
 		} else {
 			buf += `</small></p>`;
 		}
