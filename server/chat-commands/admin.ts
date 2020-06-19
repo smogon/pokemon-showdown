@@ -935,7 +935,7 @@ export const commands: ChatCommands = {
 			this.broadcasting = true;
 			this.broadcastToRoom = true;
 		}
-		this.sendReply(`|html|<table><tr><td>&raquo;</td><td>${Chat.getReadmoreCodeBlock(target)}</td></tr><table>`);
+		this.sendReply(`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">&gt;&gt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(target)}</td></tr><table>`);
 		logRoom?.roomlog(`>> ${target}`);
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
@@ -949,11 +949,11 @@ export const commands: ChatCommands = {
 			} else {
 				result = Utils.visualize(result);
 			}
-			this.sendReply(`|html|<table><tr><td>&laquo;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`);
+			this.sendReply(`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">&lt;&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`);
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			this.sendReply(`|html|<table><tr><td>&laquo;</td><td>${Chat.getReadmoreCodeBlock(message)}</td></tr><table>`);
+			this.sendReply(`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">&lt;&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(message)}</td></tr><table>`);
 			logRoom?.roomlog(`<< ${message}`);
 		}
 	},
