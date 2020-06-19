@@ -37,10 +37,10 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 
 	const eventID = toID(event.eventName);
 	const aliases = getAllAliases(room).filter(
-		alias => (room.settings.events?.[alias] as RoomEventAlias).eventID === eventID
+		alias => (room.settings.events![alias] as RoomEventAlias).eventID === eventID
 	);
 	const categories = getAllCategories(room).filter(
-		category => (room.settings.events?.[category] as RoomEventCategory).events.includes(eventID)
+		category => (room.settings.events![category] as RoomEventCategory).events.includes(eventID)
 	);
 
 	let ret = `<tr title="${explanation}">`;
@@ -61,11 +61,9 @@ function getAllAliases(room: Room) {
 }
 
 function getAllCategories(room: Room) {
+	if (!room.settings.events) return [];
 	const categories: string[] = [];
-	for (const category of Object.values(room.settings.events!)
-		.filter(cat => 'events' in cat)
-		.map(cat => cat as RoomEventCategory)
-	) {
+	for (const category of Object.values(room.settings.events).filter(cat => 'events' in cat)) {
 		categories.push(category.id);
 	}
 	return categories;

@@ -539,7 +539,7 @@ export class GlobalRoom extends BasicRoom {
 
 			// convert from old RoomEvent.aliases format to RoomEventAlias format
 			if (settings.events) {
-				for (const event of Object.values(settings.events).map(e => e as AnyObject)) {
+				for (const event of Object.values(settings.events) as AnyObject[]) {
 					if (!event.aliases) continue;
 					for (const alias of event.aliases) {
 						settings.events[alias] = {id: alias, eventID: toID(event.eventName)};
