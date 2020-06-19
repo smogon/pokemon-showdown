@@ -1703,9 +1703,6 @@ export const Chat = new class {
 	}
 	getReadmoreCodeBlock(str: string) {
 		const params = str.substr(+str.startsWith('\n')).split('\n');
-		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```')) {
-			return `<code>${params[0]}</code>`;
-		}
 		const output = [];
 		let cutoff = 3;
 		for (const param of params) {

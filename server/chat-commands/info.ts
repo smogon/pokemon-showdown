@@ -2569,8 +2569,9 @@ export const commands: ChatCommands = {
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!this.canBroadcast(true, '!code')) return;
 		const code = Chat.getReadmoreCodeBlock(target);
-		if (/<code>(.+)<\/code>/.test(code)) {
-			return `/html ${code}`;
+		const params = target.split('\n');
+		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```') && this.shouldBroadcast()) {
+			return this.canTalk(`\`\`\`${params[0]}\`\`\``);
 		}
 		this.runBroadcast(true);
 		if (this.broadcasting) {
