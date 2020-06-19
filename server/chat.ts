@@ -1721,7 +1721,9 @@ export const Chat = new class {
 				output.slice(0, cutoff).join('<br />')
 			}</summary>${output.slice(cutoff).join('<br />')}</details></div>`;
 		} else {
-			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
+			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${
+				output.join('<br />')
+			}</code></div>`;
 		}
 		return code;
 	}
