@@ -929,15 +929,15 @@ export const commands: ChatCommands = {
 	async eval(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
-		const logRoom = Rooms.get('development');
+		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
 
-		const show = this.message.startsWith('>>') || this.message.startsWith('!eval');
+		const broadcasting = this.broadcasting || this.message.startsWith('>>');
 		if (show) {
 			room.add(`||>> ${target}`).update();
-			logRoom?.roomlog(`>> ${target}`);
 		} else {
 			this.sendReply(`||>> ${target}`);
 		}
+		logRoom?.roomlog(`>> ${target}`);
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
 			const battle = room.battle;
@@ -956,10 +956,10 @@ export const commands: ChatCommands = {
 			).replace(/\n/g, '<br>') : result.replace(/\n/g, '\n||');
 			if (show) {
 				room.add(`|html|<< ${result}`).update();
-				logRoom?.roomlog(`<< ${result}`);
 			} else {
 				this.sendReply(`|| << ${result}`);
 			}
+			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			msg = show && msg.length > 200 ? (
@@ -968,11 +968,11 @@ export const commands: ChatCommands = {
 				Utils.html`${msg.slice(200)}</details>`
 			).replace(/\n/g, '<br>') : msg.replace(/\n/g, '\n||');
 			if (show) {
-				logRoom?.roomlog(`<< ${target}`);
 				room.add(`|html|<< ${msg}`).update();
 			} else {
 				this.sendReply(`|| << ${msg}`);
 			}
+			logRoom?.roomlog(`<< ${msg}`);
 		}
 	},
 
