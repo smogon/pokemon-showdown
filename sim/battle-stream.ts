@@ -117,9 +117,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		}
 	}
 
-	_end() {
-		// this is in theory synchronous...
-		this.pushEnd();
+	_writeEnd() {
+		// if battle already ended, we don't need to pushEnd.
+		if (!this.atEOF) this.pushEnd();
 		this._destroy();
 	}
 
@@ -274,7 +274,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		}
 	}
 
-	_end() {
+	_writeEnd() {
 		return this.battleStream.writeEnd();
 	}
 }
