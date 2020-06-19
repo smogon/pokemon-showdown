@@ -1706,10 +1706,9 @@ export const Chat = new class {
 	 * If it has a newline, will make the 3 lines the preview, and fill the rest in.
 	 * @param str string to block
 	 */
-	getReadmoreCodeBlock(str: string) {
-		const params = str.substr(+str.startsWith('\n')).split('\n');
+	getReadmoreCodeBlock(str: string, cutoff = 3) {
+		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output = [];
-		let cutoff = 3;
 		for (const param of params) {
 			if (output.length < 3 && param.length > 80) cutoff = 2;
 			output.push(Utils.escapeHTML(param));
