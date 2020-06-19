@@ -2568,7 +2568,7 @@ export const commands: ChatCommands = {
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!this.canBroadcast(true, '!code')) return;
-		const code = Chat.getReadmoreCodeBlock(target)
+		const code = Chat.getReadmoreCodeBlock(target);
 		if (/<code>(.+)<\/code>/.test(code)) {
 			return `/html ${code}`;
 		}
