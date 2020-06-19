@@ -1701,6 +1701,27 @@ export const Chat = new class {
 		htmlContent = htmlContent.replace(/\n/g, '&#10;');
 		return htmlContent;
 	}
+	getReadmoreCodeBlock(str: string) {
+		const params = str.substr(+str.startsWith('\n')).split('\n');
+		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```')) {
+			return `<code>${params[0]}</code>`;
+		}
+		const output = [];
+		let cutoff = 3;
+		for (const param of params) {
+			if (output.length < 3 && param.length > 80) cutoff = 2;
+			output.push(Utils.escapeHTML(param));
+		}
+
+		let code;
+		if (output.length > cutoff) {
+			code = `<div class="chat"><details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>` +
+				`${output.slice(0, cutoff).join('<br />')}</summary>${output.slice(cutoff).join('<br />')}</details></div>`;
+		} else {
+			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
+		}
+		return code;
+	}
 
 	getDataPokemonHTML(species: Species, gen = 7, tier = '') {
 		if (typeof species === 'string') species = Dex.deepClone(Dex.getSpecies(species));

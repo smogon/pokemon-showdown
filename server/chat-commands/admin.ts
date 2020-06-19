@@ -951,11 +951,7 @@ export const commands: ChatCommands = {
 				result = Utils.visualize(result);
 			}
 			logRoom?.roomlog(`<< ${result}`);
-			const newlineIdx = result.indexOf('\n');
-			result = broadcasting && newlineIdx > -1 ? (`<details class="readmore code" style="` +
-				Utils.html`display: table; tab-size: 3"><summary>${result.slice(0, newlineIdx)}</summary>` +
-				Utils.html`${result.slice(newlineIdx + 1)}</details>`
-			).replace(/\n/g, '<br>') : result.replace(/\n/g, '\n||');
+			result = broadcasting ? Chat.getReadmoreCodeBlock(result) : result.replace(/\n/g, '\n||');
 			if (broadcasting) {
 				room.add(`|html|<< ${result}`).update();
 			} else {
@@ -963,13 +959,8 @@ export const commands: ChatCommands = {
 			}
 		} catch (e) {
 			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			const newlineIdx = msg.indexOf('\n');
 			logRoom?.roomlog(`<< ${msg}`);
-			msg = broadcasting && newlineIdx > -1 ? (
-				`<details class="readmore code" style="display: table; tab-size: 3">` +
-				Utils.html`<summary>${msg.slice(0, newlineIdx)}</summary>` +
-				Utils.html`${msg.slice(newlineIdx + 1)}</details>`
-			).replace(/\n/g, '<br>') : msg.replace(/\n/g, '\n||');
+			msg = broadcasting ? Chat.getReadmoreCodeBlock(msg) : msg.replace(/\n/g, '\n||');
 			if (broadcasting) {
 				room.add(`|html|<< ${msg}`).update();
 			} else {

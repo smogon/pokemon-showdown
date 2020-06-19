@@ -2564,34 +2564,14 @@ export const commands: ChatCommands = {
 
 	'!code': true,
 	code(target, room, user) {
-		// XXX: target is trimmed by Chat#splitMessage. Let's not add another
-		// awful hack like ! or help command keys for whether or not the target
-		// is raw for now.
-		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!target) return this.parse('/help code');
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
-
-		const params = target.substr(+target.startsWith('\n')).split('\n');
-		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```') && this.shouldBroadcast()) {
-			return this.canTalk(`\`\`\`${params[0]}\`\`\``);
-		}
-
+		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!this.canBroadcast(true, '!code')) return;
-
-		const output = [];
-		let cutoff = 3;
-		for (const param of params) {
-			if (output.length < 3 && param.length > 80) cutoff = 2;
-			output.push(Utils.escapeHTML(param));
+		const code = Chat.getReadmoreCodeBlock(target)
+		if (/<code>(.+)<\/code>/.test(code)) {
+			return `/html ${code}`;
 		}
-
-		let code;
-		if (output.length > cutoff) {
-			code = `<div class="chat"><details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${output.slice(0, cutoff).join('<br />')}</summary>${output.slice(cutoff).join('<br />')}</details></div>`;
-		} else {
-			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
-		}
-
 		this.runBroadcast(true);
 		if (this.broadcasting) {
 			return `/raw <div class="infobox">${code}</div>`;
