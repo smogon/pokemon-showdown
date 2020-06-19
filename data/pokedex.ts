@@ -14285,7 +14285,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		evos: ["Greedent"],
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	greedent: {
 		num: 820,
@@ -14299,7 +14298,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Skwovet",
 		evoLevel: 24,
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	rookidee: {
 		num: 821,
@@ -14422,7 +14420,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		evos: ["Thievul"],
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	thievul: {
 		num: 828,
@@ -14436,7 +14433,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Nickit",
 		evoLevel: 18,
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	gossifleur: {
 		num: 829,
@@ -14474,7 +14470,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		evos: ["Dubwool"],
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	dubwool: {
 		num: 832,
@@ -14488,7 +14483,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Wooloo",
 		evoLevel: 24,
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	chewtle: {
 		num: 833,
@@ -14542,7 +14536,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		evos: ["Boltund"],
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	boltund: {
 		num: 836,
@@ -14556,7 +14549,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Yamper",
 		evoLevel: 25,
 		eggGroups: ["Field"],
-		unreleasedHidden: true,
 	},
 	rolycoly: {
 		num: 837,
