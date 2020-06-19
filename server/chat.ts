@@ -1710,7 +1710,7 @@ export const Chat = new class {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output = [];
 		for (const param of params) {
-			if (output.length < 3 && param.length > 80) cutoff = 2;
+			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
 			output.push(Utils.escapeHTML(param));
 		}
 
