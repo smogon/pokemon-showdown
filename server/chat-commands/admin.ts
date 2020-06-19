@@ -952,9 +952,9 @@ export const commands: ChatCommands = {
 			logRoom?.roomlog(`<< ${result}`);
 			this.sendReply(`|html|<table><tr><td>&laquo;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`);
 		} catch (e) {
-			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			this.sendReply(`|html|<table><tr><td>&laquo;</td><td>${Chat.getReadmoreCodeBlock(msg)}</td></tr><table>`);
-			logRoom?.roomlog(`<< ${msg}`);
+			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
+			this.sendReply(`|html|<table><tr><td>&laquo;</td><td>${Chat.getReadmoreCodeBlock(message)}</td></tr><table>`);
+			logRoom?.roomlog(`<< ${message}`);
 		}
 	},
 
