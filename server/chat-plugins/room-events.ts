@@ -16,12 +16,10 @@ export interface RoomEvent {
 }
 
 export interface RoomEventAlias {
-	id: ID;
 	eventID: ID;
 }
 
 export interface RoomEventCategory {
-	id: ID;
 	events: ID[];
 }
 
@@ -53,9 +51,10 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 }
 
 function getAllAliases(room: Room) {
+	if (!room.settings.events) return [];
 	const aliases: string[] = [];
-	for (const alias of Object.values(room.settings.events!).filter(a => 'eventID' in a).map(a => a as RoomEventAlias)) {
-		aliases.push(alias.id);
+	for (const aliasID of Object.keys(room.settings.events).filter(id => 'eventID' in room.settings.events![id])) {
+		aliases.push(aliasID);
 	}
 	return aliases;
 }
@@ -63,8 +62,8 @@ function getAllAliases(room: Room) {
 function getAllCategories(room: Room) {
 	if (!room.settings.events) return [];
 	const categories: string[] = [];
-	for (const category of Object.values(room.settings.events).filter(cat => 'events' in cat)) {
-		categories.push(category.id);
+	for (const categoryID of Object.keys(room.settings.events).filter(id => 'events' in room.settings.events![id])) {
+		categories.push(categoryID);
 	}
 	return categories;
 }
@@ -239,9 +238,10 @@ export const commands: ChatCommands = {
 
 			let events: RoomEvent[] = [];
 			if (getAllCategories(room).includes(target)) {
-				for (const possibleCategory of Object.values(room.settings.events)) {
-					if ('events' in possibleCategory && possibleCategory.id === target) {
-						events = possibleCategory.events.map(e => room.settings.events?.[e] as RoomEvent);
+				for (const categoryID of Object.keys(room.settings.events)) {
+					const category = room.settings.events[categoryID];
+					if ('events' in category && categoryID === target) {
+						events = category.events.map(e => room.settings.events?.[e] as RoomEvent);
 						break;
 					}
 				}
@@ -303,7 +303,7 @@ export const commands: ChatCommands = {
 			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event titled "${eventId}".`);
 			if (room.settings.events[alias]) return this.errorReply(`"${alias}" is already an event, alias, or category.`);
 
-			room.settings.events[alias] = {id: alias, eventID: eventId};
+			room.settings.events[alias] = {eventID: eventId};
 			this.privateModAction(`(${user.name} added an alias "${alias}" for the roomevent "${eventId}".)`);
 			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
 			room.saveSettings();
@@ -399,7 +399,7 @@ export const commands: ChatCommands = {
 			if (!room.settings.events) room.settings.events = Object.create(null);
 			if (room.settings.events?.[categoryId]) return this.errorReply(`The category "${target}" already exists.`);
 
-			room.settings.events![categoryId] = {id: categoryId, events: []};
+			room.settings.events![categoryId] = {events: []};
 
 			this.privateModAction(`(${user.name} added the category "${categoryId}".)`);
 			this.modlog('ROOMEVENT', null, `category: added "${categoryId}"`);
