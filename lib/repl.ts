@@ -91,10 +91,14 @@ export const Repl = new class {
 		});
 
 		const pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
-		server.listen(pathname, () => {
-			fs.chmodSync(pathname, Config.replsocketmode || 0o600);
-			Repl.socketPathnames.add(pathname);
-		});
+		try {
+			server.listen(pathname, () => {
+				fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+				Repl.socketPathnames.add(pathname);
+			});
+		} catch (err) {
+			console.error(`Could not start REPL server "${filename}": ${err}`);
+		}
 
 		server.once('error', (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE") {
