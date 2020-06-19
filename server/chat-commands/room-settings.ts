@@ -510,9 +510,12 @@ export const commands: ChatCommands = {
 		} else if (this.meansYes(target)) {
 			if (room.settings.requestShowEnabled) return this.errorReply(`Approvals are already enabled.`);
 			room.settings.requestShowEnabled = true;
-			this.privateModAction(`${user.name} enabled approvals in this room.`);
+			this.privateModAction(`${user.name} enabled the use of media approvals in this room.`);
 			if (!room.settings.showEnabled || room.settings.showEnabled === '@') {
-				this.privateModAction(`Note: Drivers aren't allowed to use /show directly, but will be able to request and approve each other's /requestshow`);
+				this.privateModAction(
+					`Note: Due to this room's settings, Drivers aren't allowed to use /show directly, ` +
+					`but will be able to request and approve each other's /requestshow`
+				);
 			}
 		} else {
 			return this.errorReply(`Unrecognized setting for approvals. Use 'on' or 'off'.`);
@@ -546,7 +549,10 @@ export const commands: ChatCommands = {
 		this.modlog(`SHOWMEDIA`, null, `to ${target}`);
 		this.privateModAction(`(${user.name} set /show permissions to ${target}.)`);
 		if (room.settings.requestShowEnabled && (!room.settings.showEnabled || room.settings.showEnabled === '@')) {
-			this.privateModAction(`Note: Drivers aren't allowed to use /show directly, but will be able to request and approve each other's /requestshow`);
+			this.privateModAction(
+				`Note: Due to this room's settings, Drivers aren't allowed to use /show directly,` +
+				` but will be able to request and approve each other's /requestshow`
+			);
 		}
 	},
 
