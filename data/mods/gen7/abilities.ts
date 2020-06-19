@@ -34,25 +34,11 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		shortDesc: "This Pokemon cannot be made to flinch.",
 		rating: 1,
+		onBoost() {},
 	},
 	intimidate: {
 		inherit: true,
 		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune.",
-		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-				if (!activated) {
-					this.add('-ability', pokemon, 'Intimidate', 'boost');
-					activated = true;
-				}
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
-				} else {
-					this.boost({atk: -1}, target, pokemon, null, true);
-				}
-			}
-		},
 		rating: 4,
 	},
 	leafguard: {
@@ -92,11 +78,13 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it.",
 		shortDesc: "This Pokemon cannot be infatuated or taunted.",
+		onBoost() {},
 	},
 	owntempo: {
 		inherit: true,
 		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
 		shortDesc: "This Pokemon cannot be confused.",
+		onBoost() {},
 	},
 	raindish: {
 		inherit: true,
@@ -118,6 +106,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
 		shortDesc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
+		onBoost() {},
 	},
 	solarpower: {
 		inherit: true,
