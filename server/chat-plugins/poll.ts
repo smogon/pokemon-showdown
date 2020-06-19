@@ -345,36 +345,35 @@ export const commands: ChatCommands = {
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
 			if (!this.can('mute', null, room)) return false;
-			if (!room.queuedActivity) room.queuedActivity = [];
-			const queue = room.queuedActivity;
-			if (cmd === 'clearqueue') {
-				queue.splice(0, queue.length);
-				if (!queue.length) {
-					return this.errorReply("No polls in queue.");
-				}
+			if (!room.queuedActivity) {
+				return this.errorReply("The queue is already empty.");
+			}
+			if (cmd === 'deletequeue' && room.activityQueue.length !== 1 && !target) {
+				return this.parse('/help deletequeue');
+			}
+			if (!target) {
+				room.activityQueue = null;
 				this.modlog('CLEARQUEUE');
 				this.sendReply(`Cleared poll queue.`);
 			} else {
-				const [num, roomid, update] = target.split(',');
-				const parsed = parseInt(num);
-				if (!Rooms.search(roomid)) return this.errorReply(`No such room.`);
+				const [slotString, roomid, update] = target.split(',');
+				const slot = parseInt(slotString);
 				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
-				if (isNaN(parsed)) return this.errorReply(`Must be a number.`);
-				if (!queue[parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
-				queue.splice(parsed, 1);
+				if (!curRoom) return this.errorReply(`Room "${roomid}" not found.`);
+				if (isNaN(slot)) return this.errorReply(`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
+				if (!room.activityQueue[slot - 1]) return this.errorReply(`There is no poll in queue at slot ${slot}.`);
+
+				curRoom.activityQueue.splice(slot - 1, 1);
+				if (!curRoom.activityQueue.length) curRoom.activityQueue = null;
+
 				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${num}`);
-				if (!update) {
-					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`);
-					return curRoom.update();
-				} else {
-					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`);
-					curRoom.update();
-					return this.parse(`/j view-pollqueue-${curRoom}`);
-				}
+				curRoom.sendMods(`(${user.name} deleted the queued poll in slot ${slot}.)`);
+				curRoom.update();
+				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
 			}
 		},
 		deletequeuehelp: [
-			`/deletequeue [number] - deletes poll with corresponding number from the queue. Requires: % @ # &`,
+			`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
 			`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
 		],
 
@@ -434,13 +433,12 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (poll) poll.end();
 					room.minorActivity = null;
-					if (!room.queuedActivity) room.queuedActivity = [];
-					if (room.queuedActivity.length) {
-						room.minorActivity = room.queuedActivity[0];
+					if (room.queuedActivity?.length) {
+						room.minorActivity = room.shift()!;
 						this.addModAction(`The queued poll was started.`);
 						this.modlog(`POLL`, null, `queued`);
 						room.minorActivity.display();
-						room.queuedActivity.splice(0, 1);
+						if (!room.queuedActivity.length) room.queuedActivity = null;
 					}
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
@@ -527,7 +525,7 @@ export const commands: ChatCommands = {
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
 		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
-		`/deletequeue [number] - deletes poll with corresponding number from the queue.`,
+		`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
 		`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
 		`/viewqueue - view the queue of polls in the room. Requires: % @ # &`,
 	],

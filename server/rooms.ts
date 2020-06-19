@@ -1117,7 +1117,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (!options.isPersonal) this.persist = true;
 
 		this.minorActivity = null;
-		this.queuedActivity = [];
+		this.queuedActivity = null;
 		this.parent = null;
 		if (options.parentid) {
 			const parent = Rooms.get(options.parentid);
