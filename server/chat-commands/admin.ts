@@ -950,12 +950,7 @@ export const commands: ChatCommands = {
 				result = Utils.visualize(result);
 			}
 			logRoom?.roomlog(`<< ${result}`);
-			result = broadcasting ? Chat.getReadmoreCodeBlock(result) : result.replace(/\n/g, '\n||');
-			if (broadcasting) {
-				room.add(`|html|<< ${result}`).update();
-			} else {
-				this.sendReply(`|| << ${result}`);
-			}
+			this.sendReply(`|html|<table><tr><td>&laquo;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`);
 		} catch (e) {
 			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			logRoom?.roomlog(`<< ${msg}`);
