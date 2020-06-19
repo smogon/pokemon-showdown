@@ -950,6 +950,7 @@ export const commands: ChatCommands = {
 			} else {
 				result = Utils.visualize(result);
 			}
+			logRoom?.roomlog(`<< ${result}`);
 			const newlineIdx = result.indexOf('\n');
 			result = broadcasting && newlineIdx > -1 ? (`<details class="readmore code" style="` +
 				Utils.html`display: table; tab-size: 3"><summary>${result.slice(0, newlineIdx)}</summary>` +
@@ -960,10 +961,10 @@ export const commands: ChatCommands = {
 			} else {
 				this.sendReply(`|| << ${result}`);
 			}
-			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			let msg = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			const newlineIdx = msg.indexOf('\n');
+			logRoom?.roomlog(`<< ${msg}`);
 			msg = broadcasting && newlineIdx > -1 ? (
 				`<details class="readmore code" style="display: table; tab-size: 3">` +
 				Utils.html`<summary>${msg.slice(0, newlineIdx)}</summary>` +
@@ -974,7 +975,6 @@ export const commands: ChatCommands = {
 			} else {
 				this.sendReply(`|| << ${msg}`);
 			}
-			logRoom?.roomlog(`<< ${msg}`);
 		}
 	},
 
