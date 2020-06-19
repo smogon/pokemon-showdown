@@ -2566,9 +2566,9 @@ export const commands: ChatCommands = {
 	code(target, room, user) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
-		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!target) return this.parse('/help code');
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
+		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!this.canBroadcast(true, '!code')) return;
 		const code = Chat.getReadmoreCodeBlock(target);
 		if (target.length < 80 && !target.includes('\n') && !target.includes('```') && this.shouldBroadcast()) {
