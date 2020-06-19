@@ -1714,19 +1714,17 @@ export const Chat = new class {
 			output.push(Utils.escapeHTML(param));
 		}
 
-		let code;
 		if (output.length > cutoff) {
-			code = `<div class="chat"><details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
+			return `<div class="chat"><details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
 				output.slice(0, cutoff).join('<br />')
 			}</summary>${
 				output.slice(cutoff).join('<br />')
 			}</details></div>`;
 		} else {
-			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${
+			return `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${
 				output.join('<br />')
 			}</code></div>`;
 		}
-		return code;
 	}
 
 	getDataPokemonHTML(species: Species, gen = 7, tier = '') {
