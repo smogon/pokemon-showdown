@@ -4824,7 +4824,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	magearnaoriginal: {
 		tier: "OU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 	},
 	marshadow: {
 		randomBattleMoves: ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"],
