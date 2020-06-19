@@ -681,7 +681,7 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
-			creationTime: parent ? null : Date.now(),
+			creationTime: Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
@@ -705,14 +705,18 @@ export const commands: ChatCommands = {
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
-	'!groupchatuptime': true,
-	groupchatuptime(target, room, user) {
-		if (!room || !room.creationTime) return this.errorReply("Can only be used in a groupchat.");
+	'!roomuptime': true,
+	groupchatuptime: 'roomuptime',
+	roomuptime(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		const uptime = Chat.toDurationString(Date.now() - room.creationTime);
-		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
+		if (!room) return this.errorReply(`Can only be used in a room.`);
+
+		// for hotpatching
+		if (!room.settings.creationTime) room.settings.creationTime = Date.now();
+		const uptime = Chat.toDurationString(Date.now() - room.settings.creationTime);
+		this.sendReplyBox(`Room uptime: <b>${uptime}</b>`);
 	},
-	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a groupchat.`],
+	roomuptimehelp: [`/roomuptime - Displays the uptime of the room.`],
 
 	deregisterchatroom(target, room, user) {
 		if (!this.can('makeroom')) return;
