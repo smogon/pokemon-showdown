@@ -1268,6 +1268,8 @@ export const BattleScripts: BattleScriptsData = {
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;
+		// copy the priority for Psychic Terrain, Quick Guard
+		maxMove.priority = move.priority;
 		maxMove.isZOrMaxPowered = true;
 		return maxMove;
 	},
