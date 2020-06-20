@@ -19260,7 +19260,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		name: "Terrain Pulse",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1},
 		onModifyType(move, pokemon) {
 			switch (this.field.terrain) {
 			case 'electricterrain':
