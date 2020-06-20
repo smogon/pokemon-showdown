@@ -776,12 +776,12 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				},
 			},
 		},
-		onTryMove(pokemon, target, move) {
+		onTry(pokemon) {
 			if (pokemon.species.baseSpecies === 'Morpeko') {
 				return;
 			}
-			this.add('-fail', pokemon, 'move: Aura Wheel');
 			this.hint("Only a Pokemon whose form is Morpeko or Morpeko-Hangry can use this move.");
+			this.add('-fail', pokemon, 'move: Aura Wheel');
 			return null;
 		},
 		onModifyType(move, pokemon) {
@@ -13714,9 +13714,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onTry(pokemon, target) {
+			if (!target.item || target.ignoringItem()) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				return null;
+			}
+		},
 		onTryHit(target, source, move) {
-			if (!target.item) return false;
-			if (target.ignoringItem()) return false;
 			this.add('-activate', target, 'move: Poltergeist', this.dex.getItem(target.item).name);
 		},
 		secondary: null,
