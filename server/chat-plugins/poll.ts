@@ -318,7 +318,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (room.minorActivity) {
-				room.queuedActivity!.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
+				room.activityQueue!.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
 			}
@@ -345,7 +345,7 @@ export const commands: ChatCommands = {
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
 			if (!this.can('mute', null, room)) return false;
-			if (!room.queuedActivity) {
+			if (!room.activityQueue) {
 				return this.errorReply("The queue is already empty.");
 			}
 			if (cmd === 'deletequeue' && room.activityQueue.length !== 1 && !target) {
@@ -363,8 +363,8 @@ export const commands: ChatCommands = {
 				if (isNaN(slot)) return this.errorReply(`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
 				if (!room.activityQueue[slot - 1]) return this.errorReply(`There is no poll in queue at slot ${slot}.`);
 
-				curRoom.activityQueue.splice(slot - 1, 1);
-				if (!curRoom.activityQueue.length) curRoom.activityQueue = null;
+				curRoom.activityQueue!.splice(slot - 1, 1);
+				if (!curRoom.activityQueue?.length) curRoom.activityQueue = null;
 
 				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${slot}`);
 				curRoom.sendMods(`(${user.name} deleted the queued poll in slot ${slot}.)`);
@@ -433,12 +433,12 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (poll) poll.end();
 					room.minorActivity = null;
-					if (room.queuedActivity?.length) {
-						room.minorActivity = room.shift()!;
+					if (room.activityQueue?.length) {
+						room.minorActivity = room.activityQueue.shift()!;
 						this.addModAction(`The queued poll was started.`);
 						this.modlog(`POLL`, null, `queued`);
 						room.minorActivity.display();
-						if (!room.queuedActivity.length) room.queuedActivity = null;
+						if (!room.activityQueue.length) room.activityQueue = null;
 					}
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
@@ -483,9 +483,9 @@ export const commands: ChatCommands = {
 
 			poll.end();
 			room.minorActivity = null;
-			if (room.queuedActivity?.length) {
-				room.minorActivity = room.queuedActivity[0];
-				room.queuedActivity.splice(0, 1);
+			if (room.activityQueue?.length) {
+				room.minorActivity = room.activityQueue[0];
+				room.activityQueue.splice(0, 1);
 				this.addModAction(`The queued poll was started.`);
 				this.modlog(`POLL`, null, `queued`);
 				room.minorActivity.display();
@@ -538,13 +538,13 @@ export const pages: PageTable = {
 		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
-		if (!room.queuedActivity) room.queuedActivity = [];
-		if (!room.queuedActivity.length) {
+		if (!room.activityQueue) room.activityQueue = [];
+		if (!room.activityQueue.length) {
 			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
-		for (const poll of room.queuedActivity) {
-			const num = room.queuedActivity.indexOf(poll);
+		for (const poll of room.activityQueue) {
+			const num = room.activityQueue.indexOf(poll);
 			const button = (
 				`<strong>#${num} in queue </strong>` +
 				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid},updatelist">` +
