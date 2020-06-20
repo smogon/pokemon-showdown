@@ -1385,13 +1385,13 @@ export const roomSettings: SettingsHandler[] = [
 			// groupchat ROs can set modjoin, but only to +
 			// first rank is for modjoin off
 			...RANKS.slice(1, room.settings.isPersonal && !user.can('makeroom') ? 2 : undefined),
-		].map(rank => [rank, rank === (room.settings.modjoin || 'off') || `modchat ${rank || 'off'}`]),
+		].map(rank => [rank, rank === (room.settings.modjoin || 'off') || `modjoin ${rank || 'off'}`]),
 	}),
 	room => ({
 		label: "Language",
 		permission: 'editroom',
 		options: [...Chat.languages].map(
-			([id, name]) => [name, id === (room.settings.language || 'off') || `roomlanguage ${id || 'off'}`]
+			([id, name]) => [name, id === (room.settings.language || 'english') || `roomlanguage ${id || 'off'}`]
 		),
 	}),
 	room => ({
@@ -1438,16 +1438,16 @@ export const roomSettings: SettingsHandler[] = [
 		label: "/requestshow",
 		permission: 'declare',
 		options: [
-			[`Off`, !room.settings.requestShowEnabled || `showapprovals off`],
-			[`On`, room.settings.requestShowEnabled || `showapprovals on`],
+			[`off`, !room.settings.requestShowEnabled || `showapprovals off`],
+			[`on`, room.settings.requestShowEnabled || `showapprovals on`],
 		],
 	}),
 	room => ({
 		label: "/show",
 		permission: 'declare',
 		options: [
-			[`Off`, !room.settings.showEnabled || `showmedia off`],
-			[`Whitelisted`, room.settings.showEnabled === true || `showmedia on`],
+			[`off`, !room.settings.showEnabled || `showmedia off`],
+			[`whitelist`, room.settings.showEnabled === true || `showmedia on`],
 			[`+`, room.settings.showEnabled === '+' || `showmedia +`],
 			[`%`, room.settings.showEnabled === '%' || `showmedia %`],
 			[`@`, room.settings.showEnabled === '@' || `showmedia @`],
