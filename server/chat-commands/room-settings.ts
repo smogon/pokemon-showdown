@@ -387,8 +387,8 @@ export const commands: ChatCommands = {
 			// Most of the regex code is copied from the client. TODO: unify them?
 			// Regex banwords can have commas in the {1,5} pattern
 			let words = (regex ? target.match(/[^,]+(,\d*}[^,]*)?/g)! : target.split(','))
-				.map(word => word.replace(/\n/g, '').trim());
-			if (!words) return this.parse('/help banword');
+				.map(word => word.replace(/\n/g, '').trim()).filter(word => word.length > 0);
+			if (!words || words.length === 0) return this.parse('/help banword');
 
 			// Escape any character with a special meaning in regex
 			if (!regex) {
@@ -451,7 +451,7 @@ export const commands: ChatCommands = {
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
 			if (!words) return this.parse('/help banword');
 
-			words = words.map(word => word.replace(/\n/g, '').trim());
+			words = words.map(word => word.replace(/\n/g, '').trim()).filter(word => word.length > 0);
 
 			for (const word of words) {
 				if (!room.settings.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
