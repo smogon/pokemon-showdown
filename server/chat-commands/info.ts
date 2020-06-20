@@ -887,6 +887,23 @@ export const commands: ChatCommands = {
 			}
 		}
 
+		const statuses: {[k: string]: string} = {
+			brn: "Burn",
+			frz: "Frozen",
+			hail: "Hail damage",
+			par: "Paralysis",
+			powder: "Powder moves",
+			prankster: "Prankster",
+			sandstorm: "Sandstorm damage",
+			tox: "Toxic",
+			trapped: "Trapping",
+		};
+		for (const status in statuses) {
+			if (!mod.getImmunity(status, species)) {
+				immunities.push(statuses[status]);
+			}
+		}
+
 		const buffer = [];
 		buffer.push(`${species.exists ? `${species.name} (ignoring abilities):` : `${target}:`}`);
 		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
