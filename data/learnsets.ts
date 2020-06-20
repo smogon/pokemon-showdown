@@ -58535,6 +58535,8 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 5, level: 65, shiny: 1, moves: ["sacredsword", "swordsdance", "quickguard", "workup"]},
 			{generation: 6, level: 50, shiny: 1, moves: ["retaliate", "ironhead", "sacredsword", "swordsdance"]},
 			{generation: 7, level: 60, shiny: 1, moves: ["sacredsword", "swordsdance", "quickattack", "ironhead"]},
+			// The gen 8 event isn't real, but exists to allow this pokemon to be used in Gen 8 VGC
+			{generation: 8, level: 42, shiny: 1},
 		],
 		eventOnly: true,
 	},
@@ -58616,6 +58618,8 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 5, level: 65, shiny: 1, moves: ["sacredsword", "swordsdance", "quickguard", "workup"]},
 			{generation: 6, level: 50, shiny: 1, moves: ["retaliate", "rockslide", "sacredsword", "swordsdance"]},
 			{generation: 7, level: 60, shiny: 1, moves: ["sacredsword", "swordsdance", "rockslide", "stoneedge"]},
+			// The gen 8 event isn't real, but exists to allow this pokemon to be used in Gen 8 VGC
+			{generation: 8, level: 42, shiny: 1},
 		],
 		eventOnly: true,
 	},
@@ -58700,6 +58704,8 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 5, level: 65, shiny: 1, moves: ["sacredsword", "swordsdance", "quickguard", "workup"]},
 			{generation: 6, level: 50, shiny: 1, moves: ["retaliate", "gigadrain", "sacredsword", "swordsdance"]},
 			{generation: 7, level: 60, shiny: 1, moves: ["sacredsword", "swordsdance", "gigadrain", "leafblade"]},
+			// The gen 8 event isn't real, but exists to allow this pokemon to be used in Gen 8 VGC
+			{generation: 8, level: 42, shiny: 1},
 		],
 		eventOnly: true,
 	},
