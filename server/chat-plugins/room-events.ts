@@ -34,9 +34,7 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 	}
 
 	const eventID = toID(event.eventName);
-	const aliases = getAllAliases(room).filter(
-		alias => (room.settings.events![alias] as RoomEventAlias).eventID === eventID
-	);
+	const aliases = getAliases(room, eventID);
 	const categories = getAllCategories(room).filter(
 		category => (room.settings.events![category] as RoomEventCategory).events.includes(eventID)
 	);
@@ -50,11 +48,14 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 	return ret;
 }
 
-function getAllAliases(room: Room) {
+function getAliases(room: Room, eventID?: ID) {
 	if (!room.settings.events) return [];
 	const aliases: string[] = [];
 	for (const aliasID in room.settings.events) {
-		if ('eventID' in room.settings.events[aliasID]) aliases.push(aliasID);
+		if (
+			'eventID' in room.settings.events[aliasID] &&
+			(!eventID || (room.settings.events[aliasID] as RoomEventAlias).eventID === eventID)
+		) aliases.push(aliasID);
 	}
 	return aliases;
 }
@@ -63,9 +64,18 @@ function getAllCategories(room: Room) {
 	if (!room.settings.events) return [];
 	const categories: string[] = [];
 	for (const categoryID in room.settings.events) {
-		if ('events' in room.settings.events[id]) categories.push(categoryID);
+		if ('events' in room.settings.events[categoryID]) categories.push(categoryID);
 	}
 	return categories;
+}
+
+function getAllEvents(room: Room) {
+	if (!room.settings.events) return [];
+	const events: RoomEvent[] = [];
+	for (const event of Object.values(room.settings.events)) {
+		if ('eventName' in event) events.push(event);
+	}
+	return events;
 }
 
 function getEventID(nameOrAlias: string, room: Room): ID {
@@ -87,7 +97,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.runBroadcast()) return;
-			const hasAliases = getAllAliases(room).length > 0;
+			const hasAliases = getAliases(room).length > 0;
 			const hasCategories = getAllCategories(room).length > 0;
 
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
@@ -96,10 +106,8 @@ export const commands: ChatCommands = {
 			if (hasCategories) buff += '<th>Event Categories:</th>';
 			buff += '<th>Event Description:</th><th>Event Date:</th>';
 
-			for (const event of Object.values(room.settings.events)) {
-				if ('eventName' in event) {
-					buff += formatEvent(room, event, hasAliases, hasCategories);
-				}
+			for (const event of getAllEvents(room)) {
+				buff += formatEvent(room, event, hasAliases, hasCategories);
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -152,7 +160,7 @@ export const commands: ChatCommands = {
 
 			newName = newName.trim();
 			const newID = toID(newName);
-			const oldID = (getAllAliases(room).includes(toID(oldName)) ? getEventID(oldName, room) : toID(oldName));
+			const oldID = (getAliases(room).includes(toID(oldName)) ? getEventID(oldName, room) : toID(oldName));
 			if (newID === oldID) return this.errorReply("The new name must be different from the old one.");
 			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
 			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
@@ -214,15 +222,15 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
-			target = toID(target);
-			if (getAllAliases(room).includes(target)) return this.errorReply("To delete aliases, use /roomevents removealias.");
-			if (!(room.settings.events[target] && 'eventName' in room.settings.events[target])) {
+			const eventID = toID(target);
+			if (getAliases(room).includes(eventID)) return this.errorReply("To delete aliases, use /roomevents removealias.");
+			if (!(room.settings.events[eventID] && 'eventName' in room.settings.events[eventID])) {
 				return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			}
 
 			delete room.settings.events[target];
-			for (const alias of getAllAliases(room)) {
-				if ((room.settings.events[alias] as RoomEventAlias).eventID === target) delete room.settings.events[alias];
+			for (const alias of getAliases(room, eventID)) {
+				delete room.settings.events[alias];
 			}
 
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
@@ -257,11 +265,8 @@ export const commands: ChatCommands = {
 			let hasAliases = false;
 			let hasCategories = false;
 
-			for (const potentialAlias of getAllAliases(room)) {
-				if (
-					events.map(event => toID(event.eventName))
-						.includes((room.settings.events[potentialAlias] as RoomEventAlias).eventID)
-				) hasAliases = true; break;
+			for (const event of events) {
+				if (getAliases(room, toID(event.eventName)).length) hasAliases = true;
 			}
 
 			for (const potentialCategory of getAllCategories(room)) {
@@ -508,7 +513,7 @@ export const commands: ChatCommands = {
 	},
 	roomeventshelp() {
 		this.sendReply(
-			`|html|<div class="infobox infobox-limited">` +
+			`|html|<details class="readmore"><summary>Commands to manage room events.</summary>` +
 			`<code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
 			`<code>/roomevents add [event name] | [event date/time] | [event description]</code>: adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # &<br />` +
 			`<code>/roomevents start [event name]</code>: declares to the room that the event has started. Requires: @ # &<br />` +
@@ -522,7 +527,7 @@ export const commands: ChatCommands = {
 			`<code>/roomevents removefromcategory [event name] | [category]</code>: removes the event from a category. Requires: @ # &<br />` +
 			`<code>/roomevents sortby [column name] | [asc/desc (optional)]</code> sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default. Requires: @ # &<br />` +
 			`<code>/roomevents view [event name or category]</code>: displays information about a specific event or category of events.` +
-			`</div>`
+			`</details>`
 		);
 	},
 };
