@@ -462,8 +462,9 @@ export class RandomTeams {
 		];
 		// Moves that shouldn't be the only STAB moves:
 		const NoStab = [
-			'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'explosion', 'fakeout', 'firstimpression', 'flamecharge',
+			'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'flipturn',
 			'iceshard', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'selfdestruct', 'skydrop', 'suckerpunch', 'watershuriken',
+
 			'clearsmog', 'eruption', 'icywind', 'incinerate', 'snarl', 'vacuumwave', 'waterspout',
 		];
 
@@ -646,14 +647,14 @@ export class RandomTeams {
 				case 'acrobatics':
 					if (!counter.setupType) rejected = true;
 					break;
+				case 'destinybond': case 'healbell':
+					if (movePool.includes('protect') || movePool.includes('wish')) rejected = true;
+					break;
 				case 'flamecharge': case 'sacredsword':
 					if (movePool.includes('swordsdance') || counter.damagingMoves.length < 3 && !counter.setupType) rejected = true;
 					break;
 				case 'focuspunch': case 'reversal':
 					if (!hasMove['substitute'] || counter.damagingMoves.length < 2 || hasMove['liquidation']) rejected = true;
-					break;
-				case 'healbell':
-					if (movePool.includes('protect') || movePool.includes('wish')) rejected = true;
 					break;
 				case 'hex':
 					if (!hasMove['thunderwave'] && !hasMove['willowisp']) rejected = true;
@@ -898,23 +899,19 @@ export class RandomTeams {
 				case 'shadowclaw':
 					if (hasMove['shadowsneak'] && counter.Physical < 4) rejected = true;
 					break;
-				case 'shadowpunch':
-					if (hasMove['shadowsneak'] || hasMove['earthquake'] && !hasType['Ground']) rejected = true;
-					break;
 				case 'shadowsneak':
-					if (!!counter['recovery'] || hasMove['toxic'] || hasMove['substitute'] && !hasMove['earthquake']) rejected = true;
+					if (!hasType['Ghost'] && !!counter['recovery']) rejected = true;
+					if (hasMove['substitute'] || hasMove['toxic'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'dragonpulse': case 'outrage':
 					if (hasMove['dracometeor'] && counter.Special < 4) rejected = true;
-					break;
-				case 'darkestlariat': case 'foulplay':
-					if (hasMove['knockoff']) rejected = true;
 					break;
 				case 'darkpulse':
 					if ((hasMove['foulplay'] || hasMove['knockoff'] || hasMove['suckerpunch'] || hasMove['defog']) && counter.setupType !== 'Special') rejected = true;
 					if (!hasType['Dark'] && !!counter.Status) rejected = true;
 					break;
 				case 'knockoff':
+					if (hasMove['darkestlariat']) rejected = true;
 					if (hasMove['acrobatics'] || hasMove['swordsdance'] && movePool.includes('acrobatics')) rejected = true;
 					break;
 				case 'suckerpunch':
@@ -946,7 +943,7 @@ export class RandomTeams {
 					if (moveid === 'synthesis' && hasMove['gigadrain']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['rest'] || hasMove['uturn']) rejected = true;
+					if (hasMove['facade'] || hasMove['rest'] || hasMove['uturn']) rejected = true;
 					if (movePool.includes('painsplit') || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
 					break;
 				case 'wideguard':
@@ -1214,7 +1211,7 @@ export class RandomTeams {
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
 			}
-		} else if (species.evos.length) {
+		} else if (species.evos.length && !hasMove['uturn']) {
 			item = 'Eviolite';
 		} else if (hasMove['bellydrum']) {
 			item = (!!counter['priority'] || !hasMove['substitute']) ? 'Sitrus Berry' : 'Salac Berry';
@@ -1240,16 +1237,22 @@ export class RandomTeams {
 			item = 'Blunder Policy';
 
 		// Medium priority
-		} else if (counter.Physical >= 4 && ability !== 'Guts' && (!hasMove['bodyslam'] || hasType['Normal']) && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !isDoubles) {
-			item = (species.baseStats.atk >= 100 || ability === 'Huge Power') && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
-		} else if (counter.Special >= 4 && !hasMove['clearsmog'] && !isDoubles) {
-			item = species.baseStats.spa >= 100 && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && ability !== 'Tinted Lens' && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['healingwish'])) && !counter['priority'] && !hasMove['uturn'] && !isDoubles) {
-			item = 'Choice Scarf';
+		} else if (counter.Physical >= 4 && (!hasMove['bodyslam'] || hasType['Normal']) && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !isDoubles) {
+			if ((species.baseStats.atk >= 100 || ability === 'Huge Power') && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && ability !== 'Speed Boost' && this.randomChance(2, 3)) {
+				item = 'Choice Scarf';
+			} else {
+				item = 'Choice Band';
+			}
 		} else if (counter.Physical >= 3 && (hasMove['copycat'] || hasMove['partingshot']) && !hasMove['fakeout'] && !hasMove['rapidspin'] && !isDoubles) {
 			item = 'Choice Band';
-		} else if (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['partingshot'] || hasMove['uturn'])) {
-			item = 'Choice Specs';
+		} else if ((counter.Special >= 4 || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['partingshot'] || hasMove['uturn']))) && !isDoubles) {
+			if (species.baseStats.spa >= 100 && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter.Physical && !counter.Special && ability !== 'Tinted Lens' && this.randomChance(2, 3)) {
+				item = 'Choice Scarf';
+			} else {
+				item = 'Choice Specs';
+			}
+		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['healingwish'])) && !counter['priority'] && !hasMove['uturn'] && !isDoubles) {
+			item = 'Choice Scarf';
 		} else if (hasMove['raindance'] || hasMove['sunnyday'] || ability === 'Stance Change' && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
 		} else if (hasMove['outrage'] && counter.setupType) {

@@ -784,7 +784,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	marowakalola: {
-		randomBattleMoves: ["earthquake", "flamecharge", "flareblitz", "shadowbone", "stoneedge", "willowisp"],
+		randomBattleMoves: ["earthquake", "flamecharge", "flareblitz", "shadowbone", "stealthrock", "stoneedge"],
 		randomBattleLevel: 84,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -810,7 +810,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	hitmontop: {
-		randomBattleMoves: ["closecombat", "machpunch", "rapidspin", "stoneedge", "suckerpunch", "toxic"],
+		randomBattleMoves: ["closecombat", "machpunch", "rapidspin", "suckerpunch", "toxic", "tripleaxel"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["closecombat", "fakeout", "feint", "helpinghand", "rapidspin", "suckerpunch", "wideguard"],
 		tier: "PU",
@@ -1493,7 +1493,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	heracross: {
-		randomBattleMoves: ["closecombat", "earthquake", "knockoff", "megahorn", "stoneedge", "swordsdance"],
+		randomBattleMoves: ["closecombat", "facade", "knockoff", "megahorn", "stoneedge", "substitute"],
 		randomBattleLevel: 84,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -1900,7 +1900,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	shedinja: {
-		randomBattleMoves: ["shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
+		randomBattleMoves: ["poltergeist", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
 		randomBattleLevel: 100,
 		randomDoubleBattleMoves: ["allyswitch", "protect", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
 		tier: "(PU)",
@@ -1943,7 +1943,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	sableye: {
-		randomBattleMoves: ["encore", "foulplay", "knockoff", "recover", "taunt", "willowisp"],
+		randomBattleMoves: ["encore", "foulplay", "recover", "taunt", "willowisp"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["disable", "encore", "fakeout", "foulplay", "knockoff", "recover", "willowisp"],
 		tier: "RU",
@@ -2050,7 +2050,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	sharpedo: {
-		randomBattleMoves: ["closecombat", "crunch", "destinybond", "protect", "waterfall"],
+		randomBattleMoves: ["closecombat", "crunch", "destinybond", "flipturn", "protect", "waterfall"],
 		randomBattleLevel: 84,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -2252,7 +2252,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	dusknoir: {
-		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "shadowpunch", "shadowsneak", "substitute", "trick", "willowisp"],
+		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "poltergeist", "shadowsneak", "substitute", "willowisp"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["allyswitch", "earthquake", "haze", "icepunch", "painsplit", "shadowsneak", "trickroom", "willowisp"],
 		tier: "PU",
@@ -4117,28 +4117,28 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gourgeist: {
-		randomBattleMoves: ["leechseed", "powerwhip", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["poltergeist", "powerwhip", "shadowsneak", "synthesis", "willowisp"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["destinybond", "disable", "foulplay", "leechseed", "painsplit", "powerwhip", "willowisp"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	gourgeistsmall: {
-		randomBattleMoves: ["leechseed", "powerwhip", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["leechseed", "poltergeist", "powerwhip", "substitute", "willowisp"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["destinybond", "disable", "foulplay", "leechseed", "painsplit", "powerwhip", "willowisp"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
 	gourgeistlarge: {
-		randomBattleMoves: ["leechseed", "powerwhip", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["poltergeist", "powerwhip", "shadowsneak", "synthesis", "willowisp"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["powerwhip", "protect", "shadowsneak", "synthesis", "trickroom"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	gourgeistsuper: {
-		randomBattleMoves: ["explosion", "foulplay", "powerwhip", "rockslide", "shadowsneak", "trick"],
+		randomBattleMoves: ["poltergeist", "powerwhip", "rockslide", "shadowsneak", "trickroom"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["powerwhip", "protect", "shadowsneak", "synthesis", "trickroom"],
 		tier: "PU",
