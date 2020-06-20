@@ -862,7 +862,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	chansey: {
 		randomBattleMoves: ["healbell", "seismictoss", "softboiled", "stealthrock", "toxic"],
 		randomBattleLevel: 80,
-		tier: "RUBL",
+		tier: "UUBL",
 		doublesTier: "NFE",
 	},
 	blissey: {
