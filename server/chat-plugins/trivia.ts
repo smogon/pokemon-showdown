@@ -83,8 +83,6 @@ interface TriviaLeaderboard {
 	[k: string]: TriviaRank;
 }
 
-type TriviaHistory = TriviaGame[];
-
 interface TriviaGame {
 	mode: string;
 	length: string;
@@ -99,7 +97,7 @@ interface TriviaData {
 	leaderboard?: TriviaLeaderboard;
 	altLeaderboard?: TriviaLeaderboard;
 	ladder?: TriviaLadder;
-	history?: TriviaHistory;
+	history?: TriviaGame[];
 }
 
 interface TopPlayer {
@@ -700,8 +698,8 @@ class Trivia extends Rooms.RoomGame {
 		this.room.modlog(`(${this.room.roomid}) ${logbuf}`);
 
 		if (!triviaData.history) triviaData.history = [];
-		triviaData.history?.push(this.game);
-		if (triviaData.history && triviaData.history.length > 10) triviaData.history = triviaData.history.slice(-10);
+		triviaData.history.push(this.game);
+		if (triviaData.history.length > 10) triviaData.history.shift();
 
 		writeTriviaData();
 		this.destroy();
@@ -1682,10 +1680,8 @@ const commands: ChatCommands = {
 
 		const games = triviaData.history.reverse();
 		const buf = [];
-		let i = 1;
-		for (const game of games) {
-			buf.push(Utils.html`<b>${i}.</b> ${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category.`);
-			i++;
+		for (const [i, game] of games.entries()) {
+			buf.push(Utils.html`<b>${i + 1}.</b> ${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category.`);
 		}
 
 		return this.sendReplyBox(buf.join('<br />'));
