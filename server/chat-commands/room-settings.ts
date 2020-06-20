@@ -328,14 +328,15 @@ export const commands: ChatCommands = {
 
 		help: '',
 		''(target, room, user) {
-			const configGroups = ["showmedia", "ban", "mute", "alts", "modlog", "broadcast", "declare",
-				"announce", "modchat", "tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
+			const configGroups = [
+				"ban", "mute", "alts", "modlog", "broadcast", "declare", "announce", "modchat",
+				"tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
 			];
-			let buffer = `<strong>Room permissions help:</strong><hr> `;
-			buffer += `<strong>Usage:</strong><code> /permissions set [permission], [rank]</code><br>`;
-			buffer += `<strong>Usable permissions:</strong><br>`;
+			let buffer = `<strong>Room permissions help:</strong><hr />`;
+			buffer += `<strong>Usage:</strong><code> /permissions set [permission], [rank]</code><br />`;
+			buffer += `<strong>Usable permissions:</strong><br />`;
 			buffer += Chat.getReadmoreCodeBlock(Permissions.approvedPermissions(room).join(', '));
-			buffer += `<br><strong>Command groups: </strong>${Chat.getReadmoreCodeBlock(configGroups.join(', '))}<br>`;
+			buffer += `<br /><strong>Command groups: </strong>${Chat.getReadmoreCodeBlock(configGroups.join(', '))}<br />`;
 			buffer += `These can be used to set permissions for multiple commands at once.`;
 			return this.sendReplyBox(buffer);
 		},
@@ -1523,29 +1524,28 @@ export const pages: PageTable = {
 				const name = (Config.groups[r] ? Config.groups[r].name : r).replace(/ /, '');
 				buf += `<a href="/view-permissions-${room}-${Dashycode.encode(name)}" `;
 				buf += `target="_blank" rel="noopener"> <button style="border: 1px solid black ;`;
-				buf += ` border-radius: 30px ; background-color: #eeeeee ; height: 35px">${name}</button> </a><hr>`;
+				buf += ` border-radius: 30px ; background-color: #eeeeee ; height: 35px">${name}</button> </a><hr />`;
 			}
-			buf += `<strong>All possible permissions for this room:</strong><br>`;
+			buf += `<strong>All possible permissions for this room:</strong><br />`;
 			buf += `${Permissions.approvedPermissions(this.room).join(', ')}`;
 			return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
 		}
 		rank = Dashycode.decode(rank).toLowerCase();
-		let buf = `<div class="pad"><p>` +
-		`<a roomid="view-permissions-${room}">◂ All ranks</a> / ` +
-		`<strong>${u(rank)}</strong></p><hr />`;
+		let buf = `<div class="pad">`;
+		buf += `<p><a roomid="view-permissions-${room}">◂ All ranks</a> / <strong>${u(rank)}</strong></p><hr />`;
 		let symbol = '';
 		for (const s of Config.groupsranking) {
 			if (toID(Config.groups[s]?.name) === rank) symbol = s;
 		}
 		buf += `Custom room permissions: `;
-		buf += `<div class="ladder pad"><table><tr><th>Permission</th><th>Rank</th></tr><tr>`;
+		buf += `<div class="ladder pad"><table><tr><th>Permission</th><th>Rank</th></tr>`;
 		const perms = Permissions.getPermissions(this.room);
 		for (const key in perms) {
 			if (Config.groups[symbol]?.rank >= (Config.groups[perms[key]].rank || -1)) {
-				buf += `<tr><td>${u(key)}</td> <td>${perms[key]}</small></td></tr>`;
+				buf += `<tr><td>${u(key)}</td><td><small>${perms[key]}</small></td></tr>`;
 			}
 		}
-		buf += `</td></tr></table></div>`;
+		buf += `</table></div>`;
 		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
 	},
 };
