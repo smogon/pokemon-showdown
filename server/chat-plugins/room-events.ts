@@ -53,8 +53,8 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 function getAllAliases(room: Room) {
 	if (!room.settings.events) return [];
 	const aliases: string[] = [];
-	for (const aliasID of Object.keys(room.settings.events).filter(id => 'eventID' in room.settings.events![id])) {
-		aliases.push(aliasID);
+	for (const aliasID in room.settings.events) {
+		if ('eventID' in room.settings.events[aliasID]) aliases.push(aliasID);
 	}
 	return aliases;
 }
@@ -62,16 +62,17 @@ function getAllAliases(room: Room) {
 function getAllCategories(room: Room) {
 	if (!room.settings.events) return [];
 	const categories: string[] = [];
-	for (const categoryID of Object.keys(room.settings.events).filter(id => 'events' in room.settings.events![id])) {
-		categories.push(categoryID);
+	for (const categoryID in room.settings.events) {
+		if ('events' in room.settings.events[id]) categories.push(categoryID);
 	}
 	return categories;
 }
 
 function getEventID(nameOrAlias: string, room: Room): ID {
 	let id = toID(nameOrAlias);
-	if (room.settings.events?.[id] && 'eventID' in room.settings.events[id]) {
-		id = (room.settings.events[id] as RoomEventAlias).eventID;
+	const event = room.settings.events?.[id];
+	if (event && 'eventID' in event) {
+		id = event.eventID;
 	}
 	return id;
 }
@@ -95,8 +96,10 @@ export const commands: ChatCommands = {
 			if (hasCategories) buff += '<th>Event Categories:</th>';
 			buff += '<th>Event Description:</th><th>Event Date:</th>';
 
-			for (const event of Object.values(room.settings.events).filter(e => 'eventName' in e).map(e => e as RoomEvent)) {
-				buff += formatEvent(room, event, hasAliases, hasCategories);
+			for (const event of Object.values(room.settings.events)) {
+				if ('eventName' in event) {
+					buff += formatEvent(room, event, hasAliases, hasCategories);
+				}
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
