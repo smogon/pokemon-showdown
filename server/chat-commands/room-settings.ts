@@ -7,6 +7,8 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
+import {Permissions, Auth} from '../user-groups';
+import * as Dashycode from '../../lib/dashycode';
 
 const RANKS: string[] = Config.groupsranking;
 
@@ -290,7 +292,54 @@ export const commands: ChatCommands = {
 		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # &`,
 		`/slowchat off - Disables slowchat in the room. Requires @ # &`,
 	],
+	permission: 'permissions',
+	permissions: {
+		set(target, room, user) {
+			let [perm, rank] = target.split(',').map(item => item.toLowerCase().replace(/ +/g, ''));
+			perm = toID(perm);
+			if (!room.auth.atLeast(user, '#')) {
+				return this.errorReply(`/permissions set - Access denied.`);
+			}
+			if (!target || !perm) return this.parse(`/permissions help`);
+			if (rank && !Auth.isValidSymbol(rank)) {
+				return this.errorReply(`${rank} is not a valid rank.`);
+			}
+			if (Permissions.getPermissions(room)[perm] === rank) {
+				return this.errorReply(`${perm} is already set to ${rank}.`);
+			}
+			const approved = Permissions.approvedPermissions(room);
+			if (!approved.includes(perm)) return this.errorReply(`${perm} is not a valid permission.`);
+			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
+			if (!Permissions.setPermission(perm, rank as GroupSymbol, room)) {
+				return this.errorReply(`${perm} cannot be configured. See /permissions help for configurable commands.`);
+			}
+			if (!rank) rank = `default`;
+			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
+			return this.privateModAction(`(${user.name} set the required rank for ${perm} to ${rank}.)`);
+		},
+		sethelp: [
+			`/setpermission [command, rank] - sets the required permission to use the command [command] to [rank].`,
+			`If no [rank] is given, resets the needed permission to the default. Requires: # &`,
+		],
 
+		view(target, room, user) {
+			return this.parse(`/join view-permissions-${room.roomid}`);
+		},
+
+		help: '',
+		''(target, room, user) {
+			const configGroups = ["showmedia", "ban", "mute", "alts", "modlog", "broadcast", "declare",
+				"announce", "modchat", "tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
+			];
+			let buffer = `<strong>Room permissions help:</strong><hr> `;
+			buffer += `<strong>Usage:</strong><code> /permissions set [permission], [rank]</code><br>`;
+			buffer += `<strong>Usable permissions:</strong><br>`;
+			buffer += Chat.getReadmoreCodeBlock(Permissions.approvedPermissions(room).join(', '));
+			buffer += `<br><strong>Command groups: </strong>${Chat.getReadmoreCodeBlock(configGroups.join(', '))}<br>`;
+			buffer += `These can be used to set permissions for multiple commands at once.`;
+			return this.sendReplyBox(buffer);
+		},
+	},
 	stretching: 'stretchfilter',
 	stretchingfilter: 'stretchfilter',
 	stretchfilter(target, room, user) {
@@ -1454,3 +1503,49 @@ export const roomSettings: SettingsHandler[] = [
 		],
 	}),
 ];
+
+export const pages: PageTable = {
+	permissions(args, user, connection) {
+		let [room, rank] = args.filter(Boolean) as [string, string | undefined];
+		this.title = `[Permissions]`;
+		this.extractRoom();
+		const u = (str: string) => {
+			const char = str.charAt(0).toUpperCase();
+			str = str.slice(1);
+			return char + str;
+		};
+		if (!room) return `<h2>This room does not exist or does not support permissions</h2>`;
+		if (!this.can('declare', null, this.room)) return;
+		if (!rank) {
+			let buf = `<div class="pad"><center><strong>Groups on ${this.room.title}:</strong><hr/ >`;
+			for (const r of Config.groupsranking.slice(2)) {
+				if (Config.groups[r]?.globalonly) continue;
+				const name = (Config.groups[r] ? Config.groups[r].name : r).replace(/ /, '');
+				buf += `<a href="/view-permissions-${room}-${Dashycode.encode(name)}" `;
+				buf += `target="_blank" rel="noopener"> <button style="border: 1px solid black ;`;
+				buf += ` border-radius: 30px ; background-color: #eeeeee ; height: 35px">${name}</button> </a><hr>`;
+			}
+			buf += `<strong>All possible permissions for this room:</strong><br>`;
+			buf += `${Permissions.approvedPermissions(this.room).join(', ')}`;
+			return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
+		}
+		rank = Dashycode.decode(rank).toLowerCase();
+		let buf = `<div class="pad"><p>` +
+		`<a roomid="view-permissions-${room}">◂ All ranks</a> / ` +
+		`<strong>${u(rank)}</strong></p><hr />`;
+		let symbol = '';
+		for (const s of Config.groupsranking) {
+			if (toID(Config.groups[s]?.name) === rank) symbol = s;
+		}
+		buf += `Custom room permissions: `;
+		buf += `<div class="ladder pad"><table><tr><th>Permission</th><th>Rank</th></tr><tr>`;
+		const perms = Permissions.getPermissions(this.room);
+		for (const key in perms) {
+			if (Config.groups[symbol]?.rank >= (Config.groups[perms[key]].rank || -1)) {
+				buf += `<tr><td>${u(key)}</td> <td>${perms[key]}</small></td></tr>`;
+			}
+		}
+		buf += `</td></tr></table></div>`;
+		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
+	},
+};

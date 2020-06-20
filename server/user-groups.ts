@@ -57,7 +57,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	atLeast(user: User, group: GroupSymbol) {
 		if (!Config.groups[group]) return false;
 		if (user.locked || user.semilocked) return false;
-		if (!this.has(user.id)) return false;
+		if (this.get(user.id) === ' ' && group !== ' ') return false;
 		return Auth.getGroup(this.get(user.id)).rank >= Auth.getGroup(group).rank;
 	}
 
@@ -246,3 +246,96 @@ export class GlobalAuth extends Auth {
 		return true;
 	}
 }
+
+export const Permissions = new class {
+	roomPermissions: AnyObject;
+	constructor() {
+		this.roomPermissions = JSON.parse(FS('config/permissions.json').readIfExistsSync() || "{}");
+	}
+	can(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
+		if (user.hasSysopAccess()) return true;
+		if (this.canRoom(permission, user, room, target)) return true;
+		if (this.canGlobal(permission, user, room, target)) return true;
+
+		return Auth.hasPermission(
+			user.group, permission, target ? target.group : undefined, target?.id === user.id
+		);
+	}
+	canRoom(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
+		if (target && !this.canTarget(user, room, target, true)) return false;
+		const auth = room.auth;
+		let group = auth.get(user);
+		if (this.roomPermissions[room.roomid] && this.roomPermissions[room.roomid][permission]) {
+			// custom perms supersede
+			return auth.atLeast(user, this.roomPermissions[room.roomid][permission]);
+		}
+		if (auth.has(user.id) && group === Auth.defaultSymbol()) {
+			group = 'whitelist' as GroupSymbol;
+		}
+		if (!group && Users.globalAuth.isStaff(user.id)) return this.canGlobal(permission, user, room, target);
+
+		const targetGroup = target ? auth.get(target) : undefined;
+		const roomIsTemporary = !room.persist;
+		if (roomIsTemporary && group === user.group) {
+			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
+			if (replaceGroup) group = replaceGroup;
+		}
+		return Auth.hasPermission(group, permission, targetGroup, target?.id === user.id);
+	}
+
+	canGlobal(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
+		if (target && !this.canTarget(user, room, target)) return false;
+		const visibility = room.settings.isPrivate;
+		const roomauth = room.auth;
+		if (visibility && visibility !== 'hidden' && !roomauth.atLeast(user, '%')) {
+			// defer to room auth if it's private
+			return this.canRoom(permission, user, room, target);
+		}
+		if (!Users.globalAuth.has(user.id)) return false;
+		return Auth.hasPermission(user.group, permission, target?.group);
+	}
+
+	canTarget(user: User, room: Room | BasicChatRoom, target: User, isRoom?: boolean) {
+		const auth = isRoom ? room.auth : Users.globalAuth;
+		const tarGroup = auth.get(target);
+		const group = auth.get(user);
+		return Config.groups[group].rank > Config.groups[tarGroup].rank;
+	}
+
+	approvedPermissions(room: Room | null = null) {
+		// support some config permission groups that aren't already a command name - these need to be hardcoded
+		// since there's no good way to automate this
+		const ALLOWED_COMMANDS = [
+			"showmedia", "broadcast", "tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
+		];
+		for (const cmd in Chat.commands) {
+			if (typeof Chat.commands[cmd] !== 'function') continue;
+			const isSpecific = /\.roomid !== (.+)/.exec(Chat.commands[cmd].toString());
+			// remove room-plugin commands unless it is that room
+			if (isSpecific && room && !isSpecific[1].includes(room.roomid)) continue;
+			// Assume if it passes a room into CommandContext.can that it's roomonly
+			if (Chat.commands[cmd].toString().includes('room)) return false;')) {
+				ALLOWED_COMMANDS.push(cmd);
+			}
+		}
+		return ALLOWED_COMMANDS;
+	}
+
+	setPermission(permission: string, rank: GroupSymbol | undefined, room: Room) {
+		const permissions = this.getPermissions(room);
+		if (!rank) {
+			delete permissions[permission];
+		} else {
+			const ALLOWED_COMMANDS = Permissions.approvedPermissions(room);
+			permission = Chat.baseCommand(permission);
+			if (!ALLOWED_COMMANDS.includes(toID(permission))) return false;
+			permissions[permission] = rank;
+		}
+		this.roomPermissions[room.roomid] = permissions;
+		FS('config/permissions.json').writeUpdate(() => JSON.stringify(this.roomPermissions));
+		return true;
+	}
+	getPermissions(room: Room) {
+		return this.roomPermissions[room.roomid] || {};
+	}
+};

@@ -97,6 +97,7 @@ const TRANSLATION_DIRECTORY = 'translations/';
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
+import {Permissions} from './user-groups';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
@@ -750,7 +751,9 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!this.user.can(permission as any, target, room as any)) {
+		const commands = Permissions.approvedPermissions(room);
+		if (commands.includes(toID(this.cmd))) permission = this.cmd;
+		if (!this.user.can(permission as any, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
 		}
@@ -1624,6 +1627,15 @@ export const Chat = new class {
 		}
 		const space = singular.startsWith('<') ? '' : ' ';
 		return `${num}${space}${num > 1 ? pluralSuffix : singular}`;
+	}
+
+	/**
+	 * Takes the name of a command and gets the base command, if there is one.
+	 * @param cmd string
+	 */
+	baseCommand(cmd: string) {
+		if (typeof this.commands[cmd] === 'string') return this.commands[cmd] as string;
+		return cmd;
 	}
 
 	/**

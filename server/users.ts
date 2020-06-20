@@ -41,7 +41,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
-import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
+import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, Permissions, RoomPermission, GlobalPermission} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -525,22 +525,8 @@ export class User extends Chat.MessageContext {
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: Room | BasicChatRoom | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null): boolean {
 		if (this.hasSysopAccess()) return true;
-
-		const auth: Auth = room ? room.auth : Users.globalAuth;
-
-		let group = auth.get(this);
-		if (auth.has(this.id) && group === Auth.defaultSymbol()) {
-			group = 'whitelist' as GroupSymbol;
-		}
-		const targetGroup = target ? auth.get(target) : undefined;
-
-		const roomIsTemporary = room && !room.persist;
-		if (roomIsTemporary && group === this.group) {
-			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
-			if (replaceGroup) group = replaceGroup;
-		}
-
-		return Auth.hasPermission(group, permission as any, targetGroup, target === this);
+		if (!room) room = Rooms.global;
+		return Permissions.can(permission, this, room, target ? target : undefined);
 	}
 	/**
 	 * Special permission check for system operators
