@@ -1633,7 +1633,7 @@ export const Chat = new class {
 	 * Takes the name of a command and gets the base command, if there is one.
 	 */
 	baseCommand(cmd: string) {
-		if (typeof this.commands[cmd] === 'string') return this.commands[cmd];
+		if (typeof this.commands[cmd] === 'string') return this.commands[cmd] as string;
 		return cmd;
 	}
 
