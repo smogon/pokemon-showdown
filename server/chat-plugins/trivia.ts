@@ -83,6 +83,14 @@ interface TriviaLeaderboard {
 	[k: string]: TriviaRank;
 }
 
+type TriviaHistory = TriviaGame[];
+
+interface TriviaGame {
+	mode: string;
+	length: string;
+	category: string;
+}
+
 type TriviaLadder = TriviaRank[][];
 
 interface TriviaData {
@@ -91,6 +99,7 @@ interface TriviaData {
 	leaderboard?: TriviaLeaderboard;
 	altLeaderboard?: TriviaLeaderboard;
 	ladder?: TriviaLadder;
+	history?: TriviaHistory;
 }
 
 interface TopPlayer {
@@ -304,9 +313,7 @@ class Trivia extends Rooms.RoomGame {
 	minPlayers: number;
 	kickedUsers: Set<string>;
 	canLateJoin: boolean;
-	mode: string;
-	length: string;
-	category: string;
+	game: TriviaGame;
 	questions: TriviaQuestion[];
 	phase: string;
 	phaseTimeout: NodeJS.Timer | null;
@@ -328,16 +335,22 @@ class Trivia extends Rooms.RoomGame {
 		this.minPlayers = MINIMUM_PLAYERS;
 		this.kickedUsers = new Set();
 		this.canLateJoin = true;
-		this.mode = (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]);
-		this.length = length;
-		this.category = '';
-		if (category === 'all') {
-			this.category = 'All';
-		} else if (category === 'random') {
-			this.category = `Random (${ALL_CATEGORIES[questions[0].category]})`;
-		} else {
-			this.category = ALL_CATEGORIES[category];
+
+		switch (category) {
+		case 'all':
+			category = 'All'; break;
+		case 'random':
+			category = `Random (${ALL_CATEGORIES[questions[0].category]})`; break;
+		default:
+			category = ALL_CATEGORIES[category];
 		}
+
+		this.game = {
+			mode: (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]),
+			length: length,
+			category: category,
+		};
+
 		this.questions = questions;
 
 		this.phase = SIGNUP_PHASE;
@@ -359,7 +372,7 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	getCap() {
-		return LENGTHS[this.length].cap;
+		return LENGTHS[this.game.length].cap;
 	}
 
 	/**
@@ -459,7 +472,7 @@ class Trivia extends Rooms.RoomGame {
 	init() {
 		this.broadcast(
 			'Signups for a new trivia game have begun!',
-			`Mode: ${this.mode} | Category: ${this.category} | Score cap: ${this.getCap()}<br />` +
+			`Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap()}<br />` +
 			'Enter /trivia join to sign up for the trivia game.'
 		);
 	}
@@ -478,7 +491,7 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	getDescription() {
-		return `Mode: ${this.mode} | Category: ${this.category} | Score cap: ${this.getCap()}`;
+		return `Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap()}`;
 	}
 
 	/**
@@ -686,12 +699,16 @@ class Trivia extends Rooms.RoomGame {
 		this.room.roomlog(buf);
 		this.room.modlog(`(${this.room.roomid}) ${logbuf}`);
 
+		if (!triviaData.history) triviaData.history = [];
+		triviaData.history?.push(this.game);
+		if (triviaData.history && triviaData.history.length > 10) triviaData.history = triviaData.history.slice(-10);
+
 		writeTriviaData();
 		this.destroy();
 	}
 
 	getPrizes() {
-		return LENGTHS[this.length].prizes;
+		return LENGTHS[this.game.length].prizes;
 	}
 
 	getTopPlayers(options: {max: number | null, requirePoints?: boolean} = {max: null, requirePoints: true}): TopPlayer[] {
@@ -729,8 +746,8 @@ class Trivia extends Rooms.RoomGame {
 	getStaffEndMessage(winners: TopPlayer[], mapper: (k: TopPlayer) => string) {
 		let message = "";
 		const winnerParts: ((k: TopPlayer) => string)[] = [
-			winner => `User ${mapper(winner)} won the game of ${this.mode}` +
-				` mode trivia under the ${this.category} category with a cap of ` +
+			winner => `User ${mapper(winner)} won the game of ${this.game.mode}` +
+				` mode trivia under the ${this.game.category} category with a cap of ` +
 				`${this.getCap()} points, with ${winner.player.points} points and ` +
 				`${winner.player.correctAnswers} correct answers!`,
 			winner => ` Second place: ${mapper(winner)} (${winner.player.points} points)`,
@@ -1201,7 +1218,7 @@ const commands: ChatCommands = {
 			tarUser = user;
 		}
 		let buffer = `There is a trivia game in progress, and it is in its ${game.phase} phase.<br />` +
-			`Mode: ${game.mode} | Category: ${game.category} | Score cap: ${game.getCap()}`;
+			`Mode: ${game.game.mode} | Category: ${game.game.category} | Score cap: ${game.getCap()}`;
 
 		const player = game.playerTable[tarUser.id];
 		if (player) {
@@ -1657,6 +1674,24 @@ const commands: ChatCommands = {
 	},
 	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # &`],
 
+	pastgames: 'history',
+	history(target, room, user) {
+		if (room.roomid !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		if (!this.runBroadcast()) return false;
+		if (!triviaData.history?.length) return this.sendReplyBox("There is no game history.");
+
+		const games = triviaData.history.reverse();
+		const buf = [];
+		let i = 1;
+		for (const game of games) {
+			buf.push(Utils.html`<b>${i}.</b> ${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category.`);
+			i++;
+		}
+
+		return this.sendReplyBox(buf.join('<br />'));
+	},
+	historyhelp: [`/trivia history - View a list of the 10 most recently played trivia games.`],
+
 	help(target, room, user) {
 		return this.parse(`${this.cmdToken}help trivia`);
 	},
@@ -1702,6 +1737,7 @@ const commands: ChatCommands = {
 			`- <code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.`,
 			`- <code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.`,
 			`- <code>/trivia alltimeladder</code> - View information about the top 15 users on the all time trivia leaderboard`,
+			`- <code>/trivia history</code> - View a list of the 10 most recently played trivia games.`,
 		].join('<br />') + '</div>');
 	},
 };
