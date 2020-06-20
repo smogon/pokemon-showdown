@@ -71,7 +71,7 @@ export const commands: ChatCommands = {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
+		room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
 	},
 	addrankhtmlboxhelp: [
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * # &`,
@@ -121,7 +121,7 @@ export const commands: ChatCommands = {
 		}
 
 		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.room.sendRankedUsers(html, rank as GroupSymbol);
+		room.sendRankedUsers(html, rank as GroupSymbol);
 	},
 	addrankuhtmlhelp: [
 		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * # &`,
@@ -324,7 +324,7 @@ export const commands: ChatCommands = {
 				// respawn simulator processes
 				void Rooms.PM.respawn();
 				// broadcast the new formats list to clients
-				Rooms.global.send(Rooms.global.formatListText);
+				Rooms.global.sendAll(Rooms.global.formatListText);
 
 				this.sendReply("Formats have been hot-patched.");
 			} else if (target === 'loginserver') {
@@ -787,7 +787,7 @@ export const commands: ChatCommands = {
 
 	refreshpage(target, room, user) {
 		if (!this.can('lockdown')) return false;
-		Rooms.global.send('|refresh|');
+		Rooms.global.sendAll('|refresh|');
 		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},

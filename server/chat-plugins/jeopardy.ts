@@ -40,7 +40,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	finals: boolean;
 	gameNumber: number;
 
-	constructor(room: ChatRoom | GameRoom, user: User, categoryCount: number, questionCount: number) {
+	constructor(room: Room, user: User, categoryCount: number, questionCount: number) {
 		super(room);
 		this.gameNumber = room.nextGameNumber();
 		this.playerTable = Object.create(null);

@@ -320,7 +320,7 @@ class Trivia extends Rooms.RoomGame {
 	curAnswers: string[];
 	askedAt: number[];
 	constructor(
-		room: GameRoom | ChatRoom, mode: string, category: string,
+		room: Room, mode: string, category: string,
 		length: string, questions: TriviaQuestion[], isRandomMode = false
 	) {
 		super(room);
