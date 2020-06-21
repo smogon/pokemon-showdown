@@ -474,7 +474,7 @@ export abstract class BasicRoom {
 export class GlobalRoom extends BasicRoom {
 	readonly type: 'global';
 	readonly active: false;
-	readonly settingsList: AnyObject[];
+	readonly settingsList: RoomSettings[];
 	readonly chatRooms: ChatRoom[];
 	/**
 	 * Rooms that users autojoin upon connecting
@@ -517,15 +517,17 @@ export class GlobalRoom extends BasicRoom {
 		if (!this.settingsList.length) {
 			this.settingsList = [{
 				title: 'Lobby',
+				auth: {},
+				creationTime: Date.now(),
 				isOfficial: true,
 				autojoin: true,
-				persistSettings: true,
 			}, {
 				title: 'Staff',
+				auth: {},
+				creationTime: Date.now(),
 				isPrivate: true,
 				staffRoom: true,
 				staffAutojoin: true,
-				persistSettings: true,
 			}];
 		}
 
@@ -794,6 +796,7 @@ export class GlobalRoom extends BasicRoom {
 
 		const settings = {
 			title,
+			auth: {},
 			creationTime: Date.now(),
 		};
 		const room = Rooms.createChatRoom(id, title, settings);
