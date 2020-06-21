@@ -11,7 +11,7 @@ export const GLOBAL_PERMISSIONS = [
 	// administrative
 	'bypassall', 'console', 'disableladder', 'lockdown', 'potd', 'rawpacket',
 	// other
-	'alts', 'autotimer', 'bypassblocks', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'ignorelimits', 'ip', 'lock', 'makeroom', 'rangeban', 'promote',
+	'addhtml', 'alts', 'autotimer', 'ban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'ignorelimits', 'importinputlog', 'ip', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
 ] as const;
 
 export type RoomPermission = typeof ROOM_PERMISSIONS[number];

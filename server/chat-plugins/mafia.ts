@@ -1883,7 +1883,8 @@ export const pages: PageTable = {
 	},
 	mafialadder(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!query.length || !Rooms.get('mafia')) return this.close();
+		const mafiaRoom = Rooms.get('mafia');
+		if (!query.length || !mafiaRoom) return this.close();
 		const headers: {[k: string]: {title: string, type: string, section: MafiaLogSection}} = {
 			leaderboard: {title: 'Leaderboard', type: 'Points', section: 'leaderboard'},
 			mvpladder: {title: 'MVP Ladder', type: 'MVPs', section: 'mvps'},
@@ -1896,7 +1897,6 @@ export const pages: PageTable = {
 		const month = date.toLocaleString("en-us", {month: "numeric", year: "numeric"});
 		const ladder = headers[query[0]];
 		if (!ladder) return this.close();
-		const mafiaRoom = Rooms.get('mafia') as ChatRoom | undefined;
 		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !this.can('mute', null, mafiaRoom)) return;
 		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})`;
 		let buf = `<div class="pad ladder">`;
