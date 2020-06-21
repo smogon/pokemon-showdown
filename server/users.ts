@@ -1608,6 +1608,7 @@ export const Users = {
 	pruneInactiveTimer: setInterval(() => {
 		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
 	}, 30 * MINUTES),
+	Permissions: Permissions,
 	logGhostConnections,
 	logGhostConnectionsTimer: setInterval(() => {
 		void logGhostConnections(7 * 24 * 60 * MINUTES);
