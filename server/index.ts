@@ -194,3 +194,20 @@ Repl.start('app', cmd => eval(cmd));
 if (Config.startuphook) {
 	process.nextTick(Config.startuphook);
 }
+
+if (Config.ofemain) {
+	try {
+		require.resolve('node-oom-heapdump');
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
+		throw new Error(
+			'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+			'Run npm install node-oom-heapdump and restart the server.'
+		);
+	}
+
+	// Create a heapdump if the process runs out of memory.
+	global.nodeOomHeapdump = (require as any)('node-oom-heapdump')({
+		addTimestamp: true,
+	});
+}

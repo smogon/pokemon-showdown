@@ -84,6 +84,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		const symbols = Object.keys(Config.groups) as GroupSymbol[];
 		return symbols.filter(targetSymbol => Auth.hasPermission(symbol, permission, targetSymbol));
 	}
+	static isValidSymbol(symbol: string): symbol is GroupSymbol {
+		if (symbol.length !== 1) return false;
+		return !/[A-Za-z0-9|,]/.test(symbol);
+	}
 }
 
 export class RoomAuth extends Auth {

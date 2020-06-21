@@ -1020,7 +1020,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
-				if (!validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (move.gen <= maxGen && !validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
@@ -2384,6 +2384,9 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
 
 const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
+		if (Config.debugdexsearchprocesses && process.send) {
+			process.send('DEBUG\n' + JSON.stringify(query));
+		}
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':

@@ -14,7 +14,7 @@ import * as path from 'path';
 import * as repl from 'repl';
 import {crashlogger} from './crashlogger';
 
-export const Repl = new class {
+export const Repl = new class ReplSingleton {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
 	 */
@@ -91,28 +91,32 @@ export const Repl = new class {
 		});
 
 		const pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
-		server.listen(pathname, () => {
-			fs.chmodSync(pathname, Config.replsocketmode || 0o600);
-			Repl.socketPathnames.add(pathname);
-		});
+		try {
+			server.listen(pathname, () => {
+				fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+				Repl.socketPathnames.add(pathname);
+			});
 
-		server.once('error', (err: NodeJS.ErrnoException) => {
-			if (err.code === "EADDRINUSE") {
-				fs.unlink(pathname, _err => {
-					if (_err && _err.code !== "ENOENT") {
-						crashlogger(_err, `REPL: ${filename}`);
-					}
+			server.once('error', (err: NodeJS.ErrnoException) => {
+				if (err.code === "EADDRINUSE") {
+					fs.unlink(pathname, _err => {
+						if (_err && _err.code !== "ENOENT") {
+							crashlogger(_err, `REPL: ${filename}`);
+						}
+						server.close();
+					});
+				} else {
+					crashlogger(err, `REPL: ${filename}`);
 					server.close();
-				});
-			} else {
-				crashlogger(err, `REPL: ${filename}`);
-				server.close();
-			}
-		});
+				}
+			});
 
-		server.once('close', () => {
-			Repl.socketPathnames.delete(pathname);
-			Repl.start(filename, evalFunction);
-		});
+			server.once('close', () => {
+				Repl.socketPathnames.delete(pathname);
+				Repl.start(filename, evalFunction);
+			});
+		} catch (err) {
+			console.error(`Could not start REPL server "${filename}": ${err}`);
+		}
 	}
 };

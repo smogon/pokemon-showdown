@@ -348,46 +348,6 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`Server version: <b>${Chat.packageData.version}</b>`);
 	},
 
-	'!authority': true,
-	auth: 'authority',
-	stafflist: 'authority',
-	globalauth: 'authority',
-	authlist: 'authority',
-	authority(target, room, user, connection) {
-		if (target && target !== '+') {
-			const targetRoom = Rooms.search(target);
-			const availableRoom = targetRoom?.checkModjoin(user);
-			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
-			return this.parse(`/userauth ${target}`);
-		}
-		const showAll = !!target;
-		const rankLists: {[k: string]: string[]} = {};
-		for (const [id, symbol] of Users.globalAuth) {
-			if (symbol === ' ' || (symbol === '+' && !showAll)) continue;
-			if (!rankLists[symbol]) rankLists[symbol] = [];
-			rankLists[symbol].push(id);
-		}
-
-		const buffer = (Object.keys(rankLists) as GroupSymbol[]).sort(
-			(symbol1, symbol2) => Users.Auth.getGroup(symbol1).rank - Users.Auth.getGroup(symbol2).rank
-		).map(
-			symbol => (
-				`${(Config.groups[symbol] ? `**${Config.groups[symbol].name}s** (${symbol})` : symbol)}:\n` +
-				rankLists[symbol].sort((name1, name2) => toID(name1).localeCompare(toID(name2))).join(", ")
-			)
-		);
-		if (!showAll) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
-
-		if (!buffer.length) return connection.popup("This server has no global authority.");
-		connection.popup(buffer.join("\n\n"));
-	},
-	authhelp: [
-		`/auth - Show global staff for the server.`,
-		`/auth + - Show global staff for the server, including voices.`,
-		`/auth [room] - Show what roomauth a room has.`,
-		`/auth [user] - Show what global and roomauth a user has.`,
-	],
-
 	userlist(target, room, user) {
 		const userList = [];
 
@@ -1596,6 +1556,7 @@ process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
 		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code ', '/modnote ', '/mn ',
+		'/eval', '!eval', '/evalbattle',
 		'/importinputlog '
 	);
 });

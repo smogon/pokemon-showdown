@@ -57,6 +57,8 @@ export const commands: ChatCommands = {
 
 	'!roompromote': true,
 	roomdemote: 'roompromote',
+	forceroompromote: 'roompromote',
+	forceroomdemote: 'roompromote',
 	roompromote(target, room, user, connection, cmd) {
 		if (!room) {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
@@ -65,8 +67,7 @@ export const commands: ChatCommands = {
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help roompromote');
 
-		const force = target.startsWith('!!!');
-		if (force) target = target.slice(3);
+		const force = cmd.startsWith('force');
 		target = this.splitTarget(target, true);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
@@ -92,8 +93,12 @@ export const commands: ChatCommands = {
 		}
 		if (!Config.groups[nextSymbol]) {
 			if (!force || !user.can('bypassall')) {
-				return this.errorReply(`Group '${nextSymbol}' does not exist.`);
-			} else if (nextSymbol.length !== 1) {
+				this.errorReply(`Group '${nextSymbol}' does not exist.`);
+				if (user.can('bypassall')) {
+					this.errorReply(`If you want to promote to a nonexistent group, use /forceroompromote`);
+				}
+				return;
+			} else if (!Users.Auth.isValidSymbol(nextSymbol)) {
 				// yes I know this excludes astral-plane characters and includes combining characters
 				return this.errorReply(`Admins can forcepromote to nonexistent groups only if they are one character long`);
 			}
@@ -174,6 +179,47 @@ export const commands: ChatCommands = {
 		`/roomdeauth [username] - Removes all room rank from the user. Requires: @ # &`,
 	],
 
+	'!authority': true,
+	auth: 'authority',
+	stafflist: 'authority',
+	globalauth: 'authority',
+	authlist: 'authority',
+	authority(target, room, user, connection) {
+		if (target && target !== '+') {
+			const targetRoom = Rooms.search(target);
+			const availableRoom = targetRoom?.checkModjoin(user);
+			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
+			return this.parse(`/userauth ${target}`);
+		}
+		const showAll = !!target;
+		const rankLists: {[k: string]: string[]} = {};
+		for (const [id, symbol] of Users.globalAuth) {
+			if (symbol === ' ' || (symbol === '+' && !showAll)) continue;
+			if (!rankLists[symbol]) rankLists[symbol] = [];
+			rankLists[symbol].push(Users.globalAuth.usernames.get(id) || id);
+		}
+
+		const buffer = Utils.sortBy(
+			Object.entries(rankLists) as [GroupSymbol, string[]][],
+			([symbol]) => -Users.Auth.getGroup(symbol).rank
+		).map(
+			([symbol, names]) => (
+				`${(Config.groups[symbol] ? `**${Config.groups[symbol].name}s** (${symbol})` : symbol)}:\n` +
+				Utils.sortBy(names, name => toID(name)).join(", ")
+			)
+		);
+		if (!showAll) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
+
+		if (!buffer.length) return connection.popup("This server has no global authority.");
+		connection.popup(buffer.join("\n\n"));
+	},
+	authhelp: [
+		`/auth - Show global staff for the server.`,
+		`/auth + - Show global staff for the server, including voices.`,
+		`/auth [room] - Show what roomauth a room has.`,
+		`/auth [user] - Show what global and roomauth a user has.`,
+	],
+
 	'!roomauth': true,
 	roomstaff: 'roomauth',
 	roomauth1: 'roomauth',
@@ -194,18 +240,17 @@ export const commands: ChatCommands = {
 			rankLists[rank].push(id);
 		}
 
-		const buffer = Object.keys(rankLists).sort(
-			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
-		).map(groupSymbol => {
-			let roomRankList: string[] = rankLists[groupSymbol].sort();
-			roomRankList = roomRankList.map(userid => {
-				const curUser = Users.get(userid);
-				const isAway = curUser?.statusType !== 'online';
-				return userid in targetRoom.users && !isAway ? `**${userid}**` : userid;
-			});
-			let group = Config.groups[groupSymbol] ? `${Config.groups[groupSymbol].name}s (${groupSymbol})` : groupSymbol;
-			if (groupSymbol === ' ') group = 'Whitelisted';
-			return `${group}:\n${roomRankList.join(", ")}`;
+		const buffer = Utils.sortBy(
+			Object.entries(rankLists) as [GroupSymbol, ID[]][],
+			([symbol]) => -Users.Auth.getGroup(symbol).rank
+		).map(([symbol, names]) => {
+			let group = Config.groups[symbol] ? `${Config.groups[symbol].name}s (${symbol})` : symbol;
+			if (symbol === ' ') group = 'Whitelisted (this list is only visible to staff)';
+			return `${group}:\n` +
+				Utils.sortBy(names).map(userid => {
+					const isOnline = Users.get(userid)?.statusType === 'online';
+					return userid in targetRoom.users && isOnline ? `**${userid}**` : userid;
+				}).join(', ');
 		});
 
 		let curRoom = targetRoom;
@@ -241,7 +286,7 @@ export const commands: ChatCommands = {
 		const buffer = [];
 		let innerBuffer = [];
 		const group = Users.globalAuth.get(targetId);
-		if (group) {
+		if (group !== ' ' || Users.isTrusted(targetId)) {
 			buffer.push(`Global auth: ${group === ' ' ? 'trusted' : group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
@@ -1277,7 +1322,7 @@ export const commands: ChatCommands = {
 		if (!target) return;
 
 		for (const u of Users.users.values()) {
-			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
+			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		}
 		this.modlog(`GLOBALDECLARE`, null, target);
 	},

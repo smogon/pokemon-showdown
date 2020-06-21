@@ -74,7 +74,7 @@ const filterWords: {[k: string]: FilterWord[]} = Chat.filterWords;
 
 function constructEvasionRegex(str: string) {
 	const buf = "\\b" +
-		str.split('').map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
+		[...str].map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
 		"\\b";
 	return new RegExp(buf, 'i');
 }

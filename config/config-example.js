@@ -89,12 +89,39 @@ Main's SSL deploy script from Let's Encrypt looks like:
 exports.proxyip = false;
 
 /**
- * ofe - write heapdumps if sockets.js workers run out of memory.
- *   If you wish to enable this, you will need to install node-oom-heapdump,
- *   as it is sometimes not installed by default:
+ * Various debug options
+ *
+ * ofe[something]
+ * ============================================================================
+ *
+ * Write heapdumps if that processs run out of memory.
+ *
+ * If you wish to enable this, you will need to install node-oom-heapdump,
+ * as it is sometimes not installed by default:
+ *
  *     $ npm install node-oom-heapdump
+ *
+ * You might also want to signal processes to put them in debug mode, for
+ * access to on-demand heapdumps.
+ *
+ *     kill -s SIGUSR1 [pid]
+ *
+ * debug[something]processes
+ * ============================================================================
+ *
+ * Attach a `debug` property to `ProcessWrapper`, allowing you to see the last
+ * message it received before it hit an infinite loop.
+ *
+ * For example:
+ *
+ *     >> ProcessManager.processManagers[4].processes[0].debug
+ *     << "{"tar":"spe=60,all,!lc,!nfe","cmd":"dexsearch","canAll":true,"message":"/ds spe=60,all,!lc,!nfe"}"
  */
-exports.ofe = false;
+exports.ofemain = false;
+exports.ofesockets = false;
+exports.debugsimprocesses = true;
+exports.debugvalidatorprocesses = true;
+exports.debugdexsearchprocesses = true;
 
 /**
  * Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
@@ -607,6 +634,17 @@ exports.grouplist = [
 		inherit: ' ',
 		alts: 's',
 		broadcast: true,
+		showmedia: true,
+	},
+	{
+		symbol: 'whitelist',
+		id: "whitelist",
+		name: "Whitelist",
+		inherit: ' ',
+		roomonly: true,
+		alts: 's',
+		broadcast: true,
+		showmedia: true,
 	},
 	{
 		symbol: ' ',

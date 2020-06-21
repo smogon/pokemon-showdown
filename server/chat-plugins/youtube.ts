@@ -29,12 +29,13 @@ export class YoutubeInterface {
 		this.intervalTime = 0;
 	}
 	async getChannelData(link: string, username?: string) {
+		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
 		const raw = await Net(queryUrl).get();
 		const res = JSON.parse(raw);
-		if (!res || !res.items) return null;
+		if (!res || !res.items || res.items.length < 1) return;
 		const data = res.items[0];
 		const cache = {
 			name: data.snippet.title,
@@ -99,29 +100,32 @@ export class YoutubeInterface {
 		return channel;
 	}
 	getId(link: string) {
-		let id;
+		let id = '';
+		if (!link) return null;
 		if (channelData[link]) return link;
 		if (!link.includes('channel')) {
 			if (link.includes('youtube')) {
-				id = link.split('v=')[1];
+				id = link.split('v=')[1] || '';
 			} else if (link.includes('youtu.be')) {
-				id = link.split('/')[3];
+				id = link.split('/')[3] || '';
 			} else {
 				return null;
 			}
 		} else {
-			id = link.split('channel/')[1];
+			id = link.split('channel/')[1] || '';
 		}
 		if (id.includes('&')) id = id.split('&')[0];
+		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
+		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
 		const raw = await Net(queryUrl).get();
 		const res = JSON.parse(raw);
-		if (!res.items) return;
+		if (!res || !res.items || res.items.length < 1) return;
 		const video = res.items[0];
 		const info = {
 			title: video.snippet.title,
@@ -157,6 +161,7 @@ const YouTube = new YoutubeInterface();
 export const commands: ChatCommands = {
 	async randchannel(target, room, user) {
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+		if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
 		if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 		this.runBroadcast();
 		const data = await YouTube.randChannel();
@@ -175,6 +180,7 @@ export const commands: ChatCommands = {
 	youtube: {
 		async addchannel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+			if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
 			const [id, name] = target.split(',');
 			if (!id) return this.errorReply('Specify a channel ID.');
 			const data = await YouTube.getChannelData(id, name);
@@ -188,7 +194,8 @@ export const commands: ChatCommands = {
 
 		removechannel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			if (!this.can('ban', null, room)) return false;
+			if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
+			if (!this.can('mute', null, room)) return false;
 			const id = YouTube.channelSearch(target);
 			if (!id) return this.errorReply(`Channel with ID or name ${target} not found.`);
 			delete channelData[id];
@@ -200,6 +207,7 @@ export const commands: ChatCommands = {
 
 		async channel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+			if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
 			const channel = YouTube.channelSearch(target);
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
 			const data = await YouTube.generateChannelDisplay(channel);
@@ -217,6 +225,7 @@ export const commands: ChatCommands = {
 		],
 		async video(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+			if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
 			if (!target) return this.errorReply(`Provide a valid youtube link.`);
 			const html = await YouTube.generateVideoDisplay(target);
 			if (!html) return this.errorReply(`This url is invalid. Please use a youtu.be link or a youtube.com link.`);
@@ -233,6 +242,7 @@ export const commands: ChatCommands = {
 		channels(target, room, user) {
 			let all;
 			if (toID(target) === 'all') all = true;
+			if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
 			return this.parse(`/j view-channels${all ? '-all' : ''}`);
 		},
 		help(target, room, user) {
@@ -253,6 +263,7 @@ export const commands: ChatCommands = {
 		interval: 'repeat',
 		async repeat(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+			if (!Config.youtubeKey) return this.errorReply(`Youtube is not configured.`);
 			if (!this.can('declare', null, room)) return false;
 			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime)}.`);
 			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
@@ -292,6 +303,7 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	async channels(args, user) {
 		const all = toID(args[0]) === 'all';
+		if (!Config.youtubeKey) return `<h2>Youtube is not configured.</h2>`;
 		this.title = `[Channels] ${all ? 'All' : ''}`;
 		let buffer = `<div class="pad"><h4>Channels in the YouTube database:`;
 		if (all) buffer += `(All)`;
