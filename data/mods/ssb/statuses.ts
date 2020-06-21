@@ -87,6 +87,21 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	beowulf: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Beowulf')}|:^)`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Beowulf')}|/me buzzes`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Beowulf')}|time for my own isekai`);
+		},
+		onSourceFaint() {
+			this.add(`c|${getName('Beowulf')}|another one reincarnating into an isekai`);
+		},
+	},
 	cake: {
 		noCopy: true,
 		onStart(target, source) {
@@ -95,7 +110,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			// Cake innate
 			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source);
 		},
-		onSwitchOut() {
+		onSwitchOut(pokemon) {
 			this.add(`c|${getName('Cake')}|${pokemon.side.name} is a nerd`);
 		},
 		onFaint() {

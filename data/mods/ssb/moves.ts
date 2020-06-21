@@ -188,7 +188,36 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
-// Cake
+	// Beowulf
+	buzzinspection: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Gains the ability Compound Eyes and then switches out",
+		shortDesc: "Gains Compound Eyes and switches",
+		name: "Buzz Inspection",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Night Shade', source);
+		},
+		onHit(pokemon) {
+			pokemon.baseAbility = "compoundeyes";
+			pokemon.setAbility("compoundeyes");
+			this.add('-ability', pokemon, pokemon.getAbility().name, '[from] move: Buzz Inspection');
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "self",
+		type: "Bug",
+	},
+
+	// Cake
 	kevin: {
 		accuracy: 100,
 		basePower: 111,
@@ -216,7 +245,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			let pokemon = target.side.foe.active[0];
+			const pokemon = target.side.foe.active[0];
 			if (pokemon.types[1]) {
 				return typeMod + this.dex.getEffectiveness(pokemon.types[1], type);
 			}
@@ -287,7 +316,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Seed Flare', target);
 		},
 		target: "normal",
-		type: "Grass", 
+		type: "Grass",
 	},
 
 	// c.kilgannon

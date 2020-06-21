@@ -58,6 +58,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	Beowulf: {
+		species: 'Beedrill', ability: 'Intrepid Sword', item: 'Beedrillite', gender: '',
+		moves: ['Megahorn', 'Gunk Shot', ['Precipice Blades', 'Head Smash']],
+		signatureMove: 'Buzz Inspection',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: 2,
+	},
 	Cake: {
 		species: 'Dunsparce', ability: 'h', item: 'Leftovers', gender: 'M',
 		moves: ['Toxic', 'Spiky Shield', 'Skill Swap'],
