@@ -316,7 +316,8 @@ export const commands: ChatCommands = {
 			}
 
 			if (room.minorActivity) {
-				room.minorActivityQueue!.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
+				if (!room.minorActivityQueue) room.minorActivityQueue = [];
+				room.minorActivityQueue.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
 			}
