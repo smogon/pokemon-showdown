@@ -538,8 +538,7 @@ export const pages: PageTable = {
 		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
-		if (!room.minorActivityQueue) room.minorActivityQueue = [];
-		if (!room.minorActivityQueue.length) {
+		if (!room.minorActivityQueue?.length) {
 			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
