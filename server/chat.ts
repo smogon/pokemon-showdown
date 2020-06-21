@@ -1500,8 +1500,26 @@ export const Chat = new class {
 		}
 		this.loadPluginData(plugin);
 	}
+	fillCommands(commandTable: AnyObject) {
+		for (const cmd in commandTable) {
+			const entry = commandTable[cmd];
+			if (typeof entry === 'object') {
+				this.fillCommands(entry);
+			}
+			if (typeof entry !== 'function') continue;
+
+			const handlerCode = entry.toString();
+			entry.requiresRoom = !commandTable[`!${cmd}`];
+
+			const roomSpecificSearch = /\.roomid !== ['"]([a-z0-9-]+)['"]/.exec(handlerCode);
+			entry.roomSpecific = roomSpecificSearch?.[1] || null;
+		}
+		return commandTable;
+	}
 	loadPluginData(plugin: AnyObject) {
-		if (plugin.commands) Object.assign(Chat.commands, plugin.commands);
+		if (plugin.commands) {
+			Object.assign(Chat.commands, this.fillCommands(plugin.commands));
+		}
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
 		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);

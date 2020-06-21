@@ -258,7 +258,7 @@ export const Permissions = new class {
 		if (this.canGlobal(permission, user, room, target)) return true;
 
 		return Auth.hasPermission(
-			user.group, permission, target ? target.group : undefined, target?.id === user.id
+			user.group, permission as any, target ? target.group : undefined, target?.id === user.id
 		);
 	}
 	canRoom(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
@@ -280,7 +280,7 @@ export const Permissions = new class {
 			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
 			if (replaceGroup) group = replaceGroup;
 		}
-		return Auth.hasPermission(group, permission, targetGroup, target?.id === user.id);
+		return Auth.hasPermission(group, permission as any, targetGroup, target?.id === user.id);
 	}
 
 	canGlobal(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
@@ -292,7 +292,7 @@ export const Permissions = new class {
 			return this.canRoom(permission, user, room, target);
 		}
 		if (!Users.globalAuth.has(user.id)) return false;
-		return Auth.hasPermission(user.group, permission, target?.group);
+		return Auth.hasPermission(user.group, permission as any, target?.group);
 	}
 
 	canTarget(user: User, room: Room | BasicChatRoom, target: User, isRoom?: boolean) {
