@@ -141,6 +141,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	darmanitanz: "Darmanitan-Zen",
 	darmanitanzenmode: "Darmanitan-Zen",
 	darmanitanzengalar: "Darmanitan-Galar-Zen",
+	darmgz: "Darmanitan-Galar-Zen",
 	deoxysnormal: "Deoxys",
 	deon: "Deoxys",
 	deoxysa: "Deoxys-Attack",
