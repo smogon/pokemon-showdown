@@ -90,26 +90,32 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 
 		if (group[permission]) {
-			const jurisdiction = group[permission];
-			if (!targetSymbol) {
-				return !!jurisdiction;
-			}
+			let jurisdiction = group[permission];
 			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return Auth.hasPermission(symbol, 'jurisdiction', targetSymbol);
+				jurisdiction = group['jurisdiction'] || true;
 			}
-			if (typeof jurisdiction !== 'string') {
-				return !!jurisdiction;
-			}
-			if (jurisdiction.includes(targetSymbol)) {
-				return true;
-			}
-			if (jurisdiction.includes('s') && targetingSelf) {
-				return true;
-			}
-			if (jurisdiction.includes('u') &&
-				Config.groupsranking.indexOf(symbol) > Config.groupsranking.indexOf(targetSymbol)) {
-				return true;
-			}
+			return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, targetingSelf);
+		}
+		return false;
+	}
+	static hasJurisdiction(
+		symbol: GroupSymbol, jurisdiction?: string | boolean, targetSymbol?: GroupSymbol, targetingSelf?: boolean
+	) {
+		if (!targetSymbol) {
+			return !!jurisdiction;
+		}
+		if (typeof jurisdiction !== 'string') {
+			return !!jurisdiction;
+		}
+		if (jurisdiction.includes(targetSymbol)) {
+			return true;
+		}
+		if (jurisdiction.includes('s') && targetingSelf) {
+			return true;
+		}
+		if (jurisdiction.includes('u') &&
+			Config.groupsranking.indexOf(symbol) > Config.groupsranking.indexOf(targetSymbol)) {
+			return true;
 		}
 		return false;
 	}
@@ -248,58 +254,40 @@ export class GlobalAuth extends Auth {
 }
 
 export const Permissions = new class {
-	roomPermissions: AnyObject;
+	roomPermissions: {[roomid: string]: {[permission: string]: GroupSymbol}};
 	constructor() {
 		this.roomPermissions = JSON.parse(FS('config/permissions.json').readIfExistsSync() || "{}");
 	}
-	can(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
+	can(permission: string, user: User, room: Room | BasicChatRoom | null, target: User | null, cmd?: string): boolean {
 		if (user.hasSysopAccess()) return true;
-		if (this.canRoom(permission, user, room, target)) return true;
-		if (this.canGlobal(permission, user, room, target)) return true;
 
-		return Auth.hasPermission(
-			user.group, permission as any, target ? target.group : undefined, target?.id === user.id
-		);
-	}
-	canRoom(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
-		if (target && !this.canTarget(user, room, target, true)) return false;
-		const auth = room.auth;
+		const auth: Auth = room ? room.auth : Users.globalAuth;
+
 		let group = auth.get(user);
-		if (this.roomPermissions[room.roomid] && this.roomPermissions[room.roomid][permission]) {
-			// custom perms supersede
-			return auth.atLeast(user, this.roomPermissions[room.roomid][permission]);
-		}
 		if (auth.has(user.id) && group === Auth.defaultSymbol()) {
 			group = 'whitelist' as GroupSymbol;
 		}
-		if (!group && Users.globalAuth.isStaff(user.id)) return this.canGlobal(permission, user, room, target);
-
 		const targetGroup = target ? auth.get(target) : undefined;
-		const roomIsTemporary = !room.persist;
+
+		const roomIsTemporary = room && !room.persist;
 		if (roomIsTemporary && group === user.group) {
 			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
 			if (replaceGroup) group = replaceGroup;
 		}
-		return Auth.hasPermission(group, permission as any, targetGroup, target?.id === user.id);
-	}
 
-	canGlobal(permission: string, user: User, room: Room | BasicChatRoom, target?: User): boolean {
-		if (target && !this.canTarget(user, room, target)) return false;
-		const visibility = room.settings.isPrivate;
-		const roomauth = room.auth;
-		if (visibility && visibility !== 'hidden' && !roomauth.atLeast(user, '%')) {
-			// defer to room auth if it's private
-			return this.canRoom(permission, user, room, target);
+		const roomPermissions = room ? this.roomPermissions[room.roomid] : null;
+		if (roomPermissions) {
+			if (cmd && permission !== cmd && roomPermissions[cmd]) {
+				return auth.atLeast(user, roomPermissions[cmd]) &&
+					Auth.hasJurisdiction(group, 'su', targetGroup, target === user);
+			}
+			if (roomPermissions[permission]) {
+				return auth.atLeast(user, roomPermissions[permission]) &&
+					Auth.hasJurisdiction(group, 'su', targetGroup, target === user);
+			}
 		}
-		if (!Users.globalAuth.has(user.id)) return false;
-		return Auth.hasPermission(user.group, permission as any, target?.group);
-	}
 
-	canTarget(user: User, room: Room | BasicChatRoom, target: User, isRoom?: boolean) {
-		const auth = isRoom ? room.auth : Users.globalAuth;
-		const tarGroup = auth.get(target);
-		const group = auth.get(user);
-		return Config.groups[group].rank > Config.groups[tarGroup].rank;
+		return Auth.hasPermission(group, permission as any, targetGroup, target === user);
 	}
 
 	approvedPermissions(room: Room | null = null) {

@@ -750,9 +750,7 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		const commands = Users.Permissions.approvedPermissions(room);
-		if (commands.includes(toID(this.cmd))) permission = this.cmd;
-		if (!this.user.can(permission as any, target, room)) {
+		if (!this.user.can(permission as any, target, room!, this.cmd)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
 		}

@@ -522,13 +522,11 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
-	can(permission: RoomPermission, target: User | null, room: Room | BasicChatRoom): boolean;
+	can(permission: RoomPermission, target: User | null, room: Room | BasicChatRoom, cmd?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: Room | BasicChatRoom | null): boolean;
-	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null): boolean {
-		if (this.hasSysopAccess()) return true;
-		if (!room) room = Rooms.global;
-		return Permissions.can(permission, this, room, target ? target : undefined);
+	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null, cmd?: string): boolean {
+		return Permissions.can(permission, this, room, target, cmd);
 	}
 	/**
 	 * Special permission check for system operators
