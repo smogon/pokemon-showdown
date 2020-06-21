@@ -41,7 +41,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
-import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL} from './user-groups';
+import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -520,6 +520,8 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
+	can(permission: RoomPermission | GlobalPermission, target?: User | null, room?: Room | BasicChatRoom | null): boolean;
+	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null): boolean {
 		if (this.hasSysopAccess()) return true;
 
@@ -537,7 +539,7 @@ export class User extends Chat.MessageContext {
 			if (replaceGroup) group = replaceGroup;
 		}
 
-		return Auth.hasPermission(group, permission, targetGroup, target === this);
+		return Auth.hasPermission(group, permission as any, targetGroup, target === this);
 	}
 	/**
 	 * Special permission check for system operators

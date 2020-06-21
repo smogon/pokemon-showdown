@@ -23,6 +23,9 @@ To reload chat commands:
 
 */
 
+type RoomPermission = import('./user-groups').RoomPermission;
+type GlobalPermission = import('./user-groups').GlobalPermission;
+
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
 export interface PageTable {
@@ -48,7 +51,7 @@ export type SettingsHandler = (
 	connection: Connection
 ) => {
 	label: string,
-	permission: boolean | string,
+	permission: boolean | RoomPermission | GlobalPermission,
 	// button label, command | disabled
 	options: [string, string | true][],
 };
@@ -215,8 +218,10 @@ export class PageContext extends MessageContext {
 		this.title = 'Page';
 	}
 
+	can(permission: RoomPermission | GlobalPermission, target?: User | null, room?: Room | null): boolean;
+	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!this.user.can(permission, target, room)) {
+		if (!this.user.can(permission as any, target, room)) {
 			this.send(`<h2>Permission denied.</h2>`);
 			return false;
 		}
@@ -742,8 +747,10 @@ export class CommandContext extends MessageContext {
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
 	}
+	can(permission: RoomPermission | GlobalPermission, target?: User | null, room?: Room | null): boolean;
+	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!this.user.can(permission, target, room)) {
+		if (!this.user.can(permission as any, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
 		}

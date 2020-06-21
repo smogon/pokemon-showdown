@@ -1,8 +1,38 @@
 import {FS} from '../lib/fs';
-type GroupInfo = import('./config-loader').GroupInfo;
 
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
+
+export const ROOM_PERMISSIONS = [
+	'addhtml', 'announce', 'ban', 'broadcast', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modchatall', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'showmedia', 'timer', 'tournaments', 'warn',
+] as const;
+
+export const GLOBAL_PERMISSIONS = [
+	// administrative
+	'bypassall', 'console', 'disableladder', 'lockdown', 'potd', 'rawpacket',
+	// other
+	'alts', 'autotimer', 'bypassblocks', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'ignorelimits', 'ip', 'lock', 'makeroom', 'rangeban', 'promote',
+] as const;
+
+export type RoomPermission = typeof ROOM_PERMISSIONS[number];
+export type GlobalPermission = typeof GLOBAL_PERMISSIONS[number];
+
+export type GroupInfo = {
+	symbol: GroupSymbol,
+	id: ID,
+	name: string,
+	rank: number,
+	inherit?: GroupSymbol,
+	jurisdiction?: string,
+
+	globalonly?: boolean,
+	roomonly?: boolean,
+	battleonly?: boolean,
+	root?: boolean,
+	globalGroupInPersonalRoom?: GroupSymbol,
+} & {
+	[P in RoomPermission | GlobalPermission]?: string | boolean;
+};
 
 /**
  * Auth table - a Map for which users are in which groups.
@@ -49,7 +79,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		});
 	}
 	static hasPermission(
-		symbol: GroupSymbol, permission: string, targetSymbol?: GroupSymbol, targetingSelf?: boolean
+		symbol: GroupSymbol,
+		permission: GlobalPermission | RoomPermission | 'jurisdiction',
+		targetSymbol?: GroupSymbol,
+		targetingSelf?: boolean
 	): boolean {
 		const group = Auth.getGroup(symbol);
 		if (group['root']) {
@@ -80,7 +113,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		return false;
 	}
-	static listJurisdiction(symbol: GroupSymbol, permission: string) {
+	static listJurisdiction(symbol: GroupSymbol, permission: GlobalPermission | RoomPermission) {
 		const symbols = Object.keys(Config.groups) as GroupSymbol[];
 		return symbols.filter(targetSymbol => Auth.hasPermission(symbol, permission, targetSymbol));
 	}

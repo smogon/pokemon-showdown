@@ -115,10 +115,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is already a ${nextGroupName} in this room.`);
 		}
 		if (!user.can('makeroom')) {
-			if (currentGroup.id && !user.can(`room${currentGroup.id || 'voice'}`, null, room)) {
+			if (currentGroup.id && !user.can(`room${currentGroup.id || 'voice'}` as 'roomvoice', null, room)) {
 				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${currentGroupName}.`);
 			}
-			if (nextSymbol !== ' ' && !user.can(`room${nextGroup.id || 'voice'}`, null, room)) {
+			if (nextSymbol !== ' ' && !user.can(`room${nextGroup.id || 'voice'}` as 'roomvoice', null, room)) {
 				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${nextGroupName}.`);
 			}
 		}
