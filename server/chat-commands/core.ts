@@ -815,7 +815,7 @@ export const commands: ChatCommands = {
 	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: &`],
 
 	importinputlog(target, room, user, connection) {
-		if (!this.can('broadcast')) return;
+		if (!this.can('importinputlog')) return;
 		const formatIndex = target.indexOf(`"formatid":"`);
 		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
 		if (formatIndex < 0 || nextQuoteIndex < 0) return this.errorReply(`Invalid input log.`);
@@ -1074,7 +1074,7 @@ export const commands: ChatCommands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
-		if (!this.can('kick', targetUser)) return false;
+		if (!this.can('kick', targetUser, room)) return false;
 		if (room.battle.leaveGame(targetUser)) {
 			this.addModAction(`${targetUser.name} was kicked from a battle by ${user.name} ${(target ? ` (${target})` : ``)}`);
 			this.modlog('KICKBATTLE', targetUser, target, {noip: 1, noalts: 1});

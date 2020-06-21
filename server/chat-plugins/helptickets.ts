@@ -1416,7 +1416,7 @@ export const commands: ChatCommands = {
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
-			if (!this.can('declare')) return;
+			if (!this.can('makeroom')) return;
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(`${target} does not have a ticket.`);

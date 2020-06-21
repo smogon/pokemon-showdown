@@ -231,7 +231,7 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		const showAll = user.can('lock', null, room);
+		const showAll = user.can('mute', null, room);
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
 		for (const [id, rank] of targetRoom.auth) {
@@ -391,7 +391,9 @@ export const commands: ChatCommands = {
 	warn(target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (!this.canTalk()) return;
-		if (room.settings.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
+		if (room.settings.isPersonal && !user.can('warn' as any)) {
+			return this.errorReply("Warning is unavailable in group chats.");
+		}
 		// If used in staff, help tickets or battles, log the warn to the global modlog.
 		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
@@ -399,7 +401,7 @@ export const commands: ChatCommands = {
 		const targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
-			if (!this.can('warn')) return false;
+			if (!this.can('warn', null, room)) return false;
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
 			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
@@ -1298,7 +1300,7 @@ export const commands: ChatCommands = {
 
 	htmldeclare(target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
-		if (!this.can('gdeclare', null, room)) return false;
+		if (!this.can('gdeclare')) return false;
 		if (!this.canTalk()) return;
 		(target as string | null) = this.canHTML(target);
 		if (!target) return;

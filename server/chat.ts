@@ -51,7 +51,7 @@ export type SettingsHandler = (
 	connection: Connection
 ) => {
 	label: string,
-	permission: boolean | RoomPermission | GlobalPermission,
+	permission: boolean | RoomPermission,
 	// button label, command | disabled
 	options: [string, string | true][],
 };
@@ -218,10 +218,10 @@ export class PageContext extends MessageContext {
 		this.title = 'Page';
 	}
 
-	can(permission: RoomPermission | GlobalPermission, target?: User | null, room?: Room | null): boolean;
+	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!this.user.can(permission as any, target, room)) {
+		if (!this.user.can(permission as any, target, room as any)) {
 			this.send(`<h2>Permission denied.</h2>`);
 			return false;
 		}
@@ -747,10 +747,10 @@ export class CommandContext extends MessageContext {
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
 	}
-	can(permission: RoomPermission | GlobalPermission, target?: User | null, room?: Room | null): boolean;
+	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!this.user.can(permission as any, target, room)) {
+		if (!this.user.can(permission as any, target, room as any)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
 		}
@@ -996,7 +996,7 @@ export class CommandContext extends MessageContext {
 			this.errorReply(this.tr(`Your status message contains a phrase banned by this room.`));
 			return null;
 		}
-		if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
+		if (!this.checkBanwords(room, message) && !user.can('mute', null, room!)) {
 			this.errorReply(this.tr("Your message contained banned words in this room."));
 			return null;
 		}
@@ -1136,7 +1136,7 @@ export class CommandContext extends MessageContext {
 				}
 
 				if (tagName === 'img') {
-					if (this.room.settings.isPersonal && !this.user.can('announce')) {
+					if (this.room.settings.isPersonal && !this.user.can('lock')) {
 						this.errorReply(`This tag is not allowed: <${tagContent}>`);
 						this.errorReply(`Images are not allowed in personal rooms.`);
 						return null;

@@ -312,7 +312,7 @@ export const pages: PageTable = {
 		buffer += `<button class="button" name="send" value="/join view-channels${all ? '-all' : ''}"">`;
 		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		buffer += `</h4><hr />`;
-		const isStaff = user.can('mute', null, Rooms.get('youtube'));
+		const isStaff = user.can('mute', null, Rooms.get('youtube')!);
 		for (const id of Utils.shuffle(Object.keys(channelData))) {
 			const name = YouTube.get(id).name;
 			const psid = YouTube.get(id).username;
