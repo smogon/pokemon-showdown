@@ -539,7 +539,7 @@ export const pages: PageTable = {
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		if (!room.minorActivityQueue?.length) {
-			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
+			buf += `<hr /><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
 		for (const [i, poll] of room.minorActivityQueue.entries()) {
@@ -548,10 +548,10 @@ export const pages: PageTable = {
 				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
 				`(delete)</button>`
 			);
-			buf += `<hr/ >`;
+			buf += `<hr />`;
 			buf += `${button}<br />${poll.generateResults()}`;
 		}
-		buf += `<hr/ >`;
+		buf += `<hr />`;
 		return buf;
 	},
 };
