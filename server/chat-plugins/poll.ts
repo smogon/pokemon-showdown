@@ -543,15 +543,14 @@ export const pages: PageTable = {
 			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
-		for (const poll of room.minorActivityQueue) {
-			const num = room.minorActivityQueue.indexOf(poll);
+		for (const [i, poll] of room.minorActivityQueue.entries()) {
 			const button = (
-				`<strong>#${num} in queue </strong>` +
-				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid},updatelist">` +
+				`<strong>#${i + 1} in queue </strong>` +
+				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
 				`(delete)</button>`
 			);
 			buf += `<hr/ >`;
-			buf += `${button}<br/ >${poll.generateResults()}`;
+			buf += `${button}<br />${poll.generateResults()}`;
 		}
 		buf += `<hr/ >`;
 		return buf;
