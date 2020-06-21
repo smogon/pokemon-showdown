@@ -1,6 +1,6 @@
 /*
  * Poll chat plugin
- * By bumbadadabum and Zarel.
+ * By Asheviere and Zarel.
  */
 import {Utils} from '../../lib/utils';
 
@@ -265,6 +265,10 @@ export const commands: ChatCommands = {
 		create: 'new',
 		createmulti: 'new',
 		htmlcreatemulti: 'new',
+		queue: 'new',
+		queuehtml: 'new',
+		queuemulti: 'new',
+		htmlqueuemulti: 'new',
 		new(target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
@@ -276,6 +280,7 @@ export const commands: ChatCommands = {
 
 			const supportHTML = cmd.includes('html');
 			const multi = cmd.includes('multi');
+			const queue = cmd.includes('queue');
 			let separator = '';
 			if (text.includes('\n')) {
 				separator = '\n';
@@ -286,13 +291,15 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply("Not enough arguments for /poll new.");
 			}
-
 			let params = text.split(separator).map(param => param.trim());
 
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (room.minorActivity) return this.errorReply("There is already a poll or announcement in progress in this room.");
+			if (room.minorActivity && !queue) {
+				return this.errorReply("There is already a poll or announcement in progress in this room.");
+			}
+
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
 			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
@@ -308,6 +315,12 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
 
+			if (room.minorActivity) {
+				if (!room.minorActivityQueue) room.minorActivityQueue = [];
+				room.minorActivityQueue.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
+				this.modlog('QUEUEPOLL');
+				return this.privateModAction(`${user.name} queued a poll.`);
+			}
 			room.minorActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 			room.minorActivity.display();
 
@@ -318,7 +331,49 @@ export const commands: ChatCommands = {
 		newhelp: [
 			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
 			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
+			`To queue a poll, use [queue], [queuemulti], or [htmlqueuemulti].`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
+		],
+
+		viewqueue(target, room, user) {
+			if (!this.can('mute', null, room)) return false;
+			this.parse(`/join view-pollqueue-${room.roomid}`);
+		},
+		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # &`],
+
+		clearqueue: 'deletequeue',
+		deletequeue(target, room, user, connection, cmd) {
+			if (!this.can('mute', null, room)) return false;
+			if (!room.minorActivityQueue) {
+				return this.errorReply("The queue is already empty.");
+			}
+			if (cmd === 'deletequeue' && room.minorActivityQueue.length !== 1 && !target) {
+				return this.parse('/help deletequeue');
+			}
+			if (!target) {
+				room.minorActivityQueue = null;
+				this.modlog('CLEARQUEUE');
+				this.sendReply(`Cleared poll queue.`);
+			} else {
+				const [slotString, roomid, update] = target.split(',');
+				const slot = parseInt(slotString);
+				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
+				if (!curRoom) return this.errorReply(`Room "${roomid}" not found.`);
+				if (isNaN(slot)) return this.errorReply(`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
+				if (!room.minorActivityQueue[slot - 1]) return this.errorReply(`There is no poll in queue at slot ${slot}.`);
+
+				curRoom.minorActivityQueue!.splice(slot - 1, 1);
+				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
+
+				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${slot}`);
+				curRoom.sendMods(`(${user.name} deleted the queued poll in slot ${slot}.)`);
+				curRoom.update();
+				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
+			}
+		},
+		deletequeuehelp: [
+			`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
+			`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
 		],
 
 		deselect: 'select',
@@ -377,6 +432,13 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (poll) poll.end();
 					room.minorActivity = null;
+					if (room.minorActivityQueue?.length) {
+						room.minorActivity = room.minorActivityQueue.shift()!;
+						this.addModAction(`The queued poll was started.`);
+						this.modlog(`POLL`, null, `queued`);
+						room.minorActivity.display();
+						if (!room.minorActivityQueue.length) room.minorActivityQueue = null;
+					}
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
@@ -420,6 +482,13 @@ export const commands: ChatCommands = {
 
 			poll.end();
 			room.minorActivity = null;
+			if (room.minorActivityQueue?.length) {
+				room.minorActivity = room.minorActivityQueue[0];
+				room.minorActivityQueue.splice(0, 1);
+				this.addModAction(`The queued poll was started.`);
+				this.modlog(`POLL`, null, `queued`);
+				room.minorActivity.display();
+			}
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
@@ -455,9 +524,36 @@ export const commands: ChatCommands = {
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
 		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
+		`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
+		`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
+		`/viewqueue - view the queue of polls in the room. Requires: % @ # &`,
 	],
 };
 
+export const pages: PageTable = {
+	pollqueue(args, user) {
+		this.extractRoom();
+		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
+		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
+		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
+		if (!room.minorActivityQueue?.length) {
+			buf += `<hr /><strong>No polls queued.</strong></div>`;
+			return buf;
+		}
+		for (const [i, poll] of room.minorActivityQueue.entries()) {
+			const button = (
+				`<strong>#${i + 1} in queue </strong>` +
+				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
+				`(delete)</button>`
+			);
+			buf += `<hr />`;
+			buf += `${button}<br />${poll.generateResults()}`;
+		}
+		buf += `<hr />`;
+		return buf;
+	},
+};
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti) ');
+	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti|queue|queuemulti|htmlqueuemulti) ');
 });

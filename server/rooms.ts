@@ -1091,6 +1091,7 @@ export class BasicChatRoom extends BasicRoom {
 	/** Only available in groupchats */
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
+	minorActivityQueue: Poll[] | null;
 	banwordRegex: RegExp | true | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
@@ -1121,6 +1122,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (!options.isPersonal) this.persist = true;
 
 		this.minorActivity = null;
+		this.minorActivityQueue = null;
 		this.parent = null;
 		if (options.parentid) {
 			const parent = Rooms.get(options.parentid);
