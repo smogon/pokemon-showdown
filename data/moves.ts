@@ -15174,8 +15174,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onBasePower(basePower) {
-			if (this.field.isTerrain('electricterrain')) {
+		onBasePower(basePower, pokemon, target) {
+			if (this.field.isTerrain('electricterrain') && !target.runImmunity('Ground')) {
 				this.debug('terrain buff');
 				return this.chainModify(2);
 			}
