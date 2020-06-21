@@ -178,7 +178,6 @@ export const IPTools = new class {
 		'tmobile.mobile-nohost',
 		'tele2.se',
 		'ideacellular.mobile-nohost',
-		'as13285.net',
 		'att.net',
 	]);
 	readonly connectionTestCache = new Map<string, boolean>();
