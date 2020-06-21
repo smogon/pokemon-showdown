@@ -886,6 +886,39 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Rock",
 	},
 
+	// n10siT
+	"unbind": {
+		accuracy: 100,
+		basePower: 60,
+		category: "Special"
+		desc: "",
+		shortDesc: "",
+		name: "Unbind",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hyperspace Hole', source);
+			this.add('-anim', source, 'Hyperspace Fury', source);
+		},
+		onHit(target, pokemon, move) {
+			if (pokemon.baseSpecies.baseSpecies === 'Hoopa') {
+				pokemon.formeChange(pokemon.species.otherformes[0], this.effect, false, '[msg]');
+				this.boost({spe: 1}, pokemon, pokemon, move);
+			}
+		},
+		onModifyType(move, pokemon) {
+		if (pokemon.baseSpecies.baseSpecies !== 'Hoopa') return;
+			move.type = pokemon.species.name === 'Hoopa-Unbound' ? 'Dark' : 'Psychic';
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// OM~!
 	mechomnism: {
 		accuracy: 95,

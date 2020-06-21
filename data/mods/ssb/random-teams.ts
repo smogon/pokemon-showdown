@@ -174,6 +174,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Terraforming',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	n10siT: {
+		species: 'Hoopa', ability: 'Greedy Magician', item: 'Focus Sash', gender: 'N',
+		moves: ['Hyperspace Hole', 'Shadow Ball', 'Aura Sphere'],
+		signatureMove: 'Unbind',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	'OM~!': {
 		species: 'Magneton', ability: 'Triage', item: 'Metronome', gender: 'N',
 		moves: ['Parabolic Charge', 'Oblivion Wing', 'Giga Drain'],

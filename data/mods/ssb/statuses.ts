@@ -377,6 +377,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Mitsuki')}|THIS WORLD SHALL KNOW P A I N`);
 		},
 	},
+	n10sit: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('n10siT')}|Heheheh... were you surprised?`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('n10siT')}|Heheheh... did I scare you?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('n10siT')}|Hoopa never saw one of those!`);
+		},
+	},
 	overneat: {
 		noCopy: true,
 		onStart(source) {
