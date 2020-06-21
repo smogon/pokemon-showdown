@@ -35,7 +35,7 @@ export class YoutubeInterface {
 		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
 		const raw = await Net(queryUrl).get();
 		const res = JSON.parse(raw);
-		if (!res || !res.items || res.items.length > 1) return;
+		if (!res || !res.items || res.items.length < 1) return;
 		const data = res.items[0];
 		const cache = {
 			name: data.snippet.title,
@@ -125,7 +125,7 @@ export class YoutubeInterface {
 		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
 		const raw = await Net(queryUrl).get();
 		const res = JSON.parse(raw);
-		if (!res || !res.items || res.items.length > 1) return;
+		if (!res || !res.items || res.items.length < 1) return;
 		const video = res.items[0];
 		const info = {
 			title: video.snippet.title,
