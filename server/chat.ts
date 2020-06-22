@@ -41,8 +41,15 @@ export type ChatHandler = (
 	cmd: string,
 	message: string
 ) => void;
+export type AnnotatedChatHandler = ChatHandler & {
+	requiresRoom: boolean,
+	roomSpecific: RoomID,
+};
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | true | ChatCommands;
+}
+export interface AnnotatedChatCommands {
+	[k: string]: AnnotatedChatHandler | string | string[] | true | AnnotatedChatCommands;
 }
 
 export type SettingsHandler = (
@@ -1233,8 +1240,8 @@ export const Chat = new class {
 	/*********************************************************
 	 * Load command files
 	 *********************************************************/
-	baseCommands: ChatCommands = undefined!;
-	commands: ChatCommands = undefined!;
+	baseCommands: AnnotatedChatCommands = undefined!;
+	commands: AnnotatedChatCommands = undefined!;
 	basePages: PageTable = undefined!;
 	pages: PageTable = undefined!;
 	readonly destroyHandlers: (() => void)[] = [];
@@ -1498,11 +1505,11 @@ export const Chat = new class {
 		}
 		this.loadPluginData(plugin);
 	}
-	fillCommands(commandTable: AnyObject) {
+	annotateCommands(commandTable: AnyObject) {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
-				this.fillCommands(entry);
+				this.annotateCommands(entry);
 			}
 			if (typeof entry !== 'function') continue;
 
@@ -1516,7 +1523,7 @@ export const Chat = new class {
 	}
 	loadPluginData(plugin: AnyObject) {
 		if (plugin.commands) {
-			Object.assign(Chat.commands, this.fillCommands(plugin.commands));
+			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 

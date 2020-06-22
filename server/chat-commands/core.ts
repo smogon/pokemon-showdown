@@ -1528,7 +1528,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`The command '/${target}' does not exist.`);
 			}
 			if (typeof nextNamespace !== 'object') break;
-			namespace = nextNamespace;
+			namespace = nextNamespace as import('../chat').AnnotatedChatCommands;
 		}
 
 		if (!currentBestHelp) {
