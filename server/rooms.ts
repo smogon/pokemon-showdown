@@ -544,17 +544,6 @@ export class GlobalRoom extends BasicRoom {
 				continue;
 			}
 
-			// convert from old RoomEvent.aliases format to RoomEventAlias format
-			if (settings.events) {
-				for (const event of Object.values(settings.events) as AnyObject[]) {
-					if (!event.aliases) continue;
-					for (const alias of event.aliases) {
-						settings.events[alias] = {id: alias, eventID: toID(event.eventName)};
-					}
-					delete event.aliases;
-				}
-			}
-
 			// We're okay with assinging type `ID` to `RoomID` here
 			// because the hyphens in chatrooms don't have any special
 			// meaning, unlike in helptickets, groupchats, battles etc
