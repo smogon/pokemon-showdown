@@ -814,7 +814,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["closecombat", "machpunch", "rapidspin", "suckerpunch", "toxic", "tripleaxel"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["closecombat", "fakeout", "feint", "helpinghand", "rapidspin", "suckerpunch", "wideguard"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	lickitung: {
@@ -3222,14 +3222,14 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["aquajet", "crunch", "headsmash", "liquidation", "psychicfangs"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["aquajet", "headsmash", "icebeam", "liquidation", "muddywater", "protect", "psychicfangs", "superpower"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	basculinbluestriped: {
 		randomBattleMoves: ["aquajet", "crunch", "headsmash", "liquidation", "psychicfangs"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["aquajet", "headsmash", "icebeam", "liquidation", "muddywater", "protect", "psychicfangs", "superpower"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	sandile: {
@@ -4123,7 +4123,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["poltergeist", "powerwhip", "shadowsneak", "synthesis", "willowisp"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["destinybond", "disable", "foulplay", "leechseed", "painsplit", "powerwhip", "willowisp"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	gourgeistsmall: {
@@ -4137,14 +4137,14 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["poltergeist", "powerwhip", "shadowsneak", "synthesis", "willowisp"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["powerwhip", "protect", "shadowsneak", "synthesis", "trickroom"],
-		tier: "(PU)",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	gourgeistsuper: {
 		randomBattleMoves: ["poltergeist", "powerwhip", "rockslide", "shadowsneak", "trickroom"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["powerwhip", "protect", "shadowsneak", "synthesis", "trickroom"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	bergmite: {
@@ -4529,7 +4529,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["flamethrower", "multiattack", "partingshot", "psychicfangs", "thunderbolt"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["flamethrower", "multiattack", "psychicfangs", "tailwind", "uturn"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallydark: {
@@ -4550,7 +4550,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["flamethrower", "grasspledge", "icebeam", "multiattack", "tailwind"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallyfairy: {
@@ -4592,7 +4592,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["defog", "flamethrower", "icebeam", "multiattack", "partingshot"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["flamethrower", "icebeam", "multiattack", "partingshot", "tailwind"],
-		tier: "(PU)",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallyground: {
@@ -4620,7 +4620,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["crunch", "multiattack", "swordsdance", "uturn"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["flamethrower", "multiattack", "partingshot", "tailwind", "xscissor"],
-		tier: "(PU)",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallyrock: {
