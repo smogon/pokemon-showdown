@@ -18647,6 +18647,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
+		maxMove: {basePower: 130},
 	},
 	swagger: {
 		num: 207,
