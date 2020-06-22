@@ -5263,7 +5263,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["calmmind", "hypervoice", "mysticalfire", "psyshock", "trick"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["encore", "hypervoice", "mysticalfire", "protect", "psychic", "trick"],
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	indeedeef: {
