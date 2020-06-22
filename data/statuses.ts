@@ -670,7 +670,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		duration: 3,
 		onStart(pokemon) {
 			pokemon.removeVolatile('substitute');
-			if (pokemon.illusion) this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			if (pokemon.volatiles['torment']) {
 				delete pokemon.volatiles['torment'];
 				this.add('-end', pokemon, 'Torment', '[silent]');
