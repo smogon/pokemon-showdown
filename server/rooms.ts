@@ -80,7 +80,7 @@ export interface RoomSettings {
 	staffRoom?: boolean;
 	language?: string | false;
 	slowchat?: number | false;
-	events?: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases?: string[]}};
+	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
 	filterStretching?: boolean;
 	filterEmojis?: boolean;
 	filterCaps?: boolean;
@@ -117,6 +117,9 @@ export interface RoomSettings {
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
 type Announcement = import('./chat-plugins/announcements').Announcement;
+type RoomEvent = import('./chat-plugins/room-events').RoomEvent;
+type RoomEventAlias = import('./chat-plugins/room-events').RoomEventAlias;
+type RoomEventCategory = import('./chat-plugins/room-events').RoomEventCategory;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
@@ -540,6 +543,7 @@ export class GlobalRoom extends BasicRoom {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
+
 			// We're okay with assinging type `ID` to `RoomID` here
 			// because the hyphens in chatrooms don't have any special
 			// meaning, unlike in helptickets, groupchats, battles etc
@@ -552,6 +556,7 @@ export class GlobalRoom extends BasicRoom {
 					Rooms.aliases.set(alias, id);
 				}
 			}
+
 			this.chatRooms.push(room);
 			if (room.settings.autojoin) this.autojoinList.push(id);
 			if (room.settings.staffAutojoin) this.staffAutojoinList.push(id);
