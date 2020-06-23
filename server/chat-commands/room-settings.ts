@@ -1506,50 +1506,50 @@ export const roomSettings: SettingsHandler[] = [
 
 export const pages: PageTable = {
 	permissions(args, user, connection) {
-		 let [roomid, rank] = args.filter(Boolean) ;
-		 if (!rank) {
-			  rank = '#';
-		 } else {
-			  rank = Dashycode.decode(rank);
-		 }
-		 this.title = `[Permissions]`;
-		 this.extractRoom();
-		 const u = (str: string) => {
-			  const char = str.charAt(0).toUpperCase();
-			  str = str.slice(1);
-			  return char + str;
-		 };
-		 if (!roomid) return `<h2>This room does not exist or does not support permissions.</h2>`;
-		 if (!user.authAtLeast('%', this.room)) return `<h2>Access denied.</h2>`;
-		 const roomGroups = new Set(this.room.auth.values());
-		 const groupArray = [...roomGroups].sort((a, b) => {
-			  return (Config.groups[b]?.rank || 0) + (Config.groups[a]?.rank || 0);
-		 });
-		 let buf = `<div class="pad"><strong>Ranks on ${this.room.title}</strong>`;
-		 buf += `<div class="infobox"><table style="margin:0px;"><tr>`;
-		 buf += `<td style="margin:5px;min-width:200px;max-width:300px;text-align:center;">`;
-		 for (const group of groupArray) {
-			  buf += `<a href="/view-permissions-${roomid}-${Dashycode.encode(group)}" `;
-			  buf += `target="_blank" rel="noopener"> <button style="border: 2px solid black ;`;
-			  buf += ` border-radius: 30px ; height: 40px">`;
-			  buf += `${Config.groups[group] ? Config.groups[group].name : ''} (${group})</button> </a><br/ ><br/ >`;
-		 }
-		 buf += `</td><td style="padding: 0px 25px;font-size:10pt    ;vertical-align:top;">`;
-		 const perms = Users.Permissions.getPermissions(this.room);
-		 buf += `<div class="infobox infobox${Object.keys(perms).length > 20 ? ' infobox-limited' : ''}">`;
-		 for (const perm in perms) {
-			  if (groupArray.indexOf(rank as GroupSymbol) > groupArray.indexOf(perms[perm])) continue;
-			  buf += `<hr/ ><strong>${u(perm)}</strong><br/ >`;
-			  buf += groupArray.map(item => {
-					return `<button class="button${perms[perm] === item ? ' disabled' : ''}"` +
-						 `name="send" value="/permissions set ${perm},${item}">${item}</button>`
-			  }).join (' ');
-		 }
-		 buf += '</div>';
-		 buf += `</td><td style="padding: 0px 25px;font-size:10pt    ;text-align:left;">`;
-		 buf += `<div class="infobox infobox-limited">`;
-		 buf += `<strong>Usable permissions:</strong><hr/ >${Users.Permissions.approvedPermissions(this.room).join('<br/ > - ')}`;
-		 buf += `</div>`;
-		 return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
-	}
+		let [roomid, rank] = args.filter(Boolean);
+		if (!rank) {
+			rank = '#';
+		} else {
+			rank = Dashycode.decode(rank);
+		}
+		this.title = `[Permissions]`;
+		this.extractRoom();
+		const u = (str: string) => {
+			const char = str.charAt(0).toUpperCase();
+			str = str.slice(1);
+			return char + str;
+		};
+		if (!roomid) return `<h2>This room does not exist or does not support permissions.</h2>`;
+		if (!user.authAtLeast('%', this.room)) return `<h2>Access denied.</h2>`;
+		const roomGroups = new Set(this.room.auth.values());
+		const groupArray = [...roomGroups].sort((a, b) => {
+			return (Config.groups[b]?.rank || 0) + (Config.groups[a]?.rank || 0);
+		});
+		let buf = `<div class="pad"><strong>Ranks on ${this.room.title}</strong>`;
+		buf += `<div class="infobox"><table style="margin:0px;"><tr>`;
+		buf += `<td style="margin:5px;min-width:200px;max-width:300px;text-align:center;">`;
+		for (const group of groupArray) {
+			buf += `<a href="/view-permissions-${roomid}-${Dashycode.encode(group)}" `;
+			buf += `target="_blank" rel="noopener"> <button style="border: 2px solid black ;`;
+			buf += ` border-radius: 30px ; height: 40px">`;
+			buf += `${Config.groups[group] ? Config.groups[group].name : ''} (${group})</button> </a><br/ ><br/ >`;
+		}
+		buf += `</td><td style="padding: 0px 25px;font-size:10pt    ;vertical-align:top;">`;
+		const perms = Users.Permissions.getPermissions(this.room);
+		buf += `<div class="infobox infobox${Object.keys(perms).length > 20 ? ' infobox-limited' : ''}">`;
+		for (const perm in perms) {
+			if (groupArray.indexOf(rank as GroupSymbol) > groupArray.indexOf(perms[perm])) continue;
+			buf += `<hr/ ><strong>${u(perm)}</strong><br/ >`;
+			buf += groupArray.map(item => {
+				return `<button class="button${perms[perm] === item ? ' disabled' : ''}"` +
+					`name="send" value="/permissions set ${perm},${item}">${item}</button>`;
+			}).join (' ');
+		}
+		buf += '</div>';
+		buf += `</td><td style="padding: 0px 25px;font-size:10pt    ;text-align:left;">`;
+		buf += `<div class="infobox infobox-limited">`;
+		buf += `<strong>Usable permissions:</strong><hr/ >${Users.Permissions.approvedPermissions(this.room).join('<br/ > - ')}`;
+		buf += `</div>`;
+		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
+	},
 };
