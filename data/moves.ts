@@ -10033,6 +10033,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.chainModify(2);
 			}
 		},
+		secondary: null,
 		target: "normal",
 		type: "Dark",
 	},
@@ -18662,6 +18663,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
+		zMove: {basePower: 140},
 		maxMove: {basePower: 130},
 	},
 	swagger: {
