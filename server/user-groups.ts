@@ -297,10 +297,10 @@ export const Permissions = new class {
 			"showmedia", "broadcast", "tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
 		];
 		for (const cmd in Chat.commands) {
-			if (typeof Chat.commands[cmd] !== 'function') continue;
-			const isSpecific = /\.roomid !== (.+)/.exec(Chat.commands[cmd].toString());
+			const entry = Chat.commands[cmd];
+			if (typeof entry !== 'function') continue;
 			// remove room-plugin commands unless it is that room
-			if (isSpecific && room && !isSpecific[1].includes(room.roomid)) continue;
+			if (entry.roomSpecific && entry.roomSpecific !== room?.roomid) continue;
 			// Assume if it passes a room into CommandContext.can that it's roomonly
 			if (Chat.commands[cmd].toString().includes('room)) return false;')) {
 				ALLOWED_COMMANDS.push(cmd);
