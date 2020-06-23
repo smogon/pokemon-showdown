@@ -2509,14 +2509,14 @@ export const commands: ChatCommands = {
 				return this.errorReply('Invalid image');
 			}
 		}
-		buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray"><small>(Requested by ${request.name})</small>`;
+		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
-			buf += Utils.html`<br /><p style="margin-left:5px;font-size:9pt;color:gray">${request.comment}</p>`;
+			buf += Utils.html`<br />${request.comment}</small></div>`;
 		} else {
-			buf += `</small></p>`;
+			buf += `</small></div>>`;
 		}
-		this.addBox(buf);
-		room.update();
+		room.add(`|c|${request.name}|/uhtml ${request.name},${buf}`).update();
+		this.modlog('APPROVESHOW', null, `${request.name} (link: ${request.link})`);
 	},
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
@@ -2534,8 +2534,13 @@ export const commands: ChatCommands = {
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
 		this.privateModAction(`(${user.name} denied ${target}'s request to display ${link}.)`);
+		this.modlog(`DENYSHOW`, null, `${target}`);
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
+
+	viewrequests(target, room, user) {
+		return this.parse(`/join view-approvals-${room.roomid}`);
+	},
 
 	'!show': true,
 	async show(target, room, user) {
@@ -2645,6 +2650,21 @@ export const pages: PageTable = {
 			sP.set(punishment[0], punishment[1]);
 		}
 		buf += Punishments.visualizePunishments(sP, user);
+		return buf;
+	},
+	approvals(args, user) {
+		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		if (!this.can('mute', null, this.room)) return;
+		if (!room.pendingApprovals) room.pendingApprovals = new Map();
+		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;
+		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
+		for (const [userid, entry] of room.pendingApprovals) {
+			buf += `<strong>${entry.name}</strong><div class="infobox">`;
+			buf += `<strong>ID:</strong> ${userid}<br>`;
+			buf += `<strong>Link:</strong> ${entry.link}<br>`;
+			buf += `<strong>Comment:</strong> ${entry.comment}`
+			buf += `</div><hr/ >`;
+		}
 		return buf;
 	},
 };
