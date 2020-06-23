@@ -487,6 +487,10 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	quadrophenic: {
+		noCopy: true,
+		// No quotes requested
+	},
 	rabia: {
 		noCopy: true,
 		onStart() {
