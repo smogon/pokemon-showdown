@@ -13709,14 +13709,13 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 90,
 		basePower: 110,
 		category: "Physical",
-		desc: "This move fails if the target doesn't have an item or is afflicted with Embargo. Additionally, this move fails if Magic Room is up, or the target has the ability Klutz and is not holding an item that ignores Klutz.",
-		shortDesc: "Fails if the target has no item.",
+		shortDesc: "Fails if the target has no held item.",
 		name: "Poltergeist",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTry(pokemon, target) {
-			if (!target.item || target.ignoringItem()) {
+			if (!target.item) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
 				return null;
