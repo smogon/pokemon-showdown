@@ -1540,7 +1540,7 @@ export const pages: PageTable = {
 		for (const perm in perms) {
 			if (groupArray.indexOf(rank as GroupSymbol) > groupArray.indexOf(perms[perm])) continue;
 			buf += `<hr/ ><strong>${u(perm)}</strong><br/ >`;
-			buf += groupArray.map((item) => {
+			buf += groupArray.map(item => {
 				return `<button class="button${perms[perm] === item ? ' disabled' : ''}"` +
 					`name="send" value="/permissions set ${perm},${item}">${item}</button>`;
 			}).join(' ');
