@@ -1678,7 +1678,7 @@ const commands: ChatCommands = {
 		if (!this.runBroadcast()) return false;
 		if (!triviaData.history?.length) return this.sendReplyBox("There is no game history.");
 
-		const games = triviaData.history.reverse();
+		const games = [...triviaData.history].reverse();
 		const buf = [];
 		for (const [i, game] of games.entries()) {
 			buf.push(Utils.html`<b>${i + 1}.</b> ${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category.`);
