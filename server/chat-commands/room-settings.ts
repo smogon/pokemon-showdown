@@ -1534,19 +1534,19 @@ export const pages: PageTable = {
 			buf += ` border-radius: 30px ; height: 40px">`;
 			buf += `${Config.groups[group] ? Config.groups[group].name : ''} (${group})</button> </a><br/ ><br/ >`;
 		}
-		buf += `</td><td style="padding: 0px 25px;font-size:10pt    ;vertical-align:top;">`;
+		buf += `</td><td style="padding: 0px 25px;font-size:10pt;vertical-align:top;">`;
 		const perms = Users.Permissions.getPermissions(this.room);
 		buf += `<div class="infobox infobox${Object.keys(perms).length > 20 ? ' infobox-limited' : ''}">`;
 		for (const perm in perms) {
 			if (groupArray.indexOf(rank as GroupSymbol) > groupArray.indexOf(perms[perm])) continue;
 			buf += `<hr/ ><strong>${u(perm)}</strong><br/ >`;
-			buf += groupArray.map(item => {
+			buf += groupArray.map((item) => {
 				return `<button class="button${perms[perm] === item ? ' disabled' : ''}"` +
 					`name="send" value="/permissions set ${perm},${item}">${item}</button>`;
-			}).join (' ');
+			}).join(' ');
 		}
 		buf += '</div>';
-		buf += `</td><td style="padding: 0px 25px;font-size:10pt    ;text-align:left;">`;
+		buf += `</td><td style="padding: 0px 25px;font-size:10pt; text-align:left;">`;
 		buf += `<div class="infobox infobox-limited">`;
 		buf += `<strong>Usable permissions:</strong><hr/ >${Users.Permissions.approvedPermissions(this.room).join('<br/ > - ')}`;
 		buf += `</div>`;
