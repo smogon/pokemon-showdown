@@ -526,7 +526,7 @@ export class User extends Chat.MessageContext {
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: Room | BasicChatRoom | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null, cmd?: string): boolean {
-		return Permissions.can(permission, this, room, target, cmd);
+		return Auth.hasPermission(this, permission, target, room, cmd);
 	}
 	/**
 	 * Special permission check for system operators

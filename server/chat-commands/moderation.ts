@@ -1156,14 +1156,14 @@ export const commands: ChatCommands = {
 		if (currentGroup === nextGroup) {
 			return this.errorReply(`User '${name}' is already a ${groupName}`);
 		}
-		if (!Users.Auth.hasPermission(user.group, 'promote', currentGroup)) {
+		if (!Users.Auth.hasPermission(user, 'promote', currentGroup)) {
 			this.errorReply(`/${cmd} - Access denied for promoting from ${currentGroup}`);
-			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user.group, 'promote')}`);
+			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`);
 			return;
 		}
-		if (!Users.Auth.hasPermission(user.group, 'promote', nextGroup)) {
+		if (!Users.Auth.hasPermission(user, 'promote', nextGroup)) {
 			this.errorReply(`/${cmd} - Access denied for promoting to ${groupName}`);
-			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user.group, 'promote')}`);
+			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`);
 		}
 
 		if (!Users.isUsernameKnown(userid)) {
