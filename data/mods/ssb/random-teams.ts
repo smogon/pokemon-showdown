@@ -256,6 +256,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ten',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	yuki: {
+		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
+		moves: ['Quick Attack'],
+		signatureMove: 'Class Change',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
+	},
 	Zodiax: {
 		species: 'Oricorio-Pom-Pom', ability: 'Primordial Sea', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Quiver Dance', 'Hurricane', 'Thunder'],

@@ -207,8 +207,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Night Shade', source);
 		},
 		onHit(pokemon) {
-			pokemon.baseAbility = "compoundeyes";
-			pokemon.setAbility("compoundeyes");
+			pokemon.baseAbility = 'compoundeyes' as ID;
+			pokemon.setAbility('compoundeyes');
 			this.add('-ability', pokemon, pokemon.getAbility().name, '[from] move: Buzz Inspection');
 		},
 		selfSwitch: true,
@@ -919,7 +919,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	"unbind": {
 		accuracy: 100,
 		basePower: 60,
-		category: "Special"
+		category: "Special",
 		desc: "",
 		shortDesc: "",
 		name: "Unbind",
@@ -935,12 +935,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, pokemon, move) {
 			if (pokemon.baseSpecies.baseSpecies === 'Hoopa') {
-				pokemon.formeChange(pokemon.species.otherformes[0], this.effect, false, '[msg]');
+				const forme = pokemon.species.forme === 'Unbound' ? '' : '-Unbound';
+				pokemon.formeChange(`Hoopa${forme}`, this.effect, false, '[msg]');
 				this.boost({spe: 1}, pokemon, pokemon, move);
 			}
 		},
 		onModifyType(move, pokemon) {
-		if (pokemon.baseSpecies.baseSpecies !== 'Hoopa') return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Hoopa') return;
 			move.type = pokemon.species.name === 'Hoopa-Unbound' ? 'Dark' : 'Psychic';
 		},
 		secondary: null,
@@ -1389,6 +1390,130 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
+	},
+
+	// yuki
+	classchange: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If the user is a cosplay Pikachu forme, it randomly changes forme and effect.",
+		shortDesc: "Pikachu: Random forme and effect.",
+		name: "Class Change",
+		pp: 6,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(foe, source, move) {
+			let animation: string;
+			const formes = ['Cleric', 'Ninja', 'Dancer', 'Songstress', 'Jester'];
+			source.m.yukiCosplayForme = this.sample(formes);
+			switch (source.m.yukiCosplayForme) {
+			case 'Cleric':
+				animation = 'Strength Sap';
+				break;
+			case 'Ninja':
+				animation = 'Confuse Ray';
+				break;
+			case 'Dancer':
+				animation = 'Feather Dance';
+				break;
+			case 'Songstress':
+				animation = 'Sing';
+				break;
+			case 'Jester':
+				animation = 'Charm';
+				break;
+			default:
+				animation = 'Tackle';
+				break;
+			}
+			this.add('-anim', source, animation, foe);
+		},
+		onHit(target, source) {
+			if (source.baseSpecies.baseSpecies !== 'Pikachu') return;
+			let classChangeIndex = source.moveSlots.map(x => x.id).indexOf('classchange' as ID);
+			if (classChangeIndex < 0) classChangeIndex = 1;
+			const getMoveSlot = (k: string, curMovePP?: number) => {
+				const move = this.dex.getMove(k);
+				return {
+					id: move.id,
+					move: move.name,
+					pp: curMovePP || move.pp * 8 / 5,
+					maxpp: move.pp * 8 / 5,
+					disabled: false,
+					used: false,
+				};
+			};
+			switch (source.m.yukiCosplayForme) {
+			case 'Cleric':
+				if (target.boosts.atk === -6) return false;
+				const atk = target.getStat('atk', false, true);
+				const success = this.boost({atk: -1}, target, source, null, false, true);
+				source.formeChange('pikachuphd', this.effect, true);
+				source.moveSlots = [
+					getMoveSlot('paraboliccharge'),
+					getMoveSlot('wish'),
+					getMoveSlot('batonpass'),
+					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
+				];
+				this.add('-message', 'yuki patches up her wounds!');
+				return !!(this.heal(atk, source, target) || success);
+			case 'Ninja':
+				target.addVolatile('confusion');
+				source.formeChange('pikachulibre', this.effect, true);
+				source.moveSlots = [
+					getMoveSlot('watershuriken'),
+					getMoveSlot('acrobatics'),
+					getMoveSlot('toxic'),
+					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
+				];
+				this.add('-message', `yuki's fast movements confuse ${target.name}!`);
+				return;
+			case 'Dancer':
+				this.boost({atk: -2}, target, source, this.effect, false, true);
+				source.formeChange('pikachupopstar', this.effect, true);
+				source.moveSlots = [
+					getMoveSlot('fierydance'),
+					getMoveSlot('revelationdance'),
+					getMoveSlot('lunardance'),
+					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
+				];
+				this.add('-message', `yuki dazzles ${target.name} with her moves!`);
+				return;
+			case 'Songstress':
+				target.trySetStatus('slp');
+				source.formeChange('pikachurockstar', this.effect, true);
+				source.moveSlots = [
+					getMoveSlot('hypervoice'),
+					getMoveSlot('overdrive'),
+					getMoveSlot('sing'),
+					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
+				];
+				this.add('-message', `yuki sang an entrancing melody!`);
+				return;
+			case 'Jester':
+				this.boost({atk: -2}, target, source, this.effect, false, true);
+				source.formeChange('pikachubelle', this.effect, true);
+				source.moveSlots = [
+					getMoveSlot('present'),
+					getMoveSlot('metronome'),
+					getMoveSlot('teeterdance'),
+					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
+				];
+				this.add('-message', `yuki tries her best to impress ${target.name}!`);
+				return;
+			default:
+				return;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 	},
 
 	// Zodiax

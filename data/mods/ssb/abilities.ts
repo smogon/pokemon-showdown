@@ -393,7 +393,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	//n10siT
+	// n10siT
 	greedymagician: {
 		desc: "This Pokemon steals the item off a Pokemon it hits with an attack. If you already have an item, it is replaced with the stolen item. Does not affect Doom Desire and Future Sight.",
 		shortDesc: "This Pokemon steals the item off a Pokemon it hits with an attack; existing item gets replaced with the stolen item.",
@@ -594,6 +594,55 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType === 'Move' && effect?.recoil) this.heal(source.baseMaxhp / 4);
 		},
+	},
+
+	// yuki
+	combattraining: {
+		desc: "If this Pokemon is a Cosplay Pikachu forme, the first hit it takes in battle deals 0 neutral damage. Confusion damage also breaks the immunity.",
+		shortDesc: "(Pikachu-Cosplay only) First hit deals 0 damage.",
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			const cosplayFormes = [
+				'pikachucosplay', 'pikachuphd', 'pikachulibre', 'pikachupopstar', 'pikachurockstar', 'pikachubelle',
+			];
+			if (
+				effect?.effectType === 'Move' &&
+				cosplayFormes.includes(target.species.id) && !target.transformed
+			) {
+				this.add('-activate', target, 'ability: Combat Training');
+				this.effectData.busted = true;
+				return 0;
+			}
+		},
+		onCriticalHit(target, source, move) {
+			if (!target) return;
+			const cosplayFormes = [
+				'pikachucosplay', 'pikachuphd', 'pikachulibre', 'pikachupopstar', 'pikachurockstar', 'pikachubelle',
+			];
+			if (!cosplayFormes.includes(target.species.id) || target.transformed) {
+				return;
+			}
+			const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move.type)) return;
+			return false;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
+			const cosplayFormes = [
+				'pikachucosplay', 'pikachuphd', 'pikachulibre', 'pikachupopstar', 'pikachurockstar', 'pikachubelle',
+			];
+			if (!cosplayFormes.includes(target.species.id) || target.transformed) {
+				return;
+			}
+			const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move.type)) return;
+			return 0;
+		},
+		name: "Combat Training",
 	},
 	// Modified Illusion to support SSB volatiles
 	illusion: {

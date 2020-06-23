@@ -564,6 +564,32 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Teclis')}|Magic never dies. It merely fades away.`);
 		},
 	},
+	yuki: {
+		noCopy: true,
+		onStart(target, pokemon) {
+			let bst = 0;
+			for (const stat of Object.values(pokemon.species.baseStats)) {
+				bst += stat;
+			}
+			let targetBst = 0;
+			for (const stat of Object.values(target.species.baseStats)) {
+				targetBst += stat;
+			}
+			let message: string;
+			if (bst > targetBst) {
+				message = 'You dare challenge me!?';
+			} else {
+				message = 'Sometimes, you go for it';
+			}
+			this.add(`c|${getName('yuki')}|${message}`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('yuki')}|Catch me if you can!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('yuki')}|You'll never extinguish our hopes!`);
+		},
+	},
 	zodiax: {
 		noCopy: true,
 		onStart() {
