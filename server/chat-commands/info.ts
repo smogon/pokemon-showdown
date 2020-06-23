@@ -2660,9 +2660,9 @@ export const pages: PageTable = {
 		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
 		for (const [userid, entry] of room.pendingApprovals) {
 			buf += `<strong>${entry.name}</strong><div class="infobox">`;
-			buf += `<strong>ID:</strong> ${userid}<br>`;
+			buf += `<strong>Requester ID:</strong> ${userid}<br>`;
 			buf += `<strong>Link:</strong> ${entry.link}<br>`;
-			buf += `<strong>Comment:</strong> ${entry.comment}`
+			buf += `<strong>Comment:</strong> ${entry.comment}`;
 			buf += `</div><hr/ >`;
 		}
 		return buf;
