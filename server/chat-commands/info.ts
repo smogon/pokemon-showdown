@@ -2528,12 +2528,12 @@ export const commands: ChatCommands = {
 		target = toID(target);
 		if (!target) return this.parse(`/help denyshow`);
 
-		const link = room.pendingApprovals?.get(target);
-		if (!link) return this.errorReply(`${target} has no pending request.`);
+		const entry = room.pendingApprovals?.get(target);
+		if (!entry) return this.errorReply(`${target} has no pending request.`);
 
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
-		this.privateModAction(`(${user.name} denied ${target}'s request to display ${link}.)`);
+		this.privateModAction(`(${user.name} denied ${target}'s request to display ${entry.link}.)`);
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
