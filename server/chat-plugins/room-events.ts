@@ -245,7 +245,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			}
 
-			delete room.settings.events[target];
+			delete room.settings.events[eventID];
 			for (const alias of getAliases(room, eventID)) {
 				delete room.settings.events[alias];
 			}
