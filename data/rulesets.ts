@@ -91,7 +91,9 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
 			if (species.tier === "Unreleased") {
-				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${toID(species.baseSpecies)}`)) return;
+				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${toID(species.baseSpecies)}`)) {
+					return;
+				}
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
