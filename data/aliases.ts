@@ -242,6 +242,8 @@ export const BattleAliases: {[alias: string]: string} = {
 	rime: "Mr. Rime",
 	zacianc: "Zacian-Crowned",
 	zamazentac: "Zamazenta-Crowned",
+	urshifurs: "Urshifu-Rapid-Style",
+	urshifurapid: "Urshifu-Rapid-Style",
 
 	// base formes
 	nidoranfemale: "Nidoran-F",
