@@ -245,7 +245,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			}
 
-			delete room.settings.events[target];
+			delete room.settings.events[eventID];
 			for (const alias of getAliases(room, eventID)) {
 				delete room.settings.events[alias];
 			}
@@ -524,6 +524,7 @@ export const commands: ChatCommands = {
 			// rebuild the room.settings.events object
 			for (const sortedObj of sortable) {
 				const eventId = toID(sortedObj.eventName);
+				delete room.settings.events[eventId];
 				room.settings.events[eventId] = sortedObj;
 			}
 
