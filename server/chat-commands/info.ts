@@ -1487,6 +1487,7 @@ export const commands: ChatCommands = {
 	},
 
 	'!servertime': true,
+	st: 'servertime',
 	servertime(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const servertime = new Date();
