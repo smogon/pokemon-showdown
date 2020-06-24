@@ -638,7 +638,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['Not Fully Evolved', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Chansey', 'Doublade', 'Gurdurr', 'Ivysaur', 'Magneton', 'Mr. Mime-Galar',
+			'Chansey', 'Doublade', 'Gurdurr', 'Haunter', 'Ivysaur', 'Magneton', 'Mr. Mime-Galar',
 			'Pawniard', 'Porygon2', 'Rhydon', 'Rufflet', 'Scyther', 'Sneasel', 'Type: Null',
 			'Shadow Tag', 'Baton Pass',
 		],
