@@ -309,7 +309,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	vulpix: {
-		tier: "LC Uber",
+		tier: "LC",
 	},
 	vulpixalola: {
 		tier: "LC Uber",

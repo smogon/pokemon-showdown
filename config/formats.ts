@@ -117,7 +117,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 5,
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola',
+			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
 			'Chlorophyll', 'Moody', 'Baton Pass',
 		],
 	},
