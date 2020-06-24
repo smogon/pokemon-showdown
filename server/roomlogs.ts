@@ -223,7 +223,7 @@ export class Roomlog {
 		this.broadcastBuffer += fullMessage + '\n';
 	}
 	attributedUhtmlchange(user: User, name: string, message: string) {
-		const start = `/uhtml ${name},`;
+		const start = `/uhtmlchange ${name},`;
 		const fullMessage = this.withTimestamp(`|c|${user.getIdentity()}|${start}${message}`);
 		for (const [i, line] of this.log.entries()) {
 			if (this.parseChatLine(line)?.message.startsWith(start)) {
