@@ -2516,7 +2516,7 @@ export const commands: ChatCommands = {
 			buf += `</small></div>>`;
 		}
 		room.add(`|c|${request.name}|/uhtml ${request.name},${buf}`).update();
-		this.modlog('APPROVESHOW', null, `${request.name} (link: ${request.link})`);
+		this.privateModAction(`${user.name} has approved the display of ${request.name}'s media approval.`);
 	},
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
@@ -2534,11 +2534,14 @@ export const commands: ChatCommands = {
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
 		this.privateModAction(`(${user.name} denied ${target}'s request to display ${link}.)`);
-		this.modlog(`DENYSHOW`, null, `${target}`);
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
-	viewrequests(target, room, user) {
+	approvallog(target, room, user) {
+		return this.parse(`/sl has approved the display of, ${room.roomid}`);
+	},
+
+	viewapprovals(target, room, user) {
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
 
@@ -2652,7 +2655,7 @@ export const pages: PageTable = {
 		buf += Punishments.visualizePunishments(sP, user);
 		return buf;
 	},
-	approvals(args, user) {
+	approvals(args) {
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
 		if (!this.can('mute', null, this.room)) return;
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
@@ -2661,7 +2664,7 @@ export const pages: PageTable = {
 		for (const [userid, entry] of room.pendingApprovals) {
 			buf += `<strong>${entry.name}</strong><div class="infobox">`;
 			buf += `<strong>Requester ID:</strong> ${userid}<br>`;
-			buf += `<strong>Link:</strong> ${entry.link}<br>`;
+			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br>`;
 			buf += `<strong>Comment:</strong> ${entry.comment}`;
 			buf += `</div><hr/ >`;
 		}
