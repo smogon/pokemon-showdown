@@ -522,9 +522,9 @@ export const commands: ChatCommands = {
 			}
 
 			// rebuild the room.settings.events object
-			room.settings.events = {};
 			for (const sortedObj of sortable) {
 				const eventId = toID(sortedObj.eventName);
+				delete room.settings.events[eventId];
 				room.settings.events[eventId] = sortedObj;
 			}
 
