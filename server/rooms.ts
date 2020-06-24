@@ -1292,9 +1292,9 @@ export class BasicChatRoom extends BasicRoom {
 				message += `<div class="infobox">`;
 				message += `<strong>Requester ID:</strong> ${userid}<br/ >`;
 				message += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br/ >`;
-				message+= `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br/ >`;
+				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br/ >`;
 				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
-				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`
+				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
 				message += `</div><hr/ >`;
 			}
 			message += `</details></div>`;
