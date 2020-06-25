@@ -927,14 +927,12 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 					const originalForme = dex.getSpecies(species.changesFrom || species.name);
 					types = originalForme.types;
 					if (baseSpecies.otherFormes) {
-						for (const formeid of baseSpecies.otherFormes) {
-							let skipForme = false;
+						for (const formeName of baseSpecies.otherFormes) {
 							if (baseSpecies.prevo) {
 								const prevo = dex.getSpecies(baseSpecies.prevo);
-								skipForme = prevo.evos.map(toID).includes(toID(formeid));
+								if (prevo.evos.includes(formeName)) continue;
 							}
-							if (skipForme) continue;
-							const forme = dex.getSpecies(formeid);
+							const forme = dex.getSpecies(formeName);
 							if (forme.changesFrom === originalForme.name) {
 								types = types.concat(forme.types);
 							}
