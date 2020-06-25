@@ -897,7 +897,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	kangaskhan: {
 		randomBattleMoves: ["doubleedge", "earthquake", "fakeout", "hammerarm", "suckerpunch"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["drainpunch", "doubleedge", "fakeout", "protect", "rockslide", "suckerpunch"],
+		randomDoubleBattleMoves: ["doubleedge", "drainpunch", "fakeout", "protect", "rockslide", "suckerpunch"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -3249,7 +3249,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	basculin: {
 		randomBattleMoves: ["aquajet", "crunch", "headsmash", "liquidation", "psychicfangs"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["headsmash", "flipturn", "icebeam", "liquidation", "muddywater", "protect", "psychicfangs", "superpower"],
+		randomDoubleBattleMoves: ["flipturn", "headsmash", "icebeam", "liquidation", "muddywater", "protect", "psychicfangs", "superpower"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
@@ -4755,7 +4755,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	dhelmise: {
 		randomBattleMoves: ["anchorshot", "earthquake", "knockoff", "powerwhip", "rapidspin", "swordsdance"],
 		randomBattleLevel: 84,
-		randomDoubleBattleMoves: ["anchorshot", "knockoff", "powerwhip", "poltergeist", "protect"],
+		randomDoubleBattleMoves: ["anchorshot", "knockoff", "poltergeist", "powerwhip", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
