@@ -1333,10 +1333,9 @@ export class RandomTeams {
 			} else if (ability === 'Slow Start') {
 				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			}
+
 			level = 70 + Math.floor(((640 - Utils.clampIntRange(bst, 330, 640)) / 10.3));
-			if (ability === 'Imposter') {
-				level = 85;
-			}
+			if (ability === 'Imposter') level = 85;
 		}
 
 		// Prepare optimal HP
