@@ -1073,7 +1073,7 @@ export class RandomTeams {
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Harvest') {
-					rejectAbility = hasAbility['Frisk'] && !isDoubles;
+					rejectAbility = hasAbility['Frisk'];
 				} else if (ability === 'Hustle') {
 					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Intimidate') {
@@ -1115,7 +1115,7 @@ export class RandomTeams {
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = (!counter['sheerforce'] || hasAbility['Guts']);
 				} else if (ability === 'Sniper') {
-					rejectAbility = counter['Water'] > 1 && !hasMove['focusenergy'];
+					rejectAbility = (counter['Water'] > 1 && !hasMove['focusenergy']);
 				} else if (ability === 'Snow Warning') {
 					rejectAbility = (hasAbility['Refrigerate'] && !!counter['Normal']);
 				} else if (ability === 'Speed Boost') {
@@ -1169,7 +1169,7 @@ export class RandomTeams {
 				if (hasAbility['Guts']) ability = 'Guts';
 				if (hasAbility['Harvest']) ability = 'Harvest';
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
-				if (hasAbility['Klutz'] && hasAbility ['Limber']) ability = 'Klutz';
+				if (hasAbility['Klutz'] && ability === 'Limber') ability = 'Klutz';
 				if (hasAbility['Magic Guard'] && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
 				if (hasAbility['Ripen']) ability = 'Ripen';
 				if (hasAbility['Sniper'] && hasMove['focusenergy']) ability = 'Sniper';
@@ -1203,17 +1203,13 @@ export class RandomTeams {
 			item = 'Scope Lens';
 		} else if (species.name === 'Wobbuffet') {
 			item = 'Sitrus Berry';
-		} else if (ability === 'Klutz') {
-			item = 'Iron Ball';
-		} else if (hasMove['meteorbeam']) {
-			item = 'Power Herb';
-		} else if (ability === 'Cheek Pouch' || (ability === 'Emergency Exit' && !!counter['Status']) || ability === 'Harvest' || (ability === 'Ripen' && isDoubles)) {
+		} else if (ability === 'Cheek Pouch' || (ability === 'Emergency Exit' && !!counter['Status']) || ability === 'Harvest' || ability === 'Ripen') {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Gluttony') {
 			item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 		} else if (ability === 'Gorilla Tactics' || ability === 'Imposter' || (ability === 'Magnet Pull' && hasMove['bodypress'] && !isDoubles)) {
 			item = 'Choice Scarf';
-		} else if (hasMove['switcheroo'] || hasMove['trick']) {
+		} else if (hasMove['trick'] || hasMove['switcheroo'] && !isDoubles) {
 			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority']) {
 				item = 'Choice Scarf';
 			} else {
@@ -1223,6 +1219,8 @@ export class RandomTeams {
 			item = 'Eviolite';
 		} else if (hasMove['bellydrum']) {
 			item = (!!counter['priority'] || !hasMove['substitute']) ? 'Sitrus Berry' : 'Salac Berry';
+		} else if (hasMove['meteorbeam']) {
+			item = 'Power Herb';
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Sturdy' && !isLead && !isDoubles) ? 'Heavy-Duty Boots' : 'White Herb';
 		} else if (ability === 'Guts' && (hasMove['facade'] || isDoubles)) {
@@ -1239,10 +1237,24 @@ export class RandomTeams {
 			item = 'Chesto Berry';
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
 			item = 'Liechi Berry';
+
+		// Doubles
+		} else if (isDoubles && ability === 'Klutz') {
+			item = 'Iron Ball';
 		} else if (isDoubles && (hasMove['eruption'] || hasMove['waterspout']) && counter.damagingMoves.length >= 4) {
 			item = 'Choice Scarf';
 		} else if (isDoubles && hasMove['blizzard'] && ability !== 'Snow Warning' && !teamDetails['hail']) {
 			item = 'Blunder Policy';
+		} else if (isDoubles && counter.Physical >= 4 && (hasMove['flipturn'] || hasMove['uturn']) && !hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin']) {
+			item = (species.name !== 'Scyther' && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
+		} else if (isDoubles && ((counter.Special >= 4 && hasMove['voltswitch']) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) && !hasMove['acidspray'] && !hasMove['electroweb'])) {
+			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
+		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['electroweb'] && !hasMove['fakeout'] &&
+			!hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn'])
+		{
+			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
+		} else if (isDoubles && this.dex.getEffectiveness('Rock', species) >= 2 && this.dex.getEffectiveness('Ground', species) > 0) {
+			item = 'Heavy-Duty Boots';
 
 		// Medium priority
 		} else if (counter.Physical >= 4 && (!hasMove['bodyslam'] || hasType['Normal']) && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !isDoubles) {
@@ -1259,20 +1271,11 @@ export class RandomTeams {
 			} else {
 				item = 'Choice Specs';
 			}
-		} else if (isDoubles && (counter.Physical >= 4) && (hasMove['flipturn'] || hasMove['uturn']) && !hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin']) {
-			item = (species.name !== 'Scyther' && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
-		} else if (isDoubles && ((counter.Special >= 4 && hasMove ['voltswitch']) || (counter.Special >= 3 && hasMove['flipturn'] || hasMove['uturn']) && !hasMove['acidspray'] && !hasMove['electroweb'])) {
-			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['healingwish'])) && !counter['priority'] && !hasMove['uturn'] && !isDoubles) {
 			item = 'Choice Scarf';
 		} else if (hasMove['raindance'] || hasMove['sunnyday'] || ability === 'Stance Change' && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
-		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['electroweb'] && !hasMove['fakeout'] &&
-		!hasMove['feint'] && !hasMove['flamecharge'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']) {
-			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 		} else if (this.dex.getEffectiveness('Rock', species) >= 2 || (this.dex.getEffectiveness('Rock', species) >= 1 && (ability === 'Multiscale' || hasMove['courtchange'] || hasMove['defog'] || hasMove['rapidspin'])) && !isDoubles) {
-			item = 'Heavy-Duty Boots';
-		} else if (isDoubles && this.dex.getEffectiveness('Rock', species) >= 2 && this.dex.getEffectiveness('Ground', species) > 0) {
 			item = 'Heavy-Duty Boots';
 		} else if (hasMove['outrage'] && counter.setupType) {
 			item = 'Lum Berry';
@@ -1296,9 +1299,9 @@ export class RandomTeams {
 			item = 'Air Balloon';
 		} else if (counter.damagingMoves.length >= 4 && !counter['Dark'] && !counter['Dragon'] && !counter['Normal'] && !isDoubles) {
 			item = 'Expert Belt';
-		} else if (counter.damagingMoves.length >= 3 && !counter['damage'] && ability !== 'Sturdy' && !hasMove['clearsmog'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['substitute'] && !hasMove['uturn'] &&
-			(!!counter['speedsetup'] || hasMove['trickroom'] || !!counter['drain'] || hasMove['psystrike'] || (species.baseStats.spe > 40 && species.baseStats.hp + species.baseStats.def +
-		species.baseStats.spd < 275)) && !isDoubles) {
+		} else if (counter.damagingMoves.length >= 3 && !counter['damage'] && ability !== 'Sturdy' && !hasMove['clearsmog'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['substitute'] && !hasMove['uturn'] && !isDoubles &&
+			(!!counter['speedsetup'] || hasMove['trickroom'] || !!counter['drain'] || hasMove['psystrike'] || (species.baseStats.spe > 40 && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 275))
+		) {
 			item = 'Life Orb';
 		}
 
