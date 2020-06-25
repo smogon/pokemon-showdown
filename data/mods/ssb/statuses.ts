@@ -568,6 +568,19 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Teclis')}|Magic never dies. It merely fades away.`);
 		},
 	},
+	tiki: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('tiki')}|just tiki.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('tiki')}|`);
+			this.add(`raw|<img src="https://www.smogon.com/forums/attachments/cat-custom-png.254830/" />`);
+		},
+		onFaint() {
+			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
+		},
+	},
 	yuki: {
 		noCopy: true,
 		onStart(target, pokemon) {

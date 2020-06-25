@@ -1205,12 +1205,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 20,
 			onHit(target, source) {
-				switch(toID(source.types[0])) { 
-					case 'normal':
-					const typeList = ["Fighting", "Flying", "Poison", "Ground", "Rock",
-							"Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric",
-							"Psychic", "Ice", "Dragon", "Dark", "Fairy"];
-					const newType = typeList[this.random(typeList.length)];
+				switch (toID(source.types[0])) {
+				case 'normal':
+					const typeList = Object.keys(this.dex.data.TypeChart);
+					const newType = this.sample(typeList);
 					source.types = [newType];
 					this.add('-start', source, 'typechange', newType);
 					break;
@@ -1488,6 +1486,50 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
+	},
+
+	// tiki
+	rightoncue: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "25% chance of setting up a layer of spikes. 25% chance of using Heal Bell. 25% chance of using Leech Seed. 25% chance of using Tailwind. 25% chance of using Octolock.",
+		shortDesc: "5 independent chances of rolling different effects.",
+		name: "Right. On. Cue!",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onHit(target, source) {
+			let effects = 0;
+			if (this.randomChance(1, 4)) {
+				this.useMove('Spikes', source, target);
+				effects++;
+			}
+			if (this.randomChance(1, 4)) {
+				this.useMove('Heal Bell', source);
+				effects++;
+			}
+			if (this.randomChance(1, 4)) {
+				this.useMove('Leech Seed', source, target);
+				effects++;
+			}
+			if (this.randomChance(1, 4)) {
+				this.useMove('Tailwind', source, target);
+				effects++;
+			}
+			if (this.randomChance(1, 4)) {
+				this.useMove('Octolock', source);
+				effects++;
+			}
+			if (effects <= 0) {
+				this.add(`c|${getName('tiki')}|truly a dumpster fire`);
+			} else if (effects >= 3) {
+				this.add(`c|${getName('tiki')}|whos ${source.side.foe.name}?`);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 	},
 
 	// yuki

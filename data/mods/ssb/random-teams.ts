@@ -268,6 +268,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ten',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	tiki: {
+		species: 'Snom', ability: 'True Grit', item: 'Eviolite', gender: 'M',
+		moves: ['Toxic', 'Strength Sap', 'U-turn'],
+		signatureMove: 'Right. On. Cue!',
+		evs: {hp: 128, def: 144, spd: 236}, ivs: {atk: 0}, nature: 'Bold',
+	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
 		moves: ['Quick Attack'],
