@@ -58,6 +58,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	'awa!': {
+		species: 'Lycanroc', ability: 'Sand Rush', item: 'Life Orb', gender: 'F',
+		moves: ['Earthquake', 'Close Combat', 'Swords Dance'],
+		signatureMove: 'awa!',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
+	},
 	Beowulf: {
 		species: 'Beedrill', ability: 'Intrepid Sword', item: 'Beedrillite', gender: '',
 		moves: ['Megahorn', 'Gunk Shot', ['Precipice Blades', 'Head Smash']],

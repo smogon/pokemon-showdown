@@ -87,6 +87,19 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	awa: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('awa!')}|awa!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('awa!')}|well, at least i didn't lose the game`);
+			this.add(`c|${getName('awa!')}|or did i?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('awa!')}|awawa?! awa awawawa awawa >:(`);
+		},
+	},
 	beowulf: {
 		noCopy: true,
 		onStart() {

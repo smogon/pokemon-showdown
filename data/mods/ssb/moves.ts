@@ -188,6 +188,30 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// awa
+	awa: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Sets up Sandstorm.",
+		shortDesc: "Sets up Sandstorm.",
+		name: "awa!",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Let\'s Snuggle Forever', target);
+		},
+		weather: 'sandstorm',
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
+
 	// Beowulf
 	buzzinspection: {
 		accuracy: true,
