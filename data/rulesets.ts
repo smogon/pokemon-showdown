@@ -918,7 +918,8 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, species, setSources, set) {
 			const restrictedMoves = this.format.restricted || [];
-			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isZ && !move.isMax) {
+			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
+			if (!restrictedMoves.includes(move.name) && !nonstandard && !move.isZ && !move.isMax) {
 				const dex = this.dex;
 				let types: string[];
 				if (species.forme || species.otherFormes) {
@@ -927,6 +928,12 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 					types = originalForme.types;
 					if (baseSpecies.otherFormes) {
 						for (const formeid of baseSpecies.otherFormes) {
+							let skipForme = false;
+							if (baseSpecies.prevo) {
+								const prevo = dex.getSpecies(baseSpecies.prevo);
+								skipForme = prevo.evos.map(toID).includes(toID(formeid));
+							}
+							if (skipForme) continue;
 							const forme = dex.getSpecies(formeid);
 							if (forme.changesFrom === originalForme.name) {
 								types = types.concat(forme.types);
