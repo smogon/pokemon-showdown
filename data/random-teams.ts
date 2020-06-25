@@ -1250,8 +1250,8 @@ export class RandomTeams {
 		} else if (isDoubles && ((counter.Special >= 4 && hasMove['voltswitch']) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) && !hasMove['acidspray'] && !hasMove['electroweb'])) {
 			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['electroweb'] && !hasMove['fakeout'] &&
-			!hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn'])
-		{
+			!hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']
+		) {
 			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 		} else if (isDoubles && this.dex.getEffectiveness('Rock', species) >= 2 && this.dex.getEffectiveness('Ground', species) > 0) {
 			item = 'Heavy-Duty Boots';
