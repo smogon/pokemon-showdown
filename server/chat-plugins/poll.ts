@@ -372,8 +372,8 @@ export const commands: ChatCommands = {
 			}
 		},
 		deletequeuehelp: [
-			`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
-			`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
+			`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
+			`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
 		],
 
 		deselect: 'select',
@@ -524,9 +524,9 @@ export const commands: ChatCommands = {
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
 		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
-		`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
-		`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
-		`/viewqueue - view the queue of polls in the room. Requires: % @ # &`,
+		`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
+		`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
+		`/poll viewqueue - view the queue of polls in the room. Requires: % @ # &`,
 	],
 };
 
