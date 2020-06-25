@@ -10,6 +10,7 @@
   },
   "optionalDependencies": {
     "cloud-env": "^0.2.3",
+    "githubhook": "^1.9.3",
     "node-oom-heapdump": "^1.2.0",
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
