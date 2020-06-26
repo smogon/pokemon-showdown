@@ -516,6 +516,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
+	ransei: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Ransei')}|Sup! This is Gen 8 so imma run an Eternamax set. Best of luck. You’ll need it :^)`);
+		},
+		onFaint(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			if (!target || target.fainted || target.hp <= 0) {
+				this.add(`c|${getName('Ransei')}|Ahah yes you got rekt! Welcome to Hackmons! gg m8!`);
+			} else {
+				this.add(`c|${getName('Ransei')}|ripsei... Ok look you might’ve won this time but I kid you not you’re losing next game!`);
+			}
+		},
+	},
 	robb576: {
 		noCopy: true,
 		onStart(target, pokemon) {

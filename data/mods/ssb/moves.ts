@@ -1323,6 +1323,38 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Ransei
+	ripsei: {
+		accuracy: 100,
+		basePower: 0,
+		damageCallback(pokemon) {
+			const damage = pokemon.hp;
+			return damage;
+		},
+		category: "Special",
+		desc: "Deals damage to the target equal to the user's current HP. If this move is successful, the user faints.",
+		shortDesc: "Does damage equal to the user's HP. User faints.",
+		name: "ripsei",
+		pp: 5,
+		priority: 1,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Final Gambit', target);
+		},
+		onAfterMove(pokemon, target, move) {
+			if (pokemon.moveThisTurnResult === true) {
+				pokemon.faint();
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
+
 	// Robb576
 	integeroverflow: {
 		accuracy: true,

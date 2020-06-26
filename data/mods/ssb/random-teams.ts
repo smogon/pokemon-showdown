@@ -250,6 +250,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psycho Drive',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
+	Ransei: {
+		species: 'Audino', ability: 'Neutralizing Gas', item: 'Choice Scarf', gender: 'M',
+		moves: ['Trick', 'Recover', 'Spectral Thief'],
+		signatureMove: 'ripsei',
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',
 		moves: ['Moongeist Beam', 'Psystrike', 'Thunder Wave'],
