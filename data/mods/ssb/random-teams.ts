@@ -91,7 +91,7 @@ export const ssbSets: SSBSets = {
 	'c.kilgannon': {
 		species: 'Yveltal', ability: 'Pestilence', item: 'Choice Scarf', gender: 'N',
 		moves: ['Knock Off', 'Steel Wing', 'U-turn'],
-		signatureMove: 'The Swirlix Move',
+		signatureMove: 'Death Wing',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
 	},
 	cleann: {

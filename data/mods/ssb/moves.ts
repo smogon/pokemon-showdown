@@ -344,13 +344,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 
 	// c.kilgannon
-	theswirlixmove: {
+	deathwing: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Lowers the target's Attack by 1 stage. The user restores its HP equal to the target's Attack stat calculated with its stat stage before this move was used. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Fails if the target's Attack stat stage is -6.",
 		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
-		name: "The Swirlix Move",
+		name: "Death Wing",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, heal: 1},
