@@ -186,7 +186,8 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	metalcoat: {
 		inherit: true,
-		desc: "Holder's Steel-type attacks have 1.1x power.",
+		desc: "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+		shortDesc: "Holder's Steel-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return basePower * 1.1;
