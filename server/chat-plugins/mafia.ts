@@ -1773,9 +1773,9 @@ export const pages: PageTable = {
 					buf += `<p>${game.theme.desc}</p>`;
 				}
 				if (game.noReveal) {
-					buf += `<p><span style="font-weight:bold; color:${game.closedSetup ? '#ffff00' : 'initial'}">Original Rolelist</span>: ${game.originalRoleString}</p>`;
+					buf += `<p><span style="font-weight:bold;">Original Rolelist ${game.closedSetup ? '(CS)' : ''}</span>: ${game.originalRoleString}</p>`;
 				} else {
-					buf += `<p><span style="font-weight:bold; color:${game.closedSetup ? '#ffff00' : 'initial'}">Rolelist</span>: ${game.roleString}</p>`;
+					buf += `<p><span style="font-weight:bold;">Rolelist ${game.closedSetup ? '(CS)' : ''}</span>: ${game.roleString}</p>`;
 				}
 			}
 		}
