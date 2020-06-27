@@ -50,10 +50,10 @@ export const GithubParser = new class {
 		Rooms.global.notifyRooms(rooms, `|c| github|/html <div class="infobox">${html}</div>`);
 	}
 	push(repo: string, ref: string, result: Result) {
-
+		this.report(`${repo}: ${ref}: \n${result}`);
 	}
 	pull(repo: string, ref: string, result: Result) {
-
+		this.report(`${repo}: ${ref}: \n${result}`);
 	}
 }
 
