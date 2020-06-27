@@ -2756,18 +2756,16 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Removes the target's item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
-		shortDesc: "Removes the target's item.",
+		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		shortDesc: "Removes adjacent Pokemon's held items.",
 		name: "Corrosive Gas",
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit(target, source) {
-			if (source.hp) {
-				const item = target.takeItem();
-				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
-				}
+			const item = target.takeItem(source);
+			if (item) {
+				this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
 			}
 		},
 		secondary: null,
@@ -6231,7 +6229,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Power doubles if the last move used by any Pokemon this turn was Fusion Flare.",
-		shortDesc: "Power doubles if used after Fusion Flare.",
+		shortDesc: "Power doubles if used after Fusion Flare this turn.",
 		name: "Fusion Bolt",
 		pp: 5,
 		priority: 0,
@@ -6253,7 +6251,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Special",
 		desc: "Power doubles if the last move used by any Pokemon this turn was Fusion Bolt.",
-		shortDesc: "Power doubles if used after Fusion Bolt.",
+		shortDesc: "Power doubles if used after Fusion Bolt this turn.",
 		name: "Fusion Flare",
 		pp: 5,
 		priority: 0,
@@ -15169,7 +15167,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
-		desc: "If the current terrain is Electric Terrain, this move's power is doubled.",
+		desc: "If the current terrain is Electric Terrain and the target is grounded, this move's power is doubled.",
 		shortDesc: "2x power if target is grounded in Electric Terrain.",
 		name: "Rising Voltage",
 		pp: 20,
@@ -17922,7 +17920,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 110,
 		category: "Special",
 		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen.",
-		shortDesc: "30% chance to burn the target.",
+		shortDesc: "30% chance to burn the target. Thaws target.",
 		isNonstandard: "Past",
 		name: "Steam Eruption",
 		pp: 5,
