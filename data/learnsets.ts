@@ -73441,6 +73441,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			attract: ["8M"],
 			defensecurl: ["8E"],
 			dracometeor: ["8T"],
+			grassyglide: ["8T"],
 			recycle: ["8E"],
 			rollout: ["8E"],
 			suckerpunch: ["8E"],
