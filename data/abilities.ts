@@ -2998,7 +2998,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Quick Draw",
-		rating: 2,
+		rating: 3,
 		num: 259,
 	},
 	quickfeet: {
@@ -3143,7 +3143,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Ripen",
-		rating: 2.5,
+		rating: 2,
 		num: 247,
 	},
 	rivalry: {
@@ -4334,7 +4334,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (move.flags['contact']) delete move.flags['protect'];
 		},
 		name: "Unseen Fist",
-		rating: 2,
+		rating: 2.5,
 		num: 260,
 	},
 	victorystar: {
