@@ -156,7 +156,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: ['PU', 'Silvally-Electric'],
+		banlist: ['PU', 'Thwackey'],
 	},
 	{
 		name: "[Gen 8] 1v1",
