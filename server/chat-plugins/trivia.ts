@@ -1184,6 +1184,10 @@ const commands: ChatCommands = {
 		const answer = toID(target);
 		if (!answer) return this.errorReply("No valid answer was entered.");
 
+		if (!Object.keys(game.playerTable).includes(user.id)) {
+			const res = game.addTriviaPlayer(user);
+			if (res) return this.errorReply(res);
+		}
 		const res = game.answerQuestion(answer, user);
 		if (res) return this.errorReply(res);
 		this.sendReply(`You have selected "${answer}" as your answer.`);
