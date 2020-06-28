@@ -1182,11 +1182,6 @@ export const BattleScripts: BattleScriptsData = {
 				mustStruggle = false;
 			}
 			const move = this.dex.getMove(moveSlot.move);
-			// National Dex mechanic
-			if (move.gen > 7) {
-				zMoves.push(null);
-				continue;
-			}
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
 				const zMove = this.dex.getMove(zMoveName);
