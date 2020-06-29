@@ -13507,7 +13507,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["7M"],
 			confusion: ["8L1", "8V", "7L1"],
 			doubleteam: ["7M"],
-			dracometeor: ["7T", "7S0"],
+			dracometeor: ["8T", "7T", "7S0"],
 			dragonhammer: ["8L0", "7L1"],
 			dragonpulse: ["8M", "8V", "7T"],
 			dragontail: ["8V", "7M"],
