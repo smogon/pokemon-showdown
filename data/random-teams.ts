@@ -522,7 +522,9 @@ export class RandomTeams {
 			// Moves with low accuracy:
 			if (move.accuracy && move.accuracy !== true && move.accuracy < 90) counter['inaccurate']++;
 			// Moves with non-zero priority:
-			if (move.category !== 'Status' && move.priority !== 0) counter['priority']++;
+			if (move.category !== 'Status' && (move.priority !== 0 || (moveid === 'grassyglide' && hasAbility['Grassy Surge']))) {
+				counter['priority']++;
+			}
 
 			// Moves that change stats:
 			if (RecoveryMove.includes(moveid)) counter['recovery']++;
@@ -799,7 +801,7 @@ export class RandomTeams {
 					if (!!counter['speedsetup'] || hasMove['curse'] || hasMove['drainpunch'] || hasMove['rockblast']) rejected = true;
 					break;
 				case 'facade':
-					if (movePool.includes('doubleedge') || !hasAbility['Guts'] && !!counter.Status) rejected = true;
+					if (movePool.includes('doubleedge') || !hasAbility['Guts'] && !!counter.Status && !isDoubles) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['blizzard']) rejected = true;
