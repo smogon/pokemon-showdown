@@ -2990,11 +2990,11 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	},
 	quickdraw: {
 		shortDesc: "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
-		onFractionalPriorityPriority: -1,
+		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category !== "Status" && this.randomChance(3, 10)) {
+			if (priority <= 0 && move.category !== "Status" && this.randomChance(3, 10)) {
 				this.add('-activate', pokemon, 'ability: Quick Draw');
-				return Math.round(priority) + 0.1;
+				return 0.1;
 			}
 		},
 		name: "Quick Draw",
@@ -3727,9 +3727,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	},
 	stall: {
 		shortDesc: "This Pokemon moves last among Pokemon using the same or greater priority moves.",
-		onFractionalPriority(priority) {
-			return Math.round(priority) - 0.1;
-		},
+		onFractionalPriority: -0.1,
 		name: "Stall",
 		rating: -1,
 		num: 100,
