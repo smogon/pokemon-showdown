@@ -1530,13 +1530,13 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			const option = params.length ? params[0].toLowerCase() : 'on';
 			if (this.meansYes(option)) {
 				tournament.forcePublicReplays = true;
-				this.room.add('forcepublicreplays is now on for the tournament.');
-				this.privateModAction(`(Forced public replays was turned on for the tournament by ${user.name})`);
-				this.modlog('TOUR fORCEPUBLICREPLAYS', null, 'ON');
+				this.room.add('Tournament replays forced public: ON');
+				this.privateModAction(`(Tournament public replays were turned ON by ${user.name})`);
+				this.modlog('TOUR FORCEPUBLICREPLAYS', null, 'ON');
 			} else if (this.meansNo(option) || option === 'stop') {
 				tournament.forcePublicReplays = false;
-				this.room.add('Forcepublicreplays is now off for the tournament.');
-				this.privateModAction(`(Forced public replays was turned off for the tournament by ${user.name})`);
+				this.room.add('Tournament replays forced public: OFF');
+				this.privateModAction(`(Tournament public replays were turned on by ${user.name})`);
 				this.modlog('TOUR FORCEPUBLICREPLAYS', null, 'OFF');
 			} else {
 				return this.sendReply(`Usage: ${cmd} <on|off>`);
