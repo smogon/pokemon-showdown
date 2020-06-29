@@ -210,6 +210,26 @@ export const commands: ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
+	sendhtmlpage(target, room, user, connection) {
+		if (!this.can('addhtml', null, room)) return false;
+		let [targetID, pageid, content] = target.split(',') as [string, string, string | null];
+		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
+		const targetUser = Users.get(targetID);
+		if (!targetUser) return this.errorReply(`User not found.`);
+		content = this.canHTML(content);
+		if (!content) return;
+		const context = new Chat.PageContext({
+			user: targetUser,
+			connection: targetUser.connections[0],
+			pageid: pageid,
+		});
+		context.title = `[${user.name}] ${pageid}`;
+		return context.send(content);
+	},
+	sendhtmlpagehelp: [
+		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
+	],
+
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
 		this.sendReply(`||https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#global-messages`);
