@@ -1526,7 +1526,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				return this.sendReply(`Usage: ${cmd} <allow|disallow>`);
 			}
 		},
-		forcepublicreplays(tournament, user, params, cmd) {
+		forcepublic(tournament, user, params, cmd) {
 			const option = params[0] || 'on';
 			if (this.meansYes(option)) {
 				tournament.forcePublicReplays = true;
