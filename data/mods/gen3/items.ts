@@ -254,7 +254,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		onFractionalPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
-				return Math.round(priority) + 0.1;
+				return 0.1;
 			}
 		},
 	},
