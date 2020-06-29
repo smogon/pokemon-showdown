@@ -1536,7 +1536,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			} else if (this.meansNo(option) || option === 'stop') {
 				tournament.forcePublicReplays = false;
 				this.room.add('Tournament replays forced public: OFF');
-				this.privateModAction(`(Tournament public replays were turned on by ${user.name})`);
+				this.privateModAction(`(Tournament public replays were turned OFF by ${user.name})`);
 				this.modlog('TOUR FORCEPUBLICREPLAYS', null, 'OFF');
 			} else {
 				return this.sendReply(`Usage: ${cmd} <on|off>`);
