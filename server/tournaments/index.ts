@@ -1794,7 +1794,7 @@ export const commands: ChatCommands = {
 			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
 			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
 			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
-			`- forcepublicreplays &lt;on|off>: Forces tournament battles to have public replays.<br />` +
+			`- forcepublic &lt;on|off>: Forces tournament battles to have public replays.<br />` +
 			`- getusers: Lists the users in the current tournament.<br />` +
 			`- on/enable &lt;%|@>: Enables allowing drivers or mods to start tournaments in the current room.<br />` +
 			`- off/disable: Disables allowing drivers and mods to start tournaments in the current room.<br />` +
