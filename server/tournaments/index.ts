@@ -1527,7 +1527,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			}
 		},
 		forcepublicreplays(tournament, user, params, cmd) {
-			const option = params.length ? params[0].toLowerCase() : 'on';
+			const option = params[0] || 'on';
 			if (this.meansYes(option)) {
 				tournament.forcePublicReplays = true;
 				this.room.add('Tournament replays forced public: ON');
