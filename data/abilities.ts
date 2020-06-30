@@ -2990,9 +2990,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	},
 	quickdraw: {
 		shortDesc: "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
-		onFractionalPriorityPriority: -2,
+		onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (priority <= 0 && move.category !== "Status" && this.randomChance(3, 10)) {
+			if (move.category !== "Status" && this.randomChance(3, 10)) {
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;
 			}

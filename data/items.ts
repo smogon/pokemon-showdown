@@ -1090,9 +1090,12 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 			basePower: 100,
 			type: "Ghost",
 		},
-		onFractionalPriorityPriority: -1,
+		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if (
+				(priority <= 0 && pokemon.hp <= pokemon.maxhp / 4) ||
+				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))
+			) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 					return 0.1;
@@ -4592,7 +4595,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		desc: "A Poke Ball that provides a better catch rate at the start of a wild encounter.",
 	},
 	quickclaw: {
-		onFractionalPriorityPriority: -3,
+		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon) {
 			if (priority <= 0 && this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
