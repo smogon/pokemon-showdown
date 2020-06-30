@@ -254,10 +254,6 @@ export class GlobalAuth extends Auth {
 }
 
 export const Permissions = new class {
-	roomPermissions: {[roomid: string]: {[permission: string]: GroupSymbol}};
-	constructor() {
-		this.roomPermissions = JSON.parse(FS('config/permissions.json').readIfExistsSync() || "{}");
-	}
 	can(permission: string, user: User, room: Room | BasicChatRoom | null, target: User | null, cmd?: string): boolean {
 		if (user.hasSysopAccess()) return true;
 
@@ -275,7 +271,7 @@ export const Permissions = new class {
 			if (replaceGroup) group = replaceGroup;
 		}
 
-		const roomPermissions = room ? this.roomPermissions[room.roomid] : null;
+		const roomPermissions = room ? room.settings.permissions : null;
 		if (roomPermissions) {
 			if (cmd && permission !== cmd && roomPermissions[cmd]) {
 				return auth.atLeast(user, roomPermissions[cmd]) &&
@@ -319,11 +315,11 @@ export const Permissions = new class {
 			if (!ALLOWED_COMMANDS.includes(toID(permission))) return false;
 			permissions[permission] = rank;
 		}
-		this.roomPermissions[room.roomid] = permissions;
-		FS('config/permissions.json').writeUpdate(() => JSON.stringify(this.roomPermissions));
+		room.settings.permissions = permissions;
+		room.saveSettings();
 		return true;
 	}
 	getPermissions(room: Room) {
-		return this.roomPermissions[room.roomid] || {};
+		return room.settings.permissions || {};
 	}
 };
