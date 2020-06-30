@@ -1285,7 +1285,7 @@ export class BasicChatRoom extends BasicRoom {
 				this.settings.staffMessage.replace(/\n/g, '') +
 				`</div>`;
 		}
-		if (this.pendingApprovals && this.pendingApprovals.size > 0 && user.can('mute', null, this)) {
+		if (this.pendingApprovals?.size && user.can('mute', null, this)) {
 			message += `\n|raw|<div class="infobox">`;
 			message += `<details><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
 			for (const [userid, entry] of this.pendingApprovals) {
