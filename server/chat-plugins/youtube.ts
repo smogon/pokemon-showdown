@@ -251,7 +251,7 @@ export const commands: ChatCommands = {
 
 		update(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			if (!this.can('ban', null, room)) return false;
+			if (!this.can('mute', null, room)) return false;
 			const [channel, name] = target.split(',');
 			const id = YouTube.channelSearch(channel);
 			if (!id) return this.errorReply(`Channel ${channel} is not in the database.`);
