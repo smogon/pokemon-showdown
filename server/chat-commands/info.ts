@@ -2457,7 +2457,7 @@ export const commands: ChatCommands = {
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		if (this.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
+		if (user.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
