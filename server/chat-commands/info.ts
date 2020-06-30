@@ -2520,7 +2520,7 @@ export const commands: ChatCommands = {
 			buf += `</small></div>>`;
 		}
 		room.add(`|c|${request.name}|/raw ${buf}`).update();
-		this.privateModAction(`${user.name} has approved the display of ${request.name}'s media approval.`);
+		this.privateModAction(`${user.name} approved showing media from ${request.name}.`);
 	},
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
