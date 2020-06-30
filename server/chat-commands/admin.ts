@@ -15,7 +15,6 @@ import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
-import { brotliCompress } from 'zlib';
 
 export const commands: ChatCommands = {
 
