@@ -2517,7 +2517,7 @@ export const commands: ChatCommands = {
 		if (request.comment) {
 			buf += Utils.html`<br />${request.comment}</small></div>`;
 		} else {
-			buf += `</small></div>>`;
+			buf += `</small></div>`;
 		}
 		room.add(`|c| ${request.name}|/raw ${buf}`);
 		this.privateModAction(`${user.name} approved showing media from ${request.name}.`);
