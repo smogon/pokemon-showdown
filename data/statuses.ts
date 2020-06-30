@@ -682,10 +682,10 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = 2;
+			const ratio = this.format.id === 'gen8doublesou' ? 1.5 : 2;
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
-			pokemon.hp = Math.ceil(pokemon.hp * ratio);
+			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onTryAddVolatile(status, pokemon) {
