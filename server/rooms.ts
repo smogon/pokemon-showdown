@@ -1292,6 +1292,20 @@ export class BasicChatRoom extends BasicRoom {
 				this.settings.staffMessage.replace(/\n/g, '') +
 				`</div>`;
 		}
+		if (this.pendingApprovals?.size && user.can('mute', null, this)) {
+			message += `\n|raw|<div class="infobox">`;
+			message += `<details><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
+			for (const [userid, entry] of this.pendingApprovals) {
+				message += `<div class="infobox">`;
+				message += `<strong>Requester ID:</strong> ${userid}<br />`;
+				message += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
+				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br />`;
+				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
+				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
+				message += `</div><hr />`;
+			}
+			message += `</details></div>`;
+		}
 		return message;
 	}
 	getSubRooms(includeSecret = false) {
