@@ -1,5 +1,8 @@
 import {FS} from '../lib/fs';
 
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
+
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
@@ -62,11 +65,11 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	}
 
 	static defaultSymbol() {
-		return Config.groupsranking[0];
+		return Config.groupsranking[0] as GroupSymbol;
 	}
-	static getGroup(symbol: GroupSymbol): GroupInfo;
-	static getGroup<T>(symbol: GroupSymbol, fallback: T): GroupInfo | T;
-	static getGroup(symbol: GroupSymbol, fallback?: AnyObject) {
+	static getGroup(symbol: EffectiveGroupSymbol): GroupInfo;
+	static getGroup<T>(symbol: EffectiveGroupSymbol, fallback: T): GroupInfo | T;
+	static getGroup(symbol: EffectiveGroupSymbol, fallback?: AnyObject) {
 		if (Config.groups[symbol]) return Config.groups[symbol];
 
 		if (fallback !== undefined) return fallback;
@@ -78,28 +81,53 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			name: symbol,
 		});
 	}
+	getEffectiveSymbol(user: User): EffectiveGroupSymbol {
+		const group = this.get(user);
+		if (this.has(user.id) && group === Auth.defaultSymbol()) {
+			return 'whitelist';
+		}
+		return group;
+	}
 	static hasPermission(
-		symbol: GroupSymbol,
-		permission: GlobalPermission | RoomPermission | 'jurisdiction',
-		targetSymbol?: GroupSymbol,
-		targetingSelf?: boolean
+		user: User,
+		permission: string,
+		target: User | GroupSymbol | null,
+		room?: Room | BasicChatRoom | null,
+		cmd?: string
 	): boolean {
+		if (user.hasSysopAccess()) return true;
+
+		const auth: Auth = room ? room.auth : Users.globalAuth;
+
+		const symbol = auth.getEffectiveSymbol(user);
+		const targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
+
 		const group = Auth.getGroup(symbol);
-		if (group['root']) {
-			return true;
+		if (group['root']) return true;
+
+		let jurisdiction = group[permission as GlobalPermission | RoomPermission];
+		if (jurisdiction === true && permission !== 'jurisdiction') {
+			jurisdiction = group['jurisdiction'] || true;
 		}
 
-		if (group[permission]) {
-			let jurisdiction = group[permission];
-			if (jurisdiction === true && permission !== 'jurisdiction') {
-				jurisdiction = group['jurisdiction'] || true;
+		const roomPermissions = room ? room.settings.permissions : null;
+		if (roomPermissions) {
+			if (cmd && permission !== cmd && roomPermissions[cmd]) {
+				if (!auth.atLeast(user, roomPermissions[cmd])) return false;
+				jurisdiction = 'su';
+			} else if (roomPermissions[permission]) {
+				if (!auth.atLeast(user, roomPermissions[permission])) return false;
+				jurisdiction = 'su';
 			}
-			return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, targetingSelf);
 		}
-		return false;
+
+		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
 	}
 	static hasJurisdiction(
-		symbol: GroupSymbol, jurisdiction?: string | boolean, targetSymbol?: GroupSymbol, targetingSelf?: boolean
+		symbol: EffectiveGroupSymbol,
+		jurisdiction?: string | boolean,
+		targetSymbol?: GroupSymbol | null,
+		targetingSelf?: boolean
 	) {
 		if (!targetSymbol) {
 			return !!jurisdiction;
@@ -119,9 +147,9 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		return false;
 	}
-	static listJurisdiction(symbol: GroupSymbol, permission: GlobalPermission | RoomPermission) {
+	static listJurisdiction(user: User, permission: GlobalPermission | RoomPermission) {
 		const symbols = Object.keys(Config.groups) as GroupSymbol[];
-		return symbols.filter(targetSymbol => Auth.hasPermission(symbol, permission, targetSymbol));
+		return symbols.filter(targetSymbol => Auth.hasPermission(user, permission, targetSymbol));
 	}
 	static isValidSymbol(symbol: string): symbol is GroupSymbol {
 		if (symbol.length !== 1) return false;
@@ -162,6 +190,14 @@ export class RoomAuth extends Auth {
 
 		return parentGroup;
 	}
+	getEffectiveSymbol(user: User) {
+		const symbol = super.getEffectiveSymbol(user);
+		if (!this.room.persist && symbol === user.group) {
+			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
+			if (replaceGroup) return replaceGroup;
+		}
+		return symbol;
+	}
 	/** gets the room group without inheriting */
 	getDirect(id: ID): GroupSymbol {
 		return super.get(id);
@@ -181,16 +217,15 @@ export class RoomAuth extends Auth {
 		}
 	}
 	set(id: ID, symbol: GroupSymbol) {
-		const user = Users.get(id);
-		if (user) {
-			this.room.onUpdateIdentity(user);
-		}
 		if (symbol === 'whitelist' as GroupSymbol) {
 			symbol = Auth.defaultSymbol();
 		}
 		super.set(id, symbol);
 		this.room.settings.auth[id] = symbol;
 		this.room.saveSettings();
+
+		const user = Users.get(id);
+		if (user) this.room.onUpdateIdentity(user);
 		return this;
 	}
 	delete(id: ID) {
@@ -254,38 +289,6 @@ export class GlobalAuth extends Auth {
 }
 
 export const Permissions = new class {
-	can(permission: string, user: User, room: Room | BasicChatRoom | null, target: User | null, cmd?: string): boolean {
-		if (user.hasSysopAccess()) return true;
-
-		const auth: Auth = room ? room.auth : Users.globalAuth;
-
-		let group = auth.get(user);
-		if (auth.has(user.id) && group === Auth.defaultSymbol()) {
-			group = 'whitelist' as GroupSymbol;
-		}
-		const targetGroup = target ? auth.get(target) : undefined;
-
-		const roomIsTemporary = room && !room.persist;
-		if (roomIsTemporary && group === user.group) {
-			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
-			if (replaceGroup) group = replaceGroup;
-		}
-
-		const roomPermissions = room ? room.settings.permissions : null;
-		if (roomPermissions) {
-			if (cmd && permission !== cmd && roomPermissions[cmd]) {
-				return auth.atLeast(user, roomPermissions[cmd]) &&
-					Auth.hasJurisdiction(group, 'su', targetGroup, target === user);
-			}
-			if (roomPermissions[permission]) {
-				return auth.atLeast(user, roomPermissions[permission]) &&
-					Auth.hasJurisdiction(group, 'su', targetGroup, target === user);
-			}
-		}
-
-		return Auth.hasPermission(group, permission as any, targetGroup, target === user);
-	}
-
 	approvedPermissions(room: Room | null = null) {
 		// support some config permission groups that aren't already a command name - these need to be hardcoded
 		// since there's no good way to automate this
@@ -316,7 +319,7 @@ export const Permissions = new class {
 			permissions[permission] = rank;
 		}
 		room.settings.permissions = permissions;
-		room.saveSettings();
+		room.saveSettings()
 		return true;
 	}
 	getPermissions(room: Room) {
