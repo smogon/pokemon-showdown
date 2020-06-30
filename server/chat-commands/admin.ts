@@ -15,6 +15,7 @@ import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
+import { brotliCompress } from 'zlib';
 
 export const commands: ChatCommands = {
 
@@ -212,7 +213,7 @@ export const commands: ChatCommands = {
 
 	sendhtmlpage(target, room, user, connection) {
 		if (!this.can('addhtml', null, room)) return false;
-		let [targetID, pageid, content] = target.split(',') as [string, string, string | null];
+		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2) as [string, string, string | null];
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
 		const targetUser = Users.get(targetID);
 		if (!targetUser) return this.errorReply(`User not found.`);
@@ -229,7 +230,6 @@ export const commands: ChatCommands = {
 	sendhtmlpagehelp: [
 		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
 	],
-
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
 		this.sendReply(`||https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#global-messages`);
@@ -1121,4 +1121,15 @@ export const commands: ChatCommands = {
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
 	],
+};
+
+export const pages: PageTable = {
+	bot(args, user) {
+		const [bot, pageid] = args;
+		const targetBot = Users.get(bot);
+		if (!targetBot) {
+			return `<div class="pad"><h2>User ${bot} not found, and so cannot be requested for this page.</h2></div>`;
+		}
+		return targetBot.send(`|requestpage|${user.name}|${pageid}`);
+	},
 };
