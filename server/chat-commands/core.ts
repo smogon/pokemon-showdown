@@ -977,6 +977,9 @@ export const commands: ChatCommands = {
 
 	hidereplay(target, room, user, connection) {
 		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
+		if (room.tour?.forcePublicReplays) {
+			return this.errorReply(`You are unable to hide tournament battles currently.`);
+		}
 		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
 		// If a replay has already been saved, /savereplay again to update the uploaded replay's hidden status
