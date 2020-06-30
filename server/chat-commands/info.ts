@@ -2496,7 +2496,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`You can't approve your own /show request.`);
 		}
 		room.pendingApprovals!.delete(userid);
-		room.sendMods(`|uhtmlchange|request-${userid}|`);
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
 
 		let buf;
 		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(request.link)) {
