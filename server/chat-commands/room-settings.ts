@@ -883,6 +883,9 @@ export const commands: ChatCommands = {
 			if (prefix) {
 				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 			}
+			if (room.tour?.forcePublic) {
+				return this.errorReply(`Due to the rooms tournament settings you are unable to hide this room.`);
+			}
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings
