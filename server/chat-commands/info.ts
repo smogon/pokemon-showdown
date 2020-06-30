@@ -2519,7 +2519,7 @@ export const commands: ChatCommands = {
 		} else {
 			buf += `</small></div>>`;
 		}
-		room.add(`|c|${request.name}|/uhtml ${request.name},${buf}`).update();
+		room.add(`|c|${request.name}|/raw ${buf}`).update();
 		this.privateModAction(`${user.name} has approved the display of ${request.name}'s media approval.`);
 	},
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
