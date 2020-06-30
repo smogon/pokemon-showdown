@@ -2542,7 +2542,7 @@ export const commands: ChatCommands = {
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
 	approvallog(target, room, user) {
-		return this.parse(`/sl has approved the display of, ${room.roomid}`);
+		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
 
 	viewapprovals(target, room, user) {
@@ -2667,10 +2667,10 @@ export const pages: PageTable = {
 		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
 		for (const [userid, entry] of room.pendingApprovals) {
 			buf += `<strong>${entry.name}</strong><div class="infobox">`;
-			buf += `<strong>Requester ID:</strong> ${userid}<br>`;
-			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br>`;
+			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
+			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
 			buf += `<strong>Comment:</strong> ${entry.comment}`;
-			buf += `</div><hr/ >`;
+			buf += `</div><hr />`;
 		}
 		return buf;
 	},
