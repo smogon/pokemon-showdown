@@ -82,6 +82,7 @@ export class Tournament extends Rooms.RoomGame {
 	modjoin: boolean;
 	forceTimer: boolean;
 	autostartcap: boolean;
+	forcePublicReplays: boolean;
 	isTournamentStarted: boolean;
 	isBracketInvalidated: boolean;
 	lastBracketUpdate: number;
@@ -127,6 +128,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.modjoin = false;
 		this.forceTimer = false;
 		this.autostartcap = false;
+		this.forcePublicReplays = false;
 		if (Config.tourdefaultplayercap && this.playerCap > Config.tourdefaultplayercap) {
 			Monitor.log(`[TourMonitor] Room ${room.roomid} starting a tour over default cap (${this.playerCap})`);
 		}
@@ -1524,6 +1526,22 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				return this.sendReply(`Usage: ${cmd} <allow|disallow>`);
 			}
 		},
+		forcepublic(tournament, user, params, cmd) {
+			const option = params[0] || 'on';
+			if (this.meansYes(option)) {
+				tournament.forcePublicReplays = true;
+				this.room.add('Tournament replays forced public: ON');
+				this.privateModAction(`(Tournament public replays were turned ON by ${user.name})`);
+				this.modlog('TOUR FORCEPUBLICREPLAYS', null, 'ON');
+			} else if (this.meansNo(option) || option === 'stop') {
+				tournament.forcePublicReplays = false;
+				this.room.add('Tournament replays forced public: OFF');
+				this.privateModAction(`(Tournament public replays were turned OFF by ${user.name})`);
+				this.modlog('TOUR FORCEPUBLICREPLAYS', null, 'OFF');
+			} else {
+				return this.sendReply(`Usage: ${cmd} <on|off>`);
+			}
+		},
 		forcetimer(tournament, user, params, cmd) {
 			const option = params.length ? params[0].toLowerCase() : 'on';
 			if (this.meansYes(option)) {
@@ -1776,6 +1794,7 @@ export const commands: ChatCommands = {
 			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
 			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
 			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
+			`- forcepublic &lt;on|off>: Forces tournament battles to have public replays.<br />` +
 			`- getusers: Lists the users in the current tournament.<br />` +
 			`- on/enable &lt;%|@>: Enables allowing drivers or mods to start tournaments in the current room.<br />` +
 			`- off/disable: Disables allowing drivers and mods to start tournaments in the current room.<br />` +
