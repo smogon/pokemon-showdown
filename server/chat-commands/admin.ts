@@ -221,7 +221,7 @@ export const commands: ChatCommands = {
 		const context = new Chat.PageContext({
 			user: targetUser,
 			connection: targetUser.connections[0],
-			pageid: pageid,
+			pageid: `view-bot-${user.id}-${toID(pageid)}`,
 		});
 		context.title = `[${user.name}] ${pageid}`;
 		return context.send(content);
