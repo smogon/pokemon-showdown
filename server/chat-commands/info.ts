@@ -2472,7 +2472,8 @@ export const commands: ChatCommands = {
 		});
 		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		const notifyId = `${room.roomid}-rank-driver`;
-		const message = `|tempnotify|${notifyId}|${room.title} media request!|${user.name} has requested to show media in ${room.title}.`;
+		let message = `|tempnotify|${notifyId}|Pending media request!`;
+		message += `|${user.name} has requested to show media in ${room.title}.|new media request`;
 		room.sendRankedUsers(message, '%');
 		room.sendMods(
 			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
