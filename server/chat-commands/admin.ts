@@ -1127,7 +1127,7 @@ export const pages: PageTable = {
 		const [bot, pageid] = args;
 		const targetBot = Users.get(bot);
 		if (!targetBot) {
-			return `<div class="pad"><h2>User ${bot} not found, and so cannot be requested for this page.</h2></div>`;
+			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
 		}
 		targetBot.send(`|requestpage|${user.name}|${pageid}`);
 	},
