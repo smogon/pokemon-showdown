@@ -105,7 +105,9 @@ export const Repl = new class ReplSingleton {
 						}
 					});
 				} else if (err.code === "EACCES") {
-					console.error(`Could not start REPL server "${filename}": Your OS doesn't support Unix sockets (everything else will still work)`);
+					if (process.platform !== 'win32') {
+						console.error(`Could not start REPL server "${filename}": Your filesystem doesn't support Unix sockets (everything else will still work)`);
+					}
 				} else {
 					crashlogger(err, `REPL: ${filename}`);
 				}
