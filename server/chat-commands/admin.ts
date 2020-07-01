@@ -1140,6 +1140,6 @@ export const pages: PageTable = {
 		if (!canSend) {
 			return `<div class="pad"><h2>"${bot}" is not a bot.</h2></div>`;
 		}
-		targetBot.sendTo(room ? room : Rooms.lobby, `|requestpage|${user.name}|${pageid}`);
+		targetBot.sendTo(room ? room.roomid : 'lobby', `|requestpage|${user.name}|${pageid}`);
 	},
 };
