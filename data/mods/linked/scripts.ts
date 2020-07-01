@@ -341,7 +341,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length || (this.gen <= 3 && ['move', 'residual'].includes(this.queue[0].choice))) {
+		if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
@@ -350,14 +350,14 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			for (const [i, queuedAction] of this.queue.entries()) {
 				if (queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move') {
-					this.queue.splice(i, 1);
+					this.queue.list.splice(i, 1);
 					queuedAction.mega = 'done';
 					this.queue.insertChoice(queuedAction, true);
 					break;
 				}
 			}
 			return false;
-		} else if (this.queue.length && this.queue[0].choice === 'instaswitch') {
+		} else if (this.queue.peek()?.choice === 'instaswitch') {
 			return false;
 		}
 
@@ -394,7 +394,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (this.gen < 5) this.eachEvent('Update');
 
-		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
+		if (this.gen >= 8 && this.queue.peek()?.choice === 'move') {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue) {

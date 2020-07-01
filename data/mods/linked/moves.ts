@@ -260,8 +260,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectData.turnsActivated[this.turn]++;
 				if (!Array.isArray(this.effectData.move)) {
-					const nextAction = this.queue.willMove(pokemon);
-					if (nextAction) this.queue.splice(this.queue.indexOf(nextAction), 1);
+					this.queue.cancelAction(pokemon);
 					if (move.id !== this.effectData.move) return this.effectData.move;
 					return;
 				}
