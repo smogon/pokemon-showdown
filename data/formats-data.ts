@@ -1699,7 +1699,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	lugia: {
-		randomBattleMoves: ["airslash", "calmmind", "earthquake", "psyshock", "roost", "substitute", "toxic"],
+		randomBattleMoves: ["aeroblast", "calmmind", "earthquake", "psyshock", "roost", "substitute", "toxic"],
 		randomBattleLevel: 72,
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -2162,7 +2162,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	altaria: {
-		randomBattleMoves: ["defog", "dragondance", "dragonpulse", "earthquake", "outrage", "roost", "toxic"],
+		randomBattleMoves: ["defog", "dracometeor", "earthquake", "fireblast", "roost", "toxic"],
 		randomBattleLevel: 88,
 		isNonstandard: "Past",
 		tier: "Illegal",
