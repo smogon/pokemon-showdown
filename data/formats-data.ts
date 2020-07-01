@@ -709,7 +709,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	gengar: {
 		randomDoubleBattleMoves: ["focusblast", "nastyplot", "protect", "shadowball", "sludgebomb", "thunderbolt", "trick", "willowisp"],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	gengarmega: {
@@ -1799,7 +1799,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["bulkup", "closecombat", "facade", "knockoff", "partingshot"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["closecombat", "facade", "knockoff", "obstruct", "partingshot", "taunt"],
-		tier: "UUBL",
+		tier: "UU",
 		doublesTier: "(DUU)",
 	},
 	wurmple: {
@@ -2210,7 +2210,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["aquajet", "closecombat", "crabhammer", "dragondance", "knockoff", "swordsdance"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["aquajet", "closecombat", "crabhammer", "knockoff", "protect", "swordsdance"],
-		tier: "UUBL",
+		tier: "UU",
 		doublesTier: "(DUU)",
 	},
 	baltoy: {
