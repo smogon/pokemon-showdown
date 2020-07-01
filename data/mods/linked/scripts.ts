@@ -527,7 +527,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		},
 		hasLinkedMove(moveid) {
 			// @ts-ignore
-			const linkedMoves: ID[] = this.getlinkedMoves(true);
+			const linkedMoves: ID[] = this.getLinkedMoves(true);
 			if (!linkedMoves.length) return false;
 			return linkedMoves.some(x => x === moveid);
 		},
