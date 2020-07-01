@@ -1,8 +1,8 @@
 export const BattleScripts: ModdedBattleScriptsData = {
 	gen: 8,
 	init() {
-		this.modData('Movedex', 'zippyzap').isNonstandard = null;
-		this.modData('Movedex', 'pikapapow').isNonstandard = null;
+		this.modData('FormatsData', 'melmetalgmax').isNonstandard = null;
+		this.modData('FormatsData', 'melmetalgmax').tier = "Uber";
 
 		this.modData('Learnsets', 'venusaur').learnset.gunkshot = ["8M"];
 		this.modData('Learnsets', 'charizard').learnset.lavaplume = ["8M"];

@@ -928,7 +928,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'megamax',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax'],
+		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
 		unbanlist: ['Uber'],
 		onValidateSet(set) {
 			const species = this.dex.getSpecies(set.species);
