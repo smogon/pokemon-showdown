@@ -319,7 +319,7 @@ export const Permissions = new class {
 			permissions[permission] = rank;
 		}
 		room.settings.permissions = permissions;
-		room.saveSettings()
+		room.saveSettings();
 		return true;
 	}
 	getPermissions(room: Room) {
