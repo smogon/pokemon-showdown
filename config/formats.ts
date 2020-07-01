@@ -477,7 +477,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		checkLearnset(move, species, lsetData, set) {
 			// @ts-ignore
-			if (!set.sp.exists || !set.crossSpecies.exists) return this.checkLearnset(move, species, lsetData, set);
+			if (!set.sp || !set.sp.exists || !set.crossSpecies || !set.crossSpecies.exists) {
+				return this.checkLearnset(move, species, lsetData, set);
+			}
 			// @ts-ignore
 			const problem = this.checkLearnset(move, set.sp);
 			if (!problem) return null;
