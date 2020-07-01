@@ -497,7 +497,8 @@ export const commands: ChatCommands = {
 		mixedSpecies.baseStats = Dex.deepClone(mixedSpecies.baseStats);
 		let statName: StatName;
 		for (statName in species.baseStats) {
-			mixedSpecies.baseStats[statName] += crossSpecies.baseStats[statName] - prevo.baseStats[statName];
+			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
+			mixedSpecies.baseStats[statName] = Utils.clampIntRange(mixedSpecies.baseStats[statName] + statChange, 1, 255);
 		}
 		mixedSpecies.types = [species.types[0]];
 		if (species.types[1]) mixedSpecies.types.push(species.types[1]);
@@ -509,12 +510,6 @@ export const commands: ChatCommands = {
 		mixedSpecies.weighthg += crossSpecies.weighthg - prevo.weighthg;
 		if (mixedSpecies.weighthg < 1) {
 			mixedSpecies.weighthg = 1;
-		}
-		for (const stat in mixedSpecies.baseStats) {
-			if (mixedSpecies.baseStats[stat] < 1 || mixedSpecies.baseStats[stat] > 255) {
-				this.errorReply(`Warning: This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
-				break;
-			}
 		}
 		mixedSpecies.tier = "CE";
 		let weighthit = 20;

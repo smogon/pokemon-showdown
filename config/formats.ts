@@ -475,16 +475,18 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				];
 			}
 		},
-		checkLearnset(move, sp, lsetData, set) {
-			const crossSpecies = this.dex.getSpecies(set.name);
-			const species = this.dex.getSpecies(set.species);
-			if (!crossSpecies.exists) return this.checkLearnset(move, sp, lsetData, set);
-			const problem = this.checkLearnset(move, species);
+		checkLearnset(move, species, lsetData, set) {
+			// @ts-ignore
+			if (!set.sp.exists || !set.crossSpecies.exists) return this.checkLearnset(move, species, lsetData, set);
+			// @ts-ignore
+			let problem = this.checkLearnset(move, set.sp);
 			if (!problem) return null;
-			let crossMovesLeft = 2;
-			if (!crossMovesLeft) return problem;
-			if (!this.checkLearnset(move, crossSpecies)) return problem;
-			crossMovesLeft--;
+			// @ts-ignore
+			if (!set.crossMovesLeft) return problem;
+			// @ts-ignore
+			if (this.checkLearnset(move, set.crossSpecies)) return problem;
+			// @ts-ignore
+			set.crossMovesLeft--;
 			return null;
 		},
 		validateSet(set, teamHas) {
@@ -515,6 +517,12 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				set.species = crossSpecies.name;
 			}
 
+			// @ts-ignore
+			set.sp = species;
+			// @ts-ignore
+			set.crossSpecies = crossSpecies;
+			// @ts-ignore
+			set.crossMovesLeft = 2;
 			problems = this.validateSet(set, teamHas);
 			set.name = crossSpecies.name;
 			set.species = species.name;
@@ -1169,36 +1177,37 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		column: 3,
 	},
 	{
-		name: "[Gen 1] Ubers",
+		name: "[Gen 2] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286283/">RBY Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286282/">GSC Ubers</a>`,
 		],
 
-		mod: 'gen1',
+		mod: 'gen2',
 		// searchShow: false,
 		ruleset: ['Standard'],
 	},
 	{
-		name: "[Gen 3] NU",
+		name: "[Gen 4] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Rankings</a>`,
 		],
 
-		mod: 'gen3',
+		mod: 'gen4',
 		// searchShow: false,
-		ruleset: ['[Gen 3] UU', '!NFE Clause'],
-		banlist: ['UU'],
+		ruleset: ['[Gen 4] OU', 'Baton Pass Clause'],
+		banlist: ['OU', 'UUBL'],
+		unbanlist: ['Sand Veil', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 5] PU",
+		name: "[Gen 6] Pure Hackmons",
+		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7326932/">BW2 PU</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3649618/">ORAS Pure Hackmons</a>`,
 		],
 
-		mod: 'gen5',
-		// searchShow: false,
-		ruleset: ['[Gen 5] NU'],
-		banlist: ['NU', 'Combusken', 'Linoone', 'Riolu', 'Rotom-Frost', 'Vigoroth'],
+		mod: 'gen6',
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 
 	// Past Gens OU
@@ -2006,6 +2015,17 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		banlist: ['RU', 'NUBL', 'Prankster + Assist'],
 	},
 	{
+		name: "[Gen 5] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7326932/">BW2 PU</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] NU'],
+		banlist: ['NU', 'Combusken', 'Linoone', 'Riolu', 'Rotom-Frost', 'Vigoroth'],
+	},
+	{
 		name: "[Gen 5] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
@@ -2155,19 +2175,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['Standard', 'Arceus EV Limit'],
 	},
 	{
-		name: "[Gen 4] UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Rankings</a>`,
-		],
-
-		mod: 'gen4',
-		searchShow: false,
-		ruleset: ['[Gen 4] OU', 'Baton Pass Clause'],
-		banlist: ['OU', 'UUBL'],
-		unbanlist: ['Sand Veil', 'Baton Pass'],
-	},
-	{
 		name: "[Gen 4] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3583742/">DPP NU Metagame Discussion</a>`,
@@ -2313,6 +2320,17 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		unbanlist: ['Scyther'],
 	},
 	{
+		name: "[Gen 3] NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
+		],
+
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['[Gen 3] UU', '!NFE Clause'],
+		banlist: ['UU'],
+	},
+	{
 		name: "[Gen 3] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
@@ -2349,16 +2367,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 2] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286282/">GSC Ubers</a>`,
-		],
-
-		mod: 'gen2',
-		searchShow: false,
-		ruleset: ['Standard'],
-	},
-	{
 		name: "[Gen 2] UU",
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3576710/">GSC UU</a>`],
 
@@ -2386,6 +2394,16 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 1] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286283/">RBY Ubers</a>`,
+		],
+
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['Standard'],
 	},
 	{
 		name: "[Gen 1] UU",
