@@ -2663,7 +2663,7 @@ export const pages: PageTable = {
 	},
 	approvals(args) {
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
-		if (!this.can('mute', null, this.room)) return;
+		if (!this.can('mute', null, room)) return;
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;
 		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
