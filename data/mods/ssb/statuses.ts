@@ -173,18 +173,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('c.kilgannon')}|Your time will come.`);
 		},
 	},
-	cleann: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('cleann')}|The mainframe is open... intercept their messages and get out`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('cleann')}|Mission Success`);
-		},
-		onFaint() {
-			this.add(`c|${getName('cleann')}|Shazam! They've been destroyed from the inside...`);
-		},
-	},
 	darth: {
 		noCopy: true,
 		onStart() {

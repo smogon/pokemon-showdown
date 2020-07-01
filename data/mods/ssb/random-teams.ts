@@ -94,12 +94,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Death Wing',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
 	},
-	cleann: {
-		species: 'Dragapult', ability: 'Frisk', item: ['Life Orb', 'Dragon Fang'], gender: '',
-		moves: ['Dragon Dance', 'Dragon Darts', 'Fire Punch'],
-		signatureMove: 'Malicious Intent',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
-	},
 	Darth: {
 		species: 'Articuno', ability: 'Guardian Angel', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Revelation Dance', ['Recover', 'Roost'], 'U-turn'],

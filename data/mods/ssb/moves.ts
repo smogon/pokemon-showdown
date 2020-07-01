@@ -372,42 +372,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
-	// cleann
-	maliciousintent: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		desc: "Reveals a Pokemon from the other team.",
-		shortDesc: "Reveals a Pokemon from the other team.",
-		name: "Malicious Intent",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Shadow Bone', target);
-		},
-		self: {
-			onHit(target, source) {
-				const mons = [];
-				for (const foe of target.side.foe.pokemon) {
-					if (foe.m.identified) continue;
-					mons.push(foe);
-				}
-				if (mons.length < 1) return;
-				const randNo = this.random(mons.length);
-				this.add('-message', `${source.name} identified that the opposing team has ${mons[randNo].species}!`);
-				this.add(`c|${getName('cleann')}|Your team's information has been LEAKED!`);
-				mons[randNo].m.identified = true;
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-
 	// Darth
 	archangelsrequiem: {
 		accuracy: 100,
