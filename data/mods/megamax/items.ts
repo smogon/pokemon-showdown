@@ -342,7 +342,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		megaEvolves: "Toxtricity",
 		itemUser: ["Toxtricity"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			if (source.baseSpecies.name.includes('Toxtricity')) return false;
 			return true;
 		},
 		num: 10000,
@@ -434,7 +434,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Duraludon, this item allows it to Mega Evolve in battle.",
 	},
 	urshifusite: {
-		name: "Duraludite",
+		name: "Urshifusite",
 		spritenum: 583,
 		megaStone: "Urshifu-Gmax",
 		megaEvolves: "Urshifu",

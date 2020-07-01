@@ -10,4 +10,13 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
+	evasionmovesclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Moves Clause',
+		desc: "Bans moves that consistently raise the user's evasion when used",
+		banlist: ['Minimize', 'Double Team', 'Zippy Zap'],
+		onBegin() {
+			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
+		},
+	},
 };

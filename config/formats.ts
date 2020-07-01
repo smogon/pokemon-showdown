@@ -936,7 +936,25 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				(!this.ruleTable.has(`+pokemon:${species.name}`) ||
 				!this.ruleTable.has(`+basepokemon:${species.baseSpecies}`))) {
 				return [`${set.name || set.species} is banned.`];
+			}
+		},
+		checkLearnset(move, species, lsetData, set) {
+			if (species.name === 'Pikachu' || species.name === 'Pikachu-Gmax') {
+				if (['boltstrike', 'fusionbolt', 'pikapapow', 'zippyzap'].includes(move.id)) {
+					return null;
 				}
+			}
+			if (species.name === 'Meowth' || species.name === 'Meowth-Gmax') {
+				if (['Parting Shot', 'Skill Swap', 'Wrap'].includes(move.id)) {
+					return null;
+				}
+			}
+			if (species.name === 'Eevee' || species.name === 'Eevee-Gmax') {
+				if (['Icicle Crash', 'Liquidation', 'Sappy Seed', 'Sizzly Slide', 'Wild Charge'].includes(move.id)) {
+					return null;
+				}
+			}
+			return this.checkLearnset(move, species, lsetData, set);
 		},
 	},
 	{
