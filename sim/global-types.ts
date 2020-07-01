@@ -1370,7 +1370,7 @@ interface ModdedBattlePokemon {
 	ignoringAbility?: (this: Pokemon) => boolean;
 
 	// OM
-	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => ID[];
+	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => string[];
 	hasLinkedMove?: (this: Pokemon, moveid: string) => boolean;
 }
 

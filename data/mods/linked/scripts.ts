@@ -148,16 +148,25 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			// Linked mod
 			const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
 			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax && (linkIndex = linkedMoves.indexOf(action.move)) >= 0) {
+			if (linkedMoves.length && !move.isZ && !move.isMax && (linkIndex = linkedMoves.indexOf(toID(action.move))) >= 0) {
+				// @ts-ignore
 				const linkedActions = action.linked || linkedMoves.map(moveid => this.dex.getActiveMove(moveid));
 				const altMove = linkedActions[1 - linkIndex];
 				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
 				const thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, altMove.priority);
 				priority = Math.min(thisPriority, thatPriority);
+				action.priority = priority + action.fractionalPriority;
+				if (this.gen > 5) {
+					// Gen 6+: Quick Guard blocks moves with artificially enhanced priority.
+					// This also applies to Psychic Terrain.
+					linkedActions[linkIndex].priority = priority;
+					altMove.priority = priority;
+				}
+			} else {
+				action.priority = priority + action.fractionalPriority;
+				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+				if (this.gen > 5) action.move.priority = priority;
 			}
-			action.priority = priority + action.fractionalPriority;
-			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-			if (this.gen > 5) action.move.priority = priority;
 		}
 
 		if (!action.pokemon) {
@@ -205,9 +214,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			// Linked moves
-			// @ts-expect-error
+			// @ts-ignore
 			if (action.linked) {
-				// @ts-expect-error
+				// @ts-ignore
 				const linkedMoves: ActiveMove[] = action.linked;
 				for (let i = linkedMoves.length - 1; i >= 0; i--) {
 					const validTarget = this.validTargetLoc(action.targetLoc, action.pokemon, linkedMoves[i].target);
@@ -215,9 +224,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 					const pseudoAction: Action = {
 						choice: 'move', priority: action.priority, speed: action.speed, pokemon: action.pokemon,
 						targetLoc: targetLoc, moveid: linkedMoves[i].id, move: linkedMoves[i], mega: action.mega,
-					} as unknown as Action;
+						order: action.order, fractionalPriority: action.fractionalPriority, originalTarget: action.originalTarget,
+					};
 					this.queue.unshift(pseudoAction);
 				}
+				return;
 			}
 			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
 				action.zmove, undefined, action.maxMove, action.originalTarget);
@@ -452,11 +463,14 @@ export const BattleScripts: ModdedBattleScriptsData = {
 							pokemon: action.pokemon,
 						}));
 					}
+					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
 					if (linkedMoves.length && !action.pokemon.getItem().isChoice && !action.zmove && !action.maxMove) {
 						const decisionMove = toID(action.move);
 						if (linkedMoves.includes(decisionMove)) {
+							// @ts-ignore
 							action.linked = linkedMoves.map(moveid => this.battle.dex.getActiveMove(moveid));
+							// @ts-ignore
 							const linkedOtherMove = action.linked[1 - linkedMoves.indexOf(decisionMove)];
 							if (linkedOtherMove.beforeTurnCallback) {
 								this.addChoice({
@@ -468,7 +482,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 							}
 						}
 					}
-					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 				} else if (['switch', 'instaswitch'].includes(action.choice)) {
 					if (typeof action.pokemon.switchFlag === 'string') {
 						action.sourceEffect = this.battle.dex.getMove(action.pokemon.switchFlag as ID) as any;
@@ -502,17 +515,18 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		},
 		getLinkedMoves(ignoreDisabled) {
 			const linkedMoves = this.moveSlots.slice(0, 2);
-			if (linkedMoves.length !== 2 || linkedMoves.some(x => x.pp <= 0)) return [];
-			const ret = linkedMoves.map(x => x.id);
+			if (linkedMoves.length !== 2 || linkedMoves[0].pp <= 0 || linkedMoves[1].pp <= 0) return [];
+			const ret = [linkedMoves[0].id, linkedMoves[1].id];
 			if (ignoreDisabled) return ret;
 			if (!this.ateBerry && ret.includes('belch' as ID)) return [];
-			if (this.hasItem('assaultvest') && ret.some(x => this.battle.dex.getMove(x).category === 'Status')) {
+			if (this.hasItem('assaultvest') &&
+				(this.battle.dex.getMove(ret[0]).category === 'Status' || this.battle.dex.getMove(ret[1]).category === 'Status')) {
 				return [];
 			}
 			return ret;
 		},
 		hasLinkedMove(moveid) {
-			// @ts-expect-error
+			// @ts-ignore
 			const linkedMoves: ID[] = this.getlinkedMoves(true);
 			if (!linkedMoves.length) return false;
 			return linkedMoves.some(x => x === moveid);
