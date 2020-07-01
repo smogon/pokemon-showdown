@@ -40,7 +40,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	contaminate: {
 		desc: "On switch-in, this Pokemon lowers the Special Defense of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune.",
-		shortDesc: "On switch-in, this Pokemon lowers the Sp. Atk of adjacent opponents by 1 stage.",
+		shortDesc: "On switch-in, this Pokemon lowers the Sp. Def of adjacent opponents by 1 stage.",
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.side.foe.active) {
@@ -52,7 +52,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({spa: -1}, target, pokemon, null, true);
+					this.boost({spd: -1}, target, pokemon, null, true);
 				}
 			}
 		},
