@@ -207,7 +207,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		forme: "Gmax",
 		types: ["Steel"],
 		gender: "N",
-		baseStats: {hp: 135, atk: 163, def: 173, spa:110, spd: 85, spe: 34},
+		baseStats: {hp: 135, atk: 163, def: 173, spa: 110, spd: 85, spe: 34},
 		abilities: {0: "Bulletproof"},
 		heightm: 2.5,
 		weightkg: 800,
