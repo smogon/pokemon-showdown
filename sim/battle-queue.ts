@@ -127,6 +127,9 @@ export class BattleQueue extends Array<Action> {
 	constructor(battle: Battle) {
 		super();
 		this.battle = battle;
+		if (!battle || battle.constructor.name !== 'Battle') return; // FIXME: horrible hack for splice/slice
+		const queueScripts = battle.format.queue || battle.dex.data.Scripts.queue;
+		if (queueScripts) Object.assign(this, queueScripts);
 	}
 	/**
 	 * Takes an ActionChoice, and fills it out into a full Action object.
