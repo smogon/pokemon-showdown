@@ -1129,6 +1129,17 @@ export const pages: PageTable = {
 		if (!targetBot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
 		}
-		targetBot.send(`|requestpage|${user.name}|${pageid}`);
+		let canSend = false;
+		let room;
+		for (const curRoom of Rooms.global.chatRooms) {
+			if (targetBot.authAtLeast('*', curRoom)) {
+				canSend = true;
+				room = curRoom;
+			}
+		}
+		if (!canSend) {
+			return `<div class="pad"><h2>"${bot}" is not a bot.</h2></div>`;
+		}
+		targetBot.sendTo(room ? room : Rooms.lobby, `|requestpage|${user.name}|${pageid}`);
 	},
 };
