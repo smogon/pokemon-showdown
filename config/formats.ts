@@ -922,20 +922,41 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		column: 2,
 	},
 	{
-		name: "[Gen 8 Pet Mod] Roulettemons",
-		desc: `A metagame made up of brand new Pok&eacute;mon that have randomly generated moves, stats, abilities, and types.`,
+		name: "[Gen 8 Pet Mod] Megamax",
+		desc: `A metagame where Gigantamax formes are turned into new Mega Evolutions.`,
 		threads: [
-			`<a href="https://www.smogon.com/forums/threads/3649106/">Roulettemons</a>`,
+			`<a href="https://www.smogon.com/forums/threads/3658623/">Megamax</a>`,
 		],
 
-		mod: 'roulettemons',
-		ruleset: ['Standard NatDex', 'Dynamax Clause', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Baton Pass Clause', 'OHKO Clause'],
-		banlist: ['All Pokemon'],
-		unbanlist: [
-			'Koatric', 'Aquazelle', 'Salamalix', 'Brawnkey', 'Stuneleon', 'Chillyte', 'Eartharoo', 'Crazefly', 'Electritar', 'Aquatopus', 'Scorpita', 'Baloon', 'Kinesel', 'Glacida', 'Pidgeotine', 'Gorilax', 'Albatrygon', 'Chillvark', 'Komodith', 'Giranium', 'Flamyle', 'Voltecta', 'Ostria', 'Ninjoth', 'Herbigator', 'Anteros', 'Gladiaster', 'Hyperoach', 'Barracoth', 'Toados', 'Voltarak', 'Mosqung', 'Flamepion', 'Hyenix', 'Rhinolite', 'Bellena', 'Falcola', 'Beanium', 'Lemotic', 'Biceon', 'Skeleray', 'Specyte', 'Ramron', 'Panthee', 'Blastora', 'Balar', 'Dropacle', 'Fluffora', 'Dolphena', 'Tigire', 'Catelax',
-		],
-		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+		mod: 'megamax',
+		ruleset: ['[Gen 8] OU'],
+		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
+		unbanlist: ['Uber'],
+		onValidateSet(set) {
+			const species = this.dex.getSpecies(set.species);
+			if (species.tier === "Uber" &&
+				(!this.ruleTable.has(`+pokemon:${species.name}`) ||
+				!this.ruleTable.has(`+basepokemon:${species.baseSpecies}`))) {
+				return [`${set.name || set.species} is banned.`];
+			}
+		},
+		checkLearnset(move, species, lsetData, set) {
+			if (species.name === 'Pikachu' || species.name === 'Pikachu-Gmax') {
+				if (['boltstrike', 'fusionbolt', 'pikapapow', 'zippyzap'].includes(move.id)) {
+					return null;
+				}
+			}
+			if (species.name === 'Meowth' || species.name === 'Meowth-Gmax') {
+				if (['Parting Shot', 'Skill Swap', 'Wrap'].includes(move.id)) {
+					return null;
+				}
+			}
+			if (species.name === 'Eevee' || species.name === 'Eevee-Gmax') {
+				if (['Icicle Crash', 'Liquidation', 'Sappy Seed', 'Sizzly Slide', 'Wild Charge'].includes(move.id)) {
+					return null;
+				}
+			}
+			return this.checkLearnset(move, species, lsetData, set);
 		},
 	},
 	{
