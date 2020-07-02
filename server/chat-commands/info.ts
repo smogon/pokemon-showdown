@@ -19,10 +19,8 @@ export const commands: ChatCommands = {
 	alt: 'whois',
 	alts: 'whois',
 	whoare: 'whois',
-	whois(target, room, user, connection, cmd) {
-		let usedRoom: ChatRoom | GameRoom | GlobalRoom = room;
-		if (usedRoom?.roomid === 'staff' && !this.runBroadcast()) return;
-		if (!usedRoom) usedRoom = Rooms.global;
+	whois(target, room: Room | null, user, connection, cmd) {
+		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
 		const targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (!targetUser) {
@@ -43,8 +41,8 @@ export const commands: ChatCommands = {
 			buf += ` <small style="color:gray">(trusted${targetUser.id === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
-		const roomauth = usedRoom.auth.getDirect(targetUser.id);
-		if (Config.groups[roomauth]?.name) {
+		const roomauth = room?.auth.getDirect(targetUser.id);
+		if (roomauth && Config.groups[roomauth]?.name) {
 			buf += Utils.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group]?.name) {
@@ -85,7 +83,7 @@ export const commands: ChatCommands = {
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
-			(usedRoom.settings.isPrivate !== true && user.can('mute', targetUser, usedRoom) && targetUser.id in usedRoom.users);
+			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += `<br />`;
 
@@ -2631,13 +2629,15 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	punishments(query, user) {
 		this.title = 'Punishments';
+		const room = this.extractRoom();
+		if (!room) return;
+
 		let buf = "";
-		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.persist) return;
-		if (!this.can('mute', null, this.room)) return;
+		if (!room.persist) return;
+		if (!this.can('mute', null, room)) return;
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid))
+		const sortedPunishments = Array.from(Punishments.getPunishments(room.roomid))
 			.sort((a, b) => a[1].expireTime - b[1].expireTime);
 		const sP = new Map();
 		for (const punishment of sortedPunishments) {

@@ -100,7 +100,7 @@ export class UnoGame extends Rooms.RoomGame {
 	isPlusFour: boolean;
 	gameNumber: number;
 
-	constructor(room: ChatRoom | GameRoom, cap: number, suppressMessages: boolean) {
+	constructor(room: Room, cap: number, suppressMessages: boolean) {
 		super(room);
 
 		this.playerTable = Object.create(null);

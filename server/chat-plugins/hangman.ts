@@ -18,7 +18,7 @@ export class Hangman extends Rooms.RoomGame {
 	lastGuesser: string;
 	wordSoFar: string[];
 
-	constructor(room: ChatRoom | GameRoom, user: User, word: string, hint = '') {
+	constructor(room: Room, user: User, word: string, hint = '') {
 		super(room);
 
 		this.gameNumber = room.nextGameNumber();

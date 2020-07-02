@@ -34,7 +34,7 @@ class Giveaway {
 	gaNumber: number;
 	host: User;
 	giver: User;
-	room: ChatRoom | GameRoom;
+	room: Room;
 	ot: string;
 	tid: string;
 	prize: string;
@@ -45,7 +45,7 @@ class Giveaway {
 	sprite: string;
 
 	constructor(
-		host: User, giver: User, room: ChatRoom | GameRoom,
+		host: User, giver: User, room: Room,
 		ot: string, tid: string, prize: string
 	) {
 		this.gaNumber = room.nextGameNumber();
@@ -111,15 +111,15 @@ class Giveaway {
 		return false;
 	}
 
-	static checkBanned(room: ChatRoom | GameRoom, user: User) {
+	static checkBanned(room: Room, user: User) {
 		return Punishments.getRoomPunishType(room, toID(user)) === 'GIVEAWAYBAN';
 	}
 
-	static ban(room: ChatRoom | GameRoom, user: User, reason: string) {
+	static ban(room: Room, user: User, reason: string) {
 		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toID(user), Date.now() + BAN_DURATION, reason]);
 	}
 
-	static unban(room: ChatRoom | GameRoom, user: User) {
+	static unban(room: Room, user: User) {
 		Punishments.roomUnpunish(room, toID(user), 'GIVEAWAYBAN', false);
 	}
 
@@ -219,7 +219,7 @@ export class QuestionGiveaway extends Giveaway {
 	winner: User | null;
 
 	constructor(
-		host: User, giver: User, room: ChatRoom | GameRoom, ot: string, tid: string,
+		host: User, giver: User, room: Room, ot: string, tid: string,
 		prize: string, question: string, answers: string[]
 	) {
 		super(host, giver, room, ot, tid, prize);
@@ -359,7 +359,7 @@ export class LotteryGiveaway extends Giveaway {
 	maxWinners: number;
 
 	constructor(
-		host: User, giver: User, room: ChatRoom | GameRoom, ot: string,
+		host: User, giver: User, room: Room, ot: string,
 		tid: string, prize: string, winners: number
 	) {
 		super(host, giver, room, ot, tid, prize);
@@ -484,7 +484,7 @@ export class LotteryGiveaway extends Giveaway {
 
 export class GTSGiveaway {
 	gtsNumber: number;
-	room: ChatRoom | GameRoom;
+	room: Room;
 	giver: User;
 	left: number;
 	summary: string;
@@ -497,7 +497,7 @@ export class GTSGiveaway {
 	timer: NodeJS.Timer | null;
 
 	constructor(
-		room: ChatRoom | GameRoom, giver: User, amount: number,
+		room: Room, giver: User, amount: number,
 		summary: string, deposit: string, lookfor: string
 	) {
 		this.gtsNumber = room.nextGameNumber();

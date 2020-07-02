@@ -1121,7 +1121,7 @@ function createTournamentGenerator(
 	return new TourGenerator(modifier || '');
 }
 function createTournament(
-	room: ChatRoom | GameRoom, formatId: string | undefined, generator: string | undefined, playerCap: string | undefined,
+	room: Room, formatId: string | undefined, generator: string | undefined, playerCap: string | undefined,
 	isRated: boolean, generatorMod: string | undefined, name: string | undefined, output: CommandContext
 ) {
 	if (room.type !== 'chat') {
@@ -1241,10 +1241,10 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 					if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
 						Monitor.log(`[TourMonitor] Room ${tournament.room.roomid} starting a tour over default cap (${tournament.playerCap})`);
 					}
-					this.room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
+					this.room!.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
 				} else if (tournament.playerCap && !playerCap) {
 					tournament.playerCap = 0;
-					this.room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
+					this.room!.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
 				}
 				const capNote = (tournament.playerCap ? ' with a player cap of ' + tournament.playerCap : '');
 				this.privateModAction(`(${user.name} set tournament type to ${generator.name + capNote}.)`);
@@ -1292,7 +1292,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				this.modlog('TOUR PLAYERCAP', null, tournament.playerCap.toString());
 				this.sendReply(`Tournament cap set to ${tournament.playerCap}.`);
 			}
-			this.room.send(`|tournament|update|{"playerCap": "${tournament.playerCap}"}`);
+			this.room!.send(`|tournament|update|{"playerCap": "${tournament.playerCap}"}`);
 		},
 		end: 'delete',
 		stop: 'delete',
@@ -1317,7 +1317,9 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
 			}
 			if (tournament.setCustomRules(params, this)) {
-				this.room.addRaw(`<div class='infobox infobox-limited'>This tournament includes:<br />${tournament.getCustomRules()}</div>`);
+				this.room!.addRaw(
+					`<div class='infobox infobox-limited'>This tournament includes:<br />${tournament.getCustomRules()}</div>`
+				);
 				this.privateModAction(`(${user.name} updated the tournament's custom rules.)`);
 				this.modlog('TOUR RULES', null, tournament.customRules.join(', '));
 			}
@@ -1336,10 +1338,10 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			tournament.fullFormat = tournament.baseFormat;
 			if (tournament.name === tournament.getDefaultCustomName()) {
 				tournament.name = tournament.baseFormat;
-				this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
+				this.room!.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
 				tournament.update();
 			}
-			this.room.addRaw(`<b>The tournament's custom rules were cleared.</b>`);
+			this.room!.addRaw(`<b>The tournament's custom rules were cleared.</b>`);
 			this.privateModAction(`(${user.name} cleared the tournament's custom rules.)`);
 			this.modlog('TOUR CLEARRULES');
 		},
@@ -1357,7 +1359,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			}
 			if (name.includes('|')) return this.errorReply("The tournament's name cannot include the | symbol.");
 			tournament.name = name;
-			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
+			this.room!.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
 			this.privateModAction(`(${user.name} set the tournament's name to ${tournament.name}.)`);
 			this.modlog('TOUR NAME', null, tournament.name);
 			tournament.update();
@@ -1366,7 +1368,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 		clearname(tournament, user) {
 			if (tournament.name === tournament.baseFormat) return this.errorReply("The tournament does not have a name.");
 			tournament.name = tournament.baseFormat;
-			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
+			this.room!.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
 			this.privateModAction(`(${user.name} cleared the tournament's name.)`);
 			this.modlog('TOUR CLEARNAME');
 			tournament.update();
@@ -1376,7 +1378,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 		begin: 'start',
 		start(tournament, user) {
 			if (tournament.startTournament(this)) {
-				this.room.sendMods(`(${user.name} started the tournament.)`);
+				this.room!.sendMods(`(${user.name} started the tournament.)`);
 			}
 		},
 		dq: 'disqualify',
@@ -1423,7 +1425,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 						return this.errorReply("The tournament is already set to autostart when the player cap is reached.");
 					}
 					tournament.autostartcap = true;
-					this.room.add(`The tournament will start once ${tournament.playerCap} players have joined.`);
+					this.room!.add(`The tournament will start once ${tournament.playerCap} players have joined.`);
 					this.privateModAction(`(The tournament was set to autostart when the player cap is reached by ${user.name})`);
 					this.modlog('TOUR AUTOSTART', null, 'when playercap is reached');
 				}
@@ -1485,14 +1487,14 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				if (tournament.scouting) return this.errorReply("Scouting for this tournament is already set to allowed.");
 				tournament.scouting = true;
 				tournament.modjoin = false;
-				this.room.add('|tournament|scouting|allow');
+				this.room!.add('|tournament|scouting|allow');
 				this.privateModAction(`(The tournament was set to allow scouting by ${user.name})`);
 				this.modlog('TOUR SCOUT', null, 'allow');
 			} else if (this.meansNo(option) || option === 'disallow' || option === 'disallowed') {
 				if (!tournament.scouting) return this.errorReply("Scouting for this tournament is already disabled.");
 				tournament.scouting = false;
 				tournament.modjoin = true;
-				this.room.add('|tournament|scouting|disallow');
+				this.room!.add('|tournament|scouting|disallow');
 				this.privateModAction(`(The tournament was set to disallow scouting by ${user.name})`);
 				this.modlog('TOUR SCOUT', null, 'disallow');
 			} else {
@@ -1513,13 +1515,13 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			if (this.meansYes(option) || option === 'allow' || option === 'allowed') {
 				if (tournament.modjoin) return this.errorReply("Modjoining is already allowed for this tournament.");
 				tournament.modjoin = true;
-				this.room.add("Modjoining is now allowed (Players can modjoin their tournament battles).");
+				this.room!.add("Modjoining is now allowed (Players can modjoin their tournament battles).");
 				this.privateModAction(`(The tournament was set to allow modjoin by ${user.name})`);
 				this.modlog('TOUR MODJOIN', null, option);
 			} else if (this.meansNo(option) || option === 'disallow' || option === 'disallowed') {
 				if (!tournament.modjoin) return this.errorReply("Modjoining is already not allowed for this tournament.");
 				tournament.modjoin = false;
-				this.room.add("Modjoining is now banned (Players cannot modjoin their tournament battles).");
+				this.room!.add("Modjoining is now banned (Players cannot modjoin their tournament battles).");
 				this.privateModAction(`(The tournament was set to disallow modjoin by ${user.name})`);
 				this.modlog('TOUR MODJOIN', null, option);
 			} else {
@@ -1530,12 +1532,12 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			const option = params[0] || 'on';
 			if (this.meansYes(option)) {
 				tournament.forcePublic = true;
-				this.room.add('Tournament battles forced public: ON');
+				this.room!.add('Tournament battles forced public: ON');
 				this.privateModAction(`(Tournament public battles were turned ON by ${user.name})`);
 				this.modlog('TOUR FORCEPUBLIC', null, 'ON');
 			} else if (this.meansNo(option) || option === 'stop') {
 				tournament.forcePublic = false;
-				this.room.add('Tournament battles forced public: OFF');
+				this.room!.add('Tournament battles forced public: OFF');
 				this.privateModAction(`(Tournament public battles were turned OFF by ${user.name})`);
 				this.modlog('TOUR FORCEPUBLIC', null, 'OFF');
 			} else {
@@ -1546,12 +1548,12 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			const option = params.length ? params[0].toLowerCase() : 'on';
 			if (this.meansYes(option)) {
 				tournament.forceTimer = true;
-				this.room.add('Forcetimer is now on for the tournament.');
+				this.room!.add('Forcetimer is now on for the tournament.');
 				this.privateModAction(`(The timer was turned on for the tournament by ${user.name})`);
 				this.modlog('TOUR FORCETIMER', null, 'ON');
 			} else if (this.meansNo(option) || option === 'stop') {
 				tournament.forceTimer = false;
-				this.room.add('Forcetimer is now off for the tournament.');
+				this.room!.add('Forcetimer is now off for the tournament.');
 				this.privateModAction(`(The timer was turned off for the tournament by ${user.name})`);
 				this.modlog('TOUR FORCETIMER', null, 'OFF');
 			} else {
@@ -1714,9 +1716,9 @@ export const commands: ChatCommands = {
 			const punishment: [string, ID, number, string] =
 				['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
 			if (targetUser) {
-				Punishments.roomPunish(this.room, targetUser, punishment);
+				Punishments.roomPunish(this.room!, targetUser, punishment);
 			} else {
-				Punishments.roomPunishName(this.room, targetUserid, punishment);
+				Punishments.roomPunishName(this.room!, targetUserid, punishment);
 			}
 			room.getGame(Tournament)?.removeBannedUser(targetUserid);
 
@@ -1734,7 +1736,7 @@ export const commands: ChatCommands = {
 
 			if (!Tournament.checkBanned(room, targetUserid)) return this.errorReply("This user isn't banned from tournaments.");
 
-			if (targetUser) { Punishments.roomUnpunish(this.room, targetUserid, 'TOURBAN', false); }
+			if (targetUser) { Punishments.roomUnpunish(this.room!, targetUserid, 'TOURBAN', false); }
 			this.privateModAction(`${targetUser ? targetUser.name : targetUserid} was unbanned from joining tournaments by ${user.name}.`);
 			this.modlog('TOUR UNBAN', targetUser, null, {noip: 1, noalts: 1});
 		} else {

@@ -14,9 +14,7 @@ let NumberModeTrivia;
 function makeUser(name, connection) {
 	const user = new User(connection);
 	user.forceRename(name, true);
-	user.connected = true;
 	Users.users.set(user.id, user);
-	user.joinRoom('global', connection);
 	user.joinRoom('trivia', connection);
 	return user;
 }

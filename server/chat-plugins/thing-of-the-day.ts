@@ -680,7 +680,7 @@ export const otdCommands: ChatCommands = {
 		return handler.generateWinnerDisplay().then(text => {
 			if (!text) return this.errorReply("There is no winner yet.");
 			this.sendReplyBox(text);
-			this.room.update();
+			room.update();
 		});
 	},
 };

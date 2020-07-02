@@ -29,7 +29,7 @@ namespace Chat {
 }
 
 // Rooms
-type GlobalRoom = Rooms.GlobalRoom;
+type GlobalRoomState = Rooms.GlobalRoomState;
 type ChatRoom = Rooms.ChatRoom;
 type GameRoom = Rooms.GameRoom;
 type BasicRoom = Rooms.BasicRoom;
@@ -40,7 +40,7 @@ type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;
 type RoomID = "" | "global" | "lobby" | "staff" | "upperstaff" | "development" | "battle" | string & {__isRoomID: true};
 namespace Rooms {
-	export type GlobalRoom = import('./rooms').GlobalRoom;
+	export type GlobalRoomState = import('./rooms').GlobalRoomState;
 	export type ChatRoom = import('./rooms').ChatRoom;
 	export type GameRoom = import('./rooms').GameRoom;
 	export type BasicRoom = import('./rooms').BasicRoom;

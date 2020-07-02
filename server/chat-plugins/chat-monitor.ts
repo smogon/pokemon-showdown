@@ -6,7 +6,7 @@ type FilterWord = [RegExp, string, string, string | null, number];
 type MonitorHandler = (
 	this: CommandContext,
 	line: FilterWord,
-	room: ChatRoom | GameRoom | null,
+	room: Room | null,
 	user: User,
 	message: string,
 	lcMessage: string,

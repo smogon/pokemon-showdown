@@ -52,18 +52,20 @@ export const destroy = () => {
 export const pages: PageTable = {
 	async spotlights(query, user, connection) {
 		this.title = 'Daily Spotlights';
-		this.extractRoom();
+		const room = this.extractRoom();
+		if (!room) return;
+
 		let buf = `<div class="pad ladder"><h2>Daily Spotlights</h2>`;
-		if (!spotlights[this.room.roomid]) {
+		if (!spotlights[room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
-			for (const key in spotlights[this.room.roomid]) {
+			for (const key in spotlights[room.roomid]) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				for (const [i, spotlight] of spotlights[this.room.roomid][key].entries()) {
+				for (const [i, spotlight] of spotlights[room.roomid][key].entries()) {
 					const html = await renderSpotlight(spotlight.description, spotlight.image);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					// @ts-ignore room is definitely a proper room here.
-					if (!user.can('announce', null, this.room)) break;
+					if (!user.can('announce', null, room)) break;
 				}
 				buf += '</table>';
 			}

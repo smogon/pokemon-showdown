@@ -264,19 +264,21 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	lottery(query, user) {
-		this.extractRoom();
 		this.title = 'Lottery';
+		const room = this.extractRoom();
+		if (!room) return;
+
 		let buf = '<div class="pad">';
-		const lottery = lotteries[this.room.roomid];
+		const lottery = lotteries[room.roomid];
 		if (!lottery) {
-			buf += `<h2>There is no lottery running in ${this.room.title}</h2></div>`;
+			buf += `<h2>There is no lottery running in ${room.title}</h2></div>`;
 			return buf;
 		}
 		buf += `<h2 style="text-align: center">${lottery.name}</h2>${lottery.markup}<br />`;
 		if (lottery.running) {
 			const userSignedUp = lottery.participants[user.latestIp] ||
 				Object.values(lottery.participants).map(toID).includes(user.id);
-			buf += `<button class="button" name="send" style=" display: block; margin: 0 auto" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${this.room.roomid}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
+			buf += `<button class="button" name="send" style=" display: block; margin: 0 auto" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${room.roomid}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
 		} else {
 			buf += '<p style="text-align: center"><b>This lottery has already ended. The winners are:</b></p>';
 			buf += '<ul style="display: table; margin: 0px auto">';

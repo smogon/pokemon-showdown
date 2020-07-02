@@ -14,7 +14,7 @@ interface Option {
 export class Poll {
 	readonly activityId: 'poll';
 	pollNumber: number;
-	room: ChatRoom | GameRoom;
+	room: Room;
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
@@ -26,7 +26,7 @@ export class Poll {
 	timeoutMins: number;
 	isQuiz: boolean;
 	options: Map<number, Option>;
-	constructor(room: ChatRoom | GameRoom, questionData: QuestionData, options: string[], multi: boolean) {
+	constructor(room: Room, questionData: QuestionData, options: string[], multi: boolean) {
 		this.activityId = 'poll';
 		this.pollNumber = room.nextGameNumber();
 		this.room = room;

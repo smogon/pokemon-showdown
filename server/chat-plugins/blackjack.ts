@@ -18,7 +18,7 @@ type Symbols = '♥' | '♦' | '♣' | '♠';
 type SymbolName = 'Hearts' | 'Diamonds' | 'Clubs' | 'Spades';
 
 export class Blackjack extends Rooms.RoomGame {
-	room: ChatRoom | GameRoom;
+	room: Room;
 
 	blackjack: boolean;
 
@@ -56,7 +56,7 @@ export class Blackjack extends Rooms.RoomGame {
 	playerTable: {[k: string]: BlackjackPlayer};
 	gameNumber: number;
 
-	constructor(room: ChatRoom | GameRoom, user: User, autostartMinutes = 0) {
+	constructor(room: Room, user: User, autostartMinutes = 0) {
 		super(room);
 		this.gameNumber = room.nextGameNumber();
 		this.room = room;

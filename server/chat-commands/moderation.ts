@@ -227,7 +227,7 @@ export const commands: ChatCommands = {
 		let userLookup = '';
 		if (cmd === 'roomauth1') userLookup = `\n\nTo look up auth for a user, use /userauth ${target}`;
 		let targetRoom = room;
-		if (target) targetRoom = Rooms.search(target) as ChatRoom | GameRoom;
+		if (target) targetRoom = Rooms.search(target)!;
 		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
@@ -262,7 +262,7 @@ export const commands: ChatCommands = {
 				const also = buffer.length === 0 ? `` : ` also`;
 				buffer.push(`${curRoom.title} is a ${roomType}subroom of ${curRoom.parent.title}, so ${curRoom.parent.title} users${inheritedUserType}${also} have authority in this room.`);
 			}
-			curRoom = curRoom.parent as ChatRoom | GameRoom;
+			curRoom = curRoom.parent;
 		}
 		if (!buffer.length) {
 			connection.popup(`The room '${targetRoom.title}' has no auth. ${userLookup}`);
@@ -375,7 +375,7 @@ export const commands: ChatCommands = {
 	leave: 'part',
 	part(target, room, user, connection) {
 		const targetRoom = target ? Rooms.search(target) : room;
-		if (!targetRoom || targetRoom === Rooms.global) {
+		if (!targetRoom) {
 			if (target.startsWith('view-')) return;
 			return this.errorReply(`The room '${target}' does not exist.`);
 		}
@@ -1829,7 +1829,7 @@ export const commands: ChatCommands = {
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
 	showblacklist(target, room, user, connection, cmd) {
-		if (target) room = Rooms.search(target) as ChatRoom | GameRoom;
+		if (target) room = Rooms.search(target)!;
 		if (!room) return this.errorReply(`The room "${target}" was not found.`);
 		if (!this.can('mute', null, room)) return false;
 		const SOON_EXPIRING_TIME = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months

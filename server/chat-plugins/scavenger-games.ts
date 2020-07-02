@@ -663,12 +663,12 @@ const MODES: {[k: string]: GameMode | string} = {
 };
 
 export class ScavengerGameTemplate {
-	room: ChatRoom | GameRoom;
+	room: Room;
 	playerlist: null | string[];
 	timer: NodeJS.Timer | null;
 
 	[k: string]: any;
-	constructor(room: GameRoom | ChatRoom) {
+	constructor(room: Room) {
 		this.room = room;
 		this.playerlist = null;
 		this.timer = null;
@@ -694,7 +694,7 @@ export class ScavengerGameTemplate {
 	}
 }
 
-const LoadGame = function (room: ChatRoom | GameRoom, gameid: string) {
+const LoadGame = function (room: Room, gameid: string) {
 	let game = MODES[gameid];
 	if (!game) return false; // invalid id
 	if (typeof game === 'string') game = MODES[game];

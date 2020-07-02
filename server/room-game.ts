@@ -81,7 +81,7 @@ export class RoomGame {
 	 * The room this roomgame is in. Rooms can only have one RoomGame at a time,
 	 * which are available as `this.room.game === this`.
 	 */
-	room: ChatRoom | GameRoom;
+	room: Room;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
@@ -100,7 +100,7 @@ export class RoomGame {
 	 * to be later. The /timer command is written to be resilient to this.
 	 */
 	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void} | NodeJS.Timer | null;
-	constructor(room: ChatRoom | GameRoom) {
+	constructor(room: Room) {
 		this.roomid = room.roomid;
 		this.room = room;
 		this.gameid = 'game' as ID;
