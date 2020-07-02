@@ -947,12 +947,12 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				}
 			}
 			if (species.name === 'Meowth' || species.name === 'Meowth-Gmax') {
-				if (['Parting Shot', 'Skill Swap', 'Wrap'].includes(move.id)) {
+				if (['partingshot', 'skillswap', 'wrap'].includes(move.id)) {
 					return null;
 				}
 			}
 			if (species.name === 'Eevee' || species.name === 'Eevee-Gmax') {
-				if (['Icicle Crash', 'Liquidation', 'Sappy Seed', 'Sizzly Slide', 'Wild Charge'].includes(move.id)) {
+				if (['iciclecrash', 'liquidation', 'sappyseed', 'sizzlyslide', 'wildcharge'].includes(move.id)) {
 					return null;
 				}
 			}
