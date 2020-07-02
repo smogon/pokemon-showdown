@@ -1095,7 +1095,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		// check for mismatched tags
-		const tags = htmlContent.match(/<\/?[^<>]*/g);
+		const tags = htmlContent.match(/<!--.*?-->|<\/?[^<>]*/g);
 		if (tags) {
 			const ILLEGAL_TAGS = [
 				'script', 'head', 'body', 'html', 'canvas', 'base', 'meta', 'link',
@@ -1114,6 +1114,7 @@ export class CommandContext extends MessageContext {
 				const tagContent = tag.slice(isClosingTag ? 2 : 1).replace(/\s+/, ' ').trim();
 				const tagNameEndIndex = tagContent.indexOf(' ');
 				const tagName = tagContent.slice(0, tagNameEndIndex >= 0 ? tagNameEndIndex : undefined).toLowerCase();
+				if (tagName === '!--') continue;
 				if (isClosingTag) {
 					if (LEGAL_AUTOCLOSE_TAGS.includes(tagName)) continue;
 					if (!stack.length) {
