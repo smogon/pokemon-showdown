@@ -1,190 +1,143 @@
 export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	koatric: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	aquazelle: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	salamalix: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	brawnkey: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	stuneleon: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	chillyte: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	eartharoo: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	crazefly: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	electritar: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	aquatopus: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	scorpita: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	baloon: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	kinesel: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	glacida: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	pidgeotine: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	gorilax: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	albatrygon: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	chillvark: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	komodith: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	giranium: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	flamyle: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	voltecta: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	ostria: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	ninjoth: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	herbigator: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	anteros: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	gladiaster: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	hyperoach: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	barracoth: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	toados: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	voltarak: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	mosqung: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	flamepion: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	hyenix: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	rhinolite: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	bellena: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	falcola: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	beanium: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	lemotic: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	biceon: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	skeleray: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	specyte: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	ramron: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	balar: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	panthee: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	blastora: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 	dropacle: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tiers: ["OU", "DOU"],
 	},
 };

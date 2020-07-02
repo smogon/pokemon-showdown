@@ -90,7 +90,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 				if (this.ruleTable.has(`+pokemon:${species.id}`)) return;
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
-			if (species.tier === "Unreleased") {
+			if (species.tiers.includes("Unreleased")) {
 				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${toID(species.baseSpecies)}`)) {
 					return;
 				}

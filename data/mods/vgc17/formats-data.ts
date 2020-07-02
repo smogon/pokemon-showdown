@@ -1,54 +1,54 @@
 export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pikachupartner: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	marowakalolatotem: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	ribombeetotem: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	rockruffdusk: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	lycanrocdusk: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	araquanidtotem: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	necrozmaduskmane: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	necrozmadawnwings: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	necrozmaultra: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	poipole: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	naganadel: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	stakataka: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 	blacephalon: {
 		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tiers: ["Unreleased"],
 	},
 };

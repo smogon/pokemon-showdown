@@ -1252,14 +1252,6 @@ export class TeamValidator {
 			}
 		}
 
-		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
-		const tierTag = 'pokemontag:' + toID(tier);
-		setHas[tierTag] = true;
-
-		const doublesTier = tierSpecies.doublesTier === '(DUU)' ? 'DNU' : tierSpecies.doublesTier;
-		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
-		setHas[doublesTierTag] = true;
-
 		let banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {
 			return `${species.name} is ${banReason}.`;
@@ -1294,17 +1286,20 @@ export class TeamValidator {
 			}
 		}
 
-		banReason = ruleTable.check(tierTag) || (tier === 'AG' ? ruleTable.check('pokemontag:uber') : null);
-		if (banReason) {
-			return `${tierSpecies.name} is in ${tier}, which is ${banReason}.`;
-		}
-		if (banReason === '') return null;
+		const tiers = tierSpecies.tiers;
+		if (tiers.includes('(PU)')) tiers[tiers.indexOf('(PU)')] = 'ZU';
+		if (tiers.includes('(NU)')) tiers[tiers.indexOf('(PU)')] = 'PU';
+		if (tiers.includes('(DUU)')) tiers[tiers.indexOf('(DUU)')] = 'DNU';
 
-		banReason = ruleTable.check(doublesTierTag);
-		if (banReason) {
-			return `${tierSpecies.name} is in ${doublesTier}, which is ${banReason}.`;
+		for (const tier of tiers) {
+			const tierTag = `pokemontag:${toID(tier)}`;
+			setHas[tierTag] = true;
+			banReason = ruleTable.check(tierTag) || (tiers.includes('AG') ? ruleTable.check('pokemontag:uber') : null);
+			if (banReason) {
+				return `${tierSpecies.name} is in ${tier}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
 		}
-		if (banReason === '') return null;
 
 		banReason = ruleTable.check('pokemontag:allpokemon');
 		if (banReason) {

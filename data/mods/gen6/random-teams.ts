@@ -850,7 +850,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Holistic judgement
 			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Spinda: 100, Unown: 100,
 		};
-		const tier = toID(species.tier).replace('bl', '');
+		const tier = toID(species.tiers[0]).replace('bl', '');
 		let level = levelScale[tier] || (species.nfe ? 90 : 80);
 		if (customScale[forme]) level = customScale[forme];
 

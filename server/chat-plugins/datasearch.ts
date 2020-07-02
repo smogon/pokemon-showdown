@@ -14,7 +14,6 @@ import {Utils} from '../../lib/utils';
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
 	tiers: {[k: string]: boolean};
-	doublesTiers: {[k: string]: boolean};
 	colors: {[k: string]: boolean};
 	'egg groups': {[k: string]: boolean};
 	formes: {[k: string]: boolean};
@@ -443,8 +442,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		nfe: 'NFE',
 		lcuber: 'LC Uber', lcubers: 'LC Uber', lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
-	});
-	const allDoublesTiers: {[k: string]: string} = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',
 		doublesou: 'DOU', dou: 'DOU',
 		doublesbl: 'DBL', dbl: 'DBL',
@@ -514,7 +511,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	for (const andGroup of target.split(',')) {
 		const orGroup: DexOrGroup = {
-			abilities: {}, tiers: {}, doublesTiers: {}, colors: {}, 'egg groups': {}, formes: {},
+			abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, formes: {},
 			gens: {}, moves: {}, types: {}, resists: {}, weak: {}, stats: {}, skip: false,
 		};
 		const parameters = andGroup.split("|");
@@ -545,15 +542,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (invalid) return {error: invalid};
 				tierSearch = tierSearch || !isNotSearch;
 				orGroup.tiers[target] = !isNotSearch;
-				continue;
-			}
-
-			if (toID(target) in allDoublesTiers) {
-				target = allDoublesTiers[toID(target)];
-				const invalid = validParameter("doubles tiers", target, isNotSearch, target);
-				if (invalid) return {error: invalid};
-				tierSearch = tierSearch || !isNotSearch;
-				orGroup.doublesTiers[target] = !isNotSearch;
 				continue;
 			}
 
@@ -869,9 +857,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					species.isNonstandard &&
 					!["Custom", "Glitch", "Pokestar"].includes(species.isNonstandard)
 				) ||
-				(species.tier !== 'Unreleased' && species.tier !== 'Illegal')
+				(!species.tiers.includes('Unreleased') && !species.tiers.includes('Illegal'))
 			) &&
-			(!species.tier.startsWith("CAP") || capSearch) &&
+			(!species.tiers.some(x => x.startsWith("CAP")) || capSearch) &&
 			megaSearchResult &&
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult
@@ -909,11 +897,21 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
-				let tier = dex[mon].tier;
-				if (tier[0] === '(' && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1);
-				if (tier === 'New') tier = 'OU';
-				if (alts.tiers[tier]) continue;
-				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
+				const tiers = dex[mon].tiers;
+				let contin = false;
+				for (let tier of tiers) {
+					if (tier[0] === '(' && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1);
+					if (tier === 'New') tier = 'OU';
+					if (alts.tiers[tier]) {
+						contin = true;
+						break;
+					}
+					if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) {
+						contin = true;
+						break;
+					}
+				}
+				if (contin) continue;
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
 				let format = Dex.getFormat('gen' + maxGen + 'lc');
@@ -922,8 +920,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
 					dex[mon].evos.some(evo => mod.getSpecies(evo).gen <= mod.gen) &&
-					!format.banlist.includes(dex[mon].name) &&
-					!format.banlist.includes(dex[mon].name + "-Base")
+					!dex[mon].tiers.some(x => format.banlist.includes(x))
 				) {
 					const lsetData = Dex.getLearnsetData(dex[mon].id);
 					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
@@ -936,13 +933,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						continue;
 					}
 				}
-			}
-
-			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
-				let tier = dex[mon].doublesTier;
-				if (tier && tier[0] === '(' && tier !== '(DUU)') tier = tier.slice(1, -1);
-				if (alts.doublesTiers[tier]) continue;
-				if (Object.values(alts.doublesTiers).includes(false) && alts.doublesTiers[tier] !== false) continue;
 			}
 
 			for (const type in alts.types) {

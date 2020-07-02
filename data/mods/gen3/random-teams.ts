@@ -446,7 +446,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const customScale: {[k: string]: number} = {
 			Ditto: 99, Unown: 99,
 		};
-		const tier = species.tier;
+		const tier = species.tiers[0];
 		let level = levelScale[tier] || (species.nfe ? 90 : 80);
 		if (customScale[species.name]) level = customScale[species.name];
 
@@ -510,7 +510,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Limit to one Wobbuffet per battle (not just per team)
 			if (species.name === 'Wobbuffet' && this.hasWobbuffet) continue;
 
-			const tier = species.tier;
+			const tier = species.tiers[0];
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
 

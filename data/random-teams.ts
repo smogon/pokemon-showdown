@@ -1461,7 +1461,7 @@ export class RandomTeams {
 				// Prevent unwanted formes in doubles
 				if (this.format.gameType === 'doubles' && !species.randomDoubleBattleMoves) continue;
 
-				const tier = species.tier;
+				const tier = species.tiers;
 				const types = species.types;
 				const typeCombo = types.slice().sort().join();
 
@@ -1490,7 +1490,7 @@ export class RandomTeams {
 
 				if (restrict && !species.isMega) {
 					// Limit one Pokemon per tier, two for Monotype
-					if ((tierCount[tier] >= (isMonotype ? 2 : 1)) && !this.randomChance(1, Math.pow(5, tierCount[tier]))) {
+					if ((tierCount[tier[0]] >= (isMonotype ? 2 : 1)) && !this.randomChance(1, Math.pow(5, tierCount[tier[0]]))) {
 						continue;
 					}
 
@@ -1536,10 +1536,10 @@ export class RandomTeams {
 				baseFormes[species.baseSpecies] = 1;
 
 				// Increment tier counter
-				if (tierCount[tier]) {
-					tierCount[tier]++;
+				if (tierCount[tier[0]]) {
+					tierCount[tier[0]]++;
 				} else {
-					tierCount[tier] = 1;
+					tierCount[tier[0]] = 1;
 				}
 
 				// Increment type counters

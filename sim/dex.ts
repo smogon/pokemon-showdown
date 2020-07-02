@@ -417,30 +417,24 @@ export class ModdedDex {
 					if (!(key in species)) species[key] = baseSpeciesStatuses[key];
 				}
 			}
-			if (!species.tier && !species.doublesTier && species.baseSpecies !== species.name) {
+			if (!species.tiers.length && species.baseSpecies !== species.name) {
 				if (species.baseSpecies === 'Mimikyu') {
-					species.tier = this.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
-					species.doublesTier = this.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
+					species.tiers = this.data.FormatsData[toID(species.baseSpecies)].tiers || ['Illegal'];
 				} else if (species.id.endsWith('totem')) {
-					species.tier = this.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
-					species.doublesTier = this.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
+					species.tiers = this.data.FormatsData[species.id.slice(0, -5)].tiers || ['Illegal'];
 				} else if (species.battleOnly) {
-					species.tier = this.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
-					species.doublesTier = this.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
+					species.tiers = this.data.FormatsData[toID(species.battleOnly)].tiers || ['Illegal'];
 				} else {
 					const baseFormatsData = this.data.FormatsData[toID(species.baseSpecies)];
 					if (!baseFormatsData) {
 						throw new Error(`${species.baseSpecies} has no formats-data entry`);
 					}
-					species.tier = baseFormatsData.tier || 'Illegal';
-					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';
+					species.tiers = baseFormatsData.tiers || ['Illegal'];
 				}
 			}
-			if (!species.tier) species.tier = 'Illegal';
-			if (!species.doublesTier) species.doublesTier = species.tier;
+			if (!species.tiers) species.tiers = ['Illegal'];
 			if (species.gen > this.gen) {
-				species.tier = 'Illegal';
-				species.doublesTier = 'Illegal';
+				species.tier = ['Illegal'];
 				species.isNonstandard = 'Future';
 			}
 			if (this.currentMod === 'letsgo' && !species.isNonstandard) {
@@ -453,7 +447,7 @@ export class ModdedDex {
 			species.nfe = species.evos.length && this.getSpecies(species.evos[0]).gen <= this.gen;
 		} else {
 			species = new Data.Species({
-				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
+				id, name, exists: false, tiers: ['Illegal'], isNonstandard: 'Custom',
 			});
 		}
 		if (species.exists) this.speciesCache.set(id, species);
@@ -1014,7 +1008,7 @@ export class ModdedDex {
 				// valid pokemontags
 				const validTags = [
 					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
+					'ag', 'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags -- nduubl is used for national dex teambuilder formatting

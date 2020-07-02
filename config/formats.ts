@@ -116,10 +116,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		maxLevel: 5,
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
-		banlist: [
-			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
-			'Chlorophyll', 'Moody', 'Baton Pass',
-		],
+		banlist: ['LC Uber', 'Chlorophyll', 'Moody', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 8] Monotype",
@@ -501,7 +498,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const species = this.dex.getSpecies(set.species);
 			if (!species.exists || species.isNonstandard || species === crossSpecies) return this.validateSet(set, teamHas);
 			if (!species.nfe) return [`${species.name} cannot cross evolve because it doesn't evolve.`];
-			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable");
+			const crossIsUnreleased = (crossSpecies.tiers.includes("Unreleased") && crossSpecies.isNonstandard === "Unobtainable");
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
 			}
@@ -537,7 +534,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const crossSpecies = this.dex.getSpecies(target.set.name);
 			if (!crossSpecies.exists) return;
 			if (species.battleOnly || !species.nfe) return;
-			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable");
+			const crossIsUnreleased = (crossSpecies.tiers.includes("Unreleased") && crossSpecies.isNonstandard === "Unobtainable");
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) return;
 			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
 			if (!crossPrevoSpecies.prevo !== !species.prevo) return;
@@ -884,7 +881,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				lcuber: 40,
 				lc: 40,
 			};
-			const tier = toID(species.tier) || 'ou';
+			const tier = toID(species.tiers[0]) || 'ou';
 			if (!(tier in boosts)) return;
 			const pokemon: Species = this.dex.deepClone(species);
 			const boost = boosts[tier];
@@ -1378,11 +1375,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Little Cup', 'Standard', 'Swagger Clause'],
-		banlist: [
-			'Aipom', 'Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon',
-			'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Trapinch', 'Vulpix-Base', 'Wingull', 'Yanma',
-			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
-		],
+		banlist: ['LC Uber', 'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
 		name: "[Gen 7] Monotype",
@@ -1750,10 +1743,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Standard', 'Little Cup'],
-		banlist: [
-			'Drifloon', 'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma',
-			'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger',
-		],
+		banlist: ['LC Uber', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
 	},
 	{
 		name: "[Gen 6] Monotype",
@@ -2038,10 +2028,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
-		banlist: [
-			'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scraggy', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma',
-			'Sand Rush', 'Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom',
-		],
+		banlist: ['LC Uber', 'Sand Rush', 'Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
 		name: "[Gen 5] Monotype",
@@ -2216,10 +2203,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Standard', 'Little Cup'],
-		banlist: [
-			'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma',
-			'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Hypnosis', 'Sonic Boom',
-		],
+		banlist: ['LC Uber', 'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Hypnosis', 'Sonic Boom'],
 	},
 	{
 		name: "[Gen 4] 1v1",

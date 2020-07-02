@@ -622,7 +622,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const customScale: {[forme: string]: number} = {
 			Blaziken: 79, 'Deoxys-Defense': 79, Landorus: 79, Manaphy: 79, Thundurus: 79, 'Tornadus-Therian': 79, Unown: 100,
 		};
-		let level = levelScale[species.tier] || 80;
+		let level = levelScale[species.tiers[0]] || 80;
 		if (customScale[forme]) level = customScale[forme];
 
 		// Minimize confusion damage
@@ -691,7 +691,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				break;
 			}
 
-			const tier = species.tier;
+			const tier = species.tiers[0];
 
 			// Limit two Pokemon per tier
 			if (tierCount[tier] > 1 && this.gen === 5) {

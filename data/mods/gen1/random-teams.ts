@@ -155,7 +155,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// If you have a shitmon, don't get another
 			if (handicapMons.includes(species.id) && hasShitmon) continue;
 
-			const tier = species.tier;
+			const tier = species.tiers[0];
 			switch (tier) {
 			case 'LC':
 			case 'NFE':
@@ -362,7 +362,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			Caterpie: 99, Metapod: 99, Weedle: 99, Kakuna: 99, Magikarp: 99,
 			Ditto: 88,
 		};
-		let level = levelScale[species.tier] || 80;
+		let level = levelScale[species.tiers[0]] || 80;
 		if (customScale[species.name]) level = customScale[species.name];
 
 		return {

@@ -43,7 +43,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 			// Ensure 1 Uber at most
 			// Ensure 2 mons of same tier at most (this includes OU,UUBL,UU,NU; other tiers not supported yet)
-			const tier = species.tier;
+			const tier = species.tiers[0];
 			switch (tier) {
 			case 'Uber':
 				if (tierCount['Uber']) skip = true;
@@ -267,7 +267,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			Unown: 98, Wobbuffet: 82, Ditto: 82,
 			Snorlax: 66, Nidoqueen: 70,
 		};
-		let level = levelScale[species.tier] || 90;
+		let level = levelScale[species.tiers[0]] || 90;
 		if (customScale[species.name]) level = customScale[species.name];
 
 		return {

@@ -643,7 +643,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		const customScale: {[k: string]: number} = {
 			Delibird: 99, Ditto: 99, 'Farfetch\u2019d': 99, Unown: 99,
 		};
-		const tier = species.tier;
+		const tier = species.tiers[0];
 		let level = levelScale[tier] || 75;
 		if (customScale[species.name]) level = customScale[species.name];
 

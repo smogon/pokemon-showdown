@@ -1136,7 +1136,6 @@ type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inh
 
 interface SpeciesFormatsData {
 	comboMoves?: readonly string[];
-	doublesTier?: string;
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	isNonstandard?: Nonstandard | null;
@@ -1144,7 +1143,7 @@ interface SpeciesFormatsData {
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
-	tier?: string;
+	tiers?: string[];
 }
 
 type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};

@@ -350,7 +350,7 @@ export const commands: ChatCommands = {
 			'LC Uber': 40,
 			LC: 40,
 		};
-		let tier = species.tier;
+		let tier = species.tiers[0];
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
@@ -448,7 +448,7 @@ export const commands: ChatCommands = {
 			const swap = species.baseStats[natureObj.minus];
 			species.baseStats[natureObj.minus] = species.baseStats[natureObj.plus];
 			species.baseStats[natureObj.plus] = swap;
-			species.tier = 'NS';
+			species.tiers = ['NS'];
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -511,7 +511,7 @@ export const commands: ChatCommands = {
 		if (mixedSpecies.weighthg < 1) {
 			mixedSpecies.weighthg = 1;
 		}
-		mixedSpecies.tier = "CE";
+		mixedSpecies.tiers = ["CE"];
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
 			weighthit = 120;

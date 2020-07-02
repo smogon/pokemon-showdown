@@ -554,9 +554,8 @@ export const commands: ChatCommands = {
 					}
 				}
 				if (!tierDisplay) tierDisplay = 'tiers';
-				const displayedTier = tierDisplay === 'tiers' ? pokemon.tier :
-					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
-					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
+				const displayedTier = tierDisplay === 'tiers' ? pokemon.tiers.join('<br />') :
+					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tiers[0];
 				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;

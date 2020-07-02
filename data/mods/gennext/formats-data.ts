@@ -1,62 +1,62 @@
 export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	aegislash: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	blaziken: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	blazikenmega: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	genesect: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	gengarmega: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	greninja: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	kangaskhanmega: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	landorus: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	mawilemega: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	salamencemega: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	deoxysdefense: {
 		inherit: true,
-		tier: "Uber",
+		tiers: ["Uber"],
 	},
 	deoxysspeed: {
 		inherit: true,
-		tier: "Uber",
+		tiers: ["Uber"],
 	},
 	hoopaunbound: {
 		inherit: true,
-		tier: "OU",
+		tiers: ["OU"],
 	},
 	kyurem: {
 		inherit: true,
-		tier: "Uber",
+		tiers: ["Uber"],
 	},
 	kyuremblack: {
 		inherit: true,
-		tier: "Uber",
+		tiers: ["Uber"],
 	},
 };

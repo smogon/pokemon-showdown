@@ -662,15 +662,14 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly changesFrom?: string;
 
 	/**
-	 * Singles Tier. The Pokemon's location in the Smogon tier system.
-	 * Do not use for LC bans (usage tier will override LC Uber).
+	 * Tier array. The Pokemon's location in the Smogon tier system.
+	 * Indexed as [
+	 * * Singles Tier (this is the BL tier if the pokemon does not have enough usage to be higher tiered),
+	 * * Singles BL (if any; includes LC Uber),
+	 * * Doubles tier,
+	 * ],
 	 */
-	readonly tier: string;
-	/**
-	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
-	 * Do not use for LC bans (usage tier will override LC Uber).
-	 */
-	readonly doublesTier: string;
+	readonly tiers: string[];
 	readonly randomBattleMoves?: readonly ID[];
 	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
@@ -699,8 +698,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
 		this.prevo = data.prevo || '';
-		this.tier = data.tier || '';
-		this.doublesTier = data.doublesTier || '';
+		this.tiers = data.tiers || [];
 		this.evos = data.evos || [];
 		this.evoType = data.evoType || undefined;
 		this.evoMove = data.evoMove || undefined;

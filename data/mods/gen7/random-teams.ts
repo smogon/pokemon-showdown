@@ -972,7 +972,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// Holistic judgement
 				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
-			const tier = toID(species.tier).replace('bl', '');
+			const tier = toID(species.tiers[0]).replace('bl', '');
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
 			if (customScale[forme]) level = customScale[forme];
 
@@ -1217,8 +1217,8 @@ export class RandomGen7Teams extends RandomTeams {
 
 			// Lessen the need of deleting sets of Pokemon after tier shifts
 			if (
-				chosenTier in tierValues && species.tier in tierValues &&
-				tierValues[species.tier] > tierValues[chosenTier]
+				chosenTier in tierValues && species.tiers[0] in tierValues &&
+				tierValues[species.tiers[0]] > tierValues[chosenTier]
 			) continue;
 
 			const speciesFlags = this.randomFactorySets[chosenTier][species.id].flags;
