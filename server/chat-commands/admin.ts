@@ -212,7 +212,7 @@ export const commands: ChatCommands = {
 
 	sendhtmlpage(target, room, user, connection) {
 		if (!this.can('addhtml', null, room)) return false;
-		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2) as [string, string, string | null];
+		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
 		const targetUser = Users.get(targetID);
 		if (!targetUser) return this.errorReply(`User not found.`);
