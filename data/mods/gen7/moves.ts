@@ -871,9 +871,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 
 			action.priority = -7.1;
 			this.queue.cancelMove(target);
-			for (let i = this.queue.length - 1; i >= 0; i--) {
-				if (this.queue[i].choice === 'residual') {
-					this.queue.splice(i, 0, action);
+			for (let i = this.queue.list.length - 1; i >= 0; i--) {
+				if (this.queue.list[i].choice === 'residual') {
+					this.queue.list.splice(i, 0, action);
 					break;
 				}
 			}

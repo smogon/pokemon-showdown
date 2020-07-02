@@ -14478,7 +14478,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 						for (const [actionIndex, action] of this.queue.entries()) {
 							if (action.pokemon === source && action.choice === 'megaEvo') {
 								this.runMegaEvo(source);
-								this.queue.splice(actionIndex, 1);
+								this.queue.list.splice(actionIndex, 1);
 								break;
 							}
 						}
