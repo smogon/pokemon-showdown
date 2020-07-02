@@ -6,33 +6,14 @@
 */
 
 
-import * as https from 'https';
-import * as querystring from 'querystring';
-
+import {Net} from '../../lib/net';
+import {Utils} from '../../lib/utils';
 
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
 async function getFandom(site: string, pathName: string, search: AnyObject) {
-	const reqOpts = {
-		hostname: `${site}.fandom.com`,
-		method: 'GET',
-		path: `${pathName}?${querystring.stringify(search)}`,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
-
-	const body: any = await new Promise((resolve, reject) => {
-		https.request(reqOpts, res => {
-			if (!res.statusCode || !(res.statusCode >= 200 && res.statusCode < 300)) return reject(new Error(`Not found.`));
-			const data: string[] = [];
-			res.setEncoding('utf8');
-			res.on('data', chunk => data.push(chunk));
-			res.on('end', () => resolve(data.join('')));
-		}).on('error', reject).setTimeout(5000).end();
-	});
-
+	const body = await Net(`https://${site}.fandom.com/${pathName}`).get({query: search});
 	const json = JSON.parse(body);
 	if (!json) throw new Error(`Malformed data`);
 	if (json.exception) throw new Error(Dex.getString(json.exception.message) || `Not found`);
@@ -75,12 +56,12 @@ export const commands: ChatCommands = {
 			const entryUrl = Dex.getString(data.url);
 			const entryTitle = Dex.getString(data.title);
 			const id = Dex.getString(data.id);
-			let htmlReply = Chat.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
+			let htmlReply = Utils.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
 				getCardDetails(subdomain, id).then((card: {thumbnail: unknown}) => {
 					const thumb = Dex.getString(card.thumbnail);
 					if (thumb) {
-						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Chat.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
+						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Utils.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
 					}
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();

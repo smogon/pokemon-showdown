@@ -143,7 +143,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(this.dex.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectData.stage);
 		},
 	},
 	confusion: {
@@ -212,28 +212,26 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		},
 		onStart(pokemon, source) {
 			this.add('-activate', pokemon, 'move: ' + this.effectData.sourceEffect, '[of] ' + source);
+			this.effectData.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 		},
 		onResidualOrder: 11,
 		onResidual(pokemon) {
 			const source = this.effectData.source;
-			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-				// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
-				if (['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id)) return;
+			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id);
+			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
 				delete pokemon.volatiles['partiallytrapped'];
 				this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
 			}
-			if (source.hasItem('bindingband')) {
-				this.damage(pokemon.baseMaxhp / 6);
-			} else {
-				this.damage(pokemon.baseMaxhp / 8);
-			}
+			this.damage(pokemon.baseMaxhp / this.effectData.boundDivisor);
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 		onTrapPokemon(pokemon) {
-			if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id);
+			if (this.effectData.source?.isActive || gmaxEffect) pokemon.tryTrap();
 		},
 	},
 	lockedmove: {
@@ -646,6 +644,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		name: 'DeltaStream',
 		effectType: 'Weather',
 		duration: 0,
+		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');
@@ -671,7 +670,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		duration: 3,
 		onStart(pokemon) {
 			pokemon.removeVolatile('substitute');
-			if (pokemon.illusion) this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			if (pokemon.volatiles['torment']) {
 				delete pokemon.volatiles['torment'];
 				this.add('-end', pokemon, 'Torment', '[silent]');
@@ -684,10 +682,10 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = 2;
+			const ratio = this.format.id === 'gen8doublesou' ? 1.5 : 2;
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
-			pokemon.hp = Math.ceil(pokemon.hp * ratio);
+			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onTryAddVolatile(status, pokemon) {

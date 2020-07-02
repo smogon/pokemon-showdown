@@ -141,6 +141,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	darmanitanz: "Darmanitan-Zen",
 	darmanitanzenmode: "Darmanitan-Zen",
 	darmanitanzengalar: "Darmanitan-Galar-Zen",
+	darmgz: "Darmanitan-Galar-Zen",
 	deoxysnormal: "Deoxys",
 	deon: "Deoxys",
 	deoxysa: "Deoxys-Attack",
@@ -241,6 +242,8 @@ export const BattleAliases: {[alias: string]: string} = {
 	rime: "Mr. Rime",
 	zacianc: "Zacian-Crowned",
 	zamazentac: "Zamazenta-Crowned",
+	urshifurs: "Urshifu-Rapid-Style",
+	urshifurapid: "Urshifu-Rapid-Style",
 
 	// base formes
 	nidoranfemale: "Nidoran-F",

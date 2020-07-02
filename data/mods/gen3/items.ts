@@ -186,7 +186,8 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	metalcoat: {
 		inherit: true,
-		desc: "Holder's Steel-type attacks have 1.1x power.",
+		desc: "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+		shortDesc: "Holder's Steel-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return basePower * 1.1;
@@ -253,7 +254,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		onFractionalPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
-				return Math.round(priority) + 0.1;
+				return 0.1;
 			}
 		},
 	},

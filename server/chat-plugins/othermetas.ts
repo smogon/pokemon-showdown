@@ -1,5 +1,7 @@
 // Other Metas plugin by Spandan
 
+import {Utils} from '../../lib/utils';
+
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};
 	weighthg: number;
@@ -49,7 +51,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (!target || target === 'all') {
-			buffer += `- <a href="https://www.smogon.com/forums/forums/394/">Other Metagames Forum</a><br />`;
+			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
@@ -71,7 +73,7 @@ export const commands: ChatCommands = {
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ # & ~`,
+		`!om - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!mixandmega': true,
@@ -136,7 +138,7 @@ export const commands: ChatCommands = {
 		}
 		let statName: StatName;
 		for (statName in species.baseStats) { // Add the changed stats and weight
-			mixedSpecies.baseStats[statName] = Dex.clampIntRange(
+			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
 		}
@@ -354,7 +356,7 @@ export const commands: ChatCommands = {
 		const boost = boosts[tier as TierShiftTiers];
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
-			species.baseStats[statName] = Dex.clampIntRange(species.baseStats[statName] + boost, 1, 255);
+			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -399,7 +401,7 @@ export const commands: ChatCommands = {
 		const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
 		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
 		for (const stat of stats) {
-			species.baseStats[stat] = Dex.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
+			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -495,7 +497,8 @@ export const commands: ChatCommands = {
 		mixedSpecies.baseStats = Dex.deepClone(mixedSpecies.baseStats);
 		let statName: StatName;
 		for (statName in species.baseStats) {
-			mixedSpecies.baseStats[statName] += crossSpecies.baseStats[statName] - prevo.baseStats[statName];
+			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
+			mixedSpecies.baseStats[statName] = Utils.clampIntRange(mixedSpecies.baseStats[statName] + statChange, 1, 255);
 		}
 		mixedSpecies.types = [species.types[0]];
 		if (species.types[1]) mixedSpecies.types.push(species.types[1]);
@@ -507,12 +510,6 @@ export const commands: ChatCommands = {
 		mixedSpecies.weighthg += crossSpecies.weighthg - prevo.weighthg;
 		if (mixedSpecies.weighthg < 1) {
 			mixedSpecies.weighthg = 1;
-		}
-		for (const stat in mixedSpecies.baseStats) {
-			if (mixedSpecies.baseStats[stat] < 1 || mixedSpecies.baseStats[stat] > 255) {
-				this.errorReply(`Warning: This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
-				break;
-			}
 		}
 		mixedSpecies.tier = "CE";
 		let weighthit = 20;

@@ -72,10 +72,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	bonemerang: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	bouncybubble: {
 		inherit: true,
 		basePower: 90,
@@ -132,14 +128,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	continentalcrush: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	conversion: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	conversion2: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -226,10 +214,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	dragonhammer: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	dragonrage: {
 		inherit: true,
 		isNonstandard: null,
@@ -308,23 +292,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	fierydance: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	flameburst: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	flash: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	fleurcannon: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	floralhealing: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -425,9 +397,19 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	headcharge: {
+	healbell: {
 		inherit: true,
-		isNonstandard: null,
+		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured.",
+		onHit(pokemon, source) {
+			this.add('-activate', source, 'move: Heal Bell');
+			const side = pokemon.side;
+			let success = false;
+			for (const ally of side.pokemon) {
+				if (ally.hasAbility('soundproof')) continue;
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
 	},
 	healblock: {
 		inherit: true,
@@ -547,6 +529,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Raises the user's Attack by 1 stage.",
 		shortDesc: "Raises the user's Attack by 1.",
+		flags: {snatch: 1},
 		boosts: {
 			atk: 1,
 		},
@@ -609,10 +592,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	karatechop: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	kinesis: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -730,10 +709,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		noMetronome: [
 			"After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V-create", "Wide Guard",
 		],
-	},
-	milkdrink: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	mindblown: {
 		inherit: true,
@@ -896,9 +871,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 
 			action.priority = -7.1;
 			this.queue.cancelMove(target);
-			for (let i = this.queue.length - 1; i >= 0; i--) {
-				if (this.queue[i].choice === 'residual') {
-					this.queue.splice(i, 0, action);
+			for (let i = this.queue.list.length - 1; i >= 0; i--) {
+				if (this.queue.list[i].choice === 'residual') {
+					this.queue.list.splice(i, 0, action);
 					break;
 				}
 			}
@@ -990,10 +965,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	shadowbone: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	shadowforce: {
 		inherit: true,
 		isNonstandard: null,
@@ -1003,10 +974,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	shatteredpsyche: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	shoreup: {
 		inherit: true,
 		isNonstandard: null,
 	},

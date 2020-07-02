@@ -36,8 +36,10 @@ async function renderSpotlight(description: string, image?: string) {
 	let imgHTML = '';
 
 	if (image) {
-		const [width, height] = await Chat.fitImage(image, 150, 300);
-		imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+		try {
+			const [width, height] = await Chat.fitImage(image, 150, 300);
+			imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+		} catch (err) {}
 	}
 
 	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
@@ -50,18 +52,20 @@ export const destroy = () => {
 export const pages: PageTable = {
 	async spotlights(query, user, connection) {
 		this.title = 'Daily Spotlights';
-		this.extractRoom();
+		const room = this.extractRoom();
+		if (!room) return;
+
 		let buf = `<div class="pad ladder"><h2>Daily Spotlights</h2>`;
-		if (!spotlights[this.room.roomid]) {
+		if (!spotlights[room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
-			for (const key in spotlights[this.room.roomid]) {
+			for (const key in spotlights[room.roomid]) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				for (const [i, spotlight] of spotlights[this.room.roomid][key].entries()) {
+				for (const [i, spotlight] of spotlights[room.roomid][key].entries()) {
 					const html = await renderSpotlight(spotlight.description, spotlight.image);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					// @ts-ignore room is definitely a proper room here.
-					if (!user.can('announce', null, this.room)) break;
+					if (!user.can('announce', null, room)) break;
 				}
 				buf += '</table>';
 			}
@@ -72,7 +76,7 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	removedaily(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
@@ -102,7 +106,7 @@ export const commands: ChatCommands = {
 	},
 	queuedaily: 'setdaily',
 	async setdaily(target, room, user, connection, cmd) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, ...rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
@@ -115,8 +119,11 @@ export const commands: ChatCommands = {
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {
 			[img, ...rest] = rest;
 			img = img.trim();
-			const ret = await Chat.getImageDimensions(img);
-			if (ret.err) return this.errorReply(`Invalid image url: ${img}`);
+			try {
+				await Chat.getImageDimensions(img);
+			} catch (e) {
+				return this.errorReply(`Invalid image url: ${img}`);
+			}
 		}
 		const desc = rest.join(',');
 		if (Chat.stripFormatting(desc).length > 500) {
@@ -140,7 +147,7 @@ export const commands: ChatCommands = {
 		saveSpotlights();
 	},
 	async daily(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const key = toID(target);
 		if (!key) return this.parse('/help daily');
 
@@ -157,17 +164,17 @@ export const commands: ChatCommands = {
 		room.update();
 	},
 	viewspotlights(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-spotlights-${room.roomid}`);
 	},
 
 	dailyhelp: [
 		`Daily spotlights plugin:`,
 		`- /daily [name] - Shows the daily spotlight.`,
-		`- !daily [name] - Shows the daily spotlight to everyone. Requires: + % @ # & ~`,
-		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ # & ~`,
-		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # & ~`,
-		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # & ~`,
+		`- !daily [name] - Shows the daily spotlight to everyone. Requires: + % @ # &`,
+		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ # &`,
+		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # &`,
+		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # &`,
 		`- /viewspotlights - Shows all current spotlights in the room. For staff, also shows queued spotlights.`,
 	],
 };

@@ -283,8 +283,14 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			const originalHp = pokemon.hp;
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+			if (pokemon && pokemon !== target && move && move.category !== 'Status') {
+				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
+					this.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
 		}
 
 		return true;
@@ -462,7 +468,7 @@ export const BattleScripts: BattleScriptsData = {
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
 						boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
-						boost = this.dex.clampIntRange(boosts['accuracy'], -6, 6);
+						boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
 						} else {
@@ -471,7 +477,7 @@ export const BattleScripts: BattleScriptsData = {
 					}
 					if (!move.ignoreEvasion) {
 						boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
-						boost = this.dex.clampIntRange(boosts['evasion'], -6, 6);
+						boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
 						} else if (boost < 0) {
@@ -507,7 +513,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.breaksProtect) {
 			for (const target of targets) {
 				let broke = false;
-				for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
+				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
 				if (this.gen >= 6 || target.side !== pokemon.side) {
@@ -516,8 +522,8 @@ export const BattleScripts: BattleScriptsData = {
 					}
 				}
 				if (broke) {
-					if (move.id === 'feint') {
-						this.add('-activate', target, 'move: Feint');
+					if (['feint', 'gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
+						this.add('-activate', target, 'move: ' + move.name);
 					} else {
 						this.add('-activate', target, 'move: ' + move.name, '[broken]');
 					}
@@ -649,7 +655,7 @@ export const BattleScripts: BattleScriptsData = {
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
 						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
-						const boost = this.dex.clampIntRange(boosts['accuracy'], -6, 6);
+						const boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
 						} else {
@@ -658,7 +664,7 @@ export const BattleScripts: BattleScriptsData = {
 					}
 					if (!move.ignoreEvasion) {
 						const boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
-						const boost = this.dex.clampIntRange(boosts['evasion'], -6, 6);
+						const boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
 						} else if (boost < 0) {
@@ -714,7 +720,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.struggleRecoil) {
 			let recoilDamage;
 			if (this.dex.gen >= 5) {
-				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
+				recoilDamage = this.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
 			} else {
 				recoilDamage = this.trunc(pokemon.maxhp / 4);
 			}
@@ -922,7 +928,7 @@ export const BattleScripts: BattleScriptsData = {
 				}
 				if (moveData.heal && !target.fainted) {
 					if (target.hp >= target.maxhp) {
-						this.add('-fail', pokemon, 'heal');
+						this.add('-fail', target, 'heal');
 						this.attrLastMove('[still]');
 						damage[i] = this.combineResults(damage[i], false);
 						didAnything = this.combineResults(didAnything, null);
@@ -1082,7 +1088,7 @@ export const BattleScripts: BattleScriptsData = {
 
 	calcRecoilDamage(damageDealt, move) {
 		// @ts-ignore
-		return this.dex.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 
 	zMoveTable: {
@@ -1259,9 +1265,12 @@ export const BattleScripts: BattleScriptsData = {
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
 			maxMove.basePower = move.maxMove.basePower;
+			if (['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) maxMove.basePower = 160;
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;
+		// copy the priority for Psychic Terrain, Quick Guard
+		maxMove.priority = move.priority;
 		maxMove.isZOrMaxPowered = true;
 		return maxMove;
 	},

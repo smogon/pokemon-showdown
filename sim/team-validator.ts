@@ -1132,8 +1132,8 @@ export class TeamValidator {
 		const species = dex.getSpecies(set.species);
 
 		if (species.name === 'Necrozma-Ultra') {
-			const whichMoves = (set.moves.includes('Sunsteel Strike') ? 1 : 0) +
-				(set.moves.includes('Moongeist Beam') ? 2 : 0);
+			const whichMoves = (set.moves.includes('sunsteelstrike') ? 1 : 0) +
+				(set.moves.includes('moongeistbeam') ? 2 : 0);
 			if (item.name !== 'Ultranecrozium Z') {
 				// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
 				problems.push(`Necrozma-Ultra must start the battle holding Ultranecrozium Z.`);
@@ -1178,12 +1178,26 @@ export class TeamValidator {
 				if (dex.gen >= 8 && (species.baseSpecies === 'Arceus' || species.baseSpecies === 'Silvally')) {
 					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
 					if (set.ability === species.abilities[0]) {
-						problems.push(`${name} needs to hold ${species.requiredItems.join(' or ')}.`);
+						problems.push(
+							`${name} needs to hold ${species.requiredItems.join(' or ')}.`,
+							`(It will revert to its Normal forme if you remove the item or give it a different item.)`
+						);
 					}
 				} else {
 					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-					problems.push(`${name} needs to hold ${species.requiredItems.join(' or ')}.`);
+					const baseSpecies = Dex.getSpecies(species.changesFrom);
+					problems.push(
+						`${name} needs to hold ${species.requiredItems.join(' or ')} to be in its ${species.forme} forme.`,
+						`(It will revert to its ${baseSpecies.baseForme} forme if you remove the item or give it a different item.)`
+					);
 				}
+			}
+			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
+				const baseSpecies = Dex.getSpecies(species.changesFrom);
+				problems.push(
+					`${name} needs to know the move ${species.requiredMove} to be in its ${species.forme} forme.`,
+					`(It will revert to its ${baseSpecies.baseForme} forme if it forgets the move.)`
+				);
 			}
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
@@ -1464,6 +1478,7 @@ export class TeamValidator {
 		const dex = this.dex;
 		let name = set.species;
 		const species = dex.getSpecies(set.species);
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? 2 : dex.gen;
 		if (!eventSpecies) eventSpecies = species;
 		if (set.name && set.species !== set.name && species.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
@@ -1473,11 +1488,11 @@ export class TeamValidator {
 
 		const problems = [];
 
-		if (this.minSourceGen > eventData.generation) {
+		if (dex.gen < 8 && this.minSourceGen > eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format requires Pokemon from gen ${this.minSourceGen} or later and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
-		if (dex.gen < eventData.generation) {
+		if (maxSourceGen < eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
@@ -1846,13 +1861,11 @@ export class TeamValidator {
 					}
 
 					// Gen 8 egg moves can be taught to any pokemon from any source
-					if (learned === '8E') learned = '8T';
-
-					if ('LMTR'.includes(learned.charAt(1))) {
+					if (learned === '8E' || 'LMTR'.includes(learned.charAt(1))) {
 						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
-							if (babyOnly) setSources.babyOnly = babyOnly;
+							if (learned !== '8E' && babyOnly) setSources.babyOnly = babyOnly;
 							if (!moveSources.moveEvoCarryCount) return null;
 						}
 						// past-gen level-up, TM, or tutor moves:
@@ -1981,9 +1994,11 @@ export class TeamValidator {
 			species = this.dex.getSpecies(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
-		} else if (species.changesFrom) {
+		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
+		} else if (species.baseSpecies === 'Pumpkaboo' && species.forme) {
+			return this.dex.getSpecies('Pumpkaboo');
 		}
 		return null;
 	}

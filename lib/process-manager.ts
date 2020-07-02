@@ -23,43 +23,46 @@ export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
 class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
-	process: ChildProcess;
+	process: StreamProcessWrapper;
 	taskId: number;
-	constructor(process: ChildProcess, taskId: number) {
+	constructor(process: StreamProcessWrapper, taskId: number) {
 		super();
 		this.process = process;
 		this.taskId = taskId;
-		this.process.send(`${taskId}\nNEW`);
+		this.process.process.send(`${taskId}\nNEW`);
 	}
 	_write(message: string) {
-		if (!this.process.connected) {
+		if (!this.process.process.connected) {
 			this.pushError(new Error(`Process disconnected (possibly crashed?)`));
-			this.push(null);
 			return;
 		}
-		this.process.send(`${this.taskId}\nWRITE\n${message}`);
+		this.process.process.send(`${this.taskId}\nWRITE\n${message}`);
 		// responses are handled in ProcessWrapper
 	}
+	_writeEnd() {
+		this.process.process.send(`${this.taskId}\nWRITEEND`);
+	}
 	_destroy() {
-		if (!this.process.connected) return;
-		this.process.send(`${this.taskId}\nDESTROY`);
+		if (!this.process.process.connected) return;
+		this.process.process.send(`${this.taskId}\nDESTROY`);
+		this.process.deleteStream(this.taskId);
+		this.process = null!;
 	}
 }
 
 class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
-	process: ChildProcess & {process: undefined} | Worker;
-	constructor(process: ChildProcess | Worker) {
+	process: RawProcessWrapper;
+	constructor(process: RawProcessWrapper) {
 		super();
-		this.process = process as any;
+		this.process = process;
 	}
 	_write(message: string) {
-		const isConnected = (this.process.process ? this.process.process : this.process).connected;
-		if (!isConnected) {
+		if (!this.process.getProcess().connected) {
 			// no error because the crash handler should already have shown an error, and
 			// sometimes harmless messages are sent during cleanup
 			return;
 		}
-		this.process.send(message);
+		this.process.process.send(message);
 		// responses are handled in ProcessWrapper
 	}
 }
@@ -192,7 +195,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 
 			const taskId = parseInt(message.slice(0, nlLoc));
 			const stream = this.activeStreams.get(taskId);
-			if (!stream) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
+			if (!stream) return; // stream already destroyed
 
 			message = message.slice(nlLoc + 1);
 			nlLoc = message.indexOf('\n');
@@ -201,7 +204,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
-				void stream.end();
+				stream.pushEnd();
 				this.deleteStream(taskId);
 				return;
 			} else if (messageType === 'PUSH') {
@@ -209,7 +212,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			} else if (messageType === 'THROW') {
 				const error = new Error();
 				error.stack = message;
-				stream.pushError(error);
+				stream.pushError(error, true);
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}
@@ -233,7 +236,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	createStream(): SubprocessStream {
 		this.taskId++;
 		const taskId = this.taskId;
-		const stream = new SubprocessStream(this.process, taskId);
+		const stream = new SubprocessStream(this, taskId);
 		this.activeStreams.set(taskId, stream);
 		return stream;
 	}
@@ -314,7 +317,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			this.stream.push(message);
 		});
 
-		this.stream = new RawSubprocessStream(this.process);
+		this.stream = new RawSubprocessStream(this);
 	}
 
 	getProcess() {
@@ -430,9 +433,9 @@ export abstract class ProcessManager {
 		this.releasingProcesses = this.releasingProcesses.concat(processes);
 		return Promise.all(released);
 	}
-	spawn(count = 1) {
+	spawn(count = 1, force?: boolean) {
 		if (!this.isParentProcess) return;
-		if (disabled) return;
+		if (disabled && !force) return;
 		while (this.processes.length < count) {
 			const process = this.createProcess();
 			process.process.on('disconnect', () => this.releaseCrashed(process));
@@ -529,6 +532,10 @@ export class StreamProcessManager extends ProcessManager {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
 			}
 		}
+		if (!this.activeStreams.has(taskId)) {
+			// stream.destroy() was called, don't send an END message
+			return;
+		}
 		process.send!(`${taskId}\nEND`);
 		this.activeStreams.delete(taskId);
 	}
@@ -565,6 +572,9 @@ export class StreamProcessManager extends ProcessManager {
 			} else if (messageType === 'WRITE') {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
 				void stream.write(message);
+			} else if (messageType === 'WRITEEND') {
+				if (!stream) throw new Error(`WRITEEND: Invalid taskId ${taskId}`);
+				void stream.writeEnd();
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}

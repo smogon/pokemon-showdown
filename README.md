@@ -84,19 +84,19 @@ If you truly want to host the client yourself, there is [a repository for the Po
 Setting up an Administrator account
 ------------------------------------------------------------------------
 
-Once your server is up, you probably want to make yourself an Administrator (~) on it.
+Once your server is up, you probably want to make yourself an Administrator (&) on it.
 
 ### config/usergroups.csv
 
 To become an Administrator, create a file named `config/usergroups.csv` containing
 
-    USER,~
+    USER,&
 
-Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the tilde.
+Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
 
 This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 
-Once you're an administrator, you can promote/demote others easily with the `/globaladmin`, `/globalleader`, `/globalmod`, etc commands.
+Once you're an administrator, you can promote/demote others easily with the `/globaladmin`, `/globalmod`, `/globaldriver`, etc commands.
 
 
 Browser support
@@ -167,9 +167,11 @@ Retired Staff
 
 Major Contributors
 
+- [Anubis, Lusamine] - Research (game mechanics), Sysadmin
 - Austin Couturier [Austin] - Development (damage calculator)
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
+- Kris Johnson [Kris] - Development
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Neil Rashbrook [urkerab] - Development
 - [peach] - Development
@@ -182,7 +184,6 @@ Major Contributors
 Contributors
 
 - Alexander B. [mathfreak231] - Development
-- [Anubis, Lusamine] - Research (game mechanics)
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
@@ -192,7 +193,6 @@ Contributors
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jacob McLemore [McLemore] - Development
 - Jeremy Piemonte [panpawn] - Development
-- Kris Johnson [Kris] - Development
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
 - Spandan Punwatkar [spandan]- Development

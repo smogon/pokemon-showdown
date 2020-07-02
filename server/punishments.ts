@@ -12,6 +12,7 @@
  */
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -535,7 +536,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.settings.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(user);
 			}
 		}
@@ -595,7 +596,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.settings.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(userid);
 			}
 		}
@@ -1091,7 +1092,7 @@ export const Punishments = new class {
 				if (!punishment) {
 					const appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
 					// Prioritize popups for other global punishments
-					user.send(`|popup||html|You are banned from battling${battleban[1] !== userid ? ` because you have the same IP as banned user: ${battleban[1]}` : ''}. Your battle ban will expire in a few days.${battleban[3] ? Chat.html `\n\nReason: ${battleban[3]}` : ``}${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`);
+					user.send(`|popup||html|You are banned from battling${battleban[1] !== userid ? ` because you have the same IP as banned user: ${battleban[1]}` : ''}. Your battle ban will expire in a few days.${battleban[3] ? Utils.html `\n\nReason: ${battleban[3]}` : ``}${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`);
 					user.punishmentNotified = true;
 					return;
 				}
@@ -1101,7 +1102,7 @@ export const Punishments = new class {
 
 		const id = punishment[0];
 		const punishUserid = punishment[1];
-		const reason = punishment[3] ? Chat.html`\n\nReason: ${punishment[3]}` : '';
+		const reason = punishment[3] ? Utils.html`\n\nReason: ${punishment[3]}` : '';
 		let appeal = ``;
 		if (user.permalocked && Config.appealurl) {
 			appeal += `\n\nPermanent punishments can be appealed: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
@@ -1325,8 +1326,8 @@ export const Punishments = new class {
 
 		for (const curRoom of Rooms.global.chatRooms) {
 			if (
-				!curRoom || curRoom.isPrivate === true ||
-				(options.publicOnly && (curRoom.isPersonal || curRoom.battle))
+				!curRoom || curRoom.settings.isPrivate === true ||
+				(options.publicOnly && (curRoom.settings.isPersonal || curRoom.battle))
 			) continue;
 			let punishment = Punishments.roomUserids.nestedGet(curRoom.roomid, userid);
 			if (punishment) {
@@ -1478,7 +1479,7 @@ export const Punishments = new class {
 				if (typeof user !== 'string') {
 					(user as User).popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
-						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
+						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
 						`Your lock will expire in a few days.`
 					);
 				}

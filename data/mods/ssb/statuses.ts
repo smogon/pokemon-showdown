@@ -125,13 +125,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	andrew: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Andrew|Hah! You better have BURN HEAL!`);
+			this.add(`c|@Andrew|Hah! You better have BURN HEAL!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Andrew|brb kuncing`);
+			this.add(`c|@Andrew|brb kuncing`);
 		},
 		onFaint() {
-			this.add(`c|%Andrew|<_<`);
+			this.add(`c|@Andrew|<_<`);
 		},
 	},
 	anubis: {
@@ -139,7 +139,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart() {
 			this.add(`c|+Anubis|hi ur qt`);
 			// In loving memory of the SSB programming team's sanity.
-			if (this.random(300) === 272) this.add(`c|~HoeenHero|Anubis's set is OP against programmer sanity.`);
+			if (this.random(300) === 272) this.add(`c|&HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
 			this.add(`c|+Anubis|brb making coffee`);
@@ -221,13 +221,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	asheviere: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Asheviere|Blessings to you.`);
+			this.add(`c|+Asheviere|Blessings to you.`);
 		},
 		onSwitchOut() {
-			this.add(`c|~Asheviere|Don't trade me for someone else :(`);
+			this.add(`c|+Asheviere|Don't trade me for someone else :(`);
 		},
 		onFaint() {
-			this.add(`c|~Asheviere|Who will lead my kingdom now?`);
+			this.add(`c|+Asheviere|Who will lead my kingdom now?`);
 		},
 	},
 	averardo: {
@@ -342,18 +342,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
-	ckilgannon: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
-		},
-		onSwitchOut() {
-			this.add(`c|%c.kilgannon|/me growls`);
-		},
-		onFaint() {
-			this.add(`c|%c.kilgannon|Your time will come.`);
-		},
-	},
 	cantsay: {
 		noCopy: true,
 		onStart() {
@@ -416,6 +404,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
+		},
+	},
+	ckilgannon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%c.kilgannon|/me growls`);
+		},
+		onFaint() {
+			this.add(`c|%c.kilgannon|Your time will come.`);
 		},
 	},
 	darth: {
@@ -669,15 +669,15 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	gmars: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|@GMars|It's ya boy GEEEEEEEEMARS`);
+			this.add(`c|&GMars|It's ya boy GEEEEEEEEMARS`);
 			if (target.illusion || !target.m.miniorColor) return;
 			this.add('-formechange', target, `Minior${target.m.miniorColor}`);
 		},
 		onSwitchOut() {
-			this.add(`c|@GMars|I like 'em crisp`);
+			this.add(`c|&GMars|I like 'em crisp`);
 		},
 		onFaint() {
-			this.add(`c|@GMars|Don't forget to check out my bandcamp`);
+			this.add(`c|&GMars|Don't forget to check out my bandcamp`);
 		},
 	},
 	grimauxiliatrix: {
@@ -706,27 +706,27 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		noCopy: true,
 		onStart() {
 			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|~HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
+			this.add(`c|&HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
 		},
 		onSwitchOut() {
 			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|~HoeenHero|There's still no bug!`);
+			this.add(`c|&HoeenHero|There's still no bug!`);
 		},
 		onFaint() {
 			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|~HoeenHero|My PMs are flooded with bug reports :(`);
+			this.add(`c|&HoeenHero|My PMs are flooded with bug reports :(`);
 		},
 	},
 	hoeenhero: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~HoeenHero|My scripts will lead me to victory!`);
+			this.add(`c|&HoeenHero|My scripts will lead me to victory!`);
 		},
 		onSwitchOut() {
-			this.add(`c|~HoeenHero|I need to look something up, hold on...`);
+			this.add(`c|&HoeenHero|I need to look something up, hold on...`);
 		},
 		onFaint() {
-			this.add(`c|~HoeenHero|There must have been a bug in my script ;-;`);
+			this.add(`c|&HoeenHero|There must have been a bug in my script ;-;`);
 		},
 	},
 	hubriz: {
@@ -751,6 +751,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|+inactive|/me turns to stone and crumbles`);
+		},
+	},
+	instruct: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
+		},
+		onFaint() {
+			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
 		},
 	},
 	irritated: {
@@ -886,13 +898,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	kipkluif: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Kipkluif|I like bacon.`);
+			this.add(`c|%Kipkluif|I like bacon.`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Kipkluif|Run away da, run run away da`);
+			this.add(`c|%Kipkluif|Run away da, run run away da`);
 		},
 		onFaint() {
-			this.add(`c|+Kipkluif|Aah! Well, at least I have chicken.`);
+			this.add(`c|%Kipkluif|Aah! Well, at least I have chicken.`);
 		},
 		// Footballer innate
 		onBasePowerPriority: 8,
@@ -1183,13 +1195,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	pluviometer: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
+			this.add(`c|+pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
 		},
 		onSwitchOut() {
-			this.add(`c|@pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
+			this.add(`c|+pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
 		},
 		onFaint() {
-			this.add(`c|@pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
+			this.add(`c|+pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
 		},
 	},
 	pohjis: {
@@ -1207,7 +1219,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	pre: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|~pre|let's go, in and out, 20 minute adventure`);
+			this.add(`c|&pre|let's go, in and out, 20 minute adventure`);
 			// Easter Egg
 			const activeMon = toID(
 				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
@@ -1216,38 +1228,38 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 				this.add(`c|+Anubis|ohey it's pre`);
 				this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
 				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
-				this.add(`c|~pre|<3`);
+				this.add(`c|&pre|<3`);
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|~pre|sometimes science is more art than science`);
+			this.add(`c|&pre|sometimes science is more art than science`);
 		},
 		onFaint() {
-			this.add(`c|~pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
-		},
-	},
-	ptoad: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+ptoad⚬|Make it rain!`);
-		},
-		onSwitchOut() {
-			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
-		},
-		onFaint() {
-			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
+			this.add(`c|&pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
 		},
 	},
 	psynergy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Psynergy|oh`);
+			this.add(`c|%Psynergy|oh`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Psynergy|Joe doesn't pay me enough for this`);
+			this.add(`c|%Psynergy|Joe doesn't pay me enough for this`);
 		},
 		onFaint() {
-			this.add(`c|+Psynergy|I'm going to be late...`);
+			this.add(`c|%Psynergy|I'm going to be late...`);
+		},
+	},
+	ptoad: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%ptoad⚬|Make it rain!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+		},
+		onFaint() {
+			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	quitequiet: {
@@ -1333,18 +1345,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
-		},
-	},
-	instruct: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
-		},
-		onFaint() {
-			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
 		},
 	},
 	schiavetto: {
@@ -1518,13 +1518,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	theimmortal: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~The Immortal|h-hi`);
+			this.add(`c|&The Immortal|h-hi`);
 		},
 		onSwitchOut() {
-			this.add(`c|~The Immortal|ok`);
+			this.add(`c|&The Immortal|ok`);
 		},
 		onFaint() {
-			this.add(`c|~The Immortal|zzz`);
+			this.add(`c|&The Immortal|zzz`);
 		},
 	},
 	theleprechaun: {
@@ -1615,13 +1615,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	xfix: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&xfix|destroy the world!`);
+			this.add(`c|+xfix|destroy the world!`);
 		},
 		onSwitchOut() {
-			this.add(`c|&xfix|brb i need to rethink my plan`);
+			this.add(`c|+xfix|brb i need to rethink my plan`);
 		},
 		onFaint() {
-			this.add(`c|&xfix|but the world refused`);
+			this.add(`c|+xfix|but the world refused`);
 		},
 	},
 	xjoelituh: {
@@ -1682,10 +1682,10 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	zarel: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Zarel|Your mom`);
+			this.add(`c|&Zarel|Your mom`);
 		},
 		onFaint() {
-			this.add(`c|~Zarel|Your mom`);
+			this.add(`c|&Zarel|Your mom`);
 			// message is shown after the "Zarel Fainted!" message
 			this.add('message', 'Zarel used your mom!');
 		},
@@ -2082,7 +2082,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add('-sidestart', side, 'move: Stealth Rock');
 		},
 		onSwitchIn(pokemon) {
-			const typeMod = this.dex.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+			const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 			this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 		},
 	},

@@ -12,20 +12,14 @@
     "types": ["node"],
     "exclude": [
         "./.*-dist/**/*",
-        "./server/index.js",
-        "./server/chat-commands.js"
     ],
     "include": [
-        "./config/formats.js",
+        "./config/*.ts",
         "./data/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
         "./lib/*",
-        "./server/*",
-        "./server/tournaments/*",
-        "./server/chat-commands/*.ts",
-        "./server/chat-plugins/*.ts",
-        "./server/chat-plugins/thing-of-the-day.js",
+        "./server/**/*.ts",
         "./sim/**/*",
         "./tools/set-import/*.ts"
     ]

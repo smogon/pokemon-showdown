@@ -102,7 +102,7 @@ export class Runner {
 		while ((chunk = await streams.omniscient.read())) {
 			if (this.output) console.log(chunk);
 		}
-		return streams.omniscient.end();
+		return streams.omniscient.writeEnd();
 	}
 
 	// Same as PRNG#generatedSeed, only deterministic.
@@ -175,11 +175,11 @@ class DualStream {
 		this.compare();
 	}
 
-	end() {
-		// We need to compare first because _end() destroys the battle object.
+	writeEnd() {
+		// We need to compare first because _writeEnd() destroys the battle object.
 		this.compare(true);
-		this.control._end();
-		this.test._end();
+		this.control._writeEnd();
+		this.test._writeEnd();
 	}
 
 	compare(end?: boolean) {

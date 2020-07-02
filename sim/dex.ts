@@ -46,12 +46,13 @@ import * as path from 'path';
 
 import * as Data from './dex-data';
 import {PRNG, PRNGSeed} from './prng';
+import {Utils} from '../lib/utils';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
 const DATA_DIR = path.resolve(__dirname, '../.data-dist');
 const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
-const FORMATS = path.resolve(__dirname, '../config/formats');
+const FORMATS = path.resolve(__dirname, '../.config-dist/formats');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
@@ -449,6 +450,7 @@ export class ModdedDex {
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
+			species.nfe = species.evos.length && this.getSpecies(species.evos[0]).gen <= this.gen;
 		} else {
 			species = new Data.Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
@@ -1015,8 +1017,8 @@ export class ModdedDex {
 					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
-					// custom tags
-					'mega',
+					// custom tags -- nduubl is used for national dex teambuilder formatting
+					'mega', 'nduubl',
 					// illegal/nonstandard reasons
 					'past', 'future', 'unobtainable', 'lgpe', 'custom',
 					// all
@@ -1050,71 +1052,6 @@ export class ModdedDex {
 			throw new Error(`Nothing matches "${rule}"`);
 		}
 		return matches[0];
-	}
-
-	shuffle<T>(arr: T[]): T[] {
-		// In-place shuffle by Fisher-Yates algorithm
-		for (let i = arr.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[arr[i], arr[j]] = [arr[j], arr[i]];
-		}
-		return arr;
-	}
-
-	levenshtein(s: string, t: string, l: number): number {
-		// Original levenshtein distance function by James Westgate, turned out to be the fastest
-		const d: number[][] = [];
-
-		// Step 1
-		const n = s.length;
-		const m = t.length;
-
-		if (n === 0) return m;
-		if (m === 0) return n;
-		if (l && Math.abs(m - n) > l) return Math.abs(m - n);
-
-		// Create an array of arrays in javascript (a descending loop is quicker)
-		for (let i = n; i >= 0; i--) d[i] = [];
-
-		// Step 2
-		for (let i = n; i >= 0; i--) d[i][0] = i;
-		for (let j = m; j >= 0; j--) d[0][j] = j;
-
-		// Step 3
-		for (let i = 1; i <= n; i++) {
-			const si = s.charAt(i - 1);
-
-			// Step 4
-			for (let j = 1; j <= m; j++) {
-				// Check the jagged ld total so far
-				if (i === j && d[i][j] > 4) return n;
-
-				const tj = t.charAt(j - 1);
-				const cost = (si === tj) ? 0 : 1; // Step 5
-
-				// Calculate the minimum
-				let mi = d[i - 1][j] + 1;
-				const b = d[i][j - 1] + 1;
-				const c = d[i - 1][j - 1] + cost;
-
-				if (b < mi) mi = b;
-				if (c < mi) mi = c;
-
-				d[i][j] = mi; // Step 6
-			}
-		}
-
-		// Step 7
-		return d[n][m];
-	}
-
-	/** Forces num to be an integer (between min and max). */
-	clampIntRange(num: any, min?: number, max?: number): number {
-		if (typeof num !== 'number') num = 0;
-		num = Math.floor(num);
-		if (min !== undefined && num < min) num = min;
-		if (max !== undefined && num > max) num = max;
-		return num;
 	}
 
 	/**
@@ -1177,7 +1114,7 @@ export class ModdedDex {
 			if (!searchObj) continue;
 
 			for (const j in searchObj) {
-				const ld = this.levenshtein(cmpTarget, j, maxLd);
+				const ld = Utils.levenshtein(cmpTarget, j, maxLd);
 				if (ld <= maxLd) {
 					const word = searchObj[j].name || searchObj[j].species || j;
 					const results = this.dataSearch(word, searchIn, word);
@@ -1556,7 +1493,7 @@ export class ModdedDex {
 			}
 		}
 		if (!Array.isArray(Formats)) {
-			throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
+			throw new TypeError(`Exported property 'Formats' from "./config/formats.ts" must be an array`);
 		}
 		let section = '';
 		let column = 1;

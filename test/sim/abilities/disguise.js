@@ -75,7 +75,7 @@ describe('Disguise', function () {
 		assert.hurtsBy(battle.p2.active[0], 1, () => battle.makeChoices());
 	});
 
-	it.skip('should not trigger critical hits while active', function () {
+	it('should not trigger critical hits while active', function () {
 		battle = common.createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk']},
 		], [

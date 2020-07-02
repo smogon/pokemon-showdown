@@ -9,6 +9,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		if (species.battleOnly && species.battleOnly === 'string') forme = species.battleOnly;
 
+		if (species.cosmeticFormes) {
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
+		}
+
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id].learnset!)).slice();
 		const rejectedPool: string[] = [];
 		const moves: string[] = [];
@@ -547,7 +551,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item = species.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (species.name === 'Farfetch\'d') {
+		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Stick';
 		} else if (species.name === 'Marowak') {
 			item = 'Thick Club';
@@ -637,7 +641,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Uber: 71,
 		};
 		const customScale: {[k: string]: number} = {
-			Delibird: 99, Ditto: 99, 'Farfetch\'d': 99, Unown: 99,
+			Delibird: 99, Ditto: 99, 'Farfetch\u2019d': 99, Unown: 99,
 		};
 		const tier = species.tier;
 		let level = levelScale[tier] || 75;
