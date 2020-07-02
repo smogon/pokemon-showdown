@@ -282,6 +282,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Instruct')}|I'm not ready to say goodbye to someone like you again...`);
 		},
 	},
+	jettxx: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Jett x_x')}|It's a good day for a hunt.`);
+		},
+		onSwitchOut(source) {
+			this.add(`c|${getName('Jett x_x')}|I'll be back for more.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Jett x_x')}|They got lucky.`);
+		},
+	},
 	jho: {
 		noCopy: true,
 		onStart() {

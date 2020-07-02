@@ -633,6 +633,76 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "???",
 	},
 
+	// Jett x_x
+	thehuntison: {
+		accuracy: 100,
+		basePower: 55,
+		basePowerCallback(pokemon, target, move) {
+			// You can't get here unless the pursuit effect succeeds
+			if (target.beingCalledBack) {
+				this.debug('Thehuntison damage boost');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		category: "Physical",
+		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Parting Shot, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over; if an opponent faints from this, the replacement Pokemon does not become active until the end of the turn. Raises the user's Attack by 2 stages if this move KOes the target.",
+		shortDesc: "Foe: 2x power when switching. +2 Atk if KO.",
+		name: "The Hunt is On!",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sucker Punch', target);
+			this.add('-anim', source, 'Pursuit', target);
+		},
+		beforeTurnCallback(pokemon) {
+			for (const side of this.sides) {
+				if (side === pokemon.side) continue;
+				side.addSideCondition('thehuntison', pokemon);
+				const data = side.getSideConditionData('thehuntison');
+				if (!data.sources) {
+					data.sources = [];
+				}
+				data.sources.push(pokemon);
+			}
+		},
+		onModifyMove(move, source, target) {
+			if (target?.beingCalledBack) move.accuracy = true;
+		},
+		onTryHit(target, pokemon) {
+			target.side.removeSideCondition('thehuntison');
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				this.boost({atk: 2}, pokemon, pokemon, move);
+				this.add(`c|${getName('Jett xx')}|Gotcha!`);
+			}
+		},
+		effect: {
+			duration: 1,
+			onBeforeSwitchOut(pokemon) {
+				this.debug('Thehuntison start');
+				let alreadyAdded = false;
+				pokemon.removeVolatile('destinybond');
+				for (const source of this.effectData.sources) {
+					if (!this.queue.cancelMove(source) || !source.hp) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon, 'move: The Hunt is On!');
+						alreadyAdded = true;
+					}
+					this.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
+
 	// Kaiju Bunny
 	cozycuddle: {
 		accuracy: 95,

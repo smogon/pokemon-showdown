@@ -144,6 +144,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Data Corruption',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	'Jett x_x': {
+		species: 'Sneasel', ability: 'Deceiver', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Knock Off', 'Icicle Crash', 'Counter'],
+		signatureMove: 'The Hunt is On!',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	Instruct: {
 		species: 'Cinderace', ability: 'Determination', item: 'Flame Plate', gender: 'N',
 		moves: ['Pyro Ball', 'Sacred Sword', 'Bolt Strike'],
