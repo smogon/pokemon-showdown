@@ -7,11 +7,11 @@ import {Utils} from '../../lib/utils';
 export class Announcement {
 	readonly activityId: 'announcement';
 	announcementNumber: number;
-	room: ChatRoom | GameRoom;
+	room: Room;
 	source: string;
 	timeout: NodeJS.Timer | null;
 	timeoutMins: number;
-	constructor(room: ChatRoom | GameRoom, source: string) {
+	constructor(room: Room, source: string) {
 		this.activityId = 'announcement';
 		this.announcementNumber = room.nextGameNumber();
 		this.room = room;

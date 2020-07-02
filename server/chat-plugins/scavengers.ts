@@ -202,7 +202,7 @@ if (LeaderboardRoom) {
 	LeaderboardRoom.scavLeaderboard.scavsPlayerLeaderboard = PlayerLeaderboard;
 }
 
-function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: ChatRoom | GameRoom, broadcasting?: boolean) {
+function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, broadcasting?: boolean) {
 	const showStaff = viewer.can('mute', null, room) && !broadcasting;
 	const queueDisabled = room.settings.scavSettings?.scavQueueDisabled;
 	const timerDuration = room.settings.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
@@ -353,7 +353,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(
-		room: ChatRoom | GameRoom,
+		room: Room,
 		staffHost: User | FakeUser,
 		hosts: FakeUser[],
 		gameType: GameTypes,
@@ -952,7 +952,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return ips.filter((ip, index) => ips.indexOf(ip) === index).length;
 	}
 
-	static parseHosts(hostArray: string[], room: ChatRoom | GameRoom, allowOffline?: boolean) {
+	static parseHosts(hostArray: string[], room: Room, allowOffline?: boolean) {
 		const hosts = [];
 		for (const u of hostArray) {
 			const id = toID(u);
@@ -2345,11 +2345,13 @@ const ScavengerCommands: ChatCommands = {
 export const pages: PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
+		const room = this.extractRoom();
+		if (!room) return;
+
 		let buf = "";
-		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.persist) return;
-		if (!this.can('mute', null, this.room)) return;
+		if (!room.persist) return;
+		if (!this.can('mute', null, room)) return;
 		buf += `<div class="pad"><h2>List of recycled Scavenger hunts</h2>`;
 		buf += `<ol style="width: 90%;">`;
 		for (const hunt of scavengersData.recycledHunts) {
