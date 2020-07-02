@@ -1287,11 +1287,10 @@ export class TeamValidator {
 		}
 
 		const tiers = tierSpecies.tiers;
-		if (tiers.includes('(PU)')) tiers[tiers.indexOf('(PU)')] = 'ZU';
-		if (tiers.includes('(NU)')) tiers[tiers.indexOf('(PU)')] = 'PU';
-		if (tiers.includes('(DUU)')) tiers[tiers.indexOf('(DUU)')] = 'DNU';
-
-		for (const tier of tiers) {
+		for (let tier of tiers) {
+			if (tier === '(PU)') tier = 'ZU';
+			if (tier === '(NU)') tier = 'PU';
+			if (tier === '(DUU)') tier = 'DNU';
 			const tierTag = `pokemontag:${toID(tier)}`;
 			setHas[tierTag] = true;
 			banReason = ruleTable.check(tierTag) || (tiers.includes('AG') ? ruleTable.check('pokemontag:uber') : null);

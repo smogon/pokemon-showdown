@@ -555,7 +555,7 @@ export const commands: ChatCommands = {
 				}
 				if (!tierDisplay) tierDisplay = 'tiers';
 				const displayedTier = tierDisplay === 'tiers' ? pokemon.tiers.join('<br />') :
-					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tiers[0];
+					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tiers.join('<br />');
 				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
