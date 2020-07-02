@@ -1142,7 +1142,7 @@ export const pages: PageTable = {
 		}
 		targetBot.sendTo(
 			room ? room.roomid : 'lobby',
-			`|pm|${user.name}|${targetBot.name}|requestpage|${user.name}|${pageid}`
+			`|pm|${user.name}|${targetBot.name}||requestpage|${user.name}|${pageid}`
 		);
 	},
 };
