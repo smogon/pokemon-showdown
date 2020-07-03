@@ -963,7 +963,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				newSpecies.isMega = true;
 			}
 			return newSpecies;
-		}
+		},
 	},
 	{
 		name: "[Gen 8] National Dex BH",
@@ -988,7 +988,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Comatose + Sleep Talk',
 		],
 		onValidateSet(set) {
-			if (toID(set.ability) === 'intrepidsword' && !toID(set.species).startsWith('zacian') && toID(set.item) !== 'rustedsword') {
+			if (toID(set.ability) === 'intrepidsword' &&
+				!toID(set.species).startsWith('zacian') && toID(set.item) !== 'rustedsword') {
 				return [`${set.ability} is banned.`];
 			}
 			if (set.species === 'Zacian-Crowned' && (toID(set.item) !== 'rustedsword' || toID(set.ability) !== 'intrepidsword')) {
