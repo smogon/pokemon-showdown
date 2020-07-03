@@ -627,6 +627,8 @@ export class CommandContext extends MessageContext {
 				return prefix + `/text ` + message.slice(2);
 			} else if (message.startsWith(`|html|`)) {
 				return prefix + `/raw ` + message.slice(6);
+			} else if (message.startsWith(`|modaction|`)) {
+				return prefix + `/log ` + message.slice(11);
 			} else if (message.startsWith(`|raw|`)) {
 				return prefix + `/raw ` + message.slice(5);
 			} else if (message.startsWith(`|error|`)) {
@@ -666,29 +668,34 @@ export class CommandContext extends MessageContext {
 		this.connection.popup(message);
 	}
 	add(data: string) {
-		if (!this.room) {
-			data = this.pmTransform(data);
-			this.user.send(data);
-			if (this.pmTarget !== this.user) this.pmTarget!.send(data);
-			return;
+		if (this.room) {
+			this.room.add(data);
+		} else {
+			this.send(data);
 		}
-		this.room.add(data);
 	}
 	send(data: string) {
-		if (!this.room) {
+		if (this.room) {
+			this.room.send(data);
+		} else {
 			data = this.pmTransform(data);
 			this.user.send(data);
-			if (this.pmTarget !== this.user) this.pmTarget!.send(data);
-			return;
+			if (this.pmTarget && this.pmTarget !== this.user) {
+				this.pmTarget.send(data);
+			}
 		}
-		this.room.send(data);
-	}
-	sendModCommand(data: string) {
-		this.room!.sendModsByUser(this.user, data);
 	}
 
 	privateModAction(msg: string) {
-		this.room!.sendMods(msg);
+		if (this.room) {
+			this.room.sendModsByUser(this.user, msg);
+		} else {
+			const data = this.pmTransform(`|modaction|${msg}`);
+			this.user.send(data);
+			if (this.pmTarget && this.pmTarget !== this.user && this.pmTarget.isStaff) {
+				this.pmTarget.send(data);
+			}
+		}
 		this.roomlog(msg);
 	}
 	globalModlog(action: string, user: string | User | null, note: string) {
@@ -740,7 +747,11 @@ export class CommandContext extends MessageContext {
 		if (this.room) this.room.roomlog(data);
 	}
 	addModAction(msg: string) {
-		this.room!.addByUser(this.user, msg);
+		if (this.room) {
+			this.room.addByUser(this.user, msg);
+		} else {
+			this.send(`|modaction|${msg}`);
+		}
 	}
 	update() {
 		if (this.room) this.room.update();
