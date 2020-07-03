@@ -312,6 +312,7 @@ export class CommandContext extends MessageContext {
 	cmdToken: string;
 	target: string;
 	fullCmd: string;
+	isQuiet: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	broadcastMessage: string;
@@ -340,6 +341,7 @@ export class CommandContext extends MessageContext {
 		this.cmdToken = options.cmdToken || '';
 		this.target = options.target || ``;
 		this.fullCmd = options.fullCmd || '';
+		this.isQuiet = false;
 
 		// broadcast context
 		this.broadcasting = false;
@@ -352,10 +354,11 @@ export class CommandContext extends MessageContext {
 		this.inputUsername = "";
 	}
 
-	parse(msg?: string): any {
+	parse(msg?: string, quiet?: boolean): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext(this);
+			if (quiet) subcontext.isQuiet = true;
 			subcontext.recursionDepth++;
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
@@ -642,6 +645,7 @@ export class CommandContext extends MessageContext {
 		}).join(`\n`);
 	}
 	sendReply(data: string) {
+		if (this.isQuiet) return;
 		if (this.broadcasting && this.broadcastToRoom) {
 			// broadcasting
 			this.add(data);
