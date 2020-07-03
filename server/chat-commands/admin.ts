@@ -1132,7 +1132,7 @@ export const pages: PageTable = {
 		let canSend = Users.globalAuth.get(targetBot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (targetBot.authAtLeast('*', curRoom)) {
+			if (curRoom.auth.get(targetBot) === '*') {
 				canSend = true;
 				room = curRoom;
 			}
