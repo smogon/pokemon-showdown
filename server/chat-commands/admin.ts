@@ -1129,7 +1129,7 @@ export const pages: PageTable = {
 		if (!targetBot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
 		}
-		let canSend = false;
+		let canSend = Users.globalAuth.get(targetBot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
 			if (targetBot.authAtLeast('*', curRoom)) {
