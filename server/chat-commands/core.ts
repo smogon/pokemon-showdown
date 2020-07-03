@@ -563,18 +563,18 @@ export const commands: ChatCommands = {
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
 		if (toID(target) === 'ac') target = 'autoconfirmed';
-		if (user.blockPMs === (target || true)) {
+		if (user.settings.blockPMs === (target || true)) {
 			return this.errorReply(this.tr("You are already blocking private messages! To unblock, use /unblockpms"));
 		}
 		if (target in Config.groups) {
-			user.blockPMs = target;
+			user.settings.blockPMs = target;
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
-			user.blockPMs = target;
+			user.settings.blockPMs = target;
 			target = this.tr(target);
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target} users.`);
 		} else {
-			user.blockPMs = true;
+			user.settings.blockPMs = true;
 			this.sendReply(this.tr("You are now blocking private messages, except from staff."));
 		}
 		user.update('blockPMs');
@@ -589,8 +589,10 @@ export const commands: ChatCommands = {
 	unignorepms: 'unblockpms',
 	unignorepm: 'unblockpms',
 	unblockpms(target, room, user) {
-		if (!user.blockPMs) return this.errorReply(this.tr("You are not blocking private messages! To block, use /blockpms"));
-		user.blockPMs = false;
+		if (!user.settings.blockPMs) {
+			return this.errorReply(this.tr("You are not blocking private messages! To block, use /blockpms"));
+		}
+		user.settings.blockPMs = false;
 		user.update('blockPMs');
 		return this.sendReply(this.tr("You are no longer blocking private messages."));
 	},
@@ -1219,8 +1221,8 @@ export const commands: ChatCommands = {
 	blockchall: 'blockchallenges',
 	blockchalls: 'blockchallenges',
 	blockchallenges(target, room, user) {
-		if (user.blockChallenges) return this.errorReply(this.tr("You are already blocking challenges!"));
-		user.blockChallenges = true;
+		if (user.settings.blockChallenges) return this.errorReply(this.tr("You are already blocking challenges!"));
+		user.settings.blockChallenges = true;
 		user.update('blockChallenges');
 		this.sendReply(this.tr("You are now blocking all incoming challenge requests."));
 	},
@@ -1233,8 +1235,8 @@ export const commands: ChatCommands = {
 	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
 	allowchallenges(target, room, user) {
-		if (!user.blockChallenges) return this.errorReply(this.tr("You are already available for challenges!"));
-		user.blockChallenges = false;
+		if (!user.settings.blockChallenges) return this.errorReply(this.tr("You are already available for challenges!"));
+		user.settings.blockChallenges = false;
 		user.update('blockChallenges');
 		this.sendReply(this.tr("You are available for challenges from now on."));
 	},

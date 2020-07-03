@@ -158,8 +158,8 @@ export const commands: ChatCommands = {
 			return this.errorReply("You do not have permission to use this command to users who are not in this room.");
 		}
 		if (
-			targetUser.blockPMs &&
-			(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')
+			targetUser.settings.blockPMs &&
+			(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) && !user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
@@ -196,8 +196,8 @@ export const commands: ChatCommands = {
 		if (!(targetUser.id in room.users) && !user.can('addhtml')) {
 			return this.errorReply("You do not have permission to use this command to users who are not in this room.");
 		}
-		if (targetUser.blockPMs &&
-			(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
+		if (targetUser.settings.blockPMs &&
+			(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}

@@ -1701,9 +1701,9 @@ export const Rooms = {
 
 		const inviteOnly = (options.inviteOnly || []);
 		for (const user of players) {
-			if (user.inviteOnlyNextBattle) {
+			if (user.settings.inviteOnlyNextBattle) {
 				inviteOnly.push(user.id);
-				user.inviteOnlyNextBattle = false;
+				user.settings.inviteOnlyNextBattle = false;
 			}
 		}
 		if (inviteOnly.length) {
