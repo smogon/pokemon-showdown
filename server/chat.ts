@@ -46,7 +46,7 @@ export interface ChatCommands {
 }
 
 export type SettingsHandler = (
-	room: BasicChatRoom,
+	room: Room,
 	user: User,
 	connection: Connection
 ) => {
@@ -561,7 +561,7 @@ export class CommandContext extends MessageContext {
 		return result;
 	}
 
-	checkFormat(room: BasicChatRoom | null | undefined, user: User, message: string) {
+	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
 		if (!room.settings.filterStretching && !room.settings.filterCaps && !room.settings.filterEmojis) return true;
 		if (user.can('bypassall')) return true;
@@ -599,7 +599,7 @@ export class CommandContext extends MessageContext {
 		return true;
 	}
 
-	checkBanwords(room: BasicChatRoom | null | undefined, message: string): boolean {
+	checkBanwords(room: BasicRoom | null | undefined, message: string): boolean {
 		if (!room) return true;
 		if (!room.banwordRegex) {
 			if (room.settings.banwords && room.settings.banwords.length) {

@@ -1027,22 +1027,23 @@ export const commands: ChatCommands = {
 			return this.errorReply(`This room is already a parent room, and a parent room cannot be made as a subroom.`);
 		}
 
-		const main = Rooms.search(target);
+		const parent = Rooms.search(target);
 
-		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
-		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
-		if (main.settings.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
-		if (main.settings.isPrivate && !room.settings.isPrivate) {
+		if (!parent) return this.errorReply(`The room '${target}' does not exist.`);
+		if (parent.type !== 'chat') return this.errorReply(`Parent room '${target}' must be a chat room.`);
+		if (parent.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
+		if (parent.settings.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
+		if (parent.settings.isPrivate && !room.settings.isPrivate) {
 			return this.errorReply(`Private rooms cannot have public subrooms.`);
 		}
-		if (!main.persist) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
-		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
+		if (!parent.persist) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
+		if (room === parent) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
-		room.parent = main;
-		if (!main.subRooms) main.subRooms = new Map();
-		main.subRooms.set(room.roomid, room as ChatRoom);
+		room.parent = parent;
+		if (!parent.subRooms) parent.subRooms = new Map();
+		parent.subRooms.set(room.roomid, room);
 
-		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === main.title);
+		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === parent.title);
 		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room.title);
 
 		// This is needed to ensure that the main room gets loaded before the subroom.
@@ -1052,15 +1053,15 @@ export const commands: ChatCommands = {
 			Rooms.global.settingsList[subIdx] = tmp;
 		}
 
-		room.settings.parentid = main.roomid;
+		room.settings.parentid = parent.roomid;
 		room.saveSettings();
 
 		for (const userid in room.users) {
 			room.users[userid].updateIdentity(room.roomid);
 		}
 
-		this.modlog('SUBROOM', null, `of ${main.title}`);
-		return this.addModAction(`This room was set as a subroom of ${main.title} by ${user.name}.`);
+		this.modlog('SUBROOM', null, `of ${parent.title}`);
+		return this.addModAction(`This room was set as a subroom of ${parent.title} by ${user.name}.`);
 	},
 
 	removesubroom: 'unsubroom',

@@ -507,7 +507,7 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	authAtLeast(minAuth: string, room: Room | BasicChatRoom | null = null) {
+	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
 		if (!minAuth || minAuth === ' ') return true;
 		if (this.locked || this.semilocked) return false;
 		if (minAuth === 'unlocked') return true;
@@ -521,10 +521,10 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
-	can(permission: RoomPermission, target: User | null, room: Room | BasicChatRoom): boolean;
+	can(permission: RoomPermission, target: User | null, room: BasicRoom): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: Room | BasicChatRoom | null): boolean;
-	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null): boolean {
+	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
+	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
 		if (this.hasSysopAccess()) return true;
 
 		const auth: Auth = room ? room.auth : Users.globalAuth;
