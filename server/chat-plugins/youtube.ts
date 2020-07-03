@@ -10,7 +10,6 @@ import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
-const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
 let channelData: AnyObject;
@@ -32,8 +31,9 @@ export class YoutubeInterface {
 		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
-		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const raw = await Net(queryUrl).get();
+		const raw = await Net(`${ROOT}channels`).get({
+			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+		});
 		const res = JSON.parse(raw);
 		if (!res || !res.items || res.items.length < 1) return;
 		const data = res.items[0];
@@ -122,8 +122,9 @@ export class YoutubeInterface {
 		if (!Config.youtubeKey) throw new Error("Must set up Config.youtubeKey");
 		const id = this.getId(link);
 		if (!id) return null;
-		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const raw = await Net(queryUrl).get();
+		const raw = await Net(`${ROOT}videos`).get({
+			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+		});
 		const res = JSON.parse(raw);
 		if (!res || !res.items || res.items.length < 1) return;
 		const video = res.items[0];
