@@ -67,7 +67,7 @@ export class Roomlog {
 	roomlogStream?: Streams.WriteStream | null;
 	sharedModlog: boolean;
 	roomlogFilename: string;
-	constructor(room: BasicChatRoom, options: RoomlogOptions = {}) {
+	constructor(room: BasicRoom, options: RoomlogOptions = {}) {
 		this.roomid = room.roomid;
 
 		this.isMultichannel = !!options.isMultichannel;
@@ -329,7 +329,7 @@ const sharedModlogs = new Map<string, Streams.WriteStream>();
 
 const roomlogs = new Map<string, Roomlog>();
 
-function createRoomlog(room: BasicChatRoom, options = {}) {
+function createRoomlog(room: BasicRoom, options = {}) {
 	let roomlog = Roomlogs.roomlogs.get(room.roomid);
 	if (roomlog) throw new Error(`Roomlog ${room.roomid} already exists`);
 

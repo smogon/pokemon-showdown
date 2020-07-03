@@ -33,7 +33,6 @@ type GlobalRoomState = Rooms.GlobalRoomState;
 type ChatRoom = Rooms.ChatRoom;
 type GameRoom = Rooms.GameRoom;
 type BasicRoom = Rooms.BasicRoom;
-type BasicChatRoom = Rooms.BasicChatRoom;
 type RoomGame = Rooms.RoomGame;
 type RoomBattle = Rooms.RoomBattle;
 type Roomlog = Rooms.Roomlog;
@@ -44,7 +43,6 @@ namespace Rooms {
 	export type ChatRoom = import('./rooms').ChatRoom;
 	export type GameRoom = import('./rooms').GameRoom;
 	export type BasicRoom = import('./rooms').BasicRoom;
-	export type BasicChatRoom = import('./rooms').BasicChatRoom;
 	export type RoomGame = import('./room-game').RoomGame;
 	export type RoomBattle = import('./room-battle').RoomBattle;
 	export type Roomlog = import('./roomlogs').Roomlog;
