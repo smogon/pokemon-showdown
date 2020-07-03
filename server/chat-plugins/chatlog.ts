@@ -397,7 +397,7 @@ export const LogViewer = new class {
 		const list = await LogReader.listCategorized(user, opts) as {[k: string]: RoomID[]};
 
 		if (!list) {
-			buf += `<p class="message-error">You must be a staff member of a room, to view logs</p></div>`;
+			buf += `<p class="message-error">You must be a staff member of a room to view its logs</p></div>`;
 			return buf;
 		}
 
