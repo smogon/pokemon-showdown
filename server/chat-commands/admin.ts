@@ -1124,8 +1124,8 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	bot(args, user) {
-		const [bot, pageid] = args;
-		const targetBot = Users.get(bot);
+		const [botid, pageid] = args;
+		const bot = Users.get(botid);
 		if (!targetBot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
 		}
