@@ -693,7 +693,7 @@ export abstract class BasicRoom {
 		// add an alias from the old id
 		Rooms.aliases.set(oldID, newID);
 		if (!this.settings.aliases) this.settings.aliases = [];
-		this.settings.aliases.push(oldID);
+		if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
 		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
@@ -719,10 +719,8 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.persist) {
-			this.title = newTitle;
-			this.saveSettings();
-		}
+		this.settings.title = newTitle;
+		this.saveSettings();
 
 		return this.log.rename(newID);
 	}
