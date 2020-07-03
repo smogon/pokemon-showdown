@@ -17,10 +17,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		if (species.battleOnly && typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		if (species.cosmeticFormes) {
-			forme = this.sample([species.name].concat(species.cosmeticFormes));
-		}
-
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool = [];
 		const moves: string[] = [];
@@ -422,6 +418,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			item = 'Salac Berry';
 		} else if (hasMove['endure'] || (hasMove['substitute'] && (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']))) {
 			item = (species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
+		} else if (hasMove['substitute'] && species.baseStats.spe >= 120 && counter.Physical >= 3) {
+			item = 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
 			item = 'Petaya Berry';
 		} else if (counter.Physical >= 4) {
