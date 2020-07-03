@@ -1031,7 +1031,6 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	'!report': true,
 	report(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
@@ -1043,7 +1042,6 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-help-request--report${meta}`);
 	},
 
-	'!appeal': true,
 	appeal(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
@@ -1059,7 +1057,6 @@ export const commands: ChatCommands = {
 	helprequest: 'helpticket',
 	ht: 'helpticket',
 	helpticket: {
-		'!create': true,
 		'': 'create',
 		create(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -1075,7 +1072,6 @@ export const commands: ChatCommands = {
 		},
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
-		'!submit': true,
 		submit(target, room, user, connection) {
 			if (user.can('lock') && !user.can('bypassall')) {
 				return this.popupReply(`Global staff can't make tickets. They can only use the form for reference.`);
@@ -1219,21 +1215,18 @@ export const commands: ChatCommands = {
 			connection.send(`>view-help-request\n|deinit`);
 		},
 
-		'!list': true,
 		list(target, room, user) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
-		'!stats': true,
 		stats(target, room, user) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
 
-		'!close': true,
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');

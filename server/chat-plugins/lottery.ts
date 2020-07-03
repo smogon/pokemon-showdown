@@ -180,7 +180,6 @@ export const commands: ChatCommands = {
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			endLottery(room.roomid, winners);
 		},
-		'!join': true,
 		join(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
@@ -211,7 +210,6 @@ export const commands: ChatCommands = {
 				this.popupReply('You are already in the lottery.');
 			}
 		},
-		'!leave': true,
 		leave(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room

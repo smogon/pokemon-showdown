@@ -56,7 +56,6 @@ export const commands: ChatCommands = {
 	},
 	roomownerhelp: [`/roomowner [username] - Appoints [username] as a room owner. Requires: &`],
 
-	'!roompromote': true,
 	roomdemote: 'roompromote',
 	forceroompromote: 'roompromote',
 	forceroomdemote: 'roompromote',
@@ -180,7 +179,6 @@ export const commands: ChatCommands = {
 		`/roomdeauth [username] - Removes all room rank from the user. Requires: @ # &`,
 	],
 
-	'!authority': true,
 	auth: 'authority',
 	stafflist: 'authority',
 	globalauth: 'authority',
@@ -221,7 +219,6 @@ export const commands: ChatCommands = {
 		`/auth [user] - Show what global and roomauth a user has.`,
 	],
 
-	'!roomauth': true,
 	roomstaff: 'roomauth',
 	roomauth1: 'roomauth',
 	roomauth(target, room, user, connection, cmd) {
@@ -279,7 +276,6 @@ export const commands: ChatCommands = {
 		connection.popup(`${buffer.join("\n\n")}${userLookup}`);
 	},
 
-	'!userauth': true,
 	userauth(target, room, user, connection) {
 		const targetId = toID(target) || user.id;
 		const targetUser = Users.getExact(targetId);
@@ -331,7 +327,6 @@ export const commands: ChatCommands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
-	'!autojoin': true,
 	autojoin(target, room, user, connection) {
 		const targets = target.split(',');
 		if (targets.length > 16 || connection.inRooms.size > 1) {
@@ -353,7 +348,6 @@ export const commands: ChatCommands = {
 		});
 	},
 
-	'!join': true,
 	joim: 'join',
 	j: 'join',
 	join(target, room, user, connection) {
@@ -373,7 +367,6 @@ export const commands: ChatCommands = {
 	},
 	joinhelp: [`/join [roomname] - Attempt to join the room [roomname].`],
 
-	'!part': true,
 	leave: 'part',
 	part(target, room, user, connection) {
 		const targetRoom = target ? Rooms.search(target) : room;
@@ -668,7 +661,6 @@ export const commands: ChatCommands = {
 	wl: 'lock',
 	weeklock: 'lock',
 	monthlock: 'lock',
-	'!lock': true,
 	async lock(target, room, user, connection, cmd) {
 		const week = cmd === 'wl' || cmd === 'weeklock';
 		const month = cmd === 'monthlock';
@@ -791,7 +783,6 @@ export const commands: ChatCommands = {
 		`/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
-	'!unlock': true,
 	unlock(target, room, user) {
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('lock')) return false;
@@ -818,7 +809,6 @@ export const commands: ChatCommands = {
 			this.errorReply(`User '${target}' is not locked.`);
 		}
 	},
-	'!unlockname': true,
 	unlockname(target, room, user) {
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('lock')) return false;
@@ -883,7 +873,6 @@ export const commands: ChatCommands = {
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
-	'!globalban': true,
 	async globalban(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help globalban');
 
@@ -964,7 +953,6 @@ export const commands: ChatCommands = {
 		`/globalban OR /gban [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
-	'!unglobalban': true,
 	globalunban: 'unglobalban',
 	unglobalban(target, room, user) {
 		if (!target) return this.parse(`/help unglobalban`);
@@ -1353,7 +1341,6 @@ export const commands: ChatCommands = {
 	},
 	chatdeclarehelp: [`/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: &`],
 
-	'!announce': true,
 	wall: 'announce',
 	announce(target, room, user) {
 		if (!target) return this.parse('/help announce');
@@ -1406,7 +1393,6 @@ export const commands: ChatCommands = {
 	],
 
 	fr: 'forcerename',
-	'!forcerename': true,
 	forcerename(target, room, user) {
 		if (!target) return this.parse('/help forcerename');
 
@@ -1450,7 +1436,6 @@ export const commands: ChatCommands = {
 		`/allowname [username] - Unmarks a forcerenamed username, stopping staff from being notified when it is used. Requires % @ &`,
 	],
 
-	'!namelock': true,
 	nl: 'namelock',
 	forcenamelock: 'namelock',
 	async namelock(target, room, user, connection, cmd) {
@@ -1490,7 +1475,6 @@ export const commands: ChatCommands = {
 	},
 	namelockhelp: [`/namelock OR /nl [user], [reason] - Name locks a [user] and shows the [reason]. Requires: % @ &`],
 
-	'!unnamelock': true,
 	unl: 'unnamelock',
 	unnamelock(target, room, user) {
 		if (!target) return this.parse('/help unnamelock');

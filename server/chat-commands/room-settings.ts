@@ -134,7 +134,6 @@ export const commands: ChatCommands = {
 	ioo(target, room, user) {
 		return this.parse('/modjoin %');
 	},
-	'!ionext': true,
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
@@ -727,7 +726,6 @@ export const commands: ChatCommands = {
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
-	'!roomuptime': true,
 	groupchatuptime: 'roomuptime',
 	roomuptime(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;

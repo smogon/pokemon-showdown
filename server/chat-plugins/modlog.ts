@@ -563,7 +563,6 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	'!modlog': true,
 	ml: 'modlog',
 	punishlog: 'modlog',
 	pl: 'modlog',

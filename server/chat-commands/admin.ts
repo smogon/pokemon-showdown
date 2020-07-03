@@ -135,7 +135,6 @@ export const commands: ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
 	],
 
-	'!addline': true,
 	addline(target, room, user) {
 		if (!this.can('rawpacket')) return false;
 		// secret sysop command
@@ -437,7 +436,6 @@ export const commands: ChatCommands = {
 		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
-	'!processes': true,
 	processes(target, room, user) {
 		if (!this.can('lockdown')) return false;
 

@@ -13,7 +13,6 @@ import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 
 export const commands: ChatCommands = {
-	'!whois': true,
 	ip: 'whois',
 	rooms: 'whois',
 	alt: 'whois',
@@ -233,7 +232,6 @@ export const commands: ChatCommands = {
 		`/whois [username] - Get details on a username: alts (Requires: % @ &), group, IP address (Requires: @ &), and rooms.`,
 	],
 
-	'!offlinewhois': true,
 	'chp': 'offlinewhois',
 	checkpunishment: 'offlinewhois',
 	offlinewhois(target, room, user) {
@@ -349,7 +347,6 @@ export const commands: ChatCommands = {
 	},
 	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
 
-	'!host': true,
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		if (!this.can('ip')) return;
@@ -362,7 +359,6 @@ export const commands: ChatCommands = {
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
 
-	'!ipsearch': true,
 	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
 	hostsearch: 'ipsearch',
@@ -476,7 +472,6 @@ export const commands: ChatCommands = {
 	 * Data Search Dex
 	 *********************************************************/
 
-	'!data': true,
 	pstats: 'data',
 	stats: 'data',
 	dex: 'data',
@@ -787,7 +782,6 @@ export const commands: ChatCommands = {
 		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # &`,
 	],
 
-	'!details': true,
 	dt: 'details',
 	dt1: 'details',
 	dt2: 'details',
@@ -811,7 +805,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!weakness': true,
 	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
@@ -918,7 +911,6 @@ export const commands: ChatCommands = {
 		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
 	],
 
-	'!effectiveness': true,
 	eff: 'effectiveness',
 	type: 'effectiveness',
 	matchup: 'effectiveness',
@@ -993,7 +985,6 @@ export const commands: ChatCommands = {
 		`!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pok\u00e9mon.`,
 	],
 
-	'!coverage': true,
 	cover: 'coverage',
 	coverage(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1201,7 +1192,6 @@ export const commands: ChatCommands = {
 		`Adding the parameter 'all' or 'table' will display the information with a table of all type combinations.`,
 	],
 
-	'!statcalc': true,
 	statcalc(target, room, user) {
 		if (!target) return this.parse("/help statcalc");
 		if (!this.runBroadcast()) return;
@@ -1470,7 +1460,6 @@ export const commands: ChatCommands = {
 	 * Informational commands
 	 *********************************************************/
 
-	'!uptime': true,
 	uptime(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const uptime = process.uptime();
@@ -1486,7 +1475,6 @@ export const commands: ChatCommands = {
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
 
-	'!servertime': true,
 	st: 'servertime',
 	servertime(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1494,7 +1482,6 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
 	},
 
-	'!groups': true,
 	groups(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const showRoom = (target !== 'global');
@@ -1530,7 +1517,6 @@ export const commands: ChatCommands = {
 		`!groups - Shows everyone that information. Requires: + % @ # &`,
 	],
 
-	'!punishments': true,
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const showRoom = (target !== 'global');
@@ -1564,7 +1550,6 @@ export const commands: ChatCommands = {
 		`!punishments - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!opensource': true,
 	repo: 'opensource',
 	repository: 'opensource',
 	git: 'opensource',
@@ -1584,19 +1569,16 @@ export const commands: ChatCommands = {
 		`!opensource - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!staff': true,
 	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 
-	'!forums': true,
 	forums(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
 	},
 
-	'!privacypolicy': true,
 	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
@@ -1607,13 +1589,11 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!suggestions': true,
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 
-	'!bugs': true,
 	bugreport: 'bugs',
 	bugreports: 'bugs',
 	bugs(target, room, user) {
@@ -1629,7 +1609,6 @@ export const commands: ChatCommands = {
 		}
 	},
 
-	'!avatars': true,
 	avatars(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.`);
@@ -1639,13 +1618,11 @@ export const commands: ChatCommands = {
 		`!avatars - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!optionsbutton': true,
 	optionbutton: 'optionsbutton',
 	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
-	'!soundbutton': true,
 	soundsbutton: 'soundbutton',
 	volumebutton: 'soundbutton',
 	soundbutton(target, room, user) {
@@ -1653,7 +1630,6 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 
-	'!intro': true,
 	introduction: 'intro',
 	intro(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1671,7 +1647,6 @@ export const commands: ChatCommands = {
 		`!intro - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!smogintro': true,
 	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
 	smogintro(target, room, user) {
@@ -1683,7 +1658,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!calc': true,
 	bsscalc: 'calc',
 	calculator: 'calc',
 	cantsaycalc: 'calc',
@@ -1734,7 +1708,6 @@ export const commands: ChatCommands = {
 		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # &`,
 	],
 
-	'!cap': true,
 	capintro: 'cap',
 	cap(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1751,7 +1724,6 @@ export const commands: ChatCommands = {
 		`!cap - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!gennext': true,
 	gennext(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
@@ -1763,7 +1735,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!formathelp': true,
 	banlists: 'formathelp',
 	tier: 'formathelp',
 	tiers: 'formathelp',
@@ -1885,7 +1856,6 @@ export const commands: ChatCommands = {
 		return this.sendReply(`|raw|${buf.join("")}`);
 	},
 
-	'!roomhelp': true,
 	roomhelp(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!this.canBroadcast(false, '!htmlbox')) return;
@@ -1949,7 +1919,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!restarthelp': true,
 	restarthelp(target, room, user) {
 		if (!Rooms.global.lockdown && !this.can('lockdown')) return false;
 		if (!this.runBroadcast()) return;
@@ -1962,7 +1931,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!rules': true,
 	rule: 'rules',
 	rules(target, room, user) {
 		if (!target) {
@@ -2004,7 +1972,6 @@ export const commands: ChatCommands = {
 		`/rules remove - Removes a room rules URL. Requires: # &`,
 	],
 
-	'!faq': true,
 	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = target.toLowerCase().trim();
@@ -2048,7 +2015,6 @@ export const commands: ChatCommands = {
 		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
 	],
 
-	'!smogdex': true,
 	analysis: 'smogdex',
 	strategy: 'smogdex',
 	smogdex(target, room, user) {
@@ -2218,7 +2184,6 @@ export const commands: ChatCommands = {
 		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # &`,
 	],
 
-	'!veekun': true,
 	veekun(target, broadcast, user) {
 		if (!target) return this.parse('/help veekun');
 		if (!this.runBroadcast()) return;
@@ -2308,7 +2273,6 @@ export const commands: ChatCommands = {
 		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # &`,
 	],
 
-	'!register': true,
 	register() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
@@ -2318,7 +2282,6 @@ export const commands: ChatCommands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
-	'!dice': true,
 	roll: 'dice',
 	dice(target, room, user) {
 		if (!target || /[^\d\sdHL+-]/i.test(target)) return this.parse('/help dice');
@@ -2422,7 +2385,6 @@ export const commands: ChatCommands = {
 		`/dice [number of dice]d[number of sides]-[H/L] - Simulates rolling a number of dice with removal of extreme values, e.g., /dice 3d8-L: rolls three 8-sided dice; the result ignores the lowest value.`,
 	],
 
-	'!pickrandom': true,
 	pr: 'pickrandom',
 	pick: 'pickrandom',
 	pickrandom(target, room, user) {
@@ -2438,7 +2400,6 @@ export const commands: ChatCommands = {
 	},
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
-	'!shuffle': true,
 	shuffle(target, room, user) {
 		if (!target || !target.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
@@ -2556,7 +2517,6 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
 
-	'!show': true,
 	async show(target, room, user) {
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help show`);
@@ -2596,7 +2556,6 @@ export const commands: ChatCommands = {
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
 
-	'!pi': true,
 	pi(target, room, user) {
 		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox(
@@ -2607,7 +2566,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!code': true,
 	code(target, room, user) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
