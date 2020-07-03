@@ -16,6 +16,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
+type UserSettings = import('../users').UserSettings;
 
 const avatarTable = new Set([
 	'aaron',
@@ -567,7 +568,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr("You are already blocking private messages! To unblock, use /unblockpms"));
 		}
 		if (target in Config.groups) {
-			user.settings.blockPMs = target;
+			user.settings.blockPMs = target as GroupSymbol;
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			user.settings.blockPMs = target;
@@ -577,7 +578,7 @@ export const commands: ChatCommands = {
 			user.settings.blockPMs = true;
 			this.sendReply(this.tr("You are now blocking private messages, except from staff."));
 		}
-		user.update('blockPMs');
+		user.update();
 		return true;
 	},
 	blockpmshelp: [
@@ -593,7 +594,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr("You are not blocking private messages! To block, use /blockpms"));
 		}
 		user.settings.blockPMs = false;
-		user.update('blockPMs');
+		user.update();
 		return this.sendReply(this.tr("You are no longer blocking private messages."));
 	},
 	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
@@ -710,6 +711,29 @@ export const commands: ChatCommands = {
 
 			this.sendReply(`|raw|${buffer}`);
 		});
+	},
+
+	updatesettings(target, room, user) {
+		const settings: Partial<UserSettings> = {};
+		try {
+			const raw = JSON.parse(target);
+			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
+				this.errorReply("/updatesettings expects JSON encoded object.");
+			}
+			for (const setting in user.settings) {
+				if (setting in raw) {
+					if (setting === 'blockPMs' &&
+						(raw[setting] in Config.groups || ['autoconfirmed', 'trusted', 'unlocked'].includes(raw[setting]))) {
+						settings[setting] = raw[setting];
+					} else {
+						settings[setting as keyof UserSettings] = !!raw[setting];
+					}
+				}
+			}
+			user.updateSettings(settings);
+		} catch {
+			this.errorReply("Unable to parse settings in /updatesettings!");
+		}
 	},
 
 	/*********************************************************
@@ -1223,7 +1247,7 @@ export const commands: ChatCommands = {
 	blockchallenges(target, room, user) {
 		if (user.settings.blockChallenges) return this.errorReply(this.tr("You are already blocking challenges!"));
 		user.settings.blockChallenges = true;
-		user.update('blockChallenges');
+		user.update();
 		this.sendReply(this.tr("You are now blocking all incoming challenge requests."));
 	},
 	blockchallengeshelp: [
@@ -1237,7 +1261,7 @@ export const commands: ChatCommands = {
 	allowchallenges(target, room, user) {
 		if (!user.settings.blockChallenges) return this.errorReply(this.tr("You are already available for challenges!"));
 		user.settings.blockChallenges = false;
-		user.update('blockChallenges');
+		user.update();
 		this.sendReply(this.tr("You are available for challenges from now on."));
 	},
 	allowchallengeshelp: [

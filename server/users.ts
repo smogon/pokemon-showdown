@@ -301,7 +301,7 @@ type ChatQueueEntry = [string, RoomID, Connection];
 
 export interface UserSettings {
 	blockChallenges: boolean;
-	blockPMs: boolean | string;
+	blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked';
 	inviteOnlyNextBattle: boolean;
 	ignoreTickets: boolean;
 }
@@ -312,6 +312,7 @@ const SETTINGS: readonly UserSetting[] =
 
 // User
 export class User extends Chat.MessageContext {
+	static readonly SETTINGS = SETTINGS;
 	readonly user: User;
 	readonly inRooms: Set<RoomID>;
 	/**
@@ -866,18 +867,10 @@ export class User extends Chat.MessageContext {
 	 */
 	getUpdateuserText(...updated: UserSetting[]) {
 		const named = this.named ? 1 : 0;
-		const diff: AnyObject = {};
-		const settings = updated.length ? updated : SETTINGS;
-		for (const setting of settings) {
-			diff[setting] = this.settings[setting];
-		}
-		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
+		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(this.settings)}`;
 	}
-	/**
-	 * @param updated the settings which have been updated or none for all settings.
-	 */
-	update(...updated: UserSetting[]) {
-		this.send(this.getUpdateuserText(...updated));
+	update() {
+		this.send(this.getUpdateuserText());
 	}
 	merge(oldUser: User) {
 		oldUser.cancelReady();
@@ -1383,6 +1376,10 @@ export class User extends Chat.MessageContext {
 		} else {
 			this.chatQueue = null;
 		}
+	}
+	updateSettings(settings: Partial<UserSettings>) {
+		Object.assign(this.settings, settings);
+		this.update();
 	}
 	setStatusType(type: StatusType) {
 		if (type === this.statusType) return;

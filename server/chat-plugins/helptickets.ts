@@ -1391,7 +1391,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
 			user.settings.ignoreTickets = true;
-			user.update('ignoreTickets');
+			user.update();
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
@@ -1402,7 +1402,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
 			user.settings.ignoreTickets = false;
-			user.update('ignoreTickets');
+			user.update();
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
