@@ -35,7 +35,7 @@ export interface PageTable {
 export type ChatHandler = (
 	this: CommandContext,
 	target: string,
-	room: Room,
+	room: Room | null,
 	user: User,
 	connection: Connection,
 	cmd: string,
@@ -1235,6 +1235,11 @@ export class CommandContext extends MessageContext {
 		this.inputUsername = name.trim();
 		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
 		return rest;
+	}
+
+	requiresRoom() {
+		this.errorReply(`You tried to use ${this.cmd} as a global command, but it is not one.`);
+		this.errorReply(`Use it in a room instead.`);
 	}
 }
 

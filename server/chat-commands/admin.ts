@@ -24,6 +24,7 @@ export const commands: ChatCommands = {
 
 	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
+		if (!room) return this.requiresRoom();
 		target = this.canHTML(target)!;
 		if (!target) return;
 		target = Chat.collapseLineBreaksHTML(target);
@@ -44,6 +45,7 @@ export const commands: ChatCommands = {
 	],
 	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
+		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return;
 		target = this.canHTML(target)!;
 		if (!target) return;
@@ -59,6 +61,7 @@ export const commands: ChatCommands = {
 		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # &`,
 	],
 	addrankhtmlbox(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 		let [rank, html] = this.splitOne(target);
@@ -78,6 +81,7 @@ export const commands: ChatCommands = {
 	],
 	changeuhtml: 'adduhtml',
 	adduhtml(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 
@@ -105,6 +109,7 @@ export const commands: ChatCommands = {
 	],
 	changerankuhtml: 'addrankuhtml',
 	addrankuhtml(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 
@@ -130,14 +135,16 @@ export const commands: ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
 	],
 
+	'!addline': true,
 	addline(target, room, user) {
 		if (!this.can('rawpacket')) return false;
 		// secret sysop command
-		room.add(target);
+		this.add(target);
 	},
 
 	pminfobox(target, room, user, connection) {
 		if (!this.canTalk()) return;
+		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
 
@@ -176,6 +183,7 @@ export const commands: ChatCommands = {
 	pmuhtmlchange: 'pmuhtml',
 	pmuhtml(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
+		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help " + cmd);
 
@@ -621,7 +629,7 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown();
 
-		const logRoom = Rooms.get('staff') || room;
+		const logRoom = Rooms.get('staff')!;
 		logRoom.roomlog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [
@@ -632,14 +640,13 @@ export const commands: ChatCommands = {
 	autolockdownkill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
-
+		const logRoom = Rooms.get('staff')!;
 		if (this.meansYes(target)) {
 			if (Config.autolockdown) {
 				return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = true;
 			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
-			const logRoom = Rooms.get('staff') || room;
 			logRoom.roomlog(`${user.name} used /autolockdownkill on`);
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) {
@@ -647,7 +654,6 @@ export const commands: ChatCommands = {
 			}
 			Config.autolockdown = false;
 			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
-			const logRoom = Rooms.get('staff') || room;
 			logRoom.roomlog(`${user.name} used /autolockdownkill off`);
 		} else {
 			return this.parse('/help autolockdownkill');
@@ -662,8 +668,8 @@ export const commands: ChatCommands = {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
 		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /prelockdown`);
+		const logRoom = Rooms.get('staff');
+		logRoom!.roomlog(`${user.name} used /prelockdown`);
 	},
 
 	slowlockdown(target, room, user) {
@@ -671,8 +677,8 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown(undefined, true);
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /slowlockdown`);
+		const logRoom = Rooms.get('staff');
+		logRoom!.roomlog(`${user.name} used /slowlockdown`);
 	},
 
 	crashfixed: 'endlockdown',
@@ -701,8 +707,8 @@ export const commands: ChatCommands = {
 		}
 		Rooms.global.lockdown = false;
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /endlockdown`);
+		const logRoom = Rooms.get('staff');
+		logRoom!.roomlog(`${user.name} used /endlockdown`);
 	},
 	endlockdownhelp: [
 		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: &`,
@@ -722,8 +728,8 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /emergency.`);
+		const logRoom = Rooms.get('staff');
+		logRoom!.roomlog(`${user.name} used /emergency.`);
 	},
 
 	endemergency(target, room, user) {
@@ -739,8 +745,8 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /endemergency.`);
+		const logRoom = Rooms.get('staff');
+		logRoom!.roomlog(`${user.name} used /endemergency.`);
 	},
 
 	kill(target, room, user) {
@@ -754,12 +760,12 @@ export const commands: ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		const logRoom = Rooms.get('staff') || room;
+		const logRoom = Rooms.get('staff');
 		if (!(logRoom as any).destroyLog) {
 			process.exit();
 			return;
 		}
-		logRoom.roomlog(`${user.name} used /kill`);
+		logRoom!.roomlog(`${user.name} used /kill`);
 		(logRoom as any).destroyLog(() => {
 			process.exit();
 		});
@@ -788,8 +794,8 @@ export const commands: ChatCommands = {
 	refreshpage(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.sendAll('|refresh|');
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /refreshpage`);
+		const logRoom = Rooms.get('staff');
+		logRoom!.roomlog(`${user.name} used /refreshpage`);
 	},
 
 	async updateserver(target, room, user, connection) {
@@ -801,24 +807,24 @@ export const commands: ChatCommands = {
 
 		Monitor.updateServerLock = true;
 
-		const logRoom = Rooms.get('staff') || room;
+		const logRoom = Rooms.get('staff');
 
 		function exec(command: string): Promise<[number, string, string]> {
-			logRoom.roomlog(`$ ${command}`);
+			logRoom!.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom.roomlog(log);
+					logRoom!.roomlog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
 		}
 
 		this.sendReply(`Fetching newest version...`);
-		logRoom.roomlog(`${user.name} used /updateserver`);
+		logRoom!.roomlog(`${user.name} used /updateserver`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
@@ -885,17 +891,17 @@ export const commands: ChatCommands = {
 	},
 
 	async rebuild(target, room, user, connection) {
-		const logRoom = Rooms.get('staff') || room;
+		const logRoom = Rooms.get('staff');
 
 		function exec(command: string): Promise<[number, string, string]> {
-			logRoom.roomlog(`$ ${command}`);
+			logRoom!.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom.roomlog(log);
+					logRoom!.roomlog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
@@ -927,6 +933,7 @@ export const commands: ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
@@ -959,6 +966,7 @@ export const commands: ChatCommands = {
 	},
 
 	evalbattle(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
@@ -970,6 +978,7 @@ export const commands: ChatCommands = {
 
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('forcewin')) return false;
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {
