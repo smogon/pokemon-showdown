@@ -1126,13 +1126,13 @@ export const pages: PageTable = {
 	bot(args, user) {
 		const [botid, pageid] = args;
 		const bot = Users.get(botid);
-		if (!targetBot) {
+		if (!bot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
 		}
-		let canSend = Users.globalAuth.get(targetBot) === '*';
+		let canSend = Users.globalAuth.get(bot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (curRoom.auth.get(targetBot) === '*') {
+			if (curRoom.auth.get(bot) === '*') {
 				canSend = true;
 				room = curRoom;
 			}
@@ -1140,9 +1140,9 @@ export const pages: PageTable = {
 		if (!canSend) {
 			return `<div class="pad"><h2>"${bot}" is not a bot.</h2></div>`;
 		}
-		targetBot.sendTo(
+		bot.sendTo(
 			room ? room.roomid : 'lobby',
-			`|pm|${user.name}|${targetBot.name}||requestpage|${user.name}|${pageid}`
+			`|pm|${user.name}|${bot.name}||requestpage|${user.name}|${pageid}`
 		);
 	},
 };
