@@ -234,7 +234,7 @@ export const commands: ChatCommands = {
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
 			}
-			const canSeeIps = user.can('ban');
+			const canSeeIps = user.can('globalban');
 			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
 				return `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
 			});

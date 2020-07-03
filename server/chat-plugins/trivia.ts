@@ -1064,7 +1064,7 @@ class TriumvirateModeTrivia extends Trivia {
 const commands: ChatCommands = {
 	new(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in the Trivia room.");
-		if (!this.can('broadcast', null, room)) return false;
+		if (!this.can('show', null, room)) return false;
 		if (!this.canTalk()) return;
 		if (room.game) {
 			return this.errorReply(`There is already a game of ${room.game.title} in progress.`);
@@ -1166,7 +1166,7 @@ const commands: ChatCommands = {
 
 	start(target, room) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
-		if (!this.can('broadcast', null, room)) return false;
+		if (!this.can('show', null, room)) return false;
 		if (!this.canTalk()) return;
 		const game = getTriviaGame(this);
 		if (!game) return;
@@ -1196,7 +1196,7 @@ const commands: ChatCommands = {
 
 	end(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
-		if (!this.can('broadcast', null, room)) return false;
+		if (!this.can('show', null, room)) return false;
 		if (!this.canTalk()) return;
 		const game = getTriviaGame(this);
 		if (!game) return;
@@ -1240,7 +1240,7 @@ const commands: ChatCommands = {
 	add(target, room, user, connection, cmd) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 		if (cmd === 'add' && !this.can('mute', null, room)) return false;
-		if (cmd === 'submit' && !this.can('broadcast', null, room)) return false;
+		if (cmd === 'submit' && !this.can('show', null, room)) return false;
 		if (!target) return false;
 		if (!this.canTalk()) return false;
 
@@ -1565,7 +1565,7 @@ const commands: ChatCommands = {
 
 	search(target, room, user) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
-		if (!this.can('broadcast', null, room)) return false;
+		if (!this.can('show', null, room)) return false;
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
 
 		let [type, ...query] = target.split(',');

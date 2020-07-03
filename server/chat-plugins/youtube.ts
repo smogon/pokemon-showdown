@@ -168,7 +168,7 @@ export const commands: ChatCommands = {
 		const data = await YouTube.randChannel();
 		if (!data) return this.errorReply(`Error in getting channel data.`);
 		if (this.broadcasting) {
-			if (!this.can('broadcast', null, room)) return false;
+			if (!this.can('show', null, room)) return false;
 			this.addBox(data);
 			room.update();
 		} else {

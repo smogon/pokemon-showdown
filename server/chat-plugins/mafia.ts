@@ -1939,7 +1939,7 @@ export const commands: ChatCommands = {
 			if (!this.canTalk()) return;
 			if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
-			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${cmd} - Access denied.`);
+			if (!user.can('show', null, room)) return this.errorReply(`/mafia ${cmd} - Access denied.`);
 
 			let nextHost = false;
 			if (room.roomid === 'mafia') {
@@ -2006,7 +2006,7 @@ export const commands: ChatCommands = {
 			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toID);
 			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
-				const permission = (user.id === args[1]) ? 'broadcast' : 'mute';
+				const permission = (user.id === args[1]) ? 'show' : 'mute';
 				if (['forceadd', 'add'].includes(args[0]) && !this.can(permission, null, room)) return;
 				if (['remove', 'del', 'delete'].includes(args[0]) && user.id !== args[1] && !this.can('mute', null, room)) return;
 			} else {
@@ -2220,7 +2220,7 @@ export const commands: ChatCommands = {
 		idea(target, room, user) {
 			const game = room.getGame(MafiaTracker);
 			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!this.can('broadcast', null, room)) return;
+			if (!this.can('show', null, room)) return;
 			if (!user.can('mute', null, room) && game.hostid !== user.id && !game.cohosts.includes(user.id)) {
 				return this.errorReply(`/mafia idea - Access denied.`);
 			}
@@ -3127,7 +3127,7 @@ export const commands: ChatCommands = {
 			}
 			const game = targetRoom.getGame(MafiaTracker);
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
-			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('broadcast', null, room)) return;
+			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('show', null, room)) return;
 			game.end();
 			this.room = targetRoom;
 			this.modlog('MAFIAEND', null);

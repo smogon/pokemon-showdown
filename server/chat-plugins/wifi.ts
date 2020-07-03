@@ -635,7 +635,7 @@ const cmds: ChatCommands = {
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		const targetUser = Users.get(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) {
+		if (!user.can('warn', null, room) && !(user.can('show', null, room) && user === targetUser)) {
 			return this.errorReply("/qg - Access denied.");
 		}
 		if (!targetUser.autoconfirmed) {
@@ -693,7 +693,7 @@ const cmds: ChatCommands = {
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		const targetUser = Users.get(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) {
+		if (!user.can('warn', null, room) && !(user.can('show', null, room) && user === targetUser)) {
 			return this.errorReply("/lg - Access denied.");
 		}
 		if (!targetUser.autoconfirmed) {
@@ -910,7 +910,7 @@ const cmds: ChatCommands = {
 		let reply = '';
 		switch (target) {
 		case 'staff':
-			if (!this.can('broadcast', null, room)) return;
+			if (!this.can('show', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
 					'- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
 					'- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
@@ -922,7 +922,7 @@ const cmds: ChatCommands = {
 					'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
 			break;
 		case 'gts':
-			if (!this.can('broadcast', null, room)) return;
+			if (!this.can('show', null, room)) return;
 			reply = '<strong>GTS giveaway commands:</strong><br />' +
 					'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # &)<br />' +
 					'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
