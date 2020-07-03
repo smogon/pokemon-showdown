@@ -964,9 +964,9 @@ export const commands: ChatCommands = {
 		`/globalban OR /gban [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
+	'!unglobalban': true,
 	globalunban: 'unglobalban',
 	unglobalban(target, room, user) {
-		if (!room) return this.requiresRoom();
 		if (!target) return this.parse(`/help unglobalban`);
 		if (!this.can('ban')) return false;
 
@@ -977,9 +977,7 @@ export const commands: ChatCommands = {
 		if (name) {
 			this.addModAction(unbanMessage);
 			// Notify staff room when a user is unbanned outside of it.
-			if (room.roomid !== 'staff') {
-				Rooms.get('staff')?.addByUser(user, `<<${room.roomid}>> ${unbanMessage}`);
-			}
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${unbanMessage}`);
 			this.globalModlog("UNBAN", target, ` by ${user.id}`);
 		} else {
 			this.errorReply(`User '${target}' is not globally banned.`);
@@ -1492,6 +1490,7 @@ export const commands: ChatCommands = {
 	},
 	namelockhelp: [`/namelock OR /nl [user], [reason] - Name locks a [user] and shows the [reason]. Requires: % @ &`],
 
+	'!unnamelock': true,
 	unl: 'unnamelock',
 	unnamelock(target, room, user) {
 		if (!target) return this.parse('/help unnamelock');
