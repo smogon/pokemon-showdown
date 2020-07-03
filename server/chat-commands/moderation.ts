@@ -844,7 +844,7 @@ export const commands: ChatCommands = {
 	unlockip(target, room, user) {
 		target = target.trim();
 		if (!target) return this.parse('/help unlock');
-		if (!this.can('ban')) return false;
+		if (!this.can('globalban')) return false;
 		const range = target.charAt(target.length - 1) === '*';
 		if (range && !this.can('rangeban')) return false;
 
@@ -890,7 +890,7 @@ export const commands: ChatCommands = {
 		if (!target && REQUIRE_REASONS) {
 			return this.errorReply("Global bans require a reason.");
 		}
-		if (!this.can('ban', targetUser)) return false;
+		if (!this.can('globalban', targetUser)) return false;
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
 
@@ -963,7 +963,7 @@ export const commands: ChatCommands = {
 	globalunban: 'unglobalban',
 	unglobalban(target, room, user) {
 		if (!target) return this.parse(`/help unglobalban`);
-		if (!this.can('ban')) return false;
+		if (!this.can('globalban')) return false;
 
 		const name = Punishments.unban(target);
 
@@ -1851,7 +1851,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (user.can('ban')) {
+		if (user.can('globalban')) {
 			const roomIps = Punishments.roomIps.get(room.roomid);
 
 			if (roomIps) {
@@ -1888,7 +1888,7 @@ export const commands: ChatCommands = {
 
 	markshared(target, room, user) {
 		if (!target) return this.parse('/help markshared');
-		if (!this.can('ban')) return false;
+		if (!this.can('globalban')) return false;
 		let [ip, note] = this.splitOne(target);
 		if (!/^[0-9.*]+$/.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
@@ -1916,7 +1916,7 @@ export const commands: ChatCommands = {
 
 	unmarkshared(target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
-		if (!this.can('ban')) return false;
+		if (!this.can('globalban')) return false;
 		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
 
 		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");

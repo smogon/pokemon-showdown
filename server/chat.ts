@@ -593,7 +593,7 @@ export class CommandContext extends MessageContext {
 
 	checkSlowchat(room: Room | null | undefined, user: User) {
 		if (!room || !room.settings.slowchat) return true;
-		if (user.can('broadcast', null, room)) return true;
+		if (user.can('show', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
 		if (lastActiveSeconds < room.settings.slowchat) return false;
 		return true;
@@ -787,7 +787,7 @@ export class CommandContext extends MessageContext {
 			return true;
 		}
 
-		if (this.room && !this.user.can('broadcast', null, this.room)) {
+		if (this.room && !this.user.can('show', null, this.room)) {
 			this.errorReply(`You need to be voiced to broadcast this command's information.`);
 			this.errorReply(`To see it for yourself, use: /${this.message.slice(1)}`);
 			return false;
@@ -1034,7 +1034,7 @@ export class CommandContext extends MessageContext {
 
 		if (room?.settings.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2 &&
-			!user.can('broadcast', null, room)) {
+			!user.can('show', null, room)) {
 			this.errorReply(
 				this.tr('Due to this room being a high traffic room, your message must contain at least two letters.')
 			);
