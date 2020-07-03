@@ -1238,8 +1238,7 @@ export class CommandContext extends MessageContext {
 	}
 
 	requiresRoom() {
-		this.errorReply(`You tried to use ${this.cmd} as a global command, but it is not one.`);
-		this.errorReply(`Use it in a room instead.`);
+		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
 }
 
