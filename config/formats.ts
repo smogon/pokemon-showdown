@@ -580,7 +580,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'linked',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['King\'s Rock', 'Razor Fang'],
+		banlist: ['Chlorophyll', 'Unburden', 'Sand Rush', 'Slush Rush', 'Surge Surfer', 'Swift Swim', 'King\'s Rock', 'Razor Fang'],
 		restricted: [
 			'Baneful Bunker', 'Bounce', 'Protect', 'Detect', 'Dig', 'Dive', 'Fly', 'King\'s Shield', 'Nature\'s Madness', 'Night Shade',
 			'Obstruct', 'Phantom Force', 'Seismic Toss', 'Shadow Force', 'Sky Drop', 'Spiky Shield', 'Super Fang',
