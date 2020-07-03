@@ -374,7 +374,7 @@ export class CommandContext extends MessageContext {
 		} else {
 			if (commandHandler === '!') {
 				if (!this.room) {
-					return this.popupReply(`You tried use "${message}" as a global command, but it is not a global command.`);
+					return this.popupReply(`You tried to use "${message}" as a global command, but it is not a global command.`);
 				} else if (this.room) {
 					return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 				}
