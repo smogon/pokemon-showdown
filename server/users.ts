@@ -302,13 +302,14 @@ type ChatQueueEntry = [string, RoomID, Connection];
 export interface UserSettings {
 	blockChallenges: boolean;
 	blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked';
-	inviteOnlyNextBattle: boolean;
+	hideNextBattle: boolean;
 	ignoreTickets: boolean;
+	inviteOnlyNextBattle: boolean;
 }
 type UserSetting = keyof UserSettings;
 
 const SETTINGS: readonly UserSetting[] =
-	['blockChallenges', 'blockPMs', 'ignoreTickets', 'inviteOnlyNextBattle'] as const;
+	['blockChallenges', 'blockPMs', 'hideNextBattle', 'ignoreTickets', 'inviteOnlyNextBattle'] as const;
 
 // User
 export class User extends Chat.MessageContext {
@@ -422,6 +423,7 @@ export class User extends Chat.MessageContext {
 		this.settings = {
 			blockChallenges: false,
 			blockPMs: false,
+			hideNextBattle: false,
 			ignoreTickets: false,
 			inviteOnlyNextBattle: false,
 		};

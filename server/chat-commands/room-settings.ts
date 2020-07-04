@@ -986,6 +986,27 @@ export const commands: ChatCommands = {
 		`/publicroom - Makes a room public. Requires: \u2606 &`,
 	],
 
+	hidenext(target, room, user) {
+		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
+		if (!groupConfig?.editprivacy) return this.errorReply(`/hidenext - Access denied.`);
+		if (this.meansNo(target)) {
+			user.settings.hideNextBattle = false;
+			user.update();
+			this.sendReply("Your next battle will be publicly visible.");
+		} else {
+			user.settings.hideNextBattle = true;
+			user.update();
+			if (user.forcedPublic) {
+				return this.errorReply(`Your next battle will be hidden provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
+			}
+			this.sendReply("Your next battle will be hidden");
+		}
+	},
+	hidenexthelp: [
+		`/hidenext - Sets your next battle to be hidden.`,
+		`/hidenext off - Sets your next battle to be publicly visible.`,
+	],
+
 	officialchatroom: 'officialroom',
 	officialroom(target, room, user) {
 		if (!room) return this.requiresRoom();

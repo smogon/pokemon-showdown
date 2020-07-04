@@ -1699,24 +1699,33 @@ export const Rooms = {
 		// Special battles have modchat set to Player from the beginning
 		if (p1Special) room.settings.modchat = '\u2606';
 
-		const inviteOnly = (options.inviteOnly || []);
+		let inviteOnly = false;
+		const privacySetter = new Set<ID>(options.inviteOnly || []);
 		for (const user of players) {
 			if (user.settings.inviteOnlyNextBattle) {
-				inviteOnly.push(user.id);
+				inviteOnly = true;
+				privacySetter.add(user.id);
 				user.settings.inviteOnlyNextBattle = false;
 			}
+			if (user.settings.hideNextBattle) {
+				privacySetter.add(user.id);
+				user.settings.hideNextBattle = false;
+			}
 		}
-		if (inviteOnly.length) {
+		if (privacySetter.size) {
 			const prefix = battle.forcedPublic();
 			if (prefix) {
 				room.settings.isPrivate = false;
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
-				room.settings.modjoin = '%';
 				room.settings.isPrivate = 'hidden';
-				room.privacySetter = new Set(inviteOnly);
-				room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+				if (inviteOnly) room.settings.modjoin = '%';
+				room.privacySetter = privacySetter;
+				if (inviteOnly) {
+					room.settings.modjoin = '%';
+					room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+				}
 			}
 		}
 
