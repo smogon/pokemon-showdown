@@ -568,13 +568,13 @@ export const commands: ChatCommands = {
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		if (!room) room = Rooms.get('global') as ChatRoom | GameRoom;
-		let roomid: RoomID = (room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: RoomID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			const targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toID(targets[0]) as RoomID || room.roomid;
+			const newid = toID(targets[0]) as RoomID;
+			if (newid) roomid = newid;
 		}
 
 		const targetRoom = Rooms.search(roomid);
