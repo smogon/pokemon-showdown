@@ -803,7 +803,9 @@ export const commands: ChatCommands = {
 			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`;
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${unlockMessage}`);
+			if (!room || room.roomid !== 'staff') {
+				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${unlockMessage}`);
+			}
 			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has unlocked you.`);
 		} else {
@@ -922,8 +924,9 @@ export const commands: ChatCommands = {
 		this.addModAction(banMessage);
 
 		// Notify staff room when a user is banned outside of it.
-		Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${banMessage}`);
-
+		if (!room || room.roomid !== 'staff') {
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${banMessage}`);
+		}
 		const affected = await Punishments.ban(targetUser, null, null, false, userReason);
 		const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
@@ -966,7 +969,9 @@ export const commands: ChatCommands = {
 		if (name) {
 			this.addModAction(unbanMessage);
 			// Notify staff room when a user is unbanned outside of it.
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${unbanMessage}`);
+			if (!room || room.roomid !== 'staff') {
+				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${unbanMessage}`);
+			}
 			this.globalModlog("UNBAN", target, ` by ${user.id}`);
 		} else {
 			this.errorReply(`User '${target}' is not globally banned.`);
@@ -1459,8 +1464,9 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${lockMessage})`);
 
 		// Notify staff room when a user is locked outside of it.
-		Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${lockMessage}`);
-
+		if (!room || room.roomid !== 'staff') {
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${lockMessage}`);
+		}
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {
 			Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
