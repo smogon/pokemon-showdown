@@ -739,8 +739,9 @@ export const commands: ChatCommands = {
 		const lockMessage = `${name} was locked from talking${durationMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
-		Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${lockMessage}`);
-
+		if (!room || room.roomid !== 'staff') {
+			 Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${lockMessage}`);
+		}
 		if (room) room.hideText([userid, toID(this.inputUsername)]);
 		const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
