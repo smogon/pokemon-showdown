@@ -763,7 +763,7 @@ export const commands: ChatCommands = {
 
 		if (!logRoom?.log.roomlogStream) return process.exit();
 
-		logRoom.log.roomlogStream.writeEnd().then(() => {
+		void logRoom.log.roomlogStream.writeEnd().then(() => {
 			process.exit();
 		});
 
