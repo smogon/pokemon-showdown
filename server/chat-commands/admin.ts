@@ -627,8 +627,8 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown();
 
-		const logRoom = Rooms.get('staff')!;
-		logRoom.roomlog(`${user.name} used /lockdown`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.roomlog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [
 		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: &`,
@@ -638,21 +638,21 @@ export const commands: ChatCommands = {
 	autolockdownkill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
-		const logRoom = Rooms.get('staff')!;
+		const logRoom = Rooms.get('staff') || room;
 		if (this.meansYes(target)) {
 			if (Config.autolockdown) {
 				return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = true;
 			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
-			logRoom.roomlog(`${user.name} used /autolockdownkill on`);
+			logRoom?.add(`${user.name} used /autolockdownkill on`).update();
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) {
 				return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = false;
 			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
-			logRoom.roomlog(`${user.name} used /autolockdownkill off`);
+			logRoom?.add(`${user.name} used /autolockdownkill off`).update();
 		} else {
 			return this.parse('/help autolockdownkill');
 		}
@@ -666,8 +666,8 @@ export const commands: ChatCommands = {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
 		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
-		const logRoom = Rooms.get('staff');
-		logRoom!.roomlog(`${user.name} used /prelockdown`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.add(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`).update();
 	},
 
 	slowlockdown(target, room, user) {
@@ -675,8 +675,8 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown(undefined, true);
 
-		const logRoom = Rooms.get('staff');
-		logRoom!.roomlog(`${user.name} used /slowlockdown`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.add(`${user.name} used /slowlockdown (lockdown without auto-restart)`).update();
 	},
 
 	crashfixed: 'endlockdown',
@@ -705,8 +705,8 @@ export const commands: ChatCommands = {
 		}
 		Rooms.global.lockdown = false;
 
-		const logRoom = Rooms.get('staff');
-		logRoom!.roomlog(`${user.name} used /endlockdown`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.roomlog(`${user.name} used /endlockdown`);
 	},
 	endlockdownhelp: [
 		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: &`,
@@ -726,8 +726,8 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		const logRoom = Rooms.get('staff');
-		logRoom!.roomlog(`${user.name} used /emergency.`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.roomlog(`${user.name} used /emergency.`);
 	},
 
 	endemergency(target, room, user) {
@@ -743,8 +743,8 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		const logRoom = Rooms.get('staff');
-		logRoom!.roomlog(`${user.name} used /endemergency.`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.roomlog(`${user.name} used /endemergency.`);
 	},
 
 	kill(target, room, user) {
@@ -758,18 +758,16 @@ export const commands: ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		const logRoom = Rooms.get('staff');
-		if (!(logRoom as any).destroyLog) {
-			process.exit();
-			return;
-		}
-		logRoom!.roomlog(`${user.name} used /kill`);
-		(logRoom as any).destroyLog(() => {
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.roomlog(`${user.name} used /kill`);
+
+		if (!logRoom?.log.roomlogStream) return process.exit();
+
+		logRoom.log.roomlogStream.writeEnd().then(() => {
 			process.exit();
 		});
 
-		// Just in the case the above never terminates, kill the process
-		// after 10 seconds.
+		// In the case the above never terminates
 		setTimeout(() => {
 			process.exit();
 		}, 10000);
@@ -805,24 +803,24 @@ export const commands: ChatCommands = {
 
 		Monitor.updateServerLock = true;
 
-		const logRoom = Rooms.get('staff');
+		const logRoom = Rooms.get('staff') || room;
 
 		function exec(command: string): Promise<[number, string, string]> {
-			logRoom!.roomlog(`$ ${command}`);
+			logRoom?.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom!.roomlog(log);
+					logRoom?.roomlog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
 		}
 
 		this.sendReply(`Fetching newest version...`);
-		logRoom!.roomlog(`${user.name} used /updateserver`);
+		logRoom?.add(`${user.name} used /updateserver`).update();
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
