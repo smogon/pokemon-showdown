@@ -790,8 +790,8 @@ export const commands: ChatCommands = {
 	refreshpage(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.sendAll('|refresh|');
-		const logRoom = Rooms.get('staff');
-		logRoom!.roomlog(`${user.name} used /refreshpage`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.roomlog(`${user.name} used /refreshpage`);
 	},
 
 	async updateserver(target, room, user, connection) {
@@ -887,17 +887,17 @@ export const commands: ChatCommands = {
 	},
 
 	async rebuild(target, room, user, connection) {
-		const logRoom = Rooms.get('staff');
+		const logRoom = Rooms.get('staff') || room;
 
 		function exec(command: string): Promise<[number, string, string]> {
-			logRoom!.roomlog(`$ ${command}`);
+			logRoom?.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom!.roomlog(log);
+					logRoom?.roomlog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});

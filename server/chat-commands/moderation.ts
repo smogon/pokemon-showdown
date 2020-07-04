@@ -740,7 +740,7 @@ export const commands: ChatCommands = {
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
 		if (!room || room.roomid !== 'staff') {
-			 Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${lockMessage}`);
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${lockMessage}`);
 		}
 		if (room) room.hideText([userid, toID(this.inputUsername)]);
 		const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -804,7 +804,7 @@ export const commands: ChatCommands = {
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
 			if (!room || room.roomid !== 'staff') {
-				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${unlockMessage}`);
+				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${unlockMessage}`);
 			}
 			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has unlocked you.`);
@@ -925,7 +925,7 @@ export const commands: ChatCommands = {
 
 		// Notify staff room when a user is banned outside of it.
 		if (!room || room.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${banMessage}`);
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${banMessage}`);
 		}
 		const affected = await Punishments.ban(targetUser, null, null, false, userReason);
 		const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -970,7 +970,7 @@ export const commands: ChatCommands = {
 			this.addModAction(unbanMessage);
 			// Notify staff room when a user is unbanned outside of it.
 			if (!room || room.roomid !== 'staff') {
-				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${unbanMessage}`);
+				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${unbanMessage}`);
 			}
 			this.globalModlog("UNBAN", target, ` by ${user.id}`);
 		} else {
@@ -1430,7 +1430,7 @@ export const commands: ChatCommands = {
 		const rankMessage = targetUser.getAccountStatusString();
 		Rooms.global.notifyRooms(
 			['staff'],
-			`|html|${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`}` +
+			`|html|${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`}` +
 			Utils.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`
 		);
 
@@ -1465,7 +1465,7 @@ export const commands: ChatCommands = {
 
 		// Notify staff room when a user is locked outside of it.
 		if (!room || room.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM: ${this.pmTarget}>`} ${lockMessage}`);
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${lockMessage}`);
 		}
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {

@@ -567,8 +567,7 @@ export const commands: ChatCommands = {
 			}
 			saveFilters(true);
 			const output = `'${word}' was added to the ${list} list.`;
-			const upperStaff = Rooms.get('upperstaff');
-			if (upperStaff) upperStaff.add(output).update();
+			Rooms.get('upperstaff')?.add(output).update();
 			return this.sendReply(output);
 		},
 		remove(target, room, user) {
