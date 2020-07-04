@@ -65,11 +65,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Darkest Wings'},
 		types: ['Dark', 'Fairy'],
 	},
-	// Perish Song
-	mismagius: {
-		inherit: true,
-		types: ["Ghost", "Ice"],
-	},
 	// quadrophenic
 	porygon: {
 		inherit: true,
