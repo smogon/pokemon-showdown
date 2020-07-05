@@ -567,9 +567,8 @@ export const commands: ChatCommands = {
 			}
 			saveFilters(true);
 			const output = `'${word}' was added to the ${list} list.`;
-			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 			Rooms.get('upperstaff')?.add(output).update();
-			return this.sendReply(output);
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		remove(target, room, user) {
 			if (!this.can('rangeban')) return false;
@@ -592,8 +591,7 @@ export const commands: ChatCommands = {
 			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
 			saveFilters(true);
 			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
-			const upperStaff = Rooms.get('upperstaff');
-			if (upperStaff) upperStaff.add(output).update();
+			Rooms.get('upperstaff')?.add(output).update();
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		'': 'view',
