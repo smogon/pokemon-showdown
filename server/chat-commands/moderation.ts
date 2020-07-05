@@ -951,7 +951,7 @@ export const commands: ChatCommands = {
 			this.privateModAction(displayMessage);
 		}
 
-		if (room) room.hideText([userid, toID(this.inputUsername)]);
+		room?.hideText([userid, toID(this.inputUsername)]);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
 		this.globalModlog("BAN", targetUser, ` by ${user.id}${globalReason}`);
