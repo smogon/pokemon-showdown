@@ -267,11 +267,11 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 
 	// Flare
 	permafrostarmor: {
-		desc: "This Pokemon takes 1/10 less damage from direct attacks. This Pokemon can only be damaged by direct attacks.",
+		desc: "This Pokemon takes 15% less damage from direct attacks. This Pokemon can only be damaged by direct attacks.",
 		shortDesc: "Reduced damage from direct attacks. Can only be damaged by direct attacks.",
 		name: "Permafrost Armor",
 		onSourceModifyDamage(damage, source, target, move) {
-			return this.chainModify(0.9);
+			return this.chainModify(0.85);
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {

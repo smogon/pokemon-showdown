@@ -128,7 +128,7 @@ export const ssbSets: SSBSets = {
 	},
 	Flare: {
 		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
-		moves: ['Earthquake', 'Knock Off', ['Play Rough', 'U-turn']],
+		moves: ['Sacred Sword', 'Knock Off', 'U-turn'],
 		signatureMove: 'Kōri Senbon',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},

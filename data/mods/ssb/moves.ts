@@ -523,23 +523,25 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// Flare
 	krisenbon: {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 110,
 		category: "Physical",
-		desc: "If the target is a Flying type that has not used Roost this turn or a Pokemon with the Levitate Ability, it loses its immunity to Ground-type attacks and the Arena Trap Ability as long as it remains active. This move's type effectiveness against Water is changed to be neutral no matter what this move's type is.",
-		shortDesc: "Grounds target. Neutral on Water.",
+		desc: "Almost always goes first. Deals double damage if resisted.",
+		shortDesc: "Almost always goes first. Deals double damage if resisted.",
 		name: "Kōri Senbon",
-		pp: 5,
+		pp: 3,
+		noPPBoosts: true,
 		priority: 1,
-		flags: {protect: 1, mirror: 1, nonsky: 1},
-		volatileStatus: 'smackdown',
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Ice Shard', target);
 		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Water') return 0;
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod < 0) {
+				return this.chainModify(2);
+			}
 		},
 		secondary: null,
 		target: "normal",
