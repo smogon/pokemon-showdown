@@ -43,8 +43,9 @@ export const BattleAliases: {[alias: string]: string} = {
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
-	petmod: "[Gen 8 Pet Mod] Megamax",
-	megamax: "[Gen 8 Pet Mod] Megamax",
+	pmots: "[Gen 8] Megamax",
+	mbh: "[Gen 8] More Balanced Hackmons",
+	opti: "[Gen 8] Optimons",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
