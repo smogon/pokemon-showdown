@@ -1430,7 +1430,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (room.roomid !== 'staff') this.privateModAction(`(${targetUser.name} ${forceRenameMessage})`);
-		const roomMessage = this.pmTarget ? &lt;PM:${this.pmTarget.userid}>` :
+		const roomMessage = this.pmTarget ? `<PM:${this.pmTarget.userid}>` :
 			room && room.roomid !== 'staff' ? `«<a href="/${room.roomid}" target="_blank">${room.roomid}</a>» ` :
 			'';
 		const rankMessage = targetUser.getAccountStatusString();
