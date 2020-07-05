@@ -1433,8 +1433,7 @@ export const commands: ChatCommands = {
 		const rankMessage = targetUser.getAccountStatusString();
 		Rooms.global.notifyRooms(
 			['staff'],
-			`|html|${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`}` +
-			Utils.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`
+			`|html|${roomMessage}` + Utils.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`
 		);
 
 		targetUser.resetName(true);
