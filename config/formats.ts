@@ -1018,7 +1018,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	},
 	{
 		name: "[Gen 8] Optimons",
-		desc: `Every Pok&eacute;mon is optimized to become viable for a balanced metagame.`,
+		desc: `Every Pok&eacute;mon is optimized to become viable for a balanced metagame. To see the new stats of optimized Pok&eacute;mon, do <code>/dt [pokemon], optimons</code>.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657509/">Optimons</a>`,
 		],
