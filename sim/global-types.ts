@@ -1143,6 +1143,7 @@ interface SpeciesFormatsData {
 	randomBattleMoves?: readonly string[];
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
+	randomDoubleBattleLevel?: number;
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: string;
 }
