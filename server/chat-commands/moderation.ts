@@ -739,7 +739,7 @@ export const commands: ChatCommands = {
 		const lockMessage = `${name} was locked from talking${durationMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
-		if (!room || room.roomid !== 'staff') {
+		if (!room || room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${lockMessage}`);
 		}
 		if (room) room.hideText([userid, toID(this.inputUsername)]);
@@ -803,7 +803,7 @@ export const commands: ChatCommands = {
 			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`;
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
-			if (!room || room.roomid !== 'staff') {
+			if (!room || room?.roomid !== 'staff') {
 				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${unlockMessage}`);
 			}
 			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.id}`);
@@ -837,7 +837,9 @@ export const commands: ChatCommands = {
 		const unlockMessage = `The name '${target}' was unlocked by ${user.name}.`;
 
 		this.addModAction(unlockMessage);
-		Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${unlockMessage}`);
+		if (!room || room?.roomid !== 'staff') {
+			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${unlockMessage}`);
+		}
 	},
 	unlockip(target, room, user) {
 		target = target.trim();
@@ -863,8 +865,9 @@ export const commands: ChatCommands = {
 		}
 		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 
-		const broadcastRoom = Rooms.get('staff');
-		broadcastRoom!.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
+		if (!room || room?.roomid !== 'staff') {
+			Rooms.get('staff')?.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
+		}
 	},
 	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ &`],
 	unlocknamehelp: [`/unlockname [name] - Unlocks a punished alt, leaving the original lock intact. Requires: % @ &`],
