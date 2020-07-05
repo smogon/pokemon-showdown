@@ -565,6 +565,7 @@ export const commands: ChatCommands = {
 	jeopardy: {
 		off: 'disable',
 		disable(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('gamemanagement', null, room)) return;
 			if (room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already disabled in this room.");
@@ -576,6 +577,7 @@ export const commands: ChatCommands = {
 
 		on: 'enable',
 		enable(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already enabled in this room.");
@@ -591,6 +593,7 @@ export const commands: ChatCommands = {
 
 		create: 'new',
 		new(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.game) {
 				return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 			}
@@ -612,6 +615,7 @@ export const commands: ChatCommands = {
 		},
 
 		categories(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -624,6 +628,7 @@ export const commands: ChatCommands = {
 		},
 
 		category(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -642,6 +647,7 @@ export const commands: ChatCommands = {
 		},
 
 		select(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.select(target, user);
@@ -649,6 +655,7 @@ export const commands: ChatCommands = {
 		},
 
 		buzz(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.buzz(user);
@@ -656,6 +663,7 @@ export const commands: ChatCommands = {
 		},
 
 		wager(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.wager(target, user);
@@ -663,6 +671,7 @@ export const commands: ChatCommands = {
 		},
 
 		answer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.answer(target, user);
@@ -670,6 +679,7 @@ export const commands: ChatCommands = {
 		},
 
 		import(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!target) return this.errorReply("You must specify at least one question");
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
@@ -715,6 +725,7 @@ export const commands: ChatCommands = {
 
 		dd: 'dailydouble',
 		dailydouble(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -740,6 +751,7 @@ export const commands: ChatCommands = {
 		],
 
 		view(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -758,6 +770,7 @@ export const commands: ChatCommands = {
 
 		addplayer: 'adduser',
 		adduser(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -773,6 +786,7 @@ export const commands: ChatCommands = {
 
 		incorrect: 'correct',
 		correct(target, room, user, connection, cmd) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -781,6 +795,7 @@ export const commands: ChatCommands = {
 		},
 
 		start(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -789,6 +804,7 @@ export const commands: ChatCommands = {
 		},
 		removeplayer: 'removeuser',
 		removeuser(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -802,6 +818,7 @@ export const commands: ChatCommands = {
 		},
 
 		subhost(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -812,6 +829,7 @@ export const commands: ChatCommands = {
 		},
 
 		state(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -819,6 +837,7 @@ export const commands: ChatCommands = {
 		},
 
 		end(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (!this.can('minigame', null, room)) return;
@@ -828,6 +847,7 @@ export const commands: ChatCommands = {
 		},
 
 		pass(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -835,6 +855,7 @@ export const commands: ChatCommands = {
 		},
 
 		timer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
@@ -847,6 +868,7 @@ export const commands: ChatCommands = {
 		},
 
 		finaltimer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
