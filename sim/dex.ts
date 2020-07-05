@@ -829,6 +829,9 @@ export class ModdedDex {
 		for (const ban of format.banlist) {
 			ruleset.push('-' + ban);
 		}
+		for (const ban of format.restricted) {
+			ruleset.push('*' + ban);
+		}
 		for (const ban of format.unbanlist) {
 			ruleset.push('+' + ban);
 		}
@@ -881,12 +884,11 @@ export class ModdedDex {
 				continue;
 			}
 
-			if ("+-".includes(ruleSpec.charAt(0))) {
-				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
-				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
+			if ("+*-".includes(ruleSpec.charAt(0))) {
 				if (ruleTable.has(ruleSpec)) {
 					throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
 				}
+				for (const prefix of "-*+") ruleTable.delete(prefix + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
@@ -953,6 +955,7 @@ export class ModdedDex {
 	validateRule(rule: string, format: Format | null = null) {
 		switch (rule.charAt(0)) {
 		case '-':
+		case '*':
 		case '+':
 			if (format?.team) throw new Error(`We don't currently support bans in generated teams`);
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {

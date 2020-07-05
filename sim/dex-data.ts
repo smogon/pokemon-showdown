@@ -182,6 +182,11 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`-${thing}`);
 	}
 
+	isRestricted(thing: string) {
+		if (this.has(`+${thing}`)) return false;
+		return this.has(`*${thing}`);
+	}
+
 	check(thing: string, setHas: {[id: string]: true} | null = null) {
 		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
@@ -259,6 +264,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly baseRuleset: string[];
 	/** List of banned effects. */
 	readonly banlist: string[];
+	/** List of effects that aren't completely banned. */
+	readonly restricted: string[];
 	/** List of inherited banned effects to override. */
 	readonly unbanlist: string[];
 	/** List of ruleset and banlist changes in a custom format. */
@@ -317,6 +324,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];
+		this.restricted = data.restricted || [];
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
