@@ -520,6 +520,67 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+
+	// fart
+	soupstealing7starstrikeredux: {
+		accuracy: 100,
+		basePower: 40,
+		basePowerCallback() {
+			if (this.field.pseudoWeather.soupstealing7starstrikeredux) {
+				return 40 * this.field.pseudoWeather.soupstealing7starstrikeredux.multiplier;
+			}
+			return 40;
+		},
+		category: "Physical",
+		desc: "This move is either a Water, Fire, or Grass type move. The selected type is added to the user of this move. For every consecutive turn that this move is used by at least one Pokemon, this move's power is multiplied by the number of turns to pass, but not more than 5.",
+		shortDesc: "Changes user/move type to fire, water, or grass. Power increases when repeated.",
+		name: "Soup-Stealing 7-Star Strike: Redux",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTry() {
+			this.field.addPseudoWeather('soupstealing7starstrikeredux');
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Conversion", source);
+		},
+		onModifyMove(move, pokemon) {
+			const types = ['Fire', 'Water', 'Grass'];
+			const randomType = this.sample(types);
+			move.type = randomType;
+			pokemon.addType(randomType);
+			this.add('-start', pokemon, 'typeadd', randomType);
+		},
+		onHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', target);
+			if (this.randomChance(1, 2)) {
+				this.add(`c|${getName('fart')}|I hl on soup`);
+			} else {
+				this.add(`c|${getName('fart')}|I walk with purpose. bring me soup.`);
+			}
+		},
+		effect: {
+			duration: 2,
+			onStart() {
+				this.effectData.multiplier = 1;
+			},
+			onRestart() {
+				if (this.effectData.duration !== 2) {
+					this.effectData.duration = 2;
+					if (this.effectData.multiplier < 5) {
+						this.effectData.multiplier++;
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Flare
 	krisenbon: {
 		accuracy: 100,

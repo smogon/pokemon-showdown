@@ -265,6 +265,60 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// fart
+	bipolar: {
+		desc: "When this Pokemon switches in, it changes to two random types and gets STAB.",
+		shortDesc: "2 random types + STAB on switch-in.",
+		name: "Bipolar",
+		onSwitchIn(pokemon) {
+			const typeMap = {
+				Normal: "Return",
+				Fighting: "Sacred Sword",
+				Flying: "Drill Peck",
+				Poison: "Poison Jab",
+				Ground: "Earthquake",
+				Rock: "Stone Edge",
+				Bug: "Lunge",
+				Ghost: "Shadow Bone",
+				Steel: "Iron Head",
+				Electric: "Zing Zap",
+				Psychic: "Psychic Fangs",
+				Ice: "Icicle Crash",
+				Dragon: "Dual Chop",
+				Dark: "Jaw Lock",
+				Fairy: "Play Rough",
+			};
+			const types = Object.keys(typeMap);
+			this.prng.shuffle(types);
+			const newTypes = [types[0], types[1]];
+			this.add('-start', pokemon, 'typechange', newTypes.join('/'));
+			pokemon.setType(newTypes);
+			let move = this.dex.getMove(typeMap[newTypes[0]]);
+			pokemon.moveSlots[3] = pokemon.moveSlots[1];
+			pokemon.moveSlots[1] = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+				virtual: true,
+			};
+			move = this.dex.getMove(typeMap[newTypes[1]]);
+			pokemon.moveSlots[2] = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+				virtual: true,
+			};
+		},
+	},
+
 	// Flare
 	permafrostarmor: {
 		desc: "This Pokemon takes 15% less damage from direct attacks. This Pokemon can only be damaged by direct attacks.",

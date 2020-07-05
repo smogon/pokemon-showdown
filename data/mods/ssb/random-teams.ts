@@ -126,6 +126,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Forced Landing',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	fart: {
+		species: 'Kartana', ability: 'Bipolar', item: 'Metronome', gender: 'M',
+		moves: ['U-turn'],
+		signatureMove: 'Soup-Stealing 7-Star Strike: Redux',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: 1,
+	},
 	Flare: {
 		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
 		moves: ['Sacred Sword', 'Knock Off', 'U-turn'],
