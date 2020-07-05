@@ -567,6 +567,7 @@ export const commands: ChatCommands = {
 			}
 			saveFilters(true);
 			const output = `'${word}' was added to the ${list} list.`;
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 			Rooms.get('upperstaff')?.add(output).update();
 			return this.sendReply(output);
 		},
@@ -593,7 +594,7 @@ export const commands: ChatCommands = {
 			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
 			const upperStaff = Rooms.get('upperstaff');
 			if (upperStaff) upperStaff.add(output).update();
-			return this.sendReply(output);
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		'': 'view',
 		list: 'view',
