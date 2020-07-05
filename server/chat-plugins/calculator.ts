@@ -137,7 +137,6 @@ function solveRPN(rpn: string[]) {
 }
 
 export const commands: ChatCommands = {
-	'!calculate': true,
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');

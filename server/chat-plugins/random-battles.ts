@@ -293,7 +293,6 @@ function CAP1v1Sets(species: string | Species) {
 }
 
 export const commands: ChatCommands = {
-	'!randombattles': true,
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -351,7 +350,6 @@ export const commands: ChatCommands = {
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
 	],
 
-	'!randomdoublesbattle': true,
 	randdubs: 'randomdoublesbattle',
 	randomdoublesbattle(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -394,7 +392,6 @@ export const commands: ChatCommands = {
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
 	],
 
-	'!battlefactory': true,
 	bssfactory: 'battlefactory',
 	battlefactory(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
@@ -457,7 +454,6 @@ export const commands: ChatCommands = {
 		`/bssfactory [pokemon], [gen] - Displays a Pok\u00e9mon's BSS Factory sets. Supports Gen 7. Defaults to Gen 7.`,
 	],
 
-	'!cap1v1': true,
 	cap1v1(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse(`/help cap1v1`);

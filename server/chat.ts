@@ -35,14 +35,14 @@ export interface PageTable {
 export type ChatHandler = (
 	this: CommandContext,
 	target: string,
-	room: Room,
+	room: Room | null,
 	user: User,
 	connection: Connection,
 	cmd: string,
 	message: string
 ) => void;
 export interface ChatCommands {
-	[k: string]: ChatHandler | string | string[] | true | ChatCommands;
+	[k: string]: ChatHandler | string | string[] | ChatCommands;
 }
 
 export type SettingsHandler = (
@@ -367,19 +367,19 @@ export class CommandContext extends MessageContext {
 
 		const commandHandler = this.splitCommand(message);
 
+		if (this.room && !(this.user.id in this.room.users)) {
+			if (this.room.roomid === 'lobby') {
+				this.room = null;
+			} else {
+				return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
+			}
+		}
+
 		if (this.user.statusType === 'idle') this.user.setStatusType('online');
 
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
 		} else {
-			if (commandHandler === '!') {
-				if (!this.room) {
-					return this.popupReply(`You tried use "${message}" as a global command, but it is not a global command.`);
-				} else if (this.room) {
-					return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
-				}
-				return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" is unavailable in private messages. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
-			}
 			if (this.cmdToken) {
 				// To guard against command typos, show an error message
 				if (this.shouldBroadcast()) {
@@ -430,7 +430,7 @@ export class CommandContext extends MessageContext {
 		}
 	}
 
-	splitCommand(message = this.message, recursing = false): '!' | undefined | ChatHandler {
+	splitCommand(message = this.message, recursing = false): undefined | ChatHandler {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
@@ -528,15 +528,6 @@ export class CommandContext extends MessageContext {
 		this.cmdToken = cmdToken;
 		this.target = target;
 		this.fullCmd = fullCmd;
-
-		const requireGlobalCommand = !(this.room && this.user.id in this.room.users);
-
-		if (typeof commandHandler === 'function' && requireGlobalCommand) {
-			const baseCmd = typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd;
-			if (!curCommands['!' + baseCmd]) {
-				return '!';
-			}
-		}
 
 		// @ts-ignore type narrowing handled above
 		return commandHandler;
@@ -1235,6 +1226,10 @@ export class CommandContext extends MessageContext {
 		this.inputUsername = name.trim();
 		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
 		return rest;
+	}
+
+	requiresRoom() {
+		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
 }
 

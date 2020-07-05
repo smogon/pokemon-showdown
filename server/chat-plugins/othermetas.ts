@@ -39,7 +39,6 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 }
 
 export const commands: ChatCommands = {
-	'!othermetas': true,
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -76,7 +75,6 @@ export const commands: ChatCommands = {
 		`!om - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!mixandmega': true,
 	mnm: 'mixandmega',
 	mixandmega(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -175,7 +173,6 @@ export const commands: ChatCommands = {
 		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pokemon's type and stats.`,
 	],
 
-	'!stone': true,
 	orb: 'stone',
 	megastone: 'stone',
 	stone(target) {
@@ -277,7 +274,6 @@ export const commands: ChatCommands = {
 	},
 	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pokemon.`],
 
-	'!350cup': true,
 	350: '350cup',
 	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -309,7 +305,6 @@ export const commands: ChatCommands = {
 		`/350 OR /350cup <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in 350 Cup.`,
 	],
 
-	'!tiershift': true,
 	ts: 'tiershift',
 	ts1: 'tiershift',
 	ts2: 'tiershift',
@@ -365,7 +360,6 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /ts[gen number] to see a Pokemon's stats in that generation.`,
 	],
 
-	'!scalemons': true,
 	scale: 'scalemons',
 	scale1: 'scalemons',
 	scale2: 'scalemons',
@@ -410,7 +404,6 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /scale[gen number] to see a Pokemon's scaled stats in that generation.`,
 	],
 
-	'!natureswap': true,
 	ns: 'natureswap',
 	ns3: 'natureswap',
 	ns4: 'natureswap',
@@ -457,7 +450,6 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /ns[gen number] to see a Pokemon's stats in that generation.`,
 	],
 
-	'!crossevolve': true,
 	ce: 'crossevolve',
 	crossevo: 'crossevolve',
 	crossevolve(target, user, room) {

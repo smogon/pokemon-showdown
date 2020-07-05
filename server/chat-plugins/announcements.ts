@@ -51,6 +51,7 @@ export const commands: ChatCommands = {
 		htmlcreate: 'new',
 		create: 'new',
 		new(target, room, user, connection, cmd, message) {
+			if (!room) return this.requiresRoom();
 			if (!target) return this.parse('/help announcement new');
 			target = target.trim();
 			if (room.battle) return this.errorReply("Battles do not support announcements.");
@@ -78,6 +79,7 @@ export const commands: ChatCommands = {
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
 
 		timer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}
@@ -120,6 +122,7 @@ export const commands: ChatCommands = {
 		close: 'end',
 		stop: 'end',
 		end(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
@@ -137,6 +140,7 @@ export const commands: ChatCommands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}

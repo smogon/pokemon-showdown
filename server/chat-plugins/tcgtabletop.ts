@@ -46,6 +46,7 @@ export const commands: ChatCommands = {
 	ygo: 'yugioh',
 	yugioh(target, room, user) {
 		if (!this.canBroadcast()) return;
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
 		const subdomain = 'yugioh';
 		const query = target.trim();

@@ -88,6 +88,7 @@ function getWinnersInLottery(roomid: RoomID) {
 export const commands: ChatCommands = {
 	lottery: {
 		''(target, room) {
+			if (!room) return this.requiresRoom();
 			const lottery = lotteries[room.roomid];
 			if (!lottery) {
 				return this.errorReply("This room doesn't have a lottery running.");
@@ -96,6 +97,7 @@ export const commands: ChatCommands = {
 		},
 		edit: 'create',
 		create(target, room, user, connection, cmd) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('declare', null, room)) return;
 			if (room.battle || !room.persist) {
 				return this.errorReply('This room does not support the creation of lotteries.');
@@ -136,6 +138,7 @@ export const commands: ChatCommands = {
 			this.modlog(`LOTTERY ${edited ? 'EDIT' : 'CREATE'} ${name}`, null, `${maxWinnersNum} max winners`);
 		},
 		delete(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('declare', null, room)) return;
 			const lottery = lotteries[room.roomid];
 			if (!lottery) {
@@ -147,6 +150,7 @@ export const commands: ChatCommands = {
 			this.sendReply('The lottery was successfully deleted.');
 		},
 		end(target, room) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('declare', null, room)) return;
 			const lottery = lotteries[room.roomid];
 			if (!lottery) {
@@ -176,7 +180,6 @@ export const commands: ChatCommands = {
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			endLottery(room.roomid, winners);
 		},
-		'!join': true,
 		join(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
@@ -207,7 +210,6 @@ export const commands: ChatCommands = {
 				this.popupReply('You are already in the lottery.');
 			}
 		},
-		'!leave': true,
 		leave(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
@@ -230,6 +232,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		participants(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const lottery = lotteries[room.roomid];
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
