@@ -865,8 +865,10 @@ export const commands: ChatCommands = {
 		}
 		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 
-		if (!room || room?.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
+		const logRoom = Rooms.get('staff') || room;
+		logRoom?.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
+		if (!logRoom || logRoom !== room) {
+			this.privateModAction(`(${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target})`);
 		}
 	},
 	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ &`],
