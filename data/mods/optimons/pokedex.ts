@@ -106,4 +106,71 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Ground", "Dragon"],
 		baseStats: {hp: 82, atk: 107, def: 125, spa: 65, spd: 90, spe: 75},
 	},
+	flapple: {
+		inherit: true,
+		baseStats: {hp: 75, atk: 110, def: 90, spa: 95, spd: 80, spe: 100},
+	},
+	appletun: {
+		inherit: true,
+		baseStats: {hp: 120, atk: 85, def: 90, spa: 110, spd: 85, spe: 45},
+	},
+	magmortar: {
+		inherit: true,
+		types: ["Fire", "Fighting"],
+		baseStats: {hp: 75, atk: 95, def: 67, spa: 125, spd: 95, spe: 83},
+		abilities: {0: "Flame Body", 1: "Sheer Force"},
+	},
+	electivire: {
+		inherit: true,
+		types: ["Electric", "Fighting"],
+		baseStats: {hp: 75, atk: 123, def: 87, spa: 105, spd: 85, spe: 95},
+		abilities: {0: "Motor Drive", 1: "Vital Spirit", H: "Sheer Force"},
+	},
+	yanmega: {
+		inherit: true,
+		types: ["Bug", "Dragon"],
+	},
+	dusknoir: {
+		inherit: true,
+		types: ["Ghost", "Dark"],
+		baseStats: {hp: 80, atk: 135, def: 100, spa: 65, spd: 100, spe: 65},
+		abilities: {0: "Pressure", 1: "Iron Fist"},
+	},
+	xatu: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 70, def: 90, spa: 115, spd: 90, spe: 75},
+	},
+	sudowoodo: {
+		inherit: true,
+		types: ["Rock", "Grass"],
+		baseStats: {hp: 80, atk: 125, def: 125, spa: 50, spd: 80, spe: 50},
+	},
+	oranguru: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 60, def: 90, spa: 110, spd: 110, spe: 50},
+		abilities: {0: "Oblivious", 1: "Telepathy", H: "Sheer Force"},
+	},
+	bellossom: {
+		inherit: true,
+		types: ["Grass", "Fairy"],
+		baseStats: {hp: 75, atk: 60, def: 95, spa: 100, spd: 100, spe: 100},
+		abilities: {0: "Dancer", 1: "Own Tempo", H: "Triage"},
+	},
+	garbodor: {
+		inherit: true,
+		types: ["Poison", "Steel"],
+		baseStats: {hp: 100, atk: 60, def: 102, spa: 95, spd: 102, spe: 55},
+		abilities: {0: "Stench", 1: "Corrosion", H: "Aftermath"},
+	},
+	druddigon: {
+		inherit: true,
+		types: ["Dragon", "Steel"],
+		baseStats: {hp: 77, atk: 130, def: 120, spa: 60, spd: 90, spe: 68},
+		abilities: {0: "Mold Breaker", 1: "Rough Skin", H: "Sheer Force"},
+	},
+	flygon: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 70, def: 90, spa: 115, spd: 90, spe: 100},
+		abilities: {0: "Levitate", 1: "Adaptability", H: "Berserk"},
+	},
 };

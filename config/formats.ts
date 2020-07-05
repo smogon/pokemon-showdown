@@ -1024,7 +1024,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'optimons',
+		searchShow: false,
 		ruleset: ['[Gen 8] OU'],
+		unbanlist: ['Electabuzz', 'Electivire', 'Elekid', 'Magby', 'Magmar', 'Magmortar', 'Yanma', 'Yanmega'],
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",
