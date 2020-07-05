@@ -742,7 +742,7 @@ export const commands: ChatCommands = {
 		if (!room || room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${lockMessage}`);
 		}
-		if (room) room.hideText([userid, toID(this.inputUsername)]);
+		room?.hideText([userid, toID(this.inputUsername)]);
 		const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
