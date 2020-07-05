@@ -1701,17 +1701,15 @@ export const Rooms = {
 
 		let inviteOnly = false;
 		const privacySetter = new Set<ID>(options.inviteOnly || []);
-		for (const user of players) {
-			if (user.settings.inviteOnlyNextBattle) {
+		for (const p of ['p1', 'p2', 'p3', 'p4']) {
+			if (options[`${p}inviteOnly`]) {
 				inviteOnly = true;
-				privacySetter.add(user.id);
-				user.settings.inviteOnlyNextBattle = false;
-			}
-			if (user.settings.hideNextBattle) {
-				privacySetter.add(user.id);
-				user.settings.hideNextBattle = false;
+				privacySetter.add(options[p].id);
+			} else if (options[`${p}hidden`]) {
+				privacySetter.add(options[p].id);
 			}
 		}
+
 		if (privacySetter.size) {
 			const prefix = battle.forcedPublic();
 			if (prefix) {

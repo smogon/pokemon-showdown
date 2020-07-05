@@ -16,7 +16,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
-type UserSettings = import('../users').UserSettings;
+type UserSettings = import('../users').User['settings'];
 
 const avatarTable = new Set([
 	'aaron',
@@ -730,7 +730,8 @@ export const commands: ChatCommands = {
 					}
 				}
 			}
-			user.updateSettings(settings);
+			Object.assign(user.settings, settings);
+			user.update();
 		} catch {
 			this.errorReply("Unable to parse settings in /updatesettings!");
 		}
@@ -1289,7 +1290,7 @@ export const commands: ChatCommands = {
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam(target, room, user) {
-		user.team = target;
+		user.battleSettings.team = target;
 	},
 
 	vtm(target, room, user, connection) {
@@ -1304,7 +1305,7 @@ export const commands: ChatCommands = {
 		);
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		return TeamValidatorAsync.get(format.id).validateTeam(user.team).then(result => {
+		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${format.name}.`);

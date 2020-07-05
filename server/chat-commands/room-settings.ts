@@ -139,11 +139,11 @@ export const commands: ChatCommands = {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
 		if (!groupConfig?.editprivacy) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
-			user.settings.inviteOnlyNextBattle = false;
+			user.battleSettings.inviteOnly = false;
 			user.update();
 			this.sendReply("Your next battle will be publicly visible.");
 		} else {
-			user.settings.inviteOnlyNextBattle = true;
+			user.battleSettings.inviteOnly = true;
 			user.update();
 			if (user.forcedPublic) {
 				return this.errorReply(`Your next battle will be invite-only provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
@@ -990,11 +990,11 @@ export const commands: ChatCommands = {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
 		if (!groupConfig?.editprivacy) return this.errorReply(`/hidenext - Access denied.`);
 		if (this.meansNo(target)) {
-			user.settings.hideNextBattle = false;
+			user.battleSettings.hidden = false;
 			user.update();
 			this.sendReply("Your next battle will be publicly visible.");
 		} else {
-			user.settings.hideNextBattle = true;
+			user.battleSettings.hidden = true;
 			user.update();
 			if (user.forcedPublic) {
 				return this.errorReply(`Your next battle will be hidden provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);

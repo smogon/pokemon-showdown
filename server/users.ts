@@ -299,21 +299,8 @@ export class Connection {
 
 type ChatQueueEntry = [string, RoomID, Connection];
 
-export interface UserSettings {
-	blockChallenges: boolean;
-	blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked';
-	hideNextBattle: boolean;
-	ignoreTickets: boolean;
-	inviteOnlyNextBattle: boolean;
-}
-type UserSetting = keyof UserSettings;
-
-const SETTINGS: readonly UserSetting[] =
-	['blockChallenges', 'blockPMs', 'hideNextBattle', 'ignoreTickets', 'inviteOnlyNextBattle'] as const;
-
 // User
 export class User extends Chat.MessageContext {
-	static readonly SETTINGS = SETTINGS;
 	readonly user: User;
 	readonly inRooms: Set<RoomID>;
 	/**
@@ -344,11 +331,21 @@ export class User extends Chat.MessageContext {
 
 	lastChallenge: number;
 	lastPM: string;
-	team: string;
 	lastMatch: string;
 	forcedPublic: string | null;
 
-	settings: UserSettings;
+	settings: {
+		blockChallenges: boolean,
+		blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked',
+		ignoreTickets: boolean,
+	};
+
+	battleSettings: {
+		team: string,
+		hidden: boolean,
+		inviteOnly: boolean,
+	};
+
 	isSysop: boolean;
 	isStaff: boolean;
 	lastDisconnected: number;
@@ -360,6 +357,13 @@ export class User extends Chat.MessageContext {
 	lastChatMessage: number;
 	lastCommand: string;
 
+	notified: {
+		blockChallenges: boolean,
+		blockPMs: boolean,
+		punishment: boolean,
+		lock: boolean,
+	};
+
 	lastMessage: string;
 	lastMessageTime: number;
 	lastReportTime: number;
@@ -367,10 +371,6 @@ export class User extends Chat.MessageContext {
 	s2: string;
 	s3: string;
 
-	blockChallengesNotified: boolean;
-	blockPMsNotified: boolean;
-	punishmentNotified: boolean;
-	lockNotified: boolean;
 	autoconfirmed: ID;
 	trusted: ID;
 	trackRename: string;
@@ -415,7 +415,6 @@ export class User extends Chat.MessageContext {
 		// misc state
 		this.lastChallenge = 0;
 		this.lastPM = '';
-		this.team = '';
 		this.lastMatch = '';
 		this.forcedPublic = null;
 
@@ -423,10 +422,14 @@ export class User extends Chat.MessageContext {
 		this.settings = {
 			blockChallenges: false,
 			blockPMs: false,
-			hideNextBattle: false,
 			ignoreTickets: false,
-			inviteOnlyNextBattle: false,
 		};
+		this.battleSettings = {
+			team: '',
+			hidden: false,
+			inviteOnly: false,
+		};
+
 		this.isSysop = false;
 		this.isStaff = false;
 		this.lastDisconnected = 0;
@@ -446,10 +449,13 @@ export class User extends Chat.MessageContext {
 		this.s2 = '';
 		this.s3 = '';
 
-		this.blockChallengesNotified = false;
-		this.blockPMsNotified = false;
-		this.punishmentNotified = false;
-		this.lockNotified = false;
+		this.notified = {
+			blockChallenges: false,
+			blockPMs: false,
+			punishment: false,
+			lock: false,
+		};
+
 		this.autoconfirmed = '';
 		this.trusted = '';
 		// Used in punishments
@@ -864,12 +870,16 @@ export class User extends Chat.MessageContext {
 		if (isForceRenamed) this.trackRename = oldname;
 		return true;
 	}
-	/**
-	 * @param updated the settings which have been updated or none for all settings.
-	 */
-	getUpdateuserText(...updated: UserSetting[]) {
+	getUpdateuserText() {
 		const named = this.named ? 1 : 0;
-		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(this.settings)}`;
+		const settings = {
+			...this.settings,
+			// Battle privacy state needs to be propagated in addition to regular settings so that the
+			// 'Ban spectators' checkbox on the client can be kept in sync (and disable privacy correctly)
+			hiddenNextBattle: this.battleSettings.hidden,
+			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
+		};
+		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
 	update() {
 		this.send(this.getUpdateuserText());
@@ -1378,10 +1388,6 @@ export class User extends Chat.MessageContext {
 		} else {
 			this.chatQueue = null;
 		}
-	}
-	updateSettings(settings: Partial<UserSettings>) {
-		Object.assign(this.settings, settings);
-		this.update();
 	}
 	setStatusType(type: StatusType) {
 		if (type === this.statusType) return;

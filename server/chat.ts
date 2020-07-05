@@ -1877,14 +1877,14 @@ export const Chat = new class {
 		const prefix = `|pm|&|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
-			if (!targetUser.blockPMsNotified) {
+			if (!targetUser.notified.blockPMs) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
-				targetUser.blockPMsNotified = true;
+				targetUser.notified.blockPMs = true;
 			}
 		} else if (blocked === 'challenge') {
-			if (!targetUser.blockChallengesNotified) {
+			if (!targetUser.notified.blockChallenges) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
-				targetUser.blockChallengesNotified = true;
+				targetUser.notified.blockChallenges = true;
 			}
 		}
 	}
