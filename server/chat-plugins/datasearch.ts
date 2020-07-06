@@ -63,7 +63,6 @@ function escapeHTML(str?: string) {
 }
 
 export const commands: ChatCommands = {
-	'!dexsearch': true,
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
@@ -148,7 +147,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!randommove': true,
 	rollmove: 'randommove',
 	randmove: 'randommove',
 	randommove(target, room, user, connection, cmd, message) {
@@ -194,7 +192,6 @@ export const commands: ChatCommands = {
 		`/randommove uses the same parameters as /movesearch (see '/help ms').`,
 		`Adding a number as a parameter returns that many random Pok\u00e9mon Moves, e.g., '/randmove 6' returns 6 random Pok\u00e9mon Moves.`,
 	],
-	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon(target, room, user, connection, cmd, message) {
@@ -241,7 +238,6 @@ export const commands: ChatCommands = {
 		`Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon.`,
 	],
 
-	'!movesearch': true,
 	ms: 'movesearch',
 	ms1: 'movesearch',
 	ms2: 'movesearch',
@@ -303,7 +299,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!itemsearch': true,
 	isearch: 'itemsearch',
 	is: 'itemsearch',
 	is2: 'itemsearch',
@@ -349,7 +344,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!abilitysearch': true,
 	asearch: 'abilitysearch',
 	as: 'abilitysearch',
 	as3: 'abilitysearch',
@@ -392,7 +386,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!learn': true,
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',

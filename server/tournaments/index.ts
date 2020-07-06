@@ -1568,6 +1568,7 @@ export const commands: ChatCommands = {
 	tours: 'tournament',
 	tournaments: 'tournament',
 	tournament(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		let cmd;
 		[cmd, target] = Utils.splitFirst(target, ' ');
 		cmd = toID(cmd);

@@ -135,8 +135,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['Same Type Clause', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo',
-			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Urshifu-Rapid-Strike', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 	},
@@ -453,7 +453,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause'],
+		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Baton Pass', 'King\'s Rock'],
 		restricted: ['Shedinja', 'Lunala', 'Solgaleo', 'Type: Null', 'Huge Power', 'Pure Power', 'Gorilla Tactics', 'Shadow Tag'],
 		onValidateTeam(team) {
@@ -492,7 +492,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			return null;
 		},
 		validateSet(set, teamHas) {
-			const restricted = this.dex.getFormat('gen8crossevolution').restricted || [];
 			const crossSpecies = this.dex.getSpecies(set.name);
 			const onChangeSet = this.dex.getFormat('Pokemon').onChangeSet;
 			let problems = onChangeSet ? onChangeSet.call(this, set, this.format) : null;
@@ -505,7 +504,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
 			}
-			if (restricted.includes(crossSpecies.name) || restricted.includes(species.name)) {
+			if (this.ruleTable.isRestricted('pokemon:' + crossSpecies.id) || this.ruleTable.isRestricted('pokemon:' + species.id)) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
 			}
 			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
@@ -515,7 +514,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				];
 			}
 			const ability = this.dex.getAbility(set.ability);
-			if (!restricted.includes(ability.name) || Object.values(species.abilities).includes(ability.name)) {
+			if (!this.ruleTable.isRestricted('ability:' + ability.id) || Object.values(species.abilities).includes(ability.name)) {
 				set.species = crossSpecies.name;
 			}
 
@@ -583,12 +582,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Baneful Bunker', 'Bounce', 'Protect', 'Detect', 'Dig', 'Dive', 'Fly', 'King\'s Shield', 'Nature\'s Madness', 'Night Shade',
 			'Obstruct', 'Phantom Force', 'Seismic Toss', 'Shadow Force', 'Sky Drop', 'Spiky Shield', 'Super Fang',
 		],
-		onValidateSet(set, format) {
-			const restricted = format.restricted || [];
+		onValidateSet(set) {
 			const problems = [];
 			for (const [i, moveid] of set.moves.entries()) {
 				const move = this.dex.getMove(moveid);
-				if ([0, 1].includes(i) && restricted.includes(move.name)) {
+				if ([0, 1].includes(i) && this.ruleTable.isRestricted('move:' + move.id)) {
 					problems.push(`${set.name || set.species}'s move ${move.name} cannot be linked.`);
 				}
 			}
@@ -658,15 +656,14 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite',
 		],
 		restricted: ['Gengar', 'Kyurem-Black', 'Kyurem-White', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zekrom', 'Zeraora'],
-		onValidateTeam(team, format) {
-			const restrictedPokemon = format.restricted || [];
+		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
 			for (const set of team) {
 				const item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
 				const species = this.dex.getSpecies(set.species);
 				if (species.isNonstandard) return [`${species.baseSpecies} does not exist in gen 8.`];
-				if (restrictedPokemon.includes(species.name)) {
+				if (this.ruleTable.isRestricted('pokemon:' + species.id)) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
@@ -920,8 +917,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		column: 2,
 	},
 	{
-		name: "[Gen 8 Pet Mod] Megamax",
-		desc: `A metagame where Gigantamax formes are turned into new Mega Evolutions.`,
+		name: "[Gen 8] Megamax",
+		desc: `A metagame where Gigantamax formes are turned into new Mega Evolutions. To see the new stats of a Megamax forme or to see what new ability does, do <code>/dt [target], megamax</code>.`,
 		threads: [
 			`<a href="https://www.smogon.com/forums/threads/3658623/">Megamax</a>`,
 		],
@@ -930,13 +927,14 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
 		unbanlist: ['Uber'],
-		onValidateSet(set) {
+		onChangeSet(set) {
 			const species = this.dex.getSpecies(set.species);
 			if (species.tier === "Uber" &&
 				(!this.ruleTable.has(`+pokemon:${species.name}`) ||
 				!this.ruleTable.has(`+basepokemon:${species.baseSpecies}`))) {
 				return [`${set.name || set.species} is banned.`];
 			}
+			if (set.species.endsWith('-Gmax')) set.species = set.species.slice(0, -5);
 		},
 		checkLearnset(move, species, lsetData, set) {
 			if (species.name === 'Pikachu' || species.name === 'Pikachu-Gmax') {
@@ -956,6 +954,76 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			}
 			return this.checkLearnset(move, species, lsetData, set);
 		},
+		onModifySpecies(species) {
+			const newSpecies = this.dex.deepClone(species);
+			if (newSpecies.forme.includes('Gmax')) {
+				newSpecies.isMega = true;
+			}
+			return newSpecies;
+		},
+	},
+	{
+		name: "[Gen 8] National Dex BH",
+		desc: `Balanced Hackmons with National Dex elements mixed in.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658587/">More Balanced Hackmons</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', '!Obtainable'],
+		banlist: [
+			// Pokemon
+			'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja',
+			// Abilities
+			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody',
+			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
+			// Items
+			'Gengarite',
+			// Moves
+			'Chatter', 'Double Iron Bash', 'Octolock',
+			// Other
+			'Comatose + Sleep Talk',
+		],
+		onValidateSet(set) {
+			if (toID(set.ability) === 'intrepidsword' &&
+				!toID(set.species).startsWith('zacian') && toID(set.item) !== 'rustedsword') {
+				return [`${set.ability} is banned.`];
+			}
+			if (set.species === 'Zacian-Crowned' && (toID(set.item) !== 'rustedsword' || toID(set.ability) !== 'intrepidsword')) {
+				return [set.species + " is banned."];
+			}
+		},
+		onChangeSet(set) {
+			const item = toID(set.item);
+			if (set.species === 'Zacian' && item === 'rustedsword') {
+				set.species = 'Zacian-Crowned';
+				set.ability = 'Intrepid Sword';
+				const ironHead = set.moves.indexOf('ironhead');
+				if (ironHead >= 0) {
+					set.moves[ironHead] = 'behemothblade';
+				}
+			}
+			if (set.species === 'Zamazenta' && item === 'rustedshield') {
+				set.species = 'Zamazenta-Crowned';
+				set.ability = 'Dauntless Shield';
+				const ironHead = set.moves.indexOf('ironhead');
+				if (ironHead >= 0) {
+					set.moves[ironHead] = 'behemothbash';
+				}
+			}
+		},
+	},
+	{
+		name: "[Gen 8] Optimons",
+		desc: `Every Pok&eacute;mon is optimized to become viable for a balanced metagame. To see the new stats of optimized Pok&eacute;mon, do <code>/dt [pokemon], optimons</code>.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657509/">Optimons</a>`,
+		],
+
+		mod: 'optimons',
+		searchShow: false,
+		ruleset: ['[Gen 8] OU'],
+		unbanlist: ['Electabuzz', 'Electivire', 'Elekid', 'Magby', 'Magmar', 'Magmortar', 'Yanma', 'Yanmega'],
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",
@@ -2089,7 +2157,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			battle: 1,
 		},
 		ruleset: ['Standard', 'Baton Pass Clause', 'Swagger Clause'],
-		banlist: ['Uber', 'Whimsicott', 'Focus Sash', 'Soul Dew', 'Perish Song'],
+		banlist: ['Uber', 'Cottonee', 'Whimsicott', 'Focus Sash', 'Soul Dew', 'Perish Song'],
 		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
 	},
 	{

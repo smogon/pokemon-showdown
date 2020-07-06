@@ -261,7 +261,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (hasMove['morningsun'] || hasMove['toxic']) rejected = true;
 					break;
 				case 'hiddenpower':
-					if (move.type === 'Grass' && hasMove['sunnyday'] && (hasMove['solarbeam'] || movePool.includes('solarbeam'))) rejected = true;
+					if (move.type === 'Grass' && hasMove['sunnyday'] && hasMove['solarbeam']) rejected = true;
 					if (!hasType[move.type] && (hasMove['substitute'] || hasMove['toxic'] || hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
@@ -292,6 +292,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Normal'] && !counter['Normal'] && counter.setupType === 'Physical') ||
+					(hasType['Psychic'] && (movePool.includes('psychic') || movePool.includes('psychoboost')) && species.baseStats.spa >= 100) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 100) ||
 					(hasType['Water'] && !counter['Water'] && !hasMove['icebeam'] && counter.setupType !== 'Physical' && species.baseStats.spa >= 60) ||
 					(movePool.includes('meteormash') || movePool.includes('spore')) ||
@@ -418,7 +419,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			item = 'Salac Berry';
 		} else if (hasMove['endure'] || (hasMove['substitute'] && (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']))) {
 			item = (species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
-		} else if (hasMove['substitute'] && species.baseStats.spe >= 120 && counter.Physical >= 3) {
+		} else if (hasMove['substitute'] && counter.Physical >= 3 && species.baseStats.spe >= 120) {
 			item = 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
 			item = 'Petaya Berry';

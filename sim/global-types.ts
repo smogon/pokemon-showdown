@@ -1248,6 +1248,7 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 	readonly defaultLevel: number;
 	readonly maxLevel: number;
 	readonly noLog: boolean;
+	readonly restricted: string[];
 	readonly ruleset: string[];
 	readonly unbanlist: string[];
 	ruleTable: import('./dex-data').RuleTable | null;
