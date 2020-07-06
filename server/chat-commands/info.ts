@@ -582,7 +582,7 @@ export const commands: ChatCommands = {
 						Gen: String(pokemon.gen) || 'CAP',
 						Height: `${pokemon.heightm} m`,
 					};
-					if (!pokemon.forme || pokemon.forme !== "Gmax") {
+					if (pokemon.forme !== "Gmax" || dex.currentMod === 'megamax') {
 						details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					} else {
 						details["Weight"] = "0 kg <em>(GK/LK fail)</em>";
