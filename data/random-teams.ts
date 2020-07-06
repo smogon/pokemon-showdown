@@ -1095,7 +1095,7 @@ export class RandomTeams {
 				} else if (ability === 'Intimidate') {
 					rejectAbility = hasMove['bounce'];
 				} else if (ability === 'Iron Fist') {
-					rejectAbility = counter['ironfist'] < 2 || hasMove['dynamicpunch'];
+					rejectAbility = (counter['ironfist'] < 2 || hasMove['dynamicpunch']);
 				} else if (ability === 'Justified') {
 					rejectAbility = (hasAbility['Inner Focus'] && isDoubles);
 				} else if (ability === 'Lightning Rod') {
@@ -1105,7 +1105,7 @@ export class RandomTeams {
 				} else if (ability === 'Magic Guard') {
 					rejectAbility = (hasAbility['Tinted Lens'] && !counter.Status && !isDoubles);
 				} else if (ability === 'Mold Breaker') {
-					rejectAbility = (hasAbility['Adaptability'] || (hasAbility['Sheer Force'] && isDoubles) || hasAbility['Scrappy'] || hasAbility['Unburden'] && counter.setupType);
+					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Scrappy'] || (hasAbility['Sheer Force'] && !!counter['sheerforce']) || hasAbility['Unburden'] && counter.setupType);
 				} else if (ability === 'Neutralizing Gas') {
 					rejectAbility = !hasMove['toxicspikes'];
 				} else if (ability === 'No Guard') {
@@ -1271,14 +1271,17 @@ export class RandomTeams {
 			item = 'Choice Scarf';
 		} else if (isDoubles && hasMove['blizzard'] && ability !== 'Snow Warning' && !teamDetails['hail']) {
 			item = 'Blunder Policy';
-		} else if (isDoubles && counter.Physical >= 4 && (hasMove['flipturn'] || hasMove['uturn'] || hasType['Dragon'] || hasType['Fighting']) && !hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin'] &&
-			!hasMove['suckerpunch']) {
+		} else if (isDoubles && counter.Physical >= 4 && (hasType['Dragon'] || hasType['Fighting'] || hasMove['flipturn'] || hasMove['uturn']) &&
+			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']
+		) {
 			item = (!hasMove['aerialace'] && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
-		} else if (isDoubles && ((counter.Special >= 4 && (hasMove['voltswitch'] || hasType['Dragon'] || hasType ['Fighting'])) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) && !hasMove['acidspray'] &&
-			!hasMove['electroweb'])) {
+		} else if (isDoubles && ((counter.Special >= 4 && (hasType['Dragon'] || hasType ['Fighting'] || hasMove['voltswitch'])) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) &&
+			!hasMove['acidspray'] && !hasMove['electroweb'])
+		) {
 			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['electroweb'] &&
-			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['uturn']) {
+			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['uturn']
+		) {
 			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 
 		// Medium priority
@@ -1337,11 +1340,7 @@ export class RandomTeams {
 			item = 'Black Sludge';
 		}
 
-		let level: number = species.randomBattleLevel || 80;
-
-		if (isDoubles) {
-			level = species.randomDoubleBattleLevel || 80;
-		}
+		const level: number = (!isDoubles ? species.randomBattleLevel : species.randomDoubleBattleLevel) || 80;
 
 		// Prepare optimal HP
 		const srWeakness = (ability === 'Magic Guard' || item === 'Heavy-Duty Boots' ? 0 : this.dex.getEffectiveness('Rock', species));
