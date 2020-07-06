@@ -682,6 +682,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly randomBattleMoves?: readonly ID[];
 	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
+	readonly randomDoubleBattleLevel?: number;
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;

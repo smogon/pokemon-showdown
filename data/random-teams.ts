@@ -2,7 +2,6 @@
 
 import {Dex} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
-import {Utils} from '../lib/utils';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -658,7 +657,7 @@ export class RandomTeams {
 				case 'flamecharge': case 'sacredsword':
 					if (movePool.includes('swordsdance') || counter.damagingMoves.length < 3 && !counter.setupType) rejected = true;
 					break;
-				case 'fly': case 'scaleshot': case 'storedpower':
+				case 'fly': case 'storedpower':
 					if (!counter.setupType) rejected = true;
 					break;
 				case 'focuspunch': case 'reversal':
@@ -673,6 +672,9 @@ export class RandomTeams {
 				case 'rest':
 					if (movePool.includes('sleeptalk')) rejected = true;
 					if (!hasMove['sleeptalk'] && (movePool.includes('bulkup') || movePool.includes('calmmind') || movePool.includes('coil') || movePool.includes('curse'))) rejected = true;
+					break;
+				case 'scaleshot':
+					if (!counter.setupType && !isDoubles) rejected = true;
 					break;
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
@@ -1044,7 +1046,7 @@ export class RandomTeams {
 			}
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
 
-		const baseSpecies: Species = species.battleOnly && !species.requiredAbility ? this.dex.getSpecies(species.battleOnly as string) : species;
+		// const baseSpecies: Species = species.battleOnly && !species.requiredAbility ? this.dex.getSpecies(species.battleOnly as string) : species;
 		const abilities: string[] = Object.values(species.abilities);
 		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
 		let ability0 = this.dex.getAbility(abilities[0]);
@@ -1093,7 +1095,7 @@ export class RandomTeams {
 				} else if (ability === 'Intimidate') {
 					rejectAbility = hasMove['bounce'];
 				} else if (ability === 'Iron Fist') {
-					rejectAbility = counter['ironfist'] < 2;
+					rejectAbility = (counter['ironfist'] < 2 || hasMove['dynamicpunch']);
 				} else if (ability === 'Justified') {
 					rejectAbility = (hasAbility['Inner Focus'] && isDoubles);
 				} else if (ability === 'Lightning Rod') {
@@ -1103,13 +1105,15 @@ export class RandomTeams {
 				} else if (ability === 'Magic Guard') {
 					rejectAbility = (hasAbility['Tinted Lens'] && !counter.Status && !isDoubles);
 				} else if (ability === 'Mold Breaker') {
-					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Scrappy'] || hasAbility['Unburden'] && counter.setupType);
+					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Scrappy'] || (hasAbility['Sheer Force'] && !!counter['sheerforce']) || hasAbility['Unburden'] && counter.setupType);
 				} else if (ability === 'Neutralizing Gas') {
 					rejectAbility = !hasMove['toxicspikes'];
 				} else if (ability === 'No Guard') {
-					rejectAbility = (!counter['inaccurate'] || isDoubles && !species.types.includes('Rock'));
+					rejectAbility = (!counter['inaccurate']);
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
+				} else if (ability === 'Own Tempo') {
+					rejectAbility = isDoubles;
 				} else if (ability === 'Power Construct') {
 					rejectAbility = true;
 				} else if (ability === 'Prankster' || ability === 'Steely Spirit') {
@@ -1193,6 +1197,7 @@ export class RandomTeams {
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
 				if (hasAbility['Storm Drain']) ability = 'Storm Drain';
 				if (hasAbility['Telepathy'] && ability === 'Pressure') ability = 'Telepathy';
+				if (hasAbility['Triage']) ability = 'Triage';
 			}
 		} else {
 			ability = ability0.name;
@@ -1266,12 +1271,16 @@ export class RandomTeams {
 			item = 'Choice Scarf';
 		} else if (isDoubles && hasMove['blizzard'] && ability !== 'Snow Warning' && !teamDetails['hail']) {
 			item = 'Blunder Policy';
-		} else if (isDoubles && counter.Physical >= 4 && (hasMove['flipturn'] || hasMove['uturn']) && !hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin']) {
-			item = (species.name !== 'Scyther' && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
-		} else if (isDoubles && ((counter.Special >= 4 && hasMove['voltswitch']) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) && !hasMove['acidspray'] && !hasMove['electroweb'])) {
-			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['electroweb'] && !hasMove['fakeout'] &&
-			!hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']
+		} else if (isDoubles && counter.Physical >= 4 && (hasType['Dragon'] || hasType['Fighting'] || hasMove['flipturn'] || hasMove['uturn']) &&
+			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']
+		) {
+			item = (!hasMove['aerialace'] && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
+		} else if (isDoubles && ((counter.Special >= 4 && (hasType['Dragon'] || hasType ['Fighting'] || hasMove['voltswitch'])) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) &&
+			!hasMove['acidspray'] && !hasMove['electroweb'])
+		) {
+			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
+		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['electroweb'] &&
+			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['uturn']
 		) {
 			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 
@@ -1331,33 +1340,7 @@ export class RandomTeams {
 			item = 'Black Sludge';
 		}
 
-		let level: number = species.randomBattleLevel || 80;
-
-		if (isDoubles) {
-			// We choose level based on BST. Min level is 70, max level is 100. 640+ BST is 70, 330 or lower is 100. Calculate with those values.
-			// Every 10.3 BST adds a level from 70 up to 100. Results are floored.
-			const baseStats = species.baseStats;
-
-			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
-			// Adjust levels of mons based on abilities (Pure Power, Slow Start, etc.) and also Eviolite and Light Ball
-			// For the stat boosted, treat the Pokemon's base stat as if it were multiplied by the boost. (Actual effective base stats are higher.)
-			const speciesAbility = (baseSpecies === species ? ability : species.abilities[0]);
-			if (speciesAbility === 'Huge Power' || speciesAbility === 'Pure Power') {
-				bst += baseStats.atk;
-			}
-			if (item === 'Eviolite') {
-				bst += 0.5 * (baseStats.def + baseStats.spd);
-			} else if (item === 'Light Ball') {
-				bst += baseStats.atk + baseStats.spa;
-			} else if (ability === 'Gorilla Tactics') {
-				bst += 0.5 * (baseStats.atk);
-			} else if (ability === 'Slow Start') {
-				bst -= 0.5 * (baseStats.atk + baseStats.spe);
-			}
-
-			level = 70 + Math.floor(((640 - Utils.clampIntRange(bst, 330, 640)) / 10.3));
-			if (ability === 'Imposter') level = 85;
-		}
+		const level: number = (!isDoubles ? species.randomBattleLevel : species.randomDoubleBattleLevel) || 80;
 
 		// Prepare optimal HP
 		const srWeakness = (ability === 'Magic Guard' || item === 'Heavy-Duty Boots' ? 0 : this.dex.getEffectiveness('Rock', species));
