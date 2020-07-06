@@ -1310,11 +1310,11 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 		rules: 'customrules',
 		customrules(tournament, user, params, cmd) {
 			if (cmd === 'banlist') {
-				return this.errorReply('The new syntax is: /tour rules -bannedthing, +unbannedthing, *restrictedthing, ^unrestrictedthing, !removedrule, addedrule');
+				return this.errorReply('The new syntax is: /tour rules -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule');
 			}
 			if (params.length < 1) {
 				this.sendReply("Usage: /tour rules <list of rules>");
-				this.sendReply("Rules can be: -bannedthing, +unbannedthing, *restrictedthing, ^unrestrictedthing, !removedrule, addedrule");
+				this.sendReply("Rules can be: -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule");
 				return this.parse('/tour viewrules');
 			}
 			if (tournament.isTournamentStarted) {

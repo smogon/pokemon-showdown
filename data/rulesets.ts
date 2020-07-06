@@ -861,7 +861,8 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Prevents Pok&eacute;mon on the Ubers dynamax banlist from dynamaxing",
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (this.ruleTable.isRestricted(`pokemon:${pokemon.species.id}`) || this.ruleTable.isRestricted(`basepokemon:${pokemon.species.id}`)) {
+				if (this.ruleTable.isRestricted(`pokemon:${pokemon.species.id}`) ||
+					this.ruleTable.isRestricted(`basepokemon:${pokemon.species.id}`)) {
 					pokemon.canDynamax = false;
 				}
 			}
