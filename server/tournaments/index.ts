@@ -223,6 +223,7 @@ export class Tournament extends Rooms.RoomGame {
 	getCustomRules() {
 		const bans = [];
 		const unbans = [];
+		const restrictions = [];
 		const addedRules = [];
 		const removedRules = [];
 		for (const ban of this.customRules) {
@@ -231,6 +232,8 @@ export class Tournament extends Rooms.RoomGame {
 				unbans.push(ban.substr(1));
 			} else if (charAt0 === '-') {
 				bans.push(ban.substr(1));
+			} else if (charAt0 === '*') {
+				restrictions.push(ban.substr(1));
 			} else if (charAt0 === '!') {
 				removedRules.push(ban.substr(1));
 			} else {
@@ -238,8 +241,9 @@ export class Tournament extends Rooms.RoomGame {
 			}
 		}
 		const html = [];
-		if (bans.length) html.push(Utils.html`<b>Bans</b> - ${bans.join(', ')}`);
-		if (unbans.length) html.push(Utils.html`<b>Unbans</b> - ${unbans.join(', ')}`);
+		if (bans.length) html.push(Utils.html`<b>Added bans</b> - ${bans.join(', ')}`);
+		if (unbans.length) html.push(Utils.html`<b>Removed bans</b> - ${unbans.join(', ')}`);
+		if (restrictions.length) html.push(Utils.html`<b>Added Restrictions</b> - ${restrictions.join(', ')}`);
 		if (addedRules.length) html.push(Utils.html`<b>Added rules</b> - ${addedRules.join(', ')}`);
 		if (removedRules.length) html.push(Utils.html`<b>Removed rules</b> - ${removedRules.join(', ')}`);
 		return html.join(`<br />`);
@@ -1306,11 +1310,11 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 		rules: 'customrules',
 		customrules(tournament, user, params, cmd) {
 			if (cmd === 'banlist') {
-				return this.errorReply('The new syntax is: /tour rules -bannedthing, +unbannedthing, !removedrule, addedrule');
+				return this.errorReply('The new syntax is: /tour rules -bannedthing, +unbannedthing, *restrictedthing, ^unrestrictedthing, !removedrule, addedrule');
 			}
 			if (params.length < 1) {
 				this.sendReply("Usage: /tour rules <list of rules>");
-				this.sendReply("Rules can be: -bannedthing, +unbannedthing, !removedrule, addedrule");
+				this.sendReply("Rules can be: -bannedthing, +unbannedthing, *restrictedthing, ^unrestrictedthing, !removedrule, addedrule");
 				return this.parse('/tour viewrules');
 			}
 			if (tournament.isTournamentStarted) {
