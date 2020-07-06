@@ -861,7 +861,10 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Prevents Pok&eacute;mon on the Ubers dynamax banlist from dynamaxing",
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (this.ruleTable.isRestricted('pokemon:' + pokemon.species.id)) pokemon.canDynamax = false;
+				if (this.ruleTable.isRestricted(`pokemon:${pokemon.species.id}`) ||
+					this.ruleTable.isRestricted(`basepokemon:${pokemon.species.id}`)) {
+					pokemon.canDynamax = false;
+				}
 			}
 			this.add('html', 'Ubers Dynamax Clause: Pokémon on the <a href="https://www.smogon.com/dex/ss/formats/uber/">Ubers Dynamax Banlist</a> cannot Dynamax.');
 		},
@@ -917,7 +920,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
-			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted('move:' + move.id)) {
+			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const dex = this.dex;
 				let types: string[];
 				if (species.forme || species.otherFormes) {

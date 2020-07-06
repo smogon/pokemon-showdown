@@ -517,7 +517,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
 			}
-			if (this.ruleTable.isRestricted('pokemon:' + crossSpecies.id) || this.ruleTable.isRestricted('pokemon:' + species.id)) {
+			if (this.ruleTable.isRestricted(`pokemon:${crossSpecies.id}`) || this.ruleTable.isRestricted(`pokemon:${species.id}`)) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
 			}
 			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
@@ -527,7 +527,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				];
 			}
 			const ability = this.dex.getAbility(set.ability);
-			if (!this.ruleTable.isRestricted('ability:' + ability.id) || Object.values(species.abilities).includes(ability.name)) {
+			if (!this.ruleTable.isRestricted(`ability:${ability.id}`) || Object.values(species.abilities).includes(ability.name)) {
 				set.species = crossSpecies.name;
 			}
 
@@ -599,7 +599,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const problems = [];
 			for (const [i, moveid] of set.moves.entries()) {
 				const move = this.dex.getMove(moveid);
-				if ([0, 1].includes(i) && this.ruleTable.isRestricted('move:' + move.id)) {
+				if ([0, 1].includes(i) && this.ruleTable.isRestricted(`move:${move.id}`)) {
 					problems.push(`${set.name || set.species}'s move ${move.name} cannot be linked.`);
 				}
 			}
@@ -676,7 +676,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				if (!item || !item.megaStone) continue;
 				const species = this.dex.getSpecies(set.species);
 				if (species.isNonstandard) return [`${species.baseSpecies} does not exist in gen 8.`];
-				if (this.ruleTable.isRestricted('pokemon:' + species.id)) {
+				if (this.ruleTable.isRestricted(`pokemon:${species.id}`) || this.ruleTable.isRestricted(`basepokemon:${species.id}`)) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
