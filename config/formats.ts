@@ -939,14 +939,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'megamax',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
-		unbanlist: ['Uber'],
 		onChangeSet(set) {
-			const species = this.dex.getSpecies(set.species);
-			if (species.tier === "Uber" &&
-				(!this.ruleTable.has(`+pokemon:${species.name}`) ||
-				!this.ruleTable.has(`+basepokemon:${species.baseSpecies}`))) {
-				return [`${set.name || set.species} is banned.`];
-			}
 			if (set.species.endsWith('-Gmax')) set.species = set.species.slice(0, -5);
 		},
 		checkLearnset(move, species, lsetData, set) {
@@ -971,6 +964,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.forme.includes('Gmax')) {
 				newSpecies.isMega = true;
+				newSpecies.tier = "OU";
 			}
 			return newSpecies;
 		},
@@ -983,7 +977,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', '!Obtainable'],
+		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', '!Obtainable'],
 		banlist: [
 			// Pokemon
 			'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja',
