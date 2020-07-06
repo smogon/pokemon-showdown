@@ -534,4 +534,53 @@ export const commands: ChatCommands = {
 	crossevolvehelp: [
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon.",
 	],
+
+	showevo(target, user, room) {
+		if (!this.runBroadcast()) return;
+		const targetid = toID(target);
+		if (!targetid) return this.parse('/help showevo');
+		const evo = Dex.getSpecies(target);
+		if (!evo.exists) {
+			return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
+		}
+		if (!evo.prevo) {
+			return this.errorReply(`Error: ${evo.name} is not an evolution.`);
+		}
+		// Fake Pokemon
+		if (evo.isNonstandard === 'CAP') {
+			this.errorReply(`Warning: ${evo.name} is a fake Pok\u00e9mon created by the CAP Project and is restricted to CAP.`);
+		}
+		const prevoSpecies = Dex.getSpecies(evo.prevo);
+		const deltas = Dex.deepClone(evo);
+		deltas.tier = 'CE';
+		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+		let i: StatName;
+		for (i in evo.baseStats) {
+			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+			deltas.baseStats[i] = statChange;
+		}
+		deltas.types = [];
+		if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+		if (evo.types[1] !== prevoSpecies.types[1]) {
+			deltas.types[1] = evo.types[1] || evo.types[0];
+		}
+		if (deltas.types.length) {
+			// Undefined type remover
+			deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+
+			if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+		} else {
+			deltas.types = null;
+		}
+		const details = {
+			Gen: evo.gen,
+			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+			Stage: (Dex.getSpecies(prevoSpecies.prevo).exists ? 3 : 2),
+		};
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
+		this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+	},
+	showevohelp: [
+		`/showevo <Pok\u00e9mon> - Shows the changes that a Pok\u00e9mon applies in Cross Evolution`,
+	],
 };
