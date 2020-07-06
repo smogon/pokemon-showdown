@@ -110,7 +110,7 @@ function checkRipgrepAvailability() {
 }
 
 function getMoreButton(
-	roomid: RoomID, search: string, useExactSearch: boolean,
+	roomid: RoomID | 'global', search: string, useExactSearch: boolean,
 	lines: number, maxLines: number, onlyPunishments: boolean
 ) {
 	let newLines = 0;
@@ -215,7 +215,7 @@ async function runRipgrepModlog(paths: string[], regexString: string, results: S
 }
 
 function prettifyResults(
-	resultArray: string[], roomid: RoomID, searchString: string, exactSearch: boolean,
+	resultArray: string[], roomid: RoomID | 'global', searchString: string, exactSearch: boolean,
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
 ) {
 	if (resultArray === null) {
@@ -287,7 +287,7 @@ function prettifyResults(
 }
 
 async function getModlog(
-	connection: Connection, roomid: RoomID = 'global', searchString = '',
+	connection: Connection, roomid: RoomID | 'global' = 'global', searchString = '',
 	maxLines = 20, onlyPunishments = false, timed = false
 ) {
 	const startTime = Date.now();
@@ -568,7 +568,7 @@ export const commands: ChatCommands = {
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		let roomid: RoomID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: RoomID | 'global' = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			const targets = target.split(',');
