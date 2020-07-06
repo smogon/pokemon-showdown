@@ -7,6 +7,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
+import { throws } from 'assert';
 
 const RANKS: string[] = Config.groupsranking;
 
@@ -728,6 +729,34 @@ export const commands: ChatCommands = {
 	makegroupchathelp: [
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
+	],
+
+	async renamegroupchat(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!user.authAtLeast(Users.HOST_SYMBOL, room) || !user.can('lock')) return false;
+		 let title = target.trim();
+		if (!title) return this.parse('/help renamegroupchat');
+		if (room.minorActivity || room.game || room.tour) {
+			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
+		}
+		if (title.length >= 32) {
+			return this.errorReply("Title must be under 32 characters long.");
+		} else if (this.filter(title) !== title) {
+			return this.errorReply("Invalid title.");
+		}
+		const existingRoom = Rooms.search(toID(title));
+		if (existingRoom && !existingRoom.settings.modjoin) {
+			return this.errorReply(`Your group chat name is too similar to existing chat room '${title}'.`);
+		}
+		title = `[G] ${title}`;
+		if (!(await room.rename(title))) {
+			return this.errorReply(`Unknown error occurred while renaming the groupchat.`);
+		}
+		room.add(Utils.html`|raw|<div class="broadcast-green">This room has been renamed to <b>${target}</b></div>`).update();
+	},
+	renamegroupchathelp: [
+		'/renamegroupchat [name]: renames the current room to [name], if it\'s a groupchat.',
+		`Requires: % ${Users.HOST_SYMBOL} @ &`,
 	],
 
 	groupchatuptime: 'roomuptime',
