@@ -222,7 +222,6 @@ export const commands: ChatCommands = {
 	roomstaff: 'roomauth',
 	roomauth1: 'roomauth',
 	roomauth(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
 		let userLookup = '';
 		if (cmd === 'roomauth1') userLookup = `\n\nTo look up auth for a user, use /userauth ${target}`;
 		let targetRoom = room;
@@ -230,7 +229,7 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		const showAll = user.can('mute', null, room);
+		const showAll = user.can('mute', null, targetRoom);
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
 		for (const [id, rank] of targetRoom.auth) {
@@ -248,7 +247,8 @@ export const commands: ChatCommands = {
 			return `${group}:\n` +
 				Utils.sortBy(names).map(userid => {
 					const isOnline = Users.get(userid)?.statusType === 'online';
-					return userid in targetRoom.users && isOnline ? `**${userid}**` : userid;
+					// targetRoom guaranteed to exist above
+					return userid in targetRoom!.users && isOnline ? `**${userid}**` : userid;
 				}).join(', ');
 		});
 
