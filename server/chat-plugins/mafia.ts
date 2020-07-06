@@ -1005,7 +1005,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (player.lynching) this.unlynch(player.id, true);
 		this.sendDeclare(`${msg}! ${!this.noReveal && toID(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`);
-		if (player.role && !this.noReveal && toID(ability) === 'kill') player.revealed = `${player.getRole()}`;
+		if (player.role && !this.noReveal && toID(ability) === 'kill') player.revealed = player.getRole()!;
 		const targetRole = player.role;
 		if (targetRole) {
 			for (const [roleIndex, role] of this.roles.entries()) {
@@ -1035,7 +1035,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!toReveal.role) {
 		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`);
 		}
-		toReveal.revealed = `${revealAs}`;
+		toReveal.revealed = revealAs;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.id in this.playerTable ? `is` : `was`} ${revealAs}.`);
 		this.updatePlayers();
 	}
@@ -2555,7 +2555,7 @@ export const commands: ChatCommands = {
 					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getRole()}`);
 					game.logAction(user, `revealed ${player.name}`);
 					if (cmd === 'revealas') {
-						game.secretLogAction(user, `$fakerevealed ${player.name} as ${revealedRole!.role.safeName}`);
+						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole!.role.name}`);
 					}
 				} else {
 					user.sendTo(this.room, `|error|${targetUsername} is not a player.`);
