@@ -7649,7 +7649,6 @@ export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 			blizzard: ["2M", "1M"],
 			conversion: ["2L1", "2S0", "1L1"],
 			curse: ["2M"],
-			defensecurl: ["2M", "2L24"],
 			doubleedge: ["1M"],
 			doubleteam: ["2M", "1M"],
 			dreameater: ["2M"],
