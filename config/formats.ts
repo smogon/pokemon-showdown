@@ -517,7 +517,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
 			}
-			if (this.ruleTable.isRestricted(`pokemon:${crossSpecies.id}`) || this.ruleTable.isRestricted(`pokemon:${species.id}`)) {
+			if (this.ruleTable.isRestrictedSpecies(crossSpecies) || this.ruleTable.isRestrictedSpecies(species)) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
 			}
 			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
@@ -676,7 +676,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				if (!item || !item.megaStone) continue;
 				const species = this.dex.getSpecies(set.species);
 				if (species.isNonstandard) return [`${species.baseSpecies} does not exist in gen 8.`];
-				if (this.ruleTable.isRestricted(`pokemon:${species.id}`) || this.ruleTable.isRestricted(`basepokemon:${species.id}`)) {
+				if (this.ruleTable.isRestrictedSpecies(species)) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
