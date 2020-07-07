@@ -124,4 +124,9 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
 		abilities: {0: "Tangled Feet"},
 	},
+	// Zalm
+	weedle: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 35, def: 100, spa: 90, spd: 90, spe: 100},
+	},
 };

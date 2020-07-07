@@ -304,6 +304,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
 	},
+	Zalm: {
+		species: 'Weedle', ability: 'Berserk', item: 'Sitrus Berry', gender: 'M',
+		moves: ['Quiver Dance', 'Belch', ['Snipe Shot', 'Power Gem']],
+		signatureMove: 'Ingredient Foraging',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	Zodiax: {
 		species: 'Oricorio-Pom-Pom', ability: 'Primordial Sea', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Quiver Dance', 'Hurricane', 'Thunder'],

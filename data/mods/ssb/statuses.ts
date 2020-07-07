@@ -680,6 +680,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('yuki')}|You'll never extinguish our hopes!`);
 		},
 	},
+	zalm: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Zalm')}|<(:O)000>`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('Zalm')}|Run for the hills!`);
+		},
+		onFaint(pokemon) {
+			this.add(`c|${getName('Zalm')}|Woah`);
+		},
+	},
 	zodiax: {
 		noCopy: true,
 		onStart() {
