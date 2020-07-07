@@ -36,7 +36,13 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer {
 	readonly availableMatches: Set<TournamentPlayer>;
 	isBusy: boolean;
 	inProgressMatch: {to: TournamentPlayer, room: GameRoom} | null;
-	pendingChallenge: {from?: TournamentPlayer, to?: TournamentPlayer, team: string} | null;
+	pendingChallenge: {
+		from?: TournamentPlayer,
+		to?: TournamentPlayer,
+		team: string,
+		hidden: boolean,
+		inviteOnly: boolean,
+	} | null;
 	isDisqualified: boolean;
 	isEliminated: boolean;
 	autoDisqualifyWarned: boolean;
@@ -900,8 +906,8 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		to.lastActionTime = Date.now();
-		from.pendingChallenge = {to, team: ready.team};
-		to.pendingChallenge = {from, team: ready.team};
+		from.pendingChallenge = {to, team: ready.team, hidden: ready.hidden, inviteOnly: ready.inviteOnly};
+		to.pendingChallenge = {from, team: ready.team, hidden: ready.hidden, inviteOnly: ready.inviteOnly};
 		from.sendRoom(`|tournament|update|${JSON.stringify({challenging: to.name})}`);
 		to.sendRoom(`|tournament|update|${JSON.stringify({challenged: from.name})}`);
 
@@ -949,8 +955,8 @@ export class Tournament extends Rooms.RoomGame {
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.from) return;
 
-		const ready2 = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
-		if (!ready2) return;
+		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
+		if (!ready) return;
 
 		// Prevent battles between offline users from starting
 		const from = Users.get(challenge.from.id);
@@ -960,21 +966,18 @@ export class Tournament extends Rooms.RoomGame {
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
 
-		const ready1 = Ladders.getChallenging(from.id)?.ready;
-		if (!ready1) return;
-
 		const room = Rooms.createBattle(this.fullFormat, {
 			isPrivate: this.room.settings.isPrivate,
 			p1: from,
-			p1team: ready1.team,
-			p1hidden: ready1.hidden,
-			p1inviteOnly: ready1.inviteOnly,
+			p1team: challenge.team,
+			p1hidden: challenge.hidden,
+			p1inviteOnly: challenge.inviteOnly,
 			p2: user,
-			p2team: ready2.team,
-			p2hidden: ready2.hidden,
-			p2inviteOnly: ready2.inviteOnly,
+			p2team: ready.team,
+			p2hidden: ready.hidden,
+			p2inviteOnly: ready.inviteOnly,
 			rated: !Ladders.disabled && this.isRated,
-			challengeType: ready2.challengeType,
+			challengeType: ready.challengeType,
 			tour: this,
 		});
 		if (!room || !room.battle) throw new Error(`Failed to create battle in ${room}`);

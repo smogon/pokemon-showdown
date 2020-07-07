@@ -181,8 +181,18 @@ class Ladder extends LadderStore {
 		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
 	}
 
+	static getChallenging(userid: ID) {
+		const userChalls = Ladders.challenges.get(userid);
+		if (userChalls) {
+			for (const chall of userChalls) {
+				if (chall.from === userid) return chall;
+			}
+		}
+		return null;
+	}
+
 	static cancelChallenging(user: User) {
-		const chall = Ladders.getChallenging(user.id);
+		const chall = Ladder.getChallenging(user.id);
 		if (chall) {
 			Ladder.removeChallenge(chall);
 			return true;
@@ -191,7 +201,7 @@ class Ladder extends LadderStore {
 	}
 	static rejectChallenge(user: User, targetUsername: string) {
 		const targetUserid = toID(targetUsername);
-		const chall = Ladders.getChallenging(targetUserid);
+		const chall = Ladder.getChallenging(targetUserid);
 		if (chall && chall.to === user.id) {
 			Ladder.removeChallenge(chall);
 			return true;
@@ -225,7 +235,7 @@ class Ladder extends LadderStore {
 			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
 			return false;
 		}
-		if (Ladders.getChallenging(user.id)) {
+		if (Ladder.getChallenging(user.id)) {
 			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
@@ -261,7 +271,7 @@ class Ladder extends LadderStore {
 		return true;
 	}
 	static async acceptChallenge(connection: Connection, targetUser: User) {
-		const chall = Ladders.getChallenging(targetUser.id);
+		const chall = Ladder.getChallenging(targetUser.id);
 		if (!chall || chall.to !== connection.user.id) {
 			connection.popup(`${targetUser.id} is not challenging you. Maybe they cancelled before you accepted?`);
 			return false;
@@ -575,16 +585,6 @@ function getLadder(formatid: string) {
 	return new Ladder(formatid);
 }
 
-function getChallenging(userid: ID) {
-	const userChalls = Ladders.challenges.get(userid);
-	if (userChalls) {
-		for (const chall of userChalls) {
-			if (chall.from === userid) return chall;
-		}
-	}
-	return null;
-}
-
 const periodicMatchInterval = setInterval(
 	() => Ladder.periodicMatch(),
 	PERIODIC_MATCH_INTERVAL
@@ -594,7 +594,6 @@ export const Ladders = Object.assign(getLadder, {
 	BattleReady,
 	LadderStore,
 	Ladder,
-	getChallenging,
 
 	cancelSearches: Ladder.cancelSearches,
 	updateSearch: Ladder.updateSearch,
