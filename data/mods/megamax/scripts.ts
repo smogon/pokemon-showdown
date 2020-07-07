@@ -1,6 +1,9 @@
 export const BattleScripts: ModdedBattleScriptsData = {
 	gen: 8,
 	init() {
+		for (const i in this.data.FormatsData) {
+			if (i.endsWith('gmax')) this.modData('FormatsData', i).tier = "OU";
+		}
 		this.modData('FormatsData', 'melmetalgmax').isNonstandard = null;
 
 		this.modData('Learnsets', 'venusaur').learnset.gunkshot = ["8M"];

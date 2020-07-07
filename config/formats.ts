@@ -964,7 +964,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.forme.includes('Gmax')) {
 				newSpecies.isMega = true;
-				newSpecies.tier = "OU";
 			}
 			return newSpecies;
 		},
@@ -977,7 +976,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', '!Obtainable'],
+		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', '!Obtainable'],
 		banlist: [
 			// Pokemon
 			'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja',
