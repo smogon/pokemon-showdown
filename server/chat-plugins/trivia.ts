@@ -32,8 +32,6 @@ const MODES: {[k: string]: string} = {
 	number: 'Number',
 	timer: 'Timer',
 	triumvirate: 'Triumvirate',
-	tri: 'Triumvirate',
-	triforce: 'Triumvirate',
 };
 
 const LENGTHS: {[k: string]: {cap: number, prizes: number[]}} = {
@@ -1074,6 +1072,7 @@ const commands: ChatCommands = {
 		if (targets.length < 3) return this.errorReply("Usage: /trivia new [mode], [category], [length]");
 
 		let mode: string = toID(targets[0]);
+		if (['triforce', 'tri'].includes(mode)) mode = 'triumvirate';
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
 			mode = Utils.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
@@ -1085,7 +1084,8 @@ const commands: ChatCommands = {
 		const isAll = (category === 'all');
 		let questions;
 		if (isRandomCategory) {
-			const categories = Object.keys(MAIN_CATEGORIES);
+			const lastCategoryID = toID(triviaData.history?.slice(-1)[0].category).replace("random", "");
+			const categories = Object.keys(MAIN_CATEGORIES).filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID);
 			const randCategory = categories[Math.floor(Math.random() * categories.length)];
 			questions = sliceCategory(randCategory);
 		} else if (isAll) {
@@ -1117,7 +1117,7 @@ const commands: ChatCommands = {
 			_Trivia = FirstModeTrivia;
 		} else if (mode === 'number') {
 			_Trivia = NumberModeTrivia;
-		} else if (mode === 'triumvirate' || mode === 'tri' || mode === 'triforce') {
+		} else if (mode === 'triumvirate') {
 			_Trivia = TriumvirateModeTrivia;
 		} else {
 			_Trivia = TimerModeTrivia;
