@@ -949,8 +949,8 @@ export class Tournament extends Rooms.RoomGame {
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.from) return;
 
-		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
-		if (!ready) return;
+		const ready2 = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
+		if (!ready2) return;
 
 		// Prevent battles between offline users from starting
 		const from = Users.get(challenge.from.id);
@@ -960,14 +960,21 @@ export class Tournament extends Rooms.RoomGame {
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
 
+		const ready1 = Ladders.getChallenging(from.id)?.ready;
+		if (!ready1) return;
+
 		const room = Rooms.createBattle(this.fullFormat, {
 			isPrivate: this.room.settings.isPrivate,
 			p1: from,
-			p1team: challenge.team,
+			p1team: ready1.team,
+			p1hidden: ready1.hidden,
+			p1inviteOnly: ready1.inviteOnly,
 			p2: user,
-			p2team: ready.team,
+			p2team: ready2.team,
+			p2hidden: ready2.hidden,
+			p2inviteOnly: ready2.inviteOnly,
 			rated: !Ladders.disabled && this.isRated,
-			challengeType: ready.challengeType,
+			challengeType: ready2.challengeType,
 			tour: this,
 		});
 		if (!room || !room.battle) throw new Error(`Failed to create battle in ${room}`);
@@ -1210,7 +1217,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			void TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.team).then(result => {
+			void TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.battleSettings.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
