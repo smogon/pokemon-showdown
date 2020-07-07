@@ -2,7 +2,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	gen: 8,
 	init() {
 		this.modData('FormatsData', 'melmetalgmax').isNonstandard = null;
-		this.modData('FormatsData', 'melmetalgmax').tier = "Uber";
 
 		this.modData('Learnsets', 'venusaur').learnset.gunkshot = ["8M"];
 		this.modData('Learnsets', 'charizard').learnset.lavaplume = ["8M"];
@@ -53,6 +52,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'hatterene').learnset.moonblast = ["8M"];
 		this.modData('Learnsets', 'hatterene').learnset.gravity = ["8M"];
 		this.modData('Learnsets', 'grimmsnarl').learnset.yawn = ["8M"];
+		this.modData('Learnsets', 'grimmsnarl').learnset.honeclaws = ["8M"];
 		this.modData('Learnsets', 'alcremie').learnset.icebeam = ["8M"];
 		this.modData('Learnsets', 'alcremie').learnset.moonblast = ["8M"];
 		this.modData('Learnsets', 'alcremie').learnset.stockpile = ["8M"];
