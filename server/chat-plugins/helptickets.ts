@@ -368,7 +368,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	timerEnds[room.roomid] = 0;
 	for (const i in room.users) {
 		const user: User = room.users[i];
-		if (user.can('mute', null, room) && !user.ignoreTickets) {
+		if (user.can('mute', null, room) && !user.settings.ignoreTickets) {
 			user.sendTo(
 				room,
 				`|tempnotify|helptickets|Unclaimed help tickets!|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`
@@ -1387,22 +1387,22 @@ export const commands: ChatCommands = {
 
 		ignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (user.ignoreTickets) {
+			if (user.settings.ignoreTickets) {
 				return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
-			user.ignoreTickets = true;
-			user.update('ignoreTickets');
+			user.settings.ignoreTickets = true;
+			user.update();
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
 
 		unignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (!user.ignoreTickets) {
+			if (!user.settings.ignoreTickets) {
 				return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
-			user.ignoreTickets = false;
-			user.update('ignoreTickets');
+			user.settings.ignoreTickets = false;
+			user.update();
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],

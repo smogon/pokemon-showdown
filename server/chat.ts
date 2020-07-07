@@ -942,8 +942,8 @@ export class CommandContext extends MessageContext {
 					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 					return null;
 				}
-				if (targetUser.blockPMs &&
-					(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) &&
+				if (targetUser.settings.blockPMs &&
+					(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) &&
 					!user.can('lock')) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
@@ -955,8 +955,8 @@ export class CommandContext extends MessageContext {
 						return null;
 					}
 				}
-				if (user.blockPMs && (user.blockPMs === true ||
-					!targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
+				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
+					!targetUser.authAtLeast(user.settings.blockPMs)) && !targetUser.can('lock')) {
 					this.errorReply(`You are blocking private messages right now.`);
 					return null;
 				}
@@ -1902,14 +1902,14 @@ export const Chat = new class {
 		const prefix = `|pm|&|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
-			if (!targetUser.blockPMsNotified) {
+			if (!targetUser.notified.blockPMs) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
-				targetUser.blockPMsNotified = true;
+				targetUser.notified.blockPMs = true;
 			}
 		} else if (blocked === 'challenge') {
-			if (!targetUser.blockChallengesNotified) {
+			if (!targetUser.notified.blockChallenges) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
-				targetUser.blockChallengesNotified = true;
+				targetUser.notified.blockChallenges = true;
 			}
 		}
 	}

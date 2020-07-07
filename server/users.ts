@@ -299,13 +299,6 @@ export class Connection {
 
 type ChatQueueEntry = [string, RoomID, Connection];
 
-const SETTINGS = [
-	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
-	'ignoreTickets', 'lastConnected', 'lastDisconnected',
-	'inviteOnlyNextBattle', 'statusType',
-] as const;
-type UserSetting = typeof SETTINGS[number];
-
 // User
 export class User extends Chat.MessageContext {
 	readonly user: User;
@@ -338,24 +331,38 @@ export class User extends Chat.MessageContext {
 
 	lastChallenge: number;
 	lastPM: string;
-	team: string;
 	lastMatch: string;
 	forcedPublic: string | null;
 
+	settings: {
+		blockChallenges: boolean,
+		blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked',
+		ignoreTickets: boolean,
+	};
+
+	battleSettings: {
+		team: string,
+		hidden: boolean,
+		inviteOnly: boolean,
+	};
+
 	isSysop: boolean;
 	isStaff: boolean;
-	blockChallenges: boolean;
-	blockPMs: boolean | string;
-	ignoreTickets: boolean;
 	lastDisconnected: number;
 	lastConnected: number;
-	inviteOnlyNextBattle: boolean;
 	foodfight?: {generatedTeam: string[], dish: string, ingredients: string[], timestamp: number};
 
 	chatQueue: ChatQueueEntry[] | null;
 	chatQueueTimeout: NodeJS.Timeout | null;
 	lastChatMessage: number;
 	lastCommand: string;
+
+	notified: {
+		blockChallenges: boolean,
+		blockPMs: boolean,
+		punishment: boolean,
+		lock: boolean,
+	};
 
 	lastMessage: string;
 	lastMessageTime: number;
@@ -364,10 +371,6 @@ export class User extends Chat.MessageContext {
 	s2: string;
 	s3: string;
 
-	blockChallengesNotified: boolean;
-	blockPMsNotified: boolean;
-	punishmentNotified: boolean;
-	lockNotified: boolean;
 	autoconfirmed: ID;
 	trusted: ID;
 	trackRename: string;
@@ -412,19 +415,25 @@ export class User extends Chat.MessageContext {
 		// misc state
 		this.lastChallenge = 0;
 		this.lastPM = '';
-		this.team = '';
 		this.lastMatch = '';
 		this.forcedPublic = null;
 
 		// settings
+		this.settings = {
+			blockChallenges: false,
+			blockPMs: false,
+			ignoreTickets: false,
+		};
+		this.battleSettings = {
+			team: '',
+			hidden: false,
+			inviteOnly: false,
+		};
+
 		this.isSysop = false;
 		this.isStaff = false;
-		this.blockChallenges = false;
-		this.blockPMs = false;
-		this.ignoreTickets = false;
 		this.lastDisconnected = 0;
 		this.lastConnected = connection.connectedAt;
-		this.inviteOnlyNextBattle = false;
 
 		// chat queue
 		this.chatQueue = null;
@@ -440,10 +449,13 @@ export class User extends Chat.MessageContext {
 		this.s2 = '';
 		this.s3 = '';
 
-		this.blockChallengesNotified = false;
-		this.blockPMsNotified = false;
-		this.punishmentNotified = false;
-		this.lockNotified = false;
+		this.notified = {
+			blockChallenges: false,
+			blockPMs: false,
+			punishment: false,
+			lock: false,
+		};
+
 		this.autoconfirmed = '';
 		this.trusted = '';
 		// Used in punishments
@@ -858,23 +870,19 @@ export class User extends Chat.MessageContext {
 		if (isForceRenamed) this.trackRename = oldname;
 		return true;
 	}
-	/**
-	 * @param updated the settings which have been updated or none for all settings.
-	 */
-	getUpdateuserText(...updated: UserSetting[]) {
+	getUpdateuserText() {
 		const named = this.named ? 1 : 0;
-		const diff: AnyObject = {};
-		const settings = updated.length ? updated : SETTINGS;
-		for (const setting of settings) {
-			diff[setting] = this[setting];
-		}
-		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
+		const settings = {
+			...this.settings,
+			// Battle privacy state needs to be propagated in addition to regular settings so that the
+			// 'Ban spectators' checkbox on the client can be kept in sync (and disable privacy correctly)
+			hiddenNextBattle: this.battleSettings.hidden,
+			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
+		};
+		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
-	/**
-	 * @param updated the settings which have been updated or none for all settings.
-	 */
-	update(...updated: UserSetting[]) {
-		this.send(this.getUpdateuserText(...updated));
+	update() {
+		this.send(this.getUpdateuserText());
 	}
 	merge(oldUser: User) {
 		oldUser.cancelReady();
@@ -1032,7 +1040,7 @@ export class User extends Chat.MessageContext {
 				this.semilocked = '#dnsbl.' as PunishType;
 			}
 		}
-		if (this.blockPMs && this.can('lock') && !this.can('bypassall')) this.blockPMs = false;
+		if (this.settings.blockPMs && this.can('lock') && !this.can('bypassall')) this.settings.blockPMs = false;
 	}
 	/**
 	 * Set a user's group. Pass (' ', true) to force trusted
@@ -1041,13 +1049,11 @@ export class User extends Chat.MessageContext {
 	setGroup(group: GroupSymbol, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group;
-		const wasStaff = this.isStaff;
 		const groupInfo = Config.groups[this.group];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
 		}
-		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceTrusted || this.group !== Users.Auth.defaultSymbol()) {
@@ -1387,7 +1393,6 @@ export class User extends Chat.MessageContext {
 		if (type === this.statusType) return;
 		this.statusType = type;
 		this.updateIdentity();
-		this.update('statusType');
 	}
 	setUserMessage(message: string) {
 		if (message === this.userMessage) return;

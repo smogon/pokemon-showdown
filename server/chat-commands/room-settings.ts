@@ -139,12 +139,12 @@ export const commands: ChatCommands = {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
 		if (!groupConfig?.editprivacy) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
-			user.inviteOnlyNextBattle = false;
-			user.update('inviteOnlyNextBattle');
+			user.battleSettings.inviteOnly = false;
+			user.update();
 			this.sendReply("Your next battle will be publicly visible.");
 		} else {
-			user.inviteOnlyNextBattle = true;
-			user.update('inviteOnlyNextBattle');
+			user.battleSettings.inviteOnly = true;
+			user.update();
 			if (user.forcedPublic) {
 				return this.errorReply(`Your next battle will be invite-only provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
 			}
@@ -988,6 +988,27 @@ export const commands: ChatCommands = {
 		`/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: &`,
 		`/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 &`,
 		`/publicroom - Makes a room public. Requires: \u2606 &`,
+	],
+
+	hidenext(target, room, user) {
+		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
+		if (!groupConfig?.editprivacy) return this.errorReply(`/hidenext - Access denied.`);
+		if (this.meansNo(target)) {
+			user.battleSettings.hidden = false;
+			user.update();
+			this.sendReply("Your next battle will be publicly visible.");
+		} else {
+			user.battleSettings.hidden = true;
+			user.update();
+			if (user.forcedPublic) {
+				return this.errorReply(`Your next battle will be hidden provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
+			}
+			this.sendReply("Your next battle will be hidden");
+		}
+	},
+	hidenexthelp: [
+		`/hidenext - Sets your next battle to be hidden.`,
+		`/hidenext off - Sets your next battle to be publicly visible.`,
 	],
 
 	officialchatroom: 'officialroom',

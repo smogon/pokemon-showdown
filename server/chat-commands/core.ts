@@ -16,6 +16,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
+type UserSettings = import('../users').User['settings'];
 
 const avatarTable = new Set([
 	'aaron',
@@ -563,21 +564,21 @@ export const commands: ChatCommands = {
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
 		if (toID(target) === 'ac') target = 'autoconfirmed';
-		if (user.blockPMs === (target || true)) {
+		if (user.settings.blockPMs === (target || true)) {
 			return this.errorReply(this.tr("You are already blocking private messages! To unblock, use /unblockpms"));
 		}
 		if (target in Config.groups) {
-			user.blockPMs = target;
+			user.settings.blockPMs = target as GroupSymbol;
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
-			user.blockPMs = target;
+			user.settings.blockPMs = target;
 			target = this.tr(target);
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target} users.`);
 		} else {
-			user.blockPMs = true;
+			user.settings.blockPMs = true;
 			this.sendReply(this.tr("You are now blocking private messages, except from staff."));
 		}
-		user.update('blockPMs');
+		user.update();
 		return true;
 	},
 	blockpmshelp: [
@@ -589,9 +590,11 @@ export const commands: ChatCommands = {
 	unignorepms: 'unblockpms',
 	unignorepm: 'unblockpms',
 	unblockpms(target, room, user) {
-		if (!user.blockPMs) return this.errorReply(this.tr("You are not blocking private messages! To block, use /blockpms"));
-		user.blockPMs = false;
-		user.update('blockPMs');
+		if (!user.settings.blockPMs) {
+			return this.errorReply(this.tr("You are not blocking private messages! To block, use /blockpms"));
+		}
+		user.settings.blockPMs = false;
+		user.update();
 		return this.sendReply(this.tr("You are no longer blocking private messages."));
 	},
 	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
@@ -708,6 +711,30 @@ export const commands: ChatCommands = {
 
 			this.sendReply(`|raw|${buffer}`);
 		});
+	},
+
+	updatesettings(target, room, user) {
+		const settings: Partial<UserSettings> = {};
+		try {
+			const raw = JSON.parse(target);
+			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
+				this.errorReply("/updatesettings expects JSON encoded object.");
+			}
+			for (const setting in user.settings) {
+				if (setting in raw) {
+					if (setting === 'blockPMs' &&
+						(raw[setting] in Config.groups || ['autoconfirmed', 'trusted', 'unlocked'].includes(raw[setting]))) {
+						settings[setting] = raw[setting];
+					} else {
+						settings[setting as keyof UserSettings] = !!raw[setting];
+					}
+				}
+			}
+			Object.assign(user.settings, settings);
+			user.update();
+		} catch {
+			this.errorReply("Unable to parse settings in /updatesettings!");
+		}
 	},
 
 	/*********************************************************
@@ -1219,9 +1246,9 @@ export const commands: ChatCommands = {
 	blockchall: 'blockchallenges',
 	blockchalls: 'blockchallenges',
 	blockchallenges(target, room, user) {
-		if (user.blockChallenges) return this.errorReply(this.tr("You are already blocking challenges!"));
-		user.blockChallenges = true;
-		user.update('blockChallenges');
+		if (user.settings.blockChallenges) return this.errorReply(this.tr("You are already blocking challenges!"));
+		user.settings.blockChallenges = true;
+		user.update();
 		this.sendReply(this.tr("You are now blocking all incoming challenge requests."));
 	},
 	blockchallengeshelp: [
@@ -1233,9 +1260,9 @@ export const commands: ChatCommands = {
 	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
 	allowchallenges(target, room, user) {
-		if (!user.blockChallenges) return this.errorReply(this.tr("You are already available for challenges!"));
-		user.blockChallenges = false;
-		user.update('blockChallenges');
+		if (!user.settings.blockChallenges) return this.errorReply(this.tr("You are already available for challenges!"));
+		user.settings.blockChallenges = false;
+		user.update();
 		this.sendReply(this.tr("You are available for challenges from now on."));
 	},
 	allowchallengeshelp: [
@@ -1263,7 +1290,7 @@ export const commands: ChatCommands = {
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam(target, room, user) {
-		user.team = target;
+		user.battleSettings.team = target;
 	},
 
 	vtm(target, room, user, connection) {
@@ -1278,7 +1305,7 @@ export const commands: ChatCommands = {
 		);
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		return TeamValidatorAsync.get(format.id).validateTeam(user.team).then(result => {
+		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${format.name}.`);
