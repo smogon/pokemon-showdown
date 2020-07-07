@@ -437,13 +437,13 @@ export class LotteryGiveaway extends Giveaway {
 		this.clearTimer();
 
 		const userlist = Object.values(this.joined);
-		if (userlist.length < this.maxWinners) {
+		if (userlist.length === 0) {
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			delete this.room.giveaway;
-			return this.room.send("The giveaway has been forcibly ended as there are not enough participants.");
+			return this.room.send("The giveaway has been forcibly ended as there are no participants.");
 		}
 
-		while (this.winners.length < this.maxWinners) {
+		while (this.winners.length < this.maxWinners && userlist.length > 0) {
 			const winner = Users.get(userlist.splice(Math.floor(Math.random() * userlist.length), 1)[0]);
 			if (!winner) continue;
 			this.winners.push(winner);
