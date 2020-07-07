@@ -286,6 +286,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ten',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Tenshi: {
+		species: 'Stoutland', ability: 'Royal Coat', item: 'Leftovers', gender: 'M',
+		moves: ['Knock Off', 'Thousand Waves', ['Play Rough', 'Power Whip']],
+		signatureMove: 'Stony Kibbles',
+		evs: {atk: 128, spd: 252, spe: 128}, nature: 'Jolly',
+	},
 	tiki: {
 		species: 'Snom', ability: 'True Grit', item: 'Eviolite', gender: 'M',
 		moves: ['Toxic', 'Strength Sap', 'U-turn'],

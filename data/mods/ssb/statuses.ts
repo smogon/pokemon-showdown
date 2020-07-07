@@ -629,6 +629,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Teclis')}|Magic never dies. It merely fades away.`);
 		},
 	},
+	tenshi: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Tenshi')}|Hi gm`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Tenshi')}|Ight Imma head out`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Tenshi')}|Grr bork bork :(`);
+		},
+	},
 	tiki: {
 		noCopy: true,
 		onStart() {
