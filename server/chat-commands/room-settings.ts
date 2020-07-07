@@ -596,9 +596,12 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	makeprivatechatroom: 'makechatroom',
+	makepublicchatroom: 'makechatroom',
 	makechatroom(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (!this.can('makeroom')) return;
+		const id = toID(target);
+		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
 
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
@@ -607,8 +610,6 @@ export const commands: ChatCommands = {
 			return this.errorReply("Room titles can't contain any of: ,|[-");
 		}
 
-		const id = toID(target);
-		if (!id) return this.parse('/help makechatroom');
 		if (id.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
 		// Check if the name already exists as a room or alias
 		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
@@ -640,7 +641,10 @@ export const commands: ChatCommands = {
 			this.sendReply(`The chat room '${target}' was created.`);
 		}
 	},
-	makechatroomhelp: [`/makechatroom [roomname] - Creates a new room named [roomname]. Requires: &`],
+	makechatroomhelp: [
+		`/makeprivatechatroom [roomname] - Creates a new private room named [roomname]. Requires: &`,
+		`/makepublicchatroom [roomname] - Creates a new public room named [roomname]. Requires: &`,
+	],
 
 	subroomgroupchat: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
