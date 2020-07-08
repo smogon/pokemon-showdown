@@ -131,7 +131,7 @@ export class UNO extends Rooms.RoomGame {
 		this.suppressMessages = suppressMessages || false;
 		this.spectators = Object.create(null);
 
-		this.sendToRoom(`|uhtml|uno-${this.gameNumber}|<div class="broadcast-blue"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join">Join as a Player</button> <button class="button" name="send" value="/uno spectate">Join as a Spectator</button></p>${this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will only be shown to players.</p>` : ''}</div>`, true);
+		this.sendToRoom(`|uhtml|uno-${this.gameNumber}|<div class="broadcast-blue"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join">Join and playr</button> <button class="button" name="send" value="/uno spectate">Watch</button></p>${this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will only be shown to players.</p>` : ''}</div>`, true);
 	}
 
 	onUpdateConnection() {}
@@ -142,8 +142,8 @@ export class UNO extends Rooms.RoomGame {
 				this.room,
 				`|uhtml|uno-${this.gameNumber}|<div class="broadcast-blue">` +
 				`<p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p>` +
-				`<p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join">Join as a Player</button> ` +
-				`<button class="button" name="send" value="/uno spectate">Join as a Spectator</button></p>` +
+				`<p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join">Join and play</button> ` +
+				`<button class="button" name="send" value="/uno spectate">Watch</button></p>` +
 				`${this.suppressMessages ?
 					`<p style="font-size: 6pt; text-align: center">Game messages will only be shown to players.` : ''}</div>`
 			);
@@ -925,7 +925,8 @@ export const commands: ChatCommands = {
 	},
 
 	unohelp: [
-		`/uno create [player cap] - creates a new UNO game with an optional player cap (default player cap at 6). Use the command [createpublic] to force a public game or [createprivate] to force a private game. Requires: % @ # &`,
+		`/uno create [player cap] - creates a new UNO game with an optional player cap (default player cap at 12). Use the command [createpublic] to force a public game or [createprivate] to force a private game. Requires: % @ # &`,
+		`/uno setcap [player cap] - adjusts the player cap of the current UNO game. Requires: % @ # &`,
 		`/uno timer [amount] - sets an auto disqualification timer for [amount] seconds. Requires: % @ # &`,
 		`/uno autostart [amount] - sets an auto starting timer for [amount] seconds. Requires: % @ # &`,
 		`/uno end - ends the current game of UNO. Requires: % @ # &`,
