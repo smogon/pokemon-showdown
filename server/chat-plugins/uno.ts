@@ -16,6 +16,8 @@ interface Card {
 	name: string;
 }
 
+const TIMESTAMP = Math.floor(Date.now() / 1000);
+
 const maxTime = 60; // seconds
 
 const rgbGradients: {[k in Color]: string} = {
@@ -315,13 +317,13 @@ export class UNO extends Rooms.RoomGame {
 				if (this.timer) clearTimeout(this.timer);
 				const player = this.playerTable[this.currentPlayerid];
 
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name}'s turn.`);
+				this.sendToRoom(`|c:|${TIMESTAMP}|&|${player.name}'s turn.`);
 				this.state = 'play';
 				if (player.cardLock) player.cardLock = null;
 				player.sendDisplay();
 
 				this.timer = setTimeout(() => {
-					this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has been automatically disqualified.`);
+					this.sendToRoom(`|c:|${TIMESTAMP}|&|${player.name} has been automatically disqualified.`);
 					this.eliminate(this.currentPlayerid);
 				}, this.maxTime * 1000);
 			});
@@ -354,7 +356,7 @@ export class UNO extends Rooms.RoomGame {
 
 		this.onCheckUno();
 
-		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has drawn a card.`);
+		this.sendToRoom(`|c:|${TIMESTAMP}|&|${player.name} has drawn a card.`);
 
 		const card = this.onDrawCard(player, 1);
 		player.sendDisplay();
@@ -422,17 +424,17 @@ export class UNO extends Rooms.RoomGame {
 		switch (value) {
 		case 'Reverse':
 			this.direction *= -1;
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|The direction of the game has changed.`);
+			this.sendToRoom(`|c:|${TIMESTAMP}|&|The direction of the game has changed.`);
 			// in 2 player games, reverse sends the turn back to the player.
 			if (!initialize && this.playerCount === 2) this.onNextPlayer();
 			break;
 		case 'Skip':
 			this.onNextPlayer();
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.playerTable[this.currentPlayerid].name}'s turn has been skipped.`);
+			this.sendToRoom(`|c:|${TIMESTAMP}|&|${this.playerTable[this.currentPlayerid].name}'s turn has been skipped.`);
 			break;
 		case '+2':
 			this.onNextPlayer();
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.playerTable[this.currentPlayerid].name} has been forced to draw 2 cards.`);
+			this.sendToRoom(`|c:|${TIMESTAMP}|&|${this.playerTable[this.currentPlayerid].name} has been forced to draw 2 cards.`);
 			this.onDrawCard(this.playerTable[this.currentPlayerid], 2);
 			break;
 		case '+4':
@@ -440,11 +442,11 @@ export class UNO extends Rooms.RoomGame {
 			this.state = 'color';
 			// apply to the next in line, since the current player still has to choose the color
 			const next = this.getNextPlayer();
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.playerTable[next].name} has been forced to draw 4 cards.`);
+			this.sendToRoom(`|c:|${TIMESTAMP}|&|${this.playerTable[next].name} has been forced to draw 4 cards.`);
 			this.onDrawCard(this.playerTable[next], 4);
 			this.isPlusFour = true;
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.playerTable[this.currentPlayerid].name} has been automatically disqualified.`);
+				this.sendToRoom(`|c:|${TIMESTAMP}|&|${this.playerTable[this.currentPlayerid].name} has been automatically disqualified.`);
 				this.eliminate(this.currentPlayerid);
 			}, this.maxTime * 1000);
 			break;
@@ -452,7 +454,7 @@ export class UNO extends Rooms.RoomGame {
 			this.playerTable[this.currentPlayerid].sendRoom(colorDisplay);
 			this.state = 'color';
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.playerTable[this.currentPlayerid].name} has been automatically disqualified.`);
+				this.sendToRoom(`|c:|${TIMESTAMP}|&|${this.playerTable[this.currentPlayerid].name} has been automatically disqualified.`);
 				this.eliminate(this.currentPlayerid);
 			}, this.maxTime * 1000);
 			break;
@@ -473,7 +475,7 @@ export class UNO extends Rooms.RoomGame {
 			throw new Error(`No top card in the discard pile.`);
 		}
 		this.topCard.changedColor = color;
-		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|The color has been changed to ${color}.`);
+		this.sendToRoom(`|c:|${TIMESTAMP}|&|The color has been changed to ${color}.`);
 		if (this.timer) clearTimeout(this.timer);
 
 		// send the display of their cards again
@@ -520,7 +522,7 @@ export class UNO extends Rooms.RoomGame {
 	onUno(player: UNOPlayer, unoId: ID) {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || player.id !== this.awaitUno) return false;
-		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|**UNO!** ${player.name} is down to their last card!`);
+		this.sendToRoom(`|c:|${TIMESTAMP}|&|**UNO!** ${player.name} is down to their last card!`);
 		this.awaitUno = null;
 		this.unoId = null;
 	}
@@ -529,7 +531,7 @@ export class UNO extends Rooms.RoomGame {
 		if (this.awaitUno) {
 			// if the previous player hasn't hit UNO before the next player plays something, they are forced to draw 2 cards;
 			if (this.awaitUno !== this.currentPlayerid) {
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.playerTable[this.awaitUno].name} forgot to say UNO! and is forced to draw 2 cards.`);
+				this.sendToRoom(`|c:|${TIMESTAMP}|&|${this.playerTable[this.awaitUno].name} forgot to say UNO! and is forced to draw 2 cards.`);
 				this.onDrawCard(this.playerTable[this.awaitUno], 2);
 			}
 			this.awaitUno = null;
@@ -824,7 +826,7 @@ export const commands: ChatCommands = {
 			if (!player.cardLock) return this.errorReply("You cannot pass until you draw a card.");
 			if (game.state === 'color') return this.errorReply("You cannot pass until you choose a color.");
 
-			game.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${user.name} has passed.`);
+			game.sendToRoom(`|c:|${TIMESTAMP}|&|${user.name} has passed.`);
 			game.nextTurn();
 		},
 
