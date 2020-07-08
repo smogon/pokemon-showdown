@@ -175,7 +175,7 @@ export class UNO extends Rooms.RoomGame {
 			this.discards.unshift(this.topCard);
 		} while (this.topCard.color === 'Black');
 
-		this.sendToRoom(`|raw|The top card is <span style="color: ${textColors[this.topCard.color]}">${this.topCard.name}</span>.`);
+		this.sendToRoom(`|raw|The top card is <span style="font-weight:bold;color: ${textColors[this.topCard.color]}">${this.topCard.name}</span>.`);
 
 		this.onRunEffect(this.topCard.value, true);
 		this.nextTurn(true);
@@ -671,11 +671,28 @@ export const commands: ChatCommands = {
 			const suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.roomid === 'gamecorner');
 
 			let cap = parseInt(target);
-			if (isNaN(cap)) cap = 6;
+			if (isNaN(cap)) cap = 12;
 			if (cap < 2) cap = 2;
 			room.game = new UNO(room, cap, suppressMessages);
 			this.privateModAction(`(A game of UNO was created by ${user.name}.)`);
 			this.modlog('UNO CREATE');
+		},
+
+		cap: 'setcap',
+		setcap(target, room, user) {
+			if (!room) return this.requiresRoom();
+			if (!this.can('minigame', null, room)) return;
+			const game = room.getGame(UNO);
+			if (!game || game.state !== 'signups') {
+				return this.errorReply(`There is no UNO game in the signups phase in this room, so adjusting the player cap would do nothing.`);
+			}
+			let cap = parseInt(target);
+			if (isNaN(cap) || cap < 2) {
+				cap = 2;
+			}
+			game.playerCap = cap;
+			this.privateModAction(`(The playercap was set to ${game.playerCap} by ${user.name}.)`);
+			this.modlog('UNO PLAYERCAP');
 		},
 
 		start(target, room, user) {
