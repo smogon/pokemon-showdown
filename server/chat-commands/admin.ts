@@ -627,8 +627,7 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown();
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.roomlog(`${user.name} used /lockdown`);
+		this.stafflog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [
 		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: &`,
@@ -638,21 +637,18 @@ export const commands: ChatCommands = {
 	autolockdownkill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
-		const logRoom = Rooms.get('staff') || room;
 		if (this.meansYes(target)) {
 			if (Config.autolockdown) {
 				return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = true;
-			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
-			logRoom?.add(`${user.name} used /autolockdownkill on`).update();
+			this.privateGlobalModAction(`${user.name} used /autolockdownkill on (autokill on final battle finishing)`);
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) {
 				return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = false;
-			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
-			logRoom?.add(`${user.name} used /autolockdownkill off`).update();
+			this.privateGlobalModAction(`${user.name} used /autolockdownkill off (no autokill on final battle finishing)`);
 		} else {
 			return this.parse('/help autolockdownkill');
 		}
@@ -665,9 +661,8 @@ export const commands: ChatCommands = {
 	prelockdown(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
-		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.add(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`).update();
+
+		this.privateGlobalModAction(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`);
 	},
 
 	slowlockdown(target, room, user) {
@@ -675,8 +670,7 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown(undefined, true);
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.add(`${user.name} used /slowlockdown (lockdown without auto-restart)`).update();
+		this.privateGlobalModAction(`${user.name} used /slowlockdown (lockdown without auto-restart)`);
 	},
 
 	crashfixed: 'endlockdown',
@@ -705,8 +699,7 @@ export const commands: ChatCommands = {
 		}
 		Rooms.global.lockdown = false;
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.roomlog(`${user.name} used /endlockdown`);
+		this.stafflog(`${user.name} used /endlockdown`);
 	},
 	endlockdownhelp: [
 		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: &`,
@@ -726,8 +719,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.roomlog(`${user.name} used /emergency.`);
+		this.stafflog(`${user.name} used /emergency.`);
 	},
 
 	endemergency(target, room, user) {
@@ -738,13 +730,10 @@ export const commands: ChatCommands = {
 		}
 		Config.emergency = false;
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.roomid !== 'global') {
-				curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
-			}
+			curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.roomlog(`${user.name} used /endemergency.`);
+		this.stafflog(`${user.name} used /endemergency.`);
 	},
 
 	kill(target, room, user) {
@@ -758,10 +747,11 @@ export const commands: ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.roomlog(`${user.name} used /kill`);
+		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
 
 		if (!logRoom?.log.roomlogStream) return process.exit();
+
+		logRoom.roomlog(`${user.name} used /kill`);
 
 		void logRoom.log.roomlogStream.writeEnd().then(() => {
 			process.exit();
@@ -790,8 +780,7 @@ export const commands: ChatCommands = {
 	refreshpage(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.sendAll('|refresh|');
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.roomlog(`${user.name} used /refreshpage`);
+		this.stafflog(`${user.name} used /refreshpage`);
 	},
 
 	async updateserver(target, room, user, connection) {
@@ -803,24 +792,22 @@ export const commands: ChatCommands = {
 
 		Monitor.updateServerLock = true;
 
-		const logRoom = Rooms.get('staff') || room;
-
-		function exec(command: string): Promise<[number, string, string]> {
-			logRoom?.roomlog(`$ ${command}`);
+		const exec = (command: string): Promise<[number, string, string]> => {
+			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom?.roomlog(log);
+					this.stafflog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
-		}
+		};
 
 		this.sendReply(`Fetching newest version...`);
-		logRoom?.add(`${user.name} used /updateserver`).update();
+		this.addGlobalModAction(`${user.name} used /updateserver`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
@@ -887,21 +874,19 @@ export const commands: ChatCommands = {
 	},
 
 	async rebuild(target, room, user, connection) {
-		const logRoom = Rooms.get('staff') || room;
-
-		function exec(command: string): Promise<[number, string, string]> {
-			logRoom?.roomlog(`$ ${command}`);
+		const exec = (command: string): Promise<[number, string, string]> => {
+			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom?.roomlog(log);
+					this.stafflog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
-		}
+		};
 
 		if (!this.canUseConsole()) return false;
 		Monitor.updateServerLock = true;
