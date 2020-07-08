@@ -443,6 +443,27 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// KingSwordYT
+	bambookingdom: {
+		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using physical moves against this Pokemon lose 1/8 of their maximum HP. Pokemon using special moves against this Pokemon lose 1/16 of their maximum HP. Attacking moves have their priority set to -7.",
+		shortDesc: "+1 Def/SpD. -7 priority on attacks. 1/8 recoil when hit with physical move, 1/16 when hit with special move.",
+		name: "Bamboo Kingdom",
+		onStart(pokemon) {
+			this.boost({def: 1, spd: 1}, pokemon);
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category !== 'Status') return -7;
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
+				this.damage(source.baseMaxhp / 8, source, target);
+			}
+			if (move.category === 'Special') {
+				this.damage(source.baseMaxhp / 16, source, target);
+			}
+		},
+	},
+
 	// Mitsuki
 	photosynthesis: {
 		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled. If Sunny Day is active, this Pokemon's Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Attack remains the same and it does not lose any HP.",

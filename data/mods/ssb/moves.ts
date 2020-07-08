@@ -807,6 +807,35 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// KingSwordYT
+	clashofpangoros: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user restores 1/8 of its maximum HP, rounded half up. Target can't use status moves its next 3 turns. Lowers the target's Attack by 1 stages.",
+		shortDesc: "Deals damage, heals 1/8, taunts, lowers Atk, and switches out.",
+		name: "Clash of Pangoros",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Black Hole Eclipse', target);
+		},
+		onAfterHit(target, source) {
+			if (source.hp) {
+				this.heal(source.maxhp / 2, source);
+			}
+		},
+		onHit(target, pokemon, move) {
+			this.boost({atk: -1}, target, target, move);
+			target.addVolatile('taunt', pokemon);
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
+
 	// Jho
 	genrechange: {
 		accuracy: true,

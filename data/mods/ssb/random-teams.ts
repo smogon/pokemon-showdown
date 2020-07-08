@@ -174,6 +174,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cozy Cuddle',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: 1,
 	},
+	KingSwordYT: {
+		species: 'Pangoro', ability: 'Bamboo Kingdom', item: 'Rocky Helmet', gender: 'M',
+		moves: ['Body Press', 'Spiky Shield', 'Shore Up'],
+		signatureMove: 'Clash of Pangoros',
+		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish', shiny: true,
+	},
 	Kris: {
 		species: 'Unown', ability: 'Protean', item: 'Life Orb', gender: 'N',
 		moves: ['Light of Ruin', 'Psystrike', ['Secret Sword', 'Mind Blown', 'Seed Flare']],

@@ -354,6 +354,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Kaiju Bunny')}|Wow, okay, r00d ￣(ಥㅅಥ)￣`);
 		},
 	},
+	kingswordyt: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('KingSwordYT')}|Mucho texto`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('KingSwordYT')}|Hasta la próximaaaa`);
+		},
+		onFaint() {
+			this.add(`c|${getName('KingSwordYT')}|**__Se anula el host__**`);
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart(source) {
