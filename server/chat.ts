@@ -701,9 +701,27 @@ export class CommandContext extends MessageContext {
 		}
 	}
 
+	/** like privateModAction, but also notify Staff room */
+	privateGlobalModAction(msg: string) {
+		this.privateModAction(`(${msg})`);
+		if (this.room?.roomid !== 'staff') {
+			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
+		}
+	}
+	addGlobalModAction(msg: string) {
+		this.addModAction(msg);
+		if (this.room?.roomid !== 'staff') {
+			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
+		}
+	}
+
 	privateModAction(msg: string) {
 		if (this.room) {
-			this.room.sendModsByUser(this.user, msg);
+			if (this.room.roomid === 'staff') {
+				this.room.addByUser(this.user, msg);
+			} else {
+				this.room.sendModsByUser(this.user, msg);
+			}
 		} else {
 			const data = this.pmTransform(`|modaction|${msg}`);
 			this.user.send(data);
@@ -713,7 +731,7 @@ export class CommandContext extends MessageContext {
 		}
 		this.roomlog(msg);
 	}
-	globalModlog(action: string, user: string | User | null, note: string) {
+	globalModlog(action: string, user: string | User | null, note?: string | null) {
 		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
@@ -727,6 +745,7 @@ export class CommandContext extends MessageContext {
 				buf += ` [${user.latestIp}]`;
 			}
 		}
+		if (!note) note = ` by ${this.user.id}`;
 		buf += note.replace(/\n/gm, ' ');
 
 		Rooms.global.modlog(buf);
@@ -738,7 +757,7 @@ export class CommandContext extends MessageContext {
 		note: string | null = null,
 		options: Partial<{noalts: any, noip: any}> = {}
 	) {
-		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;
+		let buf = `(${this.room?.roomid || 'global'}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${toID(user)}]`;
@@ -760,6 +779,9 @@ export class CommandContext extends MessageContext {
 	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
+	}
+	stafflog(data: string) {
+		(Rooms.get('staff') || Rooms.lobby || this.room)?.roomlog(data);
 	}
 	addModAction(msg: string) {
 		if (this.room) {
