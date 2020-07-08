@@ -131,7 +131,7 @@ export class UNO extends Rooms.RoomGame {
 		this.suppressMessages = suppressMessages || false;
 		this.spectators = Object.create(null);
 
-		this.sendToRoom(`|uhtml|uno-${this.gameNumber}|<div class="broadcast-blue"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join">Join and playr</button> <button class="button" name="send" value="/uno spectate">Watch</button></p>${this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will only be shown to players.</p>` : ''}</div>`, true);
+		this.sendToRoom(`|uhtml|uno-${this.gameNumber}|<div class="broadcast-blue"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join"><strong>Join and play</strong>r</button> <button class="button" name="send" value="/uno spectate">Watch</button></p>${this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages won't show up unless you're playing or watching.</p>` : ''}</div>`, true);
 	}
 
 	onUpdateConnection() {}
@@ -142,16 +142,16 @@ export class UNO extends Rooms.RoomGame {
 				this.room,
 				`|uhtml|uno-${this.gameNumber}|<div class="broadcast-blue">` +
 				`<p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p>` +
-				`<p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join">Join and play</button> ` +
+				`<p style="font-size: 9pt; text-align: center"><button class="button" name="send" value="/uno join"><strong>Join and play</strong></button> ` +
 				`<button class="button" name="send" value="/uno spectate">Watch</button></p>` +
 				`${this.suppressMessages ?
-					`<p style="font-size: 6pt; text-align: center">Game messages will only be shown to players.` : ''}</div>`
+					`<p style="font-size: 6pt; text-align: center">Game messages won't show up unless you're playing or watching.` : ''}</div>`
 			);
 		} else if (this.onSendHand(user) === false) {
 			connection.sendTo(
 				this.room,
 				`|uhtml|uno-${this.gameNumber}|<div class="infobox"><p>A game of UNO is currently in progress.<button class="button" name="send" value="/uno spectate">Spectate Game</button></p>` +
-				`${this.suppressMessages ? `<p style="font-size: 6pt">Game messages will only be shown to players.` : ''}</div>`
+				`${this.suppressMessages ? `<p style="font-size: 6pt">Game messages won't show up unless you're playing or watching.` : ''}</div>`
 			);
 		}
 	}
@@ -159,7 +159,7 @@ export class UNO extends Rooms.RoomGame {
 	onStart() {
 		if (this.playerCount < 2) return false;
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
-		this.sendToRoom(`|uhtmlchange|uno-${this.gameNumber}|<div class="infobox"><p>The game of UNO has started. <button class="button" name="send" value="/uno spectate">Spectate Game</button></p>${this.suppressMessages ? `<p style="font-size: 6pt">Game messages will only be shown to players.` : ''}</div>`, true);
+		this.sendToRoom(`|uhtmlchange|uno-${this.gameNumber}|<div class="infobox"><p>The game of UNO has started. <button class="button" name="send" value="/uno spectate">Spectate Game</button></p>${this.suppressMessages ? `<p style="font-size: 6pt">Game messages won't show up unless you're playing or watching.` : ''}</div>`, true);
 		this.state = 'play';
 
 		this.onNextPlayer(); // determines the first player
