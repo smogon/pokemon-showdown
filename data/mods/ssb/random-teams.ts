@@ -168,6 +168,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genre Change',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Jordy: {
+		species: 'Archeops', ability: 'Divine Sandstorm', item: 'Life Orb', gender: 'M',
+		moves: ['Brave Bird', 'Head Smash', ['U-turn', 'Roost', 'Icicle Crash']],
+		signatureMove: 'Archeops\'s Rage',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	'Kaiju Bunny': {
 		species: 'Lopunny', ability: 'Second Wind', item: 'Lopunnite', gender: 'F',
 		moves: ['Return', 'Play Rough', ['Drain Punch', 'High Jump Kick']],

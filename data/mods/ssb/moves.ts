@@ -916,6 +916,33 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Jordy
+	archeopssrage: {
+		accuracy: 85,
+		basePower: 90,
+		category: "Physical",
+		desc: "Upon damaging the target, the user gains +1 Speed.",
+		shortDesc: "+1 Speed upon hit.",
+		name: "Archeops's Rage",
+		pp: 5,
+		flags: {protect: 1},
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sunsteel Strike', target);
+		},
+		type: "Flying",
+		self: {
+			boosts: {
+				spe: 1,
+			},
+		},
+		secondary: null,
+		target: "normal",
+	},
+
 	// Kris
 	alphabetsoup: {
 		accuracy: true,

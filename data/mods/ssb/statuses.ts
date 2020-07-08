@@ -340,6 +340,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Jho')}|Unfortunately, CAP no longer accepts custom elements`);
 		},
 	},
+	jordy: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Jordy')}|I heard there's a badge here. Please give it to me immediately.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Jordy')}|Au Revoir. Was that right?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Jordy')}|hjb`);
+		},
+	},
 	kaijubunny: {
 		noCopy: true,
 		onStart(source) {
