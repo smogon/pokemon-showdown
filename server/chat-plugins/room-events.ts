@@ -254,6 +254,9 @@ export const commands: ChatCommands = {
 			for (const alias of getAliases(room, eventID)) {
 				delete room.settings.events[alias];
 			}
+			for (const category of getAllCategories(room).map(cat => room.settings.events?.[cat] as RoomEventCategory)) {
+				category.events = category.events.filter(event => event !== eventID);
+			}
 
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
@@ -276,7 +279,9 @@ export const commands: ChatCommands = {
 				for (const categoryID of Object.keys(room.settings.events)) {
 					const category = room.settings.events[categoryID];
 					if ('events' in category && categoryID === target) {
-						events = category.events.map(e => room.settings.events?.[e] as RoomEvent);
+						events = category.events
+							.map(e => room.settings.events?.[e] as RoomEvent)
+							.filter(e => e);
 						break;
 					}
 				}
