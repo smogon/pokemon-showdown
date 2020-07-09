@@ -622,10 +622,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Ice Shard', target);
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod < 0) {
-				return this.chainModify(2);
-			}
+		onEffectiveness(typeMod, target, type) { // not sure but i think i should use effectiveness cause Flare mentions it.
+			if (typeMod === -2) return -1;
 		},
 		secondary: null,
 		target: "normal",

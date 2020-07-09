@@ -296,7 +296,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "2 random types + STAB on switch-in.",
 		name: "Bipolar",
 		onSwitchIn(pokemon) {
-			const typeMap = {
+			const typeMap: {[key: string]: string} = {
 				Normal: "Return",
 				Fighting: "Sacred Sword",
 				Flying: "Drill Peck",
