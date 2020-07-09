@@ -2548,7 +2548,7 @@ export const commands: ChatCommands = {
 				return this.errorReply('Invalid image');
 			}
 		}
-		if (comment) buf += Utils.html`<br>(${comment})</div>`;
+		if (comment) buf += Utils.html`<br>(${comment.trim()})</div>`;
 
 		if (!this.canBroadcast()) return false;
 		if (this.broadcastMessage) {
