@@ -467,8 +467,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Baton Pass', 'King\'s Rock'],
-		restricted: ['Shedinja', 'Lunala', 'Solgaleo', 'Type: Null', 'Huge Power', 'Pure Power', 'Gorilla Tactics', 'Shadow Tag'],
+		banlist: ['Ice Scales', 'Moody', 'Baton Pass', 'King\'s Rock'],
+		restricted: ['Chansey', 'Lunala', 'Shedinja', 'Solgaleo', 'Type: Null', 'Huge Power', 'Pure Power', 'Gorilla Tactics', 'Shadow Tag'],
 		onValidateTeam(team) {
 			const names = new Set<ID>();
 			for (const set of team) {
@@ -517,7 +517,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
 			}
-			if (this.ruleTable.isRestricted(`pokemon:${crossSpecies.id}`) || this.ruleTable.isRestricted(`pokemon:${species.id}`)) {
+			if (this.ruleTable.isRestrictedSpecies(crossSpecies) ||
+				(this.ruleTable.isRestrictedSpecies(species) && !species.prevo)) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
 			}
 			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
@@ -544,7 +545,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // chat
-			if (effect && ['imposter', 'transforme'].includes(effect.id)) return;
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			if (target.set.name === target.set.species) return;
 			const crossSpecies = this.dex.getSpecies(target.set.name);
 			if (!crossSpecies.exists) return;
@@ -676,7 +677,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				if (!item || !item.megaStone) continue;
 				const species = this.dex.getSpecies(set.species);
 				if (species.isNonstandard) return [`${species.baseSpecies} does not exist in gen 8.`];
-				if (this.ruleTable.isRestricted(`pokemon:${species.id}`) || this.ruleTable.isRestricted(`basepokemon:${species.id}`)) {
+				if (this.ruleTable.isRestrictedSpecies(species)) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
@@ -964,7 +965,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.forme.includes('Gmax')) {
 				newSpecies.isMega = true;
-				newSpecies.tier = "OU";
 			}
 			return newSpecies;
 		},
@@ -977,7 +977,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', '!Obtainable'],
+		ruleset: ['-Nonexistent', 'Standard NatDex', 'Species Clause', 'Sleep Clause Mod', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', '!Obtainable'],
 		banlist: [
 			// Pokemon
 			'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja',
