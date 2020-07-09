@@ -1219,15 +1219,15 @@ export const commands: ChatCommands = {
 				return this.errorReply(`User '${name}' is trusted indirectly through global rank ${currentGroup}. Demote them from that rank to remove trusted status.`);
 			}
 			const trustedSourceRooms = Rooms.global.chatRooms
-				.filter(room => room.persist && room.settings.isPrivate !== true && room.auth.isStaff(userid))
-				.map(room => room.auth.get(userid) + room.roomid).join(' ');
+				.filter(authRoom => authRoom.persist && authRoom.settings.isPrivate !== true && authRoom.auth.isStaff(userid))
+				.map(authRoom => authRoom.auth.get(userid) + authRoom.roomid).join(' ');
 			if (trustedSourceRooms.length && !Users.globalAuth.has(userid)) {
 				return this.errorReply(`User '${name}' is trusted indirectly through room ranks ${trustedSourceRooms}. Demote them from those ranks to remove trusted status.`);
 			}
 			if (!Users.globalAuth.has(userid)) return this.errorReply(`User '${name}' is not trusted.`);
 
 			if (targetUser) {
-				targetUser.setGroup(Users.Auth.defaultSymbol())
+				targetUser.setGroup(Users.Auth.defaultSymbol());
 			} else {
 				Users.globalAuth.delete(userid);
 			}
@@ -1239,7 +1239,7 @@ export const commands: ChatCommands = {
 			if (currentGroup) {
 				if (Users.globalAuth.has(userid)) {
 					if (currentGroup === Users.Auth.defaultSymbol()) return this.errorReply(`User '${name}' is already trusted.`);
-					else return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
+					return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
 				}
 			}
 			if (targetUser) {
