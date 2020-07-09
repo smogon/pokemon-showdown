@@ -671,8 +671,20 @@ export abstract class BasicRoom {
 	 */
 	async rename(newTitle: string, newID?: RoomID) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		if (this.game || this.tour) return;
-
+		if (this.tour || this.minorActivity || this.game) {
+			throw new Chat.ErrorMessage("Cannot rename room while there is a game/tour/poll running.");
+		}
+		if (this.battle) {
+			throw new Chat.ErrorMessage("Cannot rename battle rooms.");
+		}
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (newTitle.includes(',') || newTitle.includes('|') || newTitle.includes('[') || newTitle.includes('-')) {
+			throw new Chat.ErrorMessage("Room titles can't contain any of: ,|[-");
+		}
+		if (newID.length > 225) throw new Chat.ErrorMessage("The given room title is too long.");
+		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 		const oldID = this.roomid;
 		this.roomid = newID;
 		this.title = newTitle;

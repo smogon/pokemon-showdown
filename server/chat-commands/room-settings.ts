@@ -7,15 +7,12 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
-import { throws } from 'assert';
 
 const RANKS: string[] = Config.groupsranking;
 
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
-
-const MAX_CHATROOM_ID_LENGTH = 225;
 
 export const commands: ChatCommands = {
 	roomsetting: 'roomsettings',
@@ -611,7 +608,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("Room titles can't contain any of: ,|[-");
 		}
 
-		if (id.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
+		if (id.length > 255) return this.errorReply("The given room title is too long.");
 		// Check if the name already exists as a room or alias
 		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
 		if (!Rooms.global.addChatRoom(target)) {
@@ -733,23 +730,23 @@ export const commands: ChatCommands = {
 
 	async renamegroupchat(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!user.authAtLeast(Users.HOST_SYMBOL, room) || !user.can('lock')) return false;
-		 let title = target.trim();
+		if (room.persist) return this.errorReply(`Must be a groupchat.`);
+		if (!user.authAtLeast(Users.HOST_SYMBOL, room) && !user.can('lock')) {
+			return this.errorReply(`Access denied.`);
+		}
+		let title = target.trim();
 		if (!title) return this.parse('/help renamegroupchat');
-		if (room.minorActivity || room.game || room.tour) {
-			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
-		}
-		if (title.length >= 32) {
-			return this.errorReply("Title must be under 32 characters long.");
-		} else if (this.filter(title) !== title) {
-			return this.errorReply("Invalid title.");
-		}
 		const existingRoom = Rooms.search(toID(title));
 		if (existingRoom && !existingRoom.settings.modjoin) {
-			return this.errorReply(`Your group chat name is too similar to existing chat room '${title}'.`);
+			return this.errorReply(`Your groupchat name is too similar to existing chat room '${title}'.`);
 		}
+		if (this.filter(title) !== title) {
+			throw new Chat.ErrorMessage("Invalid title.");
+		}
+		const creatorID = room.roomid.split('-')[1];
+		const id = `groupchat-${creatorID}-${toID(title)}` as RoomID;
 		title = `[G] ${title}`;
-		if (!(await room.rename(title))) {
+		if (!(await room.rename(title, id))) {
 			return this.errorReply(`Unknown error occurred while renaming the groupchat.`);
 		}
 		room.add(Utils.html`|raw|<div class="broadcast-green">This room has been renamed to <b>${target}</b></div>`).update();
@@ -883,24 +880,8 @@ export const commands: ChatCommands = {
 	async renameroom(target, room) {
 		if (!this.can('makeroom')) return;
 		if (!room) return this.requiresRoom();
-		if (room.minorActivity || room.game || room.tour) {
-			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
-		}
-		if (room.battle) {
-			return this.errorReply("Battle rooms cannot be renamed.");
-		}
-		const oldTitle = room.title;
-		const roomid = toID(target) as RoomID;
 		const roomtitle = target;
-		if (!roomid.length) return this.errorReply("The new room needs a title.");
-		// `,` is a delimiter used by a lot of /commands
-		// `|` and `[` are delimiters used by the protocol
-		// `-` has special meaning in roomids
-		if (roomtitle.includes(',') || roomtitle.includes('|') || roomtitle.includes('[') || roomtitle.includes('-')) {
-			return this.errorReply("Room titles can't contain any of: ,|[-");
-		}
-		if (roomid.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
-		if (Rooms.search(roomtitle)) return this.errorReply(`The room '${roomtitle}' already exists.`);
+		const oldTitle = room.title;
 		if (!(await room.rename(roomtitle))) {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
