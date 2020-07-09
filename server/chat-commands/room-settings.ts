@@ -600,14 +600,18 @@ export const commands: ChatCommands = {
 		if (!this.can('makeroom')) return;
 		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
-
+		if (id.length > 255) return this.errorReply("The given room title is too long.");
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
 		if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
 			return this.errorReply("Room titles can't contain any of: ,|[-");
 		}
+<<<<<<< HEAD
 
+=======
+		if (!id) return this.parse('/help makechatroom');
+>>>>>>> Update room-settings.ts
 		if (id.length > 255) return this.errorReply("The given room title is too long.");
 		// Check if the name already exists as a room or alias
 		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
