@@ -87,6 +87,21 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	arsenal: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|${getName('Arsenal')}|Wenger Out`);
+			// Innate
+			if (pokemon.illusion) return;
+			this.boost({atk: 1}, pokemon);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Arsenal')}|Wait.. Wenger is gone?? STAN OUT`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Arsenal')}|Next Year...`);
+		},
+	},
 	awa: {
 		noCopy: true,
 		onStart() {

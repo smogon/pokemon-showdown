@@ -188,6 +188,29 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Arsenal
+	vorpalwings: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		desc: "Raises the users speed by 1 stage.",
+		shortDesc: "Raises the users speed by 1 stage.",
+		name: "Vorpal Wings",
+		pp: 32,
+		priority: 0,
+		flags: {protect: 1, contact: 1},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Steel",
+	},
+
 	// awa
 	awa: {
 		accuracy: 100,

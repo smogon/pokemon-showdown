@@ -58,6 +58,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	Arsenal: {
+		species: 'Corvisquire', ability: 'Royal Privilege', item: 'Eviolite', gender: '',
+		moves: ['Sky Attack', 'High Jump Kick', 'Earthquake'],
+		signatureMove: 'Vorpal Wings',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	'awa!': {
 		species: 'Lycanroc', ability: 'Sand Rush', item: 'Life Orb', gender: 'F',
 		moves: ['Earthquake', 'Close Combat', 'Swords Dance'],
