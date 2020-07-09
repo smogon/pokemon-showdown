@@ -69,6 +69,16 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// a random duck
+	galewingsv1: {
+		desc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
+		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move && move.type === 'Flying') return priority + 1;
+		},
+		name: "Gale Wings v1",
+	},
+
 	// Arsenal
 	royalprivilege: {
 		desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. This Pokemon can only be damaged by direct attacks. Attacks that need to charge do not charge and execute in 1 turnThis Pokemon is not affected by the secondary effect of another Pokemon's attack. This Pokemon can only be damaged by direct attacks. Attacks that need to charge do not charge and execute in 1 turn.",

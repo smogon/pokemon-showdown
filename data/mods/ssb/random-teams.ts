@@ -58,6 +58,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	'a random duck': {
+		species: 'Ducklett', ability: 'Gale Wings v1', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Thousand Waves', 'Liquidation', ['Brave Bird', 'Dragon Ascent']],
+		signatureMove: 'Grapes',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
 	Arsenal: {
 		species: 'Corvisquire', ability: 'Royal Privilege', item: 'Eviolite', gender: '',
 		moves: ['Sky Attack', 'High Jump Kick', 'Earthquake'],

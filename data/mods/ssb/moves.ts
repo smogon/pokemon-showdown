@@ -188,6 +188,33 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// a random duck
+	grapes: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Restores 50% HP, 50% Chance to boost Attack OR Speed 1 stage",
+		shortDesc: "Restores 50% HP, 50% Chance to boost Attack OR Speed 1 stage,",
+		name: "Grapes",
+		pp: 10,
+		priority: 0,
+		flags: {heal: 1},
+		heal: [1, 2],
+		secondary: {
+			chance: 50,
+			self: {
+				onHit(target, source, move) {
+					const boostName: string[] = ['atk', 'spe'];
+					let boost: {[key: string]: number} = {};
+					boost[boostName[this.random(2)]] = 1;
+					this.boost(boost, target);
+				},
+			},
+		},
+		target: "self",
+		type: "Flying",
+	},
+
 	// Arsenal
 	vorpalwings: {
 		accuracy: 100,

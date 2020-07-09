@@ -16,6 +16,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 40, atk: 70, def: 70, spa: 80, spd: 90, spe: 70},
 	},
+	// a random duck
+	ducklett: {
+		inherit: true,
+		baseStats: {hp: 62, atk: 88, def: 100, spa: 44, spd: 100, spe: 110},
+	},
 	// Elgino
 	celebi: {
 		inherit: true,

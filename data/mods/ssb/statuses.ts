@@ -87,6 +87,15 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	'a random duck': {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('a random duck')}|Hey! Got any grapes??`);
+		},
+		onFaint() {
+			this.add(`c|${getName('a random duck')}|and he waddled away... bum bum bum`);
+		},
+	},
 	arsenal: {
 		noCopy: true,
 		onStart(pokemon) {
