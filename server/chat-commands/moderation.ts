@@ -736,12 +736,8 @@ export const commands: ChatCommands = {
 		);
 
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
-		const lockMessage = `${name} was locked from talking${durationMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
-		this.addModAction(lockMessage);
-		// Notify staff room when a user is locked outside of it.
-		if (!room || room?.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${lockMessage}`);
-		}
+		this.addGlobalModAction(`${name} was locked from talking${durationMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : ""));
+
 		room?.hideText([userid, toID(this.inputUsername)]);
 		const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
@@ -800,12 +796,7 @@ export const commands: ChatCommands = {
 		const unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
-			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`;
-			this.addModAction(unlockMessage);
-			// Notify staff room when a user is unlocked outside of it.
-			if (!room || room?.roomid !== 'staff') {
-				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${unlockMessage}`);
-			}
+			this.addGlobalModAction(`${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`);
 			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has unlocked you.`);
 		} else {
@@ -832,14 +823,9 @@ export const commands: ChatCommands = {
 				curUser.updateIdentity();
 			}
 		}
+
+		this.addGlobalModAction(`The name '${target}' was unlocked by ${user.name}.`);
 		this.globalModlog("UNLOCKNAME", userid, ` by ${user.name}`);
-
-		const unlockMessage = `The name '${target}' was unlocked by ${user.name}.`;
-
-		this.addModAction(unlockMessage);
-		if (!room || room?.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PMs: ${this.pmTarget}>`} ${unlockMessage}`);
-		}
 	},
 	unlockip(target, room, user) {
 		target = target.trim();
@@ -863,13 +849,9 @@ export const commands: ChatCommands = {
 				curUser.updateIdentity();
 			}
 		}
-		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom?.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
-		if (!logRoom || logRoom !== room) {
-			this.privateModAction(`(${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target})`);
-		}
+		this.privateGlobalModAction(`${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
+		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 	},
 	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ &`],
 	unlocknamehelp: [`/unlockname [name] - Unlocks a punished alt, leaving the original lock intact. Requires: % @ &`],
@@ -925,13 +907,8 @@ export const commands: ChatCommands = {
 
 		targetUser.popup(`|modal|${user.name} has globally banned you.${(userReason ? `\n\nReason: ${userReason}` : ``)} ${(Config.appealurl ? `\n\nIf you feel that your ban was unjustified, you can appeal:\n${Config.appealurl}` : ``)}\n\nYour ban will expire in a few days.`);
 
-		const banMessage = `${name} was globally banned by ${user.name}.${(userReason ? ` (${userReason})` : ``)}`;
-		this.addModAction(banMessage);
+		this.addGlobalModAction(`${name} was globally banned by ${user.name}.${(userReason ? ` (${userReason})` : ``)}`);
 
-		// Notify staff room when a user is banned outside of it.
-		if (!room || room.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${banMessage}`);
-		}
 		const affected = await Punishments.ban(targetUser, null, null, false, userReason);
 		const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
@@ -969,18 +946,12 @@ export const commands: ChatCommands = {
 
 		const name = Punishments.unban(target);
 
-		const unbanMessage = `${name} was globally unbanned by ${user.name}.`;
-
-		if (name) {
-			this.addModAction(unbanMessage);
-			// Notify staff room when a user is unbanned outside of it.
-			if (!room || room.roomid !== 'staff') {
-				Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${unbanMessage}`);
-			}
-			this.globalModlog("UNBAN", target, ` by ${user.id}`);
-		} else {
-			this.errorReply(`User '${target}' is not globally banned.`);
+		if (!name) {
+			return this.errorReply(`User '${target}' is not globally banned.`);
 		}
+
+		this.addGlobalModAction(`${name} was globally unbanned by ${user.name}.`);
+		this.globalModlog("UNBAN", target, ` by ${user.id}`);
 	},
 	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ &`],
 
@@ -999,7 +970,8 @@ export const commands: ChatCommands = {
 		Punishments.userids.clear();
 		Punishments.ips.clear();
 		Punishments.savePunishments();
-		this.addModAction(`All bans and locks have been lifted by ${user.name}.`);
+
+		this.addGlobalModAction(`All bans and locks have been lifted by ${user.name}.`);
 		this.modlog('UNBANALL');
 	},
 	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: &`],
@@ -1049,7 +1021,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`The ${ipDesc} is already temporarily banned.`);
 		}
 		Punishments.banRange(ip, reason);
-		this.addModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
+
+		this.addGlobalModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
 		this.modlog('RANGEBAN', null, reason);
 	},
 	baniphelp: [
@@ -1068,7 +1041,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
 		}
 		Punishments.ips.delete(target);
-		this.addModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
+
+		this.addGlobalModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
 		this.modlog('UNRANGEBAN', null, target);
 	},
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],
@@ -1089,7 +1063,8 @@ export const commands: ChatCommands = {
 		}
 
 		Punishments.lockRange(ip, reason);
-		this.addModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
+
+		this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
 		this.modlog('RANGELOCK', null, reason);
 	},
 	lockiphelp: [
@@ -1121,7 +1096,7 @@ export const commands: ChatCommands = {
 			this.modlog('NOTE', null, target);
 		}
 
-		return this.privateModAction(`(${user.name} notes: ${target})`);
+		this.privateModAction(`(${user.name} notes: ${target})`);
 	},
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ # &`],
 
@@ -1182,12 +1157,12 @@ export const commands: ChatCommands = {
 			Users.globalAuth.set(targetUser ? targetUser.id : userid, nextGroup);
 		}
 		if (Users.Auth.getGroup(nextGroup).rank < Users.Auth.getGroup(currentGroup).rank) {
-			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
-			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');
+			this.privateGlobalModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
+			this.globalModlog(`GLOBAL ${groupName.toUpperCase()}`, userid, `by ${user.id}: (demote)`);
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
 		} else {
-			this.addModAction(`${name} was promoted to ${groupName} by ${user.name}.`);
-			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid);
+			this.addGlobalModAction(`${name} was promoted to ${groupName} by ${user.name}.`);
+			this.globalModlog(`GLOBAL ${groupName.toUpperCase()}`, userid);
 			if (targetUser) targetUser.popup(`You were promoted to ${groupName} by ${user.name}.`);
 		}
 
@@ -1231,9 +1206,9 @@ export const commands: ChatCommands = {
 			} else {
 				Users.globalAuth.delete(userid);
 			}
-			this.sendReply(`User '${name}' is no longer trusted.`);
-			this.privateModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
-			this.modlog('UNTRUSTUSER', userid);
+
+			this.privateGlobalModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
+			this.globalModlog('UNTRUSTUSER', userid);
 		} else {
 			if (!targetUser && !force) return this.errorReply(`User '${name}' is offline. Use /force${cmd} if you're sure.`);
 			if (currentGroup) {
@@ -1247,9 +1222,9 @@ export const commands: ChatCommands = {
 			} else {
 				Users.globalAuth.set(userid, Users.Auth.defaultSymbol());
 			}
-			this.sendReply(`User '${name}' is now trusted.`);
-			this.privateModAction(`${name} was set as a trusted user by ${user.name}.`);
-			this.modlog('TRUSTUSER', userid);
+
+			this.privateGlobalModAction(`${name} was set as a trusted user by ${user.name}.`);
+			this.globalModlog('TRUSTUSER', userid);
 		}
 	},
 	trustuserhelp: [
@@ -1282,8 +1257,8 @@ export const commands: ChatCommands = {
 		}
 		Users.globalAuth.set(name as ID, nextGroup);
 
-		this.addModAction(`${name} was promoted to ${(Config.groups[nextGroup].name || "regular user")} by ${user.name}.`);
-		this.modlog(`GLOBAL${(Config.groups[nextGroup].name || "regular").toUpperCase()}`, toID(name));
+		this.addGlobalModAction(`${name} was promoted to ${(Config.groups[nextGroup].name || "regular user")} by ${user.name}.`);
+		this.globalModlog(`GLOBAL${(Config.groups[nextGroup].name || "regular").toUpperCase()}`, toID(name));
 	},
 
 	devoice: 'deauth',
@@ -1350,7 +1325,7 @@ export const commands: ChatCommands = {
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		}
-		this.modlog(`GLOBALDECLARE`, null, target);
+		this.globalModlog(`GLOBALDECLARE`, null, target);
 	},
 	globaldeclarehelp: [`/globaldeclare [message] - Anonymously announces a message to all rooms on the site. Requires: &`],
 
@@ -1366,7 +1341,7 @@ export const commands: ChatCommands = {
 				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 			}
 		}
-		this.modlog(`CHATDECLARE`, null, target);
+		this.globalModlog(`CHATDECLARE`, null, target);
 	},
 	chatdeclarehelp: [`/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: &`],
 
@@ -1485,18 +1460,13 @@ export const commands: ChatCommands = {
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 
 		const reasonText = reason ? ` (${reason})` : `.`;
-		const lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
-		this.privateModAction(`(${lockMessage})`);
+		this.privateGlobalModAction(`${targetUser.name} was namelocked by ${user.name}${reasonText}`);
+		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 
-		// Notify staff room when a user is locked outside of it.
-		if (!room || room.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `${room ? `<<${room.roomid}>>` : `<PM:${this.pmTarget}>`} ${lockMessage}`);
-		}
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {
 			Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
-		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
 		await Punishments.namelock(targetUser, null, null, false, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
@@ -1520,13 +1490,13 @@ export const commands: ChatCommands = {
 
 		const unlocked = Punishments.unnamelock(target);
 
-		if (unlocked) {
-			this.addModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
-			if (!reason) this.globalModlog("UNNAMELOCK", toID(target), ` by ${user.id}`);
-			if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);
-		} else {
-			this.errorReply(`User '${target}' is not namelocked.`);
+		if (!unlocked) {
+			return this.errorReply(`User '${target}' is not namelocked.`);
 		}
+
+		this.addGlobalModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
+		if (!reason) this.globalModlog("UNNAMELOCK", toID(target), ` by ${user.id}`);
+		if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);
 	},
 	unnamelockhelp: [`/unnamelock [username] - Unnamelocks the user. Requires: % @ &`],
 
@@ -1676,7 +1646,7 @@ export const commands: ChatCommands = {
 			this.globalModlog("BLACKLIST", targetUser, ` by ${user.id}${target ? `: ${target}` : ''}`);
 		} else {
 			// Room modlog only
-			this.modlog("BLACKLIST", targetUser, ` by ${user.id}${(target ? `: ${target}` : '')}`);
+			this.modlog("BLACKLIST", targetUser, target);
 		}
 		return true;
 	},
@@ -1719,13 +1689,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${targetUser.name}' is already banned from battling.`);
 		}
 		const reasonText = reason ? ` (${reason})` : `.`;
-		const battlebanMessage = `${targetUser.name} was banned from starting new battles by ${user.name}${reasonText}`;
-		this.privateModAction(`(${battlebanMessage})`);
+		this.privateGlobalModAction(`${targetUser.name} was banned from starting new battles by ${user.name}${reasonText}`);
 
-		// Notify staff room when a user is banned from battling outside of it.
-		if (room.roomid !== 'staff') {
-			Rooms.get('staff')?.addByUser(user, `<<${room.roomid}>> ${battlebanMessage}`);
-		}
 		if (targetUser.trusted) {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
 		}
@@ -1931,13 +1896,9 @@ export const commands: ChatCommands = {
 
 		Punishments.addSharedIp(ip, note);
 		note = ` (${note})`;
+
+		this.addGlobalModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
 		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
-
-		const message = `The IP '${ip}' was marked as shared by ${user.name}.${note}`;
-		const staffRoom = Rooms.get('staff');
-		if (staffRoom) return staffRoom.addByUser(user, message);
-
-		return this.addModAction(message);
 	},
 	marksharedhelp: [
 		`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
@@ -1952,8 +1913,9 @@ export const commands: ChatCommands = {
 		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
 
 		Punishments.removeSharedIp(target);
+
+		this.addGlobalModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 		this.globalModlog('UNSHAREIP', target, ` by ${user.name}`);
-		return this.addModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 	},
 	unmarksharedhelp: [`/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &`],
 };
