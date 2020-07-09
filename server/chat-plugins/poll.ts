@@ -542,9 +542,9 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	pollqueue(args, user) {
-		this.extractRoom();
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
-		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
+		if (!room) return `<div class="pad"><h2>Specify a room.</h2></div>`;
+		let buf = `<div class="pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		if (!room.minorActivityQueue?.length) {
