@@ -316,6 +316,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Stony Kibbles',
 		evs: {atk: 128, spd: 252, spe: 128}, nature: 'Jolly',
 	},
+	'The Immortal': {
+		species: 'Xurkitree', ability: 'Teravolt', item: 'Electrium Z', gender: '',
+		moves: ['Tail Glow', 'Freeze Dry', 'Secret Sword'],
+		signatureMove: 'Watt Up',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	tiki: {
 		species: 'Snom', ability: 'True Grit', item: 'Eviolite', gender: 'M',
 		moves: ['Toxic', 'Strength Sap', 'U-turn'],

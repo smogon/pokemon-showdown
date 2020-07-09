@@ -1769,6 +1769,36 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// The Immortal
+	wattup: {
+		accuracy: 100,
+		basePower: 73,
+		category: "Special",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "+1 Speed if successful.",
+		name: "Watt Up",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Volt Switch', target);
+			this.add('-anim', source, 'Nasty Plot', source);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Electric",
+	},
+
 	// tiki
 	rightoncue: {
 		accuracy: true,
