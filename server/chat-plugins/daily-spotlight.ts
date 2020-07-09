@@ -2,7 +2,7 @@ import {FS} from '../../lib/fs';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
-const NUMBER_REGEX = /^[0-9]+\s*$/;
+const NUMBER_REGEX = /^\s*[0-9]+\s*$/;
 
 let spotlights: {[k: string]: {[k: string]: {image?: string, description: string}[]}} = {};
 try {
