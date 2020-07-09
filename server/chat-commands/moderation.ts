@@ -1215,20 +1215,38 @@ export const commands: ChatCommands = {
 		const currentGroup = Users.globalAuth.get(userid);
 
 		if (untrust) {
-			if (currentGroup !== Users.Auth.defaultSymbol()) return this.errorReply(`User '${name}' is not trusted.`);
+			if (currentGroup !== Users.Auth.defaultSymbol()) {
+				return this.errorReply(`User '${name}' is trusted indirectly through global rank ${currentGroup}. Demote them from that rank to remove trusted status.`);
+			}
+			const trustedSourceRooms = Rooms.global.chatRooms
+				.filter(room => room.persist && room.settings.isPrivate !== true && room.auth.isStaff(userid))
+				.map(room => room.auth.get(userid) + room.roomid).join(' ');
+			if (trustedSourceRooms.length && !Users.globalAuth.has(userid)) {
+				return this.errorReply(`User '${name}' is trusted indirectly through room ranks ${trustedSourceRooms}. Demote them from those ranks to remove trusted status.`);
+			}
+			if (!Users.globalAuth.has(userid)) return this.errorReply(`User '${name}' is not trusted.`);
 
-			Users.globalAuth.set(userid, Users.Auth.defaultSymbol());
+			if (targetUser) {
+				targetUser.setGroup(Users.Auth.defaultSymbol())
+			} else {
+				Users.globalAuth.delete(userid);
+			}
 			this.sendReply(`User '${name}' is no longer trusted.`);
 			this.privateModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
 			this.modlog('UNTRUSTUSER', userid);
 		} else {
 			if (!targetUser && !force) return this.errorReply(`User '${name}' is offline. Use /force${cmd} if you're sure.`);
 			if (currentGroup) {
-				if (currentGroup === Users.Auth.defaultSymbol()) return this.errorReply(`User '${name}' is already trusted.`);
-				return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
+				if (Users.globalAuth.has(userid)) {
+					if (currentGroup === Users.Auth.defaultSymbol()) return this.errorReply(`User '${name}' is already trusted.`);
+					else return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
+				}
 			}
-
-			Users.globalAuth.set(userid, Users.Auth.defaultSymbol());
+			if (targetUser) {
+				targetUser.setGroup(Users.Auth.defaultSymbol(), true);
+			} else {
+				Users.globalAuth.set(userid, Users.Auth.defaultSymbol());
+			}
 			this.sendReply(`User '${name}' is now trusted.`);
 			this.privateModAction(`${name} was set as a trusted user by ${user.name}.`);
 			this.modlog('TRUSTUSER', userid);
