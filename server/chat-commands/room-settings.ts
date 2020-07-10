@@ -607,11 +607,6 @@ export const commands: ChatCommands = {
 		if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
 			return this.errorReply("Room titles can't contain any of: ,|[-");
 		}
-<<<<<<< HEAD
-
-=======
-		if (!id) return this.parse('/help makechatroom');
->>>>>>> Update room-settings.ts
 		if (id.length > 255) return this.errorReply("The given room title is too long.");
 		// Check if the name already exists as a room or alias
 		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
