@@ -65,4 +65,19 @@ describe('Fusion Bolt + Fusion Flare', function () {
 
 		assert.equal(bpModifiers.get('fusionflare'), 1);
 	});
+
+	it('should not boost the second move if the first move failed', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: 'Zekrom', ability: 'teravolt', moves: ['fusionbolt'], evs: {spe: 4}}, {species: 'Reshiram', ability: 'teravolt', moves: ['fusionflare']}],
+			[{species: 'Stunfisk', ability: 'Multiscale', moves: ['roost']}, {species: 'Stunfisk', ability: 'Multiscale', moves: ['roost']}],
+		]);
+
+		const bpModifiers = new Map();
+		battle.onEvent('BasePower', battle.format, -100, function (bp, attacker, defender, move) {
+			bpModifiers.set(move.id, this.event.modifier);
+		});
+		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'default');
+
+		assert.equal(bpModifiers.get('fusionflare'), 1);
+	});
 });
