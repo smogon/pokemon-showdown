@@ -484,11 +484,11 @@ export const commands: ChatCommands = {
 		user.resetName();
 	},
 
-	nofeedback(target, room, user) {
-		if (!target.startsWith('/')) return this.parse('/help nofeedback');
+	noreply(target, room, user) {
+		if (!target.startsWith('/')) return this.parse('/help noreply');
 		return this.parse(target, true);
 	},
-	nofeedbackhelp: [`/nofeedback [command] - Runs the command without displaying the response.`],
+	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
 	r: 'reply',
 	reply(target, room, user) {
