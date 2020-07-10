@@ -118,7 +118,7 @@ export class Battle {
 	activeTarget: Pokemon | null;
 
 	lastMove: ActiveMove | null;
-	lastMoveThisTurn: Move | null;
+	lastSuccessfulMoveThisTurn: ID | null;
 	lastMoveLine: number;
 	lastDamage: number;
 	abilityOrder: number;
@@ -200,7 +200,7 @@ export class Battle {
 
 		this.lastMove = null;
 		this.lastMoveLine = -1;
-		this.lastMoveThisTurn = null;
+		this.lastSuccessfulMoveThisTurn = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
 
@@ -300,10 +300,8 @@ export class Battle {
 
 	clearActiveMove(failed?: boolean) {
 		if (this.activeMove) {
-			this.lastMoveThisTurn = null;
 			if (!failed) {
 				this.lastMove = this.activeMove;
-				this.lastMoveThisTurn = this.activeMove;
 			}
 			this.activeMove = null;
 			this.activePokemon = null;
@@ -1409,7 +1407,7 @@ export class Battle {
 
 	nextTurn() {
 		this.turn++;
-		this.lastMoveThisTurn = null;
+		this.lastSuccessfulMoveThisTurn = null;
 
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
