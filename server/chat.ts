@@ -988,7 +988,7 @@ export class CommandContext extends MessageContext {
 		if (typeof message !== 'string') return true;
 
 		if (!message) {
-			connection.popup(this.tr("Your message can't be blank."));
+			this.errorReply(this.tr("Your message can't be blank."));
 			return null;
 		}
 		let length = message.length;
