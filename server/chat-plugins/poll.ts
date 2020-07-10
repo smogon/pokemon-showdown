@@ -542,7 +542,8 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	pollqueue(args, user) {
-		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		this.extractRoom();
+		const room = this.room;
 		if (!room) return `<div class="pad"><h2>Specify a room.</h2></div>`;
 		let buf = `<div class="pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
