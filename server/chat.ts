@@ -559,7 +559,7 @@ export class CommandContext extends MessageContext {
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		} catch (err) {
-			if (err.name?.includes('ErrorMessage')) {
+			if (err.name?.endsWith('ErrorMessage')) {
 				this.errorReply(err.message);
 				return false;
 			}
