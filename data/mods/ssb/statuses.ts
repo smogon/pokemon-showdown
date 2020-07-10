@@ -740,6 +740,17 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Zalm')}|Woah`);
 		},
 	},
+	zarel: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Zarel')}|the melo-p represents PS's battles, and the melo-a represents PS's chatrooms`);
+			this.add(`c|${getName('Zarel')}|THIS melo-a represents kicking your ass, though`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Zarel')}|the melo-p represents PS's battles, and the melo-a represents PS's chatrooms`);
+			this.add(`c|${getName('Zarel')}|THIS melo-a represents kicking your ass, though`);
+		},
+	},
 	zodiax: {
 		noCopy: true,
 		onStart() {

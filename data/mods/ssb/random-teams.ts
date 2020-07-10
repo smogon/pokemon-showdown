@@ -340,6 +340,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ingredient Foraging',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	Zarel: {
+		species: 'Meloetta', ability: 'Dancer', item: 'Leftovers', gender: 'N',
+		moves: ['Quiver Dance', 'Feather Dance', 'Lunar Dance'],
+		signatureMove: 'Relic Song',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	Zodiax: {
 		species: 'Oricorio-Pom-Pom', ability: 'Primordial Sea', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Quiver Dance', 'Hurricane', 'Thunder'],

@@ -1997,6 +1997,59 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 	},
 
+	// Zarel
+	relicsong: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "+1 Special Attack and transforms into Meloetta-P/A with their accompanying moveset regardless of the outcome of the move. The move becomes fighting if Meloetta-P uses the move.",
+		shortDesc: "+1 Special Attack. Meloetta transforms. If Meloetta-Pirouette, type becomes Fighting.",
+		name: "Relic Song",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		secondary: null,
+		onAfterMove(source) {
+			const formeMoves: {[key: string]: string[]} = {
+				meloetta: ["Quiver Dance", "Feather Dance", "Lunar Dance", "Relic Song"],
+				meloettapirouette: ["Revelation Dance", "Fiery Dance", "Petal Dance", "Relic Song"],
+			};
+			const forme = source.species.name === "Meloetta" ? "Meloetta-Pirouette" : "Meloetta";
+			source.formeChange(forme, this.effect, true);
+			const newMoves = formeMoves[toID(forme)];
+			const carryOver = source.moveSlots.slice().map(m => {
+				return m.pp / m.maxpp;
+			});
+			// Incase theres ever less than 4 moves
+			while (carryOver.length < 4) {
+				carryOver.push(1);
+			}
+			source.moveSlots = [];
+			let slot = 0;
+			for (const newMove of newMoves) {
+				const moveData = source.battle.dex.getMove(toID(newMove));
+				if (!moveData.id) continue;
+				source.moveSlots.push({
+					move: moveData.name,
+					id: moveData.id,
+					pp: ((moveData.noPPBoosts || moveData.isZ) ? Math.floor(moveData.pp * carryOver[slot]) : moveData.pp * 8 / 5),
+					maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
+					target: moveData.target,
+					disabled: false,
+					disabledSource: '',
+					used: false,
+				});
+				slot++;
+			}
+			this.boost({spa: 1}, source);
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === "Meloetta-Pirouette") move.type = "Fighting";
+		},
+		target: "allAdjacentFoes",
+		type: "Psychic",
+	},
+
 	// Zodiax
 	bigstormcoming: {
 		accuracy: 100,

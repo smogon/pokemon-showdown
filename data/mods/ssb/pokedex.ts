@@ -134,4 +134,13 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 100, atk: 35, def: 100, spa: 90, spd: 90, spe: 100},
 	},
+	// Zarel
+	meloetta: {
+		inherit: true,
+		abilities: {0: "Dancer"},
+	},
+	meloettapirouette: {
+		inherit: true,
+		abilities: {0: "Serene Grace"},
+	},
 };
