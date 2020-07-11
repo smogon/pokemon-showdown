@@ -437,6 +437,18 @@ export class CommandContext extends MessageContext {
 					this.sendChatMessage(resolvedMessage);
 				}
 				this.update();
+			}).catch(err => {
+				if (err.name?.endsWith('ErrorMessage')) {
+					this.errorReply(err.message);
+					return false;
+				}
+				Monitor.crashlog(err, 'An async chat command', {
+					user: this.user.name,
+					room: this.room?.roomid,
+					pmTarget: this.pmTarget?.name,
+					message: this.message,
+				});
+				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message);
@@ -575,8 +587,8 @@ export class CommandContext extends MessageContext {
 			}
 			Monitor.crashlog(err, 'A chat command', {
 				user: this.user.name,
-				room: this.room && this.room.roomid,
-				pmTarget: this.pmTarget && this.pmTarget.name,
+				room: this.room?.roomid,
+				pmTarget: this.pmTarget?.name,
 				message: this.message,
 			});
 			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
