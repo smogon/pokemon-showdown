@@ -478,6 +478,12 @@ export const commands: ChatCommands = {
 		user.resetName();
 	},
 
+	noreply(target, room, user) {
+		if (!target.startsWith('/')) return this.parse('/help noreply');
+		return this.parse(target, true);
+	},
+	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
+
 	r: 'reply',
 	reply(target, room, user) {
 		if (!target) return this.parse('/help reply');
