@@ -294,6 +294,7 @@ export const commands: ChatCommands = {
 	permission: 'permissions',
 	permissions: {
 		set(target, room, user) {
+			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.toLowerCase().replace(/ +/g, ''));
 			perm = toID(perm);
 			if (!room.auth.atLeast(user, '#')) {
@@ -327,6 +328,7 @@ export const commands: ChatCommands = {
 
 		help: '',
 		''(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const configGroups = [
 				"ban", "mute", "alts", "modlog", "broadcast", "declare", "announce", "modchat",
 				"tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
