@@ -92,7 +92,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		user: User,
 		permission: string,
 		target: User | GroupSymbol | null,
-		room?: Room | BasicChatRoom | null,
+		room?: Room | BasicRoom | null,
 		cmd?: string
 	): boolean {
 		if (user.hasSysopAccess()) return true;
@@ -301,7 +301,7 @@ export const Permissions = new class {
 			// remove room-plugin commands unless it is that room
 			if (entry.roomSpecific && entry.roomSpecific !== room?.roomid) continue;
 			// Assume if it passes a room into CommandContext.can that it's roomonly
-			if (Chat.commands[cmd].toString().includes('room)) return false;')) {
+			if (/.can\((.+), (.+), (.+)\)/.test(Chat.commands[cmd].toString())) {
 				ALLOWED_COMMANDS.push(cmd);
 			}
 		}
