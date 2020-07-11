@@ -54,7 +54,6 @@ export const Repl = new class ReplSingleton {
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
-		if (process.platform === 'win32') return;
 
 		Repl.setupListeners();
 
@@ -98,22 +97,24 @@ export const Repl = new class ReplSingleton {
 			});
 
 			server.once('error', (err: NodeJS.ErrnoException) => {
+				server.close();
 				if (err.code === "EADDRINUSE") {
 					fs.unlink(pathname, _err => {
 						if (_err && _err.code !== "ENOENT") {
 							crashlogger(_err, `REPL: ${filename}`);
 						}
-						server.close();
 					});
+				} else if (err.code === "EACCES") {
+					if (process.platform !== 'win32') {
+						console.error(`Could not start REPL server "${filename}": Your filesystem doesn't support Unix sockets (everything else will still work)`);
+					}
 				} else {
 					crashlogger(err, `REPL: ${filename}`);
-					server.close();
 				}
 			});
 
 			server.once('close', () => {
 				Repl.socketPathnames.delete(pathname);
-				Repl.start(filename, evalFunction);
 			});
 		} catch (err) {
 			console.error(`Could not start REPL server "${filename}": ${err}`);

@@ -182,6 +182,25 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`-${thing}`);
 	}
 
+	isRestricted(thing: string) {
+		if (this.has(`+${thing}`)) return false;
+		return this.has(`*${thing}`);
+	}
+
+	isRestrictedSpecies(species: Species) {
+		if (this.has(`+pokemon:${species.id}`)) return false;
+		if (this.has(`*pokemon:${species.id}`)) return true;
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
+		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
+		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
+		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
+		if (this.has(`*pokemontag:${toID(tier)}`)) return true;
+		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
+		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
+		if (this.has(`*pokemontag:${toID(doublesTier)}`)) return true;
+		return this.has(`*pokemontag:allpokemon`);
+	}
+
 	check(thing: string, setHas: {[id: string]: true} | null = null) {
 		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
@@ -259,6 +278,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly baseRuleset: string[];
 	/** List of banned effects. */
 	readonly banlist: string[];
+	/** List of effects that aren't completely banned. */
+	readonly restricted: string[];
 	/** List of inherited banned effects to override. */
 	readonly unbanlist: string[];
 	/** List of ruleset and banlist changes in a custom format. */
@@ -317,6 +338,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];
+		this.restricted = data.restricted || [];
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
@@ -587,9 +609,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Added type (used in OMs). */
 	readonly addedType?: string;
 	/** Pre-evolution. '' if nothing evolves into this Pokemon. */
-	readonly prevo: ID;
+	readonly prevo: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
-	readonly evos: ID[];
+	readonly evos: string[];
 	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
 	/** Evolution condition. falsy if doesn't evolve. */
 	readonly evoCondition?: string;
@@ -674,6 +696,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly randomBattleMoves?: readonly ID[];
 	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
+	readonly randomDoubleBattleLevel?: number;
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;

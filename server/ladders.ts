@@ -25,13 +25,23 @@ class BattleReady {
 	readonly userid: ID;
 	readonly formatid: string;
 	readonly team: string;
+	readonly hidden: boolean;
+	readonly inviteOnly: boolean;
 	readonly rating: number;
 	readonly challengeType: ChallengeType;
 	readonly time: number;
-	constructor(userid: ID, formatid: string, team: string, rating = 0, challengeType: ChallengeType) {
+	constructor(
+		userid: ID,
+		formatid: string,
+		settings: User['battleSettings'],
+		rating: number,
+		challengeType: ChallengeType
+	) {
 		this.userid = userid;
 		this.formatid = formatid;
-		this.team = team;
+		this.team = settings.team;
+		this.hidden = settings.hidden;
+		this.inviteOnly = settings.inviteOnly;
 		this.rating = rating;
 		this.challengeType = challengeType;
 		this.time = Date.now();
@@ -74,7 +84,7 @@ class Ladder extends LadderStore {
 		// all validation for a battle goes through here
 		const user = connection.user;
 		const userid = user.id;
-		if (team === null) team = user.team;
+		if (team === null) team = user.battleSettings.team;
 
 		if (Rooms.global.lockdown && Rooms.global.lockdown !== 'pre') {
 			let message = `The server is restarting. Battles will be available again in a few minutes.`;
@@ -165,7 +175,20 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		return new BattleReady(userid, this.formatid, valResult.slice(1), rating, challengeType);
+		const settings = {...user.battleSettings, team: valResult.slice(1) as string};
+		user.battleSettings.inviteOnly = false;
+		user.battleSettings.hidden = false;
+		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
+	}
+
+	static getChallenging(userid: ID) {
+		const userChalls = Ladders.challenges.get(userid);
+		if (userChalls) {
+			for (const chall of userChalls) {
+				if (chall.from === userid) return chall;
+			}
+		}
+		return null;
 	}
 
 	static cancelChallenging(user: User) {
@@ -216,7 +239,7 @@ class Ladder extends LadderStore {
 			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
-		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
+		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
@@ -262,15 +285,6 @@ class Ladder extends LadderStore {
 		return true;
 	}
 
-	static getChallenging(userid: ID) {
-		const userChalls = Ladders.challenges.get(userid);
-		if (userChalls) {
-			for (const chall of userChalls) {
-				if (chall.from === userid) return chall;
-			}
-		}
-		return null;
-	}
 	static addChallenge(challenge: Challenge, skipUpdate = false) {
 		let challs1 = Ladders.challenges.get(challenge.from);
 		if (!challs1) Ladders.challenges.set(challenge.from, challs1 = []);
@@ -554,9 +568,13 @@ class Ladder extends LadderStore {
 			p1: user1,
 			p1team: ready1.team,
 			p1rating: ready1.rating,
+			p1hidden: ready1.hidden,
+			p1inviteOnly: ready1.inviteOnly,
 			p2: user2,
 			p2team: ready2.team,
 			p2rating: ready2.rating,
+			p2hidden: ready2.hidden,
+			p2inviteOnly: ready2.inviteOnly,
 			rated: Math.min(ready1.rating, ready2.rating),
 			challengeType: ready1.challengeType,
 		});

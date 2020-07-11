@@ -14,7 +14,7 @@ interface Option {
 export class Poll {
 	readonly activityId: 'poll';
 	pollNumber: number;
-	room: ChatRoom | GameRoom;
+	room: Room;
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
@@ -26,7 +26,7 @@ export class Poll {
 	timeoutMins: number;
 	isQuiz: boolean;
 	options: Map<number, Option>;
-	constructor(room: ChatRoom | GameRoom, questionData: QuestionData, options: string[], multi: boolean) {
+	constructor(room: Room, questionData: QuestionData, options: string[], multi: boolean) {
 		this.activityId = 'poll';
 		this.pollNumber = room.nextGameNumber();
 		this.room = room;
@@ -270,6 +270,7 @@ export const commands: ChatCommands = {
 		queuemulti: 'new',
 		htmlqueuemulti: 'new',
 		new(target, room, user, connection, cmd, message) {
+			if (!room) return this.requiresRoom();
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
 			if (target.length > 1024) return this.errorReply("Poll too long.");
@@ -336,6 +337,7 @@ export const commands: ChatCommands = {
 		],
 
 		viewqueue(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			this.parse(`/join view-pollqueue-${room.roomid}`);
 		},
@@ -343,6 +345,7 @@ export const commands: ChatCommands = {
 
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			if (!room.minorActivityQueue) {
 				return this.errorReply("The queue is already empty.");
@@ -372,13 +375,14 @@ export const commands: ChatCommands = {
 			}
 		},
 		deletequeuehelp: [
-			`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
-			`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
+			`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
+			`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
 		],
 
 		deselect: 'select',
 		vote: 'select',
 		select(target, room, user, connection, cmd) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
@@ -400,7 +404,9 @@ export const commands: ChatCommands = {
 			`/poll select [number] - Select option [number].`,
 			`/poll deselect [number] - Deselects option [number].`,
 		],
+
 		submit(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
@@ -411,6 +417,7 @@ export const commands: ChatCommands = {
 		submithelp: [`/poll submit - Submits your vote.`],
 
 		timer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
@@ -458,6 +465,7 @@ export const commands: ChatCommands = {
 		],
 
 		results(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
@@ -472,6 +480,7 @@ export const commands: ChatCommands = {
 		close: 'end',
 		stop: 'end',
 		end(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
@@ -497,6 +506,7 @@ export const commands: ChatCommands = {
 		show: '',
 		display: '',
 		''(target, room, user, connection) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
@@ -524,17 +534,18 @@ export const commands: ChatCommands = {
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
 		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
-		`/deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
-		`/clearqueue - deletes the queue of polls. Requires: % @ # &`,
-		`/viewqueue - view the queue of polls in the room. Requires: % @ # &`,
+		`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
+		`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
+		`/poll viewqueue - view the queue of polls in the room. Requires: % @ # &`,
 	],
 };
 
 export const pages: PageTable = {
 	pollqueue(args, user) {
 		this.extractRoom();
-		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
-		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
+		const room = this.room;
+		if (!room) return `<div class="pad"><h2>Specify a room.</h2></div>`;
+		let buf = `<div class="pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		if (!room.minorActivityQueue?.length) {

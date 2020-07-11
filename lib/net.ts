@@ -99,7 +99,7 @@ export class NetStream extends Streams.ReadWriteStream {
 			});
 			response.on('end', () => {
 				if (this.state === 'open') this.state = 'success';
-				this.pushEnd();
+				if (!this.atEOF) this.pushEnd();
 			});
 		});
 		request.on('close', () => {
