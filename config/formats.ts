@@ -759,7 +759,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		banlist: [
 			'Chansey', 'Doublade', 'Gurdurr', 'Haunter', 'Ivysaur', 'Magneton', 'Mr. Mime-Galar',
 			'Pawniard', 'Porygon2', 'Rhydon', 'Rufflet', 'Scyther', 'Sneasel', 'Type: Null',
-			'Shadow Tag', 'Baton Pass',
+			'Arena Trap', 'Shadow Tag', 'Baton Pass',
 		],
 	},
 	{
