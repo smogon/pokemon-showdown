@@ -63,6 +63,7 @@ interface PokemonSet {
 	happiness?: number;
 	pokeball?: string;
 	hpType?: string;
+	gigantamax?: boolean;
 }
 
 /**
@@ -1129,7 +1130,8 @@ interface SpeciesData {
 	requiredItems?: string[];
 	requiredMove?: string;
 	battleOnly?: string | string[];
-	isGigantamax?: string;
+	canGigantamax?: string;
+	cannotDynamax?: boolean;
 	changesFrom?: string;
 	maleOnlyHidden?: boolean;
 	unreleasedHidden?: boolean | 'Past';
@@ -1142,6 +1144,7 @@ interface SpeciesFormatsData {
 	doublesTier?: string;
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
+	gmaxUnreleased?: boolean;
 	isNonstandard?: Nonstandard | null;
 	randomBattleMoves?: readonly string[];
 	randomBattleLevel?: number;

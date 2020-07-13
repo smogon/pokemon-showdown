@@ -582,7 +582,7 @@ export class RandomTeams {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
-		if (species.battleOnly && !species.isGigantamax && typeof species.battleOnly === 'string') {
+		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
 		}
@@ -1178,7 +1178,7 @@ export class RandomTeams {
 
 			if (species.name === 'Azumarill' && !isDoubles) {
 				ability = 'Sap Sipper';
-			} else if (species.name === 'Copperajah-Gmax') {
+			} else if (species.name === 'Copperajah-Gmax') { // I'll let TI handle this
 				ability = 'Heavy Metal';
 			} else if (species.name === 'Miltank') {
 				ability = counter.setupType ? 'Scrappy' : 'Thick Fat';

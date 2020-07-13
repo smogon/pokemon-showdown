@@ -82,6 +82,7 @@ describe('Dex data', function () {
 			}
 			if (entry.formeOrder) {
 				for (const forme of entry.formeOrder) {
+					if (toID(forme).includes('gmax')) continue;
 					 // formeOrder contains other formes and 'cosmetic' formes which do not have entries in Pokedex but should have aliases
 					const formeEntry = Dex.getSpecies(toID(forme));
 					assert.equal(forme, formeEntry.name, `Misspelled/nonexistent forme "${forme}" of ${entry.name}`);

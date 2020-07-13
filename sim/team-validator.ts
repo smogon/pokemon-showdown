@@ -1155,14 +1155,12 @@ export class TeamValidator {
 				// Meloetta-Pirouette, Rayquaza-Mega
 				problems.push(`${species.name} transforms in-battle with ${species.requiredMove}, please fix its moves.`);
 			}
-			if (!species.isGigantamax) {
-				if (typeof species.battleOnly !== 'string') {
-					// Ultra Necrozma and Complete Zygarde are already checked above
-					throw new Error(`${species.name} should have a string battleOnly`);
-				}
-				// Set to out-of-battle forme
-				set.species = species.battleOnly;
+			if (typeof species.battleOnly !== 'string') {
+				// Ultra Necrozma and Complete Zygarde are already checked above
+				throw new Error(`${species.name} should have a string battleOnly`);
 			}
+			// Set to out-of-battle forme
+			set.species = species.battleOnly;
 		} else {
 			if (species.requiredAbility) {
 				// Impossible!
@@ -1313,6 +1311,14 @@ export class TeamValidator {
 					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
 				}
 				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		if (tierSpecies.gmaxUnreleased && set.gigantamax) {
+			banReason = ruleTable.check('pokemontag:unobtainable');
+			if (banReason) {
+				return `${tierSpecies.name} is flagged as gigantamax, but it cannot gigantamax without hacking or glitches.`;
 			}
 			if (banReason === '') return null;
 		}
@@ -1989,7 +1995,7 @@ export class TeamValidator {
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
-			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
+			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
 		} else if (species.baseSpecies === 'Pumpkaboo' && species.forme) {
 			return this.dex.getSpecies('Pumpkaboo');
