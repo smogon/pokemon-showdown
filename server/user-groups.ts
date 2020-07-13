@@ -109,7 +109,6 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (jurisdiction === true && permission !== 'jurisdiction') {
 			jurisdiction = group['jurisdiction'] || true;
 		}
-
 		const roomPermissions = room ? room.settings.permissions : null;
 		if (roomPermissions) {
 			if (cmd && permission !== cmd && roomPermissions[cmd]) {
@@ -119,6 +118,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
 				jurisdiction = 'su';
 			}
+		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
 		}
 
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);

@@ -43,7 +43,7 @@ export type ChatHandler = (
 ) => void;
 export type AnnotatedChatHandler = ChatHandler & {
 	requiresRoom: boolean,
-	roomSpecific: RoomID,
+	broadcastable: boolean,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -496,7 +496,7 @@ export class CommandContext extends MessageContext {
 
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 
-		let curCommands: ChatCommands = Chat.commands;
+		let curCommands: AnnotatedChatCommands = Chat.commands;
 		let commandHandler;
 		let fullCmd = cmd;
 
@@ -523,7 +523,7 @@ export class CommandContext extends MessageContext {
 				}
 
 				fullCmd += ' ' + cmd;
-				curCommands = commandHandler as ChatCommands;
+				curCommands = commandHandler as AnnotatedChatCommands;
 			}
 		} while (commandHandler && typeof commandHandler === 'object');
 
@@ -1299,10 +1299,10 @@ export const Chat = new class {
 	/*********************************************************
 	 * Load command files
 	 *********************************************************/
-	baseCommands: AnnotatedChatCommands = undefined!;
-	commands: AnnotatedChatCommands = undefined!;
-	basePages: PageTable = undefined!;
-	pages: PageTable = undefined!;
+	baseCommands!: AnnotatedChatCommands;
+	commands!: AnnotatedChatCommands;
+	basePages!: PageTable;
+	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
 	roomSettings: SettingsHandler[] = [];
 
@@ -1565,7 +1565,7 @@ export const Chat = new class {
 		}
 		this.loadPluginData(plugin);
 	}
-	annotateCommands(commandTable: AnyObject) {
+	annotateCommands(commandTable: AnyObject): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
@@ -1574,10 +1574,8 @@ export const Chat = new class {
 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
-			entry.requiresRoom = /.can\((.+), (.+), (.+)\)/.test(handlerCode);
-
-			const roomSpecificSearch = /\.roomid !== ['"]([a-z0-9-]+)['"]/.exec(handlerCode);
-			entry.roomSpecific = roomSpecificSearch?.[1] || null;
+			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
+			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
 		}
 		return commandTable;
 	}
