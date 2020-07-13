@@ -1574,7 +1574,7 @@ export const Chat = new class {
 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
-			entry.requiresRoom = !commandTable[`!${cmd}`];
+			entry.requiresRoom = /.can\((.+), (.+), (.+)\)/.test(handlerCode);
 
 			const roomSpecificSearch = /\.roomid !== ['"]([a-z0-9-]+)['"]/.exec(handlerCode);
 			entry.roomSpecific = roomSpecificSearch?.[1] || null;
