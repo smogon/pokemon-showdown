@@ -294,6 +294,7 @@ export const commands: ChatCommands = {
 	permission: 'permissions',
 	permissions: {
 		set(target, room, user) {
+			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.toLowerCase().replace(/ +/g, ''));
 			perm = toID(perm);
 			if (!room.auth.atLeast(user, '#')) {
