@@ -1,5 +1,8 @@
 import {FS} from '../lib/fs';
 
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
+
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
@@ -57,16 +60,16 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	atLeast(user: User, group: GroupSymbol) {
 		if (!Config.groups[group]) return false;
 		if (user.locked || user.semilocked) return false;
-		if (!this.has(user.id)) return false;
+		if (this.get(user.id) === ' ' && group !== ' ') return false;
 		return Auth.getGroup(this.get(user.id)).rank >= Auth.getGroup(group).rank;
 	}
 
 	static defaultSymbol() {
-		return Config.groupsranking[0];
+		return Config.groupsranking[0] as GroupSymbol;
 	}
-	static getGroup(symbol: GroupSymbol): GroupInfo;
-	static getGroup<T>(symbol: GroupSymbol, fallback: T): GroupInfo | T;
-	static getGroup(symbol: GroupSymbol, fallback?: AnyObject) {
+	static getGroup(symbol: EffectiveGroupSymbol): GroupInfo;
+	static getGroup<T>(symbol: EffectiveGroupSymbol, fallback: T): GroupInfo | T;
+	static getGroup(symbol: EffectiveGroupSymbol, fallback?: AnyObject) {
 		if (Config.groups[symbol]) return Config.groups[symbol];
 
 		if (fallback !== undefined) return fallback;
@@ -78,44 +81,63 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			name: symbol,
 		});
 	}
+	getEffectiveSymbol(user: User): EffectiveGroupSymbol {
+		const group = this.get(user);
+		if (this.has(user.id) && group === Auth.defaultSymbol()) {
+			return 'whitelist';
+		}
+		return group;
+	}
 	static hasPermission(
-		symbol: GroupSymbol,
-		permission: GlobalPermission | RoomPermission | 'jurisdiction',
-		targetSymbol?: GroupSymbol,
-		targetingSelf?: boolean
+		user: User,
+		permission: string,
+		target: User | GroupSymbol | null,
+		room?: Room | BasicRoom | null
 	): boolean {
+		if (user.hasSysopAccess()) return true;
+
+		const auth: Auth = room ? room.auth : Users.globalAuth;
+
+		const symbol = auth.getEffectiveSymbol(user);
+		const targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
+
 		const group = Auth.getGroup(symbol);
-		if (group['root']) {
-			return true;
+		if (group['root']) return true;
+
+		let jurisdiction = group[permission as GlobalPermission | RoomPermission];
+		if (jurisdiction === true && permission !== 'jurisdiction') {
+			jurisdiction = group['jurisdiction'] || true;
 		}
 
-		if (group[permission]) {
-			const jurisdiction = group[permission];
-			if (!targetSymbol) {
-				return !!jurisdiction;
-			}
-			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return Auth.hasPermission(symbol, 'jurisdiction', targetSymbol);
-			}
-			if (typeof jurisdiction !== 'string') {
-				return !!jurisdiction;
-			}
-			if (jurisdiction.includes(targetSymbol)) {
-				return true;
-			}
-			if (jurisdiction.includes('s') && targetingSelf) {
-				return true;
-			}
-			if (jurisdiction.includes('u') &&
-				Config.groupsranking.indexOf(symbol) > Config.groupsranking.indexOf(targetSymbol)) {
-				return true;
-			}
+		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
+	}
+	static hasJurisdiction(
+		symbol: EffectiveGroupSymbol,
+		jurisdiction?: string | boolean,
+		targetSymbol?: GroupSymbol | null,
+		targetingSelf?: boolean
+	) {
+		if (!targetSymbol) {
+			return !!jurisdiction;
+		}
+		if (typeof jurisdiction !== 'string') {
+			return !!jurisdiction;
+		}
+		if (jurisdiction.includes(targetSymbol)) {
+			return true;
+		}
+		if (jurisdiction.includes('s') && targetingSelf) {
+			return true;
+		}
+		if (jurisdiction.includes('u') &&
+			Config.groupsranking.indexOf(symbol) > Config.groupsranking.indexOf(targetSymbol)) {
+			return true;
 		}
 		return false;
 	}
-	static listJurisdiction(symbol: GroupSymbol, permission: GlobalPermission | RoomPermission) {
+	static listJurisdiction(user: User, permission: GlobalPermission | RoomPermission) {
 		const symbols = Object.keys(Config.groups) as GroupSymbol[];
-		return symbols.filter(targetSymbol => Auth.hasPermission(symbol, permission, targetSymbol));
+		return symbols.filter(targetSymbol => Auth.hasPermission(user, permission, targetSymbol));
 	}
 	static isValidSymbol(symbol: string): symbol is GroupSymbol {
 		if (symbol.length !== 1) return false;
@@ -155,6 +177,14 @@ export class RoomAuth extends Auth {
 		}
 
 		return parentGroup;
+	}
+	getEffectiveSymbol(user: User) {
+		const symbol = super.getEffectiveSymbol(user);
+		if (!this.room.persist && symbol === user.group) {
+			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
+			if (replaceGroup) return replaceGroup;
+		}
+		return symbol;
 	}
 	/** gets the room group without inheriting */
 	getDirect(id: ID): GroupSymbol {
