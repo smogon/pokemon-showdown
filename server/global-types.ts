@@ -1,6 +1,6 @@
 type Config = typeof import('../config/config-example') & AnyObject;
 
-type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+type GroupSymbol = import('./user-groups').GroupSymbol;
 
 /** not actually guaranteed to be one of these */
 type PunishType = '#chatfilter' | '#hostfilter' | '#dnsbl' | '#ipban';

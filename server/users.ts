@@ -537,23 +537,7 @@ export class User extends Chat.MessageContext {
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
 	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
-		if (this.hasSysopAccess()) return true;
-
-		const auth: Auth = room ? room.auth : Users.globalAuth;
-
-		let group = auth.get(this);
-		if (auth.has(this.id) && group === Auth.defaultSymbol()) {
-			group = 'whitelist' as GroupSymbol;
-		}
-		const targetGroup = target ? auth.get(target) : undefined;
-
-		const roomIsTemporary = room && !room.persist;
-		if (roomIsTemporary && group === this.group) {
-			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
-			if (replaceGroup) group = replaceGroup;
-		}
-
-		return Auth.hasPermission(group, permission as any, targetGroup, target === this);
+		return Auth.hasPermission(this, permission, target, room);
 	}
 	/**
 	 * Special permission check for system operators

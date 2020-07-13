@@ -7,10 +7,11 @@
 
 import * as defaults from '../config/config-example';
 type GroupInfo = import('./user-groups').GroupInfo;
+type EffectiveGroupSymbol = import('./user-groups').EffectiveGroupSymbol;
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
-	groupsranking: GroupSymbol[],
+	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: {[combo: string]: GroupSymbol},
 	[k: string]: any,
 };
