@@ -43,6 +43,7 @@ export class Pokemon {
 	readonly gender: GenderName;
 	readonly happiness: number;
 	readonly pokeball: string;
+	readonly gigantamax: boolean;
 
 	/** Transform keeps the original pre-transformed Hidden Power in Gen 2-4. */
 	readonly baseHpType: string;
@@ -270,6 +271,7 @@ export class Pokemon {
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
+		this.gigantamax = !!this.set.gigantamax;
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
@@ -398,7 +400,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.canUltraBurst(this);
 		// Normally would want to use battle.canDynamax to set this, but it references this property.
 		this.canDynamax = (this.battle.gen >= 8);
-		this.canGigantamax = this.baseSpecies.canGigantamax || '';
+		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
