@@ -804,7 +804,7 @@ export class RandomTeams {
 					if (!!counter['speedsetup'] || hasMove['curse'] || hasMove['drainpunch'] || hasMove['rockblast']) rejected = true;
 					break;
 				case 'facade':
-					if (movePool.includes('doubleedge') || !hasAbility['Guts'] && !!counter.Status && !isDoubles) rejected = true;
+					if (movePool.includes('doubleedge')) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['blizzard']) rejected = true;
@@ -906,7 +906,8 @@ export class RandomTeams {
 					break;
 				case 'stoneedge':
 					if (hasMove['rockblast'] || hasMove['rockslide'] || !!counter.Status && movePool.includes('rockslide')) rejected = true;
-					if ((hasAbility['Guts'] && !hasMove['dynamicpunch']) || hasAbility['Iron Fist'] && movePool.includes('machpunch')) rejected = true;
+					if (hasAbility['Guts'] && (!hasMove['dynamicpunch'] || hasMove['spikes'])) rejected = true;
+					if (hasAbility['Iron Fist'] && movePool.includes('machpunch')) rejected = true;
 					break;
 				case 'airslash':
 					if (hasMove['hurricane'] && !counter.setupType || (hasAbility['Simple'] && !!counter['recovery'])) rejected = true;
@@ -979,7 +980,7 @@ export class RandomTeams {
 				}
 
 				// This move doesn't satisfy our setup requirements:
-				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
+				if (((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) && moveid !== 'photongeyser') {
 					// Reject STABs last in case the setup type changes later on
 					const stabs: number = counter[species.types[0]] + (counter[species.types[1]] || 0);
 					if (!hasType[move.type] || stabs > 1 || counter[move.category] < 2) rejected = true;
@@ -1088,6 +1089,8 @@ export class RandomTeams {
 					rejectAbility = (this.dex.getEffectiveness('Fire', species) < -1);
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
+				} else if (ability === 'Guts') {
+					rejectAbility = (counter.damagingMoves.length > 3 && !hasMove['facade']);
 				} else if (ability === 'Harvest') {
 					rejectAbility = hasAbility['Frisk'];
 				} else if (ability === 'Hustle') {
@@ -1136,8 +1139,6 @@ export class RandomTeams {
 					rejectAbility = (counter['Water'] > 1 && !hasMove['focusenergy']);
 				} else if (ability === 'Snow Warning') {
 					rejectAbility = (hasAbility['Refrigerate'] && !!counter['Normal']);
-				} else if (ability === 'Speed Boost') {
-					rejectAbility = (hasAbility['Infiltrator'] && !isDoubles);
 				} else if (ability === 'Sturdy') {
 					rejectAbility = !!counter['recoil'];
 				} else if (ability === 'Swarm') {
@@ -1361,6 +1362,8 @@ export class RandomTeams {
 			}
 			evs.hp -= 4;
 		}
+
+		if (hasMove['shellsidearm'] && item === 'Choice Specs') evs.atk -= 4;
 
 		// Minimize confusion damage
 		if (!counter['Physical'] && !hasMove['transform'] && (!hasMove['shellsidearm'] || !counter.Status)) {
