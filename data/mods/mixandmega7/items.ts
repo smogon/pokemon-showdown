@@ -28,17 +28,17 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			let species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
+			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
 			if (pokemon.m.originalSpecies === 'Groudon') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
 				pokemon.formeChange(species, this.effect, true);
 				pokemon.baseSpecies = species;
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
-				let apparentSpecies = pokemon.illusion ? pokemon.illusion.species.name : pokemon.m.originalSpecies;
-				let oSpecies = this.dex.getSpecies(apparentSpecies);
+				const apparentSpecies = pokemon.illusion ? pokemon.illusion.species.name : pokemon.m.originalSpecies;
+				const oSpecies = this.dex.getSpecies(apparentSpecies);
 				if (pokemon.illusion) {
-					let types = oSpecies.types;
+					const types = oSpecies.types;
 					if (types.length > 1 || types[types.length - 1] !== 'Fire') {
 						this.add('-start', pokemon, 'typechange', (types[0] !== 'Fire' ? types[0] + '/' : '') + 'Fire', '[silent]');
 					}
