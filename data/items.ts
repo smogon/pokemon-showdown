@@ -1090,12 +1090,15 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 			basePower: 100,
 			type: "Ghost",
 		},
-		onFractionalPriorityPriority: -1,
+		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if (
+				(priority <= 0 && pokemon.hp <= pokemon.maxhp / 4) ||
+				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))
+			) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
-					return Math.round(priority) + 0.1;
+					return 0.1;
 				}
 			}
 		},
@@ -2078,9 +2081,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		onFractionalPriority(priority, pokemon) {
-			return Math.round(priority) - 0.1;
-		},
+		onFractionalPriority: -0.1,
 		num: 316,
 		gen: 4,
 		desc: "Holder moves last in its priority bracket.",
@@ -2913,9 +2914,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		onFractionalPriority(priority, pokemon) {
-			return Math.round(priority) - 0.1;
-		},
+		onFractionalPriority: -0.1,
 		num: 279,
 		gen: 4,
 		desc: "Holder moves last in its priority bracket.",
@@ -4596,11 +4595,11 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		desc: "A Poke Ball that provides a better catch rate at the start of a wild encounter.",
 	},
 	quickclaw: {
-		onFractionalPriorityPriority: -1,
+		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon) {
-			if (this.randomChance(1, 5)) {
+			if (priority <= 0 && this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
-				return Math.round(priority) + 0.1;
+				return 0.1;
 			}
 		},
 		name: "Quick Claw",

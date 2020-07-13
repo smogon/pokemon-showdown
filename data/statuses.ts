@@ -670,7 +670,6 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		duration: 3,
 		onStart(pokemon) {
 			pokemon.removeVolatile('substitute');
-			if (pokemon.illusion) this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			if (pokemon.volatiles['torment']) {
 				delete pokemon.volatiles['torment'];
 				this.add('-end', pokemon, 'Torment', '[silent]');
@@ -683,10 +682,10 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = 2;
+			const ratio = this.format.id.startsWith('gen8doublesou') ? 1.5 : 2;
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
-			pokemon.hp = Math.ceil(pokemon.hp * ratio);
+			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onTryAddVolatile(status, pokemon) {

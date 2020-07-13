@@ -24,6 +24,7 @@ export const commands: ChatCommands = {
 
 	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
+		if (!room) return this.requiresRoom();
 		target = this.canHTML(target)!;
 		if (!target) return;
 		target = Chat.collapseLineBreaksHTML(target);
@@ -44,6 +45,7 @@ export const commands: ChatCommands = {
 	],
 	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
+		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return;
 		target = this.canHTML(target)!;
 		if (!target) return;
@@ -59,6 +61,7 @@ export const commands: ChatCommands = {
 		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # &`,
 	],
 	addrankhtmlbox(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 		let [rank, html] = this.splitOne(target);
@@ -71,13 +74,14 @@ export const commands: ChatCommands = {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
+		room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
 	},
 	addrankhtmlboxhelp: [
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * # &`,
 	],
 	changeuhtml: 'adduhtml',
 	adduhtml(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 
@@ -105,6 +109,7 @@ export const commands: ChatCommands = {
 	],
 	changerankuhtml: 'addrankuhtml',
 	addrankuhtml(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 
@@ -121,7 +126,7 @@ export const commands: ChatCommands = {
 		}
 
 		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.room.sendRankedUsers(html, rank as GroupSymbol);
+		room.sendRankedUsers(html, rank as GroupSymbol);
 	},
 	addrankuhtmlhelp: [
 		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * # &`,
@@ -133,11 +138,12 @@ export const commands: ChatCommands = {
 	addline(target, room, user) {
 		if (!this.can('rawpacket')) return false;
 		// secret sysop command
-		room.add(target);
+		this.add(target);
 	},
 
 	pminfobox(target, room, user, connection) {
 		if (!this.canTalk()) return;
+		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
 
@@ -152,8 +158,8 @@ export const commands: ChatCommands = {
 			return this.errorReply("You do not have permission to use this command to users who are not in this room.");
 		}
 		if (
-			targetUser.blockPMs &&
-			(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')
+			targetUser.settings.blockPMs &&
+			(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) && !user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
@@ -176,6 +182,7 @@ export const commands: ChatCommands = {
 	pmuhtmlchange: 'pmuhtml',
 	pmuhtml(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
+		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help " + cmd);
 
@@ -189,8 +196,8 @@ export const commands: ChatCommands = {
 		if (!(targetUser.id in room.users) && !user.can('addhtml')) {
 			return this.errorReply("You do not have permission to use this command to users who are not in this room.");
 		}
-		if (targetUser.blockPMs &&
-			(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
+		if (targetUser.settings.blockPMs &&
+			(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -324,7 +331,7 @@ export const commands: ChatCommands = {
 				// respawn simulator processes
 				void Rooms.PM.respawn();
 				// broadcast the new formats list to clients
-				Rooms.global.send(Rooms.global.formatListText);
+				Rooms.global.sendAll(Rooms.global.formatListText);
 
 				this.sendReply("Formats have been hot-patched.");
 			} else if (target === 'loginserver') {
@@ -429,7 +436,6 @@ export const commands: ChatCommands = {
 		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
-	'!processes': true,
 	processes(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
@@ -621,8 +627,7 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown();
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /lockdown`);
+		this.stafflog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [
 		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: &`,
@@ -632,23 +637,18 @@ export const commands: ChatCommands = {
 	autolockdownkill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
-
 		if (this.meansYes(target)) {
 			if (Config.autolockdown) {
 				return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = true;
-			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
-			const logRoom = Rooms.get('staff') || room;
-			logRoom.roomlog(`${user.name} used /autolockdownkill on`);
+			this.privateGlobalModAction(`${user.name} used /autolockdownkill on (autokill on final battle finishing)`);
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) {
 				return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = false;
-			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
-			const logRoom = Rooms.get('staff') || room;
-			logRoom.roomlog(`${user.name} used /autolockdownkill off`);
+			this.privateGlobalModAction(`${user.name} used /autolockdownkill off (no autokill on final battle finishing)`);
 		} else {
 			return this.parse('/help autolockdownkill');
 		}
@@ -661,9 +661,8 @@ export const commands: ChatCommands = {
 	prelockdown(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
-		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /prelockdown`);
+
+		this.privateGlobalModAction(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`);
 	},
 
 	slowlockdown(target, room, user) {
@@ -671,8 +670,7 @@ export const commands: ChatCommands = {
 
 		Rooms.global.startLockdown(undefined, true);
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /slowlockdown`);
+		this.privateGlobalModAction(`${user.name} used /slowlockdown (lockdown without auto-restart)`);
 	},
 
 	crashfixed: 'endlockdown',
@@ -701,8 +699,7 @@ export const commands: ChatCommands = {
 		}
 		Rooms.global.lockdown = false;
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /endlockdown`);
+		this.stafflog(`${user.name} used /endlockdown`);
 	},
 	endlockdownhelp: [
 		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: &`,
@@ -722,8 +719,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /emergency.`);
+		this.stafflog(`${user.name} used /emergency.`);
 	},
 
 	endemergency(target, room, user) {
@@ -734,13 +730,10 @@ export const commands: ChatCommands = {
 		}
 		Config.emergency = false;
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.roomid !== 'global') {
-				curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
-			}
+			curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /endemergency.`);
+		this.stafflog(`${user.name} used /endemergency.`);
 	},
 
 	kill(target, room, user) {
@@ -754,18 +747,17 @@ export const commands: ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		const logRoom = Rooms.get('staff') || room;
-		if (!(logRoom as any).destroyLog) {
-			process.exit();
-			return;
-		}
+		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
+
+		if (!logRoom?.log.roomlogStream) return process.exit();
+
 		logRoom.roomlog(`${user.name} used /kill`);
-		(logRoom as any).destroyLog(() => {
+
+		void logRoom.log.roomlogStream.writeEnd().then(() => {
 			process.exit();
 		});
 
-		// Just in the case the above never terminates, kill the process
-		// after 10 seconds.
+		// In the case the above never terminates
 		setTimeout(() => {
 			process.exit();
 		}, 10000);
@@ -787,9 +779,8 @@ export const commands: ChatCommands = {
 
 	refreshpage(target, room, user) {
 		if (!this.can('lockdown')) return false;
-		Rooms.global.send('|refresh|');
-		const logRoom = Rooms.get('staff') || room;
-		logRoom.roomlog(`${user.name} used /refreshpage`);
+		Rooms.global.sendAll('|refresh|');
+		this.stafflog(`${user.name} used /refreshpage`);
 	},
 
 	async updateserver(target, room, user, connection) {
@@ -801,24 +792,22 @@ export const commands: ChatCommands = {
 
 		Monitor.updateServerLock = true;
 
-		const logRoom = Rooms.get('staff') || room;
-
-		function exec(command: string): Promise<[number, string, string]> {
-			logRoom.roomlog(`$ ${command}`);
+		const exec = (command: string): Promise<[number, string, string]> => {
+			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom.roomlog(log);
+					this.stafflog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
-		}
+		};
 
 		this.sendReply(`Fetching newest version...`);
-		logRoom.roomlog(`${user.name} used /updateserver`);
+		this.addGlobalModAction(`${user.name} used /updateserver`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
@@ -885,21 +874,19 @@ export const commands: ChatCommands = {
 	},
 
 	async rebuild(target, room, user, connection) {
-		const logRoom = Rooms.get('staff') || room;
-
-		function exec(command: string): Promise<[number, string, string]> {
-			logRoom.roomlog(`$ ${command}`);
+		const exec = (command: string): Promise<[number, string, string]> => {
+			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
-					logRoom.roomlog(log);
+					this.stafflog(log);
 					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
-		}
+		};
 
 		if (!this.canUseConsole()) return false;
 		Monitor.updateServerLock = true;
@@ -927,6 +914,7 @@ export const commands: ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
@@ -959,6 +947,7 @@ export const commands: ChatCommands = {
 	},
 
 	evalbattle(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
@@ -970,6 +959,7 @@ export const commands: ChatCommands = {
 
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('forcewin')) return false;
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {

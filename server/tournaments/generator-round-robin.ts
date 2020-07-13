@@ -172,7 +172,7 @@ export class RoundRobin {
 	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
-		const sortedScores = this.players.sort(
+		const sortedScores = this.players.slice().sort(
 			(p1, p2) => p2.score - p1.score
 		);
 

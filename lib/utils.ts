@@ -150,6 +150,10 @@ export const Utils = new class Utils {
 		return array.sort((a, b) => this.compare(callback(a), callback(b)));
 	}
 
+	splitFirst(str: string, delimiter: string): [string, string];
+	splitFirst(str: string, delimiter: string, limit: 2): [string, string, string];
+	splitFirst(str: string, delimiter: string, limit: 3): [string, string, string, string];
+	splitFirst(str: string, delimiter: string, limit: number): string[];
 	/**
 	 * Like string.split(delimiter), but only recognizes the first `limit`
 	 * delimiters (default 1).

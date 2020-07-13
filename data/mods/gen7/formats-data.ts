@@ -4493,7 +4493,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	hakamoo: {
 		tier: "NFE",
 	},
-	kommoo: {	// should reject clanger outright in dubs if zmove is taken but dunno how
+	kommoo: {
 		randomBattleMoves: ["dragondance", "outrage", "closecombat", "poisonjab", "clangingscales"],
 		randomDoubleBattleMoves: ["clangingscales", "closecombat", "dragondance", "poisonjab"],
 		tier: "OU",

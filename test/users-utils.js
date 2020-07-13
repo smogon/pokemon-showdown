@@ -164,7 +164,6 @@ function createUser(connection) {
 	if (!connection) connection = createConnection();
 
 	const user = new Users.User(connection);
-	user.joinRoom('global', connection);
 	connection.user = user;
 
 	return user;

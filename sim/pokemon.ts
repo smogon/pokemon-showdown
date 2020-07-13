@@ -716,7 +716,7 @@ export class Pokemon {
 
 	ignoringAbility() {
 		const abilities = [
-			'battlebond', 'comatose', 'disguise', 'gulpmissile', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+			'battlebond', 'comatose', 'disguise', 'gulpmissile', 'iceface', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
 		];
 		// Check if any active pokemon have the ability Neutralizing Gas
 		let neutralizinggas = false;
@@ -881,9 +881,8 @@ export class Pokemon {
 			}
 			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['Zacian', 'Zamazenta', 'Eternatus'];
-			if (cannotDynamax.includes(this.species.baseSpecies)) {
-				return;
-			}
+			if (cannotDynamax.includes(this.species.baseSpecies)) return;
+			if (this.illusion && cannotDynamax.includes(this.illusion.species.baseSpecies)) return;
 		}
 		const result: DynamaxOptions = {maxMoves: []};
 		let atLeastOne = false;
