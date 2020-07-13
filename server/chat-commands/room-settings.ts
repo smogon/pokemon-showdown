@@ -600,16 +600,6 @@ export const commands: ChatCommands = {
 		if (!this.can('makeroom')) return;
 		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
-		if (id.length > 255) return this.errorReply("The given room title is too long.");
-		// `,` is a delimiter used by a lot of /commands
-		// `|` and `[` are delimiters used by the protocol
-		// `-` has special meaning in roomids
-		if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
-			return this.errorReply("Room titles can't contain any of: ,|[-");
-		}
-		if (id.length > 255) return this.errorReply("The given room title is too long.");
-		// Check if the name already exists as a room or alias
-		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
 		if (!Rooms.global.addChatRoom(target)) {
 			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
 		}
@@ -735,6 +725,12 @@ export const commands: ChatCommands = {
 		}
 		let title = target.trim();
 		if (!title) return this.parse('/help renamegroupchat');
+		if (room.game || room.minorActivity || room.tour) {
+			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
+		}
+		if (room.battle) {
+			return this.errorReply("Cannot rename battle rooms.");
+		}
 		const existingRoom = Rooms.search(toID(title));
 		if (existingRoom && !existingRoom.settings.modjoin) {
 			return this.errorReply(`Your groupchat name is too similar to existing chat room '${title}'.`);
@@ -745,6 +741,7 @@ export const commands: ChatCommands = {
 		const creatorID = room.roomid.split('-')[1];
 		const id = `groupchat-${creatorID}-${toID(title)}` as RoomID;
 		title = `[G] ${title}`;
+		room.validateTitle(title, id);
 		if (!(await room.rename(title, id))) {
 			return this.errorReply(`Unknown error occurred while renaming the groupchat.`);
 		}
@@ -879,8 +876,15 @@ export const commands: ChatCommands = {
 	async renameroom(target, room) {
 		if (!this.can('makeroom')) return;
 		if (!room) return this.requiresRoom();
+		if (room.game || room.minorActivity || room.tour) {
+			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
+		}
+		if (room.battle) {
+			return this.errorReply("Cannot rename battle rooms.");
+		}
 		const roomtitle = target;
 		const oldTitle = room.title;
+		room.validateTitle(roomtitle);
 		if (!(await room.rename(roomtitle))) {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
