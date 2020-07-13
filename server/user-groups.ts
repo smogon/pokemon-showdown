@@ -118,7 +118,6 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
 				jurisdiction = 'su';
 			}
-		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
 		}
 
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
