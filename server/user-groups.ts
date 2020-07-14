@@ -297,8 +297,6 @@ export const Permissions = new class {
 		for (const cmd in Chat.commands) {
 			const entry = Chat.commands[cmd];
 			if (typeof entry !== 'function') continue;
-			// remove room-plugin commands unless it is that room
-			if (entry.roomSpecific && entry.roomSpecific !== room?.roomid) continue;
 			// Assume if it passes a room into CommandContext.can that it's roomonly
 			if (entry.requiresRoom) {
 				ALLOWED_COMMANDS.push(cmd);
