@@ -3,7 +3,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	init() {
 		const addNewMoves = (pokemonid: string, moveids: string[], tutor = false) => {
 			for (const moveid of moveids.map(toID)) {
-				this.modData('Learnsets', toID(pokemonid)).learnset[moveid] = [`8${tutor? 'T' : 'M'}`];
+				this.modData('Learnsets', toID(pokemonid)).learnset[moveid] = [`8${tutor ? 'T' : 'M'}`];
 			}
 		};
 		for (const i in this.data.FormatsData) {
