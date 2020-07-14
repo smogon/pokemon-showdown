@@ -511,6 +511,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (Array.isArray(problems) && problems.length) return problems;
 			if (!crossSpecies.exists || crossSpecies.isNonstandard) return this.validateSet(set, teamHas);
 			const species = this.dex.getSpecies(set.species);
+			const check = this.checkSpecies(set, species, species, {});
+			if (check) return [check];
 			if (!species.exists || species.isNonstandard || species === crossSpecies) return this.validateSet(set, teamHas);
 			if (!species.nfe) return [`${species.name} cannot cross evolve because it doesn't evolve.`];
 			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable");
