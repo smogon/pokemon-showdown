@@ -1139,7 +1139,12 @@ export const commands: ChatCommands = {
 	restoreplayershelp: [
 		`/restoreplayers - Restore previous players in an imported input log.`,
 	],
-
+	rejoinbattle(target, room, user) {
+		if (!user.rejoinBattle()) return this.errorReply(`You do not have a battle you can rejoin.`);
+	},
+	rejoinbattlehelp: [
+		`/rejoinbattle - rejoins a battle that has been restored after a server restart.`,
+	],
 	joinbattle: 'joingame',
 	joingame(target, room, user) {
 		if (!room) return this.requiresRoom();

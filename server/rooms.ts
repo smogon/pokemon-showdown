@@ -1200,17 +1200,20 @@ export class GlobalRoomState {
 		return true;
 	}
 
-	prepBattleRoom(format: string) {
+	prepBattleRoom(format: string, options?: AnyObject) {
 		// console.log('BATTLE START BETWEEN: ' + p1.id + ' ' + p2.id);
 		const roomPrefix = `battle-${toID(Dex.getFormat(format).name)}-`;
 		let battleNum = this.lastBattle;
 		let roomid: RoomID;
-		do {
-			roomid = `${roomPrefix}${++battleNum}` as RoomID;
-		} while (Rooms.rooms.has(roomid));
-
-		this.lastBattle = battleNum;
-		this.writeNumRooms();
+		if (options?.num) {
+			roomid = `${roomPrefix}${options.num}` as RoomID;
+		} else {
+			do {
+				roomid = `${roomPrefix}${++battleNum}` as RoomID;
+			} while (Rooms.rooms.has(roomid));
+			this.lastBattle = battleNum;
+			this.writeNumRooms();
+		}
 		return roomid;
 	}
 
@@ -1393,6 +1396,7 @@ export class GlobalRoomState {
 	}
 	async writeBattleState() {
 		const buffer: AnyObject = {};
+<<<<<<< HEAD
 		const promises = [];
 		for (const [id, room] of Rooms.rooms) {
 			if (!room.battle) continue;
@@ -1409,16 +1413,43 @@ export class GlobalRoomState {
 			promises.push(promise);
 		}
 		await Promise.all(promises);
+=======
+		for (const [id, room] of Rooms.rooms) {
+			if (!room.battle) continue;
+			const formatid = room.battle.format;
+			const logData = await room.battle.getLog();
+			if (!logData) continue;
+			if (!buffer[formatid]) buffer[formatid] = {};
+			buffer[formatid][id] = {
+				inputLog: logData.map(item => item.replace(/\r/g, '')).join('\n'),
+				title: room.title,
+				num: room.roomid.split('-')[2],
+			};
+		}
+>>>>>>> Support persisting battles
 		return FS(`logs/battles.json`).writeUpdate(() => JSON.stringify(buffer));
 	}
 	loadBattleState() {
 		if (!Config.persistbattles) return;
 		const battleData = JSON.parse(FS(`logs/battles.json`).readIfExistsSync() || "{}");
+<<<<<<< HEAD
 		FS(`logs/battles.json`).writeUpdate(() => JSON.stringify({}));
 		for (const formatid in battleData) {
 			for (const battle in battleData[formatid]) {
 				const entry = battleData[formatid][battle];
 				Rooms.createBattle(formatid, entry);
+=======
+		for (const formatid in battleData) {
+			for (const battle in battleData[formatid]) {
+				const entry = battleData[formatid][battle];
+				const battleRoom = Rooms.createBattle(formatid, entry);
+				// ensure log is at the end of the battle so that users rejoining see it
+				setTimeout(() => {
+					battleRoom?.add(
+						`|html|<div class="broadcast-red"><b>This battle has been restored.</b><br />Use /rejoinbattle to rejoin.`
+					);
+				}, 1 * 1000);
+>>>>>>> Support persisting battles
 			}
 		}
 	}
@@ -1745,7 +1776,11 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
+<<<<<<< HEAD
 		const roomid = options.roomid ? options.roomid : Rooms.global.prepBattleRoom(formatid);
+=======
+		const roomid = Rooms.global.prepBattleRoom(formatid, options);
+>>>>>>> Support persisting battles
 		options.format = formatid;
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
@@ -1831,3 +1866,5 @@ export const Rooms = {
 	RoomBattleTimer,
 	PM: RoomBattlePM,
 };
+
+Rooms.global.loadBattleState();

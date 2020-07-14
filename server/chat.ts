@@ -1149,7 +1149,6 @@ export class CommandContext extends MessageContext {
 		if (Chat.filters.length) {
 			return Chat.filter(this, message, user, room, connection, targetUser);
 		}
-
 		return message;
 	}
 	canPMHTML(targetUser: User | null) {
