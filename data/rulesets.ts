@@ -563,6 +563,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 			for (const set of team) {
 				const species = this.dex.getSpecies(set.species);
 				if (species.name === "Orbeetle" && set.gigantamax) hasOrbeetle = true;
+				if (!hasOrbeetle && species.name === "Orbeetle-Gmax") hasOrbeetle = true;
 				for (const moveid of set.moves) {
 					const move = this.dex.getMove(moveid);
 					if (move.status && move.status === 'slp' && move.accuracy < 100) hasSleepMove = true;
