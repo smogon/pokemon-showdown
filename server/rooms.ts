@@ -1200,17 +1200,20 @@ export class GlobalRoomState {
 		return true;
 	}
 
-	prepBattleRoom(format: string) {
+	prepBattleRoom(format: string, options?: AnyObject) {
 		// console.log('BATTLE START BETWEEN: ' + p1.id + ' ' + p2.id);
 		const roomPrefix = `battle-${toID(Dex.getFormat(format).name)}-`;
 		let battleNum = this.lastBattle;
 		let roomid: RoomID;
-		do {
-			roomid = `${roomPrefix}${++battleNum}` as RoomID;
-		} while (Rooms.rooms.has(roomid));
-
-		this.lastBattle = battleNum;
-		this.writeNumRooms();
+		if (options?.num) {
+			roomid = `${roomPrefix}${options.num}` as RoomID;
+		} else {
+			do {
+				roomid = `${roomPrefix}${++battleNum}` as RoomID;
+			} while (Rooms.rooms.has(roomid));
+			this.lastBattle = battleNum;
+			this.writeNumRooms();
+		}
 		return roomid;
 	}
 
@@ -1376,15 +1379,51 @@ export class GlobalRoomState {
 			// kill server in 10 seconds if it's still set to
 			setTimeout(() => {
 				if (Config.autolockdown && Rooms.global.lockdown === true) {
-					// finally kill the server
-					process.exit();
+					// finally save state / kill the server
+					void this.kill();
 				} else {
 					this.notifyRooms(
 						notifyPlaces,
-						`|html|<div class="broadcsat-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
+						`|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
 					);
 				}
 			}, 10 * 1000);
+		}
+	}
+	async kill() {
+		if (Config.persistbattles) await this.writeBattleState();
+		return process.exit();
+	}
+	async writeBattleState() {
+		const buffer: AnyObject = {};
+		for (const [id, room] of Rooms.rooms) {
+			if (!room.battle) continue;
+			const formatid = room.battle.format;
+			const logData = await room.battle.getLog();
+			if (!logData) continue;
+			if (!buffer[formatid]) buffer[formatid] = {};
+			buffer[formatid][id] = {
+				inputLog: logData.map(item => item.replace(/\r/g, '')).join('\n'),
+				title: room.title,
+				num: room.roomid.split('-')[2],
+			};
+		}
+		return FS(`logs/battles.json`).writeUpdate(() => JSON.stringify(buffer));
+	}
+	loadBattleState() {
+		if (!Config.persistbattles) return;
+		const battleData = JSON.parse(FS(`logs/battles.json`).readIfExistsSync() || "{}");
+		for (const formatid in battleData) {
+			for (const battle in battleData[formatid]) {
+				const entry = battleData[formatid][battle];
+				const battleRoom = Rooms.createBattle(formatid, entry);
+				// ensure log is at the end of the battle so that users rejoining see it
+				setTimeout(() => {
+					battleRoom?.add(
+						`|html|<div class="broadcast-red"><b>This battle has been restored.</b><br />Use /rejoinbattle to rejoin.`
+					);
+				}, 1 * 1000);
+			}
 		}
 	}
 	notifyRooms(rooms: RoomID[], message: string) {
@@ -1696,7 +1735,7 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = Rooms.global.prepBattleRoom(formatid);
+		const roomid = Rooms.global.prepBattleRoom(formatid, options);
 		options.format = formatid;
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
@@ -1709,6 +1748,8 @@ export const Rooms = {
 		let roomTitle;
 		if (gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
+		} else if (options.title) {
+			roomTitle = options.title;
 		} else if (gameType === 'free-for-all') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
@@ -1780,3 +1821,5 @@ export const Rooms = {
 	RoomBattleTimer,
 	PM: RoomBattlePM,
 };
+
+Rooms.global.loadBattleState();

@@ -1482,6 +1482,27 @@ export class User extends Chat.MessageContext {
 	toString() {
 		return this.id;
 	}
+	/**
+	 * Makes the user rejoin their re-loaded battles after a restart.
+	 */
+	rejoinBattle() {
+		let battleRoom: GameRoom | undefined;
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle) continue;
+			const log = room.battle.inputLog;
+			// if there's no log, ignore, since battles created after a restart will always have an input log
+			if (!log) continue;
+			const players = room.battle.getPlayerIDs(log);
+			if (players.includes(this.id)) battleRoom = room;
+			if (battleRoom?.battle) {
+				// can be asserted since we've assured they're a player by now
+				battleRoom.battle.joinGame(this, battleRoom.battle.getSlot(this.id, log));
+				battleRoom.auth.set(this.id, Users.HOST_SYMBOL);
+				this.joinRoom(battleRoom, this.connections[0]);
+			}
+		}
+		return battleRoom;
+	}
 }
 
 /*********************************************************

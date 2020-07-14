@@ -534,7 +534,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.logData = null;
 		this.endType = 'normal';
 		this.score = null;
-		this.inputLog = null;
+		this.inputLog = options.inputLog ? options.inputLog.split('\n') : null;
 		this.turn = 0;
 
 		this.rqid = 1;
@@ -750,7 +750,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			if (!this.ended) this.timer.nextRequest();
 			this.checkActive();
 			break;
-
 		case 'sideupdate': {
 			const slot = lines[1] as SideID;
 			const player = this[slot];
@@ -1194,7 +1193,6 @@ export class RoomBattleStream extends BattleStream {
 			console.log(`[slow battle] ${deltaTime}ms - ${chunk}`);
 		}
 	}
-
 	_writeLine(type: string, message: string) {
 		switch (type) {
 		case 'chat-inputlogonly':

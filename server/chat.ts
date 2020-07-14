@@ -1118,7 +1118,6 @@ export class CommandContext extends MessageContext {
 			this.errorReply(this.tr("Your message contained banned words in this room."));
 			return null;
 		}
-
 		const gameFilter = this.checkGameFilter();
 		if (typeof gameFilter === 'string') {
 			if (gameFilter) this.errorReply(gameFilter);
@@ -1150,7 +1149,6 @@ export class CommandContext extends MessageContext {
 		if (Chat.filters.length) {
 			return Chat.filter(this, message, user, room, connection, targetUser);
 		}
-
 		return message;
 	}
 	canPMHTML(targetUser: User | null) {
