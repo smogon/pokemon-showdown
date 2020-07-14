@@ -330,8 +330,11 @@ export class TeamValidator {
 		let species = dex.getSpecies(set.species);
 		set.species = species.name;
 		// Backwards compatability with old Gmax format
-		if ((set.name || set.species).endsWith('-Gmax') && this.format.id !== 'gen8megamax') {
-			problems.push(`The way Gigantamaxing works has been changed. This was done to properly simulate the cart's mechanics. If you would like ${set.species} to be able to Gigantamax, please go into the set details and click "Yes" next to Gigantamax.`);
+		if (set.species.endsWith('-Gmax') && this.format.id !== 'gen8megamax') {
+			set.species = set.species.slice(0, -5);
+			species = dex.getSpecies(set.species);
+			if (set.name.endsWith('-Gmax')) set.name = species.baseSpecies;
+			set.gigantamax = true;
 		}
 		if (set.name && set.name.length > 18) {
 			if (set.name === set.species) {
