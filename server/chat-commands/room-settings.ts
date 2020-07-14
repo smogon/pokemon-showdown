@@ -327,6 +327,7 @@ export const commands: ChatCommands = {
 		],
 
 		view(target, room, user) {
+			if (!room) return this.requiresRoom();
 			return this.parse(`/join view-permissions-${room.roomid}`);
 		},
 
