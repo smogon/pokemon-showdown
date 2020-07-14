@@ -487,6 +487,24 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Mitsuki')}|THIS WORLD SHALL KNOW P A I N`);
 		},
 	},
+	morfent: {
+		noCopy: true,
+		onStart(target, source) {
+			this.add(`c|${getName('Morfent ( _̀> ̀)')}|le le 9gag army has arrived`);
+			if (source.illusion) return;
+			this.add('-start', source, 'typeadd', 'Normal');
+		},
+		onFaint(source) {
+			this.add(`c|${getName('Morfent ( _̀> ̀)')}|mods pls ban ${source.side.foe.name}!!! they're hacking into ${source.side.name}'s account and making awful plays`);
+		},
+		// Prankster innate
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
+		},
+	},
 	n10sit: {
 		noCopy: true,
 		onStart(source) {

@@ -216,6 +216,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Terraforming',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	'Morfent ( _̀> ̀)': {
+		species: 'Banette', ability: 'Normalize', item: 'Ghost Memory', gender: 'M',
+		moves: ['Skill Swap', 'Multi-Attack', 'Recover'],
+		signatureMove: 'OwO wuts dis?',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
+	},
 	n10siT: {
 		species: 'Hoopa', ability: 'Greedy Magician', item: 'Focus Sash', gender: 'N',
 		moves: ['Hyperspace Hole', 'Shadow Ball', 'Aura Sphere'],

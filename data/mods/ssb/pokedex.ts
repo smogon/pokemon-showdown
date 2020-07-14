@@ -59,6 +59,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		// For reverting back to an Unown forme
 		abilities: {0: 'Protean'},
 	},
+	// Morfent
+	banette: {
+		inherit: true,
+		types: ["Ghost", "Normal"],
+	},
 	// OM~!
 	magneton: {
 		inherit: true,

@@ -205,7 +205,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			self: {
 				onHit(target, source, move) {
 					const boostName: string[] = ['atk', 'spe'];
-					let boost: {[key: string]: number} = {};
+					const boost: {[key: string]: number} = {};
 					boost[boostName[this.random(2)]] = 1;
 					this.boost(boost, target);
 				},
@@ -1138,6 +1138,32 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
+	},
+
+	// Morfent
+	owowutsdis: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "Has a 50% chance to torment the opponent.",
+		shortDesc: "Has a 50% chance to torment the opponent.",
+		name: "OwO wuts dis?",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Return', target);
+		},
+		secondary: {
+			chance: 50,
+			volatileStatus: 'torment',
+		},
+		target: "normal",
+		type: "Normal",
 	},
 
 	// n10siT
