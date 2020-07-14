@@ -535,10 +535,10 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
-	can(permission: RoomPermission, target: User | null, room: Room | BasicChatRoom, cmd?: string): boolean;
+	can(permission: RoomPermission, target: User | null, room: Room | BasicRoom, cmd?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
+	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
 		return Auth.hasPermission(this, permission, target, room, cmd);
 	}
 	/**
