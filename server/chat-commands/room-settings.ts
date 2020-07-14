@@ -1581,7 +1581,7 @@ export const pages: PageTable = {
 			str = str.slice(1);
 			return char + str;
 		};
-		if (!roomid) return `<h2>This room does not exist or does not support permissions.</h2>`;
+		if (!this.room || !roomid) return `<h2>This room does not exist or does not support permissions.</h2>`;
 		if (!user.authAtLeast('%', this.room)) return `<h2>Access denied.</h2>`;
 		const roomGroups = new Set(this.room.auth.values());
 		const groupArray = [...roomGroups].sort((a, b) => {
