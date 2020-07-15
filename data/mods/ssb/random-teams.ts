@@ -334,6 +334,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Right. On. Cue!',
 		evs: {hp: 128, def: 144, spd: 236}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	Trickster: {
+		species: 'Shiinotic', ability: 'Trillionage Roots', item: 'Leftovers', gender: '',
+		moves: ['Stremngth Sap', 'Cosmic Power', 'Knock Off'],
+		signatureMove: 'Soul-Shattering Stare',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', shiny: true,
+	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
 		moves: ['Quick Attack'],

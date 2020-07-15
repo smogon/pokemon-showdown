@@ -720,6 +720,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
 		},
 	},
+	trickster: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Trickster')}|(¤﹏¤).`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Trickster')}|(︶︹︺)`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Trickster')}|(ಥ﹏ಥ)`);
+		},
+	},
 	yuki: {
 		noCopy: true,
 		onStart(target, pokemon) {

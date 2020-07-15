@@ -795,6 +795,32 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Trickster
+	trillionageroots: {
+		desc: "Sturdy + seeds the opposing Pokemon when hit with an attacking move.",
+		shortDesc: "Sturdy + seeds the opposing Pokemon when hit with an attacking move.",
+		onTryHit(pokemon, target, move) {
+			if (move.ohko) {
+				this.add('-immune', pokemon, '[from] ability: Trillionage Roots');
+				return null;
+			}
+		},
+		onDamagePriority: -100,
+		onDamage(damage, target, source, effect) {
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Trillionage Roots');
+				return target.hp - 1;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (source.volatiles['leechseed']) return;
+			if (!move.isFutureMove) {
+				source.addVolatile('leechseed', this.effectData.target);
+			}
+		},
+		name: "Trillionage Roots",
+	},
+
 	// yuki
 	combattraining: {
 		desc: "If this Pokemon is a Cosplay Pikachu forme, the first hit it takes in battle deals 0 neutral damage. Confusion damage also breaks the immunity.",
