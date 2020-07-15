@@ -2037,8 +2037,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		onAfterMove(source) {
 			const formeMoves: {[key: string]: string[]} = {
-				meloetta: ["Quiver Dance", "Feather Dance", "Lunar Dance", "Relic Song"],
-				meloettapirouette: ["Revelation Dance", "Fiery Dance", "Petal Dance", "Relic Song"],
+				meloetta: ["Quiver Dance", "Feather Dance", "Lunar Dance", "Relic Dance"],
+				meloettapirouette: ["Revelation Dance", "Fiery Dance", "Petal Dance", "Relic Dance"],
 			};
 			const forme = source.species.name === "Meloetta" ? "Meloetta-Pirouette" : "Meloetta";
 			source.formeChange(forme, this.effect, true);
