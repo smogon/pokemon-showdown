@@ -24,10 +24,12 @@ export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
 	intervalTime: number;
 	data: AnyObject;
+	updateTimer?: NodeJS.Timer;
 	constructor(data?: AnyObject) {
 		this.data = data ? data : {};
 		this.interval = null;
 		this.intervalTime = 0;
+		this.updateTimer = this.setUpdateTimer();
 	}
 	async getChannelData(link: string, username?: string) {
 		if (!Config.youtubeKey) {
@@ -41,19 +43,34 @@ export class YoutubeInterface {
 		const res = JSON.parse(raw);
 		if (!res || !res.items || res.items.length < 1) return;
 		const data = res.items[0];
-		const cache = {
-			name: data.snippet.title,
-			description: data.snippet.description,
-			url: data.snippet.customUrl,
-			icon: data.snippet.thumbnails.medium.url,
-			videos: Number(data.statistics.videoCount),
-			subs: Number(data.statistics.subscriberCount),
-			views: Number(data.statistics.viewCount),
-			username: username,
-		};
-		this.data[id] = {...cache};
+		if (!this.data[id]) {
+			const cache = {
+				name: data.snippet.title,
+				description: data.snippet.description,
+				url: data.snippet.customUrl,
+				icon: data.snippet.thumbnails.medium.url,
+				videos: Number(data.statistics.videoCount),
+				subs: Number(data.statistics.subscriberCount),
+				views: Number(data.statistics.viewCount),
+				username: username,
+			};
+			this.data[id] = {...cache};
+		} else {
+			const cached = this.data[id];
+			// convert to arrays, if old
+			if (!Array.isArray(cached.subs)) cached.subs = [cached.subs];
+			if (!Array.isArray(cached.views)) cached.views = [cached.views];
+			// add new data to the beginning
+			cached.subs.unshift(Number(data.statistics.subscriberCount));
+			cached.views.unshift(Number(data.statistics.viewCount));
+			// update all the rest
+			for (const key in data) {
+				if (Array.isArray(cached[key])) continue;
+				cached[key] = data[key];
+			}
+		}
 		this.save();
-		return cache;
+		return this.data[id];
 	}
 	async generateChannelDisplay(link: string) {
 		const id = this.getId(link);
@@ -70,7 +87,7 @@ export class YoutubeInterface {
 		buf += `<a style="font-weight:bold;color:#c70000;font-size:12pt;" href="https://www.youtube.com/channel/${id}">${name}</a>`;
 		buf += `</p></td><td style="padding: 0px 25px;font-size:10pt;background:rgb(220,20,60);width:100%;border-bottom:0px;vertical-align:top;">`;
 		buf += `<p style="padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
-		buf += `${videos} videos | ${subs} subscribers | ${views} video views</p>`;
+		buf += `${videos} videos | ${subs[0]} subscribers | ${views[0]} video views</p>`;
 		buf += `<p style="margin-left: 5px; font-size:9pt;color:white;">`;
 		buf += `${description.slice(0, 400).replace(/\n/g, ' ')}${description.length > 400 ? '(...)' : ''}</p>`;
 		if (username) {
@@ -166,9 +183,29 @@ export class YoutubeInterface {
 	save() {
 		return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
+	setUpdateTimer() {
+		if (this.updateTimer) clearTimeout(this.updateTimer);
+		const time = Date.now();
+		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
+		nextMidnight.setHours(0, 0, 1);
+		this.updateTimer = setTimeout(() => this.updateData(), nextMidnight.getTime() - time);
+		return this.updateTimer;
+	}
+	updateData() {
+		for (const key in this.data) {
+			this.getChannelData(key);
+		}
+		this.setUpdateTimer();
+	}
+	trend(id: string, key: string, num?: number) {
+		const channel = this.data[id];
+		if (!channel) return;
+		const data = channel[key] as string[];
+		return data.slice(0, (num && num < data.length ? num : undefined));
+	}
 }
 
-const YouTube = new YoutubeInterface(channelData);
+export const YouTube = new YoutubeInterface();
 
 export const commands: ChatCommands = {
 	async randchannel(target, room, user) {
@@ -237,20 +274,8 @@ export const commands: ChatCommands = {
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
 		],
 		async video(target, room, user) {
-			if (!room) return this.requiresRoom();
-			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			if (!target) return this.errorReply(`Provide a valid youtube link.`);
-			const html = await YouTube.generateVideoDisplay(target);
-			if (!html) return this.errorReply(`This url is invalid. Please use a youtu.be link or a youtube.com link.`);
-			this.runBroadcast();
-			if (this.broadcasting) {
-				this.addBox(html);
-				return room.update();
-			} else {
-				return this.sendReplyBox(html);
-			}
+			return this.sendReply(`Use /show instead.`);
 		},
-		videohelp: [`/youtube video - View data of a specified video. Can be either channel ID or channel name`],
 
 		channels(target, room, user) {
 			let all;
@@ -299,6 +324,47 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${user.name} set a randchannel interval to ${target} minutes`);
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
 		},
+		forceupdate(target, room, user) {
+			if (!room) return this.requiresRoom();
+			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+			if (!this.can('declare', null, room)) return false;
+			YouTube.updateData();
+			this.modlog(`UPDATECHANNELDATA`, null, 'forced');
+			this.privateModAction(`(${user.name} forced the YouTube channel database to update.)`);
+		},
+		viewtrend(target, room) {
+			if (!room) return this.requiresRoom();
+			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+			if (!target) return this.parse(`/help youtube`);
+			const [id, key, num] = target.split(',');
+			if (!id || !key) return this.parse(`/help youtube`);
+			const channel = YouTube.channelSearch(id);
+			if (!channel) return this.errorReply(`Not a channel in the database.`);
+			if (!['subs', 'views'].includes(toID(key))) return this.errorReply(`Use the search key "subs" or "views".`);
+			if (num && isNaN(parseInt(num))) return this.errorReply(`Invalid number of days to include.`);
+			if (parseInt(num) > 15) return this.errorReply(`A trend search of that length cannot be broadcast.`);
+			const strings = YouTube.trend(channel, toID(key), parseInt(num));
+			if (!strings) return this.errorReply(`No trends for ${channel}.`);
+			let buf = `<b>Trends for ${id}${num ? ` in the last ${Chat.count(num, 'days')}` : ''} (${key})</b><hr />`;
+			let curIndex = 0;
+			let prevNum = strings[0];
+			while (strings.length > 0) {
+				const string = strings.shift();
+				curIndex++;
+				const diff = `${Number(prevNum) - Number(string)}`;
+				buf += `- ${curIndex} days ago: ${string} `;
+				const changes = {
+					gain: toID(key) === 'views' ? '+' : 'gained ',
+					// you can't LOSE views
+					lost: toID(key) === 'views' ? '+' : 'lost ',
+				};
+				buf += `(${parseInt(diff) > 0 ? `${changes.gain}${diff}` : `${changes.lost}${diff.replace('-', '')}`})<br /> `;
+				prevNum = string as string;
+			}
+			if (strings.length > 5) buf = Chat.getReadmoreCodeBlock(buf);
+			this.runBroadcast();
+			return this.sendReplyBox(buf);
+		},
 	},
 
 	youtubehelp: [
@@ -310,6 +376,8 @@ export const commands: ChatCommands = {
 		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
 		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ #`,
 		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # &`,
+		`/youtube viewtrend [channel], [subs | views], [days to go back] - Shows the [subs | views] counts of the [channel].`,
+		`if an [order] is given, shows it in that order. If [days] is given, goes back that many days.`,
 	],
 };
 
