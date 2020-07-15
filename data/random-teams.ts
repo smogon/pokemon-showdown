@@ -1090,7 +1090,7 @@ export class RandomTeams {
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Guts') {
-					rejectAbility = (counter.damagingMoves.length > 3 && !hasMove['facade']);
+					rejectAbility = (counter.damagingMoves.length > 3 && !hasMove['facade'] && !isDoubles);
 				} else if (ability === 'Harvest') {
 					rejectAbility = hasAbility['Frisk'];
 				} else if (ability === 'Hustle') {
@@ -1192,7 +1192,7 @@ export class RandomTeams {
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
 				if (hasAbility['Klutz'] && ability === 'Limber') ability = 'Klutz';
 				if (hasAbility['Magic Guard'] && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
-				if (hasAbility['Reckless'] && ability === 'Unburden') ability = 'Reckless';
+				if (hasAbility['Unburden'] && ability === 'Reckless') ability = 'Unburden';
 				if (hasAbility['Ripen']) ability = 'Ripen';
 				if (hasAbility['Sniper'] && hasMove['focusenergy']) ability = 'Sniper';
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
