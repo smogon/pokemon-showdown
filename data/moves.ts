@@ -2688,7 +2688,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
-			if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
+			if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
 			if (noCopycat.includes(move.id) || move.isZ || move.isMax) {
 				return false;
 			}
@@ -4547,7 +4547,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
-				if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
+				if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
 				const moveIndex = target.moves.indexOf(move.id);
 				if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
