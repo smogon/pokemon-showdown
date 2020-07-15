@@ -192,8 +192,8 @@ export class YoutubeInterface {
 		return this.updateTimer;
 	}
 	updateData() {
-		for (const key in this.data) {
-			this.getChannelData(key);
+		for (const key in channelData) {
+			void this.getChannelData(key);
 		}
 		this.setUpdateTimer();
 	}
@@ -273,7 +273,7 @@ export const commands: ChatCommands = {
 		channelhelp: [
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
 		],
-		async video(target, room, user) {
+		video(target, room, user) {
 			return this.sendReply(`Use /show instead.`);
 		},
 
