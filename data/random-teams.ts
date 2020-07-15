@@ -948,6 +948,9 @@ export class RandomTeams {
 				case 'meteormash':
 					if (movePool.includes('extremespeed')) rejected = true;
 					break;
+				case 'dazzlinggleam':
+					if (isDoubles && hasMove['fleurcannon']) rejected = true;
+					break;
 				case 'moonblast':
 					if (isDoubles && hasMove['dazzlinggleam']) rejected = true;
 					break;
@@ -1136,7 +1139,7 @@ export class RandomTeams {
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = (!counter['sheerforce'] || hasAbility['Guts']);
 				} else if (ability === 'Sniper') {
-					rejectAbility = (counter['Water'] > 1 && !hasMove['focusenergy']);
+					rejectAbility = (counter['Water'] > 1 || (isDoubles && !hasMove['focusenergy']));
 				} else if (ability === 'Snow Warning') {
 					rejectAbility = (hasAbility['Refrigerate'] && !!counter['Normal']);
 				} else if (ability === 'Sturdy') {
@@ -1153,6 +1156,8 @@ export class RandomTeams {
 					rejectAbility = (!counter['technician'] || hasMove['tailslap'] || hasAbility['Punk Rock'] || movePool.includes('snarl'));
 				} else if (ability === 'Tinted Lens') {
 					rejectAbility = (hasMove['defog'] || hasMove['hurricane'] || counter.Status > 2 && !counter.setupType);
+				} else if (ability === 'Torrent') {
+					rejectAbility = hasMove['focusenergy'];
 				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
