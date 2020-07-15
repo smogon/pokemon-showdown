@@ -15552,6 +15552,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Sword",
 		changesFrom: "Zacian",
+		cannotDynamax: true,
 	},
 	zamazenta: {
 		num: 889,
@@ -15583,6 +15584,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Shield",
 		changesFrom: "Zamazenta",
+		cannotDynamax: true,
 	},
 	eternatus: {
 		num: 890,
@@ -15612,6 +15614,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		cannotDynamax: true,
 	},
 	kubfu: {
 		num: 891,

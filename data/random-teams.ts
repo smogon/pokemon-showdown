@@ -581,6 +581,7 @@ export class RandomTeams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false, isDoubles = false): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
+		let gmax = false;
 
 		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
@@ -588,6 +589,10 @@ export class RandomTeams {
 		}
 		if (species.cosmeticFormes) {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
+		}
+		if (species.name.endsWith('-Gmax')) {
+			forme = species.name.slice(0, -5);
+			gmax = true;
 		}
 
 		const randMoves = !isDoubles ? species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);
@@ -1178,7 +1183,7 @@ export class RandomTeams {
 
 			if (species.name === 'Azumarill' && !isDoubles) {
 				ability = 'Sap Sipper';
-			} else if (species.name === 'Copperajah-Gmax') { // I'll let TI handle this
+			} else if (forme === 'Copperajah' && gmax) {
 				ability = 'Heavy Metal';
 			} else if (species.name === 'Miltank') {
 				ability = counter.setupType ? 'Scrappy' : 'Thick Fat';
@@ -1387,6 +1392,7 @@ export class RandomTeams {
 			item: item,
 			level: level,
 			shiny: this.randomChance(1, 1024),
+			gigantamax: gmax,
 		};
 	}
 
