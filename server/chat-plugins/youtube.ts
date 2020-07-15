@@ -344,10 +344,9 @@ export const commands: ChatCommands = {
 			if (!channel) return this.errorReply(`Not a channel in the database.`);
 			if (!['subs', 'views'].includes(toID(key))) return this.errorReply(`Use the search key "subs" or "views".`);
 			if (num && isNaN(parseInt(num))) return this.errorReply(`Invalid number of days to include.`);
-			if (parseInt(num) > 15) return this.errorReply(`A trend search of that length cannot be broadcast.`);
 			const strings = YouTube.trend(channel, toID(key), parseInt(num));
 			if (!strings) return this.errorReply(`No trends for ${channel}.`);
-			let buf = `<b>Trends for ${id}${num ? ` in the last ${Chat.count(num, 'days')}` : ''} (${key})</b><hr />`;
+			let buf = `<b>Trends for ${id}${num ? ` in the last ${Chat.count(num, 'days')}` : ' in the last 15 days'} (${key})</b><hr />`;
 			let curIndex = 0;
 			let prevNum = strings[0];
 			while (strings.length > 0) {
