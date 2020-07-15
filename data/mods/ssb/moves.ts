@@ -2024,16 +2024,16 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Zarel
-	relicsong: {
+	relicdance: {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "+1 Special Attack and transforms into Meloetta-P/A with their accompanying moveset regardless of the outcome of the move. The move becomes fighting if Meloetta-P uses the move.",
 		shortDesc: "+1 Special Attack. Meloetta transforms. If Meloetta-Pirouette, type becomes Fighting.",
-		name: "Relic Song",
+		name: "Relic Dance",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		secondary: null,
 		onAfterMove(source) {
 			const formeMoves: {[key: string]: string[]} = {

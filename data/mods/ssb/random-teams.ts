@@ -349,7 +349,7 @@ export const ssbSets: SSBSets = {
 	Zarel: {
 		species: 'Meloetta', ability: 'Dancer', item: 'Leftovers', gender: 'N',
 		moves: ['Quiver Dance', 'Feather Dance', 'Lunar Dance'],
-		signatureMove: 'Relic Song',
+		signatureMove: 'Relic Dance',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Zodiax: {
