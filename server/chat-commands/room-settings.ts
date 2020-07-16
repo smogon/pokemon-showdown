@@ -7,7 +7,6 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
-import * as Dashycode from '../../lib/dashycode';
 
 const RANKS: string[] = Config.groupsranking;
 
@@ -42,7 +41,7 @@ export const commands: ChatCommands = {
 				// disabled button
 				if (option[1] === true) {
 					output += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;` +
-						`font-weight:bold;background-color:#d3d3d3;">${option[0]}</button> `;
+						`background:#d3d3d3;">${option[0]}</button> `;
 				} else {
 					// only show proper buttons if we have the permissions to use them
 					if (!setting.permission) continue;
@@ -301,15 +300,16 @@ export const commands: ChatCommands = {
 		set(target, room, user) {
 			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
+			if (rank === 'default') rank = '';
 			if (!room.auth.atLeast(user, '#')) {
 				return this.errorReply(`/permissions set - Access denied.`);
 			}
 			if (!target || !perm) return this.parse(`/permissions help`);
-			if (rank && !Users.Auth.isValidSymbol(rank)) {
+			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
-			if (Users.Permissions.getPermissions(room)[perm] === rank) {
-				return this.errorReply(`${perm} is already set to ${rank}.`);
+			if (Users.Permissions.getPermissions(room)[perm] === (rank || undefined)) {
+				return this.errorReply(`${perm} is already set to ${rank || 'default'}.`);
 			}
 			if (!Users.Permissions.supportedPermissions(room).includes(perm)) {
 				return this.errorReply(`${perm} is not a valid permission.`);
@@ -326,6 +326,15 @@ export const commands: ChatCommands = {
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
 			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
+
+		clickset(target, room, user) {
+			const [roomid, newTarget] = Utils.splitFirst(target, ',');
+			this.room = Rooms.get(roomid) || null;
+			if (!this.room) return this.errorReply(`must specify roomid`);
+			this.pmTarget = null;
+			this.parse(`/permissions set ${newTarget}`);
+			this.parse(`/join view-permissions-${this.room.roomid}`);
+		},
 
 		view(target, room, user) {
 			if (!room) return this.requiresRoom();
@@ -1573,50 +1582,38 @@ export const roomSettings: SettingsHandler[] = [
 
 export const pages: PageTable = {
 	permissions(args, user, connection) {
-		let [roomid, rank] = args.filter(Boolean);
-		if (!rank) {
-			rank = '#';
-		} else {
-			rank = Dashycode.decode(rank);
-		}
 		this.title = `[Permissions]`;
-		this.extractRoom();
-		const u = (str: string) => {
-			const char = str.charAt(0).toUpperCase();
-			str = str.slice(1);
-			return char + str;
-		};
-		if (!this.room || !roomid) return `<h2>This room does not exist or does not support permissions.</h2>`;
-		if (!user.authAtLeast('%', this.room)) return `<h2>Access denied.</h2>`;
-		const roomGroups = new Set(this.room.auth.values());
-		const groupArray = [...roomGroups].sort((a, b) => {
-			return (Config.groups[b]?.rank || 0) + (Config.groups[a]?.rank || 0);
-		});
-		let buf = `<div class="pad"><strong>Ranks on ${this.room.title}</strong>`;
-		buf += `<div class="infobox"><table style="margin:0px;"><tr>`;
-		buf += `<td style="margin:5px;min-width:200px;max-width:300px;text-align:center;">`;
-		for (const group of groupArray) {
-			buf += `<a href="/view-permissions-${roomid}-${Dashycode.encode(group)}" `;
-			buf += `target="_blank" rel="noopener"> <button style="border: 2px solid black ;`;
-			buf += ` border-radius: 30px ; height: 40px">`;
-			buf += `${Config.groups[group] ? Config.groups[group].name : ''} (${group})</button> </a><br /><br />`;
+		const room = this.extractRoom();
+		if (!room) return `<h2>This room does not exist or does not support permissions.</h2>`;
+		if (!user.authAtLeast('%', room)) return `<h2>Access denied.</h2>`;
+
+		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
+		const permissions = Users.Permissions.getPermissions(room);
+
+		let buf = `<div class="pad"><h2>Command permissions for ${room.title}</h2>`;
+		buf += `<div class="ladder"><table>`;
+		buf += `<tr><th>Permission</th><th>Required rank</th></tr>`;
+		let atLeastOne = false;
+		for (const permission in permissions) {
+			const requiredRank = permissions[permission];
+			atLeastOne = true;
+			buf += `<tr><td><strong>${permission}</strong></td><td>`;
+			if (user.authAtLeast('#', room)) {
+				buf += roomGroups.map(group => (
+					requiredRank === group ?
+						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
+						Utils.html`<button class="button" name="send" value="/permissions clickset ${room.roomid}, ${permission}, ${group}">${group}</button>`
+				)).join(' ');
+			} else {
+				buf += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${requiredRank}</button>`;
+			}
+			buf += `</td>`;
 		}
-		buf += `</td><td style="padding: 0px 25px;font-size:10pt;vertical-align:top;">`;
-		const perms = Users.Permissions.getPermissions(this.room);
-		buf += `<div class="infobox infobox${Object.keys(perms).length > 20 ? ' infobox-limited' : ''}">`;
-		for (const perm in perms) {
-			if (groupArray.indexOf(rank as GroupSymbol) > groupArray.indexOf(perms[perm])) continue;
-			buf += `<hr/ ><strong>${u(perm)}</strong><br/ >`;
-			buf += groupArray.map(item => {
-				return `<button class="button${perms[perm] === item ? ' disabled' : ''}"` +
-					`name="send" value="/permissions set ${perm},${item}">${item}</button>`;
-			}).join(' ');
+		if (!atLeastOne) {
+			buf += `<tr><td colspan="2">You don't have any permissions configured.</td></tr>`;
 		}
-		buf += '</div>';
-		buf += `</td><td style="padding: 0px 25px;font-size:10pt; text-align:left;">`;
-		buf += `<div class="infobox infobox-limited">`;
-		buf += `<strong>Usable permissions:</strong><hr />&bull; ${Users.Permissions.supportedPermissions(this.room).join(`<br />&bull; `)}`;
-		buf += `</div>`;
-		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
+		buf += `</table></div>`;
+		buf += `<p>Use <code>/permissions</code> to add new permissions</p>`;
+		return buf;
 	},
 };
