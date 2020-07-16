@@ -41,9 +41,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
-import {
-	Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, Permissions, RoomPermission, GlobalPermission,
-} from './user-groups';
+import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -535,7 +533,7 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
-	can(permission: RoomPermission, target: User | null, room: Room | BasicRoom, cmd?: string): boolean;
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
 	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
@@ -1615,7 +1613,6 @@ export const Users = {
 	pruneInactiveTimer: setInterval(() => {
 		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
 	}, 30 * MINUTES),
-	Permissions: Permissions,
 	logGhostConnections,
 	logGhostConnectionsTimer: setInterval(() => {
 		void logGhostConnections(7 * 24 * 60 * MINUTES);

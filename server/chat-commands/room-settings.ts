@@ -304,20 +304,29 @@ export const commands: ChatCommands = {
 			if (!room.auth.atLeast(user, '#')) {
 				return this.errorReply(`/permissions set - Access denied.`);
 			}
+			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
 			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
-			if (Users.Permissions.getPermissions(room)[perm] === (rank || undefined)) {
+			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
+				return this.errorReply(`${perm} is not a valid room permission.`);
+			}
+
+			const currentPermissions = room.settings.permissions || {};
+			if (currentPermissions[perm] === (rank || undefined)) {
 				return this.errorReply(`${perm} is already set to ${rank || 'default'}.`);
 			}
-			if (!Users.Permissions.supportedPermissions(room).includes(perm)) {
-				return this.errorReply(`${perm} is not a valid permission.`);
+
+			if (rank) {
+				currentPermissions[perm] = rank as GroupSymbol;
+				room.settings.permissions = currentPermissions;
+			} else {
+				delete currentPermissions[perm];
+				if (!Object.keys(currentPermissions).length) delete room.settings.permissions;
 			}
-			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
-			if (!Users.Permissions.setPermission(perm, rank as GroupSymbol, room)) {
-				return this.errorReply(`${perm} cannot be configured. See /permissions help for configurable commands.`);
-			}
+			room.saveSettings();
+
 			if (!rank) rank = `default`;
 			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
 			return this.privateModAction(`(${user.name} set the required rank for ${perm} to ${rank}.)`);
@@ -345,7 +354,7 @@ export const commands: ChatCommands = {
 		''(target, room, user) {
 			if (!room) return this.requiresRoom();
 
-			const allPermissions = Users.Permissions.supportedPermissions(room);
+			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
 			const permissions = allPermissions.filter(perm => perm.startsWith('/'));
 
@@ -1588,7 +1597,7 @@ export const pages: PageTable = {
 		if (!user.authAtLeast('%', room)) return `<h2>Access denied.</h2>`;
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
-		const permissions = Users.Permissions.getPermissions(room);
+		const permissions = room.settings.permissions || {};
 
 		let buf = `<div class="pad"><h2>Command permissions for ${room.title}</h2>`;
 		buf += `<div class="ladder"><table>`;

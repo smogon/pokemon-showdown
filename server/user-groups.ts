@@ -122,6 +122,19 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
 	}
+	static supportedRoomPermissions(room: Room | null = null) {
+		// support some config permission groups that aren't already a command name - these need to be hardcoded
+		// since there's no good way to automate this
+		const permissions: string[] = ROOM_PERMISSIONS.slice();
+		for (const cmd in Chat.commands) {
+			const entry = Chat.commands[cmd];
+			if (typeof entry !== 'function') continue;
+			if (entry.hasRoomPermissions) {
+				permissions.push(`/${cmd}`);
+			}
+		}
+		return permissions;
+	}
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,
 		jurisdiction?: string | boolean,
@@ -288,38 +301,3 @@ export class GlobalAuth extends Auth {
 		return true;
 	}
 }
-
-export const Permissions = new class {
-	supportedPermissions(room: Room | null = null) {
-		// support some config permission groups that aren't already a command name - these need to be hardcoded
-		// since there's no good way to automate this
-		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		for (const cmd in Chat.commands) {
-			const entry = Chat.commands[cmd];
-			if (typeof entry !== 'function') continue;
-			if (entry.hasRoomPermissions) {
-				permissions.push(`/${cmd}`);
-			}
-		}
-		return permissions;
-	}
-
-	setPermission(permission: string, rank: GroupSymbol | undefined, room: Room) {
-		const permissions = this.getPermissions(room);
-		if (!rank) {
-			delete permissions[permission];
-		} else {
-			if (permission.startsWith(`/`)) permission = `/` + Chat.baseCommand(permission.slice(1));
-			if (!Permissions.supportedPermissions().includes(permission)) {
-				return false;
-			}
-			permissions[permission] = rank;
-		}
-		room.settings.permissions = permissions;
-		room.saveSettings();
-		return true;
-	}
-	getPermissions(room: Room) {
-		return room.settings.permissions || {};
-	}
-};
