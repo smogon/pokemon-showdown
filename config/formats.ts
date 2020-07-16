@@ -918,17 +918,16 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
-		restricted: ['Dracovish', 'Dracozolt'],
+		banlist: ['Blissey', 'Chansey', 'Shedinja', 'Bolt Beak', 'Fishious Rend', 'Shell Smash', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Simple', 'Water Bubble'],
+		restricted: ['Cinderace', 'Toxtricity', 'Torkoal'],
 		getEvoFamily(speciesid) {
-			let species = this.dex.getSpecies(speciesid);
+			let species = Dex.getSpecies(speciesid);
 			while (species.prevo) {
-				species = this.dex.getSpecies(species.prevo);
+				species = Dex.getSpecies(species.prevo);
 			}
 			return species.id;
 		},
 		validateSet(set, teamHas) {
-			const isBannedDonor = this.ruleTable.isRestrictedSpecies;
 			const unreleased = (pokemon: Species) => pokemon.tier === "Unreleased" && pokemon.isNonstandard === "Unobtainable";
 			if (!teamHas.abilityMap) {
 				teamHas.abilityMap = Object.create(null);
@@ -936,7 +935,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 					const pokemon = this.dex.getSpecies(speciesid);
 					if (pokemon.isNonstandard || unreleased(pokemon)) continue;
 					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
-					if (pokemon.isGigantamax || isBannedDonor(pokemon)) continue;
+					if (pokemon.isGigantamax || this.ruleTable.isRestrictedSpecies(pokemon)) continue;
 
 					for (const key of Object.values(pokemon.abilities)) {
 						const abilityId = toID(key);
@@ -954,7 +953,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 			const species = this.dex.getSpecies(set.species);
 			if (!species.exists || species.num < 1) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
-			if (species.isNonstandard || unreleased(species)) return [`${species.name} is not obtainable in gen 8.`];
+			if (species.isNonstandard || unreleased(species)) {
+				return [`${species.name} is not obtainable in Generation ${this.dex.gen}.`];
+			}
 			const check = this.checkSpecies(set, species, species, {});
 			if (check) return [check];
 
@@ -963,7 +964,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const ability = this.dex.getAbility(set.ability);
 			if (!ability.exists || ability.isNonstandard) return [`${name} needs to have a valid ability.`];
 			const pokemonWithAbility = teamHas.abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
+			if (!pokemonWithAbility) return [`${this.dex.getAbility(set.ability).name} is not available on a legal Pok\u00e9mon.`];
 
 			// @ts-ignore
 			this.format.debug = true;
@@ -975,9 +976,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 			for (const donor of pokemonWithAbility) {
 				const donorSpecies = this.dex.getSpecies(donor);
-				const familyGrabber = this.format.getEvoFamily || this.dex.getFormat('gen8inheritance').getEvoFamily;
-				if (!familyGrabber) throw new Error(`No getEvoFamily function defined for ${this.format.id}`);
-				const evoFamily = familyGrabber.call(this, donorSpecies.id);
+				let format = this.format;
+				if (!format.getEvoFamily) format = this.dex.getFormat('gen8inheritance');
+				const evoFamily = format.getEvoFamily!(donorSpecies.id);
 				if (validSources.includes(evoFamily)) continue;
 
 				set.species = donorSpecies.name;
@@ -1004,15 +1005,15 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			set.ability = `${set.ability}0${canonicalSource}`;
 			return null;
 		},
-		onValidateTeam(team, format, teamHas) {
+		onValidateTeam(team, f, teamHas) {
 			// Donor Clause
 			const evoFamilyLists = [];
 			for (const set of team) {
-				const abilitySources = (teamHas.abilitySources && teamHas.abilitySources[toID(set.species)]);
+				const abilitySources = teamHas.abilitySources?.[toID(set.species)];
 				if (!abilitySources) continue;
-				const familyGrabber = this.format.getEvoFamily || this.dex.getFormat('gen8inheritance').getEvoFamily;
-				if (!familyGrabber) throw new Error(`No getEvoFamily function defined for ${this.format.id}`);
-				evoFamilyLists.push(abilitySources.map(familyGrabber));
+				let format = this.format;
+				if (!format.getEvoFamily) format = this.dex.getFormat('gen8inheritance');
+				evoFamilyLists.push(abilitySources.map(format.getEvoFamily!));
 			}
 
 			// Checking actual full incompatibility would require expensive algebra.
@@ -1064,15 +1065,19 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
 		],
 		onValidateTeam(team, format, teamHas) {
+			const problems = [];
 			for (const trademark in teamHas.trademarks) {
-				if (teamHas.trademarks[trademark] > 1) return [`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks[trademark]} of ${trademark}).`];
+				if (teamHas.trademarks[trademark] > 1) {
+					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks[trademark]} Pok\u00e9mon with ${trademark} as a Trademark.)`);
+				}
 			}
+			return problems;
 		},
 		validateSet(set, teamHas) {
 			const dex = this.dex;
 			const ability = dex.getMove(set.ability);
 			if (ability.category !== 'Status' || ability.status === 'slp' ||
-				this.ruleTable.isRestricted(`move:${ability.name}`) || set.moves.map(toID).includes(ability.id)) {
+				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(toID).includes(ability.id)) {
 				return this.validateSet(set, teamHas);
 			}
 			const customRules = this.format.customRules || [];
