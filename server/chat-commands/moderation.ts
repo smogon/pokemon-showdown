@@ -1158,7 +1158,7 @@ export const commands: ChatCommands = {
 		}
 		if (Users.Auth.getGroup(nextGroup).rank < Users.Auth.getGroup(currentGroup).rank) {
 			this.privateGlobalModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
-			this.globalModlog(`GLOBAL ${groupName.toUpperCase()}`, userid, `by ${user.id}: (demote)`);
+			this.globalModlog(`GLOBAL ${groupName.toUpperCase()}`, userid, ` by ${user.id}: (demote)`);
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
 		} else {
 			this.addGlobalModAction(`${name} was promoted to ${groupName} by ${user.name}.`);
