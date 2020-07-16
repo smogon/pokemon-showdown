@@ -297,6 +297,7 @@ export const commands: ChatCommands = {
 	],
 	permission: 'permissions',
 	permissions: {
+		clear: 'set',
 		set(target, room, user) {
 			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
@@ -322,8 +323,8 @@ export const commands: ChatCommands = {
 			return this.privateModAction(`(${user.name} set the required rank for ${perm} to ${rank}.)`);
 		},
 		sethelp: [
-			`/setpermission [command], [rank] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
-			`/setpermission [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
+			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
+			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
 
 		view(target, room, user) {
@@ -334,16 +335,20 @@ export const commands: ChatCommands = {
 		help: '',
 		''(target, room, user) {
 			if (!room) return this.requiresRoom();
-			const configGroups = [
-				"ban", "mute", "alts", "modlog", "broadcast", "declare", "announce", "modchat",
-				"tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
-			];
+
+			const allPermissions = Users.Permissions.supportedPermissions(room);
+			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
+			const permissions = allPermissions.filter(perm => perm.startsWith('/'));
+
 			let buffer = `<strong>Room permissions help:</strong><hr />`;
-			buffer += `<strong>Usage:</strong><code> /permissions set [permission], [rank]</code><br />`;
-			buffer += `<strong>Usable permissions:</strong><br />`;
-			buffer += Chat.getReadmoreCodeBlock(Users.Permissions.supportedPermissions(room).join(', '));
-			buffer += `<br /><strong>Command groups: </strong>${Chat.getReadmoreCodeBlock(configGroups.join(', '))}<br />`;
-			buffer += `These can be used to set permissions for multiple commands at once.`;
+			buffer += `<p><strong>Usage: </strong><br />`;
+			buffer += `<code>/permissions set [permission], [rank symbol]</code><br />`;
+			buffer += `<code>/permissions clear [permission]</code><br />`;
+			buffer += `<code>/permissions view</code></p>`;
+			buffer += `<p><strong>Group permissions:</strong> (will affect multiple commands or part of one command)<br />`;
+			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
+			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
+			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
 			return this.sendReplyBox(buffer);
 		},
 	},

@@ -1576,7 +1576,7 @@ export const Chat = new class {
 
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
-			entry.hasRoomPermissions = /\bthis\.can\([^,]*, [^,]*,/.test(handlerCode);
+			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
 		}
 		return commandTable;
