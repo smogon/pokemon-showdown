@@ -111,8 +111,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		const roomPermissions = room ? room.settings.permissions : null;
 		if (roomPermissions) {
-			if (cmd && permission !== cmd && roomPermissions[cmd]) {
-				if (!auth.atLeast(user, roomPermissions[cmd])) return false;
+			if (cmd && roomPermissions[`/${cmd}`]) {
+				if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
 				jurisdiction = 'su';
 			} else if (roomPermissions[permission]) {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
@@ -154,6 +154,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (symbol.length !== 1) return false;
 		return !/[A-Za-z0-9|,]/.test(symbol);
 	}
+	static ROOM_PERMISSIONS = ROOM_PERMISSIONS;
+	static GLOBAL_PERMISSIONS = GLOBAL_PERMISSIONS;
 }
 
 export class RoomAuth extends Auth {
@@ -288,21 +290,18 @@ export class GlobalAuth extends Auth {
 }
 
 export const Permissions = new class {
-	approvedPermissions(room: Room | null = null) {
+	supportedPermissions(room: Room | null = null) {
 		// support some config permission groups that aren't already a command name - these need to be hardcoded
 		// since there's no good way to automate this
-		const ALLOWED_COMMANDS = [
-			"showmedia", "broadcast", "tournaments", "gamemoderation", "gamemanagement", "minigame", "game",
-		];
+		const permissions: string[] = ROOM_PERMISSIONS.slice();
 		for (const cmd in Chat.commands) {
 			const entry = Chat.commands[cmd];
 			if (typeof entry !== 'function') continue;
-			// Assume if it passes a room into CommandContext.can that it's roomonly
-			if (entry.requiresRoom) {
-				ALLOWED_COMMANDS.push(cmd);
+			if (entry.hasRoomPermissions) {
+				permissions.push(`/${cmd}`);
 			}
 		}
-		return ALLOWED_COMMANDS;
+		return permissions;
 	}
 
 	setPermission(permission: string, rank: GroupSymbol | undefined, room: Room) {
@@ -310,9 +309,10 @@ export const Permissions = new class {
 		if (!rank) {
 			delete permissions[permission];
 		} else {
-			const ALLOWED_COMMANDS = Permissions.approvedPermissions(room);
-			permission = Chat.baseCommand(permission);
-			if (!ALLOWED_COMMANDS.includes(toID(permission))) return false;
+			if (permission.startsWith(`/`)) permission = `/` + Chat.baseCommand(permission.slice(1));
+			if (!Permissions.supportedPermissions().includes(permission)) {
+				return false;
+			}
 			permissions[permission] = rank;
 		}
 		room.settings.permissions = permissions;

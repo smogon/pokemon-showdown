@@ -299,8 +299,7 @@ export const commands: ChatCommands = {
 	permissions: {
 		set(target, room, user) {
 			if (!room) return this.requiresRoom();
-			let [perm, rank] = target.split(',').map(item => item.toLowerCase().replace(/ +/g, ''));
-			perm = toID(perm);
+			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (!room.auth.atLeast(user, '#')) {
 				return this.errorReply(`/permissions set - Access denied.`);
 			}
@@ -311,8 +310,9 @@ export const commands: ChatCommands = {
 			if (Users.Permissions.getPermissions(room)[perm] === rank) {
 				return this.errorReply(`${perm} is already set to ${rank}.`);
 			}
-			const approved = Users.Permissions.approvedPermissions(room);
-			if (!approved.includes(perm)) return this.errorReply(`${perm} is not a valid permission.`);
+			if (!Users.Permissions.supportedPermissions(room).includes(perm)) {
+				return this.errorReply(`${perm} is not a valid permission.`);
+			}
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!Users.Permissions.setPermission(perm, rank as GroupSymbol, room)) {
 				return this.errorReply(`${perm} cannot be configured. See /permissions help for configurable commands.`);
@@ -322,8 +322,8 @@ export const commands: ChatCommands = {
 			return this.privateModAction(`(${user.name} set the required rank for ${perm} to ${rank}.)`);
 		},
 		sethelp: [
-			`/setpermission [command, rank] - sets the required permission to use the command [command] to [rank].`,
-			`If no [rank] is given, resets the needed permission to the default. Requires: # &`,
+			`/setpermission [command], [rank] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
+			`/setpermission [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
 
 		view(target, room, user) {
@@ -341,7 +341,7 @@ export const commands: ChatCommands = {
 			let buffer = `<strong>Room permissions help:</strong><hr />`;
 			buffer += `<strong>Usage:</strong><code> /permissions set [permission], [rank]</code><br />`;
 			buffer += `<strong>Usable permissions:</strong><br />`;
-			buffer += Chat.getReadmoreCodeBlock(Users.Permissions.approvedPermissions(room).join(', '));
+			buffer += Chat.getReadmoreCodeBlock(Users.Permissions.supportedPermissions(room).join(', '));
 			buffer += `<br /><strong>Command groups: </strong>${Chat.getReadmoreCodeBlock(configGroups.join(', '))}<br />`;
 			buffer += `These can be used to set permissions for multiple commands at once.`;
 			return this.sendReplyBox(buffer);
@@ -1594,7 +1594,7 @@ export const pages: PageTable = {
 			buf += `<a href="/view-permissions-${roomid}-${Dashycode.encode(group)}" `;
 			buf += `target="_blank" rel="noopener"> <button style="border: 2px solid black ;`;
 			buf += ` border-radius: 30px ; height: 40px">`;
-			buf += `${Config.groups[group] ? Config.groups[group].name : ''} (${group})</button> </a><br/ ><br/ >`;
+			buf += `${Config.groups[group] ? Config.groups[group].name : ''} (${group})</button> </a><br /><br />`;
 		}
 		buf += `</td><td style="padding: 0px 25px;font-size:10pt;vertical-align:top;">`;
 		const perms = Users.Permissions.getPermissions(this.room);
@@ -1610,7 +1610,7 @@ export const pages: PageTable = {
 		buf += '</div>';
 		buf += `</td><td style="padding: 0px 25px;font-size:10pt; text-align:left;">`;
 		buf += `<div class="infobox infobox-limited">`;
-		buf += `<strong>Usable permissions:</strong><hr/ >${Users.Permissions.approvedPermissions(this.room).join('<br/ > - ')}`;
+		buf += `<strong>Usable permissions:</strong><hr />&bull; ${Users.Permissions.supportedPermissions(this.room).join(`<br />&bull; `)}`;
 		buf += `</div>`;
 		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
 	},

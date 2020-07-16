@@ -43,6 +43,7 @@ export type ChatHandler = (
 ) => void;
 export type AnnotatedChatHandler = ChatHandler & {
 	requiresRoom: boolean,
+	hasRoomPermissions: boolean,
 	broadcastable: boolean,
 };
 export interface ChatCommands {
@@ -1575,6 +1576,7 @@ export const Chat = new class {
 
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
+			entry.hasRoomPermissions = /\bthis\.can\([^,]*, [^,]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
 		}
 		return commandTable;
