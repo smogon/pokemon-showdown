@@ -92,7 +92,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		user: User,
 		permission: string,
 		target: User | GroupSymbol | null,
-		room?: Room | BasicRoom | null,
+		room?: BasicRoom | null,
 		cmd?: string
 	): boolean {
 		if (user.hasSysopAccess()) return true;
