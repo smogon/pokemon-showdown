@@ -1489,6 +1489,7 @@ export class User extends Chat.MessageContext {
 		let battleRoom: GameRoom | undefined;
 		for (const room of Rooms.rooms.values()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			const battle = room.battle;
 			if (!battle) continue;
 			if (!battle.inputLog) continue;
@@ -1502,14 +1503,26 @@ export class User extends Chat.MessageContext {
 =======
 			if (!room.battle) continue;
 			const log = room.battle.inputLog;
+=======
+			const battle = room.battle;
+			if (!battle) continue;
+			const log = battle.inputLog;
+>>>>>>> Remove getPlayerIDs and getSlot
 			// if there's no log, ignore, since battles created after a restart will always have an input log
 			if (!log) continue;
-			const players = room.battle.getPlayerIDs(log);
-			if (players.includes(this.id)) battleRoom = room;
+			const playerCount = battle.gameType && ['multi', 'free-for-all'].includes(battle.gameType) ? 4 : 2;
+			const players = log.filter(item => item.includes('>player'))
+				.slice(0, playerCount)
+				.map(item => toID(JSON.parse(item.slice(10)).name));
+			if (players.includes(this.id)) battleRoom = room as GameRoom;
 			if (battleRoom?.battle) {
 				// can be asserted since we've assured they're a player by now
+<<<<<<< HEAD
 				battleRoom.battle.joinGame(this, battleRoom.battle.getSlot(this.id, log));
 >>>>>>> Support persisting battles
+=======
+				battleRoom.battle.joinGame(this, `p${players.indexOf(this.id) + 1}` as SideID);
+>>>>>>> Remove getPlayerIDs and getSlot
 				battleRoom.auth.set(this.id, Users.HOST_SYMBOL);
 				this.joinRoom(battleRoom, this.connections[0]);
 			}
