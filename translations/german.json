@@ -97,6 +97,8 @@
 		"Your status contains a banned word.": "Dein Status beinhaltet ein verbotenes Wort.",
 		"Your status has been set to: ${target}.": "Dein Status wurde zu ${target} geändert.", "You are now marked as busy.": "Du bist jetzt als beschäftigt markiert.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Du bist jetzt als abwesend markiert. Versende eine Nachricht oder nutze /back um zu signalisieren, dass du zurück bist.",
+		"You are already marked as back.": "Du bist bereits als anwesend markiert.",
+		"You are no longer marked as busy.": "Du bist nicht länger als beschäftigt markiert.",
 
 		"You are already blocking private messages! To unblock, use /unblockpms": "Du blockierst bereits private Nachrichten! Um dies zu deaktivieren, benutze /unblockpms",
 		"You are now blocking private messages, except from staff and ${rank}.": "Du blockierst jetzt private Nachrichten, außer vom Staff und ${rank}. ",

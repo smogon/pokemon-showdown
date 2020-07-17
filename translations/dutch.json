@@ -101,6 +101,8 @@
 		"Your status has been set to: ${target}.": "Je status is nu: ${target}.",
 		"You are now marked as busy.": "Je staat nu als bezig aangegeven.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Je staat nu als afwezig aangegeven. Stuur een bericht of gebruik /back om te laten zien dat je terug bent.",
+		"You are already marked as back.": "Je staat al op aanwezig.",
+		"You are no longer marked as busy.": "Je staat niet langer als bezig (busy) aangemerkt.",
 
 		"You must choose a name before you can talk.": "Je moet eerst een naam kiezen voordat je kunt praten.",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "je bent ${lockType} en kunt niet in de chat praten. ${lockExpiration}",
