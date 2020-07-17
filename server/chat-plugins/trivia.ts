@@ -1298,13 +1298,13 @@ const commands: ChatCommands = {
 				triviaData.questions!.splice(findEndOfCategory(category, false), 0, entry);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `added '${param[1]}'`);
-				this.privateModAction(`(Question '${param[1]}' was added to the question database by ${user.name}.)`);
+				this.privateModAction(`Question '${param[1]}' was added to the question database by ${user.name}.`);
 			} else {
 				triviaData.submissions!.splice(findEndOfCategory(category, true), 0, entry);
 				writeTriviaData();
 				if (!user.can('mute', null, room)) this.sendReply(`Question '${param[1]}' was submitted for review.`);
 				this.modlog('TRIVIAQUESTION', null, `submitted '${param[1]}'`);
-				this.privateModAction(`(Question '${param[1]}' was submitted to the submission database by ${user.name} for review.)`);
+				this.privateModAction(`Question '${param[1]}' was submitted to the submission database by ${user.name} for review.`);
 			}
 		}
 	},
@@ -1360,7 +1360,7 @@ const commands: ChatCommands = {
 			triviaData.submissions = [];
 			writeTriviaData();
 			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
-			return this.privateModAction(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
+			return this.privateModAction(`${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.`);
 		}
 
 		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
@@ -1416,7 +1416,7 @@ const commands: ChatCommands = {
 
 			writeTriviaData();
 			this.modlog('TRIVIAQUESTION', null, `${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target}`);
-			return this.privateModAction(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
+			return this.privateModAction(`${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.`);
 		}
 
 		this.errorReply(`'${target}' is an invalid argument. View /trivia help questions for more information.`);
@@ -1445,7 +1445,7 @@ const commands: ChatCommands = {
 				questions.splice(i, 1);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
-				return this.privateModAction(`(${user.name} removed question '${target}' from the question database.)`);
+				return this.privateModAction(`${user.name} removed question '${target}' from the question database.`);
 			}
 		}
 
@@ -1496,7 +1496,7 @@ const commands: ChatCommands = {
 					questions.splice(findEndOfCategory(category, false), 0, question);
 					writeTriviaData();
 					this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' to '${param[0]}'`);
-					return this.privateModAction(`(${user.name} changed question category to '${param[0]}' for '${param[1].trim()}' from the question database.)`);
+					return this.privateModAction(`${user.name} changed question category to '${param[0]}' for '${param[1].trim()}' from the question database.`);
 				}
 			}
 		}
@@ -1673,7 +1673,7 @@ const commands: ChatCommands = {
 			if (SPECIAL_CATEGORIES[category]) {
 				triviaData.questions = triviaData.questions!.filter(q => q.category !== category);
 				writeTriviaData();
-				return this.privateModAction(`(${user.name} removed all questions of category '${category}'.)`);
+				return this.privateModAction(`${user.name} removed all questions of category '${category}'.`);
 			} else {
 				return this.errorReply(`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
 			}

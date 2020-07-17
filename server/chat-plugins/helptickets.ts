@@ -1273,7 +1273,7 @@ export const commands: ChatCommands = {
 				username = targetUser.getLastName();
 				userid = targetUser.getLastId();
 				if (ticketBan && ticketBan.expires > Date.now()) {
-					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 				if (targetUser.trusted) {
 					Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
@@ -1282,7 +1282,7 @@ export const commands: ChatCommands = {
 				username = this.targetUsername;
 				userid = toID(this.targetUsername);
 				if (ticketBan && ticketBan.expires > Date.now()) {
-					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 			}
 
@@ -1325,10 +1325,10 @@ export const commands: ChatCommands = {
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
-				displayMessage = `(${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")})`;
+				displayMessage = `${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")}`;
 				this.privateModAction(displayMessage);
 			} else if (acAccount) {
-				displayMessage = `(${username}'s ac account: ${acAccount})`;
+				displayMessage = `${username}'s ac account: ${acAccount}`;
 				this.privateModAction(displayMessage);
 			}
 

@@ -74,7 +74,7 @@ export const commands: ChatCommands = {
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
-			return this.privateModAction(`(An announcement was started by ${user.name}.)`);
+			return this.privateModAction(`An announcement was started by ${user.name}.`);
 		},
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
 
@@ -104,7 +104,7 @@ export const commands: ChatCommands = {
 				}, (timeout * 60000));
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute${Chat.plural(timeout)}.`);
 				this.modlog('announcement TIMER', null, `${timeout} minutes`);
-				return this.privateModAction(`(The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.)`);
+				return this.privateModAction(`The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (announcement.timeout) {
@@ -134,7 +134,7 @@ export const commands: ChatCommands = {
 			announcement.end();
 			room.minorActivity = null;
 			this.modlog('ANNOUNCEMENT END');
-			return this.privateModAction(`(The announcement was ended by ${user.name}.)`);
+			return this.privateModAction(`The announcement was ended by ${user.name}.`);
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 

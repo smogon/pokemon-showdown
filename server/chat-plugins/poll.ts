@@ -449,7 +449,7 @@ export const commands: ChatCommands = {
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
-				return this.privateModAction(`(The poll timer was set to ${timeout} minute(s) by ${user.name}.)`);
+				return this.privateModAction(`The poll timer was set to ${timeout} minute(s) by ${user.name}.`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (poll.timeout) {
@@ -499,7 +499,7 @@ export const commands: ChatCommands = {
 				room.minorActivity.display();
 			}
 			this.modlog('POLL END');
-			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
+			return this.privateModAction(`The poll was ended by ${user.name}.`);
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
 

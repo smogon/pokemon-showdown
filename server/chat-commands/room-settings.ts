@@ -122,7 +122,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
 		if ((room as GameRoom).requestModchat && !room.settings.modchat) (room as GameRoom).requestModchat(null);
-		this.privateModAction(`(${user.name} set modchat to ${room.settings.modchat || "off"})`);
+		this.privateModAction(`${user.name} set modchat to ${room.settings.modchat || "off"}`);
 		this.modlog('MODCHAT', null, `to ${room.settings.modchat || "false"}`);
 
 		room.saveSettings();
@@ -286,7 +286,7 @@ export const commands: ChatCommands = {
 			return this.parse("/help slowchat");
 		}
 		const slowchatSetting = (room.settings.slowchat || "OFF");
-		this.privateModAction(`(${user.name} set slowchat to ${slowchatSetting})`);
+		this.privateModAction(`${user.name} set slowchat to ${slowchatSetting}`);
 		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
 		room.saveSettings();
 	},
@@ -316,7 +316,7 @@ export const commands: ChatCommands = {
 			return this.parse("/help stretchfilter");
 		}
 		const stretchSetting = (room.settings.filterStretching ? "ON" : "OFF");
-		this.privateModAction(`(${user.name} turned the stretch filter ${stretchSetting})`);
+		this.privateModAction(`${user.name} turned the stretch filter ${stretchSetting}`);
 		this.modlog('STRETCH FILTER', null, stretchSetting);
 		room.saveSettings();
 	},
@@ -345,7 +345,7 @@ export const commands: ChatCommands = {
 			return this.parse("/help capsfilter");
 		}
 		const capsSetting = (room.settings.filterCaps ? "ON" : "OFF");
-		this.privateModAction(`(${user.name} turned the caps filter ${capsSetting})`);
+		this.privateModAction(`${user.name} turned the caps filter ${capsSetting}`);
 		this.modlog('CAPS FILTER', null, capsSetting);
 
 		room.saveSettings();
@@ -373,7 +373,7 @@ export const commands: ChatCommands = {
 			return this.parse("/help emojifilter");
 		}
 		const emojiSetting = (room.settings.filterEmojis ? "ON" : "OFF");
-		this.privateModAction(`(${user.name} turned the emoji filter ${emojiSetting})`);
+		this.privateModAction(`${user.name} turned the emoji filter ${emojiSetting}`);
 		this.modlog('EMOJI FILTER', null, emojiSetting);
 
 		room.saveSettings();
@@ -438,11 +438,11 @@ export const commands: ChatCommands = {
 			}
 			room.banwordRegex = null;
 			if (words.length > 1) {
-				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.)`);
+				this.privateModAction(`The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.`);
 				this.modlog('BANWORD', null, words.map(w => `'${w}'`).join(', '));
 				this.sendReply(`Banned phrases successfully added.`);
 			} else {
-				this.privateModAction(`(The banword '${words[0]}' was added by ${user.name}.)`);
+				this.privateModAction(`The banword '${words[0]}' was added by ${user.name}.`);
 				this.modlog('BANWORD', null, words[0]);
 				this.sendReply(`Banned phrase successfully added.`);
 			}
@@ -469,11 +469,11 @@ export const commands: ChatCommands = {
 			room.settings.banwords = room.settings.banwords.filter(w => !words!.includes(w));
 			room.banwordRegex = null;
 			if (words.length > 1) {
-				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
+				this.privateModAction(`The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.`);
 				this.modlog('UNBANWORD', null, words.map(w => `'${w}'`).join(', '));
 				this.sendReply(`Banned phrases successfully deleted.`);
 			} else {
-				this.privateModAction(`(The banword '${words[0]}' was removed by ${user.name}.)`);
+				this.privateModAction(`The banword '${words[0]}' was removed by ${user.name}.`);
 				this.modlog('UNBANWORD', null, words[0]);
 				this.sendReply(`Banned phrase successfully deleted.`);
 			}
@@ -559,7 +559,7 @@ export const commands: ChatCommands = {
 		}
 		room.saveSettings();
 		this.modlog(`SHOWMEDIA`, null, `to ${target}`);
-		this.privateModAction(`(${user.name} set /show permissions to ${target}.)`);
+		this.privateModAction(`${user.name} set /show permissions to ${target}.`);
 		if (room.settings.requestShowEnabled && (!room.settings.showEnabled || room.settings.showEnabled === '@')) {
 			this.privateModAction(
 				`Note: Due to this room's settings, Drivers aren't allowed to use /show directly,` +
@@ -1196,7 +1196,7 @@ export const commands: ChatCommands = {
 		room.settings.desc = target;
 		this.sendReply(`(The room description is now: ${target})`);
 
-		this.privateModAction(`(${user.name} changed the roomdesc to: "${target}".)`);
+		this.privateModAction(`${user.name} changed the roomdesc to: "${target}".`);
 		this.modlog('ROOMDESC', null, `to "${target}"`);
 		room.saveSettings();
 	},
@@ -1229,7 +1229,7 @@ export const commands: ChatCommands = {
 		this.sendReply("(The room introduction has been changed to:)");
 		this.sendReply(`|raw|<div class="infobox infobox-limited">${room.settings.introMessage.replace(/\n/g, '')}</div>`);
 
-		this.privateModAction(`(${user.name} changed the roomintro.)`);
+		this.privateModAction(`${user.name} changed the roomintro.`);
 		this.modlog('ROOMINTRO');
 		this.roomlog(room.settings.introMessage.replace(/\n/g, ''));
 
@@ -1242,7 +1242,7 @@ export const commands: ChatCommands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!room.settings.introMessage) return this.errorReply("This room does not have a introduction set.");
 
-		this.privateModAction(`(${user.name} deleted the roomintro.)`);
+		this.privateModAction(`${user.name} deleted the roomintro.`);
 		this.modlog('DELETEROOMINTRO');
 		this.roomlog(target);
 		delete room.settings.introMessage;
@@ -1278,7 +1278,7 @@ export const commands: ChatCommands = {
 		this.sendReply("(The staff introduction has been changed to:)");
 		this.sendReply(`|raw|<div class="infobox">${target.replace(/\n/g, ``)}</div>`);
 
-		this.privateModAction(`(${user.name} changed the staffintro.)`);
+		this.privateModAction(`${user.name} changed the staffintro.`);
 		this.modlog('STAFFINTRO');
 		this.roomlog(room.settings.staffMessage.replace(/\n/g, ``));
 		room.saveSettings();
@@ -1290,7 +1290,7 @@ export const commands: ChatCommands = {
 		if (!this.can('ban', null, room)) return false;
 		if (!room.settings.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
 
-		this.privateModAction(`(${user.name} deleted the staffintro.)`);
+		this.privateModAction(`${user.name} deleted the staffintro.`);
 		this.modlog('DELETESTAFFINTRO');
 		this.roomlog(target);
 		delete room.settings.staffMessage;
@@ -1318,7 +1318,7 @@ export const commands: ChatCommands = {
 		if (room.settings.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases.set(alias, room.roomid);
-		this.privateModAction(`(${user.name} added the room alias '${alias}'.)`);
+		this.privateModAction(`${user.name} added the room alias '${alias}'.`);
 		this.modlog('ROOMALIAS', null, alias);
 
 		if (!room.settings.aliases) room.settings.aliases = [];
@@ -1349,7 +1349,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("You may only remove an alias from the current room.");
 		}
 
-		this.privateModAction(`(${user.name} removed the room alias '${alias}'.)`);
+		this.privateModAction(`${user.name} removed the room alias '${alias}'.`);
 		this.modlog('REMOVEALIAS', null, alias);
 
 		const aliasIndex = room.settings.aliases.indexOf(alias);
@@ -1391,13 +1391,13 @@ export const commands: ChatCommands = {
 			room.settings.dataCommandTierDisplay = displayIDToName[toID(target)];
 			this.sendReply(`(The room's tier display is now: ${displayIDToName[toID(target)]})`);
 
-			this.privateModAction(`(${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.)`);
+			this.privateModAction(`${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.`);
 			this.modlog('ROOMTIERDISPLAY', null, `to ${displayIDToName[toID(target)]}`);
 		} else {
 			room.settings.dataCommandTierDisplay = 'tiers';
 			this.sendReply(`(The room's tier display is now: tiers)`);
 
-			this.privateModAction(`(${user.name} reset the room's tier display.)`);
+			this.privateModAction(`${user.name} reset the room's tier display.`);
 			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
 		}
 

@@ -646,7 +646,7 @@ const cmds: ChatCommands = {
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
 
-		this.privateModAction(`(${user.name} started a question giveaway for ${targetUser.name})`);
+		this.privateModAction(`${user.name} started a question giveaway for ${targetUser.name}`);
 		this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	changeanswer: 'changequestion',
@@ -716,7 +716,7 @@ const cmds: ChatCommands = {
 
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, prize, numWinners);
 
-		this.privateModAction(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
+		this.privateModAction(`${user.name} started a lottery giveaway for ${targetUser.name}`);
 		this.modlog('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	leavelotto: 'join',
@@ -773,7 +773,7 @@ const cmds: ChatCommands = {
 
 			room.gtsga = new GTSGiveaway(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon)`);
+			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon`);
 			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 		},
 		left(target, room, user) {
@@ -833,7 +833,7 @@ const cmds: ChatCommands = {
 			const amount = room.gtsga.end(true);
 			if (target) target = `: ${target}`;
 			this.modlog('GTS END', null, `with ${amount} left${target}`);
-			this.privateModAction(`(The giveaway was forcibly ended by ${user.name} with ${amount} left${target})`);
+			this.privateModAction(`The giveaway was forcibly ended by ${user.name} with ${amount} left${target}`);
 		},
 	},
 	// general.
@@ -857,7 +857,7 @@ const cmds: ChatCommands = {
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
 		this.modlog('GIVEAWAYBAN', targetUser, target);
 		if (target) target = ` (${target})`;
-		this.privateModAction(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
+		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
 	},
 	unban(target, room, user) {
 		if (!target) return false;
@@ -889,7 +889,7 @@ const cmds: ChatCommands = {
 		room.giveaway.end(true);
 		this.modlog('GIVEAWAY END', null, target);
 		if (target) target = `: ${target}`;
-		this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
+		this.privateModAction(`The giveaway was forcibly ended by ${user.name}${target}`);
 	},
 	rm: 'remind',
 	remind(target, room, user) {

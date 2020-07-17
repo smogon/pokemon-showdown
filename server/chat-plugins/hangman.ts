@@ -266,7 +266,7 @@ export const commands: ChatCommands = {
 
 			game.end();
 			this.modlog('ENDHANGMAN');
-			return this.privateModAction(`(The game of hangman was ended by ${user.name}.)`);
+			return this.privateModAction(`The game of hangman was ended by ${user.name}.`);
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &"],
 

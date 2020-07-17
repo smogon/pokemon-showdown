@@ -671,7 +671,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Usage: /blackjack create [autostart] - where autostart is an integer");
 			}
 
-			this.privateModAction(`(A game of blackjack was created by ${user.name}.)`);
+			this.privateModAction(`A game of blackjack was created by ${user.name}.`);
 			this.modlog(`BLACKJACK CREATE`);
 			room.game = new Blackjack(room, user, autostartMinutes);
 		},
@@ -684,7 +684,7 @@ export const commands: ChatCommands = {
 			}
 			if (game.state !== 'signups') return this.errorReply("This game of blackjack has already started.");
 
-			this.privateModAction(`(The game of blackjack was started by ${user.name}.)`);
+			this.privateModAction(`The game of blackjack was started by ${user.name}.`);
 			this.modlog(`BLACKJACK START`);
 			game.start(user);
 		},
@@ -700,7 +700,7 @@ export const commands: ChatCommands = {
 
 			const end = game.end(user, cmd);
 			if (end) {
-				this.privateModAction(`(The game of blackjack was ${force}ended by ${user.name}.)`);
+				this.privateModAction(`The game of blackjack was ${force}ended by ${user.name}.`);
 				this.modlog(`BLACKJACK END`);
 			}
 		},

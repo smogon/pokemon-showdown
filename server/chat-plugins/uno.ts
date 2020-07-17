@@ -676,7 +676,7 @@ export const commands: ChatCommands = {
 			if (isNaN(cap)) cap = 12;
 			if (cap < 2) cap = 2;
 			room.game = new UNO(room, cap, suppressMessages);
-			this.privateModAction(`(A game of UNO was created by ${user.name}.)`);
+			this.privateModAction(`A game of UNO was created by ${user.name}.`);
 			this.modlog('UNO CREATE');
 		},
 
@@ -693,7 +693,7 @@ export const commands: ChatCommands = {
 				cap = 2;
 			}
 			game.playerCap = cap;
-			this.privateModAction(`(The playercap was set to ${game.playerCap} by ${user.name}.)`);
+			this.privateModAction(`The playercap was set to ${game.playerCap} by ${user.name}.`);
 			this.modlog('UNO PLAYERCAP');
 		},
 
@@ -705,7 +705,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("There is no UNO game in signups phase in this room.");
 			}
 			if (game.onStart()) {
-				this.privateModAction(`(The game of UNO was started by ${user.name}.)`);
+				this.privateModAction(`The game of UNO was started by ${user.name}.`);
 				this.modlog('UNO START');
 			}
 		},
@@ -717,7 +717,7 @@ export const commands: ChatCommands = {
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room.");
 			room.game.destroy();
 			room.add("The game of UNO was forcibly ended.").update();
-			this.privateModAction(`(The game of UNO was ended by ${user.name}.)`);
+			this.privateModAction(`The game of UNO was ended by ${user.name}.`);
 			this.modlog('UNO END');
 		},
 
@@ -770,7 +770,7 @@ export const commands: ChatCommands = {
 
 			const disqualified = game.eliminate(toID(target));
 			if (disqualified === false) return this.errorReply(`Unable to disqualify ${target}.`);
-			this.privateModAction(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
+			this.privateModAction(`${user.name} has disqualified ${disqualified} from the UNO game.`);
 			this.modlog('UNO DQ', toID(target));
 			room.add(`${disqualified} has been disqualified from the UNO game.`).update();
 		},
