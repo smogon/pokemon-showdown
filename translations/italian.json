@@ -101,6 +101,8 @@
 		"Your status contains a banned word.": "Il tuo stato contiene una parola proibita.",
 		"Your status has been set to: ${target}.": "Il tuo stato è stato cambiato in: ${target}.", "You are now marked as busy.": "Sei ora indicato come busy (occupato).",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Sei ora indicato come away (assente). Invia un messaggio o usa il comando /back per indicare che sei nuovamente presente.",
+		"You are already marked as back.": "Sei già indicato come back (attivo).",
+		"You are no longer marked as busy.": "Non sei più indicato come busy (occupato).",
 
 		"You must choose a name before you can talk.": "Devi scegliere un nome prima che di poter parlare.",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Sei ${lockType} e non puoi parlare in chat. ${lockExpiration}",

@@ -101,6 +101,8 @@
 		"Your status contains a banned word.": "ステータスに禁止ワードが入っています。",
 		"Your status has been set to: ${target}.": "新しいステータスが設定されました: ${target}.", "You are now marked as busy.": "ステータスが「取り込み中」になりました。",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "ステータスが「離席中」になりました。メッセージを送信するか、/backを入力すると、ステータスが元に戻ります。",
+		"You are already marked as back.": "現在「取り込み中」ではありません。",
+		"You are no longer marked as busy.": "「取り込み中」状態が解除されました。",
 
 		"You must choose a name before you can talk.": "チャットするには、ユーザー名を設定する必要があります。",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "${lockType} されているため、チャットすることはできません。ロック期限： ${lockExpiration}",

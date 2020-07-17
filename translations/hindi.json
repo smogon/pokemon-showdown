@@ -102,6 +102,8 @@
 		"Your status contains a banned word.": "आपके status में एक प्रतिबंधित शब्द है.",
 		"Your status has been set to: ${target}.": "आपका status अब ये है : ${target}.", "You are now marked as busy.": "आपको अब busy (व्यस्त) मार्क कर दिया गया है.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "आपको away (दूर) मार्क कर दिया गया है. अपनी वापसी दर्शाने के लिए एक सन्देश भेजें या /back का उपयोग करें.",
+		"You are already marked as back.": "आप पहले से ही (back) मुक्त चिह्नित हैं.",
+		"You are no longer marked as busy.": "अब आप (busy) व्यस्त चिन्हित नहीं हैं.",
 
 		"You must choose a name before you can talk.": "बात करने के लिए एक नाम चुनें.",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "आप ${lockType} हैं और बात नहीं कर सकते हैं. ${lockExpiration}",
