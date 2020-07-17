@@ -729,12 +729,12 @@ export class CommandContext extends MessageContext {
 	privateModAction(msg: string) {
 		if (this.room) {
 			if (this.room.roomid === 'staff') {
-				this.room.addByUser(this.user, msg);
+				this.room.addByUser(this.user, `(${msg})`);
 			} else {
-				this.room.sendModsByUser(this.user, msg);
+				this.room.sendModsByUser(this.user, `(${msg})`);
 			}
 		} else {
-			const data = this.pmTransform(`|modaction|(${msg})`);
+			const data = this.pmTransform(`|modaction|${msg}`);
 			this.user.send(data);
 			if (this.pmTarget && this.pmTarget !== this.user && this.pmTarget.isStaff) {
 				this.pmTarget.send(data);
