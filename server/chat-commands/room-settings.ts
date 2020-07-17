@@ -567,6 +567,36 @@ export const commands: ChatCommands = {
 			);
 		}
 	},
+	showthrottle(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
+		if (!room.settings.requestShowEnabled) return this.errorReply("/requestshow is not enabled.");
+		if (!target) {
+			return this.sendReplyBox(
+				`The /requestshow throttle is currently set to ` +
+				`${room.settings.showThrottle ? Chat.toDurationString(room.settings.showThrottle) : 'OFF'}.`
+			);
+		}
+		const parsed = parseInt(target);
+		if (!this.can('declare', null, room)) return false;
+		if (this.meansNo(target)) {
+			room.settings.showThrottle = undefined;
+		} else if (isNaN(parsed)) {
+			return this.errorReply("Invalid number.");
+		} else {
+			room.settings.showThrottle = parsed * 60 * 1000;
+		}
+		room.saveSettings();
+		this.modlog(`SHOWTHROTTLE`, null, `to ${Chat.toDurationString(parsed)}`);
+		this.privateModAction(
+			`(${user.name} ${room.settings.showThrottle ?
+				`set the /requestshow throttle to ${Chat.toDurationString(room.settings.showThrottle)}` :
+				`disabled the show throttle.`})`
+		);
+	},
+	showthrottlehelp: [
+		`/showthrottle [number in minutes] - sets the room's /requestshow throttle to [minutes].`,
+		`Requires: # &`,
+	],
 
 	hightraffic(target, room, user) {
 		if (!room) return this.requiresRoom();

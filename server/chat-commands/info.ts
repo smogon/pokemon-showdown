@@ -2440,6 +2440,12 @@ export const commands: ChatCommands = {
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
+		if (!room.settings.showThrottle) room.settings.showThrottle = 0;
+		if (!room.lastShowRequest) room.lastShowRequest = {};
+		if (room.lastShowRequest[user.id] && Date.now() - room.lastShowRequest[user.id] <= room.settings.showThrottle) {
+			return this.errorReply(`Your request was not submitted because you've been sending them too quickly.`);
+		}
+		room.lastShowRequest[user.id] = Date.now();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
 			link: link,

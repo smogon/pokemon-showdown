@@ -103,6 +103,7 @@ export interface RoomSettings {
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
 	showEnabled?: GroupSymbol | true;
+	showThrottle?: number;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -184,6 +185,7 @@ export abstract class BasicRoom {
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
 	pendingApprovals: Map<string, {name: string, link: string, comment: string}> | null;
+	lastShowRequest: {[k: string]: number} | null;
 
 	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		this.users = Object.create(null);
@@ -274,6 +276,7 @@ export abstract class BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.pendingApprovals = null;
+		this.lastShowRequest = null;
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
