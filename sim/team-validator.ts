@@ -1317,11 +1317,15 @@ export class TeamValidator {
 				if (tierSpecies.isNonstandard === 'Unobtainable') {
 					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
 				}
+				if (tierSpecies.isNonstandard === 'Gigantamax') {
+					return `${tierSpecies.name} is obtainable without Gigantamaxing, even through hacking.`;
+				}
 				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
 			}
 			if (banReason === '') return null;
 		}
 
+		// Special casing for Pokemon that can Gmax, but their Gmax factor cannot be legally obtained
 		if (tierSpecies.gmaxUnreleased && set.gigantamax) {
 			banReason = ruleTable.check('pokemontag:unobtainable');
 			if (banReason) {
@@ -1414,6 +1418,9 @@ export class TeamValidator {
 			if (banReason) {
 				if (move.isNonstandard === 'Unobtainable') {
 					return `${move.name} is not obtainable without hacking or glitches.`;
+				}
+				if (move.isNonstandard === 'Gigantamax') {
+					return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
 				}
 				return `${set.name}'s move ${move.name} is tagged ${move.isNonstandard}, which is ${banReason}.`;
 			}

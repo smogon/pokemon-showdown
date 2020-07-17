@@ -334,7 +334,7 @@ export class RandomTeams {
 			do {
 				const moveid = this.sampleNoReplace(movePool);
 				const move = this.dex.getMove(moveid);
-				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ') && (!move.isMax || typeof move.isMax !== 'string')) {
+				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
 					m.push(moveid);
 				}
 			} while (m.length < 4);
