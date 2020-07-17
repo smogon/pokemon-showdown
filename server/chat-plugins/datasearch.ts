@@ -841,8 +841,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(megaSearch === false && !species.isMega)
 		);
 		const gmaxSearchResult = (
-			gmaxSearch === null || (gmaxSearch === true && species.canGigantamax) ||
-			(gmaxSearch === false && !species.canGigantamax)
+			gmaxSearch === null || (gmaxSearch === true && species.name.endsWith('-Gmax')) ||
+			(gmaxSearch === false && !species.name.endsWith('-Gmax'))
 		);
 		const fullyEvolvedSearchResult = (
 			fullyEvolvedSearch === null ||
@@ -1039,7 +1039,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].canGigantamax && !allowGmax) continue;
+		if (dex[mon].name.endsWith('-Gmax') && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
