@@ -41,8 +41,8 @@ const BATTLE = new Set([
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
-	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species',
-	'id', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
+	'side', 'battle', 'set', 'name', 'fullname', 'id',
+	'happiness', 'level', 'pokeball', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
 const ACTIVE_MOVE = new Set(['move']);
