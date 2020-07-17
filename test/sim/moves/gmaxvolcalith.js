@@ -13,7 +13,7 @@ describe('G-Max Volcalith', function () {
 	it('should not damage Rock-types', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
-			{species: 'Coalossal', moves: ['rockthrow'], gigantamax: true},
+			{species: 'Coalossal-Gmax', moves: ['rockthrow']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]});
 		battle.setPlayer('p2', {team: [
