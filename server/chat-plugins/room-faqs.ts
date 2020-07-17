@@ -54,7 +54,7 @@ export const commands: ChatCommands = {
 		roomFaqs[room.roomid][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
-		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
+		this.privateModAction(`${user.name} added a FAQ for '${topic}'`);
 		this.modlog('RFAQ', null, `added '${topic}'`);
 	},
 	removefaq(target, room, user) {
@@ -74,7 +74,7 @@ export const commands: ChatCommands = {
 		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
-		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
+		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
 	},
 	addalias(target, room, user) {
@@ -95,7 +95,7 @@ export const commands: ChatCommands = {
 		}
 		roomFaqs[room.roomid][alias] = `>${topic}`;
 		saveRoomFaqs();
-		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.privateModAction(`${user.name} added an alias for '${topic}': ${alias}`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
 	viewfaq: 'roomfaq',

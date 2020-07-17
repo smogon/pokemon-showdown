@@ -714,7 +714,7 @@ export class CommandContext extends MessageContext {
 
 	/** like privateModAction, but also notify Staff room */
 	privateGlobalModAction(msg: string) {
-		this.privateModAction(`(${msg})`);
+		this.privateModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
 		}
@@ -729,9 +729,9 @@ export class CommandContext extends MessageContext {
 	privateModAction(msg: string) {
 		if (this.room) {
 			if (this.room.roomid === 'staff') {
-				this.room.addByUser(this.user, msg);
+				this.room.addByUser(this.user, `(${msg})`);
 			} else {
-				this.room.sendModsByUser(this.user, msg);
+				this.room.sendModsByUser(this.user, `(${msg})`);
 			}
 		} else {
 			const data = this.pmTransform(`|modaction|${msg}`);
@@ -740,7 +740,7 @@ export class CommandContext extends MessageContext {
 				this.pmTarget.send(data);
 			}
 		}
-		this.roomlog(msg);
+		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null) {
 		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;
