@@ -1317,8 +1317,8 @@ export class TeamValidator {
 				if (tierSpecies.isNonstandard === 'Unobtainable') {
 					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
 				}
-				if (tierSpecies.isNonstandard === 'Gigantamax') {
-					return `${tierSpecies.name} is obtainable without Gigantamaxing, even through hacking.`;
+				if (tierSpecies.isNonstandard === 'Nonhackable') {
+					return `${tierSpecies.name} is not obtainable${tierSpecies.name.endsWith('-Gmax') ? ` without Gigantamaxing` : ''}, even through hacking.`;
 				}
 				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
 			}
@@ -1403,10 +1403,6 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
-		if (ruleTable.isBanned('nonexistent') && typeof move.isMax === 'string') {
-			return `${set.name}'s move ${move.name} is not obtainable without Gigantamaxing ${move.isMax}.`;
-		}
-
 		banReason = ruleTable.check('pokemontag:allmoves');
 		if (banReason) {
 			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
@@ -1419,8 +1415,9 @@ export class TeamValidator {
 				if (move.isNonstandard === 'Unobtainable') {
 					return `${move.name} is not obtainable without hacking or glitches.`;
 				}
-				if (move.isNonstandard === 'Gigantamax') {
-					return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
+				if (move.isNonstandard === 'Nonhackable') {
+					if (typeof move.isMax === 'string') return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
+					return `${move.name} is not obtainable, even via hacking.`;
 				}
 				return `${set.name}'s move ${move.name} is tagged ${move.isNonstandard}, which is ${banReason}.`;
 			}

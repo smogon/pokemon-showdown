@@ -1022,7 +1022,7 @@ export class ModdedDex {
 					// custom tags -- nduubl is used for national dex teambuilder formatting
 					'mega', 'nduubl',
 					// illegal/nonstandard reasons
-					'past', 'future', 'unobtainable', 'lgpe', 'custom', 'gigantamax',
+					'past', 'future', 'unobtainable', 'lgpe', 'custom', 'nonhackable',
 					// all
 					'allpokemon', 'allitems', 'allmoves', 'allabilities',
 				];
