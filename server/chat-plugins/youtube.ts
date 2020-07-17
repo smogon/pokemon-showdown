@@ -193,7 +193,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Error in retrieving channel data.`);
 			}
 			this.modlog('ADDCHANNEL', null, `${id} ${name ? `username: ${name}` : ''}`);
-			return this.privateModAction(`(Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.)`);
+			return this.privateModAction(`Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.`);
 		},
 		addchannelhelp: [`/addchannel - Add channel data to the YouTube database. Requires: % @ #`],
 
@@ -205,7 +205,7 @@ export const commands: ChatCommands = {
 			if (!id) return this.errorReply(`Channel with ID or name ${target} not found.`);
 			delete channelData[id];
 			FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
-			this.privateModAction(`(${user.name} deleted channel with ID or name ${target}.)`);
+			this.privateModAction(`${user.name} deleted channel with ID or name ${target}.`);
 			return this.modlog(`REMOVECHANNEL`, null, id);
 		},
 		removechannelhelp: [`/youtube removechannel - Delete channel data from the YouTube database. Requires: % @ #`],
@@ -262,7 +262,7 @@ export const commands: ChatCommands = {
 			if (!id) return this.errorReply(`Channel ${channel} is not in the database.`);
 			channelData[id].username = name;
 			this.modlog(`UPDATECHANNEL`, null, name);
-			this.privateModAction(`(${user.name} updated channel ${id}'s username to ${name}.)`);
+			this.privateModAction(`${user.name} updated channel ${id}'s username to ${name}.`);
 			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 		},
 		interval: 'repeat',
@@ -288,7 +288,7 @@ export const commands: ChatCommands = {
 					room.update();
 				})();
 			 }, interval);
-			this.privateModAction(`(${user.name} set a randchannel interval to ${target} minutes)`);
+			this.privateModAction(`${user.name} set a randchannel interval to ${target} minutes`);
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
 		},
 	},

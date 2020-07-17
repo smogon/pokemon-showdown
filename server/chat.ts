@@ -734,13 +734,13 @@ export class CommandContext extends MessageContext {
 				this.room.sendModsByUser(this.user, msg);
 			}
 		} else {
-			const data = this.pmTransform(`|modaction|${msg}`);
+			const data = this.pmTransform(`|modaction|(${msg})`);
 			this.user.send(data);
 			if (this.pmTarget && this.pmTarget !== this.user && this.pmTarget.isStaff) {
 				this.pmTarget.send(data);
 			}
 		}
-		this.roomlog(msg);
+		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null) {
 		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;

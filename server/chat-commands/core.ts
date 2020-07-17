@@ -662,7 +662,7 @@ export const commands: ChatCommands = {
 			if (!targetUser.userMessage) return this.errorReply(`${targetUser.name} does not have a status set.`);
 			if (!this.can('forcerename', targetUser)) return false;
 
-			this.privateModAction(`(${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
+			this.privateModAction(`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${reason ? `: ${reason}` : ``}`);
 			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}" by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
