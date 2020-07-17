@@ -123,8 +123,6 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		// support some config permission groups that aren't already a command name - these need to be hardcoded
-		// since there's no good way to automate this
 		const permissions: string[] = ROOM_PERMISSIONS.slice();
 		for (const cmd in Chat.commands) {
 			const entry = Chat.commands[cmd];
