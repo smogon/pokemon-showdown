@@ -1200,20 +1200,16 @@ export class GlobalRoomState {
 		return true;
 	}
 
-	prepBattleRoom(format: string, options?: AnyObject) {
+	prepBattleRoom(format: string) {
 		// console.log('BATTLE START BETWEEN: ' + p1.id + ' ' + p2.id);
 		const roomPrefix = `battle-${toID(Dex.getFormat(format).name)}-`;
 		let battleNum = this.lastBattle;
 		let roomid: RoomID;
-		if (options?.num) {
-			roomid = `${roomPrefix}${options.num}` as RoomID;
-		} else {
-			do {
-				roomid = `${roomPrefix}${++battleNum}` as RoomID;
-			} while (Rooms.rooms.has(roomid));
-			this.lastBattle = battleNum;
-			this.writeNumRooms();
-		}
+		do {
+			roomid = `${roomPrefix}${++battleNum}` as RoomID;
+		} while (Rooms.rooms.has(roomid));
+		this.lastBattle = battleNum;
+		this.writeNumRooms();
 		return roomid;
 	}
 
@@ -1405,6 +1401,7 @@ export class GlobalRoomState {
 			if (!buffer[formatid]) buffer[formatid] = {};
 			const promise = room.battle.getLog().then((log) => {
 				if (!log) throw new Error(`Invalid battle log received while writing battle state.`);
+<<<<<<< HEAD
 				buffer[formatid][id] = {
 					inputLog: log.join('\n'),
 					title: room.title,
@@ -1423,10 +1420,12 @@ export class GlobalRoomState {
 			const formatid = room.battle.format;
 			if (!buffer[formatid]) buffer[formatid] = {};
 			const promise = room.battle.getLog().then((log) => {
+=======
+>>>>>>> review stuff
 				buffer[formatid][id] = {
 					inputLog: log.map(item => item.replace(/\r/g, '')).join('\n'),
 					title: room.title,
-					num: room.roomid.split('-')[2],
+					roomid: room.roomid,
 				};
 			});
 			promises.push(promise);
@@ -1796,10 +1795,14 @@ export const Rooms = {
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const roomid = options.roomid ? options.roomid : Rooms.global.prepBattleRoom(formatid);
 =======
 		const roomid = Rooms.global.prepBattleRoom(formatid, options);
 >>>>>>> Support persisting battles
+=======
+		const roomid = options.roomid ? options.roomid : Rooms.global.prepBattleRoom(formatid);
+>>>>>>> review stuff
 		options.format = formatid;
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
