@@ -1433,16 +1433,21 @@ export class GlobalRoomState {
 		if (!Config.persistbattles) return;
 		const battleData = JSON.parse(FS(`logs/battles.json`).readIfExistsSync() || "{}");
 <<<<<<< HEAD
+<<<<<<< HEAD
 		FS(`logs/battles.json`).writeUpdate(() => JSON.stringify({}));
 		for (const formatid in battleData) {
 			for (const battle in battleData[formatid]) {
 				const entry = battleData[formatid][battle];
 				Rooms.createBattle(formatid, entry);
 =======
+=======
+		FS(`logs/battles.json`).writeUpdate(() => JSON.stringify({}));
+>>>>>>> stuff
 		for (const formatid in battleData) {
 			for (const battle in battleData[formatid]) {
 				const entry = battleData[formatid][battle];
 				const battleRoom = Rooms.createBattle(formatid, entry);
+<<<<<<< HEAD
 				// ensure log is at the end of the battle so that users rejoining see it
 				setTimeout(() => {
 					battleRoom?.add(
@@ -1450,6 +1455,8 @@ export class GlobalRoomState {
 					);
 				}, 1 * 1000);
 >>>>>>> Support persisting battles
+=======
+>>>>>>> stuff
 			}
 		}
 	}
