@@ -668,44 +668,44 @@ export abstract class BasicRoom {
 
 	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
+	 * @param moveLogs Whether or not to rename the log file. Defaults to true.
+	 * @param keepAliases Whether or not to point the room's aliases and name to its new name. Defaults to true.
 	 */
-	async rename(newTitle: string, newID?: RoomID) {
+	async rename(newTitle: string, newID?: RoomID, moveLogs = true, keepAliases = true) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		if (this.game || this.tour) return;
+		if ((this.game && moveLogs) || this.tour) return;
 
 		const oldID = this.roomid;
 		this.roomid = newID;
 		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
-		Rooms.rooms.set(newID, this as ChatRoom);
+		Rooms.rooms.set(newID, (this.game ? this as unknown as GameRoom : this as ChatRoom));
 
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
 		} else if (newID === 'lobby') {
-			Rooms.lobby = this as ChatRoom;
+			Rooms.lobby = this as ChatRoom; // lobby shouldn't be a GameRoom
 		}
 
-		for (const [alias, roomid] of Rooms.aliases.entries()) {
-			if (roomid === oldID) {
-				Rooms.aliases.set(alias, newID);
+		if (keepAliases) {
+			for (const [alias, roomid] of Rooms.aliases.entries()) {
+				if (roomid === oldID) {
+					Rooms.aliases.set(alias, newID);
+				}
+			}
+
+			// add an alias from the old id
+			Rooms.aliases.set(oldID, newID);
+			if (this.settings) {
+				if (!this.settings.aliases) this.settings.aliases = [];
+				// resolve an old (fixed) bug in /renameroom
+				if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
+				this.saveSettings();
 			}
 		}
-		// add an alias from the old id
-		Rooms.aliases.set(oldID, newID);
-		if (!this.settings.aliases) this.settings.aliases = [];
-		// resolve an old (fixed) bug in /renameroom
-		if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
-		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
-			user.inRooms.delete(oldID);
-			user.inRooms.add(newID);
-			for (const connection of user.connections) {
-				connection.inRooms.delete(oldID);
-				connection.inRooms.add(newID);
-				Sockets.roomRemove(connection.worker, oldID, connection.socketid);
-				Sockets.roomAdd(connection.worker, newID, connection.socketid);
-			}
+			user.moveConnections(oldID, newID);
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
 		}
 
@@ -720,10 +720,12 @@ export abstract class BasicRoom {
 			}
 		}
 
-		this.settings.title = newTitle;
-		this.saveSettings();
+		if (this.settings) {
+			this.settings.title = newTitle;
+			this.saveSettings();
+		}
 
-		return this.log.rename(newID);
+		return (moveLogs ? this.log.rename(newID) : true);
 	}
 
 	onConnect(user: User, connection: Connection) {
