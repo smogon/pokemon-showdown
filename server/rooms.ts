@@ -1423,7 +1423,7 @@ export class GlobalRoomState {
 =======
 >>>>>>> review stuff
 				buffer[formatid][id] = {
-					inputLog: log.map(item => item.replace(/\r/g, '')).join('\n'),
+					inputLog: log.join('\n'),
 					title: room.title,
 					roomid: room.roomid,
 				};
@@ -1713,8 +1713,12 @@ export class GameRoom extends BasicRoom {
 			.slice(0, playerCount)
 			.map(item => toID(JSON.parse(item.slice(10)).name));
 		const formatidLine = log.filter(item => item.includes(`formatid":"`))[0];
+<<<<<<< HEAD
 		const spaceIndex = formatidLine.indexOf(' ');
 		const formatid = JSON.parse(formatidLine.slice(spaceIndex)).formatid;
+=======
+		const formatid = JSON.parse(formatidLine.slice(formatidLine.indexOf(' '))).formatid;
+>>>>>>> handle getLog correctly
 		return {players, playerCount, formatid};
 	}
 }
