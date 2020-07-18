@@ -330,10 +330,10 @@ export class TeamValidator {
 		let species = dex.getSpecies(set.species);
 		set.species = species.name;
 		// Backwards compatability with old Gmax format
-		if (set.species.endsWith('-Gmax') && this.format.id !== 'gen8megamax') {
+		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
 			set.species = set.species.slice(0, -5);
 			species = dex.getSpecies(set.species);
-			if (set.name.endsWith('-Gmax')) set.name = species.baseSpecies;
+			if (set.name && set.name.endsWith('-Gmax')) set.name = species.baseSpecies;
 			set.gigantamax = true;
 		}
 		if (set.name && set.name.length > 18) {
