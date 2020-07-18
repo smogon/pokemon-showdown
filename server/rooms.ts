@@ -1400,7 +1400,7 @@ export class GlobalRoomState {
 			const promise = room.battle.getLog().then((log) => {
 				if (!log) throw new Error(`Invalid battle log received while writing battle state.`);
 				buffer[formatid][id] = {
-					inputLog: log.map(item => item.replace(/\r/g, '')).join('\n'),
+					inputLog: log.join('\n'),
 					title: room.title,
 					roomid: room.roomid,
 				};
@@ -1652,6 +1652,19 @@ export class GameRoom extends BasicRoom {
 			id: this.roomid.substr(7),
 			silent: options === 'forpunishment' || options === 'silent',
 		}));
+	}
+	parseInputLog(): AnyObject {
+		if (!this.battle) return {};
+		if (!this.battle.inputLog) return {};
+		const log = this.battle.inputLog;
+		const battle = this.battle;
+		const playerCount = battle.gameType && ['multi', 'free-for-all'].includes(battle.gameType) ? 4 : 2;
+		const players = log.filter(item => item.includes('>player'))
+			.slice(0, playerCount)
+			.map(item => toID(JSON.parse(item.slice(10)).name));
+		const formatidLine = log.filter(item => item.includes(`formatid":"`))[0];
+		const formatid = JSON.parse(formatidLine.slice(formatidLine.indexOf(' '))).formatid;
+		return {players, playerCount, formatid};
 	}
 }
 

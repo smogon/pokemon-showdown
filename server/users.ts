@@ -1490,13 +1490,10 @@ export class User extends Chat.MessageContext {
 		for (const room of Rooms.rooms.values()) {
 			const battle = room.battle;
 			if (!battle) continue;
-			const log = battle.inputLog;
-			// if there's no log, ignore, since battles created after a restart will always have an input log
-			if (!log) continue;
-			const playerCount = battle.gameType && ['multi', 'free-for-all'].includes(battle.gameType) ? 4 : 2;
-			const players = log.filter(item => item.includes('>player'))
-				.slice(0, playerCount)
-				.map(item => toID(JSON.parse(item.slice(10)).name));
+			if (!battle.inputLog) continue;
+			if (!(room instanceof Rooms.GameRoom)) continue;
+			const {players} = room.parseInputLog();
+			if (!players) continue;
 			if (players.includes(this.id)) battleRoom = room as GameRoom;
 			if (battleRoom?.battle) {
 				// can be asserted since we've assured they're a player by now
