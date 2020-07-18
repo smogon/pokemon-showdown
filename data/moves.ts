@@ -16293,7 +16293,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 90,
 		category: "Special",
 		desc: "Has a 20% chance to poison the target. This move becomes a physical attack that makes contact if the value of ((((2 * the user's level / 5 + 2) * 90 * X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
-		shortDesc: "20% poison. Physical, contact if more damaging.",
+		shortDesc: "20% poison. Phys+contact if it would be stronger.",
 		name: "Shell Side Arm",
 		pp: 10,
 		priority: 0,
