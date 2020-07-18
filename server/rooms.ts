@@ -679,7 +679,7 @@ export abstract class BasicRoom {
 		this.roomid = newID;
 		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
-		Rooms.rooms.set(newID, (this.game ? this as unknown as GameRoom : this as ChatRoom));
+		Rooms.rooms.set(newID, this as Room);
 
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
