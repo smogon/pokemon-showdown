@@ -1439,6 +1439,7 @@ export class GlobalRoomState {
 			for (const battle in battleData[formatid]) {
 				const entry = battleData[formatid][battle];
 				Rooms.createBattle(formatid, entry);
+<<<<<<< HEAD
 =======
 =======
 		FS(`logs/battles.json`).writeUpdate(() => JSON.stringify({}));
@@ -1457,6 +1458,8 @@ export class GlobalRoomState {
 >>>>>>> Support persisting battles
 =======
 >>>>>>> stuff
+=======
+>>>>>>> that too
 			}
 		}
 	}

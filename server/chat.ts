@@ -1119,13 +1119,8 @@ export class CommandContext extends MessageContext {
 			return null;
 		}
 		const gameFilter = this.checkGameFilter();
-<<<<<<< HEAD
 		if (typeof gameFilter === 'string') {
 			if (gameFilter) this.errorReply(gameFilter);
-=======
-		if (gameFilter && !user.can('bypassall')) {
-			this.errorReply(gameFilter);
->>>>>>> stuff
 			return null;
 		}
 
