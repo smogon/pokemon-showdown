@@ -673,7 +673,7 @@ export abstract class BasicRoom {
 	 */
 	async rename(newTitle: string, newID?: RoomID, moveLogs = true, keepAliases = true) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		if ((this.type === 'battle' && moveLogs) || (this.type === 'chat' && this.game) || this.tour) return;
+		if ((this.type === 'chat' && this.game) || this.tour) return;
 
 		const oldID = this.roomid;
 		this.roomid = newID;
