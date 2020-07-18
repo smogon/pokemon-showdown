@@ -684,7 +684,7 @@ export abstract class BasicRoom {
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
 		} else if (newID === 'lobby') {
-			Rooms.lobby = this as ChatRoom;
+			Rooms.lobby = this;
 		}
 
 		if (keepAliases) {
