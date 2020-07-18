@@ -1584,7 +1584,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	dunsparce: {
-		randomBattleMoves: ["coil", "glare", "headbutt", "rockslide", "roost", "substitute"],
+		randomBattleMoves: ["coil", "glare", "headbutt", "rockslide", "roost"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["glare", "headbutt", "protect", "rockslide", "stealthrock"],
 		randomDoubleBattleLevel: 90,
@@ -3417,7 +3417,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	lilligant: {
-		randomBattleMoves: ["energyball", "gigadrain", "pollenpuff", "quiverdance", "sleeppowder"],
+		randomBattleMoves: ["gigadrain", "petaldance", "pollenpuff", "quiverdance", "sleeppowder"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["energyball", "pollenpuff", "quiverdance", "sleeppowder"],
 		randomDoubleBattleLevel: 84,
@@ -3994,7 +3994,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	reshiram: {
-		randomBattleMoves: ["blueflare", "dracometeor", "dragonpulse", "earthpower", "roost", "stoneedge"],
+		randomBattleMoves: ["blueflare", "defog", "dracometeor", "dragonpulse", "earthpower", "roost", "stoneedge"],
 		randomBattleLevel: 72,
 		randomDoubleBattleMoves: ["blueflare", "dracometeor", "earthpower", "heatwave", "roost", "tailwind"],
 		randomDoubleBattleLevel: 72,
