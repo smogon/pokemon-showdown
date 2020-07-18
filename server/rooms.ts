@@ -1413,16 +1413,11 @@ export class GlobalRoomState {
 	loadBattleState() {
 		if (!Config.persistbattles) return;
 		const battleData = JSON.parse(FS(`logs/battles.json`).readIfExistsSync() || "{}");
+		FS(`logs/battles.json`).writeUpdate(() => JSON.stringify({}));
 		for (const formatid in battleData) {
 			for (const battle in battleData[formatid]) {
 				const entry = battleData[formatid][battle];
 				const battleRoom = Rooms.createBattle(formatid, entry);
-				// ensure log is at the end of the battle so that users rejoining see it
-				setTimeout(() => {
-					battleRoom?.add(
-						`|html|<div class="broadcast-red"><b>This battle has been restored.</b><br />Use /rejoinbattle to rejoin.`
-					);
-				}, 1 * 1000);
 			}
 		}
 	}
