@@ -696,12 +696,10 @@ export abstract class BasicRoom {
 
 			// add an alias from the old id
 			Rooms.aliases.set(oldID, newID);
-			if (this.settings) {
-				if (!this.settings.aliases) this.settings.aliases = [];
-				// resolve an old (fixed) bug in /renameroom
-				if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
-				this.saveSettings();
-			}
+			if (!this.settings.aliases) this.settings.aliases = [];
+			// resolve an old (fixed) bug in /renameroom
+			if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
+			this.saveSettings();
 		}
 
 		for (const user of Object.values(this.users)) {
@@ -720,10 +718,8 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.settings) {
-			this.settings.title = newTitle;
-			this.saveSettings();
-		}
+		this.settings.title = newTitle;
+		this.saveSettings();
 
 		return (moveLogs ? this.log.rename(newID) : true);
 	}
