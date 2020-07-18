@@ -1396,18 +1396,21 @@ export class GlobalRoomState {
 	}
 	async writeBattleState() {
 		const buffer: AnyObject = {};
+		const promises = [];
 		for (const [id, room] of Rooms.rooms) {
 			if (!room.battle) continue;
 			const formatid = room.battle.format;
-			const logData = await room.battle.getLog();
-			if (!logData) continue;
 			if (!buffer[formatid]) buffer[formatid] = {};
-			buffer[formatid][id] = {
-				inputLog: logData.map(item => item.replace(/\r/g, '')).join('\n'),
-				title: room.title,
-				num: room.roomid.split('-')[2],
-			};
+			const promise = room.battle.getLog().then((log) => {
+				buffer[formatid][id] = {
+					inputLog: log.map(item => item.replace(/\r/g, '')).join('\n'),
+					title: room.title,
+					num: room.roomid.split('-')[2],
+				};
+			});
+			promises.push(promise);
 		}
+		await Promise.all(promises);
 		return FS(`logs/battles.json`).writeUpdate(() => JSON.stringify(buffer));
 	}
 	loadBattleState() {
