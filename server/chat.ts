@@ -1135,7 +1135,7 @@ export class CommandContext extends MessageContext {
 				!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
 				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)
 			) {
-				this.errorReply(this.tr("You can't send sthe same message again so soon."));
+				this.errorReply(this.tr("You can't send the same message again so soon."));
 				return null;
 			}
 			user.lastMessage = message;
