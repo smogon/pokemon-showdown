@@ -839,8 +839,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (species.isNonstandard || unreleased(species)) {
 				return [`${species.name} is not obtainable in Generation ${this.dex.gen}.`];
 			}
-			const check = this.checkSpecies(set, species, species, {});
-			if (check) return [check];
 
 			const name = set.name;
 
