@@ -1663,7 +1663,8 @@ export class GameRoom extends BasicRoom {
 			.slice(0, playerCount)
 			.map(item => toID(JSON.parse(item.slice(10)).name));
 		const formatidLine = log.filter(item => item.includes(`formatid":"`))[0];
-		const formatid = JSON.parse(formatidLine.slice(formatidLine.indexOf(' '))).formatid;
+		const spaceIndex = formatidLine.indexOf(' ');
+		const formatid = JSON.parse(formatidLine.slice(spaceIndex)).formatid;
 		return {players, playerCount, formatid};
 	}
 }
