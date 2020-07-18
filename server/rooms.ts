@@ -1417,7 +1417,7 @@ export class GlobalRoomState {
 		for (const formatid in battleData) {
 			for (const battle in battleData[formatid]) {
 				const entry = battleData[formatid][battle];
-				const battleRoom = Rooms.createBattle(formatid, entry);
+				Rooms.createBattle(formatid, entry);
 			}
 		}
 	}
