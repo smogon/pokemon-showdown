@@ -78,7 +78,7 @@ describe('Chat', function () {
 		);
 		assert.equal(
 			Chat.formatText(`[[pokemon: Oshawott]] >w<`, true),
-			`<a href="//dex.pokemonshowdown.com/pokemon/oshawott" target="_blank"><psicon pokemon="Oshawott"/></a> &gt;w&lt;`
+			`<a href="//dex.pokemonshowdown.com/pokemon/oshawott" target="_blank"><psicon pokemon="Oshawott" /></a> &gt;w&lt;`
 		);
 		assert.equal(
 			Chat.formatText(`[[item: Beast ball]] >w<`),
