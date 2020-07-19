@@ -706,8 +706,16 @@ export abstract class BasicRoom {
 			if (!this.settings.aliases) this.settings.aliases = [];
 			// resolve an old (fixed) bug in /renameroom
 			if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
-			this.saveSettings();
+		} else {
+			// clear aliases
+			for (const [alias, roomid] of Rooms.aliases.entries()) {
+				if (roomid === oldID) {
+					Rooms.aliases.delete(alias);
+				}
+			}
+			this.settings.aliases = undefined;
 		}
+		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
 			user.moveConnections(oldID, newID);
