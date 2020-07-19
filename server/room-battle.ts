@@ -879,15 +879,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const tier = this.room.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
 
-		let logID = this.roomid;
-		if (logID.endsWith('pw')) {
-			const split = logID.split('-');
-			split.pop();
-			logID = split.join('-') as RoomID;
-		}
-
 		await FS(logpath).mkdirp();
-		await FS(`${logpath}${logID}.log.json`).write(JSON.stringify(logData));
+		await FS(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
 	}
 	onConnect(user: User, connection: Connection | null = null) {

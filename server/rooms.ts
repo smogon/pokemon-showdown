@@ -666,6 +666,13 @@ export abstract class BasicRoom {
 		);
 	}
 
+	getReplayData() {
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		const end = this.roomid.length - 2;
+		const lastHyphen = this.roomid.lastIndexOf('-', end);
+		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen, end)};
+	}
+
 	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
 	 * @param moveLogs Whether or not to rename the log file. Defaults to true.
