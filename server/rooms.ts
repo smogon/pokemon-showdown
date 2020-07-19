@@ -666,18 +666,27 @@ export abstract class BasicRoom {
 		);
 	}
 
+	getReplayData() {
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		const end = this.roomid.length - 2;
+		const lastHyphen = this.roomid.lastIndexOf('-', end);
+		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen, end)};
+	}
+
 	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
+	 * @param noAlias Set this param to true to not redirect aliases and the room's old name to its new name.
 	 */
-	async rename(newTitle: string, newID?: RoomID) {
+	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		if (this.game || this.tour) return;
-
+		if (this.type === 'chat' && this.game) {
+			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
+		}
 		const oldID = this.roomid;
 		this.roomid = newID;
 		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
-		Rooms.rooms.set(newID, this as ChatRoom);
+		Rooms.rooms.set(newID, this as Room);
 
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
@@ -685,27 +694,31 @@ export abstract class BasicRoom {
 			Rooms.lobby = this as ChatRoom;
 		}
 
-		for (const [alias, roomid] of Rooms.aliases.entries()) {
-			if (roomid === oldID) {
-				Rooms.aliases.set(alias, newID);
+		if (!noAlias) {
+			for (const [alias, roomid] of Rooms.aliases.entries()) {
+				if (roomid === oldID) {
+					Rooms.aliases.set(alias, newID);
+				}
 			}
+
+			// add an alias from the old id
+			Rooms.aliases.set(oldID, newID);
+			if (!this.settings.aliases) this.settings.aliases = [];
+			// resolve an old (fixed) bug in /renameroom
+			if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
+		} else {
+			// clear aliases
+			for (const [alias, roomid] of Rooms.aliases.entries()) {
+				if (roomid === oldID) {
+					Rooms.aliases.delete(alias);
+				}
+			}
+			this.settings.aliases = undefined;
 		}
-		// add an alias from the old id
-		Rooms.aliases.set(oldID, newID);
-		if (!this.settings.aliases) this.settings.aliases = [];
-		// resolve an old (fixed) bug in /renameroom
-		if (!this.settings.aliases.includes(oldID)) this.settings.aliases.push(oldID);
 		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
-			user.inRooms.delete(oldID);
-			user.inRooms.add(newID);
-			for (const connection of user.connections) {
-				connection.inRooms.delete(oldID);
-				connection.inRooms.add(newID);
-				Sockets.roomRemove(connection.worker, oldID, connection.socketid);
-				Sockets.roomAdd(connection.worker, newID, connection.socketid);
-			}
+			user.moveConnections(oldID, newID);
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
 		}
 
