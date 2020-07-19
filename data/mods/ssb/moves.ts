@@ -855,6 +855,64 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Kingbaruk
+	leaveittotheteam: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user faints and the Pokemon brought out to replace it gets healing wish effects, 1 boost to attack, defense, special attack and special defense.",
+		shortDesc: "User faints. Replacement Healing Wish Effects, gets +1 Attack, +1 Defense, +1 Special Attack and +1 Special Defense.",
+		name: "Leave it to the team!",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryHit(pokemon, target, move) {
+			if (!this.canSwitch(pokemon.side)) {
+				delete move.selfdestruct;
+				return false;
+			}
+		},
+		selfdestruct: "ifHit",
+		sideCondition: 'leaveittotheteam',
+		effect: {
+			duration: 2,
+			onStart(side, source) {
+				this.debug('Leave it to the team started on ' + side.name);
+				this.effectData.positions = [];
+				for (const i of side.active.keys()) {
+					this.effectData.positions[i] = false;
+				}
+				this.effectData.positions[source.position] = true;
+			},
+			onRestart(side, source) {
+				this.effectData.positions[source.position] = true;
+			},
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				const positions: boolean[] = this.effectData.positions;
+				if (target.position !== this.effectData.sourcePosition) {
+					return;
+				}
+				if (!target.fainted) {
+					target.heal(target.maxhp);
+					this.boost({atk: 1, def: 1, spa: 1, spd: 1}, target);
+					target.setStatus('');
+					for (const moveSlot of target.moveSlots) {
+						moveSlot.pp = moveSlot.maxpp;
+					}
+					this.add('-heal', target, target.getHealth, '[from] move: Leave it to the team');
+					positions[target.position] = false;
+				}
+				if (!positions.some(affected => affected === true)) {
+					target.side.removeSideCondition('leaveittotheteam');
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+	},
+
 	// KingSwordYT
 	clashofpangoros: {
 		accuracy: 100,

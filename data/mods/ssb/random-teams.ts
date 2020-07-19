@@ -192,6 +192,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cozy Cuddle',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: 1,
 	},
+	Kingbaruk: {
+		species: 'Stonjourner', ability: 'Sturdy', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Diamond Storm', ['Superpower', 'Earthquake'], 'King\s Shield'],
+		signatureMove: 'Leave it to the team!',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	KingSwordYT: {
 		species: 'Pangoro', ability: 'Bamboo Kingdom', item: 'Rocky Helmet', gender: 'M',
 		moves: ['Body Press', 'Spiky Shield', 'Shore Up'],

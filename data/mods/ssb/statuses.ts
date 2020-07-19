@@ -390,6 +390,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Kaiju Bunny')}|Wow, okay, r00d ￣(ಥㅅಥ)￣`);
 		},
 	},
+	kingbaruk: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Kingbaruk')}|:cute:`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Kingbaruk')}|//none`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Kingbaruk')}|Fijne avond nog`);
+		},
+	},
 	kingswordyt: {
 		noCopy: true,
 		onStart(source) {
