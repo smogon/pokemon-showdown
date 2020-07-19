@@ -673,8 +673,9 @@ export abstract class BasicRoom {
 	 */
 	async rename(newTitle: string, newID?: RoomID, keepAliases = true) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		if ((this.type === 'chat' && this.game) || this.tour) return;
-
+		if (this.type === 'chat' && this.game) {
+			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
+		}
 		const oldID = this.roomid;
 		this.roomid = newID;
 		this.title = newTitle;
