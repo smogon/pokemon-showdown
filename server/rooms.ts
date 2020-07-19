@@ -671,7 +671,7 @@ export abstract class BasicRoom {
 	 * @param moveLogs Whether or not to rename the log file. Defaults to true.
 	 * @param keepAliases Whether or not to point the room's aliases and name to its new name. Defaults to true.
 	 */
-	async rename(newTitle: string, newID?: RoomID, moveLogs = true, keepAliases = true) {
+	async rename(newTitle: string, newID?: RoomID, keepAliases = true) {
 		if (!newID) newID = toID(newTitle) as RoomID;
 		if ((this.type === 'chat' && this.game) || this.tour) return;
 
@@ -684,7 +684,7 @@ export abstract class BasicRoom {
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
 		} else if (newID === 'lobby') {
-			Rooms.lobby = this;
+			Rooms.lobby = this as ChatRoom;
 		}
 
 		if (keepAliases) {
@@ -721,7 +721,7 @@ export abstract class BasicRoom {
 		this.settings.title = newTitle;
 		this.saveSettings();
 
-		return (moveLogs ? this.log.rename(newID) : true);
+		return this.log.rename(newID);
 	}
 
 	onConnect(user: User, connection: Connection) {
