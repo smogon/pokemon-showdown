@@ -675,10 +675,9 @@ export abstract class BasicRoom {
 
 	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
-	 * @param moveLogs Whether or not to rename the log file. Defaults to true.
-	 * @param keepAliases Whether or not to point the room's aliases and name to its new name. Defaults to true.
+	 * @param noAlias Set this param to true to not redirect aliases and the room's old name to its new name.
 	 */
-	async rename(newTitle: string, newID?: RoomID, keepAliases = true) {
+	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
 		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
@@ -695,7 +694,7 @@ export abstract class BasicRoom {
 			Rooms.lobby = this as ChatRoom;
 		}
 
-		if (keepAliases) {
+		if (!noAlias) {
 			for (const [alias, roomid] of Rooms.aliases.entries()) {
 				if (roomid === oldID) {
 					Rooms.aliases.set(alias, newID);
