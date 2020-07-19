@@ -878,8 +878,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const logfolder = logsubfolder.split('-', 2).join('-');
 		const tier = this.room.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
+
 		await FS(logpath).mkdirp();
-		await FS(logpath + this.room.roomid + '.log.json').write(JSON.stringify(logData));
+		await FS(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
 	}
 	onConnect(user: User, connection: Connection | null = null) {
