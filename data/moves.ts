@@ -8577,7 +8577,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerbug: {
@@ -8596,7 +8595,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerdark: {
@@ -8615,7 +8613,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerdragon: {
@@ -8634,7 +8631,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerelectric: {
@@ -8653,7 +8649,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerfighting: {
@@ -8672,7 +8667,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerfire: {
@@ -8691,7 +8685,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerflying: {
@@ -8710,7 +8703,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerghost: {
@@ -8729,7 +8721,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowergrass: {
@@ -8748,7 +8739,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerground: {
@@ -8767,7 +8757,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerice: {
@@ -8786,7 +8775,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerpoison: {
@@ -8805,7 +8793,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerpsychic: {
@@ -8824,7 +8811,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerrock: {
@@ -8843,7 +8829,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowersteel: {
@@ -8862,7 +8847,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	hiddenpowerwater: {
@@ -8881,7 +8865,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		maxMove: {basePower: 80},
 		contestType: "Clever",
 	},
 	highhorsepower: {
@@ -9806,7 +9789,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		maxMove: {basePower: 90},
 		contestType: "Beautiful",
 	},
 	jumpkick: {
