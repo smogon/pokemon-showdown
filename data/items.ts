@@ -5323,7 +5323,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		desc: "Holder's Normal-type attacks have 1.2x power.",
 	},
 	silverpowder: {
-		name: "SilverPowder",
+		name: "Silver Powder",
 		spritenum: 447,
 		fling: {
 			basePower: 10,
