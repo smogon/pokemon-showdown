@@ -58,7 +58,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Ubers Clause'],
-		banlist: [],
+		banlist: ['Baton Pass'],
 		restricted: ['Ditto', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zekrom'],
 	},
 	{
