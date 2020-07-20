@@ -153,6 +153,11 @@ The beginning of a battle will look something like this:
 
 > The battle has ended in a tie.
 
+`|t:|TIMESTAMP`
+
+> The current UNIX timestamp (the number of seconds since 1970) - useful for determining
+> when events occured in real time.
+
 ### Identifying Pokémon
 
 Pokémon will be identified by a Pokémon ID (generally labeled `POKEMON` in
