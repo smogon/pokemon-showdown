@@ -1773,7 +1773,7 @@ export const commands: ChatCommands = {
 			`<li><code>- Drizzle ++ Swift Swim</code> ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`,
 			`<br/>For more information, <a href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">visit this page.</a><br/>`,
 		];
-		let rulesets = [
+		const rulesets = [
 			`<h2>Rules, Mods, and Clauses</h2>`,
 			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
 			`<ul>`,
