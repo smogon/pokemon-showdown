@@ -480,6 +480,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	},
 	compoundeyes: {
 		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
+		onModifyAccuracyPriority: 9,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
@@ -1473,10 +1474,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk) {
 			return this.modify(atk, 1.5);
 		},
-		onModifyMovePriority: -1,
-		onModifyMove(move) {
+		onModifyAccuracyPriority: 7,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
 			if (move.category === 'Physical' && typeof move.accuracy === 'number') {
-				move.accuracy *= 0.8;
+				return accuracy * 0.8;
 			}
 		},
 		name: "Hustle",
@@ -3265,6 +3266,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
+		onModifyAccuracyPriority: 8,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			if (this.field.isWeather('sandstorm')) {
@@ -3612,6 +3614,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		onModifyAccuracyPriority: 8,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			if (this.field.isWeather('hail')) {
@@ -4050,6 +4053,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	},
 	tangledfeet: {
 		shortDesc: "This Pokemon's evasiveness is doubled as long as it is confused.",
+		onModifyAccuracyPriority: 6,
 		onModifyAccuracy(accuracy, target) {
 			if (typeof accuracy !== 'number') return;
 			if (target?.volatiles['confusion']) {
