@@ -684,7 +684,7 @@ export const commands: ChatCommands = {
 		this.stafflog(`${user.name} used /endemergency.`);
 	},
 
-	kill(target, room, user) {
+	async kill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		if (Rooms.global.lockdown !== true) {
@@ -701,9 +701,10 @@ export const commands: ChatCommands = {
 
 		logRoom.roomlog(`${user.name} used /kill`);
 
-		void logRoom.log.roomlogStream.writeEnd().then(() => {
-			void Rooms.global.kill();
-		});
+		void Promise.all([
+			logRoom.log.roomlogStream.writeEnd(),
+			Rooms.global.kill(),
+		]);
 
 		// In the case the above never terminates
 		setTimeout(() => {
