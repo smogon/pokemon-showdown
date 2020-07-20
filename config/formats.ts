@@ -210,6 +210,21 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] Armor Beginnings",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3667440/">Armor Beginnings Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Standard GBU', 'Isle of Armor Pokedex'],
+		minSourceGen: 8,
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
