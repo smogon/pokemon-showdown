@@ -1751,7 +1751,7 @@ export const commands: ChatCommands = {
 		const rules = Object.values(Dex.data.Formats).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
 		let rulesHTML = `|html|<div class="infobox infobox-limited">`;
-		let basics = [
+		const basics = [
 			`<h2>Custom Rules</h2>`,
 			`Pokémon Showdown supports custom rules in three ways:`,
 			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
@@ -1774,12 +1774,12 @@ export const commands: ChatCommands = {
 			`<strong>Complex Bans</strong>`,
 			`<ul><li><code>- Blaziken + Speed Boost</code> ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)</li>`,
 			`<li><code>- Drizzle ++ Swift Swim</code> ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`,
-			`<br/>For more information, <a href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">visit this page.</a><br/>` 
+			`<br/>For more information, <a href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">visit this page.</a><br/>`,
 		];
-		var rulesets = [
+		let rulesets = [
 			`<h2>Rulelist</h2>`,
 			`The following is the rule list coded for PS and their descriptions:`,
-			`<ul>`
+			`<ul>`,
 		];
 		for (const rule of rules) {
 			rulesets.push(`<li><code>${rule.name}</code>: ${rule.desc}</li>`);
@@ -1789,7 +1789,7 @@ export const commands: ChatCommands = {
 		this.sendReply(rulesHTML);
 	},
 	battleruleshelp: [
-		`/battlerules - Provides information on the rules that can be added to tournament and challenge battles.`
+		`/battlerules - Provides information on the rules that can be added to tournament and challenge battles.`,
 	],
 
 	banlists: 'formathelp',
