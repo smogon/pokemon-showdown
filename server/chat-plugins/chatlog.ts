@@ -528,14 +528,8 @@ export const LogSearcher = new class {
 		}
 		return {results, total};
 	}
-
-	async ripgrepSearch(
-		roomid: RoomID,
-		search: string,
-		limit?: number | null,
-		date?: string | null
-	) {
-		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
+	async ripgrepSearchMonth(roomid: RoomID, search: string, limit: number, date: string) {
+		let results;
 		try {
 			const {stdout} = await execFile('rg', [
 				'-e', this.constructRegex(search),
@@ -547,11 +541,37 @@ export const LogSearcher = new class {
 				maxBuffer: Infinity,
 				cwd: path.normalize(`${__dirname}/../../`),
 			});
-			return this.render(stdout.split('--'), roomid, search, limit, date);
+			results = stdout.split('--');
 		} catch (e) {
-			if (e.stdout) return this.render(e.stdout.split('--'), roomid, search, limit, date);
+			if (e.stdout) results = e.stdout.split('--');
 			throw e;
 		}
+		const count = results.length;
+		return {results, count};
+	}
+	async ripgrepSearch(
+		roomid: RoomID,
+		search: string,
+		limit?: number | null,
+		date?: string | null
+	) {
+		const months = date ? [date] : await new LogReaderRoom(roomid).listMonths();
+		let count = 0;
+		let results: string[] = [];
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
+		if (!date) date = 'all';
+		while (count < MAX_RESULTS) {
+			const month = months.shift();
+			if (!month) break;
+			const output = await this.ripgrepSearchMonth(roomid, search, limit, month);
+			results = results.concat(output.results);
+			count += output.count;
+		}
+		if (count > MAX_RESULTS) {
+			const diff = count - MAX_RESULTS;
+			results = results.slice(0, -diff);
+		}
+		return this.render(results, roomid, search, limit, date);
 	}
 
 	render(results: string[], roomid: RoomID, search: string, limit: number, month?: string | null) {
