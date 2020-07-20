@@ -5088,7 +5088,7 @@
 				"species": "Raikou",
 				"item": ["Leftovers"],
 				"ability": ["Pressure"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Calm Mind"], ["Thunderbolt"], ["Hidden Power Ice"], ["Substitute"]]
 			}]
