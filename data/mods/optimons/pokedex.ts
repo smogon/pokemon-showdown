@@ -173,4 +173,26 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 70, def: 90, spa: 115, spd: 90, spe: 100},
 		abilities: {0: "Levitate", 1: "Adaptability", H: "Berserk"},
 	},
+	marowak: {
+		inherit: true,
+		types: ["Ground", "Rock"],
+		baseStats: {hp: 70, atk: 80, def: 120, spa: 50, spd: 80, spe: 55},
+		abilities: {0: "Rock Head", 1: "Unnerve", H: "Solid Rock"},
+	},
+	exeggutor: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 75, def: 85, spa: 125, spd: 75, spe: 75},
+		abilities: {0: "Chlorophyll", 1: "Regenerator", H: "Competitive"},
+	},
+	golduck: {
+		inherit: true,
+		types: ["Water", "Psychic"],
+		baseStats: {hp: 80, atk: 82, def: 78, spa: 95, spd: 80, spe: 105},
+		abilities: {0: "Dazzling", 1: "Cloud Nine", H: "Swift Swim"},
+	},
+	emolga: {
+		inherit: true,
+		baseStats: {hp: 55, atk: 85, def: 60, spa: 105, spd: 60, spe: 135},
+		abilities: {0: "Static", 1: "Motor Drive", H: "Trickster"},
+	},
 };
