@@ -8,13 +8,13 @@
 import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
 import * as child_process from 'child_process';
-import * as Util from 'util';
+import * as util from 'util';
 import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
 
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
-const execFile = Util.promisify(child_process.execFile);
+const execFile = util.promisify(child_process.execFile);
 
 export class LogReaderRoom {
 	roomid: RoomID;
@@ -528,12 +528,12 @@ export const LogSearcher = new class {
 		}
 		return {results, total};
 	}
-	async ripgrepSearchMonth(roomid: RoomID, search: string, limit: number, date: string) {
+	async ripgrepSearchMonth(roomid: RoomID, search: string, limit: number, month: string) {
 		let results;
 		try {
 			const {stdout} = await execFile('rg', [
 				'-e', this.constructRegex(search),
-				`logs/chat/${roomid}${toID(date) === 'all' ? '' : `/${date}`}`,
+				`logs/chat/${roomid}/${month}`,
 				'-C', '3',
 				'-m', `${limit}`,
 				'-P',
