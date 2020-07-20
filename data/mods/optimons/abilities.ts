@@ -62,4 +62,29 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	trickster: {
+		shortDesc: "Switches out after attacking or being attacked. Moves have 1.3x power.",
+		name: "Trickster",
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category !== "Status") {
+				return this.chainModify([0x14CD, 0x1000]);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== 'Status' && !target.switchFlag) {
+				move.selfSwitch = true;
+			}
+		},
+		onAfterMoveSecondaryPriority: 2,
+		onAfterMoveSecondary(target, source, move) {
+			if (move && move.category !== 'Status') {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.switchFlag === true) return;
+				}
+				target.switchFlag = true;
+				source.switchFlag = false;
+			}
+		},
+	},
 };
