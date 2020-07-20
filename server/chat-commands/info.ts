@@ -1755,7 +1755,7 @@ export const commands: ChatCommands = {
 			`<h2>Custom Rules</h2>`,
 			`Pokémon Showdown supports custom rules in three ways:`,
 			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
-			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li>`,
+			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li></ul>`,
 			`<h2>Bans</h2>`,
 			`Bans are just a <code>-</code> followed by the thing you want to ban.</li><br/>`,
 			`<strong>Individual Bans</strong><br/>`,
