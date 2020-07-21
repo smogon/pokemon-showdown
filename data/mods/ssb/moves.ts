@@ -1815,6 +1815,33 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Shadecession
+	shadeuppercut: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "This move ignores type effectiveness, substitutes, opposing side's Reflect, Light Screen, Safeguard, Mist and Aurora Veil.",
+		shortDesc: "Ignores type effectiveness, substitutes, opposing side's Reflect, Light Screen, Safeguard, Mist and Aurora Veil.",
+		name: "Shade Uppercut",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sky Uppercut', target);
+			this.add('-anim', source, 'Shadow Sneak', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			return 0;
+		},
+		infiltrates: true,
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
+
 	// Sunny
 	oneforallfullcowl100: {
 		accuracy: 100,

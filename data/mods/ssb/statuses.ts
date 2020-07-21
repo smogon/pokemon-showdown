@@ -695,6 +695,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me`);
 		},
 	},
+	shadecession: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Shadecession')}|Better put on my Shadecessions`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('Shadecession')}|⌐■_■`);
+		},
+		onFaint(pokemon) {
+			this.add(`c|${getName('Shadecession')}|ah, gg fam`);
+		},
+	},
 	sunny: {
 		noCopy: true,
 		onStart() {

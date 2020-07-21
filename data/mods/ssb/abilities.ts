@@ -732,6 +732,46 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Shadecession
+	shadydeal: {
+		desc: "on entering the battle, this mon gains a 1 stage boost to a random stat that isn't SpA and 2 random type immunities that are displayed to the opponent.",
+		shortDesc: "on Switch in, oosts Random Stat other than SpA o.",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Shady Deal');
+			const stats: BoostName[] = [];
+			let stat: BoostName;
+			for (stat in pokemon.boosts) {
+				const noBoost: string[] = ['accuracy', 'evasion', 'spa'];
+				if (!noBoost.includes(stat) && pokemon.boosts[stat] < 6) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				const randomStat = this.sample(stats);
+				const boost: SparseBoostsTable = {};
+				boost[randomStat] = 1;
+				this.boost(boost);
+			}
+			pokemon.addVolatile('shadydeal');
+		},
+		effect: {
+			onStart(pokemon) {
+				const typeList = Object.keys(this.dex.data.TypeChart);
+				const firstTypeIndex = this.random(typeList.length);
+				const secondType = typeList.slice(0, firstTypeIndex).concat(typeList.slice(firstTypeIndex + 1))[this.random(typeList.length - 1)];
+				this.effectData.immunities = [typeList[firstTypeIndex], secondType];
+				this.add("-message", `Shadecession is now immune to ${this.effectData.immunities[0]} and ${this.effectData.immunities[1]} types!`);
+			},
+			onTryHit(target, source, move) {
+				if (target !== source && this.effectData.immunities.includes(move.type)) {
+					this.add('-immune', target, '[from] ability: Shady Deal');
+					return null;
+				}
+			},
+		},
+		name: "Shady Deal",
+	},
+
 	// Sunny
 	oneforall: {
 		desc: "This Pokemon's contact moves have their power multiplied by 1.3. If this Pokemon KOes the target with a recoil move, it regains 25% of its max HP.",

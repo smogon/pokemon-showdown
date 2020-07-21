@@ -316,6 +316,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Disconnect',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
 	},
+	Shadecession: {
+		species: 'Honchkrow', ability: 'Shady Deal', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Knock Off', 'Roost', 'Brave Bird'],
+		signatureMove: 'Shade Uppercut',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
+	},
 	Sunny: {
 		species: 'Charizard', ability: 'Blaze', item: 'Charizardite X', gender: 'M',
 		moves: ['Earthquake', ['Double Edge', 'Flare Blitz'], 'Roost'],
