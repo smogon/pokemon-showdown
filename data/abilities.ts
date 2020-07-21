@@ -480,7 +480,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	},
 	compoundeyes: {
 		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
-		onModifyAccuracyPriority: 9,
+		onSourceModifyAccuracyPriority: 9,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
@@ -1026,7 +1026,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onModifySpDPriority: 4,
+		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
 			if (this.effectData.target.baseSpecies.baseSpecies !== 'Cherrim') return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
@@ -1474,9 +1474,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk) {
 			return this.modify(atk, 1.5);
 		},
-		onModifyAccuracyPriority: 7,
+		onSourceModifyAccuracyPriority: 7,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
-			if (move.category === 'Physical' && typeof move.accuracy === 'number') {
+			if (move.category === 'Physical' && typeof accuracy === 'number') {
 				return accuracy * 0.8;
 			}
 		},
@@ -1533,7 +1533,6 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	iceface: {
 		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
 		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
-		onDamagePriority: 1,
 		onStart(pokemon) {
 			if (this.field.isWeather('hail') && pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
@@ -1541,6 +1540,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
+		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (
 				effect && effect.effectType === 'Move' && effect.category === 'Physical' &&
@@ -4422,13 +4422,13 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	waterbubble: {
 		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
 		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
-		onModifyAtkPriority: 5,
+		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
+		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
@@ -4564,7 +4564,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "Status moves with accuracy checks are 50% accurate when used on this Pokemon.",
 		onModifyAccuracyPriority: 10,
 		onModifyAccuracy(accuracy, target, source, move) {
-			if (move.category === 'Status' && typeof move.accuracy === 'number') {
+			if (move.category === 'Status' && typeof accuracy === 'number') {
 				this.debug('Wonder Skin - setting accuracy to 50');
 				return 50;
 			}
