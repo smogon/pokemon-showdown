@@ -290,6 +290,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	felucia: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('Felucia')}|battlesignup! I dropped my dice somewhere and now all I can do is make you play with them (join using %join one)`);
+			if (source.illusion) return;
+			this.add('-start', source, 'typechange', 'Psychic/Normal');
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Felucia')}|battlesignup: I lost connection to a player so I guess I'll get a new one (/me in to sub)`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Felucia')}|%remp Felucia`);
+		},
+	},
 	flare: {
 		noCopy: true,
 		onStart() {

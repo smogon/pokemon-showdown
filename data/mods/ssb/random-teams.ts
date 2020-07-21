@@ -144,6 +144,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Soup-Stealing 7-Star Strike: Redux',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: 1,
 	},
+	Felucia: {
+		species: 'Uxie', ability: 'Regenerator', item: 'Red Card', gender: 'F',
+		moves: ['Strength Sap', ['Psyshock', 'Night Shade'], ['Thief', 'Toxic']],
+		signatureMove: 'Rigged Dice',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
+	},
 	Flare: {
 		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
 		moves: ['Sacred Sword', 'Knock Off', 'U-turn'],

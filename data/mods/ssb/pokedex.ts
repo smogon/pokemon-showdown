@@ -26,6 +26,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ['Grass', 'Fairy'],
 	},
+	// Felucia
+	uxie: {
+		inherit: true,
+		types: ["Psychic", "Normal"],
+	},
 	// Frostyicelad
 	frosmoth: {
 		inherit: true,

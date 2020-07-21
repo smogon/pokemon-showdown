@@ -631,6 +631,43 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Felucia
+	riggeddice: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Inverts target's stat boosts if they have any; taunts otherwise. User then switches out.",
+		shortDesc: "Inverts target's stat boosts if they have any; taunts otherwise. User then switches out.",
+		name: "Rigged Dice",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Smart Strike', source);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			let i: BoostName;
+			for (i in target.boosts) {
+				if (target.boosts[i] === 0) continue;
+				target.boosts[i] = -target.boosts[i];
+				success = true;
+			}
+			if (!success) {
+				this.add('-invertboost', target, '[from] move: Rigged Dice');
+			} else {
+				target.addVolatile("taunt");
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+	},
+	
 	// Flare
 	krisenbon: {
 		accuracy: 100,
