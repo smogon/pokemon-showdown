@@ -43,7 +43,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		onBegin() {
 			if (this.rated && this.format.id === 'gen8ou') {
-				this.add('html', '<div class="broadcast-blue"><strong>OU is currently suspecting Magearna! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/3667669/">suspect thread</a>.</strong></div>');
+				this.add('html', '<div class="broadcast-blue"><strong>OU is currently suspecting Magearna! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3667669/">suspect thread</a>.</strong></div>');
 			}
 		},
 	},
