@@ -666,6 +666,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
+	sectoniaservant: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('SectoniaServant')}|I love one (1) queen bee`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('SectoniaServant')}|My search for my lost queen continues....`);
+		},
+		onFaint(pokemon) {
+			this.add(`c|${getName('SectoniaServant')}|NOOOOOO NOT THE JELLY BABY`);
+		},
+	},
 	segmr: {
 		noCopy: true,
 		onStart() {
