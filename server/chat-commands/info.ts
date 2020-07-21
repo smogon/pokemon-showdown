@@ -2615,12 +2615,12 @@ export const pages: PageTable = {
 		const rules = Object.values(Dex.data.Formats).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
 		this.title = "Custom Rules";
-		let rulesHTML = `<div clas="pad"><h2>Custom Rules in challenges and tournaments</h2>`;
+		let rulesHTML = `<div clas="pad"><h1>Custom Rules in challenges and tournaments</h1>`;
 		const basics = [
 			`<p>Pok&eacute;mon Showdown! supports custom rules in three ways:</p>`,
 			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
 			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li></ul>`,
-			`<h2>Bans</h2>`,
+			`<h2><u>Bans</u></h2>`,
 			`<p>Bans are just a <code>-</code> followed by the thing you want to ban.</p>`,
 			`<h3>Individual Bans</h3>`,
 			`<ul><li><code>- Arceus</code> ban a Pok&eacute;mon (including all formes)</li>`,
@@ -2629,16 +2629,16 @@ export const pages: PageTable = {
 			`<h3>Group Bans</h3>`,
 			`<ul><li><code>- OU</code> or <code>- DUU</code> Ban a tier</li>`,
 			`<li><code>- Mega</code> or <code>- CAP</code> Ban a Pok&eacute;mon Category</li></ul>`,
-			`<h2>Unbans</h2>`,
-			`<p>Using a <code>+</code> instead of a <code>-</code> Unbans that category.</p>`,
-			`<ul><li><code>+ Blaziken</code> Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
 			`<h3>Complex Bans</h3>`,
 			`<ul><li><code>- Blaziken + Speed Boost</code> ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)</li>`,
 			`<li><code>- Drizzle ++ Swift Swim</code> ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`,
+			`<h2><u>Unbans</u></h2>`,
+			`<p>Using a <code>+</code> instead of a <code>-</code> Unbans that category.</p>`,
+			`<ul><li><code>+ Blaziken</code> Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
 			`<br/>For more information, <a href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">visit this page.</a><br/>`,
 		];
 		const rulesets = [
-			`<h2>Rules, Mods, and Clauses</h2>`,
+			`<h2><u>Rules, Mods, and Clauses</u></h2>`,
 			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
 			`<ul>`,
 		];
