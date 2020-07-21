@@ -20,6 +20,11 @@ const TEAMS = [[
 	{species: 'Snorlax', ability: 'thickfat', item: 'leftovers', moves: ['rest']},
 ]];
 
+function normalizeState(state) {
+	state.log = state.log.map(line => line.startsWith(`|t:|`) ? `|t:|` : line);
+	return state;
+}
+
 describe('State', function () {
 	describe('Battles', function () {
 		it('should be able to be serialized and deserialized without affecting functionality (slow)', function () {
@@ -31,7 +36,7 @@ describe('State', function () {
 				control.makeChoices();
 				test.makeChoices();
 
-				assert.deepEqual(test.toJSON(), control.toJSON());
+				assert.deepEqual(normalizeState(test.toJSON()), normalizeState(control.toJSON()));
 
 				// Roundtrip the test battle to confirm it still works.
 				const send = test.send;
