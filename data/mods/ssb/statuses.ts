@@ -756,6 +756,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Trickster')}|(ಥ﹏ಥ)`);
 		},
 	},
+	vivalospride: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('vivalospride')}|hola mi amore`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('vivalospride')}|no hablo español`);
+		},
+		onFaint() {
+			this.add(`c|${getName('vivalospride')}|classic honestly`);
+		},
+	},
 	yuki: {
 		noCopy: true,
 		onStart(target, pokemon) {

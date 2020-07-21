@@ -1991,6 +1991,32 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		contestType: "Tough",
 	},
 
+	// vivalospride
+	dripbayless: {
+		accuracy: true,
+		basePower: 85,
+		category: "Special",
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Super effective on Water.",
+		name: "DRIP BAYLESS",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Lava Plume', target);
+			this.add('-anim', source, 'Sunny Day', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+
 	// yuki
 	classchange: {
 		accuracy: true,

@@ -352,6 +352,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Soul-Shattering Stare',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', shiny: true,
 	},
+	vivalospride: {
+		species: 'Darmanitan-Zen', ability: 'Regenerator', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Teleport', 'Future Sight', 'Toxic'],
+		signatureMove: 'DRIP BAYLESS',
+		evs: {hp: 252, spa: 252, def: 4}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
 		moves: ['Quick Attack'],
