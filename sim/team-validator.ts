@@ -1844,7 +1844,7 @@ export class TeamValidator {
 							// falls through to LMT check below
 						} else if (level >= 5 && learnedGen === 3 && species.eggGroups && species.eggGroups[0] !== 'Undiscovered') {
 							// Pomeg Glitch
-						} else if ((!species.gender || species.gender === 'F') && learnedGen >= 2) {
+						} else if ((!species.gender || species.gender === 'F') && learnedGen >= 2 && species.eggGroups[0] !== 'Undiscovered') {
 							// available as egg move
 							learned = learnedGen + 'Eany';
 							// falls through to E check below
