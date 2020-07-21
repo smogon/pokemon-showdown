@@ -428,7 +428,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	thickfat: {
 		shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
-		onBasePowerPriority: 1,
+		onSourceBasePowerPriority: 1,
 		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				return this.chainModify(0.5);

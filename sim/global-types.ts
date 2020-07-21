@@ -722,6 +722,8 @@ interface EventMethods {
 	onAnyFaintPriority?: number;
 	onAllyBasePowerPriority?: number;
 	onAllyModifyAtkPriority?: number;
+	onAllyModifySpAPriority?: number;
+	onAllyModifySpDPriority?: number;
 	onAttractPriority?: number;
 	onBasePowerPriority?: number;
 	onBeforeMovePriority?: number;
@@ -753,6 +755,7 @@ interface EventMethods {
 	onResidualSubOrder?: number;
 	onSourceBasePowerPriority?: number;
 	onSourceInvulnerabilityPriority?: number;
+	onSourceModifyAccuracyPriority?: number;
 	onSourceModifyAtkPriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
