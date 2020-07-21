@@ -1766,7 +1766,7 @@ export const commands: ChatCommands = {
 			`<ul><li><code>- OU</code> or <code>- DUU</code> Ban a tier</li>`,
 			`<li><code>- Mega</code> or <code>- CAP</code> Ban a Pok&eacute;mon Category</li></ul>`,
 			`<h2>Unbans</h2>`,
-			`<p>Using a <code>+</code> instead of a <code>-</code> Unbans that category.</p>`,
+			`<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`,
 			`<ul><li><code>+ Blaziken</code> Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
 			`<h3>Complex Bans</h3>`,
 			`<ul><li><code>- Blaziken + Speed Boost</code> ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)</li>`,
