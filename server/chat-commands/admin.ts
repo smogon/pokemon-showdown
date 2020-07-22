@@ -592,7 +592,7 @@ export const commands: ChatCommands = {
 
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type === 'battle') curRoom.rated = 0;
-			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+			curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
@@ -615,7 +615,7 @@ export const commands: ChatCommands = {
 		);
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+			curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
@@ -689,7 +689,7 @@ export const commands: ChatCommands = {
 			`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
 		if (Rooms.global.lockdown === true) {
 			for (const curRoom of Rooms.rooms.values()) {
-				if (curRoom.roomid !== 'global') curRoom.addRaw(message).update();
+				curRoom.addRaw(message).update();
 			}
 			for (const curUser of Users.users.values()) {
 				curUser.send(`|pm|&|${curUser.group}${curUser.name}|/raw ${message}`);
@@ -714,9 +714,7 @@ export const commands: ChatCommands = {
 		}
 		Config.emergency = true;
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.roomid !== 'global') {
-				curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
-			}
+			curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
 		}
 
 		this.stafflog(`${user.name} used /emergency.`);

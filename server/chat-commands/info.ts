@@ -59,7 +59,6 @@ export const commands: ChatCommands = {
 		let hiddenrooms = ``;
 		let privaterooms = ``;
 		for (const roomid of targetUser.inRooms) {
-			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
 			const authSymbol = targetRoom.auth.getDirect(targetUser.id).trim();
