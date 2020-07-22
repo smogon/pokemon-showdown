@@ -337,7 +337,16 @@ export const BattleScripts: BattleScriptsData = {
 
 		this.setActiveMove(move, pokemon, targets[0]);
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
+		let hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
+			return false;
+		}
+
+		hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
@@ -346,15 +355,6 @@ export const BattleScripts: BattleScriptsData = {
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
-
-		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
-		if (!hitResult) {
-			if (hitResult === false) {
-				this.add('-fail', pokemon);
-				this.attrLastMove('[still]');
-			}
-			return false;
-		}
 
 		let atLeastOneFailure!: boolean;
 		for (const step of moveSteps) {
@@ -574,6 +574,10 @@ export const BattleScripts: BattleScriptsData = {
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return false;
+		}
+
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
@@ -583,10 +587,6 @@ export const BattleScripts: BattleScriptsData = {
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
-
-		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
-			return false;
-		}
 
 		if (move.target === 'all') {
 			hitResult = this.runEvent('TryHitField', target, pokemon, move);
