@@ -178,7 +178,6 @@ export const IPTools = new class {
 		'tmobile.mobile-nohost',
 		'tele2.se',
 		'ideacellular.mobile-nohost',
-		'as13285.net',
 		'att.net',
 	]);
 	readonly connectionTestCache = new Map<string, boolean>();
@@ -666,7 +665,7 @@ export const IPTools = new class {
 			'137.63.71.51', '78.60.203.75', '188.186.4.177', '87.92.64.0', '88.119.43.142', '24.135.56.196',
 			'31.168.98.68', '78.62.214.242', '83.238.39.241', '84.22.63.122', '87.255.79.223', '46.55.25.191',
 			'91.181.235.31', '188.124.93.166', '84.236.2.166', '82.200.233.4', '60.68.175.196', '158.181.227.63',
-			'38.95.109.66',
+			'38.95.109.66', '113.177.27.217', '80.187.140.26',
 		].includes(ip)) {
 			// single-IP open proxies
 			return 'proxy';

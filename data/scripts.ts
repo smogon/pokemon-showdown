@@ -96,6 +96,7 @@ export const BattleScripts: BattleScriptsData = {
 			pokemon.side.zMoveUsed = true;
 		}
 		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+		this.lastSuccessfulMoveThisTurn = moveDidSomething ? this.activeMove && this.activeMove.id : null;
 		if (this.activeMove) move = this.activeMove;
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
@@ -513,7 +514,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.breaksProtect) {
 			for (const target of targets) {
 				let broke = false;
-				for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
+				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
 				if (this.gen >= 6 || target.side !== pokemon.side) {
@@ -522,8 +523,8 @@ export const BattleScripts: BattleScriptsData = {
 					}
 				}
 				if (broke) {
-					if (move.id === 'feint') {
-						this.add('-activate', target, 'move: Feint');
+					if (['feint', 'gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
+						this.add('-activate', target, 'move: ' + move.name);
 					} else {
 						this.add('-activate', target, 'move: ' + move.name, '[broken]');
 					}
@@ -1264,10 +1265,14 @@ export const BattleScripts: BattleScriptsData = {
 				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
-			maxMove.basePower = move.maxMove.basePower;
+			if (!['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) {
+				maxMove.basePower = move.maxMove.basePower;
+			}
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;
+		// copy the priority for Psychic Terrain, Quick Guard
+		maxMove.priority = move.priority;
 		maxMove.isZOrMaxPowered = true;
 		return maxMove;
 	},

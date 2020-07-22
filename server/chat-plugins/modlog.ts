@@ -110,7 +110,7 @@ function checkRipgrepAvailability() {
 }
 
 function getMoreButton(
-	roomid: RoomID, search: string, useExactSearch: boolean,
+	roomid: RoomID | 'global', search: string, useExactSearch: boolean,
 	lines: number, maxLines: number, onlyPunishments: boolean
 ) {
 	let newLines = 0;
@@ -160,7 +160,7 @@ async function runModlog(
 		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	} else {
 		searchString = toID(searchString);
-		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
+		regexString = `[^a-zA-Z0-9]${[...searchString].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 	if (onlyPunishments) regexString = `${PUNISHMENTS_REGEX_STRING}${regexString}`;
 
@@ -215,7 +215,7 @@ async function runRipgrepModlog(paths: string[], regexString: string, results: S
 }
 
 function prettifyResults(
-	resultArray: string[], roomid: RoomID, searchString: string, exactSearch: boolean,
+	resultArray: string[], roomid: RoomID | 'global', searchString: string, exactSearch: boolean,
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
 ) {
 	if (resultArray === null) {
@@ -273,7 +273,8 @@ function prettifyResults(
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
-		const searchStringDescription = `${exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`}`;
+		const searchStringDescription = exactSearch ?
+			Utils.html`containing the string "${searchString}"` : Utils.html`matching the username "${searchString}"`;
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
 			`|pagehtml|<div class="pad"><p>The last ${scope}${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
 			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
@@ -286,7 +287,7 @@ function prettifyResults(
 }
 
 async function getModlog(
-	connection: Connection, roomid: RoomID = 'global', searchString = '',
+	connection: Connection, roomid: RoomID | 'global' = 'global', searchString = '',
 	maxLines = 20, onlyPunishments = false, timed = false
 ) {
 	const startTime = Date.now();
@@ -308,7 +309,10 @@ async function getModlog(
 	const addModlogLinks = !!(
 		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
-
+	if (hideIps && /^\[?[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\]?$/.test(searchString)) {
+		connection.popup(`You cannot search for IPs.`);
+		return;
+	}
 	if (searchString.length > MAX_QUERY_LENGTH) {
 		connection.popup(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
 		return;
@@ -374,7 +378,7 @@ async function runBattleSearch(userid: ID, turnLimit: number, month: string, tie
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
 		// in a user's name so the userid can case-insensitively be matched to the name.
-		const regexString = `("p1":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
+		const regexString = `("p1":"${[...userid].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${[...userid].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
 		let output;
 		try {
 			output = await execFile('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', pathString]);
@@ -559,19 +563,18 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	'!modlog': true,
 	ml: 'modlog',
 	punishlog: 'modlog',
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		if (!room) room = Rooms.get('global') as ChatRoom | GameRoom;
-		let roomid: RoomID = (room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: RoomID | 'global' = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			const targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toID(targets[0]) as RoomID || room.roomid;
+			const newid = toID(targets[0]) as RoomID;
+			if (newid) roomid = newid;
 		}
 
 		const targetRoom = Rooms.search(roomid);

@@ -6,21 +6,12 @@
  */
 
 import * as defaults from '../config/config-example';
-
-export interface GroupInfo {
-	symbol: GroupSymbol;
-	id: ID;
-	name: string;
-	rank: number;
-	inherit?: GroupSymbol;
-	jurisdiction?: string;
-	globalGroupInPersonalRoom?: GroupSymbol;
-	[k: string]: string | true | number | undefined;
-}
+type GroupInfo = import('./user-groups').GroupInfo;
+type EffectiveGroupSymbol = import('./user-groups').EffectiveGroupSymbol;
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
-	groupsranking: GroupSymbol[],
+	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: {[combo: string]: GroupSymbol},
 	[k: string]: any,
 };
@@ -68,7 +59,7 @@ export function cacheGroupData(config: ConfigType) {
 				// preserving permissions specifically declared for the higher group.
 				for (const key in inheritGroup) {
 					if (key in groupData) continue;
-					groupData[key] = inheritGroup[key];
+					(groupData as any)[key] = (inheritGroup as any)[key];
 				}
 			}
 			delete groupData['inherit'];

@@ -7,11 +7,11 @@ import {Utils} from '../../lib/utils';
 export class Announcement {
 	readonly activityId: 'announcement';
 	announcementNumber: number;
-	room: ChatRoom | GameRoom;
+	room: Room;
 	source: string;
 	timeout: NodeJS.Timer | null;
 	timeoutMins: number;
-	constructor(room: ChatRoom | GameRoom, source: string) {
+	constructor(room: Room, source: string) {
 		this.activityId = 'announcement';
 		this.announcementNumber = room.nextGameNumber();
 		this.room = room;
@@ -51,6 +51,7 @@ export const commands: ChatCommands = {
 		htmlcreate: 'new',
 		create: 'new',
 		new(target, room, user, connection, cmd, message) {
+			if (!room) return this.requiresRoom();
 			if (!target) return this.parse('/help announcement new');
 			target = target.trim();
 			if (room.battle) return this.errorReply("Battles do not support announcements.");
@@ -73,11 +74,12 @@ export const commands: ChatCommands = {
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
-			return this.privateModAction(`(An announcement was started by ${user.name}.)`);
+			return this.privateModAction(`An announcement was started by ${user.name}.`);
 		},
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
 
 		timer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}
@@ -102,7 +104,7 @@ export const commands: ChatCommands = {
 				}, (timeout * 60000));
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute${Chat.plural(timeout)}.`);
 				this.modlog('announcement TIMER', null, `${timeout} minutes`);
-				return this.privateModAction(`(The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.)`);
+				return this.privateModAction(`The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (announcement.timeout) {
@@ -120,6 +122,7 @@ export const commands: ChatCommands = {
 		close: 'end',
 		stop: 'end',
 		end(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
@@ -131,12 +134,13 @@ export const commands: ChatCommands = {
 			announcement.end();
 			room.minorActivity = null;
 			this.modlog('ANNOUNCEMENT END');
-			return this.privateModAction(`(The announcement was ended by ${user.name}.)`);
+			return this.privateModAction(`The announcement was ended by ${user.name}.`);
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
 		show: 'display',
 		display(target, room, user, connection) {
+			if (!room) return this.requiresRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}

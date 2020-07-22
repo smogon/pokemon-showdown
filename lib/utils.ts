@@ -150,6 +150,10 @@ export const Utils = new class Utils {
 		return array.sort((a, b) => this.compare(callback(a), callback(b)));
 	}
 
+	splitFirst(str: string, delimiter: string): [string, string];
+	splitFirst(str: string, delimiter: string, limit: 2): [string, string, string];
+	splitFirst(str: string, delimiter: string, limit: 3): [string, string, string, string];
+	splitFirst(str: string, delimiter: string, limit: number): string[];
 	/**
 	 * Like string.split(delimiter), but only recognizes the first `limit`
 	 * delimiters (default 1).
@@ -206,6 +210,23 @@ export const Utils = new class Utils {
 		if (min !== undefined && num < min) num = min;
 		if (max !== undefined && num > max) num = max;
 		return num;
+	}
+
+	clearRequireCache(options: {exclude?: string[]} = {}) {
+		const excludes = options?.exclude || [];
+		excludes.push('/node_modules/');
+
+		for (const path in require.cache) {
+			let skip = false;
+			for (const exclude of excludes) {
+				if (path.includes(exclude)) {
+					skip = true;
+					break;
+				}
+			}
+
+			if (!skip) delete require.cache[path];
+		}
 	}
 
 	levenshtein(s: string, t: string, l: number): number {

@@ -569,13 +569,7 @@ export class TeamValidator {
 		const lsetProblems = this.reconcileLearnset(outOfBattleSpecies, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
 
-		if (ruleTable.has('obtainablemisc') && outOfBattleSpecies.forme?.includes('Gmax')) {
-			if (!setSources.sourcesBefore) {
-				problems.push(`${name} has an exclusive move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid).`);
-			} else if (setSources.sourcesBefore < 8) {
-				problems.push(`${name} has a Gen ${setSources.sourcesBefore} move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid in Gen 8).`);
-			}
-		} else if (!setSources.sourcesBefore && setSources.sources.length) {
+		if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
 			for (const source of setSources.sources) {
 				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
@@ -1478,6 +1472,7 @@ export class TeamValidator {
 		const dex = this.dex;
 		let name = set.species;
 		const species = dex.getSpecies(set.species);
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? 2 : dex.gen;
 		if (!eventSpecies) eventSpecies = species;
 		if (set.name && set.species !== set.name && species.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
@@ -1487,11 +1482,11 @@ export class TeamValidator {
 
 		const problems = [];
 
-		if (this.minSourceGen > eventData.generation) {
+		if (dex.gen < 8 && this.minSourceGen > eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format requires Pokemon from gen ${this.minSourceGen} or later and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
-		if (dex.gen < eventData.generation) {
+		if (maxSourceGen < eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
@@ -1849,7 +1844,7 @@ export class TeamValidator {
 							// falls through to LMT check below
 						} else if (level >= 5 && learnedGen === 3 && species.eggGroups && species.eggGroups[0] !== 'Undiscovered') {
 							// Pomeg Glitch
-						} else if ((!species.gender || species.gender === 'F') && learnedGen >= 2) {
+						} else if ((!species.gender || species.gender === 'F') && learnedGen >= 2 && species.eggGroups[0] !== 'Undiscovered') {
 							// available as egg move
 							learned = learnedGen + 'Eany';
 							// falls through to E check below
@@ -1996,7 +1991,7 @@ export class TeamValidator {
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
-		} else if (species.baseSpecies === 'Pumpkaboo') {
+		} else if (species.baseSpecies === 'Pumpkaboo' && species.forme) {
 			return this.dex.getSpecies('Pumpkaboo');
 		}
 		return null;

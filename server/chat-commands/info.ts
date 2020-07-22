@@ -9,21 +9,21 @@
  * @license MIT
  */
 import * as net from 'net';
+import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 
 export const commands: ChatCommands = {
-	'!whois': true,
 	ip: 'whois',
 	rooms: 'whois',
 	alt: 'whois',
 	alts: 'whois',
 	whoare: 'whois',
-	whois(target, room, user, connection, cmd) {
-		let usedRoom: ChatRoom | GameRoom | GlobalRoom = room;
-		if (usedRoom?.roomid === 'staff' && !this.runBroadcast()) return;
-		if (!usedRoom) usedRoom = Rooms.global;
+	altsnorecurse: 'whois',
+	whois(target, room: Room | null, user, connection, cmd) {
+		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
 		const targetUser = this.targetUserOrSelf(target, user.group === ' ');
-		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
+		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
+		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
 			if (showAll) return this.parse('/offlinewhois ' + target);
 			return this.errorReply("User " + this.targetUsername + " not found.");
@@ -42,8 +42,8 @@ export const commands: ChatCommands = {
 			buf += ` <small style="color:gray">(trusted${targetUser.id === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
-		const roomauth = usedRoom.auth.getDirect(targetUser.id);
-		if (Config.groups[roomauth]?.name) {
+		const roomauth = room?.auth.getDirect(targetUser.id);
+		if (roomauth && Config.groups[roomauth]?.name) {
 			buf += Utils.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group]?.name) {
@@ -84,7 +84,7 @@ export const commands: ChatCommands = {
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
-			(usedRoom.settings.isPrivate !== true && user.can('mute', targetUser, usedRoom) && targetUser.id in usedRoom.users);
+			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += `<br />`;
 
@@ -160,7 +160,7 @@ export const commands: ChatCommands = {
 			ips = ips.map(ip => {
 				const status = [];
 				const punishment = Punishments.ips.get(ip);
-				if (user.can('ip') && punishment) {
+				if (user.can('globalban') && punishment) {
 					const [punishType, userid] = punishment;
 					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
 					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
@@ -228,13 +228,21 @@ export const commands: ChatCommands = {
 			}
 		}
 		this.sendReplyBox(buf);
+
+		if (showRecursiveAlts && canViewAlts) {
+			const targetId = toID(target);
+			for (const alt of Users.users.values()) {
+				if (alt !== targetUser && targetId in alt.prevNames) {
+					this.parse(`/altsnorecurse ${alt.name}`);
+				}
+			}
+		}
 	},
 	whoishelp: [
 		`/whois - Get details on yourself: alts, group, IP address, and rooms.`,
 		`/whois [username] - Get details on a username: alts (Requires: % @ &), group, IP address (Requires: @ &), and rooms.`,
 	],
 
-	'!offlinewhois': true,
 	'chp': 'offlinewhois',
 	checkpunishment: 'offlinewhois',
 	offlinewhois(target, room, user) {
@@ -335,6 +343,7 @@ export const commands: ChatCommands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
 		}
@@ -349,10 +358,9 @@ export const commands: ChatCommands = {
 	},
 	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
 
-	'!host': true,
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		if (!this.can('ip')) return;
+		if (!this.can('globalban')) return;
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
@@ -362,7 +370,6 @@ export const commands: ChatCommands = {
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
 
-	'!ipsearch': true,
 	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
 	hostsearch: 'ipsearch',
@@ -420,6 +427,7 @@ export const commands: ChatCommands = {
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
 	checkchallenges(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('ban', null, room)) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
@@ -475,7 +483,6 @@ export const commands: ChatCommands = {
 	 * Data Search Dex
 	 *********************************************************/
 
-	'!data': true,
 	pstats: 'data',
 	stats: 'data',
 	dex: 'data',
@@ -575,7 +582,7 @@ export const commands: ChatCommands = {
 						Gen: String(pokemon.gen) || 'CAP',
 						Height: `${pokemon.heightm} m`,
 					};
-					if (!pokemon.forme || pokemon.forme !== "Gmax") {
+					if (pokemon.forme !== "Gmax" || dex.currentMod === 'megamax') {
 						details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					} else {
 						details["Weight"] = "0 kg <em>(GK/LK fail)</em>";
@@ -608,10 +615,10 @@ export const commands: ChatCommands = {
 								evos.push(`${evo.name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
-								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : evo.evoCondition ? ` ${evo.evoCondition}` : ``})`);
+								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
 								break;
 							default:
-								evos.push(`${evo.name} (${evo.evoLevel})`);
+								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
 							}
 						}
 					}
@@ -786,7 +793,6 @@ export const commands: ChatCommands = {
 		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # &`,
 	],
 
-	'!details': true,
 	dt: 'details',
 	dt1: 'details',
 	dt2: 'details',
@@ -810,7 +816,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!weakness': true,
 	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
@@ -886,6 +891,23 @@ export const commands: ChatCommands = {
 			}
 		}
 
+		const statuses: {[k: string]: string} = {
+			brn: "Burn",
+			frz: "Frozen",
+			hail: "Hail damage",
+			par: "Paralysis",
+			powder: "Powder moves",
+			prankster: "Prankster",
+			sandstorm: "Sandstorm damage",
+			tox: "Toxic",
+			trapped: "Trapping",
+		};
+		for (const status in statuses) {
+			if (!mod.getImmunity(status, species)) {
+				immunities.push(statuses[status]);
+			}
+		}
+
 		const buffer = [];
 		buffer.push(`${species.exists ? `${species.name} (ignoring abilities):` : `${target}:`}`);
 		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
@@ -900,7 +922,6 @@ export const commands: ChatCommands = {
 		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
 	],
 
-	'!effectiveness': true,
 	eff: 'effectiveness',
 	type: 'effectiveness',
 	matchup: 'effectiveness',
@@ -975,7 +996,6 @@ export const commands: ChatCommands = {
 		`!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pok\u00e9mon.`,
 	],
 
-	'!coverage': true,
 	cover: 'coverage',
 	coverage(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1183,7 +1203,6 @@ export const commands: ChatCommands = {
 		`Adding the parameter 'all' or 'table' will display the information with a table of all type combinations.`,
 	],
 
-	'!statcalc': true,
 	statcalc(target, room, user) {
 		if (!target) return this.parse("/help statcalc");
 		if (!this.runBroadcast()) return;
@@ -1452,7 +1471,6 @@ export const commands: ChatCommands = {
 	 * Informational commands
 	 *********************************************************/
 
-	'!uptime': true,
 	uptime(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const uptime = process.uptime();
@@ -1468,14 +1486,13 @@ export const commands: ChatCommands = {
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
 
-	'!servertime': true,
+	st: 'servertime',
 	servertime(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const servertime = new Date();
 		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
 	},
 
-	'!groups': true,
 	groups(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const showRoom = (target !== 'global');
@@ -1511,7 +1528,6 @@ export const commands: ChatCommands = {
 		`!groups - Shows everyone that information. Requires: + % @ # &`,
 	],
 
-	'!punishments': true,
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const showRoom = (target !== 'global');
@@ -1545,7 +1561,6 @@ export const commands: ChatCommands = {
 		`!punishments - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!opensource': true,
 	repo: 'opensource',
 	repository: 'opensource',
 	git: 'opensource',
@@ -1565,19 +1580,16 @@ export const commands: ChatCommands = {
 		`!opensource - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!staff': true,
 	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 
-	'!forums': true,
 	forums(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
 	},
 
-	'!privacypolicy': true,
 	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
@@ -1588,13 +1600,11 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!suggestions': true,
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 
-	'!bugs': true,
 	bugreport: 'bugs',
 	bugreports: 'bugs',
 	bugs(target, room, user) {
@@ -1610,7 +1620,6 @@ export const commands: ChatCommands = {
 		}
 	},
 
-	'!avatars': true,
 	avatars(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.`);
@@ -1620,13 +1629,11 @@ export const commands: ChatCommands = {
 		`!avatars - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!optionsbutton': true,
 	optionbutton: 'optionsbutton',
 	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
-	'!soundbutton': true,
 	soundsbutton: 'soundbutton',
 	volumebutton: 'soundbutton',
 	soundbutton(target, room, user) {
@@ -1634,7 +1641,6 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 
-	'!intro': true,
 	introduction: 'intro',
 	intro(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1652,7 +1658,6 @@ export const commands: ChatCommands = {
 		`!intro - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!smogintro': true,
 	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
 	smogintro(target, room, user) {
@@ -1664,7 +1669,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!calc': true,
 	bsscalc: 'calc',
 	calculator: 'calc',
 	cantsaycalc: 'calc',
@@ -1715,7 +1719,6 @@ export const commands: ChatCommands = {
 		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # &`,
 	],
 
-	'!cap': true,
 	capintro: 'cap',
 	cap(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1732,7 +1735,6 @@ export const commands: ChatCommands = {
 		`!cap - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!gennext': true,
 	gennext(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
@@ -1744,7 +1746,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!formathelp': true,
 	banlists: 'formathelp',
 	tier: 'formathelp',
 	tiers: 'formathelp',
@@ -1866,8 +1867,8 @@ export const commands: ChatCommands = {
 		return this.sendReply(`|raw|${buf.join("")}`);
 	},
 
-	'!roomhelp': true,
 	roomhelp(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.canBroadcast(false, '!htmlbox')) return;
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
@@ -1884,6 +1885,9 @@ export const commands: ChatCommands = {
 				`- /announce OR /wall <em>message</em>: make an announcement`,
 				`- /modlog <em>username</em>: search the moderator log of the room`,
 				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+				`- !show [image or youtube link]: display given media in chat.`,
+				`- /whitelist [user]: whitelist a non-staff user to use !show.`,
+				`- /unwhitelist [user]: removes the user from !show whitelist.`,
 			],
 			[
 				`<strong>Room moderators (@)</strong> can also use:`,
@@ -1903,7 +1907,6 @@ export const commands: ChatCommands = {
 				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
 				`- /declare <em>message</em>: make a large blue declaration to the room`,
 				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
-				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
 				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
@@ -1927,7 +1930,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!restarthelp': true,
 	restarthelp(target, room, user) {
 		if (!Rooms.global.lockdown && !this.can('lockdown')) return false;
 		if (!this.runBroadcast()) return;
@@ -1940,7 +1942,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!rules': true,
 	rule: 'rules',
 	rules(target, room, user) {
 		if (!target) {
@@ -1965,11 +1966,11 @@ export const commands: ChatCommands = {
 		if (target === 'delete' || target === 'remove') {
 			if (!room.settings.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
 			delete room.settings.rulesLink;
-			this.privateModAction(`(${user.name} has removed the room rules link.)`);
+			this.privateModAction(`${user.name} has removed the room rules link.`);
 			this.modlog('RULES', null, `removed room rules link`);
 		} else {
 			room.settings.rulesLink = target;
-			this.privateModAction(`(${user.name} changed the room rules link to: ${target})`);
+			this.privateModAction(`${user.name} changed the room rules link to: ${target}`);
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
@@ -1982,7 +1983,6 @@ export const commands: ChatCommands = {
 		`/rules remove - Removes a room rules URL. Requires: # &`,
 	],
 
-	'!faq': true,
 	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = target.toLowerCase().trim();
@@ -2026,7 +2026,6 @@ export const commands: ChatCommands = {
 		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
 	],
 
-	'!smogdex': true,
 	analysis: 'smogdex',
 	strategy: 'smogdex',
 	smogdex(target, room, user) {
@@ -2196,7 +2195,6 @@ export const commands: ChatCommands = {
 		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # &`,
 	],
 
-	'!veekun': true,
 	veekun(target, broadcast, user) {
 		if (!target) return this.parse('/help veekun');
 		if (!this.runBroadcast()) return;
@@ -2286,7 +2284,6 @@ export const commands: ChatCommands = {
 		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # &`,
 	],
 
-	'!register': true,
 	register() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
@@ -2296,7 +2293,6 @@ export const commands: ChatCommands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
-	'!dice': true,
 	roll: 'dice',
 	dice(target, room, user) {
 		if (!target || /[^\d\sdHL+-]/i.test(target)) return this.parse('/help dice');
@@ -2400,7 +2396,6 @@ export const commands: ChatCommands = {
 		`/dice [number of dice]d[number of sides]-[H/L] - Simulates rolling a number of dice with removal of extreme values, e.g., /dice 3d8-L: rolls three 8-sided dice; the result ignores the lowest value.`,
 	],
 
-	'!pickrandom': true,
 	pr: 'pickrandom',
 	pick: 'pickrandom',
 	pickrandom(target, room, user) {
@@ -2416,7 +2411,6 @@ export const commands: ChatCommands = {
 	},
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
-	'!shuffle': true,
 	shuffle(target, room, user) {
 		if (!target || !target.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
@@ -2429,54 +2423,150 @@ export const commands: ChatCommands = {
 	],
 
 	showimage(target, room, user) {
-		if (!target) return this.parse('/help showimage');
-		if (!this.can('declare', null, room)) return false;
-		if (this.room.settings.isPersonal && !this.user.can('announce')) {
-			return this.errorReply(`Images are not allowed in personal rooms.`);
-		}
-
-		const targets = target.split(',');
-
-		if (targets.length !== 1 && targets.length !== 3) {
-			return this.parse('/help showimage');
-		}
-
-		let image: string | null = targets[0].trim();
-		if (!image) return this.errorReply(`No image URL was provided!`);
-		image = this.canEmbedURI(image, true);
-
-		if (!image) return false;
-
-		if (!this.runBroadcast()) return;
-
-		if (targets.length === 3) {
-			let width = targets[1].trim();
-			if (!width) return this.errorReply(`No width for the image was provided!`);
-			if (!isNaN(parseInt(width))) width += `px`;
-
-			let height = targets[2].trim();
-			if (!height) return this.errorReply(`No height for the image was provided!`);
-			if (!isNaN(parseInt(height))) height += `px`;
-
-			const unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
-			if (!unitRegex.test(width)) {
-				return this.errorReply(`"${width}" is not a valid width value!`);
-			}
-			if (!unitRegex.test(height)) {
-				return this.errorReply(`"${height}" is not a valid height value!`);
-			}
-
-			return this.sendReply(Utils.html`|raw|<img src="${image}" style="width: ${width}; height: ${height}" />`);
-		}
-
-		void Chat.fitImage(image).then(([width, height]) => {
-			this.sendReply(Utils.html`|raw|<img src="${image}" style="width: ${width}px; height: ${height}px" />`);
-			room.update();
-		});
+		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
 	},
-	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # &`],
 
-	'!pi': true,
+	requestshow(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!this.canTalk()) return false;
+		if (!room.settings.requestShowEnabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
+		if (user.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
+		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
+		if (!toID(target)) return this.parse(`/help requestshow`);
+
+		let [link, comment] = target.split(',');
+		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
+		link = encodeURI(link);
+		if (!room.pendingApprovals) room.pendingApprovals = new Map();
+		room.pendingApprovals.set(user.id, {
+			name: user.name,
+			link: link,
+			comment: comment,
+		});
+		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
+		const message = `|tempnotify|pendingapprovals|Pending media request!` +
+			`|${user.name} has requested to show media in ${room.title}.|new media request`;
+		room.sendRankedUsers(message, '%');
+		room.sendMods(
+			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
+			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
+			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
+		);
+	},
+	requestshowhelp: [`/requestshow [link], [comment] - Requests permission to show media in the room.`],
+
+	async approveshow(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!this.can('mute', null, room)) return false;
+		if (!room.settings.requestShowEnabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
+		const userid = toID(target);
+		if (!userid) return this.parse(`/help approveshow`);
+		const request = room.pendingApprovals?.get(userid);
+		if (!request) return this.errorReply(`${userid} has no pending request.`);
+		if (userid === user.id) {
+			return this.errorReply(`You can't approve your own /show request.`);
+		}
+		room.pendingApprovals!.delete(userid);
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
+
+		let buf;
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(request.link)) {
+			const YouTube = new YoutubeInterface();
+			buf = await YouTube.generateVideoDisplay(request.link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
+		} else {
+			try {
+				const [width, height, resized] = await Chat.fitImage(request.link);
+				buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
+				if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
+			} catch (err) {
+				return this.errorReply('Invalid image');
+			}
+		}
+		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
+		if (request.comment) {
+			buf += Utils.html`<br />${request.comment}</small></div>`;
+		} else {
+			buf += `</small></div>`;
+		}
+		room.add(`|c| ${request.name}|/raw ${buf}`);
+		this.privateModAction(`${user.name} approved showing media from ${request.name}.`);
+	},
+	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
+
+	denyshow(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!this.can('mute', null, room)) return false;
+		if (!room.settings.requestShowEnabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
+		target = toID(target);
+		if (!target) return this.parse(`/help denyshow`);
+
+		const entry = room.pendingApprovals?.get(target);
+		if (!entry) return this.errorReply(`${target} has no pending request.`);
+
+		room.pendingApprovals!.delete(target);
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
+		this.privateModAction(`${user.name} denied ${target}'s request to display ${entry.link}.`);
+	},
+	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
+
+	approvallog(target, room, user) {
+		if (!room) return this.requiresRoom();
+		return this.parse(`/sl approved showing media from, ${room.roomid}`);
+	},
+
+	viewapprovals(target, room, user) {
+		if (!room) return this.requiresRoom();
+		return this.parse(`/join view-approvals-${room.roomid}`);
+	},
+
+	async show(target, room, user) {
+		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
+		if (!toID(target).trim()) return this.parse(`/help show`);
+
+		const [link, comment] = Utils.splitFirst(target, ',');
+
+		let buf;
+		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			const YouTube = new YoutubeInterface();
+			buf = await YouTube.generateVideoDisplay(link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
+		} else {
+			try {
+				const [width, height, resized] = await Chat.fitImage(link);
+				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
+				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+			} catch (err) {
+				return this.errorReply('Invalid image');
+			}
+		}
+		if (comment) buf += Utils.html`<br>(${comment.trim()})</div>`;
+
+		if (!this.canBroadcast()) return false;
+		if (this.broadcastMessage) {
+			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
+			const auth = room?.auth || Users.globalAuth;
+			if (minGroup !== true && !auth.atLeast(user, minGroup)) {
+				this.errorReply(`You must be at least group ${minGroup} to use /show`);
+				if (auth.atLeast(user, '%')) {
+					this.errorReply(`The limit can be changed in /roomsettings`);
+				}
+				return;
+			}
+		}
+		this.runBroadcast();
+		this.sendReplyBox(buf);
+	},
+	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
+
 	pi(target, room, user) {
 		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox(
@@ -2487,36 +2577,19 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!code': true,
 	code(target, room, user) {
-		// XXX: target is trimmed by Chat#splitMessage. Let's not add another
-		// awful hack like ! or help command keys for whether or not the target
-		// is raw for now.
+		// target is trimmed by Chat#splitMessage, but leading spaces can be
+		// important to code block indentation.
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
 		if (!target) return this.parse('/help code');
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
-
-		const params = target.substr(+target.startsWith('\n')).split('\n');
-		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```') && this.shouldBroadcast()) {
-			return this.canTalk(`\`\`\`${params[0]}\`\`\``);
+		if (target.length < 80 && !target.includes('\n') && !target.includes('```') && this.shouldBroadcast()) {
+			return this.canTalk(`\`\`\`${target}\`\`\``);
 		}
 
 		if (!this.canBroadcast(true, '!code')) return;
 
-		const output = [];
-		let cutoff = 3;
-		for (const param of params) {
-			if (output.length < 3 && param.length > 80) cutoff = 2;
-			output.push(Utils.escapeHTML(param));
-		}
-
-		let code;
-		if (output.length > cutoff) {
-			code = `<div class="chat"><details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${output.slice(0, cutoff).join('<br />')}</summary>${output.slice(cutoff).join('<br />')}</details></div>`;
-		} else {
-			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
-		}
-
+		const code = Chat.getReadmoreCodeBlock(target);
 		this.runBroadcast(true);
 		if (this.broadcasting) {
 			return `/raw <div class="infobox">${code}</div>`;
@@ -2533,13 +2606,15 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	punishments(query, user) {
 		this.title = 'Punishments';
+		const room = this.extractRoom();
+		if (!room) return;
+
 		let buf = "";
-		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.persist) return;
-		if (!this.can('mute', null, this.room)) return;
+		if (!room.persist) return;
+		if (!this.can('mute', null, room)) return;
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid))
+		const sortedPunishments = Array.from(Punishments.getPunishments(room.roomid))
 			.sort((a, b) => a[1].expireTime - b[1].expireTime);
 		const sP = new Map();
 		for (const punishment of sortedPunishments) {
@@ -2560,6 +2635,21 @@ export const pages: PageTable = {
 			sP.set(punishment[0], punishment[1]);
 		}
 		buf += Punishments.visualizePunishments(sP, user);
+		return buf;
+	},
+	approvals(args) {
+		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		if (!this.can('mute', null, room)) return;
+		if (!room.pendingApprovals) room.pendingApprovals = new Map();
+		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;
+		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
+		for (const [userid, entry] of room.pendingApprovals) {
+			buf += `<strong>${entry.name}</strong><div class="infobox">`;
+			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
+			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
+			buf += `<strong>Comment:</strong> ${entry.comment}`;
+			buf += `</div><hr />`;
+		}
 		return buf;
 	},
 };

@@ -10,7 +10,6 @@ import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
-const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
 let channelData: AnyObject;
@@ -29,12 +28,16 @@ export class YoutubeInterface {
 		this.intervalTime = 0;
 	}
 	async getChannelData(link: string, username?: string) {
+		if (!Config.youtubeKey) {
+			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
+		}
 		const id = this.getId(link);
 		if (!id) return null;
-		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const raw = await Net(queryUrl).get();
+		const raw = await Net(`${ROOT}channels`).get({
+			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+		});
 		const res = JSON.parse(raw);
-		if (!res || !res.items) return null;
+		if (!res || !res.items || res.items.length < 1) return;
 		const data = res.items[0];
 		const cache = {
 			name: data.snippet.title,
@@ -99,29 +102,35 @@ export class YoutubeInterface {
 		return channel;
 	}
 	getId(link: string) {
-		let id;
+		let id = '';
+		if (!link) return null;
 		if (channelData[link]) return link;
 		if (!link.includes('channel')) {
 			if (link.includes('youtube')) {
-				id = link.split('v=')[1];
+				id = link.split('v=')[1] || '';
 			} else if (link.includes('youtu.be')) {
-				id = link.split('/')[3];
+				id = link.split('/')[3] || '';
 			} else {
 				return null;
 			}
 		} else {
-			id = link.split('channel/')[1];
+			id = link.split('channel/')[1] || '';
 		}
 		if (id.includes('&')) id = id.split('&')[0];
+		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
 	async generateVideoDisplay(link: string) {
+		if (!Config.youtubeKey) {
+			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
+		}
 		const id = this.getId(link);
 		if (!id) return null;
-		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const raw = await Net(queryUrl).get();
+		const raw = await Net(`${ROOT}videos`).get({
+			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+		});
 		const res = JSON.parse(raw);
-		if (!res.items) return;
+		if (!res || !res.items || res.items.length < 1) return;
 		const video = res.items[0];
 		const info = {
 			title: video.snippet.title,
@@ -156,13 +165,14 @@ const YouTube = new YoutubeInterface();
 
 export const commands: ChatCommands = {
 	async randchannel(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 		if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 		this.runBroadcast();
 		const data = await YouTube.randChannel();
 		if (!data) return this.errorReply(`Error in getting channel data.`);
 		if (this.broadcasting) {
-			if (!this.can('broadcast', null, room)) return false;
+			if (!this.can('show', null, room)) return false;
 			this.addBox(data);
 			room.update();
 		} else {
@@ -174,6 +184,7 @@ export const commands: ChatCommands = {
 	yt: 'youtube',
 	youtube: {
 		async addchannel(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			const [id, name] = target.split(',');
 			if (!id) return this.errorReply('Specify a channel ID.');
@@ -182,23 +193,25 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Error in retrieving channel data.`);
 			}
 			this.modlog('ADDCHANNEL', null, `${id} ${name ? `username: ${name}` : ''}`);
-			return this.privateModAction(`(Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.)`);
+			return this.privateModAction(`Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.`);
 		},
 		addchannelhelp: [`/addchannel - Add channel data to the YouTube database. Requires: % @ #`],
 
 		removechannel(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			if (!this.can('ban', null, room)) return false;
+			if (!this.can('mute', null, room)) return false;
 			const id = YouTube.channelSearch(target);
 			if (!id) return this.errorReply(`Channel with ID or name ${target} not found.`);
 			delete channelData[id];
 			FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
-			this.privateModAction(`(${user.name} deleted channel with ID or name ${target}.)`);
+			this.privateModAction(`${user.name} deleted channel with ID or name ${target}.`);
 			return this.modlog(`REMOVECHANNEL`, null, id);
 		},
 		removechannelhelp: [`/youtube removechannel - Delete channel data from the YouTube database. Requires: % @ #`],
 
 		async channel(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			const channel = YouTube.channelSearch(target);
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
@@ -216,6 +229,7 @@ export const commands: ChatCommands = {
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
 		],
 		async video(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!target) return this.errorReply(`Provide a valid youtube link.`);
 			const html = await YouTube.generateVideoDisplay(target);
@@ -240,18 +254,20 @@ export const commands: ChatCommands = {
 		},
 
 		update(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			if (!this.can('ban', null, room)) return false;
+			if (!this.can('mute', null, room)) return false;
 			const [channel, name] = target.split(',');
 			const id = YouTube.channelSearch(channel);
 			if (!id) return this.errorReply(`Channel ${channel} is not in the database.`);
 			channelData[id].username = name;
 			this.modlog(`UPDATECHANNEL`, null, name);
-			this.privateModAction(`(${user.name} updated channel ${id}'s username to ${name}.)`);
+			this.privateModAction(`${user.name} updated channel ${id}'s username to ${name}.`);
 			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 		},
 		interval: 'repeat',
 		async repeat(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('declare', null, room)) return false;
 			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime)}.`);
@@ -272,7 +288,7 @@ export const commands: ChatCommands = {
 					room.update();
 				})();
 			 }, interval);
-			this.privateModAction(`(${user.name} set a randchannel interval to ${target} minutes)`);
+			this.privateModAction(`${user.name} set a randchannel interval to ${target} minutes`);
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
 		},
 	},
@@ -292,6 +308,7 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	async channels(args, user) {
 		const all = toID(args[0]) === 'all';
+		if (!Config.youtubeKey) return `<h2>Youtube is not configured.</h2>`;
 		this.title = `[Channels] ${all ? 'All' : ''}`;
 		let buffer = `<div class="pad"><h4>Channels in the YouTube database:`;
 		if (all) buffer += `(All)`;
@@ -300,7 +317,7 @@ export const pages: PageTable = {
 		buffer += `<button class="button" name="send" value="/join view-channels${all ? '-all' : ''}"">`;
 		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		buffer += `</h4><hr />`;
-		const isStaff = user.can('mute', null, Rooms.get('youtube'));
+		const isStaff = user.can('mute', null, Rooms.get('youtube')!);
 		for (const id of Utils.shuffle(Object.keys(channelData))) {
 			const name = YouTube.get(id).name;
 			const psid = YouTube.get(id).username;

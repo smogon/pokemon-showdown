@@ -98,6 +98,8 @@
 		"Your status has been set to: ${target}.": "Ton statut est désormais le suivant: ${target}.",
 		"You are now marked as busy.": "Tu es maintenant marqué comme occupé.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Tu es maintenant marqué comme absent. Envoie un message ou utilise /back pour indiquer que tu es de retour.",
+		"You are already marked as back.": "Tu es déjà marqué comme étant revenu.",
+		"You are no longer marked as busy.": "Tu n'es plus marqué comme étant occupé.",
 
 		"You must choose a name before you can talk.": "Tu dois choisir un pseudo avant de pouvoir parler.",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Tu es ${lockType} et ne peux pas parler dans le chat. ${lockExpiration}",

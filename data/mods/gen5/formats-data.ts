@@ -1,44 +1,35 @@
 export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bulbasaur: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	ivysaur: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	venusaur: {
 		randomBattleMoves: ["earthquake", "gigadrain", "hiddenpowerfire", "hiddenpowerice", "leechseed", "powerwhip", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"],
-		maleOnlyHidden: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	charmander: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	charmeleon: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	charizard: {
 		randomBattleMoves: ["airslash", "dragonpulse", "fireblast", "hiddenpowergrass", "roost", "substitute"],
-		maleOnlyHidden: true,
 		tier: "NU",
 		doublesTier: "DOU",
 	},
 	squirtle: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	wartortle: {
-		maleOnlyHidden: true,
 		tier: "NU",
 		doublesTier: "NFE",
 	},
 	blastoise: {
 		randomBattleMoves: ["dragontail", "icebeam", "protect", "rapidspin", "scald", "toxic"],
-		maleOnlyHidden: true,
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -455,24 +446,20 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	tyrogue: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	hitmonlee: {
 		randomBattleMoves: ["blazekick", "closecombat", "fakeout", "highjumpkick", "machpunch", "substitute", "suckerpunch", "stoneedge"],
-		maleOnlyHidden: true,
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	hitmonchan: {
 		randomBattleMoves: ["bulkup", "closecombat", "drainpunch", "icepunch", "machpunch", "rapidspin", "stoneedge"],
-		maleOnlyHidden: true,
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	hitmontop: {
 		randomBattleMoves: ["closecombat", "machpunch", "rapidspin", "stoneedge", "suckerpunch", "toxic"],
-		maleOnlyHidden: true,
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -1139,45 +1126,36 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	treecko: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	grovyle: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	sceptile: {
 		randomBattleMoves: ["acrobatics", "earthquake", "gigadrain", "hiddenpowerfire", "leafblade", "leechseed", "substitute", "swordsdance"],
-		maleOnlyHidden: true,
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	torchic: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	combusken: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 		doublesTier: "DUU",
 	},
 	blaziken: {
 		randomBattleMoves: ["batonpass", "flareblitz", "highjumpkick", "protect", "stoneedge", "swordsdance"],
-		maleOnlyHidden: true,
 		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	mudkip: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	marshtomp: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	swampert: {
 		randomBattleMoves: ["earthquake", "icepunch", "roar", "stealthrock", "superpower", "toxic", "waterfall"],
-		maleOnlyHidden: true,
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -1751,44 +1729,35 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	turtwig: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	grotle: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	torterra: {
 		randomBattleMoves: ["earthquake", "rockpolish", "stealthrock", "stoneedge", "synthesis", "woodhammer"],
-		maleOnlyHidden: true,
 		tier: "(NU)",
 		doublesTier: "DUU",
 	},
 	chimchar: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	monferno: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	infernape: {
 		randomBattleMoves: ["closecombat", "flareblitz", "hiddenpowerice", "machpunch", "overheat", "swordsdance", "thunderpunch", "uturn"],
-		maleOnlyHidden: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	piplup: {
-		maleOnlyHidden: true,
 		tier: "LC",
 	},
 	prinplup: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	empoleon: {
 		randomBattleMoves: ["agility", "grassknot", "hydropump", "icebeam", "protect", "scald", "stealthrock", "toxic"],
-		maleOnlyHidden: true,
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -2505,12 +2474,10 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gothorita: {
-		maleOnlyHidden: true,
 		tier: "NFE",
 	},
 	gothitelle: {
 		randomBattleMoves: ["calmmind", "hiddenpowerfighting", "psyshock", "rest", "thunderbolt", "trick"],
-		maleOnlyHidden: true,
 		tier: "UUBL",
 		doublesTier: "DUU",
 	},

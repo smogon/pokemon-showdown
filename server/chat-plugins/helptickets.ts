@@ -273,7 +273,7 @@ export class HelpTicket extends Rooms.RoomGame {
 				break;
 			case 'PM Harassment':
 			case 'Battle Harassment':
-			case 'Inappropriate Username / Status Message':
+			case 'Inappropriate Username':
 			case 'Inappropriate Pokemon Nicknames':
 				this.result = (result ? 'valid' : 'invalid');
 				break;
@@ -368,7 +368,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	timerEnds[room.roomid] = 0;
 	for (const i in room.users) {
 		const user: User = room.users[i];
-		if (user.can('mute', null, room) && !user.ignoreTickets) {
+		if (user.can('mute', null, room) && !user.settings.ignoreTickets) {
 			user.sendTo(
 				room,
 				`|tempnotify|helptickets|Unclaimed help tickets!|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`
@@ -512,7 +512,7 @@ for (const room of Rooms.rooms.values()) {
 const ticketTitles: {[k: string]: string} = Object.assign(Object.create(null), {
 	pmharassment: `PM Harassment`,
 	battleharassment: `Battle Harassment`,
-	inapname: `Inappropriate Username / Status Message`,
+	inapname: `Inappropriate Username`,
 	inappokemon: `Inappropriate Pokemon Nicknames`,
 	appeal: `Appeal`,
 	ipappeal: `IP-Appeal`,
@@ -524,7 +524,7 @@ const ticketPages: {[k: string]: string} = Object.assign(Object.create(null), {
 	report: `I want to report someone`,
 	pmharassment: `Someone is harassing me in PMs`,
 	battleharassment: `Someone is harassing me in a battle`,
-	inapname: `Someone is using an offensive username or status message`,
+	inapname: `Someone is using an offensive username`,
 	inappokemon: `Someone is using offensive Pokemon nicknames`,
 
 	appeal: `I want to appeal a punishment`,
@@ -544,7 +544,7 @@ const ticketPages: {[k: string]: string} = Object.assign(Object.create(null), {
 
 	confirmpmharassment: `Report harassment in a private message (PM)`,
 	confirmbattleharassment: `Report harassment in a battle`,
-	confirminapname: `Report an inappropriate username or status message`,
+	confirminapname: `Report an inappropriate username`,
 	confirminappokemon: `Report inappropriate Pokemon nicknames`,
 	confirmappeal: `Appeal your lock`,
 	confirmipappeal: `Appeal IP lock`,
@@ -633,7 +633,7 @@ export const pages: PageTable = {
 					buf += `<p><Button>confirmbattleharassment</Button></p>`;
 					break;
 				case 'inapname':
-					buf += `<p>If a user has an inappropriate name or status message, click the button below and a global staff member will take a look.</p>`;
+					buf += `<p>If a user has an inappropriate name, click the button below and a global staff member will take a look.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminapname</Button></p>`;
 					break;
@@ -1031,7 +1031,6 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	'!report': true,
 	report(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
@@ -1043,7 +1042,6 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-help-request--report${meta}`);
 	},
 
-	'!appeal': true,
 	appeal(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
@@ -1059,7 +1057,6 @@ export const commands: ChatCommands = {
 	helprequest: 'helpticket',
 	ht: 'helpticket',
 	helpticket: {
-		'!create': true,
 		'': 'create',
 		create(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -1075,7 +1072,6 @@ export const commands: ChatCommands = {
 		},
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
-		'!submit': true,
 		submit(target, room, user, connection) {
 			if (user.can('lock') && !user.can('bypassall')) {
 				return this.popupReply(`Global staff can't make tickets. They can only use the form for reference.`);
@@ -1107,7 +1103,7 @@ export const commands: ChatCommands = {
 			const contexts: {[k: string]: string} = {
 				'PM Harassment': `Hi! Who was harassing you in private messages?`,
 				'Battle Harassment': `Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
-				'Inappropriate Username / Status Message': `Hi! Tell us the username that is inappropriate, or tell us which user has an inappropriate status message.`,
+				'Inappropriate Username': `Hi! Tell us the username that is inappropriate.`,
 				'Inappropriate Pokemon Nicknames': `Hi! Which user has Pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
 				Appeal: `Hi! Can you please explain why you feel your punishment is undeserved?`,
 				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
@@ -1138,7 +1134,7 @@ export const commands: ChatCommands = {
 			case 'PM Harassment':
 			case 'Battle Harassment':
 			case 'Inappropriate Pokemon Nicknames':
-			case 'Inappropriate Username / Status Message':
+			case 'Inappropriate Username':
 				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}">Close Ticket as Valid Report</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}, false">Close Ticket as Invalid Report</button>`;
 				break;
 			case 'Public Room Assistance Request':
@@ -1156,8 +1152,8 @@ export const commands: ChatCommands = {
 					contexts['PM Harassment'] = `Hi! Please click the button below to give global staff permission to check PMs.` +
 						` Or if ${reportTarget} is not the user you want to report, please tell us the name of the user who you want to report.`;
 					break;
-				case 'Inappropriate Username / Status Message':
-					staffIntroButtons = `<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> <button class="button" name="send" value="/clearstatus ${reportTarget}">Clear ${reportTarget}'s status</button> `;
+				case 'Inappropriate Username':
+					staffIntroButtons = `<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> `;
 					break;
 				}
 				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${reportTarget}">Global Modlog for ${reportTarget}</button> <button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
@@ -1219,21 +1215,18 @@ export const commands: ChatCommands = {
 			connection.send(`>view-help-request\n|deinit`);
 		},
 
-		'!list': true,
 		list(target, room, user) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
-		'!stats': true,
 		stats(target, room, user) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
 
-		'!close': true,
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
@@ -1280,7 +1273,7 @@ export const commands: ChatCommands = {
 				username = targetUser.getLastName();
 				userid = targetUser.getLastId();
 				if (ticketBan && ticketBan.expires > Date.now()) {
-					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 				if (targetUser.trusted) {
 					Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
@@ -1289,7 +1282,7 @@ export const commands: ChatCommands = {
 				username = this.targetUsername;
 				userid = toID(this.targetUsername);
 				if (ticketBan && ticketBan.expires > Date.now()) {
-					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 			}
 
@@ -1332,10 +1325,10 @@ export const commands: ChatCommands = {
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
-				displayMessage = `(${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")})`;
+				displayMessage = `${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")}`;
 				this.privateModAction(displayMessage);
 			} else if (acAccount) {
-				displayMessage = `(${username}'s ac account: ${acAccount})`;
+				displayMessage = `${username}'s ac account: ${acAccount}`;
 				this.privateModAction(displayMessage);
 			}
 
@@ -1394,29 +1387,29 @@ export const commands: ChatCommands = {
 
 		ignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (user.ignoreTickets) {
+			if (user.settings.ignoreTickets) {
 				return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
-			user.ignoreTickets = true;
-			user.update('ignoreTickets');
+			user.settings.ignoreTickets = true;
+			user.update();
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
 
 		unignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (!user.ignoreTickets) {
+			if (!user.settings.ignoreTickets) {
 				return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
-			user.ignoreTickets = false;
-			user.update('ignoreTickets');
+			user.settings.ignoreTickets = false;
+			user.update();
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
-			if (!this.can('declare')) return;
+			if (!this.can('makeroom')) return;
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(`${target} does not have a ticket.`);

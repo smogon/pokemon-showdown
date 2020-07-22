@@ -140,6 +140,7 @@ describe('Dex data', function () {
 	});
 
 	it('should have valid Learnsets entries', function () {
+		this.timeout(0);
 		const learnsetsArray = [Dex.mod('gen2').data.Learnsets, Dex.mod('letsgo').data.Learnsets, Dex.data.Learnsets];
 		for (const Learnsets of learnsetsArray) {
 			for (const speciesid in Learnsets) {
