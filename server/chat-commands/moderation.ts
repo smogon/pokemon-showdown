@@ -226,7 +226,7 @@ export const commands: ChatCommands = {
 		if (cmd === 'roomauth1') userLookup = `\n\nTo look up auth for a user, use /userauth ${target}`;
 		let targetRoom = room;
 		if (target) targetRoom = Rooms.search(target)!;
-		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
+		if (!targetRoom || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
 		const showAll = user.can('mute', null, targetRoom);
@@ -1337,7 +1337,7 @@ export const commands: ChatCommands = {
 		if (!target) return;
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.roomid !== 'global' && curRoom.type !== 'battle') {
+			if (curRoom.type !== 'battle') {
 				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 			}
 		}

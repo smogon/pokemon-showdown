@@ -1098,7 +1098,7 @@ export class User extends Chat.MessageContext {
 					this.markDisconnected();
 				}
 				for (const roomid of connection.inRooms) {
-					this.leaveRoom(Rooms.get(roomid)!, connection, true);
+					this.leaveRoom(Rooms.get(roomid)!, connection);
 				}
 				--this.ips[connection.ip];
 				break;
@@ -1131,7 +1131,7 @@ export class User extends Chat.MessageContext {
 			// console.log('DESTROY: ' + this.id);
 			connection = this.connections[i];
 			for (const roomid of connection.inRooms) {
-				this.leaveRoom(Rooms.get(roomid)!, connection, true);
+				this.leaveRoom(Rooms.get(roomid)!, connection);
 			}
 			connection.destroy();
 		}
@@ -1226,17 +1226,8 @@ export class User extends Chat.MessageContext {
 			room.onConnect(this, connection);
 		}
 	}
-	leaveRoom(
-		room: Room | string,
-		connection: Connection | null = null,
-		force = false
-	) {
+	leaveRoom(room: Room | string, connection: Connection | null = null) {
 		room = Rooms.get(room)!;
-		if (room.roomid === 'global') {
-			// you can't leave the global room except while disconnecting
-			if (!force) return false;
-			this.cancelReady();
-		}
 		if (!this.inRooms.has(room.roomid)) {
 			return false;
 		}
