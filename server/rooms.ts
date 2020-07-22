@@ -833,7 +833,7 @@ export abstract class BasicRoom {
 
 		// remove references to ourself
 		for (const i in this.users) {
-			this.users[i].leaveRoom(this as Room, null, true);
+			this.users[i].leaveRoom(this as Room, null);
 			delete this.users[i];
 		}
 
