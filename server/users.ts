@@ -36,6 +36,8 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
 
+const NAMECHANGE_THROTTLE = 2 * 60 * 1000; // 2 minutes
+
 const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
@@ -367,6 +369,7 @@ export class User extends Chat.MessageContext {
 	lastMessage: string;
 	lastMessageTime: number;
 	lastReportTime: number;
+	lastNewNameTime = 0;
 	s1: string;
 	s2: string;
 	s3: string;
@@ -664,6 +667,16 @@ export class User extends Chat.MessageContext {
 
 		const tokenDataSplit = tokenData.split(',');
 		const [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
+
+		const diff = Date.now() - this.lastNewNameTime;
+		if (!this.trusted && userType === '1' && diff < NAMECHANGE_THROTTLE) { // userType '1' means unregistered
+			this.send(
+				`|nametaken|${name}|You must wait ${Math.round((NAMECHANGE_THROTTLE - diff) / 1000)} more
+				seconds before using an unregistered name.`
+			);
+			return false;
+		}
+
 		if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
 			Monitor.warn(`forged assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is ${Config.legalhosts[0]}.`);
@@ -709,6 +722,7 @@ export class User extends Chat.MessageContext {
 		this.s2 = tokenDataSplit[6];
 		this.s3 = tokenDataSplit[7];
 
+		if (userType === '1') this.lastNewNameTime = Date.now();
 		this.handleRename(name, userid, newlyRegistered, userType);
 	}
 
