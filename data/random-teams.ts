@@ -1251,7 +1251,7 @@ export class RandomTeams {
 			item = 'Power Herb';
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Sturdy' && !isLead && !isDoubles) ? 'Heavy-Duty Boots' : 'White Herb';
-		} else if (ability === 'Guts' && counter.Physical > 2) {
+		} else if (ability === 'Guts' && (counter.Physical > 2 || isDoubles)) {
 			item = hasType['Fire'] ? 'Toxic Orb' : 'Flame Orb';
 		} else if (ability === 'Magic Guard' && counter.damagingMoves.length > 1) {
 			item = hasMove['counter'] ? 'Focus Sash' : 'Life Orb';
