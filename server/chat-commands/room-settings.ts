@@ -802,10 +802,6 @@ export const commands: ChatCommands = {
 
 		const title = room.title || room.roomid;
 
-		if (room.roomid === 'global') {
-			return this.errorReply(`This room can't be deleted.`);
-		}
-
 		if (room.persist) {
 			if (room.settings.isPrivate) {
 				const upperStaffRoom = Rooms.get('upperstaff');
