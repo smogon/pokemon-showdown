@@ -41,8 +41,8 @@ const BATTLE = new Set([
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
-	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species',
-	'id', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
+	'side', 'battle', 'set', 'name', 'fullname', 'id',
+	'happiness', 'level', 'pokeball', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
 const ACTIVE_MOVE = new Set(['move']);
@@ -152,6 +152,21 @@ export const State = new class {
 		// @ts-ignore - readonly
 		battle.log = state.log;
 		return battle;
+	}
+
+	// Direct comparsions of serialized state will be flakey as the timestamp
+	// protocol message |t:| can diverge between two different runs over the same state.
+	// State must first be normalized before it is comparable.
+	normalize(state: AnyObject) {
+		state.log = this.normalizeLog(state.log);
+		return state;
+	}
+
+	normalizeLog(log?: null | string | string[]) {
+		if (!log) return log;
+		const normalized = (typeof log === 'string' ? log.split('\n') : log).map(line =>
+			line.startsWith(`|t:|`) ? `|t:|` : line);
+		return (typeof log === 'string' ? normalized.join('\n') : normalized);
 	}
 
 	serializeField(field: Field): /* Field */ AnyObject {

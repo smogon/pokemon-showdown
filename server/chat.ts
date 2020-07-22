@@ -437,6 +437,18 @@ export class CommandContext extends MessageContext {
 					this.sendChatMessage(resolvedMessage);
 				}
 				this.update();
+			}).catch(err => {
+				if (err.name?.endsWith('ErrorMessage')) {
+					this.errorReply(err.message);
+					return false;
+				}
+				Monitor.crashlog(err, 'An async chat command', {
+					user: this.user.name,
+					room: this.room?.roomid,
+					pmTarget: this.pmTarget?.name,
+					message: this.message,
+				});
+				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message);
@@ -575,8 +587,8 @@ export class CommandContext extends MessageContext {
 			}
 			Monitor.crashlog(err, 'A chat command', {
 				user: this.user.name,
-				room: this.room && this.room.roomid,
-				pmTarget: this.pmTarget && this.pmTarget.name,
+				room: this.room?.roomid,
+				pmTarget: this.pmTarget?.name,
 				message: this.message,
 			});
 			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
@@ -714,7 +726,7 @@ export class CommandContext extends MessageContext {
 
 	/** like privateModAction, but also notify Staff room */
 	privateGlobalModAction(msg: string) {
-		this.privateModAction(`(${msg})`);
+		this.privateModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
 		}
@@ -729,9 +741,9 @@ export class CommandContext extends MessageContext {
 	privateModAction(msg: string) {
 		if (this.room) {
 			if (this.room.roomid === 'staff') {
-				this.room.addByUser(this.user, msg);
+				this.room.addByUser(this.user, `(${msg})`);
 			} else {
-				this.room.sendModsByUser(this.user, msg);
+				this.room.sendModsByUser(this.user, `(${msg})`);
 			}
 		} else {
 			const data = this.pmTransform(`|modaction|${msg}`);
@@ -740,7 +752,7 @@ export class CommandContext extends MessageContext {
 				this.pmTarget.send(data);
 			}
 		}
-		this.roomlog(msg);
+		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null) {
 		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;

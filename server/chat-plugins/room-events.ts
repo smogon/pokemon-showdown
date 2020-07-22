@@ -156,7 +156,7 @@ export const commands: ChatCommands = {
 			if (oldEvent && 'events' in oldEvent) return this.errorReply(`"${eventId}" is already the name of a category.`);
 
 			const eventNameActual = (oldEvent ? oldEvent.eventName : eventName.trim());
-			this.privateModAction(`(${user.name} ${oldEvent ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
+			this.privateModAction(`${user.name} ${oldEvent ? "edited the" : "added a"} roomevent titled "${eventNameActual}".`);
 			this.modlog('ROOMEVENT', null, `${oldEvent ? "edited" : "added"} "${eventNameActual}"`);
 			events[eventId] = {
 				eventName: eventNameActual,
@@ -194,7 +194,7 @@ export const commands: ChatCommands = {
 			events[newID] = eventData;
 			delete events[oldID];
 
-			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
+			this.privateModAction(`${user.name} renamed the roomevent titled "${originalName}" to "${newName}".`);
 			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
 			room.saveSettings();
 		},
@@ -258,7 +258,7 @@ export const commands: ChatCommands = {
 				category.events = category.events.filter(event => event !== eventID);
 			}
 
-			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
+			this.privateModAction(`${user.name} removed a roomevent titled "${target}".`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
 			room.saveSettings();
 		},
@@ -343,7 +343,7 @@ export const commands: ChatCommands = {
 			if (room.settings.events[alias]) return this.errorReply(`"${alias}" is already an event, alias, or category.`);
 
 			room.settings.events[alias] = {eventID: eventId};
-			this.privateModAction(`(${user.name} added an alias "${alias}" for the roomevent "${eventId}".)`);
+			this.privateModAction(`${user.name} added an alias "${alias}" for the roomevent "${eventId}".`);
 			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
 			room.saveSettings();
 		},
@@ -364,7 +364,7 @@ export const commands: ChatCommands = {
 			}
 			delete room.settings.events[target];
 
-			this.privateModAction(`(${user.name} removed the alias "${target}")`);
+			this.privateModAction(`${user.name} removed the alias "${target}"`);
 			this.modlog('ROOMEVENT', null, `removed the alias "${target}"`);
 			room.saveSettings();
 		},
@@ -394,7 +394,7 @@ export const commands: ChatCommands = {
 			category.events.push(toID(event.eventName));
 			room.settings.events[categoryId] = category;
 
-			this.privateModAction(`(${user.name} added the roomevent "${eventId}" to the category "${categoryId}".)`);
+			this.privateModAction(`${user.name} added the roomevent "${eventId}" to the category "${categoryId}".`);
 			this.modlog('ROOMEVENT', null, `category for "${eventId}": "${categoryId}"`);
 
 			room.saveSettings();
@@ -427,7 +427,7 @@ export const commands: ChatCommands = {
 			category.events = category.events.filter(e => e !== eventId);
 			room.settings.events[categoryId] = category;
 
-			this.privateModAction(`(${user.name} removed the roomevent "${eventId}" from the category "${categoryId}".)`);
+			this.privateModAction(`${user.name} removed the roomevent "${eventId}" from the category "${categoryId}".`);
 			this.modlog('ROOMEVENT', null, `category for "${eventId}": removed "${categoryId}"`);
 
 			room.saveSettings();
@@ -448,7 +448,7 @@ export const commands: ChatCommands = {
 
 			room.settings.events![categoryId] = {events: []};
 
-			this.privateModAction(`(${user.name} added the category "${categoryId}".)`);
+			this.privateModAction(`${user.name} added the category "${categoryId}".`);
 			this.modlog('ROOMEVENT', null, `category: added "${categoryId}"`);
 
 			room.saveSettings();
@@ -470,7 +470,7 @@ export const commands: ChatCommands = {
 
 			delete room.settings.events?.[categoryId];
 
-			this.privateModAction(`(${user.name} removed the category "${categoryId}".)`);
+			this.privateModAction(`${user.name} removed the category "${categoryId}".`);
 			this.modlog('ROOMEVENT', null, `category: removed "${categoryId}"`);
 
 			room.saveSettings();

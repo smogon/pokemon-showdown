@@ -100,6 +100,8 @@
 		"Your status contains a banned word.": "您的状态里包含禁止使用的词.",
 		"Your status has been set to: ${target}.": "您的状态已设置为: ${target}.", "You are now marked as busy.": "您现在被标记为忙碌.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "您现在被标记为离开。发送消息或使用/back回到原来的状态.",
+		"You are already marked as back.": "您已回到原来的状态.",
+		"You are no longer marked as busy.": "您已停止标记为忙碌.",
 
 		"You must choose a name before you can talk.": "发言之前请登录用户",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "您被${lockType}封锁，因此不能发言。${lockExpiration}",
