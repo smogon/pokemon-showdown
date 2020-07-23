@@ -366,7 +366,7 @@ export const ssbSets: SSBSets = {
 	},
 	Trickster: {
 		species: 'Shiinotic', ability: 'Trillionage Roots', item: 'Leftovers', gender: '',
-		moves: ['Stremngth Sap', 'Cosmic Power', 'Knock Off'],
+		moves: ['Strength Sap', 'Cosmic Power', 'Knock Off'],
 		signatureMove: 'Soul-Shattering Stare',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', shiny: true,
 	},

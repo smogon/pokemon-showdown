@@ -820,7 +820,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move' && effect?.recoil) this.heal(source.baseMaxhp / 4);
+			if (effect && effect.effectType === 'Move' && !!effect.recoil) this.heal(source.baseMaxhp / 4, source);
 		},
 	},
 
