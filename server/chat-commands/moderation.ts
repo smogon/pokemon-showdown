@@ -83,7 +83,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		const currentSymbol = room.auth.getDirect(userid);
+		let currentSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
+		if (currentSymbol === Users.Auth.defaultSymbol()) currentSymbol = 'whitelist';
 		const currentGroup = Users.Auth.getGroup(currentSymbol);
 		const nextSymbol = target === 'deauth' ? Users.Auth.defaultSymbol() : target as GroupSymbol;
 		const nextGroup = Users.Auth.getGroup(nextSymbol);
@@ -111,7 +112,7 @@ export const commands: ChatCommands = {
 		const currentGroupName = currentGroup.name || "regular user";
 		const nextGroupName = nextGroup.name || "regular user";
 
-		if (room.auth.getDirect(userid) === nextSymbol) {
+		if (currentSymbol === nextSymbol) {
 			return this.errorReply(`User '${name}' is already a ${nextGroupName} in this room.`);
 		}
 		if (!user.can('makeroom')) {
