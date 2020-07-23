@@ -594,11 +594,8 @@ export abstract class BasicRoom {
 		this.destroy();
 	}
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
-		let reportJoins = this.reportJoins;
-		if (reportJoins && this.settings.modchat && !user.authAtLeast(this.settings.modchat, this)) {
-			reportJoins = false;
-		}
-		if (reportJoins) {
+		const canTalk = user.authAtLeast(this.settings.modchat ?? 'unlocked', this) && !this.isMuted(user);
+		if (this.reportJoins && canTalk) {
 			this.add(`|${type}|${entry}`).update();
 			return;
 		}

@@ -136,7 +136,7 @@ export const commands: ChatCommands = {
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
 			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
-			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Gigantamax Formes only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
+			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pokemon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
@@ -841,8 +841,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(megaSearch === false && !species.isMega)
 		);
 		const gmaxSearchResult = (
-			gmaxSearch === null || (gmaxSearch === true && species.isGigantamax) ||
-			(gmaxSearch === false && !species.isGigantamax)
+			gmaxSearch === null || (gmaxSearch === true && species.name.endsWith('-Gmax')) ||
+			(gmaxSearch === false && !species.name.endsWith('-Gmax'))
 		);
 		const fullyEvolvedSearchResult = (
 			fullyEvolvedSearch === null ||
@@ -1039,7 +1039,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].isGigantamax && !allowGmax) continue;
+		if (dex[mon].name.endsWith('-Gmax') && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
