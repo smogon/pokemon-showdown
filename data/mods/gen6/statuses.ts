@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const Statuses: {[k: string]: ModdedPureEffectData} = {
 	brn: {
 		inherit: true,
 		onResidual(pokemon) {

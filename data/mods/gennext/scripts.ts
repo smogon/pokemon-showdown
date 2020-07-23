@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen6',
 	init() {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];

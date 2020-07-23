@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: PureEffectData} = {
+export const Statuses: {[k: string]: PureEffectData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',

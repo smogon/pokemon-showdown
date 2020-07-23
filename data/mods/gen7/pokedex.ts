@@ -1,4 +1,4 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},

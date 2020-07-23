@@ -1,7 +1,7 @@
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.
  */
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen1',
 	gen: 1,
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.

@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	aguavberry: {
 		inherit: true,
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
@@ -203,4 +203,4 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 };
 
-exports.BattleItems = BattleItems;
+exports.Items = Items;

@@ -4,7 +4,7 @@
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
 	init() {
@@ -865,4 +865,4 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	},
 };
 
-exports.BattleScripts = BattleScripts;
+exports.Scripts = Scripts;

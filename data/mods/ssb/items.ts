@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	// Aeonic
 	noseiumz: {
 		name: "Noseium Z",
@@ -146,4 +146,4 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 };
 
-exports.BattleItems = BattleItems;
+exports.Items = Items;

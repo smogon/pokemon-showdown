@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const Statuses: {[k: string]: ModdedPureEffectData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -238,4 +238,4 @@ function residualdmg(battle: Battle, pokemon: Pokemon) {
 	}
 }
 
-exports.BattleStatuses = BattleStatuses;
+exports.Statuses = Statuses;

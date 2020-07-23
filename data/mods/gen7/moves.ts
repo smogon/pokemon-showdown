@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	"10000000voltthunderbolt": {
 		inherit: true,
 		isNonstandard: null,
