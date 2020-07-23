@@ -720,7 +720,7 @@ export class User extends Chat.MessageContext {
 			if (elapsed < NAMECHANGE_THROTTLE) {
 				if (this.newNames >= NAMES_PER_THROTTLE) {
 					this.send(
-						`|nametaken|${name}|You must wait ${Math.round((NAMECHANGE_THROTTLE - elapsed) / 1000)} more
+						`|nametaken|${name}|You must wait ${Chat.toDurationString(NAMECHANGE_THROTTLE - elapsed)} more
 						seconds before using another unregistered name.`
 					);
 					return false;
