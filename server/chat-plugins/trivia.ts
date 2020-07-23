@@ -63,6 +63,7 @@ const LIMBO_PHASE = 'limbo';
 const MINIMUM_PLAYERS = 3;
 const START_TIMEOUT = 30 * 1000;
 const INTERMISSION_INTERVAL = 20 * 1000;
+const PAUSE_INTERMISSION = 5 * 1000;
 
 const MAX_QUESTION_LENGTH = 252;
 const MAX_ANSWER_LENGTH = 32;
@@ -310,6 +311,7 @@ class Trivia extends Rooms.RoomGame {
 	canLateJoin: boolean;
 	game: TriviaGame;
 	questions: TriviaQuestion[];
+	isPaused = false;
 	phase: string;
 	phaseTimeout: NodeJS.Timer | null;
 	questionNumber: number;
@@ -560,11 +562,26 @@ class Trivia extends Rooms.RoomGame {
 		this.setPhaseTimeout(() => this.askQuestion(), START_TIMEOUT);
 	}
 
+	pause() {
+		if (this.isPaused) return "The trivia game is already paused.";
+		if (this.phase === QUESTION_PHASE) return "You cannot pause the trivia game during a question.";
+		this.isPaused = true;
+		this.broadcast("The Trivia game has been paused.");
+	}
+
+	resume() {
+		if (!this.isPaused) return "The trivia game is not paused.";
+		this.isPaused = false;
+		this.broadcast("The Trivia game has been resumed.");
+		if (this.phase === INTERMISSION_PHASE) this.setPhaseTimeout(() => this.askQuestion(), PAUSE_INTERMISSION);
+	}
+
 	/**
 	 * Broadcasts the next question on the questions list to the room and sets
 	 * a timeout to tally the answers received.
 	 */
 	askQuestion() {
+		if (this.isPaused) return;
 		if (!this.questions.length) {
 			if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
 			this.phaseTimeout = null;
@@ -776,6 +793,7 @@ class FirstModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return 'You are not a player in the current trivia game.';
+		if (this.isPaused) return "The trivia game is paused.";
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 		if (player.answer) return 'You have already attempted to answer the current question.';
 		if (!this.verifyAnswer(answer)) return;
@@ -809,6 +827,7 @@ class FirstModeTrivia extends Trivia {
 	}
 
 	tallyAnswers() {
+		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 
 		for (const i in this.playerTable) {
@@ -836,6 +855,7 @@ class TimerModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return 'You are not a player in the current trivia game.';
+		if (this.isPaused) return "The trivia game is paused.";
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 
 		const isCorrect = this.verifyAnswer(answer);
@@ -853,6 +873,7 @@ class TimerModeTrivia extends Trivia {
 	}
 
 	tallyAnswers() {
+		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 
 		let buffer = (
@@ -936,6 +957,7 @@ class NumberModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return 'You are not a player in the current trivia game.';
+		if (this.isPaused) return "The trivia game is paused.";
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 
 		const isCorrect = this.verifyAnswer(answer);
@@ -951,6 +973,7 @@ class NumberModeTrivia extends Trivia {
 	}
 
 	tallyAnswers() {
+		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 
 		let buffer;
@@ -1005,6 +1028,7 @@ class TriumvirateModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return 'You are not a player in the current trivia game.';
+		if (this.isPaused) return "The trivia game is paused.";
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 		player.setAnswer(answer, this.verifyAnswer(answer));
 		const correctAnswers = Object.keys(this.playerTable).filter(id => this.playerTable[id].isCorrect).length;
@@ -1019,6 +1043,7 @@ class TriumvirateModeTrivia extends Trivia {
 	}
 
 	tallyAnswers() {
+		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 		const correctPlayers = Object.keys(this.playerTable)
 			.filter(id => this.playerTable[id].isCorrect)
@@ -1191,6 +1216,17 @@ const commands: ChatCommands = {
 	},
 	answerhelp: [`/trivia answer OR /ta [answer] - Answer a pending question.`],
 
+	resume: 'pause',
+	pause(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
+		if (!this.can('show', null, room)) return false;
+		if (!this.canTalk()) return;
+		const res = (cmd === 'pause' ? getTriviaGame(room).pause() : getTriviaGame(room).resume());
+		if (res) return this.errorReply(res);
+	},
+	pausehelp: [`/trivia pause - Pauses a trivia game. Requires: + % @ # &`],
+	resumehelp: [`/trivia resume - Resumes a paused trivia game. Requires: + % @ # &`],
+
 	end(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!this.can('show', null, room)) return false;
@@ -1216,7 +1252,8 @@ const commands: ChatCommands = {
 		} else {
 			tarUser = user;
 		}
-		let buffer = `There is a trivia game in progress, and it is in its ${game.phase} phase.<br />` +
+		let buffer = `There is a ${game.isPaused ? "paused trivia game" : "trivia game in progress"}, ` +
+			`and it is in its ${game.phase} phase.<br />` +
 			`Mode: ${game.game.mode} | Category: ${game.game.category} | Score cap: ${game.getCap()}`;
 
 		const player = game.playerTable[tarUser.id];
@@ -1726,7 +1763,9 @@ const commands: ChatCommands = {
 			`- <code>/ta [answer]</code> - Answer the current question.`,
 			Utils.html`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &`,
 			`- <code>/trivia leave</code> - Makes the player leave the game.`,
-			Utils.html`- <code>/trivia end</code> - End a trivia game. Requires: + % @ #`,
+			Utils.html`- <code>/trivia end</code> - End a trivia game. Requires: + % @ # &`,
+			Utils.html`- <code>/trivia pause</code> - Pauses a trivia game. Requires: + % @ # &`,
+			Utils.html`- <code>/trivia resume</code> - Resumes a paused trivia game. Requires: + % @ # &`,
 			``,
 			`<strong>Question-modifying commands:</strong>`,
 			Utils.html`- <code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`,
