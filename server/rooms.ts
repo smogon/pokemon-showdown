@@ -18,6 +18,7 @@
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
+const MAX_CHATROOM_ID_LENGTH = 225;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
@@ -674,7 +675,7 @@ export abstract class BasicRoom {
 		if (newTitle.includes(',') || newTitle.includes('|') || newTitle.includes('[') || newTitle.includes('-')) {
 			throw new Chat.ErrorMessage("Room titles can't contain any of: ,|[-");
 		}
-		if (newID.length > 225) throw new Chat.ErrorMessage("The given room title is too long.");
+		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
 		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
 

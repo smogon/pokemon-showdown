@@ -716,42 +716,6 @@ export const commands: ChatCommands = {
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
-
-	async renamegroupchat(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (room.persist) return this.errorReply(`Must be a groupchat.`);
-		if (!user.authAtLeast(Users.HOST_SYMBOL, room) && !user.can('lock')) {
-			return this.errorReply(`Access denied.`);
-		}
-		let title = target.trim();
-		if (!title) return this.parse('/help renamegroupchat');
-		if (room.game || room.minorActivity || room.tour) {
-			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
-		}
-		if (room.battle) {
-			return this.errorReply("Cannot rename battle rooms.");
-		}
-		const existingRoom = Rooms.search(toID(title));
-		if (existingRoom && !existingRoom.settings.modjoin) {
-			return this.errorReply(`Your groupchat name is too similar to existing chat room '${title}'.`);
-		}
-		if (this.filter(title) !== title) {
-			throw new Chat.ErrorMessage("Invalid title.");
-		}
-		const creatorID = room.roomid.split('-')[1];
-		const id = `groupchat-${creatorID}-${toID(title)}` as RoomID;
-		title = `[G] ${title}`;
-		room.validateTitle(title, id);
-		if (!(await room.rename(title, id))) {
-			return this.errorReply(`Unknown error occurred while renaming the groupchat.`);
-		}
-		room.add(Utils.html`|raw|<div class="broadcast-green">This room has been renamed to <b>${target}</b></div>`).update();
-	},
-	renamegroupchathelp: [
-		'/renamegroupchat [name]: renames the current room to [name], if it\'s a groupchat.',
-		`Requires: % ${Users.HOST_SYMBOL} @ &`,
-	],
-
 	groupchatuptime: 'roomuptime',
 	roomuptime(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
@@ -868,8 +832,8 @@ export const commands: ChatCommands = {
 	rename() {
 		this.errorReply("Did you mean /renameroom?");
 	},
-
-	async renameroom(target, room) {
+	renamegroupchat: 'renameroom',
+	async renameroom(target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
 		if (!room) return this.requiresRoom();
 		if (room.game || room.minorActivity || room.tour) {
@@ -880,10 +844,25 @@ export const commands: ChatCommands = {
 		}
 		const roomtitle = target;
 		const oldTitle = room.title;
-		if (!(await room.rename(roomtitle))) {
+		const isGroupchat = cmd === 'renamegroupchat';
+		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
+		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
+		if (isGroupchat) {
+			const existingRoom = Rooms.search(toID(target));
+			if (existingRoom && !existingRoom.settings.modjoin) {
+				return this.errorReply(`Your groupchat name is too similar to existing chat room '${existingRoom.title}'.`);
+			}
+			if (this.filter(target) !== target) {
+				return this.errorReply("Invalid title.");
+			}
+			target = `[G] ${target}`;
+		}
+		const creatorID = room.roomid.split('-')[1];
+		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		if (!(await room.rename(roomtitle, id))) {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
-		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
+		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
 			`${room.settings.isPrivate.charAt(0).toUpperCase()}${room.settings.isPrivate.slice(1)}`;
@@ -893,7 +872,7 @@ export const commands: ChatCommands = {
 
 		const toNotify: RoomID[] = ['upperstaff'];
 		if (room.settings.isPrivate !== true) toNotify.push('staff');
-		Rooms.global.notifyRooms(toNotify, message);
+		if (!isGroupchat) Rooms.global.notifyRooms(toNotify, message);
 		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
 	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
