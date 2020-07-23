@@ -14,6 +14,7 @@ import * as Dashycode from '../../lib/dashycode';
 
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
+const MAX_MEMORY = 67108864; // 64MB
 const execFile = util.promisify(child_process.execFile);
 
 export class LogReaderRoom {
@@ -530,6 +531,7 @@ export const LogSearcher = new class {
 	}
 	async ripgrepSearchMonth(roomid: RoomID, search: string, limit: number, month: string) {
 		let results;
+		let count = 0;
 		try {
 			const {stdout} = await execFile('rg', [
 				'-e', this.constructRegex(search),
@@ -538,7 +540,7 @@ export const LogSearcher = new class {
 				'-m', `${limit}`,
 				'-P',
 			], {
-				maxBuffer: Infinity,
+				maxBuffer: MAX_MEMORY,
 				cwd: path.normalize(`${__dirname}/../../`),
 			});
 			results = stdout.split('--');
@@ -546,7 +548,7 @@ export const LogSearcher = new class {
 			if (e.stdout) results = e.stdout.split('--');
 			throw e;
 		}
-		const count = results.length;
+		count += results.length;
 		return {results, count};
 	}
 	async ripgrepSearch(
