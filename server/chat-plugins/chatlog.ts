@@ -545,7 +545,11 @@ export const LogSearcher = new class {
 			});
 			results = stdout.split('--');
 		} catch (e) {
-			if (e.stdout) results = e.stdout.split('--');
+			if (e.stdout || e.message.includes('stdout maxBuffer')) {
+				results = e.stdout.split('--');
+				count += results.length;
+				return {results, count};
+			}
 			throw e;
 		}
 		count += results.length;
@@ -557,7 +561,7 @@ export const LogSearcher = new class {
 		limit?: number | null,
 		date?: string | null
 	) {
-		const months = (date ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
+		const months = (date && toID(date) !== 'all' ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
 		let count = 0;
 		let results: string[] = [];
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
