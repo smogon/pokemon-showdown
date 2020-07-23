@@ -788,6 +788,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	// moves
 	bb: "Brave Bird",
 	bd: "Belly Drum",
+	bde: "Baby-Doll Eyes",
 	bpass: "Baton Pass",
 	bp: "Baton Pass",
 	cc: "Close Combat",
