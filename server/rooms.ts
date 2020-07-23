@@ -697,9 +697,9 @@ export abstract class BasicRoom {
 		} catch (e) {
 			return;
 		}
-    if (this.type === 'chat' && this.game) {
+		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
-    }
+		}
 		const oldID = this.roomid;
 		this.roomid = newID;
 		this.title = newTitle;
