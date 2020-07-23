@@ -1090,12 +1090,14 @@ export class RandomTeams {
 					rejectAbility = (hasType['Grass'] && isDoubles);
 				} else if (ability === 'Flash Fire') {
 					rejectAbility = (this.dex.getEffectiveness('Fire', species) < -1);
+				} else if (ability === 'Frisk') {
+					rejectAbility = isDoubles;
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Guts') {
 					rejectAbility = (!hasMove['facade'] && !hasMove['sleeptalk'] && !species.nfe);
 				} else if (ability === 'Harvest') {
-					rejectAbility = hasAbility['Frisk'];
+					rejectAbility = (hasAbility['Frisk'] && !isDoubles);
 				} else if (ability === 'Hustle') {
 					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Intimidate') {
