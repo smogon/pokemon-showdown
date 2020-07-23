@@ -676,7 +676,6 @@ export abstract class BasicRoom {
 		}
 		if (newID.length > 225) throw new Chat.ErrorMessage("The given room title is too long.");
 		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
-		return true;
 	}
 
 	getReplayData() {
