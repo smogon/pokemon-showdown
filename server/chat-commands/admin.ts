@@ -217,6 +217,25 @@ export const commands: ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
+	sendhtmlpage(target, room, user, connection) {
+		if (!this.can('addhtml', null, room)) return false;
+		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
+		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
+		const targetUser = Users.get(targetID);
+		if (!targetUser) return this.errorReply(`User not found.`);
+		content = this.canHTML(content)!;
+		if (!content) return;
+		const context = new Chat.PageContext({
+			user: targetUser,
+			connection: targetUser.connections[0],
+			pageid: `view-bot-${user.id}-${toID(pageid)}`,
+		});
+		context.title = `[${user.name}] ${pageid}`;
+		return context.send(content);
+	},
+	sendhtmlpagehelp: [
+		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
+	],
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
 		this.sendReply(`||https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#global-messages`);
@@ -1089,4 +1108,29 @@ export const commands: ChatCommands = {
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
 	],
+};
+
+export const pages: PageTable = {
+	bot(args, user) {
+		const [botid, pageid] = args;
+		const bot = Users.get(botid);
+		if (!bot) {
+			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
+		}
+		let canSend = Users.globalAuth.get(bot) === '*';
+		let room;
+		for (const curRoom of Rooms.global.chatRooms) {
+			if (curRoom.auth.get(bot) === '*') {
+				canSend = true;
+				room = curRoom;
+			}
+		}
+		if (!canSend) {
+			return `<div class="pad"><h2>"${bot}" is not a bot.</h2></div>`;
+		}
+		bot.sendTo(
+			room ? room.roomid : 'lobby',
+			`|pm|${user.name}|${bot.name}||requestpage|${user.name}|${pageid}`
+		);
+	},
 };
