@@ -556,8 +556,23 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Bans sleep moves below 100% accuracy, in conjunction with Gravity or Gigantamax Orbeetle",
 		banlist: [
 			'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
-			'Orbeetle-Gmax ++ Grass Whistle', 'Orbeetle-Gmax ++ Hypnosis', 'Orbeetle-Gmax ++ Lovely Kiss', 'Orbeetle-Gmax ++ Sing', 'Orbeetle-Gmax ++ Sleep Powder',
 		],
+		onValidateTeam(team) {
+			let hasOrbeetle = false;
+			let hasSleepMove = false;
+			for (const set of team) {
+				const species = this.dex.getSpecies(set.species);
+				if (species.name === "Orbeetle" && set.gigantamax) hasOrbeetle = true;
+				if (!hasOrbeetle && species.name === "Orbeetle-Gmax") hasOrbeetle = true;
+				for (const moveid of set.moves) {
+					const move = this.dex.getMove(moveid);
+					if (move.status && move.status === 'slp' && move.accuracy < 100) hasSleepMove = true;
+				}
+			}
+			if (hasOrbeetle && hasSleepMove) {
+				return [`The combination of Gravity and Gigantamax Orbeetle on the same team is banned.`];
+			}
+		},
 		onBegin() {
 			this.add('rule', 'Gravity Sleep Clause: The combination of sleep-inducing moves with imperfect accuracy and Gravity or Gigantamax Orbeetle are banned');
 		},
@@ -858,9 +873,11 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onValidateSet(set) {
-			const species = this.dex.getSpecies(set.species);
-			if (species.isGigantamax) {
-				return [`Gigantamaxing is banned.`, `(Change ${species.name} to its base species, ${species.baseSpecies}.)`];
+			if (set.gigantamax) {
+				return [
+					`Your set for ${set.species} is flagged as Gigantamax, but Gigantamaxing is disallowed`,
+					`(If this was a mistake, disable Gigantamaxing on the set.)`,
+				];
 			}
 		},
 		onBegin() {

@@ -763,6 +763,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	ttar: "Tyranitar",
 	venu: "Venusaur",
 	viriz: "Virizion",
+	watershifu: "Urshifu-Rapid-Strike",
 	whimsi: "Whimsicott",
 	xern: "Xerneas",
 	xurk: "Xurkitree",

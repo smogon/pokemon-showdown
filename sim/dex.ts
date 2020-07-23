@@ -380,7 +380,6 @@ export class ModdedDex {
 			const formeNames: {[k: string]: string[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
-				gmax: ['gigantamax', 'gmax'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
 			};
@@ -1212,9 +1211,10 @@ export class ModdedDex {
 				buf += '|';
 			}
 
-			if (set.pokeball || set.hpType) {
+			if (set.pokeball || set.hpType || set.gigantamax) {
 				buf += ',' + set.hpType;
 				buf += ',' + toID(set.pokeball);
+				buf += ',' + (set.gigantamax ? 'G' : '');
 			}
 		}
 
@@ -1332,14 +1332,15 @@ export class ModdedDex {
 			j = buf.indexOf(']', i);
 			let misc;
 			if (j < 0) {
-				if (i < buf.length) misc = buf.substring(i).split(',', 3);
+				if (i < buf.length) misc = buf.substring(i).split(',', 4);
 			} else {
-				if (i !== j) misc = buf.substring(i, j).split(',', 3);
+				if (i !== j) misc = buf.substring(i, j).split(',', 4);
 			}
 			if (misc) {
 				set.happiness = (misc[0] ? Number(misc[0]) : 255);
 				set.hpType = misc[1];
 				set.pokeball = misc[2];
+				set.gigantamax = !!misc[3];
 			}
 			if (j < 0) break;
 			i = j + 1;

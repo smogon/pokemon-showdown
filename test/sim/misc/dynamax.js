@@ -71,7 +71,7 @@ describe("Dynamax", function () {
 
 	it('G-Max Steelsurge hazard should deal 2x damage to Eiscue', function () {
 		battle = common.createBattle([[
-			{species: "Copperajah-Gmax", moves: ['ironhead']},
+			{species: "Copperajah", moves: ['ironhead'], gigantamax: true},
 		], [
 			{species: "Pyukumuku", moves: ['uturn']},
 			{species: "Eiscue", ability: 'iceface', moves: ['splash']},

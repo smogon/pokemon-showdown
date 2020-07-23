@@ -27,7 +27,7 @@ describe('G-Max Volcalith', function () {
 	it('should deal damage for four turns, including the fourth turn', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
-			{species: 'Coalossal-Gmax', moves: ['rockthrow', 'sleeptalk']},
+			{species: 'Coalossal', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]});
 		battle.setPlayer('p2', {team: [
@@ -43,7 +43,7 @@ describe('G-Max Volcalith', function () {
 
 	it.skip('should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal-Gmax', item: 'Eject Button', moves: ['rockthrow', 'sleeptalk']},
+			{species: 'Coalossal', item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk', 'grasspledge']},
 			{species: 'Wynaut', moves: ['sleeptalk', 'firepledge']},
 		], [

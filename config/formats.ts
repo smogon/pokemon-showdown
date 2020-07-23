@@ -841,7 +841,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 					const pokemon = this.dex.getSpecies(speciesid);
 					if (pokemon.isNonstandard || unreleased(pokemon)) continue;
 					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
-					if (pokemon.isGigantamax || this.ruleTable.isRestrictedSpecies(pokemon)) continue;
+					if (this.ruleTable.isRestrictedSpecies(pokemon)) continue;
 
 					for (const key of Object.values(pokemon.abilities)) {
 						const abilityId = toID(key);

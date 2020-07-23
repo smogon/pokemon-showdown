@@ -13,7 +13,7 @@ describe('G-Max Wildfire', function () {
 	it('should not damage Fire-types', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
-			{species: 'Charizard-Gmax', moves: ['ember']},
+			{species: 'Charizard', moves: ['ember'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]});
 		battle.setPlayer('p2', {team: [
@@ -27,7 +27,7 @@ describe('G-Max Wildfire', function () {
 	it('should deal damage for four turns, including the fourth turn', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
-			{species: 'Charizard-Gmax', moves: ['ember', 'sleeptalk']},
+			{species: 'Charizard', moves: ['ember', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]});
 		battle.setPlayer('p2', {team: [

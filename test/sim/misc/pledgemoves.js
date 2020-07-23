@@ -47,7 +47,7 @@ describe('Pledge Moves', function () {
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
 			{species: 'Venusaur', moves: ['grasspledge']},
-			{species: 'Charizard-Gmax', level: 1, moves: ['firepledge']},
+			{species: 'Charizard', level: 1, moves: ['firepledge'], gigantamax: true},
 		]]);
 		battle.makeChoices('auto', 'move grasspledge +1, move firepledge +1 dynamax');
 		const weedle = battle.p1.active[0];

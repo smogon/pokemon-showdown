@@ -483,7 +483,7 @@ describe('Team Validator', function () {
 
 	it('should reject exclusive G-Max moves added directly to a Pokemon\'s moveset', function () {
 		const team = [
-			{species: 'charizard-gmax', ability: 'blaze', moves: ['gmaxwildfire'], evs: {hp: 1}},
+			{species: 'charizard', ability: 'blaze', moves: ['gmaxwildfire'], evs: {hp: 1}, gigantamax: true},
 		];
 		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);
@@ -494,6 +494,7 @@ describe('Team Validator', function () {
 	it('should reject Gmax Pokemon from formats with Dynamax Clause', function () {
 		const team = [
 			{species: 'gengar-gmax', ability: 'cursedbody', moves: ['shadowball'], evs: {hp: 1}},
+			{species: 'gengar', ability: 'cursedbody', moves: ['shadowball'], evs: {hp: 1}, gigantamax: true},
 		];
 		const illegal = TeamValidator.get('gen8customgame@@@dynamaxclause').validateTeam(team);
 		assert(illegal);

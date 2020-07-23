@@ -655,8 +655,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
-	/** Name of its Gigantamax move, if a pokemon is gigantamax. */
-	readonly isGigantamax?: string;
+	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
+	readonly canGigantamax?: string;
+	/** If this Pokemon can gigantamax, is its gigantamax released? */
+	readonly gmaxUnreleased?: boolean;
+	/** True if a Pokemon species is incapable of dynamaxing */
+	readonly cannotDynamax?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -746,11 +750,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
-		this.isGigantamax = data.isGigantamax || undefined;
-		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
-		// isGigantamax checking is used to successfully pass learnsets to the client
+		this.canGigantamax = data.canGigantamax || undefined;
+		this.gmaxUnreleased = !!data.gmaxUnreleased;
+		this.cannotDynamax = !!data.cannotDynamax;
+		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
-			(!this.isGigantamax ? undefined : this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
