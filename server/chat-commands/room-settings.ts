@@ -865,13 +865,13 @@ export const commands: ChatCommands = {
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
 			`${room.settings.isPrivate.charAt(0).toUpperCase()}${room.settings.isPrivate.slice(1)}`;
-		const message = Utils.html`
-			|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>
-		`;
-
-		const toNotify: RoomID[] = ['upperstaff'];
-		if (room.settings.isPrivate !== true) toNotify.push('staff');
-		if (!isGroupchat) Rooms.global.notifyRooms(toNotify, message);
+		if (!isGroupchat) {
+			const toNotify: RoomID[] = room.settings.isPrivate === true ? ['upperstaff'] : ['upperstaff', 'staff'];
+			Rooms.global.notifyRooms(
+				toNotify,
+				Utils.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`
+			);
+		}
 		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
 	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
