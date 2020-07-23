@@ -963,5 +963,3 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 	},
 };
-
-exports.Moves = Moves;

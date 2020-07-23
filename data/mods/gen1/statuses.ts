@@ -257,5 +257,3 @@ export const Statuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 };
-
-exports.Statuses = Statuses;

@@ -54,5 +54,3 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 };
-
-exports.Scripts = Scripts;

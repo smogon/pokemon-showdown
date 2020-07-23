@@ -2386,7 +2386,7 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
+export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));
@@ -2447,5 +2447,3 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
-
-exports.PM = PM;

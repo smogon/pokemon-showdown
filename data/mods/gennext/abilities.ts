@@ -684,5 +684,3 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onFoeTrapPokemon(pokemon) {},
 	},
 };
-
-exports.Abilities = Abilities;

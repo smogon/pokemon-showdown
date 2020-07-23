@@ -864,5 +864,3 @@ export const Scripts: ModdedBattleScriptsData = {
 		return Math.floor(damage);
 	},
 };
-
-exports.Scripts = Scripts;

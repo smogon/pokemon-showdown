@@ -2119,5 +2119,3 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Cute",
 	},
 };
-
-exports.Moves = Moves;

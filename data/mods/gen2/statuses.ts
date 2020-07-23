@@ -237,5 +237,3 @@ function residualdmg(battle: Battle, pokemon: Pokemon) {
 		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
 	}
 }
-
-exports.Statuses = Statuses;

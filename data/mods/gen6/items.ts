@@ -202,5 +202,3 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 	},
 };
-
-exports.Items = Items;

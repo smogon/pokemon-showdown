@@ -145,5 +145,3 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Fire-type attacks have 1.2x power. Reshiram with Blue Flare can use Bleh Flame.",
 	},
 };
-
-exports.Items = Items;

@@ -4506,21 +4506,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in exports.Moves) {
-				const move = exports.Moves[id];
+			for (const id in this.dex.data.Moves) {
+				const move = this.dex.getMove(id);
 				if (move.realMove || move.id === 'glitzerpopping') continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
-				if (this.dex.getMove(id).gen > this.gen) continue;
-				moves.push(move);
+				if (move.gen > this.gen) continue;
+				moves.push(move.name);
 			}
-			let randomMove: string;
-			if (moves.length) {
-				randomMove = this.sample(moves).name;
-			} else {
-				return false;
-			}
+			if (!moves.length) return false;
+			const randomMove = this.sample(moves);
 			this.useMove(randomMove, target);
 		},
 		multihit: [2, 5],
