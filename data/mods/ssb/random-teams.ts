@@ -180,6 +180,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hyper Goner',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	iyarito: {
+		species: 'Gengar', ability: 'Pollo Diablo', item: 'Choice Specs', gender: 'F',
+		moves: ['Sludge Wave', 'Volt Switch', 'Fusion Flare'],
+		signatureMove: 'Patrona Attack',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
+	},
 	Jho: {
 		species: 'Toxtricity', ability: 'Punk Rock', item: 'Throat Spray', gender: 'M',
 		moves: ['Nasty Plot', 'Overdrive', 'Volt Switch'],

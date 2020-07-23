@@ -354,6 +354,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Instruct')}|I'm not ready to say goodbye to someone like you again...`);
 		},
 	},
+	iyarito: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('iyarito')}|Madre de Dios, ¡es el Pollo Diablo!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('iyarito')}|Well, you're not taking me without a fight!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('iyarito')}|RIP Patrona`);
+		},
+	},
 	jettxx: {
 		noCopy: true,
 		onStart() {

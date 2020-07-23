@@ -781,6 +781,26 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "???",
 	},
 
+	// iyatiro
+	patronaattack: {
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		shortDesc: "No additional effect.",
+		name: "Patrona Attack",
+		pp: 20,
+		priority: 1,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Moongeist Beam', target);
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Jett x_x
 	thehuntison: {
 		accuracy: 100,
