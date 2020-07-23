@@ -222,6 +222,13 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen5ou').validateTeam(team);
 		assert(illegal);
+
+		// move not breedable
+		team = [
+			{species: 'kubfu', ability: 'innerfocus', moves: ['aerialace'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8lc').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should reject illegal egg move combinations', function () {
