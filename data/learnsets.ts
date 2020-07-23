@@ -3553,17 +3553,6 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 		],
 		eventOnly: true,
 	},
-	pikachugmax: {
-		learnset: {
-			doubleteam: ["8S0"],
-			growl: ["8S0"],
-			quickattack: ["8S0"],
-			thunderwave: ["8S0"],
-		},
-		eventData: [
-			{generation: 8, level: 10, perfectIVs: 6, moves: ["growl", "quickattack", "thunderwave", "doubleteam"], pokeball: "pokeball"},
-		],
-	},
 	raichu: {
 		learnset: {
 			agility: ["8M", "8L1"],
@@ -7321,17 +7310,6 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			uturn: ["8M"],
 			workup: ["8M"],
 		},
-	},
-	meowthgmax: {
-		learnset: {
-			fakeout: ["8S0"],
-			growl: ["8S0"],
-			payday: ["8S0"],
-			slash: ["8S0"],
-		},
-		eventData: [
-			{generation: 8, level: 5, perfectIVs: 3, moves: ["fakeout", "growl", "slash", "payday"], pokeball: "cherishball"},
-		],
 	},
 	persian: {
 		learnset: {
@@ -18396,17 +18374,6 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 7, level: 5, perfectIVs: 6, moves: ["tackle", "tailwhip", "growl"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
-	},
-	eeveegmax: {
-		learnset: {
-			growl: ["8S0"],
-			quickattack: ["8S0"],
-			sandattack: ["8S0"],
-			tailwhip: ["8S0"],
-		},
-		eventData: [
-			{generation: 8, level: 10, perfectIVs: 6, moves: ["growl", "tailwhip", "sandattack", "quickattack"], pokeball: "pokeball"},
-		],
 	},
 	vaporeon: {
 		learnset: {
