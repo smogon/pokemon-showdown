@@ -23,11 +23,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		this.runEvent('AfterMega', pokemon);
 
 		// Kaiju Bunny becomes Normal/Fairy when mega evolving
-		if (pokemon.name === 'Kaiju Bunny' && !pokemon.illusion) this.add('-start', pokemon, 'typechange', 'Normal/Fairy');
-		// Overneat gains the fairy type when mega evolving
-		if (pokemon.name === 'Overneat' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fairy');
-		// Custom mega without tooltips support currently
-		if (pokemon.name === 'frostyicelad ❆' && !pokemon.illusion) this.add('-start', pokemon, 'typechange', 'Bug/Ice');
+		if (['Kaiju Bunny', 'Overneat', 'frostyicelad ❆'].includes(pokemon.name) && !pokemon.illusion) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
+		}
 
 		return true;
 	},

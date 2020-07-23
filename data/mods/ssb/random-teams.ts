@@ -200,7 +200,7 @@ export const ssbSets: SSBSets = {
 	},
 	Kingbaruk: {
 		species: 'Stonjourner', ability: 'Sturdy', item: 'Heavy Duty Boots', gender: 'M',
-		moves: ['Diamond Storm', ['Superpower', 'Earthquake'], 'King\s Shield'],
+		moves: ['Diamond Storm', ['Superpower', 'Earthquake'], 'King\'s Shield'],
 		signatureMove: 'Leave it to the team!',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},

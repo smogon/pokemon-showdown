@@ -235,7 +235,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(target, pokemon) {
 			this.add(`c|${getName('Elgino')}|Time to save Hyrule!`);
 			if (pokemon.illusion) return;
-			this.add('-start', pokemon, 'typechange', 'Grass/Fairy');
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Elgino')}|Hold on I need to stock up on ${this.sample(['Bombs', 'Arrows', 'Magic', 'Seeds'])}`);
@@ -295,7 +295,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(source) {
 			this.add(`c|${getName('Felucia')}|battlesignup! I dropped my dice somewhere and now all I can do is make you play with them (join using %join one)`);
 			if (source.illusion) return;
-			this.add('-start', source, 'typechange', 'Psychic/Normal');
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Felucia')}|battlesignup: I lost connection to a player so I guess I'll get a new one (/me in to sub)`);
@@ -321,7 +321,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(source) {
 			this.add(`c|${getName('frostyicelad ❆')}|Oh i guess its my turn now! Time to sweep!`);
 			if (source.species.id !== 'frosmothmega' || source.illusion) return;
-			this.add('-start', source, 'typechange', 'Bug/Ice');
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut(source) {
 			this.add(`c|${getName('frostyicelad ❆')}|Hey! ${source.side.name} why dont you keep me in and let me sweep? Mean.`);
@@ -395,7 +395,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(source) {
 			this.add(`c|${getName('Kaiju Bunny')}|I heard SOMEONE wasn't getting enough affection! ￣( ÒㅅÓ)￣`);
 			if (source.species.id !== 'lopunnymega' || source.illusion) return;
-			this.add('-start', source, 'typechange', 'Normal/Fairy');
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Kaiju Bunny')}|Brb, need more coffee ￣( =ㅅ=)￣`);
@@ -518,7 +518,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(target, source) {
 			this.add(`c|${getName('Morfent ( _̀> ̀)')}|le le 9gag army has arrived`);
 			if (source.illusion) return;
-			this.add('-start', source, 'typeadd', 'Normal');
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onFaint(source) {
 			this.add(`c|${getName('Morfent ( _̀> ̀)')}|mods pls ban ${source.side.foe.name}!!! they're hacking into ${source.side.name}'s account and making awful plays`);
@@ -548,7 +548,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(source) {
 			this.add(`c|${getName('Overneat')}|Lets end this ${source.side.foe.name}!!`);
 			if (source.species.id !== 'absolmega' || source.illusion) return;
-			this.add('-start', source, 'typeadd', 'Fairy');
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Overneat')}|I can do better!`);
@@ -562,7 +562,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(source) {
 			this.add(`c|${getName('OM~!')}|What's up gamers?`);
 			if (source.illusion) return;
-			this.add('-start', source, 'typeadd', 'Flying');
+			// hardcode since pokemon.ts is weird with 3 types
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
+			this.add('-start', source, 'typeadd', 'Flying', '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('OM~!')}|Let me just ${['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'][this.random(3)]}`);
@@ -588,7 +590,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(target, source) {
 			this.add(`c|${getName('Perish Song')}|From the Ghastly Eyrie I can see to the ends of the world, and from this vantage point I declare with utter certainty that this one is in the bag!`);
 			if (source.illusion) return;
-			this.add('-start', source, 'typeadd', 'Ice');
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Perish Song')}|This isn't the end.`);

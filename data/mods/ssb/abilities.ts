@@ -106,13 +106,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 
 	// Cake
 	h: {
-		desc: "On switch-in and at the ened of every turn, this Pokemon changes to a random typing.",
-		shortDesc: "On switch-in & every turn, random type.",
+		shortDesc: "On switch-in and at the end of every turn, this Pokemon changes to a random typing.",
 		name: "h",
 		onSwitchIn(pokemon) {
-			const typeList = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock",
-				"Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric",
-				"Psychic", "Ice", "Dragon", "Dark", "Fairy"];
+			const typeList = Object.keys(this.dex.data.TypeChart);
 			this.prng.shuffle(typeList);
 			const firstType = typeList[0];
 			this.prng.shuffle(typeList);
@@ -131,9 +128,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
-				const typeList = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock",
-					"Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric",
-					"Psychic", "Ice", "Dragon", "Dark", "Fairy"];
+				const typeList = Object.keys(this.dex.data.TypeChart);
 				this.prng.shuffle(typeList);
 				const firstType = typeList[0];
 				this.prng.shuffle(typeList);
@@ -758,7 +753,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			onStart(pokemon) {
 				const typeList = Object.keys(this.dex.data.TypeChart);
 				const firstTypeIndex = this.random(typeList.length);
-				const secondType = typeList.slice(0, firstTypeIndex).concat(typeList.slice(firstTypeIndex + 1))[this.random(typeList.length - 1)];
+				const secondType = this.sample(typeList.slice(0, firstTypeIndex).concat(typeList.slice(firstTypeIndex + 1)));
 				this.effectData.immunities = [typeList[firstTypeIndex], secondType];
 				this.add("-message", `Shadecession is now immune to ${this.effectData.immunities[0]} and ${this.effectData.immunities[1]} types!`);
 			},
