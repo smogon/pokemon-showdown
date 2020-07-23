@@ -244,6 +244,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	counter: {
 		inherit: true,
 		desc: "Deals damage to the opposing Pokemon equal to twice the damage dealt by the last move used in the battle. This move ignores type immunity. Fails if the user moves first, or if the opposing side's last move was Counter, had 0 power, or was not Normal or Fighting type. Fails if the last move used by either side did 0 damage and was not Confuse Ray, Conversion, Focus Energy, Glare, Haze, Leech Seed, Light Screen, Mimic, Mist, Poison Gas, Poison Powder, Recover, Reflect, Rest, Soft-Boiled, Splash, Stun Spore, Substitute, Supersonic, Teleport, Thunder Wave, Toxic, or Transform.",
+		shortDesc: "If hit by Normal/Fighting move, deals 2x damage.",
 		ignoreImmunity: true,
 		willCrit: false,
 		damageCallback(pokemon, target) {

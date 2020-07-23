@@ -96,6 +96,7 @@ export const BattleScripts: BattleScriptsData = {
 			pokemon.side.zMoveUsed = true;
 		}
 		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+		this.lastSuccessfulMoveThisTurn = moveDidSomething ? this.activeMove && this.activeMove.id : null;
 		if (this.activeMove) move = this.activeMove;
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
@@ -336,7 +337,16 @@ export const BattleScripts: BattleScriptsData = {
 
 		this.setActiveMove(move, pokemon, targets[0]);
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
+		let hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
+			return false;
+		}
+
+		hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
@@ -345,15 +355,6 @@ export const BattleScripts: BattleScriptsData = {
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
-
-		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
-		if (!hitResult) {
-			if (hitResult === false) {
-				this.add('-fail', pokemon);
-				this.attrLastMove('[still]');
-			}
-			return false;
-		}
 
 		let atLeastOneFailure!: boolean;
 		for (const step of moveSteps) {
@@ -573,6 +574,10 @@ export const BattleScripts: BattleScriptsData = {
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return false;
+		}
+
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
@@ -582,10 +587,6 @@ export const BattleScripts: BattleScriptsData = {
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
-
-		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
-			return false;
-		}
 
 		if (move.target === 'all') {
 			hitResult = this.runEvent('TryHitField', target, pokemon, move);
@@ -1264,8 +1265,9 @@ export const BattleScripts: BattleScriptsData = {
 				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
-			maxMove.basePower = move.maxMove.basePower;
-			if (['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) maxMove.basePower = 160;
+			if (!['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) {
+				maxMove.basePower = move.maxMove.basePower;
+			}
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;

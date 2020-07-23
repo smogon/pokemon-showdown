@@ -15,10 +15,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "foeSide",
 		type: "Steel",
 	},
-	magmastorm: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	pikapapow: {
 		inherit: true,
 		isNonstandard: null,

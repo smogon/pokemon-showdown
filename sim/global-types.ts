@@ -722,6 +722,8 @@ interface EventMethods {
 	onAnyFaintPriority?: number;
 	onAllyBasePowerPriority?: number;
 	onAllyModifyAtkPriority?: number;
+	onAllyModifySpAPriority?: number;
+	onAllyModifySpDPriority?: number;
 	onAttractPriority?: number;
 	onBasePowerPriority?: number;
 	onBeforeMovePriority?: number;
@@ -753,6 +755,7 @@ interface EventMethods {
 	onResidualSubOrder?: number;
 	onSourceBasePowerPriority?: number;
 	onSourceInvulnerabilityPriority?: number;
+	onSourceModifyAccuracyPriority?: number;
 	onSourceModifyAtkPriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
@@ -1214,6 +1217,7 @@ interface FormatsData extends EventMethods {
 	checkLearnset?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
 	) => {type: string, [any: string]: any} | null;
+	getEvoFamily?: (this: Format, speciesid: string) => ID;
 	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onBegin?: (this: Battle) => void;

@@ -59,7 +59,6 @@ export const commands: ChatCommands = {
 		let hiddenrooms = ``;
 		let privaterooms = ``;
 		for (const roomid of targetUser.inRooms) {
-			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
 			const authSymbol = targetRoom.auth.getDirect(targetUser.id).trim();
@@ -1966,11 +1965,11 @@ export const commands: ChatCommands = {
 		if (target === 'delete' || target === 'remove') {
 			if (!room.settings.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
 			delete room.settings.rulesLink;
-			this.privateModAction(`(${user.name} has removed the room rules link.)`);
+			this.privateModAction(`${user.name} has removed the room rules link.`);
 			this.modlog('RULES', null, `removed room rules link`);
 		} else {
 			room.settings.rulesLink = target;
-			this.privateModAction(`(${user.name} changed the room rules link to: ${target})`);
+			this.privateModAction(`${user.name} changed the room rules link to: ${target}`);
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
@@ -2514,7 +2513,7 @@ export const commands: ChatCommands = {
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
 		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
-		this.privateModAction(`(${user.name} denied ${target}'s request to display ${entry.link}.)`);
+		this.privateModAction(`${user.name} denied ${target}'s request to display ${entry.link}.`);
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
@@ -2548,7 +2547,7 @@ export const commands: ChatCommands = {
 				return this.errorReply('Invalid image');
 			}
 		}
-		if (comment) buf += Utils.html`<br>(${comment})</div>`;
+		if (comment) buf += Utils.html`<br>(${comment.trim()})</div>`;
 
 		if (!this.canBroadcast()) return false;
 		if (this.broadcastMessage) {

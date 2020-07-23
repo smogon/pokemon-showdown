@@ -474,26 +474,6 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it('should reject Gmax Pokemon from before Gen 8', function () {
-		let team = [
-			{species: 'charizard-gmax', ability: 'blaze', moves: ['flamethrower'], evs: {hp: 1}},
-		];
-		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert.equal(illegal, null);
-
-		team = [
-			{species: 'charizard-gmax', ability: 'blaze', moves: ['roost'], evs: {hp: 1}},
-		];
-		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert(illegal);
-
-		team = [
-			{species: 'pikachu-gmax', ability: 'static', moves: ['thunderbolt'], evs: {hp: 1}},
-		];
-		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert.equal(illegal, null);
-	});
-
 	it('should reject exclusive G-Max moves added directly to a Pokemon\'s moveset', function () {
 		const team = [
 			{species: 'charizard-gmax', ability: 'blaze', moves: ['gmaxwildfire'], evs: {hp: 1}},

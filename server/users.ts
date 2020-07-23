@@ -537,23 +537,7 @@ export class User extends Chat.MessageContext {
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
 	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
-		if (this.hasSysopAccess()) return true;
-
-		const auth: Auth = room ? room.auth : Users.globalAuth;
-
-		let group = auth.get(this);
-		if (auth.has(this.id) && group === Auth.defaultSymbol()) {
-			group = 'whitelist' as GroupSymbol;
-		}
-		const targetGroup = target ? auth.get(target) : undefined;
-
-		const roomIsTemporary = room && !room.persist;
-		if (roomIsTemporary && group === this.group) {
-			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
-			if (replaceGroup) group = replaceGroup;
-		}
-
-		return Auth.hasPermission(group, permission as any, targetGroup, target === this);
+		return Auth.hasPermission(this, permission, target, room);
 	}
 	/**
 	 * Special permission check for system operators
@@ -1114,7 +1098,7 @@ export class User extends Chat.MessageContext {
 					this.markDisconnected();
 				}
 				for (const roomid of connection.inRooms) {
-					this.leaveRoom(Rooms.get(roomid)!, connection, true);
+					this.leaveRoom(Rooms.get(roomid)!, connection);
 				}
 				--this.ips[connection.ip];
 				break;
@@ -1147,7 +1131,7 @@ export class User extends Chat.MessageContext {
 			// console.log('DESTROY: ' + this.id);
 			connection = this.connections[i];
 			for (const roomid of connection.inRooms) {
-				this.leaveRoom(Rooms.get(roomid)!, connection, true);
+				this.leaveRoom(Rooms.get(roomid)!, connection);
 			}
 			connection.destroy();
 		}
@@ -1242,17 +1226,8 @@ export class User extends Chat.MessageContext {
 			room.onConnect(this, connection);
 		}
 	}
-	leaveRoom(
-		room: Room | string,
-		connection: Connection | null = null,
-		force = false
-	) {
+	leaveRoom(room: Room | string, connection: Connection | null = null) {
 		room = Rooms.get(room)!;
-		if (room.roomid === 'global') {
-			// you can't leave the global room except while disconnecting
-			if (!force) return false;
-			this.cancelReady();
-		}
 		if (!this.inRooms.has(room.roomid)) {
 			return false;
 		}
@@ -1297,6 +1272,20 @@ export class User extends Chat.MessageContext {
 	}
 	updateSearch(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
+	}
+	/**
+	 * Moves the user's connections in a given room to another room.
+	 * This function's main use case is for when a room is renamed.
+	 */
+	moveConnections(oldRoomID: RoomID, newRoomID: RoomID) {
+		this.inRooms.delete(oldRoomID);
+		this.inRooms.add(newRoomID);
+		for (const connection of this.connections) {
+			connection.inRooms.delete(oldRoomID);
+			connection.inRooms.add(newRoomID);
+			Sockets.roomRemove(connection.worker, oldRoomID, connection.socketid);
+			Sockets.roomAdd(connection.worker, newRoomID, connection.socketid);
+		}
 	}
 	/**
 	 * The user says message in room.
