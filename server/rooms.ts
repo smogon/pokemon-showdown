@@ -691,11 +691,7 @@ export abstract class BasicRoom {
 	 */
 	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		try {
-			this.validateTitle(newTitle, newID);
-		} catch (e) {
-			return;
-		}
+		this.validateTitle(newTitle, newID);
 		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
 		}
