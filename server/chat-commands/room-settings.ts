@@ -842,7 +842,6 @@ export const commands: ChatCommands = {
 		if (room.battle) {
 			return this.errorReply("Cannot rename battle rooms.");
 		}
-		const roomtitle = target;
 		const oldTitle = room.title;
 		const isGroupchat = cmd === 'renamegroupchat';
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
@@ -859,7 +858,7 @@ export const commands: ChatCommands = {
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
-		if (!(await room.rename(roomtitle, id))) {
+		if (!(await room.rename(target, id))) {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
 		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
