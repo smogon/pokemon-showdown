@@ -872,6 +872,14 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		effectType: 'Rule',
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
+		onValidateSet(set) {
+			if (set.gigantamax) {
+				return [
+					`Your set for ${set.species} is flagged as Gigantamax, but Gigantamaxing is disallowed`,
+					`(If this was a mistake, disable Gigantamaxing on the set.)`,
+				];
+			}
+		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.canDynamax = false;
