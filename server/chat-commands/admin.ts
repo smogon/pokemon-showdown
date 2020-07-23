@@ -218,6 +218,7 @@ export const commands: ChatCommands = {
 	],
 
 	sendhtmlpage(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
