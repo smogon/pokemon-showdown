@@ -1317,8 +1317,8 @@ export class TeamValidator {
 				if (tierSpecies.isNonstandard === 'Unobtainable') {
 					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
 				}
-				if (tierSpecies.isNonstandard === 'Custom') {
-					return `${tierSpecies.name} is not obtainable${tierSpecies.name.endsWith('-Gmax') ? ` without Gigantamaxing` : ''}, even through hacking.`;
+				if (tierSpecies.isNonstandard === 'Gigantamax') {
+					return `${tierSpecies.name} is not obtainable without Gigantamaxing, even through hacking.`;
 				}
 				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
 			}
@@ -1415,9 +1415,8 @@ export class TeamValidator {
 				if (move.isNonstandard === 'Unobtainable') {
 					return `${move.name} is not obtainable without hacking or glitches.`;
 				}
-				if (move.isNonstandard === 'Custom') {
-					if (typeof move.isMax === 'string') return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
-					return `${move.name} is not obtainable, even through hacking.`;
+				if (move.isNonstandard === 'Gigantamax') {
+					return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
 				}
 				return `${set.name}'s move ${move.name} is tagged ${move.isNonstandard}, which is ${banReason}.`;
 			}
