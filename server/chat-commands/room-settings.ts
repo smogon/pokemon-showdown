@@ -880,7 +880,6 @@ export const commands: ChatCommands = {
 		}
 		const roomtitle = target;
 		const oldTitle = room.title;
-		room.validateTitle(roomtitle);
 		if (!(await room.rename(roomtitle))) {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
