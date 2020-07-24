@@ -44,6 +44,7 @@ const LONG_QUERY_DURATION = 2000;
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
+const IPS_REGEX = /[([]([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]/g;
 
 const PUNISHMENTS = [
 	'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE', 'CRISISDEMOTE',
@@ -245,7 +246,7 @@ function prettifyResults(
 		let time;
 		let bracketIndex;
 		if (line) {
-			if (hideIps) line = line.replace(/[([][0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[)\]]/g, '');
+			if (hideIps) line = line.replace(IPS_REGEX, '');
 			bracketIndex = line.indexOf(']');
 			if (bracketIndex < 0) return Utils.escapeHTML(line);
 			time = new Date(line.slice(1, bracketIndex));
@@ -268,7 +269,9 @@ function prettifyResults(
 			const url = Config.modloglink(time, thisRoomID);
 			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 		}
-		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Utils.escapeHTML(line.slice(parenIndex + 1))}`;
+		line = Utils.escapeHTML(line.slice(parenIndex + 1));
+		if (!hideIps) line = line.replace(IPS_REGEX, `[<a href="https://whatismyipaddress.com/ip/$1" target="_blank">$1</a>]`);
+		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${line}`;
 	}).join(`<br />`);
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
