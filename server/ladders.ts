@@ -304,9 +304,7 @@ class Ladder extends LadderStore {
 			const fromUser = Users.get(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
 			const toUser = Users.get(challenge.to);
-			if (toUser) {
-				Ladder.updateChallenges(toUser);
-			}
+			if (toUser) Ladder.updateChallenges(toUser);
 		}
 	}
 	static removeChallenge(challenge: Challenge, skipUpdate = false) {
@@ -324,9 +322,7 @@ class Ladder extends LadderStore {
 			const fromUser = Users.get(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
 			const toUser = Users.get(challenge.to);
-			if (toUser) {
-				Ladder.updateChallenges(toUser);
-			}
+			if (toUser) Ladder.updateChallenges(toUser);
 		}
 		return true;
 	}
