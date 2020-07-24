@@ -59,6 +59,7 @@ export function cacheGroupData(config: ConfigType) {
 				// preserving permissions specifically declared for the higher group.
 				for (const key in inheritGroup) {
 					if (key in groupData) continue;
+					if (['symbol', 'id', 'name', 'rank', 'globalGroupInPersonalRoom'].includes(key)) continue;
 					(groupData as any)[key] = (inheritGroup as any)[key];
 				}
 			}
