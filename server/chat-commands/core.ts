@@ -1222,12 +1222,10 @@ export const commands: ChatCommands = {
 
 	async search(target, room, user, connection) {
 		if (target) {
-			if (Config.laddermodchat) {
-				if (!user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
-					const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
-					this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
-					return false;
-				}
+			if (Config.laddermodchat && !user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
+				const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
+				this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
+				return false;
 			}
 			const ladder = Ladders(target);
 			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
@@ -1265,12 +1263,10 @@ export const commands: ChatCommands = {
 		if (!user.named) {
 			return this.popupReply(`You must choose a username before you challenge someone.`);
 		}
-		if (Config.pmmodchat) {
-			if (!user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
-				const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-				this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
-				return false;
-			}
+		if (Config.pmmodchat &&!user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
+			const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+			this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
+			return false;
 		}
 		return Ladders(target).makeChallenge(connection, targetUser);
 	},

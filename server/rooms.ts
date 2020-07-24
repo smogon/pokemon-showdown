@@ -469,6 +469,7 @@ export abstract class BasicRoom {
 		Rooms.global.writeChatRoomData();
 	}
 	checkModjoin(user: User) {
+		if (user.hasSysopAccess()) return true;
 		if (user.id in this.users) return true;
 		if (!this.settings.modjoin) return true;
 		// users with a room rank can always join
@@ -489,7 +490,7 @@ export abstract class BasicRoom {
 		}
 		if (!(userGroup in Config.groups)) return false;
 		if (!(modjoinGroup in Config.groups)) throw new Error(`Invalid modjoin setting in ${this.roomid}: ${modjoinGroup}`);
-		return Config.groups[userGroup].rank >= Config.groups[modjoinGroup].rank || user.isSysop;
+		return Config.groups[userGroup].rank >= Config.groups[modjoinGroup].rank;
 	}
 	mute(user: User, setTime?: number) {
 		const userid = user.id;

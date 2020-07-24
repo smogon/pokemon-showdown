@@ -532,7 +532,8 @@ export class User extends Chat.MessageContext {
 		return status;
 	}
 	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
-		if (!minAuth || minAuth === ' ' || this.hasSysopAccess()) return true;
+		if (this.hasSysopAccess()) return true;
+		if (!minAuth || minAuth === ' ') return true;
 		if (this.locked || this.semilocked) return false;
 		if (minAuth === 'unlocked') return true;
 		if (minAuth === 'trusted' && this.trusted) return true;
@@ -1365,7 +1366,7 @@ export class User extends Chat.MessageContext {
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
-			if (this.isSysop) return;
+			if (this.hasSysopAccess()) return;
 			return false; // but end the loop here
 		}
 
