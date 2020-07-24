@@ -659,7 +659,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	slowbrogalar: {
-		randomBattleMoves: ["flamethrower", "psyshock", "shellsidearm", "trick", "trickroom"],
+		randomBattleMoves: ["flamethrower", "psychic", "shellsidearm", "trick", "trickroom"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["fireblast", "healpulse", "protect", "psychic", "shellsidearm", "trickroom"],
 		randomDoubleBattleLevel: 84,
@@ -1596,7 +1596,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	dunsparce: {
-		randomBattleMoves: ["coil", "glare", "headbutt", "rockslide", "roost"],
+		randomBattleMoves: ["coil", "earthquake", "glare", "headbutt", "roost"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["glare", "headbutt", "protect", "rockslide", "stealthrock"],
 		randomDoubleBattleLevel: 90,
@@ -5142,30 +5142,44 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	nihilego: {
+		randomBattleMoves: ["grassknot", "powergem", "sludgewave", "stealthrock", "thunderbolt", "toxicspikes"],
+		randomBattleLevel: 82,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	buzzwole: {
+		randomBattleMoves: ["bounce", "closecombat", "darkestlariat", "ironhead", "leechlife", "stoneedge"],
+		randomBattleLevel: 80,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	pheromosa: {
+		randomBattleMoves: ["bugbuzz", "closecombat", "icebeam", "poisonjab", "uturn"],
+		randomBattleLevel: 76,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	xurkitree: {
+		randomBattleMoves: ["dazzlinggleam", "energyball", "tailglow", "thunderbolt", "voltswitch"],
+		randomBattleLevel: 82,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	celesteela: {
+		randomBattleMoves: ["autotomize", "earthquake", "fireblast", "flashcannon", "leechseed", "protect"],
+		randomBattleLevel: 80,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	kartana: {
+		randomBattleMoves: ["knockoff", "leafblade", "sacredsword", "smartstrike", "swordsdance"],
+		randomBattleLevel: 80,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	guzzlord: {
+		randomBattleMoves: ["darkpulse", "dracometeor", "fireblast", "knockoff", "sludgebomb"],
+		randomBattleLevel: 88,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -5226,14 +5240,20 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	naganadel: {
+		randomBattleMoves: ["airslash", "dracometeor", "flamethrower", "nastyplot", "sludgewave"],
+		randomBattleLevel: 76,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	stakataka: {
+		randomBattleMoves: ["bodypress", "earthquake", "gyroball", "stealthrock", "stoneedge", "trickroom"],
+		randomBattleLevel: 82,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	blacephalon: {
+		randomBattleMoves: ["calmmind", "fireblast", "psyshock", "shadowball", "trick"],
+		randomBattleLevel: 80,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},

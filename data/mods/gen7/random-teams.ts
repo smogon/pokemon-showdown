@@ -820,6 +820,10 @@ export class RandomGen7Teams extends RandomTeams {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
+		} else if (ability === 'Poison Heal') {
+			item = 'Toxic Orb';
+		} else if (species.evos.length) {
+			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
 			if (ability === 'Klutz') {
 				item = 'Assault Vest';
@@ -828,8 +832,6 @@ export class RandomGen7Teams extends RandomTeams {
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
 			}
-		} else if (species.evos.length) {
-			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (hasMove['bellydrum']) {
 			if (ability === 'Gluttony') {
 				item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
@@ -848,8 +850,6 @@ export class RandomGen7Teams extends RandomTeams {
 			item = (hasType['Fire'] || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		} else if ((ability === 'Magic Guard' && counter.damagingMoves.length > 1) || ability === 'Sheer Force' && !!counter['sheerforce']) {
 			item = 'Life Orb';
-		} else if (ability === 'Poison Heal') {
-			item = 'Toxic Orb';
 		} else if (ability === 'Unburden') {
 			item = hasMove['fakeout'] ? 'Normal Gem' : 'Sitrus Berry';
 		} else if (hasMove['acrobatics']) {
@@ -963,10 +963,10 @@ export class RandomGen7Teams extends RandomTeams {
 		let level: number;
 
 		if (!isDoubles) {
-			const levelScale: {[tier: string]: number} = {
+			const levelScale: {[k: string]: number} = {
 				uber: 78, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
 			};
-			const customScale: {[forme: string]: number} = {
+			const customScale: {[k: string]: number} = {
 				// Banned Ability
 				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
 				// Holistic judgement
@@ -974,7 +974,7 @@ export class RandomGen7Teams extends RandomTeams {
 			};
 			const tier = toID(species.tier).replace('bl', '');
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
-			if (customScale[forme]) level = customScale[forme];
+			if (customScale[species.name]) level = customScale[species.name];
 
 			// Custom level based on moveset
 			if (species.name === 'Zygarde-10%' && ability === 'Power Construct') level = 80;
@@ -1059,6 +1059,147 @@ export class RandomGen7Teams extends RandomTeams {
 			level: level,
 			shiny: this.randomChance(1, 1024),
 		};
+	}
+
+	randomTeam() {
+		const seed = this.prng.seed;
+		const ruleTable = this.dex.getRuleTable(this.format);
+		const pokemon = [];
+
+		// For Monotype
+		const isMonotype = ruleTable.has('sametypeclause');
+		const typePool = Object.keys(this.dex.data.TypeChart);
+		const type = this.sample(typePool);
+
+		const baseFormes: {[k: string]: number} = {};
+		let hasMega = false;
+
+		const tierCount: {[k: string]: number} = {};
+		const typeCount: {[k: string]: number} = {};
+		const typeComboCount: {[k: string]: number} = {};
+		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+
+		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
+		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
+		for (const restrict of [true, false]) {
+			if (pokemon.length >= 6) break;
+			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+			while (pokemonPool.length && pokemon.length < 6) {
+				const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+				if (!species.exists) continue;
+
+				// Limit to one of each species (Species Clause)
+				if (baseFormes[species.baseSpecies]) continue;
+
+				// Limit one Mega per team
+				if (hasMega && species.isMega) continue;
+
+				// Prevent unwanted formes in doubles
+				if (this.format.gameType === 'doubles' && !species.randomDoubleBattleMoves) continue;
+
+				const tier = species.tier;
+				const types = species.types;
+				const typeCombo = types.slice().sort().join();
+
+				// Adjust rate for species with multiple sets
+				switch (species.baseSpecies) {
+				case 'Arceus': case 'Silvally':
+					if (this.randomChance(17, 18)) continue;
+					break;
+				case 'Castform':
+					if (this.randomChance(2, 3)) continue;
+					break;
+				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Giratina': case 'Groudon': case 'Kyogre': case 'Meloetta':
+					if (this.randomChance(1, 2)) continue;
+					break;
+				case 'Greninja':
+					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
+					break;
+				}
+
+				if (restrict && !species.isMega) {
+					// Limit one Pokemon per tier, two for Monotype
+					if ((tierCount[tier] >= (isMonotype ? 2 : 1)) && !this.randomChance(1, Math.pow(5, tierCount[tier]))) {
+						continue;
+					}
+
+					if (!isMonotype) {
+						// Limit two of any type
+						let skip = false;
+						for (const typeName of types) {
+							if (typeCount[typeName] > 1) {
+								skip = true;
+								break;
+							}
+						}
+						if (skip) continue;
+					}
+
+					// Limit one of any type combination, two in Monotype
+					if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+				}
+
+				const set = this.randomSet(species, teamDetails, pokemon.length === 5, this.format.gameType !== 'singles');
+
+				const item = this.dex.getItem(set.item);
+
+				// Limit one Z-Move per team
+				if (item.zMove && teamDetails['zMove']) continue;
+
+				// Zoroark copies the last Pokemon
+				if (set.ability === 'Illusion') {
+					if (pokemon.length < 1) continue;
+					set.level = pokemon[pokemon.length - 1].level;
+				}
+
+				// Okay, the set passes, add it to our team
+				pokemon.unshift(set);
+
+				// Don't bother tracking details for the 6th Pokemon
+				if (pokemon.length === 6) break;
+
+				// Now that our Pokemon has passed all checks, we can increment our counters
+				baseFormes[species.baseSpecies] = 1;
+
+				// Increment tier counter
+				if (tierCount[tier]) {
+					tierCount[tier]++;
+				} else {
+					tierCount[tier] = 1;
+				}
+
+				// Increment type counters
+				for (const typeName of types) {
+					if (typeName in typeCount) {
+						typeCount[typeName]++;
+					} else {
+						typeCount[typeName] = 1;
+					}
+				}
+				if (typeCombo in typeComboCount) {
+					typeComboCount[typeCombo]++;
+				} else {
+					typeComboCount[typeCombo] = 1;
+				}
+
+				// Track what the team has
+				if (item.megaStone) hasMega = true;
+				if (item.zMove) teamDetails['zMove'] = 1;
+				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails['hail'] = 1;
+				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails['rain'] = 1;
+				if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
+				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails['sun'] = 1;
+				if (set.moves.includes('spikes')) teamDetails['spikes'] = (teamDetails['spikes'] || 0) + 1;
+				if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
+				if (set.moves.includes('stickyweb')) teamDetails['stickyWeb'] = 1;
+				if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
+				if (set.moves.includes('defog')) teamDetails['defog'] = 1;
+				if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
+			}
+		}
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+
+		return pokemon;
 	}
 
 	randomFactorySet(

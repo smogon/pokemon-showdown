@@ -777,7 +777,7 @@ export class RandomTeams {
 					if (counter.setupType || teamDetails.spikes && teamDetails.spikes > 1) rejected = true;
 					break;
 				case 'stealthrock':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || hasMove['substitute'] || teamDetails.stealthRock) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || hasMove['substitute'] || hasMove['trickroom'] || teamDetails.stealthRock) rejected = true;
 					break;
 				case 'stickyweb':
 					if (counter.setupType === 'Special' || teamDetails.stickyWeb) rejected = true;
@@ -915,7 +915,8 @@ export class RandomTeams {
 					if (hasAbility['Iron Fist'] && movePool.includes('machpunch')) rejected = true;
 					break;
 				case 'airslash':
-					if (hasMove['hurricane'] && !counter.setupType || (hasAbility['Simple'] && !!counter['recovery'])) rejected = true;
+					if (hasMove['hurricane'] && !counter.setupType) rejected = true;
+					if (movePool.includes('flamethrower') || hasAbility['Simple'] && !!counter['recovery']) rejected = true;
 					break;
 				case 'bravebird':
 					if (hasMove['dragondance']) rejected = true;
@@ -1103,7 +1104,7 @@ export class RandomTeams {
 				} else if (ability === 'Hustle') {
 					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Intimidate') {
-					rejectAbility = hasMove['bounce'];
+					rejectAbility = (hasMove['bodyslam'] || hasMove['bounce']);
 				} else if (ability === 'Iron Fist') {
 					rejectAbility = (counter['ironfist'] < 2 || hasMove['dynamicpunch']);
 				} else if (ability === 'Justified') {
@@ -1431,7 +1432,6 @@ export class RandomTeams {
 		}
 
 		const baseFormes: {[k: string]: number} = {};
-		let hasMega = false;
 
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
@@ -1449,9 +1449,6 @@ export class RandomTeams {
 
 				// Limit to one of each species (Species Clause)
 				if (baseFormes[species.baseSpecies]) continue;
-
-				// Limit one Mega per team
-				if (hasMega && species.isMega) continue;
 
 				// Prevent unwanted formes in doubles
 				if (this.format.gameType === 'doubles' && !species.randomDoubleBattleMoves) continue;
@@ -1483,7 +1480,10 @@ export class RandomTeams {
 					break;
 				}
 
-				if (restrict && !species.isMega) {
+				// Illusion shouldn't be on the last slot
+				if (species.name === 'Zoroark' && pokemon.length > 4) continue;
+
+				if (restrict) {
 					// Limit one Pokemon per tier, two for Monotype
 					if ((tierCount[tier] >= (isMonotype ? 2 : 1)) && !this.randomChance(1, Math.pow(5, tierCount[tier]))) {
 						continue;
@@ -1508,24 +1508,19 @@ export class RandomTeams {
 				// The Pokemon of the Day
 				if (!!potd && potd.exists && pokemon.length < 1) species = potd;
 
-				const set = this.randomSet(species, teamDetails, pokemon.length === 5, this.format.gameType !== 'singles');
-
-				const item = this.dex.getItem(set.item);
-
-				// Limit one Z-Move per team
-				if (item.zMove && teamDetails['zMove']) continue;
-
-				// Zoroark copies the last Pokemon
-				if (set.ability === 'Illusion') {
-					if (pokemon.length < 1) continue;
-					set.level = pokemon[pokemon.length - 1].level;
-				}
+				const set = this.randomSet(species, teamDetails, pokemon.length === 0, this.format.gameType !== 'singles');
 
 				// Okay, the set passes, add it to our team
-				pokemon.unshift(set);
+				pokemon.push(set);
 
-				// Don't bother tracking details for the 6th Pokemon
-				if (pokemon.length === 6) break;
+				if (pokemon.length === 6) {
+					// Set Zoroark's level to be the same as the last Pokemon
+					const illusion = teamDetails['illusion'];
+					if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
+
+					// Don't bother tracking details for the 6th Pokemon
+					break;
+				}
 
 				// Now that our Pokemon has passed all checks, we can increment our counters
 				baseFormes[species.baseSpecies] = 1;
@@ -1552,18 +1547,19 @@ export class RandomTeams {
 				}
 
 				// Track what the team has
-				if (item.megaStone) hasMega = true;
-				if (item.zMove) teamDetails['zMove'] = 1;
 				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails['hail'] = 1;
-				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails['rain'] = 1;
+				if (set.moves.includes('raindance') || set.ability === 'Drizzle') teamDetails['rain'] = 1;
 				if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
-				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails['sun'] = 1;
+				if (set.moves.includes('sunnyday') || set.ability === 'Drought') teamDetails['sun'] = 1;
 				if (set.moves.includes('spikes')) teamDetails['spikes'] = (teamDetails['spikes'] || 0) + 1;
 				if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 				if (set.moves.includes('stickyweb')) teamDetails['stickyWeb'] = 1;
 				if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 				if (set.moves.includes('defog')) teamDetails['defog'] = 1;
 				if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
+
+				// For setting Zoroark's level
+				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 			}
 		}
 		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
