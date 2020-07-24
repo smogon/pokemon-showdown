@@ -224,7 +224,7 @@ export const commands: ChatCommands = {
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
 		const targetUser = Users.get(targetID);
 		if (!targetUser) return this.errorReply(`User not found.`);
-		content = this.canHTML(content)!;
+		content = this.canHTML(Chat.collapseLineBreaksHTML(content))!;
 		if (!content) return;
 		const context = new Chat.PageContext({
 			user: targetUser,
