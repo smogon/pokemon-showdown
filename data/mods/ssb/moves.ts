@@ -318,7 +318,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -361,7 +361,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		terrain: 'lavaterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -502,7 +502,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', target, 'Dark Void', target);
 		},
 		pseudoWeather: 'distortionworld',
-		effect: {
+		condition: {
 			duration: 5,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Ghost') {
@@ -561,7 +561,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-message', `${pokemon.side.foe.active[0].name} was caught in the ambush!`);
 			this.add(`c|+A Quag to The Past|GOTCHA BITCH`);
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Murky Ambush');
@@ -915,7 +915,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		volatileStatus: 'thousandcircuitoverload',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Thousand Circuit Overload');
@@ -1634,7 +1634,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Magic Room', source);
 		},
 		volatileStatus: "distortionblast",
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Distortion Blast');
 				this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was distorted!`);
@@ -1974,7 +1974,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Geomancy', source);
 		},
 		terrain: 'scriptedterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -2275,7 +2275,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Dark Void', target);
 			this.add('-anim', source, 'Surf', target);
 		},
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source) {
 				if (source.hasItem('gripclaw')) {
@@ -2693,7 +2693,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.field.removePseudoWeather('naptime');
 		},
 		pseudoWeather: 'naptime',
-		effect: {
+		condition: {
 			duration: 1,
 		},
 		target: "self",
@@ -3046,7 +3046,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		terrain: 'prismaticterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -3117,7 +3117,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.forceSwitchFlag = true;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onSwitchIn(pokemon) {
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('pyramidingsong'));
@@ -3432,7 +3432,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -3513,7 +3513,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Genesis Supernova", source);
 		},
 		pseudoWeather: 'literallycheating',
-		effect: {
+		condition: {
 			duration: 7,
 			onBoost(boost, target, source, effect) {
 				let positiveBoost = false;
@@ -3896,7 +3896,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick Room", source);
 		},
 		pseudoWeather: 'alienwave',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(target, source) {
 				this.add('-fieldstart', 'move: Alien Wave');
@@ -4102,7 +4102,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		pseudoWeather: 'nightmarefield',
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(battle, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
@@ -4174,7 +4174,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Celebrate", target);
 		},
 		sideCondition: "rotate",
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(source) {
 				this.add('-message', `${source.active[0].name}'s replacement is going to switch out next turn!`);
@@ -4607,7 +4607,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.addVolatile('confusion');
 			target.addVolatile('cutietrap');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Cutie Escape');
@@ -4693,7 +4693,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.hint("Zarel still has the Serene Grace ability.");
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(pokemon, target, move) {
 				if (pokemon.species.id === 'meloettapirouette') {

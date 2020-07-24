@@ -79,7 +79,7 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
-const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
+const nullEffect: Condition = new Data.Condition({name: '', exists: false});
 
 export interface Nature {
 	name: string;
@@ -520,13 +520,13 @@ export class ModdedDex {
 	 * While this function can technically return any kind of effect at
 	 * all, that's not a feature TypeScript needs to know about.
 	 */
-	getEffect(name?: string | Effect | null): PureEffect {
+	getEffect(name?: string | Effect | null): Condition {
 		if (!name) return nullEffect;
-		if (typeof name !== 'string') return name as PureEffect;
+		if (typeof name !== 'string') return name as Condition;
 
 		const id = toID(name);
 		let effect = this.effectCache.get(id);
-		if (effect) return effect as PureEffect;
+		if (effect) return effect as Condition;
 
 		if (name.startsWith('move:')) {
 			effect = this.getMove(name.slice(5));
@@ -544,33 +544,33 @@ export class ModdedDex {
 		return this.getEffectByID(id, effect);
 	}
 
-	getEffectByID(id: ID, effect?: Effect | Move): PureEffect {
+	getEffectByID(id: ID, effect?: Effect | Move): Condition {
 		if (!id) return nullEffect;
 
 		if (!effect) effect = this.effectCache.get(id);
-		if (effect) return effect as PureEffect;
+		if (effect) return effect as Condition;
 
 		let found;
 		if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name: id}, this.data.Formats[id]);
 		} else if (this.data.Conditions.hasOwnProperty(id)) {
-			effect = new Data.PureEffect({name: id}, this.data.Conditions[id]);
+			effect = new Data.Condition({name: id}, this.data.Conditions[id]);
 		} else if (
-			(this.data.Moves.hasOwnProperty(id) && (found = this.data.Moves[id]).effect) ||
-			(this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
-			(this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)
+			(this.data.Moves.hasOwnProperty(id) && (found = this.data.Moves[id]).condition) ||
+			(this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).condition) ||
+			(this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).condition)
 		) {
-			effect = new Data.PureEffect({name: found.name || id}, found.effect!);
+			effect = new Data.Condition({name: found.name || id}, found.condition!);
 		} else if (id === 'recoil') {
-			effect = new Data.PureEffect({id, name: 'Recoil', effectType: 'Recoil'});
+			effect = new Data.Condition({id, name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
-			effect = new Data.PureEffect({id, name: 'Drain', effectType: 'Drain'});
+			effect = new Data.Condition({id, name: 'Drain', effectType: 'Drain'});
 		} else {
-			effect = new Data.PureEffect({id, name: id, exists: false});
+			effect = new Data.Condition({id, name: id, exists: false});
 		}
 
 		this.effectCache.set(id, effect);
-		return effect as PureEffect;
+		return effect as Condition;
 	}
 
 	/**

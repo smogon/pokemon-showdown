@@ -725,7 +725,7 @@ export const Scripts: BattleScriptsData = {
 			} else {
 				recoilDamage = this.trunc(pokemon.maxhp / 4);
 			}
-			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as PureEffect);
+			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway

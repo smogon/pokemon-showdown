@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ModdedPureEffectData} = {
+export const Conditions: {[k: string]: ModdedConditionData} = {
 	/*
 	// Example:
 	userid: {

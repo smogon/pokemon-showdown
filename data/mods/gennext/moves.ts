@@ -138,7 +138,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	******************************************************************/
 	substitute: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
@@ -187,7 +187,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	protect: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -209,7 +209,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	kingsshield: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -234,7 +234,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spikyshield: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -296,7 +296,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'solarbeam',
 			onStart(pokemon) {
@@ -624,7 +624,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(pokemon) {
 			return this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'bide',
 			onStart(pokemon) {
@@ -821,7 +821,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	******************************************************************/
 	stealthrock: {
 		inherit: true,
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');

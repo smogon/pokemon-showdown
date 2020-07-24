@@ -974,7 +974,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onEnd(pokemon) {
 			pokemon.removeVolatile('flashfire');
 		},
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(target) {
 				this.add('-start', target, 'ability: Flash Fire');
@@ -1986,7 +1986,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 		},
 		rating: 4,
@@ -2114,7 +2114,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onEnd(pokemon) {
 			delete pokemon.volatiles['mimicry'];
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				let newType;
 				switch (this.field.terrain) {
@@ -3565,7 +3565,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			delete pokemon.volatiles['slowstart'];
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
@@ -4255,7 +4255,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			pokemon.addVolatile('truant');
 		},
-		effect: {},
+		condition: {},
 		name: "Truant",
 		rating: -1,
 		num: 54,
@@ -4307,7 +4307,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onEnd(pokemon) {
 			pokemon.removeVolatile('unburden');
 		},
-		effect: {
+		condition: {
 			onModifySpe(spe, pokemon) {
 				if (!pokemon.item) {
 					return this.chainModify(2);
@@ -4596,7 +4596,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange(pokemon.species.battleOnly as string, this.effect, false, '[silent]');
 			}
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				if (!pokemon.species.name.includes('Galar')) {
 					if (pokemon.species.id !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
@@ -4662,7 +4662,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 		},
 		rating: 3,

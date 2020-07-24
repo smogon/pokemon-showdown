@@ -25,7 +25,7 @@ const POSITIONS = 'abcdefghijklmnopqrstuvwx';
 // and thus can simply be reconsituted as needed.
 // NOTE: Species is not strictly immutable as some OM formats rely on an
 // onModifySpecies event - deserialization is not possible for such formats.
-type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item | Move | Species;
+type Referable = Battle | Field | Side | Pokemon | Condition | Ability | Item | Move | Species;
 
 // Certain fields are either redundant (transient caches, constants, duplicate
 // information) or require special treatment. These sets contain the specific
@@ -369,7 +369,7 @@ export const State = new class {
 		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
-				Battle, Field, Side, Pokemon, Data.PureEffect,
+				Battle, Field, Side, Pokemon, Data.Condition,
 				Data.Ability, Data.Item, Data.Move, Data.Species,
 			]);
 		}
@@ -404,7 +404,7 @@ export const State = new class {
 		case 'Ability': return battle.dex.getAbility(id);
 		case 'Item': return battle.dex.getItem(id);
 		case 'Move': return battle.dex.getMove(id);
-		case 'PureEffect': return battle.dex.getEffect(id);
+		case 'Condition': return battle.dex.getEffect(id);
 		case 'Species': return battle.dex.getSpecies(id);
 		default: return undefined; // maybe we actually got unlucky and its a string
 		}
