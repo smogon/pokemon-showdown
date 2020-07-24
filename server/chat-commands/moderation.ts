@@ -84,7 +84,9 @@ export const commands: ChatCommands = {
 		}
 
 		let currentSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
-		if (currentSymbol === Users.Auth.defaultSymbol()) currentSymbol = 'whitelist';
+		if (room.auth.has(userid) && currentSymbol === Users.Auth.defaultSymbol()) {
+			currentSymbol = 'whitelist';
+		}
 		const currentGroup = Users.Auth.getGroup(currentSymbol);
 		const nextSymbol = target === 'deauth' ? Users.Auth.defaultSymbol() : target as GroupSymbol;
 		const nextGroup = Users.Auth.getGroup(nextSymbol);
