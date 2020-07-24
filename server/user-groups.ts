@@ -182,7 +182,7 @@ export class RoomAuth extends Auth {
 		const symbol = super.getEffectiveSymbol(user);
 		if (!this.room.persist && symbol === user.group) {
 			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
-			if (replaceGroup) return replaceGroup;
+			if (replaceGroup && Config.groups[replaceGroup]?.rank > Config.groups[symbol]?.rank) return replaceGroup;
 		}
 		return symbol;
 	}
