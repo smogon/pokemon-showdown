@@ -249,6 +249,14 @@ class Ladder extends LadderStore {
 			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
 			return false;
 		}
+		const currentChallenges = Ladders.challenges.get(targetUser.id);
+		if (currentChallenges && currentChallenges.length >= 3 && !user.autoconfirmed) {
+			connection.popup(
+				`This user already has 3 pending challenges.\n` +
+				`You must be autoconfirmed to challenge them.`
+			);
+			return false;
+		}
 		const ready = await this.prepBattle(connection, 'challenge');
 		if (!ready) return false;
 		// If our target is already challenging us in the same format,
