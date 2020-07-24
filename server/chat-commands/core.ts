@@ -1237,6 +1237,9 @@ export const commands: ChatCommands = {
 		if (Punishments.isBattleBanned(user)) {
 			return this.popupReply(`You are banned from battling and cannot challenge users.`);
 		}
+		if (!user.named || user.namelocked) {
+			return this.popupReply(`Unnamed users cannot challenge.`);
+		}
 		if (Config.pmmodchat) {
 			const userGroup = user.group;
 			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat as GroupSymbol)) {

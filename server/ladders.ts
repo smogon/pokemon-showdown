@@ -249,6 +249,13 @@ class Ladder extends LadderStore {
 			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
 			return false;
 		}
+		if (targetUser.currentChallengeCount >= 3 && !user.autoconfirmed) {
+			connection.popup(
+				`This user already has 3 pending challenges.\n` +
+				`You must be autoconfirmed to challenge them.`
+			);
+			return false;
+		}
 		const ready = await this.prepBattle(connection, 'challenge');
 		if (!ready) return false;
 		// If our target is already challenging us in the same format,
@@ -282,6 +289,8 @@ class Ladder extends LadderStore {
 		if (Ladder.removeChallenge(chall)) {
 			Ladders.match(chall.ready, ready);
 		}
+		const user = connection.user;
+		user.currentChallengeCount--;
 		return true;
 	}
 
@@ -296,7 +305,10 @@ class Ladder extends LadderStore {
 			const fromUser = Users.get(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
 			const toUser = Users.get(challenge.to);
-			if (toUser) Ladder.updateChallenges(toUser);
+			if (toUser) {
+				Ladder.updateChallenges(toUser);
+				toUser.currentChallengeCount++;
+			}
 		}
 	}
 	static removeChallenge(challenge: Challenge, skipUpdate = false) {
@@ -314,7 +326,10 @@ class Ladder extends LadderStore {
 			const fromUser = Users.get(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
 			const toUser = Users.get(challenge.to);
-			if (toUser) Ladder.updateChallenges(toUser);
+			if (toUser) {
+				Ladder.updateChallenges(toUser);
+				toUser.currentChallengeCount--;
+			}
 		}
 		return true;
 	}
