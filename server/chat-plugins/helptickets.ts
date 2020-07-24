@@ -622,12 +622,12 @@ export const pages: PageTable = {
 					buf += `<p><Button>inappokemon</Button></p>`;
 					break;
 				case 'pmharassment':
-					buf += `<p>If someone is harrassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
+					buf += `<p>If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmpmharassment</Button></p>`;
 					break;
 				case 'battleharassment':
-					buf += `<p>If someone is harrassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
+					buf += `<p>If someone is harassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
 					buf += `<p>Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmbattleharassment</Button></p>`;
@@ -704,6 +704,7 @@ export const pages: PageTable = {
 					break;
 				case 'appealother':
 					buf += `<p>Please PM the staff member who punished you. If you don't know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</p>`;
+					buf += `<p><strong>Do not PM staff if you are locked (signified by the symbol <code>‽</code> in front of your username). Locks are a different type of punishment; to appeal a lock, make a help ticket by clicking the Back button and then selecting the most relevant option.</strong></p>`;
 					break;
 				case 'misc':
 					buf += `<p><b>Maybe one of these options will be helpful?</b></p>`;
@@ -1423,7 +1424,7 @@ export const commands: ChatCommands = {
 			}
 			this.sendReply(`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: [`/helpticket delete [user] - Deletes a users ticket. Requires: &`],
+		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
 
 	},
 	helptickethelp: [
