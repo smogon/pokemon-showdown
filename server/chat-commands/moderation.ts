@@ -15,9 +15,24 @@ import {Utils} from '../../lib/utils';
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const IP_REGEX = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/;
 
 /** Require reasons for punishment commands */
 const REQUIRE_REASONS = true;
+
+export const pages: PageTable = {
+	forceregisterips(query, user) {
+		this.title = "IPs forced to register";
+		if (!this.can("globalban")) return;
+		let buf = `<div class="ladder pad"><h2>IP addresses on which users will be forced to register:</h2>`;
+		buf += `<table><tr><th>IP address</th><th>Reason</th>`;
+		for (const [ip, reason] of Punishments.forceRegisterIps) {
+			buf += Utils.html`<tr><td>${ip}</td><td>${reason}</td></tr>`;
+		}
+		buf += `</table></div>`;
+		return buf;
+	},
+};
 
 export const commands: ChatCommands = {
 
@@ -1919,4 +1934,44 @@ export const commands: ChatCommands = {
 		this.globalModlog('UNSHAREIP', target, ` by ${user.name}`);
 	},
 	unmarksharedhelp: [`/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &`],
+
+	forceregisterip(target, room, user) {
+		if (!target) return this.parse('/help forceregisterip');
+		if (!this.can('globalban')) return false;
+		let [ip, note] = this.splitOne(target);
+		if (!IP_REGEX.test(ip)) return this.errorReply("Please enter a valid IP address.");
+		if (Punishments.forceRegisterIps.has(ip)) return this.errorReply("This IP is already forced to register.");
+
+		Punishments.addForceRegisterIp(ip, note);
+		note = note ? ` (${note})` : '';
+
+		this.addGlobalModAction(`The IP '${ip}' was forced to register by ${user.name}.${note}`);
+		this.globalModlog('FORCEREGISTERIP', ip, ` by ${user.name}${note}`);
+	},
+
+	unforceregisterip(target, room, user) {
+		if (!target) return this.parse('/help unforceregisterip');
+		if (!this.can('globalban')) return false;
+		if (!IP_REGEX.test(target)) return this.errorReply("Please enter a valid IP address.");
+		if (!Punishments.forceRegisterIps.has(target)) return this.errorReply("This IP isn't forced to register.");
+
+		Punishments.removeForceRegisterIp(target);
+
+		this.addGlobalModAction(`${user.name} set the IP '${target}' to no longer be forced to register.`);
+		this.globalModlog('UNFORCEREGISTERIP', target, ` by ${user.name}`);
+	},
+
+	viewforceregisterips: 'showforceregisterips',
+	showforceregisterips(target, room, user) {
+		if (!this.can('globalban')) return;
+		return this.parse(`/join view-forceregisterips`);
+	},
+	forceregisteriphelp: 'showforceregisteripshelp',
+	unforceregisteriphelp: 'showforceregisteripshelp',
+	showforceregisteripshelp: [
+		`/forceregisterip [IP], [note] - Forces users to register to log in on an IP address. Requires: @ &`,
+		`/unforceregisterip [IP] - Allows unregistered users to use an IP address. Requires: @ &`,
+		`/showforceregisterips - Shows a list of IP addresses whose users will be forced to register. Requires: @ &`,
+	],
+
 };

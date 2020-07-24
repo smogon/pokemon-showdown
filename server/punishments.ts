@@ -17,6 +17,7 @@ import {Utils} from '../lib/utils';
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
 const SHAREDIPS_FILE = 'config/sharedips.tsv';
+const FORCE_REGISTER_IPS_FILE = 'config/forceregisterips.tsv';
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
@@ -136,6 +137,10 @@ export const Punishments = new class {
 	 */
 	readonly sharedIps = new Map<string, string>();
 	/**
+	 * forceRegisterIps is an ip:note Map
+	 */
+	readonly forceRegisterIps = new Map<string, string>();
+	/**
 	 * Connection flood table. Separate table from IP bans.
 	 */
 	readonly cfloods = new Set<string>();
@@ -180,6 +185,7 @@ export const Punishments = new class {
 			void Punishments.loadRoomPunishments();
 			void Punishments.loadBanlist();
 			void Punishments.loadSharedIps();
+			void Punishments.loadForceRegisterIps();
 		});
 	}
 
@@ -361,6 +367,34 @@ export const Punishments = new class {
 		});
 
 		return FS(SHAREDIPS_FILE).write(buf);
+	}
+
+	/**
+	 * forceregisterips.tsv is in the format:
+	 * IP address, note
+	 */
+	async loadForceRegisterIps() {
+		const data = await FS(FORCE_REGISTER_IPS_FILE).readIfExists();
+		if (!data) return;
+		for (const row of data.split("\n")) {
+			if (!row || row === '\r') continue;
+			const [ip, note] = row.trim().split("\t");
+			if (!ip.includes('.')) continue;
+
+			Punishments.forceRegisterIps.set(ip, note);
+		}
+	}
+
+	appendForceRegisterIp(ip: string, note: string) {
+		return FS(FORCE_REGISTER_IPS_FILE).append(`${ip}\t${note}\r\n`);
+	}
+
+	saveForceRegisterIps() {
+		let buf = 'IP\tNote\r\n';
+		Punishments.sharedIps.forEach((note, ip) => {
+			buf += `${ip}\t${note}\r\n`;
+		});
+		return FS(FORCE_REGISTER_IPS_FILE).write(buf);
 	}
 
 	/*********************************************************
@@ -961,6 +995,24 @@ export const Punishments = new class {
 	removeSharedIp(ip: string) {
 		Punishments.sharedIps.delete(ip);
 		void Punishments.saveSharedIps();
+	}
+
+	addForceRegisterIp(ip: string, note: string) {
+		Punishments.forceRegisterIps.set(ip, note);
+		void Punishments.appendForceRegisterIp(ip, note);
+		for (const user of Users.users.values()) {
+			if (!(user.registered || user.autoconfirmed) && ip in user.ips) {
+				user.popup(`|forceregister|You must register your account to continue using PS.`);
+				for (const connection of user.connections) {
+					if (connection.ip === ip) connection.destroy();
+				}
+			}
+		}
+	}
+
+	removeForceRegisterIp(ip: string) {
+		Punishments.forceRegisterIps.delete(ip);
+		void Punishments.saveForceRegisterIps();
 	}
 
 	/*********************************************************

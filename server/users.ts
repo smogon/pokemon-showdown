@@ -672,6 +672,11 @@ export class User extends Chat.MessageContext {
 		const tokenDataSplit = tokenData.split(',');
 		const [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
 
+		if (!this.trusted && userType === '1' && Punishments.forceRegisterIps.has(connection.ip)) {
+			this.popup(`|forceregister|You must register your account to continue using PS.`);
+			return false;
+		}
+
 		if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
 			Monitor.warn(`forged assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is ${Config.legalhosts[0]}.`);
