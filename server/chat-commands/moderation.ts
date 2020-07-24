@@ -441,6 +441,7 @@ export const commands: ChatCommands = {
 		targetUser.send(`|c|~|/warn ${publicReason}`);
 
 		const userid = targetUser.getLastId();
+
 		this.add(`|hidelines|unlink|${userid}`);
 		if (userid !== toID(this.inputUsername)) this.add(`|hidelines|unlink|${toID(this.inputUsername)}`);
 
@@ -791,7 +792,7 @@ export const commands: ChatCommands = {
 	lockhelp: [
 		`/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ &`,
 		`/weeklock OR /wl [username], [reason] - Same as /lock, but locks users for a week.`,
-		`/lock OR /l [username], [reason] spoiler: [private reason] - Marks proof in modlog only.`,
+		`/lock OR /l [username], [reason] spoiler: [private reason] - Marks [private reason] in modlog only.`,
 	],
 
 	unlock(target, room, user) {
@@ -950,7 +951,7 @@ export const commands: ChatCommands = {
 	},
 	globalbanhelp: [
 		`/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ &`,
-		`/globalban OR /gban [username], [reason] spoiler: [private reason] - Marks proof in modlog only.`,
+		`/globalban OR /gban [username], [reason] spoiler: [private reason] - Marks [private reason] in modlog only.`,
 	],
 
 	globalunban: 'unglobalban',
