@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		const addNewMoves = (pokemonid: string, moveids: string[]) => {
 			for (const moveid of moveids.map(toID)) {

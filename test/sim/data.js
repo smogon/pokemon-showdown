@@ -113,10 +113,10 @@ describe('Dex data', function () {
 		}
 	});
 
-	it('should have valid Movedex entries', function () {
-		const Movedex = Dex.data.Movedex;
-		for (const moveid in Movedex) {
-			const entry = Movedex[moveid];
+	it('should have valid Moves entries', function () {
+		const Moves = Dex.data.Moves;
+		for (const moveid in Moves) {
+			const entry = Moves[moveid];
 			assert.equal(toID(entry.name), moveid, `Mismatched Move key "${moveid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Move ${entry.name} should have a number`);
 			assert.false(entry.infiltrates, `Move ${entry.name} should not have an 'infiltrates' property (no real move has it)`);

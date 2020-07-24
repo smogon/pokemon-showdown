@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const Conditions: {[k: string]: ModdedPureEffectData} = {
 	frz: {
 		name: 'frz',
 		effectType: 'Status',

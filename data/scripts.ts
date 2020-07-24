@@ -1,6 +1,6 @@
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
-export const BattleScripts: BattleScriptsData = {
+export const Scripts: BattleScriptsData = {
 	gen: 8,
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,

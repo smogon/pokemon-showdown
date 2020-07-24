@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		basePower: 40,
@@ -41,7 +41,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in exports.BattleMovedex) {
+			for (const id in this.dex.data.Moves) {
 				const move = this.dex.getMove(id);
 				if (move.realMove) continue;
 				if (move.gen !== 1) continue;

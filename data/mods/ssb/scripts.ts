@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		pokemon.activeMoveActions++;

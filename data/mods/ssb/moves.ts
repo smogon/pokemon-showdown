@@ -2,7 +2,7 @@
 import {RandomStaffBrosTeams} from './random-teams';
 import {Pokemon, EffectState} from '../../../sim/pokemon';
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
 	"moveid": {
@@ -2018,7 +2018,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					const moves = [];
-					const pool = Object.keys(this.dex.data.Movedex);
+					const pool = Object.keys(this.dex.data.Moves);
 					this.prng.shuffle(pool);
 					const metronome = this.dex.getMove('metronome');
 					for (const id of pool) {
@@ -2086,8 +2086,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in this.dex.data.Movedex) {
-				const move = this.dex.data.Movedex[id];
+			for (const id in this.dex.data.Moves) {
+				const move = this.dex.data.Moves[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome && effect.noMetronome.includes(move.name)) continue;
@@ -3249,7 +3249,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Toxic", target);
 		},
-		// Innate corrosive implemented in BattleScripts#setStatus
+		// Innate corrosive implemented in Scripts#setStatus
 		status: 'tox',
 		secondary: null,
 		target: "normal",
@@ -4506,21 +4506,17 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[id];
+			for (const id in this.dex.data.Moves) {
+				const move = this.dex.getMove(id);
 				if (move.realMove || move.id === 'glitzerpopping') continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
-				if (this.dex.getMove(id).gen > this.gen) continue;
-				moves.push(move);
+				if (move.gen > this.gen) continue;
+				moves.push(move.name);
 			}
-			let randomMove: string;
-			if (moves.length) {
-				randomMove = this.sample(moves).name;
-			} else {
-				return false;
-			}
+			if (!moves.length) return false;
+			const randomMove = this.sample(moves);
 			this.useMove(randomMove, target);
 		},
 		multihit: [2, 5],
