@@ -1,4 +1,4 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	/*
 	// Example
 	id: {

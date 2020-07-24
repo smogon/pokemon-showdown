@@ -161,8 +161,8 @@ export class RandomTeams {
 			let moves;
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = Object.keys(this.dex.data.Movedex).filter(moveid => {
-					const move = this.dex.data.Movedex[moveid];
+				pool = Object.keys(this.dex.data.Moves).filter(moveid => {
+					const move = this.dex.data.Moves[moveid];
 					return !(move.isNonstandard || move.isZ || move.isMax || move.realMove);
 				});
 			} else {
@@ -304,7 +304,7 @@ export class RandomTeams {
 
 		const itemPool = Object.keys(this.dex.data.Items);
 		const abilityPool = Object.keys(this.dex.data.Abilities);
-		const movePool = Object.keys(this.dex.data.Movedex);
+		const movePool = Object.keys(this.dex.data.Moves);
 		const naturePool = Object.keys(this.dex.data.Natures);
 
 		const random6 = this.random6Pokemon();

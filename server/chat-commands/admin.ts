@@ -481,7 +481,7 @@ export const commands: ChatCommands = {
 	async savelearnsets(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;
 		this.sendReply("saving...");
-		await FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
+		await FS('data/learnsets.js').write(`'use strict';\n\nexports.Learnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
 				Object.entries(Dex.getLearnsetData(id as ID)).sort(

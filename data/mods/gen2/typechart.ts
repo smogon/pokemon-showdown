@@ -1,4 +1,4 @@
-export const BattleTypeChart: {[k: string]: ModdedTypeData} = {
+export const TypeChart: {[k: string]: ModdedTypeData} = {
 	Fire: {
 		inherit: true,
 		damageTaken: {

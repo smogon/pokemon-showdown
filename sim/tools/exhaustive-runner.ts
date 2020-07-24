@@ -115,7 +115,7 @@ export class ExhaustiveRunner {
 				(_, p) => (p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-')), this.prng),
 			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Items, i => dex.getItem(i)), this.prng),
 			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Abilities, a => dex.getAbility(a)), this.prng),
-			moves: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Movedex, m => dex.getMove(m),
+			moves: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Moves, m => dex.getMove(m),
 				m => (m !== 'struggle' && (m === 'hiddenpower' || m.substr(0, 11) !== 'hiddenpower'))), this.prng),
 		};
 	}

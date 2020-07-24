@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const BattleAbilities: {[abilityid: string]: AbilityData} = {
+export const Abilities: {[abilityid: string]: AbilityData} = {
 	noability: {
 		shortDesc: "Does nothing.",
 		isNonstandard: "Past",

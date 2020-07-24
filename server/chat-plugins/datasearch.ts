@@ -294,7 +294,7 @@ export const commands: ChatCommands = {
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ms; e.g. <code>ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`<code>/ms</code> will search the Galar Movedex; you can search the National Movedex by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
+			`<code>/ms</code> will search the Galar Moves; you can search the National Moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`The order of the parameters does not matter.`
 		);
 	},
@@ -735,7 +735,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in Dex.data.Movedex) {
+				for (const move in Dex.data.Moves) {
 					const moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
@@ -1513,7 +1513,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(Dex.data.Movedex));
+	const validMoves = new Set(Object.keys(Dex.data.Moves));
 	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const species = mod.getSpecies(mon.name);
@@ -2386,7 +2386,7 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
+export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));
@@ -2447,5 +2447,3 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
-
-exports.PM = PM;

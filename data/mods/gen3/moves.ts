@@ -2,7 +2,7 @@
  * Gen 3 moves
  */
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		desc: "The user recovers 1/2 the HP lost by the target, rounded down.",
@@ -963,5 +963,3 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 	},
 };
-
-exports.BattleMovedex = BattleMovedex;

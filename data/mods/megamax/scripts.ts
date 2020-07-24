@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	gen: 8,
 	init() {
 		const addNewMoves = (pokemonid: string, moveids: string[], tutor = false) => {

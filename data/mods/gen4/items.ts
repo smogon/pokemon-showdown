@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {

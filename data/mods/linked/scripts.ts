@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
 		pokemon.activeMoveActions++;
 		let target = this.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);

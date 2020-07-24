@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	angerpoint: {
 		inherit: true,
 		desc: "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",

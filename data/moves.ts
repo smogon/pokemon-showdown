@@ -26,7 +26,7 @@ sound: Has no effect on Pokemon with the Soundproof Ability.
 
 */
 
-export const BattleMovedex: {[moveid: string]: MoveData} = {
+export const Moves: {[moveid: string]: MoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -11849,8 +11849,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		],
 		onHit(target, source, effect) {
 			const moves: MoveData[] = [];
-			for (const id in BattleMovedex) {
-				const move = BattleMovedex[id];
+			for (const id in Moves) {
+				const move = Moves[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
 				if (effect.noMetronome!.includes(move.name)) continue;
@@ -19677,7 +19677,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		// No Guard-like effect for Poison-type users implemented in BattleScripts#tryMoveHit
+		// No Guard-like effect for Poison-type users implemented in Scripts#tryMoveHit
 		status: 'tox',
 		secondary: null,
 		target: "normal",

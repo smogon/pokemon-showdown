@@ -1437,4 +1437,3 @@ export const commands: ChatCommands = {
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
 	],
 };
-exports.commands = commands;

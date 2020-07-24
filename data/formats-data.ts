@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
+export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bulbasaur: {
 		tier: "LC",
 	},

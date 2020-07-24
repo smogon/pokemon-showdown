@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
+export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	bulbasaur: {
 		learnset: {
 			doubleedge: ["7L32"],

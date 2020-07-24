@@ -425,7 +425,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			item = 'Petaya Berry';
 		} else if (counter.Physical >= 4) {
 			item = 'Choice Band';
-		} else if (counter.Physical >= 3 && (hasMove['firepunch'] || hasMove['icebeam'] || hasMove['overheat'] || moves.filter(m => this.dex.data.Movedex[m].category === 'Special' && hasType[this.dex.data.Movedex[m].type]).length)) {
+		} else if (counter.Physical >= 3 && (hasMove['firepunch'] || hasMove['icebeam'] || hasMove['overheat'] || moves.filter(m => this.dex.data.Moves[m].category === 'Special' && hasType[this.dex.data.Moves[m].type]).length)) {
 			item = 'Choice Band';
 
 		// Default to Leftovers

@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	chlorophyll: {
 		inherit: true,
 		desc: "If Sunny Day is active, this Pokemon's Speed is doubled.",

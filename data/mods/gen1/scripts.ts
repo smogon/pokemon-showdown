@@ -4,7 +4,7 @@
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
 	init() {
@@ -864,5 +864,3 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		return Math.floor(damage);
 	},
 };
-
-exports.BattleScripts = BattleScripts;

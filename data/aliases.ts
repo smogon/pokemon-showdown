@@ -1,4 +1,4 @@
-export const BattleAliases: {[alias: string]: string} = {
+export const Aliases: {[alias: string]: string} = {
 	// formats
 	randbats: "[Gen 8] Random Battle",
 	uber: "[Gen 8] Ubers",
