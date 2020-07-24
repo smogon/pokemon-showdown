@@ -949,10 +949,7 @@ export class RandomTeams {
 					if (movePool.includes('extremespeed')) rejected = true;
 					break;
 				case 'dazzlinggleam':
-					if (isDoubles && hasMove['fleurcannon']) rejected = true;
-					break;
-				case 'moonblast':
-					if (isDoubles && hasMove['dazzlinggleam']) rejected = true;
+					if (hasMove['fleurcannon'] || hasMove['moonblast']) rejected = true;
 					break;
 
 				// Status:
@@ -1090,7 +1087,7 @@ export class RandomTeams {
 					rejectAbility = (hasType['Grass'] && isDoubles);
 				} else if (ability === 'Flash Fire') {
 					rejectAbility = (this.dex.getEffectiveness('Fire', species) < -1);
-				} else if (ability === 'Frisk') {
+				} else if (ability === 'Frisk' || ability === 'Own Tempo') {
 					rejectAbility = isDoubles;
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
@@ -1120,8 +1117,6 @@ export class RandomTeams {
 					rejectAbility = (!counter['inaccurate']);
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
-				} else if (ability === 'Own Tempo') {
-					rejectAbility = isDoubles;
 				} else if (ability === 'Power Construct') {
 					rejectAbility = true;
 				} else if (ability === 'Prankster' || ability === 'Steely Spirit') {
@@ -1141,7 +1136,7 @@ export class RandomTeams {
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = (!counter['sheerforce'] || hasAbility['Guts']);
 				} else if (ability === 'Sniper') {
-					rejectAbility = (counter['Water'] > 1 || (isDoubles && !hasMove['focusenergy']));
+					rejectAbility = (counter['Water'] > 1 || isDoubles && !hasMove['focusenergy']);
 				} else if (ability === 'Snow Warning') {
 					rejectAbility = (hasAbility['Refrigerate'] && !!counter['Normal']);
 				} else if (ability === 'Sturdy') {
@@ -1158,8 +1153,6 @@ export class RandomTeams {
 					rejectAbility = (!counter['technician'] || hasMove['tailslap'] || hasAbility['Punk Rock'] || movePool.includes('snarl'));
 				} else if (ability === 'Tinted Lens') {
 					rejectAbility = (hasMove['defog'] || hasMove['hurricane'] || counter.Status > 2 && !counter.setupType);
-				} else if (ability === 'Torrent') {
-					rejectAbility = hasMove['focusenergy'];
 				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
@@ -1199,7 +1192,6 @@ export class RandomTeams {
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
 				if (hasAbility['Klutz'] && ability === 'Limber') ability = 'Klutz';
 				if (hasAbility['Magic Guard'] && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
-				if (hasAbility['Unburden'] && ability === 'Reckless') ability = 'Unburden';
 				if (hasAbility['Ripen']) ability = 'Ripen';
 				if (hasAbility['Sniper'] && hasMove['focusenergy']) ability = 'Sniper';
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
