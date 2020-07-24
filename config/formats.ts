@@ -2270,6 +2270,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -2356,6 +2360,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -2386,6 +2394,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -2520,6 +2532,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -2569,6 +2585,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -2681,6 +2701,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions
 		ruleset: ['Cancel Mod'],
 	},
@@ -2713,6 +2737,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions
 		ruleset: ['Cancel Mod'],
 	},
@@ -2784,6 +2812,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -2793,6 +2825,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -2822,6 +2858,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -2881,6 +2921,10 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 9999,
 		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 ];
