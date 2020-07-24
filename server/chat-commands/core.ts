@@ -1321,6 +1321,20 @@ export const commands: ChatCommands = {
 		});
 	},
 
+	showbattlesinusercard: 'hidebattlesfromtrainercard',
+	hidebattlesfromusercard: 'hidebattlesfromtrainercard',
+	showbattlesintrainercard: 'hidebattlesfromtrainercard',
+	hidebattlesfromtrainercard(target, room, user, connection, cmd) {
+		const shouldHide = cmd.includes('hide');
+		user.settings.hideBattlesFromTrainerCard = shouldHide;
+		user.update();
+		this.sendReply(`Battles are now ${shouldHide ? "hidden (except to staff)" : "visible"} in your trainer card.`);
+	},
+	hidebattlesfromtrainercardhelp: [
+		`/hidebattlesfromtrainercard - Hides your battles in your trainer card.`,
+		`/showbattlesintrainercard - Displays your battles in your trainer card.`,
+	],
+
 	/*********************************************************
 	 * Low-level
 	 *********************************************************/
@@ -1365,6 +1379,7 @@ export const commands: ChatCommands = {
 					roomData.isPrivate = true;
 				}
 				if (targetRoom.battle) {
+					if (targetUser.settings.hideBattlesFromTrainerCard && user.id !== targetUser.id && !user.can('lock')) continue;
 					const battle = targetRoom.battle;
 					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
