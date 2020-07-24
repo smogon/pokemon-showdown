@@ -1327,6 +1327,7 @@ export const commands: ChatCommands = {
 	hidebattlesfromtrainercard(target, room, user, connection, cmd) {
 		const shouldHide = cmd.includes('hide');
 		user.settings.hideBattlesFromTrainerCard = shouldHide;
+		user.update();
 		this.sendReply(`Battles are now ${shouldHide ? "hidden (except to staff)" : "visible"} in your trainer card.`);
 	},
 	hidebattlesfromtrainercardhelp: [
