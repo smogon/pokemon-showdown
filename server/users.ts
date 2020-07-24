@@ -382,7 +382,6 @@ export class User extends Chat.MessageContext {
 	statusType: StatusType;
 	userMessage: string;
 	lastWarnedAt: number;
-	currentChallengeCount: number;
 	constructor(connection: Connection) {
 		super(connection.user);
 		this.user = this;
@@ -470,7 +469,6 @@ export class User extends Chat.MessageContext {
 		this.userMessage = '';
 		this.lastWarnedAt = 0;
 
-		this.currentChallengeCount = 0;
 		// initialize
 		Users.add(this);
 	}
