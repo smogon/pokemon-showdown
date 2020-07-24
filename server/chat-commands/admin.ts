@@ -428,7 +428,8 @@ export const commands: ChatCommands = {
 	],
 
 	hotpatchlock: 'nohotpatch',
-	nohotpatch(target, room, user) {
+	allowhotpatch: 'nohotpatch',
+	nohotpatch(target, room, user, connection, cmd) {
 		if (!this.can('gdeclare')) return;
 		if (!target) return this.parse('/help nohotpatch');
 
@@ -441,7 +442,15 @@ export const commands: ChatCommands = {
 		const lock = Monitor.hotpatchLock;
 		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'all'];
 
-		if (validDisable.includes(hotpatch)) {
+		if (!validDisable.includes(hotpatch)) return this.errorReply(`This hot-patch is not an option to disable`);
+		const enable = cmd === 'allowhotpatch';
+
+		if (enable) {
+			if (!lock[hotpatch]) return this.errorReply(`Hot-patching ${hotpatch} is not disabled.`);
+
+			delete lock[hotpatch];
+			this.sendReply(`You have enabled hot-patching ${hotpatch}.`);
+		} else {
 			if (lock[hotpatch]) {
 				return this.errorReply(`Hot-patching ${hotpatch} has already been disabled by ${lock[hotpatch].by} (${lock[hotpatch].reason})`);
 			}
@@ -450,16 +459,15 @@ export const commands: ChatCommands = {
 				reason,
 			};
 			this.sendReply(`You have disabled hot-patching ${hotpatch}.`);
-		} else {
-			return this.errorReply("This hot-patch is not an option to disable.");
 		}
 		Rooms.global.notifyRooms(
 			['development', 'staff', 'upperstaff'] as RoomID[],
-			`|c|${user.getIdentity()}|/log ${user.name} has disabled hot-patching ${hotpatch}. Reason: ${reason}`
+			`|c|${user.getIdentity()}|/log ${user.name} has ${enable ? 'enabled' : 'disabled'} hot-patching ${hotpatch}. Reason: ${reason}`
 		);
 	},
 	nohotpatchhelp: [
 		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: &`,
+		`/allowhotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Enables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
 	processes(target, room, user) {
