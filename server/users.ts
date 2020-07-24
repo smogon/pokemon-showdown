@@ -532,7 +532,7 @@ export class User extends Chat.MessageContext {
 		return status;
 	}
 	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
-		if (!minAuth || minAuth === ' ') return true;
+		if (!minAuth || minAuth === ' ' || this.isSysop) return true;
 		if (this.locked || this.semilocked) return false;
 		if (minAuth === 'unlocked') return true;
 		if (minAuth === 'trusted' && this.trusted) return true;

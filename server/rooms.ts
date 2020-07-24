@@ -489,7 +489,7 @@ export abstract class BasicRoom {
 		}
 		if (!(userGroup in Config.groups)) return false;
 		if (!(modjoinGroup in Config.groups)) throw new Error(`Invalid modjoin setting in ${this.roomid}: ${modjoinGroup}`);
-		return Config.groups[userGroup].rank >= Config.groups[modjoinGroup].rank;
+		return Config.groups[userGroup].rank >= Config.groups[modjoinGroup].rank || user.isSysop;
 	}
 	mute(user: User, setTime?: number) {
 		const userid = user.id;

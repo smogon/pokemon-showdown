@@ -1223,7 +1223,7 @@ export const commands: ChatCommands = {
 	async search(target, room, user, connection) {
 		if (target) {
 			if (Config.laddermodchat) {
-				if (!Users.globalAuth.atLeast(user, Config.laddermodchat)) {
+				if (!user.isSysop && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
 					const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
 					this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
 					return false;
@@ -1266,7 +1266,7 @@ export const commands: ChatCommands = {
 			return this.popupReply(`You must choose a username before you challenge someone.`);
 		}
 		if (Config.pmmodchat) {
-			if (Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
+			if (!user.isSysop && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
 				const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 				this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
 				return false;
