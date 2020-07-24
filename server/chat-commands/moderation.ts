@@ -397,19 +397,29 @@ export const commands: ChatCommands = {
 		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
 		target = this.splitTarget(target);
+		let proof = '';
+		let userReason = target;
+		const targetLowercase = target.toLowerCase();
+		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
+			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
+			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
+			userReason = target.substr(0, proofIndex).trim();
+		}
+
 		const targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 			if (!this.can('warn', null, room)) return false;
 
-			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
-			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(userReason ? ` (${userReason})` : ``)}`);
+			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${userReason} ${proof}` : ``)}`);
 			return;
 		}
 		if (!(targetUser.id in room.users) && !globalWarn) {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.roomid}.`);
 		}
-		if (target.length > MAX_REASON_LENGTH) {
+		if (userReason.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 		if (!this.can('warn', targetUser, room)) return false;
@@ -422,13 +432,13 @@ export const commands: ChatCommands = {
 			return this.errorReply(`You must wait ${remainder} more seconds before you can warn ${targetUser.name} again.`);
 		}
 
-		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
+		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(userReason ? ` (${userReason})` : ``)}`);
 		if (globalWarn) {
-			this.globalModlog('WARN', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.globalModlog('WARN', targetUser, ` by ${user.id}${(target ? `: ${userReason} ${proof}` : ``)}`);
 		} else {
-			this.modlog('WARN', targetUser, target, {noalts: 1});
+			this.modlog('WARN', targetUser, target ? `${userReason} ${proof}` : ``, {noalts: 1});
 		}
-		targetUser.send(`|c|~|/warn ${target}`);
+		targetUser.send(`|c|~|/warn ${userReason}`);
 
 		const userid = targetUser.getLastId();
 		this.add(`|hidelines|unlink|${userid}`);
@@ -441,6 +451,7 @@ export const commands: ChatCommands = {
 	},
 	warnhelp: [
 		`/warn OR /k [username], [reason] - Warns a user showing them the site rules and [reason] in an overlay.`,
+		`/warn OR /k [username], [reason] spoiler: [proof] - Warns a user, marking [proof] only in the modlog.`,
 		`Requires: % @ # &`,
 	],
 
