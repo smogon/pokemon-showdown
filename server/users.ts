@@ -338,7 +338,7 @@ export class User extends Chat.MessageContext {
 		blockChallenges: boolean,
 		blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked',
 		ignoreTickets: boolean,
-		hideBattles: boolean,
+		hideBattlesFromTrainerCard: boolean,
 	};
 
 	battleSettings: {
@@ -424,7 +424,7 @@ export class User extends Chat.MessageContext {
 			blockChallenges: false,
 			blockPMs: false,
 			ignoreTickets: false,
-			hideBattles: false,
+			hideBattlesFromTrainerCard: false,
 		};
 		this.battleSettings = {
 			team: '',
