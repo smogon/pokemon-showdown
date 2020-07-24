@@ -58,10 +58,10 @@ const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
 type DataType =
 	'Abilities' | 'Formats' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
-	'Natures' | 'Pokedex' | 'Scripts' | 'Statuses' | 'TypeChart';
+	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart';
 const DATA_TYPES: (DataType | 'Aliases')[] = [
 	'Abilities', 'Formats', 'FormatsData', 'Items', 'Learnsets', 'Moves',
-	'Natures', 'Pokedex', 'Scripts', 'Statuses', 'TypeChart',
+	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart',
 ];
 
 const DATA_FILES = {
@@ -75,7 +75,7 @@ const DATA_FILES = {
 	Natures: 'natures',
 	Pokedex: 'pokedex',
 	Scripts: 'scripts',
-	Statuses: 'statuses',
+	Conditions: 'conditions',
 	TypeChart: 'typechart',
 };
 
@@ -99,7 +99,7 @@ interface DexTableData {
 	Natures: DexTable<Nature>;
 	Pokedex: DexTable<Species>;
 	Scripts: DexTable<AnyObject>;
-	Statuses: DexTable<EffectData>;
+	Conditions: DexTable<EffectData>;
 	TypeChart: DexTable<TypeData>;
 }
 
@@ -409,7 +409,7 @@ export class ModdedDex {
 		if (id && this.data.Pokedex.hasOwnProperty(id)) {
 			species = new Data.Species({name}, this.data.Pokedex[id], this.data.FormatsData[id]);
 			// Inherit any statuses from the base species (Arceus, Silvally).
-			const baseSpeciesStatuses = this.data.Statuses[toID(species.baseSpecies)];
+			const baseSpeciesStatuses = this.data.Conditions[toID(species.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
 				let key: keyof EffectData;
 				for (key in baseSpeciesStatuses) {
@@ -553,11 +553,13 @@ export class ModdedDex {
 		let found;
 		if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name: id}, this.data.Formats[id]);
-		} else if (this.data.Statuses.hasOwnProperty(id)) {
-			effect = new Data.PureEffect({name: id}, this.data.Statuses[id]);
-		} else if ((this.data.Moves.hasOwnProperty(id) && (found = this.data.Moves[id]).effect) ||
-							 (this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
-							 (this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)) {
+		} else if (this.data.Conditions.hasOwnProperty(id)) {
+			effect = new Data.PureEffect({name: id}, this.data.Conditions[id]);
+		} else if (
+			(this.data.Moves.hasOwnProperty(id) && (found = this.data.Moves[id]).effect) ||
+			(this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
+			(this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)
+		) {
 			effect = new Data.PureEffect({name: found.name || id}, found.effect!);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({id, name: 'Recoil', effectType: 'Recoil'});

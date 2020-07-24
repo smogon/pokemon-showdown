@@ -1,4 +1,4 @@
-export const Statuses: {[k: string]: PureEffectData} = {
+export const Conditions: {[k: string]: PureEffectData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
