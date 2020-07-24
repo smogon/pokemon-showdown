@@ -532,7 +532,7 @@ export class User extends Chat.MessageContext {
 		return status;
 	}
 	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
-		if (!minAuth || minAuth === ' ' || this.isSysop) return true;
+		if (!minAuth || minAuth === ' ' || this.hasSysopAccess()) return true;
 		if (this.locked || this.semilocked) return false;
 		if (minAuth === 'unlocked') return true;
 		if (minAuth === 'trusted' && this.trusted) return true;
@@ -1360,7 +1360,7 @@ export class User extends Chat.MessageContext {
 	chat(message: string, room: Room | null, connection: Connection) {
 		const now = Date.now();
 
-		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.isSysop) {
+		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.hasSysopAccess()) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
