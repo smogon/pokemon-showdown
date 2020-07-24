@@ -232,7 +232,7 @@ export const commands: ChatCommands = {
 			pageid: `view-bot-${user.id}-${toID(pageid)}`,
 		});
 		context.title = `[${user.name}] ${pageid}`;
-		return context.send(content);
+		return context.send(content.slice(0, 8192));
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
