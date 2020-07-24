@@ -410,7 +410,7 @@ export const commands: ChatCommands = {
 		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: console access`,
 		`Hot-patching has greater memory requirements than restarting`,
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
-		`/hotpatch chat - reload chat-commands.js and the chat-plugins`,
+		`/hotpatch chat - reloads the chat-commands and chat-plugins directories`,
 		`/hotpatch validator - spawn new team validator processes`,
 		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
