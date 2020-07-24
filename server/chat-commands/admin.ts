@@ -226,13 +226,14 @@ export const commands: ChatCommands = {
 		if (!targetUser) return this.errorReply(`User not found.`);
 		content = this.canHTML(Chat.collapseLineBreaksHTML(content))!;
 		if (!content) return;
+		if (content.length > 8192) return this.errorReply(`Your HTML is too long.`);
 		const context = new Chat.PageContext({
 			user: targetUser,
 			connection: targetUser.connections[0],
 			pageid: `view-bot-${user.id}-${toID(pageid)}`,
 		});
 		context.title = `[${user.name}] ${pageid}`;
-		return context.send(content.slice(0, 8192));
+		return context.send(content);
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
