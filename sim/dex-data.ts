@@ -127,7 +127,7 @@ export class BasicEffect implements EffectData {
 		this.name = Tools.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
-		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
+		this.effectType = Tools.getString(data.effectType) as EffectType || 'Condition';
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
@@ -353,13 +353,13 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	}
 }
 
-export class PureEffect extends BasicEffect implements Readonly<BasicEffect & PureEffectData> {
-	readonly effectType: 'Effect' | 'Weather' | 'Status';
+export class Condition extends BasicEffect implements Readonly<BasicEffect & ConditionData> {
+	readonly effectType: 'Condition' | 'Weather' | 'Status';
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
 		data = this;
-		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Effect');
+		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
 	}
 }
 

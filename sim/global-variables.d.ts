@@ -34,7 +34,7 @@ declare global {
 	const Format: DataType.Format;
 	const Item: DataType.Item;
 	const Move: DataType.Move;
-	const PureEffect: DataType.PureEffect;
+	const Condition: DataType.Condition;
 	const RuleTable: DataType.RuleTable;
 	const Species: DataType.Species;
 	const Tools: DataType.Tools;

@@ -184,7 +184,7 @@ export class Side {
 	}
 
 	addSideCondition(
-		status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
 		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].addSideCondition(status, source, sourceEffect);
@@ -245,7 +245,7 @@ export class Side {
 	}
 
 	addSlotCondition(
-		target: Pokemon | number, status: string | PureEffect, source: Pokemon | 'debug' | null = null,
+		target: Pokemon | number, status: string | Condition, source: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	) {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;

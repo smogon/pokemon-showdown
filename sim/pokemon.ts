@@ -1047,7 +1047,7 @@ export class Pokemon {
 		}
 		pokemon.clearVolatile();
 		for (const i in this.volatiles) {
-			const volatile = this.getVolatile(i) as PureEffect;
+			const volatile = this.getVolatile(i) as Condition;
 			this.battle.singleEvent('Copy', volatile, this.volatiles[i], this);
 		}
 	}
@@ -1399,7 +1399,7 @@ export class Pokemon {
 		return d;
 	}
 
-	trySetStatus(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+	trySetStatus(status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
@@ -1415,7 +1415,7 @@ export class Pokemon {
 	}
 
 	setStatus(
-		status: string | PureEffect,
+		status: string | Condition,
 		source: Pokemon | null = null,
 		sourceEffect: Effect | null = null,
 		ignoreImmunities = false
@@ -1665,8 +1665,8 @@ export class Pokemon {
 	}
 
 	addVolatile(
-		status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null,
-		linkedStatus: string | PureEffect | null = null
+		status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null,
+		linkedStatus: string | Condition | null = null
 	): boolean | any {
 		let result;
 		status = this.battle.dex.getEffect(status);
