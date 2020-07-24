@@ -217,7 +217,7 @@ export const commands: ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
-	sendhtmlpage(target, room, user, connection) {
+	sendhtmlpage(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
@@ -225,10 +225,16 @@ export const commands: ChatCommands = {
 		const targetUser = Users.get(targetID);
 		if (!targetUser) return this.errorReply(`User not found.`);
 		content = this.canHTML(content)!;
+		let conn = targetUser.connections[0];
+		// default to first connection, but check if they have another connection
+		// more recently active - send to that instead
+		for (const curConnection of targetUser.connections) {
+			if (curConnection.lastActiveTime > conn.lastActiveTime) conn = curConnection;
+		}
 		if (!content) return;
 		const context = new Chat.PageContext({
 			user: targetUser,
-			connection: targetUser.connections[0],
+			connection: conn,
 			pageid: `view-bot-${user.id}-${toID(pageid)}`,
 		});
 		context.title = `[${user.name}] ${pageid}`;
