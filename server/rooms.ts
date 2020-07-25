@@ -108,6 +108,7 @@ export interface RoomSettings {
 	scavQueue?: QueuedHunt[];
 
 	// should not ever be saved because they're inapplicable to persistent rooms
+	/** This includes groupchats, battles, and help-ticket rooms. */
 	isPersonal?: boolean;
 	isHelp?: boolean;
 	noLogTimes?: boolean;
@@ -145,8 +146,8 @@ export abstract class BasicRoom {
 	 */
 	battle: RoomBattle | null;
 	/**
-	 * The room's current tournament. Tours are a type of RoomGame, so if the
-	 * current room is hosting a tournament, `this.tour === this.game`.
+	 * The game room's current tournament. If the room is a battle room whose
+	 * battle is part of a tournament, `this.tour === this.parent.game`.
 	 * In all other rooms, `this.tour` is `null`.
 	 */
 	tour: Tournament | null;
@@ -520,7 +521,7 @@ export abstract class BasicRoom {
 
 		user.updateIdentity();
 
-		if (!(this.settings.isPrivate === true || this.settings.isPersonal || this.battle)) {
+		if (!(this.settings.isPrivate === true || this.settings.isPersonal)) {
 			Punishments.monitorRoomPunishments(user);
 		}
 
@@ -581,7 +582,7 @@ export abstract class BasicRoom {
 
 	pokeExpireTimer() {
 		if (this.expireTimer) clearTimeout(this.expireTimer);
-		if (this.settings.isPersonal || this.settings.isHelp) {
+		if (this.settings.isPersonal) {
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		} else {
 			this.expireTimer = null;
@@ -1701,6 +1702,7 @@ export const Rooms = {
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
+		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		const battle = new Rooms.RoomBattle(room, formatid, options);
 		room.game = battle;
