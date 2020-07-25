@@ -1418,7 +1418,7 @@ export const commands: ChatCommands = {
 				roomList[roomidWithAuth] = roomData;
 			}
 			if (!targetUser.connected) roomList = false;
-			let group = targetUser.visualGroup;
+			let group = targetUser.group;
 			if (targetUser.locked) group = Config.punishgroups?.locked?.symbol ?? '\u203d';
 			if (targetUser.namelocked) group = Config.punishgroups?.namelocked?.symbol ?? '✖';
 			const userdetails: AnyObject = {
