@@ -6814,7 +6814,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
 		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
 		isNonstandard: "Gigantamax",
-		name: "G-Max Fire Ball",
+		name: "G-Max Fireball",
 		pp: 5,
 		priority: 0,
 		flags: {},
