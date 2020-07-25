@@ -750,7 +750,7 @@ export class RandomTeams {
 				case 'healingwish': case 'memento':
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute'] || hasMove['uturn']) rejected = true;
 					break;
-				case 'highjumpkick': case '`machpunch':
+				case 'highjumpkick': case 'machpunch':
 					if (hasMove['curse']) rejected = true;
 					break;
 				case 'leechseed': case 'roar': case 'teleport': case 'whirlwind':
