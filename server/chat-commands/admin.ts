@@ -428,6 +428,7 @@ export const commands: ChatCommands = {
 	],
 
 	hotpatchlock: 'nohotpatch',
+	yeshotpatch: 'nohotpatch',
 	allowhotpatch: 'nohotpatch',
 	nohotpatch(target, room, user, connection, cmd) {
 		if (!this.can('gdeclare')) return;
@@ -442,8 +443,10 @@ export const commands: ChatCommands = {
 		const lock = Monitor.hotpatchLock;
 		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'all'];
 
-		if (!validDisable.includes(hotpatch)) return this.errorReply(`This hot-patch is not an option to disable`);
-		const enable = cmd === 'allowhotpatch';
+		if (!validDisable.includes(hotpatch)) {
+			return this.errorReply(`Disabling hotpatching "${hotpatch}" is not supported.`);
+		}
+		const enable = ['allowhotpatch', 'yeshotpatch'].includes(cmd);
 
 		if (enable) {
 			if (!lock[hotpatch]) return this.errorReply(`Hot-patching ${hotpatch} is not disabled.`);
