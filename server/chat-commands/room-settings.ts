@@ -177,14 +177,14 @@ export const commands: ChatCommands = {
 			const modjoinSetting = room.settings.modjoin === true ? "SYNC" : room.settings.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
 		}
-		if (room.settings.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
-		} else if (room.battle) {
+		if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
 			const prefix = room.battle.forcedPublic();
 			if (prefix) {
 				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 			}
+		} else if (room.settings.isPersonal) {
+			if (!this.can('editroom', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}
@@ -890,17 +890,17 @@ export const commands: ChatCommands = {
 	publicroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
-		if (room.settings.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
-		} else if (room.battle) {
+		if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
 			const prefix = room.battle.forcedPublic();
 			if (prefix) {
-				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
+				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${prefix}'.`);
 			}
 			if (room.tour?.forcePublic) {
 				return this.errorReply(`This battle can't be hidden, because the tournament is set to be forced public.`);
 			}
+		} else if (room.settings.isPersonal) {
+			if (!this.can('editroom', null, room)) return;
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings
@@ -923,19 +923,20 @@ export const commands: ChatCommands = {
 			setting = 'hidden';
 			break;
 		}
-
-		if ((setting === true || room.settings.isPrivate === true) && !room.settings.isPersonal) {
-			if (!this.can('makeroom')) return;
+		if (this.meansNo(target)) {
+			return this.errorReply(`Please specify what privacy setting you want for this room: /hiddenroom, /secretroom, or /publicroom`);
 		}
 
-		if (this.meansNo(target) || !setting) {
+		if (!setting) {
 			if (!room.settings.isPrivate) {
 				return this.errorReply(`This room is already public.`);
 			}
 			if (room.parent && room.parent.settings.isPrivate) {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
-			if (room.settings.isPersonal) return this.errorReply(`This room can't be made public.`);
+			if (room.settings.isPersonal && !room.battle) {
+				return this.errorReply(`This room can't be made public.`);
+			}
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.privacySetter.has(user.id)) {
 					const privacySetters = [...room.privacySetter].join(', ');

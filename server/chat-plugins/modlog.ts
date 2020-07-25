@@ -331,7 +331,7 @@ async function getModlog(
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
 		roomidList = [...Rooms.rooms.values()].filter(
-			room => !(room.settings.isPrivate || room.battle || room.settings.isPersonal)
+			room => !(room.settings.isPrivate || room.settings.isPersonal)
 		).map(room => room.roomid);
 	} else {
 		roomidList = [roomid];
