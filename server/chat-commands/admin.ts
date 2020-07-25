@@ -220,16 +220,17 @@ export const commands: ChatCommands = {
 	sendhtmlpage(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
-		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
+		let [targetID, pageid, connNum, content] = Utils.splitFirst(target, ',', 3);
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
 		const targetUser = Users.get(targetID);
 		if (!targetUser) return this.errorReply(`User not found.`);
 		content = this.canHTML(content)!;
-		let conn = targetUser.connections[0];
-		// default to first connection, but check if they have another connection
-		// more recently active - send to that instead
+		const connIndex = parseInt(connNum.trim());
+		const useMostRecent = isNaN(connIndex);
+		let conn = targetUser.connections[useMostRecent ? 0 : connIndex];
+		// if the specified connection is invalid, or there isn't one, default to most recently active.
 		for (const curConnection of targetUser.connections) {
-			if (curConnection.lastActiveTime > conn.lastActiveTime) conn = curConnection;
+			if (curConnection.lastActiveTime > conn.lastActiveTime && useMostRecent) conn = curConnection;
 		}
 		if (!content) return;
 		const context = new Chat.PageContext({
@@ -241,7 +242,10 @@ export const commands: ChatCommands = {
 		return context.send(content);
 	},
 	sendhtmlpagehelp: [
-		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
+		`/sendhtmlpage: [target user], [page id], [connection index], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid].`,
+		`If a [connection index] is provided, sends it to that connection in the [target user]'s user object.`,
+		`If it's invalid, or said connection doesn't exist, it defaults to most recent active connection.`,
+		`Requires: * # &.`,
 	],
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
@@ -1129,7 +1133,7 @@ export const commands: ChatCommands = {
 };
 
 export const pages: PageTable = {
-	bot(args, user) {
+	bot(args, user, connection) {
 		const [botid, pageid] = args;
 		const bot = Users.get(botid);
 		if (!bot) {
@@ -1148,7 +1152,7 @@ export const pages: PageTable = {
 		}
 		bot.sendTo(
 			room ? room.roomid : 'lobby',
-			`|pm|${user.name}|${bot.name}||requestpage|${user.name}|${pageid}`
+			`|pm|${user.name}|${bot.name}||requestpage|${user.name}|${pageid}|${user.connections.indexOf(connection)}`
 		);
 	},
 };
