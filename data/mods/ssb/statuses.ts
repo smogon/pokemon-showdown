@@ -587,16 +587,14 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	perishsonguser: {
 		noCopy: true,
-		onStart(target, source) {
-			this.add(`c|${getName('Perish Song')}|From the Ghastly Eyrie I can see to the ends of the world, and from this vantage point I declare with utter certainty that this one is in the bag!`);
-			if (source.illusion) return;
-			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
+		onStart() {
+			this.add(`c|${getName('Perish Song')}|(╯°□°）╯︵ ┻━┻`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Perish Song')}|This isn't the end.`);
+			this.add(`c|${getName('Perish Song')}|┬──┬◡ﾉ(° -°ﾉ)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Perish Song')}|Perished.`);
+			this.add(`c|${getName('Perish Song')}|Thanks for coming to my TED talk.`);
 		},
 	},
 	phiwings99: {
@@ -919,35 +917,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onEnd() {
 			this.add('-end', 'Heavy Hailstorm');
-		},
-	},
-	// Snowstorm status support for Perish Song's ability
-	snowstorm: {
-		name: 'Snowstorm',
-		effectType: 'Weather',
-		duration: 0,
-		onTryMovePriority: 1,
-		onTryMove(attacker, defender, move) {
-			if (move.type === 'Dark' && move.category !== 'Status') {
-				this.debug('Snowstorm dark suppress');
-				this.add('-fail', attacker, move, '[from] Snowstorm');
-				this.attrLastMove('[still]');
-				return null;
-			}
-		},
-		onStart(battle, source, effect) {
-			this.add('-weather', 'Snowstorm', '[from] ability: ' + effect, '[of] ' + source);
-		},
-		onResidualOrder: 1,
-		onResidual() {
-			this.add('-weather', 'Snowstorm', '[upkeep]');
-			this.eachEvent('Weather');
-		},
-		onWeather(target) {
-			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 16);
-		},
-		onEnd() {
-			this.add('-end', 'Snowstorm');
 		},
 	},
 	// Modified futuremove support for Segmr's move (Disconnect)
