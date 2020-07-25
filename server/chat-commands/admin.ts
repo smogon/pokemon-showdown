@@ -225,20 +225,26 @@ export const commands: ChatCommands = {
 		const targetUser = Users.get(targetID);
 		if (!targetUser) return this.errorReply(`User not found.`);
 		content = this.canHTML(content)!;
-		let conn = targetUser.connections[0];
+		if (!content) return;
+
+		if (!targetUser.connections.length) return this.errorReply(`User offline.`);
+
+		let targetConnection = targetUser.connections[0];
 		// default to first connection, but check if they have another connection
 		// more recently active - send to that instead
 		for (const curConnection of targetUser.connections) {
-			if (curConnection.lastActiveTime > conn.lastActiveTime) conn = curConnection;
+			if (curConnection.lastActiveTime > targetConnection.lastActiveTime) {
+				targetConnection = curConnection;
+			}
 		}
-		if (!content) return;
+
 		const context = new Chat.PageContext({
 			user: targetUser,
-			connection: conn,
+			connection: targetConnection,
 			pageid: `view-bot-${user.id}-${toID(pageid)}`,
 		});
 		context.title = `[${user.name}] ${pageid}`;
-		return context.send(content);
+		context.send(content);
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
