@@ -408,19 +408,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// Instruct
-	determination: {
-		desc: "15% chance to live a hit on 1HP",
-		shortDesc: "15% chance to live a hit on 1HP",
-		name: "Determination",
-		onDamage(damage, target, source, effect) {
-			if (this.randomChance(1, 15) && damage >= target.hp && effect && effect.effectType === 'Move') {
-				this.add("-activate", target, "Ability: Determination");
-				return target.hp - 1;
-			}
-		},
-	},
-
 	// iyarito
 	pollodiablo: {
 		shortDesc: "This Pokemon's Special Attack is 1.5x, but it can only select the first move it executes.",

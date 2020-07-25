@@ -174,12 +174,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'The Hunt is On!',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	Instruct: {
-		species: 'Cinderace', ability: 'Determination', item: 'Flame Plate', gender: 'N',
-		moves: ['Pyro Ball', 'Sacred Sword', 'Bolt Strike'],
-		signatureMove: 'Hyper Goner',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
-	},
 	iyarito: {
 		species: 'Gengar', ability: 'Pollo Diablo', item: 'Choice Specs', gender: 'F',
 		moves: ['Sludge Wave', 'Volt Switch', 'Fusion Flare'],

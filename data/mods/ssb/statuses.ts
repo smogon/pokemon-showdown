@@ -342,18 +342,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('GXS')}|A Critical Error Has Occurred. Would You Like To Send A Report? Sending Report.`);
 		},
 	},
-	instruct: {
-		noCopy: true,
-		onStart(source) {
-			this.add(`c|${getName('Instruct')}|Howdy! ${source.side.foe.name}, are you there? It's me, your best friend.`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Instruct')}|Don't worry about me. Someone has to take care of these flowers.`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Instruct')}|I'm not ready to say goodbye to someone like you again...`);
-		},
-	},
 	iyarito: {
 		noCopy: true,
 		onStart(source) {
