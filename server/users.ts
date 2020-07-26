@@ -683,7 +683,7 @@ export class User extends Chat.MessageContext {
 
 		if (tokenDataSplit.length < 5) {
 			Monitor.warn(`outdated assertion format: ${tokenData}`);
-			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
+			this.send(`|nametaken|${name}|The assertion you sent us is corrupt or incorrect. Please send the exact assertion given by the login server's JSON response.`);
 			return false;
 		}
 
