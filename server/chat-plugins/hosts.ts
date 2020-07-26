@@ -7,7 +7,6 @@
 import {Utils} from "../../lib/utils";
 import {Datacenter} from "../ip-tools";
 
-
 const IP_REGEX = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 const HOST_REGEX = /^.+\..{2,}$/;
 
