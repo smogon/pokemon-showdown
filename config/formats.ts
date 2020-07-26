@@ -1081,7 +1081,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] OU'],
-		banlist: [],
+		banlist: ['Dragapult'],
 		restricted: [
 			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock',
 			'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
