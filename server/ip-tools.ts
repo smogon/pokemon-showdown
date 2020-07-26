@@ -314,6 +314,7 @@ export const IPTools = new class {
 	async loadDatacenters() {
 		const data = await FS(DATACENTERS_FILE).readIfExists();
 		const rows = data.split('\n');
+		const datacenters = [];
 		for (const row of rows) {
 			if (!row) continue;
 			const rowSplit = row.split(',');
@@ -323,8 +324,14 @@ export const IPTools = new class {
 				name: rowSplit[2],
 				host: IPTools.urlToHost(rowSplit[3]),
 			};
-			IPTools.datacenters.push(datacenter);
+			const prev = datacenters[datacenters.length - 1];
+			if (prev && (datacenter.minIP <= prev.maxIP)) {
+				throw new Error(`Datacenters out of order at ${rowSplit[0]}.`);
+			}
+			if (datacenter.maxIP < datacenter.minIP) throw new Error(`Bad datacenter range at ${rowSplit[0]}.`);
+			datacenters.push(datacenter);
 		}
+		IPTools.datacenters = datacenters;
 	}
 
 	saveDatacenters() {
