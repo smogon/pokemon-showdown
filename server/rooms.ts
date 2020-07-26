@@ -342,7 +342,7 @@ export abstract class BasicRoom {
 	hideText(userids: ID[], lineCount = 0, hideRevealButton?: boolean) {
 		const cleared = this.log.clearText(userids, lineCount);
 		for (const userid of cleared) {
-			this.send(`|unlink|${hideRevealButton ? 'clear' : 'hide'}|${userid}|${lineCount}`);
+			this.send(`|hidelines|${hideRevealButton ? 'delete' : 'hide'}|${userid}|${lineCount}`);
 		}
 		this.update();
 	}
