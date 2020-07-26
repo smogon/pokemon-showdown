@@ -1107,6 +1107,29 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
+	canPMHTML(targetUser: User | null) {
+		if (!targetUser || !targetUser.connected) {
+			this.errorReply(`User ${this.targetUsername} is not currently online.`);
+			return false;
+		}
+		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
+			this.errorReply("You do not have permission to use this command to users who are not in this room.");
+			return false;
+		}
+		if (targetUser.settings.blockPMs &&
+			(targetUser.settings.blockPMs === true || !this.user.authAtLeast(targetUser.settings.blockPMs)) &&
+			!this.user.can('lock')
+		) {
+			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
+			this.errorReply("This user is currently blocking PMs.");
+			return false;
+		}
+		if (targetUser.locked && !this.user.can('lock')) {
+			this.errorReply("This user is currently locked, so you cannot send them HTML.");
+			return false;
+		}
+		return true;
+	}
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 	canEmbedURI(uri: string, autofix?: boolean) {
 		if (uri.startsWith('https://')) return uri;
