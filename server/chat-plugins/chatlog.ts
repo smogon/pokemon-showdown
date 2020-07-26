@@ -674,6 +674,9 @@ export const commands: ChatCommands = {
 		const roomid = targetRoom ? targetRoom.roomid : target;
 		this.parse(`/join view-chatlog-${roomid}--today`);
 	},
+	chatloghelp: [
+		`/chatlog [optional room] - View chatlogs from the given room. If none is specified, shows logs from the room you're in. Requires: % @ * # &`,
+	],
 
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
