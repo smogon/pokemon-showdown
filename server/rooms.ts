@@ -35,7 +35,7 @@ import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from 
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
-import {RoomAuth, PLAYER_SYMBOL} from './user-groups';
+import {RoomAuth} from './user-groups';
 
 /*********************************************************
  * the Room object.
@@ -594,7 +594,7 @@ export abstract class BasicRoom {
 	}
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
 		const canTalk = user.authAtLeast(this.settings.modchat ?? 'unlocked', this) && !this.isMuted(user);
-		if (this.reportJoins && (canTalk || this.auth.get(user) === PLAYER_SYMBOL)) {
+		if (this.reportJoins && (canTalk || this.auth.get(user) === Users.PLAYER_SYMBOL)) {
 			this.add(`|${type}|${entry}`).update();
 			return;
 		}
