@@ -989,7 +989,7 @@ export class CommandContext extends MessageContext {
 				}
 				if (targetUser.settings.blockPMs &&
 					(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) &&
-					(!user.can('lock' || user.auth === '*'))) {
+					(!user.can('lock' || user.group === '*'))) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						this.errorReply(`This user is blocking private messages right now.`);
