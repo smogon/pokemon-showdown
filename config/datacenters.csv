@@ -426,7 +426,6 @@
 45.38.0.0,45.39.255.255,EGIHosting.com,http://www.egihosting.com/
 45.41.96.0,45.41.127.255,fullhost,https://www.fullhost.com/
 45.41.128.0,45.41.191.255,Web2Objects,http://web2objects.com/
-45.41.181.0,45.41.181.255,VPN Consumer Network,http://www.vpnconsumer.com/
 45.43.0.0,45.43.31.255,Garrison Host,https://www.garrisonnetwork.com/
 45.43.32.0,45.43.63.255,Zenlayer,https://www.zenlayer.com/
 45.43.64.0,45.43.95.255,SYN,https://syn.one/
@@ -545,8 +544,6 @@
 50.30.32.0,50.30.47.255,Hosting Solutions International Inc,http://www.plusserver.de
 50.31.0.0,50.31.127.255,steadfast.net,http://steadfast.net/
 50.31.128.0,50.31.255.255,ServerCentral,http://www.servercentral.net/
-50.31.240.0,50.31.241.255,UK2 Group,http://www.uk2.net/
-50.31.252.0,50.31.255.255,UK2 Group,http://www.uk2.net/
 50.56.0.0,50.57.255.255,Rackspace,http://www.rackspace.com/
 50.60.0.0,50.61.255.255,Fortress Integrated Technologies,http://fortressitx.com/
 50.62.0.0,50.63.255.255,GoDaddy.com Inc,http://www.godaddy.com/
@@ -571,17 +568,7 @@
 51.254.0.0,51.255.255.255,OVH,http://www.ovh.co.uk/
 52.0.0.0,52.13.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.16.0.0,52.79.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.48.0.0,52.53.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.58.0.0,52.59.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.62.0.0,52.65.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.67.0.0,52.74.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.76.0.0,52.77.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.79.0.0,52.79.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.84.0.0,52.95.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.86.0.0,52.91.255.255,Amazon AWS,http://www.amazon.com/aws/
-52.95.240.0,52.95.249.255,Amazon AWS,http://www.amazon.com/aws/
-52.95.252.0,52.95.252.255,Amazon AWS,http://www.amazon.com/aws/
-52.95.255.0,52.95.255.159,Amazon AWS,http://www.amazon.com/aws/
 52.145.0.0,52.191.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 52.192.0.0,52.193.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.196.0.0,52.215.255.255,Amazon AWS,http://www.amazon.com/aws/
@@ -624,8 +611,8 @@
 63.131.224.0,63.131.239.255,TierPoint,http://tierpoint.com/
 63.140.0.0,63.140.15.255,Fortress Integrated Technologies,http://fortressitx.com/
 63.141.48.0,63.141.63.255,CloudIP Solutions,https://cloudip-solutions.com/
-63.141.224.0,63.141.255.255,Data Shack,http://datashack.net/
 63.141.204.0,63.141.204.255,GIGLINX,http://www.giglinx.com/
+63.141.224.0,63.141.255.255,Data Shack,http://datashack.net/
 63.143.32.0,63.143.63.255,Limestone Networks,http://www.limestonenetworks.com/
 63.246.0.0,63.246.31.255,Xiolink,http://xiolink.com
 63.246.128.0,63.246.133.255,FXTrading,http://fxtrading.net/
@@ -663,8 +650,8 @@
 64.45.0.0,64.45.63.255,PEER 1,http://www.peer1.com/
 64.46.32.0,64.46.63.255,RackForce,http://www.rockforce.com/
 64.49.192.0,64.49.255.255,Rackspace,http://www.rackspace.com/
-64.52.81.0,64.52.104.255,CloudRoute,http://www.cloudroute.com/
 64.50.160.0,64.50.191.255,Lunar Pages,http://www.lunarpages.com/
+64.52.81.0,64.52.104.255,CloudRoute,http://www.cloudroute.com/
 64.56.64.0,64.56.79.255,Perfect IP,http://www.perfectip.net/
 64.59.64.0,64.59.127.255,MojoHost,http://www.mojohost.com
 64.62.128.0,64.62.255.255,Hurricane Electic,http://www.he.net/
@@ -700,7 +687,6 @@
 64.150.176.0,64.150.191.255,Codero,http://www.codero.com/
 64.151.64.0,64.151.127.255,GoGrid,http://www.gogrid.com/
 64.156.112.0,64.156.127.255,Hostway,http://www.hostway.com/
-65.175.64.0,65.175.127.255,Cybercon,https://www.cybercon.com/
 64.179.224.0,64.179.239.255,LightEdge,http://www.lightedge.com
 64.182.0.0,64.182.255.255,C I Host,http://www.cihost.com/
 64.187.96.0,64.187.127.255,AccelerateBiz Inc.,http://www.acceleratebiz.com/
@@ -738,6 +724,7 @@
 65.98.0.0,65.98.127.255,Fortress Integrated Technologies,http://fortressitx.com/
 65.99.192.0,65.99.255.255,colo4dallas.com,http://colo4dallas.com/
 65.111.160.0,65.111.191.255,ServerPronto,http://www.serverpronto.com/
+65.175.64.0,65.175.127.255,Cybercon,https://www.cybercon.com/
 65.181.128.0,65.181.191.255,Pair Networks,http://www.pair.com/
 65.182.96.0,65.182.111.255,brinkster,http://brinkster.com/
 65.182.192.0,65.182.223.255,HostMySite.com,http://www.webmysite.com/
@@ -891,7 +878,6 @@
 68.68.16.0,68.68.31.255,Blue Mile,http://bluemilecloud.com/
 68.68.32.0,68.68.47.255,Reliable Hosting,http://reliablehosting.com/
 68.68.96.0,68.68.111.255,EGIHosting.com,http://www.egihosting.com/
-68.68.104.192,68.68.104.223,EGIHosting.com,http://www.egihosting.com/
 68.69.160.0,68.69.175.255,XMission,http://xmission.com/
 68.71.32.0,68.71.63.255,Netelligent,http://www.netelligent.ca/en/ca
 68.71.96.0,68.71.111.255,Peak10,http://www.peak10.com/
@@ -1273,7 +1259,7 @@
 82.221.102.32,82.221.102.55,Cyberghost,http://www.cyberghostvpn.com/
 82.223.0.0,82.223.63.255,Arsys,https://www.arsys.es/
 83.97.20.0,83.97.20.255,OvO Systems,https://ovo.sc/
-83.97.20.0,83.97.23.255,M247,http://www.m247.com/
+83.97.21.0,83.97.23.255,M247,http://www.m247.com/
 83.98.128.0,83.98.128.255,Flexwebhosting.nl,http://www.flexwebhosting.nl/
 83.136.80.0,83.136.87.255,myLoc,http://www.myloc.de/
 83.136.106.0,83.136.107.255,MyCore VPS,https://www.seflow.net/mycore-vps/
@@ -1715,7 +1701,6 @@
 103.23.152.0,103.23.155.255,ozhosting.com,http://ozhosting.com/
 103.25.56.0,103.25.59.255,Ransom IT,https://www.ransomit.com.au/
 103.27.76.0,103.27.79.255,Host US,http://hostus.us/
-103.27.78.0,103.27.79.255,Host US,http://hostus.us/
 103.28.148.0,103.28.149.255,Argon Data Communication,http://easyway.co.id
 103.60.8.0,103.60.11.255,NewMedia Express,https://www.newmediaexpress.com/
 103.75.118.0,103.75.118.255,OneProvider,http://oneprovider.com/
@@ -1734,15 +1719,9 @@
 103.125.232.0,103.125.235.255,Owl Hosting,https://owl.net/
 103.137.12.0,103.137.15.255,Streamline Servers,https://streamlinevps.com/
 103.192.176.0,103.192.179.255,Host US,http://hostus.us/
-103.192.178.0,103.192.178.255,Host US,http://hostus.us/
-103.192.179.0,103.192.179.255,Host US,http://hostus.us/
 103.196.20.0,103.196.23.255,Host US,http://hostus.us/
-103.196.22.0,103.196.23.255,Host US,http://hostus.us/
 103.197.148.0,103.197.148.255,Trabia,https://www.trabia.com/
 103.207.68.0,103.207.71.255,Host US,http://hostus.us/
-103.207.69.0,103.207.69.255,Host US,http://hostus.us/
-103.207.70.0,103.207.71.255,Host US,http://hostus.us/
-103.207.71.0,103.207.71.255,Host US,http://hostus.us/
 103.209.252.0,103.209.255.255,StrongVPN,https://strongtechnology.net/
 103.210.12.0,103.210.12.255,Vivid-Hosting,http://vivid-hosting.net/
 103.210.13.0,103.210.13.255,Vivid-Hosting,http://vivid-hosting.net/
@@ -1754,7 +1733,6 @@
 103.216.196.0,103.216.199.255,IPv4Hosting,http://ipv4hosting.com/
 103.221.232.0,103.221.235.255,HostRoyale,https://hostroyale.com/
 103.231.88.0,103.231.91.255,Intergrid,https://intergrid.com.au/
-104.232.36.0,104.232.37.255,FXTrading,http://fxtrading.net/
 103.246.248.0,103.246.248.255,quickweb.co.nz,http://quickweb.co.nz/
 103.246.250.0,103.246.251.255,quickweb.co.nz,http://quickweb.co.nz/
 103.253.144.0,103.253.147.255,DigitalOcean AP,https://www.digitalocean.com/
@@ -1816,12 +1794,10 @@
 104.216.0.0,104.217.255.255,Psychz Networks,http://psychz.net/
 104.222.128.0,104.222.159.255,Virtuzo Cloud,https://www.virtuzo.com/
 104.225.160.0,104.225.191.255,iboss,https://www.iboss.com/
+104.232.36.0,104.232.37.255,FXTrading,http://fxtrading.net/
 104.233.64.0,104.233.127.255,KW Datacenter CA,http://www.kwdatacentre.com/
 104.236.0.0,104.236.255.255,DigitalOcean USA,https://www.digitalocean.com/
-104.237.80.0,104.237.95.255,Micfo,https://www.micfo.com/
-104.237.48.0,104.237.63.255,WebNX,https://webnx.com/
-104.237.64.0,104.237.79.255,eSited,https://www.esited.com/
-104.237.80.0,104.237.95.255,Micfo,https://www.micfo.com/
+104.237.48.0,104.237.95.255,Micfo,https://www.micfo.com/
 104.237.128.0,104.237.159.255,Linode,https://www.linode.com/
 104.237.192.0,104.237.223.255,Nexeon Technologies,https://nexeon.com/
 104.237.224.0,104.237.255.255,DedFiber,http://dedfiber.com/
@@ -1984,11 +1960,11 @@
 130.185.152.0,130.185.155.255,webexxpurts.com,http://webexxpurts.com/
 134.0.24.0,134.0.31.255,TwooIT,http://www.twooit.de/
 134.19.176.0,134.19.191.255,serverboost.nl,http://serverboost.nl/
-136.144.40.0,136.144.40.255,Panq BV,https://www.panq.nl/
 134.170.192.0,134.170.199.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 134.209.0.0,134.209.255.255,DigitalOcean USA,https://www.digitalocean.com/
 134.255.192.0,134.255.255.255,Optimate Server,http://optimate-server.de/
 136.0.0.0,136.0.255.255,EGIHosting.com,http://www.egihosting.com/
+136.144.40.0,136.144.40.255,Panq BV,https://www.panq.nl/
 136.144.48.0,136.144.63.255,Packet Host,https://www.packet.net/
 137.59.252.0,137.59.253.255,Total Server Solutions,http://totalserversolutions.com/
 137.74.0.0,137.74.255.255,OVH,http://www.ovh.co.uk/
@@ -2004,11 +1980,10 @@
 138.91.112.0,138.91.129.79,Microsoft Azure,http://www.windowsazure.com/en-us/
 138.91.136.0,138.91.199.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 138.91.224.0,138.91.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
-139.5.176.0,139.5.179.255,Gigabit Hosting,https://thegigabit.com/
-139.28.216.0,139.28.219.255,M247,https://www.m247.com/
-139.59.0.0,139.59.255.255,DigitalOcean AP,https://www.digitalocean.com/
 138.197.0.0,138.197.255.255,DigitalOcean USA,https://www.digitalocean.com/
 138.255.12.0,138.255.15.255,Virtual Space Provedor,http://virtualspaceprovedor.com.br/
+139.5.176.0,139.5.179.255,Gigabit Hosting,https://thegigabit.com/
+139.28.216.0,139.28.219.255,M247,https://www.m247.com/
 139.59.0.0,139.59.255.255,DigitalOcean AP,https://www.digitalocean.com/
 141.0.8.0,141.0.11.255,Opera Mini Proxy,https://www.opera.com/
 141.0.160.0,141.0.167.255,NuFuture Ltd,http://www.nublue.co.uk/
@@ -2084,7 +2059,6 @@
 157.157.87.0,157.157.87.255,EstNOC,https://www.estnoc.ee/
 157.230.0.0,157.230.255.255,DigitalOcean USA,https://www.digitalocean.com/
 157.245.0.0,157.245.255.255,DigitalOcean USA,https://www.digitalocean.com/
-165.73.240.0,165.73.240.255,Psychz Networks,https://www.psychz.net/
 158.58.168.0,158.58.171.255,SeFlow.it Internet Services,http://seflow.net/
 158.58.172.0,158.58.173.255,SeFlow.it Internet Services,http://seflow.net/
 158.58.174.0,158.58.174.255,SeFlow.it Internet Services,http://seflow.net/
@@ -2128,7 +2102,6 @@
 162.244.24.0,162.244.31.255,KW Datacenter CA,http://www.kwdatacentre.com/
 162.244.32.32,162.244.32.63,King Servers,https://www.king-servers.com/
 162.244.80.0,162.244.83.255,Server Room,https://www.serverroom.net/
-162.244.80.243,162.244.80.250,Cyberghost,http://www.cyberghostvpn.com/
 162.246.16.0,162.246.23.255,InterServer.net,http://www.interserver.net/
 162.248.8.0,162.248.11.255,KW Datacenter CA,http://www.kwdatacentre.com/
 162.248.72.0,162.248.79.255,Volume Drive,http://volumedrive.com
@@ -2149,6 +2122,7 @@
 164.138.220.0,164.138.221.255,SuperHosting.BG,http://www.superhosting.bg/
 164.177.128.0,164.177.159.255,Rackspace,http://www.rackspace.com/
 165.22.0.0,165.22.255.255,DigitalOcean USA,https://www.digitalocean.com/
+165.73.240.0,165.73.240.255,Psychz Networks,https://www.psychz.net/
 165.84.224.0,165.84.231.255,Micfo,https://www.micfo.com/
 165.227.0.0,165.227.255.255,DigitalOcean USA,https://www.digitalocean.com/
 165.231.0.0,165.231.255.255,Fiber Grid Inc,http://www.fibergrid.net
@@ -2395,7 +2369,6 @@
 178.128.208.0,178.128.223.255,DigitalOcean Singapore,https://www.digitalocean.com/
 178.128.224.0,178.128.239.255,DigitalOcean Canada,https://www.digitalocean.com/
 178.128.240.0,178.128.255.255,DigitalOcean Netherlands,https://www.digitalocean.com/
-178.128.144.0,178.128.159.255,DigitalOcean USA,https://www.digitalocean.com/
 178.156.80.0,178.156.80.255,ServiHosting Networks S.L.,http://servihosting.es
 178.162.128.0,178.162.255.255,Leaseweb,http://www.leaseweb.com/
 178.174.0.0,178.174.127.255,Unbelievable Machine,http://www.unbelievable-machine.com/
@@ -2424,7 +2397,6 @@
 178.255.144.0,178.255.151.255,Blix Solutions,http://blixsolutions.no/
 178.255.152.0,178.255.159.255,ANEXIA,https://www.anexia-it.com/
 178.255.192.0,178.255.199.255,qweb,http://www.qweb.nl/
-179.61.128.0,179.61.255.255,Heficed,https://www.heficed.com/
 179.43.147.0,179.43.147.127,Private Layer INC,http://privatelayer.com/
 179.48.248.0,179.48.251.255,Rack Nation,https://www.racknation.cr/
 179.61.128.0,179.61.255.255,Heficed,https://www.heficed.com/
@@ -2543,7 +2515,6 @@
 185.117.20.0,185.117.21.255,Dedipath,https://www.dedipath.com/
 185.117.22.0,185.117.22.255,Host US,http://hostus.us/
 185.117.118.0,185.117.118.255,Creanova Hosting Solutions Ltd,https://creanova.org/
-185.134.112.0,185.134.115.255,Hostmein,https://hostmein.gr/
 185.121.120.0,185.121.121.255,Trabia Network,https://www.trabia.com/
 185.122.168.1,185.122.168.255,RapidSeedbox,https://www.rapidseedbox.com/
 185.125.168.0,185.125.169.255,TerraHost,https://terrahost.no/
@@ -2552,6 +2523,7 @@
 185.130.104.0,185.130.107.255,King Servers,https://www.king-servers.com/
 185.130.184.0,185.130.187.255,M247,http://www.m247.com/
 185.134.30.0,185.134.30.255,Zitcom,https://www.zitcom.dk/
+185.134.112.0,185.134.115.255,Hostmein,https://hostmein.gr/
 185.137.16.0,185.137.19.255,Surfeasy,https://www.surfeasy.com/
 185.140.114.0,185.140.114.255,OneProvider,http://oneprovider.com/
 185.141.116.0,185.141.116.255,CloudIP LLC,http://ipv4hosting.com
@@ -2608,7 +2580,6 @@
 185.230.120.0,185.230.123.255,Netragy,http://www.netragy.com/
 185.230.124.0,185.230.127.255,M247,https://www.m247.com/
 185.232.20.0,185.232.23.255,M247,https://www.m247.com/
-186.233.184.0,186.233.187.255,Maxihost,https://www.maxihost.com/
 185.236.40.0,185.236.43.255,Internet Vikings,https://internetvikings.com/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
 185.242.4.0,185.242.7.255,M247,https://www.m247.com/
@@ -2618,6 +2589,7 @@
 185.253.96.0,185.253.99.255,M247,https://www.m247.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
 186.227.192.0,186.227.207.255,HostDime Brazil,https://www.hostdime.com/
+186.233.184.0,186.233.187.255,Maxihost,https://www.maxihost.com/
 186.251.128.0,186.251.139.255,ipglobe.net,https://www.ipglobe.net/
 187.0.192.0,187.0.223.255,alog,http://www.alog.com.br/
 187.33.0.0,187.33.31.255,alog,http://www.alog.com.br/
@@ -2731,15 +2703,13 @@
 192.81.128.0,192.81.135.255,Linode,http://www.linode.com/
 192.81.208.0,192.81.223.255,DigitalOcean USA,https://www.digitalocean.com/
 192.82.248.0,192.82.255.255,wehostwebsites.com,http://wehostwebsites.com/
-192.119.8.0,192.119.15.255,24Shells,https://www.24shells.net/
-192.190.19.0,192.190.19.255,Windscribe,https://windscribe.com/
 192.91.186.0,192.91.186.255,demos,http://demos.ru/
 192.95.0.0,192.95.63.255,OVH,http://www.ovh.co.uk/
-191.96.0.0,191.96.255.255,Heficed,https://www.heficed.com/
 192.96.200.0,192.96.207.255,Leaseweb,http://www.leaseweb.com/
 192.99.0.0,192.99.255.255,OVH,http://www.ovh.co.uk/
 192.110.160.0,192.110.167.255,Input Output Flood LLC,http://ioflood.com/
 192.111.128.0,192.111.143.255,Total Server Solutions,http://totalserversolutions.com/
+192.119.8.0,192.119.15.255,24Shells,https://www.24shells.net/
 192.119.64.0,192.119.127.255,hostwinds.com,http://www.hostwinds.com/
 192.119.160.0,192.119.175.255,madgenius.com,http://www.madgenius.com/
 192.124.170.0,192.124.219.255,demos,http://demos.ru/
@@ -2876,6 +2846,9 @@
 194.34.128.0,194.34.131.255,CoreIP Solutions,http://www.coreipsolutions.com/
 194.34.132.0,194.34.134.255,Creanova Hosting Solutions Ltd,https://creanova.org/
 194.35.233.0,194.35.233.255,Nord VPN,https://nordvpn.com/
+194.36.108.0,194.36.108.255,M247,https://www.m247.com/
+194.36.109.0,194.36.109.255,M3XS,http://www.m3xs.com/
+194.36.110.0,194.36.111.255,M247,https://www.m247.com/
 194.54.88.0,194.54.91.255,hosting.ua,http://hosting.ua/
 194.59.249.0,194.59.251.255,M247,https://m247.com/
 194.63.140.0,194.63.143.255,nthost.ru,http://nthost.ru/
@@ -2913,9 +2886,6 @@
 195.22.203.0,195.22.203.255,Akamai,http://akamai.com/
 195.24.72.0,195.24.79.255,root S.A.,http://www.site.lu/
 195.26.4.0,195.26.5.255,root S.A.,http://www.site.lu/
-194.36.108.0,194.36.108.255,M247,https://www.m247.com/
-194.36.109.0,194.36.109.255,M3XS,http://www.m3xs.com/
-194.36.110.0,194.36.111.255,M247,https://www.m247.com/
 195.38.21.0,195.38.21.255,Xtraordinary Networks Limited,http://xtrahost.co.uk/
 195.39.196.0,195.39.197.255,mirohost.net,http://mirohost.net/
 195.42.102.0,195.42.103.255,2dayhost.com,http://www.2dayhost.com/
@@ -2935,10 +2905,10 @@
 195.128.160.0,195.128.161.255,providerdienste,http://www.providerdienste.de/
 195.138.240.0,195.138.255.255,Core-Backbone GmbH,https://www.core-backbone.com/
 195.144.4.0,195.144.4.255,PatrikWeb,http://patrikweb.net/
+195.158.249.0,195.158.249.255,HostRoyale,https://hostroyale.com/
 195.162.24.0,195.162.25.255,kylos.pl,http://www.kylos.pl/
 195.162.68.0,195.162.69.255,hostkey,http://www.hostkey.ru/
 195.181.160.0,195.181.175.255,DataCamp Limited,https://www.datacamp.co.uk/
-195.158.249.0,195.158.249.255,HostRoyale,https://hostroyale.com/
 195.189.124.0,195.189.127.255,trueserver.nl,http://trueserver.nl/
 195.189.254.0,195.189.255.255,availo.no,http://www.availo.no/
 195.190.3.0,195.190.3.255,euro-web.com,http://fr.euro-web.com/
@@ -3015,7 +2985,6 @@
 198.100.144.0,198.100.159.255,OVH,http://www.ovh.co.uk/
 198.101.128.0,198.101.255.255,Rackspace,http://www.rackspace.com/
 198.105.208.0,198.105.223.255,uk2group,http://uk2group.com/
-198.16.74.0,198.16.75.255,FDC Servers,http://fdcservers.net/
 198.136.24.0,198.136.31.255,Gorilla Servers,http://gorillaservers.com/
 198.136.48.0,198.136.63.255,DimeNOC,http://dimenoc.com/
 198.143.96.0,198.143.127.255,hostwinds.com,http://www.hostwinds.com/
@@ -3042,6 +3011,7 @@
 198.246.132.0,198.246.133.255,XMission,http://xmission.com/
 198.251.64.0,198.251.79.255,1&1 Internet,http://www.1and1.com/
 198.251.80.0,198.251.95.255,buyvm.net,http://buyvm.net/?from=frantech
+198.255.66.0,198.255.67.255,FDC Servers,http://fdcservers.net/
 199.7.232.0,199.7.239.255,datacenterscanada.com,http://www.datacenterscanada.com/
 199.15.112.0,199.15.119.255,Psychz Networks,http://psychz.net/
 199.15.168.0,199.15.175.255,Immedion,http://immedion.com/
@@ -3144,7 +3114,6 @@
 199.204.248.0,199.204.255.255,Jumpline Inc,http://www.jumpline.com/
 199.212.86.0,199.212.87.255,Power Up Hosting,https://poweruphosting.com/
 199.217.112.0,199.217.119.255,Hosting Solutions Internationa,http://www.server4you.com/
-198.255.66.0,198.255.67.255,FDC Servers,http://fdcservers.net/
 199.229.248.0,199.229.255.255,colo@,http://coloat.com/
 199.230.52.0,199.230.55.255,ServInt,http://www.servint.net/
 199.231.84.0,199.231.87.255,Input Output Flood LLC,http://ioflood.com/
@@ -3224,6 +3193,7 @@
 204.74.208.0,204.74.223.255,Take 2 Hosting,http://www.take2hosting.com/
 204.93.128.0,204.93.255.255,ServerCentral,http://www.servercentral.net/
 204.109.56.0,204.109.63.255,Tranquil Hosting,http://www.tqhosting.com/
+204.119.138.0,204.119.139.255,GlobalNexus,http://www.globalnexus.com/
 204.124.180.0,204.124.183.255,Volume Drive,http://volumedrive.com
 204.152.192.0,204.152.223.255,QuadraNet,http://quadranet.com/
 204.152.240.0,204.152.255.255,brinkster,http://brinkster.com/
@@ -3254,7 +3224,6 @@
 206.71.160.0,206.71.191.255,American Internet Services,http://americanis.net/
 206.72.192.0,206.72.207.255,InterServer.net,http://www.interserver.net/
 206.82.192.0,206.82.223.255,latisys,http://www.latisys.com/
-204.119.138.0,204.119.139.255,GlobalNexus,http://www.globalnexus.com/
 206.123.64.0,206.123.127.255,colo4dallas.com,http://colo4dallas.com/
 206.125.40.0,206.125.47.255,calPOP,http://calpop.com/
 206.130.96.0,206.130.127.255,westhost,http://www.westhost.com/
@@ -3501,9 +3470,6 @@
 209.250.224.0,209.250.255.255,Rackvibe.com,http://www.rackvibe.com/
 210.5.40.0,210.5.47.255,IP ServerOne,http://ipserverone.com/
 210.16.120.0,210.16.123.255,Host US,http://hostus.us/
-210.16.121.0,210.16.121.255,Host US,http://hostus.us/
-210.16.122.0,210.16.123.255,Host US,http://hostus.us/
-210.16.123.0,210.16.123.255,Host US,http://hostus.us/
 210.77.128.0,210.77.159.255,21vianet,http://21vianet.com/
 211.151.0.0,211.151.255.255,21vianet,http://21vianet.com/
 211.152.32.0,211.152.63.255,21vianet,http://21vianet.com/
@@ -3548,8 +3514,8 @@
 213.149.224.0,213.149.255.255,acens Technologies S.L.,http://www.acens.com/
 213.152.96.0,213.152.127.255,ConnectingBytes Gbmh,http://www.connectingbytes.de/
 213.152.160.0,213.152.191.255,serverboost.nl,http://serverboost.nl/
-213.158.96.0,213.158.127.255,Ennit Server GmbH,http://www.ennit.de
 213.155.0.0,213.155.31.255,hosting.ua,http://hosting.ua/
+213.158.96.0,213.158.127.255,Ennit Server GmbH,http://www.ennit.de
 213.163.0.0,213.163.63.255,Invitech Data Centers,https://www.invitech.hu/
 213.163.64.0,213.163.95.255,i3d.net,http://i3d.net/
 213.165.64.0,213.165.95.255,1&1 Internet,http://www.1and1.com/
