@@ -206,13 +206,14 @@ export const commands: ChatCommands = {
 		}
 
 		let targetConnections = [];
+		// find if a connection has specifically requested this page
 		for (const c of targetUser.connections) {
 			if (c.lastRequestedPage === pageid) {
 				targetConnections.push(c);
-				break;
 			}
 		}
 		if (!targetConnections.length) {
+			// no connection has requested it - verify that we share a room
 			if (!this.canPMHTML(targetUser)) return;
 			targetConnections = [targetUser.connections[0]];
 		}

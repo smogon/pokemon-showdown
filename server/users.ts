@@ -228,6 +228,7 @@ export class Connection {
 	user: User;
 	challenge: string;
 	autojoins: string;
+	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
 	constructor(
