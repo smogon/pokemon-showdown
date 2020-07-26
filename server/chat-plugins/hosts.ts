@@ -253,7 +253,7 @@ export const commands: ChatCommands = {
 			};
 			void IPTools.addDatacenter(datacenter);
 			const renameInfo = `datacenter at ${datacenter.minIP}-${datacenter.maxIP} to ${datacenter.name} (${datacenter.host})`;
-			this.globalModlog('DATACENTER RENAME', null, `by ${user.name}: ${renameInfo}`);
+			this.globalModlog('DATACENTER RENAME', null, `by ${user.id}: ${renameInfo}`);
 			return this.sendReply(`Renamed the ${renameInfo}.`);
 		},
 		renamehelp: [
