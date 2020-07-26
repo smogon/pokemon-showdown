@@ -193,20 +193,45 @@ export const commands: ChatCommands = {
 		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
 
+		pageid = `${user.id}-${toID(pageid)}`;
+
 		const targetUser = Users.get(targetID)!;
-		if (!this.canPMHTML(targetUser)) return;
+		if (!targetUser || !targetUser.connected) {
+			this.errorReply(`User ${this.targetUsername} is not currently online.`);
+			return false;
+		}
+		if (targetUser.locked && !this.user.can('lock')) {
+			this.errorReply("This user is currently locked, so you cannot send them HTML.");
+			return false;
+		}
+
+		let targetConnections = [];
+		for (const c of targetUser.connections) {
+			if (c.lastRequestedPage === pageid) {
+				targetConnections.push(c);
+				break;
+			}
+		}
+		if (!targetConnections.length) {
+			if (!this.canPMHTML(targetUser)) return;
+			targetConnections = [targetUser.connections[0]];
+		}
+
 		content = this.canHTML(content)!;
 		if (!content) return;
-		const context = new Chat.PageContext({
-			user: targetUser,
-			connection: targetUser.connections[0],
-			pageid: `view-bot-${user.id}-${toID(pageid)}`,
-		});
-		context.title = `[${user.name}] ${pageid}`;
-		context.send(content);
+
+		for (const targetConnection of targetConnections) {
+			const context = new Chat.PageContext({
+				user: targetUser,
+				connection: targetConnection,
+				pageid: `view-bot-${pageid}`,
+			});
+			context.title = `[${user.name}] ${pageid}`;
+			context.send(content);
+		}
 	},
 	sendhtmlpagehelp: [
-		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: s* # &`,
+		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: * # &`,
 	],
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
@@ -1094,7 +1119,7 @@ export const commands: ChatCommands = {
 };
 
 export const pages: PageTable = {
-	bot(args, user) {
+	bot(args, user, connection) {
 		const [botid, pageid] = args;
 		const bot = Users.get(botid);
 		if (!bot) {
@@ -1103,7 +1128,7 @@ export const pages: PageTable = {
 		let canSend = Users.globalAuth.get(bot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (curRoom.auth.get(bot) === '*') {
+			if (curRoom.auth.getDirect(bot.id) === '*') {
 				canSend = true;
 				room = curRoom;
 			}
@@ -1111,9 +1136,10 @@ export const pages: PageTable = {
 		if (!canSend) {
 			return `<div class="pad"><h2>"${bot}" is not a bot.</h2></div>`;
 		}
+		connection.lastRequestedPage = `${bot.id}-${pageid}`;
 		bot.sendTo(
 			room ? room.roomid : 'lobby',
-			`|pm|${user.name}|${bot.name}||requestpage|${user.name}|${pageid}`
+			`|pm|${user.getIdentity()}|${bot.getIdentity()}||requestpage|${user.name}|${pageid}`
 		);
 	},
 };

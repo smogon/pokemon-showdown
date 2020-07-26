@@ -228,6 +228,7 @@ export class Connection {
 	user: User;
 	challenge: string;
 	autojoins: string;
+	lastRequestedPage: string | null;
 	lastActiveTime: number;
 	constructor(
 		id: string,
@@ -253,6 +254,7 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
+		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
