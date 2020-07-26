@@ -86,6 +86,7 @@ interface TriviaGame {
 	mode: string;
 	length: string;
 	category: string;
+	creator?: string;
 }
 
 type TriviaLadder = TriviaRank[][];
@@ -320,7 +321,7 @@ class Trivia extends Rooms.RoomGame {
 	askedAt: number[];
 	constructor(
 		room: Room, mode: string, category: string,
-		length: string, questions: TriviaQuestion[], isRandomMode = false
+		length: string, questions: TriviaQuestion[], creator: string, isRandomMode = false
 	) {
 		super(room);
 		this.playerTable = {};
@@ -346,6 +347,7 @@ class Trivia extends Rooms.RoomGame {
 			mode: (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]),
 			length: length,
 			category: category,
+			creator: creator,
 		};
 
 		this.questions = questions;
@@ -707,9 +709,9 @@ class Trivia extends Rooms.RoomGame {
 
 		const buf = this.getStaffEndMessage(winners, winner => winner.player.name);
 		const logbuf = this.getStaffEndMessage(winners, winner => winner.id);
-		this.room.sendMods(buf);
+		this.room.sendMods(`(${buf}!)`);
 		this.room.roomlog(buf);
-		this.room.modlog(`(${this.room.roomid}) ${logbuf}`);
+		this.room.modlog(`(${this.room.roomid}) TRIVIAGAME: by ${toID(this.game.creator)}: ${logbuf}`);
 
 		if (!triviaData.history) triviaData.history = [];
 		triviaData.history.push(this.game);
@@ -761,14 +763,14 @@ class Trivia extends Rooms.RoomGame {
 			winner => `User ${mapper(winner)} won the game of ${this.game.mode}` +
 				` mode trivia under the ${this.game.category} category with a cap of ` +
 				`${this.getCap()} points, with ${winner.player.points} points and ` +
-				`${winner.player.correctAnswers} correct answers!`,
+				`${winner.player.correctAnswers} correct answers`,
 			winner => ` Second place: ${mapper(winner)} (${winner.player.points} points)`,
 			winner => `, third place: ${mapper(winner)} (${winner.player.points} points)`,
 		];
 		for (let i = 0; i < winners.length; i++) {
 			message += winnerParts[i](winners[i]);
 		}
-		return `(${message})`;
+		return `${message}`;
 	}
 
 	end(user: User) {
@@ -1149,7 +1151,7 @@ const commands: ChatCommands = {
 		}
 
 		questions = Utils.shuffle(questions);
-		room.game = new _Trivia(room, mode, category, length, questions, isRandomMode);
+		room.game = new _Trivia(room, mode, category, length, questions, user.name, isRandomMode);
 	},
 	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # &`],
 
@@ -1730,7 +1732,10 @@ const commands: ChatCommands = {
 		const games = [...triviaData.history].reverse();
 		const buf = [];
 		for (const [i, game] of games.entries()) {
-			buf.push(Utils.html`<b>${i + 1}.</b> ${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category.`);
+			let gameInfo = Utils.html`<b>${i + 1}.</b> ${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category`;
+			if (game.creator) gameInfo += Utils.html` hosted by ${game.creator}`;
+			gameInfo += '.';
+			buf.push(gameInfo);
 		}
 
 		return this.sendReplyBox(buf.join('<br />'));
