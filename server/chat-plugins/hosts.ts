@@ -6,18 +6,12 @@
 
 import {Utils} from "../../lib/utils";
 import {Datacenter} from "../ip-tools";
-import {FS} from '../../lib/fs';
 
-const WHITELIST_FILE = 'config/chat-plugins/hosts-managers.json';
 
 const IP_REGEX = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 const HOST_REGEX = /^.+\..{2,}$/;
 
-let whitelistedUsers: ID[] = JSON.parse(FS(WHITELIST_FILE).readIfExistsSync() || '[]');
-
-function saveWhitelist() {
-	FS(WHITELIST_FILE).writeUpdate(() => JSON.stringify(whitelistedUsers));
-}
+const WHITELISTED_USERS = ['anubis'];
 
 function ipSort(a: string, b: string) {
 	let i = 0;
@@ -31,11 +25,10 @@ function ipSort(a: string, b: string) {
 	return diff;
 }
 
-
 export const pages: PageTable = {
 	datacenters(query, user) {
 		this.title = "Datacenters";
-		if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return 'Permission denied.';
+		if (!(WHITELISTED_USERS.includes(user.id) || this.can('globalban'))) return 'Permission denied.';
 		let html = `<div class="ladder pad"><h2>Datacenters:</h2><table>`;
 		html += `<tr><th>Lowest IP address</th><th>Highest IP address</th><th>Name</th><th>Host</th></tr>`;
 		IPTools.sortDatacenters();
@@ -53,7 +46,7 @@ export const pages: PageTable = {
 
 	hosts(query, user) {
 		this.title = "Hosts";
-		if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return 'Permission denied.';
+		if (!(WHITELISTED_USERS.includes(user.id) || this.can('globalban'))) return 'Permission denied.';
 		const type = toID(query[0]) || 'all';
 
 		const openProxies = ['all', 'proxyips', 'proxies'].includes(type) ? [...IPTools.singleIPOpenProxies] : [];
@@ -97,7 +90,7 @@ export const commands: ChatCommands = {
 
 		show: 'view',
 		view(target, room, user) {
-			if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return;
+			if (!(WHITELISTED_USERS.includes(user.id) || this.can('globalban'))) return;
 			return this.parse('/join view-datacenters');
 		},
 		viewhelp: [
@@ -107,7 +100,7 @@ export const commands: ChatCommands = {
 		// Originally by Zarel
 		widen: 'add',
 		async add(target, room, user, connection, cmd) {
-			if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
+			if (!(WHITELISTED_USERS.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help datacenters add');
 			// should be in the format: IP, IP, name, URL
 			const widen = cmd.includes('widen');
@@ -213,7 +206,7 @@ export const commands: ChatCommands = {
 		],
 
 		remove(target, room, user) {
-			if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
+			if (!(WHITELISTED_USERS.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help datacenters remove');
 			let removed = 0;
 			for (const row of target.split('\n')) {
@@ -236,7 +229,7 @@ export const commands: ChatCommands = {
 		],
 
 		rename(target, room, user) {
-			if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
+			if (!(WHITELISTED_USERS.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help datacenters rename');
 			const [start, end, name, url] = target.split(',').map(part => part.trim());
 			if (!(name || url) || !IP_REGEX.test(start) || !IP_REGEX.test(end)) return this.parse('/help renamedatacenter');
@@ -276,7 +269,7 @@ export const commands: ChatCommands = {
 	},
 
 	viewhosts(target, room, user) {
-		if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return false;
+		if (!(WHITELISTED_USERS.includes(user.id) || this.can('globalban'))) return false;
 		const types = ['all', 'proxies', 'proxyips', 'proxyhosts', 'residential', 'mobile'];
 		const type = target ? toID(target) : 'all';
 		if (!types.includes(type)) {
@@ -294,7 +287,7 @@ export const commands: ChatCommands = {
 	removehosts: 'addhosts',
 	addhost: 'addhosts',
 	addhosts(target, room, user, connection, cmd) {
-		if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
+		if (!(WHITELISTED_USERS.includes(user.id) || this.can('lockdown'))) return false;
 		const removing = cmd.includes('remove');
 		let [type, toAdd] = target.split('|');
 		type = toID(type);
@@ -369,40 +362,6 @@ export const commands: ChatCommands = {
 		`/addhosts [category] | host1, host2, ... - Adds hosts to the given category. Requires: hosts manager &`,
 		`/removehosts [category] | host1, host2, ... - Removes hosts from the given category. Requires: hosts manager &`,
 		`Categories are: 'openproxy' (which takes IP addresses, not hosts), 'proxy', 'residential', and 'mobile'.`,
-	],
-
-	unwhitelisthostsmanager: 'whitelisthostsmanager',
-	whitelisthostsmanager(target, room, user, connection, cmd) {
-		if (!this.can('lockdown')) return false;
-		const userid = toID(target);
-		if (!userid) return this.parse('/help hostsmanagerwhitelist');
-		const removing = cmd.startsWith('un');
-		if (removing !== whitelistedUsers.includes(userid)) {
-			return this.errorReply(`${target} is ${removing ? 'not' : 'already'} whitelisted as a hosts manager.`);
-		}
-
-		if (removing) {
-			whitelistedUsers = whitelistedUsers.filter(whitelisted => whitelisted !== userid);
-		} else {
-			whitelistedUsers.push(userid);
-		}
-		saveWhitelist();
-		this.globalModlog(`HOSTSMANAGER ${removing ? 'REMOVE' : 'APPOINT'}`, userid, `: by ${user.id}`);
-		return this.privateGlobalModAction(`${target} was ${removing ? "demoted from" : "appointed a"} hosts manager by ${user.name}.`);
-	},
-	whitelisthostsmanagerhelp: [
-		`/whitelisthostsmanager [user] - Whitelists [user] to view, and manage hosts, proxies, and datacenters, regardless of their global rank. Requires: &`,
-		`/unwhitelisthostsmanager [user] - Removes [user] from the host management whitelist. Requires: &`,
-	],
-
-	viewhostsmanagerwhitelist: 'viewhostsmanagers',
-	viewhostsmanagers(target, room, user) {
-		if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
-		if (!this.runBroadcast()) return;
-		return this.sendReply(`Users whitelisted to manage hosts: ${whitelistedUsers.join(', ')}`);
-	},
-	viewhostsmanagershelp: [
-		`/viewhostsmanagers - Shows a list of users who are whitelisted host managers. Requires: host manager &`,
 	],
 };
 
