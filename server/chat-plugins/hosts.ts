@@ -10,6 +10,19 @@ import {Datacenter} from "../ip-tools";
 const IP_REGEX = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 const HOST_REGEX = /^.+\..{2,}$/;
 
+function ipSort(a: string, b: string) {
+	let i = 0;
+	let diff = 0;
+	const aParts = a.split('.');
+	const bParts = b.split('.');
+	while (diff === 0) {
+		diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
+		i++;
+	}
+	return diff;
+}
+
+
 export const pages: PageTable = {
 	datacenters() {
 		this.title = "Datacenters";
@@ -31,18 +44,6 @@ export const pages: PageTable = {
 	},
 
 	hosts(query) {
-		function ipSort(a: string, b: string) {
-			let i = 0;
-			let diff = 0;
-			const aParts = a.split('.');
-			const bParts = b.split('.');
-			while (diff === 0) {
-				diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
-				i++;
-			}
-			return diff;
-		}
-
 		this.title = "Hosts";
 		if (!this.can('globalban')) return 'Permission denied.';
 		const type = toID(query[0]) || 'all';
@@ -104,7 +105,7 @@ export const commands: ChatCommands = {
 			const widen = (cmd === 'widendatacenters');
 
 			const datacentersToAdd: Datacenter[] = [];
-			for (const row of String(target).split("\n")) {
+			for (const row of target.split('\n')) {
 				const [start, end, name, url] = row.split(',').map(part => part.trim());
 				if (!url || !IP_REGEX.test(start) || !IP_REGEX.test(end)) return this.errorReply(`Invalid data: ${row}`);
 				const datacenter = {
