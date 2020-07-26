@@ -311,6 +311,11 @@ export const IPTools = new class {
 	}
 
 	datacenters: Datacenter[] = [];
+
+	sortDatacenters() {
+		IPTools.datacenters.sort((a, b) => a.minIP - b.minIP);
+	}
+
 	async loadDatacenters() {
 		const data = await FS(DATACENTERS_FILE).readIfExists();
 		const rows = data.split('\n');
@@ -335,6 +340,7 @@ export const IPTools = new class {
 	}
 
 	saveDatacenters() {
+		IPTools.sortDatacenters();
 		return FS(DATACENTERS_FILE).write(
 			IPTools.datacenters
 				.map(dc => `${IPTools.numberToIP(dc.minIP)},${IPTools.numberToIP(dc.maxIP)},${dc.name},${dc.host}`)

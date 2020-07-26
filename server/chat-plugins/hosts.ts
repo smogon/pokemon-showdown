@@ -6,9 +6,18 @@
 
 import {Utils} from "../../lib/utils";
 import {Datacenter} from "../ip-tools";
+import {FS} from '../../lib/fs';
+
+const WHITELIST_FILE = 'config/chat-plugins/hosts-managers.json';
 
 const IP_REGEX = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 const HOST_REGEX = /^.+\..{2,}$/;
+
+let whitelistedUsers: ID[] = JSON.parse(FS(WHITELIST_FILE).readIfExistsSync() || '[]');
+
+function saveWhitelist() {
+	FS(WHITELIST_FILE).writeUpdate(() => JSON.stringify(whitelistedUsers));
+}
 
 function ipSort(a: string, b: string) {
 	let i = 0;
@@ -24,14 +33,13 @@ function ipSort(a: string, b: string) {
 
 
 export const pages: PageTable = {
-	datacenters() {
+	datacenters(query, user) {
 		this.title = "Datacenters";
-		if (!this.can('globalban')) return 'Permission denied.';
+		if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return 'Permission denied.';
 		let html = `<div class="ladder pad"><h2>Datacenters:</h2><table>`;
 		html += `<tr><th>Lowest IP address</th><th>Highest IP address</th><th>Name</th><th>Host</th></tr>`;
-		const sortedDatacenters = IPTools.datacenters;
-		sortedDatacenters.sort((a, b) => a.minIP - a.minIP);
-		for (const datacenter of sortedDatacenters) {
+		IPTools.sortDatacenters();
+		for (const datacenter of IPTools.datacenters) {
 			html += `<tr>`;
 			html += `<td>${IPTools.numberToIP(datacenter.minIP)}</td>`;
 			html += `<td>${IPTools.numberToIP(datacenter.maxIP)}</td>`;
@@ -43,9 +51,9 @@ export const pages: PageTable = {
 		return html;
 	},
 
-	hosts(query) {
+	hosts(query, user) {
 		this.title = "Hosts";
-		if (!this.can('globalban')) return 'Permission denied.';
+		if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return 'Permission denied.';
 		const type = toID(query[0]) || 'all';
 
 		const openProxies = ['all', 'proxyips', 'proxies'].includes(type) ? [...IPTools.singleIPOpenProxies] : [];
@@ -89,20 +97,20 @@ export const commands: ChatCommands = {
 
 		show: 'view',
 		view(target, room, user) {
-			if (!this.can('globalban')) return;
+			if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return;
 			return this.parse('/join view-datacenters');
 		},
 		viewhelp: [
-			`/datacenters view - View the list of datacenters. Requires: @ &`,
+			`/datacenters view - View the list of datacenters. Requires: hosts manager @ &`,
 		],
 
 		// Originally by Zarel
 		widen: 'add',
 		async add(target, room, user, connection, cmd) {
-			if (!this.can('lockdown')) return false;
+			if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help datacenters add');
 			// should be in the format: IP, IP, name, URL
-			const widen = (cmd === 'widendatacenters');
+			const widen = cmd.includes('widen');
 
 			const datacentersToAdd: Datacenter[] = [];
 			for (const row of target.split('\n')) {
@@ -146,8 +154,12 @@ export const commands: ChatCommands = {
 					}
 					if (datacenter.minIP <= next.minIP && datacenter.maxIP >= next.maxIP) {
 						if (widen === true) {
+							if (IPTools.datacenters[iMin + 1].minIP <= datacenter.maxIP) {
+								this.errorReply("You can only widen one datacenter at a time.");
+								continue;
+							}
 							widenSuccesses++;
-							await IPTools.removeDatacenter(IPTools.datacenters[iMin].minIP, IPTools.datacenters[iMin].maxIP);
+							await IPTools.removeDatacenter(next.minIP, next.maxIP);
 							void IPTools.addDatacenter(datacenter);
 							continue;
 						}
@@ -184,18 +196,24 @@ export const commands: ChatCommands = {
 				void IPTools.addDatacenter(datacenter);
 			}
 
-			this.sendReply(`Done: ${successes} successes, ${identicals} unchanged.`);
-			if (widenSuccesses) this.sendReply(`${widenSuccesses} widens.`);
+			const results = [];
+			if (successes) results.push(`added ${successes} datacenters`);
+			if (widenSuccesses) results.push(`widened ${widenSuccesses} datacenters`);
+			if (results.length) {
+				this.globalModlog('DATACENTER ADD', null, `by ${user.id}: ${results.join(', ')}`);
+				if (identicals) results.push(`${identicals} datacenters were already on the datacenter list`);
+				return this.sendReply(`Successfully ${results.join(' and ')}!`);
+			}
 		},
 		addhelp: [
-			`/datacenters add [low], [high], [name], [url] - Add datacenters (can be multiline). Requires: &`,
-			`/datacenters widen [low], [high], [name], [url] - Add datacenters, allowing a new range to completely cover an old range. Requires: &`,
+			`/datacenters add [low], [high], [name], [url] - Add datacenters (can be multiline). Requires: hosts manager &`,
+			`/datacenters widen [low], [high], [name], [url] - Add datacenters, allowing a new range to completely cover an old range. Requires: hosts manager &`,
 			`For example: /datacenters add 5.152.192.0, 5.152.223.255, Redstation Limited, http://redstation.com/`,
 			`Get datacenter info from whois; [low], [high] are the range in the last inetnum.`,
 		],
 
 		remove(target, room, user) {
-			if (!this.can('lockdown')) return false;
+			if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help datacenters remove');
 			let removed = 0;
 			for (const row of target.split('\n')) {
@@ -209,15 +227,16 @@ export const commands: ChatCommands = {
 				void IPTools.removeDatacenter(minIP, maxIP);
 				removed++;
 			}
+			this.globalModlog('DATACENTER REMOVE', null, `by ${user.id}: ${removed} datacenters`);
 			return this.sendReply(`Removed ${removed} datacenters!`);
 		},
 		removehelp: [
-			`/datacenters remove [low IP], [high IP] - Remove datacenter(s). Can be multiline. Requires: &`,
+			`/datacenters remove [low IP], [high IP] - Remove datacenter(s). Can be multiline. Requires: hosts manager &`,
 			`Example: /datacenters remove 5.152.192.0, 5.152.223.255`,
 		],
 
 		rename(target, room, user) {
-			if (!this.can('lockdown')) return false;
+			if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help datacenters rename');
 			const [start, end, name, url] = target.split(',').map(part => part.trim());
 			if (!(name || url) || !IP_REGEX.test(start) || !IP_REGEX.test(end)) return this.parse('/help renamedatacenter');
@@ -233,31 +252,31 @@ export const commands: ChatCommands = {
 				host: url ? IPTools.urlToHost(url) : toRename.host,
 			};
 			void IPTools.addDatacenter(datacenter);
-			return this.sendReply(
-				`Renamed the datacenter at ${datacenter.minIP}-${datacenter.maxIP} to ${datacenter.name} (${datacenter.host}).`
-			);
+			const renameInfo = `datacenter at ${datacenter.minIP}-${datacenter.maxIP} to ${datacenter.name} (${datacenter.host})`;
+			this.globalModlog('DATACENTER RENAME', null, `by ${user.name}: ${renameInfo}`);
+			return this.sendReply(`Renamed the ${renameInfo}.`);
 		},
 		renamehelp: [
-			`/datacenters rename [low IP], [high IP], [name], [url] - Renames a datacenter. You may leave one of [name] or [url] blank. Requires: &`,
+			`/datacenters rename [low IP], [high IP], [name], [url] - Renames a datacenter. You may leave one of [name] or [url] blank. Requires: hosts manager &`,
 		],
 	},
 
 	datacentershelp() {
 		const help = [
-			`<code>/datacenters view</code>: view the list of datacenters. Requires: @ &`,
-			`<code>/datacenters add [low IP], [high IP], [name], [url]</code>: add datacenters (can be multiline). Requires: &`,
-			`<code>/datacenters widen [low IP], [high IP], [name], [url]</code>: add datacenters, allowing a new range to completely cover an old range. Requires: &`,
+			`<code>/datacenters view</code>: view the list of datacenters. Requires: hosts manager @ &`,
+			`<code>/datacenters add [low IP], [high IP], [name], [url]</code>: add datacenters (can be multiline). Requires: hosts manager &`,
+			`<code>/datacenters widen [low IP], [high IP], [name], [url]</code>: add datacenters, allowing a new range to completely cover an old range. Requires: hosts manager &`,
 			`For example: <code>/datacenters add 5.152.192.0, 5.152.223.255, Redstation Limited, http://redstation.com/</code>.`,
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
-			`<code>/datacenters remove [low IP], [high IP]</code>: remove datacenter(s). Can be multiline. Requires: &`,
+			`<code>/datacenters remove [low IP], [high IP]</code>: remove datacenter(s). Can be multiline. Requires: hosts manager &`,
 			`For example: <code>/datacenters remove 5.152.192.0, 5.152.223.255</code>.`,
-			`<code>/datacenters rename [low IP], [high IP], [name], [url]</code>: renames a datacenter. You may leave one of [name] or [url] blank. Requires: &`,
+			`<code>/datacenters rename [low IP], [high IP], [name], [url]</code>: renames a datacenter. You may leave one of [name] or [url] blank. Requires: hosts manager &`,
 		];
 		return this.sendReply(`|html|<details class="readmore"><summary>Datacenter management commands:</summary>${help.join('<br />')}`);
 	},
 
-	viewhosts(target) {
-		if (!this.can('globalban')) return false;
+	viewhosts(target, room, user) {
+		if (!(whitelistedUsers.includes(user.id) || this.can('globalban'))) return false;
 		const types = ['all', 'proxies', 'proxyips', 'proxyhosts', 'residential', 'mobile'];
 		const type = target ? toID(target) : 'all';
 		if (!types.includes(type)) {
@@ -266,8 +285,8 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-hosts-${type}`);
 	},
 	viewhostshelp: [
-		`/viewhosts - View the list of all hosts and proxies. Requires: @ &`,
-		`/viewhosts [type] - View the list of a particular type of proxy. Requires: @ &`,
+		`/viewhosts - View the list of all hosts and proxies. Requires: hosts manager @ &`,
+		`/viewhosts [type] - View the list of a particular type of proxy. Requires: hosts manager @ &`,
 		`Proxy types are: 'all', 'proxies', 'proxyips', 'proxyhosts', 'residential', and 'mobile'.`,
 	],
 
@@ -275,7 +294,7 @@ export const commands: ChatCommands = {
 	removehosts: 'addhosts',
 	addhost: 'addhosts',
 	addhosts(target, room, user, connection, cmd) {
-		if (!this.can('lockdown')) return false;
+		if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
 		const removing = cmd.includes('remove');
 		let [type, toAdd] = target.split('|');
 		type = toID(type);
@@ -284,7 +303,7 @@ export const commands: ChatCommands = {
 		if (!hosts.length) return this.parse('/help addhosts');
 
 		switch (type) {
-		case 'proxyip': case 'openproxy': case 'singleipopenproxy':
+		case 'openproxy':
 			for (const host of hosts) {
 				if (!IP_REGEX.test(host)) return this.errorReply(`'${host}' is not a valid IP address.`);
 				if (removing !== IPTools.singleIPOpenProxies.has(host)) {
@@ -310,7 +329,7 @@ export const commands: ChatCommands = {
 				void IPTools.addProxyHosts(hosts);
 			}
 			break;
-		case 'residential': case 'res':
+		case 'residential':
 			for (const host of hosts) {
 				if (!HOST_REGEX.test(host)) return this.errorReply(`'${host}' is not a valid host.`);
 				if (removing !== IPTools.residentialHosts.has(host)) {
@@ -339,12 +358,51 @@ export const commands: ChatCommands = {
 		default:
 			return this.errorReply(`'${type}' isn't one of 'openproxy', 'proxy', 'residential', or 'mobile'.`);
 		}
+		this.globalModlog(
+			removing ? 'REMOVEHOSTS' : 'ADDHOSTS',
+			null,
+			`by ${user.id}: ${hosts.length} hosts to category '${type}'`
+		);
 		return this.sendReply(`${removing ? 'Removed' : 'Added'} ${hosts.length} hosts!`);
 	},
 	addhostshelp: [
-		`/addhosts [category] | host1, host2, ... - Adds hosts to the given category. Requires: &`,
-		`/removehosts [category] | host1, host2, ... - Removes hosts from the given category. Requires: &`,
+		`/addhosts [category] | host1, host2, ... - Adds hosts to the given category. Requires: hosts manager &`,
+		`/removehosts [category] | host1, host2, ... - Removes hosts from the given category. Requires: hosts manager &`,
 		`Categories are: 'openproxy' (which takes IP addresses, not hosts), 'proxy', 'residential', and 'mobile'.`,
+	],
+
+	unwhitelisthostsmanager: 'whitelisthostsmanager',
+	whitelisthostsmanager(target, room, user, connection, cmd) {
+		if (!this.can('lockdown')) return false;
+		const userid = toID(target);
+		if (!userid) return this.parse('/help hostsmanagerwhitelist');
+		const removing = cmd.startsWith('un');
+		if (removing !== whitelistedUsers.includes(userid)) {
+			return this.errorReply(`${target} is ${removing ? 'not' : 'already'} whitelisted as a hosts manager.`);
+		}
+
+		if (removing) {
+			whitelistedUsers = whitelistedUsers.filter(whitelisted => whitelisted !== userid);
+		} else {
+			whitelistedUsers.push(userid);
+		}
+		saveWhitelist();
+		this.globalModlog(`HOSTSMANAGER ${removing ? 'REMOVE' : 'APPOINT'}`, userid, `: by ${user.id}`);
+		return this.privateGlobalModAction(`${target} was ${removing ? "demoted from" : "appointed a"} hosts manager by ${user.name}.`);
+	},
+	whitelisthostsmanagerhelp: [
+		`/whitelisthostsmanager [user] - Whitelists [user] to view, and manage hosts, proxies, and datacenters, regardless of their global rank. Requires: &`,
+		`/unwhitelisthostsmanager [user] - Removes [user] from the host management whitelist. Requires: &`,
+	],
+
+	viewhostsmanagerwhitelist: 'viewhostsmanagers',
+	viewhostsmanagers(target, room, user) {
+		if (!(whitelistedUsers.includes(user.id) || this.can('lockdown'))) return false;
+		if (!this.runBroadcast()) return;
+		return this.sendReply(`Users whitelisted to manage hosts: ${whitelistedUsers.join(', ')}`);
+	},
+	viewhostsmanagershelp: [
+		`/viewhostsmanagers - Shows a list of users who are whitelisted host managers. Requires: host manager &`,
 	],
 };
 
