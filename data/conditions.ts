@@ -669,6 +669,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		noCopy: true,
 		duration: 3,
 		onStart(pokemon) {
+			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
 				delete pokemon.volatiles['torment'];
