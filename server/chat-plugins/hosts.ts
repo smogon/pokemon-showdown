@@ -365,5 +365,5 @@ export const commands: ChatCommands = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/(?:add|widen|remove)datacenter(s | )');
+	Chat.multiLinePattern.register('/(datacenters|datacenter|dc) (add|widen|remove)');
 });
