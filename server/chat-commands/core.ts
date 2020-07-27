@@ -864,6 +864,58 @@ export const commands: ChatCommands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],
 
+	showteam: 'showset',
+	async showset(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return false;
+		const showAll = cmd === 'showteam';
+		if (!room) return this.requiresRoom();
+		const battle = room.battle;
+		if (!showAll && !target) return this.parse(`/help showset`);
+		if (!battle) return this.errorReply("This command can only be used in a battle.");
+		let setNum;
+		if (target) {
+			setNum = parseInt(target);
+			if (isNaN(setNum) || setNum > 6) return this.errorReply(`Use a number between 1-6 to view a specific set.`);
+			setNum -= 1;
+		}
+		const teamStrings = await battle.getTeam(user, setNum);
+		if (!teamStrings) return this.errorReply("Only players can extract their team.");
+		const evTable: {[k: string]: string} = {
+			'spa': 'SpA',
+			'spd': 'SpD',
+			'spe': 'Spe',
+			'atk': 'Atk',
+			'def': 'Def',
+			'hp': 'HP',
+		};
+		let resultString = teamStrings.map(set => {
+			const evString = Object.keys(set.evs).map(ev => {
+				return `${set.evs[ev]} ${evTable[ev]}`;
+			}).join(' / ');
+			const moveString = set.moves.map((moveID: string) => {
+				const move = Dex.getMove(moveID);
+				return `- ${move.name ? move.name : moveID}`;
+			}).join('<br />');
+
+			let buf = `${set.name} ${set.name === set.species ? '' : `(${set.species}) `}`;
+			buf += `${set.item ? `@ ${set.item}` : ''}<br />`;
+			buf += `Ability: ${Dex.getAbility(set.ability).name}<br />`;
+			buf += `Shiny: ${set.shiny === true ? 'Yes' : 'No'}<br />`;
+			buf += `EVs: ${evString}<br />`;
+			buf += moveString;
+			return buf;
+		}).join('<br /><br />');
+		this.runBroadcast();
+		if (showAll) {
+			resultString = `<details><summary>View team</summary><${resultString}</details>`;
+		}
+		return this.sendReplyBox(resultString);
+	},
+	showsethelp: [
+		`/showset [number] OR /showteam - show part, or all, of your team in battle.`,
+		`If a [number] is provided, shows the set of the pokemon corresponding to that number.`,
+	],
+
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
 	offerdraw: 'offertie',
