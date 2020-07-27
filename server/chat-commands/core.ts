@@ -872,14 +872,22 @@ export const commands: ChatCommands = {
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
 		if (!battle) return this.errorReply("This command can only be used in a battle.");
-		let setNum;
-		if (target) {
-			setNum = parseInt(target);
-			if (isNaN(setNum) || setNum > 6) return this.errorReply(`Use a number between 1-6 to view a specific set.`);
-			setNum -= 1;
-		}
-		const teamStrings = await battle.getTeam(user, setNum);
+		let teamStrings = await battle.getTeam(user);
 		if (!teamStrings) return this.errorReply("Only players can extract their team.");
+		if (target) {
+			let setIndex;
+			const parsed = parseInt(target);
+			if (parsed > 6) return this.errorReply(`Use a number between 1-6 to view a specific set.`);
+			if (isNaN(parsed)) {
+				for (const set of teamStrings) {
+					if (toID(set.name) === toID(target)) setIndex = teamStrings.indexOf(set);
+				}
+				if (!setIndex) return this.errorReply(`Pokemon "${target}" is not on your team.`);
+			} else {
+				setIndex = parsed - 1;
+			}
+			teamStrings = [teamStrings[setIndex]];
+		}
 		const evTable: {[k: string]: string} = {
 			'spa': 'SpA',
 			'spd': 'SpD',

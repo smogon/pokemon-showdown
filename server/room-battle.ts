@@ -1135,6 +1135,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.dataResolvers.push([resolve, reject]);
 		});
 		const resultStrings = await teamDataPromise;
+<<<<<<< HEAD
 		if (!resultStrings) return;
 		const result = resultStrings.map(item => Dex.fastUnpackTeam(item))[0];
 		return result;
@@ -1150,6 +1151,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.dataResolvers.push([resolve, reject]);
 		});
 		const result = await logPromise;
+=======
+		const result = resultStrings.map(item => JSON.parse(item));
+>>>>>>> support using a mon name as a target
 		return result;
 	}
 }
