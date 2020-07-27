@@ -875,18 +875,21 @@ export const commands: ChatCommands = {
 		let teamStrings = await battle.getTeam(user);
 		if (!teamStrings) return this.errorReply("Only players can extract their team.");
 		if (target) {
-			let setIndex;
 			const parsed = parseInt(target);
 			if (parsed > 6) return this.errorReply(`Use a number between 1-6 to view a specific set.`);
 			if (isNaN(parsed)) {
-				for (const set of teamStrings) {
-					if (toID(set.name) === toID(target)) setIndex = teamStrings.indexOf(set);
-				}
-				if (!setIndex) return this.errorReply(`Pokemon "${target}" is not on your team.`);
+				const matchedSet = teamStrings.filter(set => {
+					const id = toID(target);
+					return toID(set.name) === id || toID(set.species) === id;
+				})[0];
+				if (!matchedSet) return this.errorReply(`The Pokemon "${target}" is not in your team.`);
+				teamStrings = [matchedSet];
 			} else {
-				setIndex = parsed - 1;
+				const setIndex = parsed - 1;
+				const indexedSet = teamStrings[setIndex];
+				if (!indexedSet) return this.errorReply(`That Pokemon is not in your team.`);
+				teamStrings = [indexedSet];
 			}
-			teamStrings = [teamStrings[setIndex]];
 		}
 		const evTable: {[k: string]: string} = {
 			'spa': 'SpA',
