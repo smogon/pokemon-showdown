@@ -1552,9 +1552,9 @@ export const commands: ChatCommands = {
 		}
 
 		if (targetUser && showAlts) {
-			room.send(
-				`|c|${user.getIdentity()}|/log ${name}'s alts messages ` +
-				`were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
+			room.sendByUser(
+				user,
+				`${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
 			);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
 			room.hideText([
@@ -1564,14 +1564,14 @@ export const commands: ChatCommands = {
 			] as ID[]);
 		} else {
 			if (lineCount > 0) {
-				room.send(
-					`|c|${user.getIdentity()}|/log ${lineCount} of ${name}'s messages` +
-					` were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
+				room.sendByUser(
+					user,
+					`${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
 				);
 			} else {
-				room.send(
-					`|c|${user.getIdentity()}|/log ${name}'s messages ` +
-					`were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
+				room.sendByUser(
+					user,
+					`${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
 				);
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
