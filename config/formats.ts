@@ -473,7 +473,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			// Items
 			'Gengarite',
 			// Moves
-			'Chatter', 'Double Iron Bash', 'Octolock',
+			'Chatter', 'Double Iron Bash', 'Octolock', 'Shell Smash',
 			// Other
 			'Comatose + Sleep Talk',
 		],
