@@ -911,7 +911,7 @@ export const commands: ChatCommands = {
 			let buf = `${set.name} ${set.name === set.species ? '' : `(${set.species}) `}`;
 			buf += `${set.item ? `@ ${set.item}` : ''}<br />`;
 			buf += `Ability: ${Dex.getAbility(set.ability).name}<br />`;
-			buf += `Shiny: ${set.shiny === true ? 'Yes' : 'No'}<br />`;
+			if (set.shiny) buf += `Shiny: Yes<br />`;
 			buf += `EVs: ${evString}<br />`;
 			buf += moveString;
 			return buf;
