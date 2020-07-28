@@ -382,8 +382,7 @@ export const commands: ChatCommands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				global.IPTools = require('../ip-tools').IPTools;
-				void IPTools.loadDatacenters();
-				void IPTools.loadHosts();
+				void IPTools.loadHostsAndRanges();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
