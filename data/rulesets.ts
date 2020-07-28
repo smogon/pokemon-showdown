@@ -1,5 +1,6 @@
 // Note: These are the rules that formats use
 // The list of formats is stored in config/formats.js
+import {Utils} from './../lib/utils';
 
 export const Formats: {[k: string]: FormatsData} = {
 
@@ -1059,7 +1060,7 @@ export const Formats: {[k: string]: FormatsData} = {
 			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
 			const scale = 600 - newSpecies.baseStats['hp'];
 			for (const stat of stats) {
-				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
+				newSpecies.baseStats[stat] = Utils.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 			}
 			return newSpecies;
 		},
