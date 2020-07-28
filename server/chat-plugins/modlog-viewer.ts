@@ -288,6 +288,19 @@ async function getBattleSearch(
 	connection.send(buildResults(response, userid, turnLimit, month, tierid, date));
 }
 
+export async function getGlobalPunishments(user: ID, days = 30): Promise<number> {
+	const query = {
+		cmd: 'modlog',
+		roomidList: ['global'],
+		searchString: user,
+		exactSearch: true,
+		maxLines: days * 10,
+		onlyPunishments: 'global',
+	};
+	const response = await PM.query(query);
+	return response.length;
+}
+
 export const pages: PageTable = {
 	modlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;

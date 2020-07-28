@@ -516,7 +516,7 @@ export abstract class BasicRoom {
 		user.updateIdentity();
 
 		if (!(this.settings.isPrivate === true || this.settings.isPersonal)) {
-			Punishments.monitorRoomPunishments(user);
+			void Punishments.monitorRoomPunishments(user);
 		}
 
 		return userid;
