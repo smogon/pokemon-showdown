@@ -2641,6 +2641,7 @@ export const pages: PageTable = {
 		const rulesets = [
 			`<h2><u>Rules, mods, and clauses</u></h2>`,
 			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
+			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
 			`<ul>`,
 		];
 		for (const rule of rules) {
