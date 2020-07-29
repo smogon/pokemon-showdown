@@ -1773,11 +1773,9 @@ export const commands: ChatCommands = {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
 
-		const userRank = Config.groupsranking.indexOf(room.auth.get(user.id));
 		for (const userid of targets) {
 			if (!userid) return this.errorReply(`User '${userid}' is not a valid userid.`);
-			const targetRank = Config.groupsranking.indexOf(room.auth.get(userid));
-			if (targetRank >= userRank) {
+			if (!Users.Auth.hasPermission(user, 'ban', room.auth.get(userid), room)) {
 				return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
 			}
 
@@ -1869,7 +1867,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (user.can('globalban')) {
+		if (user.can('ip')) {
 			const roomIps = Punishments.roomIps.get(room.roomid);
 
 			if (roomIps) {
