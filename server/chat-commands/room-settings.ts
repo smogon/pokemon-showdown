@@ -39,7 +39,7 @@ export const commands: ChatCommands = {
 				// disabled button
 				if (option[1] === true) {
 					output += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;` +
-						`font-weight:bold;background-color:#d3d3d3;">${option[0]}</button> `;
+						`background:#d3d3d3;">${option[0]}</button> `;
 				} else {
 					// only show proper buttons if we have the permissions to use them
 					if (!setting.permission) continue;
@@ -292,7 +292,82 @@ export const commands: ChatCommands = {
 		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # &`,
 		`/slowchat off - Disables slowchat in the room. Requires @ # &`,
 	],
+	permission: 'permissions',
+	permissions: {
+		clear: 'set',
+		set(target, room, user) {
+			if (!room) return this.requiresRoom();
+			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
+			if (rank === 'default') rank = '';
+			if (!room.auth.atLeast(user, '#')) {
+				return this.errorReply(`/permissions set - Access denied.`);
+			}
+			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
+			if (!target || !perm) return this.parse(`/permissions help`);
+			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
+				return this.errorReply(`${rank} is not a valid rank.`);
+			}
+			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
+				return this.errorReply(`${perm} is not a valid room permission.`);
+			}
 
+			const currentPermissions = room.settings.permissions || {};
+			if (currentPermissions[perm] === (rank || undefined)) {
+				return this.errorReply(`${perm} is already set to ${rank || 'default'}.`);
+			}
+
+			if (rank) {
+				currentPermissions[perm] = rank as GroupSymbol;
+				room.settings.permissions = currentPermissions;
+			} else {
+				delete currentPermissions[perm];
+				if (!Object.keys(currentPermissions).length) delete room.settings.permissions;
+			}
+			room.saveSettings();
+
+			if (!rank) rank = `default`;
+			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
+			return this.privateModAction(`(${user.name} set the required rank for ${perm} to ${rank}.)`);
+		},
+		sethelp: [
+			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
+			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
+		],
+
+		clickset(target, room, user) {
+			const [roomid, newTarget] = Utils.splitFirst(target, ',');
+			this.room = Rooms.get(roomid) || null;
+			if (!this.room) return this.errorReply(`must specify roomid`);
+			this.pmTarget = null;
+			this.parse(`/permissions set ${newTarget}`);
+			this.parse(`/join view-permissions-${this.room.roomid}`);
+		},
+
+		view(target, room, user) {
+			if (!room) return this.requiresRoom();
+			return this.parse(`/join view-permissions-${room.roomid}`);
+		},
+
+		help: '',
+		''(target, room, user) {
+			if (!room) return this.requiresRoom();
+
+			const allPermissions = Users.Auth.supportedRoomPermissions(room);
+			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
+			const permissions = allPermissions.filter(perm => perm.startsWith('/'));
+
+			let buffer = `<strong>Room permissions help:</strong><hr />`;
+			buffer += `<p><strong>Usage: </strong><br />`;
+			buffer += `<code>/permissions set [permission], [rank symbol]</code><br />`;
+			buffer += `<code>/permissions clear [permission]</code><br />`;
+			buffer += `<code>/permissions view</code></p>`;
+			buffer += `<p><strong>Group permissions:</strong> (will affect multiple commands or part of one command)<br />`;
+			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
+			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
+			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
+			return this.sendReplyBox(buffer);
+		},
+	},
 	stretching: 'stretchfilter',
 	stretchingfilter: 'stretchfilter',
 	stretchfilter(target, room, user) {
@@ -1499,3 +1574,41 @@ export const roomSettings: SettingsHandler[] = [
 		],
 	}),
 ];
+
+export const pages: PageTable = {
+	permissions(args, user, connection) {
+		this.title = `[Permissions]`;
+		const room = this.extractRoom();
+		if (!room) return `<h2>This room does not exist or does not support permissions.</h2>`;
+		if (!user.authAtLeast('%', room)) return `<h2>Access denied.</h2>`;
+
+		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
+		const permissions = room.settings.permissions || {};
+
+		let buf = `<div class="pad"><h2>Command permissions for ${room.title}</h2>`;
+		buf += `<div class="ladder"><table>`;
+		buf += `<tr><th>Permission</th><th>Required rank</th></tr>`;
+		let atLeastOne = false;
+		for (const permission in permissions) {
+			const requiredRank = permissions[permission];
+			atLeastOne = true;
+			buf += `<tr><td><strong>${permission}</strong></td><td>`;
+			if (user.authAtLeast('#', room)) {
+				buf += roomGroups.map(group => (
+					requiredRank === group ?
+						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
+						Utils.html`<button class="button" name="send" value="/permissions clickset ${room.roomid}, ${permission}, ${group}">${group}</button>`
+				)).join(' ');
+			} else {
+				buf += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${requiredRank}</button>`;
+			}
+			buf += `</td>`;
+		}
+		if (!atLeastOne) {
+			buf += `<tr><td colspan="2">You don't have any permissions configured.</td></tr>`;
+		}
+		buf += `</table></div>`;
+		buf += `<p>Use <code>/permissions</code> to add new permissions</p>`;
+		return buf;
+	},
+};

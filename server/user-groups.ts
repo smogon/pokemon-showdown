@@ -92,7 +92,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		user: User,
 		permission: string,
 		target: User | GroupSymbol | null,
-		room?: Room | BasicRoom | null
+		room?: BasicRoom | null,
+		cmd?: string
 	): boolean {
 		if (user.hasSysopAccess()) return true;
 
@@ -108,8 +109,29 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (jurisdiction === true && permission !== 'jurisdiction') {
 			jurisdiction = group['jurisdiction'] || true;
 		}
+		const roomPermissions = room ? room.settings.permissions : null;
+		if (roomPermissions) {
+			if (cmd && roomPermissions[`/${cmd}`]) {
+				if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+				jurisdiction = 'su';
+			} else if (roomPermissions[permission]) {
+				if (!auth.atLeast(user, roomPermissions[permission])) return false;
+				jurisdiction = 'su';
+			}
+		}
 
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
+	}
+	static supportedRoomPermissions(room: Room | null = null) {
+		const permissions: string[] = ROOM_PERMISSIONS.slice();
+		for (const cmd in Chat.commands) {
+			const entry = Chat.commands[cmd];
+			if (typeof entry !== 'function') continue;
+			if (entry.hasRoomPermissions) {
+				permissions.push(`/${cmd}`);
+			}
+		}
+		return permissions;
 	}
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,
@@ -143,6 +165,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (symbol.length !== 1) return false;
 		return !/[A-Za-z0-9|,]/.test(symbol);
 	}
+	static ROOM_PERMISSIONS = ROOM_PERMISSIONS;
+	static GLOBAL_PERMISSIONS = GLOBAL_PERMISSIONS;
 }
 
 export class RoomAuth extends Auth {
@@ -205,16 +229,15 @@ export class RoomAuth extends Auth {
 		}
 	}
 	set(id: ID, symbol: GroupSymbol) {
-		const user = Users.get(id);
-		if (user) {
-			this.room.onUpdateIdentity(user);
-		}
 		if (symbol === 'whitelist' as GroupSymbol) {
 			symbol = Auth.defaultSymbol();
 		}
 		super.set(id, symbol);
 		this.room.settings.auth[id] = symbol;
 		this.room.saveSettings();
+
+		const user = Users.get(id);
+		if (user) this.room.onUpdateIdentity(user);
 		return this;
 	}
 	delete(id: ID) {
