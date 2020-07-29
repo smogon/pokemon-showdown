@@ -251,6 +251,7 @@ export const IPTools = new class {
 		for (const host of IPTools.mobileHosts) {
 			hostsData += `MOBILE,${host}\n`;
 		}
+		IPTools.sortRanges();
 		for (const range of IPTools.ranges) {
 			const data = `RANGE,${IPTools.numberToIP(range.minIP)},${IPTools.numberToIP(range.maxIP)}${range.host ? `,${range.host}` : ``}\n`;
 			if (range.host?.endsWith('.proxy-nohost')) {
