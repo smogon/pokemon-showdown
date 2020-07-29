@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 data/mods/*/random-teams.ts @TheImmortal
+=======
+server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
+server/chat-plugins/trivia.ts @AnnikaCodes
+server/chat-plugins/mafia.ts @HoeenCoder
+server/chat-plugins/youtube.ts @mia-pi-git
+>>>>>>> codeowner myself while im at it
 data/mods/ssb/ @HoeenCoder
 data/random-teams.ts @TheImmortal
 server/chat-plugins/help.ts @mia-pi-git

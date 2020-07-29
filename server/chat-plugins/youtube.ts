@@ -194,7 +194,7 @@ export class YoutubeInterface {
 		return this.updateTimer;
 	}
 	updateData() {
-		for (const key in channelData) {
+		for (const key in this.data) {
 			void this.getChannelData(key);
 		}
 		this.setUpdateTimer();
@@ -295,10 +295,10 @@ export const commands: ChatCommands = {
 			const [channel, name] = target.split(',');
 			const id = YouTube.channelSearch(channel);
 			if (!id) return this.errorReply(`Channel ${channel} is not in the database.`);
-			channelData[id].username = name;
+			YouTube.data[id].username = name;
 			this.modlog(`UPDATECHANNEL`, null, name);
 			this.privateModAction(`${user.name} updated channel ${id}'s username to ${name}.`);
-			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
+			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(YouTube.data));
 		},
 		interval: 'repeat',
 		async repeat(target, room, user) {
@@ -306,7 +306,7 @@ export const commands: ChatCommands = {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('declare', null, room)) return false;
 			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime)}.`);
-			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
+			if (Object.keys(YouTube.data).length < 1) return this.errorReply(`No channels in the database.`);
 			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
 			let interval = Number(target);
 			if (interval < 10) return this.errorReply(`${interval} is too low - set it above 10 minutes.`);
