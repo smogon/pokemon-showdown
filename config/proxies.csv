@@ -316,6 +316,7 @@ HOST,redstation.co.uk
 HOST,redstation.net.uk
 HOST,samsnuk.info
 HOST,scaleway.com
+HOST,secureserver.net
 HOST,servercontrol.com.au
 HOST,serverprofi24.com
 HOST,shinyrimsinc.com
@@ -2856,6 +2857,7 @@ RANGE,185.36.100.0,185.36.100.255,go4cloud.com.proxy-nohost
 RANGE,185.38.12.0,185.38.15.255,yisp.nl.proxy-nohost
 RANGE,185.40.4.0,185.40.4.255,hostgrad.ru.proxy-nohost
 RANGE,185.45.12.0,185.45.15.255,m247.com.proxy-nohost
+RANGE,185.46.136.0,185.46.139.255,syseleven.de.proxy-nohost
 RANGE,185.48.120.0,185.48.123.255,amazon.com.proxy-nohost
 RANGE,185.49.204.0,185.49.207.255,criticalcase.com.proxy-nohost
 RANGE,185.51.133.0,185.51.134.255,synapsecom.gr.proxy-nohost
