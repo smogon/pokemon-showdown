@@ -1047,7 +1047,7 @@ export const Formats: {[k: string]: FormatsData} = {
 	'350cupmod': {
 		effectType: 'Rule',
 		name: '350 Cup Mod',
-		desc: "If a Pok&eacute;mon\'s BST is 350 or lower, all of its stats get doubled.",
+		desc: "If a Pok&eacute;mon's BST is 350 or lower, all of its stats get doubled.",
 		onBegin() {
 			this.add('rule', '350 Cup Mod: If a Pokemon\'s BST is 350 or lower, all of its stats get doubled.');
 		},
@@ -1055,7 +1055,7 @@ export const Formats: {[k: string]: FormatsData} = {
 			const newSpecies = this.dex.deepClone(species);
 			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
 			const stats: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-			let bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
+			const bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
 			if (bst <= 350) {
 				for (const stat of stats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
