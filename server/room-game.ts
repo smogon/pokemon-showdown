@@ -305,12 +305,11 @@ export class RoomGame {
 
 	/**
 	 * Called for every message a user sends while this game is active.
-	 * Return an error message to prevent the message from being sent, or
-	 * `false` to let it through.
+	 * Return an error message to prevent the message from being sent,
+	 * an empty string to prevent it with no error message, or
+	 * `undefined` to let it through.
 	 */
-	onChatMessage(message: string, user: User): string | false {
-		return false;
-	}
+	onChatMessage(message: string, user: User): string | void {}
 
 	/**
 	 * Called for every message a user sends while this game is active.
