@@ -207,7 +207,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	modnote(user: User, text: string) {
-		this.room.addByUser(user, text);
+		this.room.addByUser(user, text).update();
 		this.room.modlog(`(${this.room.roomid}) ${text}`);
 	}
 
