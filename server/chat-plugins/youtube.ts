@@ -23,11 +23,13 @@ try {
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
 	intervalTime: number;
-	constructor() {
+	data: AnyObject;
+	constructor(data?: AnyObject) {
+		this.data = data ? data : {};
 		this.interval = null;
 		this.intervalTime = 0;
 	}
-	async getChannelData(link: string, username?: string) {
+	async getChannelData(link: string, username?: string, saveData = true) {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
@@ -49,8 +51,8 @@ export class YoutubeInterface {
 			views: Number(data.statistics.viewCount),
 			username: username,
 		};
-		channelData[id] = {...cache};
-		FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
+		this.data[id] = {...cache};
+		if (saveData) this.save();
 		return cache;
 	}
 	async generateChannelDisplay(link: string) {
@@ -79,21 +81,23 @@ export class YoutubeInterface {
 		return buf;
 	}
 	randChannel() {
-		const keys = Object.keys(channelData);
+		const keys = Object.keys(this.data);
 		const id = Utils.shuffle(keys)[0].trim();
 		return this.generateChannelDisplay(id);
 	}
 	get(id: string, username?: string) {
-		if (!(id in channelData)) return this.getChannelData(id, username);
-		return {...channelData[id]};
+		if (!(id in this.data)) return this.getChannelData(id, username);
+		return {...this.data[id]};
 	}
 	channelSearch(search: string) {
 		let channel;
-		if (channelData[search]) {
+		if (this.data[search]) {
 			channel = search;
 		} else {
-			for (const id of Object.keys(channelData)) {
-				if (toID(channelData[id].name) === toID(search)) {
+			for (const id of Object.keys(this.data)) {
+				const name = toID(this.data[id].name);
+				const username = this.data[id].username;
+				if (name === toID(search) || username && toID(username) === toID(search)) {
 					channel = id;
 					break; // don't iterate through everything once a match is found
 				}
@@ -159,9 +163,12 @@ export class YoutubeInterface {
 		buf += `<i>${info.description.slice(0, 400).replace(/\n/g, ' ')}${info.description.length > 400 ? '(...)' : ''}</p><i></details></td>`;
 		return buf;
 	}
+	save() {
+		return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(this.data));
+	}
 }
 
-const YouTube = new YoutubeInterface();
+const YouTube = new YoutubeInterface(channelData);
 
 export const commands: ChatCommands = {
 	async randchannel(target, room, user) {
@@ -186,7 +193,8 @@ export const commands: ChatCommands = {
 		async addchannel(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
-			const [id, name] = target.split(',');
+			let [id, name] = target.split(',');
+			name = name.trim();
 			if (!id) return this.errorReply('Specify a channel ID.');
 			const data = await YouTube.getChannelData(id, name);
 			if (!data) {
@@ -203,8 +211,8 @@ export const commands: ChatCommands = {
 			if (!this.can('mute', null, room)) return false;
 			const id = YouTube.channelSearch(target);
 			if (!id) return this.errorReply(`Channel with ID or name ${target} not found.`);
-			delete channelData[id];
-			FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
+			delete YouTube.data[id];
+			YouTube.save();
 			this.privateModAction(`${user.name} deleted channel with ID or name ${target}.`);
 			return this.modlog(`REMOVECHANNEL`, null, id);
 		},
