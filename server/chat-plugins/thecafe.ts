@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
 		const [newDish, newIngredients] = generateDish();
 		if (!target) {
 			const bfTeam = Dex.generateTeam('gen7bssfactory');
-			importable = Chat.stringifyTeam(bfTeam, newIngredients);
+			importable = Dex.stringifyTeam(bfTeam, newIngredients);
 			team = bfTeam.map(val => val.species);
 		} else {
 			team = generateTeam(target);

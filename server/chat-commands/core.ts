@@ -891,7 +891,7 @@ export const commands: ChatCommands = {
 				teamStrings = [indexedSet];
 			}
 		}
-		let resultString = Chat.stringifyTeam(teamStrings);
+		let resultString = Dex.stringifyTeam(teamStrings);
 		if (showAll) {
 			resultString = `<details><summary>View team</summary><${resultString}</details>`;
 		}
