@@ -13,7 +13,6 @@
  * @license MIT
  */
 
-
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
 type UserSettings = import('../users').User['settings'];
@@ -1201,7 +1200,7 @@ export const commands: ChatCommands = {
 	 * Challenging and searching commands
 	 *********************************************************/
 
-	search(target, room, user, connection) {
+	async search(target, room, user, connection) {
 		if (target) {
 			if (Config.laddermodchat) {
 				const userGroup = user.group;
@@ -1211,7 +1210,14 @@ export const commands: ChatCommands = {
 					return false;
 				}
 			}
-			return Ladders(target).searchBattle(user, connection);
+			const ladder = Ladders(target);
+			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
+				user.send(
+					Utils.html`|popup||html|Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.<p style="text-align: center"><button name="register" value="${user.id}"><b>Register</b></button></p>`
+				);
+				return false;
+			}
+			return ladder.searchBattle(user, connection);
 		}
 		return Ladders.cancelSearches(user);
 	},
