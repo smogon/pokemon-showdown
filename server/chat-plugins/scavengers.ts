@@ -937,7 +937,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		});
 
 		if (filtered) return "Please do not leak the answer. Use /scavenge [guess] to submit your guess instead.";
-		return false;
+		return;
 	}
 
 	hasFinished(user: User) {

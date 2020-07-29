@@ -653,7 +653,7 @@ export class CommandContext extends MessageContext {
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
+		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return;
 		return this.room.game.onChatMessage(this.message, this.user);
 	}
 	pmTransform(originalMessage: string) {
@@ -1075,8 +1075,8 @@ export class CommandContext extends MessageContext {
 		}
 
 		const gameFilter = this.checkGameFilter();
-		if (gameFilter && !user.can('bypassall')) {
-			this.errorReply(gameFilter);
+		if (typeof gameFilter === 'string') {
+			if (gameFilter) this.errorReply(gameFilter);
 			return null;
 		}
 
