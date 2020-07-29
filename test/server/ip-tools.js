@@ -71,4 +71,39 @@ describe("IP tools helper functions", () => {
 		assert.strictEqual(IPTools.urlToHost('http://annika.codes/path'), 'annika.codes');
 		assert.strictEqual(IPTools.urlToHost('https://annika.codes/'), 'annika.codes');
 	});
+
+	it('should correctly sort a list of IP addresses', () => {
+		const ipList = ['2.3.4.5', '100.1.1.1', '2.3.5.4', '150.255.255.255', '240.0.0.0'];
+		ipList.sort(IPTools.ipSort);
+		assert.deepStrictEqual(ipList, ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0']);
+	});
+});
+
+describe('IP range conflict checker', () => {
+	it('should not allow inserting a range where maxIP < minIP', () => {
+		assert.throws(() => IPTools.checkRangeConflicts({maxIP: 1000, minIP: 9999}, []));
+	});
+
+	it('should respect the widen parameter', () => {
+		const ranges = [{
+			minIP: 100,
+			maxIP: 200,
+		}];
+
+		// Widen the minimum IP
+		assert.throws(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 200}, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 200}, ranges, true));
+
+		// Widen the maximum IP
+		assert.throws(() => IPTools.checkRangeConflicts({minIP: 100, maxIP: 201}, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 100, maxIP: 201}, ranges, true));
+
+		// Widen both IPs
+		assert.throws(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 201}, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 201}, ranges, true));
+
+		// Don't widen at all
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 98, maxIP: 99}, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 98, maxIP: 99}, ranges, true));
+	});
 });

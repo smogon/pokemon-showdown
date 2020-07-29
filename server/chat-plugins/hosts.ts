@@ -12,76 +12,6 @@ const HOST_REGEX = /^.+\..{2,}$/;
 
 const WHITELISTED_USERS = ['anubis'];
 
-export function ipSort(a: string, b: string) {
-	let i = 0;
-	let diff = 0;
-	const aParts = a.split('.');
-	const bParts = b.split('.');
-	while (diff === 0) {
-		diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
-		i++;
-	}
-	return diff;
-}
-
-export function checkRangeConflicts(insertion: AddressRange, sortedRanges: AddressRange[], widen?: boolean) {
-	if (insertion.maxIP < insertion.minIP) {
-		throw new Error(
-			`Invalid data for address range ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})`
-		);
-	}
-
-	let iMin = 0;
-	let iMax = sortedRanges.length;
-	while (iMin < iMax) {
-		const i = Math.floor((iMax + iMin) / 2);
-		if (insertion.minIP > sortedRanges[i].minIP) {
-			iMin = i + 1;
-		} else {
-			iMax = i;
-		}
-	}
-	if (iMin < sortedRanges.length) {
-		const next = sortedRanges[iMin];
-		if (insertion.minIP === next.minIP && insertion.maxIP === next.maxIP) {
-			throw new Error(`The address range ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host}) already exists`);
-		}
-		if (insertion.minIP <= next.minIP && insertion.maxIP >= next.maxIP) {
-			if (widen) {
-				if (sortedRanges[iMin + 1]?.minIP <= insertion.maxIP) {
-					throw new Error("You can only widen one address range at a time.");
-				}
-				return true;
-			}
-			throw new Error(
-				`Too wide: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
-				`Intersects with: ${IPTools.numberToIP(next.minIP)}-${IPTools.numberToIP(next.maxIP)} (${next.host})`
-			);
-		}
-		if (insertion.maxIP >= next.minIP) {
-			throw new Error(
-				`Could not insert: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} ${insertion.host}\n` +
-				`Intersects with: ${IPTools.numberToIP(next.minIP)}-${IPTools.numberToIP(next.maxIP)} (${next.host})`
-			);
-		}
-	}
-	if (iMin > 0) {
-		const prev = sortedRanges[iMin - 1];
-		if (insertion.minIP >= prev.minIP && insertion.maxIP <= prev.maxIP) {
-			throw new Error(
-				`Too narrow: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
-				`Intersects with: ${IPTools.numberToIP(prev.minIP)}-${IPTools.numberToIP(prev.maxIP)} (${prev.host})`
-			);
-		}
-		if (insertion.minIP <= prev.maxIP) {
-			throw new Error(
-				`Could not insert: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
-				`Intersects with: ${IPTools.numberToIP(prev.minIP)}-${IPTools.numberToIP(prev.maxIP)} (${prev.host})`
-			);
-		}
-	}
-}
-
 export function visualizeRangeList(ranges: AddressRange[]) {
 	let html = `<tr><th>Lowest IP address</th><th>Highest IP address</th><th>Host</th></tr>`;
 	for (const range of ranges) {
@@ -101,7 +31,7 @@ export const pages: PageTable = {
 
 		const openProxies = [...IPTools.singleIPOpenProxies];
 		const proxyHosts = [...IPTools.proxyHosts];
-		openProxies.sort(ipSort);
+		openProxies.sort(IPTools.ipSort);
 		proxyHosts.sort();
 		IPTools.sortRanges();
 
@@ -213,7 +143,7 @@ export const commands: ChatCommands = {
 			for (const range of rangesToAdd) {
 				IPTools.sortRanges();
 				try {
-					checkRangeConflicts(range, IPTools.ranges, widen);
+					IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
 				} catch (e) {
 					return this.errorReply(e.message);
 				}
