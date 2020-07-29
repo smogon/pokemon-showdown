@@ -310,6 +310,13 @@ exports.laddermodchat = false;
 exports.forcetimer = false;
 
 /**
+ * force register ELO - unregistered users cannot search for ladder battles
+ * in formats where their ELO is at or above this value.
+ * @type {false | number}
+ */
+exports.forceregisterelo = false;
+
+/**
  * backdoor - allows Pokemon Showdown system operators to provide technical
  *            support for your server
  *   This backdoor gives system operators (such as Zarel) console admin
