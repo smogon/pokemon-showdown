@@ -955,13 +955,13 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] Ubers'],
-		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'AG + Uber > 1', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'AG + Uber > 1', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag'],
 		onModifySpecies(species, target, source) {
 			if (source || !target || !target.side) return;
 			const god = target.side.team.find(set => {
 				const teamSpecies = this.dex.getSpecies(set.species);
-				const validator = new TeamValidator(`gen${this.gen}ou`);
-				const isBanned = validator.ruleTable.isBannedSpecies(teamSpecies);
+				const validator = this.dex.getRuleTable(this.dex.getFormat(`gen${this.gen}ou`));
+				const isBanned = validator.isBannedSpecies(teamSpecies);
 				return isBanned;
 			}) || target.side.team[0];
 			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
