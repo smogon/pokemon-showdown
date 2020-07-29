@@ -1556,9 +1556,13 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${name} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
 		}
 
+		// if the user hiding their own text, it would clear the "cleared" message,
+		// so we can't attribute it in that case
+		const sender = user === targetUser ? null : user;
+
 		if (targetUser && showAlts) {
 			room.sendByUser(
-				user,
+				sender,
 				`${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
 			);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
@@ -1570,12 +1574,12 @@ export const commands: ChatCommands = {
 		} else {
 			if (lineCount > 0) {
 				room.sendByUser(
-					user,
+					sender,
 					`${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
 				);
 			} else {
 				room.sendByUser(
-					user,
+					sender,
 					`${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
 				);
 			}
