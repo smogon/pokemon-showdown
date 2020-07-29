@@ -18,6 +18,7 @@
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
+const MAX_CHATROOM_ID_LENGTH = 225;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
@@ -278,6 +279,7 @@ export abstract class BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
+		this.validateTitle(this.title, this.roomid);
 	}
 
 	toString() {
@@ -664,6 +666,17 @@ export abstract class BasicRoom {
 			room => !room.settings.isPrivate || includeSecret
 		);
 	}
+	validateTitle(newTitle: string, newID?: string) {
+		if (!newID) newID = toID(newTitle);
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (newTitle.includes(',') || newTitle.includes('|') || newTitle.includes('[') || newTitle.includes('-')) {
+			throw new Chat.ErrorMessage("Room titles can't contain any of: ,|[-");
+		}
+		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
+		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
+	}
 
 	getReplayData() {
 		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
@@ -678,6 +691,7 @@ export abstract class BasicRoom {
 	 */
 	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
+		this.validateTitle(newTitle, newID);
 		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
 		}
