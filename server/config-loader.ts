@@ -32,7 +32,7 @@ export function cacheGroupData(config: ConfigType) {
 	if (config.groups) {
 		// Support for old config groups format.
 		// Should be removed soon.
-		Monitor.error(
+		console.error(
 			`You are using a deprecated version of user group specification in config.\n` +
 			`Support for this will be removed soon.\n` +
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 457).\n`
@@ -61,7 +61,7 @@ export function cacheGroupData(config: ConfigType) {
 			if (isPermission(key)) {
 				const jurisdiction = groupData[key as 'jurisdiction'];
 				if (typeof jurisdiction === 'string' && jurisdiction.includes('s')) {
-					Monitor.error(`Outdated jurisdiction for permission "${key}" of group "${symbol}": 's' is no longer a supported jurisdiction; we now use 'ipself' and 'altsself'`);
+					console.error(`Outdated jurisdiction for permission "${key}" of group "${symbol}": 's' is no longer a supported jurisdiction; we now use 'ipself' and 'altsself'`);
 					delete groupData[key as 'jurisdiction'];
 				}
 			}
