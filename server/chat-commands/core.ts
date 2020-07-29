@@ -923,8 +923,8 @@ export const commands: ChatCommands = {
 		return this.sendReplyBox(resultString);
 	},
 	showsethelp: [
-		`/showteam - show the team you're using in the current battle (must be used in a battle you're a player in).`,
-		`/showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
+		`!showteam - show the team you're using in the current battle (must be used in a battle you're a player in).`,
+		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
 
 	acceptdraw: 'offertie',
