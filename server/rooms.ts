@@ -367,8 +367,8 @@ export abstract class BasicRoom {
 	/**
 	 * Like addByUser, but without logging
 	 */
-	sendByUser(user: User, text: string) {
-		this.send('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
+	sendByUser(user: User | null, text: string) {
+		this.send('|c|' + (user ? user.getIdentity(this.roomid) : '&') + '|/log ' + text);
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
