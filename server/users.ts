@@ -546,9 +546,27 @@ export class User extends Chat.MessageContext {
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
-	can(permission: GlobalPermission, target?: User | null, room?: null, useVisualGroup?: boolean): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null, useVisualGroup?: boolean): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string, useVisualGroup?: boolean): boolean {
+	can(
+		permission: GlobalPermission,
+		target?: User | null,
+		room?: null,
+		cmd?: undefined,
+		useVisualGroup?: boolean
+	): boolean;
+	can(
+		permission: RoomPermission & GlobalPermission,
+		target: User | null,
+		room?: BasicRoom | null,
+		cmd?: undefined,
+		useVisualGroup?: boolean
+	): boolean;
+	can(
+		permission: string,
+		target: User | null = null,
+		room: BasicRoom | null = null,
+		cmd?: string,
+		useVisualGroup?: boolean
+	): boolean {
 		return Auth.hasPermission(this, permission, target, room, cmd, useVisualGroup);
 	}
 	/**

@@ -98,7 +98,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	static hasPermission(
 		user: User,
 		permission: string,
-		target: User | GroupSymbol | null,
+		target: User | EffectiveGroupSymbol | null,
 		room?: Room | BasicRoom | null,
 		cmd?: string,
 		useVisualGroup?: boolean
