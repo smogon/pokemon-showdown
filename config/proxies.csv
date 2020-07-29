@@ -285,6 +285,7 @@ HOST,hvvc.us
 HOST,hwng.net
 HOST,ihc.ru
 HOST,ipvanish.com
+HOST,ioflood.net
 HOST,linode.com
 HOST,ltt.ly
 HOST,lunanode.com
@@ -319,6 +320,7 @@ HOST,servercontrol.com.au
 HOST,serverprofi24.com
 HOST,shinyrimsinc.com
 HOST,shpv.eu
+HOST,sitel.com
 HOST,sl-reverse.com
 HOST,smartwebbrands.com
 HOST,softlayer.com
@@ -335,6 +337,7 @@ HOST,ukservers.com
 HOST,unmetered.zone
 HOST,upcloud.host
 HOST,vilayer.com
+HOST,virtuaserver.com.br
 HOST,voxility.com
 HOST,voxility.net
 HOST,vpnbook.com
@@ -344,7 +347,7 @@ HOST,your-server.de
 HOST,zare.com
 HOST,zenmate.com
 RANGE,2.58.192.0,2.58.195.255,zenex5ive.com.proxy-nohost
-RANGE,5.8.0.0,5.8.11.255,pinspb.ru.proxy-nohost.proxy-nohost
+RANGE,5.8.0.0,5.8.11.255,pinspb.ru.proxy-nohost
 RANGE,5.8.16.0,5.8.16.255,estnoc.ee.proxy-nohost
 RANGE,5.8.18.0,5.8.18.255,cloudbs.biz.proxy-nohost
 RANGE,5.9.0.0,5.9.255.255,hetzner.de.proxy-nohost
@@ -390,13 +393,16 @@ RANGE,5.180.80.0,5.180.83.255,heficed.com.proxy-nohost
 RANGE,5.181.232.0,5.181.235.255,m247.com.proxy-nohost
 RANGE,5.182.184.0,5.182.187.255,trenddigital.eu.proxy-nohost
 RANGE,5.183.100.0,5.183.103.255,digital-vm.com.proxy-nohost
+RANGE,5.183.176.0,5.183.179.255,thinkhuge.net.proxy-nohost
 RANGE,5.187.49.184,5.187.49.191,oneprovider.com.proxy-nohost
+RANGE,5.188.108.0,5.188.111.255,gcorelabs.com.proxy-nohost
 RANGE,5.189.144.0,5.189.159.255,contabo.de.proxy-nohost
 RANGE,5.196.0.0,5.196.255.255,ovh.com.proxy-nohost
 RANGE,5.199.0.0,5.199.127.255,datatechuk.com.proxy-nohost
 RANGE,5.199.128.0,5.199.143.255,myloc.de.proxy-nohost
 RANGE,5.199.160.0,5.199.175.255,cherryservers.com.proxy-nohost
 RANGE,5.252.68.0,5.252.71.255,heficed.com.proxy-nohost
+RANGE,5.253.200.0,5.253.203.255,heficed.com.proxy-nohost
 RANGE,5.253.204.0,5.253.207.255,m247.com.proxy-nohost
 RANGE,5.254.64.0,5.254.127.255,voxility.com.proxy-nohost
 RANGE,8.4.9.128,8.4.9.255,co-location.com.proxy-nohost
@@ -523,6 +529,7 @@ RANGE,23.254.0.0,23.254.127.255,servermania.com.proxy-nohost
 RANGE,25.66.8.0,25.66.15.255,windowsazure.com.proxy-nohost
 RANGE,27.0.232.0,27.0.232.255,oneprovider.com.proxy-nohost
 RANGE,27.50.32.0,27.50.39.255,he.net.proxy-nohost
+RANGE,27.50.64.0,27.50.95.255,serversaustralia.com.au.proxy-nohost
 RANGE,27.100.36.0,27.100.39.255,hostus.us.proxy-nohost
 RANGE,27.122.12.0,27.122.12.255,pacswitch.com.proxy-nohost
 RANGE,27.122.14.0,27.122.14.255,pacswitch.com.proxy-nohost
@@ -629,7 +636,7 @@ RANGE,37.123.112.0,37.123.112.255,uk2.net.proxy-nohost
 RANGE,37.123.114.0,37.123.115.255,vps.net.proxy-nohost
 RANGE,37.123.118.0,37.123.118.255,vps.net.proxy-nohost
 RANGE,37.128.129.0,37.128.129.255,memset.com.proxy-nohost
-RANGE,37.130.225.0,37.130.229.255,uk2.net.proxy-nohost
+RANGE,37.130.224.0,37.130.231.255,100tb.com.proxy-nohost
 RANGE,37.139.0.0,37.139.7.255,digitalocean.com.proxy-nohost
 RANGE,37.139.8.0,37.139.15.255,digitalocean.com.proxy-nohost
 RANGE,37.139.16.0,37.139.23.255,digitalocean.com.proxy-nohost
@@ -714,6 +721,7 @@ RANGE,37.221.160.80,37.221.160.95,epiohost.net.proxy-nohost
 RANGE,37.221.160.96,37.221.160.127,ixam-hosting.com.proxy-nohost
 RANGE,37.221.160.192,37.221.160.207,alibabahost.com.proxy-nohost
 RANGE,37.221.160.224,37.221.160.255,cinipac.com.proxy-nohost
+RANGE,37.230.168.0,37.230.191.255,purevpn.com.proxy-nohost
 RANGE,37.235.49.0,37.235.49.255,edis.at.proxy-nohost
 RANGE,37.235.53.0,37.235.63.255,edis.at.proxy-nohost
 RANGE,38.132.108.0,38.132.120.255,cogentco.com.proxy-nohost
@@ -763,6 +771,7 @@ RANGE,43.250.192.0,43.250.195.255,amazon.com.proxy-nohost
 RANGE,45.9.236.0,45.9.239.255,deltahost.com.ua.proxy-nohost
 RANGE,45.9.248.0,45.9.251.255,m247.com.proxy-nohost
 RANGE,45.11.238.0,45.11.239.255,braveway.com.proxy-nohost
+RANGE,45.12.204.0,45.12.207.255,thinkhuge.net.proxy-nohost
 RANGE,45.12.216.0,45.12.219.255,abstation.net.proxy-nohost
 RANGE,45.12.220.0,45.12.223.255,m247.com.proxy-nohost
 RANGE,45.32.0.0,45.32.255.255,choopa.com.proxy-nohost
@@ -787,9 +796,12 @@ RANGE,45.66.132.0,45.66.135.255,thinkhuge.net.proxy-nohost
 RANGE,45.66.136.0,45.66.139.255,dedipath.com.proxy-nohost
 RANGE,45.67.14.0,45.67.15.255,pitcommunications.net.proxy-nohost
 RANGE,45.67.52.0,45.67.55.255,thinkhuge.net.proxy-nohost
+RANGE,45.72.0.0,45.72.127.255,servermania.com.proxy-nohost
 RANGE,45.74.0.0,45.74.63.255,pointtoserver.com.proxy-nohost
 RANGE,45.76.0.0,45.77.255.255,choopa.com.proxy-nohost
+RANGE,45.82.166.0,45.82.167.255,thinkhuge.net.proxy-nohost
 RANGE,45.83.88.0,45.83.91.255,m247.com.proxy-nohost
+RANGE,45.85.0.0,45.85.3.255,thinkhuge.net.proxy-nohost
 RANGE,45.86.203.0,45.86.203.255,leaseweb.com.proxy-nohost
 RANGE,45.87.212.0,45.87.215.255,m247.com.proxy-nohost
 RANGE,45.89.172.0,45.89.175.255,m247.com.proxy-nohost
@@ -798,9 +810,11 @@ RANGE,45.93.219.0,45.93.219.255,thinkhuge.net.proxy-nohost
 RANGE,45.114.116.0,45.114.119.255,digitalfyre.com.proxy-nohost
 RANGE,45.124.64.0,45.124.67.255,hostus.us.proxy-nohost
 RANGE,45.127.92.0,45.127.95.255,hostus.us.proxy-nohost
+RANGE,45.131.192.0,45.131.195.255,falco-networks.com.proxy-nohost
 RANGE,45.133.180.0,45.133.183.255,m247.com.proxy-nohost
 RANGE,45.135.220.0,45.135.223.255,zoneidc.com.proxy-nohost
 RANGE,45.135.228.0,45.135.231.255,gcorelabs.com.proxy-nohost
+RANGE,45.137.196.0,45.137.199.255,panq.nl.proxy-nohost
 RANGE,45.138.96.0,45.138.99.255,virtono.com.proxy-nohost
 RANGE,45.138.108.0,45.138.108.255,zoneidc.com.proxy-nohost
 RANGE,45.141.152.0,45.141.155.255,m247.com.proxy-nohost
@@ -809,8 +823,7 @@ RANGE,45.162.228.0,45.162.231.255,qnax.com.br.proxy-nohost
 RANGE,45.228.208.0,45.228.211.255,zgh.cl.proxy-nohost
 RANGE,45.248.76.0,45.248.78.255,internet-thinking.com.au.proxy-nohost
 RANGE,46.4.0.0,46.4.255.255,hetzner.de.proxy-nohost
-RANGE,46.16.34.0,46.16.35.255,anchorfree.proxy-nohost
-RANGE,46.16.36.0,46.16.36.255,anchorfree.proxy-nohost
+RANGE,46.16.34.0,46.16.36.255,anchorfree.proxy-nohost
 RANGE,46.16.184.0,46.16.191.255,softlayer.com.proxy-nohost
 RANGE,46.17.0.0,46.17.7.255,flexwebhosting.nl.proxy-nohost
 RANGE,46.17.96.0,46.17.103.255,hostkey.com.proxy-nohost
@@ -881,6 +894,7 @@ RANGE,46.246.0.0,46.246.127.255,portlane.com.proxy-nohost
 RANGE,46.249.32.0,46.249.63.255,serverius.nl.proxy-nohost
 RANGE,46.251.224.0,46.251.255.255,optimate-server.de.proxy-nohost
 RANGE,46.254.16.0,46.254.23.255,ihc.ru.proxy-nohost
+RANGE,47.74.128.0,47.74.255.255,alibabacloud.com.proxy-nohost
 RANGE,49.247.0.0,49.247.255.255,1000dedi.net.proxy-nohost
 RANGE,50.2.0.0,50.3.255.255,serverhub.com.proxy-nohost
 RANGE,50.7.0.0,50.7.255.255,fdcservers.net.proxy-nohost
@@ -1234,6 +1248,7 @@ RANGE,68.71.128.0,68.71.159.255,wehostwebsites.com.proxy-nohost
 RANGE,68.142.64.0,68.142.127.255,limelight.com.proxy-nohost
 RANGE,68.142.176.0,68.142.191.255,peak10.com.proxy-nohost
 RANGE,68.168.96.0,68.168.111.255,codero.com.proxy-nohost
+RANGE,68.168.112.0,68.168.127.255,gtcomm.net.proxy-nohost
 RANGE,68.168.128.0,68.168.143.255,caratnetworks.com.proxy-nohost
 RANGE,68.168.208.0,68.168.223.255,interserver.net.proxy-nohost
 RANGE,68.169.32.0,68.169.47.255,westhost.com.proxy-nohost
@@ -1583,6 +1598,7 @@ RANGE,81.31.32.0,81.31.47.255,master.cz.proxy-nohost
 RANGE,81.31.144.0,81.31.159.255,dnshosting.it.proxy-nohost
 RANGE,81.88.48.0,81.88.63.255,we.register.it.proxy-nohost
 RANGE,81.89.96.0,81.89.111.255,isppro.de.proxy-nohost
+RANGE,81.90.188.0,81.90.191.255,thinkhuge.net.proxy-nohost
 RANGE,81.91.64.0,81.91.79.255,ecritel.net.proxy-nohost
 RANGE,81.92.200.0,81.92.203.255,m247.com.proxy-nohost
 RANGE,81.92.204.0,81.92.207.255,m247.com.proxy-nohost
@@ -1592,7 +1608,7 @@ RANGE,81.95.144.0,81.95.159.255,softlayer.com.proxy-nohost
 RANGE,81.169.128.0,81.169.255.255,strato.de.proxy-nohost
 RANGE,81.171.0.0,81.171.31.255,leaseweb.com.proxy-nohost
 RANGE,81.176.224.0,81.176.225.255,eserver.ru.proxy-nohost
-RANGE,81.177.26.0,81.177.27.255,.proxy-nohost
+RANGE,81.177.26.0,81.177.27.255,erix-colo.proxy-nohost
 RANGE,82.98.128.0,82.98.191.255,en.dinahosting.com.proxy-nohost
 RANGE,82.102.16.0,82.102.31.255,m247.com.proxy-nohost
 RANGE,82.103.128.0,82.103.191.255,easyspeedy.com.proxy-nohost
@@ -1696,6 +1712,7 @@ RANGE,85.255.192.0,85.255.207.255,hostbasket.com.proxy-nohost
 RANGE,86.39.128.0,86.39.255.255,easyhost.be.proxy-nohost
 RANGE,86.105.52.0,86.105.52.255,arubacloud.com.proxy-nohost
 RANGE,86.105.80.0,86.105.87.255,ip.ro.proxy-nohost
+RANGE,86.106.31.0,86.106.31.255,m247.com.proxy-nohost
 RANGE,86.106.87.0,86.106.87.255,m247.com.proxy-nohost
 RANGE,86.109.0.0,86.109.31.255,alphamegahosting.com.proxy-nohost
 RANGE,86.109.96.0,86.109.127.255,acens.com.proxy-nohost
@@ -1745,6 +1762,7 @@ RANGE,89.45.192.0,89.45.199.255,xservers.ro.proxy-nohost
 RANGE,89.47.16.0,89.47.31.255,everhost.ro.proxy-nohost
 RANGE,89.106.0.0,89.106.31.255,grid.com.tr.proxy-nohost
 RANGE,89.107.16.0,89.107.23.255,ukgrid.net.proxy-nohost
+RANGE,89.144.0.0,89.144.63.255,ghostnet.de.proxy-nohost
 RANGE,89.145.90.0,89.145.90.255,gyron.net.proxy-nohost
 RANGE,89.149.192.0,89.149.255.255,leaseweb.com.proxy-nohost
 RANGE,89.163.128.0,89.163.255.255,unitedcolo.de.proxy-nohost
@@ -1767,7 +1785,7 @@ RANGE,89.248.160.0,89.248.160.127,ecatel.net.proxy-nohost
 RANGE,89.248.166.0,89.248.166.127,ecatel.net.proxy-nohost
 RANGE,89.248.168.0,89.248.168.255,ecatel.net.proxy-nohost
 RANGE,89.248.172.0,89.248.172.255,ecatel.net.proxy-nohost
-RANGE,89.249.73.0,89.249.73.63,m247.com.proxy-nohost
+RANGE,89.249.72.0,89.249.79.255,m247.com.proxy-nohost
 RANGE,89.250.112.0,89.250.127.255,basefarm.com.proxy-nohost
 RANGE,89.255.0.0,89.255.1.255,hosting-concepts.nl.proxy-nohost
 RANGE,89.255.8.0,89.255.8.255,hosting-concepts.nl.proxy-nohost
@@ -1898,6 +1916,7 @@ RANGE,93.91.16.0,93.91.31.255,thebunker.net.proxy-nohost
 RANGE,93.92.24.0,93.92.31.255,hostex.no.proxy-nohost
 RANGE,93.92.144.0,93.92.151.255,hosteurope.de.proxy-nohost
 RANGE,93.93.64.0,93.93.71.255,comvive.es.proxy-nohost
+RANGE,93.113.206.0,93.113.207.255,firstheberg.com.proxy-nohost
 RANGE,93.115.24.0,93.115.31.255,duomenucentras.lt.proxy-nohost
 RANGE,93.115.80.0,93.115.87.255,voxility.com.proxy-nohost
 RANGE,93.115.92.0,93.115.95.255,voxility.com.proxy-nohost
@@ -2090,6 +2109,7 @@ RANGE,103.246.248.0,103.246.248.255,quickweb.co.nz.proxy-nohost
 RANGE,103.246.250.0,103.246.251.255,quickweb.co.nz.proxy-nohost
 RANGE,103.253.144.0,103.253.147.255,digitalocean.com.proxy-nohost
 RANGE,103.254.152.0,103.254.155.255,leaseweb.com.proxy-nohost
+RANGE,104.37.0.0,104.37.7.255,pointtoserver.com.proxy-nohost
 RANGE,104.37.24.0,104.37.31.255,web2objects.com.proxy-nohost
 RANGE,104.40.0.0,104.40.95.255,windowsazure.com.proxy-nohost
 RANGE,104.40.128.0,104.41.63.255,windowsazure.com.proxy-nohost
@@ -2110,6 +2130,7 @@ RANGE,104.128.128.0,104.128.143.255,micfo.com.proxy-nohost
 RANGE,104.129.0.0,104.129.63.255,quadranet.com.proxy-nohost
 RANGE,104.130.64.0,104.130.223.255,rackspace.com.proxy-nohost
 RANGE,104.131.0.0,104.131.255.255,digitalocean.com.proxy-nohost
+RANGE,104.140.0.0,104.140.255.255,eonix.net.proxy-nohost
 RANGE,104.143.0.0,104.143.15.255,versaweb.com.proxy-nohost
 RANGE,104.143.84.0,104.143.84.255,vpnconsumer.com.proxy-nohost
 RANGE,104.143.92.0,104.143.92.255,vpnconsumer.com.proxy-nohost
@@ -2158,6 +2179,8 @@ RANGE,104.238.59.0,104.238.59.255,vpnconsumer.com.proxy-nohost
 RANGE,104.238.128.0,104.238.191.255,choopa.com.proxy-nohost
 RANGE,104.239.192.0,104.239.223.255,rackspace.com.proxy-nohost
 RANGE,104.243.208.0,104.243.215.255,cloudip-solutions.com.proxy-nohost
+RANGE,104.244.72.0,104.244.79.255,buyvm.net.proxy-nohost
+RANGE,104.244.152.0,104.244.159.255,securityframe.com.proxy-nohost
 RANGE,104.245.96.0,104.245.103.255,volumedrive.com.proxy-nohost
 RANGE,104.245.144.0,104.245.147.255,amanah.com.proxy-nohost
 RANGE,104.248.0.0,104.248.255.255,digitalocean.com.proxy-nohost
@@ -2248,6 +2271,7 @@ RANGE,109.236.80.0,109.236.95.255,worldstream.nl.proxy-nohost
 RANGE,109.237.16.0,109.237.31.255,ukgrid.net.proxy-nohost
 RANGE,109.237.128.0,109.237.143.255,alfahosting.de.proxy-nohost
 RANGE,109.238.48.0,109.238.63.255,solidohosting.com.proxy-nohost
+RANGE,109.248.144.0,109.248.151.255,dataclub.eu.proxy-nohost
 RANGE,110.1.96.0,110.1.127.255,freebit.com.proxy-nohost
 RANGE,110.4.40.0,110.4.47.255,exabytes.com.proxy-nohost
 RANGE,111.91.236.0,111.91.239.255,readyspace.com.sg.proxy-nohost
@@ -2380,6 +2404,7 @@ RANGE,149.154.152.0,149.154.159.255,edis.at.proxy-nohost
 RANGE,149.202.98.160,149.202.98.175,ovh.nl.proxy-nohost
 RANGE,149.210.164.0,149.210.164.255,transip.nl.proxy-nohost
 RANGE,149.255.32.0,149.255.39.255,swiftway.net.proxy-nohost
+RANGE,150.129.8.0,150.129.11.255,liteserver.nl.proxy-nohost
 RANGE,151.80.128.0,151.80.159.255,ovh.ie.proxy-nohost
 RANGE,151.80.179.24,151.80.179.27,ovh.ie.proxy-nohost
 RANGE,151.236.0.0,151.236.31.255,edis.at.proxy-nohost
@@ -2388,6 +2413,7 @@ RANGE,151.236.216.0,151.236.223.255,linode.com.proxy-nohost
 RANGE,151.237.176.0,151.237.177.255,webexxpurts.com.proxy-nohost
 RANGE,151.237.181.0,151.237.181.255,webexxpurts.com.proxy-nohost
 RANGE,151.237.184.0,151.237.184.255,webexxpurts.com.proxy-nohost
+RANGE,152.89.208.0,152.89.211.199,thinkhuge.net.proxy-nohost
 RANGE,154.16.0.0,154.16.255.255,heficed.com.proxy-nohost
 RANGE,154.63.35.0,154.63.35.255,24shells.net.proxy-nohost
 RANGE,154.70.152.0,154.70.153.255,heficed.com.proxy-nohost
@@ -2426,6 +2452,7 @@ RANGE,159.203.0.0,159.203.255.255,digitalocean.com.proxy-nohost
 RANGE,159.253.24.0,159.253.31.255,glesys.se.proxy-nohost
 RANGE,159.253.56.0,159.253.63.255,host-it.co.uk.proxy-nohost
 RANGE,159.253.128.0,159.253.159.255,softlayer.com.proxy-nohost
+RANGE,161.35.0.0,161.35.255.255,digitalocean.com.proxy-nohost
 RANGE,162.158.0.0,162.159.255.255,cloudflare.com.proxy-nohost
 RANGE,162.208.8.0,162.208.11.255,vpscheap.net.proxy-nohost
 RANGE,162.209.0.0,162.209.127.255,rackspace.com.proxy-nohost
@@ -2514,6 +2541,7 @@ RANGE,172.94.0.0,172.94.127.255,pointtoserver.com.proxy-nohost
 RANGE,172.98.64.0,172.98.95.255,totalserversolutions.com.proxy-nohost
 RANGE,172.106.0.0,172.107.255.255,psychz.net.proxy-nohost
 RANGE,172.110.0.0,172.110.31.255,impactvps.com.proxy-nohost
+RANGE,172.111.128.0,172.111.255.255,pointtoserver.com.proxy-nohost
 RANGE,172.120.0.0,172.121.255.255,egihosting.com.proxy-nohost
 RANGE,172.122.0.0,172.123.255.255,kwdatacentre.com.proxy-nohost
 RANGE,172.240.0.0,172.241.255.255,ubiquityservers.com.proxy-nohost
@@ -2525,6 +2553,8 @@ RANGE,173.0.144.0,173.0.159.255,servers.com.proxy-nohost
 RANGE,173.0.176.0,173.0.191.255,techiemedia.net.proxy-nohost
 RANGE,173.0.224.0,173.0.239.255,247rack.com.proxy-nohost
 RANGE,173.1.0.0,173.1.255.255,gogrid.com.proxy-nohost
+RANGE,173.44.0.0,173.44.31.255,micfo.com.proxy-nohost
+RANGE,173.44.32.0,173.44.63.255,quadranet.com.proxy-nohost
 RANGE,173.44.128.0,173.44.255.255,serverhub.com.proxy-nohost
 RANGE,173.45.224.0,173.45.255.255,rackspace.com.proxy-nohost
 RANGE,173.192.0.0,173.193.255.255,softlayer.com.proxy-nohost
@@ -2537,7 +2567,7 @@ RANGE,173.203.0.0,173.203.255.255,rackspace.com.proxy-nohost
 RANGE,173.204.0.0,173.204.255.255,gogrid.com.proxy-nohost
 RANGE,173.208.0.0,173.208.127.255,ubiquityservers.com.proxy-nohost
 RANGE,173.208.128.0,173.208.255.255,wholesaleinternet.com.proxy-nohost
-RANGE,173.209.57.240,173.209.57.255,globo.tech.proxy-nohost
+RANGE,173.209.32.0,173.209.63.255,gtcomm.net.proxy-nohost
 RANGE,173.211.0.0,173.211.127.255,colocationamerica.com.proxy-nohost
 RANGE,173.213.64.0,173.213.127.255,serverhub.com.proxy-nohost
 RANGE,173.213.224.0,173.213.239.255,edgewebhosting.net.proxy-nohost
@@ -2562,7 +2592,7 @@ RANGE,173.237.128.0,173.237.191.255,colo4dallas.com.proxy-nohost
 RANGE,173.237.208.0,173.237.223.255,prioritycolo.com.proxy-nohost
 RANGE,173.239.0.0,173.239.63.255,webair.com.proxy-nohost
 RANGE,173.239.96.0,173.239.127.255,webmysite.com.proxy-nohost
-RANGE,173.239.197.0,173.239.200.255,vpnconsumer.com.proxy-nohost
+RANGE,173.239.192.0,173.239.255.255,logicweb.com.proxy-nohost
 RANGE,173.240.48.0,173.240.63.255,adhost.com.proxy-nohost
 RANGE,173.242.112.0,173.242.127.255,volumedrive.com.proxy-nohost
 RANGE,173.242.144.0,173.242.159.255,Venyu.com.proxy-nohost
@@ -2624,6 +2654,7 @@ RANGE,176.67.84.0,176.67.86.255,ipvanish.com.proxy-nohost
 RANGE,176.67.160.0,176.67.175.255,uk2.net.proxy-nohost
 RANGE,176.74.160.0,176.74.191.255,peer1.com.proxy-nohost
 RANGE,176.103.48.0,176.103.63.255,xserver.ua.proxy-nohost
+RANGE,176.113.72.0,176.113.75.255,m247.com.proxy-nohost
 RANGE,176.126.83.0,176.126.83.255,oneprovider.com.proxy-nohost
 RANGE,176.227.192.120,176.227.192.127,redstation.com.proxy-nohost
 RANGE,176.227.195.0,176.227.195.7,redstation.com.proxy-nohost
@@ -2750,7 +2781,7 @@ RANGE,178.255.40.0,178.255.47.255,artnet.pl.proxy-nohost
 RANGE,178.255.144.0,178.255.151.255,blixsolutions.no.proxy-nohost
 RANGE,178.255.152.0,178.255.159.255,anexia-it.com.proxy-nohost
 RANGE,178.255.192.0,178.255.199.255,qweb.nl.proxy-nohost
-RANGE,179.43.147.0,179.43.147.127,privatelayer.com.proxy-nohost
+RANGE,179.43.128.0,179.43.191.255,privatelayer.com.proxy-nohost
 RANGE,179.48.248.0,179.48.251.255,racknation.cr.proxy-nohost
 RANGE,179.61.128.0,179.61.255.255,heficed.com.proxy-nohost
 RANGE,179.107.32.0,179.107.47.255,alog.com.br.proxy-nohost
@@ -2826,6 +2857,7 @@ RANGE,185.38.12.0,185.38.15.255,yisp.nl.proxy-nohost
 RANGE,185.40.4.0,185.40.4.255,hostgrad.ru.proxy-nohost
 RANGE,185.45.12.0,185.45.15.255,m247.com.proxy-nohost
 RANGE,185.48.120.0,185.48.123.255,amazon.com.proxy-nohost
+RANGE,185.49.204.0,185.49.207.255,criticalcase.com.proxy-nohost
 RANGE,185.51.133.0,185.51.134.255,synapsecom.gr.proxy-nohost
 RANGE,185.52.137.0,185.52.138.255,fxtrading.net.proxy-nohost
 RANGE,185.58.193.0,185.58.193.255,arubacloud.com.proxy-nohost
@@ -2855,7 +2887,8 @@ RANGE,185.101.107.0,185.101.107.255,zetservers.com.proxy-nohost
 RANGE,185.102.27.0,185.102.27.255,cloudzilla.nl.proxy-nohost
 RANGE,185.103.96.128,185.103.96.159,ukservers.com.proxy-nohost
 RANGE,185.104.184.0,185.104.187.255,m247.com.proxy-nohost
-RANGE,185.106.102.0,185.106.102.255,cl8.com.proxy-nohost
+RANGE,185.106.96.0,185.106.99.255,dedipath.com.proxy-nohost
+RANGE,185.106.100.0,185.106.103.255,cl8.com.proxy-nohost
 RANGE,185.107.88.0,185.107.91.255,hostnet.nl.proxy-nohost
 RANGE,185.107.92.0,185.107.95.255,nforce.com.proxy-nohost
 RANGE,185.107.96.0,185.107.99.255,nfoservers.com.proxy-nohost
@@ -2895,6 +2928,7 @@ RANGE,185.165.241.0,185.165.241.255,worldstream.nl.proxy-nohost
 RANGE,185.166.84.0,185.166.87.255,hostroyale.com.proxy-nohost
 RANGE,185.166.253.0,185.166.253.255,maxihost.com.proxy-nohost
 RANGE,185.167.160.0,185.167.161.255,deltahost.com.ua.proxy-nohost
+RANGE,185.171.120.0,185.171.123.255,thinkhuge.net.proxy-nohost
 RANGE,185.176.220.0,185.176.223.255,2cloud.eu.proxy-nohost
 RANGE,185.180.8.0,185.180.11.255,planisys.net.proxy-nohost
 RANGE,185.180.12.0,185.180.15.255,cdn77.com.proxy-nohost
@@ -2915,6 +2949,7 @@ RANGE,185.205.204.0,185.205.207.255,fxtrading.net.proxy-nohost
 RANGE,185.208.152.0,185.208.155.255,fxtrading.net.proxy-nohost
 RANGE,185.209.160.0,185.209.163.255,king-servers.com.proxy-nohost
 RANGE,185.209.176.0,185.209.179.255,maxihost.com.proxy-nohost
+RANGE,185.210.216.0,185.210.219.255,m247.com.proxy-nohost
 RANGE,185.212.168.0,185.212.171.255,m247.com.proxy-nohost
 RANGE,185.212.226.0,185.212.226.255,shpv.fr.proxy-nohost
 RANGE,185.216.32.0,185.216.35.255,m247.com.proxy-nohost
@@ -2991,7 +3026,7 @@ RANGE,190.112.220.0,190.112.223.255,racknation.cr.proxy-nohost
 RANGE,190.114.252.0,190.114.255.255,bluehosting.cl.proxy-nohost
 RANGE,190.115.0.0,190.115.1.255,corponetsa.net.proxy-nohost
 RANGE,190.120.224.0,190.120.239.255,serverpronto.com.proxy-nohost
-RANGE,190.123.32.0,190.123.47.255,panamaserver.com.proxy-nohost
+RANGE,190.123.44.0,190.123.47.255,panamaserver.com.proxy-nohost
 RANGE,190.151.128.0,190.151.131.255,corponetsa.net.proxy-nohost
 RANGE,190.184.196.0,190.184.199.255,racklodge.com.proxy-nohost
 RANGE,190.242.28.0,190.242.28.255,corponetsa.net.proxy-nohost
@@ -3252,6 +3287,7 @@ RANGE,195.62.10.0,195.62.11.255,rapidswitch.com.proxy-nohost
 RANGE,195.62.28.0,195.62.29.255,ukwebhosting.ltd.uk.proxy-nohost
 RANGE,195.66.132.0,195.66.133.255,webair.com.proxy-nohost
 RANGE,195.78.228.0,195.78.231.255,comvive.es.proxy-nohost
+RANGE,195.88.6.0,195.88.7.255,criticalcase.com.proxy-nohost
 RANGE,195.88.208.0,195.88.209.255,spheral.ru.proxy-nohost
 RANGE,195.95.192.0,195.95.195.255,akamai.com.proxy-nohost
 RANGE,195.114.0.0,195.114.1.255,superhost.pl.proxy-nohost
@@ -3368,6 +3404,7 @@ RANGE,198.251.64.0,198.251.79.255,1and1.com.proxy-nohost
 RANGE,198.251.80.0,198.251.95.255,buyvm.net.proxy-nohost
 RANGE,198.255.66.0,198.255.67.255,fdcservers.net.proxy-nohost
 RANGE,199.7.232.0,199.7.239.255,datacenterscanada.com.proxy-nohost
+RANGE,199.10.64.0,199.10.64.255,layerhost.com.proxy-nohost
 RANGE,199.15.112.0,199.15.119.255,psychz.net.proxy-nohost
 RANGE,199.15.168.0,199.15.175.255,immedion.com.proxy-nohost
 RANGE,199.15.232.0,199.15.239.255,supremetelecom.com.proxy-nohost
@@ -3500,6 +3537,7 @@ RANGE,200.219.192.0,200.219.255.255,alog.com.br.proxy-nohost
 RANGE,201.20.0.0,201.20.31.255,alog.com.br.proxy-nohost
 RANGE,201.49.208.0,201.49.223.255,alog.com.br.proxy-nohost
 RANGE,201.131.124.0,201.131.127.255,hostdime.com.proxy-nohost
+RANGE,201.150.32.0,201.150.47.255,servnet.mx.proxy-nohost
 RANGE,201.190.228.0,201.190.231.255,panamaserver.com.proxy-nohost
 RANGE,201.217.192.0,201.217.223.255,ifxnetworks.com.proxy-nohost
 RANGE,202.9.36.0,202.9.39.255,thegigabit.com.proxy-nohost
@@ -3870,6 +3908,7 @@ RANGE,213.129.64.0,213.129.95.255,thebunker.net.proxy-nohost
 RANGE,213.131.224.0,213.131.255.255,mesh.eu.proxy-nohost
 RANGE,213.133.96.0,213.133.127.255,hetzner.de.proxy-nohost
 RANGE,213.134.48.0,213.134.55.255,interhost.com.proxy-nohost
+RANGE,213.136.80.0,213.136.94.255,contabo.de.proxy-nohost
 RANGE,213.142.132.0,213.142.147.255,localdedicated.com.proxy-nohost
 RANGE,213.149.224.0,213.149.255.255,acens.com.proxy-nohost
 RANGE,213.152.96.0,213.152.127.255,connectingbytes.de.proxy-nohost
@@ -4062,6 +4101,7 @@ RANGE,217.182.0.0,217.182.255.255,ovh.co.uk.proxy-nohost
 RANGE,217.194.0.0,217.194.15.255,seeweb.it.proxy-nohost
 RANGE,217.194.208.0,217.194.223.255,hostinguk.net.proxy-nohost
 RANGE,217.195.176.0,217.195.176.255,activewebs.dk.proxy-nohost
+RANGE,217.197.160.0,217.197.163.255,thinkhuge.net.proxy-nohost
 RANGE,217.198.96.0,217.198.111.255,netbenefit.com.proxy-nohost
 RANGE,217.198.128.0,217.198.143.255,link11.de.proxy-nohost
 RANGE,217.199.160.0,217.199.191.255,webfusion.com.proxy-nohost
