@@ -947,6 +947,31 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 	},
 	{
+		name: "[Gen 8] Godly Gift",
+		desc: `Each Pok&eacute;mon receives one base stat from a God (Uber Pok&eacute;mon) depending on its position in the team. If there is no Uber Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660461/">Godly Gift</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] Ubers'],
+		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'AG + Uber > 1', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		onModifySpecies(species, target, source) {
+			if (source || !target || !target.side) return;
+			const god = target.side.team.find(set => {
+				const teamSpecies = this.dex.getSpecies(set.species);
+				const validator = new TeamValidator(`gen${this.gen}ou`);
+				const isBanned = validator.ruleTable.isBannedSpecies(teamSpecies);
+				return isBanned;
+			}) || target.side.team[0];
+			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
+			const newSpecies = this.dex.deepClone(species);
+			newSpecies.baseStats = this.dex.deepClone(species.baseStats);
+			newSpecies.baseStats[stat] = this.dex.getSpecies(god.species).baseStats[stat as StatName];
+			return newSpecies;
+		},
+	},
+	{
 		name: "[Gen 8] Inheritance",
 		desc: `Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
 		threads: [
