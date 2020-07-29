@@ -8,7 +8,7 @@
  */
 import {Utils} from '../../lib/utils';
 
-const RANKS: string[] = Config.groupsranking;
+const RANKS = Config.groupsranking;
 
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
@@ -62,18 +62,11 @@ export const commands: ChatCommands = {
 		}
 		if (!this.can('modchat', null, room)) return false;
 
-		// 'modchat' lets you set up to 1 (ac/trusted also allowed)
-		// 'modchatall' lets you set up to your current rank
-		// 'makeroom' lets you set any rank, no limit
-		const threshold = user.can('makeroom') ? Infinity :
-			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id)) :
-			Math.max(Config.groupsranking.indexOf('+'), 1);
-
-		if (room.settings.modchat &&
-				room.settings.modchat.length <= 1 &&
-				Config.groupsranking.indexOf(room.settings.modchat as GroupSymbol) > threshold
+		if (
+			room.settings.modchat && room.settings.modchat.length <= 1 &&
+			!Users.Auth.hasPermission(user, 'modchat', room.settings.modchat as GroupSymbol, room)
 		) {
-			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
+			return this.errorReply(`/modchat - Access denied for changing a setting currently at ${room.settings.modchat}.`);
 		}
 		if ((room as any).requestModchat) {
 			const error = (room as GameRoom).requestModchat(user);
@@ -104,8 +97,8 @@ export const commands: ChatCommands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (Config.groupsranking.indexOf(target as GroupSymbol) > threshold) {
-				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[threshold]}.`);
+			if (!Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
+				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
 			room.settings.modchat = target;
 			break;
@@ -1473,29 +1466,16 @@ export const commands: ChatCommands = {
 
 export const roomSettings: SettingsHandler[] = [
 	// modchat
-	(room, user) => {
-		const threshold = user.can('makeroom') ? Infinity :
-			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id)) :
-			user.can('modchat', null, room) ? 1 :
-			null;
-
-		const permission = !!threshold;
-
-		// typescript seems to think that [prop, true] is of type [prop, boolean] unless we tell it explicitly
-		const options: [string, string | true][] = !permission ? [[room.settings.modchat || 'off', true]] :
-			[
-				'off',
-				'autoconfirmed',
-				'trusted',
-				...RANKS.slice(1, threshold! + 1),
-			].map(rank => [rank, rank === (room.settings.modchat || 'off') || `modchat ${rank || 'off'}`]);
-
-		return {
-			label: "Modchat",
-			permission,
-			options,
-		};
-	},
+	(room, user) => ({
+		label: "Modchat",
+		permission: 'modchat',
+		options: [
+			'off',
+			'autoconfirmed',
+			'trusted',
+			...RANKS.filter(symbol => Users.Auth.hasPermission(user, 'modchat', symbol, room)),
+		].map(rank => [rank, rank === (room.settings.modchat || 'off') || `modchat ${rank || 'off'}`]),
+	}),
 	(room, user) => ({
 		label: "Modjoin",
 		permission: room.settings.isPersonal ? user.can('editroom', null, room) : user.can('makeroom'),
