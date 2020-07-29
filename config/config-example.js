@@ -600,7 +600,7 @@ exports.grouplist = [
 
 		globalban: true,
 		ban: true,
-		modchatall: true,
+		modchat: 'a',
 		roomvoice: true,
 		roomwhitelist: true,
 		forcerename: true,
@@ -655,7 +655,7 @@ exports.grouplist = [
 		name: "Voice",
 		inherit: ' ',
 
-		alts: 's',
+		altsself: true,
 		makegroupchat: true,
 		joinbattle: true,
 		show: true,
@@ -669,7 +669,7 @@ exports.grouplist = [
 		name: "Whitelist",
 		inherit: ' ',
 		roomonly: true,
-		alts: 's',
+		altsself: true,
 		show: true,
 		showmedia: true,
 		exportinputlog: true,
@@ -677,7 +677,7 @@ exports.grouplist = [
 	},
 	{
 		symbol: ' ',
-		ip: 's',
+		ipself: true,
 	},
 	{
 		name: 'Locked',

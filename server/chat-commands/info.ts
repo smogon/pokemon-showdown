@@ -81,7 +81,7 @@ export const commands: ChatCommands = {
 		if (!showAll) {
 			return this.sendReplyBox(buf);
 		}
-		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
+		const canViewAlts = (user === targetUser ? user.can('altsself') : user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
 			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
@@ -154,12 +154,12 @@ export const commands: ChatCommands = {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
-		if (user.can('ip', targetUser)) {
+		if (user === targetUser ? user.can('ipself') : user.can('ip', targetUser)) {
 			let ips = Object.keys(targetUser.ips);
 			ips = ips.map(ip => {
 				const status = [];
 				const punishment = Punishments.ips.get(ip);
-				if (user.can('globalban') && punishment) {
+				if (user.can('alts') && punishment) {
 					const [punishType, userid] = punishment;
 					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
 					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
@@ -359,7 +359,7 @@ export const commands: ChatCommands = {
 
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		if (!this.can('globalban')) return;
+		if (!this.can('ip')) return;
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {

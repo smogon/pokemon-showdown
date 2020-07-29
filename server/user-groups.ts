@@ -7,14 +7,14 @@ export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modchatall', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
 	// administrative
 	'bypassall', 'console', 'disableladder', 'lockdown', 'potd', 'rawpacket',
 	// other
-	'addhtml', 'alts', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'ignorelimits', 'importinputlog', 'ip', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
+	'addhtml', 'alts', 'altsself', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'ignorelimits', 'importinputlog', 'ip', 'ipself', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
 ] as const;
 
 export type RoomPermission = typeof ROOM_PERMISSIONS[number];
@@ -61,7 +61,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (!Config.groups[group]) return false;
 		if (user.locked || user.semilocked) return false;
 		if (this.get(user.id) === ' ' && group !== ' ') return false;
-		return Auth.getGroup(this.get(user.id)).rank >= Auth.getGroup(group).rank;
+		return Auth.atLeast(this.get(user.id), group);
 	}
 
 	static defaultSymbol() {
@@ -91,7 +91,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	static hasPermission(
 		user: User,
 		permission: string,
-		target: User | GroupSymbol | null,
+		target: User | EffectiveGroupSymbol | null,
 		room?: BasicRoom | null,
 		cmd?: string
 	): boolean {
@@ -100,7 +100,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		const auth: Auth = room ? room.auth : Users.globalAuth;
 
 		const symbol = auth.getEffectiveSymbol(user);
-		const targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
+		let targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
+		if (targetSymbol === 'whitelist') targetSymbol = Auth.defaultSymbol();
 
 		const group = Auth.getGroup(symbol);
 		if (group['root']) return true;
@@ -120,7 +121,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			}
 		}
 
-		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol, target === user);
+		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol);
+	}
+	static atLeast(symbol: EffectiveGroupSymbol, symbol2: EffectiveGroupSymbol) {
+		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
 		const permissions: string[] = ROOM_PERMISSIONS.slice();
@@ -136,8 +140,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,
 		jurisdiction?: string | boolean,
-		targetSymbol?: GroupSymbol | null,
-		targetingSelf?: boolean
+		targetSymbol?: GroupSymbol | null
 	) {
 		if (!targetSymbol) {
 			return !!jurisdiction;
@@ -148,11 +151,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (jurisdiction.includes(targetSymbol)) {
 			return true;
 		}
-		if (jurisdiction.includes('s') && targetingSelf) {
+		if (jurisdiction.includes('a')) {
 			return true;
 		}
-		if (jurisdiction.includes('u') &&
-			Config.groupsranking.indexOf(symbol) > Config.groupsranking.indexOf(targetSymbol)) {
+		if (jurisdiction.includes('u') && Auth.getGroup(symbol).rank > Auth.getGroup(targetSymbol).rank) {
 			return true;
 		}
 		return false;
