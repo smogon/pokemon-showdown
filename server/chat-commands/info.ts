@@ -2635,7 +2635,7 @@ export const pages: PageTable = {
 			`<li><code>- Drizzle ++ Swift Swim</code>: Ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`,
 			`<h2><u>Unbans</u></h2>`,
 			`<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`,
-			`<ul><li><code>+ Blaziken</code> Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
+			`<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
 			`<p><a class="button" href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">More details</a></p>`,
 		];
 		const rulesets = [
