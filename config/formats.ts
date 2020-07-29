@@ -999,6 +999,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			}
 
 			const name = set.name;
+			if (this.ruleTable.isBanned(`pokemon:${species.id}`) || this.ruleTable.isBanned(`basepokemon:${species.id}`)) {
+				return this.validateSet(set, teamHas);
+			}
 
 			const ability = this.dex.getAbility(set.ability);
 			if (!ability.exists || ability.isNonstandard) return [`${name} needs to have a valid ability.`];
