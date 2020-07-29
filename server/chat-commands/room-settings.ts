@@ -14,8 +14,6 @@ const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
-const MAX_CHATROOM_ID_LENGTH = 225;
-
 export const commands: ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
@@ -602,17 +600,6 @@ export const commands: ChatCommands = {
 		if (!this.can('makeroom')) return;
 		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
-
-		// `,` is a delimiter used by a lot of /commands
-		// `|` and `[` are delimiters used by the protocol
-		// `-` has special meaning in roomids
-		if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
-			return this.errorReply("Room titles can't contain any of: ,|[-");
-		}
-
-		if (id.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
-		// Check if the name already exists as a room or alias
-		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
 		if (!Rooms.global.addChatRoom(target)) {
 			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
 		}
@@ -729,7 +716,6 @@ export const commands: ChatCommands = {
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
-
 	groupchatuptime: 'roomuptime',
 	roomuptime(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
@@ -846,40 +832,45 @@ export const commands: ChatCommands = {
 	rename() {
 		this.errorReply("Did you mean /renameroom?");
 	},
-
-	async renameroom(target, room) {
+	renamegroupchat: 'renameroom',
+	async renameroom(target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
 		if (!room) return this.requiresRoom();
-		if (room.minorActivity || room.game || room.tour) {
-			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
+		if (room.game || room.minorActivity || room.tour) {
+			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
 		}
 		if (room.battle) {
-			return this.errorReply("Battle rooms cannot be renamed.");
+			return this.errorReply("Cannot rename battle rooms.");
 		}
 		const oldTitle = room.title;
-		const roomid = toID(target) as RoomID;
-		const roomtitle = target;
-		if (!roomid.length) return this.errorReply("The new room needs a title.");
-		// `,` is a delimiter used by a lot of /commands
-		// `|` and `[` are delimiters used by the protocol
-		// `-` has special meaning in roomids
-		if (roomtitle.includes(',') || roomtitle.includes('|') || roomtitle.includes('[') || roomtitle.includes('-')) {
-			return this.errorReply("Room titles can't contain any of: ,|[-");
+		const isGroupchat = cmd === 'renamegroupchat';
+		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
+		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
+		if (isGroupchat) {
+			const existingRoom = Rooms.search(toID(target));
+			if (existingRoom && !existingRoom.settings.modjoin) {
+				return this.errorReply(`Your groupchat name is too similar to existing chat room '${existingRoom.title}'.`);
+			}
+			if (this.filter(target) !== target) {
+				return this.errorReply("Invalid title.");
+			}
+			target = `[G] ${target}`;
 		}
-		if (roomid.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
-		if (Rooms.search(roomtitle)) return this.errorReply(`The room '${roomtitle}' already exists.`);
-		if (!(await room.rename(roomtitle))) {
+		const creatorID = room.roomid.split('-')[1];
+		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		if (!(await room.rename(target, id))) {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
-		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
+		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
 			`${room.settings.isPrivate.charAt(0).toUpperCase()}${room.settings.isPrivate.slice(1)}`;
-
-		Rooms.global.notifyRooms(
-			room.settings.isPrivate === true ? ['upperstaff'] : ['upperstaff', 'staff'],
-			Utils.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`
-		);
+		if (!isGroupchat) {
+			Rooms.global.notifyRooms(
+				room.settings.isPrivate === true ? ['upperstaff'] : ['upperstaff', 'staff'],
+				Utils.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`
+		  );
+		}
 		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
 	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
