@@ -891,35 +891,11 @@ export const commands: ChatCommands = {
 				teamStrings = [indexedSet];
 			}
 		}
-		const evTable: {[k: string]: string} = {
-			'spa': 'SpA',
-			'spd': 'SpD',
-			'spe': 'Spe',
-			'atk': 'Atk',
-			'def': 'Def',
-			'hp': 'HP',
-		};
-		let resultString = teamStrings.map(set => {
-			const evString = Object.keys(set.evs).map(ev => {
-				return `${set.evs[ev]} ${evTable[ev]}`;
-			}).join(' / ');
-			const moveString = set.moves.map((moveID: string) => {
-				const move = Dex.getMove(moveID);
-				return `- ${move.name ? move.name : moveID}`;
-			}).join('<br />');
-
-			let buf = `${set.name} ${set.name === set.species ? '' : `(${set.species}) `}`;
-			buf += `${set.item ? `@ ${set.item}` : ''}<br />`;
-			buf += `Ability: ${Dex.getAbility(set.ability).name}<br />`;
-			if (set.shiny) buf += `Shiny: Yes<br />`;
-			buf += `EVs: ${evString}<br />`;
-			buf += moveString;
-			return buf;
-		}).join('<br /><br />');
-		this.runBroadcast();
+		let resultString = Chat.stringifyTeam(teamStrings);
 		if (showAll) {
 			resultString = `<details><summary>View team</summary><${resultString}</details>`;
 		}
+		this.runBroadcast();
 		return this.sendReplyBox(resultString);
 	},
 	showsethelp: [

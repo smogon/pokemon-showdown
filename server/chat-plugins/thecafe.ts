@@ -17,32 +17,6 @@ function saveDishes() {
 	void FS(DISHES_FILE).write(JSON.stringify(dishes));
 }
 
-/**
- * Used instead of Dex.packTeam to generate more human-readable output.
- */
-function stringifyTeam(team: PokemonSet[], ingredients: string[]) {
-	let output = '';
-	for (const [i, mon] of team.entries()) {
-		output += `${ingredients[i]} (${mon.species}) @ ${mon.item}<br/>`;
-		output += `Ability: ${mon.ability}<br/>`;
-		if (mon.happiness && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
-		const evs = [];
-		for (const stat in mon.evs) {
-			if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
-		}
-		if (evs.length) output += `EVs: ${evs.join(' / ')}<br/>`;
-		output += `${mon.nature} Nature<br/>`;
-		const ivs = [];
-		for (const stat in mon.ivs) {
-			if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
-		}
-		if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br/>`;
-		output += mon.moves.map(move => `- ${move}<br/>`).join('');
-		output += '<br/>';
-	}
-	return output;
-}
-
 function generateTeam(generator = '') {
 	let potentialPokemon = Object.keys(Dex.data.Pokedex).filter(mon => {
 		const species = Dex.getSpecies(mon);
@@ -122,7 +96,7 @@ export const commands: ChatCommands = {
 		const [newDish, newIngredients] = generateDish();
 		if (!target) {
 			const bfTeam = Dex.generateTeam('gen7bssfactory');
-			importable = stringifyTeam(bfTeam, newIngredients);
+			importable = Chat.stringifyTeam(bfTeam, newIngredients);
 			team = bfTeam.map(val => val.species);
 		} else {
 			team = generateTeam(target);
