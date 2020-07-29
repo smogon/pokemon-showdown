@@ -6124,9 +6124,17 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
+	justyke: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
 	equilibra: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	solotl: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	astrolotl: {
 		isNonstandard: "CAP",
