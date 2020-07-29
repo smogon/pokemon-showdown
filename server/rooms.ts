@@ -339,10 +339,11 @@ export abstract class BasicRoom {
 	attributedUhtmlchange(user: User, name: string, message: string) {
 		this.log.attributedUhtmlchange(user, name, message);
 	}
-	hideText(userids: ID[], lineCount = 0) {
+	hideText(userids: ID[], lineCount = 0, hideRevealButton?: boolean) {
 		const cleared = this.log.clearText(userids, lineCount);
 		for (const userid of cleared) {
-			this.send(`|unlink|hide|${userid}|${lineCount}`);
+			const showRevealButton = !hideRevealButton || Users.globalAuth.isStaff(userid) || this.auth.isStaff(userid);
+			this.send(`|hidelines|${showRevealButton ? 'hide' : 'delete'}|${userid}|${lineCount}`);
 		}
 		this.update();
 	}

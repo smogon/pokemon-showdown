@@ -431,8 +431,8 @@ export const commands: ChatCommands = {
 		targetUser.send(`|c|~|/warn ${target}`);
 
 		const userid = targetUser.getLastId();
-		this.add(`|unlink|${userid}`);
-		if (userid !== toID(this.inputUsername)) this.add(`|unlink|${toID(this.inputUsername)}`);
+		this.add(`|hidelines|unlink|${userid}`);
+		if (userid !== toID(this.inputUsername)) this.add(`|hidelines|unlink|${toID(this.inputUsername)}`);
 
 		targetUser.lastWarnedAt = now;
 
@@ -526,8 +526,8 @@ export const commands: ChatCommands = {
 			this.privateModAction(displayMessage);
 		}
 		const userid = targetUser.getLastId();
-		this.add(`|unlink|${userid}`);
-		if (userid !== toID(this.inputUsername)) this.add(`|unlink|${toID(this.inputUsername)}`);
+		this.add(`|hidelines|unlink|${userid}`);
+		if (userid !== toID(this.inputUsername)) this.add(`|hidelines|unlink|${toID(this.inputUsername)}`);
 
 		room.mute(targetUser, muteDuration);
 	},
@@ -924,7 +924,7 @@ export const commands: ChatCommands = {
 			displayMessage = `${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} banned alts: ${affectedAlts.join(", ")} ${(guests ? ` [${guests} guests]` : ``)}`;
 			this.privateModAction(displayMessage);
 			for (const id of affectedAlts) {
-				this.add(`|unlink|${toID(id)}`);
+				this.add(`|hidelines|unlink|${toID(id)}`);
 			}
 		} else if (acAccount) {
 			displayMessage = `${name}'s ac account: ${acAccount}`;
@@ -1512,10 +1512,15 @@ export const commands: ChatCommands = {
 	hidelines: 'hidetext',
 	forcehidelines: 'hidetext',
 	hlines: 'hidetext',
+	cleartext: 'hidetext',
+	clearlines: 'hidetext',
+	forcecleartext: 'hidetext',
+	forceclearlines: 'hidetext',
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 		if (!room) return this.requiresRoom();
 		const hasLineCount = cmd.includes('lines');
+		const hideRevealButton = cmd.includes('clear');
 		target = this.splitTarget(target);
 		let lineCount = 0;
 		if (/^[0-9]+\s*(,|$)/.test(target)) {
@@ -1575,13 +1580,15 @@ export const commands: ChatCommands = {
 				);
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
-			room.hideText([userid], lineCount);
+			room.hideText([userid], lineCount, hideRevealButton);
 		}
 	},
 	hidetexthelp: [
 		`/hidetext [username], [optional reason] - Removes a user's messages from chat, with an optional reason. Requires: % @ # &`,
 		`/hidealtstext [username], [optional reason] - Removes a user's messages and their alternate accounts' messages from the chat, with an optional reason.  Requires: % @ # &`,
 		`/hidelines [username], [number], [optional reason] - Removes the [number] most recent messages from a user, with an optional reason. Requires: % @ # &`,
+		`/cleartext [username], [optional reason] - Removes a user's messages from chat, and doesn't show a button to reveal them. Requires: % @ # &`,
+		`/clearlines [username], [number], [optional reason] - Like /cleartext, but only clears [number] lines. Requires: % @ # &`,
 	],
 
 	ab: 'blacklist',
