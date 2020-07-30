@@ -256,6 +256,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Emeri')}|don't forget to chall SFG or Agarica in gen8ou`);
 		},
 	},
+	epicnikolai: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('EpicNikolai')}|I never give up until I get something right, which means destroying you ☜(ﾟヮﾟ☜)`);
+			if (source.species.id !== 'garchompmega' || source.illusion) return;
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('EpicNikolai')}|This wasn't as fun as I thought it would be, I'm out ¯_( ͡~ ͜ʖ ͡°)_/¯`);
+		},
+		onFaint() {
+			this.add(`c|${getName('EpicNikolai')}|I like to keep a positive attitude even though it is hard sometimes <('o'<)~*/`);
+		},
+	},
 	fart: {
 		noCopy: true,
 		onStart(source) {

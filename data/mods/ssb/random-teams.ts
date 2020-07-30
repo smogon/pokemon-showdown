@@ -138,6 +138,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Forced Landing',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	EpicNikolai: {
+		species: 'Garchomp', ability: 'Dragon Heart', item: 'Garchompite', gender: 'M',
+		moves: ['Outrage', 'Earthquake', 'Swords Dance'],
+		signatureMove: 'Epic Rage',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	fart: {
 		species: 'Kartana', ability: 'Bipolar', item: 'Metronome', gender: 'M',
 		moves: ['U-turn'],

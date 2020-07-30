@@ -570,6 +570,41 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// EpicNikolai
+	epicrage: {
+		accuracy: 95,
+		basePower: 120,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		name: "Epic Rage",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Draco Meteor', target);
+		},
+		onModifyMove(move, pokemon) {
+			if (!pokemon.types.includes('Fire')) return;
+			move.secondaries = [];
+			move.secondaries.push({
+				chance: 100,
+				status: 'brn',
+			});
+			move.recoil = [33, 100];
+		},
+		recoil: [2, 5],
+		secondary: {
+			chance: 100,
+			status: "par",
+		},
+		target: "normal",
+		type: "Fire",
+	},
 
 	// fart
 	soupstealing7starstrikeredux: {

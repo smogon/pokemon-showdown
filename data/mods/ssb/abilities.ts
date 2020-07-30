@@ -295,6 +295,20 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// EpicNikolai
+	dragonheart: {
+		desc: "Once per battle, at 25% or lower this pokemon heals 50% hp.",
+		shortDesc: "Heals 50% when 25% or lower once per battle.",
+		name: "Dragon Heart",
+		onDamage(damage, target, source, move) {
+			if (target.m.heartless) return;
+			if (target.hp <= target.maxhp / 4) {
+				this.heal(target.baseMaxhp / 2);
+				target.m.heartless = true;
+			}
+		},
+	},
+
 	// fart
 	bipolar: {
 		desc: "When this Pokemon switches in, it changes to two random types and gets STAB.",
