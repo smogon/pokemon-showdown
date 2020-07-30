@@ -39,7 +39,7 @@ export class Tools {
 	 */
 	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	static getId(text: any): ID {
+	static toID(text: any): ID {
 		if (text && text.id) {
 			text = text.id;
 		} else if (text && text.userid) {
@@ -52,7 +52,7 @@ export class Tools {
 	}
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
-const toID = Tools.getId;
+const toID = Tools.toID;
 
 export class BasicEffect implements EffectData {
 	/**

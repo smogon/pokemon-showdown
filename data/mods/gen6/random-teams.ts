@@ -518,7 +518,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 						movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')
 					) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
 					(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
-					(species.requiredMove && movePool.includes(toID(species.requiredMove))))
+					(species.requiredMove && movePool.includes(this.dex.toID(species.requiredMove))))
 				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'judgment' && moveid !== 'sleeptalk') {
@@ -843,7 +843,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Holistic judgement
 			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Spinda: 100, Unown: 100,
 		};
-		const tier = toID(species.tier).replace('bl', '');
+		const tier = this.dex.toID(species.tier).replace('bl', '');
 		let level = levelScale[tier] || (species.nfe ? 90 : 80);
 		if (customScale[forme]) level = customScale[forme];
 
@@ -894,7 +894,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	}
 
 	randomFactorySet(species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string): RandomTeamsTypes.RandomFactorySet | null {
-		const id = toID(species.name);
+		const id = this.dex.toID(species.name);
 		// const flags = this.randomFactorySets[tier][id].flags;
 		const setList = this.randomFactorySets[tier][id].sets;
 
@@ -927,7 +927,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			const curSetVariants = [];
 			for (const move of curSet.moves) {
 				const variantIndex = this.random(move.length);
-				const moveId = toID(move[variantIndex]);
+				const moveId = this.dex.toID(move[variantIndex]);
 				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
 					reject = true;
 					break;
@@ -1060,7 +1060,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			}
 
 			for (const move of set.moves) {
-				const moveId = toID(move);
+				const moveId = this.dex.toID(move);
 				if (moveId in teamData.has) {
 					teamData.has[moveId]++;
 				} else {

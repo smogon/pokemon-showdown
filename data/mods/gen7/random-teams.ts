@@ -546,7 +546,7 @@ export class RandomGen7Teams extends RandomTeams {
 					((movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) &&
 						!counter.setupType && !hasMove['healingwish'] && !hasMove['trick'] && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
 					(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
-					(species.requiredMove && movePool.includes(toID(species.requiredMove)))
+					(species.requiredMove && movePool.includes(this.dex.toID(species.requiredMove)))
 				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.sideCondition && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
@@ -620,7 +620,7 @@ export class RandomGen7Teams extends RandomTeams {
 				rejectAbility = false;
 				if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Iron Fist, Skill Link, Strong Jaw
-					rejectAbility = !counter[toID(ability)];
+					rejectAbility = !counter[this.dex.toID(ability)];
 				} else if (ateAbilities.includes(ability)) {
 					rejectAbility = !counter['Normal'];
 				} else if (ability === 'Battle Armor' || ability === 'Sturdy') {
@@ -972,7 +972,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// Holistic judgement
 				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
-			const tier = toID(species.tier).replace('bl', '');
+			const tier = this.dex.toID(species.tier).replace('bl', '');
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
 			if (customScale[species.name]) level = customScale[species.name];
 
@@ -1209,7 +1209,7 @@ export class RandomGen7Teams extends RandomTeams {
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
 	): RandomTeamsTypes.RandomFactorySet | null {
-		const id = toID(species.name);
+		const id = this.dex.toID(species.name);
 		// const flags = this.randomFactorySets[tier][id].flags;
 		const setList = this.randomFactorySets[tier][id].sets;
 
@@ -1258,7 +1258,7 @@ export class RandomGen7Teams extends RandomTeams {
 			const curSetVariants = [];
 			for (const move of curSet.moves) {
 				const variantIndex = this.random(move.length);
-				const moveId = toID(move[variantIndex]);
+				const moveId = this.dex.toID(move[variantIndex]);
 				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
 					reject = true;
 					break;
@@ -1451,7 +1451,7 @@ export class RandomGen7Teams extends RandomTeams {
 			}
 
 			for (const move of set.moves) {
-				const moveId = toID(move);
+				const moveId = this.dex.toID(move);
 				if (moveId in teamData.has) {
 					teamData.has[moveId]++;
 				} else {
@@ -1501,7 +1501,7 @@ export class RandomGen7Teams extends RandomTeams {
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
 	): RandomTeamsTypes.RandomFactorySet | null {
-		const id = toID(species.name);
+		const id = this.dex.toID(species.name);
 		// const flags = this.randomBSSFactorySets[tier][id].flags;
 		const setList = this.randomBSSFactorySets[id].sets;
 
@@ -1541,7 +1541,7 @@ export class RandomGen7Teams extends RandomTeams {
 			const curSetVariants = [];
 			for (const move of curSet.moves) {
 				const variantIndex = this.random(move.length);
-				const moveId = toID(move[variantIndex]);
+				const moveId = this.dex.toID(move[variantIndex]);
 				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
 					reject = true;
 					break;
@@ -1684,7 +1684,7 @@ export class RandomGen7Teams extends RandomTeams {
 			}
 
 			for (const move of set.moves) {
-				const moveId = toID(move);
+				const moveId = this.dex.toID(move);
 				if (moveId in teamData.has) {
 					teamData.has[moveId]++;
 				} else {

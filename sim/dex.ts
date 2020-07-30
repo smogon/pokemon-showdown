@@ -131,7 +131,7 @@ const Natures: {[k: string]: Nature} = {
 	timid: {name: "Timid", plus: 'spe', minus: 'atk'},
 };
 
-const toID = Data.Tools.getId;
+export const toID = Data.Tools.toID;
 
 export class ModdedDex {
 	readonly Data: typeof Data;
@@ -141,7 +141,7 @@ export class ModdedDex {
 	readonly isBase: boolean;
 	readonly currentMod: string;
 
-	readonly getId: (text: any) => ID;
+	readonly toID: (text: any) => ID;
 	readonly getString: (str: any) => string;
 
 	readonly abilityCache: Map<ID, Ability>;
@@ -167,7 +167,7 @@ export class ModdedDex {
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 
-		this.getId = Data.Tools.getId;
+		this.toID = Data.Tools.toID;
 		this.getString = Data.Tools.getString;
 
 		this.abilityCache = new Map();

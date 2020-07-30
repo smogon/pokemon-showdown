@@ -112,7 +112,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		const item = pokemon.getItem();
 		if (
 			altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove
 		) {
 			return altForme.name;
 		}

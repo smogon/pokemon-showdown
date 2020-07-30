@@ -5,7 +5,6 @@
  * @license MIT
  */
 import {Dex} from './dex';
-global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
@@ -139,7 +138,7 @@ export class Battle {
 
 	trunc: (num: number, bits?: number) => number;
 	clampIntRange: (num: any, min?: number, max?: number) => number;
-
+	toID: (args: any) => ID;
 	constructor(options: BattleOptions) {
 		this.log = [];
 		this.add('t:', Math.floor(Date.now() / 1000));
@@ -154,6 +153,7 @@ export class Battle {
 		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
+		this.toID = this.dex.toID;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
@@ -1570,9 +1570,9 @@ export class Battle {
 			let berry = false; // Restorative Berry
 			let cycle = false; // Harvest or Recycle
 			for (const pokemon of side.pokemon) {
-				berry = RESTORATIVE_BERRIES.has(toID(pokemon.set.item));
-				if (['harvest', 'pickup'].includes(toID(pokemon.set.ability)) ||
-					pokemon.set.moves.map(toID).includes('recycle' as ID)) {
+				berry = RESTORATIVE_BERRIES.has(this.toID(pokemon.set.item));
+				if (['harvest', 'pickup'].includes(this.toID(pokemon.set.ability)) ||
+					pokemon.set.moves.map(this.toID).includes('recycle' as ID)) {
 					cycle = true;
 				}
 				if (berry && cycle) break;

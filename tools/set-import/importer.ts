@@ -10,7 +10,7 @@ import {Dex} from '../../sim/dex';
 import {Species} from '../../sim/dex-data';
 import {TeamValidator} from '../../sim/team-validator';
 Dex.includeModData();
-const toID = Dex.getId;
+const toID = Dex.toID;
 
 type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends (infer I)[]

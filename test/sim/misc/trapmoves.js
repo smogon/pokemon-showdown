@@ -2,6 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
+const toID = require('./../../../.sim-dist/dex').toID;
 
 let battle;
 const trappers = ['Block', 'Mean Look', 'Spider Web', 'Thousand Waves', 'Anchor Shot', 'Spirit Shackle'];

@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('./../assert');
+const toID = require('../../.sim-dist/dex').toID;
 
 describe('Dex data', function () {
 	it('should have valid Pokedex entries', function () {

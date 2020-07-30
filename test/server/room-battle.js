@@ -4,6 +4,8 @@ const assert = require('assert').strict;
 
 const {User} = require('../users-utils');
 
+const toID = require('../../.sim-dist/dex').toID;
+
 describe('Simulator abstraction layer features', function () {
 	describe('Battle', function () {
 		describe('player identifiers', function () {

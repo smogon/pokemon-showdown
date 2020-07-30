@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import {Dex} from './dex';
+import {Dex, toID} from './dex';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!

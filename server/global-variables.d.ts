@@ -19,6 +19,8 @@ import {Tournaments as TournamentsType} from './tournaments';
 declare global {
 	namespace NodeJS {
 		interface Global {
+			Dex: any;
+			toID: (item: string) => string;
 			IPTools: any;
 			Config: any;
 			Chat: any;
