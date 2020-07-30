@@ -1436,7 +1436,7 @@ export class GlobalRoomState {
 			Rooms.get('staff')?.add(crashMessage).update();
 		}
 		if (privateCrashMessage) {
-			upperStaffRoom!.add(privateCrashMessage);
+			upperStaffRoom!.add(privateCrashMessage).update();
 		}
 	}
 	/**
