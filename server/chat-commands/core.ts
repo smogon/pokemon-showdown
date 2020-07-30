@@ -1263,7 +1263,7 @@ export const commands: ChatCommands = {
 		if (!user.named) {
 			return this.popupReply(`You must choose a username before you challenge someone.`);
 		}
-		if (Config.pmmodchat &&!user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
+		if (Config.pmmodchat && !user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
 			const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 			this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
 			return false;
