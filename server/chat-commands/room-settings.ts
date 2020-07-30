@@ -1560,7 +1560,7 @@ export const pages: PageTable = {
 		this.title = `[Permissions]`;
 		const room = this.extractRoom();
 		if (!room) return `<h2>This room does not exist or does not support permissions.</h2>`;
-		if (!user.authAtLeast('%', room)) return `<h2>Access denied.</h2>`;
+		if (!room.auth.atLeast(user, '%')) return `<h2>Access denied.</h2>`;
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
 		const permissions = room.settings.permissions || {};
@@ -1573,7 +1573,7 @@ export const pages: PageTable = {
 			const requiredRank = permissions[permission];
 			atLeastOne = true;
 			buf += `<tr><td><strong>${permission}</strong></td><td>`;
-			if (user.authAtLeast('#', room)) {
+			if (room.auth.atLeast(user, '#')) {
 				buf += roomGroups.map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :

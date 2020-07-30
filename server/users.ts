@@ -531,21 +531,6 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
-		if (this.hasSysopAccess()) return true;
-		if (!minAuth || minAuth === ' ') return true;
-		if (this.locked || this.semilocked) return false;
-		if (minAuth === 'unlocked') return true;
-		if (minAuth === 'trusted' && this.trusted) return true;
-		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
-
-		if (minAuth === 'trusted' || minAuth === 'autoconfirmed') {
-			minAuth = Config.groupsranking[1];
-		}
-		if (!(minAuth in Config.groups)) return false;
-		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
-		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
-	}
 	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
 	can(
 		permission: GlobalPermission,
