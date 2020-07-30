@@ -492,7 +492,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
-	dataResolvers?: DataResolver[];
+	dataResolvers?: ((args: string[]) => void)[];
 	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
 		const format = Dex.getFormat(formatid, true);
