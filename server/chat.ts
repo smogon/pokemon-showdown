@@ -108,7 +108,6 @@ import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
-import {ExtendedGroup} from './user-groups';
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
@@ -944,7 +943,7 @@ export class CommandContext extends MessageContext {
 					this.errorReply(this.tr(`You are muted and cannot talk in this room.`));
 					return null;
 				}
-				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat as ExtendedGroup)) {
+				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
 						this.errorReply(
 							this.tr(
@@ -986,7 +985,7 @@ export class CommandContext extends MessageContext {
 					this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 					return null;
 				}
-				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat as ExtendedGroup) &&
+				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 					!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)) {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);

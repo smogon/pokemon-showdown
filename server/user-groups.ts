@@ -2,7 +2,7 @@ import {FS} from '../lib/fs';
 
 export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
-export type ExtendedGroup = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
+export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
@@ -59,7 +59,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	isStaff(userid: ID) {
 		return this.has(userid) && this.get(userid) !== '+';
 	}
-	atLeast(user: User, group: ExtendedGroup, isPermissionCheck?: boolean) {
+	atLeast(user: User, group: AuthLevel, isPermissionCheck?: boolean) {
 		if (user.hasSysopAccess()) return true;
 		if (group === 'trusted' || group === 'autoconfirmed') {
 			if (user.trusted && group === 'trusted') return true;

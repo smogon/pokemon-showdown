@@ -100,7 +100,7 @@ export const commands: ChatCommands = {
 			if (!Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
-			room.settings.modchat = target;
+			room.settings.modchat = target as AuthLevel;
 			break;
 		}
 		if (currentModchat === room.settings.modchat) {
@@ -211,7 +211,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
 			}
 			if (room.settings.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
-			room.settings.modjoin = target;
+			room.settings.modjoin = target as AuthLevel;
 			this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank ${target} or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to ${target}.`);
 			this.modlog('MODJOIN', null, target);
