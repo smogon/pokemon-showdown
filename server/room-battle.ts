@@ -730,10 +730,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		switch (lines[0]) {
 		case 'requesteddata':
 			lines = lines.slice(1);
-			if (this.dataResolvers && this.dataResolvers.length > 0) {
-				const resolver = this.dataResolvers.shift();
-				if (resolver) resolver(lines);
-			}
+			const resolver = this.dataResolvers!.shift()!;
+			resolver(lines);
 			break;
 
 		case 'update':
