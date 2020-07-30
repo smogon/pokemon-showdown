@@ -49,19 +49,26 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 *
 	 * Passing a User will read `user.group`, which is relevant for unregistered
 	 * users with temporary global auth.
+	 * @param isVisual: Whether or not to display the user's visual (display) group. Defaults to false
 	 */
-	get(user: ID | User) {
-		if (typeof user !== 'string') return (user as User).group;
-		return super.get(user) || Auth.defaultSymbol();
+	get(user: ID | User, isVisual?: boolean) {
+		if (typeof user !== 'string') return (isVisual ? (user as User).visualGroup : (user as User).group);
+		return (isVisual ? Users.get(user)?.visualGroup : super.get(user)) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
 		return this.has(userid) && this.get(userid) !== '+';
 	}
-	atLeast(user: User, group: GroupSymbol) {
+	atLeast(user: User, group: GroupSymbol, isPermissionCheck?: boolean) {
 		if (!Config.groups[group]) return false;
 		if (user.locked || user.semilocked) return false;
 		if (this.get(user.id) === ' ' && group !== ' ') return false;
-		return Auth.atLeast(this.get(user.id), group);
+		if (Auth.atLeast(this.get(user.id, true), group)) {
+			return true;
+		} else if (Auth.atLeast(this.get(user.id, false), group)) {
+			// Reset a user's visualGroup if they need their true group for a permissions check
+			if (isPermissionCheck) user.resetVisualGroup();
+			return true;
+		}
 	}
 
 	static defaultSymbol() {
@@ -81,8 +88,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			name: symbol,
 		});
 	}
-	getEffectiveSymbol(user: User): EffectiveGroupSymbol {
-		const group = this.get(user);
+	getEffectiveSymbol(user: User, isVisual?: boolean): EffectiveGroupSymbol {
+		const group = this.get(user, isVisual);
 		if (this.has(user.id) && group === Auth.defaultSymbol()) {
 			return 'whitelist';
 		}
@@ -92,14 +99,15 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		user: User,
 		permission: string,
 		target: User | EffectiveGroupSymbol | null,
-		room?: BasicRoom | null,
-		cmd?: string
+		room?: Room | BasicRoom | null,
+		cmd?: string,
+		useVisualGroup?: boolean
 	): boolean {
 		if (user.hasSysopAccess()) return true;
 
 		const auth: Auth = room ? room.auth : Users.globalAuth;
 
-		const symbol = auth.getEffectiveSymbol(user);
+		const symbol = auth.getEffectiveSymbol(user, useVisualGroup);
 		let targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
 		if (targetSymbol === 'whitelist') targetSymbol = Auth.defaultSymbol();
 
@@ -177,10 +185,10 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(user: ID | User): GroupSymbol {
+	get(user: ID | User, isVisual?: boolean): GroupSymbol {
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
-		const parentGroup = parentAuth ? parentAuth.get(user) : Auth.defaultSymbol();
+		const parentGroup = parentAuth ? parentAuth.get(user, isVisual) : Auth.defaultSymbol();
 		const id = typeof user === 'string' ? user : (user as User).id;
 
 		if (this.has(id)) {
@@ -204,8 +212,8 @@ export class RoomAuth extends Auth {
 
 		return parentGroup;
 	}
-	getEffectiveSymbol(user: User) {
-		const symbol = super.getEffectiveSymbol(user);
+	getEffectiveSymbol(user: User, isVisual?: boolean) {
+		const symbol = super.getEffectiveSymbol(user, isVisual);
 		if (!this.room.persist && symbol === user.group) {
 			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
 			if (replaceGroup) return replaceGroup;
@@ -280,7 +288,9 @@ export class GlobalAuth extends Auth {
 		if (!username) username = id;
 		const user = Users.get(id);
 		if (user) {
+			const isHidingGroup = user.group !== user.visualGroup;
 			user.group = group;
+			if (!isHidingGroup) user.setVisualGroup(group);
 			user.updateIdentity();
 			username = user.name;
 		}
@@ -295,6 +305,7 @@ export class GlobalAuth extends Auth {
 		const user = Users.get(id);
 		if (user) {
 			user.group = ' ';
+			user.visualGroup = ' ';
 		}
 		this.usernames.delete(id);
 		this.save();

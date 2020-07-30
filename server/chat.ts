@@ -827,11 +827,14 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.cmd)) {
-			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
-			return false;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.cmd, true)) return true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.cmd, false)) {
+			// If we need to use the true group's permission, reset the visual group
+			this.user.resetVisualGroup();
+			return true;
 		}
-		return true;
+		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
+		return false;
 	}
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
