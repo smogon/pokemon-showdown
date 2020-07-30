@@ -32,7 +32,7 @@ export function cacheGroupData(config: ConfigType) {
 	if (config.groups) {
 		// Support for old config groups format.
 		// Should be removed soon.
-		console.error(
+		reportError(
 			`You are using a deprecated version of user group specification in config.\n` +
 			`Support for this will be removed soon.\n` +
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 457).\n`
@@ -61,7 +61,7 @@ export function cacheGroupData(config: ConfigType) {
 			if (isPermission(key)) {
 				const jurisdiction = groupData[key as 'jurisdiction'];
 				if (typeof jurisdiction === 'string' && jurisdiction.includes('s')) {
-					console.error(`Outdated jurisdiction for permission "${key}" of group "${symbol}": 's' is no longer a supported jurisdiction; we now use 'ipself' and 'altsself'`);
+					reportError(`Outdated jurisdiction for permission "${key}" of group "${symbol}": 's' is no longer a supported jurisdiction; we now use 'ipself' and 'altsself'`);
 					delete groupData[key as 'jurisdiction'];
 				}
 			}
@@ -123,4 +123,11 @@ export function cacheGroupData(config: ConfigType) {
 	}
 }
 
+function reportError(msg: string) {
+	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.
+	// Most child processes don't have Monitor.error, but the main process should always have them, and Config
+	// errors should always be the same across processes, so this is a neat way to avoid unnecessary logging.
+	// @ts-ignore typescript doesn't like us accessing Monitor like this
+	setImmediate(() => global.Monitor?.error?.(msg));
+}
 export const Config = load();
