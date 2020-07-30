@@ -1053,7 +1053,6 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
 			const stats: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 			const bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
 			if (bst <= 350) {
@@ -1089,7 +1088,6 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
 			const stats: StatName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
 			const scale = 600 - newSpecies.baseStats['hp'];

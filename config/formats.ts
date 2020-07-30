@@ -966,7 +966,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			}) || target.side.team[0];
 			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
-			newSpecies.baseStats = this.dex.deepClone(species.baseStats);
 			newSpecies.baseStats[stat] = this.dex.getSpecies(god.species).baseStats[stat as StatName];
 			return newSpecies;
 		},
