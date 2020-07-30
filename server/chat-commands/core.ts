@@ -1348,18 +1348,20 @@ export const commands: ChatCommands = {
 		});
 	},
 
+	hbtc: 'hidebattlesfromtrainercard',
+	sbtc: 'hidebattlesfromtrainercard',
 	showbattlesinusercard: 'hidebattlesfromtrainercard',
 	hidebattlesfromusercard: 'hidebattlesfromtrainercard',
 	showbattlesintrainercard: 'hidebattlesfromtrainercard',
 	hidebattlesfromtrainercard(target, room, user, connection, cmd) {
-		const shouldHide = cmd.includes('hide');
+		const shouldHide = cmd.includes('hide') || cmd === 'hbtc';
 		user.settings.hideBattlesFromTrainerCard = shouldHide;
 		user.update();
 		this.sendReply(`Battles are now ${shouldHide ? "hidden (except to staff)" : "visible"} in your trainer card.`);
 	},
 	hidebattlesfromtrainercardhelp: [
-		`/hidebattlesfromtrainercard - Hides your battles in your trainer card.`,
-		`/showbattlesintrainercard - Displays your battles in your trainer card.`,
+		`/hidebattlesfromtrainercard OR /hbtc - Hides your battles in your trainer card.`,
+		`/showbattlesintrainercard OR /sbtc - Displays your battles in your trainer card.`,
 	],
 
 	/*********************************************************
