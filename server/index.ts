@@ -126,6 +126,8 @@ global.Punishments = Punishments;
 
 import {Rooms} from './rooms';
 global.Rooms = Rooms;
+// We initialize the global room here because roomlogs.ts needs the Rooms global
+Rooms.global = new Rooms.GlobalRoomState();
 
 import * as Verifier from './verifier';
 global.Verifier = Verifier;

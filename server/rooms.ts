@@ -333,7 +333,8 @@ export abstract class BasicRoom {
 		return this;
 	}
 	modlog(message: string) {
-		this.log.modlog(message);
+		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
+		this.log.modlog(message, override);
 		return this;
 	}
 	uhtmlchange(name: string, message: string) {
@@ -892,7 +893,7 @@ export abstract class BasicRoom {
 		}
 		this.logUserStatsInterval = null;
 
-		void this.log.destroy();
+		void this.log.destroy(true);
 
 		// get rid of some possibly-circular references
 		Rooms.rooms.delete(this.roomid);
@@ -912,7 +913,6 @@ export class GlobalRoomState {
 	readonly staffAutojoinList: RoomID[];
 	readonly ladderIpLog: WriteStream;
 	readonly reportUserStatsInterval: NodeJS.Timeout;
-	readonly modlogStream: WriteStream;
 	lockdown: boolean | 'pre' | 'ddos';
 	battleCount: number;
 	lastReportedCrash: number;
@@ -984,7 +984,7 @@ export class GlobalRoomState {
 			this.ladderIpLog = new WriteStream({write() { return undefined; }});
 		}
 		// Create writestream for modlog
-		this.modlogStream = FS('logs/modlog/modlog_global.txt').createAppendStream();
+		Rooms.Modlog.initialize('global');
 
 		this.reportUserStatsInterval = setInterval(
 			() => this.reportUserStats(),
@@ -1010,7 +1010,7 @@ export class GlobalRoomState {
 	}
 
 	modlog(message: string) {
-		void this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+		void Rooms.Modlog.write('global', message);
 	}
 
 	writeChatRoomData() {
@@ -1630,6 +1630,7 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
+	Modlog: require('./modlog').modlog,
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
@@ -1762,9 +1763,6 @@ export const Rooms = {
 		return room;
 	},
 
-	battleModlogStream: FS('logs/modlog/modlog_battle.txt').createAppendStream(),
-	groupchatModlogStream: FS('logs/modlog/modlog_groupchat.txt').createAppendStream(),
-
 	global: null! as GlobalRoomState,
 	lobby: null as ChatRoom | null,
 
@@ -1785,7 +1783,3 @@ export const Rooms = {
 	RoomBattleTimer,
 	PM: RoomBattlePM,
 };
-
-// initialize
-
-Rooms.global = new GlobalRoomState();
