@@ -1525,6 +1525,7 @@ export const commands: ChatCommands = {
 	forcehidelines: 'hidetext',
 	hlines: 'hidetext',
 	cleartext: 'hidetext',
+	clearaltstext: 'hidetext',
 	clearlines: 'hidetext',
 	forcecleartext: 'hidetext',
 	forceclearlines: 'hidetext',
@@ -1603,8 +1604,7 @@ export const commands: ChatCommands = {
 		`/hidetext [username], [optional reason] - Removes a user's messages from chat, with an optional reason. Requires: % @ # &`,
 		`/hidealtstext [username], [optional reason] - Removes a user's messages and their alternate accounts' messages from the chat, with an optional reason.  Requires: % @ # &`,
 		`/hidelines [username], [number], [optional reason] - Removes the [number] most recent messages from a user, with an optional reason. Requires: % @ # &`,
-		`/cleartext [username], [optional reason] - Removes a user's messages from chat, and doesn't show a button to reveal them. Requires: % @ # &`,
-		`/clearlines [username], [number], [optional reason] - Like /cleartext, but only clears [number] lines. Requires: % @ # &`,
+		`Use /cleartext, /clearaltstext, and /clearlines to remove messages without displaying a button to reveal them.`,
 	],
 
 	ab: 'blacklist',
