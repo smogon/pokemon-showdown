@@ -77,7 +77,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		} = {
 			abilities: megaSpecies.abilities,
 			baseStats: {},
-			weighthg: megaSpecies.weighthg - megaSpecies.weighthg,
+			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
 			originalMega: megaSpecies.name,
 			requiredItem: megaSpecies.requiredItem,
 		};
