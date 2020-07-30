@@ -1,7 +1,5 @@
 // Note: These are the rules that formats use
 // The list of formats is stored in config/formats.js
-import {Utils} from './../lib/utils';
-
 export const Formats: {[k: string]: FormatsData} = {
 
 	// Rulesets
@@ -1046,6 +1044,41 @@ export const Formats: {[k: string]: FormatsData} = {
 			}
 		},
 	},
+	'350cupmod': {
+		effectType: 'Rule',
+		name: '350 Cup Mod',
+		desc: "If a Pok&eacute;mon's BST is 350 or lower, all of its stats get doubled.",
+		onBegin() {
+			this.add('rule', '350 Cup Mod: If a Pokemon\'s BST is 350 or lower, all of its stats get doubled.');
+		},
+		onModifySpecies(species) {
+			const newSpecies = this.dex.deepClone(species);
+			const stats: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+			const bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
+			if (bst <= 350) {
+				for (const stat of stats) {
+					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+				}
+			}
+			return newSpecies;
+		},
+	},
+	flippedmod: {
+		effectType: 'Rule',
+		name: 'Flipped Mod',
+		desc: "Every Pok&eacute;mon's stats are reversed. HP becomes Spe, Atk becomes Sp. Def, Def becomes Sp. Atk, and vice versa.",
+		onBegin() {
+			this.add('rule', 'Pokemon have their stats flipped (HP becomes Spe, vice versa).');
+		},
+		onModifySpecies(species) {
+			const newSpecies = this.dex.deepClone(species);
+			const reversedNums = Object.values(newSpecies.baseStats).reverse();
+			for (const [i, statName] of Object.keys(newSpecies).entries()) {
+				newSpecies.baseStats[statName] = reversedNums[i];
+			}
+			return newSpecies;
+		},
+	},
 	scalemonsmod: {
 		effectType: 'Rule',
 		name: 'Scalemons Mod',
@@ -1055,12 +1088,11 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
 			const stats: StatName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
 			const scale = 600 - newSpecies.baseStats['hp'];
 			for (const stat of stats) {
-				newSpecies.baseStats[stat] = Utils.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 			}
 			return newSpecies;
 		},

@@ -182,6 +182,20 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`-${thing}`);
 	}
 
+	isBannedSpecies(species: Species) {
+		if (this.has(`+pokemon:${species.id}`)) return false;
+		if (this.has(`-pokemon:${species.id}`)) return true;
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
+		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
+		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
+		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
+		if (this.has(`-pokemontag:${toID(tier)}`)) return true;
+		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
+		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
+		if (this.has(`-pokemontag:${toID(doublesTier)}`)) return true;
+		return this.has(`-pokemontag:allpokemon`);
+	}
+
 	isRestricted(thing: string) {
 		if (this.has(`+${thing}`)) return false;
 		return this.has(`*${thing}`);
