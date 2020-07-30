@@ -755,9 +755,7 @@ export class Tournament extends Rooms.RoomGame {
 		}
 		if (user) {
 			user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
-			if (reason) {
-				user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title}:\n\n${reason}.`);
-			}
+			user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title}${reason ? `:\n\n${reason}` : `.`}`);
 		}
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
