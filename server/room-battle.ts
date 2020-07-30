@@ -21,6 +21,7 @@ import * as RoomGames from "./room-game";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
+type DataResolver = (args: string[]) => void;
 export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
 
 interface BattleRequestTracker {
@@ -491,6 +492,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
+	dataResolvers?: DataResolver[];
 	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
 		const format = Dex.getFormat(formatid, true);
@@ -726,6 +728,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
+		case 'requestlog':
+			lines = lines.slice(1);
+			if (this.dataResolvers && this.dataResolvers.length > 0) {
+				const resolver = this.dataResolvers.shift();
+				if (resolver) resolver(lines);
+			}
+			break;
+
 		case 'update':
 			for (const line of lines.slice(1)) {
 				if (line.startsWith('|turn|')) {
@@ -741,6 +751,13 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.checkActive();
 			break;
 
+		case 'requestedteam':
+			lines = lines.slice(1);
+			if (this.dataResolvers && this.dataResolvers.length > 0) {
+				const resolver = this.dataResolvers.shift();
+				if (resolver) resolver(lines);
+			}
+			break;
 		case 'sideupdate': {
 			const slot = lines[1] as SideID;
 			const player = this[slot];
@@ -1112,6 +1129,33 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// @ts-ignore
 		this.room = null;
 	}
+	async getTeam(user: User) {
+		const id = user.id;
+		const player = this.playerTable[id];
+		if (!player) return;
+		void this.stream.write(`>requestteam ${player.slot}`);
+		const teamDataPromise = new Promise<string[]>(resolve => {
+			if (!this.dataResolvers) this.dataResolvers = [];
+			this.dataResolvers.push(resolve);
+		});
+		const resultStrings = await teamDataPromise;
+		const result = resultStrings.map(item => Dex.fastUnpackTeam(item))[0];
+		return result;
+	}
+	onChatMessage(message: string, user: User) {
+		void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${message}`);
+		return;
+	}
+	async getLog(): Promise<string[]> {
+		if (!this.logData) this.logData = {};
+		void this.stream.write('>requestlog');
+		const logPromise = new Promise<string[]>(resolve => {
+			if (!this.dataResolvers) this.dataResolvers = [];
+			this.dataResolvers.push(resolve);
+		});
+		const result = await logPromise;
+		return result;
+	}
 }
 
 export class RoomBattleStream extends BattleStream {
@@ -1154,6 +1198,16 @@ export class RoomBattleStream extends BattleStream {
 
 	_writeLine(type: string, message: string) {
 		switch (type) {
+		case 'chat-inputlogonly':
+			this.battle.inputLog.push(`>chat ${message}`);
+			break;
+		case 'chat':
+			this.battle.inputLog.push(`>chat ${message}`);
+			this.battle.add('chat', `${message}`);
+			break;
+		case 'requestlog':
+			this.push(`requestlog\n${this.battle.inputLog.join('\n')}`);
+			break;
 		case 'eval':
 			const battle = this.battle;
 			battle.inputLog.push(`>${type} ${message}`);
@@ -1190,6 +1244,16 @@ export class RoomBattleStream extends BattleStream {
 				battle.add('', '<<< error: ' + e.message);
 			}
 			break;
+		case 'requestteam':
+			message = message.trim();
+			const slotNum = parseInt(message.slice(1)) - 1;
+			if (isNaN(slotNum) || slotNum < 0) {
+				throw new Error(`Team requested for slot ${message}, but that slot does not exist.`);
+			}
+			const side = this.battle.sides[slotNum];
+			const team = Dex.packTeam(side.team);
+			this.push(`requestedteam\n${team}`);
+			break;
 		default: super._writeLine(type, message);
 		}
 	}
@@ -1209,6 +1273,8 @@ if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	// tslint:disable-next-line: no-var-requires
 	global.Chat = require('./chat').Chat;
+	// tslint:disable-next-line: no-var-requires
+	global.Dex = require('../sim/dex').Dex;
 	// @ts-ignore ???
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
