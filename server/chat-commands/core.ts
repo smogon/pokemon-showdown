@@ -1224,7 +1224,7 @@ export const commands: ChatCommands = {
 		if (target) {
 			if (Config.laddermodchat && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
 				const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
-				this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
+				this.popupReply(`This server requires you to be rank ${groupName} or higher to search for a battle.`);
 				return false;
 			}
 			const ladder = Ladders(target);
@@ -1265,7 +1265,7 @@ export const commands: ChatCommands = {
 		}
 		if (Config.pmmodchat && !user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
 			const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-			this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
+			this.popupReply(`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
 		return Ladders(target).makeChallenge(connection, targetUser);
