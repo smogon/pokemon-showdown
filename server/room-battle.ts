@@ -728,7 +728,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
-		case 'requestlog':
+		case 'requesteddata':
 			lines = lines.slice(1);
 			if (this.dataResolvers && this.dataResolvers.length > 0) {
 				const resolver = this.dataResolvers.shift();
@@ -751,13 +751,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.checkActive();
 			break;
 
-		case 'requestedteam':
-			lines = lines.slice(1);
-			if (this.dataResolvers && this.dataResolvers.length > 0) {
-				const resolver = this.dataResolvers.shift();
-				if (resolver) resolver(lines);
-			}
-			break;
 		case 'sideupdate': {
 			const slot = lines[1] as SideID;
 			const player = this[slot];
@@ -1206,7 +1199,7 @@ export class RoomBattleStream extends BattleStream {
 			this.battle.add('chat', `${message}`);
 			break;
 		case 'requestlog':
-			this.push(`requestlog\n${this.battle.inputLog.join('\n')}`);
+			this.push(`requesteddata\n${this.battle.inputLog.join('\n')}`);
 			break;
 		case 'eval':
 			const battle = this.battle;
@@ -1252,7 +1245,7 @@ export class RoomBattleStream extends BattleStream {
 			}
 			const side = this.battle.sides[slotNum];
 			const team = Dex.packTeam(side.team);
-			this.push(`requestedteam\n${team}`);
+			this.push(`requesteddata\n${team}`);
 			break;
 		default: super._writeLine(type, message);
 		}
