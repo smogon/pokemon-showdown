@@ -343,7 +343,7 @@ export class User extends Chat.MessageContext {
 
 	settings: {
 		blockChallenges: boolean,
-		blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked',
+		blockPMs: boolean | AuthLevel,
 		ignoreTickets: boolean,
 		hideBattlesFromTrainerCard: boolean,
 	};

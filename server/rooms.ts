@@ -476,8 +476,9 @@ export abstract class BasicRoom {
 
 		const modjoinSetting = this.settings.modjoin !== true ? this.settings.modjoin : this.settings.modchat;
 		if (!modjoinSetting) return true;
-		if (!(modjoinSetting in Config.groups)) throw new Error(`Invalid modjoin setting in ${this.roomid}: ${modjoinSetting}`);
-
+		if (!Users.Auth.isAuthLevel(modjoinSetting)) {
+			Monitor.error(`Invalid modjoin setting in ${this.roomid}: ${modjoinSetting}`);
+		}
 		return Users.globalAuth.atLeast(user, modjoinSetting);
 	}
 	mute(user: User, setTime?: number) {

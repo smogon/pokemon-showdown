@@ -572,8 +572,8 @@ export const commands: ChatCommands = {
 		if (user.settings.blockPMs === (target || true)) {
 			return this.errorReply(this.tr("You are already blocking private messages! To unblock, use /unblockpms"));
 		}
-		if (target in Config.groups) {
-			user.settings.blockPMs = target as GroupSymbol;
+		if (Users.Auth.isAuthLevel(target)) {
+			user.settings.blockPMs = target;
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			user.settings.blockPMs = target;
@@ -748,7 +748,7 @@ export const commands: ChatCommands = {
 			for (const setting in user.settings) {
 				if (setting in raw) {
 					if (setting === 'blockPMs' &&
-						(raw[setting] in Config.groups || ['autoconfirmed', 'trusted', 'unlocked'].includes(raw[setting]))) {
+						Users.Auth.isAuthLevel(raw[setting])) {
 						settings[setting] = raw[setting];
 					} else {
 						settings[setting as keyof UserSettings] = !!raw[setting];

@@ -93,14 +93,14 @@ export const commands: ChatCommands = {
 			target = Users.PLAYER_SYMBOL;
 			/* falls through */
 		default:
-			if (!Config.groups[target]) {
+			if (!Users.Auth.isAuthLevel(target)) {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
 			if (!Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
-			room.settings.modchat = target as AuthLevel;
+			room.settings.modchat = target;
 			break;
 		}
 		if (currentModchat === room.settings.modchat) {
@@ -203,7 +203,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to autoconfirmed!</strong><br />Users must be rank autoconfirmed or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
-		} else if (target in Config.groups || target === 'trusted') {
+		} else if (Users.Auth.isAuthLevel(target)) {
 			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
 			}
@@ -211,7 +211,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
 			}
 			if (room.settings.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
-			room.settings.modjoin = target as AuthLevel;
+			room.settings.modjoin = target;
 			this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank ${target} or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to ${target}.`);
 			this.modlog('MODJOIN', null, target);
