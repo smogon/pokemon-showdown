@@ -27,7 +27,6 @@
  *
  * @license MIT license
  */
-
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Array.prototype, 'flatMap', {
 	value<T, U, W>(this: T[], callback: (this: W, item: T, index: number, array: T[]) => U[], thisArg: W): U[] {
@@ -130,8 +129,7 @@ const Natures: {[k: string]: Nature} = {
 	serious: {name: "Serious"},
 	timid: {name: "Timid", plus: 'spe', minus: 'atk'},
 };
-
-export const toID = Data.Tools.toID;
+export const toID = Data.toID;
 
 export class ModdedDex {
 	readonly Data: typeof Data;
@@ -141,8 +139,8 @@ export class ModdedDex {
 	readonly isBase: boolean;
 	readonly currentMod: string;
 
+	readonly getString: (text: any) => string;
 	readonly toID: (text: any) => ID;
-	readonly getString: (str: any) => string;
 
 	readonly abilityCache: Map<ID, Ability>;
 	readonly effectCache: Map<ID, Effect | Move>;
@@ -167,8 +165,8 @@ export class ModdedDex {
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 
-		this.toID = Data.Tools.toID;
-		this.getString = Data.Tools.getString;
+		this.getString = Utils.getString;
+		this.toID = toID;
 
 		this.abilityCache = new Map();
 		this.effectCache = new Map();

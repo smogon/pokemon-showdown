@@ -1,6 +1,6 @@
 /* eslint max-len: ["error", 240] */
 
-import {Dex} from '../sim/dex';
+import {Dex, toID} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
 
 export interface TeamData {
@@ -138,7 +138,7 @@ export class RandomTeams {
 					species = dex.getSpecies(this.sample(species.battleOnly));
 				}
 				forme = species.name;
-			} else if (species.requiredItems && !species.requiredItems.some(req => this.dex.toID(req) === item)) {
+			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.getSpecies(species.changesFrom);
 				forme = species.name;
@@ -175,7 +175,7 @@ export class RandomTeams {
 					);
 				}
 				if (species.changesFrom) {
-					learnset = this.dex.data.Learnsets[this.dex.toID(species.changesFrom)].learnset;
+					learnset = this.dex.data.Learnsets[toID(species.changesFrom)].learnset;
 					const basePool = Object.keys(learnset!).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
@@ -1077,12 +1077,16 @@ export class RandomTeams {
 					rejectAbility = true;
 				} else if (['Adaptability', 'Contrary', 'Serene Grace', 'Skill Link', 'Strong Jaw'].includes(ability)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Analytic') {
 					rejectAbility = (hasMove['rapidspin'] || species.nfe);
 =======
 					rejectAbility = !counter[this.dex.toID(ability)];
 >>>>>>> Remove sim/ and data/'s globals
+=======
+					rejectAbility = !counter[toID(ability)];
+>>>>>>> stuff
 				} else if (ability === 'Bulletproof' || ability === 'Overcoat') {
 					rejectAbility = (counter.setupType && hasAbility['Soundproof']);
 				} else if (ability === 'Chlorophyll') {
@@ -1416,7 +1420,7 @@ export class RandomTeams {
 	}
 
 	getPokemonPool(type: string, pokemon: RandomTeamsTypes.RandomSet[] = [], isMonotype = false) {
-		const exclude = pokemon.map(p => this.dex.toID(p.species));
+		const exclude = pokemon.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
 			let species = this.dex.getSpecies(id);

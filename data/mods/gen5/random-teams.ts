@@ -1,6 +1,7 @@
 /* eslint max-len: ["error", 240] */
 
 import RandomGen6Teams from '../gen6/random-teams';
+import {toID} from '../../../sim/dex';
 
 export class RandomGen5Teams extends RandomGen6Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {
@@ -341,7 +342,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (
 						movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')
 					) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
-					(species.requiredMove && movePool.includes(this.dex.toID(species.requiredMove))))
+					(species.requiredMove && movePool.includes(toID(species.requiredMove))))
 				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'judgment' && moveid !== 'sleeptalk') {
@@ -411,7 +412,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				rejectAbility = false;
 				if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
-					rejectAbility = !counter[this.dex.toID(ability)];
+					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Anger Point' || ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
 				} else if (ability === 'Chlorophyll') {

@@ -35,7 +35,6 @@ declare global {
 	const Condition: DataType.Condition;
 	const RuleTable: DataType.RuleTable;
 	const Species: DataType.Species;
-	const Tools: DataType.Tools;
 	const TypeInfo: DataType.TypeInfo;
 	const toID: typeof Dex.toID;
 }
