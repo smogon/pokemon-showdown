@@ -197,7 +197,7 @@ Contributors
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Mia A. [mia-pi] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
-- Spandan Punwatkar [spandan]- Development
+- Spandan Punwatkar [Spandan]- Development
 - Waleed Hassan [jetou] - Development
 
 Special thanks
