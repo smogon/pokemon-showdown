@@ -5,8 +5,6 @@
 'use strict';
 const YoutubeInterface = require('../../../.server-dist/chat-plugins/youtube').YoutubeInterface;
 const assert = require('../../assert').strict;
-const Config = require('../../../.server-dist/config-loader').load();
-Config.nofswriting = true;
 
 describe(`Youtube features`, function () {
 	it.skip(`should correctly add channels to the database`, async function () {
