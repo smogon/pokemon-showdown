@@ -609,7 +609,7 @@ export abstract class BasicRoom {
 		}
 		entry = `|${ucType}|${entry}`;
 		if (this.batchJoins) {
-			this.log.broadcastBuffer += entry;
+			this.log.broadcastBuffer += entry + '\n';
 
 			if (!this.reportJoinsInterval) {
 				this.reportJoinsInterval = setTimeout(
