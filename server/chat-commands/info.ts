@@ -427,7 +427,7 @@ export const commands: ChatCommands = {
 
 	checkchallenges(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('ban', null, room)) return false;
+		if (!user.can('addhtml', null, room) && !this.can('ban', null, room)) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
 			this.errorReply(`This command must be broadcast:`);
@@ -464,7 +464,7 @@ export const commands: ChatCommands = {
 		}
 		this.sendReplyBox(challenges.join(`<br />`));
 	},
-	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: @ # &`],
+	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: * @ # &`],
 
 	/*********************************************************
 	 * Client fallback
