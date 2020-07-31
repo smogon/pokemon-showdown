@@ -30,6 +30,7 @@ function getAlias(roomid: RoomID, key: string) {
 
 export const commands: ChatCommands = {
 	addfaq(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('ban', null, room)) return false;
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
@@ -53,10 +54,11 @@ export const commands: ChatCommands = {
 		roomFaqs[room.roomid][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
-		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
+		this.privateModAction(`${user.name} added a FAQ for '${topic}'`);
 		this.modlog('RFAQ', null, `added '${topic}'`);
 	},
 	removefaq(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('ban', null, room)) return false;
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -72,10 +74,11 @@ export const commands: ChatCommands = {
 		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
-		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
+		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
 	},
 	addalias(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('ban', null, room)) return false;
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -92,12 +95,13 @@ export const commands: ChatCommands = {
 		}
 		roomFaqs[room.roomid][alias] = `>${topic}`;
 		saveRoomFaqs();
-		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.privateModAction(`${user.name} added an alias for '${topic}': ${alias}`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
 	viewfaq: 'roomfaq',
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
 		let topic: string = toID(target);
 		if (topic === 'constructor') return false;

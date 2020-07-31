@@ -2,7 +2,7 @@
  * Gen 2 moves
  */
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		desc: "The user recovers 1/2 the HP lost by the target, rounded down. If the target has a substitute, this move misses.",
@@ -65,7 +65,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "The user spends two or three turns locked into this move and then, on the second or third turn after using this move, the user attacks the opponent, inflicting double the damage in HP it lost during those turns. If the user is prevented from moving during this move's use, the effect ends. This move does not ignore type immunity.",
 		shortDesc: "Waits 2-3 turns; deals double the damage taken.",
-		effect: {
+		condition: {
 			duration: 3,
 			durationCallback(target, source, effect) {
 				return this.random(3, 5);
@@ -153,7 +153,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		beforeTurnCallback() {},
 		onTryHit() {},
-		effect: {},
+		condition: {},
 		priority: -1,
 	},
 	crabhammer: {
@@ -167,7 +167,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	curse: {
 		inherit: true,
 		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage, unless the user's Attack and Defense stats are both at stage 6. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if the target is already affected or has a substitute.",
-		effect: {
+		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'Curse', '[of] ' + source);
 			},
@@ -195,7 +195,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			return source.status !== 'slp';
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
 				if (type === 'sandstorm') return false;
@@ -236,7 +236,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	encore: {
 		inherit: true,
 		desc: "For 3 to 6 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Metronome, Mimic, Mirror Move, Sketch, Sleep Talk, Struggle, or Transform.",
-		effect: {
+		condition: {
 			durationCallback() {
 				return this.random(3, 7);
 			},
@@ -307,7 +307,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			return source.status !== 'slp';
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder' || move.id === 'whirlwind') {
@@ -335,7 +335,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Raises the user's chance for a critical hit by 1 stage. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 		shortDesc: "Raises the user's critical hit ratio by 1.",
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
@@ -414,7 +414,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	leechseed: {
 		inherit: true,
 		onHit() {},
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
@@ -441,7 +441,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "For 5 turns, the user and its party members have their Special Defense doubled. Critical hits ignore this effect. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, the user's party has doubled Sp. Def.",
-		effect: {
+		condition: {
 			duration: 5,
 			// Sp. Def boost applied directly in stat calculation
 			onStart(side) {
@@ -457,7 +457,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "The next accuracy check against the target succeeds. The target will still avoid Earthquake, Fissure, and Magnitude if it is using Fly. If the target leaves the field using Baton Pass, the replacement remains under this effect. This effect ends when the target leaves the field or an accuracy check is done against it.",
 		shortDesc: "The next move will not miss the target.",
-		effect: {
+		condition: {
 			duration: 2,
 			onSourceAccuracy(accuracy, target, source, move) {
 				if (move && source === this.effectData.target && target === this.effectData.source) return true;
@@ -515,7 +515,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		beforeTurnCallback() {},
 		onTryHit() {},
-		effect: {},
+		condition: {},
 		priority: -1,
 	},
 	mirrormove: {
@@ -568,7 +568,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	nightmare: {
 		inherit: true,
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				if (pokemon.status !== 'slp') {
@@ -673,7 +673,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "For 5 turns, the user and its party members have their Defense doubled. Critical hits ignore this effect. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, the user's party has doubled Def.",
-		effect: {
+		condition: {
 			duration: 5,
 			// Defense boost applied directly in stat calculation
 			onStart(side) {
@@ -801,7 +801,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Sets up a hazard on the opposing side of the field, causing each opposing Pokemon that switches in to lose 1/8 of their maximum HP, rounded down, unless it is a Flying-type Pokemon. Fails if the effect is already active on the opposing side. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully.",
 		shortDesc: "Hurts grounded foes on switch-in. Max 1 layer.",
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				if (!this.effectData.layers || this.effectData.layers === 0) {
@@ -844,7 +844,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	substitute: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);

@@ -310,6 +310,13 @@ exports.laddermodchat = false;
 exports.forcetimer = false;
 
 /**
+ * force register ELO - unregistered users cannot search for ladder battles
+ * in formats where their ELO is at or above this value.
+ * @type {false | number}
+ */
+exports.forceregisterelo = false;
+
+/**
  * backdoor - allows Pokemon Showdown system operators to provide technical
  *            support for your server
  *   This backdoor gives system operators (such as Zarel) console admin
@@ -486,7 +493,8 @@ exports.chatlogreader = 'fs';
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
  *     - editroom: Editing properties of rooms
  *     - editprivacy: Set modjoin/privacy only for battles
- *     - ban: Banning and unbanning.
+ *     - globalban: Banning and unbanning from the entire server.
+ *     - ban: Banning and unbanning in rooms.
  *     - mute: Muting and unmuting.
  *     - lock: locking (ipmute) and unlocking.
  *     - receivemutedpms: Receive PMs from muted users.
@@ -494,7 +502,8 @@ exports.chatlogreader = 'fs';
  *     - ip: IP checking.
  *     - alts: Alt checking.
  *     - modlog: view the moderator logs.
- *     - broadcast: Broadcast informational commands.
+ *     - show: Show command output to other users.
+ *     - showmedia: Show images and videos to other users.
  *     - declare: /declare command.
  *     - announce: /announce command.
  *     - modchat: Set modchat.
@@ -509,19 +518,17 @@ exports.chatlogreader = 'fs';
  */
 exports.grouplist = [
 	{
-		symbol: '~',
+		symbol: '&',
 		id: "admin",
 		name: "Administrator",
-		root: true,
-		globalonly: true,
-	},
-	{
-		symbol: '&',
-		id: "leader",
-		name: "Leader",
 		inherit: '@',
 		jurisdiction: 'u',
-		promote: 'u',
+		globalonly: true,
+
+		console: true,
+		bypassall: true,
+		lockdown: true,
+		promote: '&u',
 		roomowner: true,
 		roombot: true,
 		roommod: true,
@@ -531,12 +538,12 @@ exports.grouplist = [
 		rangeban: true,
 		makeroom: true,
 		editroom: true,
+		editprivacy: true,
 		potd: true,
 		disableladder: true,
-		globalonly: true,
+		gdeclare: true,
 		gamemanagement: true,
 		exportinputlog: true,
-		editprivacy: true,
 	},
 	{
 		symbol: '#',
@@ -544,14 +551,32 @@ exports.grouplist = [
 		name: "Room Owner",
 		inherit: '@',
 		jurisdiction: 'u',
+		roomonly: true,
+
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
 		editroom: true,
 		declare: true,
 		addhtml: true,
-		roomonly: true,
 		gamemanagement: true,
+	},
+	{
+		symbol: '*',
+		id: "bot",
+		name: "Bot",
+		inherit: '%',
+		jurisdiction: 'u',
+		globalGroupInPersonalRoom: '*',
+
+		addhtml: true,
+		declare: true,
+		bypassafktimer: true,
+
+		ip: false,
+		globalban: false,
+		lock: false,
+		alts: false,
 	},
 	{
 		symbol: '\u2605',
@@ -559,22 +584,12 @@ exports.grouplist = [
 		name: "Host",
 		inherit: '@',
 		jurisdiction: 'u',
-		declare: true,
-		addhtml: true,
-		modchat: true,
 		roomonly: true,
+
+		declare: true,
+		modchat: true,
 		gamemanagement: true,
 		joinbattle: true,
-	},
-	{
-		symbol: '*',
-		id: "bot",
-		name: "Bot",
-		inherit: '@',
-		jurisdiction: 'u',
-		declare: true,
-		addhtml: true,
-		bypassafktimer: true,
 	},
 	{
 		symbol: '@',
@@ -582,9 +597,12 @@ exports.grouplist = [
 		name: "Moderator",
 		inherit: '%',
 		jurisdiction: 'u',
+
+		globalban: true,
 		ban: true,
-		modchatall: true,
+		modchat: 'a',
 		roomvoice: true,
+		roomwhitelist: true,
 		forcerename: true,
 		ip: true,
 		alts: '@u',
@@ -597,10 +615,12 @@ exports.grouplist = [
 		name: "Driver",
 		inherit: '+',
 		jurisdiction: 'u',
+		globalGroupInPersonalRoom: '@',
+
 		announce: true,
-		warn: '\u2606u',
+		warn: '\u2605u',
 		kick: true,
-		mute: '\u2606u',
+		mute: '\u2605u',
 		lock: true,
 		forcerename: true,
 		timer: true,
@@ -619,22 +639,29 @@ exports.grouplist = [
 		id: "player",
 		name: "Player",
 		inherit: '+',
+		battleonly: true,
+
 		roomvoice: true,
 		modchat: true,
-		roomonly: true,
+		editprivacy: true,
+		gamemanagement: true,
+		tournaments: true,
 		joinbattle: true,
 		nooverride: true,
-		editprivacy: true,
-		exportinputlog: true,
 	},
 	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
-		alts: 's',
-		broadcast: true,
+
+		altsself: true,
+		makegroupchat: true,
+		joinbattle: true,
+		show: true,
 		showmedia: true,
+		exportinputlog: true,
+		importinputlog: true,
 	},
 	{
 		symbol: 'whitelist',
@@ -642,13 +669,15 @@ exports.grouplist = [
 		name: "Whitelist",
 		inherit: ' ',
 		roomonly: true,
-		alts: 's',
-		broadcast: true,
-		importinputlog: true,
+		altsself: true,
+		show: true,
 		showmedia: true,
+		exportinputlog: true,
+		importinputlog: true,
 	},
 	{
 		symbol: ' ',
+		ipself: true,
 	},
 	{
 		name: 'Locked',

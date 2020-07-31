@@ -15,171 +15,24 @@
  */
 
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
+const HOSTS_FILE = 'config/hosts.csv';
+const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
 import {FS} from '../lib/fs';
+
+
+export interface AddressRange {
+	minIP: number;
+	maxIP: number;
+	host?: string;
+}
 
 export const IPTools = new class {
 	readonly dnsblCache = new Map<string, string | null>([
 		['127.0.0.1', null],
 	]);
 
-	readonly proxyHosts = new Set([
-		'ablenetvps.ne.jp',
-		'alexhost.md',
-		'amazonaws.com',
-		'anchorfree.com',
-		'aquanetworks.co.uk',
-		'aruba.it',
-		'arubacloud.com',
-		'arubacloud.de',
-		'arubacloud.fr',
-		'as29550.net',
-		'avenueoftor.com',
-		'bitcoinwebhosting.net',
-		'blazingfast.io',
-		'bnewstoday.com',
-		'brightnewfutures.net',
-		'cd-n.net',
-		'cdn77.com',
-		'choopa.com',
-		'choopa.net',
-		'cloudhosting.lv',
-		'cloudmosa.com',
-		'clues.ro',
-		'colocenter.nl',
-		'colocrossing.com',
-		'contaboserver.net',
-		'croweb.host',
-		'cyberghost.ro',
-		'cyberghostvpn.com',
-		'darkweb.love',
-		'deltahost-ptr',
-		'dockerapp.io',
-		'edis.at',
-		'elostech.cz',
-		'enahost.com',
-		'ezzi.net',
-		'fantastic-host.net',
-		'forpsi.net',
-		'freedome-vpn.net',
-		'frootvpn.com',
-		'galaxyhostplus.com',
-		'gigenet.com',
-		'gthost.com',
-		'h2dns.net',
-		'hide.me',
-		'hkserverworks.com',
-		'hostnottingham.co.uk',
-		'hostwindsdns.com',
-		'hvvc.us',
-		'hwng.net',
-		'ihc.ru',
-		'ipvanish.com',
-		'linode.com',
-		'ltt.ly',
-		'lunanode.com',
-		'm247.com',
-		'mediateam.fi',
-		'midphase.com',
-		'mivocloud.com',
-		'mixskilled.com',
-		'netdive.xyz',
-		'networktransit.net',
-		'northamericancoax.com',
-		'northghost.com',
-		'novalayer.net',
-		'nu-s.net',
-		'op-net.com',
-		'openvirtuals.com',
-		'opera.com',
-		'ovpn.com',
-		'pacswitch.com',
-		'poneytelecom.eu',
-		'primegraf.com.br',
-		'privacyfoundation.ch',
-		'protectedgroup.com',
-		'psychz.net',
-		'quadranet.com',
-		'ra4wvpn.com',
-		'redstation.co.uk',
-		'redstation.net.uk',
-		'samsnuk.info',
-		'scaleway.com',
-		'servercontrol.com.au',
-		'serverprofi24.com',
-		'shinyrimsinc.com',
-		'shpv.eu',
-		'sl-reverse.com',
-		'smartwebbrands.com',
-		'softlayer.com',
-		'stephost.md',
-		'szervernet.hu',
-		'terrahost.no',
-		'time4vps.eu',
-		'trance.fm',
-		'tunnelbear.com',
-		'tzulo.com',
-		'ubiquityservers.com',
-		'uaservers.net',
-		'ukservers.com',
-		'unmetered.zone',
-		'upcloud.host',
-		'vilayer.com',
-		'voxility.com',
-		'voxility.net',
-		'vpnbook.com',
-		'vultr.com',
-		'worldstream.nl',
-		'your-server.de',
-		'zare.com',
-		'zenmate.com',
-	]);
-	readonly residentialHosts = new Set([
-		'bell.ca',
-		'bellmts.net',
-		'bellsouth.net',
-		'cgocable.net',
-		'charter.com',
-		'comcast.net',
-		'comcast.net.res-nohost',
-		'comcastbusiness.net',
-		'cornell.edu',
-		'cox.net',
-		'embarqhsd.net',
-		'frontiernet.net',
-		'hargray.net',
-		'itctel.com',
-		'mlgc.com',
-		'netins.net',
-		'optonline.net',
-		'odu.edu',
-		'osu.edu',
-		'qwest.net',
-		'rogers.com',
-		'rr.com',
-		'sbcglobal.net',
-		'shawcable.net',
-		'sonic.net',
-		'sourcecable.net',
-		'unc.edu',
-		'verizon.net',
-		'videotron.ca',
-		'virginmobile.ca',
-		'vt.edu',
-		'wayport.net',
-		'windstream.net',
-	]);
-	readonly mobileHosts = new Set([
-		'myvzw.com',
-		'mycingular.net',
-		'spcsdns.net',
-		'tmodns.net',
-		'tmobile.mobile-nohost',
-		'tele2.se',
-		'ideacellular.mobile-nohost',
-		'att.net',
-	]);
 	readonly connectionTestCache = new Map<string, boolean>();
 
 	async lookup(ip: string) {
@@ -255,59 +108,66 @@ export const IPTools = new class {
 		return num;
 	}
 
-	getCidrPattern(cidr: string): [number, number] | null {
+	numberToIP(num: number) {
+		const ipParts: string[] = [];
+		while (num) {
+			const part = num % 256;
+			num = (num - part) / 256;
+			ipParts.unshift(part.toString());
+		}
+		return ipParts.join('.');
+	}
+
+	getCidrRange(cidr: string): AddressRange | null {
 		if (!cidr) return null;
 		const index = cidr.indexOf('/');
 		if (index <= 0) {
-			return [IPTools.ipToNumber(cidr), IPTools.ipToNumber(cidr)];
+			return {
+				minIP: IPTools.ipToNumber(cidr),
+				maxIP: IPTools.ipToNumber(cidr),
+			};
 		}
 		const low = IPTools.ipToNumber(cidr.slice(0, index));
 		const bits = parseInt(cidr.slice(index + 1));
 		// fun fact: IPTools fails if bits <= 1 because JavaScript
 		// does << with signed int32s.
 		const high = low + (1 << (32 - bits)) - 1;
-		return [low, high];
+		return {minIP: low, maxIP: high};
 	}
-	getRangePattern(range: string): [number, number] | null {
+	stringToRange(range: string): AddressRange | null {
 		if (!range) return null;
 		const index = range.indexOf(' - ');
 		if (index <= 0) {
-			return [IPTools.ipToNumber(range), IPTools.ipToNumber(range)];
+			return range.includes('/') ? IPTools.getCidrRange(range) : {
+				minIP: IPTools.ipToNumber(range),
+				maxIP: IPTools.ipToNumber(range),
+			};
 		}
-		const low = IPTools.ipToNumber(range.slice(0, index));
-		const high = IPTools.ipToNumber(range.slice(index + 3));
-		return [low, high];
+		const minIP = IPTools.ipToNumber(range.slice(0, index));
+		const maxIP = IPTools.ipToNumber(range.slice(index + 3));
+		return {minIP, maxIP};
 	}
-	getPattern(str: string): [number, number] | null {
-		if (!str) return null;
-		if (str.indexOf(' - ') > 0) return IPTools.getRangePattern(str);
-		return IPTools.getCidrPattern(str);
+
+	ipSort(a: string, b: string) {
+		let i = 0;
+		let diff = 0;
+		const aParts = a.split('.');
+		const bParts = b.split('.');
+		while (diff === 0) {
+			diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
+			i++;
+		}
+		return diff;
 	}
-	cidrToPattern(cidr: string | string[]): [number, number][] {
-		if (!cidr || !cidr.length) {
-			return [];
-		}
-		if (typeof cidr === 'string') {
-			const pattern = IPTools.getCidrPattern(cidr);
-			if (!pattern) return [];
-			return [pattern];
-		}
-		return cidr.map(IPTools.getCidrPattern).filter(x => x) as [number, number][];
-	}
-	rangeToPattern(range: string | string[]): [number, number][] {
-		if (!range || !range.length) {
-			return [];
-		}
-		if (typeof range === 'string') {
-			const pattern = IPTools.getRangePattern(range);
-			if (!pattern) return [];
-			return [pattern];
-		}
-		return range.map(IPTools.getRangePattern).filter(x => x) as [number, number][];
-	}
-	checkPattern(patterns: [number, number][], num: number) {
+
+	/******************************
+	 * Range management functions *
+	 ******************************/
+
+
+	checkPattern(patterns: AddressRange[], num: number) {
 		for (const pattern of patterns) {
-			if (num >= pattern[0] && num <= pattern[1]) {
+			if (num >= pattern.minIP && num <= pattern.maxIP) {
 				return true;
 			}
 		}
@@ -319,20 +179,207 @@ export const IPTools = new class {
 	 * ranges. The checker function returns true if its passed IP is
 	 * in the range.
 	 */
-	checker(ranges: string | string[]) {
-		if (!ranges || !ranges.length) return () => false;
-		let patterns: [number, number][] = [];
-		if (typeof ranges === 'string') {
-			const rangePatterns = IPTools.getPattern(ranges);
-			if (rangePatterns) patterns = [rangePatterns];
+	checker(rangeString: string | string[]) {
+		if (!rangeString || !rangeString.length) return () => false;
+		let ranges: AddressRange[] = [];
+		if (typeof rangeString === 'string') {
+			const rangePatterns = IPTools.stringToRange(rangeString);
+			if (rangePatterns) ranges = [rangePatterns];
 		} else {
-			patterns = ranges.map(IPTools.getPattern).filter(x => x) as [number, number][];
+			ranges = rangeString.map(IPTools.stringToRange).filter(x => x) as AddressRange[];
 		}
-		return (ip: string) => IPTools.checkPattern(patterns, IPTools.ipToNumber(ip));
+		return (ip: string) => IPTools.checkPattern(ranges, IPTools.ipToNumber(ip));
+	}
+
+	/**
+	 * Proxy and host management functions
+	 */
+	ranges: AddressRange[] = [];
+	singleIPOpenProxies: Set<string> = new Set();
+	proxyHosts: Set<string> = new Set();
+	residentialHosts: Set<string> = new Set();
+	mobileHosts: Set<string> = new Set();
+	async loadHostsAndRanges() {
+		const data = await FS(HOSTS_FILE).readIfExists() + await FS(PROXIES_FILE).readIfExists();
+		const rows = data.split('\n');
+		const ranges = [];
+		for (const row of rows) {
+			if (!row) continue;
+			const [type, hostOrLowIP, highIP, host] = row.split(',');
+			if (!hostOrLowIP) continue;
+			switch (type) {
+			case 'IP':
+				IPTools.singleIPOpenProxies.add(hostOrLowIP);
+				break;
+			case 'HOST':
+				IPTools.proxyHosts.add(hostOrLowIP);
+				break;
+			case 'RESIDENTIAL':
+				IPTools.residentialHosts.add(hostOrLowIP);
+				break;
+			case 'MOBILE':
+				IPTools.mobileHosts.add(hostOrLowIP);
+				break;
+			case 'RANGE':
+				if (!host) continue;
+				const range = {
+					minIP: IPTools.ipToNumber(hostOrLowIP),
+					maxIP: IPTools.ipToNumber(highIP),
+					host: IPTools.urlToHost(host),
+				};
+				if (range.maxIP < range.minIP) throw new Error(`Bad range at ${hostOrLowIP}.`);
+				ranges.push(range);
+				break;
+			}
+		}
+		IPTools.ranges = ranges;
+		IPTools.sortRanges();
+	}
+
+	saveHostsAndRanges() {
+		let hostsData = '';
+		let proxiesData = '';
+		for (const ip of IPTools.singleIPOpenProxies) {
+			proxiesData += `IP,${ip}\n`;
+		}
+		for (const host of IPTools.proxyHosts) {
+			proxiesData += `HOST,${host}\n`;
+		}
+		for (const host of IPTools.residentialHosts) {
+			hostsData += `RESIDENTIAL,${host}\n`;
+		}
+		for (const host of IPTools.mobileHosts) {
+			hostsData += `MOBILE,${host}\n`;
+		}
+		IPTools.sortRanges();
+		for (const range of IPTools.ranges) {
+			const data = `RANGE,${IPTools.numberToIP(range.minIP)},${IPTools.numberToIP(range.maxIP)}${range.host ? `,${range.host}` : ``}\n`;
+			if (range.host?.endsWith('.proxy-nohost')) {
+				proxiesData += data;
+			} else {
+				hostsData += data;
+			}
+		}
+		void FS(HOSTS_FILE).write(hostsData);
+		void FS(PROXIES_FILE).write(proxiesData);
+	}
+
+	addOpenProxies(ips: string[]) {
+		for (const ip of ips) {
+			IPTools.singleIPOpenProxies.add(ip);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	addProxyHosts(hosts: string[]) {
+		for (const host of hosts) {
+			IPTools.proxyHosts.add(host);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	addMobileHosts(hosts: string[]) {
+		for (const host of hosts) {
+			IPTools.mobileHosts.add(host);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	addResidentialHosts(hosts: string[]) {
+		for (const host of hosts) {
+			IPTools.residentialHosts.add(host);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	removeOpenProxies(ips: string[]) {
+		for (const ip of ips) {
+			IPTools.singleIPOpenProxies.delete(ip);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	removeResidentialHosts(hosts: string[]) {
+		for (const host of hosts) {
+			IPTools.residentialHosts.delete(host);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	removeProxyHosts(hosts: string[]) {
+		for (const host of hosts) {
+			IPTools.proxyHosts.delete(host);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	removeMobileHosts(hosts: string[]) {
+		for (const host of hosts) {
+			IPTools.mobileHosts.delete(host);
+		}
+		return IPTools.saveHostsAndRanges();
+	}
+
+	checkRangeConflicts(insertion: AddressRange, sortedRanges: AddressRange[], widen?: boolean) {
+		if (insertion.maxIP < insertion.minIP) {
+			throw new Error(
+				`Invalid data for address range ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})`
+			);
+		}
+
+		let iMin = 0;
+		let iMax = sortedRanges.length;
+		while (iMin < iMax) {
+			const i = Math.floor((iMax + iMin) / 2);
+			if (insertion.minIP > sortedRanges[i].minIP) {
+				iMin = i + 1;
+			} else {
+				iMax = i;
+			}
+		}
+		if (iMin < sortedRanges.length) {
+			const next = sortedRanges[iMin];
+			if (insertion.minIP === next.minIP && insertion.maxIP === next.maxIP) {
+				throw new Error(`The address range ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host}) already exists`);
+			}
+			if (insertion.minIP <= next.minIP && insertion.maxIP >= next.maxIP) {
+				if (widen) {
+					if (sortedRanges[iMin + 1]?.minIP <= insertion.maxIP) {
+						throw new Error("You can only widen one address range at a time.");
+					}
+					return true;
+				}
+				throw new Error(
+					`Too wide: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
+					`Intersects with: ${IPTools.numberToIP(next.minIP)}-${IPTools.numberToIP(next.maxIP)} (${next.host})`
+				);
+			}
+			if (insertion.maxIP >= next.minIP) {
+				throw new Error(
+					`Could not insert: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} ${insertion.host}\n` +
+					`Intersects with: ${IPTools.numberToIP(next.minIP)}-${IPTools.numberToIP(next.maxIP)} (${next.host})`
+				);
+			}
+		}
+		if (iMin > 0) {
+			const prev = sortedRanges[iMin - 1];
+			if (insertion.minIP >= prev.minIP && insertion.maxIP <= prev.maxIP) {
+				throw new Error(
+					`Too narrow: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
+					`Intersects with: ${IPTools.numberToIP(prev.minIP)}-${IPTools.numberToIP(prev.maxIP)} (${prev.host})`
+				);
+			}
+			if (insertion.minIP <= prev.maxIP) {
+				throw new Error(
+					`Could not insert: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
+					`Intersects with: ${IPTools.numberToIP(prev.minIP)}-${IPTools.numberToIP(prev.maxIP)} (${prev.host})`
+				);
+			}
+		}
 	}
 
 	/*********************************************************
-	 * Datacenter parsing
+	 * Range handling functions
 	 *********************************************************/
 
 	urlToHost(url: string) {
@@ -344,22 +391,28 @@ export const IPTools = new class {
 		return url;
 	}
 
-	datacenters: [number, number, string][] = [];
-	async loadDatacenters() {
-		const data = await FS('config/datacenters.csv').readIfExists();
-		const rows = data.split('\n');
-		const datacenters: [number, number, string][] = [];
-		for (const row of rows) {
-			if (!row) continue;
-			const rowSplit = row.split(',');
-			const rowData: [number, number, string] = [
-				IPTools.ipToNumber(rowSplit[0]),
-				IPTools.ipToNumber(rowSplit[1]),
-				IPTools.urlToHost(rowSplit[3]),
-			];
-			datacenters.push(rowData);
+	sortRanges() {
+		IPTools.ranges.sort((a, b) => a.minIP - b.minIP);
+	}
+
+
+	getRange(minIP: number, maxIP: number) {
+		for (const range of IPTools.ranges) {
+			if (range.minIP === minIP && range.maxIP === maxIP) return range;
 		}
-		IPTools.datacenters = datacenters;
+	}
+
+	addRange(range: AddressRange) {
+		if (IPTools.getRange(range.minIP, range.maxIP)) {
+			IPTools.removeRange(range.minIP, range.maxIP);
+		}
+		IPTools.ranges.push(range);
+		return IPTools.saveHostsAndRanges();
+	}
+
+	removeRange(minIP: number, maxIP: number) {
+		IPTools.ranges = IPTools.ranges.filter(dc => dc.minIP !== minIP || dc.maxIP !== maxIP);
+		return IPTools.saveHostsAndRanges();
 	}
 
 	/**
@@ -374,130 +427,11 @@ export const IPTools = new class {
 			}
 
 			const ipNumber = IPTools.ipToNumber(ip);
-			if (IPTools.checkPattern(rangeOVHres, ipNumber)) {
-				resolve('ovh.fr.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeWindres, ipNumber)) {
-				resolve('wind.it.res-nohost');
-				return;
-			}
-			for (const row of IPTools.datacenters) {
-				if (ipNumber >= row[0] && ipNumber <= row[1]) {
-					resolve(row[2] + '.proxy-nohost');
+			for (const range of IPTools.ranges) {
+				if (ipNumber >= range.minIP && ipNumber <= range.maxIP) {
+					resolve(range.host);
 					return;
 				}
-			}
-			if (
-				ip.startsWith('106.76.') || ip.startsWith('106.77.') || ip.startsWith('106.78.') ||
-				ip.startsWith('106.79.') || ip.startsWith('112.110.') || ip.startsWith('27.97.') ||
-				ip.startsWith('49.15.') || ip.startsWith('49.14.') || ip.startsWith('1.187.')
-			) {
-				resolve('ideacellular.mobile-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeTmobile, ipNumber) || ip.startsWith('149.254.')) {
-				resolve('tmobile.mobile-nohost');
-				return;
-			}
-			if (
-				IPTools.checkPattern(rangeCenet, ipNumber) || IPTools.checkPattern(rangeQlded, ipNumber) ||
-				ip.startsWith('153.107.') || IPTools.checkPattern(rangeCathednet, ipNumber)
-			) {
-				resolve('edu.au.res-nohost');
-				return;
-			}
-			if (ip.startsWith('179.7.')) {
-				resolve('claro.com.pe.mobile-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeTelefonica, ipNumber)) {
-				resolve('telefonica.net.pe.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('180.191.') || ip.startsWith('112.198.')) {
-				resolve('globe.com.ph.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('218.188.') || ip.startsWith('218.189.')) {
-				resolve('hgc.com.hk.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('172.242.') || ip.startsWith('172.243.')) {
-				resolve('viasat.com.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('201.141.')) {
-				resolve('cablevision.net.mx.mobile-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeStarhub, ipNumber)) {
-				resolve('starhub.com.mobile-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeM1, ipNumber)) {
-				resolve('m1.com.sg.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('202.12.94.') || ip.startsWith('202.12.95.')) {
-				resolve('nyp.edu.sg.res-nohost');
-				return;
-			}
-			if (ip.startsWith('64.150.')) {
-				resolve('illinois.net.res-nohost');
-				return;
-			}
-			if (ip.startsWith('147.129.')) {
-				resolve('ithaca.edu.res-nohost');
-				return;
-			}
-			if (ip.startsWith('189.204.')) {
-				resolve('bestel.com.mx.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangePsci, ipNumber)) {
-				resolve('psci.net.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeOcde, ipNumber)) {
-				resolve('ocde.us.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeIhet, ipNumber)) {
-				resolve('iu.edu.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeTimcelular, ipNumber)) {
-				resolve('tim.com.br.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('121.54.')) {
-				resolve('smart.com.ph.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('179.52.') || ip.startsWith('179.53.')) {
-				resolve('codetel.net.do.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('46.16.36.')) {
-				resolve('anchorfree.proxy-nohost');
-				return;
-			}
-			if (
-				ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') ||
-				ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') ||
-				ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') ||
-				ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') ||
-				ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') ||
-				ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') ||
-				ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')
-			) {
-				resolve('anchorfree.proxy-nohost');
-				return;
-			}
-			if (ip === '127.0.0.1') {
-				resolve('localhost');
-				return;
 			}
 			dns.reverse(ip, (err, hosts) => {
 				if (err) {
@@ -507,14 +441,14 @@ export const IPTools = new class {
 				if (!hosts || !hosts[0]) {
 					if (ip.startsWith('50.')) {
 						resolve('comcast.net.res-nohost');
-					} else if (IPTools.checkPattern(rangeTelstra, ipNumber)) {
-						resolve('telstra.net.res-nohost');
+					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP) {
+						resolve(telstraRange.host);
 					} else {
 						this.testConnection(ip, result => {
 							if (result) {
-								resolve('' + ip.split('.').slice(0, 2).join('.') + '.proxy-nohost');
+								resolve(`${ip.split('.').slice(0, 2).join('.')}.proxy-nohost`);
 							} else {
-								resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
+								resolve(`${ip.split('.').slice(0, 2).join('.')}.unknown-nohost`);
 							}
 						});
 					}
@@ -625,48 +559,7 @@ export const IPTools = new class {
 			// OVH
 			return 'proxy';
 		}
-		if ([
-			'114.161.93.156', '121.129.20.202', '122.45.113.125', '128.68.107.201', '150.31.37.122', '176.202.180.98',
-			'184.22.240.178', '185.127.25.192', '185.234.219.117', '199.249.230.69', '39.111.5.170', '58.124.244.202',
-			'59.8.242.27', '61.121.64.114', '78.85.106.214', '89.110.59.95', '38.132.116.198', '38.132.120.92',
-			'113.197.177.61', '38.132.120.92', '126.227.135.176', '171.251.45.151', '111.105.163.211', '119.30.32.155',
-			'176.124.96.196', '93.87.75.118', '87.247.111.222', '244.242.108.51', '72.252.4.161', '78.85.17.243',
-			'80.250.14.236', '83.142.197.99', '89.147.80.2', '91.197.189.62', '103.78.54.180', '106.120.14.39',
-			'109.122.80.234', '115.85.65.146', '118.97.55.65', '185.217.160.184', '200.35.43.89', '202.62.61.119',
-			'203.83.183.11', '84.245.104.164', '158.195.148.169', '31.168.162.22', '62.12.114.142', '157.157.87.135',
-			'40.71.227.101', '119.42.118.73', '202.40.183.234', '113.11.136.28', '222.72.38.46', '185.141.10.67',
-			'24.52.170.119', '62.140.252.72', '94.236.198.160', '182.52.51.41', '187.38.170.94', '109.185.143.169',
-			'84.41.29.225', '101.255.64.194', '210.16.84.182', '203.192.208.72', '201.182.146.14', '189.45.42.149',
-			'89.135.51.39', '82.117.234.189', '109.105.195.250', '61.9.48.99', '91.103.31.45', '213.5.194.3',
-			'185.121.202.51', '175.195.33.102', '59.120.229.102', '79.106.165.238', '217.210.157.135', '101.108.175.93',
-			'181.210.16.130', '81.91.144.53', '200.89.174.102', '85.114.96.94', '81.30.10.177', '81.162.199.249',
-			'91.210.59.145', '88.87.231.132', '109.238.220.130', '167.86.94.107', '104.244.78.55', '92.62.139.103',
-			'89.28.31.85', '31.135.99.52', '193.187.82.74', '178.215.86.254', '176.124.146.59', '79.143.225.152',
-			'95.140.30.148', '94.124.193.244', '95.31.130.96', '89.148.195.90', '185.34.17.54', '185.251.33.194',
-			'182.52.51.20', '84.124.28.56', '93.157.196.90', '150.242.19.129', '187.44.149.99', '103.217.218.29',
-			'193.93.48.21', '31.129.166.94', '217.17.111.107', '1.20.100.45', '109.248.62.207', '96.3.212.158',
-			'95.87.127.133', '78.152.109.186', '96.77.77.53', '96.89.102.21', '86.57.175.61', '50.224.238.78',
-			'67.78.120.18', '208.77.130.238', '23.25.96.205', '195.81.20.71', '66.208.117.227', '202.150.148.218 ',
-			'188.244.21.196', '188.138.250.83', '188.75.186.162', '84.242.183.150', '103.65.194.2', '109.111.243.206',
-			'115.21.84.115', '96.80.89.69', '118.168.195.232', '126.37.49.56', '60.112.178.85', '130.105.53.178',
-			'149.34.2.186', '165.73.105.51', '210.3.160.230', '219.241.2.151', '222.5.46.99', '73.212.251.26',
-			'59.133.28.51', '60.66.0.14', '84.55.113.174', '85.67.25.112', '94.24.231.50', '89.239.96.118',
-			'124.97.24.88', '74.82.232.201', '121.103.230.148', '126.216.8.82', '189.208.146.156', '77.89.251.138',
-			'185.244.172.3', '31.46.32.20', '93.190.58.4', '78.62.219.250', '213.108.160.85', '93.125.109.222',
-			'94.156.119.32', '213.97.242.43', '193.138.63.157', '193.138.63.148', '83.175.166.234', '116.0.54.30',
-			'124.41.211.251', '81.161.205.4', '136.179.21.69', '213.226.232.120', '39.111.140.55', '122.1.48.68',
-			'109.196.15.142', '110.232.80.234', '122.54.134.175', '125.25.165.97', '101.51.141.20', '159.224.220.63',
-			'176.227.188.16', '181.10.210.99', '186.42.252.218', '187.44.254.62', '188.234.214.221', '200.105.209.170',
-			'201.20.116.26', '201.219.216.131', '223.25.14.66', '37.235.153.214', '5.39.165.20', '36.84.59.53',
-			'50.205.151.218', '50.253.211.61', '77.121.5.131', '77.37.208.119', '79.101.105.74', '80.89.137.210',
-			'85.237.63.124', '86.101.159.121', '90.151.180.215', '92.234.72.248', '92.255.164.166', '95.161.196.146',
-			'80.59.233.178', '88.146.204.165', '158.58.197.227', '185.41.76.35', '212.170.49.70', '91.139.202.50',
-			'92.115.247.61', '95.65.89.96', '61.221.12.80', '210.217.18.70', '211.197.11.17', '178.20.137.178',
-			'137.63.71.51', '78.60.203.75', '188.186.4.177', '87.92.64.0', '88.119.43.142', '24.135.56.196',
-			'31.168.98.68', '78.62.214.242', '83.238.39.241', '84.22.63.122', '87.255.79.223', '46.55.25.191',
-			'91.181.235.31', '188.124.93.166', '84.236.2.166', '82.200.233.4', '60.68.175.196', '158.181.227.63',
-			'38.95.109.66', '113.177.27.217', '80.187.140.26',
-		].includes(ip)) {
+		if (this.singleIPOpenProxies.has(ip)) {
 			// single-IP open proxies
 			return 'proxy';
 		}
@@ -681,28 +574,10 @@ export const IPTools = new class {
 	}
 };
 
-const rangeTmobile = IPTools.cidrToPattern('172.32.0.0/11');
-const rangeCenet = IPTools.cidrToPattern('27.111.64.0/21');
-const rangeQlded = IPTools.cidrToPattern('203.104.0.0/20');
-const rangeCathednet = IPTools.cidrToPattern('180.95.40.0/21');
-const rangeTelefonica = IPTools.cidrToPattern([
-	'181.64.0.0/15', '190.235.0.0/17', '200.10.75.128/26', '200.37.0.0/16', '200.48.0.0/16', '200.60.128.0/18',
-]);
-const rangeStarhub = IPTools.cidrToPattern([
-	'27.125.128.0/18', '58.96.192.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23',
-]);
-const rangeTelstra = IPTools.cidrToPattern('101.160.0.0/11');
-const rangePsci = IPTools.cidrToPattern(['96.31.192.0/20', '209.239.96.0/20', '216.49.96.0/19']);
-const rangeOcde = IPTools.cidrToPattern(['104.249.64.0/18', '209.232.144.0/20', '216.100.88.0/21']);
-const rangeIhet = IPTools.cidrToPattern('199.8.0.0/16');
-const rangeTimcelular = IPTools.cidrToPattern('191.128.0.0/12');
-const rangeM1 = IPTools.cidrToPattern('119.56.64.0/18');
-
-const rangeOVHres = IPTools.rangeToPattern([
-	'109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255',
-]);
-const rangeWindres = IPTools.rangeToPattern([
-	'151.3.0.0 - 151.79.255.255', '151.81.0.0 - 151.84.255.255', '151.93.0.0 - 151.93.255.255', '151.95.0.0 - 151.95.255.255', '176.206.0.0 - 176.207.255.255',
-]);
+const telstraRange: AddressRange = {
+	minIP: IPTools.ipToNumber("101.160.0.0"),
+	maxIP: IPTools.ipToNumber("101.191.255.255"),
+	host: 'telstra.net.res-nohost',
+};
 
 export default IPTools;

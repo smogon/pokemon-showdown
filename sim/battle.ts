@@ -118,7 +118,7 @@ export class Battle {
 	activeTarget: Pokemon | null;
 
 	lastMove: ActiveMove | null;
-	lastMoveThisTurn: Move | null;
+	lastSuccessfulMoveThisTurn: ID | null;
 	lastMoveLine: number;
 	lastDamage: number;
 	abilityOrder: number;
@@ -141,6 +141,9 @@ export class Battle {
 	clampIntRange: (num: any, min?: number, max?: number) => number;
 
 	constructor(options: BattleOptions) {
+		this.log = [];
+		this.add('t:', Math.floor(Date.now() / 1000));
+
 		const format = options.format || Dex.getFormat(options.formatid, true);
 		this.format = format;
 		this.dex = Dex.forFormat(format);
@@ -174,7 +177,6 @@ export class Battle {
 		this.queue = new BattleQueue(this);
 		this.faintQueue = [];
 
-		this.log = [];
 		this.inputLog = [];
 		this.messageLog = [];
 		this.sentLogPos = 0;
@@ -200,7 +202,7 @@ export class Battle {
 
 		this.lastMove = null;
 		this.lastMoveLine = -1;
-		this.lastMoveThisTurn = null;
+		this.lastSuccessfulMoveThisTurn = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
 
@@ -300,10 +302,8 @@ export class Battle {
 
 	clearActiveMove(failed?: boolean) {
 		if (this.activeMove) {
-			this.lastMoveThisTurn = null;
 			if (!failed) {
 				this.lastMove = this.activeMove;
-				this.lastMoveThisTurn = this.activeMove;
 			}
 			this.activeMove = null;
 			this.activePokemon = null;
@@ -1409,7 +1409,7 @@ export class Battle {
 
 	nextTurn() {
 		this.turn++;
-		this.lastMoveThisTurn = null;
+		this.lastSuccessfulMoveThisTurn = null;
 
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
@@ -2216,7 +2216,7 @@ export class Battle {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if ((move.isZOrMaxPowered || move.isZOrMaxPowered) && target.getMoveHitData(move).zBrokeProtect) {
+		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}
@@ -2703,6 +2703,7 @@ export class Battle {
 
 	go() {
 		this.add('');
+		this.add('t:', Math.floor(Date.now() / 1000));
 		if (this.requestState) this.requestState = '';
 
 		if (!this.midTurn) {

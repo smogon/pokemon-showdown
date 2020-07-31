@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
@@ -96,7 +96,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			move.allies = pokemon.side.pokemon.filter(ally => !ally.fainted && !ally.status);
 			move.multihit = move.allies.length;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onModifyAtkPriority: -101,
 			onModifyAtk(atk, pokemon, defender, move) {
@@ -114,7 +114,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	bide: {
 		inherit: true,
 		desc: "The user spends two turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost to attacks during the two turns. If the last Pokemon that hit it is no longer active, the user attacks a random opposing Pokemon instead. If the user is prevented from moving during this move's use, the effect ends. This move does not check accuracy and ignores type immunity.",
-		effect: {
+		condition: {
 			duration: 3,
 			onLockMove: 'bide',
 			onStart(pokemon) {
@@ -337,7 +337,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used, up to a maximum of 8. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, or Protect. Fails if the user moves last this turn.",
 		priority: 3,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -368,7 +368,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		shortDesc: "For 4-7 turns, disables the target's last move.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
-		effect: {
+		condition: {
 			durationCallback() {
 				return this.random(4, 8);
 			},
@@ -504,7 +504,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		shortDesc: "The target repeats its last move for 4-8 turns.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
-		effect: {
+		condition: {
 			durationCallback() {
 				return this.random(4, 9);
 			},
@@ -761,7 +761,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing moves are unusable, move effects that grant healing will not heal, but Abilities and items will continue to heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain under the effect. Pain Split is unaffected.",
 		flags: {protect: 1, mirror: 1},
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -805,7 +805,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onAfterMove(pokemon) {
 			pokemon.switchFlag = true;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onSwitchInPriority: -1,
 			onSwitchIn(target) {
@@ -896,7 +896,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	lightscreen: {
 		inherit: true,
 		desc: "For 5 turns, the user and its party members take 1/2 damage from special attacks, or 2/3 damage if there are multiple active Pokemon on the user's side. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -925,7 +925,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	lockon: {
 		inherit: true,
 		desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. When this effect is started against the target, this and Mind Reader's effects end for every other Pokemon against that target. If the target leaves the field using Baton Pass, the replacement remains under this effect. If the user leaves the field using Baton Pass, this effect is restarted against the same target for the replacement. The effect ends if either the user or the target leaves the field.",
-		effect: {
+		condition: {
 			duration: 2,
 			onSourceInvulnerabilityPriority: 1,
 			onSourceInvulnerability(target, source, move) {
@@ -947,7 +947,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onAfterMove(pokemon) {
 			pokemon.switchFlag = true;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(side) {
 				this.debug('Lunar Dance started on ' + side.name);
@@ -975,7 +975,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	magiccoat: {
 		inherit: true,
 		desc: "The user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. If the move targets both opposing Pokemon, the Pokemon under this effect will reflect the move only targeting the original user. The effect ends once a move is reflected or at the end of the turn. The Lightning Rod and Storm Drain Abilities redirect their respective moves before this move takes effect.",
-		effect: {
+		condition: {
 			duration: 1,
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
@@ -1001,7 +1001,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "For 5 turns, the user is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, and the Arena Trap Ability as long as it remains active. If the user uses Baton Pass, the replacement will gain the effect. Ingrain and Iron Ball override this move if the user is under any of their effects. Fails if the user is already under this effect or the effect of Ingrain.",
 		flags: {gravity: 1},
 		volatileStatus: 'magnetrise',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(target) {
 				if (target.volatiles['ingrain'] || target.ability === 'levitate') return false;
@@ -1028,7 +1028,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	mefirst: {
 		inherit: true,
 		desc: "The user uses the move the target chose for use this turn against it, if possible, with its power multiplied by 1.5. The move must be a damaging move other than Chatter, Counter, Covet, Focus Punch, Mirror Coat, or Thief. Fails if the target moves before the user. Ignores the target's substitute for the purpose of copying the move.",
-		effect: {
+		condition: {
 			duration: 1,
 			onModifyDamagePhase2(damage) {
 				return damage * 1.5;
@@ -1154,7 +1154,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "While the user is active, all Electric-type attacks used by any active Pokemon have their power halved. Fails if this effect is already active for the user. Baton Pass can be used to transfer this effect to an ally.",
 		shortDesc: "Weakens Electric-type attacks to 1/2 their power.",
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Mud Sport');
@@ -1226,7 +1226,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used, up to a maximum of 8. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, or Protect. Fails if the user moves last this turn.",
 		priority: 3,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -1294,7 +1294,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	reflect: {
 		inherit: true,
 		desc: "For 5 turns, the user and its party members take 1/2 damage from physical attacks, or 2/3 damage if there are multiple active Pokemon on the user's side. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -1514,7 +1514,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	substitute: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
@@ -1615,7 +1615,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "For 3 turns, the user and its party members have their Speed doubled. Fails if this move is already in effect for the user's side.",
 		shortDesc: "For 3 turns, allies' Speed is doubled.",
-		effect: {
+		condition: {
 			duration: 3,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -1646,7 +1646,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "For 3 to 5 turns, prevents the target from using non-damaging moves.",
 		shortDesc: "For 3-5 turns, the target can't use status moves.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
-		effect: {
+		condition: {
 			durationCallback() {
 				return this.random(3, 6);
 			},
@@ -1700,7 +1700,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Sets up a hazard on the opposing side of the field, poisoning each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be used up to two times before failing. Opposing Pokemon become poisoned with one layer and badly poisoned with two layers. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully, is hit by Defog, or a grounded Poison-type Pokemon switches in. Safeguard prevents the opposing party from being poisoned on switch-in, as well as switching in with a substitute.",
 		flags: {},
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
@@ -1775,7 +1775,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "While the user is active, all Fire-type attacks used by any active Pokemon have their power halved. Fails if this effect is already active for the user. Baton Pass can be used to transfer this effect to an ally.",
 		shortDesc: "Weakens Fire-type attacks to 1/2 their power.",
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Water Sport');
@@ -1804,7 +1804,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		flags: {heal: 1},
 		slotCondition: 'Wish',
-		effect: {
+		condition: {
 			duration: 2,
 			onResidualOrder: 0.5,
 			onEnd(target) {

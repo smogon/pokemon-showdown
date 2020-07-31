@@ -937,7 +937,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		});
 
 		if (filtered) return "Please do not leak the answer. Use /scavenge [guess] to submit your guess instead.";
-		return false;
+		return;
 	}
 
 	hasFinished(user: User) {
@@ -1052,6 +1052,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	guess(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply("There is no scavenger hunt currently running.");
 		if (!this.canTalk()) {
@@ -1062,6 +1063,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	join(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply("There is no scavenger hunt currently running.");
 		if (!this.canTalk()) return this.errorReply("You cannot join the scavenger hunt when you are unable to talk.");
@@ -1070,6 +1072,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	leave(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply("There is no scavenger hunt currently running.");
 		game.leaveGame(user);
@@ -1088,6 +1091,7 @@ const ScavengerCommands: ChatCommands = {
 		create: 'start',
 		new: 'start',
 		start(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			if (room.scavgame) return this.errorReply('There is already a scavenger game running.');
 			if (room.getGame(ScavengerHunt)) {
@@ -1101,23 +1105,25 @@ const ScavengerCommands: ChatCommands = {
 
 			room.scavgame = game;
 
-			this.privateModAction(`(A ${game.name} has been created by ${user.name}.)`);
+			this.privateModAction(`A ${game.name} has been created by ${user.name}.`);
 			this.modlog('SCAVENGER', null, 'ended the scavenger game');
 
 			game.announce(`A game of ${game.name} has been started!`);
 		},
 
 		end(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			if (!room.scavgame) return this.errorReply(`There is no scavenger game currently running.`);
 
-			this.privateModAction(`(The ${room.scavgame.name} has been forcibly ended by ${user.name}.)`);
+			this.privateModAction(`The ${room.scavgame.name} has been forcibly ended by ${user.name}.`);
 			this.modlog('SCAVENGER', null, 'ended the scavenger game');
 			room.scavgame.announce(`The ${room.scavgame.name} has been forcibly ended.`);
 			room.scavgame.destroy(true);
 		},
 
 		kick(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			if (!room.scavgame) return this.errorReply(`There is no scavenger game currently running.`);
 
@@ -1141,6 +1147,7 @@ const ScavengerCommands: ChatCommands = {
 		score: 'leaderboard',
 		scoreboard: 'leaderboard',
 		async leaderboard(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.scavgame) return this.errorReply(`There is no scavenger game currently running.`);
 			if (!room.scavgame.leaderboard) return this.errorReply("This scavenger game does not have a leaderboard.");
 			if (!this.runBroadcast()) return false;
@@ -1151,6 +1158,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 
 		async rank(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!room.scavgame) return this.errorReply(`There is no scavenger game currently running.`);
 			if (!room.scavgame.leaderboard) return this.errorReply("This scavenger game does not have a leaderboard.");
 			if (!this.runBroadcast()) return false;
@@ -1170,6 +1178,7 @@ const ScavengerCommands: ChatCommands = {
 	teamscavs: {
 		addteam: 'createteam',
 		createteam(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			// if (room.getGame(ScavengerHunt)) return this.errorReply('Teams cannot be modified after the hunt starts.');
 
@@ -1189,6 +1198,7 @@ const ScavengerCommands: ChatCommands = {
 
 		deleteteam: 'removeteam',
 		removeteam(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('mute', null, room)) return false;
 			// if (room.getGame(ScavengerHunt)) return this.errorReply('Teams cannot be modified after the hunt starts.');
 
@@ -1202,6 +1212,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 
 		addplayer(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 			// if (room.getGame(ScavengerHunt)) return this.errorReply('Teams cannot be modified after the hunt starts.');
@@ -1236,6 +1247,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 
 		editplayers(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 			if (!this.can('mute', null, room)) return false;
@@ -1285,6 +1297,7 @@ const ScavengerCommands: ChatCommands = {
 
 		teams(target, room, user) {
 			if (!this.runBroadcast()) return false;
+			if (!room) return this.requiresRoom();
 
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
@@ -1299,6 +1312,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 
 		guesses(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 
@@ -1310,6 +1324,7 @@ const ScavengerCommands: ChatCommands = {
 
 		chat: 'note',
 		note(target, room, user) {
+			if (!room) return this.requiresRoom();
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 
@@ -1347,6 +1362,7 @@ const ScavengerCommands: ChatCommands = {
 	forcecreateunrated: 'create',
 	createrecycled: 'create',
 	create(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		}
@@ -1416,11 +1432,12 @@ const ScavengerCommands: ChatCommands = {
 
 		room.game = new ScavengerHunt(room, user, hosts, gameType, res.result, mod);
 
-		this.privateModAction(`(A new scavenger hunt was created by ${user.name}.)`);
+		this.privateModAction(`A new scavenger hunt was created by ${user.name}.`);
 		this.modlog('SCAV NEW', null, `${gameType.toUpperCase()}: creators - ${hosts.map(h => h.id)}`);
 	},
 
 	status(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
@@ -1456,12 +1473,14 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	hint(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 		if (!game.onSendQuestion(user, true)) this.errorReply("You are not currently participating in the hunt.");
 	},
 
 	timer(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('mute', null, room)) return false;
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
@@ -1470,11 +1489,12 @@ const ScavengerCommands: ChatCommands = {
 		const message = `The scavenger timer has been ${(result === 'off' ? "turned off" : `set to ${result} minutes`)}`;
 
 		room.add(message + '.');
-		this.privateModAction(`(${message} by ${user.name}.)`);
+		this.privateModAction(`${message} by ${user.name}.`);
 		this.modlog('SCAV TIMER', null, (result === 'off' ? 'OFF' : `${result} minutes`));
 	},
 
 	inherit(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('mute', null, room)) return false;
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
@@ -1488,22 +1508,24 @@ const ScavengerCommands: ChatCommands = {
 		game.eliminate(user.id);
 		game.cacheUserIps(user);
 
-		this.privateModAction(`(${user.name} has inherited staff permissions for the current hunt.)`);
+		this.privateModAction(`${user.name} has inherited staff permissions for the current hunt.`);
 		this.modlog('SCAV INHERIT');
 	},
 
 	reset(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('mute', null, room)) return false;
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
 		game.onEnd(true, user);
-		this.privateModAction(`(${user.name} has reset the scavenger hunt.)`);
+		this.privateModAction(`${user.name} has reset the scavenger hunt.`);
 		this.modlog('SCAV RESET');
 	},
 
 	forceend: 'end',
 	end(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('mute', null, room)) return false;
 		if (!room.game && room.scavgame) return this.parse('/scav games end');
 		const game = room.getGame(ScavengerHunt);
@@ -1520,11 +1542,12 @@ const ScavengerCommands: ChatCommands = {
 		}
 
 		game.onEnd(false, user);
-		this.privateModAction(`(${user.name} has ended the scavenger hunt.)`);
+		this.privateModAction(`${user.name} has ended the scavenger hunt.`);
 		this.modlog('SCAV END');
 	},
 
 	viewhunt(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
@@ -1534,10 +1557,11 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	edithunt(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			return this.errorReply("You cannot edit the hints and answers if you are not the host.");
@@ -1551,10 +1575,11 @@ const ScavengerCommands: ChatCommands = {
 
 	addhint: 'spoiler',
 	spoiler(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			return this.errorReply("You cannot add more hints if you are not the host.");
@@ -1572,10 +1597,11 @@ const ScavengerCommands: ChatCommands = {
 
 	deletehint: 'removehint',
 	removehint(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			return this.errorReply("You cannot remove hints if you are not the host.");
@@ -1595,10 +1621,11 @@ const ScavengerCommands: ChatCommands = {
 
 	modifyhint: 'edithint',
 	edithint(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			return this.errorReply("You cannot edit hints if you are not the host.");
@@ -1619,6 +1646,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	kick(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
@@ -1628,7 +1656,7 @@ const ScavengerCommands: ChatCommands = {
 		const success = game.eliminate(targetId);
 		if (success) {
 			this.modlog('SCAV KICK', targetId);
-			return this.privateModAction(`(${user.name} has kicked '${targetId}' from the scavenger hunt.)`);
+			return this.privateModAction(`${user.name} has kicked '${targetId}' from the scavenger hunt.`);
 		}
 		this.errorReply(`Unable to kick '${targetId}' from the scavenger hunt.`);
 	},
@@ -1640,6 +1668,7 @@ const ScavengerCommands: ChatCommands = {
 	queuerated: 'queue',
 	queuerecycled: 'queue',
 	queue(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1696,12 +1725,13 @@ const ScavengerCommands: ChatCommands = {
 				gameType: (this.cmd.includes('unrated') ? 'unrated' : 'regular'),
 			});
 		}
-		this.privateModAction(`(${user.name} has added a scavenger hunt to the queue.)`);
+		this.privateModAction(`${user.name} has added a scavenger hunt to the queue.`);
 
 		room.saveSettings();
 	},
 
 	dequeue(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1712,13 +1742,14 @@ const ScavengerCommands: ChatCommands = {
 		if (!room.settings.scavQueue || isNaN(id) || id < 0 || id >= room.settings.scavQueue.length) return false;
 
 		const removed = room.settings.scavQueue.splice(id, 1)[0];
-		this.privateModAction(`(${user.name} has removed a scavenger hunt created by [${removed.hosts.map(u => u.id).join(", ")}] from the queue.)`);
+		this.privateModAction(`${user.name} has removed a scavenger hunt created by [${removed.hosts.map(u => u.id).join(", ")}] from the queue.`);
 		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
 
 		room.saveSettings();
 	},
 
 	viewqueue(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1728,6 +1759,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	next(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1760,6 +1792,7 @@ const ScavengerCommands: ChatCommands = {
 
 	enablequeue: 'disablequeue',
 	disablequeue(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1776,11 +1809,12 @@ const ScavengerCommands: ChatCommands = {
 		room.saveSettings();
 
 		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
-		this.privateModAction(`(The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.)`);
+		this.privateModAction(`The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.`);
 		this.modlog('SCAV QUEUE', null, (state ? 'disabled' : 'enabled'));
 	},
 
 	defaulttimer(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1799,7 +1833,7 @@ const ScavengerCommands: ChatCommands = {
 
 		room.settings.scavSettings.defaultScavTimer = duration;
 		room.saveSettings();
-		this.privateModAction(`(The default scavenger timer has been set to ${duration} minutes by ${user.name}.)`);
+		this.privateModAction(`The default scavenger timer has been set to ${duration} minutes by ${user.name}.`);
 		this.modlog('SCAV DEFAULT TIMER', null, `${duration} minutes`);
 	},
 
@@ -1807,6 +1841,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Leaderboard Commands
 	 */
 	addpoints(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -1819,11 +1854,12 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
-		this.privateModAction(`(${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.)`);
+		this.privateModAction(`${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.`);
 		this.modlog('SCAV ADDPOINTS', targetId, '' + points);
 	},
 
 	removepoints(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -1836,21 +1872,23 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
-		this.privateModAction(`(${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.)`);
+		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.`);
 		this.modlog('SCAV REMOVEPOINTS', targetId, '' + points);
 	},
 
 	resetladder(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('declare', null, room)) return false;
 
 		Leaderboard.reset().write();
 
-		this.privateModAction(`(${user.name} has reset the monthly scavengers ladder.)`);
+		this.privateModAction(`${user.name} has reset the monthly scavengers ladder.`);
 		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
 	async ladder(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1876,6 +1914,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	async rank(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1896,6 +1935,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Leaderboard Point Distribution Editing
 	 */
 	setblitz(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const scavsRoom = getScavsRoom(room);
 		if (!scavsRoom) {
 			return this.errorReply("This command can only be used in the scavengers room.");
@@ -1926,7 +1966,7 @@ const ScavengerCommands: ChatCommands = {
 		room.settings.scavSettings.blitzPoints[gameType] = blitzPoints;
 
 		room.saveSettings();
-		this.privateModAction(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints}.)`);
+		this.privateModAction(`${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints}.`);
 		this.modlog('SCAV BLITZ', null, `${gameType}: ${blitzPoints}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
@@ -1938,6 +1978,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	sethostpoints(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const scavsRoom = getScavsRoom(room);
 		if (!scavsRoom) {
 			return this.errorReply("This command can only be used in the scavengers room.");
@@ -1956,7 +1997,7 @@ const ScavengerCommands: ChatCommands = {
 
 		room.settings.scavSettings.hostPoints = points;
 		room.saveSettings();
-		this.privateModAction(`(${user.name} has set the points awarded for hosting regular scavenger hunts to ${points})`);
+		this.privateModAction(`${user.name} has set the points awarded for hosting regular scavenger hunts to ${points}`);
 		this.modlog('SCAV SETHOSTPOINTS', null, `${points}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
@@ -1967,6 +2008,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 	},
 	setpoints(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const scavsRoom = getScavsRoom(room);
 		if (!scavsRoom) {
 			return this.errorReply("This command can only be used in the scavengers room.");
@@ -2001,7 +2043,7 @@ const ScavengerCommands: ChatCommands = {
 
 		room.saveSettings();
 		const pointsDisplay = winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ');
-		this.privateModAction(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay})`);
+		this.privateModAction(`${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay}`);
 		this.modlog('SCAV SETPOINTS', null, `${type}: ${pointsDisplay}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
@@ -2014,6 +2056,7 @@ const ScavengerCommands: ChatCommands = {
 
 	resettwist: 'settwist',
 	settwist(target, room, user) {
+		if (!room) return this.requiresRoom();
 		const scavsRoom = getScavsRoom(room);
 		if (!scavsRoom) {
 			return this.errorReply("This command can only be used in the scavengers room.");
@@ -2037,9 +2080,9 @@ const ScavengerCommands: ChatCommands = {
 		}
 
 		if (room.settings.scavSettings.officialtwist) {
-			this.privateModAction(`(${user.name} has set the official twist to ${room.settings.scavSettings.officialtwist})`);
+			this.privateModAction(`${user.name} has set the official twist to ${room.settings.scavSettings.officialtwist}`);
 		} else {
-			this.privateModAction(`(${user.name} has removed the official twist.)`);
+			this.privateModAction(`${user.name} has removed the official twist.`);
 		}
 		this.modlog('SCAV TWIST', null, room.settings.scavSettings.officialtwist);
 
@@ -2057,6 +2100,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	twists(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -2078,6 +2122,7 @@ const ScavengerCommands: ChatCommands = {
 	 */
 	huntcount: 'huntlogs',
 	async huntlogs(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -2085,14 +2130,14 @@ const ScavengerCommands: ChatCommands = {
 			if (!this.can('declare', null, room)) return false;
 			HostLeaderboard.softReset().then(() => {
 				HostLeaderboard.write();
-				this.privateModAction(`(${user.name} has reset the host log leaderboard into the next month.)`);
+				this.privateModAction(`${user.name} has reset the host log leaderboard into the next month.`);
 				this.modlog('SCAV HUNTLOGS', null, 'RESET');
 			});
 			return;
 		} else if (target === 'HARD RESET') {
 			if (!this.can('declare', null, room)) return false;
 			HostLeaderboard.hardReset().write();
-			this.privateModAction(`(${user.name} has hard reset the host log leaderboard.)`);
+			this.privateModAction(`${user.name} has hard reset the host log leaderboard.`);
 			this.modlog('SCAV HUNTLOGS', null, 'HARD RESET');
 			return;
 		}
@@ -2119,6 +2164,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	async playlogs(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -2126,14 +2172,14 @@ const ScavengerCommands: ChatCommands = {
 			if (!this.can('declare', null, room)) return false;
 			PlayerLeaderboard.softReset().then(() => {
 				PlayerLeaderboard.write();
-				this.privateModAction(`(${user.name} has reset the player log leaderboard into the next month.)`);
+				this.privateModAction(`${user.name} has reset the player log leaderboard into the next month.`);
 				this.modlog('SCAV PLAYLOGS', null, 'RESET');
 			});
 			return;
 		} else if (target === 'HARD RESET') {
 			if (!this.can('declare', null, room)) return false;
 			PlayerLeaderboard.hardReset().write();
-			this.privateModAction(`(${user.name} has hard reset the player log leaderboard.)`);
+			this.privateModAction(`${user.name} has hard reset the player log leaderboard.`);
 			this.modlog('SCAV PLAYLOGS', null, 'HARD RESET');
 			return;
 		}
@@ -2170,6 +2216,7 @@ const ScavengerCommands: ChatCommands = {
 
 	uninfract: "infract",
 	infract(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -2179,13 +2226,14 @@ const ScavengerCommands: ChatCommands = {
 
 		PlayerLeaderboard.addPoints(targetId, 'infraction', change, true).write();
 
-		this.privateModAction(`(${user.name} has ${(change > 0 ? 'given' : 'taken')} one infraction point ${(change > 0 ? 'to' : 'from')} '${targetId}'.)`);
+		this.privateModAction(`${user.name} has ${(change > 0 ? 'given' : 'taken')} one infraction point ${(change > 0 ? 'to' : 'from')} '${targetId}'.`);
 		this.modlog(`SCAV ${this.cmd.toUpperCase()}`, user);
 	},
 
 	modsettings: {
 		'': 'update',
 		'update'(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('declare', null, room) || !getScavsRoom(room)) return false;
 			const settings = room.settings.scavSettings?.scavmod || {};
 
@@ -2195,6 +2243,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 
 		'ipcheck'(target, room, user) {
+			if (!room) return this.requiresRoom();
 			if (!this.can('declare', null, room) || !getScavsRoom(room)) return false;
 
 			if (!room.settings.scavSettings) room.settings.scavSettings = {};
@@ -2214,7 +2263,7 @@ const ScavengerCommands: ChatCommands = {
 
 			room.saveSettings();
 
-			this.privateModAction(`(${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.)`);
+			this.privateModAction(`${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.`);
 			this.modlog('SCAV MODSETTINGS IPCHECK', null, setting[target] ? 'ON' : 'OFF');
 
 			this.parse('/scav modsettings update');
@@ -2225,6 +2274,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Database Commands
 	 */
 	recycledhunts(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('mute', null, room)) return false;
 		if (!getScavsRoom(room)) {
 			return this.errorReply("Scavenger Hunts can only be added to the database in the scavengers room.");

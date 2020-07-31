@@ -111,7 +111,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					`<<${room.roomid}>> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
@@ -181,7 +181,7 @@ Chat.registerMonitor('evasion', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`,
-					`<${room.roomid}> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
+					`<<${room.roomid}>> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
 				);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
@@ -232,7 +232,7 @@ Chat.registerMonitor('battlefilter', {
 			if (room) {
 				room.mute(user);
 				this.errorReply(`You have been muted for using a banned phrase. Please do not say '${match[0]}'.`);
-				const text = `[BattleMonitor] <${room.roomid}> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`;
+				const text = `[BattleMonitor] <<${room.roomid}>> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`;
 				const adminlog = Rooms.get('adminlog');
 				if (adminlog) {
 					adminlog.add(`|c|~|${text}`).update();
@@ -567,9 +567,8 @@ export const commands: ChatCommands = {
 			}
 			saveFilters(true);
 			const output = `'${word}' was added to the ${list} list.`;
-			const upperStaff = Rooms.get('upperstaff');
-			if (upperStaff) upperStaff.add(output).update();
-			if (room.roomid !== 'upperstaff') return this.sendReply(output);
+			Rooms.get('upperstaff')?.add(output).update();
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		remove(target, room, user) {
 			if (!this.can('rangeban')) return false;
@@ -592,9 +591,8 @@ export const commands: ChatCommands = {
 			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
 			saveFilters(true);
 			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
-			const upperStaff = Rooms.get('upperstaff');
-			if (upperStaff) upperStaff.add(output).update();
-			if (room.roomid !== 'upperstaff') return this.sendReply(output);
+			Rooms.get('upperstaff')?.add(output).update();
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		'': 'view',
 		list: 'view',

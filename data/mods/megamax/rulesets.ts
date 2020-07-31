@@ -1,4 +1,4 @@
-export const BattleFormats: {[k: string]: FormatsData} = {
+export const Formats: {[k: string]: FormatsData} = {
 	dynamaxclause: {
 		effectType: 'Rule',
 		name: 'Dynamax Clause',

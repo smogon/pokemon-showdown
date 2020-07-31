@@ -101,6 +101,8 @@
 		"Your status has been set to: ${target}.": "",
 		"You are now marked as busy.": "",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "",
+		"You are already marked as back.": "",
+		"You are no longer marked as busy.": "",
 
 		"You must choose a name before you can talk.": "",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "",

@@ -157,31 +157,18 @@ describe('Users features', function () {
 						if (room) room.destroy();
 					}
 				});
-				it(`should allow 's' permissions only on self`, function () {
-					const user = new User();
-					user.group = '+';
-					assert.equal(user.can('alts', user), true, 'targeting self');
-
-					const target = new User();
-					target.group = ' ';
-					assert.equal(user.can('alts', target), false, 'targeting lower rank');
-					target.group = '+';
-					assert.equal(user.can('alts', target), false, 'targeting same rank');
-					target.group = '%';
-					assert.equal(user.can('alts', target), false, 'targeting higher rank');
-				});
 				it(`should allow 'u' permissions on lower ranked users`, function () {
 					const user = new User();
-					user.group = '&';
-					assert.equal(user.can('promote', user), false, 'targeting self');
+					user.group = '@';
+					assert.equal(user.can('globalban', user), false, 'targeting self');
 
 					const target = new User();
 					target.group = ' ';
-					assert.equal(user.can('promote', target), true, 'targeting lower rank');
+					assert.equal(user.can('globalban', target), true, 'targeting lower rank');
+					target.group = '@';
+					assert.equal(user.can('globalban', target), false, 'targeting same rank');
 					target.group = '&';
-					assert.equal(user.can('promote', target), false, 'targeting same rank');
-					target.group = '~';
-					assert.equal(user.can('promote', target), false, 'targeting higher rank');
+					assert.equal(user.can('globalban', target), false, 'targeting higher rank');
 				});
 				it(`should not allow users to demote themselves`, function () {
 					room = Rooms.createChatRoom("test");

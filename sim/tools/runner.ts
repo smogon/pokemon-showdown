@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
+import {State} from '../state';
 import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 
@@ -165,7 +166,7 @@ class DualStream {
 		const test = await this.test.read();
 		// In debug mode, wait to catch this as a difference in the inputLog
 		// and error there so we get the full battle state dumped instead.
-		if (!this.debug) assert.equal(test, control);
+		if (!this.debug) assert.equal(State.normalizeLog(test), State.normalizeLog(control));
 		return control;
 	}
 
@@ -188,7 +189,7 @@ class DualStream {
 		const control = this.control.battle.toJSON();
 		const test = this.test.battle.toJSON();
 		try {
-			assert.deepEqual(test, control);
+			assert.deepEqual(State.normalize(test), State.normalize(control));
 		} catch (err) {
 			if (this.debug) {
 				// NOTE: diffing these directly won't work because the key ordering isn't stable.

@@ -63,7 +63,6 @@ function escapeHTML(str?: string) {
 }
 
 export const commands: ChatCommands = {
-	'!dexsearch': true,
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
@@ -137,18 +136,17 @@ export const commands: ChatCommands = {
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
 			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
-			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Gigantamax Formes only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
+			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pokemon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
 			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
-			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are not dual-typed.<br/>` +
+			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
 			`The order of the parameters does not matter.<br/>`
 		);
 	},
 
-	'!randommove': true,
 	rollmove: 'randommove',
 	randmove: 'randommove',
 	randommove(target, room, user, connection, cmd, message) {
@@ -194,7 +192,6 @@ export const commands: ChatCommands = {
 		`/randommove uses the same parameters as /movesearch (see '/help ms').`,
 		`Adding a number as a parameter returns that many random Pok\u00e9mon Moves, e.g., '/randmove 6' returns 6 random Pok\u00e9mon Moves.`,
 	],
-	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon(target, room, user, connection, cmd, message) {
@@ -241,7 +238,6 @@ export const commands: ChatCommands = {
 		`Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon.`,
 	],
 
-	'!movesearch': true,
 	ms: 'movesearch',
 	ms1: 'movesearch',
 	ms2: 'movesearch',
@@ -298,12 +294,11 @@ export const commands: ChatCommands = {
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ms; e.g. <code>ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`<code>/ms</code> will search the Galar Movedex; you can search the National Movedex by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
+			`<code>/ms</code> will search the Galar Moves; you can search the National Moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`The order of the parameters does not matter.`
 		);
 	},
 
-	'!itemsearch': true,
 	isearch: 'itemsearch',
 	is: 'itemsearch',
 	is2: 'itemsearch',
@@ -349,7 +344,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!abilitysearch': true,
 	asearch: 'abilitysearch',
 	as: 'abilitysearch',
 	as3: 'abilitysearch',
@@ -392,7 +386,6 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	'!learn': true,
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
@@ -742,7 +735,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in Dex.data.Movedex) {
+				for (const move in Dex.data.Moves) {
 					const moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
@@ -830,18 +823,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 	if (
-		showAll && searches.length === 0 && !maxGen &&
+		showAll && searches.length === 0 && !maxGen && !singleTypeSearch &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
 		};
 	}
-
-	if (singleTypeSearch && Object.values(searches)
-		.map(search => Object.keys(search.types).filter(type => search.types[type])[0])
-		.filter(type => type).length !== 1
-	) return {error: "A monotype search must include only one type."};
 
 	if (!maxGen) maxGen = 8;
 	const mod = Dex.mod('gen' + maxGen);
@@ -853,8 +841,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(megaSearch === false && !species.isMega)
 		);
 		const gmaxSearchResult = (
-			gmaxSearch === null || (gmaxSearch === true && species.isGigantamax) ||
-			(gmaxSearch === false && !species.isGigantamax)
+			gmaxSearch === null || (gmaxSearch === true && species.name.endsWith('-Gmax')) ||
+			(gmaxSearch === false && !species.name.endsWith('-Gmax'))
 		);
 		const fullyEvolvedSearchResult = (
 			fullyEvolvedSearch === null ||
@@ -946,10 +934,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			for (const type in alts.types) {
-				if (
-					(!singleTypeSearch || Object.keys(dex[mon].types).length === 1) &&
-					dex[mon].types.includes(type) === alts.types[type]
-				) {
+				if (dex[mon].types.includes(type) === alts.types[type]) {
 					matched = true;
 					break;
 				}
@@ -1050,10 +1035,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
+		if (singleTypeSearch && dex[mon].types.length !== 1) continue;
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].isGigantamax && !allowGmax) continue;
+		if (dex[mon].name.endsWith('-Gmax') && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
@@ -1527,7 +1513,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(Dex.data.Movedex));
+	const validMoves = new Set(Object.keys(Dex.data.Moves));
 	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const species = mod.getSpecies(mon.name);
@@ -2400,7 +2386,7 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
+export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));
@@ -2461,5 +2447,3 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
-
-exports.PM = PM;

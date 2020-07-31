@@ -13,6 +13,8 @@ Showdown directly using WebSocket:
 
 Client implementations you might want to look at for reference include:
 
+- Majeur's android client (Kotlin/Java) -
+    https://github.com/MajeurAndroid/Android-Unofficial-Showdown-Client
 - pickdenis' chat bot (Ruby) -
     https://github.com/pickdenis/ps-chatbot
 - Quinella and TalkTakesTime's chat bot (Node.js) -

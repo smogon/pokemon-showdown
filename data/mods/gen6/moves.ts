@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	allyswitch: {
 		inherit: true,
 		desc: "The user swaps positions with its ally on the opposite side of the field. Fails if there is no Pokemon at that position, if the user is the only Pokemon on its side, or if the user is in the middle.",
@@ -75,7 +75,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	encore: {
 		inherit: true,
 		desc: "For 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mimic, Mirror Move, Sketch, Struggle, or Transform.",
-		effect: {
+		condition: {
 			duration: 3,
 			onStart(target) {
 				const noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
@@ -226,7 +226,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	minimize: {
 		inherit: true,
 		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
-		effect: {
+		condition: {
 			noCopy: true,
 			onSourceModifyDamage(damage, source, target, move) {
 				const boostedMoves = [
@@ -254,7 +254,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	mistyterrain: {
 		inherit: true,
 		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a major status condition. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -327,7 +327,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	powder: {
 		inherit: true,
 		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Powder');
@@ -426,7 +426,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	stockpile: {
 		inherit: true,
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(target) {
 				this.effectData.layers = 1;
@@ -520,7 +520,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from multi-target damage this turn.",
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');

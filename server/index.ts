@@ -136,7 +136,7 @@ global.Tournaments = Tournaments;
 
 import {IPTools} from './ip-tools';
 global.IPTools = IPTools;
-void IPTools.loadDatacenters();
+void IPTools.loadHostsAndRanges();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting

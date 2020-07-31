@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: PureEffectData} = {
+export const Conditions: {[k: string]: ConditionData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -669,6 +669,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		noCopy: true,
 		duration: 3,
 		onStart(pokemon) {
+			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
 				delete pokemon.volatiles['torment'];
@@ -678,11 +679,11 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 				pokemon.formeChange('cramorant');
 			}
 			this.add('-start', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
+			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = this.format.id === 'gen8doublesou' ? 1.5 : 2;
+			const ratio = this.format.id.startsWith('gen8doublesou') ? 1.5 : 2;
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
@@ -708,7 +709,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		onResidualPriority: -100,
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.species.name);
+			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name);
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;

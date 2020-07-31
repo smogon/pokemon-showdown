@@ -127,7 +127,7 @@ export class BasicEffect implements EffectData {
 		this.name = Tools.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
-		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
+		this.effectType = Tools.getString(data.effectType) as EffectType || 'Condition';
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
@@ -180,6 +180,39 @@ export class RuleTable extends Map<string, string> {
 	isBanned(thing: string) {
 		if (this.has(`+${thing}`)) return false;
 		return this.has(`-${thing}`);
+	}
+
+	isBannedSpecies(species: Species) {
+		if (this.has(`+pokemon:${species.id}`)) return false;
+		if (this.has(`-pokemon:${species.id}`)) return true;
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
+		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
+		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
+		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
+		if (this.has(`-pokemontag:${toID(tier)}`)) return true;
+		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
+		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
+		if (this.has(`-pokemontag:${toID(doublesTier)}`)) return true;
+		return this.has(`-pokemontag:allpokemon`);
+	}
+
+	isRestricted(thing: string) {
+		if (this.has(`+${thing}`)) return false;
+		return this.has(`*${thing}`);
+	}
+
+	isRestrictedSpecies(species: Species) {
+		if (this.has(`+pokemon:${species.id}`)) return false;
+		if (this.has(`*pokemon:${species.id}`)) return true;
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
+		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
+		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
+		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
+		if (this.has(`*pokemontag:${toID(tier)}`)) return true;
+		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
+		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
+		if (this.has(`*pokemontag:${toID(doublesTier)}`)) return true;
+		return this.has(`*pokemontag:allpokemon`);
 	}
 
 	check(thing: string, setHas: {[id: string]: true} | null = null) {
@@ -259,6 +292,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly baseRuleset: string[];
 	/** List of banned effects. */
 	readonly banlist: string[];
+	/** List of effects that aren't completely banned. */
+	readonly restricted: string[];
 	/** List of inherited banned effects to override. */
 	readonly unbanlist: string[];
 	/** List of ruleset and banlist changes in a custom format. */
@@ -317,6 +352,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];
+		this.restricted = data.restricted || [];
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
@@ -331,13 +367,13 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	}
 }
 
-export class PureEffect extends BasicEffect implements Readonly<BasicEffect & PureEffectData> {
-	readonly effectType: 'Effect' | 'Weather' | 'Status';
+export class Condition extends BasicEffect implements Readonly<BasicEffect & ConditionData> {
+	readonly effectType: 'Condition' | 'Weather' | 'Status';
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
 		data = this;
-		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Effect');
+		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
 	}
 }
 
@@ -633,8 +669,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
-	/** Name of its Gigantamax move, if a pokemon is gigantamax. */
-	readonly isGigantamax?: string;
+	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
+	readonly canGigantamax?: string;
+	/** If this Pokemon can gigantamax, is its gigantamax released? */
+	readonly gmaxUnreleased?: boolean;
+	/** True if a Pokemon species is incapable of dynamaxing */
+	readonly cannotDynamax?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -674,6 +714,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly randomBattleMoves?: readonly ID[];
 	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
+	readonly randomDoubleBattleLevel?: number;
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;
@@ -723,11 +764,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
-		this.isGigantamax = data.isGigantamax || undefined;
-		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
-		// isGigantamax checking is used to successfully pass learnsets to the client
+		this.canGigantamax = data.canGigantamax || undefined;
+		this.gmaxUnreleased = !!data.gmaxUnreleased;
+		this.cannotDynamax = !!data.cannotDynamax;
+		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
-			(!this.isGigantamax ? undefined : this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {

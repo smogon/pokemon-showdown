@@ -234,7 +234,7 @@ export const LogViewer = new class {
 		buf += this.renderDayResults(results, roomid);
 		if (total > limit) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
 			buf += `<br><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
@@ -397,7 +397,7 @@ export const LogViewer = new class {
 		const list = await LogReader.listCategorized(user, opts) as {[k: string]: RoomID[]};
 
 		if (!list) {
-			buf += `<p class="message-error">You must be a staff member of a room, to view logs</p></div>`;
+			buf += `<p class="message-error">You must be a staff member of a room to view its logs</p></div>`;
 			return buf;
 		}
 
@@ -554,19 +554,14 @@ const LogSearcher = new class {
 				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered || name.includes('today') || !toID(line)) return '';
 				 // gets rid of some edge cases / duplicates
-				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
+				const date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				let matched = (
 					searchRegex.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
 				if (curDate !== date) {
 					curDate = date;
-
-					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-					matched = `${date} ${matched}`;
-				} else {
-					date = '';
+					matched = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary> ${matched}`;
 				}
-
 				if (matched.includes('chat chatmessage highlighted')) {
 					exactMatches.push(matched);
 				}
@@ -674,6 +669,9 @@ export const commands: ChatCommands = {
 		const roomid = targetRoom ? targetRoom.roomid : target;
 		this.parse(`/join view-chatlog-${roomid}--today`);
 	},
+	chatloghelp: [
+		`/chatlog [optional room] - View chatlogs from the given room. If none is specified, shows logs from the room you're in. Requires: % @ * # &`,
+	],
 
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',

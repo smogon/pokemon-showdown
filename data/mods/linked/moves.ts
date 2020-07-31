@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
@@ -159,7 +159,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// Disabling effects
 	disable: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 5,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
@@ -214,7 +214,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	encore: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
@@ -321,7 +321,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	torment: {
 		inherit: true,
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				if (pokemon.volatiles['dynamax']) {
@@ -351,7 +351,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// PP-decreasing moves
 	grudge: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Grudge');
 			},
@@ -412,7 +412,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	destinybond: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
@@ -441,7 +441,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	iceball: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'iceball',
 			onStart() {
@@ -464,7 +464,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	rollout: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'rollout',
 			onStart() {

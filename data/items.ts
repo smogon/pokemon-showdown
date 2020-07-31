@@ -1,4 +1,4 @@
-export const BattleItems: {[itemid: string]: ItemData} = {
+export const Items: {[itemid: string]: ItemData} = {
 	abomasite: {
 		name: "Abomasite",
 		spritenum: 575,
@@ -599,6 +599,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onModifyAccuracyPriority: 5,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
@@ -2975,6 +2976,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onModifyAccuracyPriority: 5,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
@@ -3599,7 +3601,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		onStart(pokemon) {
 			pokemon.addVolatile('metronome');
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.effectData.numConsecutive = 0;
 				this.effectData.lastMove = '';
@@ -3685,8 +3687,9 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		onEat(pokemon) {
 			pokemon.addVolatile('micleberry');
 		},
-		effect: {
+		condition: {
 			duration: 2,
+			onSourceModifyAccuracyPriority: 3,
 			onSourceModifyAccuracy(accuracy, target, source) {
 				this.add('-enditem', source, 'Micle Berry');
 				source.removeVolatile('micleberry');
@@ -5320,7 +5323,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		desc: "Holder's Normal-type attacks have 1.2x power.",
 	},
 	silverpowder: {
-		name: "SilverPowder",
+		name: "Silver Powder",
 		spritenum: 447,
 		fling: {
 			basePower: 10,
@@ -7239,6 +7242,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onSourceModifyAccuracyPriority: 4,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy === 'number') {
 				return accuracy * 1.1;
@@ -7343,6 +7347,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onSourceModifyAccuracyPriority: 4,
 		onSourceModifyAccuracy(accuracy, target) {
 			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');

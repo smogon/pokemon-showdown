@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
 		this.modData('Abilities', 'noability').isNonstandard = null;
@@ -54,5 +54,3 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		},
 	},
 };
-
-exports.BattleScripts = BattleScripts;

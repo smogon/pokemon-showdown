@@ -43,6 +43,7 @@ export class Pokemon {
 	readonly gender: GenderName;
 	readonly happiness: number;
 	readonly pokeball: string;
+	readonly gigantamax: boolean;
 
 	/** Transform keeps the original pre-transformed Hidden Power in Gen 2-4. */
 	readonly baseHpType: string;
@@ -252,19 +253,6 @@ export class Pokemon {
 		if (!this.baseSpecies.exists) {
 			throw new Error(`Unidentified species: ${this.baseSpecies.name}`);
 		}
-		// Change Gigantamax formes to their base formes
-		let gMax: string | null = null;
-		if (this.baseSpecies.isGigantamax) {
-			gMax = this.baseSpecies.name;
-			if (set.species && toID(set.species) === this.baseSpecies.id) {
-				set.species = this.baseSpecies.battleOnly || this.baseSpecies.baseSpecies;
-			}
-			if (set.name && toID(set.name) === this.baseSpecies.id) {
-				set.name = this.baseSpecies.battleOnly || this.baseSpecies.baseSpecies;
-			}
-			// Species#battleOnly type checking is handled in team-validator.ts
-			this.baseSpecies = this.battle.dex.getSpecies(this.baseSpecies.battleOnly as string || this.baseSpecies.baseSpecies);
-		}
 		this.set = set as PokemonSet;
 
 		this.species = this.baseSpecies;
@@ -283,6 +271,7 @@ export class Pokemon {
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
+		this.gigantamax = this.set.gigantamax || false;
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
@@ -411,7 +400,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.canUltraBurst(this);
 		// Normally would want to use battle.canDynamax to set this, but it references this property.
 		this.canDynamax = (this.battle.gen >= 8);
-		this.canGigantamax = gMax;
+		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -875,14 +864,12 @@ export class Pokemon {
 			if (!this.canDynamax) return;
 			if (
 				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
-				this.getItem().zMove || this.battle.canMegaEvo(this)
+				this.getItem().zMove || this.canMegaEvo
 			) {
 				return;
 			}
 			// Some pokemon species are unable to dynamax
-			const cannotDynamax = ['Zacian', 'Zamazenta', 'Eternatus'];
-			if (cannotDynamax.includes(this.species.baseSpecies)) return;
-			if (this.illusion && cannotDynamax.includes(this.illusion.species.baseSpecies)) return;
+			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
 		const result: DynamaxOptions = {maxMoves: []};
 		let atLeastOne = false;
@@ -1060,7 +1047,7 @@ export class Pokemon {
 		}
 		pokemon.clearVolatile();
 		for (const i in this.volatiles) {
-			const volatile = this.getVolatile(i) as PureEffect;
+			const volatile = this.getVolatile(i) as Condition;
 			this.battle.singleEvent('Copy', volatile, this.volatiles[i], this);
 		}
 	}
@@ -1249,7 +1236,7 @@ export class Pokemon {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
 			this.setAbility(species.abilities['0'], null, true);
-			if (isPermanent) this.baseAbility = this.ability;
+			this.baseAbility = this.ability;
 		}
 		return true;
 	}
@@ -1412,7 +1399,7 @@ export class Pokemon {
 		return d;
 	}
 
-	trySetStatus(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+	trySetStatus(status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
@@ -1428,7 +1415,7 @@ export class Pokemon {
 	}
 
 	setStatus(
-		status: string | PureEffect,
+		status: string | Condition,
 		source: Pokemon | null = null,
 		sourceEffect: Effect | null = null,
 		ignoreImmunities = false
@@ -1678,8 +1665,8 @@ export class Pokemon {
 	}
 
 	addVolatile(
-		status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null,
-		linkedStatus: string | PureEffect | null = null
+		status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null,
+		linkedStatus: string | Condition | null = null
 	): boolean | any {
 		let result;
 		status = this.battle.dex.getEffect(status);

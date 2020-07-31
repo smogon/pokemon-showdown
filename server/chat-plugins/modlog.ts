@@ -44,6 +44,7 @@ const LONG_QUERY_DURATION = 2000;
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
+const IPS_REGEX = /[([]([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]/g;
 
 const PUNISHMENTS = [
 	'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE', 'CRISISDEMOTE',
@@ -110,7 +111,7 @@ function checkRipgrepAvailability() {
 }
 
 function getMoreButton(
-	roomid: RoomID, search: string, useExactSearch: boolean,
+	roomid: RoomID | 'global', search: string, useExactSearch: boolean,
 	lines: number, maxLines: number, onlyPunishments: boolean
 ) {
 	let newLines = 0;
@@ -215,7 +216,7 @@ async function runRipgrepModlog(paths: string[], regexString: string, results: S
 }
 
 function prettifyResults(
-	resultArray: string[], roomid: RoomID, searchString: string, exactSearch: boolean,
+	resultArray: string[], roomid: RoomID | 'global', searchString: string, exactSearch: boolean,
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
 ) {
 	if (resultArray === null) {
@@ -245,7 +246,7 @@ function prettifyResults(
 		let time;
 		let bracketIndex;
 		if (line) {
-			if (hideIps) line = line.replace(/[([][0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[)\]]/g, '');
+			if (hideIps) line = line.replace(IPS_REGEX, '');
 			bracketIndex = line.indexOf(']');
 			if (bracketIndex < 0) return Utils.escapeHTML(line);
 			time = new Date(line.slice(1, bracketIndex));
@@ -263,12 +264,18 @@ function prettifyResults(
 			return `${date}<small>[${timestamp}] \u2190 current server time</small>`;
 		}
 		const parenIndex = line.indexOf(')');
-		const thisRoomID = line.slice((bracketIndex as number) + 3, parenIndex);
+		const thisRoomID = line.slice((bracketIndex as number) + 3, parenIndex)
+			.replace(
+				/tournament: ([a-zA-z0-9]+)/,
+				(match, room) => `tournament: «<a href="/${room}" target="_blank">${room}</a>»`
+			);
 		if (addModlogLinks) {
 			const url = Config.modloglink(time, thisRoomID);
 			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 		}
-		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Utils.escapeHTML(line.slice(parenIndex + 1))}`;
+		line = Utils.escapeHTML(line.slice(parenIndex + 1));
+		if (!hideIps) line = line.replace(IPS_REGEX, `[<a href="https://whatismyipaddress.com/ip/$1" target="_blank">$1</a>]`);
+		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${line}`;
 	}).join(`<br />`);
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
@@ -287,7 +294,7 @@ function prettifyResults(
 }
 
 async function getModlog(
-	connection: Connection, roomid: RoomID = 'global', searchString = '',
+	connection: Connection, roomid: RoomID | 'global' = 'global', searchString = '',
 	maxLines = 20, onlyPunishments = false, timed = false
 ) {
 	const startTime = Date.now();
@@ -328,7 +335,7 @@ async function getModlog(
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
 		roomidList = [...Rooms.rooms.values()].filter(
-			room => !(room.settings.isPrivate || room.battle || room.settings.isPersonal || room.roomid === 'global')
+			room => !(room.settings.isPrivate || room.settings.isPersonal)
 		).map(room => room.roomid);
 	} else {
 		roomidList = [roomid];
@@ -563,19 +570,18 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	'!modlog': true,
 	ml: 'modlog',
 	punishlog: 'modlog',
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		if (!room) (room as Room | undefined) = Rooms.get('global');
-		let roomid: RoomID = (room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: RoomID | 'global' = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			const targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toID(targets[0]) as RoomID || room.roomid;
+			const newid = toID(targets[0]) as RoomID;
+			if (newid) roomid = newid;
 		}
 
 		const targetRoom = Rooms.search(roomid);

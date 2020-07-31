@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		for (const i in this.data.Items) {
 			if (!this.data.Items[i].megaStone) continue;

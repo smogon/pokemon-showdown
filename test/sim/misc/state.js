@@ -3,6 +3,7 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 const Battle = require('./../../../.sim-dist/battle').Battle;
+const State = require('./../../../.sim-dist/state').State;
 
 const TEAMS = [[
 	{species: 'Mew', ability: 'synchronize', item: 'assaultvest', moves: ['psychic']},
@@ -31,7 +32,7 @@ describe('State', function () {
 				control.makeChoices();
 				test.makeChoices();
 
-				assert.deepEqual(test.toJSON(), control.toJSON());
+				assert.deepEqual(State.normalize(test.toJSON()), State.normalize(control.toJSON()));
 
 				// Roundtrip the test battle to confirm it still works.
 				const send = test.send;
