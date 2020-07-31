@@ -2559,8 +2559,6 @@ export const commands: ChatCommands = {
 		],
 
 		'!revive': true,
-
-      
 		forceadd: 'revive',
 		add: 'revive',
 		revive(target, room, user, connection, cmd) {
