@@ -678,8 +678,9 @@ export const pages: PageTable = {
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
 		const parsedDate = new Date(date as string);
+		const validDateStrings = ['all', 'alltime', 'today'];
 		// this is apparently the best way to tell if a date is invalid
-		if (isNaN(parsedDate.getTime()) && !isAll && date !== 'today') {
+		if (date && isNaN(parsedDate.getTime()) && !validDateStrings.includes(toID(date))) {
 			return LogViewer.error(`Invalid date.`);
 		}
 
