@@ -612,7 +612,7 @@ class Trivia extends Rooms.RoomGame {
 	 */
 	sendQuestion(question: TriviaQuestion) {
 		this.broadcast(
-			`Question: ${question.question}`,
+			`Question ${this.questionNumber}: ${question.question}`,
 			`Category: ${ALL_CATEGORIES[question.category]}`
 		);
 	}
