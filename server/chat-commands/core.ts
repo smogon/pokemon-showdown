@@ -718,26 +718,6 @@ export const commands: ChatCommands = {
 		});
 	},
 
-	showrank: 'hiderank',
-	hiderank(target, room, user, connection, cmd) {
-		const isShow = cmd === 'showrank';
-		const group = (isShow ? user.group : target.trim() as GroupSymbol) || Users.Auth.defaultSymbol();
-		if (user.visualGroup === group) return this.errorReply(`You are already displayed as the rank '${group}'.`);
-		if (!(group in Config.groups) && group !== Users.Auth.defaultSymbol()) {
-			return this.errorReply(`You must specify a valid rank.`);
-		}
-		if (!isShow && Config.groups[group].rank > Config.groups[user.group].rank) {
-			return this.errorReply("You may only hide your rank as a rank lower than yours.");
-		}
-		user.setVisualGroup(group);
-		return this.sendReply(`You are now displayed as the rank '${user.visualGroup}'!`);
-	},
-	showrankhelp: 'hiderankhelp',
-	hiderankhelp: [
-		`/hiderank [rank] - Displays your global rank as the given [rank].`,
-		`/showrank - Displays your true global rank instead of the rank you're hidden as.`,
-	],
-
 	updatesettings(target, room, user) {
 		const settings: Partial<UserSettings> = {};
 		try {
@@ -1591,9 +1571,6 @@ export const commands: ChatCommands = {
 				};
 			}
 
-			if (!nextNamespace) {
-				return this.errorReply(`The command '/${target}' does not exist.`);
-			}
 			if (typeof nextNamespace === 'function') break;
 			namespace = nextNamespace as import('../chat').AnnotatedChatCommands;
 		}

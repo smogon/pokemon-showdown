@@ -1,11 +1,36 @@
 Contributing to Pokémon Showdown
 ========================================================================
 
+Building and running
+------------------------------------------------------------------------
+
+The README contains most of the relevant information here.
+
+https://github.com/smogon/pokemon-showdown/blob/master/README.md
+
+Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
+
+PS has other useful command-line invocations, which you can investigate with `./pokemon-showdown help`.
+
+Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.
+
+
+Contributing
+------------------------------------------------------------------------
+
 In general, we welcome pull requests that fix bugs.
 
-For feature additions and large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
+For feature additions and large projects, please discuss with us at https://psim.us/development an/dor https://psim.us/devdiscord first. We'd hate to have to reject a pull request that you spent a long time working on.
 
-If you're looking for inspiration for something to do, the Ideas issue is a good place to look: https://github.com/smogon/pokemon-showdown/issues/2444
+If you're looking for inspiration for something to do, the Ideas issue has some ideas: https://github.com/smogon/pokemon-showdown/issues/2444
+
+Also useful is the Suggestions forum (you don't need to worry about approval if you take Approved suggestions): https://www.smogon.com/forums/forums/suggestions.517/
+
+Also useful is the Mechanics Bugs kanban board: https://github.com/smogon/pokemon-showdown/projects/3
+
+There's no need to worry about code standards too much (unit tests will automatically catch most of what we care about, we'll point out the rest if you make a pull request), but there here if you want them.
+
+We try to respond to pull requests within a few days, but feel free to bump yours if it seems like we forget about it. Sometimes we did, and sometimes there might be a miscommunication in terms of who is waiting for what.
 
 
 License
@@ -88,7 +113,7 @@ Unfortunately, since this is not a convention the linter can test for (and also 
 
 ### Optionals: `null` vs `undefined` vs `false`
 
-PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`. This is mostly because TypeScript expands `T?` to `T | null`.
+PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`.
 
 Some old code returns `T | undefined` (our previous convention). This is a relatively common standard (ironically, TypeScript itself uses it). Feel free to convert to `T | null` where you see it.
 
@@ -160,12 +185,14 @@ In general, use modern features; recent versions of V8 have fixed the performanc
 
 - **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over, but be careful not to use them for IDs (follow the String standards). Look at existing uses for guidance.
 
+- **Multiline template strings: NEVER** - Multiline template strings are a frequent source of bugs, so it's better to be explicit with `\n`.
+
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
 
 
 TypeScript Features
 ------------------------------------------------------------------------
 
-- **Constant Enums: NEVER** - Not supported by Sucrase our current choice of transpiler.
+- **Constant Enums: NEVER** - Not supported by Sucrase, our current choice of transpiler. We prefer constant union types, anyway (like `type Category = 'Physical' | 'Special' | 'Status'`)
 
-- **Default Properties: NEVER** - Bad performance when used with Sucrase. Prefer setting properties directly in a constructor instead.
+- **Default Properties: SOMETIMES** - Bad performance when used with Sucrase. This is fine for objects that are rarely created, but prefer setting properties directly in a constructor, for objects created in inner loops.

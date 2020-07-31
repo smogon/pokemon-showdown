@@ -1095,7 +1095,7 @@ export class GlobalRoomState {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			const groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ?
+			const groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
 				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
 
 			rankList.push({
@@ -1436,7 +1436,7 @@ export class GlobalRoomState {
 			Rooms.get('staff')?.add(crashMessage).update();
 		}
 		if (privateCrashMessage) {
-			upperStaffRoom!.add(privateCrashMessage);
+			upperStaffRoom!.add(privateCrashMessage).update();
 		}
 	}
 	/**

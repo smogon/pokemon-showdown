@@ -1236,7 +1236,7 @@ export class Pokemon {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
 			this.setAbility(species.abilities['0'], null, true);
-			if (isPermanent) this.baseAbility = this.ability;
+			this.baseAbility = this.ability;
 		}
 		return true;
 	}

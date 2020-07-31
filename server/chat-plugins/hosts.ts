@@ -199,7 +199,7 @@ export const commands: ChatCommands = {
 			const range = {
 				minIP: minIP,
 				maxIP: maxIP,
-				host: url ? IPTools.urlToHost(url) : toRename.host,
+				host: IPTools.urlToHost(url),
 			};
 			void IPTools.addRange(range);
 			const renameInfo = `IP range at ${start}-${end} to ${range.host}`;

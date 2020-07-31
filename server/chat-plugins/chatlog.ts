@@ -235,7 +235,7 @@ export const LogViewer = new class {
 		buf += this.renderDayResults(results, roomid);
 		if (total > limit) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
 			buf += `<br><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
@@ -604,7 +604,6 @@ export const LogSearcher = new class {
 				} else {
 					date = '';
 				}
-
 				if (matched.includes('chat chatmessage highlighted')) {
 					exactMatches.push(matched);
 				}
