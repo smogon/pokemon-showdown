@@ -730,12 +730,12 @@ export const commands: ChatCommands = {
 		let tarRoom = room.roomid;
 		for (const arg of args) {
 			if (arg.startsWith('room:')) {
-				const id = arg.slice(arg.indexOf('room:') + 5);
+				const id = arg.slice(5);
 				tarRoom = id as RoomID;
 			} else if (arg.startsWith('limit:')) {
-				limit = arg.slice(arg.indexOf('limit:') + 6);
+				limit = arg.slice(6);
 			} else if (arg.startsWith('date:')) {
-				date = arg.slice(arg.indexOf('date:') + 5);
+				date = arg.slice(5);
 			} else {
 				searches.push(arg);
 			}
