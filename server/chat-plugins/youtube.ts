@@ -29,7 +29,7 @@ export class YoutubeInterface {
 		this.interval = null;
 		this.intervalTime = 0;
 	}
-	async getChannelData(link: string, username?: string, saveData = true) {
+	async getChannelData(link: string, username?: string) {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
@@ -52,7 +52,7 @@ export class YoutubeInterface {
 			username: username,
 		};
 		this.data[id] = {...cache};
-		if (saveData) this.save();
+		this.save();
 		return cache;
 	}
 	async generateChannelDisplay(link: string) {
