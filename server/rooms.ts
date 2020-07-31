@@ -609,7 +609,7 @@ export abstract class BasicRoom {
 		}
 		entry = `|${ucType}|${entry}`;
 		if (this.batchJoins) {
-			this.log.broadcastBuffer += entry;
+			this.log.broadcastBuffer += entry + '\n';
 
 			if (!this.reportJoinsInterval) {
 				this.reportJoinsInterval = setTimeout(
@@ -1543,7 +1543,7 @@ export class GameRoom extends BasicRoom {
 		if (!this.log.broadcastBuffer) return;
 
 		if (this.userCount) {
-			Sockets.channelBroadcast(this.roomid, '>' + this.roomid + '\n\n' + this.log.broadcastBuffer);
+			Sockets.channelBroadcast(this.roomid, `>${this.roomid}\n${this.log.broadcastBuffer}`);
 		}
 		this.log.broadcastBuffer = '';
 
