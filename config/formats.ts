@@ -264,19 +264,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 	},
 	{
-		name: "[Gen 8] Doubles OU (Dynamax Level 0)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666636/">Doubles OU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658826/">Doubles OU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658242/">Doubles OU Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
-		banlist: ['DUber', 'Beat Up'],
-	},
-	{
 		name: "[Gen 8] Doubles Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers Metagame Discussion</a>`,
