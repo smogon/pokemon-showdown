@@ -21,7 +21,6 @@ import * as RoomGames from "./room-game";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
-type DataResolver = (args: string[]) => void;
 export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
 
 interface BattleRequestTracker {
@@ -492,7 +491,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
-	dataResolvers?: ((args: string[]) => void)[];
+	dataResolvers?: [((args: string[]) => void), ((args?: string) => void)][];
 	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
 		const format = Dex.getFormat(formatid, true);
@@ -730,7 +729,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		switch (lines[0]) {
 		case 'requesteddata':
 			lines = lines.slice(1);
-			const resolver = this.dataResolvers!.shift()!;
+			const resolver = this.dataResolvers!.shift()![0];
 			resolver(lines);
 			break;
 
@@ -1119,29 +1118,40 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		// @ts-ignore
 		this.room = null;
+		if (this.dataResolvers) {
+			for (const [, reject] of this.dataResolvers) {
+				// reject the promise, make whatever function called it return undefined
+				reject('Battle was destroyed.');
+			}
+		}
 	}
 	async getTeam(user: User) {
 		const id = user.id;
 		const player = this.playerTable[id];
 		if (!player) return;
 		void this.stream.write(`>requestteam ${player.slot}`);
-		const teamDataPromise = new Promise<string[]>(resolve => {
+		const teamDataPromise = new Promise<string[]>((resolve, reject) => {
 			if (!this.dataResolvers) this.dataResolvers = [];
-			this.dataResolvers.push(resolve);
+			this.dataResolvers.push([resolve, reject]);
+		}).catch(e => {
+			if (!e.message.includes("Battle was destroyed.")) throw e;
 		});
 		const resultStrings = await teamDataPromise;
+		if (!resultStrings) return;
 		const result = resultStrings.map(item => Dex.fastUnpackTeam(item))[0];
 		return result;
 	}
 	onChatMessage(message: string, user: User) {
 		void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${message}`);
 	}
-	async getLog(): Promise<string[]> {
+	async getLog(): Promise<string[] | void> {
 		if (!this.logData) this.logData = {};
 		void this.stream.write('>requestlog');
-		const logPromise = new Promise<string[]>(resolve => {
+		const logPromise = new Promise<string[]>((resolve, reject) => {
 			if (!this.dataResolvers) this.dataResolvers = [];
-			this.dataResolvers.push(resolve);
+			this.dataResolvers.push([resolve, reject]);
+		}).catch(e => {
+			if (!e.message.includes("Battle was destroyed.")) throw e;
 		});
 		const result = await logPromise;
 		return result;
