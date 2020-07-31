@@ -132,6 +132,19 @@
 		"You are now blocking all incoming challenge requests.": "आप अब सभी मुकाबले के अनुरोध रोक रहे हैं.",
 		"You are already blocking challenges!": " आप पहले से ही मुकाबले रोक रहे हैं!",
 		"You are already available for challenges!": "आप पहले से ही मुकाबले के लिए तैयार हैं!",
-		"You are available for challenges from now on.": "अब आप मुकाबलों के लिए तैयार हैं."
+		"You are available for challenges from now on.": "अब आप मुकाबलों के लिए तैयार हैं.",
+
+		"The announcement has ended.": "",
+		"Battles do not support announcements.": "",
+		"You are not allowed to use filtered words in announcements.": "",
+		"There is already a poll or announcement in progress in this room.": "",
+		"An announcement was started by ${user.name}.": "",
+		"There is no announcement running in this room.": "",
+		"There is no timer to clear.": "",
+		"The announcement timer was turned off.": "",
+		"Invalid time given.": "",
+		"The announcement timer is off.": "",
+		"The announcement was ended by ${user.name}.": "",
+		"Accepts the following commands:": ""
 	}
 }

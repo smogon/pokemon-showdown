@@ -131,6 +131,19 @@
 		"You are now blocking all incoming challenge requests.": "",
 		"You are already blocking challenges!": "",
 		"You are already available for challenges!": "",
-		"You are available for challenges from now on.": ""
+		"You are available for challenges from now on.": "",
+
+		"The announcement has ended.": "",
+		"Battles do not support announcements.": "",
+		"You are not allowed to use filtered words in announcements.": "",
+		"There is already a poll or announcement in progress in this room.": "",
+		"An announcement was started by ${user.name}.": "",
+		"There is no announcement running in this room.": "",
+		"There is no timer to clear.": "",
+		"The announcement timer was turned off.": "",
+		"Invalid time given.": "",
+		"The announcement timer is off.": "",
+		"The announcement was ended by ${user.name}.": "",
+		"Accepts the following commands:": ""
 	}
 }

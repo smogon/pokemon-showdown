@@ -130,6 +130,19 @@
 		"You are now blocking all incoming challenge requests.": "您已屏蔽所有挑战请求",
 		"You are already blocking challenges!": "您已屏蔽挑战请求",
 		"You are already available for challenges!": "您已能够接收挑战请求",
-		"You are available for challenges from now on.": "您从现在开始接收挑战请求"
+		"You are available for challenges from now on.": "您从现在开始接收挑战请求",
+
+		"The announcement has ended.": "",
+		"Battles do not support announcements.": "",
+		"You are not allowed to use filtered words in announcements.": "",
+		"There is already a poll or announcement in progress in this room.": "",
+		"An announcement was started by ${user.name}.": "",
+		"There is no announcement running in this room.": "",
+		"There is no timer to clear.": "",
+		"The announcement timer was turned off.": "",
+		"Invalid time given.": "",
+		"The announcement timer is off.": "",
+		"The announcement was ended by ${user.name}.": "",
+		"Accepts the following commands:": ""
 	}
 }
