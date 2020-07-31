@@ -11,7 +11,7 @@ describe(`Youtube features`, function () {
 		if (!Config.youtubeKey) return true;
 		const Youtube = new YoutubeInterface({});
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
-		await Youtube.getChannelData(url, undefined, false);
+		await Youtube.getChannelData(url, undefined);
 		assert.ok(Youtube.data['UCuAXFkgsw1L7xaCfnd5JJOw']);
 	});
 
@@ -20,7 +20,7 @@ describe(`Youtube features`, function () {
 		const Youtube = new YoutubeInterface({});
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		const channelId = 'UCuAXFkgsw1L7xaCfnd5JJOw';
-		await Youtube.getChannelData(url, 'Pickle Rick', false);
+		await Youtube.getChannelData(url, 'Pickle Rick');
 		assert.strictEqual(channelId, Youtube.channelSearch('Pickle Rick'));
 		assert.strictEqual(channelId, Youtube.channelSearch('Official Rick Astley'));
 	});
