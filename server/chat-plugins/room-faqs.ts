@@ -1,7 +1,7 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
-const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
+export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
 let roomFaqs: {[k: string]: {[k: string]: string}} = {};
