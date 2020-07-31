@@ -339,7 +339,7 @@ export const commands: ChatCommands = {
 			Answerer.writeState();
 
 			this.privateModAction(`${user.name} approved regex for use with queue number ${target}`);
-			this.modlog(`HELPFILTER APPROVE`, null, `${target}`);
+			this.modlog(`HELPFILTER APPROVE`, null, `${target}: ${str}`);
 		},
 		deny(target, room, user) {
 			if (!helpRoom) return this.errorReply(`No Help room to manage the filter for.`);
@@ -376,7 +376,7 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	helpfilter(args, user) {
 		if (!helpRoom) return `<h2>No Help room to view data for.</h2>`;
-		const canChange = user.authAtLeast(`@`, helpRoom);
+		const canChange = helpRoom.auth.atLeast(user, '@');
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
 			let button = `<button class="button" name="send" value="/join view-helpfilter-${type}`;

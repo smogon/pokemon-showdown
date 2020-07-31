@@ -4,20 +4,21 @@
  */
 
 'use strict';
-
 const assert = require('assert').strict;
-
-const defaultData = {
-	stats: {},
-	pairs: {},
-	disabled: false,
-	queue: [],
-};
+let Help;
 
 describe('Help', function () {
-	it('should only return true on added regexes', function () {
+	before(function () {
+		const defaultData = {
+			stats: {},
+			pairs: {},
+			disabled: false,
+			queue: [],
+		};
 		const Answerer = require('../../../.server-dist/chat-plugins/help').HelpAnswerer;
-		const Help = new Answerer(defaultData);
+		Help = new Answerer(defaultData);
+	});
+	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
 		Help.data.pairs.catra.push(Help.stringRegex(`Hey & adora`));
 		assert.ok(Help.match('Hey, adora', 'catra'));
@@ -25,20 +26,15 @@ describe('Help', function () {
 	});
 
 	it('should produce valid regexes', function () {
-		const Answerer = require('../../../.server-dist/chat-plugins/help').HelpAnswerer;
-		const Help = new Answerer(defaultData);
 		const regexString = Help.stringRegex(`uwu & awa`);
 		assert.strictEqual(regexString, "(?=.*?(uwu))(?=.*?(awa))");
 		const regex = new RegExp(regexString);
 		assert.ok(regex.test('uwu awa'));
 	});
 	it('should handle |, &, and ! correctly', function () {
-		const Answerer = require('../../../.server-dist/chat-plugins/help').HelpAnswerer;
-		const Help = new Answerer(defaultData);
-
-		const and = new RegExp(Help.stringRegex(`horde & prime`));
-		assert.ok(and.test('horde prime'));
-		assert.ok(!and.test('horde'));
+		const and = new RegExp(Help.stringRegex(`Horde & Prime`));
+		assert.ok(and.test('Horde Prime'));
+		assert.ok(!and.test('Horde'));
 
 		const or = new RegExp(Help.stringRegex(`she-ra|sea-ra`));
 		assert.ok(or.test('sea-ra'));
