@@ -1741,6 +1741,13 @@ export const commands: ChatCommands = {
 		);
 	},
 
+	battlerules(target, room, user) {
+		return this.parse(`/join view-battlerules`);
+	},
+	battleruleshelp: [
+		`/battlerules - Provides information on the rules that can be added to tournament and challenge battles.`,
+	],
+
 	banlists: 'formathelp',
 	tier: 'formathelp',
 	tiers: 'formathelp',
@@ -2599,6 +2606,46 @@ export const commands: ChatCommands = {
 };
 
 export const pages: PageTable = {
+	battlerules(query, user) {
+		const rules = Object.values(Dex.data.Formats).filter(rule => rule.effectType !== "Format");
+		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
+		this.title = "Custom Rules";
+		let rulesHTML = `<div clas="pad"><h1>Custom Rules in challenges and tournaments</h1>`;
+		const basics = [
+			`<p>Pok&eacute;mon Showdown! supports custom rules in three ways:</p>`,
+			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
+			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li>`,
+			`<li>Custom rules on your own server</li></ul>`,
+			`<h2><u>Bans</u></h2>`,
+			`<p>Bans are just a <code>-</code> followed by the thing you want to ban.</p>`,
+			`<h3>Individual bans</h3>`,
+			`<ul><li><code>- Arceus</code>: Ban a Pok&eacute;mon (including all formes)</li>`,
+			`<li><code>- Arceus-Flying</code> or <code>- Giratina-Altered</code>: Ban a Pok&eacute;mon forme</li>`,
+			`<li><code>- Baton Pass</code>: Ban a move/item/ability/etc</li></ul>`,
+			`<h3>Group bans</h3>`,
+			`<ul><li><code>- OU</code> or <code>- DUU</code>: Ban a tier</li>`,
+			`<li><code>- Mega</code> or <code>- CAP</code>: Ban a Pok&eacute;mon category</li></ul>`,
+			`<h3>Complex bans</h3>`,
+			`<ul><li><code>- Blaziken + Speed Boost</code>: Ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)</li>`,
+			`<li><code>- Drizzle ++ Swift Swim</code>: Ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`,
+			`<h2><u>Unbans</u></h2>`,
+			`<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`,
+			`<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
+			`<p><a class="button" href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">More details</a></p>`,
+		];
+		const rulesets = [
+			`<h2><u>Rules, mods, and clauses</u></h2>`,
+			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
+			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
+			`<ul>`,
+		];
+		for (const rule of rules) {
+			rulesets.push(`<li><code>${rule.name}</code>: ${rule.desc}</li>`);
+		}
+		rulesets.push(`</ul>`);
+		rulesHTML += `${basics.concat(rulesets).join('')}</div>`;
+		return rulesHTML;
+	},
 	punishments(query, user) {
 		this.title = 'Punishments';
 		const room = this.extractRoom();
