@@ -140,7 +140,6 @@ export class ModdedDex {
 	readonly isBase: boolean;
 	readonly currentMod: string;
 
-	readonly getString: (text: any) => string;
 	readonly toID: (text: any) => ID;
 
 	readonly abilityCache: Map<ID, Ability>;
@@ -166,7 +165,6 @@ export class ModdedDex {
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 
-		this.getString = Utils.getString;
 		this.toID = toID;
 
 		this.abilityCache = new Map();

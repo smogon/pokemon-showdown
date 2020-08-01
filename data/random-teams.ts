@@ -1076,17 +1076,9 @@ export class RandomTeams {
 				if (['Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine', 'Weak Armor'].includes(ability)) {
 					rejectAbility = true;
 				} else if (['Adaptability', 'Contrary', 'Serene Grace', 'Skill Link', 'Strong Jaw'].includes(ability)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Analytic') {
 					rejectAbility = (hasMove['rapidspin'] || species.nfe);
-=======
-					rejectAbility = !counter[this.dex.toID(ability)];
->>>>>>> Remove sim/ and data/'s globals
-=======
-					rejectAbility = !counter[toID(ability)];
->>>>>>> stuff
 				} else if (ability === 'Bulletproof' || ability === 'Overcoat') {
 					rejectAbility = (counter.setupType && hasAbility['Soundproof']);
 				} else if (ability === 'Chlorophyll') {

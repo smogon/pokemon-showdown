@@ -29,7 +29,7 @@ export const Utils = new class Utils {
 	 *     console.log(`a is ${a}`);
 	 *
 	 * This will crash (because a.toString() is not a function). Instead,
-	 * Dex.getString simply returns '' if the passed variable isn't a
+	 * getString simply returns '' if the passed variable isn't a
 	 * string or a number.
 	 */
 	getString(str: any): string {
