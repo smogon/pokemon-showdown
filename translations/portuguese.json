@@ -132,6 +132,19 @@
 		"You are now blocking all incoming challenge requests.": "Agora você está bloqueando todos os pedidos de desafio.",
 		"You are already blocking challenges!": "Você já está bloqueando desafios",
 		"You are already available for challenges!": "Você já está disponível para desafios!",
-		"You are available for challenges from now on.": "Você está disponível para desafios a partir de agora."
+		"You are available for challenges from now on.": "Você está disponível para desafios a partir de agora.",
+
+		"The announcement has ended.": "",
+		"Battles do not support announcements.": "",
+		"You are not allowed to use filtered words in announcements.": "",
+		"There is already a poll or announcement in progress in this room.": "",
+		"An announcement was started by ${user.name}.": "",
+		"There is no announcement running in this room.": "",
+		"There is no timer to clear.": "",
+		"The announcement timer was turned off.": "",
+		"Invalid time given.": "",
+		"The announcement timer is off.": "",
+		"The announcement was ended by ${user.name}.": "",
+		"Accepts the following commands:": ""
 	}
 }

@@ -131,6 +131,19 @@
 		"You are now blocking all incoming challenge requests.": " 対戦の申し込みをブロックしました。",
 		"You are already blocking challenges!": "すでに対戦の申し込みをブロックしています。",
 		"You are already available for challenges!": "現在対戦の申し込みをブロックしていません。",
-		"You are available for challenges from now on.": "対戦の申し込みのブロックを解除しました。"
+		"You are available for challenges from now on.": "対戦の申し込みのブロックを解除しました。",
+
+		"The announcement has ended.": "",
+		"Battles do not support announcements.": "",
+		"You are not allowed to use filtered words in announcements.": "",
+		"There is already a poll or announcement in progress in this room.": "",
+		"An announcement was started by ${user.name}.": "",
+		"There is no announcement running in this room.": "",
+		"There is no timer to clear.": "",
+		"The announcement timer was turned off.": "",
+		"Invalid time given.": "",
+		"The announcement timer is off.": "",
+		"The announcement was ended by ${user.name}.": "",
+		"Accepts the following commands:": ""
 	}
 }
