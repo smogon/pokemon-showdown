@@ -833,6 +833,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Corsola-Galar', 'Sneasel', 'Type: Null', 'Arena Trap', 'Ice Scales', 'Moody', 'Baton Pass', 'King\'s Rock'],
 		restricted: ['Chansey', 'Lunala', 'Shedinja', 'Solgaleo', 'Gorilla Tactics', 'Huge Power', 'Pure Power', 'Shadow Tag'],
