@@ -217,7 +217,8 @@ export class HelpAnswerer {
 export const Answerer = new HelpAnswerer(helpData);
 
 export const chatfilter: ChatFilter = (message, user, room) => {
-	if (room?.roomid === 'help' && room.auth.get(user.id) === ' ' && !Answerer.disabled) {
+	if (!helpRoom) return message;
+	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.disabled) {
 		const reply = Answerer.visualize(message, false, user);
 		if (message.startsWith('/') || message.startsWith('!')) return message;
 		if (!reply) {
@@ -239,6 +240,7 @@ export const chatfilter: ChatFilter = (message, user, room) => {
 
 export const commands: ChatCommands = {
 	question(target, room, user) {
+		if (!helpRoom) return this.errorReply(`There is no room configured for use of the Help filter.`);
 		if (!target) return this.parse("/help question");
 		const reply = Answerer.visualize(target, true);
 		if (!reply) return this.sendReplyBox(`No answer found.`);
@@ -250,6 +252,7 @@ export const commands: ChatCommands = {
 	hf: 'helpfilter',
 	helpfilter: {
 		''(target) {
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of the Help filter.`);
 			if (!target) {
 				this.parse('/help helpfilter');
 				return this.sendReply(`The Help auto-response filter is currently set to: ${Answerer.disabled ? 'OFF' : "ON"}`);
@@ -261,7 +264,8 @@ export const commands: ChatCommands = {
 		},
 		toggle(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (room.roomid !== 'help') return this.errorReply(`This command is only available in the Help room.`);
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
+			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			if (!target) {
 				return this.sendReply(`The Help auto-response filter is currently set to: ${Answerer.disabled ? 'OFF' : "ON"}`);
 			}
@@ -280,8 +284,9 @@ export const commands: ChatCommands = {
 		},
 		forceadd: 'add',
 		add(target, room, user, connection, cmd) {
-			if (room?.roomid !== 'help') return this.errorReply(`This command is only available in the Help room.`);
-			if (!helpRoom) return this.errorReply(`No Help room to manage the filter for.`);
+			if (!room) return this.requiresRoom();
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
+			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			const force = cmd === 'forceadd';
 			if (force && (!REGEX_WHITELIST.includes(user.id) && !user.can('rangeban'))) {
 				return this.errorReply(`You cannot use raw regex - use /helpfilter add instead.`);
@@ -292,7 +297,7 @@ export const commands: ChatCommands = {
 			this.modlog(`HELPFILTER ADD`, null, target);
 		},
 		remove(target, room, user) {
-			if (!helpRoom) return this.errorReply(`No Help room to manage the filter for.`);
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (!this.can('ban', null, helpRoom)) return false;
 			const [faq, index] = target.split(',');
 			// intended for use mainly within the page, so supports being used in all rooms
@@ -304,8 +309,9 @@ export const commands: ChatCommands = {
 			this.modlog('HELPFILTER REMOVE', null, index);
 		},
 		queue(target, room, user) {
-			if (room?.roomid !== 'help') return this.errorReply(`This command is only available in the Help room.`);
-			if (!helpRoom) return this.errorReply(`No Help room to manage the filter for.`);
+			if (!room) return this.requiresRoom();
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
+			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			if (!this.can('show', null, helpRoom)) return false;
 			if (!room.auth.has(user.id)) return this.errorReply(`Only roomauth can submit regexes to the filter.`);
 			if (!target) return this.errorReply(`Specify regex.`);
@@ -321,7 +327,7 @@ export const commands: ChatCommands = {
 			return this.sendReply(`Added "${target}" to the regex suggestion queue.`);
 		},
 		approve(target, room, user) {
-			if (!helpRoom) return this.errorReply(`No Help room to manage the filter for.`);
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (!this.can('ban', null, helpRoom)) return false;
 			// intended for use mainly within the page, so supports being used in all rooms
 			this.room = helpRoom;
@@ -342,7 +348,7 @@ export const commands: ChatCommands = {
 			this.modlog(`HELPFILTER APPROVE`, null, `${target}: ${str}`);
 		},
 		deny(target, room, user) {
-			if (!helpRoom) return this.errorReply(`No Help room to manage the filter for.`);
+			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (!this.can('ban', null, helpRoom)) return false;
 			// intended for use mainly within the page, so supports being used in all rooms
 			this.room = helpRoom;
@@ -375,7 +381,7 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	helpfilter(args, user) {
-		if (!helpRoom) return `<h2>No Help room to view data for.</h2>`;
+		if (!helpRoom) return `<h2>There is no room configured to use the help filter.</h2>`;
 		const canChange = helpRoom.auth.atLeast(user, '@');
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
