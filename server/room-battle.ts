@@ -491,7 +491,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
-	dataResolvers?: [((args: string[]) => void), ((args?: string) => void)][];
+	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
 		const format = Dex.getFormat(formatid, true);
@@ -729,7 +729,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		switch (lines[0]) {
 		case 'requesteddata':
 			lines = lines.slice(1);
-			const resolver = this.dataResolvers!.shift()![0];
+			const [resolver] = this.dataResolvers!.shift()!;
 			resolver(lines);
 			break;
 
@@ -1121,7 +1121,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (this.dataResolvers) {
 			for (const [, reject] of this.dataResolvers) {
 				// reject the promise, make whatever function called it return undefined
-				reject('Battle was destroyed.');
+				reject(new Error('Battle was destroyed.'));
 			}
 		}
 	}
@@ -1133,8 +1133,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const teamDataPromise = new Promise<string[]>((resolve, reject) => {
 			if (!this.dataResolvers) this.dataResolvers = [];
 			this.dataResolvers.push([resolve, reject]);
-		}).catch(e => {
-			if (!e.message.includes("Battle was destroyed.")) throw e;
 		});
 		const resultStrings = await teamDataPromise;
 		if (!resultStrings) return;
@@ -1150,8 +1148,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const logPromise = new Promise<string[]>((resolve, reject) => {
 			if (!this.dataResolvers) this.dataResolvers = [];
 			this.dataResolvers.push([resolve, reject]);
-		}).catch(e => {
-			if (!e.message.includes("Battle was destroyed.")) throw e;
 		});
 		const result = await logPromise;
 		return result;
