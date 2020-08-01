@@ -1647,7 +1647,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -3491,7 +3491,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -3650,7 +3650,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 				attacker.formeChange(forme, move);
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -5753,7 +5753,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -6058,7 +6058,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -6432,7 +6432,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -9350,7 +9350,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -11798,7 +11798,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			this.boost({spa: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
@@ -13397,7 +13397,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -14811,7 +14811,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -16135,7 +16135,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -16678,7 +16678,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			this.boost({def: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
@@ -16707,7 +16707,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -17313,7 +17313,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -17351,7 +17351,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);

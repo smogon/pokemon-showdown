@@ -582,10 +582,14 @@ stat boosts are minor actions.
 > The `SOURCE` Pokémon has used a move and is waiting for the `TARGET` Pokémon
 > (For example: Fire Pledge).
 
+`|-prepare|ATTACKER|MOVE`
+> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on an unknown target.
+> (For example: Dig, Fly).
+
 `|-prepare|ATTACKER|MOVE|DEFENDER`
 
-> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on the `DEFENDER`
-> (For example: Dig, Fly).
+> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on the `DEFENDER`.
+> (For example: Sky Drop).
 
 `|-mustrecharge|POKEMON`
 
