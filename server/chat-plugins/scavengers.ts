@@ -831,7 +831,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		if (this.room.settings.scavQueue && this.room.settings.scavQueue.length) {
 			setTimeout(() => {
 				const room = Rooms.get(roomid) as ChatRoom;
-				if (!room || room.game || !room.settings.scavQueue?.length) return;
+				if (!room || room.game || !room.settings.scavQueue?.length || room.settings.scavSettings?.scavQueueDisabled) return;
 
 				const next = room.settings.scavQueue.shift()!;
 				const duration = room.settings.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
@@ -1154,7 +1154,6 @@ const ScavengerCommands: ChatCommands = {
 
 			const html = await room.scavgame.leaderboard.htmlLadder();
 			this.sendReply(`|raw|${html}`);
-			if (this.broadcasting) room.update();
 		},
 
 		async rank(target, room, user) {
@@ -1172,7 +1171,6 @@ const ScavengerCommands: ChatCommands = {
 			} else {
 				this.sendReplyBox(Utils.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
 			}
-			if (this.broadcasting) room.update();
 		},
 	},
 	teamscavs: {
@@ -1185,7 +1183,8 @@ const ScavengerCommands: ChatCommands = {
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 
-			const [teamName, leader] = target.split(',');
+			let [teamName, leader] = target.split(',');
+			teamName = teamName.trim();
 			if (game.teams[teamName]) return this.errorReply(`The team ${teamName} already exists.`);
 
 			const leaderUser = Users.get(leader);
@@ -1521,6 +1520,30 @@ const ScavengerCommands: ChatCommands = {
 		game.onEnd(true, user);
 		this.privateModAction(`${user.name} has reset the scavenger hunt.`);
 		this.modlog('SCAV RESET');
+	},
+
+	resettoqueue(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!this.can('mute', null, room)) return false;
+		const game = room.getGame(ScavengerHunt);
+		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
+
+		const hunt: QueuedHunt = {
+			hosts: game.hosts,
+			questions: [],
+			staffHostId: game.staffHostId,
+			staffHostName: game.StaffHostName,
+			gameType: game.gameType,
+		};
+		for (const entry of game.questions) {
+			hunt.questions.push(...[entry.hint, entry.answer]);
+		}
+		if (!room.settings.scavQueue) room.settings.scavQueue = [];
+		room.settings.scavQueue.push(hunt);
+
+		game.onEnd(true, user);
+		this.privateModAction(`${user.name} has reset the scavenger hunt, and placed it in the queue.`);
+		this.modlog('SCAV RESETTOQUEUE');
 	},
 
 	forceend: 'end',
@@ -1910,7 +1933,6 @@ const ScavengerCommands: ChatCommands = {
 				"Show" :
 				"Hide"} Auth</button></div>`
 		);
-		if (this.broadcasting) room.update();
 	},
 
 	async rank(target, room, user) {
@@ -1928,7 +1950,6 @@ const ScavengerCommands: ChatCommands = {
 		} else {
 			this.sendReplyBox(Utils.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
 		}
-		if (this.broadcasting) room.update();
 	},
 
 	/**
@@ -2464,6 +2485,7 @@ export const commands: ChatCommands = {
 	joinhunt: ScavengerCommands.join,
 	leavehunt: ScavengerCommands.leave,
 	resethunt: ScavengerCommands.reset,
+	resethunttoqueue: ScavengerCommands.resettoqueue,
 	forceendhunt: 'endhunt',
 	endhunt: ScavengerCommands.end,
 	edithunt: ScavengerCommands.edithunt,
@@ -2520,6 +2542,7 @@ export const commands: ChatCommands = {
 			"- /scav edithint <em>[question number], [hint number], [value]</em> - edits a hint to a question in the current scavenger hunt. Only the host(s) can edit a hint.",
 			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
 			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # &)",
+			"- /resethunttoqueue - resets the current scavenger hunt without revealing the hints and answers, and adds it directly to the queue. (Requires: % @ * # &)",
 			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # &)",
 			"- /viewhunt - views the current scavenger hunt.  Only the user who started the hunt can use this command. Only the host(s) can view the hunt.",
 			"- /inherithunt - becomes the staff host, gaining staff permissions to the current hunt. (Requires: % @ * # &)",
