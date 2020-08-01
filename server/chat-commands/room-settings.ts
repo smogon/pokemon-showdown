@@ -476,16 +476,7 @@ export const commands: ChatCommands = {
 			// PS adds a preamble to the banword regex that's 32 chars long
 			let banwordRegexLen = (room.banwordRegex instanceof RegExp) ? room.banwordRegex.source.length : 32;
 			for (const word of words) {
-				try {
-					// eslint-disable-next-line no-new
-					new RegExp(word);
-				} catch (e) {
-					return this.errorReply(
-						e.message.startsWith('Invalid regular expression: ') ?
-							e.message :
-							`Invalid regular expression: /${word}/: ${e.message}`
-					);
-				}
+				Chat.validateRegex(word);
 				if (room.settings.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
 
 				// Banword strings are joined, so account for the first string not having the prefix

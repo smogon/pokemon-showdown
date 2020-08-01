@@ -15,8 +15,8 @@ describe('Help', function () {
 			disabled: false,
 			queue: [],
 		};
-		const Answerer = require('../../../.server-dist/chat-plugins/help').HelpAnswerer;
-		Help = new Answerer(defaultData);
+		const Responder = require('../../../.server-dist/chat-plugins/help').HelpResponder;
+		Help = new Responder(defaultData);
 	});
 	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
