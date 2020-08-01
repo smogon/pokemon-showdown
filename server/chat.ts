@@ -50,7 +50,7 @@ export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
 }
 export interface AnnotatedChatCommands {
-	[k: string]: AnnotatedChatHandler | string | string[] | true | AnnotatedChatCommands;
+	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
 export type SettingsHandler = (
