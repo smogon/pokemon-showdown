@@ -1,1 +1,2 @@
 * text=auto
+config/*.csv eol=lf
