@@ -15175,6 +15175,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
+		maxMove: {basePower: 140},
 	},
 	roar: {
 		num: 46,
