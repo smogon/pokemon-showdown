@@ -320,7 +320,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		banlist: [
 			'Eternatus', 'Jirachi', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
-			'Focus Sash', 'Perish Song', 'Swagger'
+			'Beat Up', 'Focus Sash', 'Perish Song', 'Swagger',
 		],
 	},
 	{
