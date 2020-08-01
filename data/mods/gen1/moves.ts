@@ -843,6 +843,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Has a 40% chance to poison the target.",
 		shortDesc: "40% chance to poison the target.",
+		secondary: {
+			chance: 40,
+			status: 'psn',
+		},
 	},
 	softboiled: {
 		inherit: true,
