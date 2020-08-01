@@ -217,7 +217,7 @@ export class RandomGen7Teams extends RandomTeams {
 					break;
 				case 'protect':
 					if (counter.setupType && !hasMove['wish'] && !isDoubles) rejected = true;
-					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
+					if (!!counter['speedsetup'] || hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
 					if (isDoubles && (hasMove['fakeout'] || movePool.includes('bellydrum') || movePool.includes('shellsmash') || hasMove['tailwind'] && hasMove['roost'])) rejected = true;
 					break;
 				case 'pursuit':
@@ -523,7 +523,7 @@ export class RandomGen7Teams extends RandomTeams {
 					(hasType['Bug'] && (movePool.includes('megahorn') || movePool.includes('pinmissile'))) ||
 					((hasType['Dark'] && !counter['Dark'] && !hasAbility['Protean']) || hasMove['suckerpunch'] && !hasAbility['Contrary'] && counter.stab < species.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['fly'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
-					(hasType['Electric'] && (!counter['Electric'] || (hasMove['voltswitch'] && counter.stab < 2)) && !hasAbility['Galvanize']) ||
+					(hasType['Electric'] && !hasAbility['Galvanize'] && (!counter['Electric'] || movePool.includes('thunder'))) ||
 					(hasType['Fairy'] && !counter['Fairy'] && !hasAbility['Pixilate'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (species.baseStats.atk >= 110 || hasAbility['Justified'] || hasAbility['Unburden'] || counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
@@ -1086,6 +1086,13 @@ export class RandomGen7Teams extends RandomTeams {
 			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < 6) {
 				const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+
+				// Check if the forme has moves for random battle
+				if (this.format.gameType === 'singles') {
+					if (!species.randomBattleMoves) continue;
+				} else {
+					if (!species.randomDoubleBattleMoves) continue;
+				}
 				if (!species.exists) continue;
 
 				// Limit to one of each species (Species Clause)
@@ -1093,9 +1100,6 @@ export class RandomGen7Teams extends RandomTeams {
 
 				// Limit one Mega per team
 				if (hasMega && species.isMega) continue;
-
-				// Prevent unwanted formes in doubles
-				if (this.format.gameType === 'doubles' && !species.randomDoubleBattleMoves) continue;
 
 				const tier = species.tier;
 				const types = species.types;
@@ -1109,7 +1113,7 @@ export class RandomGen7Teams extends RandomTeams {
 				case 'Castform':
 					if (this.randomChance(2, 3)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Giratina': case 'Groudon': case 'Kyogre': case 'Meloetta':
+				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Giratina': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
 				case 'Greninja':
