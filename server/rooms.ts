@@ -376,14 +376,14 @@ export abstract class BasicRoom {
 		this.sendMods('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
 	}
 	update() {
-		if (!this.log.broadcastBuffer) return;
+		if (!this.log.broadcastBuffer.length) return;
 		if (this.reportJoinsInterval) {
 			clearInterval(this.reportJoinsInterval);
 			this.reportJoinsInterval = null;
 			this.userList = this.getUserList();
 		}
-		this.send(this.log.broadcastBuffer);
-		this.log.broadcastBuffer = '';
+		this.send(this.log.broadcastBuffer.join('\n'));
+		this.log.broadcastBuffer = [];
 		this.log.truncate();
 
 		this.pokeExpireTimer();
@@ -609,7 +609,7 @@ export abstract class BasicRoom {
 		}
 		entry = `|${ucType}|${entry}`;
 		if (this.batchJoins) {
-			this.log.broadcastBuffer += entry + '\n';
+			this.log.broadcastBuffer.push(entry);
 
 			if (!this.reportJoinsInterval) {
 				this.reportJoinsInterval = setTimeout(
@@ -1540,12 +1540,12 @@ export class GameRoom extends BasicRoom {
 		return this.getLog(this.game.playerTable[user.id].num);
 	}
 	update(excludeUser: User | null = null) {
-		if (!this.log.broadcastBuffer) return;
+		if (!this.log.broadcastBuffer.length) return;
 
 		if (this.userCount) {
-			Sockets.channelBroadcast(this.roomid, `>${this.roomid}\n${this.log.broadcastBuffer}`);
+			Sockets.channelBroadcast(this.roomid, `>${this.roomid}\n${this.log.broadcastBuffer.join('\n')}`);
 		}
-		this.log.broadcastBuffer = '';
+		this.log.broadcastBuffer = [];
 
 		this.pokeExpireTimer();
 	}
