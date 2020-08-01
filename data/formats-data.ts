@@ -7,7 +7,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	venusaur: {
 		randomBattleMoves: ["gigadrain", "leechseed", "sleeppowder", "sludgebomb", "substitute"],
-		randomBattleLevel: 82,
+		randomBattleLevel: 80,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
