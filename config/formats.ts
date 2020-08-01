@@ -632,7 +632,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	},
 	{
 		name: "[Gen 8] Inverse",
-		desc: `The effectiveness of each attack is inverted.​`,
+		desc: `The effectiveness of each attack is inverted.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666858/">Inverse</a>`,
 		],
