@@ -1494,7 +1494,7 @@ export class User extends Chat.MessageContext {
 			if (!(room instanceof Rooms.GameRoom)) continue;
 			const {players} = room.parseInputLog();
 			if (!players) continue;
-			if (players.includes(this.id)) battleRoom = room as GameRoom;
+			if (players.includes(this.id)) battleRoom = room;
 			if (battleRoom?.battle) {
 				// can be asserted since we've assured they're a player by now
 				battleRoom.battle.joinGame(this, `p${players.indexOf(this.id) + 1}` as SideID);
