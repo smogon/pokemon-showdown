@@ -605,7 +605,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		section: "OM of the Month",
 		column: 2,
 	},
-	
 	{
 		name: "[Gen 8] Godly Gift",
 		desc: `Each Pok&eacute;mon receives one base stat from a God (Uber Pok&eacute;mon) depending on its position in the team. If there is no Uber Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.`,
