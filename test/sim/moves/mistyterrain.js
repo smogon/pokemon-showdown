@@ -2,7 +2,6 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const toID = require('./../../../.sim-dist/dex').toID;
 
 let battle;
 
