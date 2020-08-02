@@ -902,7 +902,6 @@ export const commands: ChatCommands = {
 	},
 	renamegroupchat: 'renameroom',
 	async renameroom(target, room, user, connection, cmd) {
-		if (!this.can('makeroom')) return;
 		if (!room) return this.requiresRoom();
 		if (room.game || room.minorActivity || room.tour) {
 			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
@@ -915,6 +914,7 @@ export const commands: ChatCommands = {
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
 		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
 		if (isGroupchat) {
+			if (!user.can('lock') && !this.can('editroom', null, room)) return false;
 			const existingRoom = Rooms.search(toID(target));
 			if (existingRoom && !existingRoom.settings.modjoin) {
 				return this.errorReply(`Your groupchat name is too similar to existing chat room '${existingRoom.title}'.`);
@@ -923,6 +923,8 @@ export const commands: ChatCommands = {
 				return this.errorReply("Invalid title.");
 			}
 			target = `[G] ${target}`;
+		} else {
+			if (!this.can('makeroom')) return;
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
