@@ -5149,7 +5149,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	pheromosa: {
-		randomBattleMoves: ["bugbuzz", "closecombat", "icebeam", "poisonjab", "uturn"],
+		randomBattleMoves: ["closecombat", "icebeam", "poisonjab", "throatchop", "uturn"],
 		randomBattleLevel: 76,
 		isNonstandard: "Past",
 		tier: "Illegal",
