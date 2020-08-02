@@ -340,7 +340,7 @@ export class FSPath {
 			}
 		}
 		return new Promise((resolve, reject) => {
-			fs.rmdir(this.path, function (err) {
+			fs.rmdir(this.path, err => {
 				err ? reject(err) : resolve();
 			});
 		});
