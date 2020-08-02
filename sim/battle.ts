@@ -4,7 +4,7 @@
  *
  * @license MIT
  */
-import {Dex} from './dex';
+import {Dex, toID} from './dex';
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
