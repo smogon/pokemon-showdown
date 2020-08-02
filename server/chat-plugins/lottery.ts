@@ -243,7 +243,7 @@ export const commands: ChatCommands = {
 			});
 			let buf = '';
 			if (user.can('declare', null, room)) {
-				buf += `<details class="readmore"><summary><b>List of participants (${participants.length}):</b></summary><p>${participants.join('\n')}</p></details>`;
+				buf += `<details class="readmore"><summary><strong>List of participants (${participants.length}):</strong></summary>${participants.join('<br>')}</details>`;
 			} else {
 				buf += `${participants.length} participant(s) joined this lottery.`;
 			}
