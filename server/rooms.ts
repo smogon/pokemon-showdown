@@ -1420,7 +1420,14 @@ export class GlobalRoomState {
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
-		if (stack.includes("private")) {
+		let hasPrivateTerm = stack.includes('private');
+
+		const privateTerms = (Config.privateCrashTerms ? [...Config.privateCrashTerms] : []).map(item => new RegExp(item, "i"));
+		console.log(privateTerms);
+		for (const term of privateTerms) {
+			if (term.test(stack) || term.test(err.message)) hasPrivateTerm = true;
+		}
+		if (hasPrivateTerm) {
 			if (upperStaffRoom) {
 				privateCrashMessage = crashMessage;
 				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
