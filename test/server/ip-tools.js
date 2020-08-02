@@ -16,7 +16,7 @@ describe("IP tools", () => {
 
 	it('should resolve unknown IPs correctly', async () => {
 		const lookup = await IPTools.lookup('255.255.255.255');
-		assert.strictEqual(lookup.host, '255.255-unknown');
+		assert.strictEqual(lookup.host, '255.255?/unknown');
 		assert.strictEqual(lookup.hostType, 'unknown');
 	});
 

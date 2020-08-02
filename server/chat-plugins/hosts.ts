@@ -49,7 +49,7 @@ export const pages: PageTable = {
 		html += `</table></div>`;
 
 		html += `<div class="ladder pad"><h2>Proxy IP Ranges:</h2><table>`;
-		html += visualizeRangeList(IPTools.ranges.filter(r => r.host?.endsWith('-proxy')));
+		html += visualizeRangeList(IPTools.ranges.filter(r => r.host?.endsWith('/proxy')));
 		html += `</table></div>`;
 		return html;
 	},
@@ -63,7 +63,7 @@ export const pages: PageTable = {
 		const mobileHosts = ['all', 'mobile'].includes(type) ? [...IPTools.mobileHosts] : [];
 		const residentialHosts = ['all', 'residential', 'res'].includes(type) ? [...IPTools.residentialHosts] : [];
 		const hostRanges = ['all', 'ranges', 'isps'].includes(type) ?
-			IPTools.ranges.filter(r => r.host && !r.host.endsWith('-proxy')) :
+			IPTools.ranges.filter(r => r.host && !r.host.endsWith('/proxy')) :
 			[];
 		mobileHosts.sort();
 		residentialHosts.sort();
@@ -95,17 +95,17 @@ export const pages: PageTable = {
 		let html = ``;
 		if (['all', 'mobile'].includes(type)) {
 			html += `<div class="ladder pad"><h2>Mobile IP Ranges:</h2><table>`;
-			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('-mobile')));
+			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('/mobile')));
 			html += `</table></div>`;
 		}
 		if (['all', 'res', 'residential'].includes(type)) {
 			html += `<div class="ladder pad"><h2>Residential IP Ranges:</h2><table>`;
-			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('-res')));
+			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('/res')));
 			html += `</table></div>`;
 		}
 		if (['all', 'proxy', 'proxies'].includes(type)) {
 			html += `<div class="ladder pad"><h2>Proxy IP Ranges:</h2><table>`;
-			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('-proxy')));
+			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('/proxy')));
 			html += `</table></div>`;
 		}
 		return html;
@@ -158,7 +158,7 @@ export const commands: ChatCommands = {
 				const range = {
 					minIP: IPTools.ipToNumber(start),
 					maxIP: IPTools.ipToNumber(end),
-					host: IPTools.urlToHost(host),
+					host: `${IPTools.urlToHost(host)}?/${type}`,
 				};
 				rangesToAdd.push(range);
 			}
