@@ -282,7 +282,8 @@ export const commands: ChatCommands = {
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			const force = cmd === 'forceadd';
-			const canForce = Rooms.get('development')?.auth.atLeast(user, '%');
+			const devAuth = Rooms.get('development')?.auth;
+			const canForce = devAuth?.atLeast(user, '%') && devAuth?.has(user.id);
 			if (force && (!canForce && !user.can('rangeban'))) {
 				return this.errorReply(`You cannot use raw regex - use /helpfilter add instead.`);
 			}
