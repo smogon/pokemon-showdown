@@ -129,7 +129,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 		onBegin() {
 			if (this.rated && this.format.id === 'gen8lc') {
-				this.add('html', '<div class="broadcast-blue"><strong>Little Cup is currently suspecting Rufflet! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads//">suspect thread</a>.</strong></div>');
+				this.add('html', '<div class="broadcast-blue"><strong>Little Cup is currently suspecting Rufflet! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668142/">suspect thread</a>.</strong></div>');
 			}
 		},
 	},
