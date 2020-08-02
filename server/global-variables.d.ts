@@ -27,6 +27,7 @@ declare global {
 			Tournaments: any;
 			LoginServer: any;
 			Punishments: any;
+			TeamValidator: any;
 			__version: {head: string, origin?: string, tree?: string};
 		}
 	}
