@@ -1475,7 +1475,7 @@ export const roomSettings: SettingsHandler[] = [
 			'off',
 			'autoconfirmed',
 			'trusted',
-			...RANKS.filter(symbol => Users.Auth.hasPermission(user, 'modchat', symbol, room)),
+			...RANKS.filter(symbol => symbol !== ' ' && Users.Auth.hasPermission(user, 'modchat', symbol, room)),
 		].map(rank => [rank, rank === (room.settings.modchat || 'off') || `modchat ${rank || 'off'}`]),
 	}),
 	(room, user) => ({
