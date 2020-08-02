@@ -34,7 +34,7 @@ const MODES: {[k: string]: string} = {
 	triumvirate: 'Triumvirate',
 };
 
-const LENGTHS: {[k: string]: {cap: number, prizes: number[]}} = {
+const LENGTHS: {[k: string]: {cap: number | false, prizes: number[]}} = {
 	short: {
 		cap: 20,
 		prizes: [3, 2, 1],
@@ -45,6 +45,10 @@ const LENGTHS: {[k: string]: {cap: number, prizes: number[]}} = {
 	},
 	long: {
 		cap: 50,
+		prizes: [5, 3, 1],
+	},
+	infinite: {
+		cap: false,
 		prizes: [5, 3, 1],
 	},
 };
@@ -126,8 +130,7 @@ if (triviaData.questions.some(q => !('type' in q))) {
 }
 
 function isTriviaRoom(room: Room) {
-	if (room.roomid === 'trivia') return true;
-	return false;
+	return room.roomid === 'trivia';
 }
 
 function getTriviaGame(room: Room | null) {
@@ -471,7 +474,7 @@ class Trivia extends Rooms.RoomGame {
 	init() {
 		this.broadcast(
 			'Signups for a new trivia game have begun!',
-			`Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap()}<br />` +
+			`Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap() || "Infinite"}<br />` +
 			'Enter /trivia join to sign up for the trivia game.'
 		);
 	}
@@ -490,7 +493,7 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	getDescription() {
-		return `Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap()}`;
+		return `Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap() || "Infinite"}`;
 	}
 
 	/**
@@ -612,7 +615,7 @@ class Trivia extends Rooms.RoomGame {
 	 */
 	sendQuestion(question: TriviaQuestion) {
 		this.broadcast(
-			`Question ${this.questionNumber}: ${question.question}`,
+			`Question${this.game.length === 'infinite' ? ` ${this.questionNumber}` : ''}: ${question.question}`,
 			`Category: ${ALL_CATEGORIES[question.category]}`
 		);
 	}
@@ -722,7 +725,9 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	getPrizes() {
-		return LENGTHS[this.game.length].prizes;
+		// Reward players more in longer infinite games
+		const multiplier = this.game.length === 'infinite' ? Math.floor(this.questionNumber / 25) || 1 : 1;
+		return LENGTHS[this.game.length].prizes.map(prize => prize * multiplier);
 	}
 
 	getTopPlayers(options: {max: number | null, requirePoints?: boolean} = {max: null, requirePoints: true}): TopPlayer[] {
@@ -760,9 +765,10 @@ class Trivia extends Rooms.RoomGame {
 	getStaffEndMessage(winners: TopPlayer[], mapper: (k: TopPlayer) => string) {
 		let message = "";
 		const winnerParts: ((k: TopPlayer) => string)[] = [
-			winner => `User ${mapper(winner)} won the game of ${this.game.mode}` +
-				` mode trivia under the ${this.game.category} category with a cap of ` +
-				`${this.getCap()} points, with ${winner.player.points} points and ` +
+			winner => `User ${mapper(winner)} won the game of ${this.game.mode} ` +
+				`mode trivia under the ${this.game.category} category with ` +
+				`${this.getCap() ? `a cap of ${this.getCap()} points` : `no score cap`}, ` +
+				`with ${winner.player.points} points and ` +
 				`${winner.player.correctAnswers} correct answers`,
 			winner => ` Second place: ${mapper(winner)} (${winner.player.points} points)`,
 			winner => `, third place: ${mapper(winner)} (${winner.player.points} points)`,
@@ -811,7 +817,7 @@ class FirstModeTrivia extends Trivia {
 			`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 			'They gained <strong>5</strong> points!<br />' +
 			`The top 5 players are: ${this.formatPlayerList({max: 5})}`;
-		if (player.points >= this.getCap()) {
+		if (this.getCap() && player.points >= this.getCap()) {
 			this.win(buffer);
 			return;
 		}
@@ -908,7 +914,7 @@ class TimerModeTrivia extends Trivia {
 			const pointBuffer = innerBuffer.get(points) || [];
 			pointBuffer.push([Utils.escapeHTML(player.name), playerAnsweredAt]);
 
-			if (player.points >= this.getCap()) {
+			if (this.getCap() && player.points >= this.getCap()) {
 				winner = true;
 			}
 
@@ -994,7 +1000,7 @@ class NumberModeTrivia extends Trivia {
 				const player = this.playerTable[i];
 				if (player.isCorrect) player.incrementPoints(points, this.questionNumber);
 
-				if (player.points >= this.getCap()) {
+				if (this.getCap() && player.points >= this.getCap()) {
 					winner = true;
 				}
 
@@ -1059,7 +1065,7 @@ class TriumvirateModeTrivia extends Trivia {
 			const points = this.calculatePoints(correctPlayers.indexOf(player));
 			player.incrementPoints(points, this.questionNumber);
 			playersWithPoints.push(`${Utils.escapeHTML(player.name)} (${points})`);
-			if (player.points >= this.getCap()) {
+			if (this.getCap() && player.points >= this.getCap()) {
 				winner = true;
 			}
 		}
@@ -1129,7 +1135,8 @@ const commands: ChatCommands = {
 		// Randomizes the order of the questions.
 		const length = toID(targets[2]);
 		if (!LENGTHS[length]) return this.errorReply(`"${length}" is an invalid game length.`);
-		if (questions.length < LENGTHS[length].cap / 5) {
+		// Assume that infinite mode will take at least 75 questions
+		if (questions.length < (LENGTHS[length].cap || 75) / 5) {
 			if (isRandomCategory) {
 				return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
 			}
@@ -1239,6 +1246,20 @@ const commands: ChatCommands = {
 	},
 	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # &`],
 
+	getwinners: 'win',
+	win(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!this.can('show', null, room)) return false;
+		if (!this.canTalk()) return;
+
+		const game = getTriviaGame(room);
+		if (game.game.length !== 'infinite' && !user.can('editroom', null, room)) {
+			return this.errorReply("Only Room Owners and higher can force a Trivia game to end with winners in a non-infinite length.");
+		}
+		game.win(`${user.name} ended the game of Trivia!`);
+	},
+	winhelp: [`/trivia win - End a trivia game and tally the points to find winners. Requires: + % @ # & in Infinite length, else # &`],
+
 	'': 'status',
 	players: 'status',
 	status(target, room, user) {
@@ -1256,7 +1277,7 @@ const commands: ChatCommands = {
 		}
 		let buffer = `There is a ${game.isPaused ? "paused trivia game" : "trivia game in progress"}, ` +
 			`and it is in its ${game.phase} phase.<br />` +
-			`Mode: ${game.game.mode} | Category: ${game.game.category} | Score cap: ${game.getCap()}`;
+			`Mode: ${game.game.mode} | Category: ${game.game.category} | Score cap: ${game.getCap() || "Infinite"}`;
 
 		const player = game.playerTable[tarUser.id];
 		if (player) {
@@ -1760,6 +1781,7 @@ const commands: ChatCommands = {
 			`- Short: 20 point score cap. The winner gains 3 leaderboard points.`,
 			`- Medium: 35 point score cap. The winner gains 4 leaderboard points.`,
 			`- Long: 50 point score cap. The winner gains 5 leaderboard points.`,
+			`- Infinite: No score cap. The winner gains 5 leaderboard points, which increases the more questions they answer.`,
 			``,
 			`<strong>Game commands:</strong>`,
 			`- <code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &`,
@@ -1769,6 +1791,7 @@ const commands: ChatCommands = {
 			`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &`,
 			`- <code>/trivia leave</code> - Makes the player leave the game.`,
 			`- <code>/trivia end</code> - End a trivia game. Requires: + % @ # &`,
+			`- <code>/trivia win</code> - End a trivia game and tally the points to find winners. Requires: + % @ # & in Infinite length, else # &`,
 			`- <code>/trivia pause</code> - Pauses a trivia game. Requires: + % @ # &`,
 			`- <code>/trivia resume</code> - Resumes a paused trivia game. Requires: + % @ # &`,
 			``,
