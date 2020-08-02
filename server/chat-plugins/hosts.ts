@@ -148,18 +148,16 @@ export const commands: ChatCommands = {
 
 			const rangesToAdd: AddressRange[] = [];
 			for (const row of target.split('\n')) {
-				const [start, end, host, type] = row.split(',').map(part => part.trim());
-				if (!type || !IP_REGEX.test(start) || !IP_REGEX.test(end) || !HOST_REGEX.test(host)) {
+				const [type, stringRange, host] = row.split(',').map(part => part.trim());
+				if (!host || !HOST_REGEX.test(host)) {
 					return this.errorReply(`Invalid data: ${row}`);
 				}
 				if (!HOST_SUFFIXES.includes(type)) {
 					return this.errorReply(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
 				}
-				const range = {
-					minIP: IPTools.ipToNumber(start),
-					maxIP: IPTools.ipToNumber(end),
-					host: `${IPTools.urlToHost(host)}?/${type}`,
-				};
+				const range = IPTools.stringToRange(stringRange);
+				if (!range) return this.errorReply(`Couldn't parse IP range '${stringRange}'.`);
+				range.host = `${IPTools.urlToHost(host)}?/${type}`;
 				rangesToAdd.push(range);
 			}
 
@@ -179,9 +177,9 @@ export const commands: ChatCommands = {
 			return this.sendReply(`Successfully added ${successes} IP ranges!`);
 		},
 		addhelp: [
-			`/ipranges add [low], [high], [host], [type] - Add IP ranges (can be multiline). Requires: hosts manager &`,
-			`/ipranges widen [low], [high], [host], [type] - Add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
-			`For example: /ipranges add 5.152.192.0, 5.152.223.255, redstation.com, proxy`,
+			`/ipranges add [type], [low]-[high], [host] - Add IP ranges (can be multiline). Requires: hosts manager &`,
+			`/ipranges widen [type], [low]-[high], [host] - Add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
+			`For example: /ipranges add proxy, 5.152.192.0 - 5.152.223.255, redstation.com`,
 			`Get datacenter info from whois; [low], [high] are the range in the last inetnum; [type] is one of res, proxy, or mobile.`,
 		],
 
@@ -190,48 +188,45 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help ipranges remove');
 			let removed = 0;
 			for (const row of target.split('\n')) {
-				const [start, end] = row.split(',').map(ip => ip.trim());
-				if (!end || !IP_REGEX.test(start) || !IP_REGEX.test(end)) return this.errorReply(`Invalid data: ${row}`);
+				const range = IPTools.stringToRange(row);
+				if (!range) return this.errorReply(`Couldn't parse the IP range '${row}'.`);
+				if (!IPTools.getRange(range.minIP, range.maxIP)) return this.errorReply(`No IP range found at '${row}'.`);
 
-				const minIP = IPTools.ipToNumber(start);
-				const maxIP = IPTools.ipToNumber(end);
-				if (!IPTools.getRange(minIP, maxIP)) return this.errorReply(`No IP range found at ${start}-${end}.`);
-
-				void IPTools.removeRange(minIP, maxIP);
+				void IPTools.removeRange(range.minIP, range.maxIP);
 				removed++;
 			}
 			this.globalModlog('IPRANGE REMOVE', null, `by ${user.id}: ${removed} IP ranges`);
 			return this.sendReply(`Removed ${removed} IP ranges!`);
 		},
 		removehelp: [
-			`/ipranges remove [low IP], [high IP] - Remove IP range(s). Can be multiline. Requires: hosts manager &`,
-			`Example: /ipranges remove 5.152.192.0, 5.152.223.255`,
+			`/ipranges remove [low IP]-[high IP] - Remove IP range(s). Can be multiline. Requires: hosts manager &`,
+			`Example: /ipranges remove 5.152.192.0-5.152.223.255`,
 		],
 
 		rename(target, room, user) {
 			if (!(WHITELISTED_USERS.includes(user.id) || this.can('lockdown'))) return false;
 			if (!target) return this.parse('/help ipranges rename');
-			const [start, end, url] = target.split(',').map(part => part.trim());
-			if (!url || !IP_REGEX.test(start) || !IP_REGEX.test(end) || !HOST_REGEX.test(url)) {
+			const [type, rangeString, url] = target.split(',').map(part => part.trim());
+			if (!url) {
 				return this.parse('/help ipranges rename');
 			}
-			const minIP = IPTools.ipToNumber(start);
-			const maxIP = IPTools.ipToNumber(end);
-			const toRename = IPTools.getRange(minIP, maxIP);
-			if (!toRename) return this.errorReply(`No IP range found at ${start}-${end}.`);
+			const toRename = IPTools.stringToRange(rangeString);
+			if (!toRename) return this.errorReply(`Couldn't parse IP range '${rangeString}'.`);
+			const exists = IPTools.getRange(toRename.minIP, toRename.maxIP);
+			if (!exists) return this.errorReply(`No IP range found at '${rangeString}'.`);
 
 			const range = {
-				minIP: minIP,
-				maxIP: maxIP,
-				host: IPTools.urlToHost(url),
+				minIP: toRename.minIP,
+				maxIP: toRename.maxIP,
+				host: `${IPTools.urlToHost(url)}?/${type}`,
 			};
 			void IPTools.addRange(range);
-			const renameInfo = `IP range at ${start}-${end} to ${range.host}`;
+			const renameInfo = `IP range at '${rangeString}' to ${range.host}`;
 			this.globalModlog('DATACENTER RENAME', null, `by ${user.id}: ${renameInfo}`);
 			return this.sendReply(`Renamed the ${renameInfo}.`);
 		},
 		renamehelp: [
-			`/ipranges rename [low IP], [high IP], [host] - Changes the host an IP range resolves to.  Requires: hosts manager &`,
+			`/ipranges rename [type], [low IP]-[high IP], [host] - Changes the host an IP range resolves to.  Requires: hosts manager &`,
 		],
 	},
 
@@ -239,13 +234,13 @@ export const commands: ChatCommands = {
 		const help = [
 			`<code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
 			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ &`,
-			`<code>/ipranges add [low IP], [high IP], [host], [type]</code>: add IP ranges (can be multiline). Requires: hosts manager &`,
-			`<code>/ipranges widen [low IP], [high IP], [host], [type]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
-			`For example: <code>/ipranges add 5.152.192.0, 5.152.223.255, redstation.com, proxy</code>.`,
+			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &`,
+			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
+			`For example: <code>/ipranges add proxy, 5.152.192.0-5.152.223.255, redstation.com</code>.`,
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
-			`<code>/ipranges remove [low IP], [high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager &`,
+			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager &`,
 			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
-			`<code>/ipranges rename [low IP], [high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
+			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
 		];
 		return this.sendReply(`|html|<details class="readmore"><summary>IP range management commands:</summary>${help.join('<br />')}`);
 	},
@@ -271,10 +266,9 @@ export const commands: ChatCommands = {
 	addhosts(target, room, user, connection, cmd) {
 		if (!(WHITELISTED_USERS.includes(user.id) || this.can('lockdown'))) return false;
 		const removing = cmd.includes('remove');
-		let [type, toAdd] = target.split('|');
+		let [type, ...hosts] = target.split(',');
 		type = toID(type);
-		if (!toAdd) return this.parse('/help addhosts');
-		const hosts = toAdd.split(',').map(host => host.trim());
+		hosts = hosts.map(host => host.trim());
 		if (!hosts.length) return this.parse('/help addhosts');
 
 		switch (type) {
@@ -341,8 +335,8 @@ export const commands: ChatCommands = {
 		return this.sendReply(`${removing ? 'Removed' : 'Added'} ${hosts.length} hosts!`);
 	},
 	addhostshelp: [
-		`/addhosts [category] | host1, host2, ... - Adds hosts to the given category. Requires: hosts manager &`,
-		`/removehosts [category] | host1, host2, ... - Removes hosts from the given category. Requires: hosts manager &`,
+		`/addhosts [category], host1, host2, ... - Adds hosts to the given category. Requires: hosts manager &`,
+		`/removehosts [category], host1, host2, ... - Removes hosts from the given category. Requires: hosts manager &`,
 		`Categories are: 'openproxy' (which takes IP addresses, not hosts), 'proxy', 'residential', and 'mobile'.`,
 	],
 

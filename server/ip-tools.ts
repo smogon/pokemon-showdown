@@ -29,7 +29,7 @@ export interface AddressRange {
 
 function removeNohost(hostname: string) {
 	// Convert from old domain.tld.type-nohost format to new domain.tld?/type format
-	if (hostname.includes('-nohost')) {
+	if (hostname?.includes('-nohost')) {
 		const parts = hostname.split('.');
 		const suffix = parts.pop();
 		return `${parts.join('.')}?/${suffix?.replace('-nohost', '')}`;
@@ -102,6 +102,7 @@ export const IPTools = new class {
 	 *********************************************************/
 
 	ipToNumber(ip: string) {
+		ip = ip.trim();
 		if (ip.includes(':') && !ip.includes('.')) {
 			// IPv6
 			return -1;
@@ -145,7 +146,7 @@ export const IPTools = new class {
 	}
 	stringToRange(range: string): AddressRange | null {
 		if (!range) return null;
-		const index = range.indexOf(' - ');
+		const index = range.indexOf('-');
 		if (index <= 0) {
 			return range.includes('/') ? IPTools.getCidrRange(range) : {
 				minIP: IPTools.ipToNumber(range),
@@ -153,7 +154,7 @@ export const IPTools = new class {
 			};
 		}
 		const minIP = IPTools.ipToNumber(range.slice(0, index));
-		const maxIP = IPTools.ipToNumber(range.slice(index + 3));
+		const maxIP = IPTools.ipToNumber(range.slice(index + 1));
 		return {minIP, maxIP};
 	}
 
@@ -216,7 +217,7 @@ export const IPTools = new class {
 		for (const row of rows) {
 			if (!row) continue;
 			let [type, hostOrLowIP, highIP, host] = row.split(',');
-			if (!host) continue;
+			if (!hostOrLowIP) continue;
 			// Handle legacy data format
 			host = removeNohost(host);
 			hostOrLowIP = removeNohost(hostOrLowIP);
