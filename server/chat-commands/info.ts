@@ -24,10 +24,8 @@ export const commands: ChatCommands = {
 		const targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
-		if (!targetUser) {
-			if (showAll) return this.parse('/offlinewhois ' + target);
-			return this.errorReply("User " + this.targetUsername + " not found.");
-		}
+		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
+
 		if (showAll && !user.trusted && targetUser !== user) {
 			return this.errorReply(`/${cmd} - Access denied.`);
 		}
@@ -82,7 +80,7 @@ export const commands: ChatCommands = {
 			return this.sendReplyBox(buf);
 		}
 		const canViewAlts = (user === targetUser ? user.can('altsself') : user.can('alts', targetUser));
-		const canViewPunishments = canViewAlts ||
+		const canViewPunishments = canViewAlts || user.trusted ||
 			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += `<br />`;
@@ -241,74 +239,6 @@ export const commands: ChatCommands = {
 		`/whois - Get details on yourself: alts, group, IP address, and rooms.`,
 		`/whois [username] - Get details on a username: alts (Requires: % @ &), group, IP address (Requires: @ &), and rooms.`,
 	],
-
-	'chp': 'offlinewhois',
-	checkpunishment: 'offlinewhois',
-	offlinewhois(target, room, user) {
-		if (!user.trusted) {
-			return this.errorReply("/offlinewhois - Access denied.");
-		}
-		const userid = toID(target);
-		if (!userid) return this.errorReply("Please enter a valid username.");
-		const targetUser = Users.get(userid);
-		let buf = Utils.html`<strong class="username">${target}</strong>`;
-		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
-
-		const roomauth = room?.auth.getDirect(userid);
-		if (roomauth && Config.groups[roomauth]?.name) {
-			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
-		}
-		const group = Users.globalAuth.get(userid);
-		if (Config.groups[group]?.name) {
-			buf += `<br />Global ${Config.groups[group].name} (${group})`;
-		}
-
-		buf += `<br /><br />`;
-		let atLeastOne = false;
-
-		const punishment = Punishments.userids.get(userid);
-		if (punishment) {
-			const [punishType, punishUserid, , reason] = punishment;
-			const punishName = (Punishments.punishmentTypes.get(punishType) || punishType).toUpperCase();
-			buf += `${punishName}: ${punishUserid}`;
-			const expiresIn = Punishments.checkLockExpiration(userid);
-			if (expiresIn) buf += expiresIn;
-			if (reason) buf += Utils.html` (reason: ${reason})`;
-			buf += '<br />';
-			atLeastOne = true;
-		}
-
-		if (!user.can('alts') && !atLeastOne) {
-			const hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.roomid, userid);
-			if (!hasJurisdiction) {
-				return this.errorReply("/checkpunishment - User not found.");
-			}
-		}
-
-		const punishments = Punishments.getRoomPunishments(targetUser || {id: userid} as User);
-
-		if (punishments?.length) {
-			buf += `<br />Room punishments: `;
-
-			buf += punishments.map(([curRoom, curPunishment]) => {
-				const [punishType, punishUserid, expireTime, reason] = curPunishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
-				if (!punishDesc) punishDesc = `punished`;
-				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
-				const expiresIn = new Date(expireTime).getTime() - Date.now();
-				const expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				punishDesc += ` for ${expireString}`;
-
-				if (reason) punishDesc += `: ${reason}`;
-				return `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
-			}).join(', ');
-			atLeastOne = true;
-		}
-		if (!atLeastOne) {
-			buf += `This username has no punishments associated with it.`;
-		}
-		this.sendReplyBox(buf);
-	},
 
 	sharedbattles(target, room) {
 		if (!this.can('lock')) return false;
