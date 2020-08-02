@@ -12,7 +12,6 @@ import {TeamValidator as TeamValidatorType} from './team-validator';
 declare global {
 	namespace NodeJS {
 		interface Global {
-			TeamValidator: any;
 			__version: {head: string, origin?: string, tree?: string}
 		}
 	}
