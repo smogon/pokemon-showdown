@@ -14,7 +14,6 @@ import {ROOMFAQ_FILE} from './room-faqs';
 const PATH = 'config/chat-plugins/help.json';
 // 6: filters out conveniently short aliases
 const MINIMUM_LENGTH = 6;
-const REGEX_WHITELIST = ['miapi', 'annika', 'kris'];
 
 export let helpData: PluginData;
 
@@ -206,7 +205,7 @@ export class HelpResponder {
 	}
 }
 
-const Answerer = new HelpResponder(helpData);
+export const Answerer = new HelpResponder(helpData);
 
 export const chatfilter: ChatFilter = (message, user, room) => {
 	const helpRoom = Answerer.getRoom();
@@ -283,7 +282,8 @@ export const commands: ChatCommands = {
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			const force = cmd === 'forceadd';
-			if (force && (!REGEX_WHITELIST.includes(user.id) && !user.can('rangeban'))) {
+			const canForce = Rooms.get('development')?.auth.atLeast(user, '%');
+			if (force && (!canForce && !user.can('rangeban'))) {
 				return this.errorReply(`You cannot use raw regex - use /helpfilter add instead.`);
 			}
 			if (!this.can('ban', null, helpRoom)) return false;
