@@ -153,7 +153,6 @@ export class Battle {
 		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
-		this.toID = toID;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 

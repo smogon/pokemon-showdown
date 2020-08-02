@@ -2439,7 +2439,7 @@ if (!PM.isParentProcess) {
 	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
-	// tslint:disable-next-line: no-var-requiress
+	// tslint:disable-next-line: no-var-requires
 	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 	// @ts-ignore

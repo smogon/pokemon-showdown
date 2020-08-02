@@ -100,7 +100,4 @@ before('initialization', function () {
 	LoginServer.disabled = true;
 
 	Ladders.disabled = true;
-
-	// eslint-disable-next-line no-unused-vars
-	const toID = require('../.sim-dist/dex').toID;
 });
