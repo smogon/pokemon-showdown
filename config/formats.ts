@@ -623,14 +623,25 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		onModifySpecies(species, target, source) {
 			if (source || !target || !target.side) return;
 			const god = target.side.team.find(set => {
-				const teamSpecies = this.dex.getSpecies(set.species);
+				let godSpecies = this.dex.getSpecies(set.species);
 				const validator = this.dex.getRuleTable(this.dex.getFormat(`gen${this.gen}ou`));
-				const isBanned = validator.isBannedSpecies(teamSpecies);
+				if (toID(set.ability) === 'powerconstruct' && this.gen === 7) {
+					return true;
+				}
+				if (set.item) {
+					const item = this.dex.getItem(set.item);
+					if (item.megaEvolves === set.species) godSpecies = this.dex.getSpecies(item.megaStone);
+				}
+				const isBanned = validator.isBannedSpecies(godSpecies);
 				return isBanned;
 			}) || target.side.team[0];
 			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
-			newSpecies.baseStats[stat] = this.dex.getSpecies(god.species).baseStats[stat as StatName];
+			let godSpecies = this.dex.getSpecies(god.species);
+			if (godSpecies.forme === 'Crowned') {
+				godSpecies = this.dex.getSpecies(godSpecies.changesFrom || godSpecies.baseSpecies);
+			}
+			newSpecies.baseStats[stat] = godSpecies.baseStats[stat as StatName];
 			return newSpecies;
 		},
 	},
