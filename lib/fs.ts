@@ -325,10 +325,22 @@ export class FSPath {
 		}
 	}
 
-	rmdir(recursive?: boolean) {
+	async rmdir(recursive?: boolean) {
 		if (Config.nofswriting) return Promise.resolve();
+		if (recursive) {
+			// In Node versions before 12, fs.rmdir() didn't support recursion,
+			// so we have to implement recursion ourselves to support Node 10 and 11...
+			for (const file of await this.readdir()) {
+				const subpath = FS(`${this.path}/${file}`);
+				if (await subpath.isDirectory()) {
+					await subpath.rmdir(true);
+				} else {
+					await subpath.unlinkIfExists();
+				}
+			}
+		}
 		return new Promise((resolve, reject) => {
-			fs.rmdir(this.path, {recursive}, err => {
+			fs.rmdir(this.path, function (err) {
 				err ? reject(err) : resolve();
 			});
 		});
@@ -336,7 +348,17 @@ export class FSPath {
 
 	rmdirSync(recursive?: boolean) {
 		if (Config.nofswriting) return;
-		return fs.rmdirSync(this.path, {recursive});
+		if (recursive) {
+			for (const file of this.readdirSync()) {
+				const subpath = FS(`${this.path}/${file}`);
+				if (subpath.isDirectorySync()) {
+					subpath.rmdirSync(true);
+				} else {
+					subpath.unlinkIfExistsSync();
+				}
+			}
+		}
+		return fs.rmdirSync(this.path);
 	}
 
 	mkdir(mode: string | number = 0o755) {
