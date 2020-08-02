@@ -1049,6 +1049,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				if (validSources.includes(evoFamily)) continue;
 
 				set.species = donorSpecies.name;
+				set.name = donorSpecies.baseSpecies;
 				const problems = this.validateSet(set, teamHas) || [];
 				if (!problems.length) {
 					validSources.push(evoFamily);
