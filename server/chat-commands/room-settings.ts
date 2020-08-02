@@ -911,6 +911,7 @@ export const commands: ChatCommands = {
 		}
 		const oldTitle = room.title;
 		const isGroupchat = cmd === 'renamegroupchat';
+		if (!toID(target)) return this.errorReply("Rooms need a title.");
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
 		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
 		if (isGroupchat) {
@@ -921,6 +922,12 @@ export const commands: ChatCommands = {
 			}
 			if (this.filter(target) !== target) {
 				return this.errorReply("Invalid title.");
+			}
+			// `,` is a delimiter used by a lot of /commands
+			// `|` and `[` are delimiters used by the protocol
+			// `-` has special meaning in roomids
+			if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
+				return this.errorReply("Room titles can't contain any of: ,|[-");
 			}
 			target = `[G] ${target}`;
 		} else {
