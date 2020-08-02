@@ -741,7 +741,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Your group chat name is too similar to existing chat room '${title}'.`);
 		}
 		// Room IDs for groupchats are groupchat-TITLEID
-		let titleid = toID(title);
+		const titleid = toID(title);
 		if (!titleid) {
 			title = `${Math.floor(Math.random() * 100000000)}` as ID;
 		}

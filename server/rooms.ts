@@ -672,7 +672,8 @@ export abstract class BasicRoom {
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
 		// groupchats use `[` so allow it to bypass this and run the checks in the commands themselves
-		if (this.persist && (newTitle.includes(',') || newTitle.includes('|') || newTitle.includes('[') || newTitle.includes('-'))) {
+		if (this.persist &&
+			(newTitle.includes(',') || newTitle.includes('|') || newTitle.includes('[') || newTitle.includes('-'))) {
 			throw new Chat.ErrorMessage("Room titles can't contain any of: ,|[-");
 		}
 		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
