@@ -31,8 +31,8 @@ export function toID(text: any): ID {
 	}
 	if (typeof text !== 'string' && typeof text !== 'number') return '';
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
+	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
-/* eslint-enable @typescript-eslint/prefer-optional-chain */
 
 
 export class BasicEffect implements EffectData {
