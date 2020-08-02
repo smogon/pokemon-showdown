@@ -142,6 +142,7 @@ export class HelpResponder {
 		}).filter(Boolean).join('');
 	}
 	match(question: string, faq: string) {
+		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
 		if (!regexes) return;
 		for (const regex of regexes) {
@@ -172,7 +173,13 @@ export class HelpResponder {
 		return FS(PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
 	loadFaqs() {
-		this.roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || `{"help":{}}`).help;
+		const room = this.getRoom();
+		if (!room) {
+			this.roomFaqs = {};
+			return this.roomFaqs;
+		}
+		const roomid = room.roomid;
+		this.roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || `{"${roomid}":{}}`)[roomid];
 		for (const key in this.data.pairs) {
 			if (!this.roomFaqs[key]) delete this.data.pairs[key];
 		}
