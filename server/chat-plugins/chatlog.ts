@@ -545,7 +545,7 @@ export const LogSearcher = new class {
 			});
 			results = stdout.split('--');
 		} catch (e) {
-			if (e.code === 2) throw e; // 2 means an error in ripgrep
+			if (e.code !== 1) throw e; // 2 means an error in ripgrep
 			if (e.stdout) {
 				results = e.stdout.split('--');
 			} else {
