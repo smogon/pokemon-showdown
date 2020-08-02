@@ -356,6 +356,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('GXS')}|A Critical Error Has Occurred. Would You Like To Send A Report? Sending Report.`);
 		},
 	},
+	hubriz: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Hubriz')}|Free hugs!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Hubriz')}|The soil's pH level is too high. I'm out!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Hubriz')}|Delicate Flower Quest failed...`);
+		},
+	},
 	iyarito: {
 		noCopy: true,
 		onStart(source) {
