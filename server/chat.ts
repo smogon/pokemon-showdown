@@ -1707,6 +1707,9 @@ export const Chat = new class {
 	 * Validates input regex and ensures it won't crash.
 	 */
 	validateRegex(word: string) {
+		if (word.endsWith('|')) {
+			throw new Chat.ErrorMessage(`Your regex was rejected because it ended with |.`);
+		}
 		try {
 			// eslint-disable-next-line no-new
 			new RegExp(word);
