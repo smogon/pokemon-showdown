@@ -19,7 +19,7 @@ export const Formats: {[k: string]: ModdedFormatsData} = {
 				for (const stat in newSpecies.baseStats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
 				}
-				newSpecies.bst = (Object.values(newSpecies.baseStats) as number[]).reduce((x, y) => x + y);
+				newSpecies.bst = Object.values(newSpecies.baseStats).reduce((x, y) => x + y);
 			}
 			return newSpecies;
 		},
@@ -62,7 +62,7 @@ export const Formats: {[k: string]: ModdedFormatsData} = {
 				if (stat === 'hp' || stat === 'spd') continue;
 				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 			}
-			newSpecies.bst = (Object.values(newSpecies.baseStats) as number[]).reduce((x, y) => x + y);
+			newSpecies.bst = Object.values(newSpecies.baseStats).reduce((x, y) => x + y);
 			return newSpecies;
 		},
 	},
