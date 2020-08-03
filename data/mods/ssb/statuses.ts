@@ -258,13 +258,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	epicnikolai: {
 		noCopy: true,
-		onStart() {
+		onStart(source) {
 			this.add(`c|${getName('EpicNikolai')}|I never give up until I get something right, which means destroying you ☜(ﾟヮﾟ☜)`);
 			if (source.species.id !== 'garchompmega' || source.illusion) return;
 			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('EpicNikolai')}|This wasn't as fun as I thought it would be, I'm out ¯_( ͡~ ͜ʖ ͡°)_/¯`);
+			this.add(`c|${getName('EpicNikolai')}|This wasn't as fun as I thought it would be, I'm out ¯_( ͡~ ͜ʖ ͡°)_/¯`); // eslint-disable-line no-irregular-whitespace
 		},
 		onFaint() {
 			this.add(`c|${getName('EpicNikolai')}|I like to keep a positive attitude even though it is hard sometimes <('o'<)~*/`);
@@ -371,13 +371,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	iyarito: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('iyarito')}|Madre de Dios, ¡es el Pollo Diablo!`);
+			this.add(`c|${getName('Iyarito')}|Madre de Dios, ¡es el Pollo Diablo!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('iyarito')}|Well, you're not taking me without a fight!`);
+			this.add(`c|${getName('Iyarito')}|Well, you're not taking me without a fight!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('iyarito')}|RIP Patrona`);
+			this.add(`c|${getName('Iyarito')}|RIP Patrona`);
 		},
 	},
 	jettxx: {
@@ -745,6 +745,22 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint(pokemon) {
 			this.add(`c|${getName('Shadecession')}|ah, gg fam`);
+		},
+	},
+	struchni: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Struchni')}|~tt newgame`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('Struchni')}|~tt endgame`);
+		},
+		onFaint(pokemon) {
+			this.add(`c|${getName('Struchni')}|**selfveto**`);
+		},
+		// Needed for Veto move
+		onHit(target, source, move) {
+			target.m.typeEff = target.getMoveHitData(move).typeMod;
 		},
 	},
 	sunny: {

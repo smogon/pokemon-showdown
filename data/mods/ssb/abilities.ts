@@ -181,7 +181,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 
 	// Darth
 	guardianangel: {
-		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last Pokemon in before it.",
+		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last and stats Pokemon in before it.",
 		shortDesc: "Switching out: Regenerator. Switching in: Resists Weaknesses of last Pokemon.",
 		name: "Guardian Angel",
 		onSwitchOut(pokemon) {
@@ -190,13 +190,18 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const possibleTypes = [];
 			const newTypes = [];
+			const weaknesses = [];
 			const types = pokemon.side.sideConditions['tracker'].storedTypes;
-			for (const u in types) {
-				for (const type in this.dex.data.TypeChart) {
-					const typeCheck = this.dex.data.TypeChart[type].damageTaken[pokemon.side.sideConditions['tracker'].storedTypes[u]];
-					if (typeCheck === 2 || typeCheck === 3) {
-						possibleTypes.push(type);
-					}
+			if (!types) return;
+			for (const type in this.dex.data.TypeChart) {
+				const typeMod = this.dex.getEffectiveness(type, types);
+				if (typeMod > 0 && this.dex.getImmunity(type, types)) weaknesses.push(type);
+			}
+			const combo = this.sample(weaknesses);
+			for (const type in this.dex.data.TypeChart) {
+				const typeCheck = this.dex.data.TypeChart[type].damageTaken[combo];
+				if (typeCheck === 2 || typeCheck === 3) {
+					possibleTypes.push(type);
 				}
 			}
 			if (possibleTypes.length < 2) return;
@@ -278,6 +283,12 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				} else {
 					return false;
 				}
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
 			}
 		},
 	},
@@ -422,7 +433,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// iyarito
+	// Iyarito
 	pollodiablo: {
 		shortDesc: "This Pokemon's Special Attack is 1.5x, but it can only select the first move it executes.",
 		name: "Pollo Diablo",
@@ -797,6 +808,49 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			},
 		},
 		name: "Shady Deal",
+	},
+
+	// Struchni
+	overaskedclause: {
+		desc: "When switching in, become a random type that resists the last move the opponent used. If no move was used or if it's the first turn, pick a random type. If hit by a move that is not very effective, become Aggron-Mega (but keep the same type).",
+		shortDesc: "I dont even know how to shortdesc this",
+		name: "Overasked Clause",
+		onStart(source) {
+			const target = source.side.foe.active[0];
+			if (!target || !target.lastMove) {
+				const typeList = Object.keys(this.dex.data.TypeChart);
+				const newType = this.sample(typeList);
+				source.types = [newType];
+				this.add('-start', source, 'typechange', newType);
+				return;
+			}
+			const possibleTypes = [];
+			const attackType = target.lastMove.type;
+			for (const type in this.dex.data.TypeChart) {
+				if (source.hasType(type)) continue;
+				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+				if (typeCheck === 2 || typeCheck === 3) {
+					possibleTypes.push(type);
+				}
+			}
+			if (!possibleTypes.length) {
+				return false;
+			}
+			const randomType = this.sample(possibleTypes);
+
+			if (!source.setType(randomType)) return false;
+			this.add('-start', source, 'typechange', randomType);
+		},
+		onHit(target, source, move) {
+			if (target.species.name !== 'Aggron' || target.illusion || target.transformed) return;
+			if (!target.hp) return;
+			if (target.getMoveHitData(move).typeMod < 0) {
+				const sameType = target.types;
+				this.runMegaEvo(target);
+				target.setType(sameType);
+				this.add('-start', target, 'typechange', sameType.join('/'));
+			}
+		},
 	},
 
 	// Sunny

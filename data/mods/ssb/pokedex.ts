@@ -104,6 +104,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "The Numbers Game"},
 	},
+	// Strucni
+	aggronmega: {
+		inherit: true,
+		abilities: {0: "Overasked Clause"},
+	},
 	// Sunny
 	charizardmegax: {
 		inherit: true,

@@ -450,10 +450,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
 				if (source.switchFlag === true) return;
 				target.switchFlag = true;
+				source.side.addSideCondition('archangelsrequiem');
 			}
 		},
 		effect: {
-			onSwap(target) {
+			duration: 1,
+			onSwitchIn(target) {
 				if (!target.fainted && target.hp < target.maxhp) {
 					this.add(`c|${getName('Darth')}|Take my place, serve the Angel of Stall!`);
 					target.heal(target.maxhp);
@@ -796,7 +798,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
-	
+
 	// Hubriz
 	steroidanaphylaxia: {
 		accuracy: true,
@@ -825,6 +827,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (!success) return false;
 			this.add('-invertboost', target, '[from] move: Steroid Anaphylaxia');
 		},
+		target: "normal",
+		type: "Poison",
 	},
 
 	// iyatiro
@@ -947,7 +951,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		effect: {
 			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'move: Cozy Cuddle', '[of]' + source.name);
+				this.add('-start', pokemon, 'Cozy Cuddle');
 			},
 			onTrapPokemon(pokemon) {
 				if (this.effectData.source?.isActive) pokemon.tryTrap();
@@ -1955,6 +1959,66 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
+	},
+
+	// Struchni
+	veto: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Struchni only. Move's base power and priority depends on effectiveness of previous move.",
+		shortDesc: "Struchni: Move BP and prio depends on eff of prev move.",
+		name: "veto",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove(source) {
+			this.attrLastMove('[still]');
+			if (source.name !== 'Struchni') {
+				this.add('-fail', source);
+				this.hint("Only Struchni can use Veto.");
+				return null;
+			}
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Head Smash', target);
+		},
+		onModifyType(move, pokemon) {
+			let type = pokemon.types[0];
+			if (type === "Bird") type = "???";
+			move.type = type;
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (source.m.typeEff) {
+				if (source.m.typeEff < 0) {
+					return priority + 1;
+				} else if (source.m.typeEff >= 0) {
+					return priority - 1;
+				}
+			}
+		},
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.m.typeEff) {
+				if (pokemon.m.typeEff < 0) {
+					return move.basePower * 2;
+				} else if (pokemon.m.typeEff >= 0) {
+					return move.basePower / 2;
+				}
+			}
+			return move.basePower;
+		},
+		onHit(target, source) {
+			if (source.m.typeEff) {
+				if (source.m.typeEff < 0) {
+					this.add(`c|${getName('Struchni')}|**veto**`);
+				} else if (source.m.typeEff >= 0) {
+					this.add(`c|${getName('Struchni')}|** veto**`);
+				}
+			}
+		},
+		target: "normal",
+		type: "Normal",
 	},
 
 	// Sunny

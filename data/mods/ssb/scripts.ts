@@ -2,6 +2,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen8',
 	// 1 mega per pokemon
 	runMegaEvo(pokemon) {
+		if (pokemon.name === 'Struchni' && pokemon.species.name === 'Aggron') pokemon.canMegaEvo = 'Aggron-Mega';
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
 		const side = pokemon.side;
