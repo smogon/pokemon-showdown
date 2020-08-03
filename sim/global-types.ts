@@ -90,10 +90,11 @@ interface PokemonSet {
  */
 type MoveSource = string;
 
-interface TierTypes {
-	Singles: "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" | "(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC Uber" | "LC";
-	Doubles: "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC Uber" | "LC";
-	Other: "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
+namespace TierTypes {
+	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
+		"(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC Uber" | "LC";
+	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC Uber" | "LC";
+	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
 
 interface EventInfo {
@@ -1147,7 +1148,7 @@ type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inh
 
 interface SpeciesFormatsData {
 	comboMoves?: readonly string[];
-	doublesTier?: TierTypes["Doubles"] | TierTypes["Other"];
+	doublesTier?: TierTypes.Doubles | TierTypes.Other;
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	gmaxUnreleased?: boolean;
@@ -1157,7 +1158,7 @@ interface SpeciesFormatsData {
 	randomDoubleBattleMoves?: readonly string[];
 	randomDoubleBattleLevel?: number;
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
-	tier?: TierTypes["Singles"] | TierTypes["Other"];
+	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
 type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
