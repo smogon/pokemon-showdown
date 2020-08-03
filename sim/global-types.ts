@@ -91,7 +91,7 @@ interface PokemonSet {
 type MoveSource = string;
 
 interface TierTypes {
-	Singles: "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC Uber" | "LC";
+	Singles: "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" | "(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC Uber" | "LC";
 	Doubles: "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC Uber" | "LC";
 	Other: "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
