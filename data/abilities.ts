@@ -3106,22 +3106,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 144,
 	},
 	ripen: {
-		// TODO Needs research. Following berries aren't supported currently:
-		// Custap, Jacoba, Rowap, Lanslat, Leppa, Micle
-		// Check if they are affected by ripen.
 		shortDesc: "When this Pokemon eats a Berry, its effect is doubled.",
 		onTryHeal(damage, target, source, effect) {
-			if (effect?.id === 'leftovers') {
+			if (!effect) return;
+			if (effect.id === 'berryjuice' || effect.id === 'leftovers') {
 				this.add('-activate', target, 'ability: Ripen');
 			}
-			if (effect && (effect as Item).isBerry) {
-				this.debug(`Ripen doubled healing`);
-				return this.chainModify(2);
-			}
+			if ((effect as Item).isBerry) return this.chainModify(2);
 		},
 		onBoost(boost, target, source, effect) {
 			if (effect && (effect as Item).isBerry) {
-				this.debug(`Ripen doubled boost`);
 				let b: BoostName;
 				for (b in boost) {
 					boost[b]! *= 2;
@@ -3130,12 +3124,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.abilityData.berryWeaken) {
-				// Pokemon ate a berry that weakened damage from this attack, ripen adds another 1/4 that.
-				this.debug(`Ripen increases damage reduction to 3/4`);
 				target.abilityData.berryWeaken = "";
 				// Not sure if this is the correct multiplier to get 3/4 total, assuming its taking 1/2 of 1/2 (3/4)
 				return this.chainModify(0.5);
 			}
+		},
+		onTryEatItemPriority: -1,
+		onTryEatItem(item, pokemon) {
+			this.add('-activate', pokemon, 'ability: Ripen');
 		},
 		onEatItem(item, pokemon) {
 			const weakenBerries = [
