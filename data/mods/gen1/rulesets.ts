@@ -14,12 +14,12 @@ export const Formats: {[k: string]: ModdedFormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: StatName[] = ['hp', 'atk', 'def', 'spa', 'spe'];
-			const bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
+			const bst = newSpecies.bst - newSpecies.baseStats.spd;
 			if (bst <= 350) {
-				for (const stat of stats) {
+				for (const stat in newSpecies.baseStats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
 				}
+				newSpecies.bst = (Object.values(newSpecies.baseStats) as number[]).reduce((x, y) => x + y);
 			}
 			return newSpecies;
 		},
@@ -56,12 +56,13 @@ export const Formats: {[k: string]: ModdedFormatsData} = {
 		},
 		onModifySpecies(species, target, source) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: StatName[] = ['atk', 'def', 'spa', 'spe'];
-			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
+			const pst: number = newSpecies.bst - newSpecies.baseStats['hp'] - newSpecies.baseStats['spd'];
 			const scale = 500 - newSpecies.baseStats['hp'];
-			for (const stat of stats) {
+			for (const stat in newSpecies.baseStats) {
+				if (stat === 'hp' || stat === 'spd') continue;
 				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 			}
+			newSpecies.bst = (Object.values(newSpecies.baseStats) as number[]).reduce((x, y) => x + y);
 			return newSpecies;
 		},
 	},

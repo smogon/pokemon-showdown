@@ -4,6 +4,7 @@ import {Utils} from '../../lib/utils';
 
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};
+	bst: number;
 	weighthg: number;
 	type?: string;
 }
@@ -113,6 +114,7 @@ export const commands: ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+			bst: 0,
 		};
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
@@ -140,6 +142,7 @@ export const commands: ChatCommands = {
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
 		}
+		mixedSpecies.bst = (Object.values(mixedSpecies.baseStats) as number[]).reduce((x, y) => x + y);
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
 		mixedSpecies.tier = "MnM";
 		let weighthit = 20;
@@ -210,11 +213,13 @@ export const commands: ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+			bst: 0,
 		};
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
 			deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 		}
+		deltas.bst = Object.values(deltas.baseStats).reduce((x, y) => x + y);
 		if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
 		} else if (megaSpecies.types.length < baseSpecies.types.length) {
@@ -262,11 +267,7 @@ export const commands: ChatCommands = {
 		buf += `<span class="col statcol"><em>SpA</em><br />${deltas.baseStats.spa}</span> `;
 		buf += `<span class="col statcol"><em>SpD</em><br />${deltas.baseStats.spd}</span> `;
 		buf += `<span class="col statcol"><em>Spe</em><br />${deltas.baseStats.spe}</span> `;
-		let bst = 0;
-		for (const stat of Object.values(deltas.baseStats)) {
-			bst += stat;
-		}
-		buf += `<span class="col bstcol"><em>BST<br />${bst}</em></span> `;
+		buf += `<span class="col bstcol"><em>BST<br />${deltas.bst}</em></span> `;
 		buf += `</span>`;
 		buf += `</li>`;
 		this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
@@ -292,13 +293,13 @@ export const commands: ChatCommands = {
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		let bst = 0;
+		let bst = species.bst;
+		if (dex.gen === 1) bst -= species.baseStats.spd;
 		for (const i in species.baseStats) {
-			bst += species.baseStats[i];
-		}
-		for (const i in species.baseStats) {
+			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
+		species.bst = (Object.values(species.baseStats) as number[]).reduce((x, y) => x + y);
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	'350cuphelp': [
@@ -351,8 +352,10 @@ export const commands: ChatCommands = {
 		const boost = boosts[tier as TierShiftTiers];
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
+			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 		}
+		species.bst = (Object.values(species.baseStats) as number[]).reduce((x, y) => x + y);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	tiershifthelp: [
@@ -392,11 +395,13 @@ export const commands: ChatCommands = {
 		}
 		if (isGen1 && species.gen > 1) return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
 		const stats = !isGen1 ? ['atk', 'def', 'spa', 'spd', 'spe'] : ['atk', 'def', 'spa', 'spe'];
-		const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
+		let bstNoHP = species.bst - species.baseStats.hp;
+		if (isGen1) bstNoHP -= species.baseStats.spd;
 		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
 		for (const stat of stats) {
-			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
+			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
 		}
+		species.bst = (Object.values(species.baseStats) as number[]).reduce((x, y) => x + y);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	scalemonshelp: [

@@ -986,7 +986,8 @@ export class RandomGen7Teams extends RandomTeams {
 			// If Wishiwashi, use the school-forme's much higher stats
 			if (species.baseSpecies === 'Wishiwashi') baseStats = this.dex.getSpecies('wishiwashischool').baseStats;
 
-			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
+			let bst = species.bst;
+			if (species.baseSpecies === 'Wishiwashi') bst = this.dex.getSpecies('wishiwashischool').bst;
 			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
 			// For the stat boosted, treat the Pokemon's base stat as if it were multiplied by the boost. (Actual effective base stats are higher.)
 			const speciesAbility = (baseSpecies === species ? ability : species.abilities[0]);

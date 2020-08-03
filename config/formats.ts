@@ -350,23 +350,13 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (species.types.includes('Steel')) {
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
 			}
-			let bst = 0;
-			let stat: StatName;
-			for (stat in species.baseStats) {
-				bst += species.baseStats[stat];
-			}
-			if (bst > 625) {
+			if (species.bst > 625) {
 				return [`${species.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			}
 			const item = this.dex.getItem(set.item);
 			if (set.item && item.megaStone) {
-				let bstMega = 0;
 				const megaSpecies = this.dex.getSpecies(item.megaStone);
-				let megaStat: StatName;
-				for (megaStat in megaSpecies.baseStats) {
-					bstMega += megaSpecies.baseStats[megaStat];
-				}
-				if (species.baseSpecies === item.megaEvolves && bstMega > 625) {
+				if (species.baseSpecies === item.megaEvolves && megaSpecies.bst > 625) {
 					return [
 						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
 					];

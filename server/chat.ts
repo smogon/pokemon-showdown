@@ -1911,8 +1911,8 @@ export const Chat = new class {
 		}
 	}
 
-	getDataPokemonHTML(species: Species, gen = 7, tier = '') {
-		if (typeof species === 'string') species = Dex.deepClone(Dex.getSpecies(species));
+	getDataPokemonHTML(species: Species, gen = 8, tier = '') {
+		species = Dex.deepClone(species);
 		let buf = '<li class="result">';
 		buf += '<span class="col numcol">' + (tier || species.tier) + '</span> ';
 		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
@@ -1943,10 +1943,7 @@ export const Chat = new class {
 			}
 			buf += '</span>';
 		}
-		let bst = 0;
-		for (const baseStat of Object.values(species.baseStats)) {
-			bst += baseStat;
-		}
+		let bst = species.bst;
 		buf += '<span style="float:left;min-height:26px">';
 		buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
 		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
