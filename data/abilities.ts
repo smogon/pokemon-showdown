@@ -3111,6 +3111,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// Check if they are affected by ripen.
 		shortDesc: "When this Pokemon eats a Berry, its effect is doubled.",
 		onTryHeal(damage, target, source, effect) {
+			if (effect?.id === 'leftovers') {
+				this.add('-activate', target, 'ability: Ripen');
+			}
 			if (effect && (effect as Item).isBerry) {
 				this.debug(`Ripen doubled healing`);
 				return this.chainModify(2);
