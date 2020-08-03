@@ -142,6 +142,7 @@ export const commands: ChatCommands = {
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
 		}
+		// @ts-ignore
 		mixedSpecies.bst = Object.values(mixedSpecies.baseStats).reduce((x, y) => x + y);
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
 		mixedSpecies.tier = "MnM";
@@ -299,6 +300,7 @@ export const commands: ChatCommands = {
 			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
+		// @ts-ignore
 		species.bst = Object.values(species.baseStats).reduce((x, y) => x + y);
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -355,6 +357,7 @@ export const commands: ChatCommands = {
 			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 		}
+		// @ts-ignore
 		species.bst = Object.values(species.baseStats).reduce((x, y) => x + y);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -394,13 +397,15 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
 		if (isGen1 && species.gen > 1) return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
-		const stats = !isGen1 ? ['atk', 'def', 'spa', 'spd', 'spe'] : ['atk', 'def', 'spa', 'spe'];
 		let bstNoHP = species.bst - species.baseStats.hp;
 		if (isGen1) bstNoHP -= species.baseStats.spd;
 		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
-		for (const stat of stats) {
+		for (const stat in species.baseStats) {
+			if (stat === 'hp') continue;
+			if (isGen1 && stat === 'spd') continue;
 			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
 		}
+		// @ts-ignore
 		species.bst = Object.values(species.baseStats).reduce((x, y) => x + y);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
