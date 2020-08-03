@@ -1422,9 +1422,11 @@ export class GlobalRoomState {
 		const upperStaffRoom = Rooms.get('upperstaff');
 		let hasPrivateTerm = stack.includes('private');
 
-		const privateTerms = (Config.privatecrashterms ? [...Config.privatecrashterms] : []).map(item => new RegExp(item, "i"));
-		for (const term of privateTerms) {
-			if (term.test(stack) || term.test(err.message)) hasPrivateTerm = true;
+		for (const term of (Config.privatecrashterms || [])) {
+			if (typeof term === 'string' ? err.stack.includes(term) : term.test(err.stack)) {
+				hasPrivateTerm = true;
+				break;
+			}
 		}
 		if (hasPrivateTerm) {
 			if (upperStaffRoom) {
