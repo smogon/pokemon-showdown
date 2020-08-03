@@ -229,7 +229,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "The user's type changes based on the battle terrain. Normal type on the regular Wi-Fi terrain. Fails if the user has the Multitype Ability or if the type is one of the user's current types.",
 		shortDesc: "Changes user's type based on terrain. (Normal)",
 		onHit(target) {
-			if (!target.setType('Normal')) return false;
+			// includes() is used here over hasType() because for whatever reason Arceus-Water
+			// always returns Normal-type from hasType() which is stupid
+			if (target.types.includes('Normal') || !target.setType('Normal')) return false;
 			this.add('-start', target, 'typechange', 'Normal');
 		},
 	},
