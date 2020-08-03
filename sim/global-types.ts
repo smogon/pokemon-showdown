@@ -761,6 +761,7 @@ interface EventMethods {
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
 	onTrapPokemonPriority?: number;
+	onTryEatItemPriority?: number;
 	onTryHealPriority?: number;
 	onTryHitPriority?: number;
 	onTryMovePriority?: number;
