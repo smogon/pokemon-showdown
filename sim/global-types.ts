@@ -90,6 +90,12 @@ interface PokemonSet {
  */
 type MoveSource = string;
 
+interface TierTypes {
+	Singles: "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC Uber" | "LC";
+	Doubles: "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC Uber" | "LC";
+	Other: "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
+}
+
 interface EventInfo {
 	generation: number;
 	level?: number;
@@ -1141,7 +1147,7 @@ type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inh
 
 interface SpeciesFormatsData {
 	comboMoves?: readonly string[];
-	doublesTier?: string;
+	doublesTier?: TierTypes["Doubles"] | TierTypes["Other"];
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	gmaxUnreleased?: boolean;
@@ -1151,7 +1157,7 @@ interface SpeciesFormatsData {
 	randomDoubleBattleMoves?: readonly string[];
 	randomDoubleBattleLevel?: number;
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
-	tier?: string;
+	tier?: TierTypes["Singles"] | TierTypes["Other"];
 }
 
 type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
