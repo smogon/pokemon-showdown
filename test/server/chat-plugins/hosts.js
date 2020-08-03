@@ -6,13 +6,9 @@
 'use strict';
 
 const assert = require('assert').strict;
-let hosts;
+const hosts = require('../../../.server-dist/chat-plugins/hosts');
 
 describe("Hosts plugin", () => {
-	before(() => {
-		hosts = require('../../../.server-dist/chat-plugins/hosts');
-	});
-
 	it('should properly visualize an empty list of ranges', () => {
 		assert.strictEqual(
 			hosts.visualizeRangeList([]),
