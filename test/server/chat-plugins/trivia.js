@@ -5,11 +5,11 @@ const assert = require('assert').strict;
 const userUtils = require('../../users-utils');
 const User = userUtils.User;
 const Connection = userUtils.Connection;
-
-let Trivia;
-let FirstModeTrivia;
-let TimerModeTrivia;
-let NumberModeTrivia;
+const trivia = require('../../../.server-dist/chat-plugins/trivia');
+const Trivia = trivia.Trivia;
+const FirstModeTrivia = trivia.FirstModeTrivia;
+const TimerModeTrivia = trivia.TimerModeTrivia;
+const NumberModeTrivia = trivia.NumberModeTrivia;
 
 function makeUser(name, connection) {
 	const user = new User(connection);
@@ -28,16 +28,6 @@ function destroyUser(user) {
 
 describe('Trivia', function () {
 	before(function () {
-		// The trivia module cannot be loaded outside of this scope because
-		// it makes reference to global.Config in the modules outermost scope,
-		// which makes the module fail to be loaded. Within the scope of thess
-		// unit test blocks however, Config is defined.
-		const trivia = require('../../../.server-dist/chat-plugins/trivia');
-		Trivia = trivia.Trivia;
-		FirstModeTrivia = trivia.FirstModeTrivia;
-		TimerModeTrivia = trivia.TimerModeTrivia;
-		NumberModeTrivia = trivia.NumberModeTrivia;
-
 		Rooms.global.addChatRoom('Trivia');
 		this.room = Rooms.get('trivia');
 	});
