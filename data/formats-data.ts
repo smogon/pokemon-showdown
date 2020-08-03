@@ -5526,7 +5526,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	barraskewda: {
 		randomBattleMoves: ["closecombat", "crunch", "drillrun", "liquidation", "poisonjab"],
-		randomBattleLevel: 82,
+		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["closecombat", "crunch", "drillrun", "flipturn", "liquidation", "poisonjab"],
 		randomDoubleBattleLevel: 84,
 		tier: "RU",
