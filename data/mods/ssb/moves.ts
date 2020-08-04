@@ -1159,26 +1159,25 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// Kris
 	alphabetsoup: {
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		basePower: 81,
+		category: "Special",
 		desc: "The user changes into a random Pokemon with a first name letter that matches the forme Unown is currently in (A -> Alakazam, etc) that has base stats that would benefit from Unown's EV/IV/Nature spread and moves. Using it while in a forme that is not Unown will make it revert back to the Unown forme it transformed in (If an Unown transforms into Alakazam, it'll transform back to Unown-A when used again). Light of Ruin becomes Strange Steam, Psystrike becomes Psyshock, Secret Sword becomes Aura Sphere, Mind Blown becomes Flamethrower, and Seed Flare becomes Apple Acid while in a non-Unown forme.",
 		shortDesc: "Transform into Unown. Unown: Transform into mon.",
 		name: "Alphabet Soup",
 		pp: 20,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1},
 		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'All-Out Pummeling', source);
-			this.add('-anim', source, 'Perish Song', source);
-			this.add('-anim', source, 'Roar of Time', source);
+			this.add('-anim', source, 'Dark Pulse', target);
+			this.add('-anim', source, 'Teleport', source);
 		},
-		onHit(target) {
-			if (!target) return;
-			if (target.species.id.includes('unown')) {
+		onHit(target, source) {
+			if (!source) return;
+			if (source.species.id.includes('unown')) {
 				const monList = Object.keys(this.dex.data.Pokedex).filter(speciesid => {
 					const species = this.dex.getSpecies(speciesid);
 					if (species.isGigantamax) return false;
@@ -1187,13 +1186,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					if (['Arceus', 'Silvally'].includes(species.baseSpecies) && species.types[0] !== 'Normal') return false;
 					if (species.baseStats.spa < 80) return false;
 					if (species.baseStats.spe < 80) return false;
-					const unownLetter = target.species.id.charAt(5) || 'a';
+					const unownLetter = source.species.id.charAt(5) || 'a';
 					if (!species.id.startsWith(unownLetter.trim().toLowerCase())) return false;
 					return true;
 				});
-				target.formeChange(this.sample(monList), this.effect, true);
-				target.setAbility('Protean');
-				target.moveSlots = target.moveSlots.map(slot => {
+				source.formeChange(this.sample(monList), this.effect, true);
+				source.setAbility('Protean');
+				source.moveSlots = source.moveSlots.map(slot => {
 					const newMoves: {[k: string]: string} = {
 						lightofruin: 'strangesteam',
 						psystrike: 'psyshock',
@@ -1216,10 +1215,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					return slot;
 				});
 			} else {
-				let transformingLetter = target.species.id[0];
+				let transformingLetter = source.species.id[0];
 				if (transformingLetter === 'a') transformingLetter = '';
-				target.formeChange(`unown${transformingLetter}`, this.effect, true);
-				target.moveSlots = target.moveSlots.map(slot => {
+				source.formeChange(`unown${transformingLetter}`, this.effect, true);
+				source.moveSlots = source.moveSlots.map(slot => {
 					const newMoves: {[k: string]: string} = {
 						strangesteam: 'lightofruin',
 						psyshock: 'psystrike',
@@ -1244,8 +1243,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		secondary: null,
-		target: "self",
-		type: "Bird",
+		target: "normal",
+		type: "Dark",
 	},
 
 	// Majorbowman
