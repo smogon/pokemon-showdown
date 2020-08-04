@@ -454,29 +454,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves: [],
 				nature: Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature,
 				gender: ssbSet.gender,
-				evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
-				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+				evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ssbSet.evs),
+				ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ssbSet.ivs),
 				level: ssbSet.level || 100,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
-				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : ssbSet.shiny,
+				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
 			};
-			if (ssbSet.ivs) {
-				let iv: StatName;
-				for (iv in ssbSet.ivs) {
-					// IVs from the set override the default of 31, assume the hardcoded IVs are legal
-					set.ivs[iv] = ssbSet.ivs[iv]!;
-				}
-			}
-			if (ssbSet.evs) {
-				let ev: StatName;
-				for (ev in ssbSet.evs) {
-					// EVs from the set override the default of 0, assume the hardcoded EVs are legal
-					set.evs[ev] = ssbSet.evs[ev]!;
-				}
-			} else {
-				set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
-			}
-
+			if (!ssbSet.evs) set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
 				let move = this.sampleNoReplace(ssbSet.moves);
 				if (Array.isArray(move)) move = this.sampleNoReplace(move);
