@@ -26,6 +26,7 @@ namespace Chat {
 	export type NameFilter = import('./chat').NameFilter;
 	export type StatusFilter = import('./chat').StatusFilter;
 	export type LoginFilter = import('./chat').LoginFilter;
+	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 }
 
 // Rooms
