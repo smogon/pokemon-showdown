@@ -1991,36 +1991,39 @@ export const commands: ChatCommands = {
 		target = target.toLowerCase().trim();
 		const showAll = target === 'all';
 		if (showAll && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast all FAQs at once.");
+			return this.sendReplyBox(this.tr`You cannot broadcast all FAQs at once.`);
 		}
+
+		const autoconfirmedFAQ = `A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`;
+		const tournamentFAQ = `To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`;
 
 		const buffer = [];
 		if (showAll || target === 'staff') {
-			buffer.push(`<a href="https://www.smogon.com/forums/posts/6774482/">Staff FAQ</a>`);
+			buffer.push(`<a href="https://www.smogon.com/forums/posts/6774482/">${this.tr`Staff FAQ`}</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
-			buffer.push(`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
+			buffer.push(this.tr(autoconfirmedFAQ));
 		}
 		if (showAll || target === 'coil') {
-			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">What is COIL?</a>`);
+			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">${this.tr`What is COIL?`}</a>`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
-			buffer.push(`<a href="https://${Config.routes.root}/pages/ladderhelp">How the ladder works</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/ladderhelp">${this.tr`How the ladder works`}/a>`);
 		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
-			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">Tiering FAQ</a>`);
+			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">${this.tr`Tiering FAQ`}</a>`);
 		}
 		if (showAll || target === 'badge' || target === 'badges') {
-			buffer.push(`<a href="https://www.smogon.com/badge_faq">Badge FAQ</a>`);
+			buffer.push(`<a href="https://www.smogon.com/badge_faq">${this.tr`Badge FAQ`}</a>`);
 		}
 		if (showAll || target === 'rng') {
-			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">How Pokémon Showdown's RNG works</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">${this.tr`How Pokémon Showdown's RNG works`}</a>`);
 		}
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
-			buffer.push(`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
+			buffer.push(this.tr(tournamentFAQ));
 		}
 		if (showAll || !buffer.length) {
-			buffer.unshift(`<a href="https://www.smogon.com/forums/posts/6774128/">Frequently Asked Questions</a>`);
+			buffer.unshift(`<a href="https://www.smogon.com/forums/posts/6774128/">${this.tr`Frequently Asked Questions`}</a>`);
 		}
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
