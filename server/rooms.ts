@@ -1419,14 +1419,15 @@ export class GlobalRoomState {
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
-		let hasPrivateTerm = stack.includes('private');
 
+		let hasPrivateTerm = stack.includes('private');
 		for (const term of (Config.privatecrashterms || [])) {
 			if (typeof term === 'string' ? stack.includes(term) : term.test(stack)) {
 				hasPrivateTerm = true;
 				break;
 			}
 		}
+
 		if (hasPrivateTerm) {
 			if (upperStaffRoom) {
 				privateCrashMessage = crashMessage;
