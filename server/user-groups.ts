@@ -138,9 +138,17 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		const permissions: string[] = ROOM_PERMISSIONS.slice();
 		for (const cmd in Chat.commands) {
 			const entry = Chat.commands[cmd];
-			if (typeof entry !== 'function') continue;
-			if (entry.hasRoomPermissions) {
+			if (typeof entry === 'string' || Array.isArray(entry)) continue;
+			if (typeof entry === 'function' && entry.hasRoomPermissions) {
 				permissions.push(`/${cmd}`);
+			}
+			if (typeof entry === 'object') {
+				for (const subCommand in entry) {
+					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
+					if (typeof subEntry !== 'function') continue;
+					if (subEntry.hasRoomPermissions) permissions.push(`/${cmd} ${subCommand}`);
+				}
+				continue;
 			}
 		}
 		return permissions;

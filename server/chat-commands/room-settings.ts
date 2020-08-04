@@ -347,7 +347,8 @@ export const commands: ChatCommands = {
 
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
-			const permissions = allPermissions.filter(perm => perm.startsWith('/'));
+			const permissions = allPermissions.filter(perm => perm.startsWith('/') && !perm.includes(' '));
+			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' '));
 
 			let buffer = `<strong>Room permissions help:</strong><hr />`;
 			buffer += `<p><strong>Usage: </strong><br />`;
@@ -358,6 +359,8 @@ export const commands: ChatCommands = {
 			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
 			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
 			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
+			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
+			buffer += `<code>` + subPermissions.join(`</code> <code>`) + `</code></details></p>`;
 			return this.sendReplyBox(buffer);
 		},
 	},
