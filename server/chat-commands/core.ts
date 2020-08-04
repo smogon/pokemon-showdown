@@ -1583,7 +1583,7 @@ export const commands: ChatCommands = {
 			this.errorReply(`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
 		}
 
-		const curHandler = this.parseCommand(`/${currentBestHelp.for[0]}`)?.handler;
+		const curHandler = this.parseCommand(`/${currentBestHelp.for.join(' ')}`)?.handler;
 		if (curHandler?.isPrivate && !user.can('lock')) {
 			return this.errorReply(`The command '/${target}' does not exist.`);
 		}

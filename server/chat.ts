@@ -1342,17 +1342,18 @@ export class CommandContext extends MessageContext {
 	}
 	secretCommand() {
 		const handler = this.handler;
-		handler!.isPrivate = true;
-		const full = this.fullCmd;
-		const token = this.cmdToken;
-		if (token === '!') {
-			return this.errorReply(`The command "${token}${this.cmd}" does not exist.`);
+		if (handler!.isPrivate) {
+			const full = this.fullCmd;
+			const token = this.cmdToken;
+			if (token === '!') {
+				throw new Chat.ErrorMessage(`The command "${token}${this.cmd}" does not exist.`);
+			}
+			throw new Chat.ErrorMessage(
+				`The command "${token}${this.cmd}" does not exist. ` +
+				`To send a message starting with "${token}${full}", ` +
+				`type "${token}${token}${full}".`
+			);
 		}
-		this.errorReply(
-			`The command "${token}${this.cmd}" does not exist. ` +
-			`To send a message starting with "${token}${full}", ` +
-			`type "${token.repeat(2)}${full}".`
-		);
 	}
 }
 
@@ -1629,13 +1630,13 @@ export const Chat = new class {
 		} else {
 			return;
 		}
-		this.loadPluginData(plugin);
+		this.loadPluginData(plugin, file);
 	}
-	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
+	annotateCommands(commandTable: AnyObject, namespace = '', file?: string): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
-				this.annotateCommands(entry, `${namespace}${cmd} `);
+				this.annotateCommands(entry, `${namespace}${cmd} `, file);
 			}
 			if (typeof entry !== 'function') continue;
 
@@ -1643,6 +1644,7 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
+			entry.isPrivate = file?.includes('private');
 
 			// This is usually the same as `entry.name`, but some weirdness like
 			// `commands.a = b` could screw it up. This should make it consistent.
@@ -1651,9 +1653,9 @@ export const Chat = new class {
 		}
 		return commandTable;
 	}
-	loadPluginData(plugin: AnyObject) {
+	loadPluginData(plugin: AnyObject, file?: string) {
 		if (plugin.commands) {
-			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
+			Object.assign(Chat.commands, this.annotateCommands(plugin.commands, '', file));
 		}
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
