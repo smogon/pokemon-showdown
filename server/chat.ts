@@ -1782,8 +1782,6 @@ export const Chat = new class {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
 	 * Takes the name of a command and gets the base command, if there is one.
 	 */
 	baseCommand(cmd: string) {
@@ -1799,7 +1797,6 @@ export const Chat = new class {
 	}
 
 	/**
->>>>>>> Chat: Add a method for marking commands as private
 	 * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
 	 *
 	 * options.human = true will reports hours human-readable
