@@ -1782,21 +1782,6 @@ export const Chat = new class {
 	}
 
 	/**
-	 * Takes the name of a command and gets the base command, if there is one.
-	 */
-	baseCommand(cmd: string) {
-		if (!this.commands[cmd]) {
-			for (const command in this.commands) {
-				const handler = this.commands[command];
-				if (typeof handler !== 'object') continue;
-				if (cmd in handler) cmd = command;
-			}
-		}
-		if (typeof this.commands[cmd] === 'string') return this.commands[cmd] as string;
-		return cmd;
-	}
-
-	/**
 	 * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
 	 *
 	 * options.human = true will reports hours human-readable
