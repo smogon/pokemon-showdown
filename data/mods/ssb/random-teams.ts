@@ -64,6 +64,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Grapes',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
+	ArchasTL: {
+		species: 'Naviathan', ability: 'Indomitable', item: 'Iron Plate', gender: 'F',
+		moves: ['Waterfall', 'Icicle Crash', 'No Retreat'],
+		signatureMove: 'Broadside Barrage',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	Arsenal: {
 		species: 'Corvisquire', ability: 'Royal Privilege', item: 'Eviolite', gender: '',
 		moves: ['Sky Attack', 'High Jump Kick', 'Earthquake'],

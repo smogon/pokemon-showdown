@@ -79,6 +79,32 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		name: "Gale Wings v1",
 	},
 
+	// ArchasTL
+	indomitable: {
+		desc: "This Pokemon cures itself if it is confused or has a major status condition. Single use.",
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'confusion' && !pokemon.m.indomitableActivated) {
+				pokemon.m.indomitableActivated = true;
+				return null;
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (!target.status) return;
+			if (target.m.indomitableActivated) return;
+			this.add('-immune', target, '[from] ability: Indomitable');
+			target.m.indomitableActivated = true;
+			return false;
+		},
+		onUpdate(pokemon) {
+			if ((pokemon.status || pokemon.volatiles['confusion']) && !pokemon.m.indomitableActivated) {
+				this.add('-activate', pokemon, 'ability: Indomitable');
+				pokemon.cureStatus();
+				pokemon.m.indomitableActivated = true;
+			}
+		},
+		name: "Indomitable",
+	},
+
 	// Arsenal
 	royalprivilege: {
 		desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. This Pokemon can only be damaged by direct attacks. Attacks that need to charge do not charge and execute in 1 turnThis Pokemon is not affected by the secondary effect of another Pokemon's attack. This Pokemon can only be damaged by direct attacks. Attacks that need to charge do not charge and execute in 1 turn.",

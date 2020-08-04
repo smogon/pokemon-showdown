@@ -215,17 +215,51 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// ArchasTL
+	broadsidebarrage: {
+		accuracy: 90,
+		basePower: 30,
+		category: "Physical",
+		shortDesc: "Hits 4 times. Super effective on Steel.",
+		name: "Broadside Barrage",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Close Combat', target);
+			this.add('-anim', target, 'Earthquake', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		multihit: 4,
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Arsenal
 	vorpalwings: {
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
-		desc: "Raises the users speed by 1 stage.",
-		shortDesc: "Raises the users speed by 1 stage.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "100% chance to raises the user's Speed by 1.",
 		name: "Vorpal Wings",
-		pp: 32,
+		pp: 20,
 		priority: 0,
 		flags: {protect: 1, contact: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Max Steelspike', target);
+		},
 		secondary: {
 			chance: 100,
 			self: {
@@ -268,11 +302,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Gains the ability Compound Eyes and then switches out",
-		shortDesc: "Gains Compound Eyes and switches",
+		shortDesc: "Gains Compound Eyes and switches.",
 		name: "Buzz Inspection",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1},
 		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');

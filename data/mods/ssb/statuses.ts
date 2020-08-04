@@ -87,13 +87,29 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
-	'a random duck': {
+	arandomduck: {
 		noCopy: true,
 		onStart() {
 			this.add(`c|${getName('a random duck')}|Hey! Got any grapes??`);
 		},
 		onFaint() {
 			this.add(`c|${getName('a random duck')}|and he waddled away... bum bum bum`);
+		},
+	},
+	archastl: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('ArchasTL')}|Ready the main batteries, gentlemen! Hit ‘em hard and fast!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('ArchasTL')}|Helmsman, full reverse at speed!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('ArchasTL')}|They say the captain always goes down with the ship...`);
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.illusion) return;
+			if (!pokemon.m.indomitableActivated) pokemon.m.indomitableActivated = false;
 		},
 	},
 	arsenal: {
@@ -111,7 +127,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Arsenal')}|Next Year...`);
 		},
 	},
-	awa: {
+	awauser: {
 		noCopy: true,
 		onStart() {
 			this.add(`c|${getName('awa!')}|awa!`);
