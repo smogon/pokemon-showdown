@@ -900,7 +900,7 @@ export abstract class BasicRoom {
 		// get rid of some possibly-circular references
 		Rooms.rooms.delete(this.roomid);
 	}
-	translate(strings: string | TemplateStringsArray, ...keys: any[]) {
+	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
 		return Chat.tr(this.settings.language || 'english', strings, keys);
 	}
 }

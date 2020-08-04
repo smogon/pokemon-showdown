@@ -42,7 +42,7 @@ export class Announcement {
 	}
 
 	end() {
-		this.room.send(`|uhtmlchange|announcement${this.announcementNumber}|<div class="infobox">(${this.room.translate`The announcement has ended.`})</div>`);
+		this.room.send(`|uhtmlchange|announcement${this.announcementNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
 	}
 }
 
