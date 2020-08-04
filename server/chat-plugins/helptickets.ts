@@ -450,7 +450,7 @@ function notifyStaff() {
 	for (const i in room.users) {
 		// FIXME: TypeScript bug: I have no clue why TypeScript can't figure out this type
 		const user: User = room.users[i];
-		if (user.can('mute', null, room)) user.sendTo(room, buf);
+		if (user.can('mute', null, room) && !user.settings.ignoreTickets) user.sendTo(room, buf);
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
