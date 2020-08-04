@@ -1412,9 +1412,8 @@ export class GlobalRoomState {
 			return;
 		}
 		this.lastReportedCrash = time;
-		// @ts-ignore
-		const stackLines = (err ? Utils.escapeHTML(err.stack).split(`\n`) : []);
-		const stack = stackLines.slice(1).join(`<br />`);
+		const stack = err.stack || err.message || err.name || '';
+		const stackLines = (err ? Utils.escapeHTML(stack).split(`\n`) : []);
 
 		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
 		let privateCrashMessage = null;
