@@ -356,7 +356,7 @@ export const commands: ChatCommands = {
 				const handler = this.parseCommand(perm)?.handler;
 				if (handler?.isPrivate && !user.can('lock')) return false;
 				return perm.startsWith('/') && perm.includes(' ');
-			});;
+			});
 
 			let buffer = `<strong>Room permissions help:</strong><hr />`;
 			buffer += `<p><strong>Usage: </strong><br />`;
