@@ -1415,15 +1415,23 @@ export class GlobalRoomState {
 			return;
 		}
 		this.lastReportedCrash = time;
-		// @ts-ignore
-		const stackLines = (err ? Utils.escapeHTML(err.stack).split(`\n`) : []);
-		const stack = stackLines.slice(1).join(`<br />`);
+		const stack = err.stack || err.message || err.name || '';
+		const stackLines = (err ? Utils.escapeHTML(stack).split(`\n`) : []);
 
 		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
-		if (stack.includes("private")) {
+
+		let hasPrivateTerm = stack.includes('private');
+		for (const term of (Config.privatecrashterms || [])) {
+			if (typeof term === 'string' ? stack.includes(term) : term.test(stack)) {
+				hasPrivateTerm = true;
+				break;
+			}
+		}
+
+		if (hasPrivateTerm) {
 			if (upperStaffRoom) {
 				privateCrashMessage = crashMessage;
 				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
