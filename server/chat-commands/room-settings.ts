@@ -359,7 +359,7 @@ export const commands: ChatCommands = {
 			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
 			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)`;
 			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
-			buffer += `<p><strong>Sub-commands:</strong> (will affect one command within a grouped command, eg /roomevents view)<br />`;
+			buffer += `<p><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)<br />`;
 			buffer += `<code>` + subPermissions.join('</code><code>') + `</code></p>`;
 			return this.sendReplyBox(buffer);
 		},
