@@ -5,19 +5,15 @@
 
 'use strict';
 const assert = require('assert').strict;
-let Help;
+const Responder = require('../../../.server-dist/chat-plugins/help').HelpResponder;
+const Help = new Responder({
+	stats: {},
+	pairs: {},
+	disabled: false,
+	queue: [],
+});
 
 describe('Help', function () {
-	before(function () {
-		const defaultData = {
-			stats: {},
-			pairs: {},
-			disabled: false,
-			queue: [],
-		};
-		const Responder = require('../../../.server-dist/chat-plugins/help').HelpResponder;
-		Help = new Responder(defaultData);
-	});
 	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
 		Help.data.pairs.catra.push(Help.stringRegex(`Hey & adora`));
