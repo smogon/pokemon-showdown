@@ -152,7 +152,7 @@
 		"A poll was started by ${user.name}.": "Un sondage a été lancé par ${pseudo}.",
 		"The queue is already empty.": "La file d'attente est déjà vide.",
 		"Cleared poll queue.": "La file d'attente des sondages a été supprimée.",
-		"Room \"${roomid}\" not found.": "La salle \"${roomid}\ n'a pas été trouvée.",
+		"Room \"${roomid}\" not found.": "La salle \"${roomid}\" n'a pas été trouvée.",
 		"Can't delete poll at slot ${slotString} - \"${slotString}\" is not a number.": "",
 		"There is no poll in queue at slot ${slot}.": "Il n'y a pas de sondage dans la file d'attente en position ${slot}.",
 		"(${user.name} deleted the queued poll in slot ${slot}.)": "${pseudo} a supprimé le poll en attente en position ${slot}.",
