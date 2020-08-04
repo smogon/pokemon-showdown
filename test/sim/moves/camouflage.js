@@ -39,16 +39,20 @@ describe('Camouflage', function () {
 		assert.equal(battle.p1.active[0].types[0], 'Ground');
 	});
 
-	it('should fail on Multitype in Gen 4 and Arceus itself in Gen 5+', function () {
+	it.only('should fail on Multitype in Gen 4 and Arceus itself in Gen 5+', function () {
 		// Gen 4
 		battle = common.gen(4).createBattle([[
-			{species: 'arceus-water', ability: 'flashfire', moves: ['camouflage']},
+			{species: 'arceus', ability: 'flashfire', moves: ['ember', 'conversion', 'camouflage']},
 			{species: 'goldeen', ability: 'multitype', moves: ['camouflage']},
 		], [
 			{species: 'feebas', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices();
+		battle.makeChoices('move conversion', 'auto');
+		console.log(battle.p1.active[0].types); // only Fire
+		console.log(battle.p1.active[0].hasType('Normal')); // returns true despite just saying it was only Fire
+		battle.makeChoices('move camouflage', 'auto');
+		console.log(battle.p1.active[0].types); // still Fire type because it doesn't pass the "already has Normal" check
 		assert.equal(battle.p1.active[0].types[0], 'Normal');
 
 		battle.makeChoices('switch 2', 'auto');

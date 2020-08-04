@@ -231,7 +231,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target) {
 			// includes() is used here over hasType() because for whatever reason Arceus-Water
 			// always returns Normal-type from hasType() which is stupid
-			if (target.types.includes('Normal') || !target.setType('Normal')) return false;
+			if (target.hasType('Normal') || !target.setType('Normal')) return false;
 			this.add('-start', target, 'typechange', 'Normal');
 		},
 	},
