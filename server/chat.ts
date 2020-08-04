@@ -45,6 +45,8 @@ export type AnnotatedChatHandler = ChatHandler & {
 	requiresRoom: boolean,
 	hasRoomPermissions: boolean,
 	broadcastable: boolean,
+	cmd: string,
+	fullCmd: string,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -336,10 +338,13 @@ export class CommandContext extends MessageContext {
 	pmTarget: User | null;
 	room: Room | null;
 	connection: Connection;
+
 	cmd: string;
 	cmdToken: string;
 	target: string;
 	fullCmd: string;
+	handler: AnnotatedChatHandler | null;
+
 	isQuiet: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
@@ -369,6 +374,7 @@ export class CommandContext extends MessageContext {
 		this.cmdToken = options.cmdToken || '';
 		this.target = options.target || ``;
 		this.fullCmd = options.fullCmd || '';
+		this.handler = null;
 		this.isQuiet = false;
 
 		// broadcast context
@@ -396,7 +402,14 @@ export class CommandContext extends MessageContext {
 		}
 		let message: any = this.message;
 
-		const commandHandler = this.splitCommand(message);
+		const parsedCommand = this.parseCommand(message);
+		if (parsedCommand) {
+			this.cmd = parsedCommand.cmd;
+			this.fullCmd = parsedCommand.fullCmd;
+			this.cmdToken = parsedCommand.cmdToken;
+			this.target = parsedCommand.target;
+			this.handler = parsedCommand.handler;
+		}
 
 		if (this.room && !(this.user.id in this.room.users)) {
 			if (this.room.roomid === 'lobby') {
@@ -408,8 +421,8 @@ export class CommandContext extends MessageContext {
 
 		if (this.user.statusType === 'idle') this.user.setStatusType('online');
 
-		if (typeof commandHandler === 'function') {
-			message = this.run(commandHandler);
+		if (this.handler) {
+			message = this.run(this.handler);
 		} else {
 			if (this.cmdToken) {
 				// To guard against command typos, show an error message
@@ -473,11 +486,10 @@ export class CommandContext extends MessageContext {
 		}
 	}
 
-	splitCommand(message = this.message, recursing = false): undefined | ChatHandler {
-		this.cmd = '';
-		this.cmdToken = '';
-		this.target = '';
-		if (!message || !message.trim().length) return;
+	parseCommand(message = this.message, recursing = false): {
+		cmd: string, fullCmd: string, cmdToken: string, target: string, handler: AnnotatedChatHandler | null,
+	} | null {
+		if (!message.trim()) return null;
 
 		// hardcoded commands
 		if (message.startsWith(`>> `)) {
@@ -491,9 +503,9 @@ export class CommandContext extends MessageContext {
 		}
 
 		const cmdToken = message.charAt(0);
-		if (!VALID_COMMAND_TOKENS.includes(cmdToken)) return;
-		if (cmdToken === message.charAt(1)) return;
-		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return;
+		if (!VALID_COMMAND_TOKENS.includes(cmdToken)) return null;
+		if (cmdToken === message.charAt(1)) return null;
+		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return null;
 
 		let cmd = '';
 		let target = '';
@@ -523,7 +535,7 @@ export class CommandContext extends MessageContext {
 				// in case someone messed up, don't loop
 				commandHandler = curCommands[commandHandler];
 			} else if (Array.isArray(commandHandler) && !recursing) {
-				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
+				return this.parseCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
 			}
 			if (commandHandler && typeof commandHandler === 'object') {
 				const spaceIndex = target.indexOf(' ');
@@ -551,29 +563,29 @@ export class CommandContext extends MessageContext {
 			for (const g in Config.groups) {
 				const groupid = Config.groups[g].id;
 				if (fullCmd === groupid) {
-					return this.splitCommand(`/promote ${target}, ${g}`, true);
+					return this.parseCommand(`/promote ${target}, ${g}`, true);
 				} else if (fullCmd === 'global' + groupid) {
-					return this.splitCommand(`/globalpromote ${target}, ${g}`, true);
+					return this.parseCommand(`/globalpromote ${target}, ${g}`, true);
 				} else if (fullCmd === 'de' + groupid || fullCmd === 'un' + groupid ||
 						fullCmd === 'globalde' + groupid || fullCmd === 'deglobal' + groupid) {
-					return this.splitCommand(`/demote ${target}`, true);
+					return this.parseCommand(`/demote ${target}`, true);
 				} else if (fullCmd === 'room' + groupid) {
-					return this.splitCommand(`/roompromote ${target}, ${g}`, true);
+					return this.parseCommand(`/roompromote ${target}, ${g}`, true);
 				} else if (fullCmd === 'forceroom' + groupid) {
-					return this.splitCommand(`/forceroompromote ${target}, ${g}`, true);
+					return this.parseCommand(`/forceroompromote ${target}, ${g}`, true);
 				} else if (fullCmd === 'roomde' + groupid || fullCmd === 'deroom' + groupid || fullCmd === 'roomun' + groupid) {
-					return this.splitCommand(`/roomdemote ${target}`, true);
+					return this.parseCommand(`/roomdemote ${target}`, true);
 				}
 			}
 		}
 
-		this.cmd = cmd;
-		this.cmdToken = cmdToken;
-		this.target = target;
-		this.fullCmd = fullCmd;
-
-		// @ts-ignore type narrowing handled above
-		return commandHandler;
+		return {
+			cmd: cmd,
+			cmdToken: cmdToken,
+			target: target,
+			fullCmd: fullCmd,
+			handler: commandHandler as AnnotatedChatHandler | null,
+		};
 	}
 	run(commandHandler: string | {call: (...args: any[]) => any}) {
 		// type checked above
@@ -1604,11 +1616,11 @@ export const Chat = new class {
 		}
 		this.loadPluginData(plugin);
 	}
-	annotateCommands(commandTable: AnyObject): AnnotatedChatCommands {
+	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
-				this.annotateCommands(entry);
+				this.annotateCommands(entry, `${namespace}${cmd} `);
 			}
 			if (typeof entry !== 'function') continue;
 
@@ -1616,6 +1628,11 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
+
+			// This is usually the same as `entry.name`, but some weirdness like
+			// `commands.a = b` could screw it up. This should make it consistent.
+			entry.cmd = cmd;
+			entry.fullCmd = `${namespace}${cmd}`;
 		}
 		return commandTable;
 	}
@@ -1747,14 +1764,6 @@ export const Chat = new class {
 		}
 		const space = singular.startsWith('<') ? '' : ' ';
 		return `${num}${space}${num > 1 ? pluralSuffix : singular}`;
-	}
-
-	/**
-	 * Takes the name of a command and gets the base command, if there is one.
-	 */
-	baseCommand(cmd: string) {
-		if (typeof this.commands[cmd] === 'string') return this.commands[cmd] as string;
-		return cmd;
 	}
 
 	/**
