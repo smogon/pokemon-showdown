@@ -348,7 +348,17 @@ export const commands: ChatCommands = {
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
 			const permissions = allPermissions.filter(perm => perm.startsWith('/') && !perm.includes(' '));
-			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' '));
+			let curNamespace = '';
+			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' ')).map(item => {
+				let [namespace, command] = item.split(' ');
+				if (curNamespace !== namespace) {
+					curNamespace = namespace;
+					namespace = `<hr /><strong>${namespace}:</strong><br />`;
+				} else {
+					namespace = '';
+				}
+				return `${namespace}${command},`;
+			});
 
 			let buffer = `<strong>Room permissions help:</strong><hr />`;
 			buffer += `<p><strong>Usage: </strong><br />`;
