@@ -47,6 +47,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	broadcastable: boolean,
 	cmd: string,
 	fullCmd: string,
+	isPrivate: boolean,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -1339,6 +1340,20 @@ export class CommandContext extends MessageContext {
 	requiresRoom() {
 		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
+	secretCommand() {
+		const handler = this.handler;
+		handler!.isPrivate = true;
+		const full = this.fullCmd;
+		const token = this.cmdToken;
+		if (token === '!') {
+			return this.errorReply(`The command "${token}${this.cmd}" does not exist.`);
+		}
+		this.errorReply(
+			`The command "${token}${this.cmd}" does not exist. ` +
+			`To send a message starting with "${token}${full}", ` +
+			`type "${token.repeat(2)}${full}".`
+		);
+	}
 }
 
 export const Chat = new class {
@@ -1767,6 +1782,24 @@ export const Chat = new class {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Takes the name of a command and gets the base command, if there is one.
+	 */
+	baseCommand(cmd: string) {
+		if (!this.commands[cmd]) {
+			for (const command in this.commands) {
+				const handler = this.commands[command];
+				if (typeof handler !== 'object') continue;
+				if (cmd in handler) cmd = command;
+			}
+		}
+		if (typeof this.commands[cmd] === 'string') return this.commands[cmd] as string;
+		return cmd;
+	}
+
+	/**
+>>>>>>> Chat: Add a method for marking commands as private
 	 * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
 	 *
 	 * options.human = true will reports hours human-readable
