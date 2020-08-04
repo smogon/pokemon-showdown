@@ -1423,7 +1423,7 @@ export class GlobalRoomState {
 		let hasPrivateTerm = stack.includes('private');
 
 		for (const term of (Config.privatecrashterms || [])) {
-			if (typeof term === 'string' ? err.stack.includes(term) : term.test(err.stack)) {
+			if (typeof term === 'string' ? stack.includes(term) : term.test(err.stack)) {
 				hasPrivateTerm = true;
 				break;
 			}
