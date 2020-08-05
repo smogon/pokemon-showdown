@@ -2558,7 +2558,6 @@ export const commands: ChatCommands = {
 			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # & ~`,
 		],
 
-		'!revive': true,
 		forceadd: 'revive',
 		add: 'revive',
 		revive(target, room, user, connection, cmd) {
