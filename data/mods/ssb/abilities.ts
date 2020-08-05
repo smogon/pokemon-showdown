@@ -779,6 +779,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				};
 				pokemon.set.evs = evs;
 				pokemon.set.ivs = ivs;
+				pokemon.set.nature = newSet.nature;
 				pokemon.formeChange(newSet.species, this.effect, true);
 
 				pokemon.baseMaxhp = Math.floor(Math.floor(
