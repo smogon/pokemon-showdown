@@ -1,4 +1,6 @@
 import {getName} from './statuses';
+// Used for grimAuxiliatrix's move
+import {ssbSets} from "./random-teams";
 
 export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	/*
@@ -489,12 +491,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		effect: {
 			duration: 1,
-			onSwitchIn(target) {
-				if (!target.fainted && target.hp < target.maxhp) {
-					this.add(`c|${getName('Darth')}|Take my place, serve the Angel of Stall!`);
-					target.heal(target.maxhp);
-					this.add('-heal', target, 33, '[from] move: Archangel\'s Requiem');
-				}
+			onSwitchInPriority: -1,
+			onSwitchIn(pokemon) {
+				this.add(`c|${getName('Darth')}|Take my place, serve the Angel of Stall!`);
+				pokemon.heal(pokemon.baseMaxhp / 3);
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			},
 		},
 		selfSwitch: true,
@@ -788,6 +789,67 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ice",
+	},
+
+	// grimAuxiliatrix
+	donotsteel: {
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		desc: "Randomly calls SSB and status moves.",
+		shortDesc: "Randomly calls SSB and status moves.",
+		name: "Do Not Steel",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMovePriority: 100,
+		onTryMove(target) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Nasty plot', source);
+		},
+		onHit(target, source, move) {
+			// @ts-ignore this is a really dumb hack
+			if (!move.curHits) move.curHits = 1;
+			const moves: MoveData[] = [];
+			for (const member in ssbSets) {
+				// No way in hell am I letting this infinitely recurse
+				if (member === 'grimAuxiliatrix') continue;
+				const set = ssbSets[member];
+				for (const moveSlot in set.moves) {
+					const callMove = Array.isArray(moveSlot) ? this.dex.getMove(this.sample(moveSlot)) : this.dex.getMove(moveSlot);
+					if (callMove.category === 'Status') {
+						moves.push(callMove);
+					}
+				}
+				moves.push(this.dex.getMove(set.signatureMove));
+			}
+
+			let randomMove;
+			if (moves.length) {
+				moves.sort((a, b) => a.num! - b.num!);
+				randomMove = this.sample(moves);
+			}
+			if (!randomMove) {
+				return false;
+			}
+
+			this.useMove(randomMove.name, source);
+			if (randomMove.category !== 'Status') {
+				delete move.onHit;
+				delete move.multihit;
+				// @ts-ignore this is a really dumb hack
+				this.add('-hitcount', source, move.curHits);
+				return;
+			}
+			// @ts-ignore this is a really dumb hack
+			move.curHits++;
+		},
+		multihit: [1, 3],
+		secondary: null,
+		target: "normal",
+		type: "Steel",
 	},
 
 	// GXS
@@ -1369,18 +1431,24 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
-		desc: "",
-		shortDesc: "",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Hoopa in its Confined forme, this move is Psychic type, and Hoopa will change into its Unbound forme. If the user is a Hoopa in its Unbound forme, this move is Dark type, and Hoopa will change into its Confined forme. This move cannot be used successfully unless the user's current form, while considering Transform, is Confined or Unbound Hoopa.",
+		shortDesc: "Hoopa: Psychic; Unbound: Dark; 100% +1 Spe. Changes form.",
 		name: "Unbind",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMove() {
+		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
+			if (pokemon.species.baseSpecies === 'Hoopa') {
+				return;
+			}
+			this.add('-fail', pokemon, 'move: Unbind');
+			this.hint("Only a Pokemon whose form is Hoopa or Hoopa-Unbound can use this move.");
+			return null;
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Hyperspace Hole', source);
-			this.add('-anim', source, 'Hyperspace Fury', source);
+			this.add('-anim', source, 'Hyperspace Hole', target);
+			this.add('-anim', source, 'Hyperspace Fury', target);
 		},
 		onHit(target, pokemon, move) {
 			if (pokemon.baseSpecies.baseSpecies === 'Hoopa') {
@@ -2422,6 +2490,18 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
 		secondary: null,
+		onTryMove(pokemon, target, move) {
+			this.attrLastMove('[still]');
+			if (pokemon.species.baseSpecies === 'Meloetta') {
+				return;
+			}
+			this.add('-fail', pokemon, 'move: Relic Dance');
+			this.hint("Only a Pokemon whose form is Meloetta or Meloetta-Pirouette can use this move.");
+			return null;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Relic Song', target);
+		},
 		onAfterMove(source) {
 			const formeMoves: {[key: string]: string[]} = {
 				meloetta: ["Quiver Dance", "Feather Dance", "Lunar Dance", "Relic Dance"],

@@ -360,6 +360,15 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('frostyicelad ❆')}|So c-c-cold`);
 		},
 	},
+	grimauxiliatrix: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('grimAuxiliatrix')}|${['THE JUICE IS LOOSE', 'TOOTHPASTE\'S OUT OF THE TUBE', 'PREPARE TO DISCORPORATE'][this.random(3)]}`);
+		},
+		onFaint() {
+			this.add(`c|${getName('grimAuxiliatrix')}|${['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA'][this.random(3)]}`);
+		},
+	},
 	gxs: {
 		noCopy: true,
 		onStart() {

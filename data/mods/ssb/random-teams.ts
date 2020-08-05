@@ -174,6 +174,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Frosty Wave',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	grimAuxiliatrix: {
+		species: 'Duraludon', ability: 'Bio-steel', item: 'Assault Vest', gender: '',
+		moves: [['Core Enforcer', 'Draco Meteor'], 'Flash Cannon', ['Thunderbolt', 'Fire Blast']],
+		signatureMove: 'Do Not Steel',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
+	},
 	GXS: {
 		species: 'Porygon-Z', ability: 'Virus Upload', item: 'Life Orb', gender: 'N',
 		moves: ['Nasty Plot', 'Aura Sphere', 'Thunderbolt'],
