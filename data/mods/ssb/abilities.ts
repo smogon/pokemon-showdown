@@ -1011,7 +1011,8 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (
 				effect?.effectType === 'Move' &&
-				cosplayFormes.includes(target.species.id) && !target.transformed
+				cosplayFormes.includes(target.species.id) && !target.transformed &&
+				!this.effectData.busted
 			) {
 				this.add('-activate', target, 'ability: Combat Training');
 				this.effectData.busted = true;
