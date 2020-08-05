@@ -310,6 +310,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 
+	sbtl: 'sharedbattles',
 	sharedbattles(target, room) {
 		if (!this.can('lock')) return false;
 
