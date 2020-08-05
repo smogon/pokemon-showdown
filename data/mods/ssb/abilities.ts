@@ -754,7 +754,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team.",
 		name: "The Numbers Game",
 		onStart(target) {
-			if (target.baseSpecies.baseSpecies !== 'Necrozma' || pokemon.transformed) return;
+			if (target.baseSpecies.baseSpecies !== 'Necrozma' || target.transformed) return;
 			/**
 			 * Assigns a new set to a Pokémon
 			 * @param pokemon the Pokemon to assign the set to
