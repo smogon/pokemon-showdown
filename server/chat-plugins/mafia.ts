@@ -2513,7 +2513,6 @@ export const commands: ChatCommands = {
 			`/mafia spiritstump [player] Kills a player, but allows them to talk during the day, and vote on the lynch.`,
 		],
 
-		'!revealrole': true,
 		revealas: 'revealrole',
 		revealrole(target, room, user, connection, cmd) {
 			const args = target.split(',');
