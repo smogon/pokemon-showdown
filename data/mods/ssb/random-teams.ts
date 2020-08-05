@@ -1,6 +1,6 @@
 import RandomTeams from '../../random-teams';
 
-interface SSBSet {
+export interface SSBSet {
 	species: string;
 	ability: string | string[];
 	item: string | string[];
@@ -13,6 +13,7 @@ interface SSBSet {
 	shiny?: number | boolean;
 	level?: number;
 	happiness?: number;
+	skip?: boolean;
 }
 interface SSBSets {[k: string]: SSBSet}
 
@@ -334,6 +335,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mode [5: Offensive]',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	Robb576DuskMane: {
+		species: 'Necrozma-Dusk-Mane', ability: 'The Numbers Game', item: 'Leftovers', gender: 'M',
+		moves: ['Sunsteel Strike', 'Toxic', 'Rapid Spin'],
+		signatureMove: 'Mode [7: Defensive]',
+		evs: {hp: 252, atk: 4, spd: 252},
+		nature: 'Modest',
+		skip: true, // This set is transformed into by The Numbers Game ability
+	},
+	Robb576Ultra: {
+		species: 'Necrozma-Ultra', ability: 'The Numbers Game', item: 'Modium-6 Z', gender: 'M',
+		moves: ['Earthquake', 'Dynamax Cannon', 'Fusion Flare'],
+		signatureMove: 'Photon Geyser',
+		evs: {atk: 204, spa: 200, spe: 104},
+		ivs: {atk: 0},
+		nature: 'Modest',
+		skip: true, // This set is transformed into by The Numbers Game ability
+	},
 	SectoniaServant: {
 		species: 'Reuniclus', ability: 'Magic Guard', item: 'Leftovers', gender: 'M',
 		moves: [['Psystrike', 'Psychic'], 'Moonblast', 'Recover'],
@@ -438,6 +456,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			depth++;
 			const name = this.sampleNoReplace(pool);
 			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
 			if (!debug.length) { // Type limits are ignored when debugging
