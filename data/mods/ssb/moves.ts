@@ -1239,8 +1239,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1},
 		onTryMovePriority: 100,
-		onTryMove() {
+		onTryMove(source) {
 			this.attrLastMove('[still]');
+			if (source.name !== 'Kris') {
+				this.add('-fail', source);
+				this.hint("Only Kris can use Alphabet Soup.");
+				return null;
+			}
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Dark Pulse', target);
