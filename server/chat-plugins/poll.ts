@@ -128,14 +128,14 @@ export class Poll {
 				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Utils.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
 			}
 			// eslint-disable-next-line max-len
-			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="${this.room.tr`Submit your vote`}"><strong>${this.room.tr`Submit`}</strong></button>` : `<button class="button" value="/poll results" name="send" title="${this.room.tr`View results - you will not be able to vote after viewing results`}">(${this.room.tr`View results`})</button`;
+			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="${this.room.tr`Submit your vote`}"><strong>${this.room.tr`Submit`}</strong></button>` : `<button class="button" value="/poll results" name="send" title="${this.room.tr`View results`} - ${this.room.tr`you will not be able to vote after viewing results`}">(${this.room.tr`View results`})</button`;
 			output += `<div style="margin-top: 7px; padding-left: 12px">${submitButton}</div>`;
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
 				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="${this.room.tr`Vote for ${num}`}. ${Utils.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
 			}
-			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="${this.room.tr`View results - you will not be able to vote after viewing results`}"><small>(${this.room.tr`View results`})</small></button></div>`;
+			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="${this.room.tr`View results`} - ${this.room.tr`you will not be able to vote after viewing results`}"><small>(${this.room.tr`View results`})</small></button></div>`;
 			output += `</div>`;
 		}
 
