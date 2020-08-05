@@ -4,9 +4,15 @@
  */
 
 import {FS} from "../../lib/fs";
+import {ssbSets} from "../../data/mods/ssb/random-teams";
+import {Utils} from "../../lib/utils";
 
 const GEN_NAMES: {[k: string]: string} = {
 	gen1: '[Gen 1]', gen2: '[Gen 2]', gen3: '[Gen 3]', gen4: '[Gen 4]', gen5: '[Gen 5]', gen6: '[Gen 6]', gen7: '[Gen 7]',
+};
+
+const STAT_NAMES: {[k: string]: string} = {
+	hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
 };
 
 const TIERS: {[k: string]: string} = {
@@ -143,9 +149,6 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	);
 	if (!Object.keys(statsFile).length) return null;
 	let buf = ``;
-	const statNames: {[k: string]: string} = {
-		hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
-	};
 	if (!isBSS) {
 		if (!tier) return {e: `Please provide a valid tier.`};
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
@@ -171,7 +174,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				let ev: string;
 				for (ev in set.evs) {
 					if (set.evs[ev] === 0) continue;
-					evs.push(`${set.evs[ev]} ${statNames[ev]}`);
+					evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
 				}
 				buf += `${evs.join(" / ")}</li>`;
 			}
@@ -182,7 +185,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				let iv: string;
 				for (iv in set.ivs) {
 					if (set.ivs[iv] === 31) continue;
-					ivs.push(`${set.ivs[iv]} ${statNames[iv]}`);
+					ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
 				}
 				buf += `${ivs.join(" / ")}</li>`;
 			}
@@ -211,7 +214,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				let ev: string;
 				for (ev in set.evs) {
 					if (set.evs[ev] === 0) continue;
-					evs.push(`${set.evs[ev]} ${statNames[ev]}`);
+					evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
 				}
 				buf += `${evs.join(" / ")}</li>`;
 			}
@@ -222,7 +225,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				let iv: string;
 				for (iv in set.ivs) {
 					if (set.ivs[iv] === 31) continue;
-					ivs.push(`${set.ivs[iv]} ${statNames[iv]}`);
+					ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
 				}
 				buf += `${ivs.join(" / ")}</li>`;
 			}
@@ -252,9 +255,6 @@ function CAP1v1Sets(species: string | Species) {
 		return {e: `${species.name} doesn't have any sets in [Gen 8] CAP 1v1.`};
 	}
 	let buf = `<span style="color:#999999;">Sets for ${species.name} in [Gen 8] CAP 1v1:</span><br />`;
-	const statNames: {[k: string]: string} = {
-		hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
-	};
 	for (const [i, set] of statsFile[species.name].entries()) {
 		buf += `<details><summary>Set ${i + 1}</summary>`;
 		buf += `<ul style="list-style-type:none;">`;
@@ -269,7 +269,7 @@ function CAP1v1Sets(species: string | Species) {
 			let ev: string;
 			for (ev in set.evs) {
 				if (set.evs[ev] === 0) continue;
-				evs.push(`${set.evs[ev]} ${statNames[ev]}`);
+				evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
 			}
 			buf += `${evs.join(" / ")}</li>`;
 		}
@@ -280,7 +280,7 @@ function CAP1v1Sets(species: string | Species) {
 			let iv: string;
 			for (iv in set.ivs) {
 				if (set.ivs[iv] === 31) continue;
-				ivs.push(`${set.ivs[iv]} ${statNames[iv]}`);
+				ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
 			}
 			buf += `${ivs.join(" / ")}</li>`;
 		}
@@ -288,6 +288,110 @@ function CAP1v1Sets(species: string | Species) {
 			buf += `<li>- ${Array.isArray(moveid) ? moveid.map(formatMove).join(" / ") : formatMove(moveid)}</li>`;
 		}
 		buf += `</ul></details>`;
+	}
+	return buf;
+}
+
+
+function SSBSets(target: string) {
+	const baseDex = Dex;
+	const dex = Dex.forFormat('gen8superstaffbros4');
+	if (!Object.keys(ssbSets).map(toID).includes(toID(target))) {
+		return {e: `Error: ${target.trim()} doesn't have a [Gen 8] Super Staff Bros 4 set.`};
+	}
+	let name = '';
+	for (const member in ssbSets) {
+		if (toID(target) !== toID(member)) continue;
+		name = member;
+	}
+	const set = ssbSets[name];
+	const mutatedSpecies = dex.getSpecies(set.species);
+	let buf = `<img src="https://${Config.routes.client}/sprites/ani/${mutatedSpecies.spriteid}.gif" />`;
+	buf += Utils.html`<h1>${name}</h1>`;
+	buf += `<details><summary>Set</summary>`;
+	buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(x => dex.getItem(x).name).join(' / ') : dex.getItem(set.item).name}</li>`;
+	buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.getAbility(x).name).join(' / ') : dex.getAbility(set.ability).name}</li>`;
+	if (set.shiny) buf += `<li>Shiny: ${typeof set.shiny === 'number' ? `Sometimes` : `Yes`}</li>`;
+	if (set.evs) {
+		const evs: string[] = [];
+		let ev: StatName;
+		for (ev in set.evs) {
+			if (set.evs[ev] === 0) continue;
+			evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
+		}
+		buf += `<li>EVs: ${evs.join(" / ")}</li>`;
+	}
+	buf += `<li>${Array.isArray(set.nature) ? set.nature.join(" / ") : formatNature(set.nature)} Nature</li>`;
+	if (set.ivs) {
+		const ivs: string[] = [];
+		let iv: StatName;
+		for (iv in set.ivs) {
+			if (set.ivs[iv] === 31) continue;
+			ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
+		}
+		buf += `<li>IVs: ${ivs.join(" / ")}</li>`;
+	}
+	for (const moveid of set.moves) {
+		buf += `<li>- ${Array.isArray(moveid) ? moveid.map(x => dex.getMove(x).name).join(" / ") : dex.getMove(moveid).name}</li>`;
+	}
+	const italicize = !baseDex.getMove(set.signatureMove).exists;
+	buf += `<li>- ${italicize ? `<em>` : ``}${dex.getMove(set.signatureMove).name}${italicize ? `</em>` : ``}</li>`;
+	buf += `</li>`;
+	buf += `</details>`;
+	const sigMove = baseDex.getMove(set.signatureMove).exists && !Array.isArray(set.item) &&
+		typeof dex.getItem(set.item).zMove === 'string' ?
+		dex.getMove(dex.getItem(set.item).zMove as string) : dex.getMove(set.signatureMove);
+	if (sigMove.shortDesc || sigMove.desc) {
+		buf += `<details><summary><strong>Custom Move</strong>: ${sigMove.name}</summary><ul>`;
+		if (sigMove.shortDesc) buf += `<li><strong>Shortened Description</strong>: ${sigMove.shortDesc}</li>`;
+		if (sigMove.desc) buf += `<li><details><summary><strong>Description</strong></summary>${sigMove.desc}</details></li>`;
+		buf += `<li><strong>Type</strong>: <img src="https://${Config.routes.client}/sprites/types/${dex.getType(sigMove.type).name}.png" /></li>`;
+		buf += `</ul></details>`;
+	}
+	if (!Array.isArray(set.item) && !baseDex.getItem(set.item).exists) {
+		const sigItem = dex.getItem(set.item);
+		buf += `<details><summary><strong>Custom Item</strong>: ${sigItem.name}</summary>`;
+		buf += `<ul>`;
+		if (sigItem.zMove && typeof sigMove.zMove === 'string') {
+			buf += `<li><strong>Z-Move</strong>: ${sigItem.zMove}</li>`;
+			buf += `<li><strong>Base Move</strong>: ${sigItem.zMoveFrom}</li>`;
+		}
+		buf += `<li><strong>Description</strong>: ${sigItem.shortDesc ? sigItem.shortDesc : sigItem.desc}</li>`;
+		buf += `</ul></details>`;
+	}
+	if (!Array.isArray(set.ability) && !baseDex.getAbility(set.ability).exists) {
+		const sigAbil = dex.getAbility(set.ability);
+		buf += `<details><summary><strong>Custom Ability</strong>: ${sigAbil.name}</summary>`;
+		buf += `<strong>Description</strong>: ${sigAbil.shortDesc || sigAbil.desc || `This ability doesn't have a description. You should try contacting the SSB dev team.`}`;
+		buf += `</details>`;
+	}
+	// Special casing for users whose usernames are already existing, i.e. Perish Song
+	let effect = dex.getEffect(name + 'user');
+	if (effect.exists && effect.desc && effect.shortDesc) {
+		buf += `<details><summary><strong>Innate Ability</strong>: ${effect.desc}</summary>`;
+		buf += `<strong>Description</strong>: ${effect.shortDesc}`;
+		buf += `</details>`;
+	} else {
+		effect = dex.getEffect(name);
+		if (effect.exists && effect.desc && effect.shortDesc) {
+			buf += `<details><summary><strong>Innate Ability</strong>: ${effect.desc}</summary>`;
+			buf += `<strong>Description</strong>: ${effect.shortDesc}`;
+			buf += `</details>`;
+		}
+	}
+	const species = dex.getSpecies(set.species);
+	if (species.types.some(x => !baseDex.getSpecies(set.species).types.includes(x))) {
+		buf += `<p><strong>Custom Type</strong>: ${species.types.map(x => `<img src="https://${Config.routes.client}/sprites/types/${dex.getType(x).name}.png" />`).join('')}</p>`;
+	}
+	if (Object.values(species.baseStats).some(
+		(stat, i) => stat !== Object.values(baseDex.getSpecies(set.species).baseStats)[i]
+	)) {
+		const stats = [];
+		let i: StatName;
+		for (i in species.baseStats) {
+			stats.push(`${species.baseStats[i]} ${STAT_NAMES[i]}`);
+		}
+		buf += `<p><strong>Custom Base Stats</strong>: ${stats.join(` / `)}</p>`;
 	}
 	return buf;
 }
@@ -470,5 +574,18 @@ export const commands: ChatCommands = {
 	},
 	cap1v1help: [
 		`/cap1v1 [pokemon] - Displays a Pok\u00e9mon's CAP 1v1 sets.`,
+	],
+
+	ssb(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse(`/help ssb`);
+		const set = SSBSets(target);
+		if (typeof set !== 'string') {
+			return this.errorReply(set.e);
+		}
+		return this.sendReplyBox(set);
+	},
+	ssbhelp: [
+		`/ssb [staff member] - Displays a staff member's Super Staff Bros. Brawl set and custom features.`,
 	],
 };
