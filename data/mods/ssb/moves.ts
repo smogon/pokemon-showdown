@@ -2049,7 +2049,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		desc: "Struchni only. Move's base power and priority depends on effectiveness of previous move.",
 		shortDesc: "Struchni: Move BP and prio depends on eff of prev move.",
-		name: "veto",
+		name: "Veto",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
