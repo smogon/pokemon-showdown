@@ -506,7 +506,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	gyarados: {
 		randomBattleMoves: ["doubleedge", "dragondance", "earthquake", "hiddenpowerflying", "hydropump", "taunt"],
-		tier: "UUBL",
+		tier: "UU",
 	},
 	lapras: {
 		randomBattleMoves: ["healbell", "hydropump", "icebeam", "rest", "sleeptalk", "thunderbolt", "toxic"],
@@ -1349,7 +1349,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	regice: {
 		randomBattleMoves: ["explosion", "icebeam", "rest", "sleeptalk", "thunderbolt", "thunderwave", "toxic"],
-		tier: "OU",
+		tier: "UU",
 	},
 	registeel: {
 		randomBattleMoves: ["counter", "protect", "rest", "seismictoss", "sleeptalk", "toxic"],
