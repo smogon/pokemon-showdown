@@ -799,7 +799,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 					carryOver.push(1);
 				}
 				pokemon.moveSlots = [];
-				// @ts-ignore hack to prevent non 8-move Robb
+				// @ts-ignore hack to prevent 8-move Robb
 				pokemon.baseMoveSlots = [];
 				let slot = 0;
 				for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
