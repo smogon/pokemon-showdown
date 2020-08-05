@@ -339,17 +339,14 @@ export const ssbSets: SSBSets = {
 		species: 'Necrozma-Dusk-Mane', ability: 'The Numbers Game', item: 'Leftovers', gender: 'M',
 		moves: ['Sunsteel Strike', 'Toxic', 'Rapid Spin'],
 		signatureMove: 'Mode [7: Defensive]',
-		evs: {hp: 252, atk: 4, spd: 252},
-		nature: 'Modest',
+		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful',
 		skip: true, // This set is transformed into by The Numbers Game ability
 	},
 	Robb576Ultra: {
 		species: 'Necrozma-Ultra', ability: 'The Numbers Game', item: 'Modium-6 Z', gender: 'M',
 		moves: ['Earthquake', 'Dynamax Cannon', 'Fusion Flare'],
 		signatureMove: 'Photon Geyser',
-		evs: {atk: 204, spa: 200, spe: 104},
-		ivs: {atk: 0},
-		nature: 'Modest',
+		evs: {atk: 204, spa: 200, spe: 104}, ivs: {atk: 0}, nature: 'Hasty',
 		skip: true, // This set is transformed into by The Numbers Game ability
 	},
 	SectoniaServant: {
