@@ -740,32 +740,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
-	// Flare
-	krisenbon: {
-		accuracy: 100,
-		basePower: 110,
-		category: "Physical",
-		desc: "Almost always goes first. Deals double damage if resisted.",
-		shortDesc: "Almost always goes first. Deals double damage if resisted.",
-		name: "Kōri Senbon",
-		pp: 3,
-		noPPBoosts: true,
-		priority: 1,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Ice Shard', target);
-		},
-		onEffectiveness(typeMod, target, type) { // not sure but i think i should use effectiveness cause Flare mentions it.
-			if (typeMod === -2) return -1;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ice",
-	},
-
 	// frostyicelad
 	frostywave: {
 		accuracy: 100,

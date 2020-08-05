@@ -163,12 +163,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rigged Dice',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
 	},
-	Flare: {
-		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
-		moves: ['Sacred Sword', 'Knock Off', 'U-turn'],
-		signatureMove: 'Kōri Senbon',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
-	},
 	'frostyicelad ❆': {
 		species: 'Frosmoth', ability: 'Ice Shield', item: 'Ice Stone', gender: 'M',
 		moves: ['Quiver Dance', 'Bug Buzz', ['Earth Power', 'Sparkling Aria']],

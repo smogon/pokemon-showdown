@@ -402,22 +402,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// Flare
-	permafrostarmor: {
-		desc: "This Pokemon takes 15% less damage from direct attacks. This Pokemon can only be damaged by direct attacks.",
-		shortDesc: "Reduced damage from direct attacks. Can only be damaged by direct attacks.",
-		name: "Permafrost Armor",
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.chainModify(0.85);
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
-	},
-
 	// Frostyicelad
 	iceshield: {
 		desc: "This Pokemon receives 1/2 damage from special attacks. This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage.",
