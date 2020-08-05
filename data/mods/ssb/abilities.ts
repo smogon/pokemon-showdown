@@ -754,6 +754,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team.",
 		name: "The Numbers Game",
 		onStart(target) {
+			if (target.baseSpecies.baseSpecies !== 'Necrozma' || pokemon.transformed) return;
 			/**
 			 * Assigns a new set to a Pokémon
 			 * @param pokemon the Pokemon to assign the set to
@@ -798,6 +799,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 					carryOver.push(1);
 				}
 				pokemon.moveSlots = [];
+				pokemon.baseMoveSlots = [];
 				let slot = 0;
 				for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
 					const move = pokemon.battle.dex.getMove(toID(newMove));
@@ -818,12 +820,15 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				}
 			};
 
-			if (target.side.pokemonLeft > 3) return;
-			if (target.species.name === 'Necrozma-Dusk-Mane' && target.side.pokemonLeft === 1) {
-				changeSet(target, ssbSets.Robb576Ultra);
-			} else if (target.species.name === "Necrozma-Dawn-Wings") {
-				changeSet(target, ssbSets.Robb576DuskMane);
+			if (target.side.pokemonLeft <= 3) {
+				if (target.species.name === 'Necrozma-Dusk-Mane' && target.side.pokemonLeft === 1 && target.m.flag2) {
+					changeSet(target, ssbSets.Robb576Ultra);
+				} else if (target.species.name === "Necrozma-Dawn-Wings" && target.m.flag1) {
+					changeSet(target, ssbSets.Robb576DuskMane);
+					target.m.flag2 = true;
+				}
 			}
+			target.m.flag1 = true;
 		},
 	},
 
