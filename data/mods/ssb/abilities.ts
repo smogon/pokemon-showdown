@@ -780,7 +780,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				};
 				pokemon.set.evs = evs;
 				pokemon.set.ivs = ivs;
-				pokemon.set.nature = newSet.nature;
+				pokemon.set.nature = Array.isArray(newSet.nature) ? this.sample(newSet.nature) : newSet.nature;
 				pokemon.formeChange(newSet.species, this.effect, true);
 
 				pokemon.baseMaxhp = Math.floor(Math.floor(
@@ -799,6 +799,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 					carryOver.push(1);
 				}
 				pokemon.moveSlots = [];
+				// @ts-ignore hack to prevent non 8-move Robb
 				pokemon.baseMoveSlots = [];
 				let slot = 0;
 				for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
