@@ -1351,6 +1351,33 @@ export class ModdedDex {
 		return team;
 	}
 
+	/**
+	* Use instead of Dex.packTeam to generate more human-readable team output.
+	*/
+	stringifyTeam(team: PokemonSet[], nicknames?: string[]) {
+		let output = '';
+		for (const [i, mon] of team.entries()) {
+			output += nicknames ? `${nicknames?.[i]} (${mon.species})` : `${mon.species}`;
+			output += ` @ ${Dex.getItem(mon.item).name}<br/>`;
+			output += `Ability: ${Dex.getAbility(mon.ability).name}<br/>`;
+			if (mon.happiness && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
+			const evs = [];
+			for (const stat in mon.evs) {
+				if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
+			}
+			if (evs.length) output += `EVs: ${evs.join(' / ')}<br/>`;
+			if (mon.nature) output += `${mon.nature} Nature<br/>`;
+			const ivs = [];
+			for (const stat in mon.ivs) {
+				if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
+			}
+			if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br/>`;
+			output += mon.moves.map(move => `- ${Dex.getMove(move).name}<br/>`).join('');
+			output += '<br/>';
+		}
+		return output;
+	}
+
 	deepClone(obj: any): any {
 		if (obj === null || typeof obj !== 'object') return obj;
 		if (Array.isArray(obj)) return obj.map(prop => this.deepClone(prop));

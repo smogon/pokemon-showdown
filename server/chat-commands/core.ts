@@ -864,6 +864,45 @@ export const commands: ChatCommands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],
 
+	showteam: 'showset',
+	async showset(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return false;
+		const showAll = cmd === 'showteam';
+		if (!room) return this.requiresRoom();
+		const battle = room.battle;
+		if (!showAll && !target) return this.parse(`/help showset`);
+		if (!battle) return this.errorReply("This command can only be used in a battle.");
+		let teamStrings = await battle.getTeam(user);
+		if (!teamStrings) return this.errorReply("Only players can extract their team.");
+		if (target) {
+			const parsed = parseInt(target);
+			if (parsed > 6) return this.errorReply(`Use a number between 1-6 to view a specific set.`);
+			if (isNaN(parsed)) {
+				const matchedSet = teamStrings.filter(set => {
+					const id = toID(target);
+					return toID(set.name) === id || toID(set.species) === id;
+				})[0];
+				if (!matchedSet) return this.errorReply(`The Pokemon "${target}" is not in your team.`);
+				teamStrings = [matchedSet];
+			} else {
+				const setIndex = parsed - 1;
+				const indexedSet = teamStrings[setIndex];
+				if (!indexedSet) return this.errorReply(`That Pokemon is not in your team.`);
+				teamStrings = [indexedSet];
+			}
+		}
+		let resultString = Dex.stringifyTeam(teamStrings);
+		if (showAll) {
+			resultString = `<details><summary>View team</summary><${resultString}</details>`;
+		}
+		this.runBroadcast();
+		return this.sendReplyBox(resultString);
+	},
+	showsethelp: [
+		`!showteam - show the team you're using in the current battle (must be used in a battle you're a player in).`,
+		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
+	],
+
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
 	offerdraw: 'offertie',
