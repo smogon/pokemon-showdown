@@ -846,7 +846,24 @@ export class CommandContext extends MessageContext {
 			this.user.resetVisualGroup();
 			return true;
 		}
+		if (this.handler!.isPrivate) return this.secretCommand();
 		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
+		return false;
+	}
+	privatelyCan(permission: RoomPermission, target: User | null, room: Room): boolean;
+	privatelyCan(permission: GlobalPermission, target?: User | null): boolean;
+	privatelyCan(permission: string, target: User | null = null, room: Room | null = null) {
+		if (!this.handler!.isPrivate) {
+			// @ts-ignore (can be several things, depending)
+			return this.can(permission, target, room);
+		}
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.cmd, true)) return true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
+			// If we need to use the true group's permission, reset the visual group
+			this.user.resetVisualGroup();
+			return true;
+		}
+		this.secretCommand();
 		return false;
 	}
 	canUseConsole() {
@@ -1341,19 +1358,16 @@ export class CommandContext extends MessageContext {
 		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
 	secretCommand() {
-		const handler = this.handler;
-		if (handler!.isPrivate) {
-			const full = this.fullCmd;
-			const token = this.cmdToken;
-			if (token === '!') {
-				throw new Chat.ErrorMessage(`The command "${token}${this.cmd}" does not exist.`);
-			}
-			throw new Chat.ErrorMessage(
-				`The command "${token}${this.cmd}" does not exist. ` +
-				`To send a message starting with "${token}${full}", ` +
-				`type "${token}${token}${full}".`
-			);
+		const full = this.fullCmd;
+		const token = this.cmdToken;
+		if (token === '!') {
+			throw new Chat.ErrorMessage(`The command "${token}${this.cmd}" does not exist.`);
 		}
+		throw new Chat.ErrorMessage(
+			`The command "${token}${this.cmd}" does not exist. ` +
+			`To send a message starting with "${token}${full}", ` +
+			`type "${token}${token}${full}".`
+		);
 	}
 }
 
