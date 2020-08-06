@@ -1055,11 +1055,11 @@ export const Formats: {[k: string]: FormatsData} = {
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.bst <= 350) {
+				newSpecies.bst = 0;
 				for (const stat in newSpecies.baseStats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+					newSpecies.bst += newSpecies.baseStats[stat];
 				}
-				// @ts-ignore
-				newSpecies.bst = Object.values(newSpecies.baseStats).reduce((x, y) => x + y);
 			}
 			return newSpecies;
 		},
@@ -1091,12 +1091,12 @@ export const Formats: {[k: string]: FormatsData} = {
 			const newSpecies = this.dex.deepClone(species);
 			const bstWithoutHp: number = newSpecies.bst - newSpecies.baseStats['hp'];
 			const scale = 600 - newSpecies.baseStats['hp'];
+			newSpecies.bst = newSpecies.baseStats['hp'];
 			for (const stat in newSpecies.baseStats) {
 				if (stat === 'hp') continue;
 				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / bstWithoutHp, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[stat];
 			}
-			// @ts-ignore
-			newSpecies.bst = Object.values(newSpecies.baseStats).reduce((x, y) => x + y);
 			return newSpecies;
 		},
 	},

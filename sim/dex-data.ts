@@ -742,7 +742,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.requiredItem = data.requiredItem || undefined;
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-		this.bst = this.baseStats.hp + this.baseStats.atk + this.baseStats.def + this.baseStats.spa + this.baseStats.spd + this.baseStats.spe;
+		this.bst = this.baseStats.hp + this.baseStats.atk + this.baseStats.def +
+			this.baseStats.spa + this.baseStats.spd + this.baseStats.spe;
 		this.weightkg = data.weightkg || 0;
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;

@@ -137,13 +137,13 @@ export const commands: ChatCommands = {
 			mixedSpecies.types = [mixedSpecies.types[0], deltas.type];
 		}
 		let statName: StatName;
+		mixedSpecies.bst = 0;
 		for (statName in species.baseStats) { // Add the changed stats and weight
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
+			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
-		// @ts-ignore
-		mixedSpecies.bst = Object.values(mixedSpecies.baseStats).reduce((x, y) => x + y);
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
 		mixedSpecies.tier = "MnM";
 		let weighthit = 20;
@@ -219,8 +219,8 @@ export const commands: ChatCommands = {
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
 			deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
+			deltas.bst += deltas.baseStats[statId];
 		}
-		deltas.bst = Object.values(deltas.baseStats).reduce((x, y) => x + y);
 		if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
 		} else if (megaSpecies.types.length < baseSpecies.types.length) {
@@ -296,12 +296,13 @@ export const commands: ChatCommands = {
 		}
 		let bst = species.bst;
 		if (dex.gen === 1) bst -= species.baseStats.spd;
+		species.bst = 0;
 		for (const i in species.baseStats) {
 			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
+			species.bst += species.baseStats[i];
 		}
-		// @ts-ignore
-		species.bst = Object.values(species.baseStats).reduce((x, y) => x + y);
+		if (dex.gen === 1) species.bst += species.baseStats.spd;
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	'350cuphelp': [
@@ -352,13 +353,14 @@ export const commands: ChatCommands = {
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
+		species.bst = species.baseStats.hp;
+		if (dex.gen === 1) species.bst += species.baseStats.spd;
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
 			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
+			species.bst += species.baseStats[statName];
 		}
-		// @ts-ignore
-		species.bst = Object.values(species.baseStats).reduce((x, y) => x + y);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	tiershifthelp: [
@@ -400,13 +402,14 @@ export const commands: ChatCommands = {
 		let bstNoHP = species.bst - species.baseStats.hp;
 		if (isGen1) bstNoHP -= species.baseStats.spd;
 		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
+		species.bst = species.baseStats.hp;
+		if (isGen1) species.bst += species.baseStats.spd;
 		for (const stat in species.baseStats) {
 			if (stat === 'hp') continue;
 			if (isGen1 && stat === 'spd') continue;
 			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
+			species.bst += species.baseStats[stat];
 		}
-		// @ts-ignore
-		species.bst = Object.values(species.baseStats).reduce((x, y) => x + y);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	scalemonshelp: [
