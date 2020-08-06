@@ -230,12 +230,14 @@ export class PageContext extends MessageContext {
 	pageid: string;
 	initialized: boolean;
 	title: string;
+	args: string[];
 	constructor(options: {pageid: string, user: User, connection: Connection, language?: string}) {
 		super(options.user, options.language);
 
 		this.connection = options.connection;
 		this.room = null;
 		this.pageid = options.pageid;
+		this.args = this.pageid.split('-');
 
 		this.initialized = false;
 		this.title = 'Page';
@@ -251,17 +253,21 @@ export class PageContext extends MessageContext {
 		return true;
 	}
 
+	requireRoom(pageid?: string) {
+		const room = this.extractRoom(pageid);
+		if (!room) {
+			throw new Chat.ErrorMessage(`Invalid link: This page requires a room ID.`);
+		}
+
+		this.room = room;
+		return room;
+	}
 	extractRoom(pageid?: string) {
 		if (!pageid) pageid = this.pageid;
 		const parts = pageid.split('-');
 
-		// Since we assume pageids are all in the form of view-pagename-roomid
-		// if someone is calling this function, so this is the only case we cover (for now)
-		const room = Rooms.get(parts[2]);
-		if (!room) {
-			this.send(`<h2>Invalid room.</h2>`);
-			return null;
-		}
+		// The roomid for the page should be view-pagename-roomid
+		const room = Rooms.get(parts[2]) || null;
 
 		this.room = room;
 		return room;
@@ -279,6 +285,9 @@ export class PageContext extends MessageContext {
 		}
 		this.connection.send(`>${this.pageid}\n${content}`);
 	}
+	errorReply(message: string) {
+		this.send(Utils.html`<div class="pad"><p class="message-error">${message}</p></div>`);
+	}
 
 	close() {
 		this.send('|deinit');
@@ -288,39 +297,46 @@ export class PageContext extends MessageContext {
 		if (pageid) this.pageid = pageid;
 
 		const parts = this.pageid.split('-');
+		parts.shift(); // first part is always `view`
+
 		let handler: PageHandler | PageTable = Chat.pages;
-		parts.shift();
 		while (handler) {
 			if (typeof handler === 'function') {
-				let res;
-				try {
-					res = await handler.call(this, parts, this.user, this.connection);
-				} catch (err) {
-					if (err.name?.endsWith('ErrorMessage')) {
-						this.send(
-							Utils.html`<div class="pad"><p class="message-error">${err.message}</p></div>`
-						);
-						return;
-					}
-					Monitor.crashlog(err, 'A chat page', {
-						user: this.user.name,
-						room: this.room && this.room.roomid,
-						pageid: this.pageid,
-					});
-					this.send(
-						`<div class="pad"><div class="broadcast-red">` +
-						`<strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.` +
-						`</div></div>`
-				  );
-				}
-				if (typeof res === 'string') {
-					this.send(res);
-					res = undefined;
-				}
-				return res;
+				break;
 			}
 			handler = handler[parts.shift() || 'default'];
 		}
+		if (typeof handler !== 'function') {
+			this.errorReply(`Page "${this.pageid}" not found`);
+			return;
+		}
+
+		this.args = parts;
+
+		let res;
+		try {
+			res = await handler.call(this, parts, this.user, this.connection);
+		} catch (err) {
+			if (err.name?.endsWith('ErrorMessage')) {
+				this.errorReply(err.message);
+				return;
+			}
+			Monitor.crashlog(err, 'A chat page', {
+				user: this.user.name,
+				room: this.room && this.room.roomid,
+				pageid: this.pageid,
+			});
+			this.send(
+				`<div class="pad"><div class="broadcast-red">` +
+				`<strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.` +
+				`</div></div>`
+			);
+		}
+		if (typeof res === 'string') {
+			this.send(res);
+			res = undefined;
+		}
+		return res;
 	}
 }
 
