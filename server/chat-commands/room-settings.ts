@@ -348,17 +348,13 @@ export const commands: ChatCommands = {
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
 			const permissions = allPermissions.filter(perm => perm.startsWith('/') && !perm.includes(' '));
-			let curNamespace = '';
-			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' ')).map(item => {
-				let [namespace, command] = item.split(' ');
-				if (curNamespace !== namespace) {
-					curNamespace = namespace;
-					namespace = `<hr /><strong>${namespace}:</strong><br />`;
-				} else {
-					namespace = '';
-				}
-				return `${namespace}${command},`;
-			});
+			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' '));
+			const subPermissionsByNamespace: {[k: string]: string[]} = {};
+			for (const perm of subPermissions) {
+				const [namespace] = perm.split(' ', 1);
+				if (!subPermissionsByNamespace[namespace]) subPermissionsByNamespace[namespace] = [];
+				subPermissionsByNamespace[namespace].push(perm);
+			}
 
 			let buffer = `<strong>Room permissions help:</strong><hr />`;
 			buffer += `<p><strong>Usage: </strong><br />`;
@@ -370,7 +366,11 @@ export const commands: ChatCommands = {
 			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
 			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
 			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
-			buffer += `<code>` + subPermissions.join(`</code> <code>`) + `</code></details></p>`;
+			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
+			for (const subPerms of Object.values(subPermissionsByNamespace)) {
+				buffer += `<br /><code>` + subPerms.join(`</code> <code>`) + `</code><br />`;
+			}
+			buffer += `</details></p>`;
 			return this.sendReplyBox(buffer);
 		},
 	},
