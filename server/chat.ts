@@ -853,10 +853,7 @@ export class CommandContext extends MessageContext {
 	privatelyCan(permission: RoomPermission, target: User | null, room: Room): boolean;
 	privatelyCan(permission: GlobalPermission, target?: User | null): boolean;
 	privatelyCan(permission: string, target: User | null = null, room: Room | null = null) {
-		if (!this.handler!.isPrivate) {
-			// @ts-ignore (can be several things, depending)
-			return this.can(permission, target, room);
-		}
+		this.handler!.isPrivate = true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
 			// If we need to use the true group's permission, reset the visual group
@@ -1644,13 +1641,13 @@ export const Chat = new class {
 		} else {
 			return;
 		}
-		this.loadPluginData(plugin, file);
+		this.loadPluginData(plugin);
 	}
-	annotateCommands(commandTable: AnyObject, namespace = '', file?: string): AnnotatedChatCommands {
+	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
-				this.annotateCommands(entry, `${namespace}${cmd} `, file);
+				this.annotateCommands(entry, `${namespace}${cmd} `);
 			}
 			if (typeof entry !== 'function') continue;
 
@@ -1658,7 +1655,6 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
-			entry.isPrivate = file?.includes('private');
 
 			// This is usually the same as `entry.name`, but some weirdness like
 			// `commands.a = b` could screw it up. This should make it consistent.
@@ -1667,9 +1663,9 @@ export const Chat = new class {
 		}
 		return commandTable;
 	}
-	loadPluginData(plugin: AnyObject, file?: string) {
+	loadPluginData(plugin: AnyObject) {
 		if (plugin.commands) {
-			Object.assign(Chat.commands, this.annotateCommands(plugin.commands, '', file));
+			Object.assign(Chat.commands, this.annotateCommands(plugin.commands, ''));
 		}
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
