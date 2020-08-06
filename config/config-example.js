@@ -288,12 +288,12 @@ exports.restrictLinks = false;
 exports.chatmodchat = false;
 /**
  * battle modchat - default minimum group for speaking in battles; changeable with /modchat
- * @type {false | string}
+ * @type {false | AuthLevel}
  */
 exports.battlemodchat = false;
 /**
- * pm modchat - minimum group for PMing other users, challenging other users
- * @type {false | string}
+ * PM modchat - minimum group for sending private messages or challenges to other users
+ * @type {false | AuthLevel}
  */
 exports.pmmodchat = false;
 /**
