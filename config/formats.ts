@@ -117,6 +117,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		maxLevel: 5,
+		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
