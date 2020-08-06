@@ -892,7 +892,7 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 	}
 	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english', strings, keys);
+		return Chat.tr(this.settings.language || 'english', strings, ...keys);
 	}
 }
 
