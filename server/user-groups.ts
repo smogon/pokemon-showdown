@@ -130,9 +130,18 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		const roomPermissions = room ? room.settings.permissions : null;
 		if (roomPermissions) {
-			if (cmd && roomPermissions[`/${cmd}`]) {
-				if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-				jurisdiction = 'su';
+			if (cmd) {
+				const groupEntryName = cmd.slice(0, cmd.indexOf(' '));
+				if (roomPermissions[`/${cmd}`]) {
+					// this checks sub commands and command objects, but it checks to see if a sub-command
+					// overrides (should a perm for the command object exist) first
+					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+					jurisdiction = 'su';
+				} else if (roomPermissions[`/${groupEntryName}`]) {
+					// if it's for one command object
+					if (!auth.atLeast(user, roomPermissions[`/${groupEntryName}`])) return false;
+					jurisdiction = 'su';
+				}
 			} else if (roomPermissions[permission]) {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
 				jurisdiction = 'su';
@@ -153,6 +162,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				permissions.push(`/${cmd}`);
 			}
 			if (typeof entry === 'object') {
+				permissions.push(`/${cmd}`);
 				for (const subCommand in entry) {
 					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
 					if (typeof subEntry !== 'function') continue;
