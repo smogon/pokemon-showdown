@@ -1207,7 +1207,7 @@ interface FormatsData extends EventMethods {
 	onModifyMovePriority?: number;
 	onModifyTypePriority?: number;
 	onSwitchInPriority?: number;
-	rated?: boolean;
+	rated?: boolean | string;
 	minSourceGen?: number;
 	restricted?: string[];
 	ruleset?: string[];
