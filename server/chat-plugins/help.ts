@@ -15,16 +15,19 @@ const PATH = 'config/chat-plugins/help.json';
 // 6: filters out conveniently short aliases
 const MINIMUM_LENGTH = 6;
 
-export let helpData: PluginData = {
-	stats: {},
-	pairs: {},
-	disabled: false,
-	queue: [],
-};
+export let helpData: PluginData;
 
 try {
-	helpData = JSON.parse(FS(PATH).readIfExistsSync());
-} catch (e) {}
+	helpData = JSON.parse(FS(PATH).readSync());
+} catch (e) {
+	if (e.code !== 'ENOENT') throw e;
+	helpData = {
+		stats: {},
+		pairs: {},
+		disabled: false,
+		queue: [],
+	};
+}
 /**
  * Terms commonly used in helping that should be ignored
  * within question parsing (the Help#find function).
@@ -67,7 +70,7 @@ export class HelpResponder {
 	queue: string[];
 	data: PluginData;
 	constructor(data: PluginData) {
-		this.data = data || {};
+		this.data = data;
 		this.roomFaqs = this.loadFaqs();
 		this.queue = data.queue || [];
 
