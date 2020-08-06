@@ -191,6 +191,7 @@ export class TeamValidator {
 	readonly ruleTable: import('./dex-data').RuleTable;
 	readonly minSourceGen: number;
 
+	readonly toID: (str: any) => ID;
 	constructor(format: string | Format) {
 		this.format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(this.format);
@@ -199,6 +200,8 @@ export class TeamValidator {
 
 		this.minSourceGen = this.ruleTable.minSourceGen ?
 			this.ruleTable.minSourceGen[0] : 1;
+
+		this.toID = toID;
 	}
 
 	validateTeam(
