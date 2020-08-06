@@ -219,7 +219,6 @@ export abstract class MessageContext {
 		}
 		return false;
 	}
-
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);
 	}
