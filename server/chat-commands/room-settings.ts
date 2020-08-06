@@ -93,7 +93,7 @@ export const commands: ChatCommands = {
 			target = Users.PLAYER_SYMBOL;
 			/* falls through */
 		default:
-			if (!Config.groups[target]) {
+			if (!Users.Auth.isAuthLevel(target)) {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
@@ -203,7 +203,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to autoconfirmed!</strong><br />Users must be rank autoconfirmed or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
-		} else if (target in Config.groups || target === 'trusted') {
+		} else if (Users.Auth.isAuthLevel(target)) {
 			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
 			}
@@ -1563,7 +1563,7 @@ export const pages: PageTable = {
 		this.title = `[Permissions]`;
 		const room = this.extractRoom();
 		if (!room) return `<h2>This room does not exist or does not support permissions.</h2>`;
-		if (!user.authAtLeast('%', room)) return `<h2>Access denied.</h2>`;
+		if (!room.auth.atLeast(user, '%')) return `<h2>Access denied.</h2>`;
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
 		const permissions = room.settings.permissions || {};
@@ -1576,7 +1576,7 @@ export const pages: PageTable = {
 			const requiredRank = permissions[permission];
 			atLeastOne = true;
 			buf += `<tr><td><strong>${permission}</strong></td><td>`;
-			if (user.authAtLeast('#', room)) {
+			if (room.auth.atLeast(user, '#')) {
 				buf += roomGroups.map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :

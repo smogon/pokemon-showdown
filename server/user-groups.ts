@@ -2,6 +2,7 @@ import {FS} from '../lib/fs';
 
 export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
+export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
@@ -58,9 +59,16 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	isStaff(userid: ID) {
 		return this.has(userid) && this.get(userid) !== '+';
 	}
-	atLeast(user: User, group: GroupSymbol, isPermissionCheck?: boolean) {
-		if (!Config.groups[group]) return false;
+	atLeast(user: User, group: AuthLevel, isPermissionCheck?: boolean) {
+		if (user.hasSysopAccess()) return true;
+		if (group === 'trusted' || group === 'autoconfirmed') {
+			if (user.trusted && group === 'trusted') return true;
+			if (user.autoconfirmed && group === 'autoconfirmed') return true;
+			group = Config.groupsranking[1];
+		}
 		if (user.locked || user.semilocked) return false;
+		if (group === 'unlocked') return true;
+		if (!Config.groups[group]) return false;
 		if (this.get(user.id) === ' ' && group !== ' ') return false;
 		if (Auth.atLeast(this.get(user.id, true), group)) {
 			return true;
@@ -109,7 +117,9 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		const symbol = auth.getEffectiveSymbol(user, useVisualGroup);
 		let targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
-		if (targetSymbol === 'whitelist') targetSymbol = Auth.defaultSymbol();
+		if (!targetSymbol || ['whitelist', 'trusted', 'autoconfirmed'].includes(targetSymbol)) {
+			targetSymbol = Auth.defaultSymbol();
+		}
 
 		const group = Auth.getGroup(symbol);
 		if (group['root']) return true;
@@ -129,7 +139,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			}
 		}
 
-		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol);
+		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol as GroupSymbol);
 	}
 	static atLeast(symbol: EffectiveGroupSymbol, symbol2: EffectiveGroupSymbol) {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
@@ -182,6 +192,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	static isValidSymbol(symbol: string): symbol is GroupSymbol {
 		if (symbol.length !== 1) return false;
 		return !/[A-Za-z0-9|,]/.test(symbol);
+	}
+	static isAuthLevel(level: string): level is AuthLevel {
+		if (this.isValidSymbol(level)) return true;
+		return ['unlocked', 'trusted', 'autoconfirmed', 'whitelist'].includes(level);
 	}
 	static ROOM_PERMISSIONS = ROOM_PERMISSIONS;
 	static GLOBAL_PERMISSIONS = GLOBAL_PERMISSIONS;

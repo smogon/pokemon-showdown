@@ -954,7 +954,7 @@ export class CommandContext extends MessageContext {
 					this.errorReply(this.tr(`You are muted and cannot talk in this room.`));
 					return null;
 				}
-				if (room.settings.modchat && !user.authAtLeast(room.settings.modchat, room)) {
+				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
 						this.errorReply(
 							this.tr(
@@ -996,14 +996,14 @@ export class CommandContext extends MessageContext {
 					this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 					return null;
 				}
-				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) &&
+				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 					!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)) {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 					return null;
 				}
 				if (targetUser.settings.blockPMs &&
-					(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) &&
+					(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockPMs)) &&
 					!user.can('lock')) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
@@ -1016,7 +1016,7 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					!targetUser.authAtLeast(user.settings.blockPMs)) && !targetUser.can('lock')) {
+					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock')) {
 					this.errorReply(`You are blocking private messages right now.`);
 					return null;
 				}
@@ -1132,7 +1132,7 @@ export class CommandContext extends MessageContext {
 			return false;
 		}
 		if (targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true || !this.user.authAtLeast(targetUser.settings.blockPMs)) &&
+			(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs)) &&
 			!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);

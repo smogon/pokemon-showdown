@@ -343,7 +343,7 @@ export class User extends Chat.MessageContext {
 
 	settings: {
 		blockChallenges: boolean,
-		blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked',
+		blockPMs: boolean | AuthLevel,
 		ignoreTickets: boolean,
 		hideBattlesFromTrainerCard: boolean,
 	};
@@ -530,20 +530,6 @@ export class User extends Chat.MessageContext {
 		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
 		const status = statusMessage + (this.userMessage || '');
 		return status;
-	}
-	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
-		if (!minAuth || minAuth === ' ') return true;
-		if (this.locked || this.semilocked) return false;
-		if (minAuth === 'unlocked') return true;
-		if (minAuth === 'trusted' && this.trusted) return true;
-		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
-
-		if (minAuth === 'trusted' || minAuth === 'autoconfirmed') {
-			minAuth = Config.groupsranking[1];
-		}
-		if (!(minAuth in Config.groups)) return false;
-		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
-		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
 	can(
@@ -1360,12 +1346,12 @@ export class User extends Chat.MessageContext {
 	chat(message: string, room: Room | null, connection: Connection) {
 		const now = Date.now();
 
-		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.isSysop) {
+		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.hasSysopAccess()) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
-			if (this.isSysop) return;
+			if (this.hasSysopAccess()) return;
 			return false; // but end the loop here
 		}
 
