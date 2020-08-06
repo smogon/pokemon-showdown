@@ -73,4 +73,24 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		inherit: true,
 		counterMax: 8,
 	},
+	// Arceus's true typing for all its formes is Normal, and it's only Multitype
+	// that changes its type, but its formes are specified to be their corresponding
+	// type in the Pokedex, so that needs to be overridden. Without Multitype it
+	// starts as Normal type, but its type can be changed by other effects.
+	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
+	arceus: {
+		name: 'Arceus',
+		onBeforeSwitchIn(pokemon) {
+			pokemon.setType('Normal'); // Multitype will prevent this
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.ability === 'multitype') {
+				const item = pokemon.getItem();
+				const targetForme = (item?.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
+				if (pokemon.species.name !== targetForme) {
+					pokemon.formeChange(targetForme);
+				}
+			}
+		},
+	},
 };
