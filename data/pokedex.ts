@@ -9838,7 +9838,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Mineral"],
-		changesFrom: "	garbodor",
+		changesFrom: "Garbodor",
 	},
 	zorua: {
 		num: 570,
