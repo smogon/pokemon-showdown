@@ -35,5 +35,4 @@ declare global {
 	const RuleTable: DataType.RuleTable;
 	const Species: DataType.Species;
 	const TypeInfo: DataType.TypeInfo;
-	const toID: typeof Dex.toID;
 }
