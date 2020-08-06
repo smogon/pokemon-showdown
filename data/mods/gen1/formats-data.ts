@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bulbasaur: {
 		randomBattleMoves: ["sleeppowder", "bodyslam"],
 		essentialMove: "razorleaf",
@@ -177,7 +177,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "thunderwave", "thunderbolt"],
 		essentialMove: "blizzard",
 		exclusiveMoves: ["counter", "sing", "sing", "psychic", "seismictoss"],
-		tier: "LC",
+		tier: "NFE",
 	},
 	clefable: {
 		randomBattleMoves: ["bodyslam", "thunderwave", "thunderbolt"],

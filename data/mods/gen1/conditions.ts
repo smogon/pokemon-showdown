@@ -1,14 +1,14 @@
 /**
- * Statuses worked way different.
- * Sleep lasted longer, had no reset on switch and took a whole turn to wake up.
- * Frozen only thaws when hit by fire or Haze.
+ * Status worked very differently in Gen 1.
+ * - Sleep lasted longer, had no reset on switch and took a whole turn to wake up.
+ * - Frozen only thaws when hit by fire or Haze.
  *
- * Secondary effects to status (-speed, -atk) worked differently, so they are
+ * Stat boosts (-speed, -atk) also worked differently, so they are
  * separated as volatile statuses that are applied on switch in, removed
  * under certain conditions and re-applied under other conditions.
  */
 
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const Conditions: {[k: string]: ModdedConditionData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -19,7 +19,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
 			const toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
-			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
 			if (pokemon.volatiles['residualdmg']) {
 				this.hint("In Gen 1, Toxic's counter is retained after Rest and applies to PSN/BRN.", true);
 			}
@@ -28,7 +28,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			pokemon.addVolatile('brnattackdrop');
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	par: {
@@ -109,13 +109,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
 			const toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
-			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
 			if (pokemon.volatiles['residualdmg']) {
 				this.hint("In Gen 1, Toxic's counter is retained after Rest and applies to PSN/BRN.", true);
 			}
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	tox: {
@@ -257,5 +257,3 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 };
-
-exports.BattleStatuses = BattleStatuses;

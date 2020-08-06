@@ -13,6 +13,8 @@ Showdown directly using WebSocket:
 
 Client implementations you might want to look at for reference include:
 
+- Majeur's android client (Kotlin/Java) -
+    https://github.com/MajeurAndroid/Android-Unofficial-Showdown-Client
 - pickdenis' chat bot (Ruby) -
     https://github.com/pickdenis/ps-chatbot
 - Quinella and TalkTakesTime's chat bot (Node.js) -
@@ -169,6 +171,17 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` said `MESSAGE`. Note that `MESSAGE` can contain `|` characters,
 > so you can't just split by `|` and take the fourth string.
+
+`|notify|TITLE|MESSAGE`
+
+> Send a notification with `TITLE` and `MESSAGE` (usually, `TITLE` will be
+> bold, and `MESSAGE` is optional).
+
+`|notify|TITLE|MESSAGE|HIGHLIGHTTOKEN`
+
+> Send a notification as above, but only if the user would be notified
+> by a chat message containing `HIGHLIGHTTOKEN` (i.e. if `HIGHLIGHTTOKEN`
+> contains words added to `/highlight`, or their username by default.)
 
 `|:|TIMESTAMP`
 

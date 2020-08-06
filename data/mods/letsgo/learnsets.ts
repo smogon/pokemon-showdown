@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
+export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	bulbasaur: {
 		learnset: {
 			doubleedge: ["7L32"],
@@ -727,6 +727,7 @@ export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 	},
 	pikachustarter: {
+		inherit: true,
 		learnset: {
 			agility: ["7L27"],
 			brickbreak: ["7M"],
@@ -3524,11 +3525,11 @@ export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 			protect: ["7M"],
 			reflect: ["7M"],
 			rest: ["7M"],
-			screech: ["7L24", "7S0"],
+			screech: ["7L24"],
 			selfdestruct: ["7M", "7L19", "7S0"],
 			sonicboom: ["7L6"],
 			substitute: ["7M"],
-			swift: ["7L14"],
+			swift: ["7L14", "7S0"],
 			tackle: ["7L1"],
 			taunt: ["7M"],
 			teleport: ["7M"],
@@ -4648,6 +4649,7 @@ export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 	},
 	eeveestarter: {
+		inherit: true,
 		learnset: {
 			baddybad: ["7T"],
 			bite: ["7L17"],

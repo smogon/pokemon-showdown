@@ -1,3 +1,5 @@
+import {Utils} from '../../lib/utils';
+
 type Operator = '^' | '%' | '/' | '*' | '+' | '-';
 interface Operators {
 	precedence: number;
@@ -135,7 +137,6 @@ function solveRPN(rpn: string[]) {
 }
 
 export const commands: ChatCommands = {
-	'!calculate': true,
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
@@ -178,7 +179,7 @@ export const commands: ChatCommands = {
 			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
 		} catch (e) {
 			this.sendReplyBox(
-				Chat.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
+				Utils.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
 			);
 		}
 	},

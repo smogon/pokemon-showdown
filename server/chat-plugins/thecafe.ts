@@ -17,32 +17,6 @@ function saveDishes() {
 	void FS(DISHES_FILE).write(JSON.stringify(dishes));
 }
 
-/**
- * Used instead of Dex.packTeam to generate more human-readable output.
- */
-function stringifyTeam(team: PokemonSet[], ingredients: string[]) {
-	let output = '';
-	for (const [i, mon] of team.entries()) {
-		output += `${ingredients[i]} (${mon.species}) @ ${mon.item}<br/>`;
-		output += `Ability: ${mon.ability}<br/>`;
-		if (mon.happiness && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
-		const evs = [];
-		for (const stat in mon.evs) {
-			if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
-		}
-		if (evs.length) output += `EVs: ${evs.join(' / ')}<br/>`;
-		output += `${mon.nature} Nature<br/>`;
-		const ivs = [];
-		for (const stat in mon.ivs) {
-			if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
-		}
-		if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br/>`;
-		output += mon.moves.map(move => `- ${move}<br/>`).join('');
-		output += '<br/>';
-	}
-	return output;
-}
-
 function generateTeam(generator = '') {
 	let potentialPokemon = Object.keys(Dex.data.Pokedex).filter(mon => {
 		const species = Dex.getSpecies(mon);
@@ -106,6 +80,7 @@ function generateDish(): [string, string[]] {
 
 export const commands: ChatCommands = {
 	foodfight(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
@@ -121,7 +96,7 @@ export const commands: ChatCommands = {
 		const [newDish, newIngredients] = generateDish();
 		if (!target) {
 			const bfTeam = Dex.generateTeam('gen7bssfactory');
-			importable = stringifyTeam(bfTeam, newIngredients);
+			importable = Dex.stringifyTeam(bfTeam, newIngredients);
 			team = bfTeam.map(val => val.species);
 		} else {
 			team = generateTeam(target);
@@ -133,6 +108,7 @@ export const commands: ChatCommands = {
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${newDish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${newIngredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
 	checkfoodfight(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 
 		const targetUser = this.targetUserOrSelf(target, false);
@@ -146,6 +122,7 @@ export const commands: ChatCommands = {
 	},
 	addingredients: 'adddish',
 	adddish(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -180,6 +157,7 @@ export const commands: ChatCommands = {
 		this.sendReply(`${cmd.slice(3)} '${dish}: ${ingredients.join(', ')}' added successfully.`);
 	},
 	removedish(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -192,17 +170,18 @@ export const commands: ChatCommands = {
 		this.sendReply(`Dish '${target}' deleted successfully.`);
 	},
 	viewdishes(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 
 		return this.parse(`/join view-foodfight`);
 	},
 	foodfighthelp: [
 		`/foodfight <generator> - Gives you a randomly generated Foodfight dish, ingredient list and team. Generator can be either 'random', 'ou', 'ag', or left blank. If left blank, uses Battle Factory to generate an importable team.`,
-		`/checkfoodfight <username> - Gives you the last team and dish generated for the entered user, or your own if left blank. Anyone can check their own info, checking other people requires: % @ # & ~`,
-		`/adddish <dish>, <ingredient>, <ingredient>, ... - Adds a dish to the database. Requires: % @ # & ~`,
-		`/addingredients <dish>, <ingredient>, <ingredient>, ... - Adds extra ingredients to a dish in the database. Requires: % @ # & ~`,
-		`/removedish <dish> - Removes a dish from the database. Requires: % @ # & ~`,
-		`/viewdishes - Shows the entire database of dishes. Requires: % @ # & ~`,
+		`/checkfoodfight <username> - Gives you the last team and dish generated for the entered user, or your own if left blank. Anyone can check their own info, checking other people requires: % @ # &`,
+		`/adddish <dish>, <ingredient>, <ingredient>, ... - Adds a dish to the database. Requires: % @ # &`,
+		`/addingredients <dish>, <ingredient>, <ingredient>, ... - Adds extra ingredients to a dish in the database. Requires: % @ # &`,
+		`/removedish <dish> - Removes a dish from the database. Requires: % @ # &`,
+		`/viewdishes - Shows the entire database of dishes. Requires: % @ # &`,
 	],
 };
 

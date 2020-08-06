@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		for (const i in this.data.Items) {
 			if (!this.data.Items[i].megaStone) continue;
@@ -103,7 +103,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		const baseStats = species.baseStats;
 		for (const statName in baseStats) {
-			baseStats[statName] = this.dex.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
 		species.originalMega = deltas.originalMega;

@@ -1,4 +1,40 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+	bulbasaur: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	ivysaur: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	venusaur: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	charmander: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	charmeleon: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	charizard: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	squirtle: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	wartortle: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	blastoise: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
 	butterfree: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 45, def: 50, spa: 80, spd: 80, spe: 70},
@@ -165,6 +201,22 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ["Normal"],
 	},
+	tyrogue: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	hitmonlee: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	hitmonchan: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	hitmontop: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
 	raikou: {
 		inherit: true,
 		abilities: {0: "Pressure"},
@@ -176,6 +228,42 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	suicune: {
 		inherit: true,
 		abilities: {0: "Pressure"},
+	},
+	treecko: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	grovyle: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	sceptile: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	torchic: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	combusken: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	blaziken: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	mudkip: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	marshtomp: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	swampert: {
+		inherit: true,
+		maleOnlyHidden: true,
 	},
 	beautifly: {
 		inherit: true,
@@ -240,6 +328,42 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	registeel: {
 		inherit: true,
 		abilities: {0: "Clear Body"},
+	},
+	turtwig: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	grotle: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	torterra: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	chimchar: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	monferno: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	infernape: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	piplup: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	prinplup: {
+		inherit: true,
+		maleOnlyHidden: true,
+	},
+	empoleon: {
+		inherit: true,
+		maleOnlyHidden: true,
 	},
 	starly: {
 		inherit: true,
@@ -357,10 +481,12 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	gothorita: {
 		inherit: true,
 		abilities: {0: "Frisk", H: "Shadow Tag"},
+		maleOnlyHidden: true,
 	},
 	gothitelle: {
 		inherit: true,
 		abilities: {0: "Frisk", H: "Shadow Tag"},
+		maleOnlyHidden: true,
 	},
 	ferrothorn: {
 		inherit: true,

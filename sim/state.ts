@@ -25,7 +25,7 @@ const POSITIONS = 'abcdefghijklmnopqrstuvwx';
 // and thus can simply be reconsituted as needed.
 // NOTE: Species is not strictly immutable as some OM formats rely on an
 // onModifySpecies event - deserialization is not possible for such formats.
-type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item | Move | Species;
+type Referable = Battle | Field | Side | Pokemon | Condition | Ability | Item | Move | Species;
 
 // Certain fields are either redundant (transient caches, constants, duplicate
 // information) or require special treatment. These sets contain the specific
@@ -41,8 +41,8 @@ const BATTLE = new Set([
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
-	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species',
-	'id', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
+	'side', 'battle', 'set', 'name', 'fullname', 'id',
+	'happiness', 'level', 'pokeball', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
 const ACTIVE_MOVE = new Set(['move']);
@@ -68,7 +68,7 @@ export const State = new class {
 		// We treat log specially because we only set it back on Battle after everything
 		// else has been deserialized to avoid anything accidentally `add`-ing to it.
 		state.log = battle.log;
-		state.queue = this.serializeWithRefs([...battle.queue], battle);
+		state.queue = this.serializeWithRefs(battle.queue.list, battle);
 		state.formatid = battle.format.id;
 		return state;
 	}
@@ -146,12 +146,27 @@ export const State = new class {
 		}
 		battle.prng = new PRNG(state.prng);
 		const queue = this.deserializeWithRefs(state.queue, battle);
-		battle.queue.push(...queue);
+		battle.queue.list = queue;
 		// @ts-ignore - readonly
 		battle.hints = new Set(state.hints);
 		// @ts-ignore - readonly
 		battle.log = state.log;
 		return battle;
+	}
+
+	// Direct comparsions of serialized state will be flakey as the timestamp
+	// protocol message |t:| can diverge between two different runs over the same state.
+	// State must first be normalized before it is comparable.
+	normalize(state: AnyObject) {
+		state.log = this.normalizeLog(state.log);
+		return state;
+	}
+
+	normalizeLog(log?: null | string | string[]) {
+		if (!log) return log;
+		const normalized = (typeof log === 'string' ? log.split('\n') : log).map(line =>
+			line.startsWith(`|t:|`) ? `|t:|` : line);
+		return (typeof log === 'string' ? normalized.join('\n') : normalized);
 	}
 
 	serializeField(field: Field): /* Field */ AnyObject {
@@ -354,7 +369,7 @@ export const State = new class {
 		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
-				Battle, Field, Side, Pokemon, Data.PureEffect,
+				Battle, Field, Side, Pokemon, Data.Condition,
 				Data.Ability, Data.Item, Data.Move, Data.Species,
 			]);
 		}
@@ -389,7 +404,7 @@ export const State = new class {
 		case 'Ability': return battle.dex.getAbility(id);
 		case 'Item': return battle.dex.getItem(id);
 		case 'Move': return battle.dex.getMove(id);
-		case 'PureEffect': return battle.dex.getEffect(id);
+		case 'Condition': return battle.dex.getEffect(id);
 		case 'Species': return battle.dex.getSpecies(id);
 		default: return undefined; // maybe we actually got unlucky and its a string
 		}

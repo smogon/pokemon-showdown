@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
 	"abilityid": {
@@ -72,7 +72,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return target.hp - 1;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 		},
 	},
@@ -210,7 +210,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				boosts['accuracy'] = 0;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 		},
 	},
@@ -289,7 +289,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Seraphic Regeneration",
 		isNonstandard: "Custom",
-		effect: {
+		condition: {
 			duration: 1,
 			onSwitchInPriority: -1,
 			onSwitchIn(pokemon) {

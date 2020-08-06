@@ -9,6 +9,7 @@
  */
 
 import {QueryProcessManager} from '../../lib/process-manager';
+import {Utils} from '../../lib/utils';
 
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
@@ -62,7 +63,6 @@ function escapeHTML(str?: string) {
 }
 
 export const commands: ChatCommands = {
-	'!dexsearch': true,
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
@@ -105,7 +105,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'dexsearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -136,17 +136,17 @@ export const commands: ChatCommands = {
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
 			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
-			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Gigantamax Formes only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
+			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pokemon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
 			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
+			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
 			`The order of the parameters does not matter.<br/>`
 		);
 	},
 
-	'!randommove': true,
 	rollmove: 'randommove',
 	randmove: 'randommove',
 	randommove(target, room, user, connection, cmd, message) {
@@ -171,7 +171,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
@@ -192,7 +192,6 @@ export const commands: ChatCommands = {
 		`/randommove uses the same parameters as /movesearch (see '/help ms').`,
 		`Adding a number as a parameter returns that many random Pok\u00e9mon Moves, e.g., '/randmove 6' returns 6 random Pok\u00e9mon Moves.`,
 	],
-	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon(target, room, user, connection, cmd, message) {
@@ -217,7 +216,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
@@ -239,7 +238,6 @@ export const commands: ChatCommands = {
 		`Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon.`,
 	],
 
-	'!movesearch': true,
 	ms: 'movesearch',
 	ms1: 'movesearch',
 	ms2: 'movesearch',
@@ -260,7 +258,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'movesearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -296,22 +294,30 @@ export const commands: ChatCommands = {
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ms; e.g. <code>ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`<code>/ms</code> will search the Galar Movedex; you can search the National Movedex by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
+			`<code>/ms</code> will search the Galar Moves; you can search the National Moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`The order of the parameters does not matter.`
 		);
 	},
 
-	'!itemsearch': true,
 	isearch: 'itemsearch',
 	is: 'itemsearch',
+	is2: 'itemsearch',
+	is3: 'itemsearch',
+	is4: 'itemsearch',
+	is5: 'itemsearch',
+	is6: 'itemsearch',
+	is7: 'itemsearch',
+	is8: 'itemsearch',
 	itemsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help itemsearch');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen) target += ` maxgen${targetGen}`;
 
 		return runSearch({
 			tar: target,
 			cmd: 'itemsearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -327,24 +333,35 @@ export const commands: ChatCommands = {
 			this.update();
 		});
 	},
-	itemsearchhelp: [
-		`/itemsearch [item description] - finds items that match the given key words.`,
-		`Command accepts natural language. (tip: fewer words tend to work better)`,
-		`Searches with "fling" in them will find items with the specified Fling behavior.`,
-		`Searches with "natural gift" in them will find items with the specified Natural Gift behavior.`,
-	],
+	itemsearchhelp() {
+		this.sendReplyBox(
+			`<code>/itemsearch [item description]</code>: finds items that match the given keywords.<br/>` +
+			`This command accepts natural language. (tip: fewer words tend to work better)<br/>` +
+			`The <code>gen</code> keyword can be used to search for items introduced in a given generation; e.g., <code>/is gen4</code> searches for items introduced in Generation 4.<br/>` +
+			`To search for items within a generation, append the generation to <code>/is</code> or use the <code>maxgen</code> keyword; e.g., <code>/is4 Water-type</code> or <code>/is maxgen4 Water-type</code> searches for items whose Generation 4 description includes "Water-type".<br/>` +
+			`Searches with <code>fling</code> in them will find items with the specified Fling behavior.<br/>` +
+			`Searches with <code>natural gift</code> in them will find items with the specified Natural Gift behavior.`
+		);
+	},
 
-	'!abilitysearch': true,
 	asearch: 'abilitysearch',
 	as: 'abilitysearch',
+	as3: 'abilitysearch',
+	as4: 'abilitysearch',
+	as5: 'abilitysearch',
+	as6: 'abilitysearch',
+	as7: 'abilitysearch',
+	as8: 'abilitysearch',
 	abilitysearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help abilitysearch');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen) target += ` maxgen${targetGen}`;
 
 		return runSearch({
 			tar: target,
 			cmd: 'abilitysearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -360,12 +377,15 @@ export const commands: ChatCommands = {
 			this.update();
 		});
 	},
-	abilitysearchhelp: [
-		`/abilitysearch [ability description] - finds abilities that match the given keywords.`,
-		`Command accepts natural language. (tip: fewer words tend to work better)`,
-	],
+	abilitysearchhelp() {
+		this.sendReplyBox(
+			`<code>/abilitysearch [ability description]</code>: finds abilities that match the given keywords.<br/>` +
+			`This command accepts natural language. (tip: fewer words tend to work better)<br/>` +
+			`The <code>gen</code> keyword can be used to search for abilities introduced in a given generation; e.g., <code>/as gen4</code> searches for abilities introduced in Generation 4.<br/>` +
+			`To search for abilities within a generation, append the generation to <code>/as</code> or use the <code>maxgen</code> keyword; e.g., <code>/as4 Water-type</code> or <code>/as maxgen4 Water-type</code> searches for abilities whose Generation 4 description includes "Water-type".`
+		);
+	},
 
-	'!learn': true,
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
@@ -383,7 +403,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'learn',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: cmd,
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -397,7 +417,7 @@ export const commands: ChatCommands = {
 	},
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,
-		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # & ~`,
+		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # &`,
 		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
@@ -407,7 +427,7 @@ export const commands: ChatCommands = {
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string) {
 	const searches: DexOrGroup[] = [];
-	const allTiers: {[k: string]: string} = Object.assign(Object.create(null), {
+	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
@@ -417,7 +437,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		lcuber: 'LC Uber', lcubers: 'LC Uber', lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
-	const allDoublesTiers: {[k: string]: string} = Object.assign(Object.create(null), {
+	const allDoublesTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',
 		doublesou: 'DOU', dou: 'DOU',
 		doublesbl: 'DBL', dbl: 'DBL',
@@ -460,6 +480,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let capSearch = null;
 	let nationalSearch = null;
 	let fullyEvolvedSearch = null;
+	let singleTypeSearch = false;
 	let randomOutput = 0;
 	let maxGen = 0;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
@@ -559,6 +580,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					return {error: 'A search cannot both exclude and include a type.'};
 				}
 				orGroup.types[target] = !isNotSearch;
+				continue;
+			}
+
+			if (['mono', 'monotype'].includes(toID(target))) {
+				singleTypeSearch = true;
+				orGroup.skip = true;
 				continue;
 			}
 
@@ -708,7 +735,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in Dex.data.Movedex) {
+				for (const move in Dex.data.Moves) {
 					const moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
@@ -796,13 +823,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 	if (
-		showAll && searches.length === 0 && !maxGen &&
+		showAll && searches.length === 0 && !maxGen && !singleTypeSearch &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
 		};
 	}
+
 	if (!maxGen) maxGen = 8;
 	const mod = Dex.mod('gen' + maxGen);
 	const dex: {[k: string]: Species} = {};
@@ -813,8 +841,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(megaSearch === false && !species.isMega)
 		);
 		const gmaxSearchResult = (
-			gmaxSearch === null || (gmaxSearch === true && species.isGigantamax) ||
-			(gmaxSearch === false && !species.isGigantamax)
+			gmaxSearch === null || (gmaxSearch === true && species.name.endsWith('-Gmax')) ||
+			(gmaxSearch === false && !species.name.endsWith('-Gmax'))
 		);
 		const fullyEvolvedSearchResult = (
 			fullyEvolvedSearch === null ||
@@ -870,8 +898,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
-				if (tier[0] === '(' && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1);
-				if (tier === 'New') tier = 'OU';
+				if (tier[0] === '(' && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1) as TierTypes.Singles;
+				// if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
@@ -900,7 +928,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
 				let tier = dex[mon].doublesTier;
-				if (tier && tier[0] === '(' && tier !== '(DUU)') tier = tier.slice(1, -1);
+				if (tier && tier[0] === '(' && tier !== '(DUU)') tier = tier.slice(1, -1) as TierTypes.Doubles;
 				if (alts.doublesTiers[tier]) continue;
 				if (Object.values(alts.doublesTiers).includes(false) && alts.doublesTiers[tier] !== false) continue;
 			}
@@ -994,7 +1022,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
-				if (!validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (move.gen <= maxGen && !validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
@@ -1007,15 +1035,16 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
+		if (singleTypeSearch && dex[mon].types.length !== 1) continue;
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].isGigantamax && !allowGmax) continue;
+		if (dex[mon].name.endsWith('-Gmax') && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
 	if (randomOutput && randomOutput < results.length) {
-		results = Dex.shuffle(results).slice(0, randomOutput);
+		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
@@ -1075,7 +1104,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror',
+		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
 		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
@@ -1186,9 +1215,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
+			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
-					return {error: 'A search cannot both exclude and include \'' + target + '\'.'};
+					return {error: `A search cannot both exclude and include '${target}'.`};
 				}
 				orGroup.flags[target] = !isNotSearch;
 				continue;
@@ -1483,7 +1513,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(Dex.data.Movedex));
+	const validMoves = new Set(Object.keys(Dex.data.Moves));
 	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const species = mod.getSpecies(mon.name);
@@ -1524,65 +1554,72 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	for (const alts of searches) {
 		if (alts.skip) continue;
-		for (const move in dex) {
+		for (const moveid in dex) {
+			const move = dex[moveid];
 			let matched = false;
 			if (Object.keys(alts.types).length) {
-				if (alts.types[dex[move].type]) continue;
-				if (Object.values(alts.types).includes(false) && alts.types[dex[move].type] !== false) continue;
+				if (alts.types[move.type]) continue;
+				if (Object.values(alts.types).includes(false) && alts.types[move.type] !== false) continue;
 			}
 
 			if (Object.keys(alts.categories).length) {
-				if (alts.categories[dex[move].category]) continue;
-				if (Object.values(alts.categories).includes(false) && alts.categories[dex[move].category] !== false) continue;
+				if (alts.categories[move.category]) continue;
+				if (Object.values(alts.categories).includes(false) && alts.categories[move.category] !== false) continue;
 			}
 
 			if (Object.keys(alts.contestTypes).length) {
-				if (alts.contestTypes[dex[move].contestType || 'Cool']) continue;
+				if (alts.contestTypes[move.contestType || 'Cool']) continue;
 				if (
 					Object.values(alts.contestTypes).includes(false) &&
-					alts.contestTypes[dex[move].contestType || 'Cool'] !== false
+					alts.contestTypes[move.contestType || 'Cool'] !== false
 				) continue;
 			}
 
 			if (Object.keys(alts.targets).length) {
-				if (alts.targets[dex[move].target]) continue;
-				if (Object.values(alts.targets).includes(false) && alts.targets[dex[move].target] !== false) continue;
+				if (alts.targets[move.target]) continue;
+				if (Object.values(alts.targets).includes(false) && alts.targets[move.target] !== false) continue;
 			}
 
 			for (const flag in alts.flags) {
 				if (flag === 'secondary') {
-					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
+					if (!(move.secondary || move.secondaries) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'zmove') {
-					if (!dex[move].isZ === !alts.flags[flag]) {
+					if (!move.isZ === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'highcrit') {
+					const crit = move.willCrit || (move.critRatio && move.critRatio > 1);
+					if (!crit === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'maxmove') {
-					if (!(typeof dex[move].isMax === 'boolean' && dex[move].isMax) === !alts.flags[flag]) {
+					if (!(typeof move.isMax === 'boolean' && move.isMax) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'gmaxmove') {
-					if (!(typeof dex[move].isMax === 'string') === !alts.flags[flag]) {
+					if (!(typeof move.isMax === 'string') === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'protection') {
-					if (!(dex[move].stallingMove && dex[move].id !== "endure") === !alts.flags[flag]) {
+					if (!(move.stallingMove && move.id !== "endure") === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'ohko') {
-					if (!dex[move].ohko === !alts.flags[flag]) {
+					if (!move.ohko === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else {
-					if ((flag in dex[move].flags) === alts.flags[flag]) {
-						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
+					if ((flag in move.flags) === alts.flags[flag]) {
+						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(move.target)) continue;
 						matched = true;
 						break;
 					}
@@ -1590,15 +1627,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (Object.keys(alts.gens).length) {
-				if (alts.gens[String(dex[move].gen)]) continue;
-				if (Object.values(alts.gens).includes(false) && alts.gens[String(dex[move].gen)] !== false) continue;
+				if (alts.gens[String(move.gen)]) continue;
+				if (Object.values(alts.gens).includes(false) && alts.gens[String(move.gen)] !== false) continue;
 			}
 			for (const recoveryType in alts.recovery) {
 				let hasRecovery = false;
 				if (recoveryType === "recovery") {
-					hasRecovery = !!dex[move].drain || !!dex[move].flags.heal;
+					hasRecovery = !!move.drain || !!move.flags.heal;
 				} else if (recoveryType === "zrecovery") {
-					hasRecovery = (dex[move].zMove?.effect === 'heal');
+					hasRecovery = (move.zMove?.effect === 'heal');
 				}
 				if (hasRecovery === alts.recovery[recoveryType]) {
 					matched = true;
@@ -1607,28 +1644,28 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (alts.recoil) {
-				if (dex[move].recoil || dex[move].hasCrashDamage) matched = true;
+				if (move.recoil || move.hasCrashDamage) matched = true;
 			}
 			if (matched) continue;
 			for (const prop in alts.property) {
 				if (typeof alts.property[prop].less === "number") {
 					if (
-						dex[move][prop as keyof Move] !== true &&
-						(dex[move][prop as keyof Move] as number) < alts.property[prop].less
+						move[prop as keyof Move] !== true &&
+						(move[prop as keyof Move] as number) < alts.property[prop].less
 					) {
 						matched = true;
 						break;
 					}
 				}
 				if (typeof alts.property[prop].greater === "number") {
-					if ((dex[move][prop as keyof Move] === true && dex[move].category !== "Status") ||
-						dex[move][prop as keyof Move] as number > alts.property[prop].greater) {
+					if ((move[prop as keyof Move] === true && move.category !== "Status") ||
+						move[prop as keyof Move] as number > alts.property[prop].greater) {
 						matched = true;
 						break;
 					}
 				}
 				if (typeof alts.property[prop].equal === "number") {
-					if (dex[move][prop as keyof Move] === alts.property[prop].equal) {
+					if (move[prop as keyof Move] === alts.property[prop].equal) {
 						matched = true;
 						break;
 					}
@@ -1636,13 +1673,13 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const boost in alts.boost) {
-				if (dex[move].boosts) {
-					if (((dex[move].boosts as Partial<BoostsTable>)[boost as BoostName]! > 0) === alts.boost[boost]) {
+				if (move.boosts) {
+					if ((move.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
-				} else if (dex[move].secondary && dex[move].secondary!.self && dex[move].secondary!.self!.boosts) {
-					if ((dex[move].secondary!.self!.boosts![boost as BoostName]! > 0) === alts.boost[boost]) {
+				} else if (move.secondary && move.secondary.self && move.secondary.self.boosts) {
+					if ((move.secondary.self.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
@@ -1650,19 +1687,19 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const lower in alts.lower) {
-				if (dex[move].boosts && dex[move].boosts !== false) {
-					if (((dex[move].boosts as Partial<BoostsTable>)[lower as BoostName]! < 0) === alts.lower[lower]) {
+				if (move.boosts && move.boosts !== false) {
+					if ((move.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
 						matched = true;
 						break;
 					}
-				} else if (dex[move].secondary) {
-					if (dex[move].secondary!.boosts) {
-						if ((dex[move].secondary!.boosts![lower as BoostName]! < 0) === alts.lower[lower]) {
+				} else if (move.secondary) {
+					if (move.secondary.boosts) {
+						if ((move.secondary.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
-					} else if (dex[move].secondary!.self && dex[move].secondary!.self!.boosts) {
-						if ((dex[move].secondary!.self!.boosts![lower as BoostName]! < 0) === alts.lower[lower]) {
+					} else if (move.secondary.self && move.secondary.self.boosts) {
+						if ((move.secondary.self.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
@@ -1671,7 +1708,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const boost in alts.zboost) {
-				const zMove = dex[move].zMove;
+				const zMove = move.zMove;
 				if (zMove?.boost) {
 					if ((zMove.boost[boost as BoostName]! > 0) === alts.zboost[boost]) {
 						matched = true;
@@ -1683,14 +1720,14 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			for (const searchStatus in alts.status) {
 				let canStatus = !!(
-					dex[move].status === searchStatus ||
-					(dex[move].secondaries && dex[move].secondaries!.some(entry => entry.status === searchStatus))
+					move.status === searchStatus ||
+					(move.secondaries && move.secondaries.some(entry => entry.status === searchStatus))
 				);
 				if (searchStatus === 'slp') {
-					canStatus = canStatus || move === 'yawn';
+					canStatus = canStatus || moveid === 'yawn';
 				}
 				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
-					canStatus = canStatus || move === 'triattack';
+					canStatus = canStatus || moveid === 'triattack';
 				}
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
@@ -1701,9 +1738,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			for (const searchStatus in alts.volatileStatus) {
 				const canStatus = !!(
-					(dex[move].secondary && dex[move].secondary!.volatileStatus === searchStatus) ||
-					(dex[move].secondaries && dex[move].secondaries!.some(entry => entry.volatileStatus === searchStatus)) ||
-					(dex[move].volatileStatus === searchStatus)
+					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
+					(move.secondaries && move.secondaries.some(entry => entry.volatileStatus === searchStatus)) ||
+					(move.volatileStatus === searchStatus)
 				);
 				if (canStatus === alts.volatileStatus[searchStatus]) {
 					matched = true;
@@ -1712,7 +1749,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 
-			delete dex[move];
+			delete dex[moveid];
 		}
 	}
 
@@ -1728,7 +1765,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	}
 	if (randomOutput && randomOutput < results.length) {
-		results = Dex.shuffle(results).slice(0, randomOutput);
+		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 	if (results.length > 1) {
 		results.sort();
@@ -1766,6 +1803,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 function runItemsearch(target: string, cmd: string, canAll: boolean, message: string) {
 	let showAll = false;
+	let maxGen = 0;
+	let gen = 0;
 
 	target = target.trim();
 	const lastCommaIndex = target.lastIndexOf(',');
@@ -1784,6 +1823,17 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	// Refine searched words
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
+		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
+			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+			maxGen = parseInt(newWord[6]);
+			if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
+			continue;
+		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
+			if (gen) return {error: "You cannot specify 'gen' multiple times."};
+			gen = parseInt(newWord[3]);
+			if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
+			continue;
+		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
 		// Words that don't really help identify item removed to speed up search
@@ -1814,25 +1864,33 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				newWord = 'supereffective';
 			}
 			break;
-		case 'special': newWord = 'sp'; break;
+		case 'special':
+			if (rawSearch[i + 1] === 'defense') {
+				newWord = 'specialdefense';
+			} else if (rawSearch[i + 1] === 'attack') {
+				newWord = 'specialattack';
+			}
+			break;
+		case 'spatk':
 		case 'spa':
-			newWord = 'sp';
+			newWord = 'specialattack';
 			break;
 		case 'atk':
 		case 'attack':
-			if (rawSearch[i - 1] === 'sp') {
-				newWord = 'atk';
+			if (['sp', 'special'].includes(rawSearch[i - 1])) {
+				break;
 			} else {
 				newWord = 'attack';
 			}
 			break;
 		case 'spd':
-			newWord = 'sp';
+		case 'spdef':
+			newWord = 'specialdefense';
 			break;
 		case 'def':
 		case 'defense':
-			if (rawSearch[i - 1] === 'sp') {
-				newWord = 'def';
+			if (['sp', 'special'].includes(rawSearch[i - 1])) {
+				break;
 			} else {
 				newWord = 'defense';
 			}
@@ -1848,7 +1906,11 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		searchedWords.push(newWord);
 	}
 
-	if (searchedWords.length === 0) return {error: "No distinguishing words were used. Try a more specific search."};
+	if (searchedWords.length === 0 && !gen && !maxGen) {
+		return {error: "No distinguishing words were used. Try a more specific search."};
+	}
+
+	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
 	if (searchedWords.includes('fling')) {
 		let basePower = 0;
 		let effect;
@@ -1881,9 +1943,9 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in Dex.data.Items) {
-			const item = Dex.getItem(n);
-			if (!item.fling) continue;
+		for (const n in dex.data.Items) {
+			const item = dex.getItem(n);
+			if (!item.fling || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && effect) {
 				if (item.fling.basePower === basePower &&
@@ -1901,7 +1963,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 
 		for (let word of searchedWords) {
 			word = word.charAt(0).toUpperCase() + word.slice(1);
-			if (word in Dex.data.TypeChart) {
+			if (word in dex.data.TypeChart) {
 				if (type) return {error: "Only specify natural gift type once."};
 				type = word;
 			} else {
@@ -1913,9 +1975,9 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in Dex.data.Items) {
-			const item = Dex.getItem(n);
-			if (!item.isBerry || !item.naturalGift) continue;
+		for (const n in dex.data.Items) {
+			const item = dex.getItem(n);
+			if (!item.isBerry || !item.naturalGift || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && type) {
 				if (item.naturalGift.basePower === basePower && item.naturalGift.type === type) foundItems.push(item.name);
@@ -1930,8 +1992,8 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	} else {
 		let bestMatched = 0;
-		for (const n in Dex.data.Items) {
-			const item = Dex.getItem(n);
+		for (const n in dex.data.Items) {
+			const item = dex.getItem(n);
 			let matched = 0;
 			// splits words in the description into a toID()-esk format except retaining / and . in numbers
 			let descWords = item.desc || '';
@@ -1945,10 +2007,19 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				.replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (const word of searchedWords) {
-				if (descWordsArray.includes(word)) matched++;
+				switch (word) {
+				case 'specialattack':
+					if (descWordsArray[descWordsArray.indexOf('sp') + 1] === 'atk') matched++;
+					break;
+				case 'specialdefense':
+					if (descWordsArray[descWordsArray.indexOf('sp') + 1] === 'def') matched++;
+					break;
+				default:
+					if (descWordsArray.includes(word)) matched++;
+				}
 			}
 
-			if (matched >= (searchedWords.length * 3 / 5)) {
+			if (matched >= (searchedWords.length * 3 / 5) && (!maxGen || item.gen <= maxGen) && (!gen || item.gen === gen)) {
 				if (matched === bestMatched) {
 					foundItems.push(item.name);
 				} else if (matched > bestMatched) {
@@ -1982,6 +2053,8 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
 	// based heavily on runItemsearch()
 	let showAll = false;
+	let maxGen = 0;
+	let gen = 0;
 
 	target = target.trim();
 	const lastCommaIndex = target.lastIndexOf(',');
@@ -1999,6 +2072,17 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
+		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
+			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+			maxGen = parseInt(newWord[6]);
+			if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
+			continue;
+		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
+			if (gen) return {error: "You cannot specify 'gen' multiple times."};
+			gen = parseInt(newWord[3]);
+			if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
+			continue;
+		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
 		// remove extraneous words
@@ -2038,6 +2122,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		case 'spatk': newWord = 'specialattack'; break;
 		case 'atk': newWord = 'attack'; break;
 		case 'def': newWord = 'defense'; break;
+		case 'spe': newWord = 'speed'; break;
 		case 'burn':
 		case 'burns': newWord = 'burned'; break;
 		case 'poison':
@@ -2051,10 +2136,14 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		searchedWords.push(newWord);
 	}
 
-	if (searchedWords.length === 0) return {error: "No distinguishing words were used. Try a more specific search."};
+	if (searchedWords.length === 0 && !gen && !maxGen) {
+		return {error: "No distinguishing words were used. Try a more specific search."};
+	}
+
 	let bestMatched = 0;
-	for (const n in Dex.data.Abilities) {
-		const ability = Dex.getAbility(n);
+	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
+	for (const n in dex.data.Abilities) {
+		const ability = dex.getAbility(n);
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
 		let descWords = ability.desc || ability.shortDesc || '';
@@ -2079,7 +2168,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 			}
 		}
 
-		if (matched >= (searchedWords.length * 3 / 5)) {
+		if (matched >= (searchedWords.length * 3 / 5) && (!maxGen || ability.gen <= maxGen) && (!gen || ability.gen === gen)) {
 			if (matched === bestMatched) {
 				foundAbilities.push(ability.name);
 			} else if (matched > bestMatched) {
@@ -2297,8 +2386,11 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
+export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
+		if (Config.debugdexsearchprocesses && process.send) {
+			process.send('DEBUG\n' + JSON.stringify(query));
+		}
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
@@ -2355,5 +2447,3 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
-
-exports.PM = PM;

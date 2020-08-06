@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	bind: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
@@ -21,6 +21,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
+	hyperbeam: {
+		inherit: true,
+		onMoveFail(target, source, move) {
+			source.addVolatile('mustrecharge');
+		},
+	},
 	jumpkick: {
 		inherit: true,
 		desc: "If this attack misses the target, the user 1HP of damage.",
@@ -32,7 +38,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	leechseed: {
 		inherit: true,
 		onHit() {},
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
@@ -43,7 +49,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				const toLeech = this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1);
+				const toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1);
 				const damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) this.heal(damage, leecher, pokemon);
 			},
@@ -54,7 +60,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'rage',
 		},
-		effect: {
+		condition: {
 			// Rage lock
 			duration: 255,
 			onStart(target, source, effect) {
@@ -108,7 +114,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	substitute: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);

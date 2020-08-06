@@ -126,6 +126,8 @@ global.Punishments = Punishments;
 
 import {Rooms} from './rooms';
 global.Rooms = Rooms;
+// We initialize the global room here because roomlogs.ts needs the Rooms global
+Rooms.global = new Rooms.GlobalRoomState();
 
 import * as Verifier from './verifier';
 global.Verifier = Verifier;
@@ -136,7 +138,7 @@ global.Tournaments = Tournaments;
 
 import {IPTools} from './ip-tools';
 global.IPTools = IPTools;
-void IPTools.loadDatacenters();
+void IPTools.loadHostsAndRanges();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
@@ -193,4 +195,21 @@ Repl.start('app', cmd => eval(cmd));
 
 if (Config.startuphook) {
 	process.nextTick(Config.startuphook);
+}
+
+if (Config.ofemain) {
+	try {
+		require.resolve('node-oom-heapdump');
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
+		throw new Error(
+			'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+			'Run npm install node-oom-heapdump and restart the server.'
+		);
+	}
+
+	// Create a heapdump if the process runs out of memory.
+	global.nodeOomHeapdump = (require as any)('node-oom-heapdump')({
+		addTimestamp: true,
+	});
 }

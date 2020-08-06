@@ -1,11 +1,12 @@
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 type FilterWord = [RegExp, string, string, string | null, number];
 
 type MonitorHandler = (
 	this: CommandContext,
 	line: FilterWord,
-	room: ChatRoom | GameRoom | null,
+	room: Room | null,
 	user: User,
 	message: string,
 	lcMessage: string,
@@ -73,7 +74,7 @@ const filterWords: {[k: string]: FilterWord[]} = Chat.filterWords;
 
 function constructEvasionRegex(str: string) {
 	const buf = "\\b" +
-		str.split('').map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
+		[...str].map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
 		"\\b";
 	return new RegExp(buf, 'i');
 }
@@ -110,7 +111,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					`<<${room.roomid}>> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
@@ -180,7 +181,7 @@ Chat.registerMonitor('evasion', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`,
-					`<${room.roomid}> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
+					`<<${room.roomid}>> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
 				);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
@@ -231,7 +232,7 @@ Chat.registerMonitor('battlefilter', {
 			if (room) {
 				room.mute(user);
 				this.errorReply(`You have been muted for using a banned phrase. Please do not say '${match[0]}'.`);
-				const text = `[BattleMonitor] <${room.roomid}> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`;
+				const text = `[BattleMonitor] <<${room.roomid}>> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`;
 				const adminlog = Rooms.get('adminlog');
 				if (adminlog) {
 					adminlog.add(`|c|~|${text}`).update();
@@ -305,7 +306,9 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		.replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	const isStaffRoom = room && ((room.chatRoomData && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
+	const isStaffRoom = room && (
+		(room.persist && room.roomid.endsWith('staff')
+		) || room.roomid.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
 	for (const list in Chat.monitors) {
@@ -313,7 +316,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
 		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
-		if (location === 'PUBLIC' && room && room.isPrivate === true) continue;
+		if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
 
 		switch (condition) {
 		case 'notTrusted':
@@ -386,7 +389,7 @@ export const loginfilter: LoginFilter = user => {
 		const manualForceRename = Chat.forceRenames.get(toID(user.trackRename));
 		Rooms.global.notifyRooms(
 			['staff'],
-			Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`
+			Utils.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`
 		);
 		user.trackRename = '';
 	}
@@ -395,7 +398,7 @@ export const loginfilter: LoginFilter = user => {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
 		Rooms.global.notifyRooms(
 			['staff'],
-			Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
+			Utils.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
 		);
 	}
 };
@@ -564,9 +567,8 @@ export const commands: ChatCommands = {
 			}
 			saveFilters(true);
 			const output = `'${word}' was added to the ${list} list.`;
-			const upperStaff = Rooms.get('upperstaff');
-			if (upperStaff) upperStaff.add(output).update();
-			if (room.roomid !== 'upperstaff') return this.sendReply(output);
+			Rooms.get('upperstaff')?.add(output).update();
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		remove(target, room, user) {
 			if (!this.can('rangeban')) return false;
@@ -589,9 +591,8 @@ export const commands: ChatCommands = {
 			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
 			saveFilters(true);
 			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
-			const upperStaff = Rooms.get('upperstaff');
-			if (upperStaff) upperStaff.add(output).update();
-			if (room.roomid !== 'upperstaff') return this.sendReply(output);
+			Rooms.get('upperstaff')?.add(output).update();
+			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		'': 'view',
 		list: 'view',
@@ -603,9 +604,9 @@ export const commands: ChatCommands = {
 		},
 	},
 	filterhelp: [
-		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: & ~`,
-		`- /filter remove list, words - Removes words from the given filter list. Requires: & ~`,
-		`- /filter view - Opens the list of filtered words. Requires: % @ & ~`,
+		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: &`,
+		`- /filter remove list, words - Removes words from the given filter list. Requires: &`,
+		`- /filter view - Opens the list of filtered words. Requires: % @ &`,
 	],
 	allowname(target, room, user) {
 		if (!this.can('forcerename')) return false;

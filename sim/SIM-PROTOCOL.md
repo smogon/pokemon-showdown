@@ -153,6 +153,11 @@ The beginning of a battle will look something like this:
 
 > The battle has ended in a tie.
 
+`|t:|TIMESTAMP`
+
+> The current UNIX timestamp (the number of seconds since 1970) - useful for determining
+> when events occured in real time.
+
 ### Identifying Pokémon
 
 Pokémon will be identified by a Pokémon ID (generally labeled `POKEMON` in
@@ -577,10 +582,14 @@ stat boosts are minor actions.
 > The `SOURCE` Pokémon has used a move and is waiting for the `TARGET` Pokémon
 > (For example: Fire Pledge).
 
+`|-prepare|ATTACKER|MOVE`
+> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on an unknown target.
+> (For example: Dig, Fly).
+
 `|-prepare|ATTACKER|MOVE|DEFENDER`
 
-> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on the `DEFENDER`
-> (For example: Dig, Fly).
+> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on the `DEFENDER`.
+> (For example: Sky Drop).
 
 `|-mustrecharge|POKEMON`
 

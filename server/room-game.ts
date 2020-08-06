@@ -81,7 +81,7 @@ export class RoomGame {
 	 * The room this roomgame is in. Rooms can only have one RoomGame at a time,
 	 * which are available as `this.room.game === this`.
 	 */
-	room: ChatRoom | GameRoom;
+	room: Room;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
@@ -100,7 +100,7 @@ export class RoomGame {
 	 * to be later. The /timer command is written to be resilient to this.
 	 */
 	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void} | NodeJS.Timer | null;
-	constructor(room: ChatRoom | GameRoom) {
+	constructor(room: Room) {
 		this.roomid = room.roomid;
 		this.room = room;
 		this.gameid = 'game' as ID;
@@ -153,10 +153,7 @@ export class RoomGame {
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;
-			if (!this.room.auth) {
-				this.room.auth = {};
-			}
-			this.room.auth[player.id] = Users.PLAYER_SYMBOL;
+			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		} else {
 			player.unlinkUser();
 		}
@@ -308,12 +305,11 @@ export class RoomGame {
 
 	/**
 	 * Called for every message a user sends while this game is active.
-	 * Return an error message to prevent the message from being sent, or
-	 * `false` to let it through.
+	 * Return an error message to prevent the message from being sent,
+	 * an empty string to prevent it with no error message, or
+	 * `undefined` to let it through.
 	 */
-	onChatMessage(message: string, user: User): string | false {
-		return false;
-	}
+	onChatMessage(message: string, user: User): string | void {}
 
 	/**
 	 * Called for every message a user sends while this game is active.

@@ -1,4 +1,4 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},
@@ -58,6 +58,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	flygon: {
 		inherit: true,
 		eggGroups: ["Bug"],
+	},
+	magnezone: {
+		inherit: true,
+		evoType: "levelExtra",
+		evoCondition: "in a special magnetic field",
 	},
 	leafeon: {
 		inherit: true,
@@ -125,6 +130,14 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evoType: "levelExtra",
 		evoCondition: "near a special magnetic field",
+	},
+	lycanroc: {
+		inherit: true,
+		evoCondition: "in Pokemon Sun/Ultra Sun",
+	},
+	lycanrocmidnight: {
+		inherit: true,
+		evoCondition: "in Pokemon Moon/Ultra Moon",
 	},
 	tapukoko: {
 		inherit: true,

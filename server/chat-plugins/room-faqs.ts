@@ -1,6 +1,7 @@
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
-const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
+export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
 let roomFaqs: {[k: string]: {[k: string]: string}} = {};
@@ -29,8 +30,9 @@ function getAlias(roomid: RoomID, key: string) {
 
 export const commands: ChatCommands = {
 	addfaq(target, room, user, connection) {
+		if (!room) return this.requiresRoom();
 		if (!this.can('ban', null, room)) return false;
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
 
 		target = target.trim();
@@ -52,13 +54,14 @@ export const commands: ChatCommands = {
 		roomFaqs[room.roomid][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
-		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
+		this.privateModAction(`${user.name} added a FAQ for '${topic}'`);
 		this.modlog('RFAQ', null, `added '${topic}'`);
 	},
 	removefaq(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('ban', null, room)) return false;
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
@@ -71,13 +74,14 @@ export const commands: ChatCommands = {
 		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
-		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
+		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
 	},
 	addalias(target, room, user) {
+		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('ban', null, room)) return false;
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const [alias, topic] = target.split(',').map(val => toID(val));
 
 		if (!(alias && topic)) return this.parse('/help roomfaq');
@@ -91,12 +95,13 @@ export const commands: ChatCommands = {
 		}
 		roomFaqs[room.roomid][alias] = `>${topic}`;
 		saveRoomFaqs();
-		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.privateModAction(`${user.name} added an alias for '${topic}': ${alias}`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
 	viewfaq: 'roomfaq',
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
 		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
 		let topic: string = toID(target);
 		if (topic === 'constructor') return false;
@@ -110,7 +115,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
 		// /viewfaq doesn't show source
 		if (!this.broadcasting && user.can('ban', null, room) && cmd !== 'viewfaq') {
-			const src = Chat.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
+			const src = Utils.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
 			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
 			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === topic);
 			if (aliases.length) {
@@ -122,9 +127,9 @@ export const commands: ChatCommands = {
 	roomfaqhelp: [
 		`/roomfaq - Shows the list of all available FAQ topics`,
 		`/roomfaq <topic> - Shows the FAQ for <topic>.`,
-		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: @ # & ~`,
-		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: @ # & ~`,
-		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # & ~`,
+		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: @ # &`,
+		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: @ # &`,
+		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # &`,
 	],
 };
 

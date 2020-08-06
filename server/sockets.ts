@@ -388,6 +388,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			if (!message) return;
 			// drop messages over 100KB
 			if (message.length > (100 * 1024)) {
+				socket.write(`|popup|Your message must be below 100KB`);
 				console.log(`Dropping client message ${message.length / 1024} KB...`);
 				console.log(message.slice(0, 160));
 				return;
@@ -457,9 +458,11 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		case '#':
 			// #roomid, message
 			// message to all connections in room
+			// #, message
+			// message to all connections
 			nlLoc = data.indexOf('\n');
 			roomid = data.substr(1, nlLoc - 1) as RoomID;
-			room = this.rooms.get(roomid);
+			room = roomid ? this.rooms.get(roomid) : this.sockets;
 			if (!room) return;
 			message = data.substr(nlLoc + 1);
 			for (const curSocket of room.values()) curSocket.write(message);
@@ -568,19 +571,19 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	if (Config.ofe) {
+	if (Config.sockets) {
 		try {
 			require.resolve('node-oom-heapdump');
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 			throw new Error(
-				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofesockets is set to true! ' +
 				'Run npm install node-oom-heapdump and restart the server.'
 			);
 		}
 
 		// Create a heapdump if the process runs out of memory.
-		(require as any)('node-oom-heapdump')({
+		(global as any).nodeOomHeapdump = (require as any)('node-oom-heapdump')({
 			addTimestamp: true,
 		});
 	}

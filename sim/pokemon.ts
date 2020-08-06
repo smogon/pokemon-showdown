@@ -28,7 +28,7 @@ export interface EffectState {
 
 // Berries which restore PP/HP and thus inflict external staleness when given to an opponent as
 // there are very few non-malicious competitive reasons to do so
-const RESTORATIVE_BERRIES = new Set([
+export const RESTORATIVE_BERRIES = new Set([
 	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
 ] as ID[]);
 
@@ -43,6 +43,7 @@ export class Pokemon {
 	readonly gender: GenderName;
 	readonly happiness: number;
 	readonly pokeball: string;
+	readonly gigantamax: boolean;
 
 	/** Transform keeps the original pre-transformed Hidden Power in Gen 2-4. */
 	readonly baseHpType: string;
@@ -135,6 +136,8 @@ export class Pokemon {
 	lastMove: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
+	statsRaisedThisTurn: boolean;
+	statsLoweredThisTurn: boolean;
 	/**
 	 * The result of the last move used on the previous turn by this
 	 * Pokemon. Stomping Tantrum checks this property for a value of false
@@ -250,14 +253,6 @@ export class Pokemon {
 		if (!this.baseSpecies.exists) {
 			throw new Error(`Unidentified species: ${this.baseSpecies.name}`);
 		}
-		// Change Gigantamax formes to their base formes
-		let gMax: string | null = null;
-		if (this.baseSpecies.isGigantamax) {
-			gMax = this.baseSpecies.name;
-			if (set.species && toID(set.species) === this.baseSpecies.id) set.species = this.baseSpecies.baseSpecies;
-			if (set.name && toID(set.name) === this.baseSpecies.id) set.name = this.baseSpecies.baseSpecies;
-			this.baseSpecies = this.battle.dex.getSpecies(this.baseSpecies.baseSpecies);
-		}
 		this.set = set as PokemonSet;
 
 		this.species = this.baseSpecies;
@@ -269,13 +264,14 @@ export class Pokemon {
 		this.name = set.name.substr(0, 20);
 		this.fullname = this.side.id + ': ' + this.name;
 
-		set.level = this.battle.dex.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
+		set.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
 		const genders: {[key: string]: GenderName} = {M: 'M', F: 'F', N: 'N'};
 		this.gender = genders[set.gender] || this.species.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
 		if (this.gender === 'N') this.gender = '';
-		this.happiness = typeof set.happiness === 'number' ? this.battle.dex.clampIntRange(set.happiness, 0, 255) : 255;
+		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
+		this.gigantamax = this.set.gigantamax || false;
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
@@ -323,10 +319,10 @@ export class Pokemon {
 			if (!this.set.ivs[stat] && this.set.ivs[stat] !== 0) this.set.ivs[stat] = 31;
 		}
 		for (stat in this.set.evs) {
-			this.set.evs[stat] = this.battle.dex.clampIntRange(this.set.evs[stat], 0, 255);
+			this.set.evs[stat] = this.battle.clampIntRange(this.set.evs[stat], 0, 255);
 		}
 		for (stat in this.set.ivs) {
-			this.set.ivs[stat] = this.battle.dex.clampIntRange(this.set.ivs[stat], 0, 31);
+			this.set.ivs[stat] = this.battle.clampIntRange(this.set.ivs[stat], 0, 31);
 		}
 		if (this.battle.gen && this.battle.gen <= 2) {
 			// We represent DVs using even IVs. Ensure they are in fact even.
@@ -382,6 +378,8 @@ export class Pokemon {
 
 		this.lastMove = null;
 		this.moveThisTurn = '';
+		this.statsRaisedThisTurn = false;
+		this.statsLoweredThisTurn = false;
 		this.hurtThisTurn = false;
 		this.lastDamage = 0;
 		this.attackedBy = [];
@@ -402,7 +400,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.canUltraBurst(this);
 		// Normally would want to use battle.canDynamax to set this, but it references this property.
 		this.canDynamax = (this.battle.gen >= 8);
-		this.canGigantamax = gMax;
+		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -550,7 +548,7 @@ export class Pokemon {
 		}
 		const combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) +
 			(Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
-		return this.battle.dex.clampIntRange(combatPower, 0, 10000);
+		return this.battle.clampIntRange(combatPower, 0, 10000);
 	}
 	*/
 
@@ -707,7 +705,7 @@ export class Pokemon {
 
 	ignoringAbility() {
 		const abilities = [
-			'battlebond', 'comatose', 'disguise', 'gulpmissile', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+			'battlebond', 'comatose', 'disguise', 'gulpmissile', 'iceface', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
 		];
 		// Check if any active pokemon have the ability Neutralizing Gas
 		let neutralizinggas = false;
@@ -866,15 +864,12 @@ export class Pokemon {
 			if (!this.canDynamax) return;
 			if (
 				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
-				this.getItem().zMove || this.battle.canMegaEvo(this)
+				this.getItem().zMove || this.canMegaEvo
 			) {
 				return;
 			}
 			// Some pokemon species are unable to dynamax
-			const cannotDynamax = ['Zacian', 'Zamazenta', 'Eternatus'];
-			if (cannotDynamax.includes(this.species.baseSpecies)) {
-				return;
-			}
+			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
 		const result: DynamaxOptions = {maxMoves: []};
 		let atLeastOne = false;
@@ -1052,7 +1047,7 @@ export class Pokemon {
 		}
 		pokemon.clearVolatile();
 		for (const i in this.volatiles) {
-			const volatile = this.getVolatile(i) as PureEffect;
+			const volatile = this.getVolatile(i) as Condition;
 			this.battle.singleEvent('Copy', volatile, this.volatiles[i], this);
 		}
 	}
@@ -1241,7 +1236,7 @@ export class Pokemon {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
 			this.setAbility(species.abilities['0'], null, true);
-			if (isPermanent) this.baseAbility = this.ability;
+			this.baseAbility = this.ability;
 		}
 		return true;
 	}
@@ -1404,7 +1399,7 @@ export class Pokemon {
 		return d;
 	}
 
-	trySetStatus(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+	trySetStatus(status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
@@ -1420,7 +1415,7 @@ export class Pokemon {
 	}
 
 	setStatus(
-		status: string | PureEffect,
+		status: string | Condition,
 		source: Pokemon | null = null,
 		sourceEffect: Effect | null = null,
 		ignoreImmunities = false
@@ -1670,8 +1665,8 @@ export class Pokemon {
 	}
 
 	addVolatile(
-		status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null,
-		linkedStatus: string | PureEffect | null = null
+		status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null,
+		linkedStatus: string | Condition | null = null
 	): boolean | any {
 		let result;
 		status = this.battle.dex.getEffect(status);
@@ -1800,7 +1795,12 @@ export class Pokemon {
 	 */
 	setType(newType: string | string[], enforce = false) {
 		// First type of Arceus, Silvally cannot be normally changed
-		if (!enforce && (this.species.num === 493 || this.species.num === 773)) return false;
+		if (!enforce) {
+			if ((this.battle.gen >= 5 && (this.species.num === 493 || this.species.num === 773)) ||
+				(this.battle.gen === 4 && this.hasAbility('multitype'))) {
+				return false;
+			}
+		}
 
 		if (!newType) throw new Error("Must pass type to setType");
 		this.types = (typeof newType === 'string' ? [newType] : newType);

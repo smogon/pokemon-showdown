@@ -1,5 +1,7 @@
 // Other Metas plugin by Spandan
 
+import {Utils} from '../../lib/utils';
+
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};
 	weighthg: number;
@@ -37,7 +39,6 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 }
 
 export const commands: ChatCommands = {
-	'!othermetas': true,
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -71,10 +72,9 @@ export const commands: ChatCommands = {
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ # & ~`,
+		`!om - Show everyone that information. Requires: + % @ # &`,
 	],
 
-	'!mixandmega': true,
 	mnm: 'mixandmega',
 	mixandmega(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -136,7 +136,7 @@ export const commands: ChatCommands = {
 		}
 		let statName: StatName;
 		for (statName in species.baseStats) { // Add the changed stats and weight
-			mixedSpecies.baseStats[statName] = Dex.clampIntRange(
+			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
 		}
@@ -173,7 +173,6 @@ export const commands: ChatCommands = {
 		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pokemon's type and stats.`,
 	],
 
-	'!stone': true,
 	orb: 'stone',
 	megastone: 'stone',
 	stone(target) {
@@ -275,7 +274,6 @@ export const commands: ChatCommands = {
 	},
 	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pokemon.`],
 
-	'!350cup': true,
 	350: '350cup',
 	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -307,7 +305,6 @@ export const commands: ChatCommands = {
 		`/350 OR /350cup <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in 350 Cup.`,
 	],
 
-	'!tiershift': true,
 	ts: 'tiershift',
 	ts1: 'tiershift',
 	ts2: 'tiershift',
@@ -354,7 +351,7 @@ export const commands: ChatCommands = {
 		const boost = boosts[tier as TierShiftTiers];
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
-			species.baseStats[statName] = Dex.clampIntRange(species.baseStats[statName] + boost, 1, 255);
+			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -363,7 +360,6 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /ts[gen number] to see a Pokemon's stats in that generation.`,
 	],
 
-	'!scalemons': true,
 	scale: 'scalemons',
 	scale1: 'scalemons',
 	scale2: 'scalemons',
@@ -399,7 +395,7 @@ export const commands: ChatCommands = {
 		const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
 		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
 		for (const stat of stats) {
-			species.baseStats[stat] = Dex.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
+			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -408,7 +404,61 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /scale[gen number] to see a Pokemon's scaled stats in that generation.`,
 	],
 
-	'!natureswap': true,
+	flip: 'flipped',
+	flip1: 'flipped',
+	flip2: 'flipped',
+	flip3: 'flipped',
+	flip4: 'flipped',
+	flip5: 'flipped',
+	flip6: 'flipped',
+	flip7: 'flipped',
+	flip8: 'flipped',
+	flipped(target, room, user, connection, cmd) {
+		if (!this.runBroadcast()) return;
+		const args = target.split(',');
+		if (!args[0]) return this.parse(`/help flipped`);
+		const mon = args[0];
+		let mod = args[1];
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !mod) mod = `gen${targetGen}`;
+		let dex = Dex;
+		if (mod && toID(mod) in Dex.dexes) {
+			dex = Dex.dexes[toID(mod)];
+		} else if (room?.battle) {
+			dex = Dex.forFormat(room.battle.format);
+		}
+		const species = Dex.deepClone(dex.getSpecies(mon));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : mon.trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
+		if (dex.gen === 1) {
+			const flippedStats: {[k: string]: number} = {
+				hp: species.baseStats.spe,
+				atk: species.baseStats.spa,
+				def: species.baseStats.def,
+				spa: species.baseStats.atk,
+				spd: species.baseStats.atk,
+				spe: species.baseStats.hp,
+			};
+			for (const stat in species.baseStats) {
+				species.baseStats[stat] = flippedStats[stat];
+			}
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+			return;
+		}
+		const stats = Object.values(species.baseStats).reverse();
+		for (const [i, statName] of Object.keys(species.baseStats).entries()) {
+			species.baseStats[statName] = stats[i];
+		}
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+	},
+	flippedhelp: [
+		`/flip OR /flipped <pokemon>[, gen] - Shows the base stats that a Pokemon would have in Flipped.`,
+		`Alternatively, you can use /flip[gen number] to see a Pokemon's stats in that generation.`,
+	],
+
 	ns: 'natureswap',
 	ns3: 'natureswap',
 	ns4: 'natureswap',
@@ -455,7 +505,6 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /ns[gen number] to see a Pokemon's stats in that generation.`,
 	],
 
-	'!crossevolve': true,
 	ce: 'crossevolve',
 	crossevo: 'crossevolve',
 	crossevolve(target, user, room) {
@@ -495,7 +544,8 @@ export const commands: ChatCommands = {
 		mixedSpecies.baseStats = Dex.deepClone(mixedSpecies.baseStats);
 		let statName: StatName;
 		for (statName in species.baseStats) {
-			mixedSpecies.baseStats[statName] += crossSpecies.baseStats[statName] - prevo.baseStats[statName];
+			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
+			mixedSpecies.baseStats[statName] = Utils.clampIntRange(mixedSpecies.baseStats[statName] + statChange, 1, 255);
 		}
 		mixedSpecies.types = [species.types[0]];
 		if (species.types[1]) mixedSpecies.types.push(species.types[1]);
@@ -507,12 +557,6 @@ export const commands: ChatCommands = {
 		mixedSpecies.weighthg += crossSpecies.weighthg - prevo.weighthg;
 		if (mixedSpecies.weighthg < 1) {
 			mixedSpecies.weighthg = 1;
-		}
-		for (const stat in mixedSpecies.baseStats) {
-			if (mixedSpecies.baseStats[stat] < 1 || mixedSpecies.baseStats[stat] > 255) {
-				this.errorReply(`Warning: This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
-				break;
-			}
 		}
 		mixedSpecies.tier = "CE";
 		let weighthit = 20;
@@ -544,5 +588,54 @@ export const commands: ChatCommands = {
 	},
 	crossevolvehelp: [
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon.",
+	],
+
+	showevo(target, user, room) {
+		if (!this.runBroadcast()) return;
+		const targetid = toID(target);
+		if (!targetid) return this.parse('/help showevo');
+		const evo = Dex.getSpecies(target);
+		if (!evo.exists) {
+			return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
+		}
+		if (!evo.prevo) {
+			return this.errorReply(`Error: ${evo.name} is not an evolution.`);
+		}
+		// Fake Pokemon
+		if (evo.isNonstandard === 'CAP') {
+			this.errorReply(`Warning: ${evo.name} is a fake Pok\u00e9mon created by the CAP Project and is restricted to CAP.`);
+		}
+		const prevoSpecies = Dex.getSpecies(evo.prevo);
+		const deltas = Dex.deepClone(evo);
+		deltas.tier = 'CE';
+		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+		let i: StatName;
+		for (i in evo.baseStats) {
+			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+			deltas.baseStats[i] = statChange;
+		}
+		deltas.types = [];
+		if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+		if (evo.types[1] !== prevoSpecies.types[1]) {
+			deltas.types[1] = evo.types[1] || evo.types[0];
+		}
+		if (deltas.types.length) {
+			// Undefined type remover
+			deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+
+			if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+		} else {
+			deltas.types = null;
+		}
+		const details = {
+			Gen: evo.gen,
+			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+			Stage: (Dex.getSpecies(prevoSpecies.prevo).exists ? 3 : 2),
+		};
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
+		this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+	},
+	showevohelp: [
+		`/showevo <Pok\u00e9mon> - Shows the changes that a Pok\u00e9mon applies in Cross Evolution`,
 	],
 };

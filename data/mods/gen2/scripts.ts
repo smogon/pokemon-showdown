@@ -2,7 +2,7 @@
  * Gen 2 scripts.
  */
 
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 2,
 	// BattlePokemon scripts.
@@ -40,7 +40,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 
 			// Gen 2 caps stats at 999 and min is 1.
-			stat = this.battle.dex.clampIntRange(stat, 1, 999);
+			stat = this.battle.clampIntRange(stat, 1, 999);
 			if (fastReturn) return stat;
 
 			// Screens
@@ -527,11 +527,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
-		critRatio = this.dex.clampIntRange(critRatio, 0, 5);
+		critRatio = this.clampIntRange(critRatio, 0, 5);
 		const critMult = [0, 16, 8, 4, 3, 2];
 		let isCrit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
@@ -559,7 +559,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		let level = pokemon.level;
@@ -637,13 +637,13 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (attack >= 1024 || defense >= 1024) {
 				this.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
 			}
-			attack = this.dex.clampIntRange(Math.floor(attack / 4) % 256, 1);
-			defense = this.dex.clampIntRange(Math.floor(defense / 4) % 256, 1);
+			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
 		// Self destruct moves halve defense at this point.
 		if (move.selfdestruct && defType === 'def') {
-			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		// Let's go with the calculation now that we have what we need.
@@ -654,7 +654,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.dex.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// Weather modifiers
