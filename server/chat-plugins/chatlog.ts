@@ -745,14 +745,13 @@ export const commands: ChatCommands = {
 		);
 	},
 	searchlogshelp() {
-		const buffer = `<details class="readmore"><summary>/searchlogs [arguments] -` +
-			`searches logs in the current room using the [arguments].</summary>` +
-			`A room can be specified using the argument <code>room: [roomid].</code> Defaults to current room.<br />` +
+		const buffer = `<details class="readmore"><summary><code>/searchlogs [arguments]</code>: ` +
+			`searches logs in the current room using the <code>[arguments]</code>.</summary>` +
+			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
 			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
-			`A date can be specified using the argument <code>date: [month]</code>. Defaults to "all."<br />` +
-			"Date formatting is ISO formatting (YYYY-MM-DD.) E.g 2020-05<br />" +
+			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
 			`All other arguments will be considered part of the search ` +
-			`(if there's more than one, it will search for lines containing all of the terms.)<br />` +
+			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # &</div>";
 		return this.sendReplyBox(buffer);
 	},
