@@ -409,7 +409,6 @@ export class TeamValidator {
 		ability = dex.getAbility(set.ability);
 
 		let outOfBattleSpecies = species;
-		const learnsetSpecies = dex.getLearnsetData(outOfBattleSpecies.id);
 		let tierSpecies = species;
 		if (ability.id === 'battlebond' && species.id === 'greninja') {
 			outOfBattleSpecies = dex.getSpecies('greninjaash');
@@ -575,6 +574,7 @@ export class TeamValidator {
 
 		const lsetProblems = this.reconcileLearnset(outOfBattleSpecies, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
+		const learnsetSpecies = dex.getLearnsetData(outOfBattleSpecies.id);
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
