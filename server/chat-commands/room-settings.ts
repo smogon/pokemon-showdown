@@ -1561,8 +1561,7 @@ export const roomSettings: SettingsHandler[] = [
 export const pages: PageTable = {
 	permissions(args, user, connection) {
 		this.title = `[Permissions]`;
-		const room = this.extractRoom();
-		if (!room) return `<h2>This room does not exist or does not support permissions.</h2>`;
+		const room = this.requireRoom();
 		if (!room.auth.atLeast(user, '%')) return `<h2>Access denied.</h2>`;
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
