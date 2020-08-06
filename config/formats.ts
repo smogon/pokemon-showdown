@@ -117,26 +117,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		maxLevel: 5,
-		searchShow: false,
-		challengeShow: false,
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
 			'Chlorophyll', 'Moody', 'Baton Pass',
 		],
-	},
-	{
-		name: "[Gen 8] LC (suspect test)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">LC Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		maxLevel: 5,
-		rated: "[Gen 8] LC",
-		ruleset: ['[Gen 8] LC'],
 		onBegin() {
 			if (this.rated && this.format.id === 'gen8lc') {
 				this.add('html', '<div class="broadcast-blue"><strong>Little Cup is currently suspecting Rufflet! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668142/">suspect thread</a>.</strong></div>');
