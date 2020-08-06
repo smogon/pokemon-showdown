@@ -1,20 +1,14 @@
 /**
- * Modlog
+ * Modlog viewer
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Interface for viewing and searching modlog. These run in a
- * subprocess.
- *
  * Also handles searching battle logs.
- *
- * Actually writing to modlog is handled in chat.js, rooms.js, and
- * roomlogs.js
+ * Actually reading, writing, and searching modlog is handled in modlog.ts.
  *
  * @license MIT
  */
 
 import * as child_process from 'child_process';
-import * as path from 'path';
 import * as util from 'util';
 import * as Dashycode from '../../lib/dashycode';
 
@@ -24,6 +18,7 @@ import {QueryProcessManager} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {Dex} from '../../sim/dex';
 import {Config} from '../config-loader';
+import {checkRipgrepAvailability, ModlogID} from '../modlog';
 
 interface Results {
 	[k: string]: number;
@@ -35,83 +30,20 @@ interface Results {
 
 const execFile = util.promisify(child_process.execFile);
 
-const MAX_PROCESSES = 1;
+const MAX_BATTLESEARCH_PROCESSES = 1;
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
 const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
-// If a modlog query takes longer than this, it will be logged.
-const LONG_QUERY_DURATION = 2000;
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
-const LOG_PATH = 'logs/modlog/';
 const IPS_REGEX = /[([]([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]/g;
-
-const PUNISHMENTS = [
-	'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE', 'CRISISDEMOTE',
-	'WEEKLOCK', 'LOCK', 'UNLOCK', 'UNLOCKNAME', 'UNLOCKRANGE', 'UNLOCKIP', 'BAN',
-	'UNBAN', 'RANGEBAN', 'UNRANGEBAN', 'RANGELOCK', 'TRUSTUSER', 'UNTRUSTUSER',
-	'FORCERENAME', 'BLACKLIST', 'BATTLEBAN', 'UNBATTLEBAN', 'NAMEBLACKLIST',
-	'KICKBATTLE', 'TICKETBAN', 'UNTICKETBAN', 'HIDETEXT', 'HIDEALTSTEXT', 'REDIRECT',
-	'NOTE', 'MAFIAHOSTBAN', 'MAFIAUNHOSTBAN', 'GIVEAWAYBAN', 'GIVEAWAYUNBAN',
-	'TOUR BAN', 'TOUR UNBAN', 'AUTOLOCK', 'AUTONAMELOCK', 'NAMELOCK', 'UNNAMELOCK',
-	'AUTOBAN', 'MONTHLOCK',
-];
-const PUNISHMENTS_REGEX_STRING = `\\b(${PUNISHMENTS.join('|')}):.*`;
-
-class SortedLimitedLengthList {
-	maxSize: number;
-	list: string[];
-
-	constructor(maxSize: number) {
-		this.maxSize = maxSize;
-		this.list = [];
-	}
-
-	getListClone() {
-		return this.list.slice();
-	}
-
-	insert(element: string) {
-		let insertedAt = -1;
-		for (let i = this.list.length - 1; i >= 0; i--) {
-			if (element.localeCompare(this.list[i]) < 0) {
-				insertedAt = i + 1;
-				if (i === this.list.length - 1) {
-					this.list.push(element);
-					break;
-				}
-				this.list.splice(i + 1, 0, element);
-				break;
-			}
-		}
-		if (insertedAt < 0) this.list.splice(0, 0, element);
-		if (this.list.length > this.maxSize) {
-			this.list.pop();
-		}
-	}
-}
 
 /*********************************************************
  * Modlog Functions
  *********************************************************/
 
-function checkRipgrepAvailability() {
-	if (Config.ripgrepmodlog === undefined) {
-		Config.ripgrepmodlog = (async () => {
-			try {
-				await execFile('rg', ['--version'], {cwd: path.normalize(`${__dirname}/../`)});
-				await execFile('tac', ['--version'], {cwd: path.normalize(`${__dirname}/../`)});
-				return true;
-			} catch (error) {
-				return false;
-			}
-		})();
-	}
-	return Config.ripgrepmodlog;
-}
-
 function getMoreButton(
-	roomid: RoomID | 'global', search: string, useExactSearch: boolean,
+	roomid: ModlogID, search: string, useExactSearch: boolean,
 	lines: number, maxLines: number, onlyPunishments: boolean
 ) {
 	let newLines = 0;
@@ -129,94 +61,8 @@ function getMoreButton(
 	}
 }
 
-async function runModlog(
-	roomidList: RoomID[], searchString: string, exactSearch: boolean,
-	maxLines: number, onlyPunishments: boolean
-) {
-	const useRipgrep = await checkRipgrepAvailability();
-	let fileNameList: string[] = [];
-	let checkAllRooms = false;
-	for (const roomid of roomidList) {
-		if (roomid === 'all') {
-			checkAllRooms = true;
-			const fileList = await FS(LOG_PATH).readdir();
-			for (const file of fileList) {
-				if (file !== 'README.md' && file !== 'modlog_global.txt') fileNameList.push(file);
-			}
-		} else {
-			fileNameList.push(`modlog_${roomid}.txt`);
-		}
-	}
-	fileNameList = fileNameList.map(filename => `${LOG_PATH}${filename}`);
-
-	// Ensure regexString can never be greater than or equal to the value of
-	// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
-	// searchString with max length MAX_QUERY_LENGTH. Otherwise, the modlog
-	// child process will crash when attempting to execute any RegExp
-	// constructed with it (i.e. when not configured to use ripgrep).
-	let regexString;
-	if (!searchString) {
-		regexString = '.';
-	} else if (exactSearch) {
-		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
-	} else {
-		searchString = toID(searchString);
-		regexString = `[^a-zA-Z0-9]${[...searchString].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
-	}
-	if (onlyPunishments) regexString = `${PUNISHMENTS_REGEX_STRING}${regexString}`;
-
-	const results = new SortedLimitedLengthList(maxLines);
-	if (useRipgrep) {
-		// the entire directory is searched by default, no need to list every file manually
-		if (checkAllRooms) fileNameList = [LOG_PATH];
-		await runRipgrepModlog(fileNameList, regexString, results, maxLines);
-	} else {
-		const searchStringRegex = searchString ? new RegExp(regexString, 'i') : null;
-		for (const fileName of fileNameList) {
-			await checkRoomModlog(fileName, searchStringRegex, results);
-		}
-	}
-	const resultData = results.getListClone();
-	return resultData;
-}
-
-async function checkRoomModlog(pathString: string, regex: RegExp | null, results: SortedLimitedLengthList) {
-	const fileStream = FS(pathString).createReadStream();
-	let line;
-	while ((line = await fileStream.readLine()) !== null) {
-		if (!regex || regex.test(line)) {
-			results.insert(line);
-		}
-	}
-	void fileStream.destroy();
-	return results;
-}
-
-async function runRipgrepModlog(paths: string[], regexString: string, results: SortedLimitedLengthList, lines: number) {
-	let output;
-	try {
-		const options = [
-			'-i',
-			'-m', '' + lines,
-			'--pre', 'tac',
-			'-e', regexString,
-			'--no-filename',
-			'--no-line-number',
-			...paths,
-			'-g', '!modlog_global.txt', '-g', '!README.md',
-		];
-		output = await execFile('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
-	} catch (error) {
-		return results;
-	}
-	for (const fileName of output.stdout.split('\n').reverse()) {
-		if (fileName) results.insert(fileName);
-	}
-	return results;
-}
-
 function prettifyResults(
-	resultArray: string[], roomid: RoomID | 'global', searchString: string, exactSearch: boolean,
+	resultArray: string[], roomid: ModlogID, searchString: string, exactSearch: boolean,
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
 ) {
 	if (resultArray === null) {
@@ -294,10 +140,9 @@ function prettifyResults(
 }
 
 async function getModlog(
-	connection: Connection, roomid: RoomID | 'global' = 'global', searchString = '',
+	connection: Connection, roomid: ModlogID = 'global', searchString = '',
 	maxLines = 20, onlyPunishments = false, timed = false
 ) {
-	const startTime = Date.now();
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
 
@@ -316,7 +161,7 @@ async function getModlog(
 	const addModlogLinks = !!(
 		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
-	if (hideIps && /^\[?[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\]?$/.test(searchString)) {
+	if (hideIps && /^\["']?[?[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\]?["']?$/.test(searchString)) {
 		connection.popup(`You cannot search for IPs.`);
 		return;
 	}
@@ -331,21 +176,11 @@ async function getModlog(
 		searchString = searchString.substring(1, searchString.length - 1);
 	}
 
-	let roomidList;
-	// handle this here so the child process doesn't have to load rooms data
-	if (roomid === 'public') {
-		roomidList = [...Rooms.rooms.values()].filter(
-			room => !(room.settings.isPrivate || room.settings.isPersonal)
-		).map(room => room.roomid);
-	} else {
-		roomidList = [roomid];
-	}
+	const response = await Rooms.Modlog.search(roomid, searchString, maxLines, onlyPunishments);
 
-	const query = {cmd: 'modlog', roomidList, searchString, exactSearch, maxLines, onlyPunishments};
-	const response = await PM.query(query);
 	connection.send(
 		prettifyResults(
-			response,
+			response.results,
 			roomid,
 			searchString,
 			exactSearch,
@@ -355,9 +190,7 @@ async function getModlog(
 			onlyPunishments
 		)
 	);
-	const duration = Date.now() - startTime;
-	if (timed) connection.popup(`The modlog query took ${duration} ms to complete.`);
-	if (duration > LONG_QUERY_DURATION) console.log(`Long modlog query took ${duration} ms to complete:`, query);
+	if (timed) connection.popup(`The modlog query took ${response.duration} ms to complete.`);
 }
 
 /*********************************************************
@@ -451,7 +284,7 @@ async function getBattleSearch(
 	const user = connection.user;
 	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
-	const response = await PM.query({cmd: 'battlesearch', userid, turnLimit, month, tierid, date});
+	const response = await PM.query({userid, turnLimit, month, tierid, date});
 	connection.send(buildResults(response, userid, turnLimit, month, tierid, date));
 }
 
@@ -575,7 +408,7 @@ export const commands: ChatCommands = {
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		let roomid: RoomID | 'global' = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: ModlogID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			const targets = target.split(',');
@@ -588,7 +421,7 @@ export const commands: ChatCommands = {
 		// if a room alias was used, replace alias with actual id
 		if (targetRoom) roomid = targetRoom.roomid;
 
-		if (roomid.includes('-')) {
+		if (Rooms.Modlog.getSharedID(roomid)) {
 			if (user.can('modlog')) {
 				// default to global modlog for staff convenience
 				roomid = 'global';
@@ -657,34 +490,17 @@ export const commands: ChatCommands = {
  *********************************************************/
 
 export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async data => {
-	switch (data.cmd) {
-	case 'modlog':
-		const {roomidList, searchString, exactSearch, maxLines, onlyPunishments} = data;
-		try {
-			return await runModlog(roomidList, searchString, exactSearch, maxLines, onlyPunishments);
-		} catch (err) {
-			Monitor.crashlog(err, 'A modlog query', {
-				roomidList,
-				searchString,
-				exactSearch,
-				maxLines,
-			});
-		}
-		break;
-	case 'battlesearch':
-		const {userid, turnLimit, month, tierid, date} = data;
-		try {
-			return await runBattleSearch(userid, turnLimit, month, tierid, date);
-		} catch (err) {
-			Monitor.crashlog(err, 'A battle search query', {
-				userid,
-				turnLimit,
-				month,
-				tierid,
-				date,
-			});
-		}
-		break;
+	const {userid, turnLimit, month, tierid, date} = data;
+	try {
+		return await runBattleSearch(userid, turnLimit, month, tierid, date);
+	} catch (err) {
+		Monitor.crashlog(err, 'A battle search query', {
+			userid,
+			turnLimit,
+			month,
+			tierid,
+			date,
+		});
 	}
 	return null;
 });
@@ -694,7 +510,7 @@ if (!PM.isParentProcess) {
 	global.Config = Config;
 	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A modlog process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A battle search process', details: {} | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -702,13 +518,13 @@ if (!PM.isParentProcess) {
 	};
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A modlog child process');
+			Monitor.crashlog(err, 'A battle search child process');
 		}
 	});
 	global.Dex = Dex;
 	global.toID = Dex.getId;
 	// eslint-disable-next-line no-eval
-	Repl.start('modlog', cmd => eval(cmd));
+	Repl.start('battlesearch', cmd => eval(cmd));
 } else {
-	PM.spawn(MAX_PROCESSES);
+	PM.spawn(MAX_BATTLESEARCH_PROCESSES);
 }

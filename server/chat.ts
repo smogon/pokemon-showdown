@@ -808,7 +808,7 @@ export class CommandContext extends MessageContext {
 		note: string | null = null,
 		options: Partial<{noalts: any, noip: any}> = {}
 	) {
-		let buf = `(${this.room?.roomid || 'global'}${this.room?.tour ? ` tournament: ${this.room.tour.roomid}` : ``}) ${action}: `;
+		let buf = `${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${toID(user)}]`;
