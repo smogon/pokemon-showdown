@@ -1719,6 +1719,25 @@ export const Chat = new class {
 		if (!htmlContent) return '';
 		return htmlContent.replace(/<[^>]*>/g, '');
 	}
+	/**
+	 * Validates input regex and ensures it won't crash.
+	 */
+	validateRegex(word: string) {
+		word = word.trim();
+		if (word.endsWith('|') || word.startsWith('|')) {
+			throw new Chat.ErrorMessage(`Your regex was rejected because it included an unterminated |.`);
+		}
+		try {
+			// eslint-disable-next-line no-new
+			new RegExp(word);
+		} catch (e) {
+			throw new Chat.ErrorMessage(
+				e.message.startsWith('Invalid regular expression: ') ?
+					e.message :
+					`Invalid regular expression: /${word}/: ${e.message}`
+			);
+		}
+	}
 
 	/**
 	 * Returns singular (defaulting to '') if num is 1, or plural
