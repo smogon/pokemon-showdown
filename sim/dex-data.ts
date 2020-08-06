@@ -705,12 +705,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
 	 * Do not use for LC bans (usage tier will override LC Uber).
 	 */
-	readonly tier: string;
+	readonly tier: TierTypes.Singles | TierTypes.Other;
 	/**
 	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
 	 * Do not use for LC bans (usage tier will override LC Uber).
 	 */
-	readonly doublesTier: string;
+	readonly doublesTier: TierTypes.Doubles | TierTypes.Other;
 	readonly randomBattleMoves?: readonly ID[];
 	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
