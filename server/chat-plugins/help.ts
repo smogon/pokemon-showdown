@@ -279,7 +279,7 @@ export const commands: ChatCommands = {
 				Answerer.disabled = true;
 			}
 			Answerer.writeState();
-			this.privateModAction(`(${user.name} ${Answerer.disabled ? 'disabled' : 'enabled'} the Help auto-response filter.)`);
+			this.privateModAction(`${user.name} ${Answerer.disabled ? 'disabled' : 'enabled'} the Help auto-response filter.`);
 			this.modlog(`HELPFILTER`, null, Answerer.disabled ? 'OFF' : 'ON');
 		},
 		forceadd: 'add',
