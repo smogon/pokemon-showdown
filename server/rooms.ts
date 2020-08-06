@@ -1412,7 +1412,7 @@ export class GlobalRoomState {
 		const stack = err.stack || err.message || err.name || '';
 		const stackLines = Utils.escapeHTML(stack).split(`\n`);
 
-		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stackLines.slice(1).join('<br>')}</details></div>`;
+		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stackLines.slice(1).join('<br />')}</details></div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
