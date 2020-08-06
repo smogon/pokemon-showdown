@@ -1034,7 +1034,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			}
 
 			const name = set.name;
-			if (this.ruleTable.isBanned(`pokemon:${species.id}`) || this.ruleTable.isBanned(`basepokemon:${species.id}`)) {
+			if (this.ruleTable.isBannedSpecies(species)) {
 				return this.validateSet(set, teamHas);
 			}
 
@@ -1059,7 +1059,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				if (validSources.includes(evoFamily)) continue;
 
 				set.species = donorSpecies.name;
-				if (!set.name) set.name = donorSpecies.baseSpecies;
+				set.name = donorSpecies.baseSpecies;
 				const problems = this.validateSet(set, teamHas) || [];
 				if (!problems.length) {
 					validSources.push(evoFamily);
