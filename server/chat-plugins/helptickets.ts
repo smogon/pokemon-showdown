@@ -1333,6 +1333,7 @@ export const commands: ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 
+			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];
@@ -1348,8 +1349,6 @@ export const commands: ChatCommands = {
 			writeTickets();
 			notifyStaff();
 			notifyStaff();
-
-			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			return true;
 		},
 		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
