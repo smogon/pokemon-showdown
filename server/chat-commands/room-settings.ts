@@ -320,7 +320,7 @@ export const commands: ChatCommands = {
 
 			if (!rank) rank = `default`;
 			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
-			return this.privateModAction(`(${user.name} set the required rank for ${perm} to ${rank}.)`);
+			return this.privateModAction(`${user.name} set the required rank for ${perm} to ${rank}.`);
 		},
 		sethelp: [
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
