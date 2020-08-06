@@ -840,7 +840,7 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.cmd, true)) return true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
 			// If we need to use the true group's permission, reset the visual group
 			this.user.resetVisualGroup();
@@ -857,7 +857,7 @@ export class CommandContext extends MessageContext {
 			// @ts-ignore (can be several things, depending)
 			return this.can(permission, target, room);
 		}
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.cmd, true)) return true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
 			// If we need to use the true group's permission, reset the visual group
 			this.user.resetVisualGroup();
