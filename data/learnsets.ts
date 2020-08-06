@@ -28982,7 +28982,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 6, level: 10, moves: ["recover", "healbell", "safeguard", "holdback"], pokeball: "luxuryball"},
 			{generation: 6, level: 100, moves: ["confusion", "recover", "healbell", "safeguard"], pokeball: "cherishball"},
 			{generation: 7, level: 30, moves: ["healbell", "safeguard", "ancientpower", "futuresight"], pokeball: "cherishball"},
-			{generation: 8, level: 60, nature: "Quirky", perfectIVs: 3, moves: ["magicalleaf", "futuresight", "lifedew", "healbell"], pokeball: "cherishball"},
+			{generation: 8, level: 60, shiny: true, nature: "Quirky", perfectIVs: 3, moves: ["magicalleaf", "futuresight", "lifedew", "healbell"], pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 2, level: 30},
