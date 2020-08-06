@@ -268,8 +268,7 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	lottery(query, user) {
 		this.title = 'Lottery';
-		const room = this.extractRoom();
-		if (!room) return;
+		const room = this.requireRoom();
 
 		let buf = '<div class="pad">';
 		const lottery = lotteries[room.roomid];

@@ -53,8 +53,7 @@ export const destroy = () => {
 export const pages: PageTable = {
 	async spotlights(query, user, connection) {
 		this.title = 'Daily Spotlights';
-		const room = this.extractRoom();
-		if (!room) return;
+		const room = this.requireRoom();
 
 		let buf = `<div class="pad ladder"><h2>Daily Spotlights</h2>`;
 		if (!spotlights[room.roomid]) {

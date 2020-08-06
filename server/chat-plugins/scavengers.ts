@@ -2416,8 +2416,7 @@ const ScavengerCommands: ChatCommands = {
 export const pages: PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
-		const room = this.extractRoom();
-		if (!room) return;
+		const room = this.requireRoom();
 
 		let buf = "";
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
