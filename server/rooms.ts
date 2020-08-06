@@ -1408,10 +1408,11 @@ export class GlobalRoomState {
 			return;
 		}
 		this.lastReportedCrash = time;
-		const stack = err.stack || err.message || err.name || '';
-		const stackLines = (err ? Utils.escapeHTML(stack).split(`\n`) : []);
 
-		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
+		const stack = (err && (err.stack || err.message || err.name)) || '';
+		const stackLines = Utils.escapeHTML(stack).split(`\n`);
+
+		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stackLines.slice(1).join('<br />')}</details></div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
