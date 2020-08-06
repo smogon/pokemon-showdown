@@ -125,7 +125,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${nextGroupName}.`);
 			}
 		}
-		if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank >= 2) {
+		if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
 			return this.errorReply("Locked users can't be promoted.");
 		}
 
