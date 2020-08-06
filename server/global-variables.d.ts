@@ -20,7 +20,7 @@ declare global {
 	namespace NodeJS {
 		interface Global {
 			Dex: any;
-			toID: (item: string) => string;
+			toID: (item: any) => ID;
 			IPTools: any;
 			Config: any;
 			Chat: any;
@@ -46,4 +46,5 @@ declare global {
 	const Roomlogs: typeof RoomlogsType.Roomlogs;
 	const Users: typeof UsersType.Users;
 	const Verifier: typeof VerifierType;
+	const toID: typeof Dex.toID;
 }
