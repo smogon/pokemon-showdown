@@ -740,7 +740,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Overwrite un-fainted pokemon other than the user
 			for (const [i, mon] of currentTeam.entries()) {
 				if (mon.fainted || !mon.hp || mon.position === source.position) continue;
-				let set = team.shift();
+				const set = team.shift();
 				if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
 				const oldSet = carryOver[i];
 
