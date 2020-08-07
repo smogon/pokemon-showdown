@@ -413,6 +413,10 @@ export class CommandContext extends MessageContext {
 				throw new Error("Too much command recursion");
 			}
 			subcontext.message = msg;
+			subcontext.cmd = '';
+			subcontext.fullCmd = '';
+			subcontext.cmdToken = '';
+			subcontext.target = '';
 			return subcontext.parse();
 		}
 		let message: any = this.message;
