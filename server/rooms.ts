@@ -1893,4 +1893,3 @@ export const Rooms = {
 	PM: RoomBattlePM,
 };
 
-Rooms.global.loadBattleState();
