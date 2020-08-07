@@ -751,13 +751,13 @@ class Trivia extends Rooms.RoomGame {
 	getWinningMessage(winners: TopPlayer[]) {
 		const prizes = this.getPrizes();
 		const [p1, p2, p3] = winners;
-		const initialPart = Utils.html`${this.room.tr`${p1.name} won the game with a final score of <strong>${p1.player.points}</strong>, and `}`;
+		const initialPart = this.room.tr`${Utils.escapeHTML(p1.name)} won the game with a final score of <strong>${p1.player.points}</strong>, and `;
 		switch (winners.length) {
 		case 1:
 			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
 		case 2:
 			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
-				Utils.html`${this.room.tr`${p2.name} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`}`;
+			this.room.tr`${Utils.escapeHTML(p2.name)} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
 		case 3:
 			return initialPart + Utils.html`${this.room.tr`${p2.name} and ${p3.name} were runners-up. `}` +
 				this.room.tr`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
