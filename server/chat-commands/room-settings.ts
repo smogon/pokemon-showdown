@@ -766,7 +766,6 @@ export const commands: ChatCommands = {
 			isPrivate: 'hidden',
 			creationTime: Date.now(),
 			modjoin: parent ? null : '+',
-			parentid: parent,
 			auth: {},
 		};
 		const settings = parent ? room.settings : defaultSettings;
