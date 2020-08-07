@@ -12,9 +12,6 @@ import {TeamValidator as TeamValidatorType} from './team-validator';
 declare global {
 	namespace NodeJS {
 		interface Global {
-			Dex: any
-			toID(input: any): string
-			TeamValidator: any
 			__version: {head: string, origin?: string, tree?: string}
 		}
 	}
@@ -37,7 +34,5 @@ declare global {
 	const Condition: DataType.Condition;
 	const RuleTable: DataType.RuleTable;
 	const Species: DataType.Species;
-	const Tools: DataType.Tools;
 	const TypeInfo: DataType.TypeInfo;
-	const toID: typeof DataType.Tools.getId;
 }

@@ -1,6 +1,7 @@
 /* eslint max-len: ["error", 240] */
 
 import RandomGen5Teams from '../gen5/random-teams';
+import {toID} from '../../../sim/dex';
 
 export class RandomGen4Teams extends RandomGen5Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {

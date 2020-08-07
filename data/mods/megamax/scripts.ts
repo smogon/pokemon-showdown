@@ -2,8 +2,8 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 8,
 	init() {
 		const addNewMoves = (pokemonid: string, moveids: string[], tutor = false) => {
-			for (const moveid of moveids.map(this.getId)) {
-				this.modData('Learnsets', this.getId(pokemonid)).learnset[moveid] = [`8${tutor ? 'T' : 'M'}`];
+			for (const moveid of moveids.map(this.toID)) {
+				this.modData('Learnsets', this.toID(pokemonid)).learnset[moveid] = [`8${tutor ? 'T' : 'M'}`];
 			}
 		};
 		for (const i in this.data.FormatsData) {
@@ -50,7 +50,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		const item = pokemon.getItem();
 		if (
 			altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove
 		) {
 			return altForme.name;
 		}

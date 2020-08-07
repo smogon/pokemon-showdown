@@ -4,55 +4,36 @@
  *
  * @license MIT license
  */
+import {Utils} from '../lib/utils';
 
-export class Tools {
-	/**
-	 * Safely converts the passed variable into a string. Unlike '' + str,
-	 * String(str), or str.toString(), Dex.getString is guaranteed not to
-	 * crash.
-	 *
-	 * Specifically, the fear with untrusted JSON is an object like:
-	 *
-	 *     let a = {"toString": "this is not a function"};
-	 *     console.log(`a is ${a}`);
-	 *
-	 * This will crash (because a.toString() is not a function). Instead,
-	 * Dex.getString simply returns '' if the passed variable isn't a
-	 * string or a number.
-	 */
-	static getString(str: any): string {
-		return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
-	}
-
-	/**
-	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
-	 * characters.
-	 *
-	 * If a string is passed, it will be converted to lowercase and
-	 * non-alphanumeric characters will be stripped.
-	 *
-	 * If an object with an ID is passed, its ID will be returned.
-	 * Otherwise, an empty string will be returned.
-	 *
-	 * Dex.getId is generally assigned to the global toID, because of how
-	 * commonly it's used.
-	 */
-	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
+/**
+* Converts anything to an ID. An ID must have only lowercase alphanumeric
+* characters.
+*
+* If a string is passed, it will be converted to lowercase and
+* non-alphanumeric characters will be stripped.
+*
+* If an object with an ID is passed, its ID will be returned.
+* Otherwise, an empty string will be returned.
+*
+* Generally assigned to the global toID, because of how
+* commonly it's used.
+*/
+export function toID(text: any): ID {
+	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	static getId(text: any): ID {
-		if (text && text.id) {
-			text = text.id;
-		} else if (text && text.userid) {
-			text = text.userid;
-		} else if (text && text.roomid) {
-			text = text.roomid;
-		}
-		if (typeof text !== 'string' && typeof text !== 'number') return '';
-		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
+	if (text && text.id) {
+		text = text.id;
+	} else if (text && text.userid) {
+		text = text.userid;
+	} else if (text && text.roomid) {
+		text = text.roomid;
 	}
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
-const toID = Tools.getId;
+
 
 export class BasicEffect implements EffectData {
 	/**
@@ -124,10 +105,10 @@ export class BasicEffect implements EffectData {
 		this.exists = true;
 		data = combine(this, data, ...moreData);
 
-		this.name = Tools.getString(data.name).trim();
+		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
-		this.fullname = Tools.getString(data.fullname) || this.name;
-		this.effectType = Tools.getString(data.effectType) as EffectType || 'Condition';
+		this.fullname = Utils.getString(data.fullname) || this.name;
+		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
@@ -344,8 +325,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		super(data, ...moreData);
 		data = this;
 
-		this.mod = Tools.getString(data.mod) || 'gen8';
-		this.effectType = Tools.getString(data.effectType) as FormatEffectType || 'Format';
+		this.mod = Utils.getString(data.mod) || 'gen8';
+		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
 		this.debug = !!data.debug;
 		this.rated = (data.rated !== false);
 		this.gameType = data.gameType || 'singles';
@@ -942,12 +923,12 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
-		this.type = Tools.getString(data.type);
+		this.type = Utils.getString(data.type);
 		this.target = data.target;
 		this.basePower = Number(data.basePower!);
 		this.accuracy = data.accuracy!;
 		this.critRatio = Number(data.critRatio) || 1;
-		this.baseMoveType = Tools.getString(data.baseMoveType) || this.type;
+		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || null;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
 		this.priority = Number(data.priority) || 0;
@@ -1106,8 +1087,8 @@ export class TypeInfo implements Readonly<TypeData> {
 		data = combine(this, data, ...moreData);
 
 		this.id = data.id || '';
-		this.name = Tools.getString(data.name).trim();
-		this.effectType = Tools.getString(data.effectType) as TypeInfoEffectType || 'Type';
+		this.name = Utils.getString(data.name).trim();
+		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
 		this.exists = !!(this.exists && this.id);
 		this.gen = data.gen || 0;
 		this.damageTaken = data.damageTaken || {};

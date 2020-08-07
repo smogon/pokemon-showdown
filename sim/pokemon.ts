@@ -6,6 +6,7 @@
  */
 
 import {State} from './state';
+import {toID} from './dex';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {

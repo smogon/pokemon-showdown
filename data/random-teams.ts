@@ -1,6 +1,6 @@
 /* eslint max-len: ["error", 240] */
 
-import {Dex} from '../sim/dex';
+import {Dex, toID} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
 
 export interface TeamData {
