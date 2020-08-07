@@ -184,7 +184,7 @@
 		"The poll timer was set to ${timeout} minute(s) by ${user.name}.": "De poll timer is gezet op ${timeout} minuten door ${user.name}.",
 		"The poll timer is on and will end in ${poll.timeoutMins} minute(s).": "De poll timer staat aan en zal stoppen in ${poll.timeoutMins} minuten.",
 		"The poll timer is off.": "De poll timer staat uit.",
-		"The poll was ended by ${user.name}.": "De poll is beëindigd door ${user.name}.",
+		"The poll was ended by ${user.name}.": "De poll is be&euml;indigd door ${user.name}.",
 		"Queued polls:": "Polls in wachtrij:",
 		"Refresh": "Vernieuw",
 		"No polls queued.": "Geen polls in wachtrij.",
