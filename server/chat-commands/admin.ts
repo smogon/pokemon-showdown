@@ -392,18 +392,8 @@ export const commands: ChatCommands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				let streams = [];
-				if (Rooms.Modlog.destroyAll && Rooms.Modlog.getActiveStreamIDs) {
-					streams = Rooms.Modlog.getActiveStreamIDs();
-					await Rooms.Modlog.destroyAll();
-				} else {
-					// This is a failsafe that will let us hotpatch modlogs without needing to restart
-					// to load in the extra methods for hotpatching.
-					// It can be removed as soon as modlog is hotpatched for the first time.
-					streams = [...Rooms.Modlog.streams.keys()];
-					for (const stream of streams) {
-						await Rooms.Modlog.destroy(stream);
-					}
-				}
+				streams = Rooms.Modlog.getActiveStreamIDs();
+				await Rooms.Modlog.destroyAll();
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
