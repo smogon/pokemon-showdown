@@ -32,7 +32,7 @@ export const Scripts: BattleScriptsData = {
 		} else if (maxMove) {
 			move = this.getActiveMaxMove(baseMove, pokemon);
 		}
-		
+
 		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
