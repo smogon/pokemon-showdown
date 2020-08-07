@@ -376,7 +376,7 @@ export const commands: ChatCommands = {
 				curRoom.minorActivityQueue!.splice(slot - 1, 1);
 				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
 
-				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${slot}`);
+				curRoom.modlog(`DELETEQUEUE: by ${user}: ${slot}`);
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
 				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
