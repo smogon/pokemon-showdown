@@ -1047,18 +1047,6 @@ export const Punishments = new class {
 		return undefined;
 	}
 
-	/**
-	 * @deprecated
-	 */
-	shortenHost(host: string) {
-		if (host.slice(-7) === '-nohost') return host;
-		let dotLoc = host.lastIndexOf('.');
-		const tld = host.substr(dotLoc);
-		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
-		dotLoc = host.lastIndexOf('.', dotLoc - 1);
-		return host.substr(dotLoc + 1);
-	}
-
 	/** Defined in Punishments.loadBanlist */
 	checkRangeBanned(ip: string) {
 		return false;
