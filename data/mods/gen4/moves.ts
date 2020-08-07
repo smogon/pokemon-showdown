@@ -1548,6 +1548,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					target.removeVolatile('substitute');
 					target.addVolatile('substitutebroken');
 					if (target.volatiles['substitutebroken']) target.volatiles['substitutebroken'].move = move.id;
+					target.subFainted = true;
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
