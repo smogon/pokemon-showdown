@@ -47,4 +47,21 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Robb576 with Photon Geyser, it can use Integer Overflow.",
 	},
+	// xJoelituh
+	rarebone: {
+		inherit: true,
+		onModifyAtkPriority: 2,
+		onModifyAtk(atk, source) {
+			return this.chainModify(1.5);
+		},
+		onModifyDefPriority: 2,
+		onModifyDef(def, source) {
+			return this.chainModify(1.5);
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			return this.chainModify(1.5);
+		},
+		desc: "1.5x to Attack, Defense, and Special Defense.",
+	},
 };

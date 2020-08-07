@@ -2260,7 +2260,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		name: "Soul-Shattering Stare",
 		pp: 10,
 		priority: -7,
-		flags: {authentic: 1},
+		flags: {protect: 1, authentic: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2298,6 +2298,36 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Water') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+
+	// xJoelituh
+	burnbone: {
+		accuracy: 90,
+		basePower: 0,
+		category: "Status",
+		desc: "This pokemon heals 33% of their health if this move burns this pokemon.",
+		shortDesc: "Heals 33% of their health if this move burns.",
+		name: "Burn Bone",
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1, reflectable: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Will-O-Wisp', target);
+			this.add('-anim', source, 'Shadow Bone', target);
+		},
+		onHit(target, source, move) {
+			if (target.trySetStatus('brn', source, move)) {
+				source.heal(source.baseMaxhp / 3);
+				return;
+			}
+			return false;
 		},
 		secondary: null,
 		target: "normal",

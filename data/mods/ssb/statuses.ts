@@ -849,6 +849,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('vivalospride')}|classic honestly`);
 		},
 	},
+	xjoelituh: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('xJoelituh')}|Hey, how can I help you?`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('xJoelituh')}|Hold on, I need a second opinion.`);
+		},
+		onFaint() {
+			let str = '';
+			for (let x = 0; x < 10; x++) str += String.fromCharCode(48 + this.random(79));
+			this.add(`c|${getName('xJoelituh')}|${str} ok`);
+		},
+	},
 	yuki: {
 		noCopy: true,
 		onStart(target, pokemon) {

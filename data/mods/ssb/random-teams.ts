@@ -409,6 +409,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'DRIP BAYLESS',
 		evs: {hp: 252, spa: 252, def: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	xJoelituh: {
+		species: 'Marowak-Alola', ability: 'Mountaineer', item: 'Rare Bone', gender: 'M',
+		moves: ['Poltergeist', 'Fire Punch', 'Stomping Tantrum'],
+		signatureMove: 'Burn Bone',
+		evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful', shiny: true,
+	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
 		moves: ['Quick Attack'],
