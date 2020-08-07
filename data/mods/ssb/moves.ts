@@ -740,15 +740,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Overwrite un-fainted pokemon other than the user
 			for (const [i, mon] of currentTeam.entries()) {
 				if (mon.fainted || !mon.hp || mon.position === source.position) continue;
-				let set = team.shift();
+				const set = team.shift();
 				if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
 				const oldSet = carryOver[i];
-
-				if (set.name === 'Flare' && currentTeam.filter(p => !p.fainted && p.hp).length <= 2) {
-					// Don't select Super Illusion when there are only 2 unfainted pokemon
-					set = team.shift();
-					if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
-				}
 
 				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
 				const effect = this.effect;
@@ -764,19 +758,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				pokemon.position = mon.position;
 				currentTeam[i] = pokemon;
-			}
-			// Move flare to the front of the team if Super Illusion would not activate
-			const newTeam = currentTeam.slice().map(p => (!p.fainted && p.hp) ? p.name : null);
-			if (newTeam.filter(n => n).pop() === 'Flare') {
-				// Don't swap with the current pokemon or client will softlock
-				const newIdx = source.position === 0 ? 1 : 0;
-				const idx = newTeam.indexOf('Flare');
-				const original = currentTeam[newIdx];
-				currentTeam[newIdx] = currentTeam[idx];
-				currentTeam[idx] = original;
-				// Update pokemon.position flags to prevent errors
-				currentTeam[newIdx].position = newIdx;
-				currentTeam[idx].position = idx;
 			}
 			source.side.pokemon = currentTeam;
 			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
@@ -1613,48 +1594,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-	},
-	// Flare
-	distortionblast: {
-		accuracy: 100,
-		basePower: 100,
-		category: "Special",
-		desc: "Until they switch out, Pokemon hit by this move will have all status effects and secondary move effects target themselves.",
-		shortDesc: "Hit Pokemon have status/secondaries self-target.",
-		name: "Distortion Blast",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Night Daze', target);
-			this.add('-anim', source, 'Magic Room', source);
-		},
-		volatileStatus: "distortionblast",
-		condition: {
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Distortion Blast');
-				this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was distorted!`);
-			},
-			onModifyMove(move, pokemon) {
-				if (move.status) {
-					if (!move.secondaries) move.secondaries = [];
-					move.secondaries.push({chance: 100, status: move.status});
-					delete move.status;
-				}
-				if (move.secondaries) {
-					move.secondaries = move.secondaries.map(secondary => {
-						return secondary.self || {self: secondary};
-					});
-				}
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Dark",
 	},
 	// FOMG
 	rickrollout: {
