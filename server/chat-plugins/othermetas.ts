@@ -114,7 +114,7 @@ export const commands: ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
-			bst: 0,
+			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
@@ -214,12 +214,11 @@ export const commands: ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
-			bst: 0,
+			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
 			deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
-			deltas.bst += deltas.baseStats[statId];
 		}
 		if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
