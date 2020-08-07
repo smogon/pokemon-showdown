@@ -143,7 +143,7 @@
 		"The announcement timer was turned off.": "De mededeling timer is af gezet.",
 		"Invalid time given.": "Ongeldige tijd opgegeven.",
 		"The announcement timer is off.": "De mededeling timer staat uit.",
-		"The announcement was ended by ${user.name}.": "De mededeling is be&euml;indigd door ${user.name}.",
+		"The announcement was ended by ${user.name}.": "De mededeling is beëindigd door ${user.name}.",
 		"Accepts the following commands:": "Aanvaardt de volgende commands:",
 
 		"That option is not selected.": "Die optie is niet geselecteerd.",
