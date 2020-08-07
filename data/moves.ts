@@ -18447,8 +18447,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
 					target.removeVolatile('substitute');
-					target.subFainted = true;
 				} else {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}

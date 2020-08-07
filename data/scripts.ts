@@ -32,8 +32,7 @@ export const Scripts: BattleScriptsData = {
 		} else if (maxMove) {
 			move = this.getActiveMaxMove(baseMove, pokemon);
 		}
-
-		if (target?.subFainted) target.subFainted = null;
+		
 		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
@@ -738,7 +737,7 @@ export const Scripts: BattleScriptsData = {
 			}
 		}
 
-		if (move.ohko && (!targets[0].hp || targets[0].subFainted)) this.add('-ohko');
+		if (move.ohko && !targets[0].hp) this.add('-ohko');
 
 		if (!damage.some(val => !!val || val === 0)) return damage;
 
