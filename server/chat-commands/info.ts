@@ -2004,9 +2004,6 @@ export const commands: ChatCommands = {
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(this.tr(autoconfirmedFAQ));
 		}
-		if (showAll || target === 'coil') {
-			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">${this.tr`What is COIL?`}</a>`);
-		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
 			buffer.push(`<a href="https://${Config.routes.root}/pages/ladderhelp">${this.tr`How the ladder works`}/a>`);
 		}
@@ -2017,7 +2014,7 @@ export const commands: ChatCommands = {
 			buffer.push(`<a href="https://www.smogon.com/badge_faq">${this.tr`Badge FAQ`}</a>`);
 		}
 		if (showAll || target === 'rng') {
-			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">${this.tr`How Pokémon Showdown's RNG works`}</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">${this.tr`Common misconceptions about our RNG`}</a>`);
 		}
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(this.tr(tournamentFAQ));
@@ -2028,8 +2025,8 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
+		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
 	],
 
 	analysis: 'smogdex',
