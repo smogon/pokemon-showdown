@@ -824,7 +824,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	if (
 		showAll && searches.length === 0 && !maxGen && !singleTypeSearch &&
-		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null
+		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
@@ -1482,7 +1482,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && !searches.length && !targetMons.length && !maxGen) {
+	if (showAll && !searches.length && !targetMons.length && !maxGen && !sort) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.",
 		};
