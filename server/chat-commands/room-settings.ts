@@ -292,9 +292,6 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (rank === 'default') rank = '';
-			if (!room.auth.atLeast(user, '#')) {
-				return this.errorReply(`/permissions set - Access denied.`);
-			}
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
 			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
@@ -302,6 +299,9 @@ export const commands: ChatCommands = {
 			}
 			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
+			}
+			if (!(room.auth.atLeast(user, '#') && Users.Auth.hasPermission(user, perm, null, room))) {
+				return this.errorReply(`/permissions set - Access denied.`);
 			}
 
 			const currentPermissions = room.settings.permissions || {};
