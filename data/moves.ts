@@ -16631,8 +16631,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (targetAbility.id !== sourceAbility.id) {
 				source.ability = targetAbility.id;
 				target.ability = sourceAbility.id;
-				source.abilityData = {id: toID(source.ability), target: source};
-				target.abilityData = {id: toID(target.ability), target: target};
+				source.abilityData = {id: this.toID(source.ability), target: source};
+				target.abilityData = {id: this.toID(target.ability), target: target};
 				if (target.side !== source.side) target.staleness = 'external';
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);

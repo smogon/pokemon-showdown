@@ -3,6 +3,7 @@
 import {RandomTeams, TeamData} from '../../random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib/utils';
+import {toID} from '../../../sim/dex';
 
 export class RandomGen7Teams extends RandomTeams {
 	randomFactorySets: AnyObject;

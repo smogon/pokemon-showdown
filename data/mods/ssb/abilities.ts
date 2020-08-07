@@ -242,8 +242,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 			const formes = ['oricorio', 'oricoriosensu', 'oricoriopompom', 'oricoriopau'];
-			if (formes.includes(toID(source.species.name))) {
-				formes.splice(formes.indexOf(toID(source.species.name)), 1);
+			if (formes.includes(this.toID(source.species.name))) {
+				formes.splice(formes.indexOf(this.toID(source.species.name)), 1);
 				this.add('-activate', source, 'ability: Arabesque');
 				source.m.hasTransformed = true;
 				source.formeChange(formes[this.random(formes.length)], this.effect, true);
@@ -895,7 +895,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon is immune to volatile statuses.",
 		shortDesc: "This Pokemon is immune to volatile statuses.",
 		onTryAddVolatile(status, target) {
-			if ([toID(target.name), 'furycutter', 'stockpile'].includes(status.id)) return;
+			if ([this.toID(target.name), 'furycutter', 'stockpile'].includes(status.id)) return;
 			this.add('-immune', target, '[from] ability: Numb Numb Juice');
 			return null;
 		},
@@ -1086,7 +1086,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onEnd(pokemon) {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
-				let disguisedAs = toID(pokemon.illusion.name);
+				let disguisedAs = this.toID(pokemon.illusion.name);
 				pokemon.illusion = null;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
@@ -1097,10 +1097,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.volatiles[disguisedAs]) {
 					pokemon.removeVolatile(disguisedAs);
 				}
-				if (!pokemon.volatiles[toID(pokemon.name)]) {
-					const status = this.dex.getEffect(toID(pokemon.name));
+				if (!pokemon.volatiles[this.toID(pokemon.name)]) {
+					const status = this.dex.getEffect(this.toID(pokemon.name));
 					if (status?.exists) {
-						pokemon.addVolatile(toID(pokemon.name), pokemon);
+						pokemon.addVolatile(this.toID(pokemon.name), pokemon);
 					}
 				}
 			}
