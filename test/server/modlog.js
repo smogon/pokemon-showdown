@@ -80,8 +80,8 @@ describe('Modlog (with FS writes)', () => {
 		Config.nofswriting = false;
 
 		await FS(TEST_PATH).mkdirp();
-		await FS(`${TEST_PATH}/modlog_readingtest.txt`).write(DATASET_A.join('\n'));
-		await FS(`${TEST_PATH}/modlog_readingtest2.txt`).write(DATASET_B.join('\n'));
+		await FS(`${TEST_PATH}/modlog_readingtest.txt`).write(DATASET_A.join('\n') + '\n');
+		await FS(`${TEST_PATH}/modlog_readingtest2.txt`).write(DATASET_B.join('\n') + '\n');
 	});
 
 	after(async () => {

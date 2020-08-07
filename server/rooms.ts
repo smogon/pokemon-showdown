@@ -1005,8 +1005,8 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(message: string) {
-		void Rooms.Modlog.write('global', message);
+	modlog(message: string, overrideID?: string) {
+		void Rooms.Modlog.write('global', message, overrideID);
 	}
 
 	writeChatRoomData() {
