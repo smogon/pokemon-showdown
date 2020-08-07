@@ -172,7 +172,7 @@
 		"The queue is already empty.": "De wachtrij is al leeg.",
 		"Cleared poll queue.": "Leeggemaakt.",
 		"Room \"${roomid}\" not found.": "Room \"${roomid}\" is niet gevonden.",
-		"Can't delete poll at slot ${slotString} - \"${slotString}\" is not a number.": "Kan poll op plek ${slotString} niet verwijderen.",
+		"Can't delete poll at slot ${slotString} - \"${slotString}\" is not a number.": "Kan poll op plek ${slotString} niet verwijderen - \"${slotString}\" is niet een nummer.",
 		"There is no poll in queue at slot ${slot}.": "Er is geen poll in sleuf ${slot} van de wachtrij.",
 		"(${user.name} deleted the queued poll in slot ${slot}.)": "(${user.name} heeft de poll in sleuf ${slot} van de wachtrij verwijderd.)",
 		"There is no poll running in this room.": "Er is geen poll bezig in deze room.",
