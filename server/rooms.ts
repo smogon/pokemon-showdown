@@ -1208,6 +1208,7 @@ export class GlobalRoomState {
 		do {
 			roomid = `${roomPrefix}${++battleNum}` as RoomID;
 		} while (Rooms.rooms.has(roomid));
+
 		this.lastBattle = battleNum;
 		this.writeNumRooms();
 		return roomid;
@@ -1830,4 +1831,3 @@ export const Rooms = {
 	RoomBattleTimer,
 	PM: RoomBattlePM,
 };
-

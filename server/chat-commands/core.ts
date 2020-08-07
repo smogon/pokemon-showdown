@@ -1139,6 +1139,7 @@ export const commands: ChatCommands = {
 	restoreplayershelp: [
 		`/restoreplayers - Restore previous players in an imported input log.`,
 	],
+
 	joinbattle: 'joingame',
 	joingame(target, room, user) {
 		if (!room) return this.requiresRoom();
