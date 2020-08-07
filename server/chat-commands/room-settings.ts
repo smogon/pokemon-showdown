@@ -761,13 +761,18 @@ export const commands: ChatCommands = {
 
 		const titleMsg = Utils.html`Welcome to ${parent ? room.title : user.name}'s` +
 			`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
-		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
+		const defaultSettings = {
 			isPersonal: true,
 			isPrivate: 'hidden',
 			creationTime: Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
+		};
+		const settings = parent ? room.settings : defaultSettings;
+		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
+			...settings,
+			parentid: parent,
 			introMessage: `` +
 				`<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
 			staffMessage: `` +
