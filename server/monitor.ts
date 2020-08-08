@@ -66,7 +66,7 @@ export const Monitor = new class {
 
 	TimedCounter = TimedCounter;
 
-	updateServerLock: 'public' | 'private' | false = false;
+	updateServerLock = false;
 	cleanInterval: NodeJS.Timeout | null = null;
 
 	/*********************************************************

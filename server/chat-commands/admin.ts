@@ -738,11 +738,11 @@ export const commands: ChatCommands = {
 	async updateserver(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;
 		const isPrivate = toID(target) === 'private';
-		if (Monitor.updateServerLock === (isPrivate ? 'private' : 'public')) {
+		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
 
-		Monitor.updateServerLock = isPrivate ? 'private' : 'public';
+		Monitor.updateServerLock = true;
 
 		const exec = (command: string): Promise<[number, string, string]> => {
 			this.stafflog(`$ ${command}`);
@@ -843,7 +843,7 @@ export const commands: ChatCommands = {
 		};
 
 		if (!this.canUseConsole()) return false;
-		Monitor.updateServerLock = 'public';
+		Monitor.updateServerLock = true;
 		const [, , stderr] = await exec('node ../../build');
 		if (stderr) {
 			return this.errorReply(`Crash while rebuilding: ${stderr}`);
