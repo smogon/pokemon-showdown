@@ -760,7 +760,7 @@ export class RandomTeams {
 					if (!!counter['speedsetup'] || hasMove['bulkup'] || hasMove['uturn']) rejected = true;
 					break;
 				case 'protect':
-					if ((!isDoubles && counter.setupType || !!counter['speedsetup']) || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (((counter.setupType || !!counter['speedsetup']) && !isDoubles) || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (counter.Status < 2 && !hasAbility['Hunger Switch'] && !hasAbility['Speed Boost'] && !isDoubles) rejected = true;
 					if (movePool.includes('leechseed') || movePool.includes('toxic') && !hasMove['wish']) rejected = true;
 					if (isDoubles && (movePool.includes('fakeout') || movePool.includes('shellsmash') || movePool.includes('spore') || hasMove['tailwind'])) rejected = true;
