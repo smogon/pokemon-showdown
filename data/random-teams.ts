@@ -1230,7 +1230,7 @@ export class RandomTeams {
 		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Leek';
 		} else if (species.name === 'Lopunny') {
-			item = (isDoubles) ? 'Iron Ball' : 'Toxic Orb';
+			item = isDoubles ? 'Iron Ball' : 'Toxic Orb';
 		} else if (species.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (species.baseSpecies === 'Pikachu') {
