@@ -18,7 +18,8 @@ describe('Dex data', function () {
 				// entry is a forme of a base species
 				const baseEntry = Pokedex[toID(entry.baseSpecies)];
 				assert(baseEntry && !baseEntry.forme, `Forme ${entry.name} should have a valid baseSpecies`);
-				assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
+				// Gmax formes are not actually formes, they are only included in pokedex.ts for convenience
+				if (!entry.name.includes('Gmax')) assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
 				assert(!entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
 				assert(!entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
 				assert(!entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
@@ -82,6 +83,7 @@ describe('Dex data', function () {
 			}
 			if (entry.formeOrder) {
 				for (const forme of entry.formeOrder) {
+					if (toID(forme).includes('gmax')) continue;
 					 // formeOrder contains other formes and 'cosmetic' formes which do not have entries in Pokedex but should have aliases
 					const formeEntry = Dex.getSpecies(toID(forme));
 					assert.equal(forme, formeEntry.name, `Misspelled/nonexistent forme "${forme}" of ${entry.name}`);
@@ -111,10 +113,10 @@ describe('Dex data', function () {
 		}
 	});
 
-	it('should have valid Movedex entries', function () {
-		const Movedex = Dex.data.Movedex;
-		for (const moveid in Movedex) {
-			const entry = Movedex[moveid];
+	it('should have valid Moves entries', function () {
+		const Moves = Dex.data.Moves;
+		for (const moveid in Moves) {
+			const entry = Moves[moveid];
 			assert.equal(toID(entry.name), moveid, `Mismatched Move key "${moveid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Move ${entry.name} should have a number`);
 			assert.false(entry.infiltrates, `Move ${entry.name} should not have an 'infiltrates' property (no real move has it)`);

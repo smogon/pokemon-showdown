@@ -3,6 +3,7 @@
 import {TeamData} from '../../random-teams';
 import RandomGen7Teams from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {toID} from '../../../sim/dex';
 
 export class RandomGen6Teams extends RandomGen7Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {

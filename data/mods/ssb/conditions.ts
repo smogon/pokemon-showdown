@@ -1,26 +1,26 @@
 import {FS} from '../../../lib/fs';
-import {Tools} from '../../../sim/dex-data';
+import {toID} from '../../../sim/dex-data';
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
 const usergroups: {[userid: string]: string} = {};
 const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
 for (const row of usergroupData) {
-	if (!Tools.getId(row)) continue;
+	if (!toID(row)) continue;
 
 	const cells = row.split(',');
-	usergroups[Tools.getId(cells[0])] = cells[1] || ' ';
+	usergroups[toID(cells[0])] = cells[1] || ' ';
 }
 
 export function getName(name: string): string {
-	const userid = Tools.getId(name);
+	const userid = toID(name);
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
 
 	const group = usergroups[userid] || ' ';
 	return group + name;
 }
 
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const Conditions: {[k: string]: ModdedConditionData} = {
 	/*
 	// Example:
 	userid: {
@@ -327,13 +327,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			activeMon = source.side.foe.active[0];
 			activeMon = activeMon.illusion ? activeMon.illusion.name : activeMon.name;
 			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie', 'sundar'];
-			if (toID(activeMon) === 'hoeenhero') {
+			if (this.toID(activeMon) === 'hoeenhero') {
 				this.add(`c|${getName('fart')}|🎵 it's friday, friday, gotta get down on friday 🎵`);
-			} else if (toID(activeMon) === 'grimauxiliatrix') {
+			} else if (this.toID(activeMon) === 'grimauxiliatrix') {
 				this.add(`c|${getName('fart')}|howdy ho, neighbor`);
-			} else if (toID(activeMon) === 'fart') {
+			} else if (this.toID(activeMon) === 'fart') {
 				this.add(`c|${getName('fart')}|How Can Mirrors Be Real If Our Eyes Aren't Real`);
-			} else if (family.includes(toID(activeMon))) {
+			} else if (family.includes(this.toID(activeMon))) {
 				this.add(`c|${getName('fart')}|hey, hey, hey. ${activeMon} is OK`);
 			} else {
 				this.add(`c|${getName('fart')}|rats, rats, we are the rats`);
@@ -345,7 +345,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onFaint(pokemon) {
 			let activeMon;
 			activeMon = pokemon.side.foe.active[0];
-			activeMon = toID(activeMon.illusion ? activeMon.illusion.name : activeMon.name);
+			activeMon = this.toID(activeMon.illusion ? activeMon.illusion.name : activeMon.name);
 			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie', 'sundar'];
 			if (family.includes(activeMon)) {
 				this.add(`c|${getName('fart')}|at least I wasn't boring, right?`);
@@ -532,7 +532,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			// So this doesn't activate upon switching in
 			if (pokemon.activeTurns < 1) return;
 			const unownLetters = 'abcdefghijklmnopgrstuvwxyz'.split('');
-			const currentFormeID = toID(pokemon.set.species);
+			const currentFormeID = this.toID(pokemon.set.species);
 			const currentLetter = currentFormeID.charAt(5) || 'a';
 			const chosenLetter = this.sample(unownLetters.filter(letter => {
 				return letter !== currentLetter;

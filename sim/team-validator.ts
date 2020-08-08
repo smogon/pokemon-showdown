@@ -7,7 +7,8 @@
  * @license MIT
  */
 
-import {Dex} from './dex';
+import {Dex, toID} from './dex';
+import {Utils} from '../lib/utils';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -190,6 +191,7 @@ export class TeamValidator {
 	readonly ruleTable: import('./dex-data').RuleTable;
 	readonly minSourceGen: number;
 
+	readonly toID: (str: any) => ID;
 	constructor(format: string | Format) {
 		this.format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(this.format);
@@ -198,6 +200,8 @@ export class TeamValidator {
 
 		this.minSourceGen = this.ruleTable.minSourceGen ?
 			this.ruleTable.minSourceGen[0] : 1;
+
+		this.toID = toID;
 	}
 
 	validateTeam(
@@ -329,6 +333,13 @@ export class TeamValidator {
 
 		let species = dex.getSpecies(set.species);
 		set.species = species.name;
+		// Backwards compatability with old Gmax format
+		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
+			set.species = set.species.slice(0, -5);
+			species = dex.getSpecies(set.species);
+			if (set.name && set.name.endsWith('-Gmax')) set.name = species.baseSpecies;
+			set.gigantamax = true;
+		}
 		if (set.name && set.name.length > 18) {
 			if (set.name === set.species) {
 				set.name = species.baseSpecies;
@@ -337,11 +348,11 @@ export class TeamValidator {
 			}
 		}
 		set.name = dex.getName(set.name);
-		let item = dex.getItem(Dex.getString(set.item));
+		let item = dex.getItem(Utils.getString(set.item));
 		set.item = item.name;
-		let ability = dex.getAbility(Dex.getString(set.ability));
+		let ability = dex.getAbility(Utils.getString(set.ability));
 		set.ability = ability.name;
-		set.nature = dex.getNature(Dex.getString(set.nature)).name;
+		set.nature = dex.getNature(Utils.getString(set.nature)).name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		const maxLevel = format.maxLevel || 100;
@@ -402,7 +413,6 @@ export class TeamValidator {
 		ability = dex.getAbility(set.ability);
 
 		let outOfBattleSpecies = species;
-		const learnsetSpecies = dex.getLearnsetData(outOfBattleSpecies.id);
 		let tierSpecies = species;
 		if (ability.id === 'battlebond' && species.id === 'greninja') {
 			outOfBattleSpecies = dex.getSpecies('greninjaash');
@@ -550,7 +560,7 @@ export class TeamValidator {
 		let lsetProblem = null;
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
-			const move = dex.getMove(Dex.getString(moveName));
+			const move = dex.getMove(Utils.getString(moveName));
 			if (!move.exists) return [`"${move.name}" is an invalid move.`];
 
 			problem = this.checkMove(set, move, setHas);
@@ -568,6 +578,7 @@ export class TeamValidator {
 
 		const lsetProblems = this.reconcileLearnset(outOfBattleSpecies, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
+		const learnsetSpecies = dex.getLearnsetData(outOfBattleSpecies.id);
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
@@ -1155,14 +1166,12 @@ export class TeamValidator {
 				// Meloetta-Pirouette, Rayquaza-Mega
 				problems.push(`${species.name} transforms in-battle with ${species.requiredMove}, please fix its moves.`);
 			}
-			if (!species.isGigantamax) {
-				if (typeof species.battleOnly !== 'string') {
-					// Ultra Necrozma and Complete Zygarde are already checked above
-					throw new Error(`${species.name} should have a string battleOnly`);
-				}
-				// Set to out-of-battle forme
-				set.species = species.battleOnly;
+			if (typeof species.battleOnly !== 'string') {
+				// Ultra Necrozma and Complete Zygarde are already checked above
+				throw new Error(`${species.name} should have a string battleOnly`);
 			}
+			// Set to out-of-battle forme
+			set.species = species.battleOnly;
 		} else {
 			if (species.requiredAbility) {
 				// Impossible!
@@ -1312,7 +1321,19 @@ export class TeamValidator {
 				if (tierSpecies.isNonstandard === 'Unobtainable') {
 					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
 				}
+				if (tierSpecies.isNonstandard === 'Gigantamax') {
+					return `${tierSpecies.name} is not obtainable without Gigantamaxing, even through hacking.`;
+				}
 				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		// Special casing for Pokemon that can Gmax, but their Gmax factor cannot be legally obtained
+		if (tierSpecies.gmaxUnreleased && set.gigantamax) {
+			banReason = ruleTable.check('pokemontag:unobtainable');
+			if (banReason) {
+				return `${tierSpecies.name} is flagged as gigantamax, but it cannot gigantamax without hacking or glitches.`;
 			}
 			if (banReason === '') return null;
 		}
@@ -1386,10 +1407,6 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
-		if (ruleTable.isBanned('nonexistent') && typeof move.isMax === 'string') {
-			return `${set.name}'s move ${move.name} is not obtainable without Gigantamaxing ${move.isMax}.`;
-		}
-
 		banReason = ruleTable.check('pokemontag:allmoves');
 		if (banReason) {
 			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
@@ -1401,6 +1418,9 @@ export class TeamValidator {
 			if (banReason) {
 				if (move.isNonstandard === 'Unobtainable') {
 					return `${move.name} is not obtainable without hacking or glitches.`;
+				}
+				if (move.isNonstandard === 'Gigantamax') {
+					return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
 				}
 				return `${set.name}'s move ${move.name} is tagged ${move.isNonstandard}, which is ${banReason}.`;
 			}
@@ -1989,7 +2009,7 @@ export class TeamValidator {
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
-			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
+			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
 		} else if (species.baseSpecies === 'Pumpkaboo' && species.forme) {
 			return this.dex.getSpecies('Pumpkaboo');

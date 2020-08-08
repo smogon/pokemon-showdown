@@ -36,6 +36,9 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
 
+const NAMECHANGE_THROTTLE = 2 * 60 * 1000; // 2 minutes
+const NAMES_PER_THROTTLE = 3;
+
 const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
@@ -225,6 +228,8 @@ export class Connection {
 	user: User;
 	challenge: string;
 	autojoins: string;
+	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
+	lastRequestedPage: string | null;
 	lastActiveTime: number;
 	constructor(
 		id: string,
@@ -250,6 +255,7 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
+		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
@@ -314,6 +320,7 @@ export class User extends Chat.MessageContext {
 	registered: boolean;
 	id: ID;
 	group: GroupSymbol;
+	visualGroup: GroupSymbol;
 	avatar: string | number;
 	language: string | null;
 
@@ -336,8 +343,9 @@ export class User extends Chat.MessageContext {
 
 	settings: {
 		blockChallenges: boolean,
-		blockPMs: boolean | GroupSymbol | 'autoconfirmed' | 'trusted' | 'unlocked',
+		blockPMs: boolean | AuthLevel,
 		ignoreTickets: boolean,
+		hideBattlesFromTrainerCard: boolean,
 	};
 
 	battleSettings: {
@@ -367,6 +375,8 @@ export class User extends Chat.MessageContext {
 	lastMessage: string;
 	lastMessageTime: number;
 	lastReportTime: number;
+	lastNewNameTime = 0;
+	newNames = 0;
 	s1: string;
 	s2: string;
 	s3: string;
@@ -389,6 +399,7 @@ export class User extends Chat.MessageContext {
 		this.registered = false;
 		this.id = '';
 		this.group = Auth.defaultSymbol();
+		this.visualGroup = this.group;
 		this.language = null;
 
 		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
@@ -423,6 +434,7 @@ export class User extends Chat.MessageContext {
 			blockChallenges: false,
 			blockPMs: false,
 			ignoreTickets: false,
+			hideBattlesFromTrainerCard: false,
 		};
 		this.battleSettings = {
 			team: '',
@@ -501,13 +513,13 @@ export class User extends Chat.MessageContext {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
 			}
-			return room.auth.get(this.id) + this.name;
+			return room.auth.get(this.id, true) + this.name;
 		}
 		if (this.semilocked) {
 			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 			return mutedSymbol + this.name;
 		}
-		return this.group + this.name;
+		return this.visualGroup + this.name;
 	}
 	getIdentityWithStatus(roomid: RoomID = '') {
 		const identity = this.getIdentity(roomid);
@@ -519,25 +531,29 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	authAtLeast(minAuth: string, room: BasicRoom | null = null) {
-		if (!minAuth || minAuth === ' ') return true;
-		if (this.locked || this.semilocked) return false;
-		if (minAuth === 'unlocked') return true;
-		if (minAuth === 'trusted' && this.trusted) return true;
-		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
-
-		if (minAuth === 'trusted' || minAuth === 'autoconfirmed') {
-			minAuth = Config.groupsranking[1];
-		}
-		if (!(minAuth in Config.groups)) return false;
-		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
-		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
-	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom): boolean;
-	can(permission: GlobalPermission, target?: User | null): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
-		return Auth.hasPermission(this, permission, target, room);
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
+	can(
+		permission: GlobalPermission,
+		target?: User | null,
+		room?: null,
+		cmd?: undefined,
+		useVisualGroup?: boolean
+	): boolean;
+	can(
+		permission: RoomPermission & GlobalPermission,
+		target: User | null,
+		room?: BasicRoom | null,
+		cmd?: undefined,
+		useVisualGroup?: boolean
+	): boolean;
+	can(
+		permission: string,
+		target: User | null = null,
+		room: BasicRoom | null = null,
+		cmd?: string,
+		useVisualGroup?: boolean
+	): boolean {
+		return Auth.hasPermission(this, permission, target, room, cmd, useVisualGroup);
 	}
 	/**
 	 * Special permission check for system operators
@@ -664,6 +680,7 @@ export class User extends Chat.MessageContext {
 
 		const tokenDataSplit = tokenData.split(',');
 		const [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
+
 		if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
 			Monitor.warn(`forged assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is ${Config.legalhosts[0]}.`);
@@ -672,7 +689,7 @@ export class User extends Chat.MessageContext {
 
 		if (tokenDataSplit.length < 5) {
 			Monitor.warn(`outdated assertion format: ${tokenData}`);
-			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
+			this.send(`|nametaken|${name}|The assertion you sent us is corrupt or incorrect. Please send the exact assertion given by the login server's JSON response.`);
 			return false;
 		}
 
@@ -708,6 +725,23 @@ export class User extends Chat.MessageContext {
 		this.s1 = tokenDataSplit[5];
 		this.s2 = tokenDataSplit[6];
 		this.s3 = tokenDataSplit[7];
+
+		if (!this.trusted && userType === '1') { // userType '1' means unregistered
+			const elapsed = Date.now() - this.lastNewNameTime;
+			if (elapsed < NAMECHANGE_THROTTLE) {
+				if (this.newNames >= NAMES_PER_THROTTLE) {
+					this.send(
+						`|nametaken|${name}|You must wait ${Chat.toDurationString(NAMECHANGE_THROTTLE - elapsed)} more
+						seconds before using another unregistered name.`
+					);
+					return false;
+				}
+				this.newNames++;
+			} else {
+				this.lastNewNameTime = Date.now();
+				this.newNames = 1;
+			}
+		}
 
 		this.handleRename(name, userid, newlyRegistered, userType);
 	}
@@ -993,11 +1027,14 @@ export class User extends Chat.MessageContext {
 		if (!registered) {
 			this.registered = false;
 			this.group = Users.Auth.defaultSymbol();
+			this.resetVisualGroup();
 			this.isStaff = false;
 			return;
 		}
 		this.registered = true;
+		const isHidingGroup = this.group !== this.visualGroup;
 		this.group = globalAuth.get(this.id);
+		if (!isHidingGroup) this.resetVisualGroup();
 
 		if (Config.customavatars && Config.customavatars[this.id]) {
 			this.avatar = Config.customavatars[this.id];
@@ -1032,7 +1069,10 @@ export class User extends Chat.MessageContext {
 	 */
 	setGroup(group: GroupSymbol, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
+
+		const isHidingGroup = this.group !== this.visualGroup;
 		this.group = group;
+		if (!isHidingGroup) this.visualGroup = group;
 		const groupInfo = Config.groups[this.group];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
@@ -1050,6 +1090,17 @@ export class User extends Chat.MessageContext {
 				this.trusted = '';
 			}
 		}
+	}
+
+	setVisualGroup(group: GroupSymbol) {
+		if (!group) throw new Error(`Falsy value passed to setVisualGroup`);
+		this.visualGroup = group;
+		this.updateIdentity();
+	}
+
+	resetVisualGroup() {
+		this.visualGroup = this.group;
+		this.updateIdentity();
 	}
 	/**
 	 * Demotes a user from anything that grants trusted status.
@@ -1080,6 +1131,7 @@ export class User extends Chat.MessageContext {
 		if (!this.registered) {
 			// for "safety"
 			this.group = Users.Auth.defaultSymbol();
+			this.visualGroup = this.group;
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
 			// This isn't strictly necessary since we don't reuse User objects
@@ -1098,7 +1150,7 @@ export class User extends Chat.MessageContext {
 					this.markDisconnected();
 				}
 				for (const roomid of connection.inRooms) {
-					this.leaveRoom(Rooms.get(roomid)!, connection, true);
+					this.leaveRoom(Rooms.get(roomid)!, connection);
 				}
 				--this.ips[connection.ip];
 				break;
@@ -1131,7 +1183,7 @@ export class User extends Chat.MessageContext {
 			// console.log('DESTROY: ' + this.id);
 			connection = this.connections[i];
 			for (const roomid of connection.inRooms) {
-				this.leaveRoom(Rooms.get(roomid)!, connection, true);
+				this.leaveRoom(Rooms.get(roomid)!, connection);
 			}
 			connection.destroy();
 		}
@@ -1226,17 +1278,8 @@ export class User extends Chat.MessageContext {
 			room.onConnect(this, connection);
 		}
 	}
-	leaveRoom(
-		room: Room | string,
-		connection: Connection | null = null,
-		force = false
-	) {
+	leaveRoom(room: Room | string, connection: Connection | null = null) {
 		room = Rooms.get(room)!;
-		if (room.roomid === 'global') {
-			// you can't leave the global room except while disconnecting
-			if (!force) return false;
-			this.cancelReady();
-		}
 		if (!this.inRooms.has(room.roomid)) {
 			return false;
 		}
@@ -1303,12 +1346,12 @@ export class User extends Chat.MessageContext {
 	chat(message: string, room: Room | null, connection: Connection) {
 		const now = Date.now();
 
-		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.isSysop) {
+		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.hasSysopAccess()) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
-			if (this.isSysop) return;
+			if (this.hasSysopAccess()) return;
 			return false; // but end the loop here
 		}
 

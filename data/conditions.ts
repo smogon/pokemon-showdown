@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: PureEffectData} = {
+export const Conditions: {[k: string]: ConditionData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -174,7 +174,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			this.activeTarget = pokemon;
 			const damage = this.getDamage(pokemon, pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			const activeMove = {id: toID('confused'), effectType: 'Move', type: '???'};
+			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			return false;
 		},
@@ -669,6 +669,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		noCopy: true,
 		duration: 3,
 		onStart(pokemon) {
+			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
 				delete pokemon.volatiles['torment'];
@@ -678,7 +679,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 				pokemon.formeChange('cramorant');
 			}
 			this.add('-start', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
+			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
@@ -708,7 +709,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		onResidualPriority: -100,
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.species.name);
+			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name);
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;

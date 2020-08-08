@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
 		for (const id in this.data.Items) {
@@ -77,7 +77,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		} = {
 			abilities: megaSpecies.abilities,
 			baseStats: {},
-			weighthg: megaSpecies.weighthg - megaSpecies.weighthg,
+			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
 			originalMega: megaSpecies.name,
 			requiredItem: megaSpecies.requiredItem,
 		};

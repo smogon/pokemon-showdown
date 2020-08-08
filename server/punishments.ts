@@ -536,7 +536,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.settings.isPrivate === true || room.settings.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.settings.isPersonal)) {
 				Punishments.monitorRoomPunishments(user);
 			}
 		}
@@ -596,7 +596,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.settings.isPrivate === true || room.settings.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.settings.isPersonal)) {
 				Punishments.monitorRoomPunishments(userid);
 			}
 		}
@@ -711,7 +711,7 @@ export const Punishments = new class {
 
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
-		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
+		Rooms.global.modlog(`AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`, roomid);
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
@@ -1047,18 +1047,6 @@ export const Punishments = new class {
 		return undefined;
 	}
 
-	/**
-	 * @deprecated
-	 */
-	shortenHost(host: string) {
-		if (host.slice(-7) === '-nohost') return host;
-		let dotLoc = host.lastIndexOf('.');
-		const tld = host.substr(dotLoc);
-		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
-		dotLoc = host.lastIndexOf('.', dotLoc - 1);
-		return host.substr(dotLoc + 1);
-	}
-
 	/** Defined in Punishments.loadBanlist */
 	checkRangeBanned(ip: string) {
 		return false;
@@ -1327,7 +1315,7 @@ export const Punishments = new class {
 		for (const curRoom of Rooms.global.chatRooms) {
 			if (
 				!curRoom || curRoom.settings.isPrivate === true ||
-				(options.publicOnly && (curRoom.settings.isPersonal || curRoom.battle))
+				(options.publicOnly && curRoom.settings.isPersonal)
 			) continue;
 			let punishment = Punishments.roomUserids.nestedGet(curRoom.roomid, userid);
 			if (punishment) {
@@ -1424,7 +1412,7 @@ export const Punishments = new class {
 		buf += `<th>Expire time</th>`;
 		buf += `<th>Reason</th>`;
 		buf += `<th>Alts</th>`;
-		if (user.can('globalban')) buf += `<th>IPs</th>`;
+		if (user.can('ip')) buf += `<th>IPs</th>`;
 		buf += `</tr>`;
 		for (const [userid, punishment] of punishments) {
 			const expiresIn = new Date(punishment.expireTime).getTime() - Date.now();
@@ -1436,7 +1424,7 @@ export const Punishments = new class {
 			buf += `<td>${expireString}</td>`;
 			buf += `<td>${punishment.reason || ' - '}</td>`;
 			buf += `<td>${punishment.userids.join(", ") || ' - '}</td>`;
-			if (user.can('globalban')) buf += `<td>${punishment.ips.join(", ") || ' - '}</td>`;
+			if (user.can('ip')) buf += `<td>${punishment.ips.join(", ") || ' - '}</td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table>`;

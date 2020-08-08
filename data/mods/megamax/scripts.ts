@@ -1,15 +1,17 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	gen: 8,
 	init() {
 		const addNewMoves = (pokemonid: string, moveids: string[], tutor = false) => {
-			for (const moveid of moveids.map(toID)) {
-				this.modData('Learnsets', toID(pokemonid)).learnset[moveid] = [`8${tutor ? 'T' : 'M'}`];
+			for (const moveid of moveids.map(this.toID)) {
+				this.modData('Learnsets', this.toID(pokemonid)).learnset[moveid] = [`8${tutor ? 'T' : 'M'}`];
 			}
 		};
 		for (const i in this.data.FormatsData) {
-			if (i.endsWith('gmax')) this.modData('FormatsData', i).tier = "OU";
+			if (i.endsWith('gmax')) {
+				this.modData('FormatsData', i).tier = "OU";
+				this.modData('FormatsData', i).isNonstandard = null;
+			}
 		}
-		this.modData('FormatsData', 'melmetalgmax').isNonstandard = null;
 
 		addNewMoves('venusaur', ['gunkshot', 'toxicspikes']);
 		addNewMoves('charizard', ['lavaplume', 'whirlwind']);
@@ -48,12 +50,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const item = pokemon.getItem();
 		if (
 			altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove
 		) {
 			return altForme.name;
-		}
-		if (item.name === "Urshifusite" && pokemon.baseSpecies.name === "Urshifu-Rapid-Strike") {
-			return "Urshifu-Rapid-Strike-Gmax";
 		}
 		if (item.name === "Toxtricitite" && pokemon.baseSpecies.name === "Toxtricity-Low-Key") {
 			return "Toxtricity-Low-Key-Gmax";

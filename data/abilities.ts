@@ -20,7 +20,7 @@ Ratings and how they work:
 
  3: Effective
 	  An ability with a strong effect on the user or foe.
-	ex. Chlorophyll, Natural Cure
+	ex. Chlorophyll, Sturdy
 
  4: Very useful
 	  One of the more popular abilities. It requires minimal support to be effective.
@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const BattleAbilities: {[abilityid: string]: AbilityData} = {
+export const Abilities: {[abilityid: string]: AbilityData} = {
 	noability: {
 		shortDesc: "Does nothing.",
 		isNonstandard: "Past",
@@ -304,7 +304,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Berserk",
-		rating: 2.5,
+		rating: 2,
 		num: 201,
 	},
 	bigpecks: {
@@ -363,7 +363,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.heal(pokemon.baseMaxhp / 3);
 		},
 		name: "Cheek Pouch",
-		rating: 1.5,
+		rating: 2,
 		num: 167,
 	},
 	chlorophyll: {
@@ -449,7 +449,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
 		isUnbreakable: true,
 		name: "Comatose",
-		rating: 3.5,
+		rating: 4,
 		num: 213,
 	},
 	competitive: {
@@ -600,7 +600,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		isUnbreakable: true,
 		name: "Dark Aura",
-		rating: 3.5,
+		rating: 3,
 		num: 186,
 	},
 	dauntlessshield: {
@@ -609,7 +609,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.boost({def: 1}, pokemon);
 		},
 		name: "Dauntless Shield",
-		rating: 3,
+		rating: 3.5,
 		num: 235,
 	},
 	dazzling: {
@@ -629,7 +629,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Dazzling",
-		rating: 2,
+		rating: 2.5,
 		num: 219,
 	},
 	defeatist: {
@@ -724,7 +724,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.clearWeather();
 		},
 		name: "Desolate Land",
-		rating: 5,
+		rating: 4.5,
 		num: 190,
 	},
 	disguise: {
@@ -771,7 +771,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Disguise",
-		rating: 4,
+		rating: 3.5,
 		num: 209,
 	},
 	download: {
@@ -805,7 +805,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.setWeather('raindance');
 		},
 		name: "Drizzle",
-		rating: 4.5,
+		rating: 4,
 		num: 2,
 	},
 	drought: {
@@ -818,7 +818,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.setWeather('sunnyday');
 		},
 		name: "Drought",
-		rating: 4.5,
+		rating: 4,
 		num: 70,
 	},
 	dryskin: {
@@ -918,7 +918,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		isUnbreakable: true,
 		name: "Fairy Aura",
-		rating: 3.5,
+		rating: 3,
 		num: 187,
 	},
 	filter: {
@@ -974,7 +974,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onEnd(pokemon) {
 			pokemon.removeVolatile('flashfire');
 		},
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(target) {
 				this.add('-start', target, 'ability: Flash Fire');
@@ -1087,7 +1087,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			return this.chainModify(mod);
 		},
 		name: "Fluffy",
-		rating: 3,
+		rating: 3.5,
 		num: 218,
 	},
 	forecast: {
@@ -1354,7 +1354,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Gulp Missile",
-		rating: 1.5,
+		rating: 2.5,
 		num: 241,
 	},
 	guts: {
@@ -1579,7 +1579,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Ice Face",
-		rating: 3.5,
+		rating: 3,
 		num: 248,
 	},
 	icescales: {
@@ -1590,7 +1590,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Ice Scales",
-		rating: 3.5,
+		rating: 4,
 		num: 246,
 	},
 	illuminate: {
@@ -1694,7 +1694,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				this.damage(target.getUndynamaxedHP(damage), source, target);
 			}
 		},
-		rating: 3.5,
+		rating: 4,
 		num: 215,
 	},
 	innerfocus: {
@@ -1986,7 +1986,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 		},
 		rating: 4,
@@ -2056,7 +2056,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Magnet Pull",
-		rating: 4.5,
+		rating: 4,
 		num: 42,
 	},
 	marvelscale: {
@@ -2091,7 +2091,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (target && ['psn', 'tox'].includes(target.status)) return 5;
 		},
 		name: "Merciless",
-		rating: 2,
+		rating: 1.5,
 		num: 196,
 	},
 	mimicry: {
@@ -2114,7 +2114,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onEnd(pokemon) {
 			delete pokemon.volatiles['mimicry'];
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				let newType;
 				switch (this.field.terrain) {
@@ -2197,7 +2197,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.setTerrain('mistyterrain');
 		},
 		name: "Misty Surge",
-		rating: 4,
+		rating: 3.5,
 		num: 228,
 	},
 	moldbreaker: {
@@ -2271,7 +2271,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Moxie",
-		rating: 3.5,
+		rating: 3,
 		num: 153,
 	},
 	multiscale: {
@@ -2391,7 +2391,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.showCure) pokemon.showCure = undefined;
 		},
 		name: "Natural Cure",
-		rating: 3,
+		rating: 2.5,
 		num: 30,
 	},
 	neuroforce: {
@@ -2986,7 +2986,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Queenly Majesty",
-		rating: 2,
+		rating: 2.5,
 		num: 214,
 	},
 	quickdraw: {
@@ -2999,7 +2999,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Quick Draw",
-		rating: 3,
+		rating: 2.5,
 		num: 259,
 	},
 	quickfeet: {
@@ -3106,19 +3106,16 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		num: 144,
 	},
 	ripen: {
-		// TODO Needs research. Following berries aren't supported currently:
-		// Custap, Jacoba, Rowap, Lanslat, Leppa, Micle
-		// Check if they are affected by ripen.
 		shortDesc: "When this Pokemon eats a Berry, its effect is doubled.",
 		onTryHeal(damage, target, source, effect) {
-			if (effect && (effect as Item).isBerry) {
-				this.debug(`Ripen doubled healing`);
-				return this.chainModify(2);
+			if (!effect) return;
+			if (effect.id === 'berryjuice' || effect.id === 'leftovers') {
+				this.add('-activate', target, 'ability: Ripen');
 			}
+			if ((effect as Item).isBerry) return this.chainModify(2);
 		},
 		onBoost(boost, target, source, effect) {
 			if (effect && (effect as Item).isBerry) {
-				this.debug(`Ripen doubled boost`);
 				let b: BoostName;
 				for (b in boost) {
 					boost[b]! *= 2;
@@ -3127,12 +3124,14 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.abilityData.berryWeaken) {
-				// Pokemon ate a berry that weakened damage from this attack, ripen adds another 1/4 that.
-				this.debug(`Ripen increases damage reduction to 3/4`);
 				target.abilityData.berryWeaken = "";
 				// Not sure if this is the correct multiplier to get 3/4 total, assuming its taking 1/2 of 1/2 (3/4)
 				return this.chainModify(0.5);
 			}
+		},
+		onTryEatItemPriority: -1,
+		onTryEatItem(item, pokemon) {
+			this.add('-activate', pokemon, 'ability: Ripen');
 		},
 		onEatItem(item, pokemon) {
 			const weakenBerries = [
@@ -3332,7 +3331,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Schooling",
-		rating: 2.5,
+		rating: 3,
 		num: 208,
 	},
 	scrappy: {
@@ -3407,7 +3406,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		isUnbreakable: true,
 		name: "Shadow Shield",
-		rating: 4,
+		rating: 3.5,
 		num: 231,
 	},
 	shadowtag: {
@@ -3525,7 +3524,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		isUnbreakable: true,
 		name: "Shields Down",
-		rating: 3.5,
+		rating: 3,
 		num: 197,
 	},
 	simple: {
@@ -3539,7 +3538,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Simple",
-		rating: 4.5,
+		rating: 4,
 		num: 86,
 	},
 	skilllink: {
@@ -3565,7 +3564,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			delete pokemon.volatiles['slowstart'];
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
@@ -3593,7 +3592,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Slush Rush",
-		rating: 2.5,
+		rating: 3,
 		num: 202,
 	},
 	sniper: {
@@ -3766,7 +3765,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		name: "Stance Change",
-		rating: 4.5,
+		rating: 4,
 		num: 176,
 	},
 	static: {
@@ -3799,7 +3798,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Steam Engine",
-		rating: 1,
+		rating: 2,
 		num: 243,
 	},
 	steelworker: {
@@ -3832,7 +3831,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Steely Spirit",
-		rating: 3,
+		rating: 3.5,
 		num: 252,
 	},
 	stench: {
@@ -3866,7 +3865,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Sticky Hold",
-		rating: 1.5,
+		rating: 2,
 		num: 60,
 	},
 	stormdrain: {
@@ -3956,7 +3955,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Surge Surfer",
-		rating: 2.5,
+		rating: 3,
 		num: 207,
 	},
 	swarm: {
@@ -4255,7 +4254,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 			pokemon.addVolatile('truant');
 		},
-		effect: {},
+		condition: {},
 		name: "Truant",
 		rating: -1,
 		num: 54,
@@ -4291,7 +4290,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				boosts['accuracy'] = 0;
 			}
 		},
-		rating: 3.5,
+		rating: 4,
 		num: 109,
 	},
 	unburden: {
@@ -4307,7 +4306,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onEnd(pokemon) {
 			pokemon.removeVolatile('unburden');
 		},
-		effect: {
+		condition: {
 			onModifySpe(spe, pokemon) {
 				if (!pokemon.item) {
 					return this.chainModify(2);
@@ -4336,7 +4335,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (move.flags['contact']) delete move.flags['protect'];
 		},
 		name: "Unseen Fist",
-		rating: 2.5,
+		rating: 2,
 		num: 260,
 	},
 	victorystar: {
@@ -4347,7 +4346,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Victory Star",
-		rating: 2.5,
+		rating: 2,
 		num: 162,
 	},
 	vitalspirit: {
@@ -4596,7 +4595,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange(pokemon.species.battleOnly as string, this.effect, false, '[silent]');
 			}
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				if (!pokemon.species.name.includes('Galar')) {
 					if (pokemon.species.id !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
@@ -4662,7 +4661,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 		},
 		rating: 3,

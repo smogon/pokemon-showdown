@@ -1,8 +1,8 @@
-import {getName} from './statuses';
+import {getName} from './conditions';
 // Used for grimAuxiliatrix's move
 import {ssbSets} from "./random-teams";
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
 	moveid: {
@@ -497,7 +497,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				source.side.addSideCondition('archangelsrequiem');
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onSwitchInPriority: -1,
 			onSwitchIn(pokemon) {
@@ -692,7 +692,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				this.add(`c|${getName('fart')}|I walk with purpose. bring me soup.`);
 			}
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onStart() {
 				this.effectData.multiplier = 1;
@@ -979,7 +979,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				this.add(`c|${getName('Jett xx')}|Gotcha!`);
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
 				this.debug('Thehuntison start');
@@ -1028,7 +1028,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			this.boost({atk: -2, def: -2}, target, target);
 		},
-		effect: {
+		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'Cozy Cuddle');
 			},
@@ -1060,7 +1060,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		selfdestruct: "ifHit",
 		sideCondition: 'leaveittotheteam',
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(side, source) {
 				this.debug('Leave it to the team started on ' + side.name);
@@ -1583,7 +1583,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Stealth Rock', target);
 		},
 		sideCondition: 'shiftingrocks',
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'Shifting Rocks');
@@ -1722,7 +1722,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 20,
 			onHit(target, source) {
-				switch (toID(source.types[0])) {
+				switch (this.toID(source.types[0])) {
 				case 'normal':
 					const typeList = Object.keys(this.dex.data.TypeChart);
 					const newType = this.sample(typeList);
@@ -2527,7 +2527,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			};
 			const forme = source.species.name === "Meloetta" ? "Meloetta-Pirouette" : "Meloetta";
 			source.formeChange(forme, this.effect, true);
-			const newMoves = formeMoves[toID(forme)];
+			const newMoves = formeMoves[this.toID(forme)];
 			const carryOver = source.moveSlots.slice().map(m => {
 				return m.pp / m.maxpp;
 			});
@@ -2538,7 +2538,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			source.moveSlots = [];
 			let slot = 0;
 			for (const newMove of newMoves) {
-				const moveData = source.battle.dex.getMove(toID(newMove));
+				const moveData = source.battle.dex.getMove(this.toID(newMove));
 				if (!moveData.id) continue;
 				source.moveSlots.push({
 					move: moveData.name,
@@ -2607,7 +2607,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	dig: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
 				if (['sandstorm', 'heavyhailstorm', 'hail'].includes(type)) return false;
@@ -2627,7 +2627,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	dive: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
 				if (['sandstorm', 'heavyhailstorm', 'hail'].includes(type)) return false;

@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -244,6 +244,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	golbat: {
 		tier: "RU",
+		doublesTier: "NFE",
 	},
 	crobat: {
 		randomBattleMoves: ["bravebird", "roost", "toxic", "taunt", "defog", "uturn", "superfang"],

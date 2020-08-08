@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen8',
 	// 1 mega per pokemon
 	runMegaEvo(pokemon) {

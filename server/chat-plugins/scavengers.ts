@@ -831,7 +831,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		if (this.room.settings.scavQueue && this.room.settings.scavQueue.length) {
 			setTimeout(() => {
 				const room = Rooms.get(roomid) as ChatRoom;
-				if (!room || room.game || !room.settings.scavQueue?.length) return;
+				if (!room || room.game || !room.settings.scavQueue?.length || room.settings.scavSettings?.scavQueueDisabled) return;
 
 				const next = room.settings.scavQueue.shift()!;
 				const duration = room.settings.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
@@ -881,7 +881,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			const logMsg = `([${player.id}] has been caught trying to do their own hunt.)`;
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(`(${this.room.roomid}) ${logMsg}`);
+			this.room.modlog(logMsg);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -898,7 +898,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(`(${this.room.roomid}) ${logMsg}`);
+			this.room.modlog(logMsg);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -937,7 +937,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		});
 
 		if (filtered) return "Please do not leak the answer. Use /scavenge [guess] to submit your guess instead.";
-		return false;
+		return;
 	}
 
 	hasFinished(user: User) {
@@ -1154,7 +1154,6 @@ const ScavengerCommands: ChatCommands = {
 
 			const html = await room.scavgame.leaderboard.htmlLadder();
 			this.sendReply(`|raw|${html}`);
-			if (this.broadcasting) room.update();
 		},
 
 		async rank(target, room, user) {
@@ -1172,7 +1171,6 @@ const ScavengerCommands: ChatCommands = {
 			} else {
 				this.sendReplyBox(Utils.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
 			}
-			if (this.broadcasting) room.update();
 		},
 	},
 	teamscavs: {
@@ -1185,7 +1183,8 @@ const ScavengerCommands: ChatCommands = {
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 
-			const [teamName, leader] = target.split(',');
+			let [teamName, leader] = target.split(',');
+			teamName = teamName.trim();
 			if (game.teams[teamName]) return this.errorReply(`The team ${teamName} already exists.`);
 
 			const leaderUser = Users.get(leader);
@@ -1521,6 +1520,30 @@ const ScavengerCommands: ChatCommands = {
 		game.onEnd(true, user);
 		this.privateModAction(`${user.name} has reset the scavenger hunt.`);
 		this.modlog('SCAV RESET');
+	},
+
+	resettoqueue(target, room, user) {
+		if (!room) return this.requiresRoom();
+		if (!this.can('mute', null, room)) return false;
+		const game = room.getGame(ScavengerHunt);
+		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
+
+		const hunt: QueuedHunt = {
+			hosts: game.hosts,
+			questions: [],
+			staffHostId: game.staffHostId,
+			staffHostName: game.StaffHostName,
+			gameType: game.gameType,
+		};
+		for (const entry of game.questions) {
+			hunt.questions.push(...[entry.hint, entry.answer]);
+		}
+		if (!room.settings.scavQueue) room.settings.scavQueue = [];
+		room.settings.scavQueue.push(hunt);
+
+		game.onEnd(true, user);
+		this.privateModAction(`${user.name} has reset the scavenger hunt, and placed it in the queue.`);
+		this.modlog('SCAV RESETTOQUEUE');
 	},
 
 	forceend: 'end',
@@ -1910,7 +1933,6 @@ const ScavengerCommands: ChatCommands = {
 				"Show" :
 				"Hide"} Auth</button></div>`
 		);
-		if (this.broadcasting) room.update();
 	},
 
 	async rank(target, room, user) {
@@ -1928,7 +1950,6 @@ const ScavengerCommands: ChatCommands = {
 		} else {
 			this.sendReplyBox(Utils.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
 		}
-		if (this.broadcasting) room.update();
 	},
 
 	/**
@@ -1971,7 +1992,7 @@ const ScavengerCommands: ChatCommands = {
 
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist && scavsRoom) {
-			scavsRoom.modlog(`(scavengers) SCAV BLITZ: by ${user.id}: ${gameType}: ${blitzPoints}`);
+			scavsRoom.modlog(`SCAV BLITZ: by ${user.id}: ${gameType}: ${blitzPoints}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints} in <<${room.roomid}>>.)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints} in <<${room.roomid}>>.)`);
 		}
@@ -2002,7 +2023,7 @@ const ScavengerCommands: ChatCommands = {
 
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist) {
-			scavsRoom.modlog(`(scavengers) SCAV SETHOSTPOINTS: [room: ${room.roomid}] by ${user.id}: ${points}`);
+			scavsRoom.modlog(`SCAV SETHOSTPOINTS: [room: ${room.roomid}] by ${user.id}: ${points}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
 		}
@@ -2048,7 +2069,7 @@ const ScavengerCommands: ChatCommands = {
 
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist) {
-			scavsRoom.modlog(`(scavengers) SCAV SETPOINTS: [room: ${room.roomid}] by ${user.id}: ${type}: ${pointsDisplay}`);
+			scavsRoom.modlog(`SCAV SETPOINTS: [room: ${room.roomid}] by ${user.id}: ${type}: ${pointsDisplay}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
 		}
@@ -2089,7 +2110,7 @@ const ScavengerCommands: ChatCommands = {
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist) {
 			if (room.settings.scavSettings.officialtwist) {
-				scavsRoom.modlog(`(scavengers) SCAV TWIST: [room: ${room.roomid}] by ${user.id}: ${room.settings.scavSettings.officialtwist}`);
+				scavsRoom.modlog(`SCAV TWIST: [room: ${room.roomid}] by ${user.id}: ${room.settings.scavSettings.officialtwist}`);
 				scavsRoom.sendMods(`(${user.name} has set the official twist to - ${room.settings.scavSettings.officialtwist} in <<${room.roomid}>>)`);
 				scavsRoom.roomlog(`(${user.name} has set the official twist to  - ${room.settings.scavSettings.officialtwist} in <<${room.roomid}>>)`);
 			} else {
@@ -2395,8 +2416,7 @@ const ScavengerCommands: ChatCommands = {
 export const pages: PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
-		const room = this.extractRoom();
-		if (!room) return;
+		const room = this.requireRoom();
 
 		let buf = "";
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
@@ -2464,6 +2484,7 @@ export const commands: ChatCommands = {
 	joinhunt: ScavengerCommands.join,
 	leavehunt: ScavengerCommands.leave,
 	resethunt: ScavengerCommands.reset,
+	resethunttoqueue: ScavengerCommands.resettoqueue,
 	forceendhunt: 'endhunt',
 	endhunt: ScavengerCommands.end,
 	edithunt: ScavengerCommands.edithunt,
@@ -2520,6 +2541,7 @@ export const commands: ChatCommands = {
 			"- /scav edithint <em>[question number], [hint number], [value]</em> - edits a hint to a question in the current scavenger hunt. Only the host(s) can edit a hint.",
 			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
 			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # &)",
+			"- /resethunttoqueue - resets the current scavenger hunt without revealing the hints and answers, and adds it directly to the queue. (Requires: % @ * # &)",
 			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # &)",
 			"- /viewhunt - views the current scavenger hunt.  Only the user who started the hunt can use this command. Only the host(s) can view the hunt.",
 			"- /inherithunt - becomes the staff host, gaining staff permissions to the current hunt. (Requires: % @ * # &)",

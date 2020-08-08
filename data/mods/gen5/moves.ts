@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1},
@@ -67,7 +67,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		volatileStatus: 'autotomize',
 		onHit(pokemon) {
 		},
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
 				if (pokemon.species.weighthg > 1) {
@@ -327,7 +327,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	furycutter: {
 		inherit: true,
 		basePower: 20,
-		effect: {
+		condition: {
 			duration: 2,
 			onStart() {
 				this.effectData.multiplier = 1;
@@ -577,7 +577,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	lightscreen: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -651,7 +651,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Stomp and Steamroller will have their damage doubled if used against the user while it is active.",
 		pp: 20,
-		effect: {
+		condition: {
 			noCopy: true,
 			onSourceModifyDamage(damage, source, target, move) {
 				if (['stomp', 'steamroller'].includes(move.id)) {
@@ -684,7 +684,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onTryHitField(target, source) {
 			if (source.volatiles['mudsport']) return false;
 		},
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add("-start", pokemon, 'Mud Sport');
@@ -783,7 +783,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onHitSide(side, source) {
 			source.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
@@ -814,7 +814,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	reflect: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -885,7 +885,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Lowers accuracy by 1 stage on the regular Wi-Fi terrain. The secondary effect chance is not affected by the Serene Grace Ability.",
 		shortDesc: "Effect varies with terrain. (30% chance acc -1)",
-		effect: {
+		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (this.randomChance(3, 10)) {
@@ -1039,7 +1039,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	substitute: {
 		inherit: true,
 		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, or if the user switches out or faints. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. If a substitute is created while the user is trapped by a binding move, the binding effect ends immediately. Fails if the user does not have enough HP remaining to create a substitute without fainting, or if it already has a substitute.",
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
@@ -1209,7 +1209,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onTryHitField(target, source) {
 			if (source.volatiles['watersport']) return false;
 		},
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add("-start", pokemon, 'move: Water Sport');

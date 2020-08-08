@@ -1583,10 +1583,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		// Hosts can always talk
-		if (this.hostid === user.id || this.cohosts.includes(user.id) ||
-			!this.started
-		) {
-			return false;
+		if (this.hostid === user.id || this.cohosts.includes(user.id) || !this.started) {
+			return;
 		}
 
 		let dead = false;
@@ -1599,7 +1597,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player) {
 			if (this.room.auth.isStaff(user.id)) {
 				// Uninvolved staff can talk anytime
-				return false;
+				return;
 			} else {
 				return `You cannot talk while a game of ${this.title} is going on.`;
 			}
@@ -1620,8 +1618,6 @@ class MafiaTracker extends Rooms.RoomGame {
 				return `You cannot talk at night.${user.can('mute', null, this.room) ? " You can bypass this using /mafia nighttalk." : ''}`;
 			}
 		}
-
-		return false;
 	}
 
 	onConnect(user: User) {

@@ -288,12 +288,12 @@ exports.restrictLinks = false;
 exports.chatmodchat = false;
 /**
  * battle modchat - default minimum group for speaking in battles; changeable with /modchat
- * @type {false | string}
+ * @type {false | AuthLevel}
  */
 exports.battlemodchat = false;
 /**
- * pm modchat - minimum group for PMing other users, challenging other users
- * @type {false | string}
+ * PM modchat - minimum group for sending private messages or challenges to other users
+ * @type {false | AuthLevel}
  */
 exports.pmmodchat = false;
 /**
@@ -308,6 +308,13 @@ exports.laddermodchat = false;
  *   This setting can also be turned on with the command /forcetimer.
  */
 exports.forcetimer = false;
+
+/**
+ * force register ELO - unregistered users cannot search for ladder battles
+ * in formats where their ELO is at or above this value.
+ * @type {false | number}
+ */
+exports.forceregisterelo = false;
 
 /**
  * backdoor - allows Pokemon Showdown system operators to provide technical
@@ -593,7 +600,7 @@ exports.grouplist = [
 
 		globalban: true,
 		ban: true,
-		modchatall: true,
+		modchat: 'a',
 		roomvoice: true,
 		roomwhitelist: true,
 		forcerename: true,
@@ -648,7 +655,7 @@ exports.grouplist = [
 		name: "Voice",
 		inherit: ' ',
 
-		alts: 's',
+		altsself: true,
 		makegroupchat: true,
 		joinbattle: true,
 		show: true,
@@ -662,7 +669,7 @@ exports.grouplist = [
 		name: "Whitelist",
 		inherit: ' ',
 		roomonly: true,
-		alts: 's',
+		altsself: true,
 		show: true,
 		showmedia: true,
 		exportinputlog: true,
@@ -670,7 +677,7 @@ exports.grouplist = [
 	},
 	{
 		symbol: ' ',
-		ip: 's',
+		ipself: true,
 	},
 	{
 		name: 'Locked',

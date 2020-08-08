@@ -404,6 +404,61 @@ export const commands: ChatCommands = {
 		`Alternatively, you can use /scale[gen number] to see a Pokemon's scaled stats in that generation.`,
 	],
 
+	flip: 'flipped',
+	flip1: 'flipped',
+	flip2: 'flipped',
+	flip3: 'flipped',
+	flip4: 'flipped',
+	flip5: 'flipped',
+	flip6: 'flipped',
+	flip7: 'flipped',
+	flip8: 'flipped',
+	flipped(target, room, user, connection, cmd) {
+		if (!this.runBroadcast()) return;
+		const args = target.split(',');
+		if (!args[0]) return this.parse(`/help flipped`);
+		const mon = args[0];
+		let mod = args[1];
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !mod) mod = `gen${targetGen}`;
+		let dex = Dex;
+		if (mod && toID(mod) in Dex.dexes) {
+			dex = Dex.dexes[toID(mod)];
+		} else if (room?.battle) {
+			dex = Dex.forFormat(room.battle.format);
+		}
+		const species = Dex.deepClone(dex.getSpecies(mon));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : mon.trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
+		if (dex.gen === 1) {
+			const flippedStats: {[k: string]: number} = {
+				hp: species.baseStats.spe,
+				atk: species.baseStats.spa,
+				def: species.baseStats.def,
+				spa: species.baseStats.atk,
+				spd: species.baseStats.atk,
+				spe: species.baseStats.hp,
+			};
+			for (const stat in species.baseStats) {
+				species.baseStats[stat] = flippedStats[stat];
+			}
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+			return;
+		}
+		const stats = Object.values(species.baseStats).reverse();
+		for (const [i, statName] of Object.keys(species.baseStats).entries()) {
+			species.baseStats[statName] = stats[i];
+		}
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+	},
+	flippedhelp: [
+		`/flip OR /flipped <pokemon>[, gen] - Shows the base stats that a Pokemon would have in Flipped.`,
+		`Alternatively, you can use /flip[gen number] to see a Pokemon's stats in that generation.`,
+	],
+
 	ns: 'natureswap',
 	ns3: 'natureswap',
 	ns4: 'natureswap',

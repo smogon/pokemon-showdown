@@ -1,6 +1,6 @@
 import {SSBSet, ssbSets} from "./random-teams";
 
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
 	"abilityid": {
@@ -745,7 +745,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.baseMoveSlots = [];
 				let slot = 0;
 				for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
-					const move = pokemon.battle.dex.getMove(toID(newMove));
+					const move = pokemon.battle.dex.getMove(this.toID(newMove));
 					if (!move.id) continue;
 					const moveSlot = {
 						move: move.name,
@@ -808,7 +808,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			}
 			pokemon.addVolatile('shadydeal');
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				const typeList = Object.keys(this.dex.data.TypeChart);
 				const firstTypeIndex = this.random(typeList.length);
@@ -1013,7 +1013,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onEnd(pokemon) {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
-				let disguisedAs = toID(pokemon.illusion.name);
+				let disguisedAs = this.toID(pokemon.illusion.name);
 				pokemon.illusion = null;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
@@ -1024,10 +1024,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.volatiles[disguisedAs]) {
 					pokemon.removeVolatile(disguisedAs);
 				}
-				if (!pokemon.volatiles[toID(pokemon.name)]) {
-					const status = this.dex.getEffect(toID(pokemon.name));
+				if (!pokemon.volatiles[this.toID(pokemon.name)]) {
+					const status = this.dex.getEffect(this.toID(pokemon.name));
 					if (status?.exists) {
-						pokemon.addVolatile(toID(pokemon.name), pokemon);
+						pokemon.addVolatile(this.toID(pokemon.name), pokemon);
 					}
 				}
 			}

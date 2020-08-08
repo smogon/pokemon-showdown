@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const Conditions: {[k: string]: ModdedConditionData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -237,5 +237,3 @@ function residualdmg(battle: Battle, pokemon: Pokemon) {
 		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
 	}
 }
-
-exports.BattleStatuses = BattleStatuses;

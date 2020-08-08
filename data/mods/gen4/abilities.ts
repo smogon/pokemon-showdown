@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	angerpoint: {
 		inherit: true,
 		desc: "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
@@ -90,7 +90,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(target) {
 				this.add('-start', target, 'ability: Flash Fire');

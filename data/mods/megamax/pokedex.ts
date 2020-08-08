@@ -1,4 +1,8 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+	venusaur: {
+		inherit: true,
+		otherFormes: ["Venusaur-Mega", "Venusaur-Gmax"],
+	},
 	venusaurgmax: {
 		num: 3,
 		name: "Venusaur-Gmax",
@@ -14,6 +18,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Venusaurite Z",
 		gen: 8,
+	},
+	charizard: {
+		inherit: true,
+		otherFormes: ["Charizard-Mega-X", "Charizard-Mega-Y", "Charizard-Gmax"],
 	},
 	charizardgmax: {
 		num: 6,
@@ -31,6 +39,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Charizardite Z",
 		gen: 8,
 	},
+	blastoise: {
+		inherit: true,
+		otherFormes: ["Blastoise-Mega", "Blastoise-Gmax"],
+	},
 	blastoisegmax: {
 		num: 9,
 		name: "Blastoise-Gmax",
@@ -47,6 +59,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Blastoisinite Z",
 		gen: 8,
 	},
+	butterfree: {
+		inherit: true,
+		otherFormes: ["Butterfree-Gmax"],
+	},
 	butterfreegmax: {
 		num: 12,
 		name: "Butterfree-Gmax",
@@ -61,6 +77,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Bug"],
 		requiredItem: "Butterfrite",
 		gen: 8,
+	},
+	pikachu: {
+		inherit: true,
+		otherFormes: ["Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-Gmax", "Pikachu-World"],
 	},
 	pikachugmax: {
 		num: 25,
@@ -77,6 +97,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Pikachuite",
 		gen: 8,
 	},
+	meowth: {
+		inherit: true,
+		otherFormes: ["Meowth-Alola", "Meowth-Galar", "Meowth-Gmax"],
+	},
 	meowthgmax: {
 		num: 52,
 		name: "Meowth-Gmax",
@@ -91,6 +115,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Field"],
 		requiredItem: "Meowthite",
 		gen: 8,
+	},
+	machamp: {
+		inherit: true,
+		otherFormes: ["Machamp-Gmax"],
 	},
 	machampgmax: {
 		num: 68,
@@ -108,6 +136,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Machampite",
 		gen: 8,
 	},
+	gengar: {
+		inherit: true,
+		otherFormes: ["Gengar-Mega", "Gengar-Gmax"],
+	},
 	gengargmax: {
 		num: 94,
 		name: "Gengar-Gmax",
@@ -122,6 +154,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Gengarite X",
 		gen: 8,
+	},
+	kingler: {
+		inherit: true,
+		otherFormes: ["Kingler-Gmax"],
 	},
 	kinglergmax: {
 		num: 99,
@@ -138,6 +174,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Kinglerite",
 		gen: 8,
 	},
+	lapras: {
+		inherit: true,
+		otherFormes: ["Lapras-Gmax"],
+	},
 	laprasgmax: {
 		num: 131,
 		name: "Lapras-Gmax",
@@ -152,6 +192,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Laprasite",
 		gen: 8,
+	},
+	eevee: {
+		inherit: true,
+		otherFormes: ["Eevee-Starter", "Eevee-Gmax"],
 	},
 	eeveegmax: {
 		num: 133,
@@ -169,6 +213,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Eevite",
 		gen: 8,
 	},
+	snorlax: {
+		inherit: true,
+		otherFormes: ["Snorlax-Gmax"],
+	},
 	snorlaxgmax: {
 		num: 143,
 		name: "Snorlax-Gmax",
@@ -185,6 +233,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Snorlaxnite",
 		gen: 8,
 	},
+	garbodor: {
+		inherit: true,
+		otherFormes: ["Garbodor-Gmax"],
+	},
 	garbodorgmax: {
 		num: 569,
 		name: "Garbodor-Gmax",
@@ -199,6 +251,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Mineral"],
 		requiredItem: "Garbodite",
 		gen: 8,
+	},
+	melmetal: {
+		inherit: true,
+		otherFormes: ["Melmetal-Gmax"],
 	},
 	melmetalgmax: {
 		num: 809,
@@ -216,6 +272,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Melmetalite",
 		gen: 8,
 	},
+	rillaboom: {
+		inherit: true,
+		otherFormes: ["Rillaboom-Gmax"],
+	},
 	rillaboomgmax: {
 		num: 812,
 		name: "Rillaboom-Gmax",
@@ -231,6 +291,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Field", "Grass"],
 		requiredItem: "Rillaboominite",
 		gen: 8,
+	},
+	cinderace: {
+		inherit: true,
+		otherFormes: ["Cinderace-Gmax"],
 	},
 	cinderacegmax: {
 		num: 815,
@@ -248,6 +312,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Cinderite",
 		gen: 8,
 	},
+	inteleon: {
+		inherit: true,
+		otherFormes: ["Inteleon-Gmax"],
+	},
 	inteleongmax: {
 		num: 818,
 		name: "Inteleon-Gmax",
@@ -264,6 +332,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Inteleonite",
 		gen: 8,
 	},
+	corviknight: {
+		inherit: true,
+		otherFormes: ["Corviknight-Gmax"],
+	},
 	corviknightgmax: {
 		num: 823,
 		name: "Corviknight-Gmax",
@@ -278,6 +350,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Flying"],
 		requiredItem: "Corviknite",
 		gen: 8,
+	},
+	orbeetle: {
+		inherit: true,
+		otherFormes: ["Orbeetle-Gmax"],
 	},
 	orbeetlegmax: {
 		num: 826,
@@ -294,6 +370,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Orbite",
 		gen: 8,
 	},
+	drednaw: {
+		inherit: true,
+		otherFormes: ["Drednaw-Gmax"],
+	},
 	drednawgmax: {
 		num: 834,
 		name: "Drednaw-Gmax",
@@ -308,6 +388,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Drednite",
 		gen: 8,
+	},
+	coalossal: {
+		inherit: true,
+		otherFormes: ["Coalossal-Gmax"],
 	},
 	coalossalgmax: {
 		num: 839,
@@ -324,6 +408,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Coalossalite",
 		gen: 8,
 	},
+	flapple: {
+		inherit: true,
+		otherFormes: ["Flapple-Gmax"],
+	},
 	flapplegmax: {
 		num: 841,
 		name: "Flapple-Gmax",
@@ -338,6 +426,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Grass", "Dragon"],
 		requiredItem: "Flappnite",
 		gen: 8,
+	},
+	appletun: {
+		inherit: true,
+		otherFormes: ["Appletun-Gmax"],
 	},
 	appletungmax: {
 		num: 842,
@@ -354,6 +446,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Appletunite",
 		gen: 8,
 	},
+	sandaconda: {
+		inherit: true,
+		otherFormes: ["Sandaconda-Gmax"],
+	},
 	sandacondagmax: {
 		num: 844,
 		name: "Sandaconda-Gmax",
@@ -368,6 +464,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Field", "Dragon"],
 		requiredItem: "Sandaconite",
 		gen: 8,
+	},
+	toxtricity: {
+		inherit: true,
+		otherFormes: ["Toxtricity-Low-Key", "Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax"],
 	},
 	toxtricitygmax: {
 		num: 849,
@@ -400,6 +500,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		battleOnly: "Toxtricity-Low-Key",
 		gen: 8,
 	},
+	centiskorch: {
+		inherit: true,
+		otherFormes: ["Centiskorch-Gmax"],
+	},
 	centiskorchgmax: {
 		num: 851,
 		name: "Centiskorch-Gmax",
@@ -414,6 +518,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Bug"],
 		requiredItem: "Centiskorchite",
 		gen: 8,
+	},
+	hatterene: {
+		inherit: true,
+		otherFormes: ["Hatterene-Gmax"],
 	},
 	hatterenegmax: {
 		num: 858,
@@ -431,6 +539,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Hatterenite",
 		gen: 8,
 	},
+	grimmsnarl: {
+		inherit: true,
+		otherFormes: ["Grimmsnarl-Gmax"],
+	},
 	grimmsnarlgmax: {
 		num: 861,
 		name: "Grimmsnarl-Gmax",
@@ -446,6 +558,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Fairy", "Human-Like"],
 		requiredItem: "Grimmsnarlite",
 		gen: 8,
+	},
+	alcremie: {
+		inherit: true,
+		otherFormes: ["Alcremie-Gmax"],
 	},
 	alcremiegmax: {
 		num: 869,
@@ -463,6 +579,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Alcremite",
 		gen: 8,
 	},
+	copperajah: {
+		inherit: true,
+		otherFormes: ["Copperajah-Gmax"],
+	},
 	copperajahgmax: {
 		num: 879,
 		name: "Copperajah-Gmax",
@@ -478,6 +598,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		requiredItem: "Copperajite",
 		gen: 8,
 	},
+	duraludon: {
+		inherit: true,
+		otherFormes: ["Duraludon-Gmax"],
+	},
 	duraludongmax: {
 		num: 884,
 		name: "Duraludon-Gmax",
@@ -492,6 +616,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Mineral", "Dragon"],
 		requiredItem: "Duraludite",
 		gen: 8,
+	},
+	urshifu: {
+		inherit: true,
+		otherFormes: ["Urshifu-Rapid-Strike", "Urshifu-Gmax", "Urshifu-Rapid-Strike-Gmax"],
 	},
 	urshifugmax: {
 		num: 892,
