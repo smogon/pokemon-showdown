@@ -3838,6 +3838,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Wynaut",
 		evoLevel: 15,
 		eggGroups: ["Amorphous"],
+		canHatch: true,
 	},
 	girafarig: {
 		num: 203,
@@ -14763,6 +14764,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		evos: ["Toxtricity", "Toxtricity-Low-Key"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	toxtricity: {
 		num: 849,
