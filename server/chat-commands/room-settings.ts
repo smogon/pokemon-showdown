@@ -7,7 +7,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
-import {ROOM_PERMISSIONS, GLOBAL_PERMISSIONS, GlobalPermission, RoomPermission} from '../user-groups';
+import type {RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
