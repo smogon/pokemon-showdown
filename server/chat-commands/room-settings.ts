@@ -7,6 +7,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
+import {ROOM_PERMISSIONS, GLOBAL_PERMISSIONS, GlobalPermission, RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
@@ -300,7 +301,12 @@ export const commands: ChatCommands = {
 			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
-			if (!(room.auth.atLeast(user, '#') && Users.Auth.hasPermission(user, perm, null, room))) {
+			if (!room.auth.atLeast(user, '#') ||
+				(
+					[...ROOM_PERMISSIONS, ...GLOBAL_PERMISSIONS].includes(perm as GlobalPermission | RoomPermission) &&
+					Users.Auth.hasPermission(user, perm, null, room)
+				)
+			) {
 				return this.errorReply(`/permissions set - Access denied.`);
 			}
 
