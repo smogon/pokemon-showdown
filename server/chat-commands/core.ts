@@ -625,17 +625,22 @@ export const commands: ChatCommands = {
 		 `Use /clearstatus to clear your status message.`,
 	],
 
-	busy(target, room, user) {
+	donotdisturb: 'busy',
+	dnd: 'busy',
+	busy(target, room, user, connection, cmd) {
 		if (target) {
 			this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('busy');
-		this.parse('/blockpms +');
-		this.parse('/blockchallenges');
+		if (['dnd', 'donotdisturb'].includes(cmd)) {
+			this.parse('/blockpms +');
+			this.parse('/blockchallenges');
+		}
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
 	busyhelp: [
-		`/busy - Marks you as busy, blocking private messages and challenges.`,
+		`/busy OR /donotdisturb - Marks you as busy.`,
+		`Use /donotdisturb to also block private messages and challenges.`,
 		`Use /back to mark yourself as back.`,
 	 ],
 
