@@ -44,7 +44,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
-import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
+import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission, AuthLevel} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -310,6 +310,7 @@ export interface UserSettings {
 	blockPMs: boolean | AuthLevel;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
+	blockInvites: AuthLevel | boolean;
 }
 
 // User
@@ -370,6 +371,7 @@ export class User extends Chat.MessageContext {
 	notified: {
 		blockChallenges: boolean,
 		blockPMs: boolean,
+		blockInvites: boolean,
 		punishment: boolean,
 		lock: boolean,
 	};
@@ -437,6 +439,7 @@ export class User extends Chat.MessageContext {
 			blockPMs: false,
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
+			blockInvites: false,
 		};
 		this.battleSettings = {
 			team: '',
@@ -466,6 +469,7 @@ export class User extends Chat.MessageContext {
 		this.notified = {
 			blockChallenges: false,
 			blockPMs: false,
+			blockInvites: false,
 			punishment: false,
 			lock: false,
 		};
