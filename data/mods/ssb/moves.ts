@@ -342,7 +342,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Brave Bird', target);
-			if (this.randomChance(255, 256)) {
+			if (!this.randomChance(255, 256)) {
 				this.attrLastMove('[miss]');
 				this.add('-activate', target, 'move: Celebrate');
 				this.add('-miss', source);
