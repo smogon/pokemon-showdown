@@ -331,7 +331,7 @@ export class FSPath {
 			// In Node versions before 12, fs.rmdir() didn't support recursion,
 			// so we have to implement recursion ourselves to support Node 10 and 11...
 			for (const file of await this.readdir()) {
-				const subpath = FS(`${this.path}/${file}`);
+				const subpath = FS(`${this.path}${pathModule.sep}${file}`);
 				if (await subpath.isDirectory()) {
 					await subpath.rmdir(true);
 				} else {
@@ -350,7 +350,7 @@ export class FSPath {
 		if (Config.nofswriting) return;
 		if (recursive) {
 			for (const file of this.readdirSync()) {
-				const subpath = FS(`${this.path}/${file}`);
+				const subpath = FS(`${this.path}${pathModule.sep}${file}`);
 				if (subpath.isDirectorySync()) {
 					subpath.rmdirSync(true);
 				} else {
