@@ -157,17 +157,51 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	cake: {
 		noCopy: true,
-		onStart(target, source) {
+		onStart(target, pokemon) {
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
-			if (source.illusion) return;
-			// Cake innate
-			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source);
+			// h innate
+			if (pokemon.illusion) return;
+			const typeList = Object.keys(this.dex.data.TypeChart);
+			this.prng.shuffle(typeList);
+			const firstType = typeList[0];
+			this.prng.shuffle(typeList);
+			const secondType = typeList[0];
+			let newTypes = [];
+			if (firstType === secondType) {
+				newTypes = [firstType];
+			} else {
+				newTypes = [firstType, secondType];
+			}
+			this.add('html|<b>h</b>');
+			this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[silent]');
+			pokemon.setType(newTypes);
 		},
 		onSwitchOut(pokemon) {
 			this.add(`c|${getName('Cake')}|${pokemon.side.name} is a nerd`);
 		},
 		onFaint() {
 			this.add(`c|${getName('Cake')}|Chowder was a good show`);
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.illusion) return;
+			if (pokemon.activeTurns) {
+				const typeList = Object.keys(this.dex.data.TypeChart);
+				this.prng.shuffle(typeList);
+				const firstType = typeList[0];
+				this.prng.shuffle(typeList);
+				const secondType = typeList[0];
+				let newTypes = [];
+				if (firstType === secondType) {
+					newTypes = [firstType];
+				} else {
+					newTypes = [firstType, secondType];
+				}
+				this.add('html|<b>h</b>');
+				this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[silent]');
+				pokemon.setType(newTypes);
+			}
 		},
 	},
 	cantsay: {

@@ -132,48 +132,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// Cake
-	h: {
-		shortDesc: "On switch-in and at the end of every turn, this Pokemon changes to a random typing.",
-		name: "h",
-		onSwitchIn(pokemon) {
-			const typeList = Object.keys(this.dex.data.TypeChart);
-			this.prng.shuffle(typeList);
-			const firstType = typeList[0];
-			this.prng.shuffle(typeList);
-			const secondType = typeList[0];
-			let newTypes = [];
-			if (firstType === secondType) {
-				newTypes = [firstType];
-			} else {
-				newTypes = [firstType, secondType];
-			}
-			this.add('html|<b>h</b>');
-			this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[silent]');
-			pokemon.setType(newTypes);
-		},
-		onResidualOrder: 26,
-		onResidualSubOrder: 1,
-		onResidual(pokemon) {
-			if (pokemon.activeTurns) {
-				const typeList = Object.keys(this.dex.data.TypeChart);
-				this.prng.shuffle(typeList);
-				const firstType = typeList[0];
-				this.prng.shuffle(typeList);
-				const secondType = typeList[0];
-				let newTypes = [];
-				if (firstType === secondType) {
-					newTypes = [firstType];
-				} else {
-					newTypes = [firstType, secondType];
-				}
-				this.add('html|<b>h</b>');
-				this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[silent]');
-				pokemon.setType(newTypes);
-			}
-		},
-	},
-
 	// cant say
 	ragequit: {
 		desc: "If Pokemon with this ability uses a move that misses or fails it faints and gives -2 Atk / -2 SpA to foe",

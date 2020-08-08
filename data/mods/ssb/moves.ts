@@ -329,8 +329,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 
 	// Cake
 	kevin: {
-		accuracy: 100,
-		basePower: 111,
+		accuracy: true,
+		basePower: 100,
 		category: "Physical",
 		desc: "This move combines the user's current typing in its type effectiveness against the target.",
 		shortDesc: "Combines current types in its type effectiveness.",
@@ -340,8 +340,15 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit(target, source) {
+		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Brave Bird', target);
+			if (this.randomChance(255, 256)) {
+				this.attrLastMove('[miss]');
+				this.add('-activate', target, 'move: Celebrate');
+				this.add('-miss', source);
+				this.hint("In Super Staff Bros, this move can still miss 1/256 of the time regardless of accuracy or evasion.");
+				return null;
+			}
 		},
 		onModifyType(move, pokemon, target) {
 			move.type = pokemon.types[0];
@@ -362,6 +369,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			return typeMod;
 		},
 		priority: 0,
+		recoil: [1, 8],
 		secondary: null,
 		target: "normal",
 		type: "Bird",

@@ -90,8 +90,8 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: 2,
 	},
 	Cake: {
-		species: 'Dunsparce', ability: 'h', item: 'Leftovers', gender: 'M',
-		moves: ['Toxic', 'Spiky Shield', 'Skill Swap'],
+		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Leftovers', gender: 'M',
+		moves: ['Psych Up', 'King\'s Shield', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Decorate', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
 		signatureMove: 'Kevin',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
