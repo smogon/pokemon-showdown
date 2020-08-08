@@ -493,6 +493,16 @@ export class CommandContext extends MessageContext {
 
 	sendChatMessage(message: string) {
 		if (this.pmTarget) {
+			const blockInvites = this.pmTarget.settings.blockInvites;
+			if (/^(<<(.*)>>+)$/.test(message.trim())) {
+				if (
+					!this.user.can('lock') && blockInvites === true ||
+					!Users.globalAuth.atLeast(this.user, blockInvites as GroupSymbol)
+				) {
+					Chat.maybeNotifyBlocked(`invite`, this.pmTarget, this.user);
+					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
+				}
+			}
 			Chat.sendPM(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
