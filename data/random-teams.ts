@@ -760,7 +760,7 @@ export class RandomTeams {
 					if (!!counter['speedsetup'] || hasMove['bulkup'] || hasMove['uturn']) rejected = true;
 					break;
 				case 'protect':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (((counter.setupType || !!counter['speedsetup']) && !isDoubles) || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (counter.Status < 2 && !hasAbility['Hunger Switch'] && !hasAbility['Speed Boost'] && !isDoubles) rejected = true;
 					if (movePool.includes('leechseed') || movePool.includes('toxic') && !hasMove['wish']) rejected = true;
 					if (isDoubles && (movePool.includes('fakeout') || movePool.includes('shellsmash') || movePool.includes('spore') || hasMove['tailwind'])) rejected = true;
@@ -1230,7 +1230,7 @@ export class RandomTeams {
 		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Leek';
 		} else if (species.name === 'Lopunny') {
-			item = 'Toxic Orb';
+			item = isDoubles ? 'Iron Ball' : 'Toxic Orb';
 		} else if (species.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (species.baseSpecies === 'Pikachu') {
@@ -1284,8 +1284,6 @@ export class RandomTeams {
 			item = 'Heavy-Duty Boots';
 
 		// Doubles
-		} else if (isDoubles && ability === 'Klutz') {
-			item = 'Iron Ball';
 		} else if (isDoubles && (hasMove['eruption'] || hasMove['waterspout']) && counter.damagingMoves.length >= 4) {
 			item = 'Choice Scarf';
 		} else if (isDoubles && hasMove['blizzard'] && ability !== 'Snow Warning' && !teamDetails['hail']) {
