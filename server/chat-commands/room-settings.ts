@@ -301,13 +301,14 @@ export const commands: ChatCommands = {
 			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
-			if (!room.auth.atLeast(user, '#') ||
-				(
-					[...ROOM_PERMISSIONS, ...GLOBAL_PERMISSIONS].includes(perm as GlobalPermission | RoomPermission) &&
-					Users.Auth.hasPermission(user, perm, null, room)
-				)
+			if (!room.auth.atLeast(user, '#')) {
+				return this.errorReply(`/permissions set - You must be at least a Room Owner to set permissions.`);
+			}
+			if (
+				Users.Auth.ROOM_PERMISSIONS.includes(perm as RoomPermission) &&
+				!Users.Auth.hasPermission(user, perm, null, room)
 			) {
-				return this.errorReply(`/permissions set - Access denied.`);
+				return this.errorReply(`/permissions set - You can't set the permission "${perm}" because you don't have it.`);
 			}
 
 			const currentPermissions = room.settings.permissions || {};
