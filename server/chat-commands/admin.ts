@@ -16,6 +16,8 @@ import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
 
+const PRIVATE_CODE_PATH = '../pokemon-showdown-private/';
+
 export const commands: ChatCommands = {
 
 	/*********************************************************
@@ -735,18 +737,18 @@ export const commands: ChatCommands = {
 
 	async updateserver(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;
-
-		if (Monitor.updateServerLock) {
+		const isPrivate = toID(target) === 'private';
+		if (Monitor.updateServerLock === (isPrivate ? 'private' : 'public')) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
 
-		Monitor.updateServerLock = true;
+		Monitor.updateServerLock = isPrivate ? 'private' : 'public';
 
 		const exec = (command: string): Promise<[number, string, string]> => {
 			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
-					cwd: __dirname,
+					cwd: `${__dirname}/../../${isPrivate ? PRIVATE_CODE_PATH : ``}`,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
@@ -757,13 +759,13 @@ export const commands: ChatCommands = {
 		};
 
 		this.sendReply(`Fetching newest version...`);
-		this.addGlobalModAction(`${user.name} used /updateserver`);
+		this.addGlobalModAction(`${user.name} used /updateserver ${isPrivate ? `private` : `public`}`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
-		if (!stdout && !stderr) {
+		if (!isPrivate && !stdout && !stderr) {
 			this.sendReply(`There were no updates.`);
-			[code, stdout, stderr] = await exec('node ../../build');
+			[code, stdout, stderr] = await exec('node ./build');
 			if (stderr) {
 				return this.errorReply(`Crash while rebuilding: ${stderr}`);
 			}
@@ -815,11 +817,13 @@ export const commands: ChatCommands = {
 			await exec(`git stash pop`);
 			this.sendReply(`FAILED, old changes restored.`);
 		}
-		[code, stdout, stderr] = await exec('node ../../build');
-		if (stderr) {
-			return this.errorReply(`Crash while rebuilding: ${stderr}`);
+		if (!isPrivate) {
+			[code, stdout, stderr] = await exec('node ./build');
+			if (stderr) {
+				return this.errorReply(`Crash while rebuilding: ${stderr}`);
+			}
+			this.sendReply(`Rebuilt.`);
 		}
-		this.sendReply(`Rebuilt.`);
 		Monitor.updateServerLock = false;
 	},
 
@@ -839,7 +843,7 @@ export const commands: ChatCommands = {
 		};
 
 		if (!this.canUseConsole()) return false;
-		Monitor.updateServerLock = true;
+		Monitor.updateServerLock = 'public';
 		const [, , stderr] = await exec('node ../../build');
 		if (stderr) {
 			return this.errorReply(`Crash while rebuilding: ${stderr}`);
