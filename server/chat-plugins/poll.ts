@@ -72,7 +72,7 @@ export class Poll {
 		const userid = user.id;
 		const pendingVote = this.pendingVotes[userid];
 		if (!pendingVote || !pendingVote.includes(option)) {
-			return user.sendTo(this.room, `That option is not selected.`);
+			return user.sendTo(this.room, this.room.tr`That option is not selected.`);
 		}
 		pendingVote.splice(pendingVote.indexOf(option), 1);
 		this.updateFor(user);
@@ -84,10 +84,10 @@ export class Poll {
 
 		if (userid in this.voters || ip in this.voterIps) {
 			delete this.pendingVotes[userid];
-			return user.sendTo(this.room, `You have already voted for this poll.`);
+			return user.sendTo(this.room, this.room.tr`You have already voted for this poll.`);
 		}
 		const selected = this.pendingVotes[userid];
-		if (!selected) return user.sendTo(this.room, `No options selected.`);
+		if (!selected) return user.sendTo(this.room, this.room.tr`No options selected.`);
 
 		this.voters[userid] = selected;
 		this.voterIps[ip] = selected;
@@ -113,7 +113,9 @@ export class Poll {
 	}
 
 	generateVotes(user: User | null) {
-		const iconText = this.isQuiz ? '<i class="fa fa-question"></i> Quiz' : '<i class="fa fa-bar-chart"></i> Poll';
+		const iconText = this.isQuiz ?
+			`<i class="fa fa-question"></i> ${this.room.tr`Quiz`}` :
+			`<i class="fa fa-bar-chart"></i> ${this.room.tr`Poll`}`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px">${iconText}</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
 
 		if (this.multiPoll) {
@@ -126,14 +128,14 @@ export class Poll {
 				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Utils.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
 			}
 			// eslint-disable-next-line max-len
-			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="Submit your vote"><strong>Submit</strong></button>` : `<button class="button" value="/poll results" name="send" title="View results - you will not be able to vote after viewing results">(View results)</button`;
+			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="${this.room.tr`Submit your vote`}"><strong>${this.room.tr`Submit`}</strong></button>` : `<button class="button" value="/poll results" name="send" title="${this.room.tr`View results`} - ${this.room.tr`you will not be able to vote after viewing results`}">(${this.room.tr`View results`})</button`;
 			output += `<div style="margin-top: 7px; padding-left: 12px">${submitButton}</div>`;
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
-				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="Vote for ${num}. ${Utils.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
+				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="${this.room.tr`Vote for ${num}`}. ${Utils.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
 			}
-			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>`;
+			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="${this.room.tr`View results`} - ${this.room.tr`you will not be able to vote after viewing results`}"><small>(${this.room.tr`View results`})</small></button></div>`;
 			output += `</div>`;
 		}
 
@@ -141,8 +143,10 @@ export class Poll {
 	}
 
 	generateResults(ended = false, option: number[] | null = null) {
-		const iconText = this.isQuiz ? '<i class="fa fa-question"></i> Quiz' : '<i class="fa fa-bar-chart"></i> Poll';
-		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? " ended" : ""}</span> <small>${this.totalVotes} vote${Chat.plural(this.totalVotes)}</small>`;
+		const iconText = this.isQuiz ?
+			`<i class="fa fa-question"></i> ${this.room.tr`Quiz`}` :
+			`<i class="fa fa-bar-chart"></i> ${this.room.tr`Poll`}`;
+		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + this.room.tr`ended` : ""}</span> <small>${this.totalVotes} ${this.room.tr`votes`}</small>`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
 		const iter = this.options.entries();
 
@@ -159,7 +163,9 @@ export class Poll {
 			i = iter.next();
 			c++;
 		}
-		if (!option && !ended) output += '<div><small>(You can\'t vote after viewing results)</small></div>';
+		if (!option && !ended) {
+			output += `div><small>(${this.room.tr`You can't vote after viewing results`})</small></div>`;
+		}
 		output += '</div>';
 
 		return output;
@@ -254,7 +260,7 @@ export class Poll {
 	end() {
 		const results = this.generateResults(true);
 
-		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(The poll has ended &ndash; scroll down to see the results)</div>`);
+		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
 		this.room.add(`|html|${results}`).update();
 	}
 }
@@ -370,7 +376,7 @@ export const commands: ChatCommands = {
 				curRoom.minorActivityQueue!.splice(slot - 1, 1);
 				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
 
-				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${slot}`);
+				curRoom.modlog(`DELETEQUEUE: by ${user}: ${slot}`);
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
 				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
@@ -544,9 +550,8 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	pollqueue(args, user) {
-		this.extractRoom();
-		const room = this.room;
-		if (!room) return `<div class="pad"><h2>Specify a room.</h2></div>`;
+		const room = this.requireRoom();
+
 		let buf = `<div class="pad"><strong>${this.tr("Queued polls:")}</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> ${this.tr("Refresh")}</button><br />`;
@@ -559,7 +564,7 @@ export const pages: PageTable = {
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
 				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
-				`(delete)</button>`
+				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
 			buf += `${button}<br />${poll.generateResults()}`;

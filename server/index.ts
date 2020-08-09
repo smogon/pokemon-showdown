@@ -107,7 +107,7 @@ if (Config.watchconfig) {
 
 import {Dex} from '../sim/dex';
 global.Dex = Dex;
-global.toID = Dex.getId;
+global.toID = Dex.toID;
 
 import {LoginServer} from './loginserver';
 global.LoginServer = LoginServer;
@@ -126,6 +126,8 @@ global.Punishments = Punishments;
 
 import {Rooms} from './rooms';
 global.Rooms = Rooms;
+// We initialize the global room here because roomlogs.ts needs the Rooms global
+Rooms.global = new Rooms.GlobalRoomState();
 
 import * as Verifier from './verifier';
 global.Verifier = Verifier;

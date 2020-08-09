@@ -297,12 +297,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Quick Reload',
 				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
 			},
-			Flare: {
-				species: 'Zoroark', ability: 'Super Illusion', item: 'Choice Scarf', gender: 'N',
-				moves: ['Fleur Cannon', 'Parting Shot', 'Sludge Bomb'],
-				signatureMove: 'Distortion Blast',
-				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-			},
 			FOMG: {
 				species: 'Golem', ability: 'Serene Grace', item: 'Astleyium Z', gender: 'M',
 				moves: ['Earthquake', 'Explosion', 'Iron Head'],

@@ -130,8 +130,7 @@ const Natures: {[k: string]: Nature} = {
 	serious: {name: "Serious"},
 	timid: {name: "Timid", plus: 'spe', minus: 'atk'},
 };
-
-const toID = Data.Tools.getId;
+export const toID = Data.toID;
 
 export class ModdedDex {
 	readonly Data: typeof Data;
@@ -141,8 +140,7 @@ export class ModdedDex {
 	readonly isBase: boolean;
 	readonly currentMod: string;
 
-	readonly getId: (text: any) => ID;
-	readonly getString: (str: any) => string;
+	readonly toID: (text: any) => ID;
 
 	readonly abilityCache: Map<ID, Ability>;
 	readonly effectCache: Map<ID, Effect | Move>;
@@ -167,8 +165,7 @@ export class ModdedDex {
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 
-		this.getId = Data.Tools.getId;
-		this.getString = Data.Tools.getString;
+		this.toID = toID;
 
 		this.abilityCache = new Map();
 		this.effectCache = new Map();
@@ -450,6 +447,8 @@ export class ModdedDex {
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
 			species.nfe = species.evos.length && this.getSpecies(species.evos[0]).gen <= this.gen;
+			species.canHatch = species.canHatch ||
+				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 		} else {
 			species = new Data.Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
@@ -1349,6 +1348,33 @@ export class ModdedDex {
 		}
 
 		return team;
+	}
+
+	/**
+	* Use instead of Dex.packTeam to generate more human-readable team output.
+	*/
+	stringifyTeam(team: PokemonSet[], nicknames?: string[]) {
+		let output = '';
+		for (const [i, mon] of team.entries()) {
+			output += nicknames ? `${nicknames?.[i]} (${mon.species})` : `${mon.species}`;
+			output += ` @ ${Dex.getItem(mon.item).name}<br/>`;
+			output += `Ability: ${Dex.getAbility(mon.ability).name}<br/>`;
+			if (mon.happiness && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
+			const evs = [];
+			for (const stat in mon.evs) {
+				if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
+			}
+			if (evs.length) output += `EVs: ${evs.join(' / ')}<br/>`;
+			if (mon.nature) output += `${mon.nature} Nature<br/>`;
+			const ivs = [];
+			for (const stat in mon.ivs) {
+				if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
+			}
+			if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br/>`;
+			output += mon.moves.map(move => `- ${Dex.getMove(move).name}<br/>`).join('');
+			output += '<br/>';
+		}
+		return output;
 	}
 
 	deepClone(obj: any): any {

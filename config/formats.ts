@@ -41,11 +41,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8ou') {
-				this.add('html', '<div class="broadcast-blue"><strong>OU is currently suspecting Magearna! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3667669/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
@@ -438,7 +433,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Blacephalon', 'Chansey', 'Charizard-Mega-Y', 'Cinderace', 'Clefable', 'Corviknight', 'Dracovish', 'Dragapult', 'Excadrill', 'Ferrothorn', 'Garchomp',
 			'Garchomp-Mega', 'Gliscor', 'Greninja', 'Heatran', 'Kartana', 'Kommo-o', 'Landorus-Therian', 'Lopunny-Mega', 'Magearna', 'Magearna-Original', 'Magnezone',
 			'Melmetal', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Slowbro-Mega', 'Swampert-Mega', 'Tangrowth', 'Tapu Fini', 'Tapu Koko',
-			'Tapu Lele', 'Toxapex', 'Tyranitar', 'Tyranitar-Mega', 'Volcanion', 'Volcarona', 'Zapdos',
+			'Tapu Lele', 'Toxapex', 'Tyranitar', 'Tyranitar-Mega', 'Volcanion', 'Volcarona', 'Zapdos', 'Zarude-Base',
 			'nduubl', // National Dex UUBL
 			'Aegislash', 'Alakazam', 'Azumarill', 'Charizard-Mega-X', 'Deoxys-Defense', 'Dragonite', 'Gallade-Mega', 'Gengar', 'Grimmsnarl', 'Hawlucha', 'Heracross-Mega',
 			'Hoopa-Unbound', 'Hydreigon', 'Kyurem', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mawile-Mega', 'Medicham-Mega', 'Mew', 'Pinsir-Mega', 'Scolipede',
@@ -624,7 +619,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		// searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'AG + Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Blissey', 'Chansey', 'Toxapex', 'Uber > 1', 'AG + Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
 		onModifySpecies(species, target, source) {
 			if (source || !target || !target.side) return;
 			const god = target.side.team.find(set => {
@@ -658,9 +653,12 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', 'Inverse Mod'],
-		banlist: ['Diggersby'],
-		unbanlist: ['Melmetal'],
+		ruleset: ['Standard', 'Dynamax Clause', 'Inverse Mod'],
+		banlist: [
+			'Darmanitan-Galar', 'Diggersby', 'Dracovish', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow',
+			'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+		],
 	},
 
 	// Other Metagames
@@ -980,10 +978,12 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['[Gen 8] OU'],
+		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
-			'Blissey', 'Chansey', 'Shedinja', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
-			'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Pure Power', 'Simple', 'Water Bubble',
+			'Blissey', 'Chansey', 'Darmanitan-Galar', 'Dracovish', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal',
+			'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Urshifu-Base', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Pure Power', 'Shadow Tag', 'Simple', 'Water Bubble',
+			'Baton Pass', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
 		],
 		restricted: ['Torkoal', 'Toxtricity'],
 		getEvoFamily(speciesid) {
@@ -1024,7 +1024,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			}
 
 			const name = set.name;
-			if (this.ruleTable.isBanned(`pokemon:${species.id}`) || this.ruleTable.isBanned(`basepokemon:${species.id}`)) {
+			if (this.ruleTable.isBannedSpecies(species)) {
 				return this.validateSet(set, teamHas);
 			}
 
@@ -1049,7 +1049,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				if (validSources.includes(evoFamily)) continue;
 
 				set.species = donorSpecies.name;
-				if (!set.name) set.name = donorSpecies.baseSpecies;
+				set.name = donorSpecies.baseSpecies;
 				const problems = this.validateSet(set, teamHas) || [];
 				if (!problems.length) {
 					validSources.push(evoFamily);
@@ -1245,11 +1245,15 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['[Gen 8] OU'],
-		banlist: ['Dragapult'],
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: [
+			'Darmanitan-Galar', 'Dracovish', 'Dragapult', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow',
+			'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+		],
 		restricted: [
 			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock',
-			'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
+			'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];

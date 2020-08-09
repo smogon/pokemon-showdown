@@ -711,7 +711,7 @@ export const Punishments = new class {
 
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
-		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
+		Rooms.global.modlog(`AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`, roomid);
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
@@ -1045,18 +1045,6 @@ export const Punishments = new class {
 			dotIndex = ip.lastIndexOf('.');
 		}
 		return undefined;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	shortenHost(host: string) {
-		if (host.slice(-7) === '-nohost') return host;
-		let dotLoc = host.lastIndexOf('.');
-		const tld = host.substr(dotLoc);
-		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
-		dotLoc = host.lastIndexOf('.', dotLoc - 1);
-		return host.substr(dotLoc + 1);
 	}
 
 	/** Defined in Punishments.loadBanlist */

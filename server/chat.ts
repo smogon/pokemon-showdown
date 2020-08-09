@@ -220,7 +220,6 @@ export abstract class MessageContext {
 		}
 		return false;
 	}
-
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);
 	}
@@ -232,12 +231,14 @@ export class PageContext extends MessageContext {
 	pageid: string;
 	initialized: boolean;
 	title: string;
+	args: string[];
 	constructor(options: {pageid: string, user: User, connection: Connection, language?: string}) {
 		super(options.user, options.language);
 
 		this.connection = options.connection;
 		this.room = null;
 		this.pageid = options.pageid;
+		this.args = this.pageid.split('-');
 
 		this.initialized = false;
 		this.title = 'Page';
@@ -253,17 +254,21 @@ export class PageContext extends MessageContext {
 		return true;
 	}
 
+	requireRoom(pageid?: string) {
+		const room = this.extractRoom(pageid);
+		if (!room) {
+			throw new Chat.ErrorMessage(`Invalid link: This page requires a room ID.`);
+		}
+
+		this.room = room;
+		return room;
+	}
 	extractRoom(pageid?: string) {
 		if (!pageid) pageid = this.pageid;
 		const parts = pageid.split('-');
 
-		// Since we assume pageids are all in the form of view-pagename-roomid
-		// if someone is calling this function, so this is the only case we cover (for now)
-		const room = Rooms.get(parts[2]);
-		if (!room) {
-			this.send(`<h2>Invalid room.</h2>`);
-			return null;
-		}
+		// The roomid for the page should be view-pagename-roomid
+		const room = Rooms.get(parts[2]) || null;
 
 		this.room = room;
 		return room;
@@ -281,6 +286,9 @@ export class PageContext extends MessageContext {
 		}
 		this.connection.send(`>${this.pageid}\n${content}`);
 	}
+	errorReply(message: string) {
+		this.send(Utils.html`<div class="pad"><p class="message-error">${message}</p></div>`);
+	}
 
 	close() {
 		this.send('|deinit');
@@ -290,39 +298,46 @@ export class PageContext extends MessageContext {
 		if (pageid) this.pageid = pageid;
 
 		const parts = this.pageid.split('-');
+		parts.shift(); // first part is always `view`
+
 		let handler: PageHandler | PageTable = Chat.pages;
-		parts.shift();
 		while (handler) {
 			if (typeof handler === 'function') {
-				let res;
-				try {
-					res = await handler.call(this, parts, this.user, this.connection);
-				} catch (err) {
-					if (err.name?.endsWith('ErrorMessage')) {
-						this.send(
-							Utils.html`<div class="pad"><p class="message-error">${err.message}</p></div>`
-						);
-						return;
-					}
-					Monitor.crashlog(err, 'A chat page', {
-						user: this.user.name,
-						room: this.room && this.room.roomid,
-						pageid: this.pageid,
-					});
-					this.send(
-						`<div class="pad"><div class="broadcast-red">` +
-						`<strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.` +
-						`</div></div>`
-				  );
-				}
-				if (typeof res === 'string') {
-					this.send(res);
-					res = undefined;
-				}
-				return res;
+				break;
 			}
 			handler = handler[parts.shift() || 'default'];
 		}
+		if (typeof handler !== 'function') {
+			this.errorReply(`Page "${this.pageid}" not found`);
+			return;
+		}
+
+		this.args = parts;
+
+		let res;
+		try {
+			res = await handler.call(this, parts, this.user, this.connection);
+		} catch (err) {
+			if (err.name?.endsWith('ErrorMessage')) {
+				this.errorReply(err.message);
+				return;
+			}
+			Monitor.crashlog(err, 'A chat page', {
+				user: this.user.name,
+				room: this.room && this.room.roomid,
+				pageid: this.pageid,
+			});
+			this.send(
+				`<div class="pad"><div class="broadcast-red">` +
+				`<strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.` +
+				`</div></div>`
+			);
+		}
+		if (typeof res === 'string') {
+			this.send(res);
+			res = undefined;
+		}
+		return res;
 	}
 }
 
@@ -399,6 +414,10 @@ export class CommandContext extends MessageContext {
 				throw new Error("Too much command recursion");
 			}
 			subcontext.message = msg;
+			subcontext.cmd = '';
+			subcontext.fullCmd = '';
+			subcontext.cmdToken = '';
+			subcontext.target = '';
 			return subcontext.parse();
 		}
 		let message: any = this.message;
@@ -769,7 +788,7 @@ export class CommandContext extends MessageContext {
 		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null) {
-		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;
+		let buf = `${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${user}]`;
@@ -785,7 +804,7 @@ export class CommandContext extends MessageContext {
 		if (!note) note = ` by ${this.user.id}`;
 		buf += note.replace(/\n/gm, ' ');
 
-		Rooms.global.modlog(buf);
+		Rooms.global.modlog(buf, this.room?.roomid);
 		if (this.room) this.room.modlog(buf);
 	}
 	modlog(
@@ -794,7 +813,7 @@ export class CommandContext extends MessageContext {
 		note: string | null = null,
 		options: Partial<{noalts: any, noip: any}> = {}
 	) {
-		let buf = `(${this.room?.roomid || 'global'}${this.room?.tour ? ` tournament: ${this.room.tour.roomid}` : ``}) ${action}: `;
+		let buf = `${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${toID(user)}]`;
@@ -970,7 +989,7 @@ export class CommandContext extends MessageContext {
 					this.errorReply(this.tr(`You are muted and cannot talk in this room.`));
 					return null;
 				}
-				if (room.settings.modchat && !user.authAtLeast(room.settings.modchat, room)) {
+				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
 						this.errorReply(
 							this.tr(
@@ -1012,14 +1031,14 @@ export class CommandContext extends MessageContext {
 					this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 					return null;
 				}
-				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) &&
+				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 					!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)) {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 					return null;
 				}
 				if (targetUser.settings.blockPMs &&
-					(targetUser.settings.blockPMs === true || !user.authAtLeast(targetUser.settings.blockPMs)) &&
+					(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockPMs)) &&
 					!user.can('lock')) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
@@ -1032,7 +1051,7 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					!targetUser.authAtLeast(user.settings.blockPMs)) && !targetUser.can('lock')) {
+					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock')) {
 					this.errorReply(`You are blocking private messages right now.`);
 					return null;
 				}
@@ -1148,7 +1167,7 @@ export class CommandContext extends MessageContext {
 			return false;
 		}
 		if (targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true || !this.user.authAtLeast(targetUser.settings.blockPMs)) &&
+			(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs)) &&
 			!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
@@ -1746,6 +1765,25 @@ export const Chat = new class {
 	stripHTML(htmlContent: string) {
 		if (!htmlContent) return '';
 		return htmlContent.replace(/<[^>]*>/g, '');
+	}
+	/**
+	 * Validates input regex and ensures it won't crash.
+	 */
+	validateRegex(word: string) {
+		word = word.trim();
+		if (word.endsWith('|') || word.startsWith('|')) {
+			throw new Chat.ErrorMessage(`Your regex was rejected because it included an unterminated |.`);
+		}
+		try {
+			// eslint-disable-next-line no-new
+			new RegExp(word);
+		} catch (e) {
+			throw new Chat.ErrorMessage(
+				e.message.startsWith('Invalid regular expression: ') ?
+					e.message :
+					`Invalid regular expression: /${word}/: ${e.message}`
+			);
+		}
 	}
 
 	/**

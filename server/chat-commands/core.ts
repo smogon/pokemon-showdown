@@ -572,8 +572,8 @@ export const commands: ChatCommands = {
 		if (user.settings.blockPMs === (target || true)) {
 			return this.errorReply(this.tr("You are already blocking private messages! To unblock, use /unblockpms"));
 		}
-		if (target in Config.groups) {
-			user.settings.blockPMs = target as GroupSymbol;
+		if (Users.Auth.isAuthLevel(target)) {
+			user.settings.blockPMs = target;
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			user.settings.blockPMs = target;
@@ -625,17 +625,22 @@ export const commands: ChatCommands = {
 		 `Use /clearstatus to clear your status message.`,
 	],
 
-	busy(target, room, user) {
+	donotdisturb: 'busy',
+	dnd: 'busy',
+	busy(target, room, user, connection, cmd) {
 		if (target) {
 			this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('busy');
-		this.parse('/blockpms +');
-		this.parse('/blockchallenges');
+		if (['dnd', 'donotdisturb'].includes(cmd)) {
+			this.parse('/blockpms +');
+			this.parse('/blockchallenges');
+		}
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
 	busyhelp: [
-		`/busy - Marks you as busy, blocking private messages and challenges.`,
+		`/busy OR /donotdisturb - Marks you as busy.`,
+		`Use /donotdisturb to also block private messages and challenges.`,
 		`Use /back to mark yourself as back.`,
 	 ],
 
@@ -728,7 +733,7 @@ export const commands: ChatCommands = {
 			for (const setting in user.settings) {
 				if (setting in raw) {
 					if (setting === 'blockPMs' &&
-						(raw[setting] in Config.groups || ['autoconfirmed', 'trusted', 'unlocked'].includes(raw[setting]))) {
+						Users.Auth.isAuthLevel(raw[setting])) {
 						settings[setting] = raw[setting];
 					} else {
 						settings[setting as keyof UserSettings] = !!raw[setting];
@@ -863,6 +868,45 @@ export const commands: ChatCommands = {
 		}, 500);
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],
+
+	showteam: 'showset',
+	async showset(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return false;
+		const showAll = cmd === 'showteam';
+		if (!room) return this.requiresRoom();
+		const battle = room.battle;
+		if (!showAll && !target) return this.parse(`/help showset`);
+		if (!battle) return this.errorReply("This command can only be used in a battle.");
+		let teamStrings = await battle.getTeam(user);
+		if (!teamStrings) return this.errorReply("Only players can extract their team.");
+		if (target) {
+			const parsed = parseInt(target);
+			if (parsed > 6) return this.errorReply(`Use a number between 1-6 to view a specific set.`);
+			if (isNaN(parsed)) {
+				const matchedSet = teamStrings.filter(set => {
+					const id = toID(target);
+					return toID(set.name) === id || toID(set.species) === id;
+				})[0];
+				if (!matchedSet) return this.errorReply(`The Pokemon "${target}" is not in your team.`);
+				teamStrings = [matchedSet];
+			} else {
+				const setIndex = parsed - 1;
+				const indexedSet = teamStrings[setIndex];
+				if (!indexedSet) return this.errorReply(`That Pokemon is not in your team.`);
+				teamStrings = [indexedSet];
+			}
+		}
+		let resultString = Dex.stringifyTeam(teamStrings);
+		if (showAll) {
+			resultString = `<details><summary>View team</summary><${resultString}</details>`;
+		}
+		this.runBroadcast();
+		return this.sendReplyBox(resultString);
+	},
+	showsethelp: [
+		`!showteam - show the team you're using in the current battle (must be used in a battle you're a player in).`,
+		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
+	],
 
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
@@ -1202,12 +1246,10 @@ export const commands: ChatCommands = {
 
 	async search(target, room, user, connection) {
 		if (target) {
-			if (Config.laddermodchat) {
-				if (!Users.globalAuth.atLeast(user, Config.laddermodchat)) {
-					const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
-					this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
-					return false;
-				}
+			if (Config.laddermodchat && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
+				const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
+				this.popupReply(`This server requires you to be rank ${groupName} or higher to search for a battle.`);
+				return false;
 			}
 			const ladder = Ladders(target);
 			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
@@ -1245,12 +1287,10 @@ export const commands: ChatCommands = {
 		if (!user.named) {
 			return this.popupReply(`You must choose a username before you challenge someone.`);
 		}
-		if (Config.pmmodchat) {
-			if (Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
-				const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-				this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
-				return false;
-			}
+		if (Config.pmmodchat && !user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
+			const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+			this.popupReply(`This server requires you to be rank ${groupName} or higher to challenge users.`);
+			return false;
 		}
 		return Ladders(target).makeChallenge(connection, targetUser);
 	},

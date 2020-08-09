@@ -208,7 +208,7 @@ export class HelpTicket extends Rooms.RoomGame {
 
 	modnote(user: User, text: string) {
 		this.room.addByUser(user, text).update();
-		this.room.modlog(`(${this.room.roomid}) ${text}`);
+		this.room.modlog(text);
 	}
 
 	getPreview() {
@@ -1333,6 +1333,7 @@ export const commands: ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 
+			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];
@@ -1348,8 +1349,6 @@ export const commands: ChatCommands = {
 			writeTickets();
 			notifyStaff();
 			notifyStaff();
-
-			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			return true;
 		},
 		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
@@ -1381,7 +1380,7 @@ export const commands: ChatCommands = {
 			writeTickets();
 
 			this.addModAction(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
-			this.globalModlog("UNTICKETBAN", target, ` by ${user.id}`);
+			this.globalModlog("UNTICKETBAN", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],

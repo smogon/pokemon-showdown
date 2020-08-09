@@ -3,7 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (const i in this.data.Items) {
 			if (!this.data.Items[i].megaStone) continue;
 			this.modData('Items', i).onTakeItem = false;
-			const id = toID(this.data.Items[i].megaStone);
+			const id = this.toID(this.data.Items[i].megaStone);
 			this.modData('FormatsData', id).isNonstandard = null;
 		}
 	},

@@ -457,6 +457,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 	readonly title: string;
 	readonly allowRenames: boolean;
 	readonly format: string;
+	/** Will exist even if the game is unrated, in case it's later forced to be rated */
+	readonly ladder: string;
 	readonly gameType: string | undefined;
 	readonly challengeType: ChallengeType;
 	/**
@@ -505,6 +507,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.gameType = format.gameType;
 		this.challengeType = options.challengeType;
 		this.rated = options.rated || 0;
+		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : formatid;
 		// true when onCreateBattleRoom has been called
 		this.missingBattleStartMessage = !!options.inputLog;
 		this.started = false;
@@ -814,7 +817,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.id);
 			}
-			const [score, p1rating, p2rating] = await Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
+			const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1name, p2name, p1score, this.room);
 			void this.logBattle(score, p1rating, p2rating);
 		} else if (Config.logchallenges) {
 			if (winnerid === p1id) {
