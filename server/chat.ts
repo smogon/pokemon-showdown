@@ -23,8 +23,7 @@ To reload chat commands:
 
 */
 
-type RoomPermission = import('./user-groups').RoomPermission;
-type GlobalPermission = import('./user-groups').GlobalPermission;
+import type {RoomPermission, GlobalPermission} from './user-groups';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;

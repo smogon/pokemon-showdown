@@ -15,7 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
-type UserSettings = import('../users').User['settings'];
+import type {UserSettings} from '../users';
 
 const avatarTable = new Set([
 	'aaron',

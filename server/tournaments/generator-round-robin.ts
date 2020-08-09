@@ -4,7 +4,7 @@ interface Match {
 	result?: string;
 }
 
-type TournamentPlayer = import('./index').TournamentPlayer;
+import type {TournamentPlayer} from './index';
 
 export class RoundRobin {
 	readonly name: string;

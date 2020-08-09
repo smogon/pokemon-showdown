@@ -16,7 +16,7 @@ const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.r
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
-type ChallengeType = import('./room-battle').ChallengeType;
+import type {ChallengeType} from './room-battle';
 
 /**
  * This represents a user's search for a battle under a format.

@@ -6,7 +6,7 @@ interface ElimTree {
 	nextLayerLeafNodes: ElimNode[];
 }
 
-type TournamentPlayer = import('./index').TournamentPlayer;
+import type {TournamentPlayer} from './index';
 
 /**
  * There are two types of elim nodes, player nodes
