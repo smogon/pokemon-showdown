@@ -386,7 +386,7 @@ export const pages: PageTable = {
 	async channels(args, user) {
 		const all = toID(args[0]) === 'all';
 		if (!Config.youtubeKey) return `<h2>Youtube is not configured.</h2>`;
-		const channelBuffer = Object.keys(channelData);
+		const channelBuffer = Object.keys(YouTube.data);
 		this.title = `[Channels] ${all ? 'All' : ''}`;
 		let buffer = `<div class="pad"><strong>Channels in the YouTube database: (${channelBuffer.length})`;
 		buffer += `</strong><br /><small>`;
