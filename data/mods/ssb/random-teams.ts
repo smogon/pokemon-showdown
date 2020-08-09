@@ -41,11 +41,17 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Skystriker',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Aelita: {
+		species: 'Zygarde', ability: 'Scyphozoa', item: 'Focus Sash', gender: 'F',
+		moves: ['Rest', 'Sleep Talk', 'Thousand Arrows'],
+		signatureMove: 'XANA\'s Keys To Lyoko',
+		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful',
+	},
 	Aeonic: {
 		species: 'Nosepass', ability: 'Arsene', item: 'Stone Plate', gender: 'M',
 		moves: ['Diamond Storm', 'Earthquake', 'Milk Drink'],
 		signatureMove: 'Looking Cool',
-		evs: {hp: 252, def: 8, spd: 252}, nature: 'Impish',
+		evs: {atk: 252, def: 4, spd: 252}, nature: 'Impish',
 	},
 	Aethernum: {
 		species: 'Lotad', ability: 'Rainy Season', item: 'Big Root', gender: 'M',

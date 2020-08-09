@@ -51,6 +51,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Adri')}|Until next time...`);
 		},
 	},
+	aelita: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Aelita')}|The Scyphozoa's absorbing Aelita's memories!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Aelita')}|We scared it away but it will be back. We can't let it get ahold of Aelita's memories.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Aelita')}|X.A.N.A. is finally finished for good.`);
+		},
+	},
 	aeonic: {
 		noCopy: true,
 		onStart() {

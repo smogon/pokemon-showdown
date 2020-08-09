@@ -12,6 +12,61 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Aelita
+	scyphozoa: {
+		desc: "This clears everything on both sides on switch in. This Pokemon's moves ignore abilities. If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP at the end of the turn.",
+		shortDesc: "Clears everything on both sides. Moves ignore abilities. Zygarde can become 100% form.",
+		name: "Scyphozoa",
+		onSwitchIn(source) {
+			this.add('-ability', source, 'Scyphozoa');
+			const target = source.side.foe.active[0];
+
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+			];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+					}
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+					}
+				}
+			}
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+			}
+			for (const clear in this.field.pseudoWeather) {
+				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
+				this.field.removePseudoWeather(clear);
+			}
+			this.field.clearWeather();
+			this.field.clearTerrain();
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+		onResidualOrder: 27,
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Zygarde' || pokemon.transformed || !pokemon.hp) return;
+			if (pokemon.species.id === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
+			this.add('-activate', pokemon, 'ability: Scyphozoa');
+			pokemon.formeChange('Zygarde-Complete', this.effect, true);
+			pokemon.baseMaxhp = Math.floor(Math.floor(
+				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+			) * pokemon.level / 100 + 10);
+			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
+			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+			pokemon.maxhp = newMaxHP;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
+	},
+
 	// Aeonic
 	arsene: {
 		desc: "On switch-in, this Pokemon summons Sandstorm. If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm.",
@@ -173,7 +228,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
-		onStart(pokemon) {
+		onSwitchIn(pokemon) {
 			const possibleTypes = [];
 			const newTypes = [];
 			const weaknesses = [];
@@ -831,7 +886,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "When switching in, become a random type that resists the last move the opponent used. If no move was used or if it's the first turn, pick a random type. If hit by a move that is not very effective, become Aggron-Mega (but keep the same type).",
 		shortDesc: "I dont even know how to shortdesc this",
 		name: "Overasked Clause",
-		onStart(source) {
+		onSwitchIn(source) {
 			const target = source.side.foe.active[0];
 			if (!target || !target.lastMove) {
 				const typeList = Object.keys(this.dex.data.TypeChart);
