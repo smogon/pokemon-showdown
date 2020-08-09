@@ -54724,7 +54724,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{generation: 8, level: 50, shiny: true, gender: "F", nature: "Sassy", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 0}, isHidden: true, moves: ["clearsmog", "spore", "protect", "ragepower"], pokeball: "cherishball"},
+			{generation: 8, level: 50, shiny: true, gender: "F", nature: "Sassy", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 0}, isHidden: true, moves: ["clearsmog", "spore", "protect", "ragepowder"], pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 5, level: 37},
