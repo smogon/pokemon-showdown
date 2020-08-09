@@ -325,40 +325,20 @@ export class FSPath {
 		}
 	}
 
-	async rmdir(recursive?: boolean) {
+	async removeFilesFromDirectory() {
 		if (Config.nofswriting) return Promise.resolve();
-		if (recursive) {
-			// In Node versions before 12, fs.rmdir() didn't support recursion,
-			// so we have to implement recursion ourselves to support Node 10 and 11...
-			for (const file of await this.readdir()) {
-				const subpath = FS(`${this.path}${pathModule.sep}${file}`);
-				if (await subpath.isDirectory()) {
-					await subpath.rmdir(true);
-				} else {
-					await subpath.unlinkIfExists();
-				}
-			}
+		for (const file of await this.readdir()) {
+			const subpath = FS(`${this.path}${pathModule.sep}${file}`);
+			if (!await subpath.isDirectory()) await subpath.unlinkIfExists();
 		}
-		return new Promise((resolve, reject) => {
-			fs.rmdir(this.path, err => {
-				err ? reject(err) : resolve();
-			});
-		});
 	}
 
-	rmdirSync(recursive?: boolean) {
+	removeFilesFromDirectorySync(recursive?: boolean) {
 		if (Config.nofswriting) return;
-		if (recursive) {
-			for (const file of this.readdirSync()) {
-				const subpath = FS(`${this.path}${pathModule.sep}${file}`);
-				if (subpath.isDirectorySync()) {
-					subpath.rmdirSync(true);
-				} else {
-					subpath.unlinkIfExistsSync();
-				}
-			}
+		for (const file of this.readdirSync()) {
+			const subpath = FS(`${this.path}${pathModule.sep}${file}`);
+			if (!subpath.isDirectorySync()) subpath.unlinkIfExistsSync();
 		}
-		return fs.rmdirSync(this.path);
 	}
 
 	mkdir(mode: string | number = 0o755) {

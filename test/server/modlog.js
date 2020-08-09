@@ -85,7 +85,7 @@ describe('Modlog (with FS writes)', () => {
 	});
 
 	after(async () => {
-		await FS(TEST_PATH).rmdir(true);
+		await FS(TEST_PATH).removeFilesFromDirectory();
 		Config.nofswriting = true;
 	});
 
