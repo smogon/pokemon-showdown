@@ -386,28 +386,28 @@ export const pages: PageTable = {
 	async channels(args, user) {
 		const all = toID(args[0]) === 'all';
 		if (!Config.youtubeKey) return `<h2>Youtube is not configured.</h2>`;
+		const channelBuffer = Object.keys(channelData);
 		this.title = `[Channels] ${all ? 'All' : ''}`;
-		let buffer = `<div class="pad"><h4>Channels in the YouTube database:`;
-		if (all) buffer += `(All)`;
-		buffer += `<br/ ><button class="button" name="send" value="/join view-channels${all ? '' : '-all'}"">`;
-		buffer += `<i class="fa fa-refresh"></i>${all ? 'Usernames only' : 'All channels'}</button>`;
-		buffer += `<button class="button" name="send" value="/join view-channels${all ? '-all' : ''}"">`;
-		buffer += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
-		buffer += `</h4><hr />`;
+		let buffer = `<div class="pad"><strong>Channels in the YouTube database: (${channelBuffer.length})`;
+		buffer += `</strong><br /><small>`;
+		buffer += all ? `(displaying all channels)</small>` : `(displaying channels with PS usernames only)`;
+		buffer += `</small><br/ ><a roomid="view-channels${all ? '' : '-all'}"">`;
+		buffer += `<i class="fa fa-refresh"></i> ${all ? 'Usernames only' : 'All channels'}</a>\t`;
+		buffer += `<a roomid="view-channels${all ? '-all' : ''}""><i class="fa fa-refresh"></i> Refresh</a>`;
+		buffer += `<br /><hr />`;
 		const isStaff = user.can('mute', null, Rooms.get('youtube')!);
-		for (const id of Utils.shuffle(Object.keys(channelData))) {
-			const name = YouTube.get(id).name;
-			const psid = YouTube.get(id).username;
-			if (!all && !psid) continue;
+		for (const id of Utils.shuffle(channelBuffer)) {
+			const {name, username} = YouTube.get(id);
+			if (!all && !username) continue;
 			buffer += `<details><summary>${name}`;
 			if (isStaff) buffer += `<small><i> (Channel ID: ${id})</i></small>`;
-			if (psid) buffer += ` <small>(PS name: ${psid})</small>`;
+			if (username) buffer += ` <small>(PS name: ${username})</small>`;
 			buffer += `</summary>`;
 			buffer += await YouTube.generateChannelDisplay(id);
 			if (!isStaff) buffer += `<i>(Channel ID: ${id})</i>`;
 			buffer += `</details><hr/ >`;
 		}
 		buffer += `</div>`;
-		return buffer;
+		return buffer.replace(/<a roomid="/g, `<a target="replace" href="/`);
 	},
 };
