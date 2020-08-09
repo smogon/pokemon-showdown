@@ -325,20 +325,18 @@ export class FSPath {
 		}
 	}
 
-	async removeFilesFromDirectory() {
+	async rmdir(recursive?: boolean) {
 		if (Config.nofswriting) return Promise.resolve();
-		for (const file of await this.readdir()) {
-			const subpath = FS(`${this.path}${pathModule.sep}${file}`);
-			if (!await subpath.isDirectory()) await subpath.unlinkIfExists();
-		}
+		return new Promise((resolve, reject) => {
+			fs.rmdir(this.path, {recursive}, err => {
+				err ? reject(err) : resolve();
+			});
+		});
 	}
 
-	removeFilesFromDirectorySync(recursive?: boolean) {
+	rmdirSync(recursive?: boolean) {
 		if (Config.nofswriting) return;
-		for (const file of this.readdirSync()) {
-			const subpath = FS(`${this.path}${pathModule.sep}${file}`);
-			if (!subpath.isDirectorySync()) subpath.unlinkIfExistsSync();
-		}
+		return fs.rmdirSync(this.path, {recursive});
 	}
 
 	mkdir(mode: string | number = 0o755) {
