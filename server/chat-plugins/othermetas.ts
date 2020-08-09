@@ -293,15 +293,13 @@ export const commands: ChatCommands = {
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		let bst = species.bst;
-		if (dex.gen === 1) bst -= species.baseStats.spd;
+		const bst = species.bst;
 		species.bst = 0;
 		for (const i in species.baseStats) {
 			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
 			species.bst += species.baseStats[i];
 		}
-		if (dex.gen === 1) species.bst += species.baseStats.spd;
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	'350cuphelp': [
@@ -353,7 +351,6 @@ export const commands: ChatCommands = {
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		species.bst = species.baseStats.hp;
-		if (dex.gen === 1) species.bst += species.baseStats.spd;
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
 			if (dex.gen === 1 && statName === 'spd') continue;
@@ -382,7 +379,6 @@ export const commands: ChatCommands = {
 		if (!args.length || !toID(args[0])) return this.parse(`/help scalemons`);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !args[1]) args[1] = `gen${targetGen}`;
-		let isGen1 = false;
 		let dex = Dex;
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
@@ -390,25 +386,22 @@ export const commands: ChatCommands = {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		if (dex.gen === 1) isGen1 = true;
 		const species = Dex.deepClone(dex.getSpecies(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		if (isGen1 && species.gen > 1) return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
-		let bstNoHP = species.bst - species.baseStats.hp;
-		if (isGen1) bstNoHP -= species.baseStats.spd;
-		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
-		species.bst = species.baseStats.hp;
-		if (isGen1) species.bst += species.baseStats.spd;
+		const bstNoHP = species.bst - species.baseStats.hp;
+		const scale = (dex.gen !== 1 ? 600 : 500) - species.baseStats['hp'];
+		species.bst = 0;
 		for (const stat in species.baseStats) {
 			if (stat === 'hp') continue;
-			if (isGen1 && stat === 'spd') continue;
+			if (dex.gen === 1 && stat === 'spd') continue;
 			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
 			species.bst += species.baseStats[stat];
 		}
+		species.bst += species.baseStats.hp;
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	scalemonshelp: [

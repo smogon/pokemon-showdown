@@ -985,7 +985,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				let monStat = 0;
 				if (stat === 'bst') {
 					monStat = dex[mon].bst;
-					if (maxGen === 1) monStat -= dex[mon].baseStats.spd;
 				} else if (stat === 'weight') {
 					monStat = dex[mon].weighthg / 10;
 				} else if (stat === 'height') {
