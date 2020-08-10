@@ -1155,7 +1155,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
-					if (['mirrorarmor', 'trace'].includes(Dex.toID(ally.baseAbility))) continue;
+					if (['mirrorarmor', 'trace'].includes(ally.baseAbility)) continue;
 					sharedPower.add(ally.baseAbility);
 				}
 			}
