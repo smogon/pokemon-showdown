@@ -1059,7 +1059,9 @@ export class User extends Chat.MessageContext {
 				this.semilocked = '#dnsbl.' as PunishType;
 			}
 		}
-		if (this.settings.blockPMs && this.can('lock') && !this.can('bypassall')) this.settings.blockPMs = {all: false};
+		if (this.settings.blockPMs && this.can('lock') && !this.can('bypassall')) {
+			this.settings.blockPMs = {all: false};
+		}
 	}
 	/**
 	 * Set a user's group. Pass (' ', true) to force trusted
