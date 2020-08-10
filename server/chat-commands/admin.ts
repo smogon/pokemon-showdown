@@ -16,8 +16,6 @@ import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
 
-const PRIVATE_CODE_PATH = '../pokemon-showdown-private/';
-
 export const commands: ChatCommands = {
 
 	/*********************************************************
@@ -748,7 +746,7 @@ export const commands: ChatCommands = {
 			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
-					cwd: `${__dirname}/../../${isPrivate ? PRIVATE_CODE_PATH : ``}`,
+					cwd: `${__dirname}/../../${isPrivate ? Config.privatecodepath || '../main-private/' : ``}`,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
