@@ -650,9 +650,8 @@ export const commands: ChatCommands = {
 	pmblocklist: {
 		add(target, room, user) {
 			// hotpatching
-			if (typeof user.settings.blockPMs === 'boolean') {
-				user.settings.blockPMs = {all: user.settings.blockPMs};
-			}
+			Chat.updateSettings(user);
+
 			target = toID(target);
 			if (!target) return this.parse('/pmblocklist');
 			if (target === user.id) return this.errorReply(`You cannot block yourself.`);
@@ -667,10 +666,8 @@ export const commands: ChatCommands = {
 			return this.parse(`/pmblocklist view`);
 		},
 		remove(target, room, user) {
-			// hotpatching
-			if (typeof user.settings.blockPMs === 'boolean') {
-				user.settings.blockPMs = {all: user.settings.blockPMs};
-			}
+			Chat.updateSettings(user);
+
 			target = toID(target);
 			if (!target) return this.parse('/pmblocklists');
 			if (!user.settings.blockPMs.specific) user.settings.blockPMs.specific = [];
@@ -683,10 +680,8 @@ export const commands: ChatCommands = {
 			return this.parse(`/pmblocklist view`);
 		},
 		view(target, room, user) {
-			// hotpatching
-			if (typeof user.settings.blockPMs === 'boolean') {
-				user.settings.blockPMs = {all: user.settings.blockPMs};
-			}
+			Chat.updateSettings(user);
+
 			if (!user.settings.blockPMs.specific) user.settings.blockPMs.specific = [];
 			return this.sendReplyBox(
 				`<strong>Users on your PM blocklist:</strong><hr />` +

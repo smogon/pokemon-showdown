@@ -1127,14 +1127,11 @@ export class CommandContext extends MessageContext {
 		return message;
 	}
 	canPM(targetUser: User) {
-		// hotpatching
 		const user = this.user;
-		if (typeof user.settings.blockPMs === 'boolean') {
-			user.settings.blockPMs = {all: user.settings.blockPMs};
-		}
-		if (typeof targetUser.settings.blockPMs === 'boolean') {
-			targetUser.settings.blockPMs = {all: targetUser.settings.blockPMs};
-		}
+
+		// for hotpatching, remove later.
+		Chat.updateSettings(user);
+		Chat.updateSettings(targetUser);
 
 		function checkBlocked(curUser: User, tarUser: User) {
 			const curBlocks = curUser.settings.blockPMs;
@@ -2069,6 +2066,16 @@ export const Chat = new class {
 			message = message.replace(/([A-Z])/g, ' $1').trim();
 		}
 		return ' ' + message.toLowerCase() + ' ';
+	}
+
+	/**
+	 * JUST FOR HOTPATCHING. To be removed later.
+	 */
+	updateSettings(user: User) {
+		if (typeof user.settings.blockPMs === 'boolean') {
+			user.settings.blockPMs = {all: user.settings.blockPMs};
+		}
+		return user.settings.blockPMs;
 	}
 
 	/**
