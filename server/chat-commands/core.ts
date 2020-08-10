@@ -836,7 +836,12 @@ export const commands: ChatCommands = {
 			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
-					settings[setting as keyof UserSettings] = typeof raw[setting] === 'object' ? raw[setting] : !!raw[setting];
+					if (setting === 'blockPMs' &&
+						Users.Auth.isAuthLevel(raw[setting].all)) {
+						settings[setting] = raw[setting];
+					} else {
+						settings[setting as keyof UserSettings] = typeof raw[setting] === 'object' ? raw[setting] : !!raw[setting];
+					}
 				}
 			}
 			Object.assign(user.settings, settings);
