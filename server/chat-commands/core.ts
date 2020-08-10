@@ -569,18 +569,18 @@ export const commands: ChatCommands = {
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
 		if (toID(target) === 'ac') target = 'autoconfirmed';
-		if (user.settings.blockPMs === (target || true)) {
+		if (user.settings.blockPMs.all === (target || true)) {
 			return this.errorReply(this.tr("You are already blocking private messages! To unblock, use /unblockpms"));
 		}
 		if (Users.Auth.isAuthLevel(target)) {
-			user.settings.blockPMs = target;
+			user.settings.blockPMs.all = target;
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
-			user.settings.blockPMs = target;
+			user.settings.blockPMs.all = target;
 			target = this.tr(target);
 			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target} users.`);
 		} else {
-			user.settings.blockPMs = true;
+			user.settings.blockPMs.all = true;
 			this.sendReply(this.tr("You are now blocking private messages, except from staff."));
 		}
 		user.update();
@@ -595,10 +595,10 @@ export const commands: ChatCommands = {
 	unignorepms: 'unblockpms',
 	unignorepm: 'unblockpms',
 	unblockpms(target, room, user) {
-		if (!user.settings.blockPMs) {
+		if (!user.settings.blockPMs.all) {
 			return this.errorReply(this.tr("You are not blocking private messages! To block, use /blockpms"));
 		}
-		user.settings.blockPMs = false;
+		user.settings.blockPMs.all = false;
 		user.update();
 		return this.sendReply(this.tr("You are no longer blocking private messages."));
 	},
@@ -644,7 +644,63 @@ export const commands: ChatCommands = {
 		`/busy OR /donotdisturb - Marks you as busy.`,
 		`Use /donotdisturb to also block private messages and challenges.`,
 		`Use /back to mark yourself as back.`,
-	 ],
+	],
+
+	pmbl: 'pmblocklist',
+	pmblocklist: {
+		add(target, room, user) {
+			// hotpatching
+			if (typeof user.settings.blockPMs === 'boolean') {
+				user.settings.blockPMs = {all: user.settings.blockPMs};
+			}
+			target = toID(target);
+			if (!target) return this.parse('/pmblocklist');
+			if (target === user.id) return this.errorReply(`You cannot block yourself.`);
+			if (!user.settings.blockPMs.specific) user.settings.blockPMs.specific = [];
+			const specific = user.settings.blockPMs.specific;
+			if (specific.includes(target)) {
+				return this.errorReply(`You are already blocking the user "${target}" from PMing you.`);
+			}
+			specific.push(target);
+			user.update();
+			this.sendReply(`The user "${target}" can not longer PM you, unless they're global staff.`);
+			return this.parse(`/pmblocklist view`);
+		},
+		remove(target, room, user) {
+			// hotpatching
+			if (typeof user.settings.blockPMs === 'boolean') {
+				user.settings.blockPMs = {all: user.settings.blockPMs};
+			}
+			target = toID(target);
+			if (!target) return this.parse('/pmblocklists');
+			if (!user.settings.blockPMs.specific) user.settings.blockPMs.specific = [];
+			const specific = user.settings.blockPMs.specific;
+			const index = specific.indexOf(target);
+			if (index < 0) return this.errorReply(`The user "${target}" is not on your PM blocklist.`);
+			specific.splice(index, 1);
+			user.update();
+			this.sendReply(`You have removed the user "${target}" from your PM blocklist.`);
+			return this.parse(`/pmblocklist view`);
+		},
+		view(target, room, user) {
+			// hotpatching
+			if (typeof user.settings.blockPMs === 'boolean') {
+				user.settings.blockPMs = {all: user.settings.blockPMs};
+			}
+			if (!user.settings.blockPMs.specific) user.settings.blockPMs.specific = [];
+			return this.sendReplyBox(
+				`<strong>Users on your PM blocklist:</strong><hr />` +
+				`${user.settings.blockPMs.specific.length ? user.settings.blockPMs.specific.join('<br />') : `None.`}`
+			);
+		},
+		''() {
+			return this.sendReplyBox([
+				`/pmblocklist OR /pmbl add [user] - Prevents the [user] from PMing you.`,
+				`/pmblocklist OR /pmbl remove [user] - Allows the [user] to PM you.`,
+				`/pmblocklist OR /pmbl view - View the users not allowed to PM you.`,
+			].join('<br />'));
+		},
+	},
 
 	idle: 'away',
 	afk: 'away',
@@ -780,12 +836,7 @@ export const commands: ChatCommands = {
 			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
-					if (setting === 'blockPMs' &&
-						Users.Auth.isAuthLevel(raw[setting])) {
-						settings[setting] = raw[setting];
-					} else {
-						settings[setting as keyof UserSettings] = !!raw[setting];
-					}
+					settings[setting as keyof UserSettings] = typeof raw[setting] === 'object' ? raw[setting] : !!raw[setting];
 				}
 			}
 			Object.assign(user.settings, settings);

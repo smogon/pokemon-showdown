@@ -303,7 +303,10 @@ type ChatQueueEntry = [string, RoomID, Connection];
 
 export interface UserSettings {
 	blockChallenges: boolean;
-	blockPMs: boolean | AuthLevel;
+	blockPMs: {
+		all: boolean | AuthLevel,
+		specific?: string[],
+	};
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
 	doNotDisturb: boolean;
@@ -426,7 +429,9 @@ export class User extends Chat.MessageContext {
 		// settings
 		this.settings = {
 			blockChallenges: false,
-			blockPMs: false,
+			blockPMs: {
+				all: false,
+			},
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
 			doNotDisturb: false,
@@ -869,6 +874,7 @@ export class User extends Chat.MessageContext {
 			...this.settings,
 			// Battle privacy state needs to be propagated in addition to regular settings so that the
 			// 'Ban spectators' checkbox on the client can be kept in sync (and disable privacy correctly)
+			// blockPMs needs to be made into a string
 			hiddenNextBattle: this.battleSettings.hidden,
 			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
 			language: this.language,
@@ -1053,7 +1059,7 @@ export class User extends Chat.MessageContext {
 				this.semilocked = '#dnsbl.' as PunishType;
 			}
 		}
-		if (this.settings.blockPMs && this.can('lock') && !this.can('bypassall')) this.settings.blockPMs = false;
+		if (this.settings.blockPMs && this.can('lock') && !this.can('bypassall')) this.settings.blockPMs = {all: false};
 	}
 	/**
 	 * Set a user's group. Pass (' ', true) to force trusted
