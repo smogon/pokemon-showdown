@@ -529,6 +529,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'megamax',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
+		unbanlist: ['Cinderace'],
 		onChangeSet(set) {
 			if (set.species.endsWith('-Gmax')) set.species = set.species.slice(0, -5);
 		},
