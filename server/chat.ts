@@ -1150,7 +1150,8 @@ export class CommandContext extends MessageContext {
 			this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 			return null;
 		}
-		if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
+		if (
+			Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 			!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)
 		) {
 			const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
