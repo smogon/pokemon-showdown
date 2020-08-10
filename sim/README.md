@@ -8,8 +8,7 @@ const Sim = require('Pokemon-Showdown/sim');
 stream = new Sim.BattleStream();
 
 (async () => {
-    let output;
-    while ((output = await stream.read())) {
+    for await (const output of stream.reader()) {
         console.log(output);
     }
 })();

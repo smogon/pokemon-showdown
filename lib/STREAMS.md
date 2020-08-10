@@ -132,3 +132,19 @@ Can return synchronously. Use `await` or wrap the return value in `Promise.resol
 ### readStream.peekBuffer(byteCount)
 
 Like `readStream.read` and `readStream.peek`, but returns a Buffer instead of a string.
+
+### readStream.peeker([encoding])
+### readStream.reader([encoding])
+### readStream.delimitedReader(delimiter, [encoding])
+### readStream.lineReader([encoding])
+
+Returns an async generator that yields values returned by
+`readStream.peek`/`readStream.read`/`readStream.readDelimitedBy`/`readStream.readLine`
+until they return null or undefined. This can be iterated over with `for await
+... of` syntax:
+
+```js
+for await (const line of stream.lineReader()) {
+	console.log(line);
+}
+```

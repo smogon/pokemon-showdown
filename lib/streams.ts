@@ -307,6 +307,27 @@ export class ReadStream {
 		return line;
 	}
 
+	peeker(encoding: BufferEncoding = this.encoding) {
+		return this.sequence<string>('peek', encoding);
+	}
+	reader(encoding: BufferEncoding = this.encoding) {
+		return this.sequence<string>('read', encoding);
+	}
+	delimitedReader(symbol: string, encoding: BufferEncoding = this.encoding) {
+		return this.sequence<string>('readDelimitedBy', symbol, encoding);
+	}
+	lineReader(encoding: BufferEncoding = this.encoding) {
+		return this.sequence<string>('readLine', encoding);
+	}
+	protected async *sequence<T>(name: keyof ReadStream, ...args: any[]): AsyncGenerator<T, void, void> {
+		const method = this[name] as (...a: typeof args) => Promise<T | null>;
+		while (true) {
+			const result = await method.call(this, ...args);
+			if (result === null) return;
+			yield result;
+		}
+	}
+
 	destroy() {
 		this.atEOF = true;
 		this.bufStart = 0;
@@ -641,6 +662,21 @@ export class ObjectReadStream<T> {
 	async peekAll() {
 		await this.loadIntoBuffer(Infinity);
 		return this.buf.slice();
+	}
+
+	peeker() {
+		return this.sequence<string>('peek');
+	}
+	reader() {
+		return this.sequence<string>('read');
+	}
+	protected async *sequence<U>(name: keyof ObjectReadStream<T>, ...args: any[]): AsyncGenerator<U, void, void> {
+		const method = this[name] as (...a: typeof args) => Promise<U | null>;
+		while (true) {
+			const result = await method.call(this, ...args);
+			if (result === null) return;
+			yield result;
+		}
 	}
 
 	destroy() {
