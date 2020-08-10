@@ -114,10 +114,16 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	'c.kilgannon': {
-		species: 'Yveltal', ability: 'Pestilence', item: 'Choice Scarf', gender: 'N',
+		species: 'Yveltal', ability: 'Infiltrator', item: 'Choice Scarf', gender: 'N',
 		moves: ['Knock Off', 'Steel Wing', 'U-turn'],
 		signatureMove: 'Death Wing',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
+	},
+	Coconut: {
+		species: 'Misdreavus', ability: 'Levitate', item: 'Focus Sash', gender: 'F',
+		moves: ['Dazzling Gleam', 'Shadow Ball', 'Snatch'],
+		signatureMove: 'Devolution Beam',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	Darth: {
 		species: 'Articuno', ability: 'Guardian Angel', item: 'Heavy Duty Boots', gender: 'M',
@@ -128,7 +134,7 @@ export const ssbSets: SSBSets = {
 	'drampa\'s grandpa': {
 		species: 'Drampa', ability: 'Old Manpa', item: 'Wise Glasses', gender: 'M',
 		moves: [
-			['Spikes', 'Stealth Rock', 'Toxic Spikes'], 'Slack Off', ['Core Enforcer', 'Snarl', 'Lava Plume', 'Steam Eruption'],
+			['Spikes', 'Stealth Rock', 'Toxic Spikes'], 'Slack Off', ['Core Enforcer', 'Snarl', 'Lava Plume', 'Scorching Sands'],
 		],
 		signatureMove: 'GET OFF MY LAWN!',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
@@ -187,23 +193,29 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Data Corruption',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
-	'Jett x_x': {
-		species: 'Sneasel', ability: 'Deceiver', item: 'Heavy Duty Boots', gender: 'M',
-		moves: ['Knock Off', 'Icicle Crash', 'Counter'],
-		signatureMove: 'The Hunt is On!',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
-	},
 	Hubriz: {
 		species: 'Roserade', ability: 'Stakeout', item: 'Rose Incense', gender: 'F',
 		moves: [['Toxic Spikes', 'Spikes'], 'Leaf Storm', 'Sludge Bomb'],
 		signatureMove: 'Steroid Anaphylaxia',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Inactive: {
+		species: 'Gyarados', ability: 'Dragon Scale', item: 'Gyaradosite', gender: '',
+		moves: ['Dragon Dance', 'Earthquake', 'Crabhammer'],
+		signatureMove: 'Paranoia',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	Iyarito: {
 		species: 'Gengar', ability: 'Pollo Diablo', item: 'Choice Specs', gender: 'F',
 		moves: ['Sludge Wave', 'Volt Switch', 'Fusion Flare'],
 		signatureMove: 'Patrona Attack',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
+	},
+	'Jett x_x': {
+		species: 'Sneasel', ability: 'Deceiver', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Knock Off', 'Icicle Crash', 'Counter'],
+		signatureMove: 'The Hunt is On!',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	Jho: {
 		species: 'Toxtricity', ability: 'Punk Rock', item: 'Throat Spray', gender: 'M',
@@ -249,7 +261,7 @@ export const ssbSets: SSBSets = {
 	},
 	Mitsuki: {
 		species: 'Leafeon', ability: 'Photosynthesis', item: ['Life Orb', 'Miracle Seed'], gender: 'M',
-		moves: ['Solar Blade', ['Body Slam', 'X-Scissor'], 'Thousand Arrows'],
+		moves: ['Solar Blade', 'Attack Order', 'Thousand Arrows'],
 		signatureMove: 'Terraforming',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
@@ -487,7 +499,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				ability: Array.isArray(ssbSet.ability) ? this.sampleNoReplace(ssbSet.ability) : ssbSet.ability,
 				moves: [],
 				nature: Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature,
-				gender: ssbSet.gender,
+				gender: ssbSet.gender || this.sample(['M', 'F', 'N']),
 				evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ssbSet.evs),
 				ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ssbSet.ivs),
 				level: ssbSet.level || 100,

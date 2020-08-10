@@ -511,6 +511,61 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// Coconut
+	devolutionbeam: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "If the target Pokemon is evolved, this move will reduce the target to its first-stage form. If the target Pokemon is single-stage or is already in its first-stage form, this move deals damage and forces the target out. Hits Ghost types.",
+		shortDesc: "Devolves evolved mons; dmg+forces small mons out.",
+		name: "Devolution Beam",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		ignoreImmunity: {'Normal': true},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Psywave', target);
+		},
+		onModifyMove(move, source, target) {
+			let species = target.species;
+			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
+			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
+			if (!isSingleStage) {
+				move.category = 'Status';
+			}
+		},
+		onBasePower(basePower, source, target) {
+			let species = target.species;
+			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
+			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
+			if (!isSingleStage) return 0;
+		},
+		onHit(target, source, move) {
+			let species = target.species;
+			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
+			const ability = target.ability;
+			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
+			if (isSingleStage) {
+				target.forceSwitchFlag = true;
+			} else {
+				let prevo = species.prevo;
+				if (this.dex.getSpecies(prevo).prevo) {
+					prevo = this.dex.getSpecies(prevo).prevo;
+				}
+				target.formeChange(prevo, this.effect, true);
+				target.canMegaEvo = null;
+				target.setAbility(ability);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Darth
 	archangelsrequiem: {
 		accuracy: 100,
@@ -955,7 +1010,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
-	// iyatiro
+	// Inactive
+	paranoia: {
+		accuracy: 90,
+		basePower: 100,
+		category: "Physical",
+		shortDesc: "Has a 15% chance to burn the target.",
+		name: "Paranoia",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Max Flare', target);
+		},
+		secondary: {
+			chance: 15,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Dark",
+	},
+
+	// Iyarito
 	patronaattack: {
 		accuracy: 100,
 		basePower: 50,
@@ -964,13 +1044,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Patrona Attack",
 		pp: 20,
 		priority: 1,
-		flags: {},
+		flags: {protect: 1},
+		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Moongeist Beam', target);
 		},
+		secondary: null,
 		target: "normal",
 		type: "Ghost",
 	},
@@ -2927,33 +3009,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!success) return false;
 			this.add('-activate', source, 'move: Court Change');
 		},
-		gmaxwindrage: {
-			inherit: true,
-			self: {
-				onHit(source) {
-					let success = false;
-					const removeTarget = [
-						'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
-					];
-					const removeAll = [
-						'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
-					];
-					for (const targetCondition of removeTarget) {
-						if (source.side.foe.removeSideCondition(targetCondition)) {
-							if (!removeAll.includes(targetCondition)) continue;
-							this.add('-sideend', source.side.foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
-							success = true;
-						}
+	},
+	gmaxwindrage: {
+		inherit: true,
+		self: {
+			onHit(source) {
+				let success = false;
+				const removeTarget = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
+				];
+				const removeAll = [
+					'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
+				];
+				for (const targetCondition of removeTarget) {
+					if (source.side.foe.removeSideCondition(targetCondition)) {
+						if (!removeAll.includes(targetCondition)) continue;
+						this.add('-sideend', source.side.foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+						success = true;
 					}
-					for (const sideCondition of removeAll) {
-						if (source.side.removeSideCondition(sideCondition)) {
-							this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
-							success = true;
-						}
+				}
+				for (const sideCondition of removeAll) {
+					if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+						success = true;
 					}
-					this.field.clearTerrain();
-					return success;
-				},
+				}
+				this.field.clearTerrain();
+				return success;
 			},
 		},
 	},

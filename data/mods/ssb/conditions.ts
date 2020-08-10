@@ -259,6 +259,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('c.kilgannon')}|Your time will come.`);
 		},
 	},
+	coconut: {
+		noCopy: true,
+		// no quotes
+	},
 	darth: {
 		noCopy: true,
 		onStart() {
@@ -427,9 +431,21 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Hubriz')}|Delicate Flower Quest failed...`);
 		},
 	},
+	inactive: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Inactive')}|Are you my nightmare? Or am I yours?`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Inactive')}|This is not the end...`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Inactive')}|/me turns to stone and crumbles`);
+		},
+	},
 	iyarito: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('Iyarito')}|Madre de Dios, ¡es el Pollo Diablo!`);
 		},
 		onSwitchOut() {
