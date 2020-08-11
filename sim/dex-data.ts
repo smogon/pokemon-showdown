@@ -620,6 +620,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly nfe: boolean;
 	/** Egg groups. */
 	readonly eggGroups: string[];
+	/** True if this species can hatch from an Egg. */
+	readonly canHatch: boolean;
 	/**
 	 * Gender. M = always male, F = always female, N = always
 	 * genderless, '' = sometimes male sometimes female.
@@ -729,6 +731,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.evoLevel = data.evoLevel || undefined;
 		this.nfe = data.nfe || false;
 		this.eggGroups = data.eggGroups || [];
+		this.canHatch = data.canHatch || false;
 		this.gender = data.gender || '';
 		this.genderRatio = data.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
 			this.gender === 'F' ? {M: 0, F: 1} :
