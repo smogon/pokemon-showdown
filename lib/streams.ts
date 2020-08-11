@@ -260,7 +260,7 @@ export class ReadStream {
 
 	async readBuffer(byteCount: number | null = null) {
 		await this.loadIntoBuffer(byteCount, true);
-		const out = this.peek(byteCount) as Buffer | null;
+		const out = this.peekBuffer(byteCount);
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
 			this.bufEnd = 0;
