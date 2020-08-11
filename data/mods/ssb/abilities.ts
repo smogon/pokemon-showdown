@@ -632,6 +632,41 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Lionyx
+	tension: {
+		desc: "On switch-in, the Pokémon builds up tension, making its next hit a critical hit, and guaranteeing that it will hit.",
+		shortDesc: "On switch-in, the Pokemon's next attack will always be a critical hit and will always hit.",
+		name: "Tension",
+		onStart(pokemon) {
+			this.add("-message", `Lionyx has built up tension!`);
+			// i could just add laserfocus and lockon volatiles here but its an ability soooo
+			pokemon.addVolatile('tension');
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon, source, effect) {
+				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+					this.add('-start', pokemon, 'move: Tension', '[silent]');
+				} else {
+					this.add('-start', pokemon, 'move: Tension');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return 5;
+			},
+			onSourceInvulnerabilityPriority: 1,
+			onSourceInvulnerability(target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return 0;
+			},
+			onSourceAccuracy(accuracy, target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return true;
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'move: Tension', '[silent]');
+			},
+		},
+	},
+
 	// Mitsuki
 	photosynthesis: {
 		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled. If Sunny Day is active, this Pokemon's Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Attack remains the same and it does not lose any HP.",

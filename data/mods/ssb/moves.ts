@@ -1284,6 +1284,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
+	// Lionyx
+	bigbang: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
+		shortDesc: "33% recoil; resets field's hazards, weather, screens and terrains.",
+		name: "Big Bang",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			this.add('-anim', source, 'Light of Ruin', target);
+			this.add('-anim', source, 'Dark Void', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			const removeTarget = [
+				'reflect', 'lightscreen', 'auroraveil', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+			];
+			const removeAll = [
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+			];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					success = true;
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			return success;
+		},
+		recoil: [33, 100],
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Jho
 	genrechange: {
 		accuracy: true,
