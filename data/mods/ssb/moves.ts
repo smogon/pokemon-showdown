@@ -900,7 +900,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (member === 'grimAuxiliatrix') continue;
 				const set = ssbSets[member];
 				if (set.skip) continue;
-				for (const moveSlot in set.moves) {
+				for (const moveSlot of set.moves) {
 					const callMove = Array.isArray(moveSlot) ? this.dex.getMove(this.sample(moveSlot)) : this.dex.getMove(moveSlot);
 					if (callMove.category === 'Status') {
 						moves.push(callMove);
