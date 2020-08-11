@@ -283,6 +283,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Unbind',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Nolali: {
+		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
+		moves: ['Shadow Ball', 'Flamethrower', 'Memento'],
+		signatureMove: 'Mad Hacks',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+	},
 	'OM~!': {
 		species: 'Magneton', ability: 'Triage', item: 'Metronome', gender: 'N',
 		moves: ['Parabolic Charge', 'Oblivion Wing', 'Giga Drain'],

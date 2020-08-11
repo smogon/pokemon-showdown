@@ -1609,6 +1609,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Nolali
+	madhacks: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Defense, Special Attack, and Special Defense by 1 stage.",
+		shortDesc: "Raises the user's Defense, Sp. Atk, Sp. Def by 1.",
+		name: "Mad Hacks",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Acupressure', source);
+		},
+		boosts: {
+			def: 1,
+			spa: 1,
+			spd: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Ghost",
+	},
+
 	// OM~!
 	mechomnism: {
 		accuracy: 95,

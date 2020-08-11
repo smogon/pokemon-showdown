@@ -681,6 +681,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Nolali
+	burningsoul: {
+		shortDesc: "Drought + Sturdy.",
+		onStart(source) {
+			this.field.setWeather('sunnyday');
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.ohko) {
+				this.add('-immune', pokemon, '[from] ability: Burning Soul');
+				return null;
+			}
+		},
+		onDamagePriority: -100,
+		onDamage(damage, target, source, effect) {
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Burning Soul');
+				return target.hp - 1;
+			}
+		},
+		name: "Burning Soul",
+	},
+
 	// Overneat
 	darkestwings: {
 		desc: "This Pokemon's contact moves have their power multiplied by 1.3. This Pokemon's Defense is doubled.",

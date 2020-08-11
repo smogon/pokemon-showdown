@@ -656,6 +656,37 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('n10siT')}|Hoopa never saw one of those!`);
 		},
 	},
+	nolali: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('Nolali')}|What's up nerds`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Nolali')}|cya nerds later`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Nolali')}|nerd`);
+		},
+		// Innate Prankster and Eviolite
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
+		},
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.nfe) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.nfe) {
+				return this.chainModify(1.5);
+			}
+		},
+	},
 	overneat: {
 		noCopy: true,
 		onStart(source) {
