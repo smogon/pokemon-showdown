@@ -28,7 +28,7 @@
  * @license MIT
  */
 
-type StatusType = 'online' | 'busy' | 'idle';
+type StatusType = 'online' | 'busy' | 'idle' | 'dnd';
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
@@ -527,7 +527,9 @@ export class User extends Chat.MessageContext {
 		return `${identity}${status}`;
 	}
 	getStatus() {
-		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
+		const statusMessage = ['busy', 'dnd'].includes(this.statusType) ?
+			'!(Busy) ' :
+			this.statusType === 'idle' ? '!(Idle) ' : '';
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
@@ -925,11 +927,15 @@ export class User extends Chat.MessageContext {
 		this.updateGroup(this.registered);
 		if (oldLocked !== this.locked || oldSemilocked !== this.semilocked) this.updateIdentity();
 
-		// We only propagate the 'busy' statusType through merging - merging is
+		// We only propagate the 'busy' and 'dnd' statusTypes through merging - merging is
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		this.setStatusType((this.statusType === 'busy' || oldUser.statusType === 'busy') ? 'busy' : 'online');
+		if (this.statusType === 'dnd' || oldUser.statusType === 'dnd') {
+			this.setStatusType('dnd');
+		} else if (this.statusType === 'busy' || oldUser.statusType === 'busy') {
+			this.setStatusType('busy');
+		}
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);
