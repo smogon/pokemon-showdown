@@ -80,7 +80,7 @@ export class ReadStream {
 
 		if (options.read) this._read = options.read;
 		if (options.pause) this._pause = options.pause;
-		if (options.destroy) this._destroy = options.read;
+		if (options.destroy) this._destroy = options.destroy;
 		if (options.encoding) this.encoding = options.encoding;
 		if (options.buffer !== undefined) {
 			this.push(options.buffer);
