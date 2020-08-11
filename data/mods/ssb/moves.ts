@@ -2656,27 +2656,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target.boosts.atk === -6) return false;
 				const atk = target.getStat('atk', false, true);
 				const success = this.boost({atk: -1}, target, source, null, false, true);
-				changeSet(this, target, ssbSets['yuki-Cleric']);
+				changeSet(this, source, ssbSets['yuki-Cleric']);
 				this.add('-message', 'yuki patches up her wounds!');
 				return !!(this.heal(atk, source, target) || success);
 			case 'Ninja':
 				target.addVolatile('confusion');
-				changeSet(this, target, ssbSets['yuki-Ninja']);
+				changeSet(this, source, ssbSets['yuki-Ninja']);
 				this.add('-message', `yuki's fast movements confuse ${target.name}!`);
 				return;
 			case 'Dancer':
 				this.boost({atk: -2}, target, source, this.effect, false, true);
-				changeSet(this, target, ssbSets['yuki-Dancer']);
+				changeSet(this, source, ssbSets['yuki-Dancer']);
 				this.add('-message', `yuki dazzles ${target.name} with her moves!`);
 				return;
 			case 'Songstress':
 				target.trySetStatus('slp');
-				changeSet(this, target, ssbSets['yuki-Songstress']);
+				changeSet(this, source, ssbSets['yuki-Songstress']);
 				this.add('-message', `yuki sang an entrancing melody!`);
 				return;
 			case 'Jester':
 				this.boost({atk: -2}, target, source, this.effect, false, true);
-				changeSet(this, target, ssbSets['yuki-Jester']);
+				changeSet(this, source, ssbSets['yuki-Jester']);
 				this.add('-message', `yuki tries her best to impress ${target.name}!`);
 				return;
 			default:
