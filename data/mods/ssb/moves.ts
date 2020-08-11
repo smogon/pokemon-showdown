@@ -1,7 +1,7 @@
 import {getName} from './conditions';
 // Used for grimAuxiliatrix's move
 import {ssbSets} from "./random-teams";
-import {changeSet} from "./abilities";
+import {changeSet, changeMoves} from "./abilities";
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
@@ -263,6 +263,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		weather: 'heavyhailstorm',
 		target: "all",
 		type: "Ice",
+	},
+
+	// Annika
+	refactor: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises Special Attack by 1 stage and regenerates user and foe movesets, restoring PP.",
+		shortDesc: "Regenerates user, foe movesets; +1 Sp. Atk.",
+		name: "Refactor",
+		pp: 5,
+		flags: {authentic: 1},
+		priority: -7,
+		onHit(target, source, move) {
+			for (const pokemon of this.getAllActive()) {
+				changeMoves(this, pokemon, ssbSets[pokemon.name]);
+				this.add('-message', `${source.name} refactored ${pokemon === target ? `themselves` : `the opposing ${pokemon.name}`}!`);
+			}
+		},
+		target: "self",
+		type: "Psychic",
 	},
 
 	// a random duck

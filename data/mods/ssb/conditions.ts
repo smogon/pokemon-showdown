@@ -111,6 +111,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	annika: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Annika')}|The circumstances of one's birth are irrelevant; it is what you do with the gift of life that determines who you are.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Annika')}|I'll be stronger when I'm back ^_^`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Annika')}|oh, I crashed the server again...`);
+		},
+	},
 	arandomduck: {
 		noCopy: true,
 		onStart() {

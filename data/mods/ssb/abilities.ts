@@ -37,7 +37,15 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
 	let item = newSet.item;
 	if (typeof item !== 'string') item = item[Math.floor(Math.random() * item.length)];
 	pokemon.setItem(item);
+	changeMoves(context, pokemon, newSet);
+}
 
+/**
+ * Assigns new moves to a Pokemon
+ * @param pokemon The Pokemon whose moveset is to be modified
+ * @param newSet The set whose moves should be assigned
+ */
+export function changeMoves(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
 	const carryOver = pokemon.moveSlots.slice().map(m => m.pp / m.maxpp);
 	// In case there are ever less than 4 moves
 	while (carryOver.length < 4) {
@@ -48,7 +56,8 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
 	pokemon.baseMoveSlots = [];
 	let slot = 0;
 	for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
-		const move = pokemon.battle.dex.getMove(this.toID(newMove));
+		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
+		const move = pokemon.battle.dex.getMove(context.toID(moveName));
 		if (!move.id) continue;
 		const moveSlot = {
 			move: move.name,
@@ -211,6 +220,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		name: "Fortifications",
+	},
+
+	// Annika
+	overprotective: {
+		desc: "If this Pokemon is the last unfainted team member, its Speed is raised by 1 stage.",
+		shortDesc: "+1 Speed on switch-in if all other team members have fainted.",
+		onSwitchIn(pokemon) {
+			if (pokemon.side.pokemonLeft === 1) this.boost({spe: 1});
+		},
+		name: "Overprotective",
 	},
 
 	// a random duck
