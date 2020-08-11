@@ -1391,9 +1391,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.species.id.includes('unown')) {
 				const monList = Object.keys(this.dex.data.Pokedex).filter(speciesid => {
 					const species = this.dex.getSpecies(speciesid);
-					if (species.isGigantamax) return false;
 					if (species.id.startsWith('unown')) return false;
-					if (species.isNonstandard === 'Unobtainable') return false;
+					if (species.isNonstandard && ['Gigantamax', 'Unobtainable'].includes(species.isNonstandard)) return false;
 					if (['Arceus', 'Silvally'].includes(species.baseSpecies) && species.types[0] !== 'Normal') return false;
 					if (species.baseStats.spa < 80) return false;
 					if (species.baseStats.spe < 80) return false;
