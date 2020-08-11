@@ -894,8 +894,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart() {
 			this.add(`c|${getName('Struchni')}|~tt newgame`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut(source) {
 			this.add(`c|${getName('Struchni')}|~tt endgame`);
+			if (source.m.typeEff) delete source.m.typeEff;
 		},
 		onFaint(pokemon) {
 			this.add(`c|${getName('Struchni')}|**selfveto**`);
