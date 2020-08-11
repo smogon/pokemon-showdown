@@ -59,6 +59,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Lilypad Overflow',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
 	},
+	Akir: {
+		species: 'Forretress', ability: 'Fortifications', item: 'Leftovers', gender: 'M',
+		moves: ['Rapid Spin', 'Stealth Rock', ['U-Turn', 'Toxic']],
+		signatureMove: 'Ravelin',
+		evs: {hp: 248, def: 252, spe: 8}, ivs: {spa: 0}, nature: 'Impish',
+	},
 	Alpha: {
 		species: 'Aurorus', ability: 'Snow Warning', item: 'Caionium Z', gender: 'M',
 		moves: ['Freeze-Dry', 'Ancient Power', 'Earth Power'],

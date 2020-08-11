@@ -209,6 +209,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// Akir
+	ravelin: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "Heals 50% of the user's max HP; Sets up Light Screen for 5 turns on the user's side.",
+		shortDesc: "Heals 50% of the user's max HP; Sets up Light Screen for 5 turns on the user's side.",
+		name: "Ravelin",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aura Sphere', target);
+			this.add('-anim', source, 'Protect', source);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp / 2, pokemon, pokemon, move);
+			if (pokemon.side.getSideCondition('lightscreen')) return;
+			pokemon.side.addSideCondition('lightscreen');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Alpha
 	blisteringiceage: {
 		accuracy: true,

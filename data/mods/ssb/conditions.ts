@@ -87,6 +87,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Aethernum')}|Ok, ok, i have procrastinated enough here, time to go ^_^' See ya around!`);
 		},
 	},
+	akir: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Akir')}|hey whats up`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Akir')}|let me get back to you`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Akir')}|ah well maybe next time`);
+		},
+	},
 	alpha: {
 		noCopy: true,
 		onStart() {
