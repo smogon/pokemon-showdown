@@ -1313,11 +1313,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
 						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
 					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
 						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
 					}
 				}
 			}
