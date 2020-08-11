@@ -1011,6 +1011,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Trillionage Roots",
 	},
 
+	// vooper
+	qigong: {
+		shortDesc: "This Pokemon's Defense is doubled, and it receives 1/2 damage from special attacks.",
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(2);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category === 'Special') {
+				return this.chainModify(0.5);
+			}
+		},
+		name: "Qi-Gong",
+	},
+
 	// yuki
 	combattraining: {
 		desc: "If this Pokemon is a Cosplay Pikachu forme, the first hit it takes in battle deals 0 neutral damage. Confusion damage also breaks the immunity.",

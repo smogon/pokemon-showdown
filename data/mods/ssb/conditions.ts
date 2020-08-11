@@ -911,6 +911,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('vivalospride')}|classic honestly`);
 		},
 	},
+	vooper: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('vooper')}|${['Paws out, claws out!', 'Ready for the prowl!'][this.random(2)]}`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('vooper')}|Must... eat... bamboo...`);
+		},
+		onFaint() {
+			this.add(`c|${getName('vooper')}|I guess Kung Fu isn't for everyone...`);
+		},
+	},
 	xjoelituh: {
 		noCopy: true,
 		onStart(source) {

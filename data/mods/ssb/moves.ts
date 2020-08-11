@@ -2438,6 +2438,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// vooper
+	pandaexpress: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Lowers the target's Attack and Special Attack by 2 stage. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if the target's Attack and Special Attack stat stages were both unchanged, or if there are no unfainted party members.",
+		shortDesc: "Lowers target's Attack and Sp. Atk by 2. User switches.",
+		name: "Panda Express",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Parting Shot', target);
+		},
+		onHit(target, source, move) {
+			const success = this.boost({atk: -2, spa: -2}, target, source);
+			if (!success && !target.hasAbility('mirrorarmor')) {
+				delete move.selfSwitch;
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
+
 	// xJoelituh
 	burnbone: {
 		accuracy: 90,

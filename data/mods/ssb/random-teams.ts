@@ -427,6 +427,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'DRIP BAYLESS',
 		evs: {hp: 252, spa: 252, def: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	vooper: {
+		species: 'Pancham', ability: 'Qui-Gong', item: 'Eviolite', gender: 'M',
+		moves: ['Drain Punch', 'Knock Off', 'Swords Dance'],
+		signatureMove: 'Panda Express',
+		evs: {hp: 252, atk: 252, spd: 4}, ivs: {atk: 0}, nature: 'Adamant',
+	},
 	xJoelituh: {
 		species: 'Marowak-Alola', ability: 'Mountaineer', item: 'Rare Bone', gender: 'M',
 		moves: ['Poltergeist', 'Fire Punch', 'Stomping Tantrum'],
