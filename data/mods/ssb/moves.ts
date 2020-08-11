@@ -2307,7 +2307,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Struchni
 	veto: {
 		accuracy: 100,
-		basePower: 120,
+		basePower: 70,
 		category: "Physical",
 		desc: "Struchni only. Move's base power and priority depends on effectiveness of previous move.",
 		shortDesc: "Struchni: Move BP and prio depends on eff of prev move.",
@@ -2639,8 +2639,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1},
 		onTryMovePriority: 100,
-		onTryMove() {
+		onTryMove(source) {
 			this.attrLastMove('[still]');
+			if (source.name !== 'yuki') {
+				this.add('-fail', source);
+				this.hint("Only yuki can use Class Change.");
+				return null;
+			}
 		},
 		onPrepareHit(foe, source, move) {
 			let animation: string;
