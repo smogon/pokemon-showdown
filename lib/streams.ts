@@ -531,7 +531,7 @@ export class ObjectReadStream<T> {
 
 		if (options.read) this._read = options.read;
 		if (options.pause) this._pause = options.pause;
-		if (options.destroy) this._destroy = options.read;
+		if (options.destroy) this._destroy = options.destroy;
 		if (options.buffer !== undefined) {
 			this.buf = options.buffer.slice();
 			this.pushEnd();
