@@ -822,12 +822,14 @@ export const commands: ChatCommands = {
 		const modName = target.split(',');
 		let mod = Dex;
 		let format: Format | null = null;
+		let isInverse = false;
 		if (modName[modName.length - 1] && toID(modName[modName.length - 1]) in Dex.dexes) {
 			mod = Dex.mod(toID(modName[modName.length - 1]));
 		} else if (room?.battle) {
 			format = Dex.getFormat(room.battle.format);
 			mod = Dex.mod(format.mod);
 		}
+		if (modName[modName.length - 1] && toID(modName[modName.length - 1]) === 'inverse') isInverse = true;
 		const targets = target.split(/ ?[,/] ?/);
 		let species: {types: string[], [k: string]: any} = mod.getSpecies(targets[0]);
 		const type1 = mod.getType(targets[0]);
@@ -860,8 +862,9 @@ export const commands: ChatCommands = {
 		const immunities = [];
 		for (const type in mod.data.TypeChart) {
 			const notImmune = mod.getImmunity(type, species);
-			if (notImmune) {
-				const typeMod = mod.getEffectiveness(type, species);
+			if (notImmune || isInverse) {
+				let typeMod = !notImmune && isInverse ? 1 : 0;
+				typeMod += (isInverse ? -1 : 1) * mod.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
