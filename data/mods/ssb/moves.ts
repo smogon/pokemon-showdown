@@ -1,6 +1,7 @@
 import {getName} from './conditions';
 // Used for grimAuxiliatrix's move
 import {ssbSets} from "./random-teams";
+import {changeSet} from "./abilities";
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
@@ -2650,73 +2651,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.baseSpecies.baseSpecies !== 'Pikachu') return;
 			let classChangeIndex = source.moveSlots.map(x => x.id).indexOf('classchange' as ID);
 			if (classChangeIndex < 0) classChangeIndex = 1;
-			const getMoveSlot = (k: string, curMovePP?: number) => {
-				const move = this.dex.getMove(k);
-				return {
-					id: move.id,
-					move: move.name,
-					pp: curMovePP || move.pp * 8 / 5,
-					maxpp: move.pp * 8 / 5,
-					disabled: false,
-					used: false,
-				};
-			};
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
 				if (target.boosts.atk === -6) return false;
 				const atk = target.getStat('atk', false, true);
 				const success = this.boost({atk: -1}, target, source, null, false, true);
-				source.formeChange('pikachuphd', this.effect, true);
-				source.moveSlots = [
-					getMoveSlot('paraboliccharge'),
-					getMoveSlot('wish'),
-					getMoveSlot('batonpass'),
-					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
-				];
+				changeSet(this, target, ssbSets['yuki-Cleric']);
 				this.add('-message', 'yuki patches up her wounds!');
 				return !!(this.heal(atk, source, target) || success);
 			case 'Ninja':
 				target.addVolatile('confusion');
-				source.formeChange('pikachulibre', this.effect, true);
-				source.moveSlots = [
-					getMoveSlot('watershuriken'),
-					getMoveSlot('acrobatics'),
-					getMoveSlot('toxic'),
-					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
-				];
+				changeSet(this, target, ssbSets['yuki-Ninja']);
 				this.add('-message', `yuki's fast movements confuse ${target.name}!`);
 				return;
 			case 'Dancer':
 				this.boost({atk: -2}, target, source, this.effect, false, true);
-				source.formeChange('pikachupopstar', this.effect, true);
-				source.moveSlots = [
-					getMoveSlot('fierydance'),
-					getMoveSlot('revelationdance'),
-					getMoveSlot('lunardance'),
-					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
-				];
+				changeSet(this, target, ssbSets['yuki-Dancer']);
 				this.add('-message', `yuki dazzles ${target.name} with her moves!`);
 				return;
 			case 'Songstress':
 				target.trySetStatus('slp');
-				source.formeChange('pikachurockstar', this.effect, true);
-				source.moveSlots = [
-					getMoveSlot('hypervoice'),
-					getMoveSlot('overdrive'),
-					getMoveSlot('sing'),
-					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
-				];
+				changeSet(this, target, ssbSets['yuki-Songstress']);
 				this.add('-message', `yuki sang an entrancing melody!`);
 				return;
 			case 'Jester':
 				this.boost({atk: -2}, target, source, this.effect, false, true);
-				source.formeChange('pikachubelle', this.effect, true);
-				source.moveSlots = [
-					getMoveSlot('present'),
-					getMoveSlot('metronome'),
-					getMoveSlot('teeterdance'),
-					getMoveSlot('classchange', source.moveSlots[classChangeIndex].pp),
-				];
+				changeSet(this, target, ssbSets['yuki-Jester']);
 				this.add('-message', `yuki tries her best to impress ${target.name}!`);
 				return;
 			default:

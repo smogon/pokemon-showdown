@@ -311,7 +311,7 @@ function SSBSets(target: string) {
 		const set = ssbSets[name];
 		const mutatedSpecies = dex.getSpecies(set.species);
 		buf += `<img src="https://${Config.routes.client}/sprites/ani/${mutatedSpecies.spriteid}.gif" />`;
-		buf += Utils.html`<h1>${displayName}</h1>`;
+		buf += Utils.html`<h1>${displayName === 'yuki' ? name : displayName}</h1>`;
 		buf += `<details><summary>Set</summary>`;
 		buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(x => dex.getItem(x).name).join(' / ') : dex.getItem(set.item).name}</li>`;
 		buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.getAbility(x).name).join(' / ') : dex.getAbility(set.ability).name}</li>`;
@@ -325,7 +325,9 @@ function SSBSets(target: string) {
 			}
 			buf += `<li>EVs: ${evs.join(" / ")}</li>`;
 		}
-		buf += `<li>${Array.isArray(set.nature) ? set.nature.join(" / ") : formatNature(set.nature)} Nature</li>`;
+		if (set.nature) {
+			buf += `<li>${Array.isArray(set.nature) ? set.nature.join(" / ") : formatNature(set.nature)} Nature</li>`;
+		}
 		if (set.ivs) {
 			const ivs: string[] = [];
 			let iv: StatName;

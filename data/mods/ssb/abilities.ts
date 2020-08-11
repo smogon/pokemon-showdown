@@ -1,5 +1,71 @@
 import {SSBSet, ssbSets} from "./random-teams";
 
+/**
+ * Assigns a new set to a Pokémon
+ * @param pokemon the Pokemon to assign the set to
+ * @param newSet the SSBSet to assign
+ */
+export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
+	// For some reason EVs and IVs in an SSBSet can be undefined...
+	const evs: StatsTable = {
+		hp: newSet.evs?.hp || 0,
+		atk: newSet.evs?.atk || 0,
+		def: newSet.evs?.def || 0,
+		spa: newSet.evs?.spa || 0,
+		spd: newSet.evs?.spd || 0,
+		spe: newSet.evs?.spe || 0,
+	};
+	const ivs: StatsTable = {
+		hp: newSet.ivs?.hp || 31,
+		atk: newSet.ivs?.atk || 31,
+		def: newSet.ivs?.def || 31,
+		spa: newSet.ivs?.spa || 31,
+		spd: newSet.ivs?.spd || 31,
+		spe: newSet.ivs?.spe || 31,
+	};
+	pokemon.set.evs = evs;
+	pokemon.set.ivs = ivs;
+	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
+	pokemon.formeChange(newSet.species, context.effect, true);
+
+	pokemon.baseMaxhp = Math.floor(Math.floor(
+		2 * pokemon.species.baseStats.hp + pokemon.set.ivs.hp + Math.floor(pokemon.set.evs.hp / 4) + 100
+	) * pokemon.level / 100 + 10);
+	const newMaxHP = pokemon.baseMaxhp;
+	pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+	pokemon.maxhp = newMaxHP;
+	let item = newSet.item;
+	if (typeof item !== 'string') item = item[Math.floor(Math.random() * item.length)];
+	pokemon.setItem(item);
+
+	const carryOver = pokemon.moveSlots.slice().map(m => m.pp / m.maxpp);
+	// In case there are ever less than 4 moves
+	while (carryOver.length < 4) {
+		carryOver.push(1);
+	}
+	pokemon.moveSlots = [];
+	// @ts-ignore hack to prevent 8-move Robb
+	pokemon.baseMoveSlots = [];
+	let slot = 0;
+	for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
+		const move = pokemon.battle.dex.getMove(toID(newMove));
+		if (!move.id) continue;
+		const moveSlot = {
+			move: move.name,
+			id: move.id,
+			pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * carryOver[slot]) : move.pp * 8 / 5),
+			maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+			target: move.target,
+			disabled: false,
+			disabledSource: '',
+			used: false,
+		};
+		pokemon.baseMoveSlots.push(moveSlot);
+		pokemon.moveSlots.push(moveSlot);
+		slot++;
+	}
+}
+
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
@@ -828,77 +894,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "The Numbers Game",
 		onStart(target) {
 			if (target.baseSpecies.baseSpecies !== 'Necrozma' || target.transformed) return;
-			/**
-			 * Assigns a new set to a Pokémon
-			 * @param pokemon the Pokemon to assign the set to
-			 * @param newSet the SSBSet to assign
-			 */
-			const changeSet = (pokemon: Pokemon, newSet: SSBSet) => {
-				// For some reason EVs and IVs in an SSBSet can be undefined...
-				const evs: StatsTable = {
-					hp: newSet.evs?.hp || 0,
-					atk: newSet.evs?.atk || 0,
-					def: newSet.evs?.def || 0,
-					spa: newSet.evs?.spa || 0,
-					spd: newSet.evs?.spd || 0,
-					spe: newSet.evs?.spe || 0,
-				};
-				const ivs: StatsTable = {
-					hp: newSet.ivs?.hp || 31,
-					atk: newSet.ivs?.atk || 31,
-					def: newSet.ivs?.def || 31,
-					spa: newSet.ivs?.spa || 31,
-					spd: newSet.ivs?.spd || 31,
-					spe: newSet.ivs?.spe || 31,
-				};
-				pokemon.set.evs = evs;
-				pokemon.set.ivs = ivs;
-				pokemon.set.nature = Array.isArray(newSet.nature) ? this.sample(newSet.nature) : newSet.nature;
-				pokemon.formeChange(newSet.species, this.effect, true);
-
-				pokemon.baseMaxhp = Math.floor(Math.floor(
-					2 * pokemon.species.baseStats.hp + pokemon.set.ivs.hp + Math.floor(pokemon.set.evs.hp / 4) + 100
-				) * pokemon.level / 100 + 10);
-				const newMaxHP = pokemon.baseMaxhp;
-				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-				pokemon.maxhp = newMaxHP;
-				let item = newSet.item;
-				if (typeof item !== 'string') item = item[Math.floor(Math.random() * item.length)];
-				pokemon.setItem(item);
-
-				const carryOver = pokemon.moveSlots.slice().map(m => m.pp / m.maxpp);
-				// In case there are ever less than 4 moves
-				while (carryOver.length < 4) {
-					carryOver.push(1);
-				}
-				pokemon.moveSlots = [];
-				// @ts-ignore hack to prevent 8-move Robb
-				pokemon.baseMoveSlots = [];
-				let slot = 0;
-				for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
-					const move = pokemon.battle.dex.getMove(this.toID(newMove));
-					if (!move.id) continue;
-					const moveSlot = {
-						move: move.name,
-						id: move.id,
-						pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * carryOver[slot]) : move.pp * 8 / 5),
-						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-					pokemon.baseMoveSlots.push(moveSlot);
-					pokemon.moveSlots.push(moveSlot);
-					slot++;
-				}
-			};
-
 			if (target.side.pokemonLeft <= 3) {
 				if (target.species.name === 'Necrozma-Dusk-Mane' && target.side.pokemonLeft === 1 && target.m.flag2) {
-					changeSet(target, ssbSets.Robb576Ultra);
+					changeSet(this, target, ssbSets.Robb576Ultra);
 				} else if (target.species.name === "Necrozma-Dawn-Wings" && target.m.flag1) {
-					changeSet(target, ssbSets.Robb576DuskMane);
+					changeSet(this, target, ssbSets.Robb576DuskMane);
 					target.m.flag2 = true;
 				}
 			}
