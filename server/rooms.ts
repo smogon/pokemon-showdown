@@ -1112,7 +1112,7 @@ export class GlobalRoomState {
 	}
 
 	getBattles(/** formatfilter, elofilter, usernamefilter */ filter: string) {
-		let rooms: GameRoom[] = [];
+		const rooms: GameRoom[] = [];
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
 		for (const room of Rooms.rooms.values()) {
