@@ -1323,14 +1323,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.side.sideConditions['gaelstrom'].sourceMove = move;
 		},
 		condition: {
+			duration: 1,
 			onSwitchIn(pokemon) {
 				if (!this.effectData.count) this.effectData.count = 1;
-				if (this.effectData.firstTarget !== pokemon && this.effectData.count++ < 3) {
+				if (this.effectData.firstTarget !== pokemon && this.effectData.count < 3) {
 					pokemon.forceSwitchFlag = true;
-				}
-				if (this.effectData.count >= 3 || !this.effectData.source ||
-					 	this.effectData.source.fainted || this.effectData.source.hp <= 0) {
-					pokemon.side.removeSideCondition('gaelstrom');
+					this.effectData.count++;
 				}
 			},
 			onEnd(side) {
