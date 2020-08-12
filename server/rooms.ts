@@ -118,12 +118,10 @@ export interface RoomSettings {
 	isMultichannel?: boolean;
 }
 export type Room = GameRoom | ChatRoom;
-type Poll = import('./chat-plugins/poll').Poll;
-type Announcement = import('./chat-plugins/announcements').Announcement;
-type RoomEvent = import('./chat-plugins/room-events').RoomEvent;
-type RoomEventAlias = import('./chat-plugins/room-events').RoomEventAlias;
-type RoomEventCategory = import('./chat-plugins/room-events').RoomEventCategory;
-type Tournament = import('./tournaments/index').Tournament;
+import type {Poll} from './chat-plugins/poll';
+import type {Announcement} from './chat-plugins/announcements';
+import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
+import type {Tournament} from './tournaments/index';
 
 export abstract class BasicRoom {
 	roomid: RoomID;
@@ -892,7 +890,7 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 	}
 	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english', strings, keys);
+		return Chat.tr(this.settings.language || 'english', strings, ...keys);
 	}
 }
 
@@ -1005,8 +1003,8 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(message: string) {
-		void Rooms.Modlog.write('global', message);
+	modlog(message: string, overrideID?: string) {
+		void Rooms.Modlog.write('global', message, overrideID);
 	}
 
 	writeChatRoomData() {

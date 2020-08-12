@@ -21,11 +21,20 @@ const PROXIES_FILE = 'config/proxies.csv';
 import * as dns from 'dns';
 import {FS} from '../lib/fs';
 
-
 export interface AddressRange {
 	minIP: number;
 	maxIP: number;
 	host?: string;
+}
+
+function removeNohost(hostname: string) {
+	// Convert from old domain.tld.type-nohost format to new domain.tld?/type format
+	if (hostname?.includes('-nohost')) {
+		const parts = hostname.split('.');
+		const suffix = parts.pop();
+		return `${parts.join('.')}?/${suffix?.replace('-nohost', '')}`;
+	}
+	return hostname;
 }
 
 export const IPTools = new class {
@@ -93,6 +102,7 @@ export const IPTools = new class {
 	 *********************************************************/
 
 	ipToNumber(ip: string) {
+		ip = ip.trim();
 		if (ip.includes(':') && !ip.includes('.')) {
 			// IPv6
 			return -1;
@@ -136,7 +146,7 @@ export const IPTools = new class {
 	}
 	stringToRange(range: string): AddressRange | null {
 		if (!range) return null;
-		const index = range.indexOf(' - ');
+		const index = range.indexOf('-');
 		if (index <= 0) {
 			return range.includes('/') ? IPTools.getCidrRange(range) : {
 				minIP: IPTools.ipToNumber(range),
@@ -144,7 +154,7 @@ export const IPTools = new class {
 			};
 		}
 		const minIP = IPTools.ipToNumber(range.slice(0, index));
-		const maxIP = IPTools.ipToNumber(range.slice(index + 3));
+		const maxIP = IPTools.ipToNumber(range.slice(index + 1));
 		return {minIP, maxIP};
 	}
 
@@ -201,12 +211,17 @@ export const IPTools = new class {
 	mobileHosts: Set<string> = new Set();
 	async loadHostsAndRanges() {
 		const data = await FS(HOSTS_FILE).readIfExists() + await FS(PROXIES_FILE).readIfExists();
-		const rows = data.split('\n');
+		// Strip carriage returns for Windows compatibility
+		const rows = data.split('\n').map(row => row.replace('\r', ''));
 		const ranges = [];
 		for (const row of rows) {
 			if (!row) continue;
-			const [type, hostOrLowIP, highIP, host] = row.split(',');
+			let [type, hostOrLowIP, highIP, host] = row.split(',');
 			if (!hostOrLowIP) continue;
+			// Handle legacy data format
+			host = removeNohost(host);
+			hostOrLowIP = removeNohost(hostOrLowIP);
+
 			switch (type) {
 			case 'IP':
 				IPTools.singleIPOpenProxies.add(hostOrLowIP);
@@ -254,7 +269,7 @@ export const IPTools = new class {
 		IPTools.sortRanges();
 		for (const range of IPTools.ranges) {
 			const data = `RANGE,${IPTools.numberToIP(range.minIP)},${IPTools.numberToIP(range.maxIP)}${range.host ? `,${range.host}` : ``}\n`;
-			if (range.host?.endsWith('.proxy-nohost')) {
+			if (range.host?.endsWith('/proxy')) {
 				proxiesData += data;
 			} else {
 				hostsData += data;
@@ -347,7 +362,7 @@ export const IPTools = new class {
 					if (sortedRanges[iMin + 1]?.minIP <= insertion.maxIP) {
 						throw new Error("You can only widen one address range at a time.");
 					}
-					return true;
+					return iMin;
 				}
 				throw new Error(
 					`Too wide: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
@@ -387,7 +402,7 @@ export const IPTools = new class {
 		if (url.startsWith('https://')) url = url.slice(8);
 		if (url.startsWith('www.')) url = url.slice(4);
 		const slashIndex = url.indexOf('/');
-		if (slashIndex > 0) url = url.slice(0, slashIndex);
+		if (slashIndex > 0 && url[slashIndex - 1] !== '?') url = url.slice(0, slashIndex);
 		return url;
 	}
 
@@ -417,7 +432,7 @@ export const IPTools = new class {
 
 	/**
 	 * Will not reject; IPs with no RDNS entry will resolve to
-	 * '[byte1].[byte2].unknown-nohost'.
+	 * '[byte1].[byte2]?/unknown'.
 	 */
 	getHost(ip: string) {
 		return new Promise<string>(resolve => {
@@ -435,20 +450,20 @@ export const IPTools = new class {
 			}
 			dns.reverse(ip, (err, hosts) => {
 				if (err) {
-					resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
+					resolve(`${ip.split('.').slice(0, 2).join('.')}?/unknown`);
 					return;
 				}
 				if (!hosts || !hosts[0]) {
 					if (ip.startsWith('50.')) {
-						resolve('comcast.net.res-nohost');
+						resolve('comcast.net?/res');
 					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP) {
 						resolve(telstraRange.host);
 					} else {
 						this.testConnection(ip, result => {
 							if (result) {
-								resolve(`${ip.split('.').slice(0, 2).join('.')}.proxy-nohost`);
+								resolve(`${ip.split('.').slice(0, 2).join('.')}?/proxy`);
 							} else {
-								resolve(`${ip.split('.').slice(0, 2).join('.')}.unknown-nohost`);
+								resolve(`${ip.split('.').slice(0, 2).join('.')}?/unknown`);
 							}
 						});
 					}
@@ -507,7 +522,7 @@ export const IPTools = new class {
 	}
 
 	shortenHost(host: string) {
-		if (host.slice(-7) === '-nohost') return host;
+		if (host.split('.').pop()?.includes('/')) return host; // It has a suffix, e.g. leaseweb.com?/proxy
 		let dotLoc = host.lastIndexOf('.');
 		const tld = host.slice(dotLoc);
 		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
@@ -529,7 +544,7 @@ export const IPTools = new class {
 		if (Punishments.sharedIps.has(ip)) {
 			return 'shared';
 		}
-		if (host === 'he.net.proxy-nohost') {
+		if (/^he\.net(\?|)\/proxy$/.test(host)) {
 			// Known to only be VPN services
 			if (['74.82.60.', '72.52.87.', '65.49.126.'].some(range => ip.startsWith(range))) {
 				return 'proxy';
@@ -546,13 +561,13 @@ export const IPTools = new class {
 		// DO is commonly used to host bots; I don't know who whitelisted
 		// servihosting but I assume for a similar reason. This isn't actually
 		// tenable; any service that can host bots can and does also host proxies.
-		if (this.proxyHosts.has(host) || host.endsWith('.proxy-nohost')) {
+		if (this.proxyHosts.has(host) || host.endsWith('/proxy')) {
 			return 'proxy';
 		}
-		if (this.residentialHosts.has(host) || host.endsWith('.res-nohost')) {
+		if (this.residentialHosts.has(host) || host.endsWith('/res')) {
 			return 'res';
 		}
-		if (this.mobileHosts.has(host) || host.endsWith('.mobile-nohost')) {
+		if (this.mobileHosts.has(host) || host.endsWith('/mobile')) {
 			return 'mobile';
 		}
 		if (/^ip-[0-9]+-[0-9]+-[0-9]+\.net$/.test(host) || /^ip-[0-9]+-[0-9]+-[0-9]+\.eu$/.test(host)) {
@@ -564,7 +579,7 @@ export const IPTools = new class {
 			return 'proxy';
 		}
 
-		if (host.endsWith('.unknown-nohost')) {
+		if (host.endsWith('/unknown')) {
 			// rdns entry doesn't exist, and IP doesn't respond to a probe on port 80
 			return 'unknown';
 		}
@@ -577,7 +592,7 @@ export const IPTools = new class {
 const telstraRange: AddressRange = {
 	minIP: IPTools.ipToNumber("101.160.0.0"),
 	maxIP: IPTools.ipToNumber("101.191.255.255"),
-	host: 'telstra.net.res-nohost',
+	host: 'telstra.net?/res',
 };
 
 export default IPTools;

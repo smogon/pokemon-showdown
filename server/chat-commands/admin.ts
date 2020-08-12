@@ -266,7 +266,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
 		const lock = Monitor.hotpatchLock;
-		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl'];
+		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
 		const version = await Monitor.version();
 		const requiresForce = (patch: string) =>
 			version && cmd !== 'forcehotpatch' &&
@@ -384,6 +384,28 @@ export const commands: ChatCommands = {
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("IPTools has been hot-patched.");
+			} else if (target === 'modlog') {
+				patch = 'modlog';
+				if (lock['modlog']) {
+					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
+				}
+				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
+
+				let streams = [];
+				streams = Rooms.Modlog.getActiveStreamIDs();
+				await Rooms.Modlog.destroyAll();
+
+				const processManagers = ProcessManager.processManagers;
+				for (const manager of processManagers.slice()) {
+					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
+				}
+
+				Rooms.Modlog = require('../modlog').modlog;
+				this.sendReply("Modlog has been hot-patched.");
+				for (const stream of streams) {
+					Rooms.Modlog.initialize(stream);
+				}
+				this.sendReply("Modlog streams have been re-initialized.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
 				return this.parse('/help nohotpatch');
@@ -414,7 +436,8 @@ export const commands: ChatCommands = {
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch loginserver - reloads new loginserver code`,
 		`/hotpatch tournaments - reloads new tournaments code`,
-		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, and dnsbl`,
+		`/hotpatch modlog - reloads new modlog code`,
+		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, modlog, and dnsbl`,
 		`/forcehotpatch [target] - as above, but performs the update regardless of whether the history has changed in git`,
 	],
 
@@ -432,7 +455,7 @@ export const commands: ChatCommands = {
 		if (!reason || !target.includes(separator)) return this.parse('/help nohotpatch');
 
 		const lock = Monitor.hotpatchLock;
-		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'all'];
+		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'modlog', 'all'];
 
 		if (!validDisable.includes(hotpatch)) {
 			return this.errorReply(`Disabling hotpatching "${hotpatch}" is not supported.`);
@@ -460,8 +483,8 @@ export const commands: ChatCommands = {
 		);
 	},
 	nohotpatchhelp: [
-		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: &`,
-		`/allowhotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Enables hotpatching the specified part of the simulator. Requires: &`,
+		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|modlog|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: &`,
+		`/allowhotpatch [chat|formats|battles|validator|tournaments|punishments|modlog|all] [reason] - Enables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
 	processes(target, room, user) {
@@ -712,7 +735,7 @@ export const commands: ChatCommands = {
 
 	async updateserver(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;
-
+		const isPrivate = toID(target) === 'private';
 		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
@@ -723,7 +746,7 @@ export const commands: ChatCommands = {
 			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
-					cwd: __dirname,
+					cwd: `${__dirname}/../../${isPrivate ? Config.privatecodepath || '../main-private/' : ``}`,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
@@ -734,13 +757,13 @@ export const commands: ChatCommands = {
 		};
 
 		this.sendReply(`Fetching newest version...`);
-		this.addGlobalModAction(`${user.name} used /updateserver`);
+		this.addGlobalModAction(`${user.name} used /updateserver ${isPrivate ? `private` : `public`}`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
-		if (!stdout && !stderr) {
+		if (!isPrivate && !stdout && !stderr) {
 			this.sendReply(`There were no updates.`);
-			[code, stdout, stderr] = await exec('node ../../build');
+			[code, stdout, stderr] = await exec('node ./build');
 			if (stderr) {
 				return this.errorReply(`Crash while rebuilding: ${stderr}`);
 			}
@@ -792,11 +815,13 @@ export const commands: ChatCommands = {
 			await exec(`git stash pop`);
 			this.sendReply(`FAILED, old changes restored.`);
 		}
-		[code, stdout, stderr] = await exec('node ../../build');
-		if (stderr) {
-			return this.errorReply(`Crash while rebuilding: ${stderr}`);
+		if (!isPrivate) {
+			[code, stdout, stderr] = await exec('node ./build');
+			if (stderr) {
+				return this.errorReply(`Crash while rebuilding: ${stderr}`);
+			}
+			this.sendReply(`Rebuilt.`);
 		}
-		this.sendReply(`Rebuilt.`);
 		Monitor.updateServerLock = false;
 	},
 

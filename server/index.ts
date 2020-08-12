@@ -107,7 +107,7 @@ if (Config.watchconfig) {
 
 import {Dex} from '../sim/dex';
 global.Dex = Dex;
-global.toID = Dex.getId;
+global.toID = Dex.toID;
 
 import {LoginServer} from './loginserver';
 global.LoginServer = LoginServer;

@@ -23,8 +23,7 @@ To reload chat commands:
 
 */
 
-type RoomPermission = import('./user-groups').RoomPermission;
-type GlobalPermission = import('./user-groups').GlobalPermission;
+import type {RoomPermission, GlobalPermission} from './user-groups';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -413,6 +412,10 @@ export class CommandContext extends MessageContext {
 				throw new Error("Too much command recursion");
 			}
 			subcontext.message = msg;
+			subcontext.cmd = '';
+			subcontext.fullCmd = '';
+			subcontext.cmdToken = '';
+			subcontext.target = '';
 			return subcontext.parse();
 		}
 		let message: any = this.message;
@@ -783,7 +786,7 @@ export class CommandContext extends MessageContext {
 		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null) {
-		let buf = `(${this.room ? this.room.roomid : 'global'}) ${action}: `;
+		let buf = `${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${user}]`;
@@ -799,7 +802,7 @@ export class CommandContext extends MessageContext {
 		if (!note) note = ` by ${this.user.id}`;
 		buf += note.replace(/\n/gm, ' ');
 
-		Rooms.global.modlog(buf);
+		Rooms.global.modlog(buf, this.room?.roomid);
 		if (this.room) this.room.modlog(buf);
 	}
 	modlog(

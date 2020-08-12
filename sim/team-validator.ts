@@ -7,7 +7,8 @@
  * @license MIT
  */
 
-import {Dex} from './dex';
+import {Dex, toID} from './dex';
+import {Utils} from '../lib/utils';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -190,6 +191,7 @@ export class TeamValidator {
 	readonly ruleTable: import('./dex-data').RuleTable;
 	readonly minSourceGen: number;
 
+	readonly toID: (str: any) => ID;
 	constructor(format: string | Format) {
 		this.format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(this.format);
@@ -198,6 +200,8 @@ export class TeamValidator {
 
 		this.minSourceGen = this.ruleTable.minSourceGen ?
 			this.ruleTable.minSourceGen[0] : 1;
+
+		this.toID = toID;
 	}
 
 	validateTeam(
@@ -344,11 +348,11 @@ export class TeamValidator {
 			}
 		}
 		set.name = dex.getName(set.name);
-		let item = dex.getItem(Dex.getString(set.item));
+		let item = dex.getItem(Utils.getString(set.item));
 		set.item = item.name;
-		let ability = dex.getAbility(Dex.getString(set.ability));
+		let ability = dex.getAbility(Utils.getString(set.ability));
 		set.ability = ability.name;
-		set.nature = dex.getNature(Dex.getString(set.nature)).name;
+		set.nature = dex.getNature(Utils.getString(set.nature)).name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		const maxLevel = format.maxLevel || 100;
@@ -556,7 +560,7 @@ export class TeamValidator {
 		let lsetProblem = null;
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
-			const move = dex.getMove(Dex.getString(moveName));
+			const move = dex.getMove(Utils.getString(moveName));
 			if (!move.exists) return [`"${move.name}" is an invalid move.`];
 
 			problem = this.checkMove(set, move, setHas);
@@ -893,7 +897,7 @@ export class TeamValidator {
 		for (const stat in set.evs) totalEV += set.evs[stat as 'hp'];
 
 		if (!this.format.debug) {
-			if ((allowEVs || allowAVs) && totalEV === 0) {
+			if (set.level > 1 && (allowEVs || allowAVs) && totalEV === 0) {
 				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			} else if (allowEVs && !capEVs && [508, 510].includes(totalEV)) {
 				problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
@@ -1858,9 +1862,9 @@ export class TeamValidator {
 							// we're past the required level to learn it
 							// (gen 7 level-up moves can be relearnered at any level)
 							// falls through to LMT check below
-						} else if (level >= 5 && learnedGen === 3 && species.eggGroups && species.eggGroups[0] !== 'Undiscovered') {
+						} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 							// Pomeg Glitch
-						} else if ((!species.gender || species.gender === 'F') && learnedGen >= 2 && species.eggGroups[0] !== 'Undiscovered') {
+						} else if ((!species.gender || species.gender === 'F') && learnedGen >= 2 && species.canHatch) {
 							// available as egg move
 							learned = learnedGen + 'Eany';
 							// falls through to E check below

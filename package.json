@@ -6,7 +6,7 @@
   "dependencies": {
     "probe-image-size": "^5.0.0",
     "sockjs": "0.3.20",
-    "sucrase": "^3.13.0"
+    "sucrase": "^3.15.0"
   },
   "optionalDependencies": {
     "cloud-env": "^0.2.3",
@@ -18,7 +18,7 @@
     "sqlite": "^3.0.6"
   },
   "engines": {
-    "node": ">=7.7.0"
+    "node": ">=12.0.0"
   },
   "scripts": {
     "start": "node pokemon-showdown start",
@@ -74,6 +74,6 @@
     "husky": "^4.2.3",
     "mocha": "^7.1.1",
     "smogon": "^1.1.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.7"
   }
 }

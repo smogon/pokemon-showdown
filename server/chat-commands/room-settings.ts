@@ -7,6 +7,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
+import type {RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
@@ -93,7 +94,7 @@ export const commands: ChatCommands = {
 			target = Users.PLAYER_SYMBOL;
 			/* falls through */
 		default:
-			if (!Users.Auth.isAuthLevel(target)) {
+			if (!Users.Auth.isAuthLevel(target) || ['‽', '!'].includes(target)) {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
@@ -203,7 +204,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to autoconfirmed!</strong><br />Users must be rank autoconfirmed or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
-		} else if (Users.Auth.isAuthLevel(target)) {
+		} else if (Users.Auth.isAuthLevel(target) && !['‽', '!'].includes(target)) {
 			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
 			}
@@ -292,9 +293,6 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (rank === 'default') rank = '';
-			if (!room.auth.atLeast(user, '#')) {
-				return this.errorReply(`/permissions set - Access denied.`);
-			}
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
 			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
@@ -302,6 +300,15 @@ export const commands: ChatCommands = {
 			}
 			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
+			}
+			if (!room.auth.atLeast(user, '#')) {
+				return this.errorReply(`/permissions set - You must be at least a Room Owner to set permissions.`);
+			}
+			if (
+				Users.Auth.ROOM_PERMISSIONS.includes(perm as RoomPermission) &&
+				!Users.Auth.hasPermission(user, perm, null, room)
+			) {
+				return this.errorReply(`/permissions set - You can't set the permission "${perm}" because you don't have it.`);
 			}
 
 			const currentPermissions = room.settings.permissions || {};

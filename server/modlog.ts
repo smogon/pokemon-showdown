@@ -160,11 +160,23 @@ export class Modlog {
 		this.streams.set(roomid, null);
 	}
 
+	async destroyAll() {
+		const promises = [];
+		for (const id in this.streams) {
+			promises.push(this.destroy(id as ModlogID));
+		}
+		return Promise.all(promises);
+	}
+
 	async rename(oldID: ModlogID, newID: ModlogID) {
 		const streamExists = this.streams.has(oldID);
 		if (streamExists) await this.destroy(oldID);
 		await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
 		if (streamExists) this.initialize(newID);
+	}
+
+	getActiveStreamIDs() {
+		return [...this.streams.keys()];
 	}
 
 	/******************************************
@@ -233,7 +245,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await execFile('rg', options, {cwd: normalizePath(`${__dirname}/../../`)});
+			output = await execFile('rg', options, {cwd: normalizePath(`${__dirname}/../`)});
 		} catch (error) {
 			return results;
 		}
