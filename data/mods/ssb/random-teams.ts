@@ -291,6 +291,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Corrosive Cloud',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold',
 	},
+	Marshmallon: {
+		species: 'Munchlax', ability: 'Stubbornness', item: 'Eviolite', gender: 'M',
+		moves: ['Head Charge', 'Flare Blitz', 'Wood Hammer', 'Head Smash'],
+		signatureMove: 'RAWWWR',
+		evs: {hp: 248, def: 252, spd: 8}, ivs: {spe: 0}, nature: 'Relaxed',
+	},
 	Mitsuki: {
 		species: 'Leafeon', ability: 'Photosynthesis', item: ['Life Orb', 'Miracle Seed'], gender: 'M',
 		moves: ['Solar Blade', 'Attack Order', 'Thousand Arrows'],
@@ -599,6 +605,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				set.moves[set.moves.indexOf('Shadow Claw')] = 'Shadow Ball';
 				set.moves[set.moves.indexOf('Iron Head')] = 'Flash Cannon';
 			}
+
+			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
 
 			team.push(set);
 

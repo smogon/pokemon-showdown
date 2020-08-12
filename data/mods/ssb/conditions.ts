@@ -677,6 +677,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('MajorBowman')}|Never loved ya.`);
 		},
 	},
+	marashmallon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Marshmallon')}|I'm hungry. Are you edible? c:`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Marshmallon')}|RAWWWR`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Marshmallon')}|I'm still hungry. rawr. :c`);
+		},
+	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {

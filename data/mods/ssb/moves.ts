@@ -1708,6 +1708,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// Marshmallon
+	rawwwr: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Heals the user by 50% of its max HP. Forces the target to switch to a random ally. User switches out after.",
+		shortDesc: "Heals the user by 50% of its max HP. Forces the target to switch to a random ally. User switches out after.",
+		name: "RAWWWR",
+		pp: 10,
+		priority: 0,
+		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Slack Off', source);
+			this.add('-anim', source, 'Roar of Time', target);
+			this.add('-anim', source, 'Roar', target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp / 2, pokemon, pokemon, move);
+		},
+		forceSwitch: true,
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
+
 	// Mitsuki
 	terraforming: {
 		accuracy: 100,

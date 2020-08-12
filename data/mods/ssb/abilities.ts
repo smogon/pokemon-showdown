@@ -747,7 +747,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.addVolatile('tension');
 		},
 		condition: {
-			duration: 1,
 			onStart(pokemon, source, effect) {
 				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', pokemon, 'move: Tension', '[silent]');
@@ -767,9 +766,48 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				return accuracy;
 			},
+			onAfterMove(pokemon, source) {
+				pokemon.removeVolatile('tension');
+			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Tension', '[silent]');
 			},
+		},
+	},
+
+	// Marshmallon
+	stubbornness: {
+		desc: "this Pokemon does not take recoil damage; its Atk, Def, and SpD are immediately raised by 1 at the first instance that an opponent's stat is raised; after this, each time an opponent's has its stats boosted, the user gains +1 Atk.",
+		shortDesc: "Rock Head + boosts its Atk, Def, SpD by 1 on opponents first stat boost; after which with every of opponent's stat boost it raises its Atk by 1.",
+		name: "Stubbornness",
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') return null;
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.m.happened) delete pokemon.m.happened;
+		},
+		onFoeAfterBoost(boost, target, source, effect) {
+			const pokemon = source.side.foe.active[0];
+			let success = false;
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					success = true;
+				}
+			}
+			// Infinite Loop preventer
+			if (effect.id === 'stubbornness') return;
+			if (success) {
+				if (!pokemon.m.happened) {
+				 	this.boost({atk: 1, def: 1, spd: 1}, pokemon);
+					pokemon.m.happened = true;
+				} else {
+					this.boost({atk: 1}, pokemon);
+				}
+			}
 		},
 	},
 
