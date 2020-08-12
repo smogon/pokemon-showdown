@@ -831,11 +831,15 @@ export const commands: ChatCommands = {
 			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
-					if (setting === 'blockPMs' &&
-						Users.Auth.isAuthLevel(raw[setting].all)) {
-						settings[setting] = raw[setting];
+					if (setting === 'blockPMs') {
+						const {all, specific} = raw[setting];
+						settings.blockPMs = {
+							all: typeof all === 'boolean' || Users.Auth.isAuthLevel(all) ? all : false,
+							specific: specific && Array.isArray(specific) ? specific : [],
+						};
 					} else {
-						settings[setting as keyof UserSettings] = typeof raw[setting] === 'object' ? raw[setting] : !!raw[setting];
+						// @ts-ignore (the only exception is parsed above, so this can be ignored)
+						settings[setting as keyof UserSettings] = !!raw[setting];
 					}
 				}
 			}
