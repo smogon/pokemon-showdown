@@ -753,9 +753,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "On switch-in, the Pokemon's next attack will always be a critical hit and will always hit.",
 		name: "Tension",
 		onStart(pokemon) {
+			const target = pokemon.side.foe.active[0];
 			this.add("-message", `Lionyx has built up tension!`);
 			// i could just add laserfocus and lockon volatiles here but its an ability soooo
-			pokemon.addVolatile('tension');
+			pokemon.addVolatile('tension', target);
 		},
 		condition: {
 			duration: 1,
