@@ -373,8 +373,6 @@ export const commands: ChatCommands = {
 		`/viewproxies - View the list of proxies. Requires: hosts manager @ &`,
 	],
 
-	
-
 	markshared(target, room, user) {
 		if (!target) return this.parse('/help markshared');
 		if (!this.can('globalban')) return false;
