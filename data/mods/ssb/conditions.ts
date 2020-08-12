@@ -63,6 +63,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Aelita')}|X.A.N.A. is finally finished for good.`);
 		},
 	},
+	aegii: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|${getName('aegii')}|${[`stream fiesta!!! https://youtu.be/eDEFolvLn0A`, `stream more&more!!! https://youtu.be/mH0_XpSHkZo`, `stream wannabe!!! https://youtu.be/fE2h3lGlOsk`, `stream love bomb!!! https://youtu.be/-SK6cvkK4c0`][this.random(4)]}`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('aegii')}|${[`brb, buying albums`, `brb, buying albums`, `brb, streaming mvs`, `brb, learning choreos`][this.random(4)]}`);
+		},
+		onFaint() {
+			this.add(`c|${getName('aegii')}|i forgot to stan loona...`);
+		},
+	},
 	aeonic: {
 		noCopy: true,
 		onStart() {

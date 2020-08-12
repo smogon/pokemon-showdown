@@ -47,6 +47,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'XANA\'s Keys To Lyoko',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful',
 	},
+	aegii: {
+		species: 'Aegislash', ability: 'New Stage', item: 'Leftovers', gender: 'M',
+		moves: ['Shadow Claw', 'Iron Head', 'Shadow Sneak'],
+		signatureMove: 'K-Shield',
+		evs: {hp: 252, def: 64, spd: 192}, nature: 'Sassy',
+	},
 	Aeonic: {
 		species: 'Nosepass', ability: 'Arsene', item: 'Stone Plate', gender: 'M',
 		moves: ['Diamond Storm', 'Earthquake', 'Milk Drink'],
@@ -583,6 +589,10 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Any set specific tweaks occur here.
 			if (set.name === 'quadrophenic') set.moves[this.random(2) + 1] = 'Conversion';
+			if (set.name === 'aegii' && this.randomChance(1, 2)) {
+				set.moves[set.moves.indexOf('Shadow Claw')] = 'Shadow Ball';
+				set.moves[set.moves.indexOf('Iron Head')] = 'Flash Cannon';
+			}
 
 			team.push(set);
 

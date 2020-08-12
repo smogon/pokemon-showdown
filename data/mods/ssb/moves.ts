@@ -98,6 +98,87 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// aegii
+	kshield: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "King's Shield; except reduces Special Attack or Attack by 2 according to the move used by the opponent. Boosts Attack or Special Attack of user according to its set.",
+		shortDesc: "King's Shield; reduces SpA or Atk by 2 based on move category; Boost users Atk or SpA according to user's set.",
+		name: "K-Shield",
+		pp: 10,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'kshield',
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this .add('-anim', source, 'Petal Dance', target);
+			this .add('-anim', source, 'King\'s Shield', source);
+		},
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.category === "Special") {
+					this.boost({spa: -2}, source, target, this.dex.getActiveMove("K-Shield"));
+				} else {
+					this.boost({atk: -2}, source, target, this.dex.getActiveMove("K-Shield"));
+				}
+				let specCount = 0;
+				let physCount = 0;
+				for (const moveSlot of target.moveSlots) {
+					const moveid = moveSlot.id;
+					const theMove = this.dex.getMove(moveid);
+					if (theMove.category === "Special") {
+						specCount++;
+					} else if (theMove.category === "Physical") {
+						physCount++;
+					}
+				}
+				const boost: {[key: string]: number} = {};
+				if (specCount > physCount) {
+					boost['spa'] = 1;
+				} else {
+					boost['atk'] = 1;
+				}
+				this.boost(boost, source);
+				return this.NOT_FAIL;
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Steel",
+	},
+
 	// Aelita
 	xanaskeystolyoko: {
 		accuracy: 100,
