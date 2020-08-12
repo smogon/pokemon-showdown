@@ -1129,10 +1129,6 @@ export class GlobalRoomState {
 			rooms.push(room);
 		}
 
-		if (rooms.length > 150 && !formatFilter && !eloFilter && !usernameFilter) {
-			rooms = rooms.slice(-150);
-		}
-
 		const roomTable: {[roomid: string]: BattleRoomTable} = {};
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			const room = rooms[i];
