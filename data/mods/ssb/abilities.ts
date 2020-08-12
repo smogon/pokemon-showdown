@@ -154,9 +154,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		onStart(pokemon) {
-			this.useMove('Haze', this.effectData.target);
-			this.useMove('Heal Bell', this.effectData.target);
-			this.useMove('Embargo', this.effectData.target);
+			this.useMove('Haze');
+			this.useMove('Heal Bell');
+			this.useMove('Embargo');
 		},
 		name: "New Stage",
 	},
