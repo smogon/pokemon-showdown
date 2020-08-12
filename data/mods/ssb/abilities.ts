@@ -154,20 +154,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		onStart(pokemon) {
-			this.add('-clearallboost');
-			for (const poke of this.getAllActive()) {
-				poke.clearBoosts();
-			}
-			this.add('-activate', pokemon, 'move: Heal Bell');
-			const side = pokemon.side;
-			for (const ally of side.pokemon) {
-				if (ally !== pokemon && ally.hasAbility('soundproof')) continue;
-				ally.cureStatus();
-			}
-			if (pokemon.side.foe.active[0]) {
-				pokemon.side.foe.active[0].addVolatile('embargo');
-				this.add('-start', pokemon, 'Embargo');
-			}
+			this.useMove('Haze', this.effectData.target);
+			this.useMove('Heal Bell', this.effectData.target);
+			this.useMove('Embargo', this.effectData.target);
 		},
 		name: "New Stage",
 	},
