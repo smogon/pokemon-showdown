@@ -347,10 +347,10 @@ export const Punishments = new class {
 	async loadSharedIps() {
 		const data = await FS(SHAREDIPS_FILE).readIfExists();
 		if (!data) return;
-		for (const row of data.split("\n")) {
-			if (!row || row === '\r') continue;
+		for (const row of data.replace('\r', '').split("\n")) {
+			if (!row) continue;
 			const [ip, type, note] = row.trim().split("\t");
-			if (!ip.includes('.')) continue;
+			if (!IPTools.ipRegex.test(ip)) continue;
 			if (type !== 'SHARED') continue;
 
 			Punishments.sharedIps.set(ip, note);
@@ -378,10 +378,10 @@ export const Punishments = new class {
 	async loadSharedIpBlacklist() {
 		const data = await FS(SHAREDIPS_BLACKLIST_FILE).readIfExists();
 		if (!data) return;
-		for (const row of data.split("\n")) {
-			if (!row || row === '\r') continue;
+		for (const row of data.replace('\r', '').split("\n")) {
+			if (!row) continue;
 			const [ip, reason] = row.trim().split("\t");
-			if (!ip.includes('.')) continue;
+			if (!IPTools.ipRegex.test(ip)) continue;
 			if (!reason) continue;
 
 			Punishments.sharedIpBlacklist.set(ip, reason);

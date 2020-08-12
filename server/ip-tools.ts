@@ -44,6 +44,9 @@ export const IPTools = new class {
 
 	readonly connectionTestCache = new Map<string, boolean>();
 
+	readonly ipRegex = /\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b/;
+	readonly hostRegex = /^.+\..{2,}$/;
+
 	async lookup(ip: string) {
 		// known TypeScript bug
 		// https://github.com/microsoft/TypeScript/issues/33752
