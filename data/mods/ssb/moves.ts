@@ -1300,6 +1300,48 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Kalalokki
+	gaelstrom: {
+		accuracy: true,
+		basePower: 120,
+		category: "Special",
+		desc: "Hits foe and phazes them out, phaze the next one out and then another one, set a random entry hazard at the end of the move.",
+		shortDesc: "Forces the target to switch to a random ally; this happens two more times; and finally sets up a random entry hazard.",
+		name: "Gaelstrom",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, distance: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hurricane', target);
+		},
+		onHit(target, source, move) {
+			target.side.addSideCondition('gaelstrom');
+			target.side.sideConditions['gaelstrom'].firstTarget = target;
+			target.side.sideConditions['gaelstrom'].sourceMove = move;
+		},
+		condition: {
+			onSwitchIn(pokemon) {
+				if (!this.effectData.count) this.effectData.count = 1;
+				if (this.effectData.firstTarget !== pokemon && this.effectData.count++ < 3) {
+					pokemon.forceSwitchFlag = true;
+				}
+				if (this.effectData.count >= 3 || !this.effectData.source ||
+					 	this.effectData.source.fainted || this.effectData.source.hp <= 0) {
+					pokemon.side.removeSideCondition('gaelstrom');
+				}
+			},
+			onEnd(side) {
+				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
+			},
+		},
+		forceSwitch: true,
+		target: "normal",
+		type: "Flying",
+	},
+
 	// Kingbaruk
 	leaveittotheteam: {
 		accuracy: true,

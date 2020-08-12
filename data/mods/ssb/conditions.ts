@@ -541,6 +541,33 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Kaiju Bunny')}|Wow, okay, r00d ￣(ಥㅅಥ)￣`);
 		},
 	},
+	kalalokki: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Kalalokki')}|(•_•)`);
+			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
+			this.add(`c|${getName('Kalalokki')}|(⌐■_■)`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Kalalokki')}|(⌐■_■)`);
+			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
+			this.add(`c|${getName('Kalalokki')}|(x_x)`);
+		},
+		// Innate Perish Body
+		onDamagingHit(damage, target, source, move) {
+			if (!move.flags['contact']) return;
+
+			let announced = false;
+			for (const pokemon of [target, source]) {
+				if (pokemon.volatiles['perishsong']) continue;
+				if (!announced) {
+					this.add('-ability', target, 'Perish Body');
+					announced = true;
+				}
+				pokemon.addVolatile('perishsong');
+			}
+		},
+	},
 	kingbaruk: {
 		noCopy: true,
 		onStart() {

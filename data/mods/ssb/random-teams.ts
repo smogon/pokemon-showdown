@@ -265,6 +265,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Clash of Pangoros',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish', shiny: true,
 	},
+	Kalalokki: {
+		species: 'Wingull', ability: 'Magic Guard', item: 'Focus Sash', gender: 'M',
+		moves: ['Tailwind', 'Encore', 'Soak'],
+		signatureMove: 'Gaelstrom',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	Kris: {
 		species: 'Unown', ability: 'Protean', item: 'Life Orb', gender: 'N',
 		moves: ['Light of Ruin', 'Psystrike', ['Secret Sword', 'Mind Blown', 'Seed Flare']],
