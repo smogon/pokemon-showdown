@@ -117,7 +117,7 @@
 		"Your message contains banned characters.": "आपके सन्देश में प्रतिबंधित अक्षर हैं.",
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "इस room में slow-chat चालू है. आप केवल हर ${time} seconds पर बात कर सकते हैं",
 		"Your username contains a phrase banned by this room.": "आपके नाम में इस room का एक प्रतिबंधित शब्द है.",
-		"Your status message contains a phrase banned by this room.": "आपके status में इस room का एक प्रतिबंधित शब्द है.",
+		"Your statusMessage contains a phrase banned by this room.": "आपके status में इस room का एक प्रतिबंधित शब्द है.",
 
 		"Your message contained banned words in this room.": "आपके सन्देश में इस room का एक प्रतिबंधित शब्द है.",
 		"You can't send the same message again so soon.": "आप एक ही सन्देश इतनी जल्दी दोबारा नहीं भेज सकते.",

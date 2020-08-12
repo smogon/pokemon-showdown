@@ -1222,7 +1222,7 @@ export class GlobalRoomState {
 
 	onCreateBattleRoom(players: User[], room: GameRoom, options: AnyObject) {
 		for (const player of players) {
-			if (player.settings.status.type === 'idle') {
+			if (player.settings.statusType === 'idle') {
 				player.setStatusType('online');
 			}
 		}

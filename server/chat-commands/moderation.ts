@@ -249,7 +249,7 @@ export const commands: ChatCommands = {
 			if (symbol === ' ') group = 'Whitelisted (this list is only visible to staff)';
 			return `${group}:\n` +
 				Utils.sortBy(names).map(userid => {
-					const isOnline = Users.get(userid)?.settings.status.type === 'online';
+					const isOnline = Users.get(userid)?.settings.statusType === 'online';
 					// targetRoom guaranteed to exist above
 					return userid in targetRoom!.users && isOnline ? `**${userid}**` : userid;
 				}).join(', ');

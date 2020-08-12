@@ -308,10 +308,8 @@ type ChatQueueEntry = [string, RoomID, Connection];
 export interface UserSettings {
 	blockChallenges: boolean;
 	blockPMs: boolean | AuthLevel;
-	status: {
-		type: StatusType,
-		message: string,
-	};
+	statusType: StatusType;
+	statusMessage: string,
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
 }
@@ -437,10 +435,8 @@ export class User extends Chat.MessageContext {
 		this.settings = {
 			blockChallenges: false,
 			blockPMs: false,
-			status: {
-				type: 'online',
-				message: '',
-			},
+			statusType: 'online',
+			statusMessage: '',
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
 		};
@@ -529,13 +525,13 @@ export class User extends Chat.MessageContext {
 	}
 	getIdentityWithStatus(roomid: RoomID = '') {
 		const identity = this.getIdentity(roomid);
-		const status = this.settings.status.type === 'online' ? '' : '@!';
+		const status = this.settings.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
 	}
 	getStatus() {
-		const type = this.settings.status.type;
+		const type = this.settings.statusType;
 		const statusMessage = type === 'busy' ? '!(Busy) ' : type === 'idle' ? '!(Idle) ' : '';
-		const status = statusMessage + (this.settings.status.message || '');
+		const status = statusMessage + (this.settings.statusMessage || '');
 		return status;
 	}
 	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
@@ -870,7 +866,7 @@ export class User extends Chat.MessageContext {
 		const joining = !this.named;
 		this.named = !userid.startsWith('guest') || !!this.namelocked;
 
-		if (isForceRenamed) this.settings.status.message = '';
+		if (isForceRenamed) this.settings.statusMessage = '';
 
 		for (const connection of this.connections) {
 			// console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -938,7 +934,7 @@ export class User extends Chat.MessageContext {
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
 		this.setStatusType(
-			(this.settings.status.type === 'busy' || oldUser.settings.status.type === 'busy') ? 'busy' : 'online'
+			(this.settings.statusType === 'busy' || oldUser.settings.statusType === 'busy') ? 'busy' : 'online'
 		);
 
 		for (const connection of oldUser.connections) {
@@ -976,7 +972,7 @@ export class User extends Chat.MessageContext {
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
-		this.settings.status.message = oldUser.settings.status.message;
+		this.settings.statusMessage = oldUser.settings.statusMessage;
 
 		oldUser.markDisconnected();
 	}
@@ -1441,18 +1437,18 @@ export class User extends Chat.MessageContext {
 		}
 	}
 	setStatusType(type: StatusType) {
-		if (type === this.settings.status.type) return;
-		this.settings.status.type = type;
+		if (type === this.settings.statusType) return;
+		this.settings.statusType = type;
 		this.updateIdentity();
 	}
 	setUserMessage(message: string) {
-		if (message === this.settings.status.message) return;
-		this.settings.status.message = message;
+		if (message === this.settings.statusMessage) return;
+		this.settings.statusMessage = message;
 		this.updateIdentity();
 	}
-	clearStatus(type: StatusType = this.settings.status.type) {
-		this.settings.status.type = type;
-		this.settings.status.message = '';
+	clearStatus(type: StatusType = this.settings.statusType) {
+		this.settings.statusType = type;
+		this.settings.statusMessage = '';
 		this.updateIdentity();
 	}
 	getAccountStatusString() {
@@ -1494,7 +1490,7 @@ export class User extends Chat.MessageContext {
 function pruneInactive(threshold: number) {
 	const now = Date.now();
 	for (const user of users.values()) {
-		if (user.settings.status.type === 'online') {
+		if (user.settings.statusType === 'online') {
 			// check if we should set status to idle
 			const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
 			const bypass = !user.can('bypassall') && (

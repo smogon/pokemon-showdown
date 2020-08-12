@@ -115,7 +115,7 @@
 		"Your message contains banned characters.": "發言內容包含了禁止詞匯",
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "限速聊天，每${time}秒鐘才能發言",
 		"Your username contains a phrase banned by this room.": "用戶名包含了禁止詞匯",
-		"Your status message contains a phrase banned by this room.": "狀態內容包含了禁止詞匯",
+		"Your statusMessage contains a phrase banned by this room.": "狀態內容包含了禁止詞匯",
 
 		"Your message contained banned words in this room.": "發言內容包含了房間內禁止詞匯",
 		"You can't send the same message again so soon.": "同樣的句子不能及時發出",

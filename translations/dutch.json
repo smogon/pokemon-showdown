@@ -116,7 +116,7 @@
 		"Your message contains banned characters.": "Je bericht bevat verbannen karakters.",
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "Deze room heeft slow-chat aangezet. Je kunt niet meer dan één keer elke ${time} seconden praten.",
 		"Your username contains a phrase banned by this room.": "Je gebruikersnaam bevat een verbannen woord uit deze room.",
-		"Your status message contains a phrase banned by this room.": "Je statusbericht bevat een verbannen woord uit deze room.",
+		"Your statusMessage contains a phrase banned by this room.": "Je statusbericht bevat een verbannen woord uit deze room.",
 
 		"Your message contained banned words in this room.": "Je bericht bevat uit de room verbannen woorden.",
 		"You can't send the same message again so soon.": "Je kunt hetzelfde bericht niet zo snel nogmaals versturen.",
