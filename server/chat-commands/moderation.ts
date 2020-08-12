@@ -15,9 +15,12 @@ import {Utils} from '../../lib/utils';
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const IP_REGEX = /\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b/;
 
 /** Require reasons for punishment commands */
 const REQUIRE_REASONS = true;
+
+const WHITELISTED_USERIDS = ['anubis'];
 
 export const commands: ChatCommands = {
 
@@ -849,7 +852,7 @@ export const commands: ChatCommands = {
 		const range = target.charAt(target.length - 1) === '*';
 		if (range && !this.can('rangeban')) return false;
 
-		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
+		if (!IP_REGEX.test(target)) return this.errorReply("Please enter a valid IP address.");
 
 		const punishment = Punishments.ips.get(target);
 		if (!punishment) return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
@@ -1850,7 +1853,7 @@ export const commands: ChatCommands = {
 		this.modlog('UNBLACKLISTALL');
 		this.roomlog(`Unblacklisted users: ${unblacklisted.join(', ')}`);
 	},
-	unblacklistallhelp: [`/unblacklistall - Unblacklists all blacklisted users in the current room. Requires #, &`],
+	unblacklistallhelp: [`/unblacklistall - Unblacklists all blacklisted users in the current room. Requires: # &`],
 
 	expiringbls: 'showblacklist',
 	expiringblacklists: 'showblacklist',
@@ -1918,9 +1921,10 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help markshared');
 		if (!this.can('globalban')) return false;
 		let [ip, note] = this.splitOne(target);
-		if (!/^[0-9.*]+$/.test(ip)) return this.errorReply("Please enter a valid IP address.");
+		if (!IP_REGEX.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
 		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
+		if (Punishments.sharedIpBlacklist.has(ip)) return this.errorReply(`This IP is blacklisted from being marked as shared.`);
 		if (!note) {
 			this.errorReply(`You must specify who owns this shared IP.`);
 			this.parse(`/help markshared`);
@@ -1930,25 +1934,94 @@ export const commands: ChatCommands = {
 		Punishments.addSharedIp(ip, note);
 		note = ` (${note})`;
 
-		this.addGlobalModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
+		this.privateGlobalModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
 		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
 	},
 	marksharedhelp: [
 		`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
-		`Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &`,
+		`Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @ &`,
 	],
 
 	unmarkshared(target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
 		if (!this.can('globalban')) return false;
-		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
+		if (!IP_REGEX.test(target)) return this.errorReply("Please enter a valid IP address.");
 
 		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
 
 		Punishments.removeSharedIp(target);
 
-		this.addGlobalModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
+		this.privateGlobalModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 		this.globalModlog('UNSHAREIP', target, ` by ${user.name}`);
 	},
-	unmarksharedhelp: [`/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &`],
+	unmarksharedhelp: [`/unmarkshared [IP] - Unmarks a shared IP address. Requires @ &`],
+
+	nomarkshared: {
+		add(target, room, user) {
+			if (!target) return this.parse(`/help nomarkshared`);
+			if (!(WHITELISTED_USERIDS.includes(user.id) || this.can('globalban'))) return false;
+			const [ip, ...reasonArr] = target.split(',');
+			if (!IP_REGEX.test(ip)) return this.errorReply(`Please enter a valid IP address.`);
+			if (!reasonArr?.length) {
+				this.errorReply(`Reasons are required.`);
+				this.parse(`/help nomarkshared`);
+				return;
+			}
+			if (Punishments.sharedIpBlacklist.has(ip)) {
+				return this.errorReply(`This IP is already blacklisted from being shared.`);
+			}
+			if (Punishments.sharedIps.has(ip)) this.parse(`/unmarkshared ${ip}`);
+			const reason = reasonArr.join(',');
+
+			Punishments.addBlacklistedSharedIp(ip, reason);
+
+			this.privateGlobalModAction(`The IP '${ip}' was blacklisted from being marked as shared by ${user.name}.`);
+			this.globalModlog('SHAREIP BLACKLIST', ip, ` by ${user.name}: ${reason.trim()}`);
+		},
+		remove(target, room, user) {
+			if (!target) return this.parse(`/help nomarkshared`);
+			if (!(WHITELISTED_USERIDS.includes(user.id) || this.can('globalban'))) return false;
+			if (!IP_REGEX.test(target)) return this.errorReply(`Please enter a valid IP address.`);
+			if (!Punishments.sharedIpBlacklist.has(target)) {
+				return this.errorReply(`This IP is not blacklisted from being shared.`);
+			}
+
+			Punishments.removeBlacklistedSharedIp(target);
+
+			this.privateGlobalModAction(`The IP '${target}' was unblacklisted from being marked as shared by ${user.name}.`);
+			this.globalModlog('SHAREIP UNBLACKLIST', target, ` by ${user.name}`);
+		},
+		view() {
+			return this.parse(`/join view-sharedipblacklist`);
+		},
+		help: '',
+		''() {
+			return this.parse(`/help nomarkshared`);
+		},
+	},
+	nomarksharedhelp: [
+		`/nomarkshared add [IP], [reason] - Prevents an IP from being marked as shared until it's removed from this list. Requires &`,
+		`/nomarkshared remove [IP] - Removes an IP from the nomarkshared list. Requires &`,
+		`/nomarkshared view - Lists all IPs prevented from being marked as shared. Requires @ &`,
+	],
+};
+
+export const pages: PageTable = {
+	sharedipblacklist(args, user, connection) {
+		this.title = `[Shared IP Blacklist]`;
+		if (!(!WHITELISTED_USERIDS.includes(user.id) || !user.can('globalban'))) return `<h2>Access denied.</h2>`;
+
+		let buf = `<div class="pad"><h2>IPs blocked from being marked as shared</h2>`;
+		if (!Punishments.sharedIpBlacklist.size) {
+			buf += `<p>None currently.</p>`;
+		} else {
+			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
+			Punishments.sharedIpBlacklist.forEach((reason, ip) => {
+				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
+			});
+			buf += `</table></div>`;
+		}
+		buf += `</div>`;
+		return buf;
+	},
 };

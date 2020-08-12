@@ -17,6 +17,7 @@ import {Utils} from '../lib/utils';
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
 const SHAREDIPS_FILE = 'config/sharedips.tsv';
+const SHAREDIPS_BLACKLIST_FILE = 'config/sharedips-blacklist.tsv';
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
@@ -138,6 +139,10 @@ export const Punishments = new class {
 	 */
 	readonly sharedIps = new Map<string, string>();
 	/**
+	 * sharedIpBlacklist is an ip:note Map
+	 */
+	readonly sharedIpBlacklist = new Map<string, string>();
+	/**
 	 * Connection flood table. Separate table from IP bans.
 	 */
 	readonly cfloods = new Set<string>();
@@ -182,6 +187,7 @@ export const Punishments = new class {
 			void Punishments.loadRoomPunishments();
 			void Punishments.loadBanlist();
 			void Punishments.loadSharedIps();
+			void Punishments.loadSharedIpBlacklist();
 		});
 	}
 
@@ -363,6 +369,36 @@ export const Punishments = new class {
 		});
 
 		return FS(SHAREDIPS_FILE).write(buf);
+	}
+
+	/**
+	 * sharedips.tsv is in the format:
+	 * IP, type (in this case always SHARED), note
+	 */
+	async loadSharedIpBlacklist() {
+		const data = await FS(SHAREDIPS_BLACKLIST_FILE).readIfExists();
+		if (!data) return;
+		for (const row of data.split("\n")) {
+			if (!row || row === '\r') continue;
+			const [ip, reason] = row.trim().split("\t");
+			if (!ip.includes('.')) continue;
+			if (!reason) continue;
+
+			Punishments.sharedIpBlacklist.set(ip, reason);
+		}
+	}
+
+	appendSharedIpBlacklist(ip: string, reason: string) {
+		const buf = `${ip}\t${reason}\r\n`;
+		return FS(SHAREDIPS_BLACKLIST_FILE).append(buf);
+	}
+
+	saveSharedIpBlacklist() {
+		let buf = `IP\tReason\r\n`;
+		Punishments.sharedIpBlacklist.forEach((reason, ip) => {
+			buf += `${ip}\t${reason}\r\n`;
+		});
+		return FS(SHAREDIPS_BLACKLIST_FILE).write(buf);
 	}
 
 	/*********************************************************
@@ -963,6 +999,16 @@ export const Punishments = new class {
 	removeSharedIp(ip: string) {
 		Punishments.sharedIps.delete(ip);
 		void Punishments.saveSharedIps();
+	}
+
+	addBlacklistedSharedIp(ip: string, reason: string) {
+		void Punishments.appendSharedIpBlacklist(ip, reason);
+		Punishments.sharedIpBlacklist.set(ip, reason);
+	}
+
+	removeBlacklistedSharedIp(ip: string) {
+		Punishments.sharedIpBlacklist.delete(ip);
+		void Punishments.saveSharedIpBlacklist();
 	}
 
 	/*********************************************************
