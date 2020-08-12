@@ -15,7 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
-import type {UserSettings} from '../users';
+import type {UserSettings, StatusType} from '../users';
 
 const avatarTable = new Set([
 	'aaron',
@@ -663,17 +663,18 @@ export const commands: ChatCommands = {
 			const reason = this.splitTarget(target);
 			const targetUser = this.targetUser;
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
-			if (!targetUser.userMessage) return this.errorReply(`${targetUser.name} does not have a status set.`);
+			const targetStatus = targetUser.settings.status.message;
+			if (!targetStatus) return this.errorReply(`${targetUser.name} does not have a status set.`);
 			if (!this.can('forcerename', targetUser)) return false;
 
-			this.privateModAction(`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${reason ? `: ${reason}` : ``}`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}" by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.privateModAction(`${targetUser.name}'s status "${targetStatus}" was cleared by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetStatus}" by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
 		}
 
-		if (!user.userMessage) return this.sendReply("You don't have a status message set.");
+		if (!user.settings.status.message) return this.sendReply("You don't have a status message set.");
 		user.setUserMessage('');
 
 		return this.sendReply("You have cleared your status message.");
@@ -686,8 +687,8 @@ export const commands: ChatCommands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		if (user.statusType === 'online') return this.errorReply("You are already marked as back.");
-		const statusType = user.statusType;
+		if (user.settings.status.type === 'online') return this.errorReply("You are already marked as back.");
+		const statusType = user.settings.status.type;
 		user.setStatusType('online');
 
 		if (statusType === 'busy') {
@@ -735,7 +736,15 @@ export const commands: ChatCommands = {
 					if (setting === 'blockPMs' &&
 						Users.Auth.isAuthLevel(raw[setting])) {
 						settings[setting] = raw[setting];
+					} else if (setting === 'status') {
+						const types = ['idle', 'away', 'busy', 'online'];
+						const {message, type} = raw[setting];
+						settings.status = {
+							message: message && this.statusfilter(message) ? message : '',
+							type: (type && types.includes(type) ? type : 'online') as StatusType,
+						};
 					} else {
+						// @ts-ignore (special cases handled above)
 						settings[setting as keyof UserSettings] = !!raw[setting];
 					}
 				}

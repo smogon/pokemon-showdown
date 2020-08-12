@@ -437,7 +437,7 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		if (this.user.statusType === 'idle') this.user.setStatusType('online');
+		if (this.user.settings.status.type === 'idle') this.user.setStatusType('online');
 
 		if (this.handler) {
 			message = this.run(this.handler);
@@ -1098,7 +1098,8 @@ export class CommandContext extends MessageContext {
 			this.errorReply(this.tr(`Your username contains a phrase banned by this room.`));
 			return null;
 		}
-		if (user.userMessage && (!this.checkBanwords(room, user.userMessage) && !user.can('bypassall'))) {
+		const status = user.settings.status.message;
+		if (status && (!this.checkBanwords(room, status) && !user.can('bypassall'))) {
 			this.errorReply(this.tr(`Your status message contains a phrase banned by this room.`));
 			return null;
 		}
