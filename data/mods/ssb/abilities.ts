@@ -753,10 +753,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "On switch-in, the Pokemon's next attack will always be a critical hit and will always hit.",
 		name: "Tension",
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[0];
 			this.add("-message", `Lionyx has built up tension!`);
 			// i could just add laserfocus and lockon volatiles here but its an ability soooo
-			pokemon.addVolatile('tension', target);
+			pokemon.addVolatile('tension');
 		},
 		condition: {
 			duration: 1,
@@ -770,12 +769,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onModifyCritRatio(critRatio) {
 				return 5;
 			},
-			onSourceInvulnerabilityPriority: 1,
-			onSourceInvulnerability(target, source, move) {
-				if (move && source === this.effectData.target && target === this.effectData.source) return 0;
+			onAnyInvulnerability(target, source, move) {
+				if (move && (source === this.effectData.target || target === this.effectData.target)) return 0;
 			},
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectData.target && target === this.effectData.source) return true;
+			onAnyAccuracy(accuracy, target, source, move) {
+				if (move && (source === this.effectData.target || target === this.effectData.target)) {
+					return true;
+				}
+				return accuracy;
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Tension', '[silent]');
