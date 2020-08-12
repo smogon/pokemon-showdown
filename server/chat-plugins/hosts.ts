@@ -164,10 +164,15 @@ export const commands: ChatCommands = {
 			let successes = 0;
 			for (const range of rangesToAdd) {
 				IPTools.sortRanges();
+				let result;
 				try {
-					IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
+					result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
 				} catch (e) {
 					return this.errorReply(e.message);
+				}
+				if (typeof result === 'number') {
+					// Remove the range that is being widened
+					IPTools.removeRange(IPTools.ranges[result].minIP, IPTools.ranges[result].maxIP);
 				}
 				successes++;
 				IPTools.addRange(range);

@@ -362,7 +362,7 @@ export const IPTools = new class {
 					if (sortedRanges[iMin + 1]?.minIP <= insertion.maxIP) {
 						throw new Error("You can only widen one address range at a time.");
 					}
-					return true;
+					return iMin;
 				}
 				throw new Error(
 					`Too wide: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
