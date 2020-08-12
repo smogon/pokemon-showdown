@@ -207,8 +207,8 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	modnote(user: User, text: string) {
-		this.room.addByUser(user, text);
-		this.room.modlog(`(${this.room.roomid}) ${text}`);
+		this.room.addByUser(user, text).update();
+		this.room.modlog(text);
 	}
 
 	getPreview() {
@@ -368,7 +368,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	timerEnds[room.roomid] = 0;
 	for (const i in room.users) {
 		const user: User = room.users[i];
-		if (user.can('mute', null, room) && !user.ignoreTickets) {
+		if (user.can('mute', null, room) && !user.settings.ignoreTickets) {
 			user.sendTo(
 				room,
 				`|tempnotify|helptickets|Unclaimed help tickets!|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`
@@ -450,7 +450,7 @@ function notifyStaff() {
 	for (const i in room.users) {
 		// FIXME: TypeScript bug: I have no clue why TypeScript can't figure out this type
 		const user: User = room.users[i];
-		if (user.can('mute', null, room)) user.sendTo(room, buf);
+		if (user.can('mute', null, room) && !user.settings.ignoreTickets) user.sendTo(room, buf);
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
@@ -622,12 +622,12 @@ export const pages: PageTable = {
 					buf += `<p><Button>inappokemon</Button></p>`;
 					break;
 				case 'pmharassment':
-					buf += `<p>If someone is harrassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
+					buf += `<p>If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmpmharassment</Button></p>`;
 					break;
 				case 'battleharassment':
-					buf += `<p>If someone is harrassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
+					buf += `<p>If someone is harassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
 					buf += `<p>Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmbattleharassment</Button></p>`;
@@ -704,6 +704,7 @@ export const pages: PageTable = {
 					break;
 				case 'appealother':
 					buf += `<p>Please PM the staff member who punished you. If you don't know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</p>`;
+					buf += `<p><strong>Do not PM staff if you are locked (signified by the symbol <code>‽</code> in front of your username). Locks are a different type of punishment; to appeal a lock, make a help ticket by clicking the Back button and then selecting the most relevant option.</strong></p>`;
 					break;
 				case 'misc':
 					buf += `<p><b>Maybe one of these options will be helpful?</b></p>`;
@@ -1273,7 +1274,7 @@ export const commands: ChatCommands = {
 				username = targetUser.getLastName();
 				userid = targetUser.getLastId();
 				if (ticketBan && ticketBan.expires > Date.now()) {
-					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 				if (targetUser.trusted) {
 					Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
@@ -1282,7 +1283,7 @@ export const commands: ChatCommands = {
 				username = this.targetUsername;
 				userid = toID(this.targetUsername);
 				if (ticketBan && ticketBan.expires > Date.now()) {
-					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 			}
 
@@ -1325,13 +1326,14 @@ export const commands: ChatCommands = {
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
-				displayMessage = `(${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")})`;
+				displayMessage = `${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")}`;
 				this.privateModAction(displayMessage);
 			} else if (acAccount) {
-				displayMessage = `(${username}'s ac account: ${acAccount})`;
+				displayMessage = `${username}'s ac account: ${acAccount}`;
 				this.privateModAction(displayMessage);
 			}
 
+			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];
@@ -1347,8 +1349,6 @@ export const commands: ChatCommands = {
 			writeTickets();
 			notifyStaff();
 			notifyStaff();
-
-			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			return true;
 		},
 		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
@@ -1380,29 +1380,29 @@ export const commands: ChatCommands = {
 			writeTickets();
 
 			this.addModAction(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
-			this.globalModlog("UNTICKETBAN", target, ` by ${user.id}`);
+			this.globalModlog("UNTICKETBAN", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
 		ignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (user.ignoreTickets) {
+			if (user.settings.ignoreTickets) {
 				return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
-			user.ignoreTickets = true;
-			user.update('ignoreTickets');
+			user.settings.ignoreTickets = true;
+			user.update();
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
 
 		unignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (!user.ignoreTickets) {
+			if (!user.settings.ignoreTickets) {
 				return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
-			user.ignoreTickets = false;
-			user.update('ignoreTickets');
+			user.settings.ignoreTickets = false;
+			user.update();
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
@@ -1423,7 +1423,7 @@ export const commands: ChatCommands = {
 			}
 			this.sendReply(`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: [`/helpticket delete [user] - Deletes a users ticket. Requires: &`],
+		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
 
 	},
 	helptickethelp: [
@@ -1437,4 +1437,3 @@ export const commands: ChatCommands = {
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
 	],
 };
-exports.commands = commands;

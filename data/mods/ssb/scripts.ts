@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		pokemon.activeMoveActions++;
@@ -112,7 +112,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const item = pokemon.getItem();
 		if (
 			altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove
 		) {
 			return altForme.name;
 		}

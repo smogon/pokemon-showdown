@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	venusauritez: {
 		name: "Venusaurite Z",
 		spritenum: 608,
@@ -433,18 +433,32 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Duraludon, this item allows it to Mega Evolve in battle.",
 	},
-	urshifusite: {
-		name: "Urshifusite",
+	urshifusites: {
+		name: "Urshifusite S",
 		spritenum: 583,
 		megaStone: "Urshifu-Gmax",
 		megaEvolves: "Urshifu",
 		itemUser: ["Urshifu"],
 		onTakeItem(item, source) {
-			if (source.baseSpecies.name.includes('Urshifu')) return false;
+			if (item.megaEvolves === source.baseSpecies.name) return false;
 			return true;
 		},
 		num: 10000,
 		gen: 8,
 		desc: "If held by a Urshifu, this item allows it to Mega Evolve in battle.",
+	},
+	urshifusiter: {
+		name: "Urshifusite R",
+		spritenum: 583,
+		megaStone: "Urshifu-Rapid-Strike-Gmax",
+		megaEvolves: "Urshifu-Rapid-Strike",
+		itemUser: ["Urshifu-Rapid-Strike"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.name) return false;
+			return true;
+		},
+		num: 10000,
+		gen: 8,
+		desc: "If held by a Urshifu-Rapid-Strike, this item allows it to Mega Evolve in battle.",
 	},
 };

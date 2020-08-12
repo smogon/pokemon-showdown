@@ -12,11 +12,12 @@ import * as util from 'util';
 import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
 
-const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
+const MAX_MEMORY = 67108864; // 64MB
+const execFile = util.promisify(child_process.execFile);
 
-class LogReaderRoom {
+export class LogReaderRoom {
 	roomid: RoomID;
 	constructor(roomid: RoomID) {
 		this.roomid = roomid;
@@ -234,7 +235,7 @@ export const LogViewer = new class {
 		buf += this.renderDayResults(results, roomid);
 		if (total > limit) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
 			buf += `<br><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
@@ -429,10 +430,20 @@ export const LogViewer = new class {
 	}
 };
 
-/** match with two lines of context in either direction */
+/** Match with two lines of context in either direction */
 type SearchMatch = readonly [string, string, string, string, string];
 
-const LogSearcher = new class {
+export const LogSearcher = new class {
+	constructRegex(str: string) {
+		const searches = str.split('+').map(term => Utils.escapeRegex(term));
+		if (searches.length <= 1) {
+			if (str.length <= 3) return `\b${str}`;
+			return str;
+		}
+
+		return `^` + searches.map(term => `(?=.*${term})`).join('');
+	}
+
 	fsSearch(roomid: RoomID, search: string, date: string, limit: number | null) {
 		const isAll = (date === 'all');
 		const isYear = (date.length === 4);
@@ -458,7 +469,7 @@ const LogSearcher = new class {
 		const lines = text.split('\n');
 		const matches: SearchMatch[] = [];
 
-		const searchTerms = search.split('-');
+		const searchTerms = search.split('+');
 		const searchTermRegexes = searchTerms.map(term => new RegExp(term, 'i'));
 		function matchLine(line: string) {
 			return searchTermRegexes.every(term => term.test(line));
@@ -518,35 +529,63 @@ const LogSearcher = new class {
 		}
 		return {results, total};
 	}
-
-	async ripgrepSearch(roomid: RoomID, search: string, limit?: number | null) {
-		let output;
-		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
+	async ripgrepSearchMonth(roomid: RoomID, search: string, limit: number, month: string) {
+		let results;
+		let count = 0;
 		try {
-			const options = [
-				'-e', `[^a-zA-Z0-9]${search.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`,
-				`${__dirname}/../../logs/chat/${roomid}`,
+			const {stdout} = await execFile('rg', [
+				'-e', this.constructRegex(search),
+				`logs/chat/${roomid}/${month}`,
 				'-C', '3',
 				'-m', `${limit}`,
-			];
-			output = await execFile('rg', options, {maxBuffer: Infinity, cwd: path.normalize(`${__dirname}/../`)});
-		} catch (error) {
-			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
-			return LogViewer.error(`${error.message}`);
+				'-P',
+			], {
+				maxBuffer: MAX_MEMORY,
+				cwd: path.normalize(`${__dirname}/../../`),
+			});
+			results = stdout.split('--');
+		} catch (e) {
+			if (e.code !== 1) throw e; // 2 means an error in ripgrep
+			if (e.stdout) {
+				results = e.stdout.split('--');
+			} else {
+				results = [];
+			}
 		}
-		return this.render(
-			output.stdout.split('--').reverse(),
-			roomid,
-			search,
-			limit
-		);
+		count += results.length;
+		return {results, count};
+	}
+	async ripgrepSearch(
+		roomid: RoomID,
+		search: string,
+		limit?: number | null,
+		date?: string | null
+	) {
+		const months = (date && toID(date) !== 'all' ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
+		let count = 0;
+		let results: string[] = [];
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
+		if (!date) date = 'all';
+		while (count < MAX_RESULTS) {
+			const month = months.shift();
+			if (!month) break;
+			const output = await this.ripgrepSearchMonth(roomid, search, limit, month);
+			results = results.concat(output.results);
+			count += output.count;
+		}
+		if (count > MAX_RESULTS) {
+			const diff = count - MAX_RESULTS;
+			results = results.slice(0, -diff);
+		}
+		return this.render(results, roomid, search, limit, date);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, limit: number) {
+	render(results: string[], roomid: RoomID, search: string, limit: number, month?: string | null) {
+		if (results.filter(Boolean).length < 1) return LogViewer.error('No results found.');
 		const exactMatches = [];
 		let curDate = '';
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
-		const searchRegex = new RegExp(search, "i");
+		const searchRegex = new RegExp(this.constructRegex(search), "i");
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
@@ -554,19 +593,17 @@ const LogSearcher = new class {
 				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered || name.includes('today') || !toID(line)) return '';
 				 // gets rid of some edge cases / duplicates
-				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
+				let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
 				let matched = (
 					searchRegex.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
 				if (curDate !== date) {
 					curDate = date;
-
 					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
 					matched = `${date} ${matched}`;
 				} else {
 					date = '';
 				}
-
 				if (matched.includes('chat chatmessage highlighted')) {
 					exactMatches.push(matched);
 				}
@@ -640,8 +677,9 @@ export const pages: PageTable = {
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
 		const parsedDate = new Date(date as string);
+		const validDateStrings = ['all', 'alltime', 'today'];
 		// this is apparently the best way to tell if a date is invalid
-		if (isNaN(parsedDate.getTime()) && !isAll && date !== 'today') {
+		if (date && isNaN(parsedDate.getTime()) && !validDateStrings.includes(toID(date))) {
 			return LogViewer.error(`Invalid date.`);
 		}
 
@@ -650,7 +688,7 @@ export const pages: PageTable = {
 			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
 				return LogSearcher.fsSearch(roomid, search, date, limit);
 			} else if (Config.chatlogreader === 'ripgrep') {
-				return LogSearcher.ripgrepSearch(roomid, search, limit);
+				return LogSearcher.ripgrepSearch(roomid, search, limit, isAll ? date : '');
 			} else {
 				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
 			}
@@ -674,38 +712,47 @@ export const commands: ChatCommands = {
 		const roomid = targetRoom ? targetRoom.roomid : target;
 		this.parse(`/join view-chatlog-${roomid}--today`);
 	},
+	chatloghelp: [
+		`/chatlog [optional room] - View chatlogs from the given room. If none is specified, shows logs from the room you're in. Requires: % @ * # &`,
+	],
 
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
+		if (!room) return this.requiresRoom();
 		target = target.trim();
-		const [search, tarRoom, limit, date] = target.split(',').map(str => str.trim());
+		const args = target.split(',').map(item => item.trim());
 		if (!target) return this.parse('/help searchlogs');
-		if (search.length < 3) return this.errorReply(`Too short of a search query.`);
-		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		let limitString;
-		if (/^[0-9]+$/.test(limit)) {
-			limitString = `--limit-${limit}`;
-		} else if (toID(limit) === 'all') {
-			limitString = `--limit-all`;
-		} else if (!limit) {
-			limitString = ``;
-		} else {
-			return this.errorReply(`Cap must be a number or [all].`);
+		let date = 'all';
+		const searches: string[] = [];
+		let limit = '500';
+		let tarRoom = room.roomid;
+		for (const arg of args) {
+			if (arg.startsWith('room:')) {
+				const id = arg.slice(5);
+				tarRoom = id as RoomID;
+			} else if (arg.startsWith('limit:')) {
+				limit = arg.slice(6);
+			} else if (arg.startsWith('date:')) {
+				date = arg.slice(5);
+			} else {
+				searches.push(arg);
+			}
 		}
-		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		return this.parse(
-			`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${Dashycode.encode(search)}${limitString}`
+			`/join view-chatlog-${curRoom}--${date}--search-${Dashycode.encode(searches.join('+'))}--limit-${limit}`
 		);
 	},
-
-	searchlogshelp: [
-		"/searchlogs [search], [room], [cap], [date] - searches logs in the current room for [search].",
-		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
-		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
-		"The delimiter | can be used to space searching for multiple terms.",
-		"Date formatting is ISO formatting (YYYY-MM-DD.) E.g 2020-05, 2020, or `all`.",
-		"Requires: % @ # &",
-	],
+	searchlogshelp() {
+		const buffer = `<details class="readmore"><summary><code>/searchlogs [arguments]</code>: ` +
+			`searches logs in the current room using the <code>[arguments]</code>.</summary>` +
+			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
+			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
+			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
+			`All other arguments will be considered part of the search ` +
+			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
+			"Requires: % @ # &</div>";
+		return this.sendReplyBox(buffer);
+	},
 };

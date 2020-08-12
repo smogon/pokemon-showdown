@@ -1583,10 +1583,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		// Hosts can always talk
-		if (this.hostid === user.id || this.cohosts.includes(user.id) ||
-			!this.started
-		) {
-			return false;
+		if (this.hostid === user.id || this.cohosts.includes(user.id) || !this.started) {
+			return;
 		}
 
 		let dead = false;
@@ -1599,7 +1597,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player) {
 			if (this.room.auth.isStaff(user.id)) {
 				// Uninvolved staff can talk anytime
-				return false;
+				return;
 			} else {
 				return `You cannot talk while a game of ${this.title} is going on.`;
 			}
@@ -1620,8 +1618,6 @@ class MafiaTracker extends Rooms.RoomGame {
 				return `You cannot talk at night.${user.can('mute', null, this.room) ? " You can bypass this using /mafia nighttalk." : ''}`;
 			}
 		}
-
-		return false;
 	}
 
 	onConnect(user: User) {
@@ -1773,9 +1769,9 @@ export const pages: PageTable = {
 					buf += `<p>${game.theme.desc}</p>`;
 				}
 				if (game.noReveal) {
-					buf += `<p><span style="font-weight:bold;">Original Rolelist</span>: ${game.originalRoleString}</p>`;
+					buf += `<p><span style="font-weight:bold;">Original Rolelist${game.closedSetup ? ' (CS)' : ''}</span>: ${game.originalRoleString}</p>`;
 				} else {
-					buf += `<p><span style="font-weight:bold;">Rolelist</span>: ${game.roleString}</p>`;
+					buf += `<p><span style="font-weight:bold;">Rolelist${game.closedSetup ? ' (CS)' : ''}</span>: ${game.roleString}</p>`;
 				}
 			}
 		}

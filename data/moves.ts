@@ -26,7 +26,7 @@ sound: Has no effect on Pokemon with the Soundproof Ability.
 
 */
 
-export const BattleMovedex: {[moveid: string]: MoveData} = {
+export const Moves: {[moveid: string]: MoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -490,7 +490,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'aquaring',
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Aqua Ring');
 			},
@@ -698,7 +698,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'attract',
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
 				if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
@@ -830,7 +830,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHitSide() {
 			if (!this.field.isWeather('hail')) return false;
 		},
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -983,7 +983,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -1095,7 +1095,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('beakblast');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Beak Blast');
@@ -1254,7 +1254,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['bide']) return true;
 		},
-		effect: {
+		condition: {
 			duration: 3,
 			onLockMove: 'bide',
 			onStart(pokemon) {
@@ -1647,14 +1647,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
@@ -2192,7 +2192,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			this.add('-activate', pokemon, 'move: Charge');
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onRestart(pokemon) {
 				this.effectData.duration = 2;
@@ -2688,7 +2688,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
-			if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
+			if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
 			if (noCopycat.includes(move.id) || move.isZ || move.isMax) {
 				return false;
 			}
@@ -2855,7 +2855,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!source.volatiles['counter']) return false;
 			if (source.volatiles['counter'].position === null) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
@@ -2999,7 +2999,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHitSide(side, source) {
 			return !!this.queue.willAct();
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.add('-singleturn', source, 'Crafty Shield');
@@ -3147,7 +3147,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			this.directDamage(source.maxhp / 2, source, source);
 		},
-		effect: {
+		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'Curse', '[of] ' + source);
 			},
@@ -3313,7 +3313,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			def: 1,
 		},
 		volatileStatus: 'defensecurl',
-		effect: {
+		condition: {
 			noCopy: true,
 		},
 		secondary: null,
@@ -3379,7 +3379,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onPrepareHit(pokemon) {
 			return !pokemon.removeVolatile('destinybond');
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
@@ -3491,14 +3491,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
@@ -3537,7 +3537,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return false;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 5,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
@@ -3650,14 +3650,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 				attacker.formeChange(forme, move);
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
@@ -4280,7 +4280,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTry() {
 			this.field.addPseudoWeather('echoedvoice');
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onStart() {
 				this.effectData.multiplier = 1;
@@ -4347,7 +4347,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {nonsky: 1},
 		terrain: 'electricterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -4411,7 +4411,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (!this.queue.willMove(target) && target.activeTurns) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Electrify');
@@ -4489,7 +4489,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		volatileStatus: 'embargo',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Embargo');
@@ -4537,7 +4537,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
-		effect: {
+		condition: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
@@ -4547,7 +4547,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
-				if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
+				if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
 				const moveIndex = target.moves.indexOf(move.id);
 				if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
@@ -4633,7 +4633,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Endure');
@@ -4887,7 +4887,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
 		pseudoWeather: 'fairylock',
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(target) {
 				this.add('-fieldactivate', 'move: Fairy Lock');
@@ -5227,7 +5227,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				move.sideCondition = 'firepledge';
 			}
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Fire Pledge');
@@ -5753,14 +5753,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
@@ -5832,7 +5832,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'focusenergy',
-		effect: {
+		condition: {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
@@ -5872,7 +5872,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return true;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Focus Punch');
@@ -5903,7 +5903,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (target.side.active.length < 2) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
@@ -5962,7 +5962,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (target.volatiles['miracleeye']) return false;
 		},
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Foresight');
@@ -6058,7 +6058,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -6188,7 +6188,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		effect: {
+		condition: {
 			duration: 2,
 			onStart() {
 				this.effectData.multiplier = 1;
@@ -6235,7 +6235,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon) {
-			if (this.lastMoveThisTurn && this.lastMoveThisTurn.id === 'fusionflare') {
+			if (this.lastSuccessfulMoveThisTurn === 'fusionflare') {
 				this.debug('double power');
 				return this.chainModify(2);
 			}
@@ -6257,7 +6257,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		onBasePower(basePower, pokemon) {
-			if (this.lastMoveThisTurn && this.lastMoveThisTurn.id === 'fusionbolt') {
+			if (this.lastSuccessfulMoveThisTurn === 'fusionbolt') {
 				this.debug('double power');
 				return this.chainModify(2);
 			}
@@ -6328,7 +6328,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return false;
 			}
 		},
-		effect: {
+		condition: {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
@@ -6432,7 +6432,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -6569,6 +6569,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side either falls asleep, becomes poisoned, or becomes paralyzed, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: slp or psn or par.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Befuddle",
 		pp: 5,
 		priority: 0,
@@ -6599,6 +6600,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Water-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Cannonade",
 		pp: 10,
 		priority: 0,
@@ -6609,7 +6611,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				source.side.foe.addSideCondition('gmaxcannonade');
 			},
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Cannonade');
@@ -6640,6 +6642,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Centiferno",
 		pp: 5,
 		priority: 0,
@@ -6664,6 +6667,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side has their critical hit ratio raised by 1 stage, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: Crit Ratio +1.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Chi Strike",
 		pp: 5,
 		priority: 0,
@@ -6676,7 +6680,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				}
 			},
 		},
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(target, source, effect) {
 				this.effectData.layers = 1;
@@ -6707,6 +6711,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if both it and the user are the same gender, if either is genderless, or if the target is already infatuated.",
 		shortDesc: "Base move affects power. Foes: infatuated.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Cuddle",
 		pp: 5,
 		priority: 0,
@@ -6731,6 +6736,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side loses 2 PP from its last move used, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: last move -2 PP.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Depletion",
 		pp: 5,
 		priority: 0,
@@ -6759,10 +6765,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 	gmaxdrumsolo: {
 		num: 1000,
 		accuracy: true,
-		basePower: 10,
+		basePower: 160,
 		category: "Physical",
-		desc: "Power is equal to the base move's Max Move power. This move ignores the abilities of opposing Pokemon.",
-		shortDesc: "Base move affects power. Ignores abilities.",
+		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
+		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Drum Solo",
 		pp: 5,
 		priority: 0,
@@ -6781,6 +6788,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side restores 1/6 of its current maximum HP, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: +1/6 max HP.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Finale",
 		pp: 5,
 		priority: 0,
@@ -6801,11 +6809,12 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 	gmaxfireball: {
 		num: 1000,
 		accuracy: true,
-		basePower: 10,
+		basePower: 160,
 		category: "Physical",
-		desc: "Power is equal to the base move's Max Move power. This move ignores the abilities of opposing Pokemon.",
-		shortDesc: "Base move affects power. Ignores abilities.",
-		name: "G-Max Fire Ball",
+		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
+		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Fireball",
 		pp: 5,
 		priority: 0,
 		flags: {},
@@ -6823,6 +6832,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 2 stages, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Foam Burst",
 		pp: 5,
 		priority: 0,
@@ -6847,6 +6857,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: confused.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Gold Rush",
 		pp: 5,
 		priority: 0,
@@ -6871,6 +6882,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Gravity begins.",
 		shortDesc: "Base move affects power. Starts Gravity.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Gravitas",
 		pp: 5,
 		priority: 0,
@@ -6886,10 +6898,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 	gmaxhydrosnipe: {
 		num: 1000,
 		accuracy: true,
-		basePower: 10,
+		basePower: 160,
 		category: "Physical",
-		desc: "Power is equal to the base move's Max Move power. This move ignores the abilities of opposing Pokemon.",
-		shortDesc: "Base move affects power. Ignores abilities.",
+		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
+		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Hydrosnipe",
 		pp: 5,
 		priority: 0,
@@ -6908,6 +6921,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes poisoned, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: poisoned.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Malodor",
 		pp: 5,
 		priority: 0,
@@ -6931,6 +6945,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Torment begins for each Pokemon on the opposing side, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: Tormented.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Meltdown",
 		pp: 5,
 		priority: 0,
@@ -6955,6 +6970,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
 		shortDesc: "Base move affects power. Breaks all protection.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max One Blow",
 		pp: 5,
 		priority: 0,
@@ -6973,6 +6989,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
 		shortDesc: "Base move affects power. Breaks all protection.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Rapid Flow",
 		pp: 5,
 		priority: 0,
@@ -6991,6 +7008,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 50% chance every Pokemon on the user's side has its Berry restored, even if they have a substitute.",
 		shortDesc: "Base move affects power. 50% restores Berries.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Replenish",
 		pp: 5,
 		priority: 0,
@@ -7021,6 +7039,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Aurora Veil begins on the user's side.",
 		shortDesc: "Base move affects power. Allies: Aurora Veil.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Resonance",
 		pp: 5,
 		priority: 0,
@@ -7041,6 +7060,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Sandblast",
 		pp: 5,
 		priority: 0,
@@ -7065,6 +7085,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: confused.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Smite",
 		pp: 5,
 		priority: 0,
@@ -7089,6 +7110,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 50% chance the effect of Yawn begins on the target, even if it has a substitute.",
 		shortDesc: "Base move affects power. Target: 50% Yawn.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Snooze",
 		pp: 5,
 		priority: 0,
@@ -7116,6 +7138,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Base move affects power. Foes: Steel hazard.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Steelsurge",
 		pp: 5,
 		priority: 0,
@@ -7126,7 +7149,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				source.side.foe.addSideCondition('gmaxsteelsurge');
 			},
 		},
-		effect: {
+		condition: {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
@@ -7154,6 +7177,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Base move affects power. Foes: Stealth Rock.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Stonesurge",
 		pp: 5,
 		priority: 0,
@@ -7176,6 +7200,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side either becomes poisoned or paralyzed, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: psn or par.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Stun Shock",
 		pp: 10,
 		priority: 0,
@@ -7205,6 +7230,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side has its status condition cured, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: status cured.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Sweetness",
 		pp: 10,
 		priority: 0,
@@ -7229,6 +7255,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the evasiveness of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -1 evasiveness.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Tartness",
 		pp: 10,
 		priority: 0,
@@ -7253,6 +7280,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. If a target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Base move affects power. Foes: trapped.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Terror",
 		pp: 10,
 		priority: 0,
@@ -7277,6 +7305,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Grass-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Vine Lash",
 		pp: 10,
 		priority: 0,
@@ -7287,7 +7316,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				source.side.foe.addSideCondition('gmaxvinelash');
 			},
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Vine Lash');
@@ -7318,6 +7347,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Rock-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Volcalith",
 		pp: 10,
 		priority: 0,
@@ -7328,7 +7358,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				source.side.foe.addSideCondition('gmaxvolcalith');
 			},
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Volcalith');
@@ -7359,6 +7389,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes paralyzed, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: paralyzed.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Volt Crash",
 		pp: 10,
 		priority: 0,
@@ -7383,6 +7414,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Fire-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Wildfire",
 		pp: 10,
 		priority: 0,
@@ -7393,7 +7425,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				source.side.foe.addSideCondition('gmaxwildfire');
 			},
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Wildfire');
@@ -7424,6 +7456,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain end, the effects of Reflect, Light Screen, Aurora Veil, Safeguard, Mist, G-Max Steelsurge, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the target's side, and the effects of G-Max Steelsurge, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the user's side.",
 		shortDesc: "Base move affects power. Ends Terrain, hazards.",
+		isNonstandard: "Gigantamax",
 		name: "G-Max Wind Rage",
 		pp: 10,
 		priority: 0,
@@ -7557,7 +7590,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				move.sideCondition = 'firepledge';
 			}
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Grass Pledge');
@@ -7625,7 +7658,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {nonsky: 1},
 		terrain: 'grassyterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -7705,13 +7738,13 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
-		shortDesc: "For 5 turns, negates all Ground immunities.",
+		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy.",
 		name: "Gravity",
 		pp: 5,
 		priority: 0,
 		flags: {nonsky: 1},
 		pseudoWeather: 'gravity',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -7836,7 +7869,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {authentic: 1},
 		volatileStatus: 'grudge',
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Grudge');
 			},
@@ -8222,7 +8255,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		volatileStatus: 'healblock',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -8282,7 +8315,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		selfdestruct: "ifHit",
 		slotCondition: 'healingwish',
-		effect: {
+		condition: {
 			onSwap(target) {
 				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
 					target.heal(target.maxhp);
@@ -8516,7 +8549,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (!target.newlySwitched && !this.queue.willMove(target)) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.effectData.multiplier = 1.5;
@@ -9259,7 +9292,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'iceball',
 			onStart() {
@@ -9317,7 +9350,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -9484,7 +9517,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, authentic: 1},
 		volatileStatus: 'imprison',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(target) {
 				this.add('-start', target, 'move: Imprison');
@@ -9598,7 +9631,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
 		volatileStatus: 'ingrain',
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Ingrain');
 			},
@@ -9669,7 +9702,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 1,
 		flags: {},
 		pseudoWeather: 'iondeluge',
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
@@ -9888,7 +9921,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -9989,7 +10022,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'laserfocus',
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(pokemon, source, effect) {
 				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
@@ -10186,7 +10219,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		volatileStatus: 'leechseed',
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
@@ -10314,7 +10347,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'lightscreen',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -10407,7 +10440,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			source.addVolatile('lockon', target);
 			this.add('-activate', source, 'move: Lock-On', '[of] ' + target);
 		},
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			duration: 2,
 			onSourceInvulnerabilityPriority: 1,
@@ -10519,7 +10552,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'luckychant',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
@@ -10557,7 +10590,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		selfdestruct: "ifHit",
 		sideCondition: 'lunardance',
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(side, source) {
 				this.debug('Lunar Dance started on ' + side.name);
@@ -10681,7 +10714,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 4,
 		flags: {},
 		volatileStatus: 'magiccoat',
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
 				this.add('-singleturn', target, 'move: Magic Coat');
@@ -10748,7 +10781,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {mirror: 1},
 		pseudoWeather: 'magicroom',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -10774,47 +10807,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
-	},
-	magikarpsrevenge: {
-		num: 0,
-		accuracy: true,
-		basePower: 120,
-		category: "Physical",
-		desc: "Has a 100% chance to confuse the target and lower its Defense and Special Attack by 1 stage. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. The user steals the foe's boosts. If this move is successful, the weather changes to rain unless it is already in effect, and the user gains the effects of Aqua Ring and Magic Coat.",
-		shortDesc: "Does many things turn 1. Can't move turn 2.",
-		isNonstandard: "Custom",
-		name: "Magikarp's Revenge",
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1, heal: 1},
-		noSketch: true,
-		drain: [1, 2],
-		onTry(pokemon) {
-			if (pokemon.species.name !== 'Magikarp') {
-				this.add('-fail', pokemon, 'move: Magikarp\'s Revenge');
-				return null;
-			}
-		},
-		self: {
-			onHit(source) {
-				this.field.setWeather('raindance');
-				source.addVolatile('magiccoat');
-				source.addVolatile('aquaring');
-			},
-			volatileStatus: 'mustrecharge',
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'confusion',
-			boosts: {
-				def: -1,
-				spa: -1,
-			},
-		},
-		stealsBoosts: true,
-		target: "normal",
-		type: "Water",
-		contestType: "Cute",
 	},
 	magmastorm: {
 		num: 463,
@@ -10893,7 +10885,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, gravity: 1},
 		volatileStatus: 'magnetrise',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(target) {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
@@ -10997,7 +10989,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return false;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.add('-singleturn', source, 'Mat Block');
@@ -11162,7 +11154,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Max Guard');
@@ -11567,7 +11559,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			this.useMove(move, pokemon, target);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onBasePowerPriority: 12,
 			onBasePower(basePower) {
@@ -11706,7 +11698,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!source.volatiles['metalburst']) return false;
 			if (source.volatiles['metalburst'].position === null) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
@@ -11806,7 +11798,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			this.boost({spa: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
@@ -11857,8 +11849,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		],
 		onHit(target, source, effect) {
 			const moves: MoveData[] = [];
-			for (const id in BattleMovedex) {
-				const move = BattleMovedex[id];
+			for (const id in Moves) {
+				const move = Moves[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
 				if (effect.noMetronome!.includes(move.name)) continue;
@@ -11996,7 +11988,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'minimize',
-		effect: {
+		condition: {
 			noCopy: true,
 			onSourceModifyDamage(damage, source, target, move) {
 				const boostedMoves = [
@@ -12041,7 +12033,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (target.volatiles['foresight']) return false;
 		},
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Miracle Eye');
@@ -12083,7 +12075,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!source.volatiles['mirrorcoat']) return false;
 			if (source.volatiles['mirrorcoat'].position === null) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
@@ -12167,7 +12159,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'mist',
-		effect: {
+		condition: {
 			duration: 5,
 			onBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
@@ -12256,7 +12248,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {nonsky: 1},
 		terrain: 'mistyterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -12485,7 +12477,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {nonsky: 1},
 		pseudoWeather: 'mudsport',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(side, source) {
 				this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
@@ -12548,6 +12540,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 		zMove: {basePower: 185},
+		maxMove: {basePower: 95},
 		contestType: "Tough",
 	},
 	mysticalfire: {
@@ -12747,7 +12740,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'nightmare',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
@@ -12839,7 +12832,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				delete move.volatileStatus;
 			}
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: No Retreat');
 			},
@@ -12914,7 +12907,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -13005,7 +12998,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			return this.dex.getImmunity('trapped', target);
 		},
 		volatileStatus: 'octolock',
-		effect: {
+		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'move: Octolock', '[of] ' + source);
 			},
@@ -13330,7 +13323,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!result) return false;
 			if (message) this.add('-fieldactivate', 'move: Perish Song');
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onEnd(target) {
 				this.add('-start', target, 'perish0');
@@ -13404,14 +13397,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onInvulnerability: false,
 		},
@@ -13755,7 +13748,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 1,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'powder',
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Powder');
@@ -13879,7 +13872,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'powertrick',
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Power Trick');
 				const newatk = pokemon.storedStats.def;
@@ -14051,7 +14044,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
@@ -14192,7 +14185,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {nonsky: 1},
 		terrain: 'psychicterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -14460,7 +14453,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target, pokemon) {
 			target.side.removeSideCondition('pursuit');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
 				this.debug('Pursuit start');
@@ -14569,7 +14562,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHitSide(side, source) {
 			source.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
@@ -14637,7 +14630,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		self: {
 			volatileStatus: 'rage',
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Rage');
 			},
@@ -14672,7 +14665,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (target.side.active.length < 2) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Rage Powder');
@@ -14818,7 +14811,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -14885,7 +14878,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'reflect',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasItem('lightclay')) {
@@ -15182,6 +15175,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
+		maxMove: {basePower: 140},
 	},
 	roar: {
 		num: 46,
@@ -15456,7 +15450,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'rollout',
 			onStart() {
@@ -15495,7 +15489,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		self: {
 			volatileStatus: 'roost',
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onResidualOrder: 20,
 			onStart(target) {
@@ -15634,7 +15628,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'safeguard',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -16142,14 +16136,14 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onInvulnerability: false,
 		},
@@ -16274,7 +16268,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 90,
 		category: "Special",
 		desc: "Has a 20% chance to poison the target. This move becomes a physical attack that makes contact if the value of ((((2 * the user's level / 5 + 2) * 90 * X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
-		shortDesc: "20% poison. Physical, contact if more damaging.",
+		shortDesc: "20% poison. Phys+contact if it would be stronger.",
 		name: "Shell Side Arm",
 		pp: 10,
 		priority: 0,
@@ -16349,7 +16343,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return null;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Shell Trap');
@@ -16637,8 +16631,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (targetAbility.id !== sourceAbility.id) {
 				source.ability = targetAbility.id;
 				target.ability = sourceAbility.id;
-				source.abilityData = {id: toID(source.ability), target: source};
-				target.abilityData = {id: toID(target.ability), target: target};
+				source.abilityData = {id: this.toID(source.ability), target: source};
+				target.abilityData = {id: this.toID(target.ability), target: target};
 				if (target.side !== source.side) target.staleness = 'external';
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
@@ -16685,7 +16679,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			this.boost({def: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
@@ -16714,7 +16708,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -16780,7 +16774,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			if (target.hp) this.add('-end', target, 'Sky Drop');
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onAnyDragOut(pokemon) {
 				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
@@ -17033,7 +17027,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		volatileStatus: 'smackdown',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				let applies = false;
@@ -17197,7 +17191,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 4,
 		flags: {authentic: 1},
 		volatileStatus: 'snatch',
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'Snatch');
@@ -17320,7 +17314,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -17358,7 +17352,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -17596,7 +17590,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {reflectable: 1, nonsky: 1},
 		sideCondition: 'spikes',
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'Spikes');
@@ -17639,7 +17633,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -17866,7 +17860,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onTryHit(target) {
 			if (target.side.active.length < 2) return false;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Spotlight');
@@ -17897,7 +17891,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {reflectable: 1},
 		sideCondition: 'stealthrock',
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
@@ -17982,7 +17976,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		basePower: 130,
 		category: "Physical",
 		desc: "Fails if there is no terrain active. Ends the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain.",
-		shortDesc: "Fails if there is no terrain active. Ends the effects of terrain.",
+		shortDesc: "Ends the effects of terrain; fails if none is active.",
 		name: "Steel Roller",
 		pp: 5,
 		priority: 0,
@@ -18032,7 +18026,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {reflectable: 1},
 		sideCondition: 'stickyweb',
-		effect: {
+		condition: {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
@@ -18064,7 +18058,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) return false;
 		},
 		volatileStatus: 'stockpile',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(target) {
 				this.effectData.layers = 1;
@@ -18423,7 +18417,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHit(target) {
 			this.directDamage(target.maxhp / 4);
 		},
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
@@ -18974,7 +18968,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'tailwind',
-		effect: {
+		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -19030,7 +19024,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		volatileStatus: 'tarshot',
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
@@ -19061,7 +19055,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'taunt',
-		effect: {
+		condition: {
 			duration: 3,
 			onStart(target) {
 				if (target.activeTurns && !this.queue.willMove(target)) {
@@ -19217,7 +19211,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, gravity: 1, mystery: 1},
 		volatileStatus: 'telekinesis',
-		effect: {
+		condition: {
 			duration: 3,
 			onStart(target) {
 				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseSpecies.baseSpecies) ||
@@ -19425,7 +19419,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(target) {
 				this.add('-start', target, 'Throat Chop', '[silent]');
@@ -19651,7 +19645,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'torment',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				if (pokemon.volatiles['dynamax']) {
@@ -19684,7 +19678,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		// No Guard-like effect for Poison-type users implemented in BattleScripts#tryMoveHit
+		// No Guard-like effect for Poison-type users implemented in Scripts#tryMoveHit
 		status: 'tox',
 		secondary: null,
 		target: "normal",
@@ -19704,7 +19698,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {reflectable: 1, nonsky: 1},
 		sideCondition: 'toxicspikes',
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
@@ -19899,7 +19893,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: -7,
 		flags: {mirror: 1},
 		pseudoWeather: 'trickroom',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -20125,7 +20119,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
 			}
 		},
-		effect: {
+		condition: {
 			duration: 3,
 			onStart(target) {
 				this.add('-start', target, 'Uproar');
@@ -20450,7 +20444,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				move.self = {sideCondition: 'waterpledge'};
 			}
 		},
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Water Pledge');
@@ -20527,7 +20521,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {nonsky: 1},
 		pseudoWeather: 'watersport',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(side, source) {
 				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
@@ -20692,7 +20686,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		onHitSide(side, source) {
 			source.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
@@ -20787,7 +20781,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		slotCondition: 'Wish',
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(pokemon, source) {
 				this.effectData.hp = source.maxhp / 2;
@@ -20838,7 +20832,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {mirror: 1},
 		pseudoWeather: 'wonderroom',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -21010,7 +21004,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return false;
 			}
 		},
-		effect: {
+		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			duration: 2,
 			onStart(target, source) {

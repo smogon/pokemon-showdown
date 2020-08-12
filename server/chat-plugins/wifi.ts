@@ -206,7 +206,7 @@ class Giveaway {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
 			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Utils.escapeHTML(this.host.name)}</p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Chat.formatText(this.prize, true)}<br />OT: ${Utils.escapeHTML(this.ot)}, TID: ${this.tid}</td>` +
-			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch, Pokémon Sword/Shield, and Nintendo Switch Online to receive the prize. Do not join if you are currently unable to trade.</p>`;
+			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch, Pokémon Sword/Shield, and Nintendo Switch Online to receive the prize. Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pokémon, unless it is explicitly allowed.</p>`;
 	}
 }
 
@@ -315,7 +315,7 @@ export class QuestionGiveaway extends Giveaway {
 				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
 				this.phase = 'ended';
 				this.clearTimer();
-				this.room.modlog(`(wifi) GIVEAWAY WIN: ${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
+				this.room.modlog(`GIVEAWAY WIN: ${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
 				this.send(this.generateWindow(
 					`<p style="text-align:center;font-size:12pt;"><b>${Utils.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
 					`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`
@@ -460,7 +460,7 @@ export class LotteryGiveaway extends Giveaway {
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`);
 			this.phase = 'ended';
 			const winnerNames = this.winners.map(winner => winner.name).join(', ');
-			this.room.modlog(`(wifi) GIVEAWAY WIN: ${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
+			this.room.modlog(`GIVEAWAY WIN: ${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
 			this.send(this.generateWindow(
 				`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p>` +
 				`<p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />` +
@@ -585,7 +585,7 @@ export class GTSGiveaway {
 		} else {
 			this.clearTimer();
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
-			this.room.modlog(`(wifi) GTS FINISHED: ${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
+			this.room.modlog(`GTS FINISHED: ${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
 			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Utils.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
 			Giveaway.updateStats(this.monIDs);
 		}
@@ -646,7 +646,7 @@ const cmds: ChatCommands = {
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
 
-		this.privateModAction(`(${user.name} started a question giveaway for ${targetUser.name})`);
+		this.privateModAction(`${user.name} started a question giveaway for ${targetUser.name}`);
 		this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	changeanswer: 'changequestion',
@@ -716,7 +716,7 @@ const cmds: ChatCommands = {
 
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, prize, numWinners);
 
-		this.privateModAction(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
+		this.privateModAction(`${user.name} started a lottery giveaway for ${targetUser.name}`);
 		this.modlog('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	leavelotto: 'join',
@@ -773,7 +773,7 @@ const cmds: ChatCommands = {
 
 			room.gtsga = new GTSGiveaway(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon)`);
+			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon`);
 			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 		},
 		left(target, room, user) {
@@ -833,7 +833,7 @@ const cmds: ChatCommands = {
 			const amount = room.gtsga.end(true);
 			if (target) target = `: ${target}`;
 			this.modlog('GTS END', null, `with ${amount} left${target}`);
-			this.privateModAction(`(The giveaway was forcibly ended by ${user.name} with ${amount} left${target})`);
+			this.privateModAction(`The giveaway was forcibly ended by ${user.name} with ${amount} left${target}`);
 		},
 	},
 	// general.
@@ -857,7 +857,7 @@ const cmds: ChatCommands = {
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
 		this.modlog('GIVEAWAYBAN', targetUser, target);
 		if (target) target = ` (${target})`;
-		this.privateModAction(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
+		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
 	},
 	unban(target, room, user) {
 		if (!target) return false;
@@ -889,7 +889,7 @@ const cmds: ChatCommands = {
 		room.giveaway.end(true);
 		this.modlog('GIVEAWAY END', null, target);
 		if (target) target = `: ${target}`;
-		this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
+		this.privateModAction(`The giveaway was forcibly ended by ${user.name}${target}`);
 	},
 	rm: 'remind',
 	remind(target, room, user) {

@@ -59,7 +59,6 @@ export const commands: ChatCommands = {
 		let hiddenrooms = ``;
 		let privaterooms = ``;
 		for (const roomid of targetUser.inRooms) {
-			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
 			const authSymbol = targetRoom.auth.getDirect(targetUser.id).trim();
@@ -82,7 +81,7 @@ export const commands: ChatCommands = {
 		if (!showAll) {
 			return this.sendReplyBox(buf);
 		}
-		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
+		const canViewAlts = (user === targetUser ? user.can('altsself') : user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
 			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
@@ -155,12 +154,12 @@ export const commands: ChatCommands = {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
-		if (user.can('ip', targetUser)) {
+		if (user === targetUser ? user.can('ipself') : user.can('ip', targetUser)) {
 			let ips = Object.keys(targetUser.ips);
 			ips = ips.map(ip => {
 				const status = [];
 				const punishment = Punishments.ips.get(ip);
-				if (user.can('globalban') && punishment) {
+				if (user.can('alts') && punishment) {
 					const [punishType, userid] = punishment;
 					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
 					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
@@ -311,6 +310,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 
+	sbtl: 'sharedbattles',
 	sharedbattles(target, room) {
 		if (!this.can('lock')) return false;
 
@@ -360,7 +360,7 @@ export const commands: ChatCommands = {
 
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		if (!this.can('globalban')) return;
+		if (!this.can('ip')) return;
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
@@ -428,7 +428,7 @@ export const commands: ChatCommands = {
 
 	checkchallenges(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('ban', null, room)) return false;
+		if (!user.can('addhtml', null, room) && !this.can('ban', null, room)) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
 			this.errorReply(`This command must be broadcast:`);
@@ -465,7 +465,7 @@ export const commands: ChatCommands = {
 		}
 		this.sendReplyBox(challenges.join(`<br />`));
 	},
-	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: @ # &`],
+	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: * @ # &`],
 
 	/*********************************************************
 	 * Client fallback
@@ -549,7 +549,7 @@ export const commands: ChatCommands = {
 			case 'pokemon':
 				let pokemon = dex.getSpecies(newTarget.name);
 				if (format?.onModifySpecies) {
-					pokemon = format.onModifySpecies.call({dex} as Battle, pokemon) || pokemon;
+					pokemon = format.onModifySpecies.call({dex, clampIntRange: Utils.clampIntRange} as Battle, pokemon) || pokemon;
 				}
 				let tierDisplay = room?.settings.dataCommandTierDisplay;
 				if (!tierDisplay && room?.battle) {
@@ -582,12 +582,8 @@ export const commands: ChatCommands = {
 						Gen: String(pokemon.gen) || 'CAP',
 						Height: `${pokemon.heightm} m`,
 					};
-					if (pokemon.forme !== "Gmax" || dex.currentMod === 'megamax') {
-						details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
-					} else {
-						details["Weight"] = "0 kg <em>(GK/LK fail)</em>";
-					}
-					if (pokemon.isGigantamax) details["G-Max Move"] = pokemon.isGigantamax;
+					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
+					if (pokemon.canGigantamax) details["G-Max Move"] = pokemon.canGigantamax;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -729,7 +725,7 @@ export const commands: ChatCommands = {
 					if (dex.gen >= 8) {
 						if (move.isMax) {
 							details["&#10003; Max Move"] = "";
-							if (typeof move.isMax === "string") details["User"] = `${move.isMax}-Gmax`;
+							if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
 						} else if (move.maxMove?.basePower) {
 							details["Dynamax Power"] = String(move.maxMove.basePower);
 						}
@@ -778,7 +774,7 @@ export const commands: ChatCommands = {
 				throw new Error(`Unrecognized searchType`);
 			}
 
-			if (details) {
+			if (showDetails) {
 				buffer += `|raw|<font size="1">${Object.keys(details).map(detail => {
 					if (details[detail] === '') return detail;
 					return `<font color="#686868">${detail}:</font> ${details[detail]}`;
@@ -1746,6 +1742,13 @@ export const commands: ChatCommands = {
 		);
 	},
 
+	battlerules(target, room, user) {
+		return this.parse(`/join view-battlerules`);
+	},
+	battleruleshelp: [
+		`/battlerules - Provides information on the rules that can be added to tournament and challenge battles.`,
+	],
+
 	banlists: 'formathelp',
 	tier: 'formathelp',
 	tiers: 'formathelp',
@@ -1966,11 +1969,11 @@ export const commands: ChatCommands = {
 		if (target === 'delete' || target === 'remove') {
 			if (!room.settings.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
 			delete room.settings.rulesLink;
-			this.privateModAction(`(${user.name} has removed the room rules link.)`);
+			this.privateModAction(`${user.name} has removed the room rules link.`);
 			this.modlog('RULES', null, `removed room rules link`);
 		} else {
 			room.settings.rulesLink = target;
-			this.privateModAction(`(${user.name} changed the room rules link to: ${target})`);
+			this.privateModAction(`${user.name} changed the room rules link to: ${target}`);
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
@@ -2514,7 +2517,7 @@ export const commands: ChatCommands = {
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
 		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
-		this.privateModAction(`(${user.name} denied ${target}'s request to display ${entry.link}.)`);
+		this.privateModAction(`${user.name} denied ${target}'s request to display ${entry.link}.`);
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
@@ -2548,13 +2551,13 @@ export const commands: ChatCommands = {
 				return this.errorReply('Invalid image');
 			}
 		}
-		if (comment) buf += Utils.html`<br>(${comment})</div>`;
+		if (comment) buf += Utils.html`<br>(${comment.trim()})</div>`;
 
 		if (!this.canBroadcast()) return false;
 		if (this.broadcastMessage) {
 			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
 			const auth = room?.auth || Users.globalAuth;
-			if (minGroup !== true && !auth.atLeast(user, minGroup)) {
+			if (minGroup !== true && !auth.atLeast(user, minGroup, true)) {
 				this.errorReply(`You must be at least group ${minGroup} to use /show`);
 				if (auth.atLeast(user, '%')) {
 					this.errorReply(`The limit can be changed in /roomsettings`);
@@ -2604,10 +2607,49 @@ export const commands: ChatCommands = {
 };
 
 export const pages: PageTable = {
+	battlerules(query, user) {
+		const rules = Object.values(Dex.data.Formats).filter(rule => rule.effectType !== "Format");
+		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
+		this.title = "Custom Rules";
+		let rulesHTML = `<div clas="pad"><h1>Custom Rules in challenges and tournaments</h1>`;
+		const basics = [
+			`<p>Pok&eacute;mon Showdown! supports custom rules in three ways:</p>`,
+			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
+			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li>`,
+			`<li>Custom rules on your own server</li></ul>`,
+			`<h2><u>Bans</u></h2>`,
+			`<p>Bans are just a <code>-</code> followed by the thing you want to ban.</p>`,
+			`<h3>Individual bans</h3>`,
+			`<ul><li><code>- Arceus</code>: Ban a Pok&eacute;mon (including all formes)</li>`,
+			`<li><code>- Arceus-Flying</code> or <code>- Giratina-Altered</code>: Ban a Pok&eacute;mon forme</li>`,
+			`<li><code>- Baton Pass</code>: Ban a move/item/ability/etc</li></ul>`,
+			`<h3>Group bans</h3>`,
+			`<ul><li><code>- OU</code> or <code>- DUU</code>: Ban a tier</li>`,
+			`<li><code>- Mega</code> or <code>- CAP</code>: Ban a Pok&eacute;mon category</li></ul>`,
+			`<h3>Complex bans</h3>`,
+			`<ul><li><code>- Blaziken + Speed Boost</code>: Ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)</li>`,
+			`<li><code>- Drizzle ++ Swift Swim</code>: Ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`,
+			`<h2><u>Unbans</u></h2>`,
+			`<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`,
+			`<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
+			`<p><a class="button" href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">More details</a></p>`,
+		];
+		const rulesets = [
+			`<h2><u>Rules, mods, and clauses</u></h2>`,
+			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
+			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
+			`<ul>`,
+		];
+		for (const rule of rules) {
+			rulesets.push(`<li><code>${rule.name}</code>: ${rule.desc}</li>`);
+		}
+		rulesets.push(`</ul>`);
+		rulesHTML += `${basics.concat(rulesets).join('')}</div>`;
+		return rulesHTML;
+	},
 	punishments(query, user) {
 		this.title = 'Punishments';
-		const room = this.extractRoom();
-		if (!room) return;
+		const room = this.requireRoom();
 
 		let buf = "";
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;

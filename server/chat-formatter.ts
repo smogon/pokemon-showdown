@@ -44,7 +44,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 				# URLs usually don't end with punctuation, so don't allow
 				# punctuation symbols that probably arent related to URL.
 				(
-					[^\s`()[\]{}\".,!?;:&<>*`^~\\]
+					[^\s()[\]{}\".,!?;:&<>*`^~\\]
 				|
 					# annoyingly, Wikipedia URLs often end in )
 					\( ( [^\s()<>&] | &amp; )* \)
@@ -58,7 +58,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 	(?! [^ ]*&gt; )
 
 */
-export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s`()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
+export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
 type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
 
@@ -309,17 +309,20 @@ class TextFormatter {
 						break;
 					case 'pokemon':
 					case 'item':
+					case 'type':
+					case 'category':
 						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
 
 						let display = '';
 						if (this.isTrusted) {
-							display = `<psicon ${key}="${term}"/>`;
+							display = `<psicon ${key}="${term}" />`;
 						} else {
 							display = `[${term}]`;
 						}
 
 						let dir = key;
 						if (key === 'item') dir += 's';
+						if (key === 'category') dir = 'categories' as 'category';
 
 						uri = `//dex.pokemonshowdown.com/${dir}/${toID(term)}`;
 						term = display;

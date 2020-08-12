@@ -1,4 +1,4 @@
-export const BattleAliases: {[alias: string]: string} = {
+export const Aliases: {[alias: string]: string} = {
 	// formats
 	randbats: "[Gen 8] Random Battle",
 	uber: "[Gen 8] Ubers",
@@ -763,6 +763,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	ttar: "Tyranitar",
 	venu: "Venusaur",
 	viriz: "Virizion",
+	watershifu: "Urshifu-Rapid-Strike",
 	whimsi: "Whimsicott",
 	xern: "Xerneas",
 	xurk: "Xurkitree",
@@ -788,6 +789,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	// moves
 	bb: "Brave Bird",
 	bd: "Belly Drum",
+	bde: "Baby-Doll Eyes",
 	bpass: "Baton Pass",
 	bp: "Baton Pass",
 	cc: "Close Combat",

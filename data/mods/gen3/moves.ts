@@ -2,7 +2,7 @@
  * Gen 3 moves
  */
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		desc: "The user recovers 1/2 the HP lost by the target, rounded down.",
@@ -52,7 +52,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "The user spends two turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost during the two turns. If the last Pokemon that hit it is no longer active, the user attacks a random opposing Pokemon instead. If the user is prevented from moving during this move's use, the effect ends. This move does not ignore type immunity.",
 		accuracy: 100,
 		priority: 0,
-		effect: {
+		condition: {
 			duration: 3,
 			onLockMove: 'bide',
 			onStart(pokemon) {
@@ -184,7 +184,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	counter: {
 		inherit: true,
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical attack this turn equal to twice the HP lost by the user from that attack. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical attack this turn, or if the user did not lose HP from the attack.",
-		effect: {
+		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
@@ -237,7 +237,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		shortDesc: "For 2-5 turns, disables the target's last move.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
-		effect: {
+		condition: {
 			durationCallback() {
 				return this.random(2, 6);
 			},
@@ -337,7 +337,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		shortDesc: "The target repeats its last move for 3-6 turns.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
-		effect: {
+		condition: {
 			durationCallback() {
 				return this.random(3, 7);
 			},
@@ -562,7 +562,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	mirrorcoat: {
 		inherit: true,
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a special attack this turn equal to twice the HP lost by the user from that attack. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's special attack this turn, or if the user did not lose HP from the attack.",
-		effect: {
+		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
@@ -802,7 +802,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3. The user's Stockpile count is reset to 0 when it is no longer active.",
 		shortDesc: "Raises user's Stockpile count by 1. Max 3 uses.",
 		pp: 10,
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(target) {
 				this.effectData.layers = 1;
@@ -853,7 +853,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "For 2 turns, prevents the target from using non-damaging moves.",
 		shortDesc: "For 2 turns, the target can't use status moves.",
 		flags: {protect: 1, authentic: 1},
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(target) {
 				this.add('-start', target, 'move: Taunt');
@@ -963,5 +963,3 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 	},
 };
-
-exports.BattleMovedex = BattleMovedex;

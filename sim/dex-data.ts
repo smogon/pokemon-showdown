@@ -4,55 +4,36 @@
  *
  * @license MIT license
  */
+import {Utils} from '../lib/utils';
 
-export class Tools {
-	/**
-	 * Safely converts the passed variable into a string. Unlike '' + str,
-	 * String(str), or str.toString(), Dex.getString is guaranteed not to
-	 * crash.
-	 *
-	 * Specifically, the fear with untrusted JSON is an object like:
-	 *
-	 *     let a = {"toString": "this is not a function"};
-	 *     console.log(`a is ${a}`);
-	 *
-	 * This will crash (because a.toString() is not a function). Instead,
-	 * Dex.getString simply returns '' if the passed variable isn't a
-	 * string or a number.
-	 */
-	static getString(str: any): string {
-		return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
-	}
-
-	/**
-	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
-	 * characters.
-	 *
-	 * If a string is passed, it will be converted to lowercase and
-	 * non-alphanumeric characters will be stripped.
-	 *
-	 * If an object with an ID is passed, its ID will be returned.
-	 * Otherwise, an empty string will be returned.
-	 *
-	 * Dex.getId is generally assigned to the global toID, because of how
-	 * commonly it's used.
-	 */
-	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
+/**
+* Converts anything to an ID. An ID must have only lowercase alphanumeric
+* characters.
+*
+* If a string is passed, it will be converted to lowercase and
+* non-alphanumeric characters will be stripped.
+*
+* If an object with an ID is passed, its ID will be returned.
+* Otherwise, an empty string will be returned.
+*
+* Generally assigned to the global toID, because of how
+* commonly it's used.
+*/
+export function toID(text: any): ID {
+	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	static getId(text: any): ID {
-		if (text && text.id) {
-			text = text.id;
-		} else if (text && text.userid) {
-			text = text.userid;
-		} else if (text && text.roomid) {
-			text = text.roomid;
-		}
-		if (typeof text !== 'string' && typeof text !== 'number') return '';
-		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
+	if (text && text.id) {
+		text = text.id;
+	} else if (text && text.userid) {
+		text = text.userid;
+	} else if (text && text.roomid) {
+		text = text.roomid;
 	}
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
-const toID = Tools.getId;
+
 
 export class BasicEffect implements EffectData {
 	/**
@@ -124,10 +105,10 @@ export class BasicEffect implements EffectData {
 		this.exists = true;
 		data = combine(this, data, ...moreData);
 
-		this.name = Tools.getString(data.name).trim();
+		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
-		this.fullname = Tools.getString(data.fullname) || this.name;
-		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
+		this.fullname = Utils.getString(data.fullname) || this.name;
+		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
@@ -182,9 +163,37 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`-${thing}`);
 	}
 
+	isBannedSpecies(species: Species) {
+		if (this.has(`+pokemon:${species.id}`)) return false;
+		if (this.has(`-pokemon:${species.id}`)) return true;
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
+		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
+		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
+		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
+		if (this.has(`-pokemontag:${toID(tier)}`)) return true;
+		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
+		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
+		if (this.has(`-pokemontag:${toID(doublesTier)}`)) return true;
+		return this.has(`-pokemontag:allpokemon`);
+	}
+
 	isRestricted(thing: string) {
 		if (this.has(`+${thing}`)) return false;
 		return this.has(`*${thing}`);
+	}
+
+	isRestrictedSpecies(species: Species) {
+		if (this.has(`+pokemon:${species.id}`)) return false;
+		if (this.has(`*pokemon:${species.id}`)) return true;
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
+		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
+		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
+		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
+		if (this.has(`*pokemontag:${toID(tier)}`)) return true;
+		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
+		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
+		if (this.has(`*pokemontag:${toID(doublesTier)}`)) return true;
+		return this.has(`*pokemontag:allpokemon`);
 	}
 
 	check(thing: string, setHas: {[id: string]: true} | null = null) {
@@ -316,8 +325,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		super(data, ...moreData);
 		data = this;
 
-		this.mod = Tools.getString(data.mod) || 'gen8';
-		this.effectType = Tools.getString(data.effectType) as FormatEffectType || 'Format';
+		this.mod = Utils.getString(data.mod) || 'gen8';
+		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
 		this.debug = !!data.debug;
 		this.rated = (data.rated !== false);
 		this.gameType = data.gameType || 'singles';
@@ -339,13 +348,13 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	}
 }
 
-export class PureEffect extends BasicEffect implements Readonly<BasicEffect & PureEffectData> {
-	readonly effectType: 'Effect' | 'Weather' | 'Status';
+export class Condition extends BasicEffect implements Readonly<BasicEffect & ConditionData> {
+	readonly effectType: 'Condition' | 'Weather' | 'Status';
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
 		data = this;
-		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Effect');
+		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
 	}
 }
 
@@ -611,6 +620,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly nfe: boolean;
 	/** Egg groups. */
 	readonly eggGroups: string[];
+	/** True if this species can hatch from an Egg. */
+	readonly canHatch: boolean;
 	/**
 	 * Gender. M = always male, F = always female, N = always
 	 * genderless, '' = sometimes male sometimes female.
@@ -641,8 +652,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
-	/** Name of its Gigantamax move, if a pokemon is gigantamax. */
-	readonly isGigantamax?: string;
+	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
+	readonly canGigantamax?: string;
+	/** If this Pokemon can gigantamax, is its gigantamax released? */
+	readonly gmaxUnreleased?: boolean;
+	/** True if a Pokemon species is incapable of dynamaxing */
+	readonly cannotDynamax?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -673,12 +688,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
 	 * Do not use for LC bans (usage tier will override LC Uber).
 	 */
-	readonly tier: string;
+	readonly tier: TierTypes.Singles | TierTypes.Other;
 	/**
 	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
 	 * Do not use for LC bans (usage tier will override LC Uber).
 	 */
-	readonly doublesTier: string;
+	readonly doublesTier: TierTypes.Doubles | TierTypes.Other;
 	readonly randomBattleMoves?: readonly ID[];
 	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
@@ -716,6 +731,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.evoLevel = data.evoLevel || undefined;
 		this.nfe = data.nfe || false;
 		this.eggGroups = data.eggGroups || [];
+		this.canHatch = data.canHatch || false;
 		this.gender = data.gender || '';
 		this.genderRatio = data.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
 			this.gender === 'F' ? {M: 0, F: 1} :
@@ -732,11 +748,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
-		this.isGigantamax = data.isGigantamax || undefined;
-		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
-		// isGigantamax checking is used to successfully pass learnsets to the client
+		this.canGigantamax = data.canGigantamax || undefined;
+		this.gmaxUnreleased = !!data.gmaxUnreleased;
+		this.cannotDynamax = !!data.cannotDynamax;
+		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
-			(!this.isGigantamax ? undefined : this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
@@ -909,12 +926,12 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
-		this.type = Tools.getString(data.type);
+		this.type = Utils.getString(data.type);
 		this.target = data.target;
 		this.basePower = Number(data.basePower!);
 		this.accuracy = data.accuracy!;
 		this.critRatio = Number(data.critRatio) || 1;
-		this.baseMoveType = Tools.getString(data.baseMoveType) || this.type;
+		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || null;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
 		this.priority = Number(data.priority) || 0;
@@ -1073,8 +1090,8 @@ export class TypeInfo implements Readonly<TypeData> {
 		data = combine(this, data, ...moreData);
 
 		this.id = data.id || '';
-		this.name = Tools.getString(data.name).trim();
-		this.effectType = Tools.getString(data.effectType) as TypeInfoEffectType || 'Type';
+		this.name = Utils.getString(data.name).trim();
+		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
 		this.exists = !!(this.exists && this.id);
 		this.gen = data.gen || 0;
 		this.damageTaken = data.damageTaken || {};

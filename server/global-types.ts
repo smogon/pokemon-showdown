@@ -1,6 +1,7 @@
 type Config = typeof import('../config/config-example') & AnyObject;
 
-type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+type GroupSymbol = import('./user-groups').GroupSymbol;
+type AuthLevel = import('./user-groups').AuthLevel;
 
 /** not actually guaranteed to be one of these */
 type PunishType = '#chatfilter' | '#hostfilter' | '#dnsbl' | '#ipban';
@@ -26,6 +27,7 @@ namespace Chat {
 	export type NameFilter = import('./chat').NameFilter;
 	export type StatusFilter = import('./chat').StatusFilter;
 	export type LoginFilter = import('./chat').LoginFilter;
+	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 }
 
 // Rooms

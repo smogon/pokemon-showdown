@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	swiftswim: {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
@@ -190,7 +190,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-formechange', pokemon, 'Cherrim', '[msg]');
 			}
 		},
-		effect: {
+		condition: {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
@@ -204,7 +204,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	slowstart: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 3,
 			onStart(target) {
 				this.add('-start', target, 'Slow Start');
@@ -548,7 +548,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			if (!move.self) move.self = {};
 			if (!move.self.volatileStatus) move.self.volatileStatus = 'truant';
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Truant');
@@ -614,7 +614,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.addVolatile('parentalbond');
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onBasePowerPriority: 8,
 			onBasePower(basePower) {
@@ -662,7 +662,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			pokemon.addVolatile('shadowtag');
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onFoeTrapPokemon(pokemon) {
 				if (pokemon.ability !== 'shadowtag') {
@@ -684,5 +684,3 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onFoeTrapPokemon(pokemon) {},
 	},
 };
-
-exports.BattleAbilities = BattleAbilities;
