@@ -170,7 +170,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					boost['atk'] = 1;
 				}
-				this.boost(boost, source);
+				this.boost(boost, target);
 				return this.NOT_FAIL;
 			},
 		},
