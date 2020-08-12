@@ -1924,7 +1924,9 @@ export const commands: ChatCommands = {
 		if (!IP_REGEX.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
 		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
-		if (Punishments.sharedIpBlacklist.has(ip)) return this.errorReply(`This IP is blacklisted from being marked as shared.`);
+		if (Punishments.sharedIpBlacklist.has(ip)) {
+			return this.errorReply(`This IP is blacklisted from being marked as shared.`);
+		}
 		if (!note) {
 			this.errorReply(`You must specify who owns this shared IP.`);
 			this.parse(`/help markshared`);
