@@ -1317,19 +1317,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Hurricane', target);
 		},
-		onHit(target, source, move) {
-			target.side.addSideCondition('gaelstrom');
-			target.side.sideConditions['gaelstrom'].firstTarget = target;
-			target.side.sideConditions['gaelstrom'].sourceMove = move;
-		},
 		condition: {
 			duration: 1,
 			onSwitchIn(pokemon) {
 				if (!this.effectData.count) this.effectData.count = 1;
-				if (this.effectData.firstTarget !== pokemon && this.effectData.count < 3) {
+				if (this.effectData.count < 3) {
 					pokemon.forceSwitchFlag = true;
 					this.effectData.count++;
 				}
+				pokemon.side.removeSideCondition('gaelstrom');
 			},
 			onEnd(side) {
 				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);

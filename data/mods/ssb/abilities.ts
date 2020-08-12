@@ -802,7 +802,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (effect.id === 'stubbornness') return;
 			if (success) {
 				if (!pokemon.m.happened) {
-				 	this.boost({atk: 1, def: 1, spd: 1}, pokemon);
+					this.boost({atk: 1, def: 1, spd: 1}, pokemon);
 					pokemon.m.happened = true;
 				} else {
 					this.boost({atk: 1}, pokemon);
