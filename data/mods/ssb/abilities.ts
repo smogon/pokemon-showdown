@@ -153,10 +153,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const targetForme = (move.id === 'kingsshield' || move.id === 'kshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
-		onStart(pokemon) {
-			this.useMove('Haze');
-			this.useMove('Heal Bell');
-			this.useMove('Embargo');
+		onSwitchIn(pokemon) {
+			this.useMove('Haze', pokemon);
+			this.useMove('Heal Bell', pokemon);
+			this.useMove('Embargo', pokemon);
 		},
 		name: "New Stage",
 	},
