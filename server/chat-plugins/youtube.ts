@@ -233,7 +233,7 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			let [id, name] = target.split(',');
-			name = name.trim();
+			if (name) name = name.trim();
 			if (!id) return this.errorReply('Specify a channel ID.');
 			const data = await YouTube.getChannelData(id, name);
 			if (!data) {
@@ -265,12 +265,7 @@ export const commands: ChatCommands = {
 			const data = await YouTube.generateChannelDisplay(channel);
 			if (!data) return this.errorReply(`Error in getting channel data.`);
 			this.runBroadcast();
-			if (this.broadcasting) {
-				this.addBox(data);
-				return room.update();
-			} else {
-				return this.sendReplyBox(data);
-			}
+			return this.sendReplyBox(data);
 		},
 		channelhelp: [
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
