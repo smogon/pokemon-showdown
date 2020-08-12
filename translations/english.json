@@ -116,7 +116,7 @@
 		"Your message contains banned characters.": "",
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "",
 		"Your username contains a phrase banned by this room.": "",
-		"Your statusMessage contains a phrase banned by this room.": "",
+		"Your status message contains a phrase banned by this room.": "",
 
 		"Your message contained banned words in this room.": "",
 		"You can't send the same message again so soon.": "",

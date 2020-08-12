@@ -461,7 +461,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 			if (regex.test(lcStatus)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
-						user, 'staff', `NameMonitor`, `inappropriate statusMessage: ${status}`,
+						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
 						`${user.name} - using an inappropriate status: ${status}`, true
 					);
 				}

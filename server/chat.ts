@@ -1100,7 +1100,7 @@ export class CommandContext extends MessageContext {
 		}
 		const status = user.settings.statusMessage;
 		if (status && (!this.checkBanwords(room, status) && !user.can('bypassall'))) {
-			this.errorReply(this.tr(`Your statusMessage contains a phrase banned by this room.`));
+			this.errorReply(this.tr(`Your status message contains a phrase banned by this room.`));
 			return null;
 		}
 		if (!this.checkBanwords(room, message) && !user.can('mute', null, room!)) {
@@ -1441,7 +1441,7 @@ export const Chat = new class {
 			if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
 		}
 		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
-		name = name.replace(/@/g, ""); // Remove @ as this is used to indicate statusMessages
+		name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
 
 		// cut name length down to 18 chars
 		if (/[A-Za-z0-9]/.test(name.slice(18))) {

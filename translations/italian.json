@@ -116,7 +116,7 @@
 		"Your message contains banned characters.": "Il tuo messaggio contiene parole o caratteri non permessi.",
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "Questa room ha la slow-chat attivata. Puoi inviare un nuovo messaggio ogni ${time} secondi.",
 		"Your username contains a phrase banned by this room.": "Il tuo username contiene una frase non permessa in questa room.",
-		"Your statusMessage contains a phrase banned by this room.": "Il tuo status contiene una frase non permessa in questa room.",
+		"Your status message contains a phrase banned by this room.": "Il tuo status contiene una frase non permessa in questa room.",
 
 		"Your message contained banned words in this room.": "Il tuo messaggio conteneva una o più parole non permesse in questa room.",
 		"You can't send the same message again so soon.": "Non puoi inviare lo stesso messaggio di nuovo dopo così poco tempo",

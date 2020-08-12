@@ -15,7 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
-import type {UserSettings, StatusType} from '../users';
+import type {UserSettings} from '../users';
 
 const avatarTable = new Set([
 	'aaron',
@@ -622,14 +622,14 @@ export const commands: ChatCommands = {
 	},
 	statushelp: [
 		`/status [note] - Sets a short note as your status, visible when users click your username.`,
-		 `Use /clearstatus to clear your statusMessage.`,
+		 `Use /clearstatus to clear your status message.`,
 	],
 
 	donotdisturb: 'busy',
 	dnd: 'busy',
 	busy(target, room, user, connection, cmd) {
 		if (target) {
-			this.errorReply("Setting statusMessages in /busy is no longer supported. Set a status using /status.");
+			this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('busy');
 		if (['dnd', 'donotdisturb'].includes(cmd)) {
@@ -649,7 +649,7 @@ export const commands: ChatCommands = {
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
 		if (target) {
-			this.errorReply("Setting statusMessages in /away is no longer supported. Set a status using /status.");
+			this.errorReply("Setting status messages in /away is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('idle');
 		this.sendReply(this.tr("You are now marked as away. Send a message or use /back to indicate you are back."));
@@ -670,18 +670,18 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${targetUser.name}'s status "${targetStatus}" was cleared by ${user.name}${reason ? `: ${reason}` : ``}`);
 			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetStatus}" by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
-			targetUser.popup(`${user.name} has cleared your statusMessage for being inappropriate${reason ? `: ${reason}` : '.'}`);
+			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
 		}
 
-		if (!user.settings.statusMessage) return this.sendReply("You don't have a statusMessage set.");
+		if (!user.settings.statusMessage) return this.sendReply("You don't have a status message set.");
 		user.setUserMessage('');
 
-		return this.sendReply("You have cleared your statusMessage.");
+		return this.sendReply("You have cleared your status message.");
 	},
 	clearstatushelp: [
-		`/clearstatus - Clears your statusMessage.`,
-		`/clearstatus user, reason - Clears another person's statusMessage. Requires: % @ &`,
+		`/clearstatus - Clears your status message.`,
+		`/clearstatus user, reason - Clears another person's status message. Requires: % @ &`,
 	],
 
 	unaway: 'back',
@@ -700,7 +700,7 @@ export const commands: ChatCommands = {
 			return this.sendReply(`You are no longer marked as ${statusType}.`);
 		}
 
-		return this.sendReply("You have cleared your statusMessage.");
+		return this.sendReply("You have cleared your status message.");
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 

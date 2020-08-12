@@ -309,7 +309,7 @@ export interface UserSettings {
 	blockChallenges: boolean;
 	blockPMs: boolean | AuthLevel;
 	statusType: StatusType;
-	statusMessage: string,
+	statusMessage: string;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
 }

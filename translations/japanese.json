@@ -116,7 +116,7 @@
 		"Your message contains banned characters.": "メッセージに使用不可の文字が入っています。",
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "このチャット部屋はスローチャットが設定されているため、 ${time} 秒以内に複数のメッセージを送ることができません。",
 		"Your username contains a phrase banned by this room.": "ユーザー名にこの部屋の禁止ワードが入っています。",
-		"Your statusMessage contains a phrase banned by this room.": "ステータスにこの部屋の禁止ワードが入っています。",
+		"Your status message contains a phrase banned by this room.": "ステータスにこの部屋の禁止ワードが入っています。",
 
 		"Your message contained banned words in this room.": "メッセージにこの部屋の禁止ワードが入っています。",
 		"You can't send the same message again so soon.": "高頻度で同じメッセージを送ることはできません。",
