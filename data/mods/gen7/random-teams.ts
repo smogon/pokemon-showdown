@@ -982,11 +982,11 @@ export class RandomGen7Teams extends RandomTeams {
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
-			let baseStats = species.baseStats;
-			// If Wishiwashi, use the school-forme's much higher stats
-			if (species.baseSpecies === 'Wishiwashi') baseStats = this.dex.getSpecies('wishiwashischool').baseStats;
+			const baseStats = species.baseStats;
 
-			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
+			let bst = species.bst;
+			// If Wishiwashi, use the school-forme's much higher stats
+			if (species.baseSpecies === 'Wishiwashi') bst = this.dex.getSpecies('wishiwashischool').bst;
 			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
 			// For the stat boosted, treat the Pokemon's base stat as if it were multiplied by the boost. (Actual effective base stats are higher.)
 			const speciesAbility = (baseSpecies === species ? ability : species.abilities[0]);

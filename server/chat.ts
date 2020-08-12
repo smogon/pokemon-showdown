@@ -1911,8 +1911,7 @@ export const Chat = new class {
 		}
 	}
 
-	getDataPokemonHTML(species: Species, gen = 7, tier = '') {
-		if (typeof species === 'string') species = Dex.deepClone(Dex.getSpecies(species));
+	getDataPokemonHTML(species: Species, gen = 8, tier = '') {
 		let buf = '<li class="result">';
 		buf += '<span class="col numcol">' + (tier || species.tier) + '</span> ';
 		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
@@ -1943,23 +1942,18 @@ export const Chat = new class {
 			}
 			buf += '</span>';
 		}
-		let bst = 0;
-		for (const baseStat of Object.values(species.baseStats)) {
-			bst += baseStat;
-		}
 		buf += '<span style="float:left;min-height:26px">';
 		buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
 		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
 		buf += '<span class="col statcol"><em>Def</em><br />' + species.baseStats.def + '</span> ';
 		if (gen <= 1) {
-			bst -= species.baseStats.spd;
 			buf += '<span class="col statcol"><em>Spc</em><br />' + species.baseStats.spa + '</span> ';
 		} else {
 			buf += '<span class="col statcol"><em>SpA</em><br />' + species.baseStats.spa + '</span> ';
 			buf += '<span class="col statcol"><em>SpD</em><br />' + species.baseStats.spd + '</span> ';
 		}
 		buf += '<span class="col statcol"><em>Spe</em><br />' + species.baseStats.spe + '</span> ';
-		buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
+		buf += '<span class="col bstcol"><em>BST<br />' + species.bst + '</em></span> ';
 		buf += '</span>';
 		buf += '</li>';
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
