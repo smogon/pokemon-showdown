@@ -449,6 +449,7 @@ export class ModdedDex {
 			species.nfe = species.evos.length && this.getSpecies(species.evos[0]).gen <= this.gen;
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
+			if (this.gen === 1) species.bst -= species.baseStats.spd;
 		} else {
 			species = new Data.Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
