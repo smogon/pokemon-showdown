@@ -819,7 +819,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
-		const modName = target.split(',').pop();
+		const modName = target.split(',').length > 1 ? target.split(',').pop() : null;
 		let mod = Dex;
 		let format: Format | null = null;
 		let isInverse = false;
