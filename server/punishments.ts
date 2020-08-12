@@ -33,6 +33,8 @@ const PUNISH_TRUSTED = false;
 const PUNISHMENT_POINT_VALUES: {[k: string]: number} = {MUTE: 2, BLACKLIST: 3, BATTLEBAN: 4, ROOMBAN: 4};
 const AUTOLOCK_POINT_THRESHOLD = 8;
 
+const AUTOWEEKLOCK_THRESHOLD = 5; // number of global punishments to upgrade autolocks to weeklocks
+const AUTOWEEKLOCK_DAYS_TO_SEARCH = 60;
 /**
  * A punishment is an array: [punishType, userid | #punishmenttype, expireTime, reason]
  */
@@ -537,7 +539,7 @@ export const Punishments = new class {
 		if (typeof room !== 'string') {
 			room = room as Room;
 			if (!(room.settings.isPrivate === true || room.settings.isPersonal)) {
-				Punishments.monitorRoomPunishments(user);
+				void Punishments.monitorRoomPunishments(user);
 			}
 		}
 
@@ -597,7 +599,7 @@ export const Punishments = new class {
 		if (typeof room !== 'string') {
 			room = room as Room;
 			if (!(room.settings.isPrivate === true || room.settings.isPersonal)) {
-				Punishments.monitorRoomPunishments(userid);
+				void Punishments.monitorRoomPunishments(userid);
 			}
 		}
 		return affected;
@@ -698,7 +700,7 @@ export const Punishments = new class {
 		const userid = toID(user);
 		const name = typeof user === 'string' ? user : (user as User).name;
 		if (namelock) {
-			punishment = `NAMELOCKED`;
+			punishment = `NAME${punishment}`;
 			await Punishments.namelock(user, expires, toID(namelock), false, `Autonamelock: ${name}: ${reason}`);
 		} else {
 			await Punishments.lock(user, expires, userid, false, `Autolock: ${name}: ${reason}`);
@@ -711,7 +713,7 @@ export const Punishments = new class {
 
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
-		Rooms.global.modlog(`AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`, roomid);
+		Rooms.global.modlog(`AUTO${punishment.replace('ED', '')}: [${userid}]${ipStr}: ${reason}`, roomid);
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
@@ -1434,7 +1436,7 @@ export const Punishments = new class {
 	/**
 	 * Notifies staff if a user has three or more room punishments.
 	 */
-	monitorRoomPunishments(user: User | ID) {
+	async monitorRoomPunishments(user: User | ID) {
 		if ((user as User).locked) return;
 		const userid = toID(user);
 
@@ -1462,8 +1464,9 @@ export const Punishments = new class {
 				const rooms = punishments.map(([room]) => room).join(', ');
 				const reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 				const message = `${(user as User).name || userid} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
+				const isWeek = await Rooms.Modlog.getGlobalPunishments(userid, AUTOWEEKLOCK_DAYS_TO_SEARCH) >= AUTOWEEKLOCK_THRESHOLD;
 
-				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message);
+				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message, isWeek);
 				if (typeof user !== 'string') {
 					(user as User).popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
