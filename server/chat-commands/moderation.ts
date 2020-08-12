@@ -1828,7 +1828,7 @@ export const commands: ChatCommands = {
 			this.errorReply(`User '${target}' is not blacklisted.`);
 		}
 	},
-	unblacklisthelp: [`/unblacklist [username] - Unblacklists the user from the room you are in. Requires # &`],
+	unblacklisthelp: [`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # &`],
 
 	unblacklistall(target, room, user) {
 		if (!room) return this.requiresRoom();

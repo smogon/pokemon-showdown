@@ -424,7 +424,7 @@ export const commands: ChatCommands = {
 			const [ip, ...reasonArr] = target.split(',');
 			if (!IPTools.ipRegex.test(ip)) return this.errorReply(`Please enter a valid IP address.`);
 			if (!reasonArr?.length) {
-				this.errorReply(`Reasons are required.`);
+				this.errorReply(`A reason is required.`);
 				this.parse(`/help nomarkshared`);
 				return;
 			}
