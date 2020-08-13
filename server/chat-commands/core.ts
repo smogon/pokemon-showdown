@@ -838,8 +838,7 @@ export const commands: ChatCommands = {
 							specific: specific && Array.isArray(specific) ? specific : [],
 						};
 					} else {
-						// @ts-ignore (the only exception is parsed above, so this can be ignored)
-						settings[setting as keyof UserSettings] = !!raw[setting];
+						settings[setting as keyof Omit<UserSettings, 'blockPMs'>] = !!raw[setting];
 					}
 				}
 			}
