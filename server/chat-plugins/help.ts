@@ -9,7 +9,7 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {LogViewer} from './chatlog';
-import {ROOMFAQ_FILE} from './room-faqs';
+import {roomFaqs, ROOMFAQ_FILE} from './room-faqs';
 
 const PATH = 'config/chat-plugins/help.json';
 // 6: filters out conveniently short aliases
@@ -71,13 +71,8 @@ export class HelpResponder {
 	data: PluginData;
 	constructor(data: PluginData) {
 		this.data = data;
-		this.roomFaqs = this.loadFaqs();
+		this.roomFaqs = roomFaqs['help'] || {};
 		this.queue = data.queue || [];
-
-		FS(ROOMFAQ_FILE).onModify(() => {
-			// refresh on modifications to keep it up to date
-			this.roomFaqs = this.loadFaqs();
-		});
 	}
 	getRoom() {
 		return Config.helpFilterRoom ? Rooms.get(Config.helpFilterRoom) : Rooms.get('help');
@@ -144,6 +139,11 @@ export class HelpResponder {
 	}
 	match(question: string, faq: string) {
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
+		if (!roomFaqs[faq]) {
+			delete this.data.pairs[faq];
+			this.writeState();
+			return null;
+		}
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
 		if (!regexes) return;
 		for (const regex of regexes) {
@@ -172,24 +172,6 @@ export class HelpResponder {
 	}
 	writeState() {
 		return FS(PATH).writeUpdate(() => JSON.stringify(this.data));
-	}
-	loadFaqs() {
-		const room = this.getRoom();
-		if (!room) {
-			this.roomFaqs = {};
-			return this.roomFaqs;
-		}
-		const roomid = room.roomid;
-		let hasDeletion = false;
-		this.roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || `{"${roomid}":{}}`)[roomid];
-		for (const key in this.data.pairs) {
-			if (!this.roomFaqs[key]) {
-				delete this.data.pairs[key];
-				hasDeletion = true;
-			}
-		}
-		if (hasDeletion) this.writeState();
-		return this.roomFaqs;
 	}
 	tryAddRegex(inputString: string, raw?: boolean) {
 		let [args, faq] = inputString.split('=>').map(item => item.trim());
