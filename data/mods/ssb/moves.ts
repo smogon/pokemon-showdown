@@ -2807,7 +2807,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			if (target.trySetStatus('brn', source, move)) {
-				source.heal(source.baseMaxhp / 3);
+				this.heal(source.baseMaxhp * 0.33, source);
 				return;
 			}
 			return false;
