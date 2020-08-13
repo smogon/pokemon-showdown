@@ -1317,6 +1317,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Hurricane', target);
 		},
+		sideCondition: 'gaelstrom',
 		condition: {
 			duration: 1,
 			onSwitchIn(pokemon) {
@@ -1326,7 +1327,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.effectData.count++;
 					return;
 				}
-				pokemon.side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
+				pokemon.side.removeSideCondition('gaelstrom');
+			},
+			onEnd(side) {
+				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
 			},
 		},
 		forceSwitch: true,
