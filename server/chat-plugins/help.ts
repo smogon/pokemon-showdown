@@ -205,12 +205,12 @@ export const chatfilter: ChatFilter = (message, user, room) => {
 	const helpRoom = Answerer.getRoom();
 	if (!helpRoom) return message;
 	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.disabled) {
+		if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 		const reply = Answerer.visualize(message, false, user);
 		if (message.startsWith('/') || message.startsWith('!')) return message;
 		if (!reply) {
 			return message;
 		} else {
-			if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 			user.sendTo(room.roomid, `|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
 			const trimmedMessage = `<div class="infobox">${Answerer.visualize(message, true)}</div>`;
 			setTimeout(() => {
@@ -417,6 +417,7 @@ export const pages: PageTable = {
 				buf += `- <a roomid="view-helpfilter-stats-${key}">${key}</a> (${stats[key].total})<br />`;
 			}
 			break;
+		case 'pairs':
 		case 'keys':
 			this.title = '[Help Regexes]';
 			if (!this.can('show', null, helpRoom)) return;
