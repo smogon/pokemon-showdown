@@ -180,15 +180,19 @@ export class HelpResponder {
 			return this.roomFaqs;
 		}
 		const roomid = room.roomid;
+		let hasDeletion = false;
 		this.roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || `{"${roomid}":{}}`)[roomid];
 		for (const key in this.data.pairs) {
-			if (!this.roomFaqs[key]) delete this.data.pairs[key];
+			if (!this.roomFaqs[key]) {
+				delete this.data.pairs[key];
+				hasDeletion = true;
+			}
 		}
-		this.writeState();
+		if (hasDeletion) this.writeState();
 		return this.roomFaqs;
 	}
 	tryAddRegex(inputString: string, raw?: boolean) {
-		let [args, faq] = inputString.split('=>');
+		let [args, faq] = inputString.split('=>').map(item => item.trim());
 		faq = this.getFaqID(toID(faq)) as string;
 		if (!faq) throw new Chat.ErrorMessage("Invalid FAQ.");
 		if (!this.data.pairs) this.data.pairs = {};
