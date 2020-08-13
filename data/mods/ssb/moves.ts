@@ -1324,11 +1324,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (this.effectData.count < 3) {
 					pokemon.forceSwitchFlag = true;
 					this.effectData.count++;
+					return;
 				}
-				pokemon.side.removeSideCondition('gaelstrom');
-			},
-			onEnd(side) {
-				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
+				pokemon.side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
 			},
 		},
 		forceSwitch: true,
