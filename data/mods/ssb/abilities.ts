@@ -692,13 +692,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// Jett x_x
+	// Jett x~x
 	deceiver: {
-		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus of 2 instead of 1.5. If this Pokemon is at full HP, it survives one hit with at least 1 HP. Upon switching in, this Pokemon's Speed is raised by 1 stage.",
-		shortDesc: "Adaptability + Sturdy. +1 Speed on switch in.",
-		onStart() {
-			this.boost({spe: 1}); // User has asked to remove this if its too strong in playtesting
-		},
+		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus of 2 instead of 1.5. If this Pokemon is at full HP, it survives one hit with at least 1 HP.",
+		shortDesc: "Adaptability + Sturdy.",
 		onModifyMove(move) {
 			move.stab = 2;
 		},

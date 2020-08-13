@@ -506,13 +506,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	jettxx: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Jett x_x')}|It's a good day for a hunt.`);
+			this.add(`c|${getName('Jett x~x')}|It's a good day for a hunt.`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|${getName('Jett x_x')}|I'll be back for more.`);
+			this.add(`c|${getName('Jett x~x')}|I'll be back for more.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Jett x_x')}|They got lucky.`);
+			this.add(`c|${getName('Jett x~x')}|They got lucky.`);
 		},
 	},
 	jho: {
@@ -826,13 +826,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	phiwings99: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('phiwings99')}|I'm boated.`);
+			this.add(`c|${getName('phiwings99')}|Pick.`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('phiwings99')}|The fact you're switching this out means you probably didn't use the Z-Move right.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
+			this.add(`c|${getName('phiwings99')}|I'm boated.`);
 		},
 	},
 	pirateprincess: {
