@@ -340,6 +340,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', target, 'Subzero Slammer', target);
 			this.add('-anim', source, 'Subzero Slammer', source);
 		},
+		isZ: "caioniumz",
 		secondary: null,
 		weather: 'heavyhailstorm',
 		target: "all",
@@ -365,6 +366,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "self",
 		type: "Psychic",
+	},
+
+	// A Quag To The Past
+	bountyplace: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Puts a bounty on the target. If the target is KOed by a direct attack, the attacker will gain +1 Attack, Defense, Special Attack, Special Defense, and Speed. If the target has a major status condition, it cannot have a bounty placed on it.",
+		shortDesc: "Puts a bounty on the target.",
+		name: "Bounty Place",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Pay Day', target);
+			this.add('-anim', source, 'Block', target);
+		},
+		status: "bounty",
+		isZ: "quagniumz",
+		secondary: null,
+		target: "normal",
+		type: "Ground",
 	},
 
 	// a random duck
@@ -1301,16 +1328,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Kalalokki
+	blackbird: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
+		shortDesc: "User switches out after damaging the target.",
+		name: "Blackbird",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 	gaelstrom: {
 		accuracy: true,
-		basePower: 120,
+		basePower: 140,
 		category: "Special",
 		desc: "Hits foe and phazes them out, phaze the next one out and then another one, set a random entry hazard at the end of the move.",
 		shortDesc: "Forces the target to switch to a random ally; this happens two more times; and finally sets up a random entry hazard.",
 		name: "Gaelstrom",
-		pp: 5,
+		pp: 1,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, distance: 1},
+		flags: {},
+		isZ: "kalalokkiumz",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

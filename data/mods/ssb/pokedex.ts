@@ -30,6 +30,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 40, atk: 70, def: 70, spa: 80, spd: 90, spe: 70},
 	},
+	// A Quag To The Past
+	quagsire: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 65, def: 85, spa: 65, spd: 85, spe: 35},
+	},
 	// a random duck
 	ducklett: {
 		inherit: true,
@@ -88,11 +93,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	banette: {
 		inherit: true,
 		types: ["Ghost", "Normal"],
-	},
-	// OM~!
-	magneton: {
-		inherit: true,
-		types: ['Electric', 'Steel', 'Flying'],
 	},
 	// Overneat
 	absolmega: {

@@ -83,6 +83,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Refactor',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Quirky', shiny: true,
 	},
+	'A Quag To The Past': {
+		species: 'Quagsire', ability: 'Carefree', item: 'Quagnium Z', gender: 'M',
+		moves: ['Shore Up', 'Flip Turn', ['Haze', 'Toxic']],
+		signatureMove: 'Scorching Sands',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
+	},
 	'a random duck': {
 		species: 'Ducklett', ability: 'Gale Wings v1', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Thousand Waves', 'Liquidation', ['Brave Bird', 'Dragon Ascent']],
@@ -253,6 +259,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cozy Cuddle',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: 1,
 	},
+	Kalalokki: {
+		species: 'Wingull', ability: 'Magic Guard', item: 'Kalalokkium Z', gender: 'M',
+		moves: ['Tailwind', 'Encore', 'Healing Wish'],
+		signatureMove: 'Blackbird',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	Kingbaruk: {
 		species: 'Stonjourner', ability: 'Sturdy', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Diamond Storm', ['Superpower', 'Earthquake'], 'King\'s Shield'],
@@ -264,12 +276,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Body Press', 'Spiky Shield', 'Shore Up'],
 		signatureMove: 'Clash of Pangoros',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish', shiny: true,
-	},
-	Kalalokki: {
-		species: 'Wingull', ability: 'Magic Guard', item: 'Focus Sash', gender: 'M',
-		moves: ['Tailwind', 'Encore', 'Soak'],
-		signatureMove: 'Gaelstrom',
-		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Kris: {
 		species: 'Unown', ability: 'Protean', item: 'Life Orb', gender: 'N',

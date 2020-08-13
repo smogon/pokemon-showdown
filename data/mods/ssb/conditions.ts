@@ -65,7 +65,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	aegii: {
 		noCopy: true,
-		onStart(pokemon) {
+		onStart() {
 			this.add(`c|${getName('aegii')}|${[`stream fiesta!!! https://youtu.be/eDEFolvLn0A`, `stream more&more!!! https://youtu.be/mH0_XpSHkZo`, `stream wannabe!!! https://youtu.be/fE2h3lGlOsk`, `stream love bomb!!! https://youtu.be/-SK6cvkK4c0`][this.random(4)]}`);
 		},
 		onSwitchOut() {
@@ -133,6 +133,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Annika')}|oh, I crashed the server again...`);
+		},
+	},
+	aquagtothepast: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('A Quag To The Past')}|Whatever happens, happens.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('A Quag To The Past')}|See you space cowboy...`);
+		},
+		onFaint() {
+			this.add(`c|${getName('A Quag To The Past')}|You're gonna carry that weight.`);
 		},
 	},
 	arandomduck: {
@@ -553,18 +565,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
 			this.add(`c|${getName('Kalalokki')}|(x_x)`);
 		},
-		// Innate Perish Body
-		onDamagingHit(damage, target, source, move) {
-			if (!move.flags['contact']) return;
-
-			let announced = false;
-			for (const pokemon of [target, source]) {
-				if (pokemon.volatiles['perishsong']) continue;
-				if (!announced) {
-					this.add('-ability', target, 'Perish Body');
-					announced = true;
-				}
-				pokemon.addVolatile('perishsong');
+		onTryHit(pokemon, target, move) {
+			if (move.ohko) {
+				this.add('-immune', pokemon, '[from] ability: Sturdy');
+				return null;
+			}
+		},
+		onDamagePriority: -100,
+		onDamage(damage, target, source, effect) {
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Sturdy');
+				return target.hp - 1;
 			}
 		},
 	},
@@ -778,12 +789,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	om: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('OM~!')}|What's up gamers?`);
-			if (source.illusion) return;
-			// hardcode since pokemon.ts is weird with 3 types
-			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
-			this.add('-start', source, 'typeadd', 'Flying', '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('OM~!')}|Let me just ${['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'][this.random(3)]}`);
@@ -1268,6 +1275,31 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onSwitchIn(pokemon) {
 			if (pokemon.name !== 'Darth') {
 				this.effectData.storedTypes = pokemon.getTypes();
+			}
+		},
+	},
+	// Custom status for A Quag To The Past's signature move
+	bounty: {
+		name: 'bounty',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect.effectType === 'Ability') {
+				this.add('-start', target, 'bounty', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-start', target, 'bounty');
+			}
+			// this.add('-start', target, 'bounty', '[silent]');
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.status === 'bounty') {
+				this.add('-start', pokemon, 'bounty');
+			}
+		},
+		onFaint(target, source, effect) {
+			if (effect.effectType !== 'Move') return;
+			if (source) {
+				this.add('-activate', target, 'ability: Bounty');
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
 			}
 		},
 	},

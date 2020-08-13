@@ -11,6 +11,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by an Aurorus with Blizzard, it can use Blistering Ice Age.",
 	},
 
+	// A Quag To The Past
+	quagniumz: {
+		name: "Quagnium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Bounty Place",
+		zMoveFrom: "Scorching Sands",
+		itemUser: ["Quagsire"],
+		gen: 8,
+		desc: "If held by a Quagsire with Scorching Sands, it can use Bounty Place.",
+	},
+
 	// frostyicelad ❆
 	icestone: {
 		inherit: true,
@@ -25,6 +37,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		shortDesc: "If held by an Frosmoth, this item allows it to Mega Evolve in battle.",
 	},
 
+	// Kalalokki
+	kalalokkiumz: {
+		name: "Kalalokkium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Gaelstrom",
+		zMoveFrom: "Blackbird",
+		itemUser: ["Wingull"],
+		gen: 8,
+		desc: "If held by a Wingull with Blackbird, it can use Gaelstrom.",
+	},
+
 	// phiwings99
 	boatiumz: {
 		name: "Boatium Z",
@@ -36,6 +60,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Froslass with Moongeist Beam, it can use Ghost of 1v1 Past.",
 	},
+
 	// Robb576
 	modium6z: {
 		name: "Modium-6 Z",
@@ -47,6 +72,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Robb576 with Photon Geyser, it can use Integer Overflow.",
 	},
+
 	// xJoelituh
 	rarebone: {
 		inherit: true,
