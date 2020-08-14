@@ -267,14 +267,8 @@ export class Modlog {
 	}
 
 	async search(
-		roomid: ModlogID = 'global', search = '', maxLines = 20, onlyPunishments = false
+		roomid: ModlogID = 'global', search = '', maxLines = 20, exactSearch = false, onlyPunishments = false
 	): Promise<ModlogResults> {
-		let exactSearch = false;
-		if (/^["'].+["']$/.test(search)) {
-			exactSearch = true;
-			search = search.substring(1, search.length - 1);
-		}
-
 		const rooms = (roomid === 'public' ?
 			[...Rooms.rooms.values()]
 				.filter(room => !room.settings.isPrivate && !room.settings.isPersonal)
