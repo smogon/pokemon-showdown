@@ -319,7 +319,7 @@ export const PM = new QueryProcessManager<ModlogQuery, string[] | undefined>(mod
 });
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
-	global.toID = require('../sim/dex').Dex.getId;
+	global.toID = require('../sim/dex').Dex.toID;
 
 	// @ts-ignore ???
 	global.Monitor = {
