@@ -119,6 +119,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Buzz Inspection',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: 2,
 	},
+	biggie: {
+		species: 'Snorlax', ability: 'Super Armor', item: 'Leftovers', gender: 'M',
+		moves: ['Body Slam', 'Darkest Lariat', 'Assist'],
+		signatureMove: 'Juggernaut Punch',
+		evs: {hp: 4, def: 252, spd: 252}, nature: 'Brave',
+	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Leftovers', gender: 'M',
 		moves: ['Psych Up', 'King\'s Shield', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Decorate', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],

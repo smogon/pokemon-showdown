@@ -357,6 +357,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// biggie
+	superarmor: {
+		shortDesc: "Reduces damage taken from physical moves by 25% if the user has not yet attacked.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.queue.willMove(target) && move.category === 'Physical') {
+				return this.chainModify(0.75);
+			}
+		},
+		name: "Super Armor",
+	},
+
 	// cant say
 	ragequit: {
 		desc: "If Pokemon with this ability uses a move that misses or fails it faints and gives -2 Atk / -2 SpA to foe",

@@ -215,6 +215,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Beowulf')}|another one reincarnating into an isekai`);
 		},
 	},
+	biggie: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('biggie')}|gonna take you for a ride`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('biggie')}|mahvel baybee!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('biggie')}|it was all a dream`);
+		},
+	},
 	cake: {
 		noCopy: true,
 		onStart(target, pokemon) {

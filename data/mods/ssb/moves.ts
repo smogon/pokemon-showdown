@@ -531,6 +531,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 	},
 
+	// biggie
+	juggernautpunch: {
+		accuracy: 100,
+		basePower: 150,
+		category: "Physical",
+		desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move.",
+		shortDesc: "Fails if the user takes damage before it hits.",
+		name: "Juggernaut Punch",
+		pp: 20,
+		priority: -3,
+		flags: {contact: 1, protect: 1, punch: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Punch', target);
+		},
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile('juggernautpunch');
+		},
+		beforeMoveCallback(pokemon) {
+			if (pokemon.volatiles['juggernautpunch'] && pokemon.volatiles['juggernautpunch'].lostFocus) {
+				this.add('cant', pokemon, 'Juggernaut Punch', 'Juggernaut Punch');
+				return true;
+			}
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Juggernaut Punch');
+			},
+			onDamagePriority: -101,
+			onDamage(damage, target, source, effect) {
+				if (effect.effectType !== 'Move') return;
+				if (damage > target.baseMaxhp / 5) {
+					target.volatiles['juggernautpunch'].lostFocus = true;
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
+
 	// Cake
 	kevin: {
 		accuracy: true,
