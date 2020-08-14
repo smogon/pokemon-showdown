@@ -12,8 +12,8 @@ import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
 const PATH = 'config/chat-plugins/help.json';
-// 6: filters out conveniently short aliases
-const MINIMUM_LENGTH = 6;
+// 4: filters out conveniently short aliases
+const MINIMUM_LENGTH = 4;
 
 export let helpData: PluginData;
 
@@ -139,7 +139,10 @@ export class HelpResponder {
 	}
 	match(question: string, faq: string) {
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
-		if (!roomFaqs[faq]) {
+		const room = this.getRoom();
+		if (!room) return;
+		// mostly for the purpose of tests
+		if (!Config.nofswriting && !roomFaqs[room.roomid][faq]) {
 			delete this.data.pairs[faq];
 			this.writeState();
 			return null;

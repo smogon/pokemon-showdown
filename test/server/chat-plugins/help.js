@@ -13,10 +13,6 @@ const Help = new Responder({
 	queue: [],
 });
 
-Help.roomFaqs = {
-	catra: `Don't you get it?`,
-};
-
 describe('Help', function () {
 	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
