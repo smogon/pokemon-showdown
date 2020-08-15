@@ -1656,7 +1656,12 @@ export const Chat = new class {
 			const runsCommand = /this.run\(('|"|`)(.*)('|"|`)\)/.exec(handlerCode);
 			if (runsCommand) {
 				const [, , baseCommand] = runsCommand;
-				if (commandTable[baseCommand]) Object.assign(entry, commandTable[baseCommand]);
+				const baseEntry = commandTable[baseCommand];
+				if (baseEntry) {
+					entry.requiresRoom = baseEntry.requiresRoom;
+					entry.hasRoompermissions = baseEntry.hasRoomPermissions;
+					entry.broadcastable = baseEntry.broadcastable;
+				}
 			}
 
 			// This is usually the same as `entry.name`, but some weirdness like
