@@ -653,8 +653,10 @@ export class ObjectReadStream<T> {
 	// eslint-disable-next-line no-restricted-globals
 	[Symbol.asyncIterator]() { return this; }
 	async next() {
-		const value = await this.read();
-		return {value, done: value === null};
+		if (this.buf.length) return {value: this.buf.shift() as T, done: false as const};
+		await this.loadIntoBuffer(1, true);
+		if (!this.buf.length) return {value: undefined, done: true as const};
+		return {value: this.buf.shift() as T, done: false as const};
 	}
 
 	async pipeTo(outStream: ObjectWriteStream<T>, options: {noEnd?: boolean} = {}) {
