@@ -2065,9 +2065,9 @@ export const Chat = new class {
 				targetUser.notified.blockChallenges = true;
 			}
 		} else if (blocked === 'invite') {
-			if (!targetUser.notified.blockChallenges) {
+			if (!targetUser.notified.blockInvites) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to invite you to a room but was blocked. To enable invites, use /unblockinvites.`);
-				targetUser.notified.blockChallenges = true;
+				targetUser.notified.blockInvites = true;
 			}
 		}
 	}
