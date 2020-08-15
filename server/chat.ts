@@ -940,7 +940,7 @@ export class CommandContext extends MessageContext {
 		return true;
 	}
 	canPMLocked(user: User, lockedUser: User) {
-		const isPunishmentsAutolock = Punishments.userids.get(lockedUser.id)![3].includes('Autolocked for having punishments');
+		const isPunishmentsAutolock = Punishments.userids.get(lockedUser.id)?.[3].includes('Autolocked for having punishments');
 		return user.can('lock') || (
 			isPunishmentsAutolock &&
 			[...Rooms.rooms.values()].some(curRoom => !curRoom.settings.isPersonal && user?.can('editroom', null, curRoom))
@@ -1014,7 +1014,7 @@ export class CommandContext extends MessageContext {
 			// own language these messages should also be translated. - Asheviere
 			if (targetUser) {
 				if (lockType && !this.canPMLocked(targetUser, user)) {
-					const canPMRoomOwners = Punishments.userids.get(user.id)![3].includes('Autolocked for having punishments');
+					const canPMRoomOwners = Punishments.userids.get(user.id)?.[3].includes('Autolocked for having punishments');
 					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team${canPMRoomOwners ? ` and Room Owners` : ``}. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
 					return null;
