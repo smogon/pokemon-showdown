@@ -360,7 +360,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: -7,
 		onHit(target, source, move) {
 			for (const pokemon of this.getAllActive()) {
-				changeMoves(this, pokemon, ssbSets[pokemon.name]);
+				const newMoves = changeMoves(this, pokemon, ssbSets[pokemon.name].moves.concat(ssbSets[pokemon.name].signatureMove));
+				pokemon.moveSlots = newMoves;
+				// @ts-ignore
+				pokemon.baseMoveSlots = newMoves;
 				this.add('-message', `${source.name} refactored ${pokemon === target ? `themselves` : `the opposing ${pokemon.name}`}!`);
 			}
 		},

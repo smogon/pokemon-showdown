@@ -38,7 +38,10 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	let item = newSet.item;
 	if (typeof item !== 'string') item = item[Math.floor(Math.random() * item.length)];
 	pokemon.setItem(item);
-	changeMoves(context, pokemon, newSet);
+	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
+	pokemon.moveSlots = newMoves;
+	// @ts-ignore Necessary so Robb576 doesn't get 8 moves
+	pokemon.baseMoveSlots = newMoves;
 }
 
 /**
@@ -46,17 +49,15 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
  * @param pokemon The Pokemon whose moveset is to be modified
  * @param newSet The set whose moves should be assigned
  */
-export function changeMoves(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
+export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string | string[])[]) {
 	const carryOver = pokemon.moveSlots.slice().map(m => m.pp / m.maxpp);
 	// In case there are ever less than 4 moves
 	while (carryOver.length < 4) {
 		carryOver.push(1);
 	}
-	pokemon.moveSlots = [];
-	// @ts-ignore hack to prevent 8-move Robb
-	pokemon.baseMoveSlots = [];
+	const result = [];
 	let slot = 0;
-	for (const newMove of newSet.moves.concat(newSet.signatureMove)) {
+	for (const newMove of newMoves) {
 		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
 		const move = pokemon.battle.dex.getMove(context.toID(moveName));
 		if (!move.id) continue;
@@ -70,10 +71,10 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
 			disabledSource: '',
 			used: false,
 		};
-		pokemon.baseMoveSlots.push(moveSlot);
-		pokemon.moveSlots.push(moveSlot);
+		result.push(moveSlot);
 		slot++;
 	}
+	return result;
 }
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
