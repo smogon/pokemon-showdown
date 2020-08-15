@@ -17,16 +17,6 @@ export interface SSBSet {
 }
 interface SSBSets {[k: string]: SSBSet}
 
-export function tweakMoves(random: (m?: number, n?: number) => number, moves: (string | string[])[], name: string) {
-	if (name === 'quadrophenic') moves[random(2) + 1] = 'Conversion';
-	if (name === 'aegii' && random(0, 2) > 1) {
-		moves[moves.indexOf('Shadow Claw')] = 'Shadow Ball';
-		moves[moves.indexOf('Iron Head')] = 'Flash Cannon';
-	}
-	if (name === 'Marshmallon' && !moves.includes('Head Charge')) moves[random(3)] = 'Head Charge';
-	return moves;
-}
-
 export const ssbSets: SSBSets = {
 	/*
 	// Example:
@@ -635,7 +625,14 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			set.moves.push(ssbSet.signatureMove);
 
 			// Any set specific tweaks occur here.
-			set.moves = tweakMoves(this.random, set.moves, set.name) as string[];
+			if (set.name === 'quadrophenic') set.moves[this.random(2) + 1] = 'Conversion';
+			if (set.name === 'aegii' && this.randomChance(1, 2)) {
+				set.moves[set.moves.indexOf('Shadow Claw')] = 'Shadow Ball';
+				set.moves[set.moves.indexOf('Iron Head')] = 'Flash Cannon';
+			}
+
+			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
+
 			team.push(set);
 
 			// Team specific tweaks occur here
