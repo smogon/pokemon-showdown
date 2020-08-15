@@ -962,6 +962,7 @@ export class CommandContext extends MessageContext {
 		}
 		if (!user.can('bypassall')) {
 			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
+			const canPMRoomOwners = !lockType || Punishments.userids.get(user.id)![3].includes('Autolocked for having punishments');
 			const lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
 				if (lockType && !room.settings.isHelp) {
@@ -1006,8 +1007,15 @@ export class CommandContext extends MessageContext {
 			// and these PM-related messages aren't attached to any rooms. If we ever get to letting users set their
 			// own language these messages should also be translated. - Asheviere
 			if (targetUser) {
-				if (lockType && !targetUser.can('lock')) {
-					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
+				if (
+					lockType &&
+					!targetUser.can('lock') &&
+					!(canPMRoomOwners && [...Rooms.rooms.values()].some(room => {
+						if (room.battle || room.settings.isPersonal) return false;
+						return targetUser?.can('editroom', null, room);
+					}))
+				) {
+					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team${canPMRoomOwners ? ` and Room Owners` : ``}. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
 					return null;
 				}
