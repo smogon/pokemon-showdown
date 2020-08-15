@@ -26,8 +26,7 @@ type ChannelID = 0 | 1 | 2 | 3 | 4;
 export const Sockets = new class {
 	async onSpawn(worker: StreamWorker) {
 		const id = worker.workerid;
-		let data;
-		while ((data = await worker.stream.read())) {
+		for await (const data of worker.stream) {
 			switch (data.charAt(0)) {
 			case '*': {
 				// *socketid, ip, protocol
