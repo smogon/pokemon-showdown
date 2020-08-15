@@ -1655,7 +1655,7 @@ export const Chat = new class {
 			// assign SOME properties from the base command if the current command uses CommandContext.run.
 			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
 			if (runsCommand) {
-				const [, , baseCommand] = runsCommand;
+				const [, baseCommand] = runsCommand;
 				const baseEntry = commandTable[baseCommand];
 				if (baseEntry) {
 					entry.requiresRoom = baseEntry.requiresRoom;
