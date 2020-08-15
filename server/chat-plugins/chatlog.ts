@@ -120,12 +120,12 @@ const LogReader = new class {
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
-			let line;
-			while ((line = await stream.readLine()) !== null && i < limit) {
+			for await (const line of stream.byLine()) {
 				const rendered = LogViewer.renderLine(line);
 				if (rendered) {
 					buf += `${line}\n`;
 					i++;
+					if (i > limit) break;
 				}
 			}
 		}
@@ -184,8 +184,7 @@ export const LogViewer = new class {
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
-			let line;
-			while ((line = await stream.readLine()) !== null) {
+			for await (const line of stream.byLine()) {
 				buf += this.renderLine(line, opts);
 			}
 		}

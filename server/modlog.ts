@@ -292,8 +292,7 @@ export class Modlog {
 
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
 		const fileStream = FS(path).createReadStream();
-		let line;
-		while ((line = await fileStream.readLine()) !== null) {
+		for await (const line of fileStream.byLine()) {
 			if (!regex || regex.test(line)) {
 				results.insert(line);
 			}
