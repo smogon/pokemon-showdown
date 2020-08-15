@@ -18339,13 +18339,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room. Fails if the user is not holding a Berry.",
-		shortDesc: "User eats its Berry and raises its Defense by 2.",
+		desc: "This move cannot be selected unless the user is holding a Berry. The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room. Fails if the user is not holding a Berry.",
+		shortDesc: "Must hold Berry to use. User eats Berry, Def +2.",
 		name: "Stuff Cheeks",
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryHit(target, source, move) {
+		// Move disabling implemented in Battle#nextTurn in sim/battle.ts
+		onTry(source) {
 			const item = source.getItem();
 			if (item.isBerry && source.eatItem(true)) {
 				this.boost({def: 2}, source, null, null, false, true);
