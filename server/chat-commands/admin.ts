@@ -391,9 +391,8 @@ export const commands: ChatCommands = {
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				let streams = [];
-				streams = Rooms.Modlog.getActiveStreamIDs();
-				await Rooms.Modlog.destroyAll();
+				const streams = Rooms.Modlog.streams;
+				const sharedStreams = Rooms.Modlog.sharedStreams;
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
@@ -402,9 +401,8 @@ export const commands: ChatCommands = {
 
 				Rooms.Modlog = require('../modlog').modlog;
 				this.sendReply("Modlog has been hot-patched.");
-				for (const stream of streams) {
-					Rooms.Modlog.initialize(stream);
-				}
+				Rooms.Modlog.streams = streams;
+				Rooms.Modlog.sharedStreams = sharedStreams;
 				this.sendReply("Modlog streams have been re-initialized.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
