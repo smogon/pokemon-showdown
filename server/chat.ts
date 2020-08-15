@@ -1652,7 +1652,7 @@ export const Chat = new class {
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
 
-			// assign SOME properties from the base command if the current command uses CommandContext.run.
+			// assign properties from the base command if the current command uses CommandContext.run.
 			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
 			if (runsCommand) {
 				const [, baseCommand] = runsCommand;
