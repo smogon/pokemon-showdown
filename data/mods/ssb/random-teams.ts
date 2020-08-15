@@ -126,7 +126,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, def: 252, spd: 252}, nature: 'Brave',
 	},
 	Cake: {
-		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Leftovers', gender: 'M',
+		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
 		moves: ['Psych Up', 'King\'s Shield', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Decorate', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
 		signatureMove: 'Kevin',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
@@ -630,7 +630,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				set.moves[set.moves.indexOf('Shadow Claw')] = 'Shadow Ball';
 				set.moves[set.moves.indexOf('Iron Head')] = 'Flash Cannon';
 			}
-
 			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
 
 			team.push(set);
