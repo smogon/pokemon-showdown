@@ -1130,18 +1130,8 @@ export class CommandContext extends MessageContext {
 		const user = this.user;
 
 		// for hotpatching, remove later.
-		Chat.updateSettings(user);
-		Chat.updateSettings(targetUser);
-
-		function checkBlocked(curUser: User, tarUser: User) {
-			const curBlocks = curUser.settings.blockPMs;
-			const tarBlocks = tarUser.settings.blockPMs;
-
-			return (tarBlocks.all === true ||
-				!Users.globalAuth.atLeast(user, tarBlocks.all as GroupSymbol) && typeof curBlocks.all === 'string' ||
-				tarBlocks.specific?.includes(curUser.id)
-			) && !curUser.can('lock');
-		}
+		const curSettings = Chat.updateSettings(user); // will just be user.settings
+		const tarSettings = Chat.updateSettings(targetUser); // will just be targetUser.settings
 
 		if (targetUser.locked && !user.can('lock')) {
 			this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
@@ -1155,7 +1145,12 @@ export class CommandContext extends MessageContext {
 			this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 			return null;
 		}
-		if (checkBlocked(user, targetUser)) {
+		if (
+			(tarSettings.all === true ||
+			!Users.globalAuth.atLeast(user, tarSettings.all as GroupSymbol) && typeof curSettings.all === 'string' ||
+			tarSettings.specific?.includes(user.id)) &&
+			!user.can('lock')
+		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			if (!targetUser.can('lock')) {
 				this.errorReply(`This user is blocking private messages right now.`);
@@ -1166,7 +1161,12 @@ export class CommandContext extends MessageContext {
 				return null;
 			}
 		}
-		if (checkBlocked(targetUser, user)) {
+		if (
+			(curSettings.all === true ||
+			!Users.globalAuth.atLeast(user, curSettings.all as GroupSymbol) && typeof tarSettings.all === 'string' ||
+			curSettings.specific?.includes(user.id)) &&
+			!targetUser.can('lock')
+		) {
 			const isBlocked = user.settings.blockPMs.specific?.includes(targetUser.id);
 			this.errorReply(`You are blocking private messages ${isBlocked ? 'from this user ' : ''}right now.`);
 			return null;
