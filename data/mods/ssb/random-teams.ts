@@ -521,14 +521,14 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: true,
 	},
-	'yuki-Ninja': {
+	'yuki-Dancer': {
 		species: 'Pikachu-Pop-Star', ability: 'Dancer', item: 'Light Ball', gender: 'F',
 		moves: ['Fiery Dance', 'Revelation Dance', 'Lunar Dance'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: true,
 	},
-	'yuki-Dancer': {
+	'yuki-Ninja': {
 		species: 'Pikachu-Libre', ability: 'White Smoke', item: 'Light Ball', gender: 'F',
 		moves: ['Water Shuriken', 'Acrobatics', 'Toxic'],
 		signatureMove: 'Class Change',
