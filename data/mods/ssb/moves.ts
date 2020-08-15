@@ -2747,6 +2747,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// trace
+	herocreation: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user switches out and raises the incoming Pokémon attack and special attack stat by one stage.",
+		shortDesc: "The user switches out and raises the incoming Pokémon attack and special attack stat by one stage.",
+		name: "Hero Creation",
+		pp: 10,
+		priority: -6,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Teleport', source);
+			this.add('-anim', source, 'Work Up', source);
+		},
+		selfSwitch: true,
+		sideCondition: 'herocreation',
+		condition: {
+			duration: 1,
+			onStart(side, source) {
+				this.debug('Hero Creation started on ' + side.name);
+				this.effectData.positions = [];
+				for (const i of side.active.keys()) {
+					this.effectData.positions[i] = false;
+				}
+				this.effectData.positions[source.position] = true;
+			},
+			onRestart(side, source) {
+				this.effectData.positions[source.position] = true;
+			},
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				this.boost({atk: 1, spa: 1}, target);
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+
 	// Trickster
 	soulshatteringstare: {
 		accuracy: true,

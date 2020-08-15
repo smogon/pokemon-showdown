@@ -1025,6 +1025,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
 		},
 	},
+	trace: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('trace')}|Daishouri!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('trace')}|¯\\_(ツ)_/¯`);
+		},
+		onFaint() {
+			this.add(`c|${getName('trace')}|sucks to sucks`);
+		},
+	},
 	trickster: {
 		noCopy: true,
 		onStart() {

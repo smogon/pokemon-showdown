@@ -471,6 +471,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Right. On. Cue!',
 		evs: {hp: 128, def: 144, spd: 236}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	trace: {
+		species: 'Jirachi', ability: 'Trace', item: 'Leftovers', gender: '',
+		moves: ['Wish', 'Protect', 'Psychic'],
+		signatureMove: 'Hero Creation',
+		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+	},
 	Trickster: {
 		species: 'Shiinotic', ability: 'Trillionage Roots', item: 'Leftovers', gender: '',
 		moves: ['Strength Sap', 'Cosmic Power', 'Knock Off'],
