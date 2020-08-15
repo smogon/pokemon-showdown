@@ -253,6 +253,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genre Change',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	'Jho-Low-Key': {
+		species: 'Toxtricity-Low-Key', ability: 'Venomize', item: 'Throat Spray', gender: 'M',
+		moves: ['Aura Sphere', 'Boomburst', 'Volt Switch'],
+		signatureMove: 'Genre Change',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		skip: true,
+	},
 	Jordy: {
 		species: 'Archeops', ability: 'Divine Sandstorm', item: 'Life Orb', gender: 'M',
 		moves: ['Brave Bird', 'Head Smash', ['U-turn', 'Roost', 'Icicle Crash']],

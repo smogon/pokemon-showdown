@@ -5,7 +5,7 @@ import {SSBSet, ssbSets} from "./random-teams";
  * @param pokemon the Pokemon to assign the set to
  * @param newSet the SSBSet to assign
  */
-export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
+export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, changeAbility = false) {
 	// For some reason EVs and IVs in an SSBSet can be undefined...
 	const evs: StatsTable = {
 		hp: newSet.evs?.hp || 0,
@@ -27,6 +27,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet) {
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
 	pokemon.formeChange(newSet.species, context.effect, true);
+	if (changeAbility) pokemon.setAbility(newSet.ability as string);
 
 	pokemon.baseMaxhp = Math.floor(Math.floor(
 		2 * pokemon.species.baseStats.hp + pokemon.set.ivs.hp + Math.floor(pokemon.set.evs.hp / 4) + 100

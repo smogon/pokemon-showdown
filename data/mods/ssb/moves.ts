@@ -734,15 +734,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Psywave', target);
 		},
-		onModifyMove(move, source, target) {
-			let species = target.species;
-			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
-			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
-			if (!isSingleStage) {
-				move.category = 'Status';
-			}
-		},
-		onBasePower(basePower, source, target) {
+		onBasePower(damage, source, target) {
 			let species = target.species;
 			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
 			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
@@ -760,7 +752,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (this.dex.getSpecies(prevo).prevo) {
 					prevo = this.dex.getSpecies(prevo).prevo;
 				}
-				target.formeChange(prevo, this.effect, true);
+				target.formeChange(prevo, this.effect);
 				target.canMegaEvo = null;
 				target.setAbility(ability);
 			}
@@ -1383,6 +1375,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		selfSwitch: true,
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Gust', target);
+			this.add('-anim', source, 'Parting Shot', target);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Flying",
@@ -1416,7 +1416,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				pokemon.side.removeSideCondition('gaelstrom');
 			},
-			onEnd(side) {
+			onStart(side) {
 				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
 			},
 		},
@@ -1587,50 +1587,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			if (pokemon.species.forme === 'Low-Key') {
-				pokemon.formeChange(`toxtricity`, this.effect);
-				pokemon.moveSlots = pokemon.moveSlots.map(slot => {
-					const newMoves: {[k: string]: string} = {
-						boomburst: 'overdrive',
-						aurasphere: 'nastyplot',
-					};
-					if (slot.id in newMoves) {
-						const move = this.dex.getMove(newMoves[slot.id]);
-						const newSlot = {
-							id: move.id,
-							move: move.name,
-							// Luckily, both slots have the same number of PP
-							pp: slot.pp,
-							maxpp: move.pp * 8 / 5,
-							disabled: slot.disabled,
-							used: false,
-						};
-						return newSlot;
-					}
-					return slot;
-				});
+				changeSet(this, pokemon, ssbSets['Jho'], true);
 			} else {
-				pokemon.formeChange(`toxtricitylowkey`, this.effect);
-				pokemon.setAbility('venomize');
-				pokemon.moveSlots = pokemon.moveSlots.map(slot => {
-					const newMoves: {[k: string]: string} = {
-						overdrive: 'boomburst',
-						nastyplot: 'aurasphere',
-					};
-					if (slot.id in newMoves) {
-						const move = this.dex.getMove(newMoves[slot.id]);
-						const newSlot = {
-							id: move.id,
-							move: move.name,
-							// Luckily, both slots have the same number of PP
-							pp: slot.pp,
-							maxpp: move.pp * 8 / 5,
-							disabled: slot.disabled,
-							used: false,
-						};
-						return newSlot;
-					}
-					return slot;
-				});
+				changeSet(this, pokemon, ssbSets['Jho-Low-Key'], true);
 			}
 		},
 		boosts: {
