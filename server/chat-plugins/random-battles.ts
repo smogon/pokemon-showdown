@@ -4,7 +4,7 @@
  */
 
 import {FS} from "../../lib/fs";
-import {ssbSets} from "../../data/mods/ssb/random-teams";
+import {ssbSets, tweakMoves} from "../../data/mods/ssb/random-teams";
 import {Utils} from "../../lib/utils";
 
 const GEN_NAMES: {[k: string]: string} = {
@@ -308,10 +308,21 @@ function SSBSets(target: string) {
 	let buf = '';
 	for (const name of names) {
 		if (buf) buf += `<hr>`;
+		const useDisplayName = ['yuki', 'Robb576'].includes(displayName);
+		buf += `<details><summary>${useDisplayName ? name : displayName}</summary>`;
 		const set = ssbSets[name];
+		// We don't have access to a battle's RNG
+		const random = (m?: number, n?: number) => {
+			if (n !== undefined && m !== undefined) {
+				return Math.random() * (Math.floor(n) - Math.floor(m)) + Math.floor(m);
+			}
+			if (m !== undefined) return Math.random() + Math.floor(m);
+			return Math.random();
+		};
+		set.moves = tweakMoves(random, set.moves, name);
 		const mutatedSpecies = dex.getSpecies(set.species);
 		buf += `<img src="https://${Config.routes.client}/sprites/ani/${mutatedSpecies.spriteid}.gif" />`;
-		buf += Utils.html`<h1>${displayName === 'yuki' ? name : displayName}</h1>`;
+		buf += Utils.html`<h1>${useDisplayName ? name : displayName}</h1>`;
 		buf += `<details><summary>Set</summary>`;
 		buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(x => dex.getItem(x).name).join(' / ') : dex.getItem(set.item).name}</li>`;
 		buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.getAbility(x).name).join(' / ') : dex.getAbility(set.ability).name}</li>`;
@@ -399,6 +410,7 @@ function SSBSets(target: string) {
 			}
 			buf += `<p><strong>Custom Base Stats</strong>: ${stats.join(` / `)}</p>`;
 		}
+		buf += `</details>`;
 	}
 	return buf;
 }
