@@ -940,8 +940,8 @@ export class CommandContext extends MessageContext {
 		return true;
 	}
 	canPMLocked(user: User, lockedUser: User) {
-		const isPunishmentsAutolock = Punishments.userids.get(user.id)![3].includes('Autolocked for having punishments');
-		return user.can('lock') || !(
+		const isPunishmentsAutolock = Punishments.userids.get(lockedUser.id)![3].includes('Autolocked for having punishments');
+		return user.can('lock') || (
 			isPunishmentsAutolock &&
 			[...Rooms.rooms.values()].some(curRoom => !curRoom.settings.isPersonal && user?.can('editroom', null, curRoom))
 		);
