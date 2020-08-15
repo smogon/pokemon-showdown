@@ -939,6 +939,13 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
+	canPMLocked(user: User, lockedUser: User) {
+		const isPunishmentsAutolock = Punishments.userids.get(user.id)![3].includes('Autolocked for having punishments');
+		return user.can('lock') || !(
+			isPunishmentsAutolock &&
+			[...Rooms.rooms.values()].some(curRoom => !curRoom.settings.isPersonal && user?.can('editroom', null, curRoom))
+		);
+	}
 	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
 	canTalk(message: string, room?: Room | null, targetUser?: User | null): string | null;
@@ -962,7 +969,6 @@ export class CommandContext extends MessageContext {
 		}
 		if (!user.can('bypassall')) {
 			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
-			const canPMRoomOwners = !lockType || Punishments.userids.get(user.id)![3].includes('Autolocked for having punishments');
 			const lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
 				if (lockType && !room.settings.isHelp) {
@@ -1007,19 +1013,13 @@ export class CommandContext extends MessageContext {
 			// and these PM-related messages aren't attached to any rooms. If we ever get to letting users set their
 			// own language these messages should also be translated. - Asheviere
 			if (targetUser) {
-				if (
-					lockType &&
-					!targetUser.can('lock') &&
-					!(canPMRoomOwners && [...Rooms.rooms.values()].some(chatroom => {
-						if (chatroom.battle || chatroom.settings.isPersonal) return false;
-						return targetUser?.can('editroom', null, chatroom);
-					}))
-				) {
+				if (lockType && !this.canPMLocked(targetUser, user)) {
+					const canPMRoomOwners = Punishments.userids.get(user.id)![3].includes('Autolocked for having punishments');
 					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team${canPMRoomOwners ? ` and Room Owners` : ``}. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
 					return null;
 				}
-				if (targetUser.locked && !user.can('lock')) {
+				if (targetUser.locked && !this.canPMLocked(user, targetUser)) {
 					this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 					return null;
 				}
