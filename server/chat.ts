@@ -1010,9 +1010,9 @@ export class CommandContext extends MessageContext {
 				if (
 					lockType &&
 					!targetUser.can('lock') &&
-					!(canPMRoomOwners && [...Rooms.rooms.values()].some(room => {
-						if (room.battle || room.settings.isPersonal) return false;
-						return targetUser?.can('editroom', null, room);
+					!(canPMRoomOwners && [...Rooms.rooms.values()].some(chatroom => {
+						if (chatroom.battle || chatroom.settings.isPersonal) return false;
+						return targetUser?.can('editroom', null, chatroom);
 					}))
 				) {
 					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team${canPMRoomOwners ? ` and Room Owners` : ``}. ${lockExpiration}`);
