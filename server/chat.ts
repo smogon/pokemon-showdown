@@ -1659,7 +1659,7 @@ export const Chat = new class {
 				const baseEntry = commandTable[baseCommand];
 				if (baseEntry) {
 					entry.requiresRoom = baseEntry.requiresRoom;
-					entry.hasRoompermissions = baseEntry.hasRoomPermissions;
+					entry.hasRoomPermissions = baseEntry.hasRoomPermissions;
 					entry.broadcastable = baseEntry.broadcastable;
 				}
 			}
