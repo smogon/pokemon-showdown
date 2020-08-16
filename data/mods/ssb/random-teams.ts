@@ -278,6 +278,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blackbird',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	KennedyLFC: {
+		species: 'Cinderace', ability: 'False Nine', item: 'Choice Band', gender: 'M',
+		moves: ['High Jump Kick', 'Triple Axel', 'U-turn'],
+		signatureMove: 'Top Bins',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
+	},
 	Kingbaruk: {
 		species: 'Stonjourner', ability: 'Sturdy', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Diamond Storm', ['Superpower', 'Earthquake'], 'King\'s Shield'],

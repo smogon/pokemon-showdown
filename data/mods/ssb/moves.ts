@@ -1428,13 +1428,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// KennedyLFC
+	topbins: {
+		accuracy: 70,
+		basePower: 130,
+		category: "Physical",
+		desc: "Has a 20% chance to burn the target and a 10% chance to flinch it.",
+		shortDesc: "20% chance to burn. 10% chance to flinch.",
+		name: "Top Bins",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Pyro Ball', target);
+			this.add('-anim', source, 'Blaze Kick', target);
+		},
+		secondaries: [
+			{
+				chance: 20,
+				status: 'brn',
+			}, {
+				chance: 10,
+				volatileStatus: 'flinch',
+			},
+		],
+		target: "normal",
+		type: "Fire",
+	},
+
 	// Kingbaruk
 	leaveittotheteam: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user faints and the Pokemon brought out to replace it gets healing wish effects, 1 boost to attack, defense, special attack and special defense.",
-		shortDesc: "User faints. Replacement Healing Wish Effects, gets +1 Attack, +1 Defense, +1 Special Attack and +1 Special Defense.",
+		shortDesc: "User faints. Replacement gets healed & +1 Atk/Def/SpA/SpD.",
 		name: "Leave it to the team!",
 		pp: 5,
 		priority: 0,
@@ -1454,7 +1486,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onStart(side, source) {
-				this.debug('Leave it to the team started on ' + side.name);
+				this.debug('Leave it to the team! started on ' + side.name);
 				this.effectData.positions = [];
 				for (const i of side.active.keys()) {
 					this.effectData.positions[i] = false;
@@ -1477,7 +1509,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
-					this.add('-heal', target, target.getHealth, '[from] move: Leave it to the team');
+					this.add('-heal', target, target.getHealth, '[from] move: Leave it to the team!');
 					positions[target.position] = false;
 				}
 				if (!positions.some(affected => affected === true)) {
@@ -1496,7 +1528,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 90,
 		category: "Physical",
 		desc: "If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user restores 1/8 of its maximum HP, rounded half up. Target can't use status moves its next 3 turns. Lowers the target's Attack by 1 stages.",
-		shortDesc: "Deals damage, heals 1/8, taunts, lowers Atk, and switches out.",
+		shortDesc: "Heals 1/8, taunts, lowers Atk, switches out.",
 		name: "Clash of Pangoros",
 		pp: 10,
 		priority: 0,
@@ -1529,7 +1561,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 120,
 		category: "Special",
 		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
-		shortDesc: "33% recoil; resets field's hazards, weather, screens and terrains.",
+		shortDesc: "33% recoil; removes hazards/weather/terrain.",
 		name: "Big Bang",
 		pp: 5,
 		priority: 0,

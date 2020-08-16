@@ -770,6 +770,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// KennedyLFC
+	falsenine: {
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This Pokemon's critical hit ratio is raised by 1 stage.",
+		shortDesc: "Pokemon's type changes to match the type of the move it's about to use. +1 crit ratio.",
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced) return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
+			}
+		},
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
+		name: "False Nine",
+	},
+
 	// KingSwordYT
 	bambookingdom: {
 		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using physical moves against this Pokemon lose 1/8 of their maximum HP. Pokemon using special moves against this Pokemon lose 1/16 of their maximum HP. Attacking moves have their priority set to -7.",
