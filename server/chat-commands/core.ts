@@ -1580,7 +1580,7 @@ export const commands: ChatCommands = {
 
 		let namespace = Chat.commands;
 
-		let currentBestHelp: {help: string[] | Chat.ChatHandler, for: string[]} | null = null;
+		let currentBestHelp: {help: string[] | Chat.AnnotatedChatHandler, for: string[]} | null = null;
 
 		for (const [i, cmd] of cmds.entries()) {
 			let nextNamespace = namespace[cmd];
@@ -1600,7 +1600,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`'/${cmds.slice(0, i + 1).join(' ')}' is a help command.`);
 				return this.parse(`/${target}`);
 			}
-			if (!nextNamespace || typeof nextNamespace === 'boolean') {
+			if (!nextNamespace) {
 				return this.errorReply(`The command '/${target}' does not exist.`);
 			}
 
@@ -1621,6 +1621,11 @@ export const commands: ChatCommands = {
 
 		if (currentBestHelp.for.length < cmds.length) {
 			this.errorReply(`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
+		}
+
+		const curHandler = this.parseCommand(`/${currentBestHelp.for.join(' ')}`)?.handler;
+		if (curHandler?.isPrivate && !user.can('lock')) {
+			return this.errorReply(`The command '/${target}' does not exist.`);
 		}
 
 		if (typeof currentBestHelp.help === 'function') {
