@@ -609,6 +609,11 @@ export class CommandContext extends MessageContext {
 		// type checked above
 		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler] as ChatHandler;
 		let result;
+		if (!(commandHandler as AnnotatedChatHandler).broadcastable && this.cmdToken === '!') {
+			this.errorReply(`You are trying to broadcast a command that cannot be broadcast.`);
+			this.errorReply(`Use /${this.fullCmd} instead.`);
+			return false;
+		}
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		} catch (err) {
@@ -1646,6 +1651,18 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
+
+			// assign properties from the base command if the current command uses CommandContext.run.
+			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
+			if (runsCommand) {
+				const [, baseCommand] = runsCommand;
+				const baseEntry = commandTable[baseCommand];
+				if (baseEntry) {
+					if (baseEntry.requiresRoom) entry.requiresRoom = baseEntry.requiresRoom;
+					if (baseEntry.hasRoomPermissions) entry.hasRoomPermissions = baseEntry.hasRoomPermissions;
+					if (baseEntry.broadcastable) entry.broadcastable = baseEntry.broadcastable;
+				}
+			}
 
 			// This is usually the same as `entry.name`, but some weirdness like
 			// `commands.a = b` could screw it up. This should make it consistent.
