@@ -898,6 +898,7 @@ export class User extends Chat.MessageContext {
 			// 'Ban spectators' checkbox on the client can be kept in sync (and disable privacy correctly)
 			hiddenNextBattle: this.battleSettings.hidden,
 			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
+			language: this.language,
 		};
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
