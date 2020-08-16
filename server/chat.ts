@@ -448,7 +448,7 @@ export class CommandContext extends MessageContext {
 				if (this.cmdToken) {
 					// To guard against command typos, show an error message
 					if (!(this.shouldBroadcast() && !/[a-z0-9]/.test(this.cmd.charAt(0)))) {
-						this.commandDoesntExist();
+						this.commandDoesNotExist();
 					}
 				} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
 						VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
@@ -871,7 +871,7 @@ export class CommandContext extends MessageContext {
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
 			throw new Chat.ErrorMessage("This is a secret command and you have the wrong visual rank for it.");
 		}
-		this.commandDoesntExist();
+		this.commandDoesNotExist();
 	}
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
@@ -1364,7 +1364,7 @@ export class CommandContext extends MessageContext {
 	requiresRoom() {
 		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
-	commandDoesntExist(): never {
+	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
 			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.cmd}" does not exist.`);
 		}
@@ -1661,7 +1661,7 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
-			entry.isPrivate = /\bthis\.(?:privatelyCan|commandDoesntExist)\(/.test(handlerCode);
+			entry.isPrivate = /\bthis\.(?:privatelyCan|commandDoesNotExist)\(/.test(handlerCode);
 
 			// This is usually the same as `entry.name`, but some weirdness like
 			// `commands.a = b` could screw it up. This should make it consistent.
