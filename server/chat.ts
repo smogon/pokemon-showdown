@@ -1129,9 +1129,8 @@ export class CommandContext extends MessageContext {
 	canPM(targetUser: User) {
 		const user = this.user;
 
-		// for hotpatching, remove later.
-		const curSettings = Chat.updateSettings(user); // will just be user.settings
-		const tarSettings = Chat.updateSettings(targetUser); // will just be targetUser.settings
+		const userSettings = user.settings.blockPMs;
+		const targetUserSettings = targetUser.settings.blockPMs;
 
 		if (targetUser.locked && !user.can('lock')) {
 			this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
@@ -1146,9 +1145,9 @@ export class CommandContext extends MessageContext {
 			return null;
 		}
 		if (
-			(tarSettings.all === true ||
-			!Users.globalAuth.atLeast(user, tarSettings.all as GroupSymbol) && typeof curSettings.all === 'string' ||
-			tarSettings.specific?.includes(user.id)) &&
+			(targetUserSettings.all === true ||
+			!Users.globalAuth.atLeast(user, targetUserSettings.all as GroupSymbol) && typeof userSettings.all === 'string' ||
+			targetUserSettings.specific?.includes(user.id)) &&
 			!user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
@@ -1162,9 +1161,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 		if (
-			(curSettings.all === true ||
-			!Users.globalAuth.atLeast(user, curSettings.all as GroupSymbol) && typeof tarSettings.all === 'string' ||
-			curSettings.specific?.includes(user.id)) &&
+			(userSettings.all === true ||
+			!Users.globalAuth.atLeast(user, userSettings.all as GroupSymbol) && typeof targetUserSettings.all === 'string' ||
+			userSettings.specific.includes(user.id)) &&
 			!targetUser.can('lock')
 		) {
 			const isBlocked = user.settings.blockPMs.specific?.includes(targetUser.id);
@@ -2066,16 +2065,6 @@ export const Chat = new class {
 			message = message.replace(/([A-Z])/g, ' $1').trim();
 		}
 		return ' ' + message.toLowerCase() + ' ';
-	}
-
-	/**
-	 * JUST FOR HOTPATCHING. To be removed later.
-	 */
-	updateSettings(user: User) {
-		if (typeof user.settings.blockPMs === 'boolean') {
-			user.settings.blockPMs = {all: user.settings.blockPMs};
-		}
-		return user.settings.blockPMs;
 	}
 
 	/**
