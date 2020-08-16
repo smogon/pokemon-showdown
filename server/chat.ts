@@ -46,6 +46,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	broadcastable: boolean,
 	cmd: string,
 	fullCmd: string,
+	isPrivate: boolean,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -439,27 +440,37 @@ export class CommandContext extends MessageContext {
 
 		if (this.user.statusType === 'idle') this.user.setStatusType('online');
 
-		if (this.handler) {
-			message = this.run(this.handler);
-		} else {
-			if (this.cmdToken) {
-				// To guard against command typos, show an error message
-				if (this.shouldBroadcast()) {
-					if (/[a-z0-9]/.test(this.cmd.charAt(0))) {
-						return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
+		try {
+			if (this.handler) {
+				message = this.run(this.handler);
+			} else {
+				if (this.cmdToken) {
+					// To guard against command typos, show an error message
+					if (!(this.shouldBroadcast() && !/[a-z0-9]/.test(this.cmd.charAt(0)))) {
+						this.commandDoesNotExist();
 					}
-				} else {
-					return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
+				} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
+						VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+					message = message.trim();
+					if (message.charAt(0) !== BROADCAST_TOKEN) {
+						message = message.charAt(0) + message;
+					}
 				}
-			} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
-					VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
-				message = message.trim();
-				if (message.charAt(0) !== BROADCAST_TOKEN) {
-					message = message.charAt(0) + message;
-				}
-			}
 
-			message = this.canTalk(message);
+				message = this.canTalk(message);
+			}
+		} catch (err) {
+			if (err.name?.endsWith('ErrorMessage')) {
+				this.errorReply(err.message);
+				return false;
+			}
+			Monitor.crashlog(err, 'A chat command', {
+				user: this.user.name,
+				room: this.room?.roomid,
+				pmTarget: this.pmTarget?.name,
+				message: this.message,
+			});
+			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 		}
 
 		// Output the message
@@ -605,30 +616,14 @@ export class CommandContext extends MessageContext {
 			handler: commandHandler as AnnotatedChatHandler | null,
 		};
 	}
-	run(commandHandler: string | {call: (...args: any[]) => any}) {
-		// type checked above
-		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler] as ChatHandler;
-		let result;
-		if (!(commandHandler as AnnotatedChatHandler).broadcastable && this.cmdToken === '!') {
-			this.errorReply(`You are trying to broadcast a command that cannot be broadcast.`);
+	run(handler: string | AnnotatedChatHandler) {
+		if (typeof handler === 'string') handler = Chat.commands[handler] as AnnotatedChatHandler;
+		if (!handler.broadcastable && this.cmdToken === '!') {
+			this.errorReply(`The command "${this.fullCmd}" can't be broadcast.`);
 			this.errorReply(`Use /${this.fullCmd} instead.`);
 			return false;
 		}
-		try {
-			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
-		} catch (err) {
-			if (err.name?.endsWith('ErrorMessage')) {
-				this.errorReply(err.message);
-				return false;
-			}
-			Monitor.crashlog(err, 'A chat command', {
-				user: this.user.name,
-				room: this.room?.roomid,
-				pmTarget: this.pmTarget?.name,
-				message: this.message,
-			});
-			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
-		}
+		let result: any = handler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		if (result === undefined) result = false;
 
 		return result;
@@ -862,7 +857,7 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.cmd, true)) return true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
 			// If we need to use the true group's permission, reset the visual group
 			this.user.resetVisualGroup();
@@ -870,6 +865,16 @@ export class CommandContext extends MessageContext {
 		}
 		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
 		return false;
+	}
+	privatelyCan(permission: RoomPermission, target: User | null, room: Room): boolean;
+	privatelyCan(permission: GlobalPermission, target?: User | null): boolean;
+	privatelyCan(permission: string, target: User | null = null, room: Room | null = null) {
+		this.handler!.isPrivate = true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
+			throw new Chat.ErrorMessage("This is a secret command and you have the wrong visual rank for it.");
+		}
+		this.commandDoesNotExist();
 	}
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
@@ -1362,6 +1367,14 @@ export class CommandContext extends MessageContext {
 	requiresRoom() {
 		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
+	commandDoesNotExist(): never {
+		if (this.cmdToken === '!') {
+			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.cmd}" does not exist.`);
+		}
+		throw new Chat.ErrorMessage(
+			`The command "${this.cmdToken}${this.cmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
+		);
+	}
 }
 
 export const Chat = new class {
@@ -1651,6 +1664,7 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
+			entry.isPrivate = /\bthis\.(?:privatelyCan|commandDoesNotExist)\(/.test(handlerCode);
 
 			// assign properties from the base command if the current command uses CommandContext.run.
 			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
@@ -1661,6 +1675,7 @@ export const Chat = new class {
 					if (baseEntry.requiresRoom) entry.requiresRoom = baseEntry.requiresRoom;
 					if (baseEntry.hasRoomPermissions) entry.hasRoomPermissions = baseEntry.hasRoomPermissions;
 					if (baseEntry.broadcastable) entry.broadcastable = baseEntry.broadcastable;
+					if (baseEntry.isPrivate) entry.isPrivate = baseEntry.isPrivate;
 				}
 			}
 
