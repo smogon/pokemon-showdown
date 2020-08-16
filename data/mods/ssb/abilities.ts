@@ -386,6 +386,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Celine
+	guardianarmor: {
+		desc: "Raises Defense and Special Defense by two stages upon switch in.",
+		shortDesc: "+2 Def and SpD on switch in.",
+		name: "Guardian Armor",
+		onStart(pokemon) {
+			this.boost({def: 2, spd: 2}, pokemon);
+		},
+	},
+
 	// Darth
 	guardianangel: {
 		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last and stats Pokemon in before it.",

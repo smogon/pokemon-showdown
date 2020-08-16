@@ -295,6 +295,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	celine: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Celine')}|Support has arrived!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Celine')}|Brb writing`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Celine')}|'Tis only a flesh wound!`); // escape the quote?
+		},
+	},
 	chloe: {
 		noCopy: true,
 		onStart() {

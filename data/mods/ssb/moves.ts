@@ -667,6 +667,77 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Celine
+	statusguard: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Protects from physical moves. If hit by physical move, opponent is either badly poisoned, burned, or paralyzed at random and is forced out. Special attacks and status moves go through this protect.",
+		shortDesc: "Protected from physical attacks. Contact: burn, par, or tox.",
+		name: "Status Guard",
+		pp: 10,
+		priority: 4,
+		flags: {protect: 1},
+		stallingMove: true,
+		volatileStatus: 'statusguard',
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Protect', source);
+		},
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect']) {
+					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.category === 'Special' || move.category === 'Status') {
+					return;
+				} else if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.category === 'Physical') {
+					const statuses = ['brn', 'par', 'tox'];
+					source.trySetStatus(this.sample(statuses), target);
+					source.forceSwitchFlag = true;
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.category === 'Physical') {
+					const statuses = ['brn', 'par', 'tox'];
+					source.trySetStatus(this.sample(statuses), target);
+					source.forceSwitchFlag = true;
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// Chloe
 	vsni: {
 		accuracy: 55,

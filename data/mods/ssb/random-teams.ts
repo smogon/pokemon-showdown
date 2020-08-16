@@ -137,6 +137,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Celine: {
+		species: 'Lucario', ability: 'Guardian Armor', item: 'Leftovers', gender: 'F',
+		moves: ['Wish', 'Teleport', 'Drain Punch'],
+		signatureMove: 'Status Guard',
+		evs: {hp: 248, def: 252, spd: 8}, nature: 'Impish',
+	},
 	Chloe: {
 		species: 'Delphox', ability: 'No Guard', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Nasty Plot', 'Inferno', 'Psystrike'],
