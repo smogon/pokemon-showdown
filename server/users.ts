@@ -310,7 +310,7 @@ export interface UserSettings {
 	blockPMs: boolean | AuthLevel;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
-  doNotDisturb: boolean;
+	doNotDisturb: boolean;
 }
 
 // User
