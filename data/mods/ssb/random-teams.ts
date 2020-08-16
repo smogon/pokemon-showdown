@@ -229,6 +229,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Steroid Anaphylaxia',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Hydro: {
+		species: 'Pichu', ability: 'Hydrostatic', item: 'Eviolite', gender: 'M',
+		moves: ['Hydro Pump', 'Thunder', 'Ice Beam'],
+		signatureMove: 'Hydrostatics',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest'
+	},
 	Inactive: {
 		species: 'Gyarados', ability: 'Dragon Scale', item: 'Gyaradosite', gender: '',
 		moves: ['Dragon Dance', 'Earthquake', 'Crabhammer'],

@@ -491,6 +491,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Hubriz')}|Delicate Flower Quest failed...`);
 		},
 	},
+	hydro: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|${getName('Hydro')}|Person reading this is a qt nerd and there is absolutely NOTHING u can do about it :)`);
+			if (pokemon.illusion) return;
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Hydro')}|brb, taking a break from ur nerdiness`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Hydro')}|RUUUUUDEEE`);
+		},
+	},
 	inactive: {
 		noCopy: true,
 		onStart() {

@@ -649,6 +649,39 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Hydro
+	hydrostatic: {
+		desc: "This Pokemon is immune to Water- and Electric-type moves and raises its Special Attack by 1 stage when hit by a Water- or Electric-type move. If this Pokemon is not the target of a single-target Water- or Electric-type move used by another Pokemon, this Pokemon redirects that move to itself if it is within the range of that move. This Pokemon's Water- and Electric-type moves have their accuracy multiplied by 1.3.",
+		shortDesc: "Storm Drain + Lightning Rod. Water/Electric moves used by this Pokemon have 1.3x acc.",
+		onSourceModifyAccuracyPriority: 9,
+		onSourceModifyAccuracy(accuracy, source, target, move) {
+			if (typeof accuracy !== 'number') return;
+			if (!['Water', 'Electric'].includes(move.type)) return;
+			this.debug('hydrostatic - enhancing accuracy');
+			return accuracy * 1.3;
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && ['Water', 'Electric'].includes(move.type)) {
+				if (!this.boost({spa: 1})) {
+					this.add('-immune', target, '[from] ability: Hydrostatic');
+				}
+				return null;
+			}
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			if (!['Water', 'Electric'].includes(move.type) || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
+			if (this.validTarget(this.effectData.target, source, redirectTarget)) {
+				if (move.smartTarget) move.smartTarget = false;
+				if (this.effectData.target !== target) {
+					this.add('-activate', this.effectData.target, 'ability: Hydrostatic');
+				}
+				return this.effectData.target;
+			}
+		},
+		name: "Hydrostatic",
+	},
+
 	// Inactive
 	dragonscale: {
 		shortDesc: "If this Pokemon gets statused, its Def is 1.5x and it restores 25% HP.",

@@ -1209,6 +1209,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// Hydro
+	hydrostatics: {
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage and a 50% chance to paralyze the target. This move combines Water in its type effectiveness against the target.",
+		shortDesc: "70% boost SpA;50% para;Combine Water in typeeff.",
+		name: "Hydrostatics",
+		pp: 10,
+		priority: 2,
+		flags: {protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Origin Pulse', target);
+			this.add('-anim', source, 'Crarge Beam', target);
+		},
+		secondaries: [
+			{
+				chance: 70,
+				self: {
+					boosts: {
+						spa: 1,
+					},
+				},
+			}, {
+				chance: 50,
+				status: 'par',
+			},
+		],
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Water', type);
+		},
+		target: "normal",
+		type: "Electric",
+	},
+
 	// Inactive
 	paranoia: {
 		accuracy: 90,
