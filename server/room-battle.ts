@@ -483,7 +483,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	p2: RoomBattlePlayer;
 	p3: RoomBattlePlayer;
 	p4: RoomBattlePlayer;
-	inviteOnlySetter: ID | 'staff' | null;
+	inviteOnlySetter: ID | null;
 	logData: AnyObject | null;
 	endType: string;
 	/**

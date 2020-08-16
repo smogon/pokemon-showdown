@@ -178,7 +178,7 @@ export const commands: ChatCommands = {
 			if (room.battle.inviteOnlySetter && !user.can('mute', null, room) && room.battle.inviteOnlySetter !== user.id) {
 				return this.errorReply(`Only the person who set this battle to be invite-only can turn it off.`);
 			}
-			room.battle.inviteOnlySetter = user.can('mute', null, room) ? 'staff' : user.id;
+			room.battle.inviteOnlySetter = user.id;
 		} else if (room.settings.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else {
