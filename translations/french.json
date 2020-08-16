@@ -129,6 +129,16 @@
 		"You are already available for challenges!": "Tu es déjà disponible pour les challenges !",
 		"You are available for challenges from now on.": "Tu es maintenant disponible pour les challenges.",
 
+    	"Staff FAQ": "",
+		"You cannot broadcast all FAQs at once.": "",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "",
+		"How the ladder works": "",
+		"Tiering FAQ": "",
+		"Badge FAQ": "",
+		"Common misconceptions about our RNG": "",
+		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "",
+		"Frequently Asked Questions": "",
+
 		"The announcement has ended.": "L'annonce est terminée.",
 		"Battles do not support announcements.": "Les combats ne permettent pas de faire des annonces.",
 		"You are not allowed to use filtered words in announcements.": "Tu n'es pas autorisé à utiliser des mots filtrés dans les annonces.",
