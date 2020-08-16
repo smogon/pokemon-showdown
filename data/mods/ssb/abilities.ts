@@ -669,7 +669,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (!['Water', 'Electric'].includes(move.type) || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			if (!['Water', 'Electric'].includes(move.type) ||
+				['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectData.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
