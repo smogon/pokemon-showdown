@@ -96,10 +96,12 @@ exports.proxyip = false;
  *
  * Write heapdumps if that processs run out of memory.
  *
- * If you wish to enable this, you will need to install node-oom-heapdump,
- * as it is sometimes not installed by default:
+ * If you wish to enable this, you will need to install node-oom-heapdump:
  *
- *     $ npm install node-oom-heapdump
+ *     $ npm install --no-save node-oom-heapdump
+ *
+ * We don't install it by default because it's super flaky and frequently
+ * crashes the installation process.
  *
  * You might also want to signal processes to put them in debug mode, for
  * access to on-demand heapdumps.
