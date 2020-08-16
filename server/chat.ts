@@ -441,27 +441,37 @@ export class CommandContext extends MessageContext {
 
 		if (this.user.statusType === 'idle') this.user.setStatusType('online');
 
-		if (this.handler) {
-			message = this.run(this.handler);
-		} else {
-			if (this.cmdToken) {
-				// To guard against command typos, show an error message
-				if (this.shouldBroadcast()) {
-					if (/[a-z0-9]/.test(this.cmd.charAt(0))) {
-						return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
+		try {
+			if (this.handler) {
+				message = this.run(this.handler);
+			} else {
+				if (this.cmdToken) {
+					// To guard against command typos, show an error message
+					if (!(this.shouldBroadcast() && !/[a-z0-9]/.test(this.cmd.charAt(0)))) {
+						this.commandDoesntExist();
 					}
-				} else {
-					return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
+				} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
+						VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+					message = message.trim();
+					if (message.charAt(0) !== BROADCAST_TOKEN) {
+						message = message.charAt(0) + message;
+					}
 				}
-			} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
-					VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
-				message = message.trim();
-				if (message.charAt(0) !== BROADCAST_TOKEN) {
-					message = message.charAt(0) + message;
-				}
-			}
 
-			message = this.canTalk(message);
+				message = this.canTalk(message);
+			}
+		} catch (err) {
+			if (err.name?.endsWith('ErrorMessage')) {
+				this.errorReply(err.message);
+				return false;
+			}
+			Monitor.crashlog(err, 'A chat command', {
+				user: this.user.name,
+				room: this.room?.roomid,
+				pmTarget: this.pmTarget?.name,
+				message: this.message,
+			});
+			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 		}
 
 		// Output the message
@@ -610,22 +620,7 @@ export class CommandContext extends MessageContext {
 	run(commandHandler: string | {call: (...args: any[]) => any}) {
 		// type checked above
 		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler] as ChatHandler;
-		let result;
-		try {
-			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
-		} catch (err) {
-			if (err.name?.endsWith('ErrorMessage')) {
-				this.errorReply(err.message);
-				return false;
-			}
-			Monitor.crashlog(err, 'A chat command', {
-				user: this.user.name,
-				room: this.room?.roomid,
-				pmTarget: this.pmTarget?.name,
-				message: this.message,
-			});
-			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
-		}
+		let result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		if (result === undefined) result = false;
 
 		return result;
@@ -865,7 +860,6 @@ export class CommandContext extends MessageContext {
 			this.user.resetVisualGroup();
 			return true;
 		}
-		if (this.handler!.isPrivate) return this.secretCommand();
 		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
 		return false;
 	}
@@ -875,12 +869,9 @@ export class CommandContext extends MessageContext {
 		this.handler!.isPrivate = true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			// If we need to use the true group's permission, reset the visual group
-			this.user.resetVisualGroup();
-			return true;
+			throw new Chat.ErrorMessage("This is a secret command and you have the wrong visual rank for it.");
 		}
-		this.secretCommand();
-		return false;
+		this.commandDoesntExist();
 	}
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
@@ -1373,16 +1364,12 @@ export class CommandContext extends MessageContext {
 	requiresRoom() {
 		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 	}
-	secretCommand() {
-		const full = this.fullCmd;
-		const token = this.cmdToken;
-		if (token === '!') {
-			throw new Chat.ErrorMessage(`The command "${token}${this.cmd}" does not exist.`);
+	commandDoesntExist(): never {
+		if (this.cmdToken === '!') {
+			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.cmd}" does not exist.`);
 		}
 		throw new Chat.ErrorMessage(
-			`The command "${token}${this.cmd}" does not exist. ` +
-			`To send a message starting with "${token}${full}", ` +
-			`type "${token}${token}${full}".`
+			`The command "${this.cmdToken}${this.cmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
 		);
 	}
 }
@@ -1674,6 +1661,7 @@ export const Chat = new class {
 			entry.requiresRoom = /\bthis\.requiresRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.can\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = /\bthis\.(?:canBroadcast|runBroadcast)\(/.test(handlerCode);
+			entry.isPrivate = /\bthis\.(?:privatelyCan|commandDoesntExist)\(/.test(handlerCode);
 
 			// This is usually the same as `entry.name`, but some weirdness like
 			// `commands.a = b` could screw it up. This should make it consistent.
@@ -1684,7 +1672,7 @@ export const Chat = new class {
 	}
 	loadPluginData(plugin: AnyObject) {
 		if (plugin.commands) {
-			Object.assign(Chat.commands, this.annotateCommands(plugin.commands, ''));
+			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
