@@ -72,6 +72,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldex') {
+				this.add('html', '<div class="broadcast-blue"><strong>UU is currently suspecting Jirachi! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668911/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] RU",
@@ -398,11 +403,16 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
 		banlist: [
 			'Alakazam-Mega', 'Arceus', 'Blastoise-Mega', 'Blaziken', 'Darkrai', 'Darmanitan-Galar', 'Deoxys-Attack', 'Deoxys-Base', 'Deoxys-Speed', 'Dialga',
-			'Eternatus', 'Genesect', 'Gengar-Mega', 'Giratina', 'Greninja-Ash', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
+			'Eternatus', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
 			'Landorus-Base', 'Lucario-Mega', 'Lugia', 'Lunala', 'Marshadow', 'Metagross-Mega', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Tornadus-Therian', 'Urshifu-Base', 'Xerneas', 'Yveltal',
-			'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
+			'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldex') {
+				this.add('html', '<div class="broadcast-blue"><strong>National Dex is currently suspecting Ash-Greninja! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668917/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] National Dex UU",
