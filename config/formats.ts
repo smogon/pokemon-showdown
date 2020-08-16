@@ -73,7 +73,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle'],
 		onBegin() {
-			if (this.rated && this.format.id === 'gen8nationaldex') {
+			if (this.rated && this.format.id === 'gen8uu') {
 				this.add('html', '<div class="broadcast-blue"><strong>UU is currently suspecting Jirachi! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668911/">suspect thread</a>.</strong></div>');
 			}
 		},
