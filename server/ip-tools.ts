@@ -44,6 +44,11 @@ export const IPTools = new class {
 
 	readonly connectionTestCache = new Map<string, boolean>();
 
+	// eslint-disable-next-line max-len
+	readonly ipRegex = /\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b/;
+
+	readonly hostRegex = /^.+\..{2,}$/;
+
 	async lookup(ip: string) {
 		// known TypeScript bug
 		// https://github.com/microsoft/TypeScript/issues/33752
@@ -362,7 +367,7 @@ export const IPTools = new class {
 					if (sortedRanges[iMin + 1]?.minIP <= insertion.maxIP) {
 						throw new Error("You can only widen one address range at a time.");
 					}
-					return true;
+					return iMin;
 				}
 				throw new Error(
 					`Too wide: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +

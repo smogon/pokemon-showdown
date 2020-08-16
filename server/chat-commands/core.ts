@@ -15,7 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
-type UserSettings = import('../users').User['settings'];
+import type {UserSettings} from '../users';
 
 const avatarTable = new Set([
 	'aaron',
@@ -901,7 +901,7 @@ export const commands: ChatCommands = {
 		}
 		let resultString = Dex.stringifyTeam(teamStrings);
 		if (showAll) {
-			resultString = `<details><summary>View team</summary><${resultString}</details>`;
+			resultString = `<details><summary>View team</summary>${resultString}</details>`;
 		}
 		this.runBroadcast();
 		return this.sendReplyBox(resultString);

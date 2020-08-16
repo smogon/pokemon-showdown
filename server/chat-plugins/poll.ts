@@ -164,7 +164,7 @@ export class Poll {
 			c++;
 		}
 		if (!option && !ended) {
-			output += `div><small>(${this.room.tr`You can't vote after viewing results`})</small></div>`;
+			output += `<div><small>(${this.room.tr`You can't vote after viewing results`})</small></div>`;
 		}
 		output += '</div>';
 

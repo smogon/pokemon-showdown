@@ -449,6 +449,7 @@ export class ModdedDex {
 			species.nfe = species.evos.length && this.getSpecies(species.evos[0]).gen <= this.gen;
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
+			if (this.gen === 1) species.bst -= species.baseStats.spd;
 		} else {
 			species = new Data.Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
@@ -1365,7 +1366,7 @@ export class ModdedDex {
 				if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
 			}
 			if (evs.length) output += `EVs: ${evs.join(' / ')}<br/>`;
-			if (mon.nature) output += `${mon.nature} Nature<br/>`;
+			if (mon.nature) output += `${this.getNature(mon.nature).name} Nature<br/>`;
 			const ivs = [];
 			for (const stat in mon.ivs) {
 				if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);

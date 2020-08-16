@@ -6,8 +6,7 @@
  */
 
 import * as defaults from '../config/config-example';
-type GroupInfo = import('./user-groups').GroupInfo;
-type EffectiveGroupSymbol = import('./user-groups').EffectiveGroupSymbol;
+import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
