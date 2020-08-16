@@ -162,6 +162,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Monster", "Dragon"],
+		changesFrom: "Charizard",
 	},
 	squirtle: {
 		num: 7,
@@ -236,6 +237,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
+		changesFrom: "Blastoise",
 	},
 	caterpie: {
 		num: 10,
@@ -289,6 +291,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Bug"],
+		changesFrom: "Butterfree",
 	},
 	weedle: {
 		num: 13,
@@ -769,6 +772,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
+		changesFrom: "Pikachu",
 	},
 	pikachuworld: {
 		num: 25,
@@ -1315,6 +1319,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Yellow",
 		eggGroups: ["Field"],
+		changesFrom: "Meowth",
 	},
 	persian: {
 		num: 53,
@@ -1579,6 +1584,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Gray",
 		eggGroups: ["Human-Like"],
+		changesFrom: "Machamp",
 	},
 	bellsprout: {
 		num: 69,
@@ -2123,6 +2129,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Amorphous"],
+		changesFrom: "Gengar",
 	},
 	onix: {
 		num: 95,
@@ -2199,6 +2206,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Water 3"],
+		changesFrom: "Kingler",
 	},
 	voltorb: {
 		num: 100,
@@ -2769,6 +2777,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
+		changesFrom: "Lapras",
 	},
 	ditto: {
 		num: 132,
@@ -2825,6 +2834,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Brown",
 		eggGroups: ["Field"],
+		changesFrom: "Eevee",
 	},
 	vaporeon: {
 		num: 134,
@@ -2996,6 +3006,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Black",
 		eggGroups: ["Monster"],
+		changesFrom: "Snorlax",
 	},
 	articuno: {
 		num: 144,
@@ -9828,6 +9839,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Mineral"],
+		changesFrom: "Garbodor",
 	},
 	zorua: {
 		num: 570,
@@ -14083,6 +14095,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Melmetal",
 	},
 	grookey: {
 		num: 810,
@@ -14140,6 +14153,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Field", "Grass"],
+		changesFrom: "Rillaboom",
 	},
 	scorbunny: {
 		num: 813,
@@ -14197,6 +14211,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Field", "Human-Like"],
+		changesFrom: "Cinderace",
 	},
 	sobble: {
 		num: 816,
@@ -14254,6 +14269,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
+		changesFrom: "Inteleon",
 	},
 	skwovet: {
 		num: 819,
@@ -14332,6 +14348,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Flying"],
+		changesFrom: "Corviknight",
 	},
 	blipbug: {
 		num: 824,
@@ -14385,6 +14402,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Bug"],
+		changesFrom: "Orbeetle",
 	},
 	nickit: {
 		num: 827,
@@ -14499,6 +14517,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Monster", "Water 1"],
+		changesFrom: "Drednaw",
 	},
 	yamper: {
 		num: 835,
@@ -14577,6 +14596,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Black",
 		eggGroups: ["Mineral"],
+		changesFrom: "Coalossal",
 	},
 	applin: {
 		num: 840,
@@ -14617,6 +14637,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Grass", "Dragon"],
+		changesFrom: "Flapple",
 	},
 	appletun: {
 		num: 842,
@@ -14645,6 +14666,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Grass", "Dragon"],
+		changesFrom: "Appletun",
 	},
 	silicobra: {
 		num: 843,
@@ -14684,6 +14706,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Field", "Dragon"],
+		changesFrom: "Sandaconda",
 	},
 	cramorant: {
 		num: 845,
@@ -14811,6 +14834,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Human-Like"],
+		changesFrom: "Toxtricity",
 	},
 	toxtricitylowkeygmax: {
 		num: 849,
@@ -14825,6 +14849,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Human-Like"],
 		battleOnly: "Toxtricity-Low-Key",
+		changesFrom: "Toxtricity-Low-Key",
 	},
 	sizzlipede: {
 		num: 850,
@@ -14864,6 +14889,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Bug"],
+		changesFrom: "Centiskorch",
 	},
 	clobbopus: {
 		num: 852,
@@ -15015,6 +15041,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Pink",
 		eggGroups: ["Fairy"],
+		changesFrom: "Hatterene",
 	},
 	impidimp: {
 		num: 859,
@@ -15072,6 +15099,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Fairy", "Human-Like"],
+		changesFrom: "Grimmsnarl",
 	},
 	obstagoon: {
 		num: 862,
@@ -15200,6 +15228,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
+		changesFrom: "Alcremie",
 	},
 	falinks: {
 		num: 870,
@@ -15384,6 +15413,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Field", "Mineral"],
+		changesFrom: "Copperajah",
 	},
 	dracozolt: {
 		num: 880,
@@ -15461,6 +15491,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Mineral", "Dragon"],
+		changesFrom: "Duraludon",
 	},
 	dreepy: {
 		num: 885,
@@ -15658,6 +15689,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Urshifu",
 	},
 	urshifurapidstrikegmax: {
 		num: 892,
@@ -15673,6 +15705,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		battleOnly: "Urshifu-Rapid-Strike",
+		changesFrom: "Urshifu-Rapid-Strike",
 	},
 	zarude: {
 		num: 893,
