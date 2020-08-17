@@ -13714,7 +13714,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onTryHit(target, source, move) {
-			this.add('-activate', target, 'move: Poltergeist', this.dex.getItem(target.item).name);
+			this.add('-item', target, this.dex.getItem(target.item), '[from] move: Poltergeist', '[of] ' + source);
 		},
 		secondary: null,
 		target: "normal",
