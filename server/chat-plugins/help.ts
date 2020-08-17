@@ -124,7 +124,7 @@ export class HelpResponder {
 	/**
 	 * Checks if the FAQ exists. If not, deletes all references to it.
 	 */
-	faqExists(faq: string) {
+	updateFaqData(faq: string) {
 		// testing purposes
 		if (Config.nofswriting) return true;
 		const room = this.getRoom();
@@ -137,7 +137,6 @@ export class HelpResponder {
 				this.queue.splice(this.queue.indexOf(item), 1);
 			}
 		}
-		this.writeState();
 		return false;
 	}
 	stringRegex(str: string, raw?: boolean) {
@@ -161,7 +160,6 @@ export class HelpResponder {
 	}
 	match(question: string, faq: string) {
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
-		if (!this.faqExists(faq)) return null;
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
 		if (!regexes) return;
 		for (const regex of regexes) {
@@ -189,6 +187,13 @@ export class HelpResponder {
 		return this.writeState();
 	}
 	writeState() {
+		this.data.queue = this.queue;
+		for (const faq in this.data.pairs) {
+			// while writing, clear old data. In the meantime, the rest of the data is inaccessible
+			// so this is the best place to clear the data
+			this.updateFaqData(faq);
+		}
+		this.data.queue = this.queue;
 		return FS(PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
 	tryAddRegex(inputString: string, raw?: boolean) {
