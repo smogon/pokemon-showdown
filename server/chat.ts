@@ -1293,8 +1293,9 @@ export class CommandContext extends MessageContext {
 					if ((!this.room || this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						if (buttonName === 'send' && (buttonValue?.startsWith('/msg ') || buttonValue?.startsWith('/pm '))) {
-							const [pmTarget] = buttonValue.replace(/^\/(?:msg|pm) /, '').split(',');
+						const msgCommandRegex = /^\/(?:msg|pm|w) /;
+						if (buttonName === 'send' && msgCommandRegex.test(buttonValue || '')) {
+							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
 							if (auth.get(toID(pmTarget)) !== '*' && toID(pmTarget) !== this.user.id) {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
