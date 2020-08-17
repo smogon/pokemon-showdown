@@ -37,7 +37,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.maxhp = newMaxHP;
 	let item = newSet.item;
 	if (typeof item !== 'string') item = item[Math.floor(Math.random() * item.length)];
-	pokemon.setItem(item);
+	if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
 	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 	pokemon.moveSlots = newMoves;
 	// @ts-ignore Necessary so Robb576 doesn't get 8 moves
