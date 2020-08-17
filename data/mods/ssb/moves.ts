@@ -2596,6 +2596,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) {
 				source.switchFlag = 'disconnect' as ID;
+				return false;
 			} else {
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					move: 'disconnect',
