@@ -65,21 +65,22 @@ interface PluginData {
 }
 
 export class HelpResponder {
-	roomFaqs: AnyObject;
 	disabled?: boolean;
 	queue: string[];
 	data: PluginData;
 	constructor(data: PluginData) {
 		this.data = data;
-		this.roomFaqs = roomFaqs['help'] || {};
 		this.queue = data.queue || [];
 	}
 	getRoom() {
 		return Config.helpFilterRoom ? Rooms.get(Config.helpFilterRoom) : Rooms.get('help');
 	}
 	find(question: string, user?: User) {
-		const faqs = Object.keys((this.roomFaqs || '{}'))
-			.filter(item => item.length >= MINIMUM_LENGTH && !this.roomFaqs[item].startsWith('>'));
+		const room = this.getRoom();
+		if (!room) return;
+		const helpFaqs = roomFaqs[room.roomid];
+		const faqs = Object.keys((helpFaqs || '{}'))
+			.filter(item => item.length >= MINIMUM_LENGTH && !helpFaqs[item].startsWith('>'));
 		if (COMMON_TERMS.some(t => t.test(question))) return null;
 		for (const faq of faqs) {
 			const match = this.match(question, faq);
@@ -89,7 +90,7 @@ export class HelpResponder {
 					const log = `${timestamp} |c| ${user.name}|${question}`;
 					this.log(log, faq, match.regex);
 				}
-				return this.roomFaqs[match.faq];
+				return helpFaqs[match.faq];
 			}
 		}
 		return null;
@@ -111,12 +112,33 @@ export class HelpResponder {
 	getFaqID(faq: string) {
 		faq = faq.trim();
 		if (!faq) return;
-		const alias: string = this.roomFaqs[faq];
-		if (!alias) return;
+		const room = this.getRoom();
+		if (!room) return;
+		const entry: string = roomFaqs[room.roomid][faq];
+		if (!entry) return;
 		// ignore short aliases, they cause too many false positives
-		if (faq.length <= MINIMUM_LENGTH || alias.length <= MINIMUM_LENGTH) return;
-		if (alias.charAt(0) !== '>') return faq; // not an alias
-		return alias.replace('>', '');
+		if (faq.length <= MINIMUM_LENGTH || entry.length <= MINIMUM_LENGTH) return;
+		if (entry.charAt(0) !== '>') return faq; // not an alias
+		return entry.replace('>', '');
+	}
+	/**
+	 * Checks if the FAQ exists. If not, deletes all references to it.
+	 */
+	faqExists(faq: string) {
+		// testing purposes
+		if (Config.nofswriting) return true;
+		const room = this.getRoom();
+		if (!room) return false;
+		if (roomFaqs[room.roomid][faq]) return true;
+		if (this.data.pairs[faq]) delete this.data.pairs[faq];
+		for (const item of this.queue) {
+			const [, targetFaq] = item.split('=>');
+			if (toID(targetFaq).includes(toID(faq))) {
+				this.queue.splice(this.queue.indexOf(item), 1);
+			}
+		}
+		this.writeState();
+		return false;
 	}
 	stringRegex(str: string, raw?: boolean) {
 		[str] = Utils.splitFirst(str, '=>');
@@ -139,14 +161,7 @@ export class HelpResponder {
 	}
 	match(question: string, faq: string) {
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
-		const room = this.getRoom();
-		if (!room) return;
-		// mostly for the purpose of tests
-		if (!Config.nofswriting && !roomFaqs[room.roomid][faq]) {
-			delete this.data.pairs[faq];
-			this.writeState();
-			return null;
-		}
+		if (!this.faqExists(faq)) return null;
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
 		if (!regexes) return;
 		for (const regex of regexes) {
