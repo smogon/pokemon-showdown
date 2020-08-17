@@ -1293,7 +1293,7 @@ export class CommandContext extends MessageContext {
 					if ((!this.room || this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						const msgCommandRegex = /^\/(?:msg|pm|w) /;
+						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
 						if (buttonName === 'send' && msgCommandRegex.test(buttonValue || '')) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
