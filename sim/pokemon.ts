@@ -227,8 +227,12 @@ export class Pokemon {
 	canDynamax: boolean;
 	readonly canGigantamax: string | null;
 
+	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
 	staleness?: 'internal' | 'external';
+	/** Staleness that will be set once a future action occurs (eg. eating a berry). */
 	pendingStaleness?: 'internal' | 'external';
+	/** Temporary staleness that lasts only until the Pokemon switches. */
+	volatileStaleness?: 'external';
 
 	// Gen 1 only
 	modifiedStats?: StatsExceptHPTable;
@@ -1289,6 +1293,8 @@ export class Pokemon {
 		this.hurtThisTurn = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
+
+		this.volatileStaleness = undefined;
 
 		this.setSpecies(this.baseSpecies);
 	}

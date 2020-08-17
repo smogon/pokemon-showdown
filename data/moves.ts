@@ -4703,7 +4703,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
 				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
-				if (target.side !== source.side) target.staleness = 'external';
+				if (target.side !== source.side) target.volatileStaleness = 'external';
 				return;
 			}
 			return false;
@@ -16633,7 +16633,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				target.ability = sourceAbility.id;
 				source.abilityData = {id: this.toID(source.ability), target: source};
 				target.abilityData = {id: this.toID(target.ability), target: target};
-				if (target.side !== source.side) target.staleness = 'external';
+				if (target.side !== source.side) target.volatileStaleness = 'external';
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
