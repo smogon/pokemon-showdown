@@ -1294,7 +1294,7 @@ export class CommandContext extends MessageContext {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
-						if (buttonName === 'send' && msgCommandRegex.test(buttonValue || '')) {
+						if (buttonName === 'send' && buttonValue && msgCommandRegex.test(buttonValue)) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
 							if (auth.get(toID(pmTarget)) !== '*' && toID(pmTarget) !== this.user.id) {
