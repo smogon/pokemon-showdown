@@ -388,6 +388,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Moongeist Beam',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	'piloswine gripado': {
+		species: 'Piloswine', ability: 'Forever Winter Nights', item: 'Eviolite', gender: 'M',
+		moves: ['Earthquake', 'Bulk Up', 'refresh'],
+		signatureMove: 'Icicle Spirits',
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+	},
 	'PiraTe Princess': {
 		species: 'Polteageist', ability: 'Wild Magic Surge', item: 'Expert Belt', gender: 'F',
 		moves: [

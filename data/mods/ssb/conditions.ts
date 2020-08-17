@@ -885,6 +885,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('phiwings99')}|I'm boated.`);
 		},
 	},
+	piloswinegripado: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('piloswine gripado')}|Suave?`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('piloswine gripado')}|cya frend :)`);
+		},
+		onFaint() {
+			this.add(`c|${getName('piloswine gripado')}|This was lame :/`);
+		},
+	},
 	pirateprincess: {
 		noCopy: true,
 		onStart() {
@@ -1248,6 +1260,33 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onEnd() {
 			this.add('-end', 'Heavy Hailstorm');
+		},
+	},
+	// Forever Winter Hail support for piloswine gripado
+	winterhail: {
+		name: 'Winter Hail',
+		effectType: 'Weather',
+		duration: 0,
+		onStart(battle, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Hail');
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (!pokemon.hasType('Ice')) return this.chainModify(0.5);
+		},
+		onResidualOrder: 1,
+		onResidual() {
+			this.add('-weather', 'Hail', '[upkeep]');
+			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			this.damage(target.baseMaxhp / 8);
+		},
+		onEnd() {
+			this.add('-weather', 'none');
 		},
 	},
 	// Modified futuremove support for Segmr's move (Disconnect)

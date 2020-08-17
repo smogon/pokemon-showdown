@@ -2249,6 +2249,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// piloswine gripado
+	iciclespirits: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "User recovers 50% of the damage dealt.",
+		name: "Icicle Spirits",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+	},
+
 	// PiraTe Princess
 	dungeonsdragons: {
 		accuracy: true,
