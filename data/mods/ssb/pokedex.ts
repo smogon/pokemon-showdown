@@ -30,6 +30,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 40, atk: 70, def: 70, spa: 80, spd: 90, spe: 70},
 	},
+	// Annika
+	mewtwomegay: {
+		inherit: true,
+		abilities: {0: "Overprotective"},
+	},
 	// A Quag To The Past
 	quagsire: {
 		inherit: true,
