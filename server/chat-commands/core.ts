@@ -632,9 +632,11 @@ export const commands: ChatCommands = {
 			this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('busy');
-		if (['dnd', 'donotdisturb'].includes(cmd)) {
+		const isDND = ['dnd', 'donotdisturb'].includes(cmd);
+		if (isDND) {
 			this.parse('/blockpms +');
 			this.parse('/blockchallenges');
+			user.settings.doNotDisturb = true;
 		}
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
@@ -690,13 +692,14 @@ export const commands: ChatCommands = {
 		const statusType = user.statusType;
 		user.setStatusType('online');
 
-		if (statusType === 'busy') {
+		if (user.settings.doNotDisturb) {
 			this.parse('/unblockpms');
 			this.parse('/unblockchallenges');
+			user.settings.doNotDisturb = false;
 		}
 
 		if (statusType) {
-			return this.sendReply(`You are no longer marked as ${statusType}.`);
+			return this.sendReply(`You are no longer marked as busy.`);
 		}
 
 		return this.sendReply("You have cleared your status message.");
