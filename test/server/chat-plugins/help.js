@@ -16,9 +16,9 @@ const Help = new Responder({
 describe('Help', function () {
 	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
-		Help.data.pairs.catra.push(Help.stringRegex(`Hey & adora`));
-		assert.ok(Help.match('Hey, adora', 'catra'));
-		assert.ok(!Help.match('Hello, adora', 'catra'));
+		Help.data.pairs.catra.push(Help.stringRegex(`Hey & Adora`));
+		assert.ok(Help.match('Hey, Adora', 'catra'));
+		assert.ok(!Help.match('Hello, Adora', 'catra'));
 	});
 
 	it('should produce valid regexes', function () {

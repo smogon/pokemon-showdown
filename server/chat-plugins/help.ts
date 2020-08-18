@@ -9,11 +9,11 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {LogViewer} from './chatlog';
-import {ROOMFAQ_FILE} from './room-faqs';
+import {roomFaqs} from './room-faqs';
 
 const PATH = 'config/chat-plugins/help.json';
-// 6: filters out conveniently short aliases
-const MINIMUM_LENGTH = 6;
+// 4: filters out conveniently short aliases
+const MINIMUM_LENGTH = 4;
 
 export let helpData: PluginData;
 
@@ -65,26 +65,22 @@ interface PluginData {
 }
 
 export class HelpResponder {
-	roomFaqs: AnyObject;
 	disabled?: boolean;
 	queue: string[];
 	data: PluginData;
 	constructor(data: PluginData) {
 		this.data = data;
-		this.roomFaqs = this.loadFaqs();
 		this.queue = data.queue || [];
-
-		FS(ROOMFAQ_FILE).onModify(() => {
-			// refresh on modifications to keep it up to date
-			this.roomFaqs = this.loadFaqs();
-		});
 	}
 	getRoom() {
 		return Config.helpFilterRoom ? Rooms.get(Config.helpFilterRoom) : Rooms.get('help');
 	}
 	find(question: string, user?: User) {
-		const faqs = Object.keys((this.roomFaqs || '{}'))
-			.filter(item => item.length >= MINIMUM_LENGTH && !this.roomFaqs[item].startsWith('>'));
+		const room = this.getRoom();
+		if (!room) return;
+		const helpFaqs = roomFaqs[room.roomid];
+		const faqs = Object.keys((helpFaqs || '{}'))
+			.filter(item => item.length >= MINIMUM_LENGTH && !helpFaqs[item].startsWith('>'));
 		if (COMMON_TERMS.some(t => t.test(question))) return null;
 		for (const faq of faqs) {
 			const match = this.match(question, faq);
@@ -94,7 +90,7 @@ export class HelpResponder {
 					const log = `${timestamp} |c| ${user.name}|${question}`;
 					this.log(log, faq, match.regex);
 				}
-				return this.roomFaqs[match.faq];
+				return helpFaqs[match.faq];
 			}
 		}
 		return null;
@@ -116,12 +112,32 @@ export class HelpResponder {
 	getFaqID(faq: string) {
 		faq = faq.trim();
 		if (!faq) return;
-		const alias: string = this.roomFaqs[faq];
-		if (!alias) return;
+		const room = this.getRoom();
+		if (!room) return;
+		const entry: string = roomFaqs[room.roomid][faq];
+		if (!entry) return;
 		// ignore short aliases, they cause too many false positives
-		if (faq.length <= MINIMUM_LENGTH || alias.length <= MINIMUM_LENGTH) return;
-		if (alias.charAt(0) !== '>') return faq; // not an alias
-		return alias.replace('>', '');
+		if (faq.length <= MINIMUM_LENGTH || entry.length <= MINIMUM_LENGTH) return;
+		if (entry.charAt(0) !== '>') return faq; // not an alias
+		return entry.replace('>', '');
+	}
+	/**
+	 * Checks if the FAQ exists. If not, deletes all references to it.
+	 */
+	updateFaqData(faq: string) {
+		// testing purposes
+		if (Config.nofswriting) return true;
+		const room = this.getRoom();
+		if (!room) return false;
+		if (roomFaqs[room.roomid][faq]) return true;
+		if (this.data.pairs[faq]) delete this.data.pairs[faq];
+		for (const item of this.queue) {
+			const [, targetFaq] = item.split('=>');
+			if (toID(targetFaq).includes(toID(faq))) {
+				this.queue.splice(this.queue.indexOf(item), 1);
+			}
+		}
+		return false;
 	}
 	stringRegex(str: string, raw?: boolean) {
 		[str] = Utils.splitFirst(str, '=>');
@@ -171,24 +187,17 @@ export class HelpResponder {
 		return this.writeState();
 	}
 	writeState() {
+		this.data.queue = this.queue;
+		for (const faq in this.data.pairs) {
+			// while writing, clear old data. In the meantime, the rest of the data is inaccessible
+			// so this is the best place to clear the data
+			this.updateFaqData(faq);
+		}
+		this.data.queue = this.queue;
 		return FS(PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
-	loadFaqs() {
-		const room = this.getRoom();
-		if (!room) {
-			this.roomFaqs = {};
-			return this.roomFaqs;
-		}
-		const roomid = room.roomid;
-		this.roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || `{"${roomid}":{}}`)[roomid];
-		for (const key in this.data.pairs) {
-			if (!this.roomFaqs[key]) delete this.data.pairs[key];
-		}
-		this.writeState();
-		return this.roomFaqs;
-	}
 	tryAddRegex(inputString: string, raw?: boolean) {
-		let [args, faq] = inputString.split('=>');
+		let [args, faq] = inputString.split('=>').map(item => item.trim());
 		faq = this.getFaqID(toID(faq)) as string;
 		if (!faq) throw new Chat.ErrorMessage("Invalid FAQ.");
 		if (!this.data.pairs) this.data.pairs = {};
@@ -219,12 +228,12 @@ export const chatfilter: ChatFilter = (message, user, room) => {
 	const helpRoom = Answerer.getRoom();
 	if (!helpRoom) return message;
 	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.disabled) {
+		if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 		const reply = Answerer.visualize(message, false, user);
 		if (message.startsWith('/') || message.startsWith('!')) return message;
 		if (!reply) {
 			return message;
 		} else {
-			if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 			user.sendTo(room.roomid, `|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
 			const trimmedMessage = `<div class="infobox">${Answerer.visualize(message, true)}</div>`;
 			setTimeout(() => {
@@ -431,6 +440,7 @@ export const pages: PageTable = {
 				buf += `- <a roomid="view-helpfilter-stats-${key}">${key}</a> (${stats[key].total})<br />`;
 			}
 			break;
+		case 'pairs':
 		case 'keys':
 			this.title = '[Help Regexes]';
 			if (!this.can('show', null, helpRoom)) return;
