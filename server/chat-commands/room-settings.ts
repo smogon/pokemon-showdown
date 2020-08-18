@@ -123,9 +123,6 @@ export const commands: ChatCommands = {
 		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & for all the options`,
 	],
 
-	ioo(target, room, user) {
-		return this.parse('/modjoin %');
-	},
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
@@ -148,7 +145,10 @@ export const commands: ChatCommands = {
 		`/ionext off - Sets your next battle to be publicly visible.`,
 	],
 
-	inviteonly(target, room, user) {
+	ioo: 'inviteonly',
+	inviteonly(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
+		if (cmd === 'ioo') target = 'on';
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
 			return this.parse("/modjoin %");
@@ -175,6 +175,10 @@ export const commands: ChatCommands = {
 			if (prefix) {
 				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 			}
+			if (room.battle.inviteOnlySetter && !user.can('mute', null, room) && room.battle.inviteOnlySetter !== user.id) {
+				return this.errorReply(`Only the person who set this battle to be invite-only can turn it off.`);
+			}
+			room.battle.inviteOnlySetter = user.id;
 		} else if (room.settings.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else {
