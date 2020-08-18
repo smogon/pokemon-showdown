@@ -161,7 +161,7 @@
 		"you will not be able to vote after viewing results": "點開結果后就不能再投票",
 		"View results": "看結果",
 		"You can't vote after viewing results": "你已看了結果，無法投票",
-		"The poll has ended – scroll down to see the results": "投票結束–結論在此",
+		"The poll has ended &ndash; scroll down to see the results": "投票結束&ndash;結論在此",
 		"Vote for ${num}": "投給${num}",
 		"Submit your vote": "提交選擇",
 		"Quiz": "測驗",
