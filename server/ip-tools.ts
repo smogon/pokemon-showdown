@@ -151,6 +151,13 @@ export const IPTools = new class {
 	}
 	stringToRange(range: string): AddressRange | null {
 		if (!range) return null;
+		if (range.endsWith('*')) {
+			const [a, b, c] = range.replace('*', '').split('.');
+			return {
+				minIP: IPTools.ipToNumber(`${a || '0'}.${b || '0'}.${c || '0'}.0`),
+				maxIP: IPTools.ipToNumber(`${a || '255'}.${b || '255'}.${c || '255'}.255`),
+			};
+		}
 		const index = range.indexOf('-');
 		if (index <= 0) {
 			return range.includes('/') ? IPTools.getCidrRange(range) : {
