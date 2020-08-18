@@ -628,12 +628,19 @@ export abstract class BasicRoom {
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
-		if (this.settings.staffMessage && user.can('mute', null, this)) {
+		if (user.can('mute', null, this)) {
+			message += this.getStaffIntroMessage(user);
+		}
+		return message;
+	}
+	getStaffIntroMessage(user: User) {
+		let message = Utils.html`\n|raw|`;
+		if (this.settings.staffMessage) {
 			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
 				this.settings.staffMessage.replace(/\n/g, '') +
 				`</div>`;
 		}
-		if (this.pendingApprovals?.size && user.can('mute', null, this)) {
+		if (this.pendingApprovals?.size) {
 			message += `\n|raw|<div class="infobox">`;
 			message += `<details><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
 			for (const [userid, entry] of this.pendingApprovals) {
@@ -643,7 +650,7 @@ export abstract class BasicRoom {
 				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br />`;
 				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
 				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
-				message += `</div><hr />`;
+				message += `<hr />`;
 			}
 			message += `</details></div>`;
 		}
@@ -761,6 +768,13 @@ export abstract class BasicRoom {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
 		}
 
+		if (user.can('mute', null, this)) {
+			this.sendUser(
+				user,
+				this.getStaffIntroMessage(user)
+			);
+		}
+
 		this.users[user.id] = user;
 		this.userCount++;
 
@@ -782,10 +796,10 @@ export abstract class BasicRoom {
 		this.users[user.id] = user;
 		if (joining) {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
-			if (this.settings.staffMessage && user.can('mute', null, this)) {
+			if (user.can('mute', null, this)) {
 				this.sendUser(
 					user,
-					`|raw|<div class="infobox">(Staff intro:)<br /><div>${this.settings.staffMessage.replace(/\n/g, '')}</div></div>`
+					this.getStaffIntroMessage(user)
 				);
 			}
 		} else if (!user.named) {
