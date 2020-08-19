@@ -726,6 +726,24 @@ export const commands: ChatCommands = {
 		});
 	},
 
+	language(target, room, user) {
+		if (!target) {
+			return this.sendReply(`Currently, you're viewing Pokémon Showdown in ${Chat.languages.get(user.language || 'english')}.`);
+		}
+		target = toID(target);
+		if (!Chat.languages.has(target)) {
+			return this.errorReply(`Valid languages are: ${[...Chat.languages.values()].join(', ')}`);
+		}
+		user.language = target;
+		user.update();
+		return this.sendReply(`Pokémon Showdown will now be displayed in ${Chat.languages.get(target)} (except in language rooms).`);
+	},
+	languagehelp: [
+		`/language - View your current language setting.`,
+		`/language [language] - Changes the language Pokémon Showdown will be displayed to you in.`,
+		`Note that rooms can set their own language, which will override this setting.`,
+	],
+
 	updatesettings(target, room, user) {
 		const settings: Partial<UserSettings> = {};
 		try {
@@ -733,6 +751,7 @@ export const commands: ChatCommands = {
 			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
 				this.errorReply("/updatesettings expects JSON encoded object.");
 			}
+			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
 					if (setting === 'blockPMs' &&
