@@ -634,7 +634,8 @@ export abstract class BasicRoom {
 		return message;
 	}
 	getStaffIntroMessage(user: User) {
-		let message = Utils.html`\n|raw|`;
+		if (!user.can('mute', null, this)) return ``;
+		let message = ``;
 		if (this.settings.staffMessage) {
 			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
 				this.settings.staffMessage.replace(/\n/g, '') +
