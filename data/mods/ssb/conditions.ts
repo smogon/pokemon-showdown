@@ -1297,6 +1297,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
+			if (target.hasType('Ice')) return;
 			this.damage(target.baseMaxhp / 8);
 		},
 		onEnd() {

@@ -678,6 +678,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 8,
 		priority: 1,
 		flags: {},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Teeter Dance', target);
+		},
 		volatileStatus: 'pandorasbox',
 		condition: {
 			onStart(target) {
@@ -2381,6 +2388,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Horn Leech', target);
+		},
 		drain: [1, 2],
 		secondary: null,
 		target: "normal",
