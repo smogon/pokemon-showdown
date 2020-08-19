@@ -744,7 +744,8 @@ export const commands: ChatCommands = {
 	hiderankhelp: [
 		`/hiderank [rank] - Displays your global rank as the given [rank].`,
 		`/showrank - Displays your true global rank instead of the rank you're hidden as.`,
-  ],
+	],
+
 	language(target, room, user) {
 		if (!target) {
 			return this.sendReply(`Currently, you're viewing Pokémon Showdown in ${Chat.languages.get(user.language || 'english')}.`);
