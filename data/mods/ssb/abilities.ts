@@ -386,6 +386,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Celestial
+	speedcontrol: {
+		desc: "Any time any stat is changed (increased or decreased by any number of stages), this pokemon's speed is raised by 1 stage.",
+		shortDesc: "Any time any stat is changed, this pokemon's speed is raised by 1 stage.",
+		name: "Speed Control",
+		onAfterBoost(boost, target, source, effect) {
+			if (effect.id === 'speedcontrol') return;
+			this.boost({spe: 1});
+		},
+		onFoeAfterBoost(boost, target, source, effect) {
+			const pokemon = target.side.foe.active[0];
+			// Infinite Loop preventer
+			if (effect.id === 'speedcontrol' || effect.id === 'stubbornness') return;
+			this.boost({spe: 1}, pokemon);
+		},
+	},
+
 	// Celine
 	guardianarmor: {
 		desc: "Raises Defense and Special Defense by two stages upon switch in.",
@@ -907,7 +924,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.m.happened) delete pokemon.m.happened;
 		},
 		onFoeAfterBoost(boost, target, source, effect) {
-			const pokemon = source.side.foe.active[0];
+			const pokemon = target.side.foe.active[0];
 			let success = false;
 			let i: BoostName;
 			for (i in boost) {
@@ -916,7 +933,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			// Infinite Loop preventer
-			if (effect.id === 'stubbornness') return;
+			if (effect.id === 'speedcontrol' || effect.id === 'stubbornness') return;
 			if (success) {
 				if (!pokemon.m.happened) {
 					this.boost({atk: 1, def: 1, spd: 1}, pokemon);

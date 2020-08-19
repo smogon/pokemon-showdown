@@ -137,6 +137,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Celestial: {
+		species: 'Dragonite', ability: 'Speed Control', item: 'Metal Coat', gender: '',
+		moves: ['Swords Dance', 'Thousand Arrows', 'Double Iron Bash'],
+		signatureMove: 'Pandora\'s Box',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: 2,
+	},
 	Celine: {
 		species: 'Lucario', ability: 'Guardian Armor', item: 'Leftovers', gender: 'F',
 		moves: ['Wish', 'Teleport', 'Drain Punch'],

@@ -667,6 +667,94 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Celestial
+	pandorasbox: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Please refer to the guide for details on this move.",
+		shortDesc: "Please refer to the guide for details on this move.",
+		name: "Pandora's Box",
+		pp: 8,
+		priority: 1,
+		flags: {},
+		volatileStatus: 'pandorasbox',
+		condition: {
+			onStart(target) {
+				const typeMovePair: {[key: string]: string} = {
+					'Normal': 'Body Slam',
+					'Fighting': 'Drain Punch',
+					'Flying': 'Floaty Fall',
+					'Poison': 'Baneful Banker',
+					'Ground': 'Shore Up',
+					'Rock': 'Stealth Rock',
+					'Bug': 'Sticky Web',
+					'Ghost': 'Shadow Sneak',
+					'Steel': 'Iron Defense',
+					'Fire': 'Fire Fang',
+					'Water': 'Life Dew',
+					'Grass': 'Synthesis',
+					'Electric': 'Thunder Fang',
+					'Psychic': 'Psychic Fangs',
+					'Ice': 'Icicle Crash',
+					'Dragon': 'Dragon Darts',
+					'Dark': 'Taunt',
+					'Fairy': 'Play Rough',
+				};
+				const foe = target.side.foe;
+				const types = [foe.pokemon[this.random(foe.pokemon.length)].types[0]];
+				for (const pokemon of foe.pokemon) {
+					if (!types.includes(pokemon.types[0])) {
+						types.push(pokemon.types[0]);
+						break;
+					}
+				}
+				const moves = [typeMovePair[types[0]], typeMovePair[types[1]]];
+				target.m.replacedMoves = [typeMovePair[types[0]], typeMovePair[types[1]]];
+				this.effectData.moveToUse = moves[this.random(2)];
+				for (const moveSlot of target.moveSlots) {
+					if (!(moveSlot.id === 'swordsdance' || moveSlot.id === 'pandorasbox')) continue;
+					if (!target.m.backupMoves) {
+						target.m.backupMoves = [this.dex.deepClone(moveSlot)];
+					} else {
+						target.m.backupMoves.push(this.dex.deepClone(moveSlot));
+					}
+					const moveData = this.dex.getMove(this.toID(moves.pop()));
+					if (!moveData.id) continue;
+					target.moveSlots[target.moveSlots.indexOf(moveSlot)] = {
+						move: moveData.name,
+						id: moveData.id,
+						pp: Math.floor(moveData.pp * (moveSlot.pp / moveSlot.maxpp)),
+						maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
+						target: moveData.target,
+						disabled: false,
+						disabledSource: '',
+						used: false,
+					};
+				}
+				target.setAbility('protean');
+			},
+			onResidual(pokemon) {
+				if (this.effectData.moveToUse) {
+					this.useMove(this.effectData.moveToUse, pokemon);
+					delete this.effectData.moveToUse;
+				}
+			},
+			onEnd(pokemon) {
+				if (!pokemon.m.backupMoves) return;
+				for (const [index, moveSlot] of pokemon.moveSlots.entries()) {
+					if (!(pokemon.m.replacedMoves.includes(moveSlot.move))) continue;
+					pokemon.moveSlots[index] = pokemon.m.backupMoves.shift();
+					pokemon.moveSlots[index].pp = Math.floor(pokemon.moveSlots[index].maxpp * (moveSlot.pp / moveSlot.maxpp));
+				}
+				delete pokemon.m.backupMoves;
+				delete pokemon.m.replacedMoves;
+			},
+		},
+		target: "self",
+		type: "Dragon",
+	},
+
 	// Celine
 	statusguard: {
 		accuracy: 100,
