@@ -18,7 +18,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10, // unboosted PP count
 		priority: 0, // move priority, -6 -> 6
 		flags: {}, // Move flags https://github.com/smogon/pokemon-showdown/blob/master/data/moves.js#L1-L27
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]'); // For custom animations
 		},
@@ -57,7 +56,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 30,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -117,7 +115,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		flags: {},
 		stallingMove: true,
 		volatileStatus: 'kshield',
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -201,7 +198,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -246,7 +242,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {},
 		volatileStatus: 'lookingcool',
-		onTryMovePriority: 100,
 		onTryMove(target) {
 			if (target.volatiles['lookingcool']) return false;
 			this.attrLastMove('[still]');
@@ -287,7 +282,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -316,7 +310,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -347,7 +340,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -402,7 +394,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -458,7 +449,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -488,7 +478,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -520,7 +509,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -546,7 +534,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -577,7 +564,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: -3,
 		flags: {contact: 1, protect: 1, punch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -674,7 +660,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -716,7 +701,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 8,
 		priority: 1,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -815,7 +799,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		flags: {protect: 1},
 		stallingMove: true,
 		volatileStatus: 'statusguard',
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -886,7 +869,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 1,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -910,7 +892,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -942,7 +923,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {protect: 1},
 		ignoreImmunity: {'Normal': true},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1037,7 +1017,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: -6,
 		flags: {protect: 1, sound: 1, authentic: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1124,7 +1103,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		flags: {heal: 1},
 		heal: [1, 2],
 		pseudoWeather: 'gravity',
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1150,7 +1128,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1290,7 +1267,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		ignoreAbility: true,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1316,7 +1292,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove(target) {
 			this.attrLastMove('[still]');
 		},
@@ -1380,7 +1355,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1459,7 +1433,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: 1,
 		flags: {protect: 1, reflectable: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1494,7 +1467,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 2,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1534,7 +1506,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1561,7 +1532,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: 1,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1701,7 +1671,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		selfSwitch: true,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1766,7 +1735,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1800,7 +1768,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1864,7 +1831,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2020,7 +1986,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove(source) {
 			this.attrLastMove('[still]');
 			if (source.name !== 'Kris') {
@@ -2180,7 +2145,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2209,7 +2173,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2279,7 +2242,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2310,7 +2272,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 3],
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2345,7 +2306,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2375,7 +2335,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2424,7 +2383,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 15,
 		priority: 0,
 		flags: {reflectable: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2478,7 +2436,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2513,7 +2470,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2539,7 +2495,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2585,7 +2540,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2683,7 +2637,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2717,7 +2670,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 1,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2775,7 +2727,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2807,7 +2758,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0, // should be -6, waiting on QC
 		flags: {sound: 1, distance: 1, authentic: 1},
 		forceSwitch: true,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2842,7 +2792,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2881,7 +2830,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {},
 		isFutureMove: true,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2964,7 +2912,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove(source) {
 			this.attrLastMove('[still]');
 			if (source.name !== 'Struchni') {
@@ -3026,7 +2973,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3287,7 +3233,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3352,7 +3297,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove(source) {
 			this.attrLastMove('[still]');
 			if (source.name !== 'yuki') {
@@ -3540,7 +3484,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

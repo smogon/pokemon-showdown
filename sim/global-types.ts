@@ -194,7 +194,6 @@ interface MoveEventMethods {
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryImmunityPriority?: number;
 	onTryMove?: CommonHandlers['ResultSourceMove'];
-	onTryMovePriority?: number;
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
 }
 
