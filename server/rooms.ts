@@ -643,7 +643,7 @@ export abstract class BasicRoom {
 				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br />`;
 				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
 				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
-				message += `</div><hr />`;
+				message += `<hr />`;
 			}
 			message += `</details></div>`;
 		}
