@@ -15,6 +15,7 @@ import * as util from 'util';
 import {FS} from '../lib/fs';
 import {QueryProcessManager} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
+import * as Database from 'better-sqlite3';
 
 import {parseModlog} from '../tools/modlog/converter';
 
@@ -22,6 +23,8 @@ const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
 const MODLOG_PATH = 'logs/modlog';
+const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
+const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -48,11 +51,17 @@ interface ModlogResults {
 	duration?: number;
 }
 
-interface ModlogQuery {
+interface ModlogTextQuery {
 	rooms: ModlogID[];
 	regexString: string;
 	maxLines: number;
 	onlyPunishments: boolean | string;
+}
+
+interface ModlogSQLQuery<T> {
+	statement: Database.Statement<T>;
+	args: T[];
+	returnsResults?: boolean;
 }
 
 export interface ModlogSearch {
@@ -137,9 +146,89 @@ export class Modlog {
 	sharedStreams: Map<ID, Streams.WriteStream | null> = new Map();
 	streams: Map<ModlogID, Streams.WriteStream | null> = new Map();
 
-	constructor(path: string) {
-		this.logPath = path;
+	readonly database: Database.Database;
+	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
+	readonly altsInsertionQuery: Database.Statement<[number, string]>;
+	readonly renameQuery: Database.Statement<[string, string]>;
+	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
+	readonly insertionTransaction: Database.Transaction;
+
+	constructor(flatFilePath: string, databasePath: string) {
+		this.logPath = flatFilePath;
+
+		this.database = new Database(databasePath);
+		this.database.exec("PRAGMA foreign_keys = ON;");
+		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync()); // Set up tables, etc.
+		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
+			return Number(RegExp(regexString, 'i').test(toMatch));
+		});
+
+
+		this.modlogInsertionQuery = this.database.prepare(
+			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
+			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
+		);
+		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
+		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
+		this.globalPunishmentsSearchQuery = this.database.prepare(
+			`SELECT * FROM modlog WHERE (roomid = 'global' OR roomid LIKE 'global-%') ` +
+			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
+			`AND timestamp > ?` +
+			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) `
+		);
+
+		this.insertionTransaction = this.database.transaction((entry: {
+			action: string,
+			roomID: string,
+			visualRoomID: string,
+			userid: ID,
+			autoconfirmedID: ID,
+			ip: string,
+			loggedBy: ID,
+			note: string,
+			time: number,
+			alts: ID[],
+		}) => {
+			const result = this.modlogInsertionQuery.run(entry);
+			for (const alt of entry.alts || []) {
+				this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
+			}
+		});
 	}
+
+	/******************
+	 * Helper methods *
+	 ******************/
+	formatArray(arr: unknown[], args: unknown[]) {
+		args.push(...arr);
+		return [...'?'.repeat(arr.length)].join(', ');
+	}
+
+	getSharedID(roomid: ModlogID): ID | false {
+		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
+	}
+
+	runSQL(query: ModlogSQLQuery<any>): Database.RunResult {
+		return query.statement.run(query.args);
+	}
+
+	runSQLWithResults(query: ModlogSQLQuery<any>): unknown[] {
+		return query.statement.all(query.args);
+	}
+
+	generateIDRegex(search: string) {
+		// Ensure the generated regex can never be greater than or equal to the value of
+		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
+		// search with max length MAX_QUERY_LENGTH. Otherwise, the modlog
+		// child process will crash when attempting to execute any RegExp
+		// constructed with it (i.e. when not configured to use ripgrep).
+		return `[^a-zA-Z0-9]?${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
+	}
+
+	escapeRegex(search: string) {
+		return search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
+	}
+
 
 	/**************************************
 	 * Methods for writing to the modlog. *
@@ -159,15 +248,32 @@ export class Modlog {
 		this.streams.set(roomid, stream);
 	}
 
-	getSharedID(roomid: ModlogID): ID | false {
-		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
-	}
-
 	/**
 	 * Writes to the modlog
 	 */
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
 		roomid = entry.roomID || roomid;
+		this.writeSQL(roomid, entry, overrideID);
+		this.writeText(roomid, entry, overrideID);
+	}
+
+	writeSQL(roomid: string, entry: ModlogEntry, overrideID?: string) {
+		if (entry.isGlobal && roomid !== 'global' && !roomid.startsWith('global-')) roomid = `global-${roomid}`;
+		this.insertionTransaction({
+			action: entry.action,
+			roomID: roomid,
+			visualRoomID: overrideID || entry.visualRoomID,
+			userid: entry.userid,
+			autoconfirmedID: entry.autoconfirmedID,
+			ip: entry.ip,
+			loggedBy: entry.loggedBy,
+			note: entry.note,
+			time: entry.time || Date.now(),
+			alts: entry.alts,
+		});
+	}
+
+	writeText(roomid: string, entry: ModlogEntry, overrideID?: string) {
 		const stream = this.streams.get(roomid as ModlogID);
 		if (!stream) throw new Error(`Attempted to write to an uninitialized modlog stream for the room '${roomid}'`);
 
@@ -181,6 +287,7 @@ export class Modlog {
 
 		void stream.write(`${buf}\n`);
 	}
+
 
 	async destroy(roomid: ModlogID) {
 		const stream = this.streams.get(roomid);
@@ -200,12 +307,18 @@ export class Modlog {
 	}
 
 	async rename(oldID: ModlogID, newID: ModlogID) {
+		if (oldID === newID) return;
+
+		// rename flat-file modlogs
 		const streamExists = this.streams.has(oldID);
 		if (streamExists) await this.destroy(oldID);
 		if (!this.getSharedID(oldID)) {
 			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
 		}
 		if (streamExists) this.initialize(newID);
+
+		// rename SQL modlogs
+		this.runSQL({statement: this.renameQuery, args: [newID, oldID]});
 	}
 
 	getActiveStreamIDs() {
@@ -215,7 +328,7 @@ export class Modlog {
 	/******************************************
 	 * Methods for reading (searching) modlog *
 	 ******************************************/
-	 async runSearch(
+	 async runTextSearch(
 		rooms: ModlogID[], regexString: string, maxLines: number, onlyPunishments: boolean | string
 	) {
 		const useRipgrep = await checkRipgrepAvailability();
@@ -275,33 +388,32 @@ export class Modlog {
 	}
 
 	async getGlobalPunishments(user: User | string, days = 30) {
+		return this.getGlobalPunishmentsText(toID(user), days);
+	}
+
+	async getGlobalPunishmentsText(userid: ID, days: number) {
 		const response = await PM.query({
 			rooms: ['global' as ModlogID],
-			regexString: this.escapeRegex(`[${toID(user)}]`),
+			regexString: this.escapeRegex(`[${toID(userid)}]`),
 			maxLines: days * 10,
 			onlyPunishments: 'global',
 		});
 		return response.length;
 	}
 
-	generateRegex(search: string) {
-		// Ensure the generated regex can never be greater than or equal to the value of
-		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
-		// search with max length MAX_QUERY_LENGTH. Otherwise, the modlog
-		// child process will crash when attempting to execute any RegExp
-		// constructed with it (i.e. when not configured to use ripgrep).
-		return `[^a-zA-Z0-9]?${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
-	}
-
-	escapeRegex(search: string) {
-		return search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
+	getGlobalPunishmentsSQL(userid: ID, days: number) {
+		const args: (string | number)[] = [
+			userid, userid, userid, Date.now() - (days * 24 * 60 * 60 * 1000), ...GLOBAL_PUNISHMENTS,
+		];
+		const results = this.runSQLWithResults({statement: this.globalPunishmentsSearchQuery, args});
+		return results.length;
 	}
 
 	async search(
 		roomid: ModlogID = 'global',
 		search: ModlogSearch = {},
 		maxLines = 20,
-		onlyPunishments = false
+		onlyPunishments = false,
 	): Promise<ModlogResults> {
 		const rooms = (roomid === 'public' ?
 			[...Rooms.rooms.values()]
@@ -309,6 +421,25 @@ export class Modlog {
 				.map(room => room.roomid) :
 			[roomid]);
 
+		const query = this.prepareSearch(rooms, maxLines, onlyPunishments, search);
+		const response = await PM.query(query);
+
+		if (response.duration > LONG_QUERY_DURATION) {
+			Monitor.log(`Long modlog query took ${response.duration} ms to complete: ${JSON.stringify(query)}`);
+		}
+		return {results: response, duration: response.duration};
+	}
+
+	prepareSearch(rooms: ModlogID[], maxLines: number, onlyPunishments: boolean, search: ModlogSearch) {
+		return this.prepareTextSearch(rooms, maxLines, onlyPunishments, search);
+	}
+
+	prepareTextSearch(
+		rooms: ModlogID[],
+		maxLines: number,
+		onlyPunishments: boolean,
+		search: ModlogSearch
+	): ModlogTextQuery {
 		// Ensure regexString can never be greater than or equal to the value of
 		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
 		// searchString with max length MAX_QUERY_LENGTH. Otherwise, the modlog
@@ -324,24 +455,98 @@ export class Modlog {
 		if (search.ip) regexString += `${this.escapeRegex(`[${search.ip}`)}.*?\\].*?`;
 		if (search.actionTaker) regexString += `${this.escapeRegex(`by ${search.actionTaker}`)}.*?`;
 		if (search.note) {
-			const regexGenerator = search.note.isExact ? this.generateRegex : this.escapeRegex;
+			const regexGenerator = search.note.isExact ? this.generateIDRegex : this.escapeRegex;
 			for (const noteSearch of search.note.searches) {
 				regexString += `${regexGenerator(toID(noteSearch))}.*?`;
 			}
 		}
 
-		const query = {
+		return {
 			rooms: rooms,
 			regexString,
 			maxLines: maxLines,
 			onlyPunishments: onlyPunishments,
 		};
-		const response = await PM.query(query);
+	}
 
-		if (response.duration > LONG_QUERY_DURATION) {
-			Monitor.log(`Long modlog query took ${response.duration} ms to complete: ${query}`);
+	prepareSQLSearch(
+		rooms: ModlogID[],
+		maxLines: number,
+		onlyPunishments: boolean,
+		search: ModlogSearch
+	): ModlogSQLQuery<string | number> {
+		for (const room of [...rooms]) {
+			rooms.push(`global-${room}` as ModlogID);
 		}
-		return {results: response, duration: response.duration};
+		const userid = toID(search.user);
+
+		const args: (string | number)[] = [];
+
+		let roomChecker = `roomid IN (${this.formatArray(rooms, args)})`;
+		if (rooms.includes('global')) roomChecker = `(roomid LIKE 'global-%' OR ${roomChecker})`;
+
+		let query = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
+		query += ` WHERE ${roomChecker}`;
+
+		if (search.anyField) {
+			query += ` AND action LIKE '%' || ? || '%'`;
+
+			query += ` OR userid LIKE '%' || ? || '%'`;
+			query += ` OR autoconfirmed_userid LIKE '%' || ? || '%'`;
+			query += ` OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE '%' || ? || '%')`;
+
+			query += ` OR ip LIKE '%' || ? || '%'`;
+			query += ` OR action_taker_userid LIKE '%' || ? || '%'`;
+
+			args.push(...Array(6).fill(search.anyField));
+
+			query += ` OR regex(?, note)`;
+			args.push(this.generateIDRegex(toID(search.anyField)));
+		}
+
+		if (search.action) {
+			query += ` AND action LIKE '%' || ? || '%'`;
+			args.push(search.action);
+		} else if (onlyPunishments) {
+			query += ` AND action IN (${this.formatArray(PUNISHMENTS, args)})`;
+		}
+
+		if (userid) {
+			query += ` AND (userid LIKE '%' || ? || '%' OR autoconfirmed_userid LIKE '%' || ? || '%' OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE '%' || ? || '%'))`;
+			args.push(userid, userid, userid);
+		}
+
+		if (search.ip) {
+			query += ` AND ip LIKE '%' || ? || '%'`;
+			args.push(search.ip);
+		}
+
+		if (search.actionTaker) {
+			query += ` AND action_taker_userid LIKE '%' || ? || '%'`;
+			args.push(search.actionTaker);
+		}
+
+		if (search.note) {
+			const parts = [];
+			for (const noteSearch of search.note.searches) {
+				if (!search.note.isExact) {
+					parts.push(`regex(?, note)`);
+					args.push(this.generateIDRegex(noteSearch));
+				} else {
+					parts.push(`note LIKE '%' || ? || '%'`);
+					args.push(noteSearch);
+				}
+			}
+			query += ` AND ${parts.join(' OR ')}`;
+		}
+
+		query += ` ORDER BY timestamp DESC`;
+		if (maxLines) {
+			query += ` LIMIT ?`;
+			args.push(maxLines);
+		}
+
+		return {statement: this.database.prepare(query), args};
 	}
 
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
@@ -361,10 +566,13 @@ export class Modlog {
 // even though it's a type not a function...
 type ModlogResult = ModlogEntry | undefined;
 
-export const PM = new QueryProcessManager<ModlogQuery, ModlogResult[]>(module, async data => {
+
+// the ProcessManager only accepts text queries at this time
+// SQL support is to be determined
+export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
-		const results = await modlog.runSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = await modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
 		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
@@ -396,4 +604,4 @@ if (!PM.isParentProcess) {
 	PM.spawn(MAX_PROCESSES);
 }
 
-export const modlog = new Modlog(MODLOG_PATH);
+export const modlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
