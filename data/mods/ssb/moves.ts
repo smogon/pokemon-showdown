@@ -998,6 +998,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add(`c|${getName('drampa\'s grandpa')}|GET OFF MY LAWN!!!`);
 		},
 		secondary: null,
+		forceSwitch: true,
 		selfSwitch: true,
 		target: "normal",
 		type: "Normal",

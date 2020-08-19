@@ -753,7 +753,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('MajorBowman')}|Never loved ya.`);
 		},
 	},
-	marashmallon: {
+	marshmallon: {
 		noCopy: true,
 		onStart() {
 			this.add(`c|${getName('Marshmallon')}|I'm hungry. Are you edible? c:`);

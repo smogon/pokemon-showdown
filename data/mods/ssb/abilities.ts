@@ -353,12 +353,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
 		},
 		onChargeMove(pokemon, target, move) {
-			if (pokemon.useItem()) {
-				this.debug('power herb - remove charge turn for ' + move.id);
-				this.attrLastMove('[still]');
-				this.addMove('-anim', pokemon, move.name, target);
-				return false; // skip charge turn
-			}
+			this.debug('power herb - remove charge turn for ' + move.id);
+			this.attrLastMove('[still]');
+			this.addMove('-anim', pokemon, move.name, target);
+			return false; // skip charge turn
 		},
 	},
 
