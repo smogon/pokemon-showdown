@@ -628,9 +628,8 @@ export abstract class BasicRoom {
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
-		if (user.can('mute', null, this)) {
-			message += this.getStaffIntroMessage(user);
-		}
+		const staffIntro = this.getStaffIntroMessage(user);
+		if (staffIntro) message += `\n${staffIntro}`;
 		return message;
 	}
 	getStaffIntroMessage(user: User) {
