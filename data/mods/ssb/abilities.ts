@@ -546,11 +546,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Once per battle, at 25% or lower this pokemon heals 50% hp.",
 		shortDesc: "Heals 50% when 25% or lower once per battle.",
 		name: "Dragon Heart",
-		onDamage(damage, target, source, move) {
-			if (target.m.heartless) return;
-			if (target.hp <= target.maxhp / 4) {
-				this.heal(target.baseMaxhp / 2);
-				target.m.heartless = true;
+		onDamagingHit(damage, target, source, move) {
+			if (move && target.hp > 0 && target.hp < target.maxhp / 4 && !target.m.dragonheart) {
+				target.m.dragonheart = true;
+				this.heal(target.maxhp / 2);
 			}
 		},
 	},
