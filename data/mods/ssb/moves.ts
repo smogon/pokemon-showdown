@@ -2899,8 +2899,8 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 					moveData: {
 						id: 'disconnect',
 						name: "Disconnect",
-		isNonstandard: "Custom",
-		gen: 8,
+						isNonstandard: "Custom",
+						gen: 8,
 						accuracy: 100,
 						basePower: 150,
 						category: "Special",
@@ -2912,7 +2912,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 					},
 				});
 				this.add('-start', source, 'Disconnect');
-				this.add(`c|%Segmr|Lemme show you this`);
+				this.add(`c|${getName('Segmr')}|Lemme show you this`);
 				source.switchFlag = 'disconnect' as ID;
 				return null;
 			}
