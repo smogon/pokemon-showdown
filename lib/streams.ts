@@ -80,7 +80,7 @@ export class ReadStream {
 
 		if (options.read) this._read = options.read;
 		if (options.pause) this._pause = options.pause;
-		if (options.destroy) this._destroy = options.read;
+		if (options.destroy) this._destroy = options.destroy;
 		if (options.encoding) this.encoding = options.encoding;
 		if (options.buffer !== undefined) {
 			this.push(options.buffer);
@@ -248,7 +248,7 @@ export class ReadStream {
 			byteCount = null;
 		}
 		await this.loadIntoBuffer(byteCount, true);
-		const out = this.peek(byteCount, encoding) as string | null;
+		const out = await this.peek(byteCount, encoding);
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
 			this.bufEnd = 0;
@@ -260,7 +260,7 @@ export class ReadStream {
 
 	async readBuffer(byteCount: number | null = null) {
 		await this.loadIntoBuffer(byteCount, true);
-		const out = this.peek(byteCount) as Buffer | null;
+		const out = await this.peekBuffer(byteCount);
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
 			this.bufEnd = 0;
@@ -531,7 +531,7 @@ export class ObjectReadStream<T> {
 
 		if (options.read) this._read = options.read;
 		if (options.pause) this._pause = options.pause;
-		if (options.destroy) this._destroy = options.read;
+		if (options.destroy) this._destroy = options.destroy;
 		if (options.buffer !== undefined) {
 			this.buf = options.buffer.slice();
 			this.pushEnd();
@@ -650,9 +650,13 @@ export class ObjectReadStream<T> {
 		return this._destroy();
 	}
 
+	// eslint-disable-next-line no-restricted-globals
+	[Symbol.asyncIterator]() { return this; }
 	async next() {
-		const value = await this.read();
-		return {value, done: value === null};
+		if (this.buf.length) return {value: this.buf.shift() as T, done: false as const};
+		await this.loadIntoBuffer(1, true);
+		if (!this.buf.length) return {value: undefined, done: true as const};
+		return {value: this.buf.shift() as T, done: false as const};
 	}
 
 	async pipeTo(outStream: ObjectWriteStream<T>, options: {noEnd?: boolean} = {}) {

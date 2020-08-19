@@ -21,15 +21,20 @@ const MAX_PROCESSES = 1;
 const LONG_QUERY_DURATION = 2000;
 const MODLOG_PATH = 'logs/modlog';
 
+
+const GLOBAL_PUNISHMENTS = [
+	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
+	'TICKETBAN', 'AUTOLOCK', 'AUTONAMELOCK', 'NAMELOCK', 'AUTOBAN', 'MONTHLOCK',
+];
+const GLOBAL_PUNISHMENTS_REGEX_STRING = `\\b(${GLOBAL_PUNISHMENTS.join('|')}):.*`;
+
 const PUNISHMENTS = [
-	'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE', 'CRISISDEMOTE',
-	'WEEKLOCK', 'LOCK', 'UNLOCK', 'UNLOCKNAME', 'UNLOCKRANGE', 'UNLOCKIP', 'BAN',
-	'UNBAN', 'RANGEBAN', 'UNRANGEBAN', 'RANGELOCK', 'TRUSTUSER', 'UNTRUSTUSER',
-	'FORCERENAME', 'BLACKLIST', 'BATTLEBAN', 'UNBATTLEBAN', 'NAMEBLACKLIST',
-	'KICKBATTLE', 'TICKETBAN', 'UNTICKETBAN', 'HIDETEXT', 'HIDEALTSTEXT', 'REDIRECT',
+	...GLOBAL_PUNISHMENTS, 'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE',
+	'CRISISDEMOTE', 'UNLOCK', 'UNLOCKNAME', 'UNLOCKRANGE', 'UNLOCKIP', 'UNBAN',
+	'UNRANGEBAN', 'TRUSTUSER', 'UNTRUSTUSER', 'BLACKLIST', 'BATTLEBAN', 'UNBATTLEBAN',
+	'NAMEBLACKLIST', 'KICKBATTLE', 'UNTICKETBAN', 'HIDETEXT', 'HIDEALTSTEXT', 'REDIRECT',
 	'NOTE', 'MAFIAHOSTBAN', 'MAFIAUNHOSTBAN', 'GIVEAWAYBAN', 'GIVEAWAYUNBAN',
-	'TOUR BAN', 'TOUR UNBAN', 'AUTOLOCK', 'AUTONAMELOCK', 'NAMELOCK', 'UNNAMELOCK',
-	'AUTOBAN', 'MONTHLOCK',
+	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK',
 ];
 const PUNISHMENTS_REGEX_STRING = `\\b(${PUNISHMENTS.join('|')}):.*`;
 
@@ -47,7 +52,7 @@ interface ModlogQuery {
 	search: string;
 	isExact: boolean;
 	maxLines: number;
-	onlyPunishments: boolean;
+	onlyPunishments: boolean | string;
 }
 
 class SortedLimitedLengthList {
@@ -178,7 +183,7 @@ export class Modlog {
 	 * Methods for reading (searching) modlog *
 	 ******************************************/
 	 async runSearch(
-		rooms: ModlogID[], search: string, isExact: boolean, maxLines: number, onlyPunishments: boolean
+		rooms: ModlogID[], search: string, isExact: boolean, maxLines: number, onlyPunishments: boolean | string
 	) {
 		const useRipgrep = await checkRipgrepAvailability();
 		let fileNameList: string[] = [];
@@ -210,7 +215,9 @@ export class Modlog {
 			search = toID(search);
 			regexString = `[^a-zA-Z0-9]${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 		}
-		if (onlyPunishments) regexString = `${PUNISHMENTS_REGEX_STRING}${regexString}`;
+		if (onlyPunishments) {
+			regexString = `${onlyPunishments === 'global' ? GLOBAL_PUNISHMENTS_REGEX_STRING : PUNISHMENTS_REGEX_STRING}${regexString}`;
+		}
 
 		const results = new SortedLimitedLengthList(maxLines);
 		if (useRipgrep) {
@@ -248,15 +255,20 @@ export class Modlog {
 		return results;
 	}
 
-	async search(
-		roomid: ModlogID = 'global', search = '', maxLines = 20, onlyPunishments = false
-	): Promise<ModlogResults> {
-		let exactSearch = false;
-		if (/^["'].+["']$/.test(search)) {
-			exactSearch = true;
-			search = search.substring(1, search.length - 1);
-		}
+	async getGlobalPunishments(user: User | string, days = 30) {
+		const response = await PM.query({
+			rooms: ['global' as ModlogID],
+			search: toID(user),
+			isExact: true,
+			maxLines: days * 10,
+			onlyPunishments: 'global',
+		});
+		return response.length;
+	}
 
+	async search(
+		roomid: ModlogID = 'global', search = '', maxLines = 20, exactSearch = false, onlyPunishments = false
+	): Promise<ModlogResults> {
 		const rooms = (roomid === 'public' ?
 			[...Rooms.rooms.values()]
 				.filter(room => !room.settings.isPrivate && !room.settings.isPersonal)
@@ -264,7 +276,6 @@ export class Modlog {
 			[roomid]);
 
 		const query = {
-			modlogClass: this,
 			rooms: rooms,
 			search: search,
 			isExact: exactSearch,
@@ -302,7 +313,7 @@ export const PM = new QueryProcessManager<ModlogQuery, string[] | undefined>(mod
 });
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
-	global.toID = require('../sim/dex').Dex.getId;
+	global.toID = require('../sim/dex').Dex.toID;
 
 	// @ts-ignore ???
 	global.Monitor = {

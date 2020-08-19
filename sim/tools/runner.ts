@@ -98,9 +98,7 @@ export class Runner {
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
 			`>player p2 ${JSON.stringify(p2spec)}`);
 
-		let chunk;
-		// tslint:disable-next-line no-conditional-assignment
-		while ((chunk = await streams.omniscient.read())) {
+		for await (const chunk of streams.omniscient) {
 			if (this.output) console.log(chunk);
 		}
 		return streams.omniscient.writeEnd();

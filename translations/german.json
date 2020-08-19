@@ -56,7 +56,7 @@
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn oder /k <em>Nutzernamen</em>: Verwarnt einen Nutzer und zeigt ihm die Regeln von Pok&eacute;mon Showdown",
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute oder /m <em>Nutzername</em>: Stummschalten für 7 Minuten",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute oder /hm <em>Nutzername</em>: Stummschalten für 60 Minuten",
-		"- /unmute <em>username</em>: unmute": "- /unmute <em>Nutzername</em>: Hebt die Stummschaltung eines Users auf",
+		"- /unmute <em>username</em>: unmute": "- /unmute <em>Nutzername</em>: Hebt die Stummschaltung eines Nutzers auf",
 		"- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>Nutzername</em>: Blendet die Nachrichten des Nutzers aus",
 		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce oder /wall <em>Nachricht</em>: Macht eine Ankündigung",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>Nutzername</em>: Ruft den Modlog des Nutzers für den Raum auf",
@@ -102,7 +102,7 @@
 
 		"You are already blocking private messages! To unblock, use /unblockpms": "Du blockierst bereits private Nachrichten! Um dies zu deaktivieren, benutze /unblockpms",
 		"You are now blocking private messages, except from staff and ${rank}.": "Du blockierst jetzt private Nachrichten, außer vom Staff und ${rank}. ",
-		"You are now blocking private messages, except from staff and ${status} users.": "Du blockierst jetzt private Nachrichten, außer von Staff und ${status} Usern. ",
+		"You are now blocking private messages, except from staff and ${status} users.": "Du blockierst jetzt private Nachrichten, außer von Staff und ${status} Nutzern. ",
 		"You are now blocking private messages, except from staff.": "Du blockierst jetzt private Nachrichten, außer vom Staff.",
 		"You are not blocking private messages! To block, use /blockpms": "Du blockierst keine privaten Nachrichten! Um diese zu blockieren, benutze /blockpms",
 		"You are no longer blocking private messages.": "Du blockierst keine privaten Nachrichten mehr.",
@@ -110,6 +110,16 @@
 		"You are already blocking challenges!": "Du blockierst bereits Herausforderungen!",
 		"You are already available for challenges!": "Du bist bereits für Herausforderungen verfügbar!",
 		"You are available for challenges from now on.": "Du bist ab jetzt für Herausforderungen verfügbar.",
+
+		"Staff FAQ": "Staff-FAQ",
+		"You cannot broadcast all FAQs at once.": "Du kannst nicht sämtliche FAQs auf einmal anzeigen lassen.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Ein Nutzer ist dann autoconfirmed, wenn dieser mindestens ein Rated-Battle gewonnen hat und seit einer Wocher oder länger registriert ist. Um Spamming und Trolling zu unterbinden, erlauben die meisten Räume nur Nutzern zu chatten, welche autoconfirmed sind. Falls du nicht autoconfirmed bist, kannst du ein Staff-Mitglied (Nutzer mit %, @, oder # vor ihren Namen) freundlich darum bitten, den Modchat zu deaktivieren. Jedoch ist der Staff nicht dazu verpflichtet, dies zu tun.",
+		"How the ladder works": "Wie die Ladder funktioniert",
+		"Tiering FAQ": "Tiering-FAQ",
+		"Badge FAQ": "Badge-FAQ",
+		"Common misconceptions about our RNG": "Häufige Missverständnisse über unser RNG-System",
+		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Um einem Raum-Turnier beizutreten, klicke auf <strong>Join!</strong> oder gebe den Befehl <code>/tour join</code> in den Chat ein. Du kannst überprüfen, ob dein Team für das Turnier legal ist, indem du auf <strong>Validate</strong> klickst, nachdem du dem Turnier beigetreten bist und ein Team ausgewählt hast. Um deinen Gegner im Turnier herauszufordern, klicke auf <strong>Ready!</strong> , wenn es erscheint. Es gibt zwei verschiedene Arten von Raum-Turnieren: Elimination (falls ein Nutzer mehr als eine bestimmte Anzahl an Spielen verliert, ist er draußen) und Round Robin (jeder spielt gegen jeden und der Nutzer mit den meisten Siegen am Ende gewinnt das Turnier).",
+		"Frequently Asked Questions": "Häufig gestellte Fragen",
 
 		"The announcement has ended.": "Die Ankündigung wurde beendet.",
 		"Battles do not support announcements.": "Kämpfe unterstützen keine Ankündigungen.",
@@ -122,7 +132,7 @@
 		"Invalid time given.": "Ungültige Zeitangabe.",
 		"The announcement timer is off.": "Der Ankündigungs-Timer ist ausgeschaltet.",
 		"The announcement was ended by ${user.name}.": "Die Ankündigung wurde von ${user.name} beendet.",
-		"Accepts the following commands:": "Folgende Befehle werden akzeptiert.",
+		"Accepts the following commands:": "Folgende Befehle werden akzeptiert:",
 
 		"That option is not selected.": "Diese Wahloption ist nicht ausgewählt.",
 		"You have already voted for this poll.": "Du hast bereits für diese Umfrage abgestimmt.",

@@ -632,9 +632,11 @@ export const commands: ChatCommands = {
 			this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('busy');
-		if (['dnd', 'donotdisturb'].includes(cmd)) {
+		const isDND = ['dnd', 'donotdisturb'].includes(cmd);
+		if (isDND) {
 			this.parse('/blockpms +');
 			this.parse('/blockchallenges');
+			user.settings.doNotDisturb = true;
 		}
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
@@ -690,13 +692,14 @@ export const commands: ChatCommands = {
 		const statusType = user.statusType;
 		user.setStatusType('online');
 
-		if (statusType === 'busy') {
+		if (user.settings.doNotDisturb) {
 			this.parse('/unblockpms');
 			this.parse('/unblockchallenges');
+			user.settings.doNotDisturb = false;
 		}
 
 		if (statusType) {
-			return this.sendReply(`You are no longer marked as ${statusType}.`);
+			return this.sendReply(`You are no longer marked as busy.`);
 		}
 
 		return this.sendReply("You have cleared your status message.");
@@ -898,7 +901,7 @@ export const commands: ChatCommands = {
 		}
 		let resultString = Dex.stringifyTeam(teamStrings);
 		if (showAll) {
-			resultString = `<details><summary>View team</summary><${resultString}</details>`;
+			resultString = `<details><summary>View team</summary>${resultString}</details>`;
 		}
 		this.runBroadcast();
 		return this.sendReplyBox(resultString);
@@ -1580,7 +1583,7 @@ export const commands: ChatCommands = {
 
 		let namespace = Chat.commands;
 
-		let currentBestHelp: {help: string[] | Chat.ChatHandler, for: string[]} | null = null;
+		let currentBestHelp: {help: string[] | Chat.AnnotatedChatHandler, for: string[]} | null = null;
 
 		for (const [i, cmd] of cmds.entries()) {
 			let nextNamespace = namespace[cmd];
@@ -1600,7 +1603,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`'/${cmds.slice(0, i + 1).join(' ')}' is a help command.`);
 				return this.parse(`/${target}`);
 			}
-			if (!nextNamespace || typeof nextNamespace === 'boolean') {
+			if (!nextNamespace) {
 				return this.errorReply(`The command '/${target}' does not exist.`);
 			}
 
@@ -1621,6 +1624,11 @@ export const commands: ChatCommands = {
 
 		if (currentBestHelp.for.length < cmds.length) {
 			this.errorReply(`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
+		}
+
+		const curHandler = this.parseCommand(`/${currentBestHelp.for.join(' ')}`)?.handler;
+		if (curHandler?.isPrivate && !user.can('lock')) {
+			return this.errorReply(`The command '/${target}' does not exist.`);
 		}
 
 		if (typeof currentBestHelp.help === 'function') {
