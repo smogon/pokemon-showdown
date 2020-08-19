@@ -194,8 +194,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return !/[A-Za-z0-9|,]/.test(symbol);
 	}
 	static isAuthLevel(level: string): level is AuthLevel {
-		if (this.isValidSymbol(level)) return true;
-		return ['unlocked', 'trusted', 'autoconfirmed', 'whitelist'].includes(level);
+		if (Config.groupsranking.includes(level as EffectiveGroupSymbol)) return true;
+		return ['‽', '!', 'unlocked', 'trusted', 'autoconfirmed', 'whitelist'].includes(level);
 	}
 	static ROOM_PERMISSIONS = ROOM_PERMISSIONS;
 	static GLOBAL_PERMISSIONS = GLOBAL_PERMISSIONS;

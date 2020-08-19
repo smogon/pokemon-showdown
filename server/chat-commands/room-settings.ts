@@ -7,6 +7,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
+import type {RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
@@ -93,7 +94,7 @@ export const commands: ChatCommands = {
 			target = Users.PLAYER_SYMBOL;
 			/* falls through */
 		default:
-			if (!Users.Auth.isAuthLevel(target)) {
+			if (!Users.Auth.isAuthLevel(target) || ['‽', '!'].includes(target)) {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
@@ -122,9 +123,6 @@ export const commands: ChatCommands = {
 		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & for all the options`,
 	],
 
-	ioo(target, room, user) {
-		return this.parse('/modjoin %');
-	},
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
@@ -147,7 +145,10 @@ export const commands: ChatCommands = {
 		`/ionext off - Sets your next battle to be publicly visible.`,
 	],
 
-	inviteonly(target, room, user) {
+	ioo: 'inviteonly',
+	inviteonly(target, room, user, connection, cmd) {
+		if (!room) return this.requiresRoom();
+		if (cmd === 'ioo') target = 'on';
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
 			return this.parse("/modjoin %");
@@ -174,6 +175,10 @@ export const commands: ChatCommands = {
 			if (prefix) {
 				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 			}
+			if (room.battle.inviteOnlySetter && !user.can('mute', null, room) && room.battle.inviteOnlySetter !== user.id) {
+				return this.errorReply(`Only the person who set this battle to be invite-only can turn it off.`);
+			}
+			room.battle.inviteOnlySetter = user.id;
 		} else if (room.settings.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else {
@@ -203,7 +208,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to autoconfirmed!</strong><br />Users must be rank autoconfirmed or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
-		} else if (Users.Auth.isAuthLevel(target)) {
+		} else if (Users.Auth.isAuthLevel(target) && !['‽', '!'].includes(target)) {
 			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
 			}
@@ -292,9 +297,6 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (rank === 'default') rank = '';
-			if (!room.auth.atLeast(user, '#')) {
-				return this.errorReply(`/permissions set - Access denied.`);
-			}
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
 			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
@@ -302,6 +304,15 @@ export const commands: ChatCommands = {
 			}
 			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
+			}
+			if (!room.auth.atLeast(user, '#')) {
+				return this.errorReply(`/permissions set - You must be at least a Room Owner to set permissions.`);
+			}
+			if (
+				Users.Auth.ROOM_PERMISSIONS.includes(perm as RoomPermission) &&
+				!Users.Auth.hasPermission(user, perm, null, room)
+			) {
+				return this.errorReply(`/permissions set - You can't set the permission "${perm}" because you don't have it.`);
 			}
 
 			const currentPermissions = room.settings.permissions || {};
@@ -347,8 +358,16 @@ export const commands: ChatCommands = {
 
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
-			const permissions = allPermissions.filter(perm => perm.startsWith('/') && !perm.includes(' '));
-			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' '));
+			const permissions = allPermissions.filter(perm => {
+				const handler = this.parseCommand(perm)?.handler;
+				if (handler?.isPrivate && !user.can('lock')) return false;
+				return perm.startsWith('/') && !perm.includes(' ');
+			});
+			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' ')).filter(perm => {
+				const handler = this.parseCommand(perm)?.handler;
+				if (handler?.isPrivate && !user.can('lock')) return false;
+				return perm.startsWith('/') && perm.includes(' ');
+			});
 			const subPermissionsByNamespace: {[k: string]: string[]} = {};
 			for (const perm of subPermissions) {
 				const [namespace] = perm.split(' ', 1);

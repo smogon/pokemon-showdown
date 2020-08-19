@@ -50,7 +50,7 @@ const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
 
-type StreamWorker = import('../lib/process-manager').StreamWorker;
+import type {StreamWorker} from '../lib/process-manager';
 
 /*********************************************************
  * Utility functions
@@ -305,6 +305,14 @@ export class Connection {
 
 type ChatQueueEntry = [string, RoomID, Connection];
 
+export interface UserSettings {
+	blockChallenges: boolean;
+	blockPMs: boolean | AuthLevel;
+	ignoreTickets: boolean;
+	hideBattlesFromTrainerCard: boolean;
+	doNotDisturb: boolean;
+}
+
 // User
 export class User extends Chat.MessageContext {
 	readonly user: User;
@@ -341,12 +349,7 @@ export class User extends Chat.MessageContext {
 	lastMatch: string;
 	forcedPublic: string | null;
 
-	settings: {
-		blockChallenges: boolean,
-		blockPMs: boolean | AuthLevel,
-		ignoreTickets: boolean,
-		hideBattlesFromTrainerCard: boolean,
-	};
+	settings: UserSettings;
 
 	battleSettings: {
 		team: string,
@@ -435,6 +438,7 @@ export class User extends Chat.MessageContext {
 			blockPMs: false,
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
+			doNotDisturb: false,
 		};
 		this.battleSettings = {
 			team: '',
@@ -896,6 +900,7 @@ export class User extends Chat.MessageContext {
 			// 'Ban spectators' checkbox on the client can be kept in sync (and disable privacy correctly)
 			hiddenNextBattle: this.battleSettings.hidden,
 			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
+			language: this.language,
 		};
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
@@ -929,7 +934,9 @@ export class User extends Chat.MessageContext {
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		this.setStatusType((this.statusType === 'busy' || oldUser.statusType === 'busy') ? 'busy' : 'online');
+		if (this.statusType === 'busy' || oldUser.statusType === 'busy') {
+			this.setStatusType('busy');
+		}
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);

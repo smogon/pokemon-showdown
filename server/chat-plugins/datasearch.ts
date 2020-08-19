@@ -480,7 +480,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let capSearch = null;
 	let nationalSearch = null;
 	let fullyEvolvedSearch = null;
-	let singleTypeSearch = false;
+	let singleTypeSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
@@ -584,7 +584,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (['mono', 'monotype'].includes(toID(target))) {
-				singleTypeSearch = true;
+				singleTypeSearch = !isNotSearch;
 				orGroup.skip = true;
 				continue;
 			}
@@ -823,8 +823,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 	if (
-		showAll && searches.length === 0 && !maxGen && !singleTypeSearch &&
-		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null
+		showAll && searches.length === 0 && !maxGen && singleTypeSearch === null &&
+		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
@@ -984,11 +984,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			for (const stat in alts.stats) {
 				let monStat = 0;
 				if (stat === 'bst') {
-					for (const monStats in dex[mon].baseStats) {
-						// Account for merged Special stat in gen 1, don't count it twice
-						if (maxGen === 1 && monStats === 'spd') continue;
-						monStat += dex[mon].baseStats[monStats as StatName];
-					}
+					monStat = dex[mon].bst;
 				} else if (stat === 'weight') {
 					monStat = dex[mon].weighthg / 10;
 				} else if (stat === 'height') {
@@ -1035,7 +1031,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
-		if (singleTypeSearch && dex[mon].types.length !== 1) continue;
+		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
@@ -1482,7 +1478,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && !searches.length && !targetMons.length && !maxGen) {
+	if (showAll && !searches.length && !targetMons.length && !maxGen && !sort) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.",
 		};
@@ -2437,7 +2433,7 @@ if (!PM.isParentProcess) {
 	global.Dex = require('../../sim/dex').Dex;
 	// tslint:disable-next-line: no-var-requires
 	global.Chat = require('../chat').Chat;
-	global.toID = Dex.getId;
+	global.toID = Dex.toID;
 	Dex.includeData();
 	// tslint:disable-next-line: no-var-requires
 	global.TeamValidator = require('../../sim/team-validator').TeamValidator;

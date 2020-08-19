@@ -38,7 +38,7 @@ export const Formats: {[k: string]: FormatsData} = {
 			'Meltan', 'Melmetal', 'Zacian', 'Zamazenta', 'Eternatus', 'Zarude',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toID(set.item) === 'souldew') {
+			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -58,7 +58,7 @@ export const Formats: {[k: string]: FormatsData} = {
 			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toID(set.item) === 'souldew') {
+			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -90,7 +90,8 @@ export const Formats: {[k: string]: FormatsData} = {
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
 			if (species.tier === "Unreleased") {
-				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${toID(species.baseSpecies)}`)) {
+				const basePokemon = this.toID(species.baseSpecies);
+				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${basePokemon}`)) {
 					return;
 				}
 				return [`${set.name || set.species} does not exist in the National Dex.`];
@@ -428,7 +429,7 @@ export const Formats: {[k: string]: FormatsData} = {
 		onValidateTeam(team) {
 			const itemTable: Set<string> = new Set();
 			for (const set of team) {
-				const item = toID(set.item);
+				const item = this.toID(set.item);
 				if (!item) continue;
 				if (itemTable.has(item)) {
 					return [
@@ -466,7 +467,7 @@ export const Formats: {[k: string]: FormatsData} = {
 				turboblaze: 'moldbreaker',
 			};
 			for (const set of team) {
-				let ability: string = toID(set.ability);
+				let ability: string = this.toID(set.ability);
 				if (!ability) continue;
 				if (ability in base) ability = base[ability];
 				if (ability in abilityTable) {
@@ -615,7 +616,7 @@ export const Formats: {[k: string]: FormatsData} = {
 			if (!('move:batonpass' in setHas)) return;
 
 			const item = this.dex.getItem(set.item);
-			const ability = toID(set.ability);
+			const ability = this.toID(set.ability);
 			let speedBoosted: boolean | string = false;
 			let nonSpeedBoosted: boolean | string = false;
 
@@ -1053,11 +1054,11 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-			const bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
-			if (bst <= 350) {
-				for (const stat of stats) {
+			if (newSpecies.bst <= 350) {
+				newSpecies.bst = 0;
+				for (const stat in newSpecies.baseStats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+					newSpecies.bst += newSpecies.baseStats[stat];
 				}
 			}
 			return newSpecies;
@@ -1068,7 +1069,7 @@ export const Formats: {[k: string]: FormatsData} = {
 		name: 'Flipped Mod',
 		desc: "Every Pok&eacute;mon's stats are reversed. HP becomes Spe, Atk becomes Sp. Def, Def becomes Sp. Atk, and vice versa.",
 		onBegin() {
-			this.add('rule', 'Pokemon have their stats flipped (HP becomes Spe, vice versa).');
+			this.add('rule', 'Flipped Mod: Pokemon have their stats flipped (HP becomes Spe, vice versa).');
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
@@ -1088,11 +1089,13 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: StatName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
-			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
+			const bstWithoutHp: number = newSpecies.bst - newSpecies.baseStats['hp'];
 			const scale = 600 - newSpecies.baseStats['hp'];
-			for (const stat of stats) {
-				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
+			newSpecies.bst = newSpecies.baseStats['hp'];
+			for (const stat in newSpecies.baseStats) {
+				if (stat === 'hp') continue;
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / bstWithoutHp, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[stat];
 			}
 			return newSpecies;
 		},

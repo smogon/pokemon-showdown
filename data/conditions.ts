@@ -174,7 +174,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.activeTarget = pokemon;
 			const damage = this.getDamage(pokemon, pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			const activeMove = {id: toID('confused'), effectType: 'Move', type: '???'};
+			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			return false;
 		},

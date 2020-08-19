@@ -15,7 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib/utils';
-type UserSettings = import('../users').User['settings'];
+import type {UserSettings} from '../users';
 
 const avatarTable = new Set([
 	'aaron',
@@ -625,17 +625,24 @@ export const commands: ChatCommands = {
 		 `Use /clearstatus to clear your status message.`,
 	],
 
-	busy(target, room, user) {
+	donotdisturb: 'busy',
+	dnd: 'busy',
+	busy(target, room, user, connection, cmd) {
 		if (target) {
 			this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 		}
 		user.setStatusType('busy');
-		this.parse('/blockpms +');
-		this.parse('/blockchallenges');
+		const isDND = ['dnd', 'donotdisturb'].includes(cmd);
+		if (isDND) {
+			this.parse('/blockpms +');
+			this.parse('/blockchallenges');
+			user.settings.doNotDisturb = true;
+		}
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
 	busyhelp: [
-		`/busy - Marks you as busy, blocking private messages and challenges.`,
+		`/busy OR /donotdisturb - Marks you as busy.`,
+		`Use /donotdisturb to also block private messages and challenges.`,
 		`Use /back to mark yourself as back.`,
 	 ],
 
@@ -685,13 +692,14 @@ export const commands: ChatCommands = {
 		const statusType = user.statusType;
 		user.setStatusType('online');
 
-		if (statusType === 'busy') {
+		if (user.settings.doNotDisturb) {
 			this.parse('/unblockpms');
 			this.parse('/unblockchallenges');
+			user.settings.doNotDisturb = false;
 		}
 
 		if (statusType) {
-			return this.sendReply(`You are no longer marked as ${statusType}.`);
+			return this.sendReply(`You are no longer marked as busy.`);
 		}
 
 		return this.sendReply("You have cleared your status message.");
@@ -736,6 +744,23 @@ export const commands: ChatCommands = {
 	hiderankhelp: [
 		`/hiderank [rank] - Displays your global rank as the given [rank].`,
 		`/showrank - Displays your true global rank instead of the rank you're hidden as.`,
+  ],
+	language(target, room, user) {
+		if (!target) {
+			return this.sendReply(`Currently, you're viewing Pokémon Showdown in ${Chat.languages.get(user.language || 'english')}.`);
+		}
+		target = toID(target);
+		if (!Chat.languages.has(target)) {
+			return this.errorReply(`Valid languages are: ${[...Chat.languages.values()].join(', ')}`);
+		}
+		user.language = target;
+		user.update();
+		return this.sendReply(`Pokémon Showdown will now be displayed in ${Chat.languages.get(target)} (except in language rooms).`);
+	},
+	languagehelp: [
+		`/language - View your current language setting.`,
+		`/language [language] - Changes the language Pokémon Showdown will be displayed to you in.`,
+		`Note that rooms can set their own language, which will override this setting.`,
 	],
 
 	updatesettings(target, room, user) {
@@ -745,6 +770,7 @@ export const commands: ChatCommands = {
 			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
 				this.errorReply("/updatesettings expects JSON encoded object.");
 			}
+			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
 					if (setting === 'blockPMs' &&
@@ -913,7 +939,7 @@ export const commands: ChatCommands = {
 		}
 		let resultString = Dex.stringifyTeam(teamStrings);
 		if (showAll) {
-			resultString = `<details><summary>View team</summary><${resultString}</details>`;
+			resultString = `<details><summary>View team</summary>${resultString}</details>`;
 		}
 		this.runBroadcast();
 		return this.sendReplyBox(resultString);
@@ -1595,7 +1621,7 @@ export const commands: ChatCommands = {
 
 		let namespace = Chat.commands;
 
-		let currentBestHelp: {help: string[] | Chat.ChatHandler, for: string[]} | null = null;
+		let currentBestHelp: {help: string[] | Chat.AnnotatedChatHandler, for: string[]} | null = null;
 
 		for (const [i, cmd] of cmds.entries()) {
 			let nextNamespace = namespace[cmd];
@@ -1615,7 +1641,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`'/${cmds.slice(0, i + 1).join(' ')}' is a help command.`);
 				return this.parse(`/${target}`);
 			}
-			if (!nextNamespace || typeof nextNamespace === 'boolean') {
+			if (!nextNamespace) {
 				return this.errorReply(`The command '/${target}' does not exist.`);
 			}
 
@@ -1636,6 +1662,11 @@ export const commands: ChatCommands = {
 
 		if (currentBestHelp.for.length < cmds.length) {
 			this.errorReply(`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
+		}
+
+		const curHandler = this.parseCommand(`/${currentBestHelp.for.join(' ')}`)?.handler;
+		if (curHandler?.isPrivate && !user.can('lock')) {
+			return this.errorReply(`The command '/${target}' does not exist.`);
 		}
 
 		if (typeof currentBestHelp.help === 'function') {
