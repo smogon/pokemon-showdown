@@ -77,15 +77,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 	rarebone: {
 		inherit: true,
 		onModifyAtkPriority: 2,
-		onModifyAtk(atk, source) {
+		onModifyAtk() {
 			return this.chainModify(1.5);
 		},
 		onModifyDefPriority: 2,
-		onModifyDef(def, source) {
+		onModifyDef() {
 			return this.chainModify(1.5);
 		},
 		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
+		onModifySpD() {
 			return this.chainModify(1.5);
 		},
 		desc: "1.5x to Attack, Defense, and Special Defense.",

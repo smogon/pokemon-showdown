@@ -1202,17 +1202,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart() {
 			this.add(`c|${getName('Zodiax')}|Zodiax is here to Zodihax`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c|${getName('Zodiax')}|Don't worry I'll be back again`);
 		},
 		onFaint(pokemon) {
 			const name = pokemon.side.foe.name;
 			this.add(`c|${getName('Zodiax')}|${name}, Why would you hurt this poor little pompombirb :(`);
-		},
-		onPrepareHit(source, target, move) {
-			if (move.name === 'Big Storm Coming') {
-				this.add(`c|${getName('Zodiax')}|There is a hail no storm okayyyyyy`);
-			}
 		},
 		// Big Storm Coming base power reduction effect
 		onBasePower(basePower, pokemon, target, move) {
@@ -1269,7 +1264,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onWeather(target, source, effect) {
 			if (target.side === this.effectData.source.side) return;
-			// Hail is strongerfrom Heavy Hailstormnone
+			// Hail is stronger from Heavy Hailstorm
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
 		},
 		onEnd() {

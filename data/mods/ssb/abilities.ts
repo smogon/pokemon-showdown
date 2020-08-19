@@ -2,7 +2,7 @@ import {SSBSet, ssbSets} from "./random-teams";
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail'];
-const HEAVY_RAIN_ABILITIES = ['primordialsea', 'tropicalcylcone', 'rainyseason'];
+const HEAVY_RAIN_ABILITIES = ['primordialsea', 'tropicalcyclone', 'rainyseason'];
 
 /**
  * Assigns a new set to a Pokémon
@@ -81,7 +81,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 	return result;
 }
 
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 	/*
 	// Example
 	"abilityid": {
@@ -146,6 +146,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// aegii
@@ -165,6 +167,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.useMove('Embargo', pokemon);
 		},
 		name: "New Stage",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Aeonic
@@ -180,9 +184,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(2);
 			}
 		},
-		onImmunity(type, pokemon) {
+		onImmunity(type) {
 			if (type === 'sandstorm') return false;
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Aethernum
@@ -223,6 +229,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(2);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Akir
@@ -244,6 +252,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		name: "Fortifications",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Annika
@@ -254,6 +264,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.side.pokemonLeft === 1) this.boost({spe: 1});
 		},
 		name: "Overprotective",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// A Quag To The Past
@@ -299,6 +311,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			duration: 1,
 		},
 		name: "Carefree",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// a random duck
@@ -309,6 +323,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 		name: "Gale Wings v1",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// ArchasTL
@@ -335,6 +351,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Indomitable",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Arsenal
@@ -358,6 +376,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.addMove('-anim', pokemon, move.name, target);
 			return false; // skip charge turn
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// biggie
@@ -369,6 +389,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Super Armor",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// cant say
@@ -385,6 +407,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Celestial
@@ -402,6 +426,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (effect.id === 'speedcontrol' || effect.id === 'stubbornness') return;
 			this.boost({spe: 1}, pokemon);
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Celine
@@ -412,12 +438,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			this.boost({def: 2, spd: 2}, pokemon);
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Darth
 	guardianangel: {
 		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last and stats Pokemon in before it.",
-		shortDesc: "Switching out: Regenerator. Switching in: Resists Weaknesses of last Pokemon.",
+		shortDesc: "Switching out: Regenerator. Switching in: Resists weaknesses of last Pokemon.",
 		name: "Guardian Angel",
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
@@ -449,6 +477,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.setType(newTypes)) return;
 			this.add('-start', pokemon, 'typechange', newTypes.join('/'));
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// drampa's grandpa
@@ -487,6 +517,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			this.boost({def: 1, spd: 1});
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// dream
@@ -526,6 +558,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Emeri
@@ -535,10 +569,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Draco Voice",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.flags['sound'] && !pokemon.volatiles.dynamax) { // hardcode
+			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
 				move.type = 'Dragon';
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// EpicNikolai
@@ -552,6 +588,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.heal(target.maxhp / 2);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// fart
@@ -606,12 +644,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				virtual: true,
 			};
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Frostyicelad
 	iceshield: {
 		desc: "This Pokemon receives 1/2 damage from special attacks. This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage.",
-		shortDesc: "Receives 1/2 dmg from SpAtks. This Pokemon can only be damaged by direct attacks.",
+		shortDesc: "Receives 1/2 damage from Special Attacks and can only be damaged by direct attacks.",
 		name: "Ice Shield",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category === 'Special') {
@@ -624,6 +664,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// GXS
@@ -649,6 +691,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// grimAuxiliatrix
@@ -674,6 +718,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add("-fail", target, "unboost", "[from] ability: Bio-steel", "[of] " + target);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// HoeenHero
@@ -683,7 +729,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Tropical Cyclone",
 		onStart(source) {
 			this.field.setWeather('primordialsea');
-			this.add('-message', 'A tropical cylcone covered the battlefield.');
+			this.add('-message', 'A tropical cyclone covered the battlefield.');
 		},
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
@@ -703,8 +749,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			this.field.clearWeather();
-			this.add('-message', 'The tropical cylcone disipated.');
+			this.add('-message', 'The tropical cyclone disipated.');
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Hydro
@@ -739,6 +787,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Hydrostatic",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Inactive
@@ -754,6 +804,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			target.heal(target.baseMaxhp / 4);
 		},
 		name: "Dragon Scale",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Iyarito
@@ -795,6 +847,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onEnd(pokemon) {
 			pokemon.abilityData.choiceLock = "";
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Jett x~x
@@ -818,6 +872,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Deceiver",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Jho
@@ -831,6 +887,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Venomize",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Jordy
@@ -847,6 +905,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			this.field.setWeather('sandstorm');
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Kaiju Bunny
@@ -860,6 +920,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.heal(target.maxhp / 2);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// KennedyLFC
@@ -878,6 +940,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return critRatio + 1;
 		},
 		name: "False Nine",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// KingSwordYT
@@ -899,6 +963,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.damage(source.baseMaxhp / 16, source, target);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Lionyx
@@ -938,6 +1004,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-end', pokemon, 'move: Tension', '[silent]');
 			},
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Marshmallon
@@ -974,6 +1042,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Mitsuki
@@ -1004,6 +1074,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// n10siT
@@ -1023,6 +1095,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-item', source, yourItem, '[from] ability: Greedy Magician', '[of] ' + target);
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Nolali
@@ -1045,6 +1119,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Burning Soul",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Overneat
@@ -1062,6 +1138,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyDef(def) {
 			return this.chainModify(2);
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Perish Song
@@ -1077,6 +1155,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Soup Sipper",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// phiwings99
@@ -1105,6 +1185,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return priority + 1;
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// piloswine gripado
@@ -1128,6 +1210,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.field.clearWeather();
 		},
 		name: "Forever Winter Nights",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// PiraTe Princess
@@ -1151,6 +1235,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.add('-start', pokemon, 'typechange', type);
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Robb576
@@ -1170,6 +1256,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			target.m.flag1 = true;
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Segmr
@@ -1181,6 +1269,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.side.getSideCondition('auroraveil')) return;
 			pokemon.side.addSideCondition('auroraveil');
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Shadecession
@@ -1221,6 +1311,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 		},
 		name: "Shady Deal",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Struchni
@@ -1264,6 +1356,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', target, 'typechange', sameType.join('/'));
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Sunny
@@ -1280,6 +1374,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && !!effect.recoil) this.heal(source.baseMaxhp / 4, source);
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Tenshi
@@ -1300,6 +1396,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// tiki
@@ -1327,6 +1425,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts['accuracy'] = 0;
 			}
 		},
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// Trickster
@@ -1353,6 +1453,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Trillionage Roots",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// vooper
@@ -1368,6 +1470,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Qi-Gong",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 
 	// yuki
@@ -1418,6 +1522,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return 0;
 		},
 		name: "Combat Training",
+		isNonstandard: "Custom",
+		gen: 8,
 	},
 	// Modified Illusion to support SSB volatiles
 	illusion: {
