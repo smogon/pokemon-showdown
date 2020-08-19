@@ -1152,6 +1152,39 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Fire",
 	},
 
+	// explodingdaisies
+	youhavenohope: {
+		accuracy: 100,
+		basePower: 0,
+		damageCallback(pokemon, target) {
+			return target.getUndynamaxedHP() - pokemon.hp;
+		},
+		onTryImmunity(target, pokemon) {
+			return pokemon.hp < target.hp;
+		},
+		category: "Physical",
+		desc: "Lowers the target's HP to the user's HP. Goes thru Substitute",
+		shortDesc: "Lowers the target's HP to the user's HP.",
+		name: "You Have No Hope!",
+		pp: 1,
+		priority: 0,
+		flags: {authentic: 1, contact: 1, protect: 1, mirror: 1},
+		isNonstandard: "Custom",
+		gen: 8,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Endeavor', target);
+		},
+		onHit(target, source) {
+			this.add(`c|${getName('explodingdaisies')}|You have no hope ${target.name}!`);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		noPPBoosts: true,
+	},
 	// fart
 	soupstealing7starstrikeredux: {
 		accuracy: 100,
@@ -3069,6 +3102,36 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		},
 		target: "normal",
 		type: "Electric",
+	},
+
+	// thewaffleman
+	icepress: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Uses user's Def stat as Atk in damage calculation. Supereffective against Fire types. 10% chance to Freeze",
+		shortDesc: "Uses user's Def stat as Atk in damage calculation.",
+		name: "Ice Press",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Body Press', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Fire') return 1;
+		},
+		secondary: {
+			chance: 10,
+			status: "frz",
+		},
+		target: "normal",
+		type: "Ice",
 	},
 
 	// tiki

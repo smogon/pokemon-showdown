@@ -411,6 +411,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('EpicNikolai')}|I like to keep a positive attitude even though it is hard sometimes <('o'<)~*/`);
 		},
 	},
+	explodingdaisies: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('explodingdaisies')}|Turn and run now, and I will mercifully pretend this never happened.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('explodingdaisies')}|You are beneath me, and it shows.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('explodingdaisies')}|Unacceptable!`);
+		},
+	},
 	fart: {
 		noCopy: true,
 		onStart(source) {
@@ -1075,6 +1087,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Tenshi')}|Grr bork bork :(`);
+		},
+	},
+	thewaffleman: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('thewaffleman')}|Whats Good Youtube its your boy thewaffleman`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('thewaffleman')}|Never Gonna Give You Up`);
+		},
+		onFaint() {
+			this.add(`c|${getName('thewaffleman')}|coyg`);
 		},
 	},
 	tiki: {
