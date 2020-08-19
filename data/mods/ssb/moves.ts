@@ -3126,6 +3126,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Fire') return 1;
 		},
+		useSourceDefensiveAsOffensive: true,
 		secondary: {
 			chance: 10,
 			status: "frz",
