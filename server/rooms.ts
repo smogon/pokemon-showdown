@@ -514,7 +514,7 @@ export abstract class BasicRoom {
 		user.updateIdentity();
 
 		if (!(this.settings.isPrivate === true || this.settings.isPersonal)) {
-			Punishments.monitorRoomPunishments(user);
+			void Punishments.monitorRoomPunishments(user);
 		}
 
 		return userid;
@@ -1111,14 +1111,10 @@ export class GlobalRoomState {
 		return Config.rankList;
 	}
 
-	getBattles(/** "formatfilter, elofilter, usernamefilter */ filter: string) {
+	getBattles(/** formatfilter, elofilter, usernamefilter */ filter: string) {
 		const rooms: GameRoom[] = [];
-		let skipCount = 0;
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
-		if (this.battleCount > 150 && !formatFilter && !eloFilter && !usernameFilter) {
-			skipCount = this.battleCount - 150;
-		}
 		for (const room of Rooms.rooms.values()) {
 			if (!room || !room.active || room.settings.isPrivate) continue;
 			if (room.type !== 'battle') continue;
@@ -1130,8 +1126,6 @@ export class GlobalRoomState {
 				if (!p1userid || !p2userid) continue;
 				if (!p1userid.startsWith(usernameFilter) && !p2userid.startsWith(usernameFilter)) continue;
 			}
-			if (skipCount && skipCount--) continue;
-
 			rooms.push(room);
 		}
 

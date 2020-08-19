@@ -312,6 +312,7 @@ export interface UserSettings {
 	statusMessage: string;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
+	doNotDisturb: boolean;
 }
 
 // User
@@ -439,6 +440,7 @@ export class User extends Chat.MessageContext {
 			statusMessage: '',
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
+			doNotDisturb: false,
 		};
 		this.battleSettings = {
 			team: '',
@@ -933,9 +935,9 @@ export class User extends Chat.MessageContext {
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		this.setStatusType(
-			(this.settings.statusType === 'busy' || oldUser.settings.statusType === 'busy') ? 'busy' : 'online'
-		);
+		if (this.settings.statusType === 'busy' || oldUser.settings.statusType === 'busy') {
+			this.setStatusType('busy');
+		}
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);

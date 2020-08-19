@@ -103,7 +103,6 @@ describe('Endless Battle Clause (slow)', () => {
 		assert(battle.winner === 'Player 2');
 	});
 
-
 	it('Entrainment should cause externally inflicted staleness', () => {
 		battle = common.createBattle({endlessBattleClause: true});
 		battle.setPlayer('p1', {team: [
@@ -136,6 +135,41 @@ describe('Endless Battle Clause (slow)', () => {
 		// Now that Magikarp is trapped, the termination condition should occur.
 		assert(battle.ended);
 		assert(battle.winner === 'Player 2');
+	});
+
+
+	it('Entrainment\'s externally inflicted staleness should go away on switch', () => {
+		battle = common.createBattle({endlessBattleClause: true});
+		battle.setPlayer('p1', {team: [
+			{species: "Blissey", ability: 'Levitate', level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'entrainment', 'block']},
+			{species: "Magikarp", moves: ['splash']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Magikarp", ability: 'Illuminate', moves: ['splash']},
+			{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']},
+		]});
+		skipTurns(battle, 100);
+		// Blissey inflicts external staleness on Magikarp.
+		battle.makeChoices('move entrainment', 'move splash');
+		assert.false(battle.ended);
+
+		for (let i = 0; i < 8; i++) {
+			battle.makeChoices('move extremespeed', 'move splash');
+		}
+		assert.false(battle.ended);
+
+		battle.makeChoices('move recycle', 'move splash');
+		assert.false(battle.ended);
+
+		for (let i = 0; i < 8; i++) {
+			battle.makeChoices('move extremespeed', 'move splash');
+		}
+		assert.false(battle.ended);
+
+		battle.makeChoices('move recycle', 'switch 2');
+		battle.makeChoices('move block', 'switch 2');
+
+		assert(!battle.ended);
 	});
 
 	it('should allow for a maximum of 1000 turns', function () {
