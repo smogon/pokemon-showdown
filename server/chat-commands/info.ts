@@ -820,16 +820,22 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
-		const modName = target.split(',');
+		const targets = target.split(',').map(toID);
+		const maybeMod = targets[targets.length - 1];
 		let mod = Dex;
 		let format: Format | null = null;
-		if (modName[modName.length - 1] && toID(modName[modName.length - 1]) in Dex.dexes) {
-			mod = Dex.mod(toID(modName[modName.length - 1]));
+		let isInverse = false;
+		if (maybeMod && maybeMod in Dex.dexes) {
+			mod = Dex.mod(maybeMod);
+			targets.pop();
 		} else if (room?.battle) {
 			format = Dex.getFormat(room.battle.format);
 			mod = Dex.mod(format.mod);
 		}
-		const targets = target.split(/ ?[,/] ?/);
+		if (maybeMod === 'inverse') {
+			isInverse = true;
+			targets.pop();
+		}
 		let species: {types: string[], [k: string]: any} = mod.getSpecies(targets[0]);
 		const type1 = mod.getType(targets[0]);
 		const type2 = mod.getType(targets[1]);
@@ -861,8 +867,9 @@ export const commands: ChatCommands = {
 		const immunities = [];
 		for (const type in mod.data.TypeChart) {
 			const notImmune = mod.getImmunity(type, species);
-			if (notImmune) {
-				const typeMod = mod.getEffectiveness(type, species);
+			if (notImmune || isInverse) {
+				let typeMod = !notImmune && isInverse ? 1 : 0;
+				typeMod += (isInverse ? -1 : 1) * mod.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
