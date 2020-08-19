@@ -1097,7 +1097,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.field.clearWeather();
 		},
-		name: "Winter Hail",
+		name: "Forever Winter Nights",
 	},
 
 	// PiraTe Princess
