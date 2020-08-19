@@ -819,18 +819,22 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
-		const modName = target.split(',').length > 1 ? target.split(',').pop() : null;
+		const targets = target.split(',').map(toID);
+		const maybeMod = targets[targets.length - 1];
 		let mod = Dex;
 		let format: Format | null = null;
 		let isInverse = false;
-		if (modName && toID(modName) in Dex.dexes) {
-			mod = Dex.mod(toID(modName));
+		if (maybeMod && maybeMod in Dex.dexes) {
+			mod = Dex.mod(maybeMod);
+			targets.pop();
 		} else if (room?.battle) {
 			format = Dex.getFormat(room.battle.format);
 			mod = Dex.mod(format.mod);
 		}
-		if (modName && toID(modName) === 'inverse') isInverse = true;
-		const targets = target.split(/ ?[,/] ?/);
+		if (maybeMod === 'inverse') {
+			isInverse = true;
+			targets.pop();
+		}
 		let species: {types: string[], [k: string]: any} = mod.getSpecies(targets[0]);
 		const type1 = mod.getType(targets[0]);
 		const type2 = mod.getType(targets[1]);
