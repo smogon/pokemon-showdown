@@ -235,6 +235,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Data Corruption',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	HoeenHero: {
+		species: 'Ludicolo', ability: 'Tropical Cyclone', item: 'Life Orb', gender: 'M',
+		moves: ['Scald', 'Giga Drain', 'Hurricane'],
+		signatureMove: 'Landfall',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	Hubriz: {
 		species: 'Roserade', ability: 'Stakeout', item: 'Rose Incense', gender: 'F',
 		moves: [['Toxic Spikes', 'Spikes'], 'Leaf Storm', 'Sludge Bomb'],

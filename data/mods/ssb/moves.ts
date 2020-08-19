@@ -1336,6 +1336,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// HoeenHero
+	landfall: {
+		accuracy: 100,
+		category: "Special",
+		basePower: 0,
+		basePowerCallback(target, source, move) {
+			const windSpeeds = [65, 85, 85, 95, 95, 95, 95, 115, 115, 140];
+			move.basePower = windSpeeds[this.random(0, 10)];
+			return move.basePower;
+		},
+		desc: "The foe is hit with a hurricane whos base power depends on the strength (category) of the hurricane. Category 1 is 65, Category 2 is 85, Category 3 is 95, Category 4 is 115, Category 5 is 140. In addition, the target's side of the field is covered in storm surge. Storm surge applies a 1/4 speed multiplier to pokemon on that side of the field. Storm surge will last for as many turns as the hurricane's category (not including the turn landfall was used).",
+		shortDesc: "Higher category = more damage, foe side speed 1/4.",
+		name: "Landfall",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hurricane', target);
+			this.add('-anim', source, 'Surf', target);
+		},
+		onHit(target, source, move) {
+			const windSpeeds = [65, 85, 95, 115, 140];
+			const category = windSpeeds.indexOf(move.basePower) + 1;
+			this.add('-message', `A category ${category} hurricane made landfall!`);
+		},
+		sideCondition: 'stormsurge', // Programmed in conditions.ts
+		target: "normal",
+		type: "Water",
+	},
+
 	// Hubriz
 	steroidanaphylaxia: {
 		accuracy: true,

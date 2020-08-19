@@ -1,6 +1,9 @@
 import {FS} from '../../../lib/fs';
 import {toID} from '../../../sim/dex-data';
 
+// Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail'];
+
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
 const usergroups: {[userid: string]: string} = {};
@@ -489,6 +492,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('GXS')}|A Critical Error Has Occurred. Would You Like To Send A Report? Sending Report.`);
+		},
+	},
+	hoeenhero: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('HoeenHero')}|A storm is brewing...`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('HoeenHero')}|The eye of the hurricane provides a brief respite from the storm.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('HoeenHero')}|All storms eventually disipate.`);
 		},
 	},
 	hubriz: {
@@ -1245,8 +1260,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onAnySetWeather(target, source, weather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream', 'snowstorm', 'heavyhailstorm'];
-			if (this.field.getWeather().id === 'heavyhailstorm' && !strongWeathers.includes(weather.id)) return false;
+			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 		onResidualOrder: 1,
 		onResidual() {
@@ -1402,6 +1416,26 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-activate', target, 'ability: Bounty');
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
 			}
+		},
+	},
+	// Custom status for HoeenHero's move
+	stormsurge: {
+		name: "Storm Surge",
+		duration: 2,
+		durationCallback(target, source, effect) {
+			const windSpeeds = [65, 85, 95, 115, 140];
+			return windSpeeds.indexOf((effect as ActiveMove).basePower) + 2;
+		},
+		onStart(targetSide) {
+			this.add('-sidestart', targetSide, 'Storm Surge');
+			this.add('-message', `Storm Surge flooded the afflicted side of the battlefield!`);
+		},
+		onEnd(targetSide) {
+			this.add('-sideend', targetSide, 'Storm Surge');
+			this.add('-message', 'The Storm Surge receeded.');
+		},
+		onModifySpe(spe, pokemon) {
+			return this.chainModify(0.25);
 		},
 	},
 };
