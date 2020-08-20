@@ -1451,7 +1451,9 @@ export class GlobalRoomState {
 				}
 
 				if (curRoom.auth.has(userid)) {
-					roomauth.push(`${curRoom.auth.get(userid)}${id}`);
+					let oldGroup = curRoom.auth.get(userid) as string;
+					if (oldGroup === ' ') oldGroup = 'whitelist in ';
+					roomauth.push(`${oldGroup}${id}`);
 				}
 			}
 		}
