@@ -100,7 +100,7 @@
 		"You are already marked as back.": "Du bist bereits als anwesend markiert.",
 		"You are no longer marked as busy.": "Du bist nicht länger als beschäftigt markiert.",
 
-    "You must choose a name before you can talk.": "Du musst einen Namen auswählen, bevor du schreiben kannst.",
+		"You must choose a name before you can talk.": "Du musst einen Namen auswählen, bevor du schreiben kannst.",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Du bist ${lockType} und kannst im Chat nicht schreiben. ${lockExpiration}",
 		"Get help with [TN: your lock]this": "Erhalte diesbezüglich Hilfe",
 		"You are muted and cannot talk in this room.": "Du bist stummgeschaltet und kannst in diesem Raum nicht schreiben.",
