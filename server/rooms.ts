@@ -796,12 +796,8 @@ export abstract class BasicRoom {
 		this.users[user.id] = user;
 		if (joining) {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
-			if (user.can('mute', null, this)) {
-				this.sendUser(
-					user,
-					this.getStaffIntroMessage(user)
-				);
-			}
+			const staffIntro = this.getStaffIntroMessage(user);
+			if (staffIntro) this.sendUser(user, staffIntro);
 		} else if (!user.named) {
 			this.reportJoin('l', oldid, user);
 		} else {
