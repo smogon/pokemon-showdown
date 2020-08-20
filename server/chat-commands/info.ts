@@ -2427,7 +2427,7 @@ export const commands: ChatCommands = {
 		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
 	},
 
-	requestshow(target, room, user) {
+	async requestshow(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return false;
 		if (!room.settings.requestShowEnabled) {
@@ -2440,11 +2440,20 @@ export const commands: ChatCommands = {
 		let [link, comment] = target.split(',');
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
+		let dimensions;
+		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			try {
+				dimensions = await Chat.fitImage(link);
+			} catch (e) {
+				throw new Chat.ErrorMessage('Invalid link.');
+			}
+		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
 			link: link,
 			comment: comment,
+			dimensions: dimensions,
 		});
 		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		const message = `|tempnotify|pendingapprovals|Pending media request!` +
@@ -2476,18 +2485,14 @@ export const commands: ChatCommands = {
 		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
 
 		let buf;
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(request.link)) {
+		if (request.dimensions) { // image
+			const [width, height, resized] = request.dimensions;
+			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
+			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
+		} else {
 			const YouTube = new YoutubeInterface();
 			buf = await YouTube.generateVideoDisplay(request.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
-		} else {
-			try {
-				const [width, height, resized] = await Chat.fitImage(request.link);
-				buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
-			} catch (err) {
-				return this.errorReply('Invalid image');
-			}
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
