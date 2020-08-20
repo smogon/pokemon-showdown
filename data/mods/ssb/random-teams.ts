@@ -389,7 +389,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 	'Perish Song': {
-		species: 'Rhydon', ability: 'Soup Sipper', item: 'Eviolite', gender: 'M',
+		species: 'Rhydon', ability: 'Soup Sipper', item: 'Rocky Helmet', gender: 'M',
 		moves: ['Swords Dance', 'Rock Blast', 'Earthquake'],
 		signatureMove: 'Shifting Rocks',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
