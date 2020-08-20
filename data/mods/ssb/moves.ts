@@ -860,29 +860,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Normal",
 	},
 
-	// Chloe
-	vsni: {
-		accuracy: 55,
-		basePower: 100,
-		category: "Special",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
-		name: "Víðsýni",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 1,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Seed Flare', target);
-		},
-		target: "normal",
-		type: "Grass",
-	},
-
 	// c.kilgannon
 	deathwing: {
 		accuracy: 100,
@@ -2217,7 +2194,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 			this.add('-anim', source, 'Ingrain', target);
 			this.add('-anim', source, 'Stealth Rock', target);
 		},
-		terrain: 'grassyterrain',
 		sideCondition: 'stealthrock',
 		secondary: null,
 		target: "normal",

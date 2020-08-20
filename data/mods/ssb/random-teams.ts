@@ -149,12 +149,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Status Guard',
 		evs: {hp: 248, def: 252, spd: 8}, nature: 'Impish',
 	},
-	Chloe: {
-		species: 'Delphox', ability: 'No Guard', item: 'Heavy-Duty Boots', gender: 'F',
-		moves: ['Nasty Plot', 'Inferno', 'Psystrike'],
-		signatureMove: 'Víðsýni',
-		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
-	},
 	'c.kilgannon': {
 		species: 'Yveltal', ability: 'Infiltrator', item: 'Choice Scarf', gender: 'N',
 		moves: ['Knock Off', 'Steel Wing', 'U-turn'],
@@ -360,7 +354,7 @@ export const ssbSets: SSBSets = {
 	},
 	Mitsuki: {
 		species: 'Leafeon', ability: 'Photosynthesis', item: ['Life Orb', 'Miracle Seed'], gender: 'M',
-		moves: ['Solar Blade', 'Attack Order', 'Thousand Arrows'],
+		moves: ['Leaf Blade', 'Attack Order', 'Thousand Arrows'],
 		signatureMove: 'Terraforming',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
