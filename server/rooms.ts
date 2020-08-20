@@ -655,7 +655,6 @@ export abstract class BasicRoom {
 			message += `</details></div>`;
 		}
 		return message ? `|raw|${message}` : ``;
-		return message;
 	}
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
