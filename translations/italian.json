@@ -354,9 +354,9 @@
 		"Hello! The global staff team would be happy to help you, but you need to explain what's going on first.": "Ciao! Il team dello staff globale è felice di assisterti, ma prima devi spiegare che cosa sta succedendo.",
 		"Please post the information I requested above so a global staff member can come to help.": "Per favore, inserisci tutte le informazioni che ti ho richiesto così che un membro dello staff globale possa venire ad assisterti.",
 		"Thank you for the information, global staff will be here shortly. Please stay in the room.": "Grazie per le informazioni, lo staff globale sarà qui tra poco. Per favore, resta all'interno della room.",
-		"You are banned from creating tickets": "Sei bannato dal creare ticket.",
+		"You are banned from creating tickets": "Sei bannato dal creare ticket",
 		", because you have the same IP as ${ticket.banned}.": ", perché hai lo stesso indirizzo IP di ${ticket.banned}.",
-		"Request help from global staff": "Richiedi assistenza allo staff globale.",
+		"Request help from global staff": "Richiedi assistenza allo staff globale",
 		"Please <button name=\"login\" class=\"button\">Log In</button> to request help.": "Per favore, <button name=\"login\" class=\"button\">effettua il log in</button> per richiedere assistenza.",
 		"Request Help": "Richiedi Assistenza",
 		"You already have a Help ticket.": "Hai già aperto un ticket Help.",
@@ -490,14 +490,14 @@
 		"${this.inputUsername} does not have an open ticket.": "${this.inputUsername} non ha un ticket aperto.",
 		"You closed ${ticket.creator}'s ticket.": "Hai chiuso il ticket di ${ticket.creator}",
 		"The reason is too long. It cannot exceed 300 characters.": "La ragione è troppo lunga.",
-		"User '${this.targetUsername}' not found.": "Utente ${this.targetUsername}' non trovato.",
+		"User '${this.targetUsername}' not found.": "Utente '${this.targetUsername}' non trovato.",
 		"${targetUser ? targetUser.name : target} is not ticket banned.": "${targetUser ? targetUser.name : target} non è bannato dall'aprire ticket.",
 		"${targetUser ? targetUser.name : target}'s ticket ban is already expired.": "Il ticketban di ${targetUser ? targetUser.name : target} è già terminato.",
 		"You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.": "Stai già ignorando le notifiche dei ticket help. Usa /helpticket unignore per ricevere nuovamente le notifiche.",
 		"You are now ignoring help ticket notifications.": "Stai ora ignorando le notifiche dei ticket help.",
 		"You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.": "Non stai ignorando le notifiche dei ticket help. Usa /helpticket ignore per non ricevere più le notifiche.",
 		"You will now receive help ticket notifications.": "Non riceverai più alcuna notifica dei ticket help.",
-		"${target} does not have a ticket.": "${target} non ha un ticket",
-		"You deleted ${target}'s ticket.": "Hai eliminato il ticket di ${target}"
+		"${target} does not have a ticket.": "${target} non ha un ticket.",
+		"You deleted ${target}'s ticket.": "Hai eliminato il ticket di ${target}."
 	}
 }
