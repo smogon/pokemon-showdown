@@ -592,6 +592,29 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// estarossa
+	sandsoftime: {
+		desc: "On switch-in, this Pokemon summons Sandstorm. This Pokemon's Ground/Rock/Steel type moves do x1.3 damage under Sandstorm. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "Sand Stream + Sand Force.",
+		name: "Sands of Time",
+		onStart(source) {
+			this.field.setWeather('sandstorm');
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm') return false;
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.field.isWeather('sandstorm')) {
+				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
+					this.debug('Sand Force boost');
+					return this.chainModify([0x14CD, 0x1000]);
+				}
+			}
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// fart
 	bipolar: {
 		desc: "When this Pokemon switches in, it changes to two random types and gets STAB.",

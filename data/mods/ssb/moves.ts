@@ -422,16 +422,20 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		priority: 0,
 		flags: {heal: 1},
 		heal: [1, 2],
-		secondary: {
-			chance: 50,
-			self: {
-				onHit(target, source, move) {
-					const boostName: string[] = ['atk', 'spe'];
-					const boost: {[key: string]: number} = {};
-					boost[boostName[this.random(2)]] = 1;
-					this.boost(boost, target);
-				},
-			},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Splash', source);
+			this.add('-anim', source, 'Dragon Dance', source);
+			this.add('-anim', source, 'Roost', source);
+		},
+		onHit(target, source, move) {
+			if (!this.randomChance(1, 2)) return;
+			const boostName: string[] = ['atk', 'spe'];
+			const boost: {[key: string]: number} = {};
+			boost[boostName[this.random(2)]] = 1;
+			this.boost(boost, target);
 		},
 		target: "self",
 		type: "Flying",
@@ -1152,6 +1156,33 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Fire",
 	},
 
+	// estarossa
+	sandbalance: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Hippowdon uses Roar, then switches out after forcing out the opposing Pokemon.",
+		shortDesc: "Hippowdon uses Roar, switches out after.",
+		name: "Sand Balance",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: -6,
+		flags: {authentic: 1, protect: 1, mirror: 1, sound: 1, refractable: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Roar', target);
+			this.add('-anim', source, 'Parting Shot', target);
+		},
+		forceSwitch: true,
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Ground",
+	},
+
 	// explodingdaisies
 	youhavenohope: {
 		accuracy: 100,
@@ -1505,7 +1536,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Origin Pulse', target);
-			this.add('-anim', source, 'Crarge Beam', target);
+			this.add('-anim', source, 'Charge Beam', target);
 		},
 		secondaries: [
 			{

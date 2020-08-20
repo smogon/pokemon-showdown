@@ -199,6 +199,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Forced Landing',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	estarossa: {
+		species: 'Hippowdon', ability: 'Sands of Time', item: 'Leftovers', gender: 'M',
+		moves: ['Earthquake', 'Stone Edge', 'Slack Off'],
+		signatureMove: 'Sand Balance',
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+	},
 	EpicNikolai: {
 		species: 'Garchomp', ability: 'Dragon Heart', item: 'Garchompite', gender: 'M',
 		moves: ['Outrage', 'Earthquake', 'Swords Dance'],

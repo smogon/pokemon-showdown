@@ -411,6 +411,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('EpicNikolai')}|I like to keep a positive attitude even though it is hard sometimes <('o'<)~*/`);
 		},
 	},
+	estarossa: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('estarossa')}|honestly best pairing for hazard coverage wtih molt is like molt + tsareena/dhelmise`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('estarossa')}|sand balance <333`);
+		},
+		onFaint() {
+			this.add(`c|${getName('estarossa')}|*eurgh*`);
+		},
+	},
 	explodingdaisies: {
 		noCopy: true,
 		onStart() {
