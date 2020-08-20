@@ -355,31 +355,6 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
-	// Arsenal
-	royalprivilege: {
-		desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. This Pokemon can only be damaged by direct attacks. Attacks that need to charge do not charge and execute in 1 turnThis Pokemon is not affected by the secondary effect of another Pokemon's attack. This Pokemon can only be damaged by direct attacks. Attacks that need to charge do not charge and execute in 1 turn.",
-		shortDesc: "Magic Guard + Shield Dust + Power Herb",
-		name: "Royal Privilege",
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
-		onModifySecondaries(secondaries) {
-			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
-		},
-		onChargeMove(pokemon, target, move) {
-			this.debug('power herb - remove charge turn for ' + move.id);
-			this.attrLastMove('[still]');
-			this.addMove('-anim', pokemon, move.name, target);
-			return false; // skip charge turn
-		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
 	// biggie
 	superarmor: {
 		shortDesc: "Reduces damage taken from physical moves by 25% if the user has not yet attacked.",
@@ -721,7 +696,7 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 	// HoeenHero
 	tropicalcyclone: {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land. In addition, if Rain Dance or Heavy Rain is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
-		shortDesc: "Heavy Rain, double speed in rain.",
+		shortDesc: "Summons Heavy Rain that is active until this Pokemon switches out. 2x Speed while rain is active.",
 		name: "Tropical Cyclone",
 		onStart(source) {
 			this.field.setWeather('primordialsea');

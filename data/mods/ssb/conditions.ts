@@ -175,21 +175,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!pokemon.m.indomitableActivated) pokemon.m.indomitableActivated = false;
 		},
 	},
-	arsenal: {
-		noCopy: true,
-		onStart(pokemon) {
-			this.add(`c|${getName('Arsenal')}|Wenger Out`);
-			// Innate
-			if (pokemon.illusion) return;
-			this.boost({atk: 1}, pokemon);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Arsenal')}|Wait.. Wenger is gone?? STAN OUT`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Arsenal')}|Next Year...`);
-		},
-	},
 	awauser: {
 		noCopy: true,
 		onStart() {
@@ -1428,7 +1413,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onEnd(targetSide) {
 			this.add('-sideend', targetSide, 'Storm Surge');
-			this.add('-message', 'The Storm Surge receeded.');
+			this.add('-message', 'The Storm Surge receded.');
 		},
 		onModifySpe(spe, pokemon) {
 			return this.chainModify(0.25);

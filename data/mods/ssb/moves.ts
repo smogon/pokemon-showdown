@@ -469,37 +469,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Steel",
 	},
 
-	// Arsenal
-	vorpalwings: {
-		accuracy: 100,
-		basePower: 75,
-		category: "Physical",
-		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
-		shortDesc: "100% chance to raises the user's Speed by 1.",
-		name: "Vorpal Wings",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Max Steelspike', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Steel",
-	},
-
 	// awa
 	awa: {
 		accuracy: 100,
@@ -1393,7 +1362,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 			move.basePower = windSpeeds[this.random(0, 10)];
 			return move.basePower;
 		},
-		desc: "The foe is hit with a hurricane whos base power depends on the strength (category) of the hurricane. Category 1 is 65, Category 2 is 85, Category 3 is 95, Category 4 is 115, Category 5 is 140. In addition, the target's side of the field is covered in storm surge. Storm surge applies a 1/4 speed multiplier to pokemon on that side of the field. Storm surge will last for as many turns as the hurricane's category (not including the turn landfall was used).",
+		desc: "The foe is hit with a hurricane with a Base Power that varies based on the strength (category) of the hurricane. Category 1 is 65, category 2 is 85, category 3 is 95, category 4 is 115, and category 5 is 140. In addition, the target's side of the field is covered in a storm surge. Storm surge applies a 1/4 Speed multiplier to pokemon on that side of the field. Storm surge will last for as many turns as the hurricane's category (not including the turn Landfall was used).",
 		shortDesc: "Higher category = more damage, foe side speed 1/4.",
 		name: "Landfall",
 		isNonstandard: "Custom",
