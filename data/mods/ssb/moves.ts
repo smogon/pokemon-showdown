@@ -1383,50 +1383,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Steel",
 	},
 
-	// GXS
-	datacorruption: {
-		accuracy: 90,
-		basePower: 110,
-		category: "Special",
-		desc: "Has a 30% chance to randomly lower one of the target's stats by 1 stage.",
-		shortDesc: "30% chance to randomly lower a foe's stat.",
-		name: "Data Corruption",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			// No animation
-		},
-		secondary: {
-			chance: 30,
-			onHit(target) {
-				const stats: BoostName[] = [];
-				let stat: BoostName;
-				for (stat in target.boosts) {
-					if (stat === 'evasion' || stat === 'accuracy') continue;
-					if (target.boosts[stat] > -6) {
-						stats.push(stat);
-					}
-				}
-				if (stats.length) {
-					const randomStat = this.sample(stats);
-					const boost: SparseBoostsTable = {};
-					boost[randomStat] = -1;
-					this.boost(boost);
-				} else {
-					return false;
-				}
-			},
-		},
-		target: "normal",
-		type: "Normal",
-	},
-
 	// HoeenHero
 	landfall: {
 		accuracy: 100,
@@ -3109,37 +3065,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		},
 		target: "normal",
 		type: "Electric",
-	},
-
-	// thewaffleman
-	icepress: {
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		desc: "Uses user's Def stat as Atk in damage calculation. Supereffective against Fire types. 10% chance to Freeze",
-		shortDesc: "Uses user's Def stat as Atk in damage calculation.",
-		name: "Ice Press",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Body Press', target);
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Fire') return 1;
-		},
-		useSourceDefensiveAsOffensive: true,
-		secondary: {
-			chance: 10,
-			status: "frz",
-		},
-		target: "normal",
-		type: "Ice",
 	},
 
 	// tiki

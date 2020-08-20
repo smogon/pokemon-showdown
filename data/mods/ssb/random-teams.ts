@@ -235,12 +235,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Do Not Steel',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
-	GXS: {
-		species: 'Porygon-Z', ability: 'Virus Upload', item: 'Life Orb', gender: 'N',
-		moves: ['Nasty Plot', 'Aura Sphere', 'Thunderbolt'],
-		signatureMove: 'Data Corruption',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
-	},
 	HoeenHero: {
 		species: 'Ludicolo', ability: 'Tropical Cyclone', item: 'Life Orb', gender: 'M',
 		moves: ['Scald', 'Giga Drain', 'Hurricane'],
@@ -513,12 +507,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Tail Glow', 'Freeze Dry', 'Secret Sword'],
 		signatureMove: 'Watt Up',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
-	},
-	thewaffleman: {
-		species: 'Mr. Rime', ability: 'Prankster', item: 'Kasib Berry', gender: 'M',
-		moves: ['Iron Defense', 'Slack Off', 'Focus Blast'],
-		signatureMove: 'Ice Press',
-		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
 	tiki: {
 		species: 'Snom', ability: 'True Grit', item: 'Eviolite', gender: 'M',

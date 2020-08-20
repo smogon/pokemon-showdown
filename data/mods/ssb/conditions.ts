@@ -494,18 +494,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('grimAuxiliatrix')}|${['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA'][this.random(3)]}`);
 		},
 	},
-	gxs: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('GXS')}|Upl0ad1ng V1ru$ BzZT!!`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('GXS')}|Buff3r1ng BzZT!!`);
-		},
-		onFaint() {
-			this.add(`c|${getName('GXS')}|A Critical Error Has Occurred. Would You Like To Send A Report? Sending Report.`);
-		},
-	},
 	hoeenhero: {
 		noCopy: true,
 		onStart() {
@@ -1087,18 +1075,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Tenshi')}|Grr bork bork :(`);
-		},
-	},
-	thewaffleman: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('thewaffleman')}|Whats Good Youtube its your boy thewaffleman`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('thewaffleman')}|Never Gonna Give You Up`);
-		},
-		onFaint() {
-			this.add(`c|${getName('thewaffleman')}|coyg`);
 		},
 	},
 	tiki: {
