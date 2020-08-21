@@ -134,8 +134,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.inviteOnly = true;
 			user.update();
-			const isForcedPublic = Config.forcedpublicprefixes.some(prefix => user.id.startsWith(toID(prefix)));
-			this.sendReply(`Your next battle will be invite-only${isForcedPublic ? `, unless it is rated` : ``}.`);
+			this.sendReply(`Your next battle will be invite-only${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
 		}
 	},
 	ionexthelp: [
@@ -1081,8 +1080,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.hidden = true;
 			user.update();
-			const isForcedPublic = Config.forcedpublicprefixes.some(prefix => user.id.startsWith(toID(prefix)));
-			this.sendReply(`Your next battle will be hidden${isForcedPublic ? `, unless it is rated` : ``}.`);
+			this.sendReply(`Your next battle will be hidden${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
 		}
 	},
 	hidenexthelp: [

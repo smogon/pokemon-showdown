@@ -1452,6 +1452,12 @@ export class User extends Chat.MessageContext {
 			this.registered ? `[registered]` :
 			``;
 	}
+	battlesForcedPublic() {
+		for (const prefix of Config.forcedpublicprefixes) {
+			if (this.id.startsWith(toID(prefix))) return prefix;
+		}
+		return null;
+	}
 	destroy() {
 		// deallocate user
 		for (const roomid of this.games) {
