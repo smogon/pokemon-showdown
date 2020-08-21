@@ -1,8 +1,8 @@
 // Note: This is the list of formats
-// The rules that formats use are stored in data/rulesets.js
+// The rules that formats use are stored in data/rulesets.ts
 import {Utils} from './../lib/utils';
 
-import { SideFormats } from './custom-formats';
+import { SideFormats, formatList } from './custom-formats';
 
 // interface for the builder.
 interface formatSection {
@@ -12,69 +12,70 @@ interface formatSection {
 }
 
 // function for merging the two lists
-function merge(main: (FormatsData | {section: string, column?: number})[],
-			   side: (FormatsData | {section: string, column?: number})[]):
-			   (FormatsData | {section: string, column?: number})[] {
+function merge(
+			   main: formatList[],
+			   side: formatList[]
+): formatList[] {
 	// result that is return and makes the actual list for formats.
-	var result: (FormatsData | {section: string, column?: number})[] = [];
+	const result: formatList[] = [];
 
 	// used as a intermediary to build the final list.
-	var build: formatSection[] = [];
+	const build: formatSection[] = [];
 
 	// used to track location to keep formats under their sections.
-	var loc: number = -1;
+	let loc: number = -1;
 
 	// populates the origonal sections and formats easily
 	// there should be no repeat sections at this point.
-	main.forEach(element => {
+	for(const element of main) {
 		if (element.section) {
 			build.push({section: element.section, column: element.column, formats: []});
 			loc++;
 		} else if (element.name) {
 			build[loc].formats.push(element);
 		}
-	});
+	};
 
 	// merges the second list the hard way. Accounts for repeats.
-	side.forEach(element => {
+	for(const element of side) {
 		// finds the section and makes it if it doesn't exist.
 		if (element.section) {
 			loc = 0;
-			var found: boolean = false;
+			let found: boolean = false;
 
 			// finds the loc of the section header (or next loc if it's new)
-			build.forEach(comp => {
-				if (comp.section === element.section) {
+			for(const entry of build) {
+				if (entry.section === element.section) {
 					found = true;
-					return;
+					break;
 				}
 				loc++;
-			});
+			};
 
 			// if it's new it makes a new entry.
 			if (!found) {
 				build.push({section: element.section, column: element.column, formats: []});
 			}
-		} else if (element.name) { // otherwise adds the element to it's section.
+		} else if (element.name) { // otherwise adds the element to its section.
 			build[loc].formats.push(element);
 		}
-	});
+	};
 
 	// builds the final result.
-	build.forEach(element => {
+	for(const element of build) {
 		// adds the section to the list.
 		result.push({section: element.section, column: element.column});
 
 		// adds all the formats in the section.
-		element.formats.forEach(obj => {
-			result.push(obj);
-		});
-	});
+		for(const entry of element.formats) {
+			result.push(entry);
+		};
+	};
 
 	return result;
 }
 
-export const MainFormats: (FormatsData | {section: string, column?: number})[] = [
+export const MainFormats: formatList[] = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
@@ -3006,4 +3007,4 @@ export const MainFormats: (FormatsData | {section: string, column?: number})[] =
 	},
 ];
 
-export const Formats: (FormatsData | {section: string, column?: number})[] = merge(MainFormats, SideFormats);
+export const Formats: formatList[] = merge(MainFormats, SideFormats);
