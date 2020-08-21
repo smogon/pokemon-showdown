@@ -1453,6 +1453,7 @@ export class User extends Chat.MessageContext {
 			``;
 	}
 	battlesForcedPublic() {
+		if (!Config.forcedpublicprefixes) return null;
 		for (const prefix of Config.forcedpublicprefixes) {
 			if (this.id.startsWith(toID(prefix))) return prefix;
 		}
