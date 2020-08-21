@@ -27,7 +27,7 @@ function merge(
 
 	// populates the origonal sections and formats easily
 	// there should be no repeat sections at this point.
-	for(const element of main) {
+	for (const element of main) {
 		if (element.section) {
 			build.push({section: element.section, column: element.column, formats: []});
 			loc++;
@@ -37,14 +37,14 @@ function merge(
 	}
 
 	// merges the second list the hard way. Accounts for repeats.
-	for(const element of side) {
+	for (const element of side) {
 		// finds the section and makes it if it doesn't exist.
 		if (element.section) {
 			loc = 0;
 			let found = false;
 
 			// finds the loc of the section header (or next loc if it's new)
-			for(const entry of build) {
+			for (const entry of build) {
 				if (entry.section === element.section) {
 					found = true;
 					break;
@@ -62,7 +62,7 @@ function merge(
 	}
 
 	// builds the final result.
-	for(const element of build) {
+	for (const element of build) {
 		// adds the section to the list.
 		result.push({section: element.section, column: element.column});
 
