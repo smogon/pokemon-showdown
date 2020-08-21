@@ -1029,9 +1029,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (user) {
 			this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
 			if (this.rated && !this.forcePublic) {
-				for (const prefix of Config.forcedpublicprefixes) {
-					if (user.id.startsWith(toID(prefix))) this.forcePublic = prefix;
-				}
+				this.forcePublic = user.battlesForcedPublic();
 			}
 		}
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
