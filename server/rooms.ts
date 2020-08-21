@@ -886,6 +886,7 @@ export abstract class BasicRoom {
 
 		void this.log.destroy(true);
 
+		Rooms.deletedRooms.add(this.roomid);
 		// get rid of some possibly-circular references
 		Rooms.rooms.delete(this.roomid);
 	}
@@ -1635,6 +1636,7 @@ export const Rooms = {
 	 */
 	rooms: new Map<RoomID, Room>(),
 	aliases: new Map<string, RoomID>(),
+	deletedRooms: new Set<RoomID>(),
 
 	get: getRoom,
 	search(name: string): Room | undefined {

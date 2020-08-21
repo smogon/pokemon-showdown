@@ -374,7 +374,8 @@ export const commands: ChatCommands = {
 	part(target, room, user, connection) {
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) {
-			if (target.startsWith('view-')) return;
+			const roomid = target.toLowerCase().replace(/[^a-zA-Z0-9-]/g, '') as RoomID;
+			if (roomid.startsWith('view-') || Rooms.deletedRooms.has(roomid)) return;
 			return this.errorReply(`The room '${target}' does not exist.`);
 		}
 		user.leaveRoom(targetRoom, connection);
