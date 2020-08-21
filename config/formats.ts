@@ -56,7 +56,7 @@ function merge(
 			if (!found) {
 				build.push({section: element.section, column: element.column, formats: []});
 			}
-		} else if (element.name) { // otherwise adds the element to its section.
+		} else if (element.name) { // otherwise, adds the element to its section.
 			build[loc].formats.push(element);
 		}
 	};
