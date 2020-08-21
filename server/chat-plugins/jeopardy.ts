@@ -566,7 +566,7 @@ export const commands: ChatCommands = {
 		off: 'disable',
 		disable(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 			if (room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already disabled in this room.");
 			}
@@ -578,7 +578,7 @@ export const commands: ChatCommands = {
 		on: 'enable',
 		enable(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already enabled in this room.");
 			}
@@ -597,7 +597,7 @@ export const commands: ChatCommands = {
 			if (room.game) {
 				return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 			}
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			const params = target.split(",");
 			const categoryCount = parseInt(params[0]) || MAX_CATEGORY_COUNT;
 			const questionCount = parseInt(params[1]) || MAX_QUESTION_COUNT;
@@ -840,7 +840,7 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			const game = room.getGame(Jeopardy);
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			game.destroy();
 			this.privateModAction(`The game of Jeopardy was ended by ${user.name}`);
 			this.modlog('JEOPARDY END');

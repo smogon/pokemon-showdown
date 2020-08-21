@@ -213,9 +213,9 @@ export const commands: ChatCommands = {
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in hangmans.");
 			const params = text.split(',');
 
-			if (!this.can('minigame', null, room)) return false;
+			this.checkCan('minigame', null, room);
 			if (room.settings.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
-			if (!this.canTalk()) return;
+			this.checkChat();
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			if (!params) return this.errorReply("No word entered.");
@@ -247,7 +247,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help guess');
 			const game = room.getGame(Hangman);
 			if (!game) return this.errorReply("There is no game of hangman running in this room.");
-			if (!this.canTalk()) return;
+			this.checkChat();
 
 			game.guess(target, user);
 		},
@@ -259,8 +259,8 @@ export const commands: ChatCommands = {
 		stop: 'end',
 		end(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return false;
-			if (!this.canTalk()) return;
+			this.checkCan('minigame', null, room);
+			this.checkChat();
 			const game = room.getGame(Hangman);
 			if (!game) return this.errorReply("There is no game of hangman running in this room.");
 
@@ -272,7 +272,7 @@ export const commands: ChatCommands = {
 
 		disable(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 			if (room.settings.hangmanDisabled) {
 				return this.errorReply("Hangman is already disabled.");
 			}
@@ -283,7 +283,7 @@ export const commands: ChatCommands = {
 
 		enable(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.hangmanDisabled) {
 				return this.errorReply("Hangman is already enabled.");
 			}
@@ -322,7 +322,7 @@ export const commands: ChatCommands = {
 		if (!room) return this.requiresRoom();
 		const game = room.getGame(Hangman);
 		if (!game) return this.errorReply("There is no game of hangman running in this room.");
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		game.guess(target, user);
 	},

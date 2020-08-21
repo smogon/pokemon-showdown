@@ -83,7 +83,7 @@ export const commands: ChatCommands = {
 		if (!key) return this.parse('/help daily');
 		if (!spotlights[room.roomid][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 
-		if (!this.can('announce', null, room)) return false;
+		this.checkCan('announce', null, room);
 		if (rest) {
 			const queueNumber = parseInt(rest);
 			if (isNaN(queueNumber) || queueNumber < 1) return this.errorReply("Invalid queue number");
@@ -110,7 +110,7 @@ export const commands: ChatCommands = {
 		if (!room) return this.requiresRoom();
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!spotlights[room.roomid]) return this.errorReply("There are no dailies for this room.");
-		if (!this.can('announce', null, room)) return false;
+		this.checkCan('announce', null, room);
 
 		const [key, indexStringA, indexStringB] = target.split(',').map(index => toID(index));
 		if (!indexStringB) return this.parse('/help daily');
@@ -161,7 +161,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Queue numbers must be between 1 and the length of the queue (${queueLength}).`);
 		}
 
-		if (!this.can('announce', null, room)) return false;
+		this.checkCan('announce', null, room);
 		if (!rest.length) return this.parse('/help daily');
 		let img;
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {

@@ -26,11 +26,10 @@ export const commands: ChatCommands = {
 	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
 		if (!room) return this.requiresRoom();
-		target = this.canHTML(target)!;
-		if (!target) return;
+		target = this.checkHTML(target);
 		target = Chat.collapseLineBreaksHTML(target);
-		if (!this.canBroadcast(true, '!htmlbox')) return;
-		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
+		this.checkBroadcast(true, '!htmlbox');
+		if (this.broadcastMessage && !this.checkCan('declare', null, room)) return false;
 
 		if (!this.runBroadcast(true, '!htmlbox')) return;
 
@@ -47,10 +46,9 @@ export const commands: ChatCommands = {
 	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return;
-		target = this.canHTML(target)!;
-		if (!target) return;
-		if (!this.can('addhtml', null, room)) return;
+		this.checkChat();
+		target = this.checkHTML(target);
+		this.checkCan('addhtml', null, room);
 		target = Chat.collapseLineBreaksHTML(target);
 		if (!user.can('addhtml')) {
 			target += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -64,12 +62,11 @@ export const commands: ChatCommands = {
 	addrankhtmlbox(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
+		this.checkChat();
 		let [rank, html] = this.splitOne(target);
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		html = this.canHTML(html)!;
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
+		html = this.checkHTML(html);
+		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -84,13 +81,12 @@ export const commands: ChatCommands = {
 	adduhtml(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		let [name, html] = this.splitOne(target);
 		name = toID(name);
-		html = this.canHTML(html)!;
-		if (!html) return this.parse(`/help ${cmd}`);
-		if (!this.can('addhtml', null, room)) return;
+		html = this.checkHTML(html);
+		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -112,15 +108,14 @@ export const commands: ChatCommands = {
 	addrankuhtml(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const [rank, uhtml] = this.splitOne(target);
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
 		let [name, html] = this.splitOne(uhtml);
 		name = toID(name);
-		html = this.canHTML(html)!;
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
+		html = this.checkHTML(html);
+		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -137,21 +132,20 @@ export const commands: ChatCommands = {
 	],
 
 	addline(target, room, user) {
-		if (!this.can('rawpacket')) return false;
+		this.checkCan('rawpacket');
 		// secret sysop command
 		this.add(target);
 	},
 
 	pminfobox(target, room, user, connection) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!room) return this.requiresRoom();
-		if (!this.can('addhtml', null, room)) return false;
+		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.canHTML(this.splitTarget(target))!;
-		if (!target) return;
+		target = this.checkHTML(this.splitTarget(target));
 		const targetUser = this.targetUser!;
-		if (!this.canPMHTML(targetUser)) return;
+		this.checkPMHTML(targetUser);
 
 		// Apply the infobox to the message
 		target = `/raw <div class="infobox">${target}</div>`;
@@ -166,15 +160,14 @@ export const commands: ChatCommands = {
 
 	pmuhtmlchange: 'pmuhtml',
 	pmuhtml(target, room, user, connection, cmd) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!room) return this.requiresRoom();
-		if (!this.can('addhtml', null, room)) return false;
+		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		target = this.canHTML(this.splitTarget(target))!;
-		if (!target) return;
+		target = this.checkHTML(this.splitTarget(target));
 		const targetUser = this.targetUser!;
-		if (!this.canPMHTML(targetUser)) return;
+		this.checkPMHTML(targetUser);
 
 		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
 
@@ -190,7 +183,7 @@ export const commands: ChatCommands = {
 
 	sendhtmlpage(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('addhtml', null, room)) return false;
+		this.checkCan('addhtml', null, room);
 		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
 
@@ -215,12 +208,11 @@ export const commands: ChatCommands = {
 		}
 		if (!targetConnections.length) {
 			// no connection has requested it - verify that we share a room
-			if (!this.canPMHTML(targetUser)) return;
+			this.checkPMHTML(targetUser);
 			targetConnections = [targetUser.connections[0]];
 		}
 
-		content = this.canHTML(content)!;
-		if (!content) return;
+		content = this.checkHTML(content);
 
 		for (const targetConnection of targetConnections) {
 			const context = new Chat.PageContext({
@@ -247,7 +239,7 @@ export const commands: ChatCommands = {
 
 	memusage: 'memoryusage',
 	memoryusage(target) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 		const memUsage = process.memoryUsage();
 		const resultNums = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
@@ -261,7 +253,7 @@ export const commands: ChatCommands = {
 	forcehotpatch: 'hotpatch',
 	async hotpatch(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help hotpatch');
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
@@ -444,7 +436,7 @@ export const commands: ChatCommands = {
 	yeshotpatch: 'nohotpatch',
 	allowhotpatch: 'nohotpatch',
 	nohotpatch(target, room, user, connection, cmd) {
-		if (!this.can('gdeclare')) return;
+		this.checkCan('gdeclare');
 		if (!target) return this.parse('/help nohotpatch');
 
 		const separator = ' ';
@@ -487,7 +479,7 @@ export const commands: ChatCommands = {
 	],
 
 	processes(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		let buf = `<strong>${process.pid}</strong> - Main<br />`;
 		for (const manager of ProcessManager.processManagers) {
@@ -503,7 +495,7 @@ export const commands: ChatCommands = {
 	},
 
 	async savelearnsets(target, room, user, connection) {
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 		this.sendReply("saving...");
 		await FS('data/learnsets.js').write(`'use strict';\n\nexports.Learnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
@@ -526,7 +518,7 @@ export const commands: ChatCommands = {
 	},
 
 	disableladder(target, room, user) {
-		if (!this.can('disableladder')) return false;
+		this.checkCan('disableladder');
 		if (Ladders.disabled) {
 			return this.errorReply(`/disableladder - Ladder is already disabled.`);
 		}
@@ -551,7 +543,7 @@ export const commands: ChatCommands = {
 	},
 
 	enableladder(target, room, user) {
-		if (!this.can('disableladder')) return false;
+		this.checkCan('disableladder');
 		if (!Ladders.disabled) {
 			return this.errorReply(`/enable - Ladder is already enabled.`);
 		}
@@ -574,7 +566,7 @@ export const commands: ChatCommands = {
 	},
 
 	lockdown(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		Rooms.global.startLockdown();
 
@@ -586,7 +578,7 @@ export const commands: ChatCommands = {
 
 	autolockdown: 'autolockdownkill',
 	autolockdownkill(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
 		if (this.meansYes(target)) {
 			if (Config.autolockdown) {
@@ -610,14 +602,14 @@ export const commands: ChatCommands = {
 	],
 
 	prelockdown(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 		Rooms.global.lockdown = 'pre';
 
 		this.privateGlobalModAction(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`);
 	},
 
 	slowlockdown(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		Rooms.global.startLockdown(undefined, true);
 
@@ -626,7 +618,7 @@ export const commands: ChatCommands = {
 
 	crashfixed: 'endlockdown',
 	endlockdown(target, room, user, connection, cmd) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		if (!Rooms.global.lockdown) {
 			return this.errorReply("We're not under lockdown right now.");
@@ -658,7 +650,7 @@ export const commands: ChatCommands = {
 	],
 
 	emergency(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		if (Config.emergency) {
 			return this.errorReply("We're already in emergency mode.");
@@ -672,7 +664,7 @@ export const commands: ChatCommands = {
 	},
 
 	endemergency(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		if (!Config.emergency) {
 			return this.errorReply("We're not in emergency mode.");
@@ -686,7 +678,7 @@ export const commands: ChatCommands = {
 	},
 
 	kill(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		if (Rooms.global.lockdown !== true) {
 			return this.errorReply("For safety reasons, /kill can only be used during lockdown.");
@@ -714,7 +706,7 @@ export const commands: ChatCommands = {
 	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: &`],
 
 	loadbanlist(target, room, user, connection) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 
 		connection.sendTo(room, "Loading ipbans.txt...");
 		Punishments.loadBanlist().then(
@@ -727,13 +719,13 @@ export const commands: ChatCommands = {
 	],
 
 	refreshpage(target, room, user) {
-		if (!this.can('lockdown')) return false;
+		this.checkCan('lockdown');
 		Rooms.global.sendAll('|refresh|');
 		this.stafflog(`${user.name} used /refreshpage`);
 	},
 
 	async updateserver(target, room, user, connection) {
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 		const isPrivate = toID(target) === 'private';
 		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
@@ -840,7 +832,7 @@ export const commands: ChatCommands = {
 			});
 		};
 
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 		Monitor.updateServerLock = true;
 		const [, , stderr] = await exec('node ../../build');
 		if (stderr) {
@@ -855,7 +847,7 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	bash(target, room, user, connection) {
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 		if (!target) return this.parse('/help bash');
 
 		connection.sendTo(room, `$ ${target}`);
@@ -867,7 +859,7 @@ export const commands: ChatCommands = {
 
 	async eval(target, room, user, connection) {
 		if (!room) return this.requiresRoom();
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
 
@@ -900,7 +892,7 @@ export const commands: ChatCommands = {
 
 	evalbattle(target, room, user, connection) {
 		if (!room) return this.requiresRoom();
-		if (!this.canUseConsole()) return false;
+		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
 			return this.errorReply("/evalbattle - This isn't a battle room.");
@@ -912,7 +904,7 @@ export const commands: ChatCommands = {
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('forcewin')) return false;
+		this.checkCan('forcewin');
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {
 			this.errorReply("/editbattle - This is not a battle room.");

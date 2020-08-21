@@ -132,7 +132,7 @@ export const commands: ChatCommands = {
 		add(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			if (!room.settings.events) room.settings.events = Object.create(null);
 			convertAliasFormat(room);
 			const events = room.settings.events!;
@@ -170,7 +170,7 @@ export const commands: ChatCommands = {
 		rename(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			let [oldName, newName] = target.split(target.includes('|') ? '|' : ',');
 			if (!(oldName && newName)) return this.errorReply("Usage: /roomevents rename [old name], [new name]");
 
@@ -203,7 +203,7 @@ export const commands: ChatCommands = {
 		start(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room to start.");
 			}
@@ -238,7 +238,7 @@ export const commands: ChatCommands = {
 		remove(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
@@ -329,7 +329,7 @@ export const commands: ChatCommands = {
 		addalias(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			const [alias, eventId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
 			if (!(alias && eventId)) {
 				return this.errorReply("Usage: /roomevents addalias [alias], [event name]. Aliases must contain at least one alphanumeric character.");
@@ -352,7 +352,7 @@ export const commands: ChatCommands = {
 		removealias(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			target = toID(target);
 			if (!target) return this.errorReply("Usage: /roomevents removealias <alias>");
 			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
@@ -372,7 +372,7 @@ export const commands: ChatCommands = {
 		addtocategory(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			const [eventId, categoryId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
 			if (!(eventId && categoryId)) return this.errorReply("Usage: /roomevents addtocategory [event name], [category].");
 			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
@@ -403,7 +403,7 @@ export const commands: ChatCommands = {
 		removefromcategory(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			const [eventId, categoryId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
 			if (!(eventId && categoryId)) {
 				return this.errorReply("Usage: /roomevents removefromcategory [event name], [category].");
@@ -437,7 +437,7 @@ export const commands: ChatCommands = {
 		addcategory(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			const categoryId = toID(target);
 			if (!target) {
 				return this.errorReply("Usage: /roomevents addcategory [category name]. Categories must contain at least one alphanumeric character.");
@@ -461,7 +461,7 @@ export const commands: ChatCommands = {
 		removecategory(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			const categoryId = toID(target);
 			if (!target) return this.errorReply("Usage: /roomevents removecategory [category name].");
 			convertAliasFormat(room);
@@ -487,7 +487,7 @@ export const commands: ChatCommands = {
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 
 			// declare variables
 			let multiplier = 1;

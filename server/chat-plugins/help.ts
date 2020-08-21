@@ -342,7 +342,7 @@ export const commands: ChatCommands = {
 					`The Help auto-response filter is currently set to: ${Answerer.settings.filterDisabled ? 'OFF' : "ON"}`
 				);
 			}
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			if (this.meansYes(target)) {
 				if (!Answerer.settings.filterDisabled) return this.errorReply(`The Help auto-response filter is already enabled.`);
 				Answerer.settings.filterDisabled = false;
@@ -365,7 +365,7 @@ export const commands: ChatCommands = {
 			if (force && !HelpResponder.canOverride(user)) {
 				return this.errorReply(`You cannot use raw regex - use /helpfilter add instead.`);
 			}
-			if (!this.can('ban', null, helpRoom)) return false;
+			this.checkCan('ban', null, helpRoom);
 			Answerer.tryAddRegex(target, force);
 			this.privateModAction(`${user.name} added regex for "${target.split('=>')[0]}" to the filter.`);
 			this.modlog(`HELPFILTER ADD`, null, target);
@@ -373,7 +373,7 @@ export const commands: ChatCommands = {
 		remove(target, room, user) {
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
-			if (!this.can('ban', null, helpRoom)) return false;
+			this.checkCan('ban', null, helpRoom);
 			const [faq, index] = target.split(',');
 			// intended for use mainly within the page, so supports being used in all rooms
 			this.room = helpRoom;
@@ -422,7 +422,7 @@ export const commands: ChatCommands = {
 		approve(target, room, user) {
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
-			if (!this.can('ban', null, helpRoom)) return false;
+			this.checkCan('ban', null, helpRoom);
 			// intended for use mainly within the page, so supports being used in all rooms
 			this.room = helpRoom;
 			const index = parseInt(target) - 1;
@@ -447,7 +447,7 @@ export const commands: ChatCommands = {
 		deny(target, room, user) {
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
-			if (!this.can('ban', null, helpRoom)) return false;
+			this.checkCan('ban', null, helpRoom);
 			// intended for use mainly within the page, so supports being used in all rooms
 			this.room = helpRoom;
 			target = target.trim();
@@ -468,7 +468,7 @@ export const commands: ChatCommands = {
 			let [userid, reason] = target.split(',').map(item => item.trim());
 			userid = toID(userid);
 			const targetUser = Users.get(userid);
-			if (!this.can('ban', targetUser, this.room)) return false;
+			this.checkCan('ban', targetUser, this.room);
 			const unban = cmd === 'unban';
 			const isBanned = Answerer.isBanned(userid);
 			if (unban) {
@@ -493,7 +493,7 @@ export const commands: ChatCommands = {
 		queue(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'help') return this.errorReply(`Must be used in the Help room.`);
-			if (!this.can('ban', null, room)) return false;
+			this.checkCan('ban', null, room);
 			target = target.trim();
 			if (!target) {
 				return this.sendReply(`The Help suggestion queue is currently ${Answerer.settings.queueDisabled ? 'OFF' : 'ON'}.`);
@@ -553,7 +553,7 @@ export const pages: PageTable = {
 		switch (args[0]) {
 		case 'stats':
 			args.shift();
-			if (!this.can('mute', null, helpRoom)) return;
+			this.checkCan('mute', null, helpRoom);
 			const date = args.join('-') || '';
 			if (!!date && isNaN(new Date(date).getTime())) {
 				return `<h2>Invalid date.</h2>`;
@@ -584,7 +584,7 @@ export const pages: PageTable = {
 		case 'pairs':
 		case 'keys':
 			this.title = '[Help Regexes]';
-			if (!this.can('show', null, helpRoom)) return;
+			this.checkCan('show', null, helpRoom);
 			buf = `<div class="pad"><h2>Help filter regexes and responses:</h2>${back}${refresh('keys')}<hr />`;
 			buf += Object.keys(helpData.pairs).map(item => {
 				const regexes = helpData.pairs[item];

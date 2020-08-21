@@ -1092,8 +1092,8 @@ const commands: ChatCommands = {
 	new(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in the Trivia room.");
-		if (!this.can('show', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('show', null, room);
+		this.checkChat();
 		if (room.game) {
 			return this.errorReply(this.tr`There is already a game of ${room.game.title} in progress.`);
 		}
@@ -1177,9 +1177,9 @@ const commands: ChatCommands = {
 
 	kick(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return;
+		this.checkChat();
 		const game = getTriviaGame(room);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -1201,8 +1201,8 @@ const commands: ChatCommands = {
 
 	start(target, room) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('show', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('show', null, room);
+		this.checkChat();
 		const game = getTriviaGame(room);
 
 		const res = game.start();
@@ -1231,8 +1231,8 @@ const commands: ChatCommands = {
 	resume: 'pause',
 	pause(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('show', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('show', null, room);
+		this.checkChat();
 		const res = (cmd === 'pause' ? getTriviaGame(room).pause() : getTriviaGame(room).resume());
 		if (res) return this.errorReply(res);
 	},
@@ -1241,8 +1241,8 @@ const commands: ChatCommands = {
 
 	end(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('show', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('show', null, room);
+		this.checkChat();
 		const game = getTriviaGame(room);
 
 		game.end(user);
@@ -1252,8 +1252,8 @@ const commands: ChatCommands = {
 	getwinners: 'win',
 	win(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('show', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('show', null, room);
+		this.checkChat();
 
 		const game = getTriviaGame(room);
 		if (game.game.length !== 'infinite' && !user.can('editroom', null, room)) {
@@ -1304,10 +1304,10 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr('This command can only be used in Question Workshop.'));
 		}
-		if (cmd === 'add' && !this.can('mute', null, room)) return false;
-		if (cmd === 'submit' && !this.can('show', null, room)) return false;
+		if (cmd === 'add' && !this.checkCan('mute', null, room)) return false;
+		if (cmd === 'submit' && !this.checkCan('show', null, room)) return false;
 		if (!target) return false;
-		if (!this.canTalk()) return false;
+		this.checkChat();
 
 		const params = target.split('\n').map(str => str.split('|'));
 		for (const param of params) {
@@ -1388,7 +1388,7 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr('This command can only be used in Question Workshop.'));
 		}
-		if (!this.can('ban', null, room)) return false;
+		this.checkCan('ban', null, room);
 
 		const submissions = triviaData.submissions;
 		if (!submissions) return this.sendReply(this.tr("No questions await review."));
@@ -1416,8 +1416,8 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr('This command can only be used in Question Workshop.'));
 		}
-		if (!this.can('ban', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('ban', null, room);
+		this.checkChat();
 
 		target = target.trim();
 		if (!target) return false;
@@ -1508,8 +1508,8 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr('This command can only be used in Question Workshop.'));
 		}
-		if (!this.can('mute', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('mute', null, room);
+		this.checkChat();
 
 		target = target.trim();
 		if (!target) return false;
@@ -1539,8 +1539,8 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr('This command can only be used in Question Workshop.'));
 		}
-		if (!this.can('mute', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('mute', null, room);
+		this.checkChat();
 
 		target = target.trim();
 		if (!target) return false;
@@ -1616,7 +1616,7 @@ const commands: ChatCommands = {
 			return this.sendReply(buffer);
 		}
 
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		const category = toID(target);
 		if (category === 'random') return false;
@@ -1657,7 +1657,7 @@ const commands: ChatCommands = {
 	search(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
-		if (!this.can('show', null, room)) return false;
+		this.checkCan('show', null, room);
 		if (!target.includes(',')) return this.errorReply(this.tr("No valid search arguments entered."));
 
 		let [type, ...query] = target.split(',');
@@ -1759,7 +1759,7 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr("This command can only be used in Question Workshop"));
 		}
-		if (!this.can('declare', null, room)) return false;
+		this.checkCan('declare', null, room);
 		const category = toID(target);
 		if (ALL_CATEGORIES[category]) {
 			if (SPECIAL_CATEGORIES[category]) {

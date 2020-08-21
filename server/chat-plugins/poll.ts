@@ -300,18 +300,17 @@ export const commands: ChatCommands = {
 			}
 			let params = text.split(separator).map(param => param.trim());
 
-			if (!this.can('minigame', null, room)) return false;
-			if (supportHTML && !this.can('declare', null, room)) return false;
-			if (!this.canTalk()) return;
+			this.checkCan('minigame', null, room);
+			if (supportHTML && !this.checkCan('declare', null, room)) return false;
+			this.checkChat();
 			if (room.minorActivity && !queue) {
 				return this.errorReply(this.tr("There is already a poll or announcement in progress in this room."));
 			}
 
 			if (params.length < 3) return this.errorReply(this.tr("Not enough arguments for /poll new."));
 
-			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
-			if (supportHTML) params = params.map(parameter => this.canHTML(parameter));
-			if (params.some(parameter => !parameter)) return;
+			// the function throws on failure, so no handling needs to be done anymore
+			if (supportHTML) params = params.map(parameter => this.checkHTML(parameter));
 
 			const options = params.splice(1);
 			if (options.length > 8) {
@@ -344,7 +343,7 @@ export const commands: ChatCommands = {
 
 		viewqueue(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('mute', null, room)) return false;
+			this.checkCan('mute', null, room);
 			this.parse(`/join view-pollqueue-${room.roomid}`);
 		},
 		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # &`],
@@ -352,7 +351,7 @@ export const commands: ChatCommands = {
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('mute', null, room)) return false;
+			this.checkCan('mute', null, room);
 			if (!room.minorActivityQueue) {
 				return this.errorReply(this.tr("The queue is already empty."));
 			}
@@ -432,7 +431,7 @@ export const commands: ChatCommands = {
 			const poll = room.minorActivity;
 
 			if (target) {
-				if (!this.can('minigame', null, room)) return false;
+				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
 					if (!poll.timeout) return this.errorReply(this.tr("There is no timer to clear."));
 					clearTimeout(poll.timeout);
@@ -489,8 +488,8 @@ export const commands: ChatCommands = {
 		stop: 'end',
 		end(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return false;
-			if (!this.canTalk()) return;
+			this.checkCan('minigame', null, room);
+			this.checkChat();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply(this.tr("There is no poll running in this room."));
 			}

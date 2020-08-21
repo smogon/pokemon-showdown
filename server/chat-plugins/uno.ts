@@ -636,7 +636,7 @@ export const commands: ChatCommands = {
 		off: 'disable',
 		disable(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 			if (room.settings.unoDisabled) {
 				return this.errorReply("UNO is already disabled in this room.");
 			}
@@ -648,7 +648,7 @@ export const commands: ChatCommands = {
 		on: 'enable',
 		enable(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.unoDisabled) {
 				return this.errorReply("UNO is already enabled in this room.");
 			}
@@ -666,7 +666,7 @@ export const commands: ChatCommands = {
 		makeprivate: 'create',
 		create(target, room, user, connection, cmd) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			if (room.settings.unoDisabled) return this.errorReply("UNO is currently disabled for this room.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
@@ -683,7 +683,7 @@ export const commands: ChatCommands = {
 		cap: 'setcap',
 		setcap(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			const game = room.getGame(UNO);
 			if (!game || game.state !== 'signups') {
 				return this.errorReply(`There is no UNO game in the signups phase in this room, so adjusting the player cap would do nothing.`);
@@ -699,7 +699,7 @@ export const commands: ChatCommands = {
 
 		start(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			const game = room.getGame(UNO);
 			if (!game || game.state !== 'signups') {
 				return this.errorReply("There is no UNO game in signups phase in this room.");
@@ -713,7 +713,7 @@ export const commands: ChatCommands = {
 		stop: 'end',
 		end(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room.");
 			room.game.destroy();
 			room.add("The game of UNO was forcibly ended.").update();
@@ -723,7 +723,7 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			const game = room.getGame(UNO);
 			if (!game) return this.errorReply("There is no UNO game going on in this room.");
 			const amount = parseInt(target);
@@ -740,7 +740,7 @@ export const commands: ChatCommands = {
 
 		autostart(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			const game = room.getGame(UNO);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
 			if (toID(target) === 'off') {
@@ -764,7 +764,7 @@ export const commands: ChatCommands = {
 		dq: 'disqualify',
 		disqualify(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 			const game = room.getGame(UNO);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
 
@@ -781,7 +781,7 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			const game = room.getGame(UNO);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
-			if (!this.canTalk()) return false;
+			this.checkChat();
 			if (!game.joinGame(user)) return this.errorReply("Unable to join the game.");
 
 			return this.sendReply("You have joined the game of UNO.");
@@ -883,7 +883,7 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			const game = room.getGame(UNO);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
-			if (!this.can('minigame', null, room)) return;
+			this.checkCan('minigame', null, room);
 
 			target = toID(target);
 			const state = target === 'on' ? true : target === 'off' ? false : undefined;

@@ -652,9 +652,9 @@ export const pages: PageTable = {
 			if (!room.checkModjoin(user) && !user.can('bypassall')) {
 				return LogViewer.error("Access denied");
 			}
-			if (!user.can('lock') && !this.can('mute', null, room)) return;
+			if (!user.can('lock') && !this.checkCan('mute', null, room)) return;
 		} else {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 		}
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);

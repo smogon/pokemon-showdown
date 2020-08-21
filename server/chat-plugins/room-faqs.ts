@@ -31,7 +31,7 @@ function getAlias(roomid: RoomID, key: string) {
 export const commands: ChatCommands = {
 	addfaq(target, room, user, connection) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('ban', null, room)) return false;
+		this.checkCan('ban', null, room);
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
 
@@ -59,8 +59,8 @@ export const commands: ChatCommands = {
 	},
 	removefaq(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('ban', null, room)) return false;
+		if (!this.checkChat()) return this.errorReply("You cannot do this while unable to talk.");
+		this.checkCan('ban', null, room);
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
@@ -79,8 +79,8 @@ export const commands: ChatCommands = {
 	},
 	addalias(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('ban', null, room)) return false;
+		if (!this.checkChat()) return this.errorReply("You cannot do this while unable to talk.");
+		this.checkCan('ban', null, room);
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const [alias, topic] = target.split(',').map(val => toID(val));
 

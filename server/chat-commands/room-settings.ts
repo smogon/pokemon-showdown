@@ -61,7 +61,7 @@ export const commands: ChatCommands = {
 			const modchatSetting = (room.settings.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		if (!this.can('modchat', null, room)) return false;
+		this.checkCan('modchat', null, room);
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&
@@ -167,7 +167,7 @@ export const commands: ChatCommands = {
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
 		}
 		if (room.battle) {
-			if (!this.can('editprivacy', null, room)) return;
+			this.checkCan('editprivacy', null, room);
 			if (room.battle.forcePublic) {
 				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${room.battle.forcePublic}'.`);
 			}
@@ -176,9 +176,9 @@ export const commands: ChatCommands = {
 			}
 			room.battle.inviteOnlySetter = user.id;
 		} else if (room.settings.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
+			this.checkCan('editroom', null, room);
 		} else {
-			if (!this.can('makeroom')) return;
+			this.checkCan('makeroom');
 		}
 		if (room.tour && !room.tour.modjoin) {
 			return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
@@ -235,7 +235,7 @@ export const commands: ChatCommands = {
 		if (!target) {
 			return this.sendReply(`This room's primary language is ${Chat.languages.get(room.settings.language || '') || 'English'}`);
 		}
-		if (!this.can('editroom', null, room)) return false;
+		this.checkCan('editroom', null, room);
 
 		const targetLanguage = toID(target);
 		if (!Chat.languages.has(targetLanguage)) return this.errorReply(`"${target}" is not a supported language.`);
@@ -257,8 +257,8 @@ export const commands: ChatCommands = {
 			const slowchatSetting = (room.settings.slowchat || "OFF");
 			return this.sendReply(`Slow chat is currently set to: ${slowchatSetting}`);
 		}
-		if (!this.canTalk()) return;
-		if (!this.can('modchat', null, room)) return false;
+		this.checkChat();
+		this.checkCan('modchat', null, room);
 
 		let targetInt = parseInt(target);
 		if (this.meansNo(target)) {
@@ -396,8 +396,8 @@ export const commands: ChatCommands = {
 			const stretchSetting = (room.settings.filterStretching ? "ON" : "OFF");
 			return this.sendReply(`This room's stretch filter is currently: ${stretchSetting}`);
 		}
-		if (!this.canTalk()) return;
-		if (!this.can('editroom', null, room)) return false;
+		this.checkChat();
+		this.checkCan('editroom', null, room);
 
 		if (this.meansYes(target)) {
 			if (room.settings.filterStretching) return this.errorReply(`This room's stretch filter is already ON`);
@@ -425,8 +425,8 @@ export const commands: ChatCommands = {
 			const capsSetting = (room.settings.filterCaps ? "ON" : "OFF");
 			return this.sendReply(`This room's caps filter is currently: ${capsSetting}`);
 		}
-		if (!this.canTalk()) return;
-		if (!this.can('editroom', null, room)) return false;
+		this.checkChat();
+		this.checkCan('editroom', null, room);
 
 		if (this.meansYes(target)) {
 			if (room.settings.filterCaps) return this.errorReply(`This room's caps filter is already ON`);
@@ -453,8 +453,8 @@ export const commands: ChatCommands = {
 			const emojiSetting = (room.settings.filterEmojis ? "ON" : "OFF");
 			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
 		}
-		if (!this.canTalk()) return;
-		if (!this.can('editroom', null, room)) return false;
+		this.checkChat();
+		this.checkCan('editroom', null, room);
 
 		if (this.meansYes(target)) {
 			if (room.settings.filterEmojis) return this.errorReply(`This room's emoji filter is already ON`);
@@ -480,7 +480,7 @@ export const commands: ChatCommands = {
 		add(target, room, user, connection, cmd) {
 			if (!room) return this.requiresRoom();
 			if (!target || target === ' ') return this.parse('/help banword');
-			if (!this.can('declare', null, room)) return false;
+			this.checkCan('declare', null, room);
 
 			const regex = cmd.includes('regex');
 			if (regex && !user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for administrators.");
@@ -537,7 +537,7 @@ export const commands: ChatCommands = {
 		delete(target, room, user) {
 			if (!room) return this.requiresRoom();
 			if (!target) return this.parse('/help banword');
-			if (!this.can('declare', null, room)) return false;
+			this.checkCan('declare', null, room);
 
 			if (!room.settings.banwords) return this.errorReply("This room has no banned phrases.");
 
@@ -572,7 +572,7 @@ export const commands: ChatCommands = {
 
 		list(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('mute', null, room)) return false;
+			this.checkCan('mute', null, room);
 
 			if (!room.settings.banwords || !room.settings.banwords.length) {
 				return this.sendReply("This room has no banned phrases.");
@@ -593,7 +593,7 @@ export const commands: ChatCommands = {
 
 	showapprovals(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('declare', null, room)) return false;
+		this.checkCan('declare', null, room);
 		target = toID(target);
 		if (!target) {
 			return this.sendReply(`Approvals are currently ${room.settings.requestShowEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
@@ -621,7 +621,7 @@ export const commands: ChatCommands = {
 
 	showmedia(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('declare', null, room)) return false;
+		this.checkCan('declare', null, room);
 		target = target.trim();
 		if (this.meansNo(target)) {
 			if (!room.settings.showEnabled) return this.errorReply(`/show is already disabled.`);
@@ -657,7 +657,7 @@ export const commands: ChatCommands = {
 		if (!target) {
 			return this.sendReply(`This room is: ${!room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
 		}
-		if (!this.can('makeroom')) return false;
+		this.checkCan('makeroom');
 
 		if (this.meansYes(target)) {
 			room.settings.highTraffic = true;
@@ -683,7 +683,7 @@ export const commands: ChatCommands = {
 	makepublicchatroom: 'makechatroom',
 	makechatroom(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('makeroom')) return;
+		this.checkCan('makeroom');
 		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
 		if (!Rooms.global.addChatRoom(target)) {
@@ -722,7 +722,7 @@ export const commands: ChatCommands = {
 	subroomgroupchat: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
@@ -734,7 +734,7 @@ export const commands: ChatCommands = {
 			if (room.settings.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
 		}
 		const parent = cmd === 'subroomgroupchat' ? room.roomid : null;
-		// if (!this.can('makegroupchat')) return false;
+		// this.checkCan('makegroupchat');
 
 		// Title defaults to a random 8-digit number.
 		let title = target.trim();
@@ -815,7 +815,7 @@ export const commands: ChatCommands = {
 	roomuptimehelp: [`/roomuptime - Displays the uptime of the room.`],
 
 	deregisterchatroom(target, room, user) {
-		if (!this.can('makeroom')) return;
+		this.checkCan('makeroom');
 		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
 		const id = toID(target);
 		if (!id) return this.parse('/help deregisterchatroom');
@@ -867,9 +867,9 @@ export const commands: ChatCommands = {
 		}
 
 		if (room.settings.isPersonal) {
-			if (!this.can('gamemanagement', null, room)) return;
+			this.checkCan('gamemanagement', null, room);
 		} else {
-			if (!this.can('makeroom')) return;
+			this.checkCan('makeroom');
 		}
 
 		const title = room.title || room.roomid;
@@ -933,7 +933,7 @@ export const commands: ChatCommands = {
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
 		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
 		if (isGroupchat) {
-			if (!user.can('lock') && !this.can('editroom', null, room)) return false;
+			if (!user.can('lock') && !this.checkCan('editroom', null, room)) return false;
 			const existingRoom = Rooms.search(toID(target));
 			if (existingRoom && !existingRoom.settings.modjoin) {
 				return this.errorReply(`Your groupchat name is too similar to existing chat room '${existingRoom.title}'.`);
@@ -949,7 +949,7 @@ export const commands: ChatCommands = {
 			}
 			target = `[G] ${target}`;
 		} else {
-			if (!this.can('makeroom')) return;
+			this.checkCan('makeroom');
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
@@ -977,7 +977,7 @@ export const commands: ChatCommands = {
 	privateroom(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (room.battle) {
-			if (!this.can('editprivacy', null, room)) return;
+			this.checkCan('editprivacy', null, room);
 			if (room.battle.forcePublic) {
 				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcePublic}'.`);
 			}
@@ -985,11 +985,11 @@ export const commands: ChatCommands = {
 				return this.errorReply(`This battle can't be hidden, because the tournament is set to be forced public.`);
 			}
 		} else if (room.settings.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
+			this.checkCan('editroom', null, room);
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings
-			if (!this.can('makeroom')) return;
+			this.checkCan('makeroom');
 		}
 		let setting: boolean | 'hidden';
 		switch (cmd) {
@@ -1091,7 +1091,7 @@ export const commands: ChatCommands = {
 	officialchatroom: 'officialroom',
 	officialroom(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('makeroom')) return;
+		this.checkCan('makeroom');
 		if (!room.persist) {
 			return this.errorReply(`/officialroom - This room can't be made official`);
 		}
@@ -1113,7 +1113,7 @@ export const commands: ChatCommands = {
 	},
 
 	psplwinnerroom(target, room, user) {
-		if (!this.can('makeroom')) return;
+		this.checkCan('makeroom');
 		if (!room) return this.requiresRoom();
 		if (!room.persist) {
 			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
@@ -1190,7 +1190,7 @@ export const commands: ChatCommands = {
 	desubroom: 'unsubroom',
 	unsubroom(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('makeroom')) return;
+		this.checkCan('makeroom');
 		if (!room.parent || !room.persist) {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
 		}
@@ -1254,7 +1254,7 @@ export const commands: ChatCommands = {
 			this.sendReplyBox(Utils.html`The room description is: ${room.settings.desc}`);
 			return;
 		}
-		if (!this.can('makeroom')) return false;
+		this.checkCan('makeroom');
 		if (target.length > 80) {
 			return this.errorReply(`Error: Room description is too long (must be at most 80 characters).`);
 		}
@@ -1291,10 +1291,9 @@ export const commands: ChatCommands = {
 			}
 			return;
 		}
-		if (!this.can('editroom', null, room)) return false;
+		this.checkCan('editroom', null, room);
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deleteroomintro"?');
-		target = this.canHTML(target)!;
-		if (!target) return; // canHTML sends its own errors
+		target = this.checkHTML(target);
 		if (!target.includes("<")) {
 			// not HTML, do some simple URL linking
 			const re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
@@ -1316,7 +1315,7 @@ export const commands: ChatCommands = {
 	deletetopic: 'deleteroomintro',
 	deleteroomintro(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('declare', null, room)) return false;
+		this.checkCan('declare', null, room);
 		if (!room.settings.introMessage) return this.errorReply("This room does not have a introduction set.");
 
 		this.privateModAction(`${user.name} deleted the roomintro.`);
@@ -1330,7 +1329,7 @@ export const commands: ChatCommands = {
 	staffintro(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (!target) {
-			if (!this.can('mute', null, room)) return false;
+			this.checkCan('mute', null, room);
 			if (!room.settings.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
 			this.sendReply(`|raw|<div class="infobox">${room.settings.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
@@ -1339,11 +1338,10 @@ export const commands: ChatCommands = {
 			}
 			return;
 		}
-		if (!this.can('ban', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('ban', null, room);
+		this.checkChat();
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deletestaffintro"?');
-		target = this.canHTML(target)!;
-		if (!target) return;
+		target = this.checkHTML(target);
 		if (!target.includes("<")) {
 			// not HTML, do some simple URL linking
 			const re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
@@ -1364,7 +1362,7 @@ export const commands: ChatCommands = {
 	deletestafftopic: 'deletestaffintro',
 	deletestaffintro(target, room, user) {
 		if (!room) return this.requiresRoom();
-		if (!this.can('ban', null, room)) return false;
+		this.checkCan('ban', null, room);
 		if (!room.settings.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
 
 		this.privateModAction(`${user.name} deleted the staffintro.`);
@@ -1381,7 +1379,7 @@ export const commands: ChatCommands = {
 			if (!room.settings.aliases) return this.sendReplyBox("This room does not have any aliases.");
 			return this.sendReplyBox(`This room has the following aliases: ${room.settings.aliases.join(", ")}`);
 		}
-		if (!this.can('makeroom')) return false;
+		this.checkCan('makeroom');
 		if (target.includes(',')) {
 			this.errorReply(`Invalid room alias: ${target.trim()}`);
 			return this.parse('/help roomalias');
@@ -1414,7 +1412,7 @@ export const commands: ChatCommands = {
 	removeroomalias(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!room.settings.aliases) return this.errorReply("This room does not have any aliases.");
-		if (!this.can('makeroom')) return false;
+		this.checkCan('makeroom');
 		if (target.includes(',')) {
 			this.errorReply(`Invalid room alias: ${target.trim()}`);
 			return this.parse('/help removeroomalias');
@@ -1451,7 +1449,7 @@ export const commands: ChatCommands = {
 				`This room is currently displaying ${room.settings.dataCommandTierDisplay} as the tier when using /data.`
 			);
 		}
-		if (!this.can('declare', null, room)) return false;
+		this.checkCan('declare', null, room);
 
 		const displayIDToName: {[k: string]: Room['settings']['dataCommandTierDisplay']} = {
 			tiers: 'tiers',

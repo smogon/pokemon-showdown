@@ -61,15 +61,14 @@ export const commands: ChatCommands = {
 
 			const supportHTML = cmd === 'htmlcreate';
 
-			if (!this.can('minigame', null, room)) return false;
-			if (supportHTML && !this.can('declare', null, room)) return false;
-			if (!this.canTalk()) return;
+			this.checkCan('minigame', null, room);
+			if (supportHTML && !this.checkCan('declare', null, room)) return false;
+			this.checkChat();
 			if (room.minorActivity) {
 				return this.errorReply(this.tr("There is already a poll or announcement in progress in this room."));
 			}
 
-			const source = supportHTML ? this.canHTML(target) : Utils.escapeHTML(target);
-			if (!source) return;
+			const source = supportHTML ? this.checkHTML(target) : Utils.escapeHTML(target);
 
 			room.minorActivity = new Announcement(room, source);
 			room.minorActivity.display();
@@ -88,7 +87,7 @@ export const commands: ChatCommands = {
 			const announcement = room.minorActivity;
 
 			if (target) {
-				if (!this.can('minigame', null, room)) return false;
+				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
 					if (!announcement.timeout) return this.errorReply(this.tr("There is no timer to clear."));
 					clearTimeout(announcement.timeout);
@@ -125,8 +124,8 @@ export const commands: ChatCommands = {
 		stop: 'end',
 		end(target, room, user) {
 			if (!room) return this.requiresRoom();
-			if (!this.can('minigame', null, room)) return false;
-			if (!this.canTalk()) return;
+			this.checkCan('minigame', null, room);
+			this.checkChat();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply(this.tr("There is no announcement running in this room."));
 			}

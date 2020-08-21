@@ -114,7 +114,7 @@ export const commands: ChatCommands = {
 		const targetUser = this.targetUserOrSelf(target, false);
 		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
 		const self = targetUser === user;
-		if (!self && !this.can('mute', targetUser, room)) return false;
+		if (!self && !this.checkCan('mute', targetUser, room)) return false;
 		if (!targetUser.foodfight) {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}
@@ -124,7 +124,7 @@ export const commands: ChatCommands = {
 	adddish(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		let [dish, ...ingredients] = target.split(',');
 		dish = dish.trim();
@@ -159,7 +159,7 @@ export const commands: ChatCommands = {
 	removedish(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		const id = toID(target);
 		if (id === 'constructor') return this.errorReply("Invalid dish.");
