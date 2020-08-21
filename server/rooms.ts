@@ -628,12 +628,19 @@ export abstract class BasicRoom {
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
-		if (this.settings.staffMessage && user.can('mute', null, this)) {
+		const staffIntro = this.getStaffIntroMessage(user);
+		if (staffIntro) message += `\n${staffIntro}`;
+		return message;
+	}
+	getStaffIntroMessage(user: User) {
+		if (!user.can('mute', null, this)) return ``;
+		let message = ``;
+		if (this.settings.staffMessage) {
 			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
 				this.settings.staffMessage.replace(/\n/g, '') +
 				`</div>`;
 		}
-		if (this.pendingApprovals?.size && user.can('mute', null, this)) {
+		if (this.pendingApprovals?.size) {
 			message += `\n|raw|<div class="infobox">`;
 			message += `<details><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
 			for (const [userid, entry] of this.pendingApprovals) {
@@ -647,7 +654,7 @@ export abstract class BasicRoom {
 			}
 			message += `</details></div>`;
 		}
-		return message;
+		return message ? `|raw|${message}` : ``;
 	}
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
@@ -761,6 +768,9 @@ export abstract class BasicRoom {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
 		}
 
+		const staffIntro = this.getStaffIntroMessage(user);
+		if (staffIntro) this.sendUser(user, staffIntro);
+
 		this.users[user.id] = user;
 		this.userCount++;
 
@@ -782,12 +792,8 @@ export abstract class BasicRoom {
 		this.users[user.id] = user;
 		if (joining) {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
-			if (this.settings.staffMessage && user.can('mute', null, this)) {
-				this.sendUser(
-					user,
-					`|raw|<div class="infobox">(Staff intro:)<br /><div>${this.settings.staffMessage.replace(/\n/g, '')}</div></div>`
-				);
-			}
+			const staffIntro = this.getStaffIntroMessage(user);
+			if (staffIntro) this.sendUser(user, staffIntro);
 		} else if (!user.named) {
 			this.reportJoin('l', oldid, user);
 		} else {
