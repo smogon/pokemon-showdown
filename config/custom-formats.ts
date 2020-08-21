@@ -4,5 +4,5 @@
 // easy to read format list type
 export type FormatList = (FormatsData | {section: string, column?: number});
 
-export const SideFormats: FormatList[] = [
+export const CustomFormats: FormatList[] = [
 ];
