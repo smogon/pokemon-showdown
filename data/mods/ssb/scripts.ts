@@ -3,6 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	// 1 mega per pokemon
 	runMegaEvo(pokemon) {
 		if (pokemon.name === 'Struchni' && pokemon.species.name === 'Aggron') pokemon.canMegaEvo = 'Aggron-Mega';
+		if (pokemon.name === 'Raj.Shoot' && pokemon.species.name === 'Swampert') pokemon.canMegaEvo = 'Swampert-Mega';
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
 		const side = pokemon.side;

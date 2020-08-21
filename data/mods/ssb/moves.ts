@@ -2618,6 +2618,36 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Psychic",
 	},
 
+	// Raj.Shoot
+	fanservice: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "The user gets its Attack and Speed raised by 1 stage before using this move. If the user is a Swampert in its base form, it will Mega Evolve.",
+		shortDesc: "+1 Atk/Spe before moving. Mega evolves user.",
+		name: "Fan Service",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sacred Fire', target);
+		},
+		onHit(target, source) {
+			if (source.species.id === 'swampert') {
+				this.runMegaEvo(source);
+			}
+		},
+		// stat boosting implemented in custom status
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+
 	// Ransei
 	ripsei: {
 		accuracy: 100,

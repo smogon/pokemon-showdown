@@ -434,6 +434,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'ripsei',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
+	'Raj.Shoot': {
+		species: 'Swampert', ability: 'Sap Sipper', item: 'Life Orb', gender: 'N',
+		moves: ['Earthquake', 'Waterfall', 'Ice Punch'],
+		signatureMove: 'Fan Service',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',
 		moves: ['Moongeist Beam', 'Psystrike', 'Thunder Wave'],

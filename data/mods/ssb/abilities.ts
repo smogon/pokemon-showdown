@@ -528,6 +528,7 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
+			if (effect.id === 'heavyhailstorm') return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -657,6 +658,7 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
+			if (effect.id === 'heavyhailstorm') return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;

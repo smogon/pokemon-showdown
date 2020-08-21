@@ -930,6 +930,23 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
+	rajshoot: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Raj.Shoot')}|Plaza Power!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Raj.Shoot')}|We'll be back!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Raj.Shoot')}|You'll join me in the shadow realm soon....`);
+		},
+		onBeforeMove(source, target, move) {
+			if (move.id === 'fanservice') {
+				this.boost({atk: 1, spe: 1}, source, source, move);
+			}
+		},
+	},
 	ransei: {
 		noCopy: true,
 		onStart() {

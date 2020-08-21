@@ -116,6 +116,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
 	},
+	// Raj.Shoot
+	swampertmega: {
+		inherit: true,
+		abilities: {0: "Sap Sipper"},
+	},
 	// Robb576
 	necrozmadawnwings: {
 		inherit: true,
