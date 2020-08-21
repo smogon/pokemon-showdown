@@ -62,8 +62,8 @@ export class YoutubeInterface {
 			// add new data to the beginning
 			cached.subs.unshift(Number(data.statistics.subscriberCount));
 			cached.views.unshift(Number(data.statistics.viewCount));
-			cached.subs.slice(0, 15);
-			cached.views.slice(0, 15);
+			cached.subs.slice(0, 14);
+			cached.views.slice(0, 14);
 			// update all the rest
 			for (const key in data) {
 				if (Array.isArray(cached[key])) continue;
