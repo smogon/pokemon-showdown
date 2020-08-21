@@ -1118,6 +1118,7 @@ export class CommandContext extends MessageContext {
 			this.errorReply(this.tr("Your message contained banned words in this room."));
 			return null;
 		}
+
 		const gameFilter = this.checkGameFilter();
 		if (typeof gameFilter === 'string') {
 			if (gameFilter) this.errorReply(gameFilter);

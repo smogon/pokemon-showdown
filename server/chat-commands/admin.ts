@@ -684,7 +684,7 @@ export const commands: ChatCommands = {
 		this.stafflog(`${user.name} used /endemergency.`);
 	},
 
-	async kill(target, room, user) {
+	kill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		if (Rooms.global.lockdown !== true) {

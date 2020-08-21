@@ -534,7 +534,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.logData = null;
 		this.endType = 'normal';
 		this.score = null;
-		this.inputLog = options.inputLog ? options.inputLog.split('\n') : null;
+		this.inputLog = null;
 		this.turn = 0;
 
 		this.rqid = 1;

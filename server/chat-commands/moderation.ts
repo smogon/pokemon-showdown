@@ -345,8 +345,7 @@ export const commands: ChatCommands = {
 				}
 			})
 		);
-		const battleRoom = user.rejoinBattle();
-		if (battleRoom) autojoins.push(battleRoom.roomid);
+		user.rejoinBattle();
 
 		return Promise.all(promises).then(() => {
 			connection.autojoins = autojoins.join(',');
