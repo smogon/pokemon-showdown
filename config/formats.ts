@@ -31,8 +31,8 @@ function merge(
 		if (element.section) {
 			build.push({section: element.section, column: element.column, formats: []});
 			loc++;
-		} else if (element.name) {
-			build[loc].formats.push(element);
+		} else if ((element as FormatsData).name) {
+			build[loc].formats.push((element as FormatsData));
 		}
 	}
 
@@ -56,8 +56,8 @@ function merge(
 			if (!found) {
 				build.push({section: element.section, column: element.column, formats: []});
 			}
-		} else if (element.name) { // otherwise, adds the element to its section.
-			build[loc].formats.push(element);
+		} else if ((element as FormatsData).name) { // otherwise, adds the element to its section.
+			build[loc].formats.push((element as FormatsData));
 		}
 	}
 
