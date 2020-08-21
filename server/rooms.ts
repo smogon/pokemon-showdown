@@ -768,12 +768,8 @@ export abstract class BasicRoom {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
 		}
 
-		if (user.can('mute', null, this)) {
-			this.sendUser(
-				user,
-				this.getStaffIntroMessage(user)
-			);
-		}
+		const staffIntro = this.getStaffIntroMessage(user);
+		if (staffIntro) this.sendUser(user, staffIntro);
 
 		this.users[user.id] = user;
 		this.userCount++;
