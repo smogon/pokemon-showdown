@@ -469,6 +469,50 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Steel",
 	},
 
+	// Averardo
+	hatofwisdom: {
+		accuracy: 100,
+		basePower: 110,
+		category: "Special",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits 1 turn after being used. User switches.",
+		name: "Hat of Wisdom",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'hatofwisdom',
+				source: source,
+				moveData: {
+					id: 'hatofwisdom',
+					name: "Hat of Wisdom",
+					accuracy: 100,
+					basePower: 110,
+					category: "Special",
+					priority: 0,
+					flags: {},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Psychic',
+				},
+			});
+			this.add('-start', source, 'move: Hat of Wisdom');
+			source.switchFlag = 'hatofwisdom' as ID;
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// awa
 	awa: {
 		accuracy: 100,

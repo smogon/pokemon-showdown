@@ -101,6 +101,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Broadside Barrage',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	Averardo: {
+		species: 'Hattrem', ability: 'Magic Hat', item: 'Eviolite', gender: 'M',
+		moves: ['Nuzzle', 'Flamethrower', 'Healing Wish'],
+		signatureMove: 'Hat of Wisdom',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Sassy',
+	},
 	'awa!': {
 		species: 'Lycanroc', ability: 'Sand Rush', item: 'Life Orb', gender: 'F',
 		moves: ['Earthquake', 'Close Combat', 'Swords Dance'],

@@ -175,6 +175,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!pokemon.m.indomitableActivated) pokemon.m.indomitableActivated = false;
 		},
 	},
+	averardo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Averardo')}|o bella`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Averardo')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Averardo')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
+		},
+	},
 	awauser: {
 		noCopy: true,
 		onStart() {
