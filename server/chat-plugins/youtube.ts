@@ -44,7 +44,7 @@ export class YoutubeInterface {
 		if (!res || !res.items || res.items.length < 1) return;
 		const data = res.items[0];
 		if (!this.data[id]) {
-			const cache = {
+			this.data[id] = {
 				name: data.snippet.title,
 				description: data.snippet.description,
 				url: data.snippet.customUrl,
@@ -54,7 +54,6 @@ export class YoutubeInterface {
 				views: Number(data.statistics.viewCount),
 				username: username,
 			};
-			this.data[id] = {...cache};
 		} else {
 			const cached = this.data[id];
 			// convert to arrays, if old
