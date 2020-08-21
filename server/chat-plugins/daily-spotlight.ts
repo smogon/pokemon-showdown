@@ -152,8 +152,7 @@ export const commands: ChatCommands = {
 		if (key.length > 20) return this.errorReply("Spotlight names can be a maximum of 20 characters long.");
 		if (key === 'constructor') return false;
 		if (!spotlights[room.roomid]) spotlights[room.roomid] = {};
-		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
-		const queueLength = spotlights[room.roomid][key].length;
+		const queueLength = spotlights[room.roomid][key]?.length || 0;
 
 		if (indexString && !NUMBER_REGEX.test(indexString)) return this.errorReply("The queue number must be a number.");
 
@@ -179,6 +178,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("Descriptions can be at most 500 characters long.");
 		}
 		const obj = {image: img, description: desc};
+		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
 		if (cmd === 'setdaily') {
 			spotlights[room.roomid][key].shift();
 			spotlights[room.roomid][key].unshift(obj);
