@@ -3007,4 +3007,4 @@ export const MainFormats: FormatList[] = [
 	},
 ];
 
-export const Formats: FormatList[] = merge(MainFormats, SideFormats);
+export const Formats: FormatList[] = merge(MainFormats, CustomFormats);
