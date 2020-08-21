@@ -67,7 +67,7 @@ function merge(
 		result.push({section: element.section, column: element.column});
 
 		// adds all the formats in the section.
-		for(const entry of element.formats) {
+		for (const entry of element.formats) {
 			result.push(entry);
 		}
 	}
