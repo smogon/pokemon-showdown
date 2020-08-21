@@ -48,7 +48,6 @@ function merge(main: (FormatsData | {section: string, column?: number})[],
 			result.push(obj);
 		});
 	});
-	console.log(build);
 	return result;
 }
 
