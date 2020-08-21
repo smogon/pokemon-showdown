@@ -5,7 +5,7 @@ import {Utils} from './../lib/utils';
 import {SideFormats} from './custom-formats';
 
 // interface for the builder.
-interface formatSection {
+interface FormatSection {
 	section: string
 	column?: number
 	formats: FormatsData[];
