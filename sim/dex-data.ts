@@ -246,7 +246,7 @@ export class RuleTable extends Map<string, string> {
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-export class Format extends BasicEffect implements Readonly<BasicEffect & FormatsData> {
+export class Format extends BasicEffect implements Readonly<BasicEffect & FormatData> {
 	readonly mod: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses

@@ -8,7 +8,7 @@ import {CustomFormats, FormatList} from './custom-formats';
 interface FormatSection {
 	section: string;
 	column?: number;
-	formats: FormatsData[];
+	formats: FormatData[];
 }
 
 // function for merging the two lists
@@ -31,8 +31,8 @@ function merge(
 		if (element.section) {
 			build.push({section: element.section, column: element.column, formats: []});
 			loc++;
-		} else if ((element as FormatsData).name) {
-			build[loc].formats.push((element as FormatsData));
+		} else if ((element as FormatData).name) {
+			build[loc].formats.push((element as FormatData));
 		}
 	}
 
@@ -56,8 +56,8 @@ function merge(
 			if (!found) {
 				build.push({section: element.section, column: element.column, formats: []});
 			}
-		} else if ((element as FormatsData).name) { // otherwise, adds the element to its section.
-			build[loc].formats.push((element as FormatsData));
+		} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
+			build[loc].formats.push((element as FormatData));
 		}
 	}
 
