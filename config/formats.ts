@@ -3,18 +3,29 @@
 import {Utils} from './../lib/utils';
 
 import { SideFormats } from './custom-formats';
+
+// interface for the builder.
 interface formatSection {
 	section: string
 	column?: number
 	formats: FormatsData[];
 }
 
+// function for merging the two lists
 function merge(main: (FormatsData | {section: string, column?: number})[],
 			   side: (FormatsData | {section: string, column?: number})[]):
 			   (FormatsData | {section: string, column?: number})[] {
+	// result that is return and makes the actual list for formats.
 	var result: (FormatsData | {section: string, column?: number})[] = [];
+
+	// used as a intermediary to build the final list.
 	var build: formatSection[] = [];
+
+	// used to track location to keep formats under their sections.
 	var loc: number = -1;
+
+	// populates the origonal sections and formats easily
+	// there should be no repeat sections at this point.
 	main.forEach(element => {
 		if (element.section) {
 			build.push({section: element.section, column: element.column, formats: []});
@@ -23,10 +34,15 @@ function merge(main: (FormatsData | {section: string, column?: number})[],
 			build[loc].formats.push(element);
 		}
 	});
+
+	// merges the second list the hard way. Accounts for repeats.
 	side.forEach(element => {
+		// finds the section and makes it if it doesn't exist.
 		if (element.section) {
 			loc = 0;
 			var found: boolean = false;
+
+			// finds the loc of the section header (or next loc if it's new)
 			build.forEach(comp => {
 				if (comp.section === element.section) {
 					found = true;
@@ -34,20 +50,27 @@ function merge(main: (FormatsData | {section: string, column?: number})[],
 				}
 				loc++;
 			});
+
+			// if it's new it makes a new entry.
 			if (!found) {
 				build.push({section: element.section, column: element.column, formats: []});
 			}
-		} else if (element.name) {
+		} else if (element.name) { // otherwise adds the element to it's section.
 			build[loc].formats.push(element);
 		}
 	});
+
+	// builds the final result.
 	build.forEach(element => {
-		//console.log("section: " + element.section +" - column: " + element.column);
+		// adds the section to the list.
 		result.push({section: element.section, column: element.column});
+
+		// adds all the formats in the section.
 		element.formats.forEach(obj => {
 			result.push(obj);
 		});
 	});
+
 	return result;
 }
 
