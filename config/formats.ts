@@ -3007,8 +3007,4 @@ export const MainFormats: FormatList[] = [
 	},
 ];
 
-<<<<<<< HEAD
 export const Formats: FormatList[] = merge(MainFormats, SideFormats);
-=======
-export const Formats: (FormatsData | {section: string, column?: number})[] = merge(MainFormats, SideFormats);
->>>>>>> d5b5091b1a92ea492c894dacd49819887a77e15a
