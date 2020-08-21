@@ -1117,13 +1117,19 @@ export class User extends Chat.MessageContext {
 		if (!this.trusted) return;
 		const userid = this.trusted;
 		const removed = [];
-		if (globalAuth.has(userid)) {
+		const globalGroup = globalAuth.get(userid);
+		if (globalGroup && globalGroup !== ' ') {
 			removed.push(globalAuth.get(userid));
 		}
 		for (const room of Rooms.global.chatRooms) {
 			if (!room.settings.isPrivate && room.auth.isStaff(userid)) {
-				removed.push(room.auth.getDirect(userid) + room.roomid);
-				room.auth.set(userid, '+');
+				let oldGroup = room.auth.getDirect(userid) as string;
+				if (oldGroup === ' ') {
+					oldGroup = 'whitelist in ';
+				} else {
+					room.auth.set(userid, '+');
+				}
+				removed.push(`${oldGroup}${room.roomid}`);
 			}
 		}
 		this.trusted = '';
