@@ -2,10 +2,10 @@
 // The rules that formats use are stored in data/rulesets.ts
 import {Utils} from './../lib/utils';
 
-import { SideFormats, formatList } from './custom-formats';
+import { SideFormats, FormatList } from './custom-formats';
 
 // interface for the builder.
-interface formatSection {
+interface FormatSection {
 	section: string
 	column?: number
 	formats: FormatsData[];
@@ -13,11 +13,11 @@ interface formatSection {
 
 // function for merging the two lists
 function merge(
-			   main: formatList[],
-			   side: formatList[]
-): formatList[] {
+			   main: FormatList[],
+			   side: FormatList[]
+): FormatList[] {
 	// result that is return and makes the actual list for formats.
-	const result: formatList[] = [];
+	const result: FormatList[] = [];
 
 	// used as a intermediary to build the final list.
 	const build: formatSection[] = [];
@@ -75,7 +75,7 @@ function merge(
 	return result;
 }
 
-export const MainFormats: formatList[] = [
+export const MainFormats: FormatList[] = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
@@ -3007,4 +3007,8 @@ export const MainFormats: formatList[] = [
 	},
 ];
 
-export const Formats: formatList[] = merge(MainFormats, SideFormats);
+<<<<<<< HEAD
+export const Formats: FormatList[] = merge(MainFormats, SideFormats);
+=======
+export const Formats: (FormatsData | {section: string, column?: number})[] = merge(MainFormats, SideFormats);
+>>>>>>> d5b5091b1a92ea492c894dacd49819887a77e15a
