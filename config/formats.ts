@@ -2,12 +2,12 @@
 // The rules that formats use are stored in data/rulesets.ts
 import {Utils} from './../lib/utils';
 
-import { SideFormats, FormatList } from './custom-formats';
+import {CustomFormats, FormatList} from './custom-formats';
 
 // interface for the builder.
 interface FormatSection {
-	section: string
-	column?: number
+	section: string;
+	column?: number;
 	formats: FormatsData[];
 }
 
@@ -23,7 +23,7 @@ function merge(
 	const build: formatSection[] = [];
 
 	// used to track location to keep formats under their sections.
-	let loc: number = -1;
+	let loc = -1;
 
 	// populates the origonal sections and formats easily
 	// there should be no repeat sections at this point.
@@ -34,14 +34,14 @@ function merge(
 		} else if (element.name) {
 			build[loc].formats.push(element);
 		}
-	};
+	}
 
 	// merges the second list the hard way. Accounts for repeats.
 	for(const element of side) {
 		// finds the section and makes it if it doesn't exist.
 		if (element.section) {
 			loc = 0;
-			let found: boolean = false;
+			let found = false;
 
 			// finds the loc of the section header (or next loc if it's new)
 			for(const entry of build) {
@@ -50,7 +50,7 @@ function merge(
 					break;
 				}
 				loc++;
-			};
+			}
 
 			// if it's new it makes a new entry.
 			if (!found) {
@@ -59,7 +59,7 @@ function merge(
 		} else if (element.name) { // otherwise, adds the element to its section.
 			build[loc].formats.push(element);
 		}
-	};
+	}
 
 	// builds the final result.
 	for(const element of build) {
@@ -69,8 +69,8 @@ function merge(
 		// adds all the formats in the section.
 		for(const entry of element.formats) {
 			result.push(entry);
-		};
-	};
+		}
+	}
 
 	return result;
 }
