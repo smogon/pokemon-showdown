@@ -758,18 +758,22 @@ export const commands: ChatCommands = {
 			});
 		};
 
+		const rebuild = async () => {
+			[code, stdout, stderr] = await exec('node ./build');
+			if (stderr) {
+				throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
+			}
+			this.sendReply(`Rebuilt.`);
+		};
+
 		this.sendReply(`Fetching newest version...`);
 		this.addGlobalModAction(`${user.name} used /updateserver ${isPrivate ? `private` : `public`}`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
-		if (!isPrivate && !stdout && !stderr) {
+		if (!stdout && !stderr) {
 			this.sendReply(`There were no updates.`);
-			[code, stdout, stderr] = await exec('node ./build');
-			if (stderr) {
-				return this.errorReply(`Crash while rebuilding: ${stderr}`);
-			}
-			this.sendReply(`Rebuilt.`);
+			if (!isPrivate) await rebuild();
 			Monitor.updateServerLock = false;
 			return;
 		}
@@ -817,13 +821,7 @@ export const commands: ChatCommands = {
 			await exec(`git stash pop`);
 			this.sendReply(`FAILED, old changes restored.`);
 		}
-		if (!isPrivate) {
-			[code, stdout, stderr] = await exec('node ./build');
-			if (stderr) {
-				return this.errorReply(`Crash while rebuilding: ${stderr}`);
-			}
-			this.sendReply(`Rebuilt.`);
-		}
+		if (!isPrivate) await rebuild();
 		Monitor.updateServerLock = false;
 	},
 
