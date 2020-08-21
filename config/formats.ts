@@ -2,7 +2,7 @@
 // The rules that formats use are stored in data/rulesets.js
 import {Utils} from './../lib/utils';
 
-import { SideFormats } from './custom-formats';
+import {SideFormats} from './custom-formats';
 
 // interface for the builder.
 interface formatSection {
