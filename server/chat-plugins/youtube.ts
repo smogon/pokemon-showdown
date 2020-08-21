@@ -12,7 +12,18 @@ import {Utils} from '../../lib/utils';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
-let channelData: AnyObject;
+interface ChannelEntry {
+	name: string;
+	description: string;
+	url: string;
+	icon: string;
+	videos: number;
+	subs: number[];
+	views: number[];
+	username?: string;
+}
+
+let channelData: {[k: string]: ChannelEntry};
 
 try {
 	channelData = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
@@ -23,25 +34,25 @@ try {
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
 	intervalTime: number;
-	data: AnyObject;
-	updateTimer?: NodeJS.Timer;
+	data: {[k: string]: ChannelEntry};
+	updateTimer: NodeJS.Timer;
 	constructor(data?: AnyObject) {
 		this.data = data ? data : {};
 		this.interval = null;
 		this.intervalTime = 0;
-		this.updateTimer = this.setUpdateTimer();
+		this.updateTimer = this.setUpdateTimer()!;
 	}
-	async getChannelData(link: string, username?: string) {
+	async getChannelData(link: string, username?: string): Promise<ChannelEntry> {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
 		const id = this.getId(link);
-		if (!id) return null;
+		if (!id) throw new Chat.ErrorMessage(`Invalid link.`);
 		const raw = await Net(`${ROOT}channels`).get({
 			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
 		});
 		const res = JSON.parse(raw);
-		if (!res || !res.items || res.items.length < 1) return;
+		if (!res || !res.items || res.items.length < 1) throw new Chat.ErrorMessage(`Invalid response.`);
 		const data = res.items[0];
 		if (!this.data[id]) {
 			this.data[id] = {
@@ -50,32 +61,31 @@ export class YoutubeInterface {
 				url: data.snippet.customUrl,
 				icon: data.snippet.thumbnails.medium.url,
 				videos: Number(data.statistics.videoCount),
-				subs: Number(data.statistics.subscriberCount),
-				views: Number(data.statistics.viewCount),
+				subs: [Number(data.statistics.subscriberCount)],
+				views: [Number(data.statistics.viewCount)],
 				username: username,
 			};
 		} else {
 			const cached = this.data[id];
 			// convert to arrays, if old
-			if (!Array.isArray(cached.subs)) cached.subs = [cached.subs];
-			if (!Array.isArray(cached.views)) cached.views = [cached.views];
+			let subs = cached.subs;
+			let views = cached.views;
+			if (!Array.isArray(subs)) subs = [subs];
+			if (!Array.isArray(views)) views = [views];
 			// add new data to the beginning
-			cached.subs.unshift(Number(data.statistics.subscriberCount));
-			cached.views.unshift(Number(data.statistics.viewCount));
-			cached.subs.slice(0, 14);
-			cached.views.slice(0, 14);
+			subs.unshift(Number(data.statistics.subscriberCount));
+			views.unshift(Number(data.statistics.viewCount));
 			// update all the rest
-			for (const key in data) {
-				if (Array.isArray(cached[key])) continue;
-				cached[key] = data[key];
-			}
+			this.data[id] = data;
+			this.data[id].views = views.slice(0, 14);
+			this.data[id].subs = subs.slice(0, 14);
 		}
 		this.save();
 		return this.data[id];
 	}
 	async generateChannelDisplay(link: string) {
 		const id = this.getId(link);
-		if (!id) return;
+		if (!id) throw new Chat.ErrorMessage("Invalid ID.");
 		// url isn't needed but it destructures wrong without it
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const {name, description, url, icon, videos, subs, views, username} = await this.get(id);
@@ -103,9 +113,9 @@ export class YoutubeInterface {
 		const id = Utils.shuffle(keys)[0].trim();
 		return this.generateChannelDisplay(id);
 	}
-	get(id: string, username?: string) {
+	get(id: string, username?: string): Promise<ChannelEntry> {
 		if (!(id in this.data)) return this.getChannelData(id, username);
-		return {...this.data[id]};
+		return Promise.resolve({...this.data[id]});
 	}
 	channelSearch(search: string) {
 		let channel;
@@ -190,7 +200,7 @@ export class YoutubeInterface {
 		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
 		nextMidnight.setHours(0, 0, 1);
 		this.updateTimer = setTimeout(() => this.updateData(), nextMidnight.getTime() - time);
-		return this.updateTimer;
+		return null;
 	}
 	updateData() {
 		for (const key in this.data) {
@@ -201,7 +211,7 @@ export class YoutubeInterface {
 	trend(id: string, key: string, num?: number) {
 		const channel = this.data[id];
 		if (!channel) return;
-		const data = channel[key] as string[];
+		const data = toID(key) === 'views' ? channel.views : channel.subs;
 		return data.slice(0, (num && num < data.length ? num : undefined));
 	}
 }
@@ -234,10 +244,7 @@ export const commands: ChatCommands = {
 			let [id, name] = target.split(',');
 			if (name) name = name.trim();
 			if (!id) return this.errorReply('Specify a channel ID.');
-			const data = await YouTube.getChannelData(id, name);
-			if (!data) {
-				return this.errorReply(`Error in retrieving channel data.`);
-			}
+			await YouTube.getChannelData(id, name);
 			this.modlog('ADDCHANNEL', null, `${id} ${name ? `username: ${name}` : ''}`);
 			return this.privateModAction(`Added channel with id ${id} ${name ? `and username (${name}) ` : ''} to the random channel pool.`);
 		},
@@ -262,7 +269,6 @@ export const commands: ChatCommands = {
 			const channel = YouTube.channelSearch(target);
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
 			const data = await YouTube.generateChannelDisplay(channel);
-			if (!data) return this.errorReply(`Error in getting channel data.`);
 			this.runBroadcast();
 			return this.sendReplyBox(data);
 		},
@@ -292,7 +298,7 @@ export const commands: ChatCommands = {
 			YouTube.data[id].username = name;
 			this.modlog(`UPDATECHANNEL`, null, name);
 			this.privateModAction(`${user.name} updated channel ${id}'s username to ${name}.`);
-			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(YouTube.data));
+			return YouTube.save();
 		},
 		interval: 'repeat',
 		async repeat(target, room, user) {
@@ -313,7 +319,7 @@ export const commands: ChatCommands = {
 			YouTube.interval = setInterval(() => {
 				void (async () => {
 					const res = await YouTube.randChannel();
-					this.addBox(res!);
+					this.addBox(res);
 					room.update();
 				})();
 			 }, interval);
@@ -328,6 +334,7 @@ export const commands: ChatCommands = {
 			this.modlog(`UPDATECHANNELDATA`, null, 'forced');
 			this.privateModAction(`(${user.name} forced the YouTube channel database to update.)`);
 		},
+		trend: 'viewtrend',
 		viewtrend(target, room) {
 			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
@@ -340,21 +347,18 @@ export const commands: ChatCommands = {
 			if (num && isNaN(parseInt(num))) return this.errorReply(`Invalid number of days to include.`);
 			const strings = YouTube.trend(channel, toID(key), parseInt(num));
 			if (!strings) return this.errorReply(`No trends for ${channel}.`);
-			let buf = `<b>Trends for ${id}${num ? ` in the last ${Chat.count(num, 'days')}` : ' in the last 15 days'} (${key})</b><hr />`;
+			let buf = `<b>Trends for ${id}${num ? ` in the last ${Chat.count(num, 'days')}` : ' in the last two weeks'} (${key})</b><hr />`;
 			let curIndex = 0;
 			let prevNum = strings[0];
 			while (strings.length > 0) {
 				const string = strings.shift();
+				if (!string) break;
 				curIndex++;
 				const diff = `${Number(prevNum) - Number(string)}`;
 				buf += `- ${curIndex} days ago: ${string} `;
-				const changes = {
-					gain: toID(key) === 'views' ? '+' : 'gained ',
-					// you can't LOSE views
-					lost: toID(key) === 'views' ? '+' : 'lost ',
-				};
-				buf += `(${parseInt(diff) > 0 ? `${changes.gain}${diff}` : `${changes.lost}${diff.replace('-', '')}`})<br /> `;
-				prevNum = string as string;
+
+				buf += `(${parseInt(diff) > 0 ? `gained ${diff}` : `lost ${diff.replace('-', '')}`})<br /> `;
+				prevNum = string;
 			}
 			if (strings.length > 5) buf = Chat.getReadmoreCodeBlock(buf);
 			this.runBroadcast();
@@ -391,7 +395,7 @@ export const pages: PageTable = {
 		buffer += `<br /><hr />`;
 		const isStaff = user.can('mute', null, Rooms.get('youtube')!);
 		for (const id of Utils.shuffle(channelBuffer)) {
-			const {name, username} = YouTube.get(id);
+			const {name, username} = await YouTube.get(id);
 			if (!all && !username) continue;
 			buffer += `<details><summary>${name}`;
 			if (isStaff) buffer += `<small><i> (Channel ID: ${id})</i></small>`;
