@@ -10,6 +10,7 @@
  * @license MIT
  */
 
+import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
@@ -737,6 +738,9 @@ export const commands: ChatCommands = {
 		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
+		if (isPrivate && (!Config.privatecodepath || !path.isAbsolute(Config.privatecodepath))) {
+			return this.errorReply("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
+		}
 
 		Monitor.updateServerLock = true;
 
@@ -744,7 +748,7 @@ export const commands: ChatCommands = {
 			this.stafflog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				child_process.exec(command, {
-					cwd: `${__dirname}/../../${isPrivate ? Config.privatecodepath || '../main-private/' : ``}`,
+					cwd: isPrivate ? Config.privatecodepath : `${__dirname}/../..`,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
