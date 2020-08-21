@@ -20,7 +20,7 @@ function merge(
 	const result: FormatList[] = [];
 
 	// used as a intermediary to build the final list.
-	const build: formatSection[] = [];
+	const build: FormatSection[] = [];
 
 	// used to track location to keep formats under their sections.
 	let loc = -1;
