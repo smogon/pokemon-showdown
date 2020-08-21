@@ -2,7 +2,57 @@
 // The rules that formats use are stored in data/rulesets.js
 import {Utils} from './../lib/utils';
 
-export const Formats: (FormatsData | {section: string, column?: number})[] = [
+import { SideFormats } from './custom-formats';
+interface formatSection {
+	section: string
+	column?: number
+	formats: FormatsData[];
+}
+
+function merge(main: (FormatsData | {section: string, column?: number})[],
+			   side: (FormatsData | {section: string, column?: number})[]):
+			   (FormatsData | {section: string, column?: number})[] {
+	var result: (FormatsData | {section: string, column?: number})[] = [];
+	var build: formatSection[] = [];
+	var loc: number = -1;
+	main.forEach(element => {
+		if (element.section) {
+			build.push({section: element.section, column: element.column, formats: []});
+			loc++;
+		} else if (element.name) {
+			build[loc].formats.push(element);
+		}
+	});
+	side.forEach(element => {
+		if (element.section) {
+			loc = 0;
+			var found: boolean = false;
+			build.forEach(comp => {
+				if (comp.section === element.section) {
+					found = true;
+					return;
+				}
+				loc++;
+			});
+			if (!found) {
+				build.push({section: element.section, column: element.column, formats: []});
+			}
+		} else if (element.name) {
+			build[loc].formats.push(element);
+		}
+	});
+	build.forEach(element => {
+		//console.log("section: " + element.section +" - column: " + element.column);
+		result.push({section: element.section, column: element.column});
+		element.formats.forEach(obj => {
+			result.push(obj);
+		});
+	});
+	console.log(build);
+	return result;
+}
+
+export const MainFormats: (FormatsData | {section: string, column?: number})[] = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
@@ -2933,3 +2983,5 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 ];
+
+export const Formats: (FormatsData | {section: string, column?: number})[] = merge(MainFormats, SideFormats);
