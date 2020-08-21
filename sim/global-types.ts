@@ -48,23 +48,7 @@ type MoveTarget =
 	'adjacentAlly' | 'adjacentAllyOrSelf' | 'adjacentFoe' | 'all' | 'allAdjacent' | 'allAdjacentFoes' |
 	'allies' | 'allySide' | 'allyTeam' | 'any' | 'foeSide' | 'normal' | 'randomNormal' | 'scripted' | 'self';
 
-interface PokemonSet {
-	name: string;
-	species: string;
-	item: string;
-	ability: string;
-	moves: string[];
-	nature: string;
-	gender: string;
-	evs: StatsTable;
-	ivs: StatsTable;
-	level: number;
-	shiny?: boolean;
-	happiness?: number;
-	pokeball?: string;
-	hpType?: string;
-	gigantamax?: boolean;
-}
+type PokemonSet = import('./teams').PokemonSet;
 
 /**
  * Describes a possible way to get a move onto a pokemon.
