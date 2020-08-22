@@ -228,6 +228,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		durationCallback() {
 			return this.random(3, 5);
 		},
+		onEnd(target) {
+			// Confusion begins even if already confused
+			delete target.volatiles['confusion'];
+			target.addVolatile('confusion');
+		},
 	},
 	stall: {
 		name: 'stall',
