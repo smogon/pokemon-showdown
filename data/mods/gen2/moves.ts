@@ -772,38 +772,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	safeguard: {
 		inherit: true,
 		desc: "For 5 turns, the user and its party members cannot have major status conditions or confusion inflicted on them by other Pokemon. During the effect, Outrage, Thrash, and Petal Dance do not confuse the user. Fails if the effect is already active on the user's side.",
-		sideCondition: 'safeguard',
-		condition: {
-			duration: 5,
-			onSetStatus(status, target, source, effect) {
-				if (!effect || !source) return;
-				if (effect.id === 'yawn') return;
-				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
-				if (target !== source) {
-					this.debug('interrupting setStatus');
-					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
-						this.add('-activate', target, 'move: Safeguard');
-					}
-					return null;
-				}
-			},
-			onTryAddVolatile(status, target, source, effect) {
-				if (!effect || !source) return;
-				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
-				if (((status.id === 'confusion' && effect.id !== 'berserkgene') || status.id === 'yawn') && target !== source) {
-					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
-					return null;
-				}
-			},
-			onStart(side) {
-				this.add('-sidestart', side, 'Safeguard');
-			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd(side) {
-				this.add('-sideend', side, 'Safeguard');
-			},
-		},
 	},
 	sandstorm: {
 		inherit: true,
