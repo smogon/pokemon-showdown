@@ -100,8 +100,7 @@ export const commands: ChatCommands = {
 				if (announcement.timeout) clearTimeout(announcement.timeout);
 				announcement.timeoutMins = timeout;
 				announcement.timeout = setTimeout(() => {
-					// do nothing if the room is gone
-					if (!room) return;
+					if (!room) return; // do nothing if the room doesn't exist anymore
 					if (announcement) announcement.end();
 					room.minorActivity = null;
 				}, (timeout * 60000));

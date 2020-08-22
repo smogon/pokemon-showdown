@@ -291,6 +291,7 @@ export const commands: ChatCommands = {
 			if (YouTube.interval) clearInterval(YouTube.interval);
 			YouTube.interval = setInterval(() => {
 				void (async () => {
+					if (!room) return; // do nothing if the room doesn't exist anymore
 					const res = await YouTube.randChannel();
 					this.addBox(res!);
 					room!.update();

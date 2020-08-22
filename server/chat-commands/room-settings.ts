@@ -1166,6 +1166,7 @@ export const commands: ChatCommands = {
 		parent.subRooms.set(room.roomid, room);
 
 		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === parent.title);
+		// can be asserted since we want this to crash if room is null (it should never be)
 		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room!.title);
 
 		// This is needed to ensure that the main room gets loaded before the subroom.

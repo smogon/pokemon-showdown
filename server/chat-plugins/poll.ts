@@ -446,6 +446,7 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (!room) return; // do nothing if the room does not exist
 					if (poll) poll.end();
+					if (!room) return; // if the room's gone, don't do anything else
 					room.minorActivity = null;
 					if (room.minorActivityQueue?.length) {
 						room.minorActivity = room.minorActivityQueue.shift()!;

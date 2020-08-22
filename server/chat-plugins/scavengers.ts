@@ -1928,7 +1928,7 @@ const ScavengerCommands: ChatCommands = {
 		const ladder = await Leaderboard.visualize('points') as AnyObject[];
 		this.sendReply(
 			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				const isStaff = room?.auth.has(toID(entry.name));
+				const isStaff = room!.auth.has(toID(entry.name));
 				if (isStaff && hideStaff) return '';
 				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Utils.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Utils.escapeHTML(entry.name)}</strong>` : Utils.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>` +
@@ -2177,7 +2177,7 @@ const ScavengerCommands: ChatCommands = {
 		const data = await HostLeaderboard.visualize(sortMethod) as AnyObject[];
 		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
 			data.map((entry: AnyObject) => {
-				const auth = room?.auth.get(toID(entry.name)).trim();
+				const auth = room!.auth.get(toID(entry.name)).trim();
 				const color = auth ? 'inherit' : 'gray';
 				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Utils.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.points || 0)}</td>` +
@@ -2226,7 +2226,7 @@ const ScavengerCommands: ChatCommands = {
 
 		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
 			formattedData.map(entry => {
-				const auth = room?.auth.get(toID(entry.name)).trim();
+				const auth = room!.auth.get(toID(entry.name)).trim();
 				const color = auth ? 'inherit' : 'gray';
 
 				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Utils.escapeHTML(entry.name)}</td>` +

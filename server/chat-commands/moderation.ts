@@ -1785,6 +1785,7 @@ export const commands: ChatCommands = {
 		const targets = targetStr.split(',').map(s => toID(s));
 
 		const duplicates = targets.filter(userid => (
+			// can be asserted, room should always exist
 			Punishments.roomUserids.nestedGet(room!.roomid, userid)?.[0] === 'BLACKLIST'
 		));
 		if (duplicates.length) {

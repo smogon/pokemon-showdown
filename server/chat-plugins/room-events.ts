@@ -254,7 +254,7 @@ export const commands: ChatCommands = {
 			for (const alias of getAliases(room, eventID)) {
 				delete room.settings.events[alias];
 			}
-			for (const category of getAllCategories(room).map(cat => room.settings.events?.[cat] as RoomEventCategory)) {
+			for (const category of getAllCategories(room).map(cat => room!.settings.events?.[cat] as RoomEventCategory)) {
 				category.events = category.events.filter(event => event !== eventID);
 			}
 
@@ -280,7 +280,7 @@ export const commands: ChatCommands = {
 					const category = room.settings.events[categoryID];
 					if ('events' in category && categoryID === target) {
 						events = category.events
-							.map(e => room.settings.events?.[e] as RoomEvent)
+							.map(e => room!.settings.events?.[e] as RoomEvent)
 							.filter(e => e);
 						break;
 					}
@@ -301,7 +301,7 @@ export const commands: ChatCommands = {
 			for (const potentialCategory of getAllCategories(room)) {
 				if (
 					events.map(event => toID(event.eventName))
-						.filter(id => (room.settings.events?.[potentialCategory] as RoomEventCategory).events.includes(id)).length
+						.filter(id => (room!.settings.events?.[potentialCategory] as RoomEventCategory).events.includes(id)).length
 				) hasCategories = true; break;
 			}
 

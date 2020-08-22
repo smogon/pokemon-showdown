@@ -60,7 +60,7 @@ export const commands: ChatCommands = {
 			let htmlReply = Utils.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
 				getCardDetails(subdomain, id).then((card: {thumbnail: unknown}) => {
-					if (!room) return; // room's gone, do nothing
+					if (!room) return; // do nothing if the room doesn't exist anymore
 					const thumb = Utils.getString(card.thumbnail);
 					if (thumb) {
 						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Utils.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
@@ -68,18 +68,18 @@ export const commands: ChatCommands = {
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 				}, () => {
-					if (!room) return; // room's gone, do nothing
+					if (!room) return; // do nothing if the room doesn't exist anymore
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 				});
 			} else {
-				if (!room) return; // room's gone, do nothing
+				if (!room) return; // do nothing if the room doesn't exist anymore
 				if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 				room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 			}
 		}, (err: Error & {code: string}) => {
 			if (!this.runBroadcast()) return;
-			if (!room) return; // room's gone, do nothing
+			if (!room) return; // do nothing if the room doesn't exist anymore
 
 			if (err instanceof SyntaxError || err.message === 'Malformed data') {
 				if (!this.broadcasting) return this.sendReply(`Error: Something went wrong in the request: ${err.message}`);
