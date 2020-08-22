@@ -2,78 +2,7 @@
 // The rules that formats use are stored in data/rulesets.ts
 import {Utils} from './../lib/utils';
 
-import {CustomFormats, FormatList} from './custom-formats';
-
-// interface for the builder.
-interface FormatSection {
-	section: string;
-	column?: number;
-	formats: FormatData[];
-}
-
-// function for merging the two lists
-function merge(
-			   main: FormatList[],
-			   side: FormatList[]
-): FormatList[] {
-	// result that is return and makes the actual list for formats.
-	const result: FormatList[] = [];
-
-	// used as a intermediary to build the final list.
-	const build: FormatSection[] = [];
-
-	// used to track location to keep formats under their sections.
-	let loc = -1;
-
-	// populates the origonal sections and formats easily
-	// there should be no repeat sections at this point.
-	for (const element of main) {
-		if (element.section) {
-			build.push({section: element.section, column: element.column, formats: []});
-			loc++;
-		} else if ((element as FormatData).name) {
-			build[loc].formats.push((element as FormatData));
-		}
-	}
-
-	// merges the second list the hard way. Accounts for repeats.
-	for (const element of side) {
-		// finds the section and makes it if it doesn't exist.
-		if (element.section) {
-			loc = 0;
-			let found = false;
-
-			// finds the loc of the section header (or next loc if it's new)
-			for (const entry of build) {
-				if (entry.section === element.section) {
-					found = true;
-					break;
-				}
-				loc++;
-			}
-
-			// if it's new it makes a new entry.
-			if (!found) {
-				build.push({section: element.section, column: element.column, formats: []});
-			}
-		} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
-			build[loc].formats.push((element as FormatData));
-		}
-	}
-
-	// builds the final result.
-	for (const element of build) {
-		// adds the section to the list.
-		result.push({section: element.section, column: element.column});
-
-		// adds all the formats in the section.
-		for (const entry of element.formats) {
-			result.push(entry);
-		}
-	}
-
-	return result;
-}
+import {FormatList} from './custom-formats';
 
 export const MainFormats: FormatList[] = [
 
@@ -3006,5 +2935,3 @@ export const MainFormats: FormatList[] = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 ];
-
-export const Formats: FormatList[] = merge(MainFormats, CustomFormats);
