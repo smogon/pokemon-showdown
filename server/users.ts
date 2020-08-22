@@ -71,16 +71,6 @@ function move(user: User, newUserid: ID) {
 	user.id = newUserid;
 	users.set(newUserid, user);
 
-	user.forcedPublic = null;
-	if (Config.forcedpublicprefixes) {
-		for (const prefix of Config.forcedpublicprefixes) {
-			if (user.id.startsWith(toID(prefix))) {
-				user.forcedPublic = prefix;
-				break;
-			}
-		}
-	}
-
 	return true;
 }
 function add(user: User) {
@@ -347,7 +337,6 @@ export class User extends Chat.MessageContext {
 	lastChallenge: number;
 	lastPM: string;
 	lastMatch: string;
-	forcedPublic: string | null;
 
 	settings: UserSettings;
 
@@ -430,7 +419,6 @@ export class User extends Chat.MessageContext {
 		this.lastChallenge = 0;
 		this.lastPM = '';
 		this.lastMatch = '';
-		this.forcedPublic = null;
 
 		// settings
 		this.settings = {
@@ -1463,6 +1451,13 @@ export class User extends Chat.MessageContext {
 			this.autoconfirmed === this.id ? `[ac]` :
 			this.registered ? `[registered]` :
 			``;
+	}
+	battlesForcedPublic() {
+		if (!Config.forcedpublicprefixes) return null;
+		for (const prefix of Config.forcedpublicprefixes) {
+			if (this.id.startsWith(toID(prefix))) return prefix;
+		}
+		return null;
 	}
 	destroy() {
 		// deallocate user

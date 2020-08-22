@@ -1755,11 +1755,10 @@ export const Rooms = {
 		}
 
 		if (privacySetter.size) {
-			const prefix = battle.forcedPublic();
-			if (prefix) {
+			if (battle.forcePublic) {
 				room.settings.isPrivate = false;
 				room.settings.modjoin = null;
-				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
+				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
 				room.settings.isPrivate = 'hidden';
 				if (inviteOnly) room.settings.modjoin = '%';
