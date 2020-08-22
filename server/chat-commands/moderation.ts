@@ -1126,7 +1126,7 @@ export const commands: ChatCommands = {
 
 		if (!userid) return this.parse('/help promote');
 
-		const currentGroup = targetUser?.group || Users.globalAuth.get(userid);
+		const currentGroup = targetUser?.tempGroup || Users.globalAuth.get(userid);
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Users.Auth.defaultSymbol();
 		if (!nextGroup) {
@@ -1338,7 +1338,7 @@ export const commands: ChatCommands = {
 		if (!target) return;
 
 		for (const u of Users.users.values()) {
-			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
+			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		}
 		this.globalModlog(`GLOBALDECLARE`, null, target);
 	},

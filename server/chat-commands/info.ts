@@ -21,7 +21,7 @@ export const commands: ChatCommands = {
 	altsnorecurse: 'whois',
 	whois(target, room: Room | null, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
-		const targetUser = this.targetUserOrSelf(target, user.group === ' ');
+		const targetUser = this.targetUserOrSelf(target, user.tempGroup === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
@@ -32,7 +32,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
-		let buf = Utils.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
+		let buf = Utils.html`<strong class="username"><small style="display:none">${targetUser.tempGroup}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
 		if (ac && showAll) {
 			buf += ` <small style="color:gray">(ac${targetUser.id === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
@@ -46,8 +46,8 @@ export const commands: ChatCommands = {
 		if (roomauth && Config.groups[roomauth]?.name) {
 			buf += Utils.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		if (Config.groups[targetUser.group]?.name) {
-			buf += Utils.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
+		if (Config.groups[targetUser.tempGroup]?.name) {
+			buf += Utils.html`<br />Global ${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
 
 			for (const targetAlt of targetUser.getAltUsers(true)) {
 				if (!targetAlt.named && !targetAlt.connected) continue;
-				if (targetAlt.group === '~' && user.group !== '~') continue;
+				if (targetAlt.tempGroup === '~' && user.tempGroup !== '~') continue;
 
 				const punishment = Punishments.userids.get(targetAlt.id);
 				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}` +
@@ -175,7 +175,7 @@ export const commands: ChatCommands = {
 				return `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>` + (status.length ? ` (${status.join('; ')})` : '');
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
-			if (user.group !== ' ' && targetUser.latestHost) {
+			if (user.tempGroup !== ' ' && targetUser.latestHost) {
 				buf += Utils.html`<br />Host: ${targetUser.latestHost} [${targetUser.latestHostType}]`;
 			}
 		} else if (user === targetUser) {
@@ -2434,7 +2434,7 @@ export const commands: ChatCommands = {
 		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
 	},
 
-	requestshow(target, room, user) {
+	async requestshow(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!this.canTalk()) return false;
 		if (!room.settings.requestShowEnabled) {
@@ -2447,11 +2447,20 @@ export const commands: ChatCommands = {
 		let [link, comment] = target.split(',');
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
+		let dimensions;
+		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			try {
+				dimensions = await Chat.fitImage(link);
+			} catch (e) {
+				throw new Chat.ErrorMessage('Invalid link.');
+			}
+		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
 			link: link,
 			comment: comment,
+			dimensions: dimensions,
 		});
 		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		const message = `|tempnotify|pendingapprovals|Pending media request!` +
@@ -2483,18 +2492,14 @@ export const commands: ChatCommands = {
 		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
 
 		let buf;
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(request.link)) {
+		if (request.dimensions) { // image
+			const [width, height, resized] = request.dimensions;
+			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
+			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
+		} else {
 			const YouTube = new YoutubeInterface();
 			buf = await YouTube.generateVideoDisplay(request.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
-		} else {
-			try {
-				const [width, height, resized] = await Chat.fitImage(request.link);
-				buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
-			} catch (err) {
-				return this.errorReply('Invalid image');
-			}
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
@@ -2562,7 +2567,7 @@ export const commands: ChatCommands = {
 		if (this.broadcastMessage) {
 			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
 			const auth = room?.auth || Users.globalAuth;
-			if (minGroup !== true && !auth.atLeast(user, minGroup, true)) {
+			if (minGroup !== true && !auth.atLeast(user, minGroup)) {
 				this.errorReply(`You must be at least group ${minGroup} to use /show`);
 				if (auth.atLeast(user, '%')) {
 					this.errorReply(`The limit can be changed in /roomsettings`);
