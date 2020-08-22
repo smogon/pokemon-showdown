@@ -709,8 +709,9 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		const now = Date.now();
 		const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+		const canBlitz = this.completed.length < 3;
 
-		const blitz = now - this.startTime <= 60000 &&
+		const blitz = now - this.startTime <= 60000 && canBlitz &&
 			(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || DEFAULT_BLITZ_POINTS[this.gameType]);
 
 		player.completed = true;
@@ -1424,7 +1425,9 @@ const ScavengerCommands: ChatCommands = {
 			room,
 			gameType === 'official' || gameType === 'recycled'
 		);
-		if (!hosts.length) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+		if (!hosts.length) {
+			return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+		}
 
 		const res = ScavengerHunt.parseQuestions(params);
 		if (res.err) return this.errorReply(res.err);
@@ -1733,7 +1736,9 @@ const ScavengerCommands: ChatCommands = {
 		} else {
 			const [hostsArray, ...params] = target.split('|');
 			const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
-			if (!hosts.length) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+			if (!hosts.length) {
+				return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+			}
 
 			const results = ScavengerHunt.parseQuestions(params);
 			if (results.err) return this.errorReply(results.err);
@@ -2314,7 +2319,9 @@ const ScavengerCommands: ChatCommands = {
 
 			const [hostsArray, ...questions] = target.split('|');
 			const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, true);
-			if (!hosts.length) return this.errorReply("You need to specify a host.");
+			if (!hosts.length)  {
+				return this.errorReply("You need to specify a host.");
+			}
 
 			const result = ScavengerHunt.parseQuestions(questions);
 			if (result.err) return this.errorReply(result.err);
