@@ -546,7 +546,7 @@ export const commands: ChatCommands = {
 			curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
-			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
+			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
 		}
 	},
 
@@ -569,7 +569,7 @@ export const commands: ChatCommands = {
 			curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
-			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
+			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
 		}
 	},
 
@@ -643,7 +643,7 @@ export const commands: ChatCommands = {
 				curRoom.addRaw(message).update();
 			}
 			for (const curUser of Users.users.values()) {
-				curUser.send(`|pm|&|${curUser.group}${curUser.name}|/raw ${message}`);
+				curUser.send(`|pm|&|${curUser.tempGroup}${curUser.name}|/raw ${message}`);
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");

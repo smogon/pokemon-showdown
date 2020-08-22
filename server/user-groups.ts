@@ -15,7 +15,7 @@ export const GLOBAL_PERMISSIONS = [
 	// administrative
 	'bypassall', 'console', 'disableladder', 'lockdown', 'potd', 'rawpacket',
 	// other
-	'addhtml', 'alts', 'altsself', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'ignorelimits', 'importinputlog', 'ip', 'ipself', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
+	'addhtml', 'alts', 'altsself', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'hiderank', 'ignorelimits', 'importinputlog', 'ip', 'ipself', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
 ] as const;
 
 export type RoomPermission = typeof ROOM_PERMISSIONS[number];
@@ -52,7 +52,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * users with temporary global auth.
 	 */
 	get(user: ID | User) {
-		if (typeof user !== 'string') return (user as User).group;
+		if (typeof user !== 'string') return (user as User).tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
@@ -124,10 +124,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (roomPermissions) {
 			if (cmd && roomPermissions[`/${cmd}`]) {
 				if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-				jurisdiction = 'su';
+				jurisdiction = 'u';
 			} else if (roomPermissions[permission]) {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
-				jurisdiction = 'su';
+				jurisdiction = 'u';
 			}
 		}
 
@@ -228,7 +228,7 @@ export class RoomAuth extends Auth {
 	}
 	getEffectiveSymbol(user: User) {
 		const symbol = super.getEffectiveSymbol(user);
-		if (!this.room.persist && symbol === user.group) {
+		if (!this.room.persist && symbol === user.tempGroup) {
 			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
 			if (replaceGroup) return replaceGroup;
 		}
@@ -302,7 +302,7 @@ export class GlobalAuth extends Auth {
 		if (!username) username = id;
 		const user = Users.get(id);
 		if (user) {
-			user.group = group;
+			user.tempGroup = group;
 			user.updateIdentity();
 			username = user.name;
 		}
@@ -316,7 +316,7 @@ export class GlobalAuth extends Auth {
 		super.delete(id);
 		const user = Users.get(id);
 		if (user) {
-			user.group = ' ';
+			user.tempGroup = ' ';
 		}
 		this.usernames.delete(id);
 		this.save();
