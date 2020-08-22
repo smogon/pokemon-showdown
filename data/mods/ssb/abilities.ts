@@ -1412,6 +1412,30 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// temp
+	chargedup: {
+		shortDesc: "Resets negative stat boosts if there is one at -2 or lower.",
+		name: "Charged Up",
+		onUpdate(pokemon) {
+			let activate = false;
+			const boosts: SparseBoostsTable = {};
+			let i: BoostName;
+			for (i in pokemon.boosts) {
+				if (pokemon.boosts[i] <= -2) {
+					activate = true;
+					boosts[i] = 0;
+				}
+			}
+			if (activate) {
+				pokemon.setBoost(boosts);
+				this.add('-activate', pokemon, 'ability: Charged Up');
+				this.add('-clearnegativeboost', pokemon);
+			}
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// tiki
 	truegrit: {
 		desc: "This Pokemon receives 1/2 damage from special attacks. This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",

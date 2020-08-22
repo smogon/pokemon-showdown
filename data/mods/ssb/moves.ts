@@ -78,7 +78,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		},
 		onAfterSubDamage(damage, target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
@@ -142,7 +142,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					this.add('-activate', target, 'move: Protect');
+					this.add('-activate', target, 'move: K-Shield');
 				}
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -831,7 +831,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
+				this.add('-singleturn', target, 'move: Status Guard');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -844,7 +844,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 				} else if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					this.add('-activate', target, 'move: Protect');
+					this.add('-activate', target, 'move: Status Guard');
 				}
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -3078,6 +3078,38 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Normal",
 	},
 
+	// temp
+	dropadraco: {
+		accuracy: 90,
+		basePower: 130,
+		category: "Special",
+		desc: "Lowers the user's Special Attack by 2 stages, then raises it by 1 stage.",
+		shortDesc: "Lowers user's Sp. Atk by 2, then raises by 1.",
+		name: "DROP A DRACO",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Draco Meteor', target);
+		},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
+		onAfterHit(source, target) {
+			this.boost({spa: 1}, target, target, this.dex.getActiveMove('dropadraco'));
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
+
 	// The Immortal
 	wattup: {
 		accuracy: 100,
@@ -3193,7 +3225,8 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 			},
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
-				this.boost({atk: 1, spa: 1}, target);
+				this.add('-activate', target, 'move: Hero Creation');
+				this.boost({atk: 1, spa: 1}, target, null, this.dex.getActiveMove('herocreation'));
 			},
 		},
 		secondary: null,

@@ -508,6 +508,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Stony Kibbles',
 		evs: {atk: 128, spd: 252, spe: 128}, nature: 'Jolly',
 	},
+	temp: {
+		species: 'Latias', ability: 'Charged Up', item: 'Dragon Fang', gender: 'F',
+		moves: ['Psychic', 'Surf', 'Roost'],
+		signatureMove: 'DROP A DRACO',
+		evs: {hp: 228, spa: 28, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+	},
 	'The Immortal': {
 		species: 'Xurkitree', ability: 'Teravolt', item: 'Electrium Z', gender: '',
 		moves: ['Tail Glow', 'Freeze Dry', 'Secret Sword'],
