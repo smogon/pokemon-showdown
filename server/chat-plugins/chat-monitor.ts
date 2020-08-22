@@ -425,7 +425,6 @@ export const nicknamefilter: NameFilter = (name, user) => {
 				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
 			}
 
-			console.log(regex, lcName);
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
