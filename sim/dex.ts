@@ -47,14 +47,14 @@ import * as path from 'path';
 import * as Data from './dex-data';
 import {PRNG, PRNGSeed} from './prng';
 import {Utils} from '../lib/utils';
-import { FormatList } from '../config/custom-formats';
+import {FormatList} from '../config/custom-formats';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
 const DATA_DIR = path.resolve(__dirname, '../.data-dist');
 const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
-const MAINFORMATS = path.resolve(__dirname, '../.config-dist/formats');
-const CUSTOMFORMATS = path.resolve(__dirname, '../.config-dist/custom-formats')
+const MAIN_FORMATS = path.resolve(__dirname, '../.config-dist/formats');
+const CUSTOM_FORMATS = path.resolve(__dirname, '../.config-dist/custom-formats');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
@@ -1591,7 +1591,7 @@ export class ModdedDex {
 		// Load formats
 		let Formats;
 		try {
-			Formats = (merge(require(MAINFORMATS).MainFormats, require(CUSTOMFORMATS).CustomFormats) as any);
+			Formats = (merge(require(MAIN_FORMATS).MainFormats, require(CUSTOM_FORMATS).CustomFormats) as any);
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
 				throw e;
