@@ -21,7 +21,7 @@ export const commands: ChatCommands = {
 	altsnorecurse: 'whois',
 	whois(target, room: Room | null, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
-		const targetUser = this.targetUserOrSelf(target, user.group === ' ');
+		const targetUser = this.targetUserOrSelf(target, user.tempGroup === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
@@ -32,7 +32,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
-		let buf = Utils.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
+		let buf = Utils.html`<strong class="username"><small style="display:none">${targetUser.tempGroup}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
 		if (ac && showAll) {
 			buf += ` <small style="color:gray">(ac${targetUser.id === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
@@ -46,8 +46,8 @@ export const commands: ChatCommands = {
 		if (roomauth && Config.groups[roomauth]?.name) {
 			buf += Utils.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		if (Config.groups[targetUser.group]?.name) {
-			buf += Utils.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
+		if (Config.groups[targetUser.tempGroup]?.name) {
+			buf += Utils.html`<br />Global ${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
 
 			for (const targetAlt of targetUser.getAltUsers(true)) {
 				if (!targetAlt.named && !targetAlt.connected) continue;
-				if (targetAlt.group === '~' && user.group !== '~') continue;
+				if (targetAlt.tempGroup === '~' && user.tempGroup !== '~') continue;
 
 				const punishment = Punishments.userids.get(targetAlt.id);
 				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}` +
@@ -175,7 +175,7 @@ export const commands: ChatCommands = {
 				return `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>` + (status.length ? ` (${status.join('; ')})` : '');
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
-			if (user.group !== ' ' && targetUser.latestHost) {
+			if (user.tempGroup !== ' ' && targetUser.latestHost) {
 				buf += Utils.html`<br />Host: ${targetUser.latestHost} [${targetUser.latestHostType}]`;
 			}
 		} else if (user === targetUser) {

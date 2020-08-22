@@ -1037,7 +1037,7 @@ export class CommandContext extends MessageContext {
 						this.errorReply(this.tr`This user is blocking private messages right now.`);
 						return null;
 					} else {
-						this.errorReply(this.tr`This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+						this.errorReply(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 						this.sendReply(`|html|${this.tr`If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`}`);
 						return null;
 					}
