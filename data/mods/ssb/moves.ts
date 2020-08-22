@@ -1893,10 +1893,8 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Black Hole Eclipse', target);
 		},
-		onAfterHit(target, source) {
-			if (source.hp) {
-				this.heal(source.maxhp / 2, source);
-			}
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp / 8, pokemon, pokemon, move);
 		},
 		onHit(target, pokemon, move) {
 			this.boost({atk: -1}, target, target, move);
