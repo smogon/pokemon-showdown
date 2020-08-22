@@ -2319,7 +2319,7 @@ const ScavengerCommands: ChatCommands = {
 
 			const [hostsArray, ...questions] = target.split('|');
 			const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, true);
-			if (!hosts.length)  {
+			if (!hosts.length) {
 				return this.errorReply("You need to specify a host.");
 			}
 
