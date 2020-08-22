@@ -175,6 +175,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!pokemon.m.indomitableActivated) pokemon.m.indomitableActivated = false;
 		},
 	},
+	arcticblast: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Arcticblast')}|words are difficult`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Arcticblast')}|oh no`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Arcticblast')}|single battles are bad anyway, why am I here?`);
+		},
+	},
 	averardo: {
 		noCopy: true,
 		onStart() {
@@ -1439,6 +1451,50 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-activate', target, 'ability: Bounty');
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
 			}
+		},
+	},
+	// Brilliant Condition for Arcticblast
+	brilliant: {
+		name: 'Brilliant',
+		duration: 5,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Brilliant');
+		},
+		onModifyAtk(atk, pokemon) {
+			return this.chainModify(1.5);
+		},
+		onModifyDef(def, pokemon) {
+			return this.chainModify(1.5);
+		},
+		onModifySpA(spa, pokemon) {
+			return this.chainModify(1.5);
+		},
+		onModifySpD(spd, pokemon) {
+			return this.chainModify(1.5);
+		},
+		onModifySpe(spe, pokemon) {
+			return this.chainModify(1.5);
+		},
+		onUpdate(pokemon) {
+			if (pokemon.volatiles['perishsong']) pokemon.removeVolatile('perishsong');
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'perishsong') return null;
+			if (this.dex.getEffect(status.id).onDisableMove) return null;
+		},
+		onResidualOrder: 7,
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16);
+		},
+		onTrapPokemon(pokemon) {
+			pokemon.tryTrap();
+		},
+		onDragOut(pokemon) {
+			this.add('-activate', pokemon, 'move: Ingrain');
+			return null;
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Brilliant');
 		},
 	},
 	// Custom status for HoeenHero's move
