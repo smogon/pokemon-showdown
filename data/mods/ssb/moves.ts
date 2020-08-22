@@ -507,8 +507,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		},
 		onHit(target, pokemon) {
 			this.add(`c|${getName('Arcticblast')}|YEET`);
-		},
-		onAfterMove(pokemon, target, move) {
 			if (pokemon.volatiles['brilliant']) pokemon.removeVolatile('brilliant');
 		},
 		secondary: null,
