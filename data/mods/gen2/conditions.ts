@@ -173,7 +173,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onEnd(target) {
 			// Confusion begins even if already confused
 			delete target.volatiles['confusion'];
-			target.addVolatile('confusion');
+			if (!target.side.getSideCondition('safeguard')) target.addVolatile('confusion');
 		},
 		onLockMove(pokemon) {
 			return this.effectData.move;
