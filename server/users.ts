@@ -503,7 +503,7 @@ export class User extends Chat.MessageContext {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
 			}
-			return room.auth.get(this.id) + this.name;
+			return room.auth.get(this) + this.name;
 		}
 		if (this.semilocked) {
 			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
