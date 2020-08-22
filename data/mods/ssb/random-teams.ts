@@ -502,6 +502,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ten',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	tennisace: {
+		species: 'Yamper', ability: 'Stout Build', item: 'Eviolite', gender: 'M',
+		moves: ['Crunch', 'Play Rough', 'Slack Off'],
+		signatureMove: 'Corgi Stampede',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+	},
 	Tenshi: {
 		species: 'Stoutland', ability: 'Royal Coat', item: 'Leftovers', gender: 'M',
 		moves: ['Knock Off', 'Thousand Waves', ['Play Rough', 'Power Whip']],
