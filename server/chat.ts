@@ -857,22 +857,18 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			// If we need to use the true group's permission, reset the visual group
-			this.user.resetVisualGroup();
-			return true;
+		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
+			return false;
 		}
-		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
-		return false;
+		return true;
 	}
 	privatelyCan(permission: RoomPermission, target: User | null, room: Room): boolean;
 	privatelyCan(permission: GlobalPermission, target?: User | null): boolean;
 	privatelyCan(permission: string, target: User | null = null, room: Room | null = null) {
 		this.handler!.isPrivate = true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			throw new Chat.ErrorMessage("This is a secret command and you have the wrong visual rank for it.");
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+			return true;
 		}
 		this.commandDoesNotExist();
 	}

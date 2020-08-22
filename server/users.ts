@@ -318,7 +318,6 @@ export class User extends Chat.MessageContext {
 	registered: boolean;
 	id: ID;
 	group: GroupSymbol;
-	visualGroup: GroupSymbol;
 	avatar: string | number;
 	language: string | null;
 
@@ -391,7 +390,6 @@ export class User extends Chat.MessageContext {
 		this.registered = false;
 		this.id = '';
 		this.group = Auth.defaultSymbol();
-		this.visualGroup = this.group;
 		this.language = null;
 
 		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
@@ -505,13 +503,13 @@ export class User extends Chat.MessageContext {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
 			}
-			return room.auth.get(this.id, true) + this.name;
+			return room.auth.get(this.id) + this.name;
 		}
 		if (this.semilocked) {
 			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 			return mutedSymbol + this.name;
 		}
-		return this.visualGroup + this.name;
+		return this.group + this.name;
 	}
 	getIdentityWithStatus(roomid: RoomID = '') {
 		const identity = this.getIdentity(roomid);
@@ -523,29 +521,11 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
-	can(
-		permission: GlobalPermission,
-		target?: User | null,
-		room?: null,
-		cmd?: undefined,
-		useVisualGroup?: boolean
-	): boolean;
-	can(
-		permission: RoomPermission & GlobalPermission,
-		target: User | null,
-		room?: BasicRoom | null,
-		cmd?: undefined,
-		useVisualGroup?: boolean
-	): boolean;
-	can(
-		permission: string,
-		target: User | null = null,
-		room: BasicRoom | null = null,
-		cmd?: string,
-		useVisualGroup?: boolean
-	): boolean {
-		return Auth.hasPermission(this, permission, target, room, cmd, useVisualGroup);
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
+	can(permission: GlobalPermission, target?: User | null): boolean;
+	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
+	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
+		return Auth.hasPermission(this, permission, target, room, cmd);
 	}
 	/**
 	 * Special permission check for system operators
@@ -1022,14 +1002,11 @@ export class User extends Chat.MessageContext {
 		if (!registered) {
 			this.registered = false;
 			this.group = Users.Auth.defaultSymbol();
-			this.resetVisualGroup();
 			this.isStaff = false;
 			return;
 		}
 		this.registered = true;
-		const isHidingGroup = this.group !== this.visualGroup;
 		this.group = globalAuth.get(this.id);
-		if (!isHidingGroup) this.resetVisualGroup();
 
 		if (Config.customavatars && Config.customavatars[this.id]) {
 			this.avatar = Config.customavatars[this.id];
@@ -1064,10 +1041,7 @@ export class User extends Chat.MessageContext {
 	 */
 	setGroup(group: GroupSymbol, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
-
-		const isHidingGroup = this.group !== this.visualGroup;
 		this.group = group;
-		if (!isHidingGroup) this.visualGroup = group;
 		const groupInfo = Config.groups[this.group];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
@@ -1085,17 +1059,6 @@ export class User extends Chat.MessageContext {
 				this.trusted = '';
 			}
 		}
-	}
-
-	setVisualGroup(group: GroupSymbol) {
-		if (!group) throw new Error(`Falsy value passed to setVisualGroup`);
-		this.visualGroup = group;
-		this.updateIdentity();
-	}
-
-	resetVisualGroup() {
-		this.visualGroup = this.group;
-		this.updateIdentity();
 	}
 	/**
 	 * Demotes a user from anything that grants trusted status.
@@ -1132,7 +1095,6 @@ export class User extends Chat.MessageContext {
 		if (!this.registered) {
 			// for "safety"
 			this.group = Users.Auth.defaultSymbol();
-			this.visualGroup = this.group;
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
 			// This isn't strictly necessary since we don't reuse User objects
