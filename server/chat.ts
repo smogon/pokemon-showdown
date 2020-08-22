@@ -1343,8 +1343,11 @@ export class CommandContext extends MessageContext {
 		return rest;
 	}
 
-	requiresRoom() {
-		this.errorReply(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
+	requireRoom() {
+		if (!this.room) {
+			throw new Chat.ErrorMessage(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
+		}
+		return this.room;
 	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {

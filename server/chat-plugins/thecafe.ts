@@ -80,7 +80,7 @@ function generateDish(): [string, string[]] {
 
 export const commands: ChatCommands = {
 	foodfight(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
@@ -108,7 +108,7 @@ export const commands: ChatCommands = {
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${newDish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${newIngredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
 	checkfoodfight(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 
 		const targetUser = this.targetUserOrSelf(target, false);
@@ -122,7 +122,7 @@ export const commands: ChatCommands = {
 	},
 	addingredients: 'adddish',
 	adddish(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 		this.checkCan('mute', null, room);
 
@@ -157,7 +157,7 @@ export const commands: ChatCommands = {
 		this.sendReply(`${cmd.slice(3)} '${dish}: ${ingredients.join(', ')}' added successfully.`);
 	},
 	removedish(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 		this.checkCan('mute', null, room);
 
@@ -170,7 +170,7 @@ export const commands: ChatCommands = {
 		this.sendReply(`Dish '${target}' deleted successfully.`);
 	},
 	viewdishes(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
 
 		return this.parse(`/join view-foodfight`);

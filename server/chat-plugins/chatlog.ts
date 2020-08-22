@@ -719,7 +719,7 @@ export const commands: ChatCommands = {
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		target = target.trim();
 		const args = target.split(',').map(item => item.trim());
 		if (!target) return this.parse('/help searchlogs');

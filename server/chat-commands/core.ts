@@ -348,7 +348,7 @@ export const commands: ChatCommands = {
 	},
 
 	userlist(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const userList = [];
 
 		for (const id in room.users) {
@@ -800,7 +800,7 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	allowexportinputlog(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) {
 			return this.errorReply(`Must be in a battle.`);
@@ -833,7 +833,7 @@ export const commands: ChatCommands = {
 
 	requestinputlog: 'exportinputlog',
 	exportinputlog(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) {
 			return this.errorReply(`This command only works in battle rooms.`);
@@ -921,7 +921,7 @@ export const commands: ChatCommands = {
 	async showset(target, room, user, connection, cmd) {
 		this.checkChat();
 		const showAll = cmd === 'showteam';
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
 		if (!battle) return this.errorReply("This command can only be used in a battle.");
@@ -961,7 +961,7 @@ export const commands: ChatCommands = {
 	offerdraw: 'offertie',
 	requesttie: 'offertie',
 	offertie(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
 		if (!Config.allowrequestingties) {
@@ -1013,7 +1013,7 @@ export const commands: ChatCommands = {
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
 		const player = battle.playerTable[user.id];
@@ -1041,7 +1041,7 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	forfeit(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.forfeit) {
 			return this.errorReply("This kind of game can't be forfeited.");
@@ -1050,7 +1050,7 @@ export const commands: ChatCommands = {
 	},
 
 	choose(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
@@ -1073,7 +1073,7 @@ export const commands: ChatCommands = {
 	},
 
 	undo(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.undo) return this.errorReply("This game doesn't support /undo");
 
@@ -1103,7 +1103,7 @@ export const commands: ChatCommands = {
 	},
 
 	addplayer(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help addplayer');
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
@@ -1144,7 +1144,7 @@ export const commands: ChatCommands = {
 	],
 
 	restoreplayers(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
@@ -1168,7 +1168,7 @@ export const commands: ChatCommands = {
 
 	joinbattle: 'joingame',
 	joingame(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.joinGame) return this.errorReply("This game doesn't support /joingame");
 
@@ -1178,7 +1178,7 @@ export const commands: ChatCommands = {
 	leavebattle: 'leavegame',
 	partbattle: 'leavegame',
 	leavegame(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame");
 
@@ -1187,7 +1187,7 @@ export const commands: ChatCommands = {
 
 	kickbattle: 'kickgame',
 	kickgame(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.battle.challengeType === 'tour' || room.battle.rated) {
 			return this.errorReply("You can only do this in unrated non-tour battles.");
@@ -1213,7 +1213,7 @@ export const commands: ChatCommands = {
 
 	timer(target, room, user) {
 		target = toID(target);
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.game || !room.game.timer) {
 			return this.errorReply(`You can only set the timer from inside a battle room.`);
 		}
@@ -1264,7 +1264,7 @@ export const commands: ChatCommands = {
 
 	forcetie: 'forcewin',
 	forcewin(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('forcewin');
 		if (!room.battle) {
 			this.errorReply("/forcewin - This is not a battle room.");

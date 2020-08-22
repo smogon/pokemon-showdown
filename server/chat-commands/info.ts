@@ -342,7 +342,7 @@ export const commands: ChatCommands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
 		}
@@ -426,7 +426,7 @@ export const commands: ChatCommands = {
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
 	checkchallenges(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!user.can('addhtml', null, room) && !this.checkCan('ban', null, room)) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
@@ -1878,7 +1878,7 @@ export const commands: ChatCommands = {
 	},
 
 	roomhelp(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkBroadcast(false, '!htmlbox');
 		if (this.broadcastMessage && !this.checkCan('declare', null, room)) return false;
 
@@ -2434,7 +2434,7 @@ export const commands: ChatCommands = {
 	},
 
 	async requestshow(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkChat();
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
@@ -2474,7 +2474,7 @@ export const commands: ChatCommands = {
 	requestshowhelp: [`/requestshow [link], [comment] - Requests permission to show media in the room.`],
 
 	async approveshow(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('mute', null, room);
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
@@ -2512,7 +2512,7 @@ export const commands: ChatCommands = {
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
 	denyshow(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('mute', null, room);
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
@@ -2531,12 +2531,12 @@ export const commands: ChatCommands = {
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
 	approvallog(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
 
 	viewapprovals(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
 

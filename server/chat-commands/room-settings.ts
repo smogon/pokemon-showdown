@@ -18,7 +18,7 @@ const SLOWCHAT_USER_REQUIREMENT = 10;
 export const commands: ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.battle) return this.errorReply("This command cannot be used in battle rooms.");
 		let uhtml = 'uhtml';
 
@@ -56,7 +56,7 @@ export const commands: ChatCommands = {
 	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
 	modchat(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			const modchatSetting = (room.settings.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
@@ -144,7 +144,7 @@ export const commands: ChatCommands = {
 
 	ioo: 'inviteonly',
 	inviteonly(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (cmd === 'ioo') target = 'on';
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
@@ -161,7 +161,7 @@ export const commands: ChatCommands = {
 	],
 
 	modjoin(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			const modjoinSetting = room.settings.modjoin === true ? "SYNC" : room.settings.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
@@ -231,7 +231,7 @@ export const commands: ChatCommands = {
 	],
 
 	roomlanguage(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			return this.sendReply(`This room's primary language is ${Chat.languages.get(room.settings.language || '') || 'English'}`);
 		}
@@ -252,7 +252,7 @@ export const commands: ChatCommands = {
 	],
 
 	slowchat(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			const slowchatSetting = (room.settings.slowchat || "OFF");
 			return this.sendReply(`Slow chat is currently set to: ${slowchatSetting}`);
@@ -290,7 +290,7 @@ export const commands: ChatCommands = {
 	permissions: {
 		clear: 'set',
 		set(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (rank === 'default') rank = '';
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
@@ -344,13 +344,13 @@ export const commands: ChatCommands = {
 		},
 
 		view(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			return this.parse(`/join view-permissions-${room.roomid}`);
 		},
 
 		help: '',
 		''(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
@@ -391,7 +391,7 @@ export const commands: ChatCommands = {
 	stretching: 'stretchfilter',
 	stretchingfilter: 'stretchfilter',
 	stretchfilter(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			const stretchSetting = (room.settings.filterStretching ? "ON" : "OFF");
 			return this.sendReply(`This room's stretch filter is currently: ${stretchSetting}`);
@@ -420,7 +420,7 @@ export const commands: ChatCommands = {
 	capitals: 'capsfilter',
 	capitalsfilter: 'capsfilter',
 	capsfilter(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			const capsSetting = (room.settings.filterCaps ? "ON" : "OFF");
 			return this.sendReply(`This room's caps filter is currently: ${capsSetting}`);
@@ -448,7 +448,7 @@ export const commands: ChatCommands = {
 	emojis: 'emojifilter',
 	emoji: 'emojifilter',
 	emojifilter(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			const emojiSetting = (room.settings.filterEmojis ? "ON" : "OFF");
 			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
@@ -478,7 +478,7 @@ export const commands: ChatCommands = {
 		regexadd: 'add',
 		addregex: 'add',
 		add(target, room, user, connection, cmd) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!target || target === ' ') return this.parse('/help banword');
 			this.checkCan('declare', null, room);
 
@@ -535,7 +535,7 @@ export const commands: ChatCommands = {
 		},
 
 		delete(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!target) return this.parse('/help banword');
 			this.checkCan('declare', null, room);
 
@@ -571,7 +571,7 @@ export const commands: ChatCommands = {
 		},
 
 		list(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 
 			if (!room.settings.banwords || !room.settings.banwords.length) {
@@ -592,7 +592,7 @@ export const commands: ChatCommands = {
 	],
 
 	showapprovals(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('declare', null, room);
 		target = toID(target);
 		if (!target) {
@@ -620,7 +620,7 @@ export const commands: ChatCommands = {
 	},
 
 	showmedia(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('declare', null, room);
 		target = target.trim();
 		if (this.meansNo(target)) {
@@ -653,7 +653,7 @@ export const commands: ChatCommands = {
 	},
 
 	hightraffic(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			return this.sendReply(`This room is: ${!room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
 		}
@@ -682,7 +682,7 @@ export const commands: ChatCommands = {
 	makeprivatechatroom: 'makechatroom',
 	makepublicchatroom: 'makechatroom',
 	makechatroom(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('makeroom');
 		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
@@ -721,7 +721,7 @@ export const commands: ChatCommands = {
 
 	subroomgroupchat: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkChat();
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
@@ -852,7 +852,7 @@ export const commands: ChatCommands = {
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
 	deleteroom(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
@@ -920,7 +920,7 @@ export const commands: ChatCommands = {
 	},
 	renamegroupchat: 'renameroom',
 	async renameroom(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.game || room.minorActivity || room.tour) {
 			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
 		}
@@ -975,7 +975,7 @@ export const commands: ChatCommands = {
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
 			if (room.battle.forcePublic) {
@@ -1090,7 +1090,7 @@ export const commands: ChatCommands = {
 
 	officialchatroom: 'officialroom',
 	officialroom(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('makeroom');
 		if (!room.persist) {
 			return this.errorReply(`/officialroom - This room can't be made official`);
@@ -1114,7 +1114,7 @@ export const commands: ChatCommands = {
 
 	psplwinnerroom(target, room, user) {
 		this.checkCan('makeroom');
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.persist) {
 			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
 		}
@@ -1137,7 +1137,7 @@ export const commands: ChatCommands = {
 
 	setsubroom: 'subroom',
 	subroom(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!user.can('makeroom')) return this.errorReply(`/subroom - Access denied. Did you mean /subrooms?`);
 		if (!target) return this.parse('/help subroom');
 
@@ -1166,7 +1166,7 @@ export const commands: ChatCommands = {
 		parent.subRooms.set(room.roomid, room);
 
 		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === parent.title);
-		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room.title);
+		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room!.title);
 
 		// This is needed to ensure that the main room gets loaded before the subroom.
 		if (mainIdx > subIdx) {
@@ -1189,7 +1189,7 @@ export const commands: ChatCommands = {
 	removesubroom: 'unsubroom',
 	desubroom: 'unsubroom',
 	unsubroom(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('makeroom');
 		if (!room.parent || !room.persist) {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
@@ -1216,7 +1216,7 @@ export const commands: ChatCommands = {
 
 	parentroom: 'subrooms',
 	subrooms(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (cmd === 'parentroom') {
 			if (!room.parent) return this.errorReply(`This room is not a subroom.`);
 			return this.sendReply(`This is a subroom of ${room.parent.title}.`);
@@ -1247,7 +1247,7 @@ export const commands: ChatCommands = {
 	],
 
 	roomdesc(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.desc) return this.sendReply(`This room does not have a description set.`);
@@ -1280,7 +1280,7 @@ export const commands: ChatCommands = {
 
 	topic: 'roomintro',
 	roomintro(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.introMessage) return this.sendReply("This room does not have an introduction set.");
@@ -1314,7 +1314,7 @@ export const commands: ChatCommands = {
 
 	deletetopic: 'deleteroomintro',
 	deleteroomintro(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('declare', null, room);
 		if (!room.settings.introMessage) return this.errorReply("This room does not have a introduction set.");
 
@@ -1327,7 +1327,7 @@ export const commands: ChatCommands = {
 
 	stafftopic: 'staffintro',
 	staffintro(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			this.checkCan('mute', null, room);
 			if (!room.settings.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
@@ -1361,7 +1361,7 @@ export const commands: ChatCommands = {
 
 	deletestafftopic: 'deletestaffintro',
 	deletestaffintro(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('ban', null, room);
 		if (!room.settings.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
 
@@ -1373,7 +1373,7 @@ export const commands: ChatCommands = {
 	},
 
 	roomalias(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.aliases) return this.sendReplyBox("This room does not have any aliases.");
@@ -1410,7 +1410,7 @@ export const commands: ChatCommands = {
 	deroomalias: 'removeroomalias',
 	unroomalias: 'removeroomalias',
 	removeroomalias(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.settings.aliases) return this.errorReply("This room does not have any aliases.");
 		this.checkCan('makeroom');
 		if (target.includes(',')) {
@@ -1441,7 +1441,7 @@ export const commands: ChatCommands = {
 
 	resettierdisplay: 'roomtierdisplay',
 	roomtierdisplay(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const resetTier = cmd === 'resettierdisplay';
 		if (!target) {
 			if (!this.runBroadcast()) return;

@@ -276,7 +276,7 @@ export const commands: ChatCommands = {
 		queuemulti: 'new',
 		htmlqueuemulti: 'new',
 		new(target, room, user, connection, cmd, message) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
 			if (target.length > 1024) return this.errorReply(this.tr("Poll too long."));
@@ -342,7 +342,7 @@ export const commands: ChatCommands = {
 		],
 
 		viewqueue(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 			this.parse(`/join view-pollqueue-${room.roomid}`);
 		},
@@ -350,7 +350,7 @@ export const commands: ChatCommands = {
 
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 			if (!room.minorActivityQueue) {
 				return this.errorReply(this.tr("The queue is already empty."));
@@ -389,7 +389,7 @@ export const commands: ChatCommands = {
 		deselect: 'select',
 		vote: 'select',
 		select(target, room, user, connection, cmd) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply(this.tr("There is no poll running in this room."));
 			}
@@ -413,7 +413,7 @@ export const commands: ChatCommands = {
 		],
 
 		submit(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply(this.tr("There is no poll running in this room."));
 			}
@@ -424,7 +424,7 @@ export const commands: ChatCommands = {
 		submithelp: [`/poll submit - Submits your vote.`],
 
 		timer(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply(this.tr("There is no poll running in this room."));
 			}
@@ -444,6 +444,7 @@ export const commands: ChatCommands = {
 				if (poll.timeout) clearTimeout(poll.timeout);
 				poll.timeoutMins = timeout;
 				poll.timeout = setTimeout(() => {
+					if (!room) return; // do nothing if the room does not exist
 					if (poll) poll.end();
 					room.minorActivity = null;
 					if (room.minorActivityQueue?.length) {
@@ -472,7 +473,7 @@ export const commands: ChatCommands = {
 		],
 
 		results(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply(this.tr("There is no poll running in this room."));
 			}
@@ -487,7 +488,7 @@ export const commands: ChatCommands = {
 		close: 'end',
 		stop: 'end',
 		end(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
@@ -513,7 +514,7 @@ export const commands: ChatCommands = {
 		show: '',
 		display: '',
 		''(target, room, user, connection) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply(this.tr("There is no poll running in this room."));
 			}

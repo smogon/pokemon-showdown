@@ -333,7 +333,7 @@ export const commands: ChatCommands = {
 			return this.parse(`/join view-helpfilter-${target}`);
 		},
 		toggle(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
@@ -357,7 +357,7 @@ export const commands: ChatCommands = {
 		},
 		forceadd: 'add',
 		add(target, room, user, connection, cmd) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
@@ -384,7 +384,7 @@ export const commands: ChatCommands = {
 			this.modlog('HELPFILTER REMOVE', null, index);
 		},
 		suggest(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
@@ -491,7 +491,7 @@ export const commands: ChatCommands = {
 			return this.modlog(`HELPFILTER ${unban ? 'UN' : ''}SUGGESTIONBAN`, userid, reason);
 		},
 		queue(target, room, user) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			if (room.roomid !== 'help') return this.errorReply(`Must be used in the Help room.`);
 			this.checkCan('ban', null, room);
 			target = target.trim();

@@ -25,7 +25,7 @@ export const commands: ChatCommands = {
 
 	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		target = this.checkHTML(target);
 		target = Chat.collapseLineBreaksHTML(target);
 		this.checkBroadcast(true, '!htmlbox');
@@ -45,7 +45,7 @@ export const commands: ChatCommands = {
 	],
 	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkChat();
 		target = this.checkHTML(target);
 		this.checkCan('addhtml', null, room);
@@ -60,7 +60,7 @@ export const commands: ChatCommands = {
 		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # &`,
 	],
 	addrankhtmlbox(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		this.checkChat();
 		let [rank, html] = this.splitOne(target);
@@ -79,7 +79,7 @@ export const commands: ChatCommands = {
 	],
 	changeuhtml: 'adduhtml',
 	adduhtml(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		this.checkChat();
 
@@ -106,7 +106,7 @@ export const commands: ChatCommands = {
 	],
 	changerankuhtml: 'addrankuhtml',
 	addrankuhtml(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		this.checkChat();
 
@@ -139,7 +139,7 @@ export const commands: ChatCommands = {
 
 	pminfobox(target, room, user, connection) {
 		this.checkChat();
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
@@ -161,7 +161,7 @@ export const commands: ChatCommands = {
 	pmuhtmlchange: 'pmuhtml',
 	pmuhtml(target, room, user, connection, cmd) {
 		this.checkChat();
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
@@ -182,7 +182,7 @@ export const commands: ChatCommands = {
 	],
 
 	sendhtmlpage(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
 		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
@@ -858,7 +858,7 @@ export const commands: ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
@@ -891,7 +891,7 @@ export const commands: ChatCommands = {
 	},
 
 	evalbattle(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
@@ -903,7 +903,7 @@ export const commands: ChatCommands = {
 
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		this.checkCan('forcewin');
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {
