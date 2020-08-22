@@ -1116,6 +1116,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Tenshi')}|Grr bork bork :(`);
 		},
 	},
+	temp: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('temp')}|hi, i'm here to drop dracos`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('temp')}|how did I not win yet`);
+		},
+		onFaint() {
+			this.add(`c|${getName('temp')}|oh I died`);
+		},
+	},
 	tiki: {
 		noCopy: true,
 		onStart() {
