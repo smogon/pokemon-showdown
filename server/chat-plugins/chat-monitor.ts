@@ -417,13 +417,25 @@ export const nicknamefilter: NameFilter = (name, user) => {
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (const line of filterWords[list]) {
-			const [regex] = line;
+			let [regex] = line;
+			if (Chat.monitors[list].punishment === 'EVASION') {
+				// Evasion banwords by default require whitespace on either side.
+				// If we didn't remove it here, it would be quite easy to evade the filter
+				// and use slurs in Pokémon nicknames.
+				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
+			}
 
+			console.log(regex, lcName);
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
 						`${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
+					);
+				} else if (Chat.monitors[list].punishment === 'EVASION') {
+					void Punishments.autolock(
+						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname`,
+						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name}\`\``
 					);
 				}
 				line[4]++;
