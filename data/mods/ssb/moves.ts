@@ -1695,6 +1695,76 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Dark",
 	},
 
+	// Jho
+	genrechange: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If the user is a Toxtricity, it changes into its Low-Key forme and Nasty Plot and Overdrive change to Aura Sphere and Boomburst, respectively. If the user is a Toxtricity in its Low-Key forme, it changes into its Amped forme and Aura Sphere and Boomburst turn into Nasty Plot and Overdrive, respectively. Raises the user's Speed by 1 stage.",
+		shortDesc: "Toxtricity: +1 Speed. Changes forme.",
+		name: "Genre Change",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {sound: 1},
+		onTryMove(pokemon, target, move) {
+			this.attrLastMove('[still]');
+			if (pokemon.species.baseSpecies === 'Toxtricity') {
+				return;
+			}
+			this.add('-fail', pokemon, 'move: Genre Change');
+			this.hint("Only a Pokemon whose form is Toxtricity or Toxtricity-Low-Key can use this move.");
+			return null;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Screech', source);
+			// The transform animation is done via `formeChange`
+		},
+		onHit(pokemon) {
+			if (pokemon.species.forme === 'Low-Key') {
+				changeSet(this, pokemon, ssbSets['Jho'], true);
+			} else {
+				changeSet(this, pokemon, ssbSets['Jho-Low-Key'], true);
+			}
+		},
+		boosts: {
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
+	// Jordy
+	archeopssrage: {
+		accuracy: 85,
+		basePower: 90,
+		category: "Physical",
+		desc: "Upon damaging the target, the user gains +1 Speed.",
+		shortDesc: "+1 Speed upon hit.",
+		name: "Archeops's Rage",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		flags: {protect: 1},
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sunsteel Strike', target);
+		},
+		type: "Flying",
+		self: {
+			boosts: {
+				spe: 1,
+			},
+		},
+		secondary: null,
+		target: "normal",
+	},
+
 	// Kaiju Bunny
 	cozycuddle: {
 		accuracy: 95,
@@ -1931,127 +2001,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Dark",
 	},
 
-	// Lionyx
-	bigbang: {
-		accuracy: 100,
-		basePower: 120,
-		category: "Special",
-		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
-		shortDesc: "33% recoil; removes hazards/weather/terrain.",
-		name: "Big Bang",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Extreme Evoboost', source);
-			this.add('-anim', source, 'Light of Ruin', target);
-			this.add('-anim', source, 'Dark Void', target);
-		},
-		onHit(target, source, move) {
-			let success = false;
-			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
-			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
-			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
-				}
-				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
-				}
-			}
-			this.field.clearTerrain();
-			this.field.clearWeather();
-			return success;
-		},
-		recoil: [33, 100],
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
-	},
-
-	// Jho
-	genrechange: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "If the user is a Toxtricity, it changes into its Low-Key forme and Nasty Plot and Overdrive change to Aura Sphere and Boomburst, respectively. If the user is a Toxtricity in its Low-Key forme, it changes into its Amped forme and Aura Sphere and Boomburst turn into Nasty Plot and Overdrive, respectively. Raises the user's Speed by 1 stage.",
-		shortDesc: "Toxtricity: +1 Speed. Changes forme.",
-		name: "Genre Change",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {sound: 1},
-		onTryMove(pokemon, target, move) {
-			this.attrLastMove('[still]');
-			if (pokemon.species.baseSpecies === 'Toxtricity') {
-				return;
-			}
-			this.add('-fail', pokemon, 'move: Genre Change');
-			this.hint("Only a Pokemon whose form is Toxtricity or Toxtricity-Low-Key can use this move.");
-			return null;
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Screech', source);
-			// The transform animation is done via `formeChange`
-		},
-		onHit(pokemon) {
-			if (pokemon.species.forme === 'Low-Key') {
-				changeSet(this, pokemon, ssbSets['Jho'], true);
-			} else {
-				changeSet(this, pokemon, ssbSets['Jho-Low-Key'], true);
-			}
-		},
-		boosts: {
-			spe: 1,
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
-
-	// Jordy
-	archeopssrage: {
-		accuracy: 85,
-		basePower: 90,
-		category: "Physical",
-		desc: "Upon damaging the target, the user gains +1 Speed.",
-		shortDesc: "+1 Speed upon hit.",
-		name: "Archeops's Rage",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		flags: {protect: 1},
-		priority: 0,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Sunsteel Strike', target);
-		},
-		type: "Flying",
-		self: {
-			boosts: {
-				spe: 1,
-			},
-		},
-		secondary: null,
-		target: "normal",
-	},
-
 	// Kris
 	alphabetsoup: {
 		accuracy: true,
@@ -2148,7 +2097,100 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Dark",
 	},
 
-	// Majorbowman
+	// Lamp
+	soulswap: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "The user copies the target's positive stat stage changes and then inverts the target's stats.",
+		shortDesc: "Copies target's stat boosts then inverts.",
+		name: "Soul Swap",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', target);
+			this.add('-anim', source, 'Teleport', source);
+			this.add('-anim', source, 'Topsy-Turvy', target);
+		},
+		onHit(target, source) {
+			let i: BoostName;
+			const boosts: SparseBoostsTable = {};
+			for (i in target.boosts) {
+				const stage = target.boosts[i];
+				if (stage > 0) {
+					boosts[i] = stage;
+				}
+				if (target.boosts[i] !== 0) {
+					target.boosts[i] = -target.boosts[i];
+				}
+			}
+			this.add('-message', `${source.name} stole ${target.name}'s boosts!`);
+			this.boost(boosts, source);
+			this.add('-invertboost', target, '[from] move: Soul Swap');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
+	// Lionyx
+	bigbang: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
+		shortDesc: "33% recoil; removes hazards/weather/terrain.",
+		name: "Big Bang",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			this.add('-anim', source, 'Light of Ruin', target);
+			this.add('-anim', source, 'Dark Void', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+			];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
+					}
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
+					}
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			return success;
+		},
+		recoil: [33, 100],
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
+	// MajorBowman
 	corrosivecloud: {
 		accuracy: true,
 		basePower: 90,

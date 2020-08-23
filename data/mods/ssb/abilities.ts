@@ -999,6 +999,19 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Lamp
+	candlewax: {
+		shortDesc: "Soul-Heart + Levitate.",
+		onAnyFaintPriority: 1,
+		onAnyFaint() {
+			this.boost({spa: 1}, this.effectData.target);
+		},
+		// airborneness implemented in scripts.ts:Pokemon#isGrounded
+		name: "Candlewax",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Lionyx
 	tension: {
 		desc: "On switch-in, the Pokémon builds up tension, making its next hit a critical hit, and guaranteeing that it will hit.",

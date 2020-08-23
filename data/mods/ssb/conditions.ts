@@ -754,6 +754,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	lamp: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|${getName('Lamp')}|DUDE HI ${pokemon.side.foe.name} (:`);
+		},
+		onSwitchOut(pokemon ) {
+			this.add(`c|${getName('Lamp')}|bye ${pokemon.side.foe.name} :)`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Lamp')}|no u`);
+		},
+	},
 	lionyx: {
 		noCopy: true,
 		onStart() {

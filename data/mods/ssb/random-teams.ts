@@ -338,6 +338,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Alphabet Soup',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Lamp: {
+		species: 'Lampent', ability: 'Candlewax', item: 'Eviolite', gender: 'M',
+		moves: ['Nasty Plot', 'Searing Shot', 'Strength Sap'],
+		signatureMove: 'Soul Swap',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	Lionyx: {
 		species: 'Gardevoir', ability: 'Tension', item: 'Blunder Policy', gender: 'F',
 		moves: [['Psychic', 'Psystrike'], 'Quiver Dance', [

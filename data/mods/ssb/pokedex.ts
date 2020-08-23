@@ -100,6 +100,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		// For reverting back to an Unown forme
 		abilities: {0: 'Protean'},
 	},
+	// Lamp
+	lampent: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 80, def: 100, spa: 135, spd: 100, spe: 95},
+	},
 	// Morfent
 	banette: {
 		inherit: true,
