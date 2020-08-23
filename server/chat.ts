@@ -505,7 +505,7 @@ export class CommandContext extends MessageContext {
 	sendChatMessage(message: string) {
 		if (this.pmTarget) {
 			const blockInvites = this.pmTarget.settings.blockInvites;
-			if (/^(<<(.*)>>+)$/.test(message.trim())) {
+			if (/^<<.*>>$/.test(message.trim())) {
 				if (
 					!this.user.can('lock') && blockInvites === true ||
 					!Users.globalAuth.atLeast(this.user, blockInvites as GroupSymbol)

@@ -550,7 +550,7 @@ export const commands: ChatCommands = {
 
 		const targetBlocked = targetUser.settings.blockInvites;
 		if (targetBlocked) {
-			if (targetBlocked === true && !user.can('lock') || !Users.globalAuth.atLeast(user, targetBlocked as GroupSymbol)) {
+			if (targetBlocked === true ? !user.can('lock') : !Users.globalAuth.atLeast(user, targetBlocked as GroupSymbol)) {
 				Chat.maybeNotifyBlocked('invite', targetUser, user);
 				return this.errorReply(`This user is currently blocking room invites.`);
 			}
