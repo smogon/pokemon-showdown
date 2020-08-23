@@ -307,6 +307,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	celestial: {
+		noCopy: true,
+		// No quotes requested
+	},
 	celine: {
 		noCopy: true,
 		onStart() {
