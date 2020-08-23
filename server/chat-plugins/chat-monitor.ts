@@ -460,9 +460,8 @@ export const statusfilter: StatusFilter = (status, user) => {
 	// Check for blatant staff impersonation attempts. Ideally this could be completely generated from Config.grouplist
 	// for better support for side servers, but not all ranks are staff ranks or should necessarily be filted.
 	// eslint-disable-next-line max-len
-	if (/\b(?:global|room|upper|senior)?\s*(?:staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)\b/gi.test(lcStatus)) {
-		return '';
-	}
+	const impersonationRegex = /\b(?:global|room|upper|senior)?\s*(?:staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)\b/gi;
+	if (!user.can('lock') && impersonationRegex.test(lcStatus)) return '';
 
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
