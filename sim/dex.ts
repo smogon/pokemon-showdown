@@ -1432,10 +1432,11 @@ export class ModdedDex {
 	stringifyTeam(team: PokemonSet[], nicknames?: string[]) {
 		let output = '';
 		for (const [i, mon] of team.entries()) {
-			output += nicknames ? `${nicknames?.[i]} (${mon.species})` : `${mon.species}`;
+			const species = Dex.getSpecies(mon.species);
+			output += nicknames ? `${nicknames?.[i]} (${species.name})` : species.name;
 			output += ` @ ${Dex.getItem(mon.item).name}<br/>`;
 			output += `Ability: ${Dex.getAbility(mon.ability).name}<br/>`;
-			if (mon.happiness && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
+			if (typeof mon.happiness === 'number' && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
 			const evs = [];
 			for (const stat in mon.evs) {
 				if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
