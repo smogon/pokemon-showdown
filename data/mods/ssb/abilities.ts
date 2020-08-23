@@ -1284,6 +1284,17 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// ptoad
+	swampysurge: {
+		shortDesc: "On switch-in, this Pokemon summons Swampy Terrain.",
+		onStart(source) {
+			this.field.setTerrain('swampyterrain');
+		},
+		name: "Swampy Surge",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Robb576
 	thenumbersgame: {
 		desc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team; Necrozma-Dusk-Mane if 3 or fewer, Necrozma-Ultra if it is the last Pokemon left on the team.",

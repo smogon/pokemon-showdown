@@ -966,6 +966,26 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	ptoad: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('ptoad')}|I'm ptoad.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('ptoad')}|Bye, ribbitch!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('ptoad')}|OKKKK DUUUDE`);
+		},
+		onTakeItem(item, pokemon, source) {
+			if (this.suppressingAttackEvents(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
+			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
+				this.add('-activate', pokemon, 'ability: Sticky Hold');
+				return false;
+			}
+		},
+	},
 	quadrophenic: {
 		noCopy: true,
 		// No quotes requested

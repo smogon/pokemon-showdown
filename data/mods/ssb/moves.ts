@@ -2647,6 +2647,109 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Dragon",
 	},
 
+	// ptoad
+	croak: {
+		accuracy: 100,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 20 * pokemon.positiveBoosts();
+		},
+		category: "Special",
+		desc: "Randomly raises two stats (other than evasion and accuracy) by 1 before attacking. + 20 power for each of the user's stat boosts. Sound based move.",
+		shortDesc: "Raises two stats 1 stage, then attacks. +20 power for every boost. Sound",
+		name: "Croak",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Splash', source);
+			const stats: BoostName[] = [];
+			let stat: BoostName;
+			const exclude: string[] = ['accuracy', 'evasion'];
+			for (stat in source.boosts) {
+				if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				let randomStat = this.sample(stats);
+				const boost: SparseBoostsTable = {};
+				boost[randomStat] = 1;
+				if (stats.length > 1) {
+					stats.splice(stats.indexOf(randomStat), 1);
+					randomStat = this.sample(stats);
+					boost[randomStat] = 1;
+				}
+				this.boost(boost, source, source, move);
+			}
+			this.add('-anim', source, 'Hyper Voice', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+
+	// used for ptoad's ability
+	swampyterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Swampy Terrain. During the effect, the power of Electric-type, Grass-type, and Ice-type attacks made by grounded Pokemon are halved and Water and Ground types heal 1/16 at the end of each turn if grounded. Fails if the current terrain is Swampy Terrain.",
+		shortDesc: "5 turns. Grounded: -Electric, -Grass and -Ice power, Water & Ground heal 1/16 each turn.",
+		name: "Swampy Terrain",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		terrain: 'swampyterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (['Electric', 'Grass', 'Ice'].includes(move.type) && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('swampy terrain weaken');
+					return this.chainModify(0.5);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Swampy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Swampy Terrain');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onTerrain(pokemon) {
+				if ((pokemon.hasType('Water') || pokemon.hasType('Ground')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					this.debug('Pokemon is grounded and a Water or Ground type, healing through Swampy Terrain.');
+					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				}
+			},
+			onEnd() {
+				if (!this.effectData.duration) this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Swampy Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Ground",
+	},
+
 	// quadrophenic
 	extremeways: {
 		accuracy: 100,
