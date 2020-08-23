@@ -119,7 +119,7 @@
 		"Your username contains a phrase banned by this room.": "Seu nome de usuário contém uma frase banida por esta sala.",
 		"Your status message contains a phrase banned by this room.": "A mensagem do seu status contém uma frase banida por esta sala.",
 
-		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "Você está ${lockType} e só pode enviar mensagens privadas para a equipe de moderação global. Expira em ${lockExpiration}",
+		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "Você está ${lockType} e só pode enviar mensagens privadas para a equipe de moderação global. ${lockExpiration}",
 		"Get help with this": "Peça ajuda com isso",
 		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "O usuário \"${targetUser.name}\" está locked e não pode receber mensagens privadas.",
 		"On this server, you must be of rank ${groupName} or higher to PM users.": "Neste servidor, você precisa ser de cargo ${groupName} ou maior para enviar mensagens privadas.",
