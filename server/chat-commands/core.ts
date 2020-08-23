@@ -548,9 +548,9 @@ export const commands: ChatCommands = {
 			return this.errorReply(`The room "${target}" was not found.`);
 		}
 
-		const targetBlocked = targetUser.settings.blockInvites;
-		if (targetBlocked) {
-			if (targetBlocked === true ? !user.can('lock') : !Users.globalAuth.atLeast(user, targetBlocked as GroupSymbol)) {
+		const invitesBlocked = targetUser.settings.blockInvites;
+		if (invitesBlocked) {
+			if (invitesBlocked === true ? !user.can('lock') : !Users.globalAuth.atLeast(user, invitesBlocked as GroupSymbol)) {
 				Chat.maybeNotifyBlocked('invite', targetUser, user);
 				return this.errorReply(`This user is currently blocking room invites.`);
 			}
