@@ -732,7 +732,7 @@ export const commands: ChatCommands = {
 		if (!userGroup['hiderank']) return this.errorReply(`/hiderank - Access denied.`);
 
 		const isShow = cmd === 'showrank';
-		const group = (isShow ? Users.globalAuth.get(user.id) : target.trim() as GroupSymbol);
+		const group = (isShow ? Users.globalAuth.get(user.id) : (target.trim() || Users.Auth.defaultSymbol()) as GroupSymbol);
 		if (user.tempGroup === group) {
 			return this.errorReply(`You already have the temporary symbol '${group}'.`);
 		}
