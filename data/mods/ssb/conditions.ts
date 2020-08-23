@@ -510,6 +510,74 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('frostyicelad ❆')}|So c-c-cold`);
 		},
 	},
+	gmars: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|${getName('GMars')}|It's ya boy GEEEEEEEEMARS`);
+		},
+		onSwitchOut(source) {
+			this.add(`c|${getName('GMars')}|Who switches out a Minior in prime position?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('GMars')}|Follow me on bandcamp`);
+		},
+		// Special Forme Effects
+		onBeforeMove(pokemon) {
+			if (pokemon.species.id === "miniorviolet") {
+				this.add(`${getName("GMars")} is thinking...`);
+				if (this.random(3) === 2) {
+					this.add('cant', pokemon, 'ability: Truant');
+					return false;
+				}
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.species.id === 'miniorindigo') {
+				this.boost({atk: 1, spa: 1}, pokemon.side.foe.active[0]);
+			} else if (pokemon.species.id === 'miniorgreen') {
+				this.boost({atk: 1}, pokemon);
+			}
+		},
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			if (target.species.id !== 'miniorblue') return;
+			let showMsg = false;
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Minior-Blue", "[of] " + target);
+			}
+		},
+		onFoeTryMove(target, source, move) {
+			if (move.id === 'haze' && target.species.id === 'miniorblue') {
+				move.onHitField = function (this: Battle) {
+					this.add('-clearallboost');
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.species.id === 'miniorblue') continue;
+						pokemon.clearBoosts();
+					}
+				}.bind(this);
+				return;
+			}
+			if (!target.set.shiny && target.species.id !== 'minior') return;
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectData.target;
+			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', dazzlingHolder, 'ability: Minior-Shiny', move, '[of] ' + target);
+				return false;
+			}
+		},
+	},
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart() {

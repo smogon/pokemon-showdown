@@ -81,6 +81,39 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Bug"],
 		requiredItem: "Ice Stone",
 	},
+	// GMars
+	minior: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorviolet: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorindigo: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorblue: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorgreen: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	minioryellow: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniororange: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniormeteor: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
 	// Hydro
 	pichu: {
 		inherit: true,

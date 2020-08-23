@@ -727,6 +727,28 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// GMars
+	capsulearmor: {
+		desc: "While in Minior-Meteor forme, this Pokemon cannot be affected by major status conditions and is immune to critical hits. This ability cannot be ignored by Moongeist Beam, Sunsteel Strike, Mold Breaker, Teravolt, or Turboblaze.",
+		shortDesc: "Minior-Meteor: Immune to crits and status",
+		name: "Capsule Armor",
+		isUnbreakable: true,
+		onCriticalHit: false,
+		onSetStatus(status, target, source, effect) {
+			if (target.species.id !== 'miniormeteor' || target.transformed) return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Capsule Armor');
+			}
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (target.species.id !== 'miniormeteor' || target.transformed) return;
+			if (status.id !== 'yawn') return;
+			this.add('-immune', target, '[from] ability: Capsule Armor');
+			return null;
+		},
+	},
+
 	// grimAuxiliatrix
 	biosteel: {
 		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out and prevents other Pokemon from lowering this Pokemon's stat stages.",

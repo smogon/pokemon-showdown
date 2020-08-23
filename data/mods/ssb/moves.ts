@@ -1404,6 +1404,82 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Ice",
 	},
 
+	// GMars
+	gacha: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Shell Smash; Then Randomly Changes Minior's Forme.",
+		shortDesc: "Shell Smash; Then Randomly Changes Minior's Forme.",
+		name: "Gacha",
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Brick Break', source);
+		},
+		onHit(target, source, move) {
+			if (target.species.id !== 'miniormeteor') return;
+			let forme: string;
+			let message = "";
+			const random = this.random(100);
+			if (random >= 0 && random < 3) {
+				forme = "Minior-Violet";
+				message = "Oof, Violet. Tough break. A Violet Minior is sluggish and won't always listen to your commands. Best of luck! Rating: ★ ☆ ☆ ☆ ☆ ";
+			} else if (random >= 3 && random < 13) {
+				forme = "Minior-Indigo";
+				message = "Uh oh, an Indigo Minior. Its inspiring color may have had some unintended effects and boosted your foe's attacking stats. Better hope you can take it down first! Rating: ★ ☆ ☆ ☆ ☆";
+			} else if (random >= 13 && random < 33) {
+				forme = "Minior";
+				message = "Nice one, a Red Minior is hard for your opponent to ignore. They'll be goaded into attacking the first time they see this! Rating: ★ ★ ★ ☆ ☆ ";
+			} else if (random >= 33 && random < 66) {
+				forme = "Minior-Orange";
+				message = "Solid, you pulled an Orange Minior. Nothing too fancy, but it can definitely get the job done if you use it right. Rating: ★ ★ ☆ ☆ ☆";
+			} else if (random >= 66 && random < 86) {
+				forme = "Minior-Yellow";
+				message = "Sweet, a Yellow Minior! This thing had a lot of static energy built up that released when you cracked it open, paralyzing the foe. Rating: ★ ★ ★ ☆ ☆ ";
+			} else if (random >= 86 && random < 96) {
+				forme = "Minior-Blue";
+				message = "Woah! You got a Blue Minior. This one's almost translucent; it looks like it'd be hard for an opponent to find a way to reduce its stats. Rating: ★ ★ ★ ★ ☆";
+			} else if (random >= 96 && random < 99) {
+				forme = "Minior-Green";
+				message = "Nice! You cracked a Green Minior, that's definitely a rare one. This type of Minior packs an extra punch, and it's great for breaking through defensive teams without risking multiple turns of setup. Rating: ★ ★ ★ ★ ★";
+			} else if (random === 99) {
+				forme = "Minior";
+				target.set.shiny = true;
+				message = "YO!! I can't believe it, you cracked open a Shiny Minior! Its multicolored interior dazzles its opponents and throws off their priority moves. Big grats. Rating: ★ ★ ★ ★ ★ ★";
+			} else {
+				forme = "Minior";
+			}
+			target.formeChange(forme, move, true);
+			if (message) this.add(`c|${getName('GMars')}|${message}`);
+			target.setAbility('capsulearmor');
+			target.baseAbility = target.ability;
+			if (forme === 'Minior-Indigo') {
+				this.boost({atk: 1, spa: 1}, target.side.foe.active[0]);
+			} else if (forme === 'Minior') {
+				target.side.foe.active[0].addVolatile('taunt');
+			} else if (forme === 'Minior-Yellow') {
+				target.side.foe.active[0].trySetStatus('par', target);
+			} else if (forme === 'Minior-Green') {
+				this.boost({atk: 1}, target);
+			}
+		},
+		boosts: {
+			def: -1,
+			spd: -1,
+			atk: 2,
+			spa: 2,
+			spe: 2,
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// grimAuxiliatrix
 	donotsteel: {
 		accuracy: true,

@@ -241,6 +241,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Frosty Wave',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	GMars: {
+		species: 'Minior-Meteor', ability: 'Capsule Armor', item: 'White Herb', gender: 'N',
+		moves: ['Acrobatics', 'Earthquake', 'Diamond Storm'],
+		signatureMove: 'Gacha',
+		evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adamant',
+	},
 	grimAuxiliatrix: {
 		species: 'Duraludon', ability: 'Bio-steel', item: 'Assault Vest', gender: '',
 		moves: [['Core Enforcer', 'Draco Meteor'], 'Flash Cannon', ['Thunderbolt', 'Fire Blast']],
