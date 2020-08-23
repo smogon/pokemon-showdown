@@ -2789,7 +2789,8 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit(target, source) {
+		onPrepareHit(target, source, move) {
+			this.boost({atk: 1, spe: 1}, source, source, move);
 			this.add('-anim', source, 'Sacred Fire', target);
 		},
 		onHit(target, source) {
@@ -2797,7 +2798,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 				this.runMegaEvo(source);
 			}
 		},
-		// stat boosting implemented in custom status
 		secondary: null,
 		target: "normal",
 		type: "Fire",

@@ -993,11 +993,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Raj.Shoot')}|You'll join me in the shadow realm soon....`);
 		},
-		onBeforeMove(source, target, move) {
-			if (move.id === 'fanservice') {
-				this.boost({atk: 1, spe: 1}, source, source, move);
-			}
-		},
 	},
 	ransei: {
 		noCopy: true,
