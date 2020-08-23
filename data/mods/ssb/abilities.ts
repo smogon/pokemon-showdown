@@ -1053,6 +1053,22 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Mad Monty ¾°
+	petrichor: {
+		desc: "On switch-in, this Pokemon summons Rain Dance. Electric-type moves have 1.2x power in the rain.",
+		shortDesc: "Summons rain. Electric-type moves have 1.2x power in rain.",
+		name: "Petrichor",
+		onStart(source) {
+			this.field.setWeather('raindance');
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.type === 'Electric' && this.field.getWeather().id === 'raindance') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+	},
+
 	// Marshmallon
 	stubbornness: {
 		desc: "this Pokemon does not take recoil damage; its Atk, Def, and SpD are immediately raised by 1 at the first instance that an opponent's stat is raised; after this, each time an opponent's has its stats boosted, the user gains +1 Atk.",

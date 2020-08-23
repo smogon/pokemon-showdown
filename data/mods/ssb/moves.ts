@@ -2190,6 +2190,37 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Fairy",
 	},
 
+	// Mad Monty ¾°
+	callamaty: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		desc: "30% chance to paralyze. Starts Rain Dance if not currently active.",
+		name: "Ca-LLAMA-ty",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		shortDesc: "30% chance to paralyze. Summons rain.",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dark Void', target);
+			this.add('-anim', source, 'Plasma Fists', target);
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		self: {
+			onHit(source) {
+				this.field.setWeather('raindance');
+			},
+		},
+		target: "normal",
+		type: "Electric",
+	},
+
 	// MajorBowman
 	corrosivecloud: {
 		accuracy: true,

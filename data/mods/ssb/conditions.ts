@@ -332,7 +332,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Celine')}|Brb writing`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Celine')}|'Tis only a flesh wound!`); // escape the quote?
+			this.add(`c|${getName('Celine')}|'Tis only a flesh wound!`);
 		},
 	},
 	ckilgannon: {
@@ -776,6 +776,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Lionyx')}|The cold never bothered me anyway...`);
+		},
+	},
+	madmonty: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Mad Monty ¾°')}|Ah, the sweet smell of rain... Oh! Hi there!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Mad Monty ¾°')}|Hey, I was enjoying the weather! Awww...`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Mad Monty ¾°')}|Nooo, if I go, who will stop the llamas?`);
 		},
 	},
 	majorbowman: {
