@@ -13,7 +13,7 @@ const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
 const WHITELISTED_USERIDS = ['anubis'];
 
 function checkCanPerform(context: PageContext | CommandContext, user: User, permission: GlobalPermission = 'lockdown') {
-	return WHITELISTED_USERIDS.includes(user.id) || context.checkCan(permission);
+	if (!WHITELISTED_USERIDS.includes(user.id)) context.checkCan(permission);
 }
 
 export function visualizeRangeList(ranges: AddressRange[]) {

@@ -770,7 +770,7 @@ const cmds: ChatCommands = {
 			}
 			const targetUser = Users.get(giver);
 			if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-			if (!this.checkCan('warn', null, room)) return this.errorReply("Permission denied.");
+			this.checkCan('warn', null, room);
 			if (!targetUser.autoconfirmed) {
 				return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
 			}
@@ -886,9 +886,7 @@ const cmds: ChatCommands = {
 		room = this.requireRoom();
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (this.checkCan('warn', null, room) && user.id !== room.giveaway.host.id) {
-			return;
-		}
+		if (user.id !== room.giveaway.host.id) this.checkCan('warn', null, room);
 
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");

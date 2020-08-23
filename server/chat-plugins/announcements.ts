@@ -62,7 +62,7 @@ export const commands: ChatCommands = {
 			const supportHTML = cmd === 'htmlcreate';
 
 			this.checkCan('minigame', null, room);
-			if (supportHTML && !this.checkCan('declare', null, room)) return false;
+			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity) {
 				return this.errorReply(this.tr("There is already a poll or announcement in progress in this room."));

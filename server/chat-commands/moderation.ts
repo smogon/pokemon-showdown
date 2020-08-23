@@ -469,11 +469,10 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.settings.modjoin || targetRoom.settings.staffRoom) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		if (!this.checkCan('warn', targetUser, room) || !this.checkCan('warn', targetUser, targetRoom)) {
-			return;
-		}
+		this.checkCan('warn', targetUser, room);
+		this.checkCan('warn', targetUser, targetRoom);
 
-		if (!this.checkCan('rangeban', targetUser)) {
+		if (!user.can('rangeban', targetUser)) {
 			this.errorReply(`Redirects have been deprecated. Instead of /redirect, use <<room links>> or /invite to guide users to the correct room, and punish if users don't cooperate.`);
 			return;
 		}
@@ -696,7 +695,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 		this.checkCan('lock', targetUser);
-		if (month && !this.checkCan('rangeban')) return false;
+		if (month) this.checkCan('rangeban');
 
 		let name;
 		let userid: ID;
@@ -851,7 +850,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help unlock');
 		this.checkCan('globalban');
 		const range = target.charAt(target.length - 1) === '*';
-		if (range && !this.checkCan('rangeban')) return false;
+		if (range) this.checkCan('rangeban');
 
 		if (!(range ? IPTools.ipRangeRegex : IPTools.ipRegex).test(target)) {
 			return this.errorReply("Please enter a valid IP address.");
@@ -1370,7 +1369,7 @@ export const commands: ChatCommands = {
 	announce(target, room, user) {
 		if (!target) return this.parse('/help announce');
 
-		if (room && !this.checkCan('announce', null, room)) return false;
+		if (room) this.checkCan('announce', null, room);
 
 		(target as string | null) = this.checkChat(target);
 		if (!target) return;
@@ -1716,7 +1715,7 @@ export const commands: ChatCommands = {
 		if (!room.battle && !includesUrl && cmd !== 'forcebattleban') {
 			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
-		if (!this.checkCan('rangeban', targetUser)) {
+		if (!user.can('rangeban', targetUser)) {
 			this.errorReply(`Battlebans have been deprecated. Alternatives:`);
 			this.errorReply(`- timerstalling and bragging about it: lock`);
 			this.errorReply(`- other timerstalling: they're not timerstalling, leave them alone`);

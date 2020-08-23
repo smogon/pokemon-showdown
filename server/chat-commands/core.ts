@@ -1091,7 +1091,8 @@ export const commands: ChatCommands = {
 	},
 
 	hidereplay(target, room, user, connection) {
-		if (!room || !room.battle || !this.checkCan('joinbattle', null, room)) return;
+		if (!room || !room.battle) return this.errorReply(`Must be used in a battle.`);
+		this.checkCan('joinbattle', null, room);
 		if (room.tour?.forcePublic) {
 			return this.errorReply(`This battle can't have hidden replays, because the tournament is set to be forced public.`);
 		}

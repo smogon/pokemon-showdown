@@ -294,7 +294,7 @@ export const commands: ChatCommands = {
 					if (!room) return; // do nothing if the room doesn't exist anymore
 					const res = await YouTube.randChannel();
 					this.addBox(res!);
-					room!.update();
+					room.update();
 				})();
 			 }, interval);
 			this.privateModAction(`${user.name} set a randchannel interval to ${target} minutes`);

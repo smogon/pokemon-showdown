@@ -29,7 +29,7 @@ export const commands: ChatCommands = {
 		target = this.checkHTML(target);
 		target = Chat.collapseLineBreaksHTML(target);
 		this.checkBroadcast(true, '!htmlbox');
-		if (this.broadcastMessage && !this.checkCan('declare', null, room)) return false;
+		if (this.broadcastMessage) this.checkCan('declare', null, room);
 
 		if (!this.runBroadcast(true, '!htmlbox')) return;
 

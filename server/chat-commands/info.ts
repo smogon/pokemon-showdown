@@ -427,7 +427,7 @@ export const commands: ChatCommands = {
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
-		if (!user.can('addhtml', null, room) && !this.checkCan('ban', null, room)) return false;
+		if (!user.can('addhtml', null, room)) this.checkCan('ban', null, room);
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
 			this.errorReply(`This command must be broadcast:`);
@@ -1880,7 +1880,7 @@ export const commands: ChatCommands = {
 	roomhelp(target, room, user) {
 		room = this.requireRoom();
 		this.checkBroadcast(false, '!htmlbox');
-		if (this.broadcastMessage && !this.checkCan('declare', null, room)) return false;
+		if (this.broadcastMessage) this.checkCan('declare', null, room);
 
 		if (!this.runBroadcast(false, '!htmlbox')) return;
 
@@ -1941,7 +1941,7 @@ export const commands: ChatCommands = {
 	},
 
 	restarthelp(target, room, user) {
-		if (!Rooms.global.lockdown && !this.checkCan('lockdown')) return false;
+		if (!Rooms.global.lockdown) this.checkCan('lockdown');
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`The server is restarting. Things to know:<br />` +

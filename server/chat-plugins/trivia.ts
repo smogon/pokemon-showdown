@@ -1304,8 +1304,8 @@ const commands: ChatCommands = {
 		if (room.roomid !== 'questionworkshop') {
 			return this.errorReply(this.tr('This command can only be used in Question Workshop.'));
 		}
-		if (cmd === 'add' && !this.checkCan('mute', null, room)) return false;
-		if (cmd === 'submit' && !this.checkCan('show', null, room)) return false;
+		if (cmd === 'add') this.checkCan('mute', null, room);
+		if (cmd === 'submit') this.checkCan('show', null, room);
 		if (!target) return false;
 		this.checkChat();
 

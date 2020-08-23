@@ -114,7 +114,7 @@ export const commands: ChatCommands = {
 		const targetUser = this.targetUserOrSelf(target, false);
 		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
 		const self = targetUser === user;
-		if (!self && !this.checkCan('mute', targetUser, room)) return false;
+		if (!self) this.checkCan('mute', targetUser, room);
 		if (!targetUser.foodfight) {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}

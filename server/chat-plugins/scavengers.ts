@@ -2260,9 +2260,8 @@ const ScavengerCommands: ChatCommands = {
 		'': 'update',
 		'update'(target, room, user) {
 			room = this.requireRoom();
-			if (!this.checkCan('declare', null, room) || !getScavsRoom(room)) {
-				return false;
-			}
+			if (!getScavsRoom(room)) return false;
+			this.checkCan('declare', null, room);
 			const settings = room.settings.scavSettings?.scavmod || {};
 
 			this.sendReply(`|uhtml${this.cmd === 'update' ? 'change' : ''}|scav-modsettings|<div class=infobox><strong>Scavenger Moderation Settings:</strong><br /><br />` +
@@ -2272,9 +2271,8 @@ const ScavengerCommands: ChatCommands = {
 
 		'ipcheck'(target, room, user) {
 			room = this.requireRoom();
-			if (!this.checkCan('declare', null, room) || !getScavsRoom(room)) {
-				return false;
-			}
+			if (!getScavsRoom(room)) return false;
+			this.checkCan('declare', null, room);
 
 			if (!room.settings.scavSettings) room.settings.scavSettings = {};
 			const settings = room.settings.scavSettings.scavmod || {};
