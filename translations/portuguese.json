@@ -359,7 +359,7 @@
 		"You are banned from creating tickets": "Você está proibido de criar pedidos de ajuda.",
 		", because you have the same IP as ${ticket.banned}.": ", porque você tem o mesmo IP de ${ticket.banned}.",
 		"Request help from global staff": "Peça ajuda a staff global",
-		"Please <button name=\"login\" class=\"button\">Log In</button> to request help.": "Por favor <button name=\ “login\” class=\”button\”>faça login</button> para pedir ajuda.",
+		"Please <button name=\"login\" class=\"button\">Log In</button> to request help.": "Por favor <button name=\"login\" class=\"button\">faça login</button> para pedir ajuda.",
 		"Request Help": "Peça Ajuda",
 		"You already have a Help ticket.": "Você já tem um pedido de ajuda aberto.",
 		"Back": "Voltar",
