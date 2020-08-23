@@ -759,7 +759,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(pokemon) {
 			this.add(`c|${getName('Lamp')}|DUDE HI ${pokemon.side.foe.name} (:`);
 		},
-		onSwitchOut(pokemon ) {
+		onSwitchOut(pokemon) {
 			this.add(`c|${getName('Lamp')}|bye ${pokemon.side.foe.name} :)`);
 		},
 		onFaint() {
