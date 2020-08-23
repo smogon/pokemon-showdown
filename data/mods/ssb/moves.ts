@@ -1970,7 +1970,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						if (moves.length >= 3) break;
 					}
 					moves.push('glitchout');
-					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) {
+					if (this.toID(pokemon.ability).includes('illusion') && pokemon.illusion) {
 						this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
 					}
 					pokemon.formeChange('missingno');

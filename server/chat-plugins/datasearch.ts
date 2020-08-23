@@ -480,7 +480,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let capSearch = null;
 	let nationalSearch = null;
 	let fullyEvolvedSearch = null;
-	let singleTypeSearch = false;
+	let singleTypeSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
@@ -584,7 +584,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (['mono', 'monotype'].includes(toID(target))) {
-				singleTypeSearch = true;
+				singleTypeSearch = !isNotSearch;
 				orGroup.skip = true;
 				continue;
 			}
@@ -823,7 +823,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 	if (
-		showAll && searches.length === 0 && !maxGen && !singleTypeSearch &&
+		showAll && searches.length === 0 && !maxGen && singleTypeSearch === null &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
 	) {
 		return {
@@ -984,11 +984,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			for (const stat in alts.stats) {
 				let monStat = 0;
 				if (stat === 'bst') {
-					for (const monStats in dex[mon].baseStats) {
-						// Account for merged Special stat in gen 1, don't count it twice
-						if (maxGen === 1 && monStats === 'spd') continue;
-						monStat += dex[mon].baseStats[monStats as StatName];
-					}
+					monStat = dex[mon].bst;
 				} else if (stat === 'weight') {
 					monStat = dex[mon].weighthg / 10;
 				} else if (stat === 'height') {
@@ -1035,7 +1031,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
-		if (singleTypeSearch && dex[mon].types.length !== 1) continue;
+		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
@@ -1492,17 +1488,17 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const mod = Dex.mod('gen' + maxGen);
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
-		let usedSpecies: Species = Dex.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Dex.deepClone(Dex.getLearnsetData(usedSpecies.id));
+		let usedSpecies: Species = Utils.deepClone(species);
+		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(Dex.getLearnsetData(usedSpecies.id));
 		if (!usedSpeciesLearnset.learnset) {
-			usedSpecies = Dex.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
-			usedSpeciesLearnset.learnset = Dex.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
+			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
+			usedSpeciesLearnset.learnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
 		}
 		const lsetData = new Set(Object.keys(usedSpeciesLearnset.learnset!));
 
 		while (usedSpecies.prevo) {
-			usedSpecies = Dex.deepClone(mod.getSpecies(usedSpecies.prevo));
-			usedSpeciesLearnset = Dex.deepClone(mod.getLearnsetData(usedSpecies.id));
+			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.prevo));
+			usedSpeciesLearnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id));
 			for (const move in usedSpeciesLearnset.learnset) {
 				lsetData.add(move);
 			}
@@ -2214,7 +2210,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			if (format.minSourceGen && format.minSourceGen === 6) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
-			format = Dex.deepClone(Dex.getFormat(targetid));
+			format = Utils.deepClone(Dex.getFormat(targetid));
 			formatid = targetid;
 			formatName = format.name;
 			targets.shift();

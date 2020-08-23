@@ -1054,11 +1054,11 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-			const bst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
-			if (bst <= 350) {
-				for (const stat of stats) {
+			if (newSpecies.bst <= 350) {
+				newSpecies.bst = 0;
+				for (const stat in newSpecies.baseStats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+					newSpecies.bst += newSpecies.baseStats[stat];
 				}
 			}
 			return newSpecies;
@@ -1069,7 +1069,7 @@ export const Formats: {[k: string]: FormatsData} = {
 		name: 'Flipped Mod',
 		desc: "Every Pok&eacute;mon's stats are reversed. HP becomes Spe, Atk becomes Sp. Def, Def becomes Sp. Atk, and vice versa.",
 		onBegin() {
-			this.add('rule', 'Pokemon have their stats flipped (HP becomes Spe, vice versa).');
+			this.add('rule', 'Flipped Mod: Pokemon have their stats flipped (HP becomes Spe, vice versa).');
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
@@ -1089,11 +1089,13 @@ export const Formats: {[k: string]: FormatsData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: StatName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
-			const pst: number = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
+			const bstWithoutHp: number = newSpecies.bst - newSpecies.baseStats['hp'];
 			const scale = 600 - newSpecies.baseStats['hp'];
-			for (const stat of stats) {
-				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
+			newSpecies.bst = newSpecies.baseStats['hp'];
+			for (const stat in newSpecies.baseStats) {
+				if (stat === 'hp') continue;
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / bstWithoutHp, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[stat];
 			}
 			return newSpecies;
 		},

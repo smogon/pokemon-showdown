@@ -849,7 +849,7 @@ export const commands: ChatCommands = {
 		const range = target.charAt(target.length - 1) === '*';
 		if (range && !this.can('rangeban')) return false;
 
-		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
+		if (!IPTools.ipRegex.test(target)) return this.errorReply("Please enter a valid IP address.");
 
 		const punishment = Punishments.ips.get(target);
 		if (!punishment) return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
@@ -1126,7 +1126,7 @@ export const commands: ChatCommands = {
 
 		if (!userid) return this.parse('/help promote');
 
-		const currentGroup = targetUser?.group || Users.globalAuth.get(userid);
+		const currentGroup = targetUser?.tempGroup || Users.globalAuth.get(userid);
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Users.Auth.defaultSymbol();
 		if (!nextGroup) {
@@ -1338,7 +1338,7 @@ export const commands: ChatCommands = {
 		if (!target) return;
 
 		for (const u of Users.users.values()) {
-			if (u.connected) u.send(`|pm|&|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
+			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		}
 		this.globalModlog(`GLOBALDECLARE`, null, target);
 	},
@@ -1850,7 +1850,7 @@ export const commands: ChatCommands = {
 		this.modlog('UNBLACKLISTALL');
 		this.roomlog(`Unblacklisted users: ${unblacklisted.join(', ')}`);
 	},
-	unblacklistallhelp: [`/unblacklistall - Unblacklists all blacklisted users in the current room. Requires #, &`],
+	unblacklistallhelp: [`/unblacklistall - Unblacklists all blacklisted users in the current room. Requires: # &`],
 
 	expiringbls: 'showblacklist',
 	expiringblacklists: 'showblacklist',
@@ -1913,42 +1913,4 @@ export const commands: ChatCommands = {
 		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # &`,
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # &`,
 	],
-
-	markshared(target, room, user) {
-		if (!target) return this.parse('/help markshared');
-		if (!this.can('globalban')) return false;
-		let [ip, note] = this.splitOne(target);
-		if (!/^[0-9.*]+$/.test(ip)) return this.errorReply("Please enter a valid IP address.");
-
-		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
-		if (!note) {
-			this.errorReply(`You must specify who owns this shared IP.`);
-			this.parse(`/help markshared`);
-			return;
-		}
-
-		Punishments.addSharedIp(ip, note);
-		note = ` (${note})`;
-
-		this.addGlobalModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
-		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
-	},
-	marksharedhelp: [
-		`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
-		`Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &`,
-	],
-
-	unmarkshared(target, room, user) {
-		if (!target) return this.parse('/help unmarkshared');
-		if (!this.can('globalban')) return false;
-		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
-
-		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
-
-		Punishments.removeSharedIp(target);
-
-		this.addGlobalModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
-		this.globalModlog('UNSHAREIP', target, ` by ${user.name}`);
-	},
-	unmarksharedhelp: [`/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &`],
 };

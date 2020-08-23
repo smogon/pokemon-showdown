@@ -701,7 +701,7 @@ const LoadGame = function (room: Room, gameid: string) {
 
 	const base = new ScavengerGameTemplate(room);
 
-	const scavgame = Object.assign(base, Dex.deepClone(game));
+	const scavgame = Object.assign(base, Utils.deepClone(game));
 
 	// initialize leaderboard if required
 	if (scavgame.leaderboard) {

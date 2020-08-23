@@ -72,6 +72,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8uu') {
+				this.add('html', '<div class="broadcast-blue"><strong>UU is currently suspecting Jirachi! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668911/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] RU",
@@ -119,14 +124,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		maxLevel: 5,
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
+			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
 			'Chlorophyll', 'Moody', 'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8lc') {
-				this.add('html', '<div class="broadcast-blue"><strong>Little Cup is currently suspecting Rufflet! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668142/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Monotype",
@@ -163,7 +163,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: ['PU', 'Ludicolo', 'Thwackey'],
+		banlist: ['PU', 'Ludicolo', 'Musharna', 'Thwackey'],
 	},
 	{
 		name: "[Gen 8] 1v1",
@@ -259,7 +259,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		banlist: ['DUber', 'Beat Up'],
 		onBegin() {
 			if (this.rated && this.format.id === 'gen8doublesou') {
-				this.add('html', '<div class="broadcast-blue"><strong>Doubles OU is currently suspecting Urshifu! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668046/">suspect thread</a>.</strong></div>');
+				this.add('html', '<div class="broadcast-blue"><strong>Doubles OU is currently suspecting Volcarona! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3669212/">suspect thread</a>.</strong></div>');
 			}
 		},
 	},
@@ -350,23 +350,13 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (species.types.includes('Steel')) {
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
 			}
-			let bst = 0;
-			let stat: StatName;
-			for (stat in species.baseStats) {
-				bst += species.baseStats[stat];
-			}
-			if (bst > 625) {
+			if (species.bst > 625) {
 				return [`${species.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			}
 			const item = this.dex.getItem(set.item);
 			if (set.item && item.megaStone) {
-				let bstMega = 0;
 				const megaSpecies = this.dex.getSpecies(item.megaStone);
-				let megaStat: StatName;
-				for (megaStat in megaSpecies.baseStats) {
-					bstMega += megaSpecies.baseStats[megaStat];
-				}
-				if (species.baseSpecies === item.megaEvolves && bstMega > 625) {
+				if (species.baseSpecies === item.megaEvolves && megaSpecies.bst > 625) {
 					return [
 						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
 					];
@@ -413,11 +403,16 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
 		banlist: [
 			'Alakazam-Mega', 'Arceus', 'Blastoise-Mega', 'Blaziken', 'Darkrai', 'Darmanitan-Galar', 'Deoxys-Attack', 'Deoxys-Base', 'Deoxys-Speed', 'Dialga',
-			'Eternatus', 'Genesect', 'Gengar-Mega', 'Giratina', 'Greninja-Ash', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
+			'Eternatus', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
 			'Landorus-Base', 'Lucario-Mega', 'Lugia', 'Lunala', 'Marshadow', 'Metagross-Mega', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Tornadus-Therian', 'Urshifu-Base', 'Xerneas', 'Yveltal',
-			'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
+			'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldex') {
+				this.add('html', '<div class="broadcast-blue"><strong>National Dex is currently suspecting Ash-Greninja! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668917/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] National Dex UU",
@@ -426,7 +421,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 
 		mod: 'gen8',
-		searchShow: false,
 		ruleset: ['[Gen 8] National Dex'],
 		banlist: [
 			// National Dex OU
@@ -435,10 +429,15 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Melmetal', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Slowbro-Mega', 'Swampert-Mega', 'Tangrowth', 'Tapu Fini', 'Tapu Koko',
 			'Tapu Lele', 'Toxapex', 'Tyranitar', 'Tyranitar-Mega', 'Volcanion', 'Volcarona', 'Zapdos', 'Zarude-Base',
 			'nduubl', // National Dex UUBL
-			'Aegislash', 'Alakazam', 'Azumarill', 'Charizard-Mega-X', 'Deoxys-Defense', 'Dragonite', 'Gallade-Mega', 'Gengar', 'Grimmsnarl', 'Hawlucha', 'Heracross-Mega',
+			'Aegislash', 'Alakazam', 'Azumarill', 'Charizard-Mega-X', 'Deoxys-Defense', 'Dragonite', 'Gallade-Mega', 'Gengar', 'Hawlucha', 'Heracross-Mega',
 			'Hoopa-Unbound', 'Hydreigon', 'Kyurem', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mawile-Mega', 'Medicham-Mega', 'Mew', 'Pinsir-Mega', 'Scolipede',
 			'Staraptor', 'Thundurus', 'Thundurus-Therian', 'Victini', 'Drizzle', 'Drought', 'Aurora Veil',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldexuu') {
+				this.add('html', '<div class="broadcast-blue"><strong>National Dex UU is currently re-suspecting Grimmsnarl! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8566347">suspect post</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] National Dex AG",
@@ -474,16 +473,17 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Comatose + Sleep Talk',
 		],
 		onValidateSet(set) {
-			if (toID(set.ability) === 'intrepidsword' &&
-				!toID(set.species).startsWith('zacian') && toID(set.item) !== 'rustedsword') {
+			if (this.dex.toID(set.ability) === 'intrepidsword' &&
+				!this.dex.toID(set.species).startsWith('zacian') && this.dex.toID(set.item) !== 'rustedsword') {
 				return [`${set.ability} is banned.`];
 			}
-			if (set.species === 'Zacian-Crowned' && (toID(set.item) !== 'rustedsword' || toID(set.ability) !== 'intrepidsword')) {
+			if (set.species === 'Zacian-Crowned' &&
+				(this.dex.toID(set.item) !== 'rustedsword' || this.dex.toID(set.ability) !== 'intrepidsword')) {
 				return [set.species + " is banned."];
 			}
 		},
 		onChangeSet(set) {
-			const item = toID(set.item);
+			const item = this.dex.toID(set.item);
 			if (set.species === 'Zacian' && item === 'rustedsword') {
 				set.species = 'Zacian-Crowned';
 				set.ability = 'Intrepid Sword';
@@ -529,6 +529,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'megamax',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
+		unbanlist: ['Cinderace'],
 		onChangeSet(set) {
 			if (set.species.endsWith('-Gmax')) set.species = set.species.slice(0, -5);
 		},
@@ -625,7 +626,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.getSpecies(set.species);
 				const validator = this.dex.getRuleTable(this.dex.getFormat(`gen${this.gen}ou`));
-				if (toID(set.ability) === 'powerconstruct' && this.gen === 7) {
+				if (this.toID(set.ability) === 'powerconstruct' && this.gen === 7) {
 					return true;
 				}
 				if (set.item) {
@@ -684,12 +685,13 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
 		onValidateSet(set) {
-			if (set.species === 'Zacian-Crowned' && (toID(set.item) !== 'rustedsword' || toID(set.ability) !== 'intrepidsword')) {
+			if (set.species === 'Zacian-Crowned' &&
+				(this.dex.toID(set.item) !== 'rustedsword' || this.dex.toID(set.ability) !== 'intrepidsword')) {
 				return [set.species + " is banned."];
 			}
 		},
 		onChangeSet(set) {
-			const item = toID(set.item);
+			const item = this.dex.toID(set.item);
 			if (set.species === 'Zacian' && item === 'rustedsword') {
 				set.species = 'Zacian-Crowned';
 				set.ability = 'Intrepid Sword';
@@ -781,6 +783,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
 			'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8almostanyability') {
+				this.add('html', '<div class="broadcast-blue"><strong>Almost Any Ability is currently suspecting Magearna! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3669035/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] STABmons",
@@ -859,13 +866,13 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const names = new Set<ID>();
 			for (const set of team) {
 				const name = set.name;
-				if (names.has(toID(name))) {
+				if (names.has(this.dex.toID(name))) {
 					return [
 						`Your Pok\u00e9mon must have different nicknames.`,
 						`(You have more than one Pok\u00e9mon named '${name}')`,
 					];
 				}
-				names.add(toID(name));
+				names.add(this.dex.toID(name));
 			}
 			if (!names.size) {
 				return [
@@ -1004,7 +1011,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 					if (this.ruleTable.isRestrictedSpecies(pokemon)) continue;
 
 					for (const key of Object.values(pokemon.abilities)) {
-						const abilityId = toID(key);
+						const abilityId = this.dex.toID(key);
 						if (abilityId in teamHas.abilityMap) {
 							teamHas.abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
 						} else {
@@ -1037,7 +1044,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			this.format.debug = true;
 
 			if (!teamHas.abilitySources) teamHas.abilitySources = Object.create(null);
-			const validSources: string[] = teamHas.abilitySources[toID(set.species)] = []; // Evolution families
+			const validSources: string[] = teamHas.abilitySources[this.dex.toID(set.species)] = []; // Evolution families
 
 			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
 
@@ -1077,7 +1084,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			// Donor Clause
 			const evoFamilyLists = [];
 			for (const set of team) {
-				const abilitySources = teamHas.abilitySources?.[toID(set.species)];
+				const abilitySources = teamHas.abilitySources?.[this.dex.toID(set.species)];
 				if (!abilitySources) continue;
 				let format = this.format;
 				if (!format.getEvoFamily) format = this.dex.getFormat('gen8inheritance');
@@ -1104,8 +1111,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.baseAbility.includes('0')) {
 					const donor = pokemon.baseAbility.split('0')[1];
-					pokemon.m.donor = toID(donor);
-					pokemon.baseAbility = toID(pokemon.baseAbility.split('0')[0]);
+					pokemon.m.donor = this.toID(donor);
+					pokemon.baseAbility = this.toID(pokemon.baseAbility.split('0')[0]);
 					pokemon.ability = pokemon.baseAbility;
 				}
 			}
@@ -1153,7 +1160,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
-					if (['mirrorarmor', 'trace'].includes(toID(ally.baseAbility))) continue;
+					if (['mirrorarmor', 'trace'].includes(ally.baseAbility)) continue;
 					sharedPower.add(ally.baseAbility);
 				}
 			}
@@ -1165,7 +1172,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = {id: toID(effect), target: pokemon};
+				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
 			}
 		},
 		onSwitchInPriority: 2,
@@ -1194,7 +1201,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			hasAbility(ability) {
 				if (this.ignoringAbility()) return false;
 				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
-				const abilityid = toID(ability);
+				const abilityid = this.battle.toID(ability);
 				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
 			},
 		},
@@ -1224,7 +1231,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				lcuber: 40,
 				lc: 40,
 			};
-			const tier = toID(species.tier) || 'ou';
+			const tier = this.toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
 			const pokemon: Species = this.dex.deepClone(species);
 			const boost = boosts[tier];
@@ -1252,8 +1259,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 		restricted: [
-			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock',
-			'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
+			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock', 'Nature Power',
+			'Parting Shot', 'Psycho Shift', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
@@ -1268,7 +1275,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			const dex = this.dex;
 			const ability = dex.getMove(set.ability);
 			if (ability.category !== 'Status' || ability.status === 'slp' ||
-				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(toID).includes(ability.id)) {
+				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(this.dex.toID).includes(ability.id)) {
 				return this.validateSet(set, teamHas);
 			}
 			const customRules = this.format.customRules || [];
@@ -1290,7 +1297,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		pokemon: {
 			getAbility() {
-				const move = this.battle.dex.getMove(toID(this.ability));
+				const move = this.battle.dex.getMove(this.battle.toID(this.ability));
 				if (!move.exists) return Object.getPrototypeOf(this).getAbility.call(this);
 				return {
 					id: move.id,
@@ -1528,7 +1535,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
-			let name: string = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.getSpecies(name).exists || name === 'rage') {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking

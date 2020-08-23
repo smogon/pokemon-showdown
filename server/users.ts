@@ -71,16 +71,6 @@ function move(user: User, newUserid: ID) {
 	user.id = newUserid;
 	users.set(newUserid, user);
 
-	user.forcedPublic = null;
-	if (Config.forcedpublicprefixes) {
-		for (const prefix of Config.forcedpublicprefixes) {
-			if (user.id.startsWith(toID(prefix))) {
-				user.forcedPublic = prefix;
-				break;
-			}
-		}
-	}
-
 	return true;
 }
 function add(user: User) {
@@ -311,6 +301,7 @@ export interface UserSettings {
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
 	blockInvites: AuthLevel | boolean;
+	doNotDisturb: boolean;
 }
 
 // User
@@ -327,8 +318,7 @@ export class User extends Chat.MessageContext {
 	named: boolean;
 	registered: boolean;
 	id: ID;
-	group: GroupSymbol;
-	visualGroup: GroupSymbol;
+	tempGroup: GroupSymbol;
 	avatar: string | number;
 	language: string | null;
 
@@ -347,7 +337,6 @@ export class User extends Chat.MessageContext {
 	lastChallenge: number;
 	lastPM: string;
 	lastMatch: string;
-	forcedPublic: string | null;
 
 	settings: UserSettings;
 
@@ -402,8 +391,7 @@ export class User extends Chat.MessageContext {
 		this.named = false;
 		this.registered = false;
 		this.id = '';
-		this.group = Auth.defaultSymbol();
-		this.visualGroup = this.group;
+		this.tempGroup = Auth.defaultSymbol();
 		this.language = null;
 
 		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
@@ -431,7 +419,6 @@ export class User extends Chat.MessageContext {
 		this.lastChallenge = 0;
 		this.lastPM = '';
 		this.lastMatch = '';
-		this.forcedPublic = null;
 
 		// settings
 		this.settings = {
@@ -440,6 +427,7 @@ export class User extends Chat.MessageContext {
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
 			blockInvites: false,
+			doNotDisturb: false,
 		};
 		this.battleSettings = {
 			team: '',
@@ -519,13 +507,13 @@ export class User extends Chat.MessageContext {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
 			}
-			return room.auth.get(this.id, true) + this.name;
+			return room.auth.get(this) + this.name;
 		}
 		if (this.semilocked) {
 			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 			return mutedSymbol + this.name;
 		}
-		return this.visualGroup + this.name;
+		return this.tempGroup + this.name;
 	}
 	getIdentityWithStatus(roomid: RoomID = '') {
 		const identity = this.getIdentity(roomid);
@@ -537,29 +525,11 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, useVisualGroup?: boolean): boolean;
-	can(
-		permission: GlobalPermission,
-		target?: User | null,
-		room?: null,
-		cmd?: undefined,
-		useVisualGroup?: boolean
-	): boolean;
-	can(
-		permission: RoomPermission & GlobalPermission,
-		target: User | null,
-		room?: BasicRoom | null,
-		cmd?: undefined,
-		useVisualGroup?: boolean
-	): boolean;
-	can(
-		permission: string,
-		target: User | null = null,
-		room: BasicRoom | null = null,
-		cmd?: string,
-		useVisualGroup?: boolean
-	): boolean {
-		return Auth.hasPermission(this, permission, target, room, cmd, useVisualGroup);
+	can(permission: RoomPermission, target: User | null, room: BasicRoom): boolean;
+	can(permission: GlobalPermission, target?: User | null): boolean;
+	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
+	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
+		return Auth.hasPermission(this, permission, target, room);
 	}
 	/**
 	 * Special permission check for system operators
@@ -902,12 +872,24 @@ export class User extends Chat.MessageContext {
 			// 'Ban spectators' checkbox on the client can be kept in sync (and disable privacy correctly)
 			hiddenNextBattle: this.battleSettings.hidden,
 			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
+			language: this.language,
 		};
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
 	update() {
 		this.send(this.getUpdateuserText());
 	}
+	/**
+	 * If Alice logs into Bob's account, and Bob is currently logged into PS,
+	 * their connections will be merged, so that both `Connection`s are attached
+	 * to the Alice `User`.
+	 *
+	 * In this function, `this` is Bob, and `oldUser` is Alice.
+	 *
+	 * This is a pretty routine thing: If Alice opens PS, then opens PS again in
+	 * a new tab, PS will first create a Guest `User`, then automatically log in
+	 * and merge that Guest `User` into the Alice `User` from the first tab.
+	 */
 	merge(oldUser: User) {
 		oldUser.cancelReady();
 		for (const roomid of oldUser.inRooms) {
@@ -928,14 +910,16 @@ export class User extends Chat.MessageContext {
 		}
 		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
 
-		this.updateGroup(this.registered);
+		this.updateGroup(this.registered, true);
 		if (oldLocked !== this.locked || oldSemilocked !== this.semilocked) this.updateIdentity();
 
 		// We only propagate the 'busy' statusType through merging - merging is
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		this.setStatusType((this.statusType === 'busy' || oldUser.statusType === 'busy') ? 'busy' : 'online');
+		if (this.statusType === 'busy' || oldUser.statusType === 'busy') {
+			this.setStatusType('busy');
+		}
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);
@@ -1013,7 +997,7 @@ export class User extends Chat.MessageContext {
 		this.updateReady(connection);
 	}
 	debugData() {
-		let str = `${this.group}${this.name} (${this.id})`;
+		let str = `${this.tempGroup}${this.name} (${this.id})`;
 		for (const [i, connection] of this.connections.entries()) {
 			str += ` socket${i}[`;
 			str += [...connection.inRooms].join(`, `);
@@ -1029,24 +1013,21 @@ export class User extends Chat.MessageContext {
 	 * Note that unlike the others, User#trusted isn't reset every
 	 * name change.
 	 */
-	updateGroup(registered: boolean) {
+	updateGroup(registered: boolean, isMerge?: boolean) {
 		if (!registered) {
 			this.registered = false;
-			this.group = Users.Auth.defaultSymbol();
-			this.resetVisualGroup();
+			this.tempGroup = Users.Auth.defaultSymbol();
 			this.isStaff = false;
 			return;
 		}
 		this.registered = true;
-		const isHidingGroup = this.group !== this.visualGroup;
-		this.group = globalAuth.get(this.id);
-		if (!isHidingGroup) this.resetVisualGroup();
+		if (!isMerge) this.tempGroup = globalAuth.get(this.id);
 
 		if (Config.customavatars && Config.customavatars[this.id]) {
 			this.avatar = Config.customavatars[this.id];
 		}
 
-		const groupInfo = Config.groups[this.group];
+		const groupInfo = Config.groups[this.tempGroup];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
@@ -1075,19 +1056,16 @@ export class User extends Chat.MessageContext {
 	 */
 	setGroup(group: GroupSymbol, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
-
-		const isHidingGroup = this.group !== this.visualGroup;
-		this.group = group;
-		if (!isHidingGroup) this.visualGroup = group;
-		const groupInfo = Config.groups[this.group];
+		this.tempGroup = group;
+		const groupInfo = Config.groups[this.tempGroup];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
 		}
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
-			if (forceTrusted || this.group !== Users.Auth.defaultSymbol()) {
-				globalAuth.set(this.id, this.group);
+			if (forceTrusted || this.tempGroup !== Users.Auth.defaultSymbol()) {
+				globalAuth.set(this.id, this.tempGroup);
 				this.trusted = this.id;
 				this.autoconfirmed = this.id;
 			} else {
@@ -1097,17 +1075,6 @@ export class User extends Chat.MessageContext {
 			}
 		}
 	}
-
-	setVisualGroup(group: GroupSymbol) {
-		if (!group) throw new Error(`Falsy value passed to setVisualGroup`);
-		this.visualGroup = group;
-		this.updateIdentity();
-	}
-
-	resetVisualGroup() {
-		this.visualGroup = this.group;
-		this.updateIdentity();
-	}
 	/**
 	 * Demotes a user from anything that grants trusted status.
 	 * Returns an array describing what the user was demoted from.
@@ -1116,13 +1083,19 @@ export class User extends Chat.MessageContext {
 		if (!this.trusted) return;
 		const userid = this.trusted;
 		const removed = [];
-		if (globalAuth.has(userid)) {
+		const globalGroup = globalAuth.get(userid);
+		if (globalGroup && globalGroup !== ' ') {
 			removed.push(globalAuth.get(userid));
 		}
 		for (const room of Rooms.global.chatRooms) {
 			if (!room.settings.isPrivate && room.auth.isStaff(userid)) {
-				removed.push(room.auth.getDirect(userid) + room.roomid);
-				room.auth.set(userid, '+');
+				let oldGroup = room.auth.getDirect(userid) as string;
+				if (oldGroup === ' ') {
+					oldGroup = 'whitelist in ';
+				} else {
+					room.auth.set(userid, '+');
+				}
+				removed.push(`${oldGroup}${room.roomid}`);
 			}
 		}
 		this.trusted = '';
@@ -1136,8 +1109,7 @@ export class User extends Chat.MessageContext {
 		this.lastDisconnected = Date.now();
 		if (!this.registered) {
 			// for "safety"
-			this.group = Users.Auth.defaultSymbol();
-			this.visualGroup = this.group;
+			this.tempGroup = Users.Auth.defaultSymbol();
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
 			// This isn't strictly necessary since we don't reuse User objects
@@ -1456,6 +1428,13 @@ export class User extends Chat.MessageContext {
 			this.autoconfirmed === this.id ? `[ac]` :
 			this.registered ? `[registered]` :
 			``;
+	}
+	battlesForcedPublic() {
+		if (!Config.forcedpublicprefixes) return null;
+		for (const prefix of Config.forcedpublicprefixes) {
+			if (this.id.startsWith(toID(prefix))) return prefix;
+		}
+		return null;
 	}
 	destroy() {
 		// deallocate user
