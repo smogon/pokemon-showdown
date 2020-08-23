@@ -407,6 +407,26 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Blaz
+	whyworry: {
+		desc: "This Pokemon receives 3/4 damage from supereffective attacks and does not take damage from poison.",
+		shortDesc: "This Pokemon takes 3/4 damage from supereffective moves. Doesn't take poison damage.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Solid Rock neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.name === 'tox' || effect.name === 'psn') {
+				return false;
+			}
+		},
+		name: "Why Worry",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// cant say
 	ragequit: {
 		desc: "If Pokemon with this ability uses a move that misses or fails it faints and gives -2 Atk / -2 SpA to foe",
@@ -1508,6 +1528,33 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 			}
 		},
 		name: "Trillionage Roots",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
+	// Vexen
+	aquilasblessing: {
+		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If this Pokemon gets hit by a damaging Fire type move, its Defense and Special Defense get raised by 1 stage.",
+		shortDesc: "Moves with secondary effects: 1.3x power, secondary removed. Hit with Fire: +1 Def/SpD.",
+		onModifyMove(move, pokemon) {
+			if (move.secondaries) {
+				delete move.secondaries;
+				// Technically not a secondary effect, but it is negated
+				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
+				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+				move.hasSheerForce = true;
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.hasSheerForce) return this.chainModify([0x14CD, 0x1000]);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire') {
+				this.boost({def: 1, spd: 1});
+			}
+		},
+		name: "Aquila's Blessing",
 		isNonstandard: "Custom",
 		gen: 8,
 	},

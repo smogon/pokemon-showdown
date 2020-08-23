@@ -239,6 +239,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('biggie')}|it was all a dream`);
 		},
 	},
+	blaz: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Blaz')}|Give me, give me, give me the truth now oh oh oh oh`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Blaz')}|Tell me... why? Please tell me why do we worry? Why? Why do we worry at all?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Blaz')}|the game (lol u lost)`);
+		},
+	},
 	cake: {
 		noCopy: true,
 		onStart(target, pokemon) {
@@ -1167,6 +1179,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Trickster')}|(ಥ﹏ಥ)`);
+		},
+	},
+	vexen: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Vexen')}|Most unlucky for you!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Vexen')}|brb reading Bleach`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Vexen')}|Wait this wasn't supposed to happen`);
 		},
 	},
 	vivalospride: {

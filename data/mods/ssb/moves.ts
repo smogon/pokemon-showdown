@@ -660,6 +660,31 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Fighting",
 	},
 
+	// Blaz
+	bleakdecember: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "Damage is calculated using the user's Special Defense stat as its Special Attack, including stat stage changes. Other effects that modify the Special Attack stat are used as normal.",
+		shortDesc: "Uses user's SpD stat as SpA in damage calculation.",
+		name: "Bleak December",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Spirit Break', target);
+		},
+		useSourceDefensiveAsOffensive: true,
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Cake
 	kevin: {
 		accuracy: true,
@@ -3334,6 +3359,33 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		target: "randomNormal",
 		type: "Ghost",
 		contestType: "Tough",
+	},
+
+	// Vexen
+	asteriusstrike: {
+		accuracy: 85,
+		basePower: 100,
+		category: "Physical",
+		desc: "Has a 25% chance to confuse the target.",
+		shortDesc: "25% chance to confuse the target.",
+		name: "Asterius Strike",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, contact: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Giga Impact', target);
+		},
+		secondary: {
+			chance: 25,
+			volatileStatus: 'confusion',
+		},
+		target: "normal",
+		type: "Normal",
 	},
 
 	// vivalospride

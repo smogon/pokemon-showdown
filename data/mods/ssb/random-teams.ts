@@ -67,7 +67,7 @@ export const ssbSets: SSBSets = {
 	},
 	Akir: {
 		species: 'Forretress', ability: 'Fortifications', item: 'Leftovers', gender: 'M',
-		moves: ['Rapid Spin', 'Stealth Rock', ['U-Turn', 'Toxic']],
+		moves: ['Rapid Spin', 'Stealth Rock', ['U-turn', 'Toxic']],
 		signatureMove: 'Ravelin',
 		evs: {hp: 248, def: 252, spe: 8}, ivs: {spa: 0}, nature: 'Impish',
 	},
@@ -130,6 +130,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Body Slam', 'Darkest Lariat', 'Assist'],
 		signatureMove: 'Juggernaut Punch',
 		evs: {hp: 4, def: 252, spd: 252}, nature: 'Brave',
+	},
+	Blaz: {
+		species: 'Carbink', ability: 'Why Worry', item: 'Leftovers', gender: 'N',
+		moves: ['Cosmic Power', 'Body Press', 'Recover'],
+		signatureMove: 'Bleak December',
+		evs: {hp: 4, def: 252, spd: 252}, ivs: {atk: 0}, nature: 'Careful', shiny: true,
 	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
@@ -492,7 +498,7 @@ export const ssbSets: SSBSets = {
 	},
 	Struchni: {
 		species: 'Aggron', ability: 'Overasked Clause', item: 'Choice Band', gender: 'M',
-		moves: ['Pursuit', 'U-Turn', 'Fishious Rend'],
+		moves: ['Pursuit', 'U-turn', 'Fishious Rend'],
 		signatureMove: 'Veto',
 		evs: {hp: 251, atk: 5, def: 11, spd: 241}, nature: 'Careful',
 	},
@@ -549,6 +555,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Strength Sap', 'Cosmic Power', 'Knock Off'],
 		signatureMove: 'Soul-Shattering Stare',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', shiny: true,
+	},
+	Vexen: {
+		species: 'Tauros', ability: 'Aquila\'s Blessing', item: 'Life Orb', gender: 'M',
+		moves: ['Earthquake', 'Zen Headbutt', 'Rock Slide'],
+		signatureMove: 'Asterius Strike',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 	vivalospride: {
 		species: 'Darmanitan-Zen', ability: 'Regenerator', item: 'Heavy Duty Boots', gender: 'M',
