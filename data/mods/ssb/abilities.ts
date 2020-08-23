@@ -488,7 +488,7 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 			const possibleTypes = [];
 			const newTypes = [];
 			const weaknesses = [];
-			const types = pokemon.side.sideConditions['tracker'].storedTypes;
+			const types = pokemon.side.sideConditions['trackermod'].storedTypes;
 			if (!types) return;
 			for (const type in this.dex.data.TypeChart) {
 				const typeMod = this.dex.getEffectiveness(type, types);

@@ -359,6 +359,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Darth')}|Well, everyone needs a break at some point.`);
 		},
+		onHit(target, source, move) {
+			if (target.getMoveHitData(move).typeMod < 0) {
+				if (this.random(1000) === 114) {
+					// Should almost never happen, but will be hilarious when it does.
+					// Basically, roll a 1000 sided die, if it lands on 114 forcibly give the user's trainer the win
+					this.add(`c|${getName('Darth')}|Fear not, ${target.side.name}, your Guardian Angel shall grant you victory.`);
+					this.win(target.side);
+				}
+			}
+		},
 	},
 	drampasgrandpa: {
 		noCopy: true,
@@ -1562,7 +1572,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	// Custom side condition to allow the ability to track what mon was last in for Darth's Ability.
-	tracker: {
+	trackermod: {
 		onStart(source) {
 			const mon = source.active[0];
 			if (mon.name !== 'Darth') {
