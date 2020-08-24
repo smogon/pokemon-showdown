@@ -43664,6 +43664,20 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 4, level: 20},
 		],
 	},
+	gastrodoneast: {
+		learnset: {
+			earthpower: ["8S0"],
+			icebeam: ["8S0"],
+			protect: ["8S0"],
+			surf: ["8S0"],
+		},
+		eventData: [
+			{generation: 8, level: 50, gender: "F", nature: "Quiet", ivs: {hp: 31, atk: 2, def: 31, spa: 31, spd: 31, spe: 0}, isHidden: false, moves: ["protect", "surf", "icebeam", "earthpower"], pokeball: "cherishball"},
+		],
+		encounters: [
+			{generation: 4, level: 20},
+		],
+	},
 	drifloon: {
 		learnset: {
 			acrobatics: ["8M", "7M", "6M", "5M"],
