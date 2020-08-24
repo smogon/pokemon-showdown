@@ -761,7 +761,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	kingswordyt: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('KingSwordYT')}|Mucho texto`);
 		},
 		onSwitchOut() {
@@ -1090,6 +1090,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
+		},
+	},
+	rach: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Rach')}|Hel-lo`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Rach')}|I was doing better alone`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Rach')}|I'm all good already, so moved on, it's scary`);
 		},
 	},
 	rajshoot: {

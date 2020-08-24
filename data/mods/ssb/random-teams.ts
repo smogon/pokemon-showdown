@@ -470,17 +470,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psycho Drive',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
-	Ransei: {
-		species: 'Audino', ability: 'Neutralizing Gas', item: 'Choice Scarf', gender: 'M',
-		moves: ['Trick', 'Recover', 'Spectral Thief'],
-		signatureMove: 'ripsei',
-		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	Rach: {
+		species: 'Spinda', ability: 'BURN IT DOWN!', item: 'Leftovers', gender: 'F',
+		moves: ['Extreme Speed', 'Recover', 'Knock Off'],
+		signatureMove: 'Spinda Wheel',
+		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 	},
 	'Raj.Shoot': {
 		species: 'Swampert', ability: 'Sap Sipper', item: 'Life Orb', gender: 'N',
 		moves: ['Earthquake', 'Waterfall', 'Ice Punch'],
 		signatureMove: 'Fan Service',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
+	Ransei: {
+		species: 'Audino', ability: 'Neutralizing Gas', item: 'Choice Scarf', gender: 'M',
+		moves: ['Trick', 'Recover', 'Spectral Thief'],
+		signatureMove: 'ripsei',
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',

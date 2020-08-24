@@ -1333,6 +1333,35 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Rach
+	burnitdown: {
+		shortDesc: "Lowerrs the foe's higher offensive stat. Status ailments ignore typing. Regenerator.",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onStart(pokemon) {
+			let totalatk = 0;
+			let totalspa = 0;
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				totalatk += target.getStat('atk', false, true);
+				totalspa += target.getStat('spa', false, true);
+			}
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				if (totalatk && totalatk >= totalspa) {
+					this.boost({atk: -1}, target);
+				} else if (totalspa) {
+					this.boost({spa: -1}, target);
+				}
+			}
+		},
+		// status ignoring in scripts.ts:Pokemon#setStatus
+		name: "BURN IT DOWN!",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Robb576
 	thenumbersgame: {
 		desc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team; Necrozma-Dusk-Mane if 3 or fewer, Necrozma-Ultra if it is the last Pokemon left on the team.",

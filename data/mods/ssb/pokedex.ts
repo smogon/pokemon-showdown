@@ -154,6 +154,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
 	},
+	// Rach
+	spinda: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+	},
 	// Raj.Shoot
 	swampertmega: {
 		inherit: true,
