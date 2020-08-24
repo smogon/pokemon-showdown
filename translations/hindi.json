@@ -120,7 +120,7 @@
 
 		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "आप ${lockType} हैं और केवल staff के सदस्यों को ही निजी संदेश भेज सकते हैं।",
 		"Get help with this": "इसके लिए सहायता",
-		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "यह user ${} locked है और इसे निजी संदेश नहीं भेजा जा सकता।",
+		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "यह user \"${targetUser.name}\" locked है और इसे निजी संदेश नहीं भेजा जा सकता।",
 		"On this server, you must be of rank ${groupName} or higher to PM users.": "इस server पर users को निजी सन्देश भेज्ने के लिये आप्को rank ${groupName} या उस्से बडा होना चाहिए।",
 		"This user is blocking private messages right now.": "इस user ने फिलहाल निजी संदेशों को निस्र्द्ध कर रखा है।",
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "यह ${Config.groups[targetUser.group].name} फिलहाल व्यस्त है। कृपया किसि अन्य staff को संपर्क करें।",
