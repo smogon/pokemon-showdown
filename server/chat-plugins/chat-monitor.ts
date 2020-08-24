@@ -417,7 +417,7 @@ export const nicknamefilter: NameFilter = (name, user) => {
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (const line of filterWords[list]) {
-			let [regex] = line;
+			let [regex, word] = line;
 			if (Chat.monitors[list].punishment === 'EVASION') {
 				// Evasion banwords by default require whitespace on either side.
 				// If we didn't remove it here, it would be quite easy to evade the filter
@@ -433,8 +433,8 @@ export const nicknamefilter: NameFilter = (name, user) => {
 					);
 				} else if (Chat.monitors[list].punishment === 'EVASION') {
 					void Punishments.autolock(
-						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname`,
-						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name}\`\``
+						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
+						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
 					);
 				}
 				line[4]++;

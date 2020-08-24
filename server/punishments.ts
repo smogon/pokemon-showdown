@@ -734,6 +734,7 @@ export const Punishments = new class {
 		}
 
 		const userid = toID(user);
+		if (Users.get(user)?.locked) return false;
 		const name = typeof user === 'string' ? user : (user as User).name;
 		if (namelock) {
 			punishment = `NAME${punishment}`;
