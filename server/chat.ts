@@ -2099,7 +2099,7 @@ export const Chat = new class {
 	}
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
-		return (new PageContext({pageid, user, connection})).resolve();
+		return (new PageContext({pageid, user, connection, language: user.language!})).resolve();
 	}
 };
 
