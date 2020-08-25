@@ -125,7 +125,7 @@
 		"This user is blocking private messages right now.": "इस user ने फिलहाल निजी संदेशों को निस्र्द्ध कर रखा है।",
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "यह ${Config.groups[targetUser.group].name} फिलहाल व्यस्त है। कृपया किसि अन्य staff को संपर्क करें।",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "अगर आपको सहायता की आवश्यकता हो, एक <a href=\"view-help-request\" class=\"button\">उपादान याचिका</a> बना लिजिये।",
-		"You are blocking private messages right now.": "आप्ने फिलहाल निजी संदेशों को निस्र्द्ध कर रखा है।",
+		"You are blocking private messages right now.": "आपने फिलहाल निजी संदेशों को निस्र्द्ध कर रखा है।",
 
 		"Your message contained banned words in this room.": "आपके सन्देश में इस room का एक प्रतिबंधित शब्द है।",
 		"You can't send the same message again so soon.": "आप एक ही सन्देश इतनी जल्दी दोबारा नहीं भेज सकते।",
