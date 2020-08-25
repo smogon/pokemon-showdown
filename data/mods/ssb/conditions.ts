@@ -856,6 +856,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Lionyx')}|The cold never bothered me anyway...`);
 		},
 	},
+	litteleven: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Litt♥Eleven')}|The coin is flipped, what follows is destiny alone.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Litt♥Eleven')}|Looks like my business is finished here... for now.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Litt♥Eleven')}|Perhaps, coin tossing isn't the optimal way to win a war...`);
+		},
+	},
 	madmonty: {
 		noCopy: true,
 		onStart() {
@@ -1684,6 +1696,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifySpe(spe, pokemon) {
 			return this.chainModify(0.25);
+		},
+	},
+	// boost for LittEleven's move
+	nexthuntcheck: {
+		duration: 1,
+		onStart(pokemon) {
+			this.add('-singleturn', pokemon, 'move: /nexthunt');
+		},
+		onHit(pokemon, source, move) {
+			if (move.category !== 'Status') {
+				pokemon.volatiles['nexthuntcheck'].lostFocus = true;
+			}
 		},
 	},
 };

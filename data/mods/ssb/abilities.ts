@@ -1075,6 +1075,32 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// LittEleven
+	darkroyalty: {
+		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect. Dark type moves are boosted 1.2x.",
+		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves. Dark type moves are boosted by 1.2x.",
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectData.target;
+			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', dazzlingHolder, 'ability: Dark Royalty', move, '[of] ' + target);
+				return false;
+			}
+		},
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				this.debug('Dark Royalty boost');
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Dark Royalty",
+	},
+
 	// Mad Monty ¾°
 	petrichor: {
 		desc: "On switch-in, this Pokemon summons Rain Dance. Electric-type moves have 1.2x power in the rain.",

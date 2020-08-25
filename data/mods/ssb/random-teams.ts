@@ -179,6 +179,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Archangel\'s Requiem',
 		evs: {hp: 252, def: 128, spd: 128}, nature: 'Bold',
 	},
+	DragonWhale: {
+		species: 'Mimikyu', ability: 'Disguise', item: 'Life Orb', gender: 'M',
+		moves: ['Play Rough', 'Spectral Thief', 'Shadow Sneak'],
+		signatureMove: 'Cloak Dance',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	'drampa\'s grandpa': {
 		species: 'Drampa', ability: 'Old Manpa', item: 'Wise Glasses', gender: 'M',
 		moves: [
@@ -357,6 +363,12 @@ export const ssbSets: SSBSets = {
 		]],
 		signatureMove: 'Big Bang',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+	},
+	'Litt♥Eleven': {
+		species: 'Bisharp', ability: 'Dark Royalty', item: 'Black Glasses', gender: 'M',
+		moves: ['Sucker Punch', 'Knock Off', 'Iron Head'],
+		signatureMove: '/nexthunt',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', shiny: true,
 	},
 	'Mad Monty ¾°': {
 		species: 'Zekrom', ability: 'Petrichor', item: 'Damp Rock', gender: 'N',

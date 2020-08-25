@@ -1098,6 +1098,38 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Normal",
 	},
 
+	// DragonWhale
+	cloakdance: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If Mimikyu's Disguise is intact or if Mimikyu is the last remaining Pokemon, Attack goes up 2 stages. If Mimikyu's Disguise is busted and there are other Pokemon on Mimikyu's side, the Disguise will be repaired and Mimikyu will switch out.",
+		shortDesc: "If Disguise intact or Mimikyu is the last remaining Pokemon, raises attack by 2; otherwise repairs Disguise and switches out.",
+		name: "Cloak Dance",
+		pp: 5,
+		priority: 0,
+		flags: {dance: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			const moveAnim = (!source.abilityData.busted || source.side.pokemonLeft === 1) ? 'Swords Dance' : 'Teleport';
+			this.add('-anim', source, moveAnim, target);
+		},
+		onHit(target, source) {
+			if (!source.abilityData.busted || source.side.pokemonLeft === 1) {
+				this.boost({atk: 2}, target);
+			} else {
+				delete source.abilityData.busted;
+				source.formeChange('Mimikyu', this.effect, true);
+				source.switchFlag = true;
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+	},
+
 	// dream
 	lockandkey: {
 		accuracy: 100,
@@ -2264,6 +2296,70 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
+	},
+
+	// LittEleven
+	nexthunt: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If this Pokemon does not take damage this turn, it switches out to another Pokemon in the party and gives it the Download boost. Fails otherwise.",
+		shortDesc: "If not damaged this turn, switches out and gives next Pokemon Download boost; fails otherwise.",
+		name: "/nexthunt",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile('nexthuntcheck');
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Teleport', source);
+		},
+		beforeMoveCallback(pokemon) {
+			if (pokemon.volatiles['nexthuntcheck'] && pokemon.volatiles['nexthuntcheck'].lostFocus) {
+				this.add('cant', pokemon, '/nexthunt', '/nexthunt');
+				return true;
+			}
+		},
+		onHit(target, source, move) {
+			this.add('-message', 'Time for the next hunt!');
+		},
+		sideCondition: 'nexthunt',
+		condition: {
+			duration: 1,
+			onStart(side, source) {
+				this.debug('/nexthunt started on ' + side.name);
+				this.effectData.positions = [];
+				for (const i of side.active.keys()) {
+					this.effectData.positions[i] = false;
+				}
+				this.effectData.positions[source.position] = true;
+			},
+			onRestart(side, source) {
+				this.effectData.positions[source.position] = true;
+			},
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				this.add('-activate', target, 'move: /nexthunt');
+				let statName = 'atk';
+				let bestStat = 0;
+				let s: StatNameExceptHP;
+				for (s in target.storedStats) {
+					if (target.storedStats[s] > bestStat) {
+						statName = s;
+						bestStat = target.storedStats[s];
+					}
+				}
+				this.boost({[statName]: 1}, target, null, this.dex.getActiveMove('/nexthunt'));
+			},
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "self",
+		type: "Normal",
 	},
 
 	// Mad Monty ¾°
