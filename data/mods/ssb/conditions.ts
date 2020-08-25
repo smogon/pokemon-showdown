@@ -844,6 +844,27 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Lamp')}|no u`);
 		},
 	},
+	level51: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Level 51')}|okay one last tournament`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Level 51')}|i hate this game`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Level 51')}|pokemon peaked in gen 6`);
+		},
+		// Burnout "innate" is here for ease of Wonder Guard limitation check
+		onResidualOrder: 25,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns && !pokemon.illusion) {
+				this.add('-message', `Level 51 is burnt out from Pokemon!`);
+				pokemon.faint();
+			}
+		},
+	},
 	lionyx: {
 		noCopy: true,
 		onStart() {

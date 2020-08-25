@@ -356,6 +356,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	'Level 51': {
+		species: 'Togekiss', ability: 'Wonder Guard', item: 'Choice Scarf', gender: 'M',
+		moves: ['U-turn', 'Parting Shot', 'Baton Pass'],
+		signatureMove: 'Swan Song',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	Lionyx: {
 		species: 'Gardevoir', ability: 'Tension', item: 'Blunder Policy', gender: 'F',
 		moves: [['Psychic', 'Psystrike'], 'Quiver Dance', [

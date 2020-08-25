@@ -2247,6 +2247,35 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Ghost",
 	},
 
+	// Level 51
+	swansong: {
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		desc: "Randomly calls Seismic Toss, Night Shade, and/or Psywave.",
+		shortDesc: "Randomly calls Seismic Toss, Night Shade, and/or Psywave.",
+		name: "Swan Song",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove(target) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Nasty plot', source);
+		},
+		onHit(target, source, move) {
+			const randomMove = this.sample(['Seismic Toss', 'Night Shade', 'Psywave']);
+			this.useMove(randomMove, source);
+		},
+		multihit: [2, 4],
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Lionyx
 	bigbang: {
 		accuracy: 100,
