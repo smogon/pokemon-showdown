@@ -1203,7 +1203,7 @@ export class RandomTeams {
 				ability = 'Scrappy';
 			} else if (hasAbility['Guts'] && (hasMove['facade'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
-			} else if (hasAbility['Moxie'] && (counter.Physical > 3 || hasMove['bounce'])) {
+			} else if (!isDoubles && hasAbility['Moxie'] && (counter.Physical > 3 || hasMove['bounce'])) {
 				ability = 'Moxie';
 			} else if (isDoubles) {
 				if (hasAbility['Competitive'] && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
