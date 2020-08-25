@@ -715,6 +715,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 						break;
 					}
 				}
+				if (ssbSet.ability === 'Wonder Guard') {
+					if (typePool['wonderguard'] === undefined) {
+						typePool['wonderguard'] = 1;
+					} else {
+						rejected = true;
+					}
+				}
 				if (rejected) continue;
 				// Update type counts
 				for (const type of types) {
