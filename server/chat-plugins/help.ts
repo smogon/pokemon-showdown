@@ -36,7 +36,10 @@ try {
 	helpData = {
 		stats: {},
 		pairs: {},
-		disabled: false,
+		settings: {
+			filterDisabled: false,
+			queueDisabled: false,
+		},
 		queue: [],
 	};
 }
@@ -64,24 +67,32 @@ interface QueueEntry {
 	/** Regex string submitted */
 	regexString: string;
 }
+
+interface FilterSettings {
+	/** Whether or not the filter is disabled. */
+	filterDisabled?: boolean;
+	queueDisabled?: boolean;
+}
+
 interface PluginData {
 	/** Stats - filter match and faq that was matched - done day by day. */
 	stats?: {[k: string]: DayStats};
 	/** Word pairs that have been marked as a match for a specific FAQ. */
 	pairs: {[k: string]: string[]};
-	/** Whether or not the filter is disabled. */
-	disabled?: boolean;
+	/** Filter settings (are they enabled or disabled.) */
+	settings: FilterSettings;
 	/** Queue of suggested regex. */
 	queue?: QueueEntry[];
 }
 
 export class HelpResponder {
-	disabled?: boolean;
 	queue: QueueEntry[];
 	data: PluginData;
+	settings: FilterSettings;
 	constructor(data: PluginData) {
 		this.data = data;
 		this.queue = data.queue || [];
+		this.settings = data.settings || {queueDisabled: false, filterDisabled: false};
 	}
 	getRoom() {
 		const room = Config.helpFilterRoom ? Rooms.get(Config.helpFilterRoom) : Rooms.get('help');
@@ -259,6 +270,15 @@ export class HelpResponder {
 		const room = this.getRoom();
 		return Punishments.getRoomPunishType(room, toID(user)) === 'HELPSUGGESTIONBAN';
 	}
+	static canOverride(user: User) {
+		const devAuth = Rooms.get('development')?.auth;
+		const room = Answerer.getRoom();
+		return (
+			devAuth?.atLeast(user, '%') && devAuth?.has(user.id) &&
+			room.auth.has(user.id) && room.auth.atLeast(user, '@') ||
+			user.can('rangeban')
+		);
+	}
 }
 
 export const Answerer = new HelpResponder(helpData);
@@ -266,7 +286,7 @@ export const Answerer = new HelpResponder(helpData);
 export const chatfilter: ChatFilter = (message, user, room) => {
 	const helpRoom = Answerer.getRoom();
 	if (!helpRoom) return message;
-	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.disabled) {
+	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.settings.filterDisabled) {
 		if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 		const reply = Answerer.visualize(message, false, user);
 		if (message.startsWith('/') || message.startsWith('!')) return message;
@@ -303,7 +323,9 @@ export const commands: ChatCommands = {
 			if (!Answerer.getRoom()) return this.errorReply(`There is no room configured for use of the Help filter.`);
 			if (!target) {
 				this.parse('/help helpfilter');
-				return this.sendReply(`The Help auto-response filter is currently set to: ${Answerer.disabled ? 'OFF' : "ON"}`);
+				return this.sendReply(
+					`The Help auto-response filter is currently set to: ${Answerer.settings.filterDisabled ? 'OFF' : "ON"}`
+				);
 			}
 			return this.parse(`/j view-helpfilter-${target}`);
 		},
@@ -316,20 +338,22 @@ export const commands: ChatCommands = {
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			if (!target) {
-				return this.sendReply(`The Help auto-response filter is currently set to: ${Answerer.disabled ? 'OFF' : "ON"}`);
+				return this.sendReply(
+					`The Help auto-response filter is currently set to: ${Answerer.settings.filterDisabled ? 'OFF' : "ON"}`
+				);
 			}
 			if (!this.can('ban', null, room)) return false;
 			if (this.meansYes(target)) {
-				if (!Answerer.disabled) return this.errorReply(`The Help auto-response filter is already enabled.`);
-				Answerer.disabled = false;
+				if (!Answerer.settings.filterDisabled) return this.errorReply(`The Help auto-response filter is already enabled.`);
+				Answerer.settings.filterDisabled = false;
 			}
 			if (this.meansNo(target)) {
-				if (Answerer.disabled) return this.errorReply(`The Help auto-response filter is already disabled.`);
-				Answerer.disabled = true;
+				if (Answerer.settings.filterDisabled) return this.errorReply(`The Help auto-response filter is already disabled.`);
+				Answerer.settings.filterDisabled = true;
 			}
 			Answerer.writeState();
-			this.privateModAction(`${user.name} ${Answerer.disabled ? 'disabled' : 'enabled'} the Help auto-response filter.`);
-			this.modlog(`HELPFILTER`, null, Answerer.disabled ? 'OFF' : 'ON');
+			this.privateModAction(`${user.name} ${Answerer.settings.filterDisabled ? 'disabled' : 'enabled'} the Help auto-response filter.`);
+			this.modlog(`HELPFILTER`, null, Answerer.settings.filterDisabled ? 'OFF' : 'ON');
 		},
 		forceadd: 'add',
 		add(target, room, user, connection, cmd) {
@@ -338,9 +362,7 @@ export const commands: ChatCommands = {
 			if (!helpRoom) return this.errorReply(`There is no room configured for use of this filter.`);
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`This command is only available in the Help room.`);
 			const force = cmd === 'forceadd';
-			const devAuth = Rooms.get('development')?.auth;
-			const canForce = devAuth?.atLeast(user, '%') && devAuth?.has(user.id);
-			if (force && (!canForce && !user.can('rangeban'))) {
+			if (force && !HelpResponder.canOverride(user)) {
 				return this.errorReply(`You cannot use raw regex - use /helpfilter add instead.`);
 			}
 			if (!this.can('ban', null, helpRoom)) return false;
@@ -373,6 +395,9 @@ export const commands: ChatCommands = {
 			const faq = Answerer.getFaqID(target.split('=>')[1]);
 			if (this.filter(target) !== target) {
 				return this.errorReply(`Invalid suggestion.`);
+			}
+			if (Answerer.settings.queueDisabled) {
+				return this.errorReply(`The Help filter suggestion queue is disabled.`);
 			}
 			if (Answerer.isBanned(user)) {
 				return this.errorReply(`You are banned from making suggestions to the Help filter.`);
@@ -457,6 +482,35 @@ export const commands: ChatCommands = {
 				);
 			}
 			return this.modlog(`HELPFILTER ${unban ? 'UN' : ''}SUGGESTIONBAN`, userid, reason);
+		},
+		queue(target, room, user) {
+			if (!room) return this.requiresRoom();
+			if (room.roomid !== 'help') return this.errorReply(`Must be used in the Help room.`);
+			if (!this.can('ban', null, room)) return false;
+			target = target.trim();
+			if (!target) {
+				return this.sendReply(`The Help suggestion queue is currently ${Answerer.settings.queueDisabled ? 'OFF' : 'ON'}.`);
+			}
+			if (this.meansYes(target)) {
+				if (!Answerer.settings.queueDisabled) return this.errorReply(`The queue is already enabled.`);
+				Answerer.settings.queueDisabled = false;
+			} else if (this.meansNo(target)) {
+				if (Answerer.settings.queueDisabled) return this.errorReply(`The queue is already disabled.`);
+				Answerer.settings.queueDisabled = true;
+			} else {
+				return this.errorReply(`Unrecognized setting.`);
+			}
+			Answerer.writeState();
+			this.privateModAction(`${user.name} ${Answerer.settings.queueDisabled ? 'disabled' : 'enabled'} the Help suggestion queue.`);
+		},
+		clearqueue: 'emptyqueue',
+		emptyqueue(target, room, user) {
+			if (!room || room.roomid !== 'help') return this.errorReply(`Must be used in the Help room.`);
+			if (!HelpResponder.canOverride(user)) return this.errorReply(`/helpfilter ${this.cmd} - Access denied.`);
+			Answerer.queue = [];
+			Answerer.writeState();
+			this.privateModAction(`${user.name} cleared the Help suggestion queue.`);
+			this.modlog(`HELPFILTER CLEARQUEUE`);
 		},
 	},
 	helpfilterhelp() {
