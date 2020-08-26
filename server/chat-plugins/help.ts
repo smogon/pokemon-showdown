@@ -408,7 +408,10 @@ export const commands: ChatCommands = {
 				regexString: target,
 				userid: user.id,
 			};
-			if (Answerer.queue.includes(entry)) {
+			if (Object.values(Answerer.queue).filter(item => {
+				const {regexString} = item;
+				return regexString === target;
+			}).length) {
 				return this.errorReply(`That regex string is already in queue.`);
 			}
 			Chat.validateRegex(regex);
