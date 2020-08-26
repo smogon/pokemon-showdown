@@ -2710,7 +2710,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 	},
 
 	// Paradise
-	"rapidturn": {
+	rapidturn: {
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
