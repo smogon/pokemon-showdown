@@ -899,7 +899,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onResidualOrder: 25,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (pokemon.activeTurns && !pokemon.illusion) {
+			if (pokemon.illusion) return;
+			if (pokemon.activeTurns) {
 				this.add('-message', `Level 51 is burnt out from Pokemon!`);
 				pokemon.faint();
 			}
