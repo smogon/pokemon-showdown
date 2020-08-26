@@ -2553,8 +2553,8 @@ export const commands: ChatCommands = {
 			}
 		},
 		revealrolehelp: [
-			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # & ~`,
-			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # & ~`,
+			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # &`,
+			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # &`,
 		],
 
 		forceadd: 'revive',
