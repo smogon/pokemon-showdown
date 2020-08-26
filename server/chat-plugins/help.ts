@@ -592,8 +592,8 @@ export const pages: PageTable = {
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
 					const button = `<button class="button" name="send"value="/hf remove ${item}, ${index}">Remove</button>`;
-					buffer += `<td>${index}</td><td><code>${regex}</code></td>`;
-					if (canChange) buffer += `<td>${button}</td>`;
+					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
+					if (canChange) buffer += `<td>${button}</td></tr>`;
 				}
 				buffer += `</details>`;
 				return buffer;
