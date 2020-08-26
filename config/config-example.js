@@ -652,9 +652,9 @@ exports.grouplist = [
 		nooverride: true,
 	},
 	{
-		symbol: '\u2729',
-		id: "star",
-		name: "Star",
+		symbol: '\u265b',
+		id: "prizewinner",
+		name: "Prize Winner",
 		inherit: '+',
 		roomonly: true,
 	},
