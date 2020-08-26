@@ -1517,8 +1517,8 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Randomly calls SSB and status moves.",
-		shortDesc: "Randomly calls SSB and status moves.",
+		desc: "Randomly calls SSB moves.",
+		shortDesc: "Randomly calls SSB moves.",
 		name: "Do Not Steel",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1540,12 +1540,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 				if (member === 'grimAuxiliatrix') continue;
 				const set = ssbSets[member];
 				if (set.skip) continue;
-				for (const moveSlot of set.moves) {
-					const callMove = Array.isArray(moveSlot) ? this.dex.getMove(this.sample(moveSlot)) : this.dex.getMove(moveSlot);
-					if (callMove.category === 'Status') {
-						moves.push(callMove);
-					}
-				}
 				moves.push(this.dex.getMove(set.signatureMove));
 			}
 
