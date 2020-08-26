@@ -283,6 +283,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Paranoia',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	Instruct: {
+		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
+		moves: ['Explosion', 'Lunar Dance', 'Memento'],
+		signatureMove: 'Savant/Blanco',
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	},
 	Iyarito: {
 		species: 'Gengar', ability: 'Pollo Diablo', item: 'Choice Specs', gender: 'F',
 		moves: ['Sludge Wave', 'Volt Switch', 'Fusion Flare'],

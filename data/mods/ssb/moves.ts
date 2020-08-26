@@ -1709,6 +1709,41 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Dark",
 	},
 
+	// Instruct
+	savantblanco: {
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "First turn: Flinches the oppnent then switches out",
+		name: "Savant/Blanco",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 3,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Extreme Evoboost', target);
+		},
+		onTry(pokemon, target) {
+			if (pokemon.activeMoveActions > 1) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				this.hint("Savant/Blanco only works on your first turn out.");
+				return null;
+			}
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		selfSwitch: true,
+		target: "normal",
+		type: "???",
+	},
+
 	// Iyarito
 	patronaattack: {
 		accuracy: 100,
