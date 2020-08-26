@@ -326,14 +326,14 @@ export const commands: ChatCommands = {
 				if (!room.minorActivityQueue) room.minorActivityQueue = [];
 				room.minorActivityQueue.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
 				this.modlog('QUEUEPOLL');
-				return this.privateModAction(this.tr`${user.name} queued a poll.`);
+				return this.privateModAction(room.tr`${user.name} queued a poll.`);
 			}
 			room.minorActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 			room.minorActivity.display();
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('POLL');
-			return this.addModAction(this.tr`A poll was started by ${user.name}.`);
+			return this.addModAction(room.tr`A poll was started by ${user.name}.`);
 		},
 		newhelp: [
 			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
@@ -449,7 +449,7 @@ export const commands: ChatCommands = {
 					room.minorActivity = null;
 					if (room.minorActivityQueue?.length) {
 						room.minorActivity = room.minorActivityQueue.shift()!;
-						this.addModAction(this.tr`The queued poll was started.`);
+						this.addModAction(room.tr`The queued poll was started.`);
 						this.modlog(`POLL`, null, `queued`);
 						room.minorActivity.display();
 						if (!room.minorActivityQueue.length) room.minorActivityQueue = null;
@@ -457,7 +457,7 @@ export const commands: ChatCommands = {
 				}, timeout * 60000);
 				room.add(this.tr`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
-				return this.privateModAction(this.tr`The poll timer was set to ${timeout} minute(s) by ${user.name}.`);
+				return this.privateModAction(room.tr`The poll timer was set to ${timeout} minute(s) by ${user.name}.`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (poll.timeout) {
@@ -502,12 +502,12 @@ export const commands: ChatCommands = {
 			if (room.minorActivityQueue?.length) {
 				room.minorActivity = room.minorActivityQueue[0];
 				room.minorActivityQueue.splice(0, 1);
-				this.addModAction(this.tr`The queued poll was started.`);
+				this.addModAction(room.tr`The queued poll was started.`);
 				this.modlog(`POLL`, null, `queued`);
 				room.minorActivity.display();
 			}
 			this.modlog('POLL END');
-			return this.privateModAction(this.tr`The poll was ended by ${user.name}.`);
+			return this.privateModAction(room.tr`The poll was ended by ${user.name}.`);
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
 
