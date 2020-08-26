@@ -4153,6 +4153,34 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		target: "normal",
 		type: "Flying",
 	},
+	// Zyg
+	luckofthedraw: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: " Boosts the users Speed, Attack and Defense by 1 stage",
+		shortDesc: "Raises the user's Attack, Defense, Speed by 1",
+		name: "Luck of the Draw",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Quiver Dance', source);
+		},
+		boosts: {
+			atk: 1,
+			def: 1,
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
 	// These moves need modified to support Alpha's move
 	auroraveil: {
 		inherit: true,
