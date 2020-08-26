@@ -973,6 +973,9 @@ export class CommandContext extends MessageContext {
 			connection.popup(this.tr(`You must choose a name before you can talk.`));
 			return null;
 		}
+		if (targetUser && !this.canPM(targetUser)) {
+			return null;
+		}
 		if (!user.can('bypassall')) {
 			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
 			const lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
@@ -1019,9 +1022,6 @@ export class CommandContext extends MessageContext {
 				if (lockType && !targetUser.can('lock')) {
 					this.errorReply(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
-					return null;
-				}
-				if (!this.canPM(targetUser)) {
 					return null;
 				}
 			}
@@ -1146,7 +1146,7 @@ export class CommandContext extends MessageContext {
 		}
 		if (
 			(targetUserSettings.all === true ||
-			!Users.globalAuth.atLeast(user, targetUserSettings.all as GroupSymbol) && typeof userSettings.all === 'string' ||
+			!Users.globalAuth.atLeast(user, targetUserSettings.all as GroupSymbol) && typeof targetUserSettings.all === 'string' ||
 			targetUserSettings.specific?.includes(user.id)) &&
 			!user.can('lock')
 		) {
@@ -1161,10 +1161,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 		if (
-			(userSettings.all === true ||
-			!Users.globalAuth.atLeast(user, userSettings.all as GroupSymbol) && typeof targetUserSettings.all === 'string' ||
-			userSettings.specific.includes(user.id)) &&
-			!targetUser.can('lock')
+			userSettings.all === true ||
+			!Users.globalAuth.atLeast(targetUser, userSettings.all as GroupSymbol) && typeof userSettings.all === 'string' ||
+			userSettings.specific.includes(targetUser.id)
 		) {
 			const isBlocked = user.settings.blockPMs.specific?.includes(targetUser.id);
 			this.errorReply(`You are blocking private messages ${isBlocked ? 'from this user ' : ''}right now.`);
