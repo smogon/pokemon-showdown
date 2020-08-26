@@ -860,7 +860,10 @@ export const commands: ChatCommands = {
 		for (const curUser of Users.findUsers([], [target])) {
 			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
 				curUser.locked = null;
-				curUser.namelocked = null;
+				if (curUser.namelocked) {
+					curUser.namelocked = null;
+					curUser.resetName();
+				}
 				curUser.updateIdentity();
 			}
 		}
