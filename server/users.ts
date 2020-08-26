@@ -899,7 +899,17 @@ export class User extends Chat.MessageContext {
 
 		// If either user is unlocked and neither is locked by name, remove the lock.
 		// Otherwise, keep any locks that were by name.
-		if ((!oldUser.locked || !this.locked) && oldUser.locked !== oldUser.id && this.locked !== this.id) {
+		if (
+			(!oldUser.locked || !this.locked) &&
+			oldUser.locked !== oldUser.id &&
+			this.locked !== this.id &&
+			// Only unlock if no previous names are locked
+			!Object.keys(oldUser.prevNames).some(id => {
+				return !!Punishments.search(id)
+					.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
+					.length;
+			})
+		) {
 			this.locked = null;
 		} else if (this.locked !== this.id) {
 			this.locked = oldUser.locked;
