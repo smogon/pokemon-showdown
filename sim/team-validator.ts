@@ -1998,7 +1998,9 @@ export class TeamValidator {
 		// different learnsets. To prevent a leak, we make them show up as their
 		// base forme, but hardcode their learnsets into Rockruff-Dusk and
 		// Greninja-Ash
-		if (species.name === 'Lycanroc-Dusk') {
+		if ((species.baseSpecies === 'Gastrodon' || species.baseSpecies === 'Pumpkaboo') && species.forme) {
+			return this.dex.getSpecies(species.baseSpecies);
+		} else if (species.name === 'Lycanroc-Dusk') {
 			return this.dex.getSpecies('Rockruff-Dusk');
 		} else if (species.name === 'Greninja-Ash') {
 			return null;
@@ -2011,8 +2013,6 @@ export class TeamValidator {
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
-		} else if (species.baseSpecies === 'Pumpkaboo' && species.forme) {
-			return this.dex.getSpecies('Pumpkaboo');
 		}
 		return null;
 	}
