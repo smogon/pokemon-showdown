@@ -1534,7 +1534,7 @@ const commands: ChatCommands = {
 				questions.splice(i, 1);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
-				return this.privateModAction(this.tr`${user.name} removed question '${target}' from the question database.`);
+				return this.privateModAction(room.tr`${user.name} removed question '${target}' from the question database.`);
 			}
 		}
 
@@ -1773,7 +1773,7 @@ const commands: ChatCommands = {
 			if (SPECIAL_CATEGORIES[category]) {
 				triviaData.questions = triviaData.questions!.filter(q => q.category !== category);
 				writeTriviaData();
-				return this.privateModAction(this.tr`${user.name} removed all questions of category '${category}'.`);
+				return this.privateModAction(room.tr`${user.name} removed all questions of category '${category}'.`);
 			} else {
 				return this.errorReply(this.tr`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
 			}
