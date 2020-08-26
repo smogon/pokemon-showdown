@@ -121,7 +121,7 @@ class OtdHandler {
 			return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
 		}
 		for (const value of this.removedNominations.values()) {
-			if (toID(user) in value.userids || user.latestIp in value.ips) {
+			if (value.userids.includes(toID(user)) || user.latestIp in value.ips) {
 				return user.sendTo(
 					this.room,
 					`Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`
@@ -131,13 +131,13 @@ class OtdHandler {
 
 		const prevNom = this.nominations.get(id);
 		if (prevNom) {
-			if (!(toID(user) in prevNom.userids || user.latestIp in prevNom.ips)) {
+			if (!(prevNom.userids.includes(toID(user)) || user.latestIp in prevNom.ips)) {
 				return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been nominated.`);
 			}
 		}
 
 		for (const [key, value] of this.nominations) {
-			if (toID(user) in value.userids || user.latestIp in value.ips) {
+			if (value.userids.includes(toID(user)) || user.latestIp in value.ips) {
 				user.sendTo(this.room, `Your previous vote for ${value.nomination} will be removed.`);
 				this.nominations.delete(key);
 				if (prenoms[this.id]) {
@@ -156,7 +156,7 @@ class OtdHandler {
 		const nomObj = {
 			nomination: nomination,
 			name: user.name,
-			userids: Object.assign(obj, user.prevNames),
+			userids: [...user.previousIDs],
 			ips: Object.assign({}, user.ips),
 		};
 
@@ -258,7 +258,7 @@ class OtdHandler {
 
 		let success = false;
 		for (const [key, value] of this.nominations) {
-			if (name in value.userids) {
+			if (value.userids.includes(name)) {
 				this.removedNominations.set(key, value);
 				this.nominations.delete(key);
 				if (prenoms[this.id]) {

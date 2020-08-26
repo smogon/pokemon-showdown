@@ -337,7 +337,7 @@ export class User extends Chat.MessageContext {
 	semilocked: ID | PunishType | null;
 	namelocked: ID | PunishType | null;
 	permalocked: ID | PunishType | null;
-	prevNames: {[id: /** ID */ string]: string};
+	previousIDs: ID[];
 
 	lastChallenge: number;
 	lastPM: string;
@@ -417,7 +417,7 @@ export class User extends Chat.MessageContext {
 		this.semilocked = null;
 		this.namelocked = null;
 		this.permalocked = null;
-		this.prevNames = Object.create(null);
+		this.previousIDs = [];
 
 		// misc state
 		this.lastChallenge = 0;
@@ -783,12 +783,10 @@ export class User extends Chat.MessageContext {
 			user.merge(this);
 
 			Users.merge(user, this);
-			for (const i in this.prevNames) {
-				if (!user.prevNames[i]) {
-					user.prevNames[i] = this.prevNames[i];
-				}
+			for (const id of this.previousIDs) {
+				if (!user.previousIDs.includes(id)) user.previousIDs.push(id);
 			}
-			if (this.named) user.prevNames[this.id] = this.name;
+			if (this.named && !user.previousIDs.includes(this.id)) user.previousIDs.push(this.id);
 			this.destroy();
 
 			Punishments.checkName(user, userid, registered);
@@ -834,7 +832,7 @@ export class User extends Chat.MessageContext {
 			this.updateGroup(registered);
 		}
 
-		if (this.named && oldid !== userid) this.prevNames[oldid] = this.name;
+		if (this.named && oldid !== userid && !this.previousIDs.includes(oldid)) this.previousIDs.push(oldid);
 		this.name = name;
 
 		const joining = !this.named;
@@ -910,7 +908,7 @@ export class User extends Chat.MessageContext {
 			oldUser.locked !== oldUser.id &&
 			this.locked !== this.id &&
 			// Only unlock if no previous names are locked
-			!Object.keys(oldUser.prevNames).some(id => {
+			!oldUser.previousIDs.some(id => {
 				return !!Punishments.search(id)
 					.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
 					.length;
@@ -1154,7 +1152,7 @@ export class User extends Chat.MessageContext {
 			}
 			// cleanup
 			this.inRooms.clear();
-			if (!this.named && !Object.keys(this.prevNames).length) {
+			if (!this.named && !this.previousIDs.length) {
 				// user never chose a name (and therefore never talked/battled)
 				// there's no need to keep track of this user, so we can
 				// immediately deallocate
@@ -1199,13 +1197,12 @@ export class User extends Chat.MessageContext {
 	}
 	getLastName() {
 		if (this.named) return this.name;
-		const prevNames = Object.keys(this.prevNames);
-		return "[" + (prevNames.length ? prevNames[prevNames.length - 1] : this.name) + "]";
+		const lastName = this.previousIDs.length ? this.previousIDs[this.previousIDs.length - 1] : this.name;
+		return `[${lastName}]`;
 	}
 	getLastId() {
 		if (this.named) return this.id;
-		const prevNames = Object.keys(this.prevNames);
-		return (prevNames.length ? prevNames[prevNames.length - 1] : this.id) as ID;
+		return (this.previousIDs.length ? this.previousIDs[this.previousIDs.length - 1] : this.id);
 	}
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
 		roomid = roomid && (roomid as Room).roomid ? (roomid as Room).roomid : roomid as RoomID;

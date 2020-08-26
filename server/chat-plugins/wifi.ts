@@ -39,7 +39,7 @@ class Giveaway {
 	tid: string;
 	prize: string;
 	phase: string;
-	joined: {[k: string]: string};
+	joined: {[k: string]: ID};
 	timer: NodeJS.Timer | null;
 	monIDs: Set<string>;
 	sprite: string;
@@ -89,14 +89,14 @@ class Giveaway {
 	checkJoined(user: User) {
 		for (const ip in this.joined) {
 			if (user.latestIp === ip) return ip;
-			if (this.joined[ip] in user.prevNames) return this.joined[ip];
+			if (user.previousIDs.includes(this.joined[ip])) return this.joined[ip];
 		}
 		return false;
 	}
 
 	kickUser(user: User) {
 		for (const ip in this.joined) {
-			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
+			if (user.latestIp === ip || user.previousIDs.includes(this.joined[ip])) {
 				user.sendTo(
 					this.room,
 					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder()}</div>`
@@ -107,7 +107,7 @@ class Giveaway {
 	}
 
 	checkExcluded(user: User) {
-		if (user === this.giver || user.latestIp in this.giver.ips || toID(user) in this.giver.prevNames) return true;
+		if (user === this.giver || user.latestIp in this.giver.ips || this.giver.previousIDs.includes(toID(user))) return true;
 		return false;
 	}
 
@@ -348,7 +348,9 @@ export class QuestionGiveaway extends Giveaway {
 	}
 
 	checkExcluded(user: User) {
-		if (user === this.host || user.latestIp in this.host.ips || toID(user) in this.host.prevNames) return true;
+		if (user === this.host) return true;
+		if (user.latestIp in this.host.ips) return true;
+		if (this.host.previousIDs.includes(toID(user))) return true;
 		return super.checkExcluded(user);
 	}
 }
