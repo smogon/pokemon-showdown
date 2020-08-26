@@ -5285,7 +5285,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	rillaboom: {
-		randomBattleMoves: ["acrobatics", "grassyglide", "highhorsepower", "knockoff", "swordsdance", "uturn", "woodhammer"],
+		randomBattleMoves: ["grassyglide", "highhorsepower", "knockoff", "uturn", "woodhammer"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["fakeout", "grassyglide", "highhorsepower", "protect", "uturn", "woodhammer"],
 		randomDoubleBattleLevel: 80,
@@ -5293,6 +5293,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	rillaboomgmax: {
+		randomBattleMoves: ["acrobatics", "grassyglide", "highhorsepower", "knockoff", "swordsdance"],
+		randomBattleLevel: 80,
 		isNonstandard: "Gigantamax",
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
