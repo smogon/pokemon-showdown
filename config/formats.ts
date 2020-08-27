@@ -213,8 +213,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		ruleset: ['Standard GBU'],
 		banlist: [
-			'Cinderace', 'Dragapult', 'Excadrill', 'Gyarados', 'Hippowdon', 'Incineroar', 'Indeedee', 'Magnezone', 'Mimikyu',
-			'Porygon2', 'Rillaboom', 'Togekiss', 'Torkoal', 'Tyranitar', 'Venusaur', 'Whimsicott',
+			'Cinderace', 'Dragapult', 'Excadrill', 'Gyarados', 'Hippowdon', 'Incineroar', 'Indeedee', 'Magnezone',
+			'Mimikyu', 'Porygon2', 'Rillaboom', 'Togekiss', 'Torkoal', 'Tyranitar', 'Venusaur', 'Whimsicott',
 		],
 		minSourceGen: 8,
 	},
@@ -318,8 +318,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		},
 		ruleset: ['Standard GBU', 'VGC Timer'],
 		banlist: [
-			'Cinderace', 'Dragapult', 'Excadrill', 'Gyarados', 'Hippowdon', 'Incineroar', 'Indeedee', 'Magnezone', 'Mimikyu',
-			'Porygon2', 'Rillaboom', 'Togekiss', 'Torkoal', 'Tyranitar', 'Venusaur', 'Whimsicott',
+			'Cinderace', 'Dragapult', 'Excadrill', 'Gyarados', 'Hippowdon', 'Incineroar', 'Indeedee', 'Magnezone',
+			'Mimikyu', 'Porygon2', 'Rillaboom', 'Togekiss', 'Torkoal', 'Tyranitar', 'Venusaur', 'Whimsicott',
 		],
 		minSourceGen: 8,
 	},
