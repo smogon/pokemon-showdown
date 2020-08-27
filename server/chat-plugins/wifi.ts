@@ -107,8 +107,11 @@ class Giveaway {
 	}
 
 	checkExcluded(user: User) {
-		if (user === this.giver || user.latestIp in this.giver.ips || this.giver.previousIDs.includes(toID(user))) return true;
-		return false;
+		return (
+			user === this.giver ||
+			this.giver.ips.includes(user.latestIp) ||
+			this.giver.previousIDs.includes(toID(user))
+		);
 	}
 
 	static checkBanned(room: Room, user: User) {
@@ -349,7 +352,7 @@ export class QuestionGiveaway extends Giveaway {
 
 	checkExcluded(user: User) {
 		if (user === this.host) return true;
-		if (user.latestIp in this.host.ips) return true;
+		if (this.host.ips.includes(user.latestIp)) return true;
 		if (this.host.previousIDs.includes(toID(user))) return true;
 		return super.checkExcluded(user);
 	}

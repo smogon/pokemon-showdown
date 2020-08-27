@@ -155,9 +155,9 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 			continue;
 		}
 		for (const myIp of ips) {
-			if (myIp in user.ips || (
+			if (user.ips.includes(myIp) || (
 				(myIp.includes('*') || myIp.includes('-')) &&
-				Object.keys(user.ips).map(IPTools.ipToNumber).some(ip => {
+				user.ips.map(IPTools.ipToNumber).some(ip => {
 					const range = IPTools.stringToRange(myIp);
 					return range && IPTools.checkPattern([range], ip);
 				})
@@ -331,7 +331,7 @@ export class User extends Chat.MessageContext {
 	connections: Connection[];
 	latestHost: string;
 	latestHostType: string;
-	ips: {[k: string]: number};
+	ips: string[];
 	latestIp: string;
 	locked: ID | PunishType | null;
 	semilocked: ID | PunishType | null;
@@ -407,11 +407,10 @@ export class User extends Chat.MessageContext {
 		this.connections = [connection];
 		this.latestHost = '';
 		this.latestHostType = '';
-		this.ips = Object.create(null);
-		this.ips[connection.ip] = 1;
+		this.ips = [connection.ip];
 		// Note: Using the user's latest IP for anything will usually be
 		//       wrong. Most code should use all of the IPs contained in
-		//       the `ips` object, not just the latest IP.
+		//       the `ips` array, not just the latest IP.
 		this.latestIp = connection.ip;
 		this.locked = null;
 		this.semilocked = null;
@@ -949,12 +948,8 @@ export class User extends Chat.MessageContext {
 		this.s3 = oldUser.s3;
 
 		// merge IPs
-		for (const ip in oldUser.ips) {
-			if (this.ips[ip]) {
-				this.ips[ip] += oldUser.ips[ip];
-			} else {
-				this.ips[ip] = oldUser.ips[ip];
-			}
+		for (const ip of oldUser.ips) {
+			if (!this.ips.includes(ip)) this.ips.push(ip);
 		}
 
 		if (oldUser.isSysop) {
@@ -962,7 +957,7 @@ export class User extends Chat.MessageContext {
 			oldUser.isSysop = false;
 		}
 
-		oldUser.ips = {};
+		oldUser.ips = [];
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
@@ -1140,7 +1135,9 @@ export class User extends Chat.MessageContext {
 				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms.get(roomid)!, connection);
 				}
-				--this.ips[connection.ip];
+				if (!this.connections.some(curConnection => curConnection.ip === connection.ip)) {
+					this.ips = this.ips.filter(ip => ip !== connection.ip);
+				}
 				break;
 			}
 		}
@@ -1190,7 +1187,7 @@ export class User extends Chat.MessageContext {
 	 * alts (i.e. when forPunishment is true), they will always be the first element of that list.
 	 */
 	getAltUsers(includeTrusted = false, forPunishment = false) {
-		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted, forPunishment});
+		let alts = findUsers([this.getLastId()], this.ips, {includeTrusted, forPunishment});
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
 		return alts;

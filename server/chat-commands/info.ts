@@ -155,8 +155,7 @@ export const commands: ChatCommands = {
 			}
 		}
 		if (user === targetUser ? user.can('ipself') : user.can('ip', targetUser)) {
-			let ips = Object.keys(targetUser.ips);
-			ips = ips.map(ip => {
+			const ips = targetUser.ips.map(ip => {
 				const status = [];
 				const punishment = Punishments.ips.get(ip);
 				if (user.can('alts') && punishment) {

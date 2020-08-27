@@ -403,7 +403,7 @@ class Trivia extends Rooms.RoomGame {
 				const isSameUser = (
 					targetUser.previousIDs.includes(user.id) ||
 					targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
-					Object.keys(targetUser.ips).some(ip => (ip in user.ips))
+					targetUser.ips.some(ip => user.ips.includes(ip))
 				);
 				if (isSameUser) return this.room.tr('You have already signed up for this game.');
 			}
@@ -523,7 +523,7 @@ class Trivia extends Rooms.RoomGame {
 					const isSameUser = (
 						kickedUser.previousIDs.includes(user.id) ||
 						kickedUser.previousIDs.some(id => user.previousIDs.includes(id)) ||
-						Object.keys(kickedUser.ips).some(ip => user.ips[ip])
+						kickedUser.ips.some(ip => user.ips.includes(ip))
 					);
 					if (isSameUser) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 				}
