@@ -586,7 +586,7 @@ export const pages: PageTable = {
 				const regexes = helpData.pairs[item];
 				if (regexes.length < 1) return null;
 				let buffer = `<details><summary>${item}</summary>`;
-				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Index</th>`;
+				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Message</th>`;
 				if (canChange) buffer += `<th>Options</th>`;
 				buffer += `</tr>`;
 				for (const regex of regexes) {
