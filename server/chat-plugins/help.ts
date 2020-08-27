@@ -586,14 +586,14 @@ export const pages: PageTable = {
 				const regexes = helpData.pairs[item];
 				if (regexes.length < 1) return null;
 				let buffer = `<details><summary>${item}</summary>`;
-				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Index</th>`;
+				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Regex</th>`;
 				if (canChange) buffer += `<th>Options</th>`;
 				buffer += `</tr>`;
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
 					const button = `<button class="button" name="send"value="/hf remove ${item}, ${index}">Remove</button>`;
-					buffer += `<td>${index}</td><td><code>${regex}</code></td>`;
-					if (canChange) buffer += `<td>${button}</td>`;
+					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
+					if (canChange) buffer += `<td>${button}</td></tr>`;
 				}
 				buffer += `</details>`;
 				return buffer;
