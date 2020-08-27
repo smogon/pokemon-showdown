@@ -9,7 +9,7 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {LogViewer} from './chatlog';
-import {roomFaqs} from './room-faqs'
+import {roomFaqs} from './room-faqs';
 
 const PATH = 'config/chat-plugins/help.json';
 // 4: filters out conveniently short aliases
