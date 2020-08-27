@@ -9,7 +9,7 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {LogViewer} from './chatlog';
-import {roomFaqs} from './room-faqs';
+import {roomFaqs} from './room-faqs'
 
 const PATH = 'config/chat-plugins/help.json';
 // 4: filters out conveniently short aliases
@@ -586,7 +586,7 @@ export const pages: PageTable = {
 				const regexes = helpData.pairs[item];
 				if (regexes.length < 1) return null;
 				let buffer = `<details><summary>${item}</summary>`;
-				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Message</th>`;
+				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Regex</th>`;
 				if (canChange) buffer += `<th>Options</th>`;
 				buffer += `</tr>`;
 				for (const regex of regexes) {
