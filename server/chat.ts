@@ -438,7 +438,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		if (this.user.statusType === 'idle') this.user.setStatusType('online');
+		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+			this.user.setStatusType('online');
+		}
 
 		try {
 			if (this.handler) {
@@ -857,22 +859,18 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			// If we need to use the true group's permission, reset the visual group
-			this.user.resetVisualGroup();
-			return true;
+		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
+			return false;
 		}
-		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
-		return false;
+		return true;
 	}
 	privatelyCan(permission: RoomPermission, target: User | null, room: Room): boolean;
 	privatelyCan(permission: GlobalPermission, target?: User | null): boolean;
 	privatelyCan(permission: string, target: User | null = null, room: Room | null = null) {
 		this.handler!.isPrivate = true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			throw new Chat.ErrorMessage("This is a secret command and you have the wrong visual rank for it.");
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+			return true;
 		}
 		this.commandDoesNotExist();
 	}
@@ -1041,7 +1039,7 @@ export class CommandContext extends MessageContext {
 						this.errorReply(this.tr`This user is blocking private messages right now.`);
 						return null;
 					} else {
-						this.errorReply(this.tr`This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+						this.errorReply(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 						this.sendReply(`|html|${this.tr`If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`}`);
 						return null;
 					}
@@ -1382,8 +1380,11 @@ export class CommandContext extends MessageContext {
 
 export const Chat = new class {
 	constructor() {
-		void this.loadTranslations();
+		void this.loadTranslations().then(() => {
+			Chat.translationsLoaded = true;
+		});
 	}
+	translationsLoaded = false;
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
@@ -1558,15 +1559,18 @@ export const Chat = new class {
 	tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
 		if (!language) language = 'english';
 		language = toID(language);
-		if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		// If strings is an array (normally the case), combine before translating.
+		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
+
+		if (!Chat.translations.has(language)) {
+			if (!Chat.translationsLoaded) return trString;
+			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		}
 		if (!strings.length) {
 			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
 				return Chat.tr(language, fStrings, ...fKeys);
 			});
 		}
-
-		// If strings is an array (normally the case), combine before translating.
-		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
 
 		const entry = Chat.translations.get(language)!.get(trString);
 		let [translated, keyLabels, valLabels] = entry || ["", [], []];
@@ -2103,7 +2107,7 @@ export const Chat = new class {
 	}
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
-		return (new PageContext({pageid, user, connection})).resolve();
+		return (new PageContext({pageid, user, connection, language: user.language!})).resolve();
 	}
 };
 

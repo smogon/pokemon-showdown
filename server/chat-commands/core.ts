@@ -726,6 +726,32 @@ export const commands: ChatCommands = {
 		});
 	},
 
+	showrank: 'hiderank',
+	hiderank(target, room, user, connection, cmd) {
+		const userGroup = Users.Auth.getGroup(Users.globalAuth.get(user.id));
+		if (!userGroup['hiderank']) return this.errorReply(`/hiderank - Access denied.`);
+
+		const isShow = cmd === 'showrank';
+		const group = (isShow ? Users.globalAuth.get(user.id) : (target.trim() || Users.Auth.defaultSymbol()) as GroupSymbol);
+		if (user.tempGroup === group) {
+			return this.errorReply(`You already have the temporary symbol '${group}'.`);
+		}
+		if (!Users.Auth.isValidSymbol(group) || !(group in Config.groups)) {
+			return this.errorReply(`You must specify a valid group symbol.`);
+		}
+		if (!isShow && Config.groups[group].rank > Config.groups[user.tempGroup].rank) {
+			return this.errorReply(`You may only set a temporary symbol below your current rank.`);
+		}
+		user.tempGroup = group;
+		user.updateIdentity();
+		this.sendReply(`|c|~|Your temporary group symbol is now \`\`${user.tempGroup}\`\`.`);
+	},
+	showrankhelp: 'hiderankhelp',
+	hiderankhelp: [
+		`/hiderank [rank] - Displays your global rank as the given [rank].`,
+		`/showrank - Displays your true global rank instead of the rank you're hidden as.`,
+	],
+
 	language(target, room, user) {
 		if (!target) {
 			return this.sendReply(`Currently, you're viewing Pokémon Showdown in ${Chat.languages.get(user.language || 'english')}.`);
@@ -1462,7 +1488,7 @@ export const commands: ChatCommands = {
 				roomList[roomidWithAuth] = roomData;
 			}
 			if (!targetUser.connected) roomList = false;
-			let group = targetUser.group;
+			let group = targetUser.tempGroup;
 			if (targetUser.locked) group = Config.punishgroups?.locked?.symbol ?? '\u203d';
 			if (targetUser.namelocked) group = Config.punishgroups?.namelocked?.symbol ?? '✖';
 			const userdetails: AnyObject = {
@@ -1588,7 +1614,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`${this.tr('OPTION COMMANDS')}: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms`);
 			this.sendReply(`${this.tr('INFORMATIONAL/RESOURCE COMMANDS')}: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq ${broadcastMsg}`);
 			this.sendReply(`${this.tr('DATA COMMANDS')}: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon ${broadcastMsg}`);
-			if (user.group !== Users.Auth.defaultSymbol()) {
+			if (user.tempGroup !== Users.Auth.defaultSymbol()) {
 				this.sendReply(`${this.tr('DRIVER COMMANDS')}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /modchat, /lock, /weeklock, /unlock, /announce`);
 				this.sendReply(`${this.tr('MODERATOR COMMANDS')}: /globalban, /unglobalban, /ip, /markshared, /unlockip`);
 				this.sendReply(`${this.tr('ADMIN COMMANDS')}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall, /ipsearch`);
