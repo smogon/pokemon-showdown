@@ -156,7 +156,7 @@ class OtdHandler {
 		const nomObj = {
 			nomination: nomination,
 			name: user.name,
-			userids: [...user.previousIDs],
+			userids: user.previousIDs.slice(),
 			ips: Object.assign({}, user.ips),
 		};
 
