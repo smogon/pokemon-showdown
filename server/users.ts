@@ -155,7 +155,13 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 			continue;
 		}
 		for (const myIp of ips) {
-			if (myIp in user.ips) {
+			if (myIp in user.ips || (
+				(myIp.includes('*') || myIp.includes('-')) &&
+				Object.keys(user.ips).map(IPTools.ipToNumber).some(ip => {
+					const range = IPTools.stringToRange(myIp);
+					return range && IPTools.checkPattern([range], ip);
+				})
+			)) {
 				matches.push(user);
 				break;
 			}
