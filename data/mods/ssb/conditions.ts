@@ -1152,7 +1152,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	quadrophenic: {
 		noCopy: true,
-		// No quotes requested
+		onStart() {
+			this.add(`c|${getName('quadrophenic')}|Did you ever like it then?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('quadrophenic')}|It fell apart.`);
+		},
 	},
 	rabia: {
 		noCopy: true,
