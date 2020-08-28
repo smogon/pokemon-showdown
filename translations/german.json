@@ -407,6 +407,7 @@
 		"I'm locked because of a proxy or VPN": "Ich bin gesperrt, weil ich einen Proxy-Server oder eine VPN verwende",
 		"Yes, I have an autoconfirmed account": "Ja, ich besitze einen Account, welcher autoconfirmed ist",
 		"No, I don't have an autoconfirmed account": "Nein, ich besitze keinen Account, welcher autoconfirmed ist",
+    "I want to appeal a mute/roomban/blacklist": "",
 		"Something else": "Etwas anderes",
 		"I lost my password": "Ich habe mein Passwort vergessen",
 		"I need global staff to help watch a public room": "Ich benötige den globalen Staff, damit ein öffentlicher Raum beaufsichtigt wird",
