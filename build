@@ -112,7 +112,7 @@ function sucrase(src, out, opts) {
 if (sucrase('./config', './.config-dist')) {
 	replace('.config-dist', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-	]);	
+	]);
 }
 
 if (sucrase('./data', './.data-dist')) {

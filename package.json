@@ -14,7 +14,9 @@
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.6"
+    "sqlite": "^3.0.6",
+    "better-sqlite3": "^7.1.0",
+    "@types/better-sqlite3": "^5.4.0"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"

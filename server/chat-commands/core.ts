@@ -1694,6 +1694,6 @@ process.nextTick(() => {
 	Chat.multiLinePattern.register(
 		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code ', '/modnote ', '/mn ',
 		'/eval', '!eval', '/evalbattle',
-		'/importinputlog '
+		'/importinputlog ', '/evalsql', '>>sql ',
 	);
 });

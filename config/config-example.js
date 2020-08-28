@@ -457,6 +457,11 @@ exports.forcedpublicprefixes = [];
  */
 exports.startuphook = function () {};
 
+/**
+ * storage - the way in which to store data from the server that requires persistence.
+ * @type {{[k: string]: 'sqlite' | 'text'}}
+ */
+exports.storage = {};
 
 /**
  * chatlogreader - the search method used for searching chatlogs.

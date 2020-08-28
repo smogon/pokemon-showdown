@@ -12,7 +12,7 @@ npm-debug.log
 .eslintfullcache
 package-lock.json
 /tools/set-import/sets
-databases/*.db*
+/databases/*.db*
 
 # Typescript build artifacts
 .*-dist/

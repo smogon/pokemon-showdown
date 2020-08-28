@@ -107,6 +107,8 @@ const TRANSLATION_DIRECTORY = 'translations/';
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
+import * as Sqlite from 'better-sqlite3';
+import * as pathModule from 'path';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
@@ -531,6 +533,8 @@ export class CommandContext extends MessageContext {
 			message = `/mee ${message.slice(3)}`;
 		} else if (message.startsWith(`/ME`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
 			message = `/MEE ${message.slice(3)}`;
+		} else if (message.startsWith('>>sql ')) {
+			message = `/evalsql ${message.slice(6)}`;
 		}
 
 		const cmdToken = message.charAt(0);
@@ -1383,6 +1387,7 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
+		this.loadDatabases();
 	}
 	translationsLoaded = false;
 	readonly multiLinePattern = new PatternTester();
@@ -1599,6 +1604,27 @@ export const Chat = new class {
 		return translated;
 	}
 
+	/*********************************************************
+	 * Intialize databases for plugins
+	 **********************************************************/
+
+	database?: Sqlite.Database;
+
+	loadDatabases() {
+		if (Config.storage?.plugins !== 'sqlite') return;
+		this.database = new Sqlite(`${__dirname}/../databases/chat-plugins.db`);
+		// try to create all SQL tables listed in the /schemas/ directory
+		const files = this.getFiles('./databases', '').filter(item => item.endsWith('.sql'));
+		for (const file of files) {
+			const schemaContent = FS(`./databases/${file}`).readSync();
+			let databaseName = `chat-plugins.db`;
+			if (!file.includes('chat-plugins')) {
+				databaseName = pathModule.basename(file).slice(0, -4) + '.db';
+			}
+			new Sqlite(`${__dirname}/../databases/${databaseName}`).exec(schemaContent);
+		}
+	}
+
 	readonly MessageContext = MessageContext;
 	readonly CommandContext = CommandContext;
 	readonly PageContext = PageContext;
@@ -1720,22 +1746,6 @@ export const Chat = new class {
 
 		// Install plug-in commands and chat filters
 
-		// All resulting filenames will be relative to basePath
-		const getFiles = (basePath: string, path: string): string[] => {
-			const filesInThisDir = FS(`${basePath}/${path}`).readdirSync();
-			let allFiles: string[] = [];
-			for (const file of filesInThisDir) {
-				const fileWithPath = path + (path ? '/' : '') + file;
-				if (FS(`${basePath}/${fileWithPath}`).isDirectorySync()) {
-					if (file.startsWith('.')) continue;
-					allFiles = allFiles.concat(getFiles(basePath, fileWithPath));
-				} else {
-					allFiles.push(fileWithPath);
-				}
-			}
-			return allFiles;
-		};
-
 		Chat.commands = Object.create(null);
 		Chat.pages = Object.create(null);
 		const coreFiles = FS('server/chat-commands').readdirSync();
@@ -1754,7 +1764,7 @@ export const Chat = new class {
 		let files = FS('server/chat-plugins').readdirSync();
 		try {
 			if (FS('server/chat-plugins/private').isDirectorySync()) {
-				files = files.concat(getFiles('server/chat-plugins', 'private'));
+				files = files.concat(this.getFiles('server/chat-plugins', 'private'));
 			}
 		} catch (err) {
 			if (err.code !== 'ENOENT') throw err;
@@ -1769,7 +1779,20 @@ export const Chat = new class {
 			handler();
 		}
 	}
-
+	getFiles(basePath: string, path: string): string[] {
+		const filesInThisDir = FS(`${basePath}/${path}`).readdirSync();
+		let allFiles: string[] = [];
+		for (const file of filesInThisDir) {
+			const fileWithPath = path + (path ? '/' : '') + file;
+			if (FS(`${basePath}/${fileWithPath}`).isDirectorySync()) {
+				if (file.startsWith('.')) continue;
+				allFiles = allFiles.concat(this.getFiles(basePath, fileWithPath));
+			} else {
+				allFiles.push(fileWithPath);
+			}
+		}
+		return allFiles;
+	}
 	/**
 	 * Strips HTML from a string.
 	 */
