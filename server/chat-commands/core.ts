@@ -1224,7 +1224,8 @@ export const commands: ChatCommands = {
 			if (!timer.timerRequesters.size) {
 				return this.sendReply(this.tr`The game timer is OFF.`);
 			}
-			return this.sendReply(this.tr`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
+			const requester = [...timer.timerRequesters].join(', ');
+			return this.sendReply(this.tr`The game timer is ON (requested by ${requester})`);
 		}
 		const force = user.can('timer', null, room);
 		if (!force && !room.game.playerTable[user.id]) {
@@ -1425,7 +1426,11 @@ export const commands: ChatCommands = {
 		const shouldHide = cmd.includes('hide') || cmd === 'hbtc';
 		user.settings.hideBattlesFromTrainerCard = shouldHide;
 		user.update();
-		this.sendReply(this.tr`Battles are now ${shouldHide ? "hidden (except to staff)" : "visible"} in your trainer card.`);
+		if (shouldHide) {
+			this.sendReply(this.tr`Battles are now hidden (except to staff) in your trainer card.`);
+		} else {
+			this.sendReply(this.tr`Battles are now visible in your trainer card.`);
+		}
 	},
 	hidebattlesfromtrainercardhelp: [
 		`/hidebattlesfromtrainercard OR /hbtc - Hides your battles in your trainer card.`,
@@ -1645,7 +1650,8 @@ export const commands: ChatCommands = {
 				throw new Error(`Recursive alias in "${target}"`);
 			}
 			if (Array.isArray(nextNamespace)) {
-				this.sendReply(this.tr`'/${cmds.slice(0, i + 1).join(' ')}' is a help command.`);
+				const command = cmds.slice(0, i + 1).join(' ');
+				this.sendReply(this.tr`'/${command}' is a help command.`);
 				return this.parse(`/${target}`);
 			}
 			if (!nextNamespace) {
