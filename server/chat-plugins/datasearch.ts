@@ -1488,17 +1488,17 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const mod = Dex.mod('gen' + maxGen);
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
-		let usedSpecies: Species = Dex.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Dex.deepClone(Dex.getLearnsetData(usedSpecies.id));
+		let usedSpecies: Species = Utils.deepClone(species);
+		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(Dex.getLearnsetData(usedSpecies.id));
 		if (!usedSpeciesLearnset.learnset) {
-			usedSpecies = Dex.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
-			usedSpeciesLearnset.learnset = Dex.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
+			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
+			usedSpeciesLearnset.learnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
 		}
 		const lsetData = new Set(Object.keys(usedSpeciesLearnset.learnset!));
 
 		while (usedSpecies.prevo) {
-			usedSpecies = Dex.deepClone(mod.getSpecies(usedSpecies.prevo));
-			usedSpeciesLearnset = Dex.deepClone(mod.getLearnsetData(usedSpecies.id));
+			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.prevo));
+			usedSpeciesLearnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id));
 			for (const move in usedSpeciesLearnset.learnset) {
 				lsetData.add(move);
 			}
@@ -2210,7 +2210,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			if (format.minSourceGen && format.minSourceGen === 6) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
-			format = Dex.deepClone(Dex.getFormat(targetid));
+			format = Utils.deepClone(Dex.getFormat(targetid));
 			formatid = targetid;
 			formatName = format.name;
 			targets.shift();

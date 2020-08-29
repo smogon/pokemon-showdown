@@ -137,12 +137,10 @@ describe('Users features', function () {
 					assert.equal(users[1].connected, true);
 				});
 
-				it('should update IP count properly', async function () {
+				it('should remove IPs properly', async function () {
 					const user = new User();
 					await Punishments.ban(user);
-					for (const ip in user.ips) {
-						assert.equal(user.ips[ip], 0);
-					}
+					assert.equal(user.ips.length, 0);
 				});
 			});
 
@@ -159,15 +157,15 @@ describe('Users features', function () {
 				});
 				it(`should allow 'u' permissions on lower ranked users`, function () {
 					const user = new User();
-					user.group = '@';
+					user.tempGroup = '@';
 					assert.equal(user.can('globalban', user), false, 'targeting self');
 
 					const target = new User();
-					target.group = ' ';
+					target.tempGroup = ' ';
 					assert.equal(user.can('globalban', target), true, 'targeting lower rank');
-					target.group = '@';
+					target.tempGroup = '@';
 					assert.equal(user.can('globalban', target), false, 'targeting same rank');
-					target.group = '&';
+					target.tempGroup = '&';
 					assert.equal(user.can('globalban', target), false, 'targeting higher rank');
 				});
 				it(`should not allow users to demote themselves`, function () {

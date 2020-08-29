@@ -438,7 +438,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		if (this.user.settings.statusType === 'idle') this.user.setStatusType('online');
+		if (this.user.settings.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+			this.user.settings.setStatusType('online');
+		}
 
 		try {
 			if (this.handler) {
@@ -857,22 +859,18 @@ export class CommandContext extends MessageContext {
 	can(permission: RoomPermission, target: User | null, room: Room): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
 	can(permission: string, target: User | null = null, room: Room | null = null) {
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			// If we need to use the true group's permission, reset the visual group
-			this.user.resetVisualGroup();
-			return true;
+		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
+			return false;
 		}
-		this.errorReply(`${this.cmdToken}${this.fullCmd} - Access denied.`);
-		return false;
+		return true;
 	}
 	privatelyCan(permission: RoomPermission, target: User | null, room: Room): boolean;
 	privatelyCan(permission: GlobalPermission, target?: User | null): boolean;
 	privatelyCan(permission: string, target: User | null = null, room: Room | null = null) {
 		this.handler!.isPrivate = true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, true)) return true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, false)) {
-			throw new Chat.ErrorMessage("This is a secret command and you have the wrong visual rank for it.");
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+			return true;
 		}
 		this.commandDoesNotExist();
 	}
@@ -942,9 +940,14 @@ export class CommandContext extends MessageContext {
 		} else {
 			this.sendReply('|c|' + this.user.getIdentity(this.room ? this.room.roomid : '') + '|' + (suppressMessage || this.message));
 		}
-		if (!ignoreCooldown && this.room) {
-			this.room.lastBroadcast = this.broadcastMessage;
-			this.room.lastBroadcastTime = Date.now();
+		if (this.room) {
+			// We don't want broadcasted messages in a room to be translated
+			// according to a user's personal language setting.
+			this.language = this.room.settings.language || null;
+			if (!ignoreCooldown) {
+				this.room.lastBroadcast = this.broadcastMessage;
+				this.room.lastBroadcastTime = Date.now();
+			}
 		}
 
 		return true;
@@ -1012,23 +1015,20 @@ export class CommandContext extends MessageContext {
 					return null;
 				}
 			}
-			// TODO: translate these messages. Currently there isn't much of a point since languages are room-dependent,
-			// and these PM-related messages aren't attached to any rooms. If we ever get to letting users set their
-			// own language these messages should also be translated. - Asheviere
 			if (targetUser) {
 				if (lockType && !targetUser.can('lock')) {
-					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
-					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
+					this.errorReply(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
+					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
 					return null;
 				}
 				if (targetUser.locked && !user.can('lock')) {
-					this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
+					this.errorReply(this.tr`The user "${targetUser.name}" is locked and cannot be PMed.`);
 					return null;
 				}
 				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 					!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)) {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
+					this.errorReply(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 					return null;
 				}
 				if (targetUser.settings.blockPMs &&
@@ -1036,17 +1036,17 @@ export class CommandContext extends MessageContext {
 					!user.can('lock')) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
-						this.errorReply(`This user is blocking private messages right now.`);
+						this.errorReply(this.tr`This user is blocking private messages right now.`);
 						return null;
 					} else {
-						this.errorReply(`This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.`);
-						this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
+						this.errorReply(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+						this.sendReply(`|html|${this.tr`If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`}`);
 						return null;
 					}
 				}
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
 					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock')) {
-					this.errorReply(`You are blocking private messages right now.`);
+					this.errorReply(this.tr`You are blocking private messages right now.`);
 					return null;
 				}
 			}
@@ -1381,8 +1381,11 @@ export class CommandContext extends MessageContext {
 
 export const Chat = new class {
 	constructor() {
-		void this.loadTranslations();
+		void this.loadTranslations().then(() => {
+			Chat.translationsLoaded = true;
+		});
 	}
+	translationsLoaded = false;
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
@@ -1557,15 +1560,18 @@ export const Chat = new class {
 	tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
 		if (!language) language = 'english';
 		language = toID(language);
-		if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		// If strings is an array (normally the case), combine before translating.
+		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
+
+		if (!Chat.translations.has(language)) {
+			if (!Chat.translationsLoaded) return trString;
+			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		}
 		if (!strings.length) {
 			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
 				return Chat.tr(language, fStrings, ...fKeys);
 			});
 		}
-
-		// If strings is an array (normally the case), combine before translating.
-		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
 
 		const entry = Chat.translations.get(language)!.get(trString);
 		let [translated, keyLabels, valLabels] = entry || ["", [], []];
@@ -2102,7 +2108,7 @@ export const Chat = new class {
 	}
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
-		return (new PageContext({pageid, user, connection})).resolve();
+		return (new PageContext({pageid, user, connection, language: user.language!})).resolve();
 	}
 };
 
