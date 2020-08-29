@@ -619,7 +619,7 @@ export const pages: PageTable = {
 				const {regexString, userid} = request;
 				if (!canViewAll && userid !== user.id) continue;
 				const submitter = Users.get(userid) ? Users.get(userid)?.name : userid;
-				buf += `<tr><td>${submitter}</td>`;
+				buf += `<tr><td><div class="username">${submitter}</div></td>`;
 				buf += `<td>${regexString}</td>`;
 				buf += `<td><code>${Answerer.stringRegex(regexString)}</td>`;
 				const index = helpData.queue.indexOf(request) + 1;
