@@ -386,29 +386,26 @@ class Trivia extends Rooms.RoomGame {
 
 	addTriviaPlayer(user: User) {
 		if (this.playerTable[user.id]) return this.room.tr('You have already signed up for this game.');
-		for (const id in user.prevNames) {
+		for (const id of user.previousIDs) {
 			if (this.playerTable[id]) return this.room.tr('You have already signed up for this game.');
 		}
 		if (this.kickedUsers.has(user.id)) {
 			return this.room.tr('You were kicked from the game and thus cannot join it again.');
 		}
-		for (const id in user.prevNames) {
+		for (const id of user.previousIDs) {
 			if (this.playerTable[id]) return this.room.tr('You have already signed up for this game.');
 			if (this.kickedUsers.has(id)) return this.room.tr('You were kicked from the game and cannot join until the next game.');
 		}
 
 		for (const id in this.playerTable) {
-			const tarUser = Users.get(id);
-			if (tarUser) {
-				if (tarUser.prevNames[user.id]) return this.room.tr('You have already signed up for this game.');
-
-				const tarPrevNames = Object.keys(tarUser.prevNames);
-				const prevNameMatch = tarPrevNames.some(tarId => (tarId in user.prevNames));
-				if (prevNameMatch) return this.room.tr('You have already signed up for this game.');
-
-				const tarIps = Object.keys(tarUser.ips);
-				const ipMatch = tarIps.some(ip => (ip in user.ips));
-				if (ipMatch) return this.room.tr('You have already signed up for this game.');
+			const targetUser = Users.get(id);
+			if (targetUser) {
+				const isSameUser = (
+					targetUser.previousIDs.includes(user.id) ||
+					targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
+					targetUser.ips.some(ip => user.ips.includes(ip))
+				);
+				if (isSameUser) return this.room.tr('You have already signed up for this game.');
 			}
 		}
 		if (this.phase !== SIGNUP_PHASE && !this.canLateJoin) return this.room.tr("This game does not allow latejoins.");
@@ -512,40 +509,35 @@ class Trivia extends Rooms.RoomGame {
 	 * Kicks a player from the game, preventing them from joining it again
 	 * until the next game begins.
 	 */
-	kick(tarUser: User) {
-		if (!this.playerTable[tarUser.id]) {
-			if (this.kickedUsers.has(tarUser.id)) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
+	kick(user: User) {
+		if (!this.playerTable[user.id]) {
+			if (this.kickedUsers.has(user.id)) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 
-			for (const id in tarUser.prevNames) {
-				if (this.kickedUsers.has(id)) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
+			for (const id of user.previousIDs) {
+				if (this.kickedUsers.has(id)) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 			}
 
 			for (const kickedUserid of this.kickedUsers) {
 				const kickedUser = Users.get(kickedUserid);
 				if (kickedUser) {
-					if (kickedUser.prevNames[tarUser.id]) {
-						return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
-					}
-
-					const prevNames = Object.keys(kickedUser.prevNames);
-					const nameMatch = prevNames.some(id => tarUser.prevNames[id]);
-					if (nameMatch) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
-
-					const ips = Object.keys(kickedUser.ips);
-					const ipMatch = ips.some(ip => tarUser.ips[ip]);
-					if (ipMatch) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
+					const isSameUser = (
+						kickedUser.previousIDs.includes(user.id) ||
+						kickedUser.previousIDs.some(id => user.previousIDs.includes(id)) ||
+						kickedUser.ips.some(ip => user.ips.includes(ip))
+					);
+					if (isSameUser) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 				}
 			}
 
-			return this.room.tr`User ${tarUser.name} is not a player in the game.`;
+			return this.room.tr`User ${user.name} is not a player in the game.`;
 		}
 
-		this.kickedUsers.add(tarUser.id);
-		for (const id in tarUser.prevNames) {
+		this.kickedUsers.add(user.id);
+		for (const id of user.previousIDs) {
 			this.kickedUsers.add(id);
 		}
 
-		super.removePlayer(tarUser);
+		super.removePlayer(user);
 	}
 
 	leave(user: User) {
