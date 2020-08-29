@@ -3461,6 +3461,34 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Dark",
 	},
 
+	// Spandan
+	imtoxicyoureslippinunder: {
+		accuracy: true,
+		basePower: 110,
+		category: "Physical",
+		desc: "This move uses opponent's Special Defense to calculate damage (Like Foul Play). Also affects Steel types (Normal Effect).",
+		shortDesc: "Uses opponent's Special Defense to calculate damage (Like Foul Play). Also affects Steel types (Normal Effect).",
+		name: "I'm Toxic You're Slippin' Under",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sludge Bomb', target);
+			this.add('-anim', source, 'Sludge Wave', target);
+		},
+		ignoreImmunity: {
+			'Steel': true,
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
+
 	// Struchni
 	veto: {
 		accuracy: 100,

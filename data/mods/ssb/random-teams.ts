@@ -550,6 +550,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shade Uppercut',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
+	Spandan: {
+		species: 'Mareanie', ability: 'Hacked Corrosion', item: 'Eviolite', gender: 'M',
+		moves: ['Toxic', 'Recover', 'Spiky Shield'],
+		signatureMove: 'I\'m Toxic You\'re Slippin\' Under',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
+	},
 	Struchni: {
 		species: 'Aggron', ability: 'Overasked Clause', item: 'Choice Band', gender: 'M',
 		moves: ['Pursuit', 'U-turn', 'Fishious Rend'],

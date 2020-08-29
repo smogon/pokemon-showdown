@@ -1274,6 +1274,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Shadecession')}|ah, gg fam`);
 		},
 	},
+	spandan: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Spandan')}|Mareanie!`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('Spandan')}|You can't end this toxic relationship just like that!`);
+		},
+		onFaint(pokemon) {
+			this.add(`c|${getName('Spandan')}|You didnt do shit. I coded myself to faint.`);
+		},
+	},
 	struchni: {
 		noCopy: true,
 		onStart() {
