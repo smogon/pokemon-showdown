@@ -217,9 +217,9 @@ async function getModlog(
  * Battle Search Functions
  *********************************************************/
 
-function checkRipgrepAvailability() {
+async function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
-		Config.ripgrepmodlog = (async () => {
+		Config.ripgrepmodlog = await (async () => {
 			try {
 				await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
 				await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
