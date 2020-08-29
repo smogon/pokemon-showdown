@@ -2525,7 +2525,7 @@ export const commands: ChatCommands = {
 			}
 			const game = targetRoom.getGame(MafiaTracker);
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
-			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, targetRoom)) return;
+			if (game.hostid !== user.id && !game.cohosts.includes(user.id)) this.checkCan('mute', null, targetRoom);
 			let revealAs = '';
 			let revealedRole = null;
 			if (cmd === 'revealas') {
