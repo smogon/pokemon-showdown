@@ -21,6 +21,7 @@ export function parseBrackets(line: string, openingBracket: '(' | '[') {
 	};
 	const bracketOpenIndex = line.indexOf(openingBracket);
 	const bracketCloseIndex = line.indexOf(brackets[openingBracket]);
+	if (bracketCloseIndex < 0 || bracketOpenIndex < 0) return '';
 	return line.slice(bracketOpenIndex + 1, bracketCloseIndex);
 }
 

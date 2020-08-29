@@ -332,6 +332,17 @@ describe('Modlog conversion script', () => {
 			);
 		});
 
+		it('should not mess up HIDEALTSTEXT', () => {
+			// HIDEALTSTEXT apparently was causing bugs
+			assert.deepStrictEqual(
+				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) HIDEALTSTEXT: [auser] alts:[alt1] by annika: hnr`),
+				{
+					action: 'HIDEALTSTEXT', roomID: 'development', userid: 'auser', alts: ['alt1'],
+					note: 'hnr', isGlobal: false, loggedBy: 'annika', time: 1598212249944,
+				}
+			);
+		});
+
 		it('should correctly parse modernized punishments, including alts/IP/autoconfirmed', () => {
 			assert.deepStrictEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] ac: [annika] alts: [annalytically], [heartofetheria] [127.0.0.1] by somemod: terrible user`),
