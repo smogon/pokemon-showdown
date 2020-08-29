@@ -393,7 +393,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You must be autoconfirmed to suggest regexes to the Help filter.`);
 			}
 			const faq = Answerer.getFaqID(target.split('=>')[1]);
-			if (this.filter(target) !== target) {
+			if (this.filter(this.message) !== target) {
 				return this.errorReply(`Invalid suggestion.`);
 			}
 			if (Answerer.settings.queueDisabled) {
@@ -427,8 +427,10 @@ export const commands: ChatCommands = {
 			this.room = helpRoom;
 			const index = parseInt(target) - 1;
 			if (isNaN(index)) return this.errorReply(`Invalid queue index.`);
+			if (!Answerer.queue[index]) {
+				return this.errorReply(`There is no item in queue with index ${target}.`);
+			}
 			const {regexString, userid} = Answerer.queue[index];
-			if (!regexString) return this.errorReply(`Item does not exist in queue.`);
 			const regex = Answerer.stringRegex(regexString);
 			// validated on submission
 			const faq = Answerer.getFaqID(regexString.split('=>')[1].trim());
@@ -437,6 +439,7 @@ export const commands: ChatCommands = {
 			Answerer.data.pairs[faq].push(regex);
 			Answerer.queue.splice(index, 1);
 			Answerer.writeState();
+			this.parse(`/hf view queue`);
 
 			this.privateModAction(`${user.name} approved regex for use with queue number ${target} (suggested by ${userid})`);
 			this.modlog(`HELPFILTER APPROVE`, null, `${target}: ${regexString} (from ${userid})`);
@@ -453,6 +456,7 @@ export const commands: ChatCommands = {
 			if (!Answerer.queue[index]) throw new Chat.ErrorMessage(`Item does not exist in queue.`);
 			Answerer.queue.splice(index, 1);
 			Answerer.writeState();
+			this.parse(`/hf view queue`);
 			this.privateModAction(`${user.name} denied regex with queue number ${target}`);
 			this.modlog(`HELPFILTER DENY`, null, `${target}`);
 		},
@@ -615,7 +619,7 @@ export const pages: PageTable = {
 				const {regexString, userid} = request;
 				if (!canViewAll && userid !== user.id) continue;
 				const submitter = Users.get(userid) ? Users.get(userid)?.name : userid;
-				buf += `<tr><td>${submitter}</td>`;
+				buf += `<tr><td><div class="username">${submitter}</div></td>`;
 				buf += `<td>${regexString}</td>`;
 				buf += `<td><code>${Answerer.stringRegex(regexString)}</td>`;
 				const index = helpData.queue.indexOf(request) + 1;
