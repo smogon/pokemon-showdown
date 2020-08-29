@@ -137,12 +137,10 @@ describe('Users features', function () {
 					assert.equal(users[1].connected, true);
 				});
 
-				it('should update IP count properly', async function () {
+				it('should remove IPs properly', async function () {
 					const user = new User();
 					await Punishments.ban(user);
-					for (const ip in user.ips) {
-						assert.equal(user.ips[ip], 0);
-					}
+					assert.equal(user.ips.length, 0);
 				});
 			});
 

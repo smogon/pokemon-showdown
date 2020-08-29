@@ -472,7 +472,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
 			);
 		}
-		if (Object.keys(user.ips).some(ip => this.joinedIps.includes(ip))) {
+		if (user.ips.some(ip => this.joinedIps.includes(ip))) {
 			return user.sendTo(this.room, "You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;
@@ -490,7 +490,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	cacheUserIps(user: User | FakeUser) {
 		// limit to 1 IP in every game.
 		if (!('ips' in user)) return; // ghost user object cached from queue
-		for (const ip in user.ips) {
+		for (const ip of user.ips) {
 			this.joinedIps.push(ip);
 		}
 	}
@@ -1007,7 +1007,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 		super(user, game);
 		this.game = game;
 
-		this.joinIps = Object.keys(user.ips);
+		this.joinIps = user.ips.slice();
 
 		this.currentQuestion = 0;
 		this.completed = false;
