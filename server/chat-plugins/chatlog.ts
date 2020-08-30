@@ -436,9 +436,9 @@ type SearchMatch = readonly [string, string, string, string, string];
 export const LogSearcher = new class {
 	constructRegex(str: string) {
 		const searches = str.split('+').map(term => Utils.escapeRegex(term));
-		if (searches.length <= 1) {
-			if (str.length <= 3) return `\b${str}`;
-			return str;
+		if (searches.length === 1) {
+			if (searches[0].length <= 3) return `\b${searches[0]}`;
+			return searches[0];
 		}
 
 		return `^` + searches.map(term => `(?=.*${term})`).join('');
