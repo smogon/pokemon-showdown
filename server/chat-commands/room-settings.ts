@@ -974,7 +974,7 @@ export const commands: ChatCommands = {
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
-	privateroom(target, room, user, connection, cmd) {
+	async privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
@@ -1056,11 +1056,14 @@ export const commands: ChatCommands = {
 				}
 				return this.errorReply(`This room is already ${settingName}.`);
 			}
-			room.settings.isPrivate = setting;
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			room.settings.isPrivate = setting;
-			room.saveSettings();
+			if (room.battle) {
+				await room.makePrivate(setting);
+			} else {
+				room.settings.isPrivate = setting;
+				room.saveSettings();
+			}
 			room.privacySetter = new Set([user.id]);
 		}
 	},
