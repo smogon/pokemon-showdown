@@ -15,6 +15,8 @@
  * @license MIT
  */
 
+const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
@@ -688,13 +690,6 @@ export abstract class BasicRoom {
 		}
 		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
 		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
-	}
-
-	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
-		const end = this.roomid.length - 2;
-		const lastHyphen = this.roomid.lastIndexOf('-', end);
-		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen, end)};
 	}
 
 	/**
@@ -1618,8 +1613,9 @@ export class GameRoom extends BasicRoom {
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
+		const {id, password} = this.getReplayData();
 		const [success] = await LoginServer.request('prepreplay', {
-			id: this.roomid.substr(7),
+			id: id,
 			loghash: datahash,
 			p1: battle.p1.name,
 			p2: battle.p2.name,
@@ -1636,9 +1632,40 @@ export class GameRoom extends BasicRoom {
 		}
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
-			id: this.roomid.substr(7),
+			id: id,
+			password: password,
 			silent: options === 'forpunishment' || options === 'silent',
 		}));
+	}
+
+	getReplayData() {
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		const end = this.roomid.length - 2;
+		const lastHyphen = this.roomid.lastIndexOf('-', end);
+		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
+	}
+
+	makePrivate(privacy: true | 'hidden' | 'voice') {
+		// This is the same password generation approach as genPassword in the client replays.lib.php
+		// but obviously will not match given mt_rand there uses a different RNG and seed.
+		let password = '';
+		for (let i = 0; i <= 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+
+		this.settings.isPrivate = privacy;
+		for (const user of Object.values(this.users)) {
+			if (!user.named) {
+				user.leaveRoom(this.roomid);
+				user.popup(`The battle <<${this.roomid}>> has been made private; you must log in to watch private battles.`);
+			}
+		}
+		if (this.roomid.endsWith('pw')) return Promise.resolve(true);
+		return this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
+	}
+
+	makePublic() {
+		this.settings.isPrivate = false;
+		if (!this.roomid.endsWith('pw')) return Promise.resolve(true);
+		return this.rename(this.title, this.getReplayData().id as RoomID);
 	}
 }
 
@@ -1756,11 +1783,11 @@ export const Rooms = {
 
 		if (privacySetter.size) {
 			if (battle.forcePublic) {
-				room.settings.isPrivate = false;
+				void room.makePublic();
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
-				room.settings.isPrivate = 'hidden';
+				void room.makePrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {
