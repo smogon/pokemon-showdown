@@ -822,6 +822,9 @@ export const commands: ChatCommands = {
 			for (const setting in user.settings) {
 				if (setting in raw) {
 					if (setting === 'blockPMs') {
+						if (typeof setting === 'boolean') {
+							raw[setting] = {all: raw[setting]};
+						}
 						const {all, specific} = raw[setting];
 						settings.blockPMs = {
 							all: typeof all === 'boolean' || Users.Auth.isAuthLevel(all) ? all : false,

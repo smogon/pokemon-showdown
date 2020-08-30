@@ -1133,7 +1133,7 @@ export class CommandContext extends MessageContext {
 		const targetUserSettings = targetUser.settings.blockPMs;
 
 		if (targetUser.locked && !user.can('lock')) {
-			this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
+			this.errorReply(this.tr`The user "${targetUser.name}" is locked and cannot be PMed.`);
 			return null;
 		}
 		if (
@@ -1141,7 +1141,7 @@ export class CommandContext extends MessageContext {
 			!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)
 		) {
 			const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-			this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
+			this.errorReply(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 			return null;
 		}
 		if (
@@ -1152,11 +1152,11 @@ export class CommandContext extends MessageContext {
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			if (!targetUser.can('lock')) {
-				this.errorReply(`This user is blocking private messages right now.`);
+				this.errorReply(this.tr`This user is blocking private messages right now.`);
 				return null;
 			} else {
-				this.errorReply(`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
-				this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
+				this.errorReply(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+				this.sendReply(this.tr`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 				return null;
 			}
 		}
@@ -1166,14 +1166,14 @@ export class CommandContext extends MessageContext {
 			userSettings.specific.includes(targetUser.id)
 		) {
 			const isBlocked = user.settings.blockPMs.specific?.includes(targetUser.id);
-			this.errorReply(`You are blocking private messages ${isBlocked ? 'from this user ' : ''}right now.`);
+			this.errorReply(this.tr`You are blocking private messages ${isBlocked ? 'from this user ' : ''}right now.`);
 			return null;
 		}
 		return true;
 	}
 	canPMHTML(targetUser: User | null) {
 		if (!targetUser || !targetUser.connected) {
-			this.errorReply(`User ${this.targetUsername} is not currently online.`);
+			this.errorReply(this.tr`User ${this.targetUsername} is not currently online.`);
 			return false;
 		}
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
