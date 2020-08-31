@@ -562,9 +562,10 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		desc: "This Pokemon can only be damaged by direct attacks. On switch-in, this Pokemon's stats are boosted based on the number of hazards on the field. 1 stat is raised if 1-2 hazards are up, and 2 stats are raised if 3 or more hazards are up.",
 		shortDesc: "On switch-in, boosts stats based on the number of hazards up on this Pokemon's side.",
 		name: "Greed Punisher",
-		/* onSwitchIn(pokemon) {
+		onSwitchIn(pokemon) {
 			const side = pokemon.side;
-			const activeCount = Object.keys(side.sideConditions).length;
+			const sideConditions = Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod');
+			const activeCount = sideConditions.length;
 			if (activeCount > 0) {
 				const stats: BoostName[] = [];
 				let i = 0;
@@ -587,7 +588,7 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 					return false;
 				}
 			}
-		},*/
+		},
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'heavyhailstorm') return;
 			if (effect.effectType !== 'Move') {
@@ -1943,6 +1944,26 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
+			}
+		},
+	},
+	// Modified Unaware for Blaz's move
+	unaware: {
+		inherit: true,
+		onAnyModifyBoost(boosts, pokemon) {
+			const unawareUser = this.effectData.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['def'] = 0;
+				boosts['spa'] = 0;
+				boosts['spd'] = 0;
+				boosts['accuracy'] = 0;
 			}
 		},
 	},

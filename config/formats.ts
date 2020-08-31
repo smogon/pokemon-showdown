@@ -1437,7 +1437,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
-			if (!pokemon.side.sideConditions['trackermod']) {
+			if (!pokemon.side.getSideCondition('trackermod') && pokemon.side.pokemon.some(x => x.name === 'Darth')) {
 				// Initialize the tracker side condition for Darth's ability
 				pokemon.side.addSideCondition('trackermod');
 			}
