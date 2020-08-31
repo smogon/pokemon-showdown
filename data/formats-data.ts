@@ -2633,7 +2633,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["firepunch", "followme", "ironhead", "lifedew", "protect", "thunderwave"],
 		randomDoubleBattleLevel: 76,
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUber",
 	},
 	deoxys: {
