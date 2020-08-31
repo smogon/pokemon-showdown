@@ -1370,10 +1370,10 @@ export class CommandContext extends MessageContext {
 	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
-			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.cmd}" does not exist.`);
+			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
 		}
 		throw new Chat.ErrorMessage(
-			`The command "${this.cmdToken}${this.cmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
+			`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
 		);
 	}
 }
