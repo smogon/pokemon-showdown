@@ -2692,6 +2692,9 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 			this.add('-anim', source, 'Techno Blast', target);
 			this.add('-anim', source, 'Never-Ending Nightmare', target);
 		},
+		onHit() {
+			this.add(`c|${getName('Notater517')}|For more phantasmic music, check out [[this link <https://www.youtube.com/watch?v=dQw4w9WgXcQ>]].`);
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
 		},
