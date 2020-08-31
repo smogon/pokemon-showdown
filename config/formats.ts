@@ -72,11 +72,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8uu') {
-				this.add('html', '<div class="broadcast-blue"><strong>UU is currently suspecting Jirachi! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668911/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] RU",
@@ -429,11 +424,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Tornadus-Therian', 'Urshifu-Base', 'Xerneas', 'Yveltal',
 			'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8nationaldex') {
-				this.add('html', '<div class="broadcast-blue"><strong>National Dex is currently suspecting Ash-Greninja! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3668917/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] National Dex UU",
