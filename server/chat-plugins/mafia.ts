@@ -1991,7 +1991,8 @@ export const commands: ChatCommands = {
 			}
 
 			if (!this.targetUser || !this.targetUser.connected) {
-				return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+				const targetUsername = this.targetUsername;
+				return this.errorReply(`The user "${targetUsername}" was not found.`);
 			}
 			if (!nextHost && this.targetUser.id !== user.id && !this.can('mute', null, room)) return false;
 			if (!room.users[this.targetUser.id]) {
@@ -3121,7 +3122,10 @@ export const commands: ChatCommands = {
 			if (!this.can('mute', null, room)) return false;
 			this.splitTarget(target, false);
 			const targetUser = this.targetUser;
-			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+			if (!targetUser || !targetUser.connected) {
+				const targetUsername = this.targetUsername;
+				return this.errorReply(`The user "${targetUsername}" was not found.`);
+			}
 			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
 			if (game.cohosts.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);

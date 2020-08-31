@@ -344,7 +344,8 @@ export const commands: ChatCommands = {
 
 	version(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(this.tr`Server version: <b>${Chat.packageData.version}</b>`);
+		const version = Chat.packageData.version;
+		this.sendReplyBox(this.tr`Server version: <b>${version}</b>`);
 	},
 
 	userlist(target, room, user) {
@@ -504,12 +505,13 @@ export const commands: ChatCommands = {
 		}
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
-		if (this.targetUsername === '~') {
+		const targetUsername = this.targetUsername;
+		if (targetUsername === '~') {
 			this.pmTarget = null;
 			this.room = null;
 		} else if (!targetUser) {
-			let error = this.tr`User ${this.targetUsername} not found. Did you misspell their name?`;
-			error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
+			let error = this.tr`User ${targetUsername} not found. Did you misspell their name?`;
+			error = `|pm|${this.user.getIdentity()}| ${targetUsername}|/error ${error}`;
 			connection.send(error);
 			return;
 		} else {
@@ -518,7 +520,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (targetUser && !targetUser.connected) {
-			return this.errorReply(this.tr`User ${this.targetUsername} is offline.`);
+			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
 		this.parse(target);
@@ -536,10 +538,11 @@ export const commands: ChatCommands = {
 		}
 
 		if (room) {
-			if (!this.targetUser) return this.errorReply(this.tr`The user "${this.targetUsername}" was not found.`);
+			const targetUsername = this.targetUsername;
+			if (!this.targetUser) return this.errorReply(this.tr`The user "${targetUsername}" was not found.`);
 			if (!targetRoom) return this.errorReply(this.tr`The room "${target}" was not found.`);
 
-			return this.parse(`/pm ${this.targetUsername}, /invite ${targetRoom.roomid}`);
+			return this.parse(`/pm ${targetUsername}, /invite ${targetRoom.roomid}`);
 		}
 
 		const targetUser = this.pmTarget!; // not room means it's a PM
@@ -667,7 +670,8 @@ export const commands: ChatCommands = {
 			if (!targetUser) return this.errorReply(this.tr`User '${target}' not found.`);
 			if (!targetUser.userMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
 			if (!this.can('forcerename', targetUser)) return false;
-			this.privateModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${reason ? `: ${reason}` : ``}`);
+			const displayReason = reason ? `: ${reason}` : ``;
+			this.privateModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}`);
 			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}" by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
@@ -753,7 +757,8 @@ export const commands: ChatCommands = {
 
 	language(target, room, user) {
 		if (!target) {
-			return this.sendReply(this.tr`Currently, you're viewing Pokémon Showdown in ${Chat.languages.get(user.language || 'english')}.`);
+			const language = Chat.languages.get(user.language || 'english');
+			return this.sendReply(this.tr`Currently, you're viewing Pokémon Showdown in ${language}.`);
 		}
 		target = toID(target);
 		if (!Chat.languages.has(target)) {
@@ -1134,7 +1139,8 @@ export const commands: ChatCommands = {
 			room.auth.delete(targetUser.id);
 			return;
 		}
-		this.addModAction(room.tr`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
+		const playerNum = target.slice(1);
+		this.addModAction(room.tr`${name} was added to the battle as Player ${playerNum} by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
 	addplayerhelp: [
@@ -1194,11 +1200,13 @@ export const commands: ChatCommands = {
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
-			return this.errorReply(this.tr`User ${this.targetUsername} not found.`);
+			const targetUsername = this.targetUsername;
+			return this.errorReply(this.tr`User ${targetUsername} not found.`);
 		}
 		if (!this.can('kick', targetUser, room)) return false;
 		if (room.battle.leaveGame(targetUser)) {
-			this.addModAction(room.tr`${targetUser.name} was kicked from a battle by ${user.name} ${(target ? ` (${target})` : ``)}`);
+			const displayTarget = target ? ` (${target})` : ``;
+			this.addModAction(room.tr`${targetUser.name} was kicked from a battle by ${user.name} ${displayTarget}`);
 			this.modlog('KICKBATTLE', targetUser, target, {noip: 1, noalts: 1});
 		} else {
 			this.errorReply("/kickbattle - User isn't in battle.");
@@ -1325,7 +1333,8 @@ export const commands: ChatCommands = {
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
-			return this.popupReply(this.tr`The user '${this.targetUsername}' was not found.`);
+			const targetUsername = this.targetUsername;
+			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
 		if (user.locked && !targetUser.locked) {
 			return this.popupReply(this.tr`You are locked and cannot challenge unlocked users.`);
@@ -1379,7 +1388,8 @@ export const commands: ChatCommands = {
 		target = this.splitTarget(target);
 		if (target) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		const targetUser = this.targetUser || this.pmTarget;
-		if (!targetUser) return this.popupReply(this.tr`User "${this.targetUsername}" not found.`);
+		const targetUsername = this.targetUsername;
+		if (!targetUser) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
 		return Ladders.acceptChallenge(connection, targetUser);
 	},
 
