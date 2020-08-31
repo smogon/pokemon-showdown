@@ -435,7 +435,9 @@ type SearchMatch = readonly [string, string, string, string, string];
 
 export const LogSearcher = new class {
 	constructRegex(str: string) {
-		const searches = str.split('+').map(term => Utils.escapeRegex(term));
+		// modified regex replace
+		str = str.replace(/[\\^$.*?()[\]{}|]/g, '\\$&');
+		const searches = str.split('+');
 		if (searches.length <= 1) {
 			if (str.length <= 3) return `\b${str}`;
 			return str;
@@ -545,7 +547,7 @@ export const LogSearcher = new class {
 			});
 			results = stdout.split('--');
 		} catch (e) {
-			if (e.code !== 1) throw e; // 2 means an error in ripgrep
+			if (e.code !== 1 && !e.message.includes('stdout maxBuffer')) throw e; // 2 means an error in ripgrep
 			if (e.stdout) {
 				results = e.stdout.split('--');
 			} else {
@@ -561,6 +563,7 @@ export const LogSearcher = new class {
 		limit?: number | null,
 		date?: string | null
 	) {
+		if (date && date.length > 7) date = date?.substr(0, 7);
 		const months = (date && toID(date) !== 'all' ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
 		let count = 0;
 		let results: string[] = [];
@@ -688,7 +691,7 @@ export const pages: PageTable = {
 			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
 				return LogSearcher.fsSearch(roomid, search, date, limit);
 			} else if (Config.chatlogreader === 'ripgrep') {
-				return LogSearcher.ripgrepSearch(roomid, search, limit, isAll ? date : '');
+				return LogSearcher.ripgrepSearch(roomid, search, limit, isAll ? null : date);
 			} else {
 				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
 			}
