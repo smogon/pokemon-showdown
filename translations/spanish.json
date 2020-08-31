@@ -500,7 +500,7 @@
 		"You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.": "Tú ya no estás ignorando las notificaciones de los help tickets. Usa /helpticket ignore para no recibir notificaciones.",
 		"You will now receive help ticket notifications.": "Tú ahora no recibirás notificaciones de help tickets.",
 		"${target} does not have a ticket.": "${target} no tiene un ticket.",
-		"You deleted ${target}'s ticket.": "",
+		"You deleted ${target}'s ticket.": "Tú eliminaste el ticket de ${target}",
 
 		"Server version: <b>${version}</b>": "",
 		"/mee - must not start with a letter or number": "",

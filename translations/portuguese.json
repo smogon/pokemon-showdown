@@ -501,7 +501,7 @@
 		"You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.": "Você não está ignorando notificações de pedidos de ajuda. Use /helptickets ignore para deixar de receber notificações.",
 		"You will now receive help ticket notifications.": "Agora você receberá notificações de pedidos de ajuda.",
 		"${target} does not have a ticket.": "${target} não tem um pedido de ajuda.",
-		"You deleted ${target}'s ticket.": "",
+		"You deleted ${target}'s ticket.": "Você deletou o pedido de ajuda de ${target}.",
 
 		"Server version: <b>${version}</b>": "",
 		"/mee - must not start with a letter or number": "",
