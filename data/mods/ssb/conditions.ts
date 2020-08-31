@@ -251,6 +251,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Blaz')}|the game (lol u lost)`);
 		},
 	},
+	brandon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Brandon')}|I didn't come here to play. I came here to slay!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Brandon')}|${[`I need to catch my breath`, `brb getting a snack`][this.random(2)]}`);
+		},
+		onFaint(target, source) {
+			const foeName = source.side.foe.active[0].illusion ?
+				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
+			this.add(`c|${getName('Brandon')}|${[`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`][this.random(3)]}`);
+		},
+	},
 	cake: {
 		noCopy: true,
 		onStart(target, pokemon) {

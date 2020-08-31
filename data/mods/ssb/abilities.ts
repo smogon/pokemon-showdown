@@ -428,6 +428,17 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Brandon
+	banesurge: {
+		shortDesc: "On switch-in, this Pokemon summons Bane Terrain.",
+		onStart(source) {
+			this.field.setTerrain('baneterrain');
+		},
+		name: "Bane Surge",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// cant say
 	ragequit: {
 		desc: "If Pokemon with this ability uses a move that misses or fails it faints and gives -2 Atk / -2 SpA to foe",

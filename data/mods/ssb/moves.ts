@@ -690,6 +690,81 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Fairy",
 	},
 
+	// Brandon
+	flowershower: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		desc: "This move is physical if the target's Defense is lower than the target's Special Defense.",
+		shortDesc: "Physical if target Def < Sp. Def.",
+		name: "Flower Shower",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Petal Dance', target);
+		},
+		onModifyMove(move, source, target) {
+			if (target.getStat('def') < target.getStat('spd')) {
+				move.category = "Physical";
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
+
+	// Used for Brandon's ability
+	baneterrain: {
+		num: 580,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Bane Terrain. During the effect, moves hit off of the Pokemon's weaker attacking stat. Fails if the current terrain is Bane Terrain.",
+		shortDesc: "5 turns. Moves hit off of weaker stat.",
+		name: "Bane Terrain",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		terrain: 'baneterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			// Stat modifying in scripts.ts
+			onStart(battle, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Bane Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Bane Terrain');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onEnd() {
+				if (!this.effectData.duration) this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Bane Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Grass",
+		zMove: {boost: {def: 1}},
+		contestType: "Beautiful",
+	},
+
 	// Cake
 	kevin: {
 		accuracy: true,

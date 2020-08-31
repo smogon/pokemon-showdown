@@ -527,7 +527,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		return damage;
 	},
 
-	// For Spandan's Custom Move
+	// For Spandan's custom move and Brandon's ability
 	getDamage(pokemon, target, move, suppressMessages = false) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
@@ -604,6 +604,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		const defender = target;
 		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
 		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		if (this.field.isTerrain('baneterrain')) {
+			if (attacker.getStat('atk') > attacker.getStat('spa')) {
+				attackStat = 'spa';
+			} else {
+				attackStat = 'atk';
+			}
+		}
 		if (move.useSourceDefensiveAsOffensive) {
 			attackStat = defenseStat;
 			// Body press really wants to use the def stat,

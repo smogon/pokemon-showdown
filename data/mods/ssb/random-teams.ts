@@ -137,6 +137,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Bleak December',
 		evs: {hp: 4, def: 252, spd: 252}, ivs: {atk: 0}, nature: 'Careful', shiny: true,
 	},
+	Brandon: {
+		species: 'Shaymin', ability: 'Bane Surge', item: ['Leftovers', 'Terrain Extender'], gender: 'M',
+		moves: [['Ice Beam', 'Paleo Wave'], ['Earthquake', 'Flamethrower'], 'Recover'],
+		signatureMove: 'Flower Shower',
+		evs: {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84}, nature: 'Quirky',
+	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
 		moves: ['Haze', 'Ingrain', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Refresh', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
@@ -787,13 +793,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves: [],
 				nature: ssbSet.nature ? Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature : 'Serious',
 				gender: ssbSet.gender || this.sample(['M', 'F', 'N']),
-				evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ssbSet.evs),
+				evs: ssbSet.evs ? Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ssbSet.evs) : {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 				ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ssbSet.ivs),
 				level: ssbSet.level || 100,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
 				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
 			};
-			if (!ssbSet.evs) set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
 				let move = this.sampleNoReplace(ssbSet.moves);
 				if (Array.isArray(move)) move = this.sampleNoReplace(move);
