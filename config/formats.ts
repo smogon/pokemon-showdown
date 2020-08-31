@@ -256,11 +256,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['DUber', 'Beat Up'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8doublesou') {
-				this.add('html', '<div class="broadcast-blue"><strong>Doubles OU is currently suspecting Volcarona! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3669212/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
