@@ -408,6 +408,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Elgino')}|I'm out of fairies D:!`);
 		},
 	},
+	elsa: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Elsa')}|Hi, this is ps-chan, how may I help you, user-kun? (｡◕‿‿◕｡)`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Elsa')}|Teclis au secours`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Elsa')}|The cold never bothered me anyway...`);
+		},
+	},
 	emeri: {
 		noCopy: true,
 		onStart() {
@@ -816,15 +828,29 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(source) {
 			const foeName = source.side.foe.active[0].illusion ?
 				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
-			this.add(`c|${getName('Kris')}|hi ${foeName}`);
+			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
+				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
+			} else {
+				this.add(`c|${getName('Kris')}|hi ${foeName}`);
+			}
 		},
 		onSwitchOut(source) {
 			const foeName = source.side.foe.active[0].illusion ?
 				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
-			this.add(`c|${getName('Kris')}|bye ${foeName}`);
+			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
+				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
+			} else {
+				this.add(`c|${getName('Kris')}|hi ${foeName}`);
+			}
 		},
-		onFaint() {
-			this.add(`c|${getName('Kris')}|Fortnite Battle Royale`);
+		onFaint(target, source) {
+			const foeName = source.side.foe.active[0].illusion ?
+				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
+			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
+				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
+			} else {
+				this.add(`c|${getName('Kris')}|Fortnite Battle Royale`);
+			}
 		},
 		// phuck innate
 		onDamage(damage, target, source, effect) { // Magic Guard
@@ -904,18 +930,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-message', `Level 51 is burnt out from Pokemon!`);
 				pokemon.faint();
 			}
-		},
-	},
-	lionyx: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Lionyx')}|Hi, this is ps-chan, how may I help you, user-kun? (｡◕‿‿◕｡)`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Lionyx')}|Teclis au secours`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Lionyx')}|The cold never bothered me anyway...`);
 		},
 	},
 	litteleven: {
@@ -1195,6 +1209,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Rach')}|I'm all good already, so moved on, it's scary`);
 		},
 	},
+	rageuser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Rage')}|Hello there`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Rage')}|im off, cya lads`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Rage')}|/me quits`);
+		},
+	},
 	rajshoot: {
 		noCopy: true,
 		onStart() {
@@ -1219,6 +1245,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			} else {
 				this.add(`c|${getName('Ransei')}|ripsei... Ok look you might’ve won this time but I kid you not you’re losing next game!`);
 			}
+		},
+	},
+	rb220: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('rb220')}|Time to win this :)`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('rb220')}|MSU need a sub`);
+		},
+		onFaint() {
+			this.add(`c|${getName('rb220')}|Authhate is real.`);
 		},
 	},
 	robb576: {
@@ -1810,6 +1848,32 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onHit(pokemon, source, move) {
 			if (move.category !== 'Status') {
 				pokemon.volatiles['nexthuntcheck'].lostFocus = true;
+			}
+		},
+	},
+	// modified paralysis for Inversion Terrain
+	par: {
+		name: 'par',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'par');
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.hasAbility('quickfeet')) return;
+			if (this.field.isTerrain('inversionterrain') && pokemon.isGrounded()) {
+				return this.chainModify(2);
+			}
+			return this.chainModify(0.5);
+		},
+		onBeforeMovePriority: 1,
+		onBeforeMove(pokemon) {
+			if (this.randomChance(1, 4)) {
+				this.add('cant', pokemon, 'par');
+				return false;
 			}
 		},
 	},

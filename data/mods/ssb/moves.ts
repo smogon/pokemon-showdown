@@ -1190,6 +1190,57 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: 'Fairy',
 	},
 
+	// Elsa
+	bigbang: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
+		shortDesc: "33% recoil; removes hazards/weather/terrain.",
+		name: "Big Bang",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			this.add('-anim', source, 'Light of Ruin', target);
+			this.add('-anim', source, 'Dark Void', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+			];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
+					}
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
+					}
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			return success;
+		},
+		recoil: [33, 100],
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Emeri
 	forcedlanding: {
 		accuracy: true,
@@ -2310,57 +2361,6 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Fairy",
 	},
 
-	// Lionyx
-	bigbang: {
-		accuracy: 100,
-		basePower: 120,
-		category: "Special",
-		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
-		shortDesc: "33% recoil; removes hazards/weather/terrain.",
-		name: "Big Bang",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Extreme Evoboost', source);
-			this.add('-anim', source, 'Light of Ruin', target);
-			this.add('-anim', source, 'Dark Void', target);
-		},
-		onHit(target, source, move) {
-			let success = false;
-			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
-			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
-			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
-				}
-				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
-				}
-			}
-			this.field.clearTerrain();
-			this.field.clearWeather();
-			return success;
-		},
-		recoil: [33, 100],
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
-	},
-
 	// LittEleven
 	nexthunt: {
 		accuracy: true,
@@ -3189,7 +3189,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			target.m.spindaHazard = this.sample(['Sticky Web', 'Stealth Rock', 'Spikes', 'Toxic Spikes', 'G-Max Steelspike']);
+			target.m.spindaHazard = this.sample(['Sticky Web', 'Stealth Rock', 'Spikes', 'Toxic Spikes', 'G-Max Steelsurge']);
 			target.m.spindaStatus = this.sample(['Thunder Wave', 'Toxic', 'Will-O-Wisp']);
 			if (target.m.spindaHazard) {
 				this.add('-anim', source, target.m.spindaHazard, target);
@@ -3213,6 +3213,91 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
+
+	// Rage
+	shockedlapras: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		desc: "Has a 100% chance to paralyze the user.",
+		shortDesc: "100% chance to paralyze the user.",
+		name: ":shockedlapras:",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Thunder', target);
+			if (!source.status) this.add('-anim', source, 'Thunder Wave', source);
+		},
+		onHit() {
+			this.add(`raw|<img src="https://cdn.discordapp.com/emojis/528403513894502440.png?v=1" />`);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				status: 'par',
+			},
+		},
+		target: "normal",
+		type: "Electric",
+	},
+
+	// used for Rage's ability
+	inversionterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Inversion Terrain. During the effect, the the type chart is inverted, and grounded, paralyzed Pokemon have their Speed doubled. Fails if the current terrain is Inversion Terrain.",
+		shortDesc: "5 turns. Type chart inverted. Par: 2x Spe.",
+		name: "Inversion Terrain",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'inversionterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onNegateImmunity: false,
+			onEffectivenessPriority: 1,
+			onEffectiveness(typeMod, target, type, move) {
+				// The effectiveness of Freeze Dry on Water isn't reverted
+				if (move && move.id === 'freezedry' && type === 'Water') return;
+				if (move && !this.dex.getImmunity(move, type)) return 1;
+				return -typeMod;
+			},
+			onStart(battle, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Inversion Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Inversion Terrain');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onEnd() {
+				if (!this.effectData.duration) this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Inversion Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Psychic",
 	},
 
 	// Raj.Shoot
@@ -3276,6 +3361,98 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
+	},
+
+	// rb220
+	quickhammer: {
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		desc: "",
+		shortDesc: "+1 Prio. +2 SpA if KO, -1 Def/SpD if not.",
+		name: "Quickhammer",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Crabhammer', target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				this.boost({spa: 2}, pokemon, pokemon, move);
+			} else {
+				this.boost({def: -1, spd: -1}, pokemon, pokemon, move);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+
+	// used for rb220's ability
+	waveterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Wave Terrain. During the effect, the accuracy of Water type moves is multiplied by 1.2, even if the user is not grounded. Hazards and screens are removed and cannot be set while Wave Terrain is active. Fails if the current terrain is Inversion Terrain.",
+		shortDesc: "5 turns. Removes hazards. Water move acc 1.2x.",
+		name: "Inversion Terrain",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'waveterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onModifyAccuracy(accuracy, target, source, move) {
+				if (move.type === 'Water') {
+					return this.chainModify(1.2);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Wave Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Wave Terrain');
+				}
+				this.add('-message', 'The battlefield suddenly flooded!');
+				const removeAll = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				];
+				for (const sideCondition of removeAll) {
+					if (source.side.foe.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+					}
+					if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+					}
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onEnd() {
+				if (!this.effectData.duration) this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Inversion Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Water",
 	},
 
 	// Robb576

@@ -205,6 +205,16 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Navi\'s Grace',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	Elsa: {
+		species: 'Gardevoir', ability: 'Tension', item: 'Blunder Policy', gender: 'F',
+		moves: [
+			['Psychic', 'Psystrike'], 'Quiver Dance', [
+				'Blizzard', 'Focus Blast', 'Hurricane', 'Hydro Pump', 'Inferno', 'Zap Cannon',
+			],
+		],
+		signatureMove: 'Big Bang',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+	},
 	Emeri: {
 		species: 'Flygon', ability: 'Draco Voice', item: 'Throat Spray', gender: 'M',
 		moves: ['Boomburst', 'Earth Power', 'Agility'],
@@ -368,14 +378,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Swan Song',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	Lionyx: {
-		species: 'Gardevoir', ability: 'Tension', item: 'Blunder Policy', gender: 'F',
-		moves: [['Psychic', 'Psystrike'], 'Quiver Dance', [
-			'Blizzard', 'Focus Blast', 'Hurricane', 'Hydro Pump', 'Inferno', 'Zap Cannon',
-		]],
-		signatureMove: 'Big Bang',
-		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-	},
 	'Litt♥Eleven': {
 		species: 'Bisharp', ability: 'Dark Royalty', item: 'Black Glasses', gender: 'M',
 		moves: ['Sucker Punch', 'Knock Off', 'Iron Head'],
@@ -506,6 +508,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Spinda Wheel',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 	},
+	Rage: {
+		species: 'Espeon', ability: 'Inversion Surge', item: 'Leftovers', gender: 'M',
+		moves: ['Psychic', 'Calm Mind', 'Hyper Voice'],
+		signatureMove: ':shockedlapras:',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	'Raj.Shoot': {
 		species: 'Swampert', ability: 'Sap Sipper', item: 'Life Orb', gender: 'N',
 		moves: ['Earthquake', 'Waterfall', 'Ice Punch'],
@@ -517,6 +525,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Trick', 'Recover', 'Spectral Thief'],
 		signatureMove: 'ripsei',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	},
+	rb220: {
+		species: 'Keldeo-Resolute', ability: 'Wave Surge', item: 'Expert Belt', gender: '',
+		moves: ['Hydro Pump', 'Secret Sword', 'Ice Beam'],
+		signatureMove: 'Quickhammer',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',
