@@ -996,6 +996,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	naziel: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Naziel')}|ay ola soy nasieeeeeeel`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Naziel')}|YAY, I WILL NOT DIE THIS TIME`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Naziel')}|Toy xikito no puedo ;-;`);
+		},
+	},
 	n10sit: {
 		noCopy: true,
 		onStart(source) {

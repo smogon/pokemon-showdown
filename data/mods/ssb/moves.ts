@@ -2573,6 +2573,36 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Normal",
 	},
 
+	// naziel
+	notsoworthypirouette: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "55% chance to OHKO the target; otherwise, it OHKOs itself.",
+		shortDesc: "55% chance to OHKO target. 45% to OHKO user.",
+		name: "Not-so-worthy Pirouette",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "High Jump Kick", target);
+		},
+		onHit(target, source) {
+			if (this.randomChance(11, 20)) {
+				target.faint();
+			} else {
+				source.faint();
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// n10siT
 	"unbind": {
 		accuracy: 100,

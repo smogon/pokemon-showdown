@@ -412,6 +412,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'OwO wuts dis?',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
 	},
+	Naziel: {
+		species: "Kirlia", ability: 'Prankster', item: 'Eviolite', gender: '',
+		moves: ['Glare', 'Defog', 'Swagger'],
+		signatureMove: 'Not-so-worthy Pirouette',
+		evs: {hp: 252, def: 200, spd: 56}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
+	},
 	n10siT: {
 		species: 'Hoopa', ability: 'Greedy Magician', item: 'Focus Sash', gender: 'N',
 		moves: ['Hyperspace Hole', 'Shadow Ball', 'Aura Sphere'],
