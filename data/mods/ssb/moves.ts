@@ -3565,7 +3565,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		},
 		onHit(pokemon, source) {
 			this.add('-activate', source, 'move: Mode [7: Defensive]');
-			const side = pokemon.side;
+			const side = source.side;
 			let success = false;
 			for (const ally of side.pokemon) {
 				if (ally.hasAbility('soundproof')) continue;
@@ -3666,6 +3666,40 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
+	},
+
+	// sejesensei
+	badopinion: {
+		accuracy: 90,
+		basePower: 120,
+		category: "Physical",
+		desc: "Forces the opponent out. +1 Def",
+		shortDesc: "Forces the opponent out. +1 Def",
+		name: "Bad Opinion",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: -6,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hyper Voice', target);
+			this.add('-anim', source, 'Sludge Bomb', target);
+		},
+		onHit() {
+			this.add(`c|${getName('sejesensei')}|Please go read To Love-Ru I swear its really good, wait... don’t leave…`);
+		},
+		self: {
+			boosts: {
+				def: 1,
+			},
+		},
+		forceSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Poison",
 	},
 
 	// Shadecession

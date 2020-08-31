@@ -570,6 +570,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Disconnect',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
 	},
+	sejesensei: {
+		species: 'Garbodor', ability: 'Trash Consumer', item: 'Red Card', gender: 'M',
+		moves: ['Toxic Spikes', 'Spikes', 'Thousand Waves'],
+		signatureMove: 'Bad Opinion',
+		evs: {hp: 252, atk: 56, def: 200}, nature: 'Impish', shiny: 2,
+	},
 	Shadecession: {
 		species: 'Honchkrow', ability: 'Shady Deal', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Knock Off', 'Roost', 'Brave Bird'],

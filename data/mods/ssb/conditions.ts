@@ -1324,6 +1324,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me`);
 		},
 	},
+	sejesensei: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('sejesensei')}|yoyo, what’ve you been reading lately`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('sejesensei')}|bbl, gonna go read some manga`);
+		},
+		onFaint(pokemon) {
+			this.add(`c|${getName('sejesensei')}|B-but, this didn’t happen in the manga…`);
+		},
+	},
 	shadecession: {
 		noCopy: true,
 		onStart() {

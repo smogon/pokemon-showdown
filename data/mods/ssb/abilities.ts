@@ -1466,6 +1466,29 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// sejesensei
+	trashconsumer: {
+		desc: "Poison Absorb + Rough Skin",
+		shortDesc: "Poison Absorb + Rough Skin",
+		name: "Trash Consumer",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Poison') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Trash Consumer');
+				}
+				return null;
+			}
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
+				this.damage(source.baseMaxhp / 8, source, target);
+			}
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Shadecession
 	shadydeal: {
 		desc: "on entering the battle, this mon gains a 1 stage boost to a random stat that isn't SpA and 2 random type immunities that are displayed to the opponent.",
