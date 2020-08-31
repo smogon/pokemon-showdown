@@ -1235,6 +1235,24 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Notater517
+	lastminutelag: {
+		shortDesc: "Applies Recharge volatile to the opposing Pokemon if this Pokemon has it.",
+		onModifyMove(move, pokemon, target) {
+			if (move.self?.volatileStatus === 'mustrecharge') {
+				if (!move.volatileStatus) {
+					move.volatileStatus = 'mustrecharge';
+				} else {
+					if (!move.secondaries) move.secondaries = [];
+					move.secondaries.push({chance: 100, volatileStatus: 'mustrecharge'});
+				}
+			}
+		},
+		name: "Last-Minute Lag",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Overneat
 	darkestwings: {
 		desc: "This Pokemon's contact moves have their power multiplied by 1.3. This Pokemon's Defense is doubled.",

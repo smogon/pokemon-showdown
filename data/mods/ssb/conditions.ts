@@ -1036,7 +1036,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	nolali: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('Nolali')}|What's up nerds`);
 		},
 		onSwitchOut() {
@@ -1063,6 +1063,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (pokemon.baseSpecies.nfe) {
 				return this.chainModify(1.5);
 			}
+		},
+	},
+	notater517: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Notater517')}|nyaa~... I mean, 'tis a swell day to twirl one's mustache, isn't it?!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Notater517')}|TBD`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Notater517')}|This is probably a good time to fix my sleep schedule`);
 		},
 	},
 	overneat: {

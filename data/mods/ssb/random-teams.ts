@@ -432,6 +432,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mad Hacks',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
 	},
+	Notater517: {
+		species: 'Jellicent', ability: 'Last-Minute Lag', item: 'Leftovers', gender: 'M',
+		moves: ['Hydro Cannon', 'Blast Burn', 'Toxic Spikes'],
+		signatureMove: 'Techno Tuber Transmission',
+		evs: {hp: 236, spa: 252, spe: 20}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	'OM~!': {
 		species: 'Magneton', ability: 'Triage', item: 'Metronome', gender: 'N',
 		moves: ['Parabolic Charge', 'Oblivion Wing', 'Giga Drain'],

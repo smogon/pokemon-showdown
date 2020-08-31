@@ -2674,6 +2674,32 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		type: "Ghost",
 	},
 
+	// Notater517
+	technotubertransmission: {
+		accuracy: 90,
+		basePower: 145,
+		category: "Special",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
+		shortDesc: "User cannot move next turn.",
+		name: "Techno Tuber Transmission",
+		pp: 5,
+		priority: 0,
+		flags: {recharge: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Techno Blast', target);
+			this.add('-anim', source, 'Never-Ending Nightmare', target);
+		},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// OM~!
 	mechomnism: {
 		accuracy: 95,
