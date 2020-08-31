@@ -439,7 +439,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (this.user.settings.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
-			this.user.settings.setStatusType('online');
+			this.user.setStatusType('online');
 		}
 
 		try {
