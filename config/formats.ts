@@ -406,9 +406,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] National Dex",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656899/">National Dex Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658849/">National Dex Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659038/">National Dex Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -424,7 +424,8 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] National Dex UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660920/">National Dex UU</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660920/">National Dex UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668687/">National Dex UU Resources</a>`,
 		],
 
 		mod: 'gen8',
