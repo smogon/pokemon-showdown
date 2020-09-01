@@ -3505,7 +3505,7 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Wave Terrain. During the effect, the accuracy of Water type moves is multiplied by 1.2, even if the user is not grounded. Hazards and screens are removed and cannot be set while Wave Terrain is active. Fails if the current terrain is Inversion Terrain.",
 		shortDesc: "5 turns. Removes hazards. Water move acc 1.2x.",
-		name: "Inversion Terrain",
+		name: "Wave Terrain",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
