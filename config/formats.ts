@@ -2,8 +2,6 @@
 // The rules that formats use are stored in data/rulesets.ts
 import {Utils} from './../lib/utils';
 
-import {FormatList} from './custom-formats';
-
 export const MainFormats: FormatList[] = [
 
 	// Sw/Sh Singles
