@@ -111,7 +111,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<<${room.roomid}>> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					`<<${room.roomid}>> ${user.name}: SPOILER: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
@@ -370,7 +370,7 @@ export const namefilter: NameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
-						`using an inappropriate name: ${name} (from ${user.name})`, false, name
+						`using an inappropriate name: SPOILER: ${name} (from ${user.name})`, false, name
 					);
 				}
 				line[4]++;
@@ -429,7 +429,7 @@ export const nicknamefilter: NameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
-						`${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
+						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
 					);
 				} else if (Chat.monitors[list].punishment === 'EVASION') {
 					void Punishments.autolock(
@@ -472,7 +472,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
-						`${user.name} - using an inappropriate status: ${status}`, true
+						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
 					);
 				}
 				line[4]++;
