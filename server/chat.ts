@@ -438,7 +438,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		if (this.user.statusType === 'idle') this.user.setStatusType('online');
+		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+			this.user.setStatusType('online');
+		}
 
 		try {
 			if (this.handler) {
@@ -1368,18 +1370,21 @@ export class CommandContext extends MessageContext {
 	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
-			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.cmd}" does not exist.`);
+			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
 		}
 		throw new Chat.ErrorMessage(
-			`The command "${this.cmdToken}${this.cmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
+			`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
 		);
 	}
 }
 
 export const Chat = new class {
 	constructor() {
-		void this.loadTranslations();
+		void this.loadTranslations().then(() => {
+			Chat.translationsLoaded = true;
+		});
 	}
+	translationsLoaded = false;
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
@@ -1554,15 +1559,18 @@ export const Chat = new class {
 	tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
 		if (!language) language = 'english';
 		language = toID(language);
-		if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		// If strings is an array (normally the case), combine before translating.
+		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
+
+		if (!Chat.translations.has(language)) {
+			if (!Chat.translationsLoaded) return trString;
+			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		}
 		if (!strings.length) {
 			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
 				return Chat.tr(language, fStrings, ...fKeys);
 			});
 		}
-
-		// If strings is an array (normally the case), combine before translating.
-		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
 
 		const entry = Chat.translations.get(language)!.get(trString);
 		let [translated, keyLabels, valLabels] = entry || ["", [], []];
@@ -2099,7 +2107,7 @@ export const Chat = new class {
 	}
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
-		return (new PageContext({pageid, user, connection})).resolve();
+		return (new PageContext({pageid, user, connection, language: user.language!})).resolve();
 	}
 };
 

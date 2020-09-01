@@ -410,6 +410,7 @@
 		"I'm locked because of a proxy or VPN": "Sono lockato a causa di un proxy o un VPN",
 		"Yes, I have an autoconfirmed account": "Sì, ho un account autoconfirmed",
 		"No, I don't have an autoconfirmed account": "No, non ho un account autoconfirmed",
+    "I want to appeal a mute/roomban/blacklist": "",
 		"Something else": "Altro",
 		"I lost my password": "Ho dimenticato la mia password",
 		"I need global staff to help watch a public room": "Ho bisogno che un membro dello staff globale controlli una room pubblica",

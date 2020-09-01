@@ -194,7 +194,7 @@ export const commands: ChatCommands = {
 			if (!room) return this.requiresRoom();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			let [id, name] = target.split(',');
-			name = name.trim();
+			if (name) name = name.trim();
 			if (!id) return this.errorReply('Specify a channel ID.');
 			const data = await YouTube.getChannelData(id, name);
 			if (!data) {
