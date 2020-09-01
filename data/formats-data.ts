@@ -3403,7 +3403,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	scolipede: {
-		randomBattleMoves: ["earthquake", "megahorn", "protect", "rockslide", "spikes", "swordsdance", "toxicspikes"],
+		randomBattleMoves: ["earthquake", "megahorn", "poisonjab", "protect", "spikes", "swordsdance", "toxicspikes"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["megahorn", "poisonjab", "protect", "rockslide", "superpower", "swordsdance"],
 		randomDoubleBattleLevel: 84,
@@ -4840,7 +4840,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	palossand: {
-		randomBattleMoves: ["earthpower", "protect", "shadowball", "shoreup", "stealthrock", "toxic"],
+		randomBattleMoves: ["earthpower", "scorchingsands", "shadowball", "shoreup", "stealthrock", "toxic"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["hypnosis", "protect", "scorchingsands", "shadowball", "shoreup", "stealthrock"],
 		randomDoubleBattleLevel: 86,
@@ -5334,6 +5334,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	inteleongmax: {
+		randomBattleMoves: ["airslash", "focusenergy", "icebeam", "surf"],
+		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["focusenergy", "hydropump", "icebeam", "muddywater"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
@@ -5859,7 +5861,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	urshifu: {
-		randomBattleMoves: ["closecombat", "ironhead", "uturn", "wickedblow"],
+		randomBattleMoves: ["closecombat", "ironhead", "suckerpunch", "uturn", "wickedblow"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["closecombat", "ironhead", "protect", "suckerpunch", "wickedblow"],
 		randomDoubleBattleLevel: 76,
