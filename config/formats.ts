@@ -771,7 +771,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['350 Cup Mod', 'Standard', 'Dynamax Clause'],
-		banlist: ['Pawniard', 'Rufflet', 'Eviolite', 'Light Ball', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Abra', 'Gastly', 'Pawniard', 'Rufflet', 'Eviolite', 'Light Ball', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
 	},
 
 	// Other Metagames
