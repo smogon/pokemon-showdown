@@ -209,13 +209,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	arsenal: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Arsenal|Wenger In`);
+			this.add(`c|+Arsenal|Wenger In`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Arsenal|Time to watch anime`);
+			this.add(`c|+Arsenal|Time to watch anime`);
 		},
 		onFaint() {
-			this.add(`c|%Arsenal|Wenger Out`);
+			this.add(`c|+Arsenal|Wenger Out`);
 		},
 	},
 	asheviere: {
@@ -576,11 +576,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
-			const activeMon = toID(
+			const activeMon = this.toID(
 				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
 			);
 			const family = [
-				'aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial',
+				'aethernum', 'ceteris', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial',
 			];
 			if (activeMon === 'hoeenhero' || activeMon === 'instruct') {
 				 this.add(`c|%fart|what song should I sing?`);
@@ -596,7 +596,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
 		onFaint(pokemon) {
-			const activeMon = toID(
+			const activeMon = this.toID(
 				pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name
 			);
 			if (activeMon === 'felucia') {
@@ -616,18 +616,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|%Felucia|Fine I'll go back to work...`);
-		},
-	},
-	flare: {
-		noCopy: true,
-		onStart() {
-			this.add('c|@Flare|(9°^°)9');
-		},
-		onSwitchIn() {
-			this.add('c|@Flare|ᕕ( ᐛ )ᕗ');
-		},
-		onFaint() {
-			this.add('c|@Flare|X_X');
 		},
 	},
 	fomg: {
@@ -917,7 +905,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	kris: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|%Kris|wjat poppin ;)))))`);
+			this.add(`c|+Kris|wjat poppin ;)))))`);
 			if (pokemon.illusion) return;
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
@@ -934,10 +922,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|%Kris|vbye`);
+			this.add(`c|+Kris|vbye`);
 		},
 		onFaint() {
-			this.add(`c|%Kris|thats weird but ok`);
+			this.add(`c|+Kris|thats weird but ok`);
 		},
 	},
 	level51: {
@@ -1221,7 +1209,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(source) {
 			this.add(`c|&pre|let's go, in and out, 20 minute adventure`);
 			// Easter Egg
-			const activeMon = toID(
+			const activeMon = this.toID(
 				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
 			);
 			if (activeMon === 'anubis') {
@@ -1876,7 +1864,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				if (target.boosts[boost]) this.add('-boost', target, boost, target.boosts[boost], '[silent]');
 			}
 			for (const v in target.volatiles) {
-				if (v !== toID(target.name) && v !== 'batonpasshelper') this.add('-start', target, target.volatiles[v].id);
+				if (v !== this.toID(target.name) && v !== 'batonpasshelper') this.add('-start', target, target.volatiles[v].id);
 			}
 		},
 	},

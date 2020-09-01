@@ -386,29 +386,26 @@ class Trivia extends Rooms.RoomGame {
 
 	addTriviaPlayer(user: User) {
 		if (this.playerTable[user.id]) return this.room.tr('You have already signed up for this game.');
-		for (const id in user.prevNames) {
+		for (const id of user.previousIDs) {
 			if (this.playerTable[id]) return this.room.tr('You have already signed up for this game.');
 		}
 		if (this.kickedUsers.has(user.id)) {
 			return this.room.tr('You were kicked from the game and thus cannot join it again.');
 		}
-		for (const id in user.prevNames) {
+		for (const id of user.previousIDs) {
 			if (this.playerTable[id]) return this.room.tr('You have already signed up for this game.');
 			if (this.kickedUsers.has(id)) return this.room.tr('You were kicked from the game and cannot join until the next game.');
 		}
 
 		for (const id in this.playerTable) {
-			const tarUser = Users.get(id);
-			if (tarUser) {
-				if (tarUser.prevNames[user.id]) return this.room.tr('You have already signed up for this game.');
-
-				const tarPrevNames = Object.keys(tarUser.prevNames);
-				const prevNameMatch = tarPrevNames.some(tarId => (tarId in user.prevNames));
-				if (prevNameMatch) return this.room.tr('You have already signed up for this game.');
-
-				const tarIps = Object.keys(tarUser.ips);
-				const ipMatch = tarIps.some(ip => (ip in user.ips));
-				if (ipMatch) return this.room.tr('You have already signed up for this game.');
+			const targetUser = Users.get(id);
+			if (targetUser) {
+				const isSameUser = (
+					targetUser.previousIDs.includes(user.id) ||
+					targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
+					targetUser.ips.some(ip => user.ips.includes(ip))
+				);
+				if (isSameUser) return this.room.tr('You have already signed up for this game.');
 			}
 		}
 		if (this.phase !== SIGNUP_PHASE && !this.canLateJoin) return this.room.tr("This game does not allow latejoins.");
@@ -512,40 +509,35 @@ class Trivia extends Rooms.RoomGame {
 	 * Kicks a player from the game, preventing them from joining it again
 	 * until the next game begins.
 	 */
-	kick(tarUser: User) {
-		if (!this.playerTable[tarUser.id]) {
-			if (this.kickedUsers.has(tarUser.id)) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
+	kick(user: User) {
+		if (!this.playerTable[user.id]) {
+			if (this.kickedUsers.has(user.id)) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 
-			for (const id in tarUser.prevNames) {
-				if (this.kickedUsers.has(id)) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
+			for (const id of user.previousIDs) {
+				if (this.kickedUsers.has(id)) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 			}
 
 			for (const kickedUserid of this.kickedUsers) {
 				const kickedUser = Users.get(kickedUserid);
 				if (kickedUser) {
-					if (kickedUser.prevNames[tarUser.id]) {
-						return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
-					}
-
-					const prevNames = Object.keys(kickedUser.prevNames);
-					const nameMatch = prevNames.some(id => tarUser.prevNames[id]);
-					if (nameMatch) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
-
-					const ips = Object.keys(kickedUser.ips);
-					const ipMatch = ips.some(ip => tarUser.ips[ip]);
-					if (ipMatch) return this.room.tr`User ${tarUser.name} has already been kicked from the game.`;
+					const isSameUser = (
+						kickedUser.previousIDs.includes(user.id) ||
+						kickedUser.previousIDs.some(id => user.previousIDs.includes(id)) ||
+						kickedUser.ips.some(ip => user.ips.includes(ip))
+					);
+					if (isSameUser) return this.room.tr`User ${user.name} has already been kicked from the game.`;
 				}
 			}
 
-			return this.room.tr`User ${tarUser.name} is not a player in the game.`;
+			return this.room.tr`User ${user.name} is not a player in the game.`;
 		}
 
-		this.kickedUsers.add(tarUser.id);
-		for (const id in tarUser.prevNames) {
+		this.kickedUsers.add(user.id);
+		for (const id of user.previousIDs) {
 			this.kickedUsers.add(id);
 		}
 
-		super.removePlayer(tarUser);
+		super.removePlayer(user);
 	}
 
 	leave(user: User) {
@@ -716,7 +708,7 @@ class Trivia extends Rooms.RoomGame {
 		const logbuf = this.getStaffEndMessage(winners, winner => winner.id);
 		this.room.sendMods(`(${buf}!)`);
 		this.room.roomlog(buf);
-		this.room.modlog(`(${this.room.roomid}) TRIVIAGAME: by ${toID(this.game.creator)}: ${logbuf}`);
+		this.room.modlog(`TRIVIAGAME: by ${toID(this.game.creator)}: ${logbuf}`);
 
 		if (!triviaData.history) triviaData.history = [];
 		triviaData.history.push(this.game);
@@ -751,13 +743,13 @@ class Trivia extends Rooms.RoomGame {
 	getWinningMessage(winners: TopPlayer[]) {
 		const prizes = this.getPrizes();
 		const [p1, p2, p3] = winners;
-		const initialPart = Utils.html`${this.room.tr`${p1.name} won the game with a final score of <strong>${p1.player.points}</strong>, and `}`;
+		const initialPart = this.room.tr`${Utils.escapeHTML(p1.name)} won the game with a final score of <strong>${p1.player.points}</strong>, and `;
 		switch (winners.length) {
 		case 1:
 			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
 		case 2:
 			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
-				Utils.html`${this.room.tr`${p2.name} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`}`;
+			this.room.tr`${Utils.escapeHTML(p2.name)} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
 		case 3:
 			return initialPart + Utils.html`${this.room.tr`${p2.name} and ${p3.name} were runners-up. `}` +
 				this.room.tr`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
@@ -1534,7 +1526,7 @@ const commands: ChatCommands = {
 				questions.splice(i, 1);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
-				return this.privateModAction(this.tr`${user.name} removed question '${target}' from the question database.`);
+				return this.privateModAction(room.tr`${user.name} removed question '${target}' from the question database.`);
 			}
 		}
 
@@ -1773,7 +1765,7 @@ const commands: ChatCommands = {
 			if (SPECIAL_CATEGORIES[category]) {
 				triviaData.questions = triviaData.questions!.filter(q => q.category !== category);
 				writeTriviaData();
-				return this.privateModAction(this.tr`${user.name} removed all questions of category '${category}'.`);
+				return this.privateModAction(room.tr`${user.name} removed all questions of category '${category}'.`);
 			} else {
 				return this.errorReply(this.tr`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
 			}

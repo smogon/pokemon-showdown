@@ -16,7 +16,7 @@ describe("IP tools", () => {
 
 	it('should resolve unknown IPs correctly', async () => {
 		const lookup = await IPTools.lookup('255.255.255.255');
-		assert.strictEqual(lookup.host, '255.255.unknown-nohost');
+		assert.strictEqual(lookup.host, '255.255?/unknown');
 		assert.strictEqual(lookup.hostType, 'unknown');
 	});
 
@@ -46,6 +46,28 @@ describe("IP tools", () => {
 
 		// Checks that a random IP does not match
 		assert(!IPTools.checkPattern([range], IPTools.ipToNumber('42.42.42.42')));
+	});
+
+	it('should handle wildcards in string ranges', () => {
+		assert.deepStrictEqual(
+			IPTools.stringToRange('1.*'),
+			{minIP: IPTools.ipToNumber('1.0.0.0'), maxIP: IPTools.ipToNumber('1.255.255.255')}
+		);
+		assert.deepStrictEqual(
+			IPTools.stringToRange('1.1.*'),
+			{minIP: IPTools.ipToNumber('1.1.0.0'), maxIP: IPTools.ipToNumber('1.1.255.255')}
+		);
+		assert.deepStrictEqual(
+			IPTools.stringToRange('1.1.1.*'),
+			{minIP: IPTools.ipToNumber('1.1.1.0'), maxIP: IPTools.ipToNumber('1.1.1.255')}
+		);
+	});
+
+	it('should handle single IPs as string ranges', () => {
+		assert.deepStrictEqual(
+			IPTools.stringToRange('1.1.1.1'),
+			{minIP: IPTools.ipToNumber('1.1.1.1'), maxIP: IPTools.ipToNumber('1.1.1.1')}
+		);
 	});
 });
 

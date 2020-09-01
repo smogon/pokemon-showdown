@@ -6,6 +6,7 @@
  */
 
 import {State} from './state';
+import {toID} from './dex';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -226,8 +227,12 @@ export class Pokemon {
 	canDynamax: boolean;
 	readonly canGigantamax: string | null;
 
+	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
 	staleness?: 'internal' | 'external';
+	/** Staleness that will be set once a future action occurs (eg. eating a berry). */
 	pendingStaleness?: 'internal' | 'external';
+	/** Temporary staleness that lasts only until the Pokemon switches. */
+	volatileStaleness?: 'external';
 
 	// Gen 1 only
 	modifiedStats?: StatsExceptHPTable;
@@ -1289,6 +1294,8 @@ export class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
+		this.volatileStaleness = undefined;
+
 		this.setSpecies(this.baseSpecies);
 	}
 
@@ -1795,7 +1802,12 @@ export class Pokemon {
 	 */
 	setType(newType: string | string[], enforce = false) {
 		// First type of Arceus, Silvally cannot be normally changed
-		if (!enforce && (this.species.num === 493 || this.species.num === 773)) return false;
+		if (!enforce) {
+			if ((this.battle.gen >= 5 && (this.species.num === 493 || this.species.num === 773)) ||
+				(this.battle.gen === 4 && this.hasAbility('multitype'))) {
+				return false;
+			}
+		}
 
 		if (!newType) throw new Error("Must pass type to setType");
 		this.types = (typeof newType === 'string' ? [newType] : newType);

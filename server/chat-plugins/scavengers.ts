@@ -472,7 +472,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
 			);
 		}
-		if (Object.keys(user.ips).some(ip => this.joinedIps.includes(ip))) {
+		if (user.ips.some(ip => this.joinedIps.includes(ip))) {
 			return user.sendTo(this.room, "You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;
@@ -490,7 +490,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	cacheUserIps(user: User | FakeUser) {
 		// limit to 1 IP in every game.
 		if (!('ips' in user)) return; // ghost user object cached from queue
-		for (const ip in user.ips) {
+		for (const ip of user.ips) {
 			this.joinedIps.push(ip);
 		}
 	}
@@ -709,8 +709,9 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		const now = Date.now();
 		const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+		const canBlitz = this.completed.length < 3;
 
-		const blitz = now - this.startTime <= 60000 &&
+		const blitz = now - this.startTime <= 60000 && canBlitz &&
 			(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || DEFAULT_BLITZ_POINTS[this.gameType]);
 
 		player.completed = true;
@@ -881,7 +882,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			const logMsg = `([${player.id}] has been caught trying to do their own hunt.)`;
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(`(${this.room.roomid}) ${logMsg}`);
+			this.room.modlog(logMsg);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -898,7 +899,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(`(${this.room.roomid}) ${logMsg}`);
+			this.room.modlog(logMsg);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -1006,7 +1007,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 		super(user, game);
 		this.game = game;
 
-		this.joinIps = Object.keys(user.ips);
+		this.joinIps = user.ips.slice();
 
 		this.currentQuestion = 0;
 		this.completed = false;
@@ -1424,7 +1425,9 @@ const ScavengerCommands: ChatCommands = {
 			room,
 			gameType === 'official' || gameType === 'recycled'
 		);
-		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+		if (!hosts.length) {
+			return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+		}
 
 		const res = ScavengerHunt.parseQuestions(params);
 		if (res.err) return this.errorReply(res.err);
@@ -1733,7 +1736,9 @@ const ScavengerCommands: ChatCommands = {
 		} else {
 			const [hostsArray, ...params] = target.split('|');
 			const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
-			if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+			if (!hosts.length) {
+				return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+			}
 
 			const results = ScavengerHunt.parseQuestions(params);
 			if (results.err) return this.errorReply(results.err);
@@ -1992,7 +1997,7 @@ const ScavengerCommands: ChatCommands = {
 
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist && scavsRoom) {
-			scavsRoom.modlog(`(scavengers) SCAV BLITZ: by ${user.id}: ${gameType}: ${blitzPoints}`);
+			scavsRoom.modlog(`SCAV BLITZ: by ${user.id}: ${gameType}: ${blitzPoints}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints} in <<${room.roomid}>>.)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints} in <<${room.roomid}>>.)`);
 		}
@@ -2023,7 +2028,7 @@ const ScavengerCommands: ChatCommands = {
 
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist) {
-			scavsRoom.modlog(`(scavengers) SCAV SETHOSTPOINTS: [room: ${room.roomid}] by ${user.id}: ${points}`);
+			scavsRoom.modlog(`SCAV SETHOSTPOINTS: [room: ${room.roomid}] by ${user.id}: ${points}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
 		}
@@ -2069,7 +2074,7 @@ const ScavengerCommands: ChatCommands = {
 
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist) {
-			scavsRoom.modlog(`(scavengers) SCAV SETPOINTS: [room: ${room.roomid}] by ${user.id}: ${type}: ${pointsDisplay}`);
+			scavsRoom.modlog(`SCAV SETPOINTS: [room: ${room.roomid}] by ${user.id}: ${type}: ${pointsDisplay}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
 		}
@@ -2110,7 +2115,7 @@ const ScavengerCommands: ChatCommands = {
 		// double modnote in scavs room if it is a subroomgroupchat
 		if (room.parent && !room.persist) {
 			if (room.settings.scavSettings.officialtwist) {
-				scavsRoom.modlog(`(scavengers) SCAV TWIST: [room: ${room.roomid}] by ${user.id}: ${room.settings.scavSettings.officialtwist}`);
+				scavsRoom.modlog(`SCAV TWIST: [room: ${room.roomid}] by ${user.id}: ${room.settings.scavSettings.officialtwist}`);
 				scavsRoom.sendMods(`(${user.name} has set the official twist to - ${room.settings.scavSettings.officialtwist} in <<${room.roomid}>>)`);
 				scavsRoom.roomlog(`(${user.name} has set the official twist to  - ${room.settings.scavSettings.officialtwist} in <<${room.roomid}>>)`);
 			} else {
@@ -2314,7 +2319,9 @@ const ScavengerCommands: ChatCommands = {
 
 			const [hostsArray, ...questions] = target.split('|');
 			const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, true);
-			if (!hosts) return this.errorReply("You need to specify a host.");
+			if (!hosts.length) {
+				return this.errorReply("You need to specify a host.");
+			}
 
 			const result = ScavengerHunt.parseQuestions(questions);
 			if (result.err) return this.errorReply(result.err);

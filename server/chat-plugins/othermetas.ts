@@ -4,6 +4,7 @@ import {Utils} from '../../lib/utils';
 
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};
+	bst: number;
 	weighthg: number;
 	type?: string;
 }
@@ -113,6 +114,7 @@ export const commands: ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
@@ -125,8 +127,8 @@ export const commands: ChatCommands = {
 		} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 			deltas.type = megaSpecies.types[1];
 		}
-		const mixedSpecies = Dex.deepClone(species);
-		mixedSpecies.abilities = Dex.deepClone(megaSpecies.abilities);
+		const mixedSpecies = Utils.deepClone(species);
+		mixedSpecies.abilities = Utils.deepClone(megaSpecies.abilities);
 		if (mixedSpecies.types[0] === deltas.type) { // Add any type gains
 			mixedSpecies.types = [deltas.type];
 		} else if (deltas.type === 'mono') {
@@ -135,10 +137,12 @@ export const commands: ChatCommands = {
 			mixedSpecies.types = [mixedSpecies.types[0], deltas.type];
 		}
 		let statName: StatName;
+		mixedSpecies.bst = 0;
 		for (statName in species.baseStats) { // Add the changed stats and weight
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
 				mixedSpecies.baseStats[statName] + deltas.baseStats[statName], 1, 255
 			);
+			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
 		mixedSpecies.tier = "MnM";
@@ -210,6 +214,7 @@ export const commands: ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatName;
 		for (statId in megaSpecies.baseStats) {
@@ -262,11 +267,7 @@ export const commands: ChatCommands = {
 		buf += `<span class="col statcol"><em>SpA</em><br />${deltas.baseStats.spa}</span> `;
 		buf += `<span class="col statcol"><em>SpD</em><br />${deltas.baseStats.spd}</span> `;
 		buf += `<span class="col statcol"><em>Spe</em><br />${deltas.baseStats.spe}</span> `;
-		let bst = 0;
-		for (const stat of Object.values(deltas.baseStats)) {
-			bst += stat;
-		}
-		buf += `<span class="col bstcol"><em>BST<br />${bst}</em></span> `;
+		buf += `<span class="col bstcol"><em>BST<br />${deltas.bst}</em></span> `;
 		buf += `</span>`;
 		buf += `</li>`;
 		this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
@@ -286,18 +287,18 @@ export const commands: ChatCommands = {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		const species = Dex.deepClone(dex.getSpecies(args[0]));
+		const species = Utils.deepClone(dex.getSpecies(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		let bst = 0;
+		const bst = species.bst;
+		species.bst = 0;
 		for (const i in species.baseStats) {
-			bst += species.baseStats[i];
-		}
-		for (const i in species.baseStats) {
+			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
+			species.bst += species.baseStats[i];
 		}
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -327,7 +328,7 @@ export const commands: ChatCommands = {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		const species = Dex.deepClone(dex.getSpecies(args[0]));
+		const species = Utils.deepClone(dex.getSpecies(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -349,9 +350,12 @@ export const commands: ChatCommands = {
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
+		species.bst = species.baseStats.hp;
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
+			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
+			species.bst += species.baseStats[statName];
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -375,7 +379,6 @@ export const commands: ChatCommands = {
 		if (!args.length || !toID(args[0])) return this.parse(`/help scalemons`);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !args[1]) args[1] = `gen${targetGen}`;
-		let isGen1 = false;
 		let dex = Dex;
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
@@ -383,20 +386,22 @@ export const commands: ChatCommands = {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		if (dex.gen === 1) isGen1 = true;
-		const species = Dex.deepClone(dex.getSpecies(args[0]));
+		const species = Utils.deepClone(dex.getSpecies(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		if (isGen1 && species.gen > 1) return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
-		const stats = !isGen1 ? ['atk', 'def', 'spa', 'spd', 'spe'] : ['atk', 'def', 'spa', 'spe'];
-		const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
-		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
-		for (const stat of stats) {
-			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
+		const bstNoHP = species.bst - species.baseStats.hp;
+		const scale = (dex.gen !== 1 ? 600 : 500) - species.baseStats['hp'];
+		species.bst = 0;
+		for (const stat in species.baseStats) {
+			if (stat === 'hp') continue;
+			if (dex.gen === 1 && stat === 'spd') continue;
+			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
+			species.bst += species.baseStats[stat];
 		}
+		species.bst += species.baseStats.hp;
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	scalemonshelp: [
@@ -427,7 +432,7 @@ export const commands: ChatCommands = {
 		} else if (room?.battle) {
 			dex = Dex.forFormat(room.battle.format);
 		}
-		const species = Dex.deepClone(dex.getSpecies(mon));
+		const species = Utils.deepClone(dex.getSpecies(mon));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : mon.trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -486,7 +491,7 @@ export const commands: ChatCommands = {
 		} = dex.getNature(nature);
 		if (dex.gen < 3) return this.errorReply(`Error: Natures don't exist prior to Generation 3.`);
 		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
-		const species = Dex.deepClone(dex.getSpecies(pokemon));
+		const species = Utils.deepClone(dex.getSpecies(pokemon));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -539,9 +544,9 @@ export const commands: ChatCommands = {
 		if (setStage + 1 !== crossStage) {
 			return this.errorReply(`Error: Cross evolution must follow evolutionary stages. (${species.name} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
 		}
-		const mixedSpecies = Dex.deepClone(species);
-		mixedSpecies.abilities = Dex.deepClone(crossSpecies.abilities);
-		mixedSpecies.baseStats = Dex.deepClone(mixedSpecies.baseStats);
+		const mixedSpecies = Utils.deepClone(species);
+		mixedSpecies.abilities = Utils.deepClone(crossSpecies.abilities);
+		mixedSpecies.baseStats = Utils.deepClone(mixedSpecies.baseStats);
 		let statName: StatName;
 		for (statName in species.baseStats) {
 			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
@@ -606,7 +611,7 @@ export const commands: ChatCommands = {
 			this.errorReply(`Warning: ${evo.name} is a fake Pok\u00e9mon created by the CAP Project and is restricted to CAP.`);
 		}
 		const prevoSpecies = Dex.getSpecies(evo.prevo);
-		const deltas = Dex.deepClone(evo);
+		const deltas = Utils.deepClone(evo);
 		deltas.tier = 'CE';
 		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
 		let i: StatName;

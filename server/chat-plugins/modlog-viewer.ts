@@ -159,7 +159,7 @@ async function getModlog(
 
 	const hideIps = !user.can('lock');
 	const addModlogLinks = !!(
-		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
+		Config.modloglink && (user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
 	if (hideIps && /^\["']?[?[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\]?["']?$/.test(searchString)) {
 		connection.popup(`You cannot search for IPs.`);
@@ -176,7 +176,7 @@ async function getModlog(
 		searchString = searchString.substring(1, searchString.length - 1);
 	}
 
-	const response = await Rooms.Modlog.search(roomid, searchString, maxLines, onlyPunishments);
+	const response = await Rooms.Modlog.search(roomid, searchString, maxLines, exactSearch, onlyPunishments);
 
 	connection.send(
 		prettifyResults(
@@ -522,7 +522,7 @@ if (!PM.isParentProcess) {
 		}
 	});
 	global.Dex = Dex;
-	global.toID = Dex.getId;
+	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
 	Repl.start('battlesearch', cmd => eval(cmd));
 } else {

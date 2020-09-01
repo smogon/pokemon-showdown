@@ -4,7 +4,7 @@ import {Utils} from '../../lib/utils';
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
-let roomFaqs: {[k: string]: {[k: string]: string}} = {};
+export let roomFaqs: {[k: string]: {[k: string]: string}} = {};
 try {
 	roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 } catch (e) {
