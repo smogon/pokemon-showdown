@@ -18,6 +18,7 @@ const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
 const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
+const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -40,7 +41,7 @@ interface ModlogResults {
 }
 
 interface ModlogQuery {
-	query: string;
+	statement: Database.Statement;
 	args: any[];
 }
 
@@ -70,25 +71,53 @@ export interface ModlogEntry {
 export class Modlog {
 	readonly database: Database.Database;
 	readonly usePM: boolean;
+	readonly modlogInsertionQuery: Database.Statement;
+	readonly altsInsertionQuery: Database.Statement;
+	readonly renameQuery: Database.Statement;
+	readonly globalPunishmentsSearchQuery: Database.Statement;
+	readonly insertionTransaction: Database.Transaction;
 
 	constructor(path: string, noProcessManager = false) {
 		this.database = new Database(path);
-		this.database.exec(FS(`${__dirname}/../databases/schemas/modlog-schema.sql`).readIfExistsSync()); // Set up tables, etc.
+		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync()); // Set up tables, etc.
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
 			return Number(RegExp(regexString).test(toMatch));
 		});
-		this.usePM = !noProcessManager;
+
+		this.modlogInsertionQuery = this.database.prepare(
+			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
+			` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		);
+		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
+		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
+		this.globalPunishmentsSearchQuery = this.database.prepare(
+			`SELECT * FROM modlog WHERE (roomid LIKE 'global-%' OR roomid = 'global')` +
+			` AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])})` +
+			` AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)` +
+			` AND timestamp > ?`
+		);
+
+		this.insertionTransaction = this.database.transaction((
+			roomID: string, action: string, time: number, visualRoomID?: string, userid?: string,
+			autoconfirmedID?: string, ip?: string, loggedBy?: string, note?: string, alts?: string[]
+		) => {
+			const args = [time, roomID, visualRoomID, action, userid, autoconfirmedID, ip, loggedBy, note].map(arg => arg || null);
+			const result = this.modlogInsertionQuery.run(...args);
+			for (const alt of alts || []) {
+				this.altsInsertionQuery.run(result.lastInsertRowid, alt);
+			}
+		});
+		this.usePM = !noProcessManager && !Config.nofswriting;
 	}
 
 	async runSQL(query: ModlogQuery, forceNoPM = false): Promise<Database.RunResult | any[]> {
 		if (!forceNoPM && this.usePM) {
 			return PM.query(query);
 		} else {
-			const statement = this.database.prepare(query.query).bind(...query.args);
 			try {
-				return statement.all();
+				return query.statement.all(...query.args);
 			} catch (e) {
-				if (e.message.includes('statement does not return data')) return statement.run();
+				if (e.message.includes('statement does not return data')) return query.statement.run(...query.args);
 				throw e;
 			}
 		}
@@ -97,30 +126,18 @@ export class Modlog {
 	/**
 	 * Writes to the modlog
 	 */
-	async write(roomid: string, entry: ModlogEntry, overrideID?: string) {
+	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
 		if (overrideID) entry.visualRoomID = overrideID;
 		if (!entry.roomID) entry.roomID = roomid;
-
-		const result = await this.runSQL({
-			query: `INSERT INTO modlog ` +
-			`(timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker, note) ` +
-			`VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			args: [
-				entry.time || Date.now(), entry.isGlobal ? `global-${roomid}` : roomid, entry.visualRoomID,
-				entry.action, entry.userid, entry.autoconfirmedID, entry.ip, entry.loggedBy, entry.note,
-			],
-		}) as Database.RunResult;
-		return Promise.all((entry.alts || []).map(alt => {
-			return this.runSQL({
-				query: `INSERT INTO alts (alts_id, userid) VALUES (?, ?)`,
-				args: [result.lastInsertRowid, alt],
-			});
-		}));
+		this.insertionTransaction(
+			entry.roomID, entry.action, entry.time || Date.now(), entry.visualRoomID, entry.userid,
+			entry.autoconfirmedID, entry.ip, entry.loggedBy, entry.note, entry.alts,
+		);
 	}
 
 	rename(oldID: ModlogID, newID: ModlogID) {
 		if (oldID === newID) return;
-		void this.runSQL({query: `UPDATE modlog SET roomid = ? WHERE roomid = ?`, args: [newID, oldID]});
+		void this.runSQL({statement: this.renameQuery, args: [newID, oldID]});
 	}
 
 	/******************************************
@@ -154,7 +171,7 @@ export class Modlog {
 		let roomChecker = `roomid IN (${this.formatArray(rooms, args)})`;
 		if (rooms.includes('global')) roomChecker = `(roomid LIKE 'global-%' OR ${roomChecker})`;
 
-		let query = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts_id = modlog.modlog_id) as alts FROM modlog`;
+		let query = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
 		query += ` WHERE ${roomChecker}`;
 
 		if (search.action) {
@@ -166,7 +183,7 @@ export class Modlog {
 
 		if (userid) {
 			const regex = this.generateRegex(userid, true);
-			query += ` AND (regex(?, userid) OR regex(?, autoconfirmed_userid) OR EXISTS(SELECT * FROM alts WHERE alts_id = modlog.modlog_id AND regex(?, userid)))`;
+			query += ` AND (regex(?, userid) OR regex(?, autoconfirmed_userid) OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND regex(?, userid)))`;
 			args.push(regex, regex, regex);
 		}
 
@@ -176,7 +193,7 @@ export class Modlog {
 		}
 
 		if (search.actionTaker) {
-			query += ` AND regex(?, action_taker)`;
+			query += ` AND regex(?, action_taker_userid)`;
 			args.push(this.generateRegex(search.actionTaker, true));
 		}
 
@@ -199,18 +216,15 @@ export class Modlog {
 			query += ` LIMIT ?`;
 			args.push(maxLines);
 		}
-		return {query, args};
+		return {statement: this.database.prepare(query), args};
 	}
 
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const userid = toID(user);
-		const args: (string | number)[] = [];
-		let query = `SELECT * FROM modlog WHERE (roomid LIKE 'global-%' OR roomid = 'global') `;
-		query += ` AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, args)})`;
-		query += ` AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts_id = modlog.modlog_id AND userid = ?)`;
-		query += ` AND timestamp > ?`;
-		args.push(userid, userid, userid, (Date.now() / 1000) - (days * 24 * 60 * 60));
-		const results = await this.runSQL({query, args}) as any[];
+		const args: (string | number)[] = [
+			...GLOBAL_PUNISHMENTS, userid, userid, userid, (Date.now() / 1000) - (days * 24 * 60 * 60),
+		];
+		const results = await this.runSQL({statement: this.globalPunishmentsSearchQuery, args}) as any[];
 		return results.length;
 	}
 
@@ -243,7 +257,7 @@ export class Modlog {
 				alts: row.alts?.split(','),
 				ip: row.ip,
 				isGlobal: row.roomid?.startsWith('global-'),
-				loggedBy: row.action_taker,
+				loggedBy: row.action_taker_userid,
 				note: row.note,
 				time: row.timestamp,
 			};
@@ -251,7 +265,7 @@ export class Modlog {
 		const duration = Date.now() - start;
 
 		if (duration > LONG_QUERY_DURATION) {
-			Monitor.log(`Long modlog query took ${duration} ms to complete: ${query.query}`);
+			Monitor.log(`Long modlog query took ${duration} ms to complete: ${query.statement.source}`);
 		}
 		return {results, duration};
 	}

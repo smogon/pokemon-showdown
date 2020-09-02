@@ -274,7 +274,7 @@ export function modernizeLog(line: string, nextLine?: string) {
 			const user = toID(log.slice(0, index));
 			log = log.slice(index + ' has been caught attempting a hunt with '.length);
 			log = log.replace('. The user has also', '; has also').replace('.', '');
-			return `SCAVCHEATER: [${user}]: caught attempting a hunt with ${log}`;
+			return `SCAV CHEATER: [${user}]: caught attempting a hunt with ${log}`;
 		},
 	};
 
@@ -381,7 +381,7 @@ export class ModlogConverterSQLite {
 		for (const {roomid} of roomids) {
 			if (!Config.nofswriting) console.log(`Reading ${roomid}...`);
 			const results = database.prepare(
-				`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts_id = modlog.modlog_id) as alts ` +
+				`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts ` +
 				`FROM modlog WHERE roomid = ? ORDER BY timestamp ASC`
 			).all(roomid);
 			for (const result of results) {
@@ -394,7 +394,7 @@ export class ModlogConverterSQLite {
 					alts: result.alts?.split(','),
 					ip: result.ip,
 					isGlobal: result.roomid?.startsWith('global-'),
-					loggedBy: result.action_taker,
+					loggedBy: result.action_taker_userid,
 					note: result.note,
 					time: result.timestamp,
 				};
@@ -467,7 +467,7 @@ export class ModlogConverterTxt {
 				process.stdout.cursorTo(0);
 				process.stdout.write(`(${Math.floor(index / interval)}%) inserted ${index + 1}/${logs.length} entries`);
 			}
-			void modlog.write(log.roomID || 'global', log);
+			modlog.write(log.roomID || 'global', log);
 		}
 		return modlog.database;
 	}

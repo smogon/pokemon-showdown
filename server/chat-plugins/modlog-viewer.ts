@@ -219,15 +219,13 @@ async function getModlog(
 
 async function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
-		Config.ripgrepmodlog = await (async () => {
-			try {
-				await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				return true;
-			} catch (error) {
-				return false;
-			}
-		})();
+		try {
+			await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
+			await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
+			Config.ripgrepmodlog = true;
+		} catch (error) {
+			Config.ripgrepmodlog = false;
+		}
 	}
 	return Config.ripgrepmodlog;
 }

@@ -882,7 +882,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
 			this.room.modlog({
-				action: 'SCAVCHEATER',
+				action: 'SCAV CHEATER',
 				userid: player.id,
 				note: 'caught trying to do their own hunt',
 			});
@@ -902,7 +902,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
 			this.room.modlog({
-				action: 'SCAVCHEATER',
+				action: 'SCAV CHEATER',
 				userid: player.id,
 				note: `caught attempting a hunt with ${uniqueConnections} connections on the account; has also been given 1 infraction point on the player leaderboard`,
 			});

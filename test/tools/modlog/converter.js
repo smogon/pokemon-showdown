@@ -294,7 +294,7 @@ describe('Modlog conversion script', () => {
 			);
 			assert.strictEqual(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (scavengers) ([annika] has been caught attempting a hunt with 2 connections on the account. The user has also been given 1 infraction point on the player leaderboard.)'),
-				'[2020-08-23T19:50:49.944Z] (scavengers) SCAVCHEATER: [annika]: caught attempting a hunt with 2 connections on the account; has also been given 1 infraction point on the player leaderboard'
+				'[2020-08-23T19:50:49.944Z] (scavengers) SCAV CHEATER: [annika]: caught attempting a hunt with 2 connections on the account; has also been given 1 infraction point on the player leaderboard'
 			);
 			// No moderator actions containing has been caught trying to do their own hunt found on room scavengers.
 			// Apparently this never got written to main's modlog, so I am not going to write a special test case
@@ -435,15 +435,14 @@ describe('Modlog conversion script', () => {
 				note: 'Write 1',
 				time: 1598212249944,
 			};
-			const writes = [];
-			writes.push(modlog.write('development', entry));
+			modlog.write('development', entry);
 			entry.time++;
 			entry.note = 'Write 2';
-			writes.push(modlog.write('development', entry));
+			modlog.write('development', entry);
 			entry.time++;
 			entry.note = 'Write 3';
-			writes.push(modlog.write('development', entry));
-			writes.push(modlog.write('development', {
+			modlog.write('development', entry);
+			modlog.write('development', {
 				action: 'GLOBAL UNITTEST',
 				roomID: 'development',
 				userid: 'annika',
@@ -454,11 +453,9 @@ describe('Modlog conversion script', () => {
 				loggedBy: 'yourmom',
 				note: 'Global test',
 				time: 1598212249947,
-			}));
+			});
 
-			await Promise.all(writes);
 			await mlConverter.toTxt();
-
 			assert.strictEqual(
 				mlConverter.isTesting.files.get('/modlog_development.txt'),
 				`[2020-08-23T19:50:49.944Z] (development) UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Write 1\n` +
@@ -489,10 +486,10 @@ describe('Modlog conversion script', () => {
 
 			const database = await mlConverter.toSQLite();
 			const globalEntries = database
-				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts_id = modlog.modlog_id) as alts FROM modlog WHERE roomid LIKE 'global-%'`)
+				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid LIKE 'global-%'`)
 				.all();
 			const entries = database
-				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts_id = modlog.modlog_id) as alts FROM modlog WHERE roomid IN (?, ?) ORDER BY timestamp ASC`)
+				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid IN (?, ?) ORDER BY timestamp ASC`)
 				.all('development', 'trivia');
 
 			assert.strictEqual(globalEntries.length, globalLines.length);
@@ -507,7 +504,7 @@ describe('Modlog conversion script', () => {
 			assert.strictEqual(globalEntries[0].timestamp, 1598212249945);
 			assert.strictEqual(globalEntries[0].roomid.replace(/^global-/, ''), 'development');
 			assert.strictEqual(globalEntries[0].action, 'GLOBAL UNITTEST');
-			assert.strictEqual(globalEntries[0].action_taker, 'yourmom');
+			assert.strictEqual(globalEntries[0].action_taker_userid, 'yourmom');
 			assert.strictEqual(globalEntries[0].userid, 'annika');
 			assert.strictEqual(globalEntries[0].autoconfirmed_userid, 'heartofetheria');
 			assert.strictEqual(globalEntries[0].ip, '127.0.0.1');

@@ -39,24 +39,24 @@ describe('Modlog', () => {
 	describe('Modlog#prepareSearch', () => {
 		it('should respect the maxLines parameter', () => {
 			const query = modlog.prepareSearch(['lobby'], 1337, false, {});
-			assert.ok(query.query.endsWith('LIMIT ?'));
+			assert.ok(query.statement.source.endsWith('LIMIT ?'));
 			assert.ok(query.args.includes(1337));
 
-			const noMaxLines = modlog.prepareSearch(['lobby'], 0, false, {}).query;
-			assert.ok(!noMaxLines.toUpperCase().includes('LIMIT'));
+			const noMaxLines = modlog.prepareSearch(['lobby'], 0, false, {}).statement;
+			assert.ok(!noMaxLines.source.toUpperCase().includes('LIMIT'));
 		});
 
 		it('should attempt to respect onlyPunishments', () => {
 			const query = modlog.prepareSearch(['lobby'], 0, true, {});
-			assert.ok(query.query.includes('action IN ('));
+			assert.ok(query.statement.source.includes('action IN ('));
 			assert.ok(query.args.includes('WEEKLOCK'));
 		});
 	});
 
 	describe('Writing to modlog', () => {
 		it('should write messages serially to the modlog', async () => {
-			await modlog.write('development', {note: 'This message is logged first', action: 'UNITTEST'});
-			await modlog.write('development', {note: 'This message is logged second', action: 'UNITTEST'});
+			modlog.write('development', {note: 'This message is logged first', action: 'UNITTEST'});
+			modlog.write('development', {note: 'This message is logged second', action: 'UNITTEST'});
 			const lines = modlog.database.prepare(
 				// Order by modlog_id since the writes most likely happen at the same second
 				`SELECT * FROM modlog WHERE roomid = 'development' ORDER BY modlog_id DESC LIMIT 2`
