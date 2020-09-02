@@ -1426,18 +1426,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			target.m.typeEff = target.getMoveHitData(move).typeMod;
 		},
 	},
-	sunny: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Sunny')}|I will live up to the hopes of those who supported me. That's why I'm giving it everything I got, for everyone!`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Sunny')}|I can't just keep getting help from others. I have to hurry and learn to control my powers.`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Sunny')}|All men are not created equal. That was the reality I learned about society in general.`);
-		},
-	},
 	teclis: {
 		noCopy: true,
 		onStart() {

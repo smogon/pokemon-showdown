@@ -1596,13 +1596,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 2,
-			basePowerCallback(pokemon, target, move) {
+			onBasePower(basePower, pokemon, target, move) {
 				if (target.newlySwitched || this.queue.willMove(target)) {
 					this.debug('Alternating Current damage boost');
-					return move.basePower * 2;
+					return this.chainModify(2);
 				}
 				this.debug('Alternating Current NOT boosted');
-				return move.basePower;
 			},
 		},
 		forceSwitch: true,
@@ -4054,30 +4053,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Normal",
-	},
-
-	// Sunny
-	oneforallfullcowl100: {
-		accuracy: 100,
-		basePower: 120,
-		category: "Physical",
-		desc: "User takes 40% recoil damage.",
-		shortDesc: "Has 40% recoil.",
-		name: "One For All: Full Cowl - 100%",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 30,
-		priority: 0,
-		flags: {contact: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'All Out Pummeling', target);
-		},
-		recoil: [4, 10],
-		target: "normal",
-		type: "Dragon",
 	},
 
 	// Teclis

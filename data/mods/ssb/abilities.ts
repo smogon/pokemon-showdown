@@ -1620,24 +1620,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Sunny
-	oneforall: {
-		desc: "This Pokemon's contact moves have their power multiplied by 1.3. If this Pokemon KOes the target with a recoil move, it regains 25% of its max HP.",
-		shortDesc: "Tough Claws + recovers 25% max HP when foe is KOed with a recoil move.",
-		name: "One For All",
-		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['contact']) {
-				return this.chainModify([0x14CD, 0x1000]);
-			}
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && !!effect.recoil) this.heal(source.baseMaxhp / 4, source);
-		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
 	// tennisace
 	stoutbuild: {
 		desc: "If a Pokemon uses a Ground-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon.",

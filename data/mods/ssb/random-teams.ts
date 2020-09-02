@@ -612,12 +612,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Veto',
 		evs: {hp: 251, atk: 5, def: 11, spd: 241}, nature: 'Careful',
 	},
-	Sunny: {
-		species: 'Charizard', ability: 'Blaze', item: 'Charizardite X', gender: 'M',
-		moves: ['Earthquake', ['Double Edge', 'Flare Blitz'], 'Roost'],
-		signatureMove: 'One For All: Full Cowl - 100%',
-		evs: {atk: 252, spd: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
-	},
 	Teclis: {
 		species: 'Alakazam', ability: 'Protean', item: 'Life Orb', gender: 'M',
 		moves: ['Psychic', 'Shadow Ball', 'Aura Sphere'],
