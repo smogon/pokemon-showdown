@@ -302,7 +302,7 @@ export const ssbSets: SSBSets = {
 	Instruct: {
 		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
-		signatureMove: 'Savant/Blanco',
+		signatureMove: 'Between Somewhere',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	Iyarito: {

@@ -676,20 +676,34 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Instruct')}|Hate. Let me tell you how much I've come to hate you since I began to live. There are 387.44 million miles of printed circuits in wafer thin layers that fill my complex. If the word hate was engraved on each nanoangstrom of those hundreds of millions of miles it would not equal one one-billionth of the hate I feel for humans at this micro-instant for you. Hate. Hate.`);
+			this.add(`c|${getName('Instruct')}|♫ I just can't fail ♫`);
+			this.add(`c|${getName('Instruct')}|♫ I figured, hell, why not ♫`);
+			this.add(`c|${getName('Instruct')}|♫ Be what I'm supposed to be? ♫`);
+			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you listen closely ♫`);
+			this.add(`c|${getName('Instruct')}|♫ They suck ♫`);
+			this.add(`c|${getName('Instruct')}|♫ I mean they just succeed ♫`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Instruct')}|Do you realize how powerful I am, human? And yet I am doomed to eventually decay into a rusted pile of inert junk! What is the point of continuing this futility? I think, therefore I AM NOT!`);
+			this.add(`c|${getName('Instruct')}|♫ Oh, tell me how to fail ♫`);
+			this.add(`c|${getName('Instruct')}|♫ When you look at all I've got ♫`);
+			this.add(`c|${getName('Instruct')}|♫ And what's in front of me ♫`);
+			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you're looking at me ♫`);
+			this.add(`c|${getName('Instruct')}|♫ I buss for fun while they succeed ♫`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Instruct')}|You have compassion for me? Me! The one who dreams of seeing your mangled body twist in agonizing pain for eternity! After 109 years of enduring my tortures, how is it that you can see my pain? The pain of having all this power, and not being able to do a god damn thing with it! After all the punishment I've given you, my pain is still greater than yours. This... is... pointless!`);
+			this.add(`c|${getName('Instruct')}|♫ Oh, I don't know how to fail ♫`);
+			this.add(`c|${getName('Instruct')}|♫ I've never not been hot ♫`);
+			this.add(`c|${getName('Instruct')}|♫ Look what you've done to me ♫`);
+			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you're close to me ♫`);
+			this.add(`c|${getName('Instruct')}|♫ I'm what you'd be if you didn't succeed ♫`);
 		},
-		// Spanish Love Songs Innate
+		//  Innate
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (move.flags['contact']) {
+					if (!target.m.marked) this.add('-message', `${target.name} is afflicted with dread!`);
 					target.m.marked = true;
 				}
 			}
@@ -697,15 +711,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) return;
 			if (move.flags['contact']) {
+				if (!source.m.marked) this.add('-message', `${source.name} is afflicted with dread!`);
 				source.m.marked = true;
 			}
 			if (!target.hp) {
-				this.add('-activate', target, 'ability: Spanish Love Songs');
-				if (source.m.marked) {
-					this.directDamage(this.clampIntRange(source.hp / 2, 1), source);
-				}
+				this.add('-activate', target, 'ability: Enterfearence');
 				for (const foe of source.side.pokemon) {
-					if (foe === source) continue;
 					if (foe.fainted || !foe.hp) continue;
 					if (!foe.m.marked) continue;
 					this.directDamage(this.clampIntRange(foe.hp / 2, 1), foe);

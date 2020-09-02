@@ -1835,12 +1835,12 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 	},
 
 	// Instruct
-	savantblanco: {
+	betweensomewhere: {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
 		shortDesc: "First turn: Flinches the oppnent then switches out",
-		name: "Savant/Blanco",
+		name: "Between Somewhere",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -1850,13 +1850,13 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', target, 'Extreme Evoboost', target);
+			this.add('-anim', source, 'Fake Out', target);
 		},
 		onTry(pokemon, target) {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("Savant/Blanco only works on your first turn out.");
+				this.hint("Between Somewhere only works on your first turn out.");
 				return null;
 			}
 		},
