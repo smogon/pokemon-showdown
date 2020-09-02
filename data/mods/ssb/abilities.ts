@@ -782,6 +782,17 @@ export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
 		gen: 8,
 	},
 
+	// Gimmick
+	whatagimmick: {
+		name: "What a Gimmick",
+		shortDesc: "On switch-in, this Pokemon summons Gimmick Terrain.",
+		onStart(source) {
+			this.field.setTerrain('gimmickterrain');
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// GMars
 	capsulearmor: {
 		desc: "While in Minior-Meteor forme, this Pokemon cannot be affected by major status conditions and is immune to critical hits. This ability cannot be ignored by Moongeist Beam, Sunsteel Strike, Mold Breaker, Teravolt, or Turboblaze.",

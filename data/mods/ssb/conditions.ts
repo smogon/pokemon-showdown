@@ -546,6 +546,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('frostyicelad ❆')}|So c-c-cold`);
 		},
 	},
+	gimmick: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Gimmick')}|Mama, they say I’m a TRRST`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Gimmick')}|Ic3peak to you later`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Gimmick')}|I did nothing wrong (but I got on the blacklist)`);
+		},
+	},
 	gmars: {
 		noCopy: true,
 		onStart(pokemon) {

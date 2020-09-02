@@ -263,6 +263,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Frosty Wave',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Gimmick: {
+		species: 'Tynamo', ability: 'What a Gimmick', item: 'Focus Sash', gender: 'M',
+		moves: ['Bolt Beak', 'Fishious Rend', ['U-turn', 'Volt Switch']],
+		signatureMove: 'Alternating Current',
+		evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
+	},
 	GMars: {
 		species: 'Minior-Meteor', ability: 'Capsule Armor', item: 'White Herb', gender: 'N',
 		moves: ['Acrobatics', 'Earthquake', 'Diamond Storm'],
@@ -302,7 +308,7 @@ export const ssbSets: SSBSets = {
 	Instruct: {
 		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
-		signatureMove: 'Between Somewhere',
+		signatureMove: 'Kickoff Tune',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	Iyarito: {
