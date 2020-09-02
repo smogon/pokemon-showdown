@@ -76,7 +76,7 @@ export const commands: ChatCommands = {
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
-			return this.privateModAction(this.tr`An announcement was started by ${user.name}.`);
+			return this.privateModAction(room.tr`An announcement was started by ${user.name}.`);
 		},
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
 
@@ -136,7 +136,7 @@ export const commands: ChatCommands = {
 			announcement.end();
 			room.minorActivity = null;
 			this.modlog('ANNOUNCEMENT END');
-			return this.privateModAction(this.tr`The announcement was ended by ${user.name}.`);
+			return this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
