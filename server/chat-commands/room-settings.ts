@@ -134,10 +134,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.inviteOnly = true;
 			user.update();
-			if (user.forcedPublic) {
-				return this.errorReply(`Your next battle will be invite-only provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
-			}
-			this.sendReply("Your next battle will be invite-only.");
+			this.sendReply(`Your next battle will be invite-only${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
 		}
 	},
 	ionexthelp: [
@@ -171,9 +168,8 @@ export const commands: ChatCommands = {
 		}
 		if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
-			const prefix = room.battle.forcedPublic();
-			if (prefix) {
-				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
+			if (room.battle.forcePublic) {
+				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${room.battle.forcePublic}'.`);
 			}
 			if (room.battle.inviteOnlySetter && !user.can('mute', null, room) && room.battle.inviteOnlySetter !== user.id) {
 				return this.errorReply(`Only the person who set this battle to be invite-only can turn it off.`);
@@ -982,9 +978,8 @@ export const commands: ChatCommands = {
 		if (!room) return this.requiresRoom();
 		if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
-			const prefix = room.battle.forcedPublic();
-			if (prefix) {
-				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${prefix}'.`);
+			if (room.battle.forcePublic) {
+				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcePublic}'.`);
 			}
 			if (room.tour?.forcePublic) {
 				return this.errorReply(`This battle can't be hidden, because the tournament is set to be forced public.`);
@@ -1085,10 +1080,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.hidden = true;
 			user.update();
-			if (user.forcedPublic) {
-				return this.errorReply(`Your next battle will be hidden provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
-			}
-			this.sendReply("Your next battle will be hidden");
+			this.sendReply(`Your next battle will be hidden${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
 		}
 	},
 	hidenexthelp: [
