@@ -919,7 +919,7 @@ export const commands: ChatCommands = {
 		this.errorReply("Did you mean /renameroom?");
 	},
 	renamegroupchat: 'renameroom',
-	async renameroom(target, room, user, connection, cmd) {
+	renameroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.game || room.minorActivity || room.tour) {
 			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
@@ -953,9 +953,7 @@ export const commands: ChatCommands = {
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
-		if (!(await room.rename(target, id))) {
-			return this.errorReply(`An error occured while renaming the room.`);
-		}
+		room.rename(target, id);
 		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
@@ -974,7 +972,7 @@ export const commands: ChatCommands = {
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
-	async privateroom(target, room, user, connection, cmd) {
+	privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
@@ -1059,7 +1057,7 @@ export const commands: ChatCommands = {
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			if (room.battle) {
-				await room.makePrivate(setting);
+				room.makePrivate(setting);
 			} else {
 				room.settings.isPrivate = setting;
 				room.saveSettings();
