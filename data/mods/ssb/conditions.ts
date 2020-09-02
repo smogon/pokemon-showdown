@@ -691,9 +691,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Instruct')}|♫ I just can't fail ♫`);
 			this.add(`c|${getName('Instruct')}|♫ I figured, hell, why not ♫`);
 			this.add(`c|${getName('Instruct')}|♫ Be what I'm supposed to be? ♫`);
-			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you listen closely ♫`);
+			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you listen closely ♫`);
 			this.add(`c|${getName('Instruct')}|♫ They suck ♫`);
-			this.add(`c|${getName('Instruct')}|♫ I mean they just succeed ♫`);
+			this.add(`c|${getName('Instruct')}|♫ I mean they just succeed ♫`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Instruct')}|♫ Oh, tell me how to fail ♫`);
