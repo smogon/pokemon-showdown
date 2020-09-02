@@ -826,7 +826,10 @@ interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
 	suppressWeather?: boolean;
 }
 
-type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
+type ModdedAbilityData = AbilityData | Partial<AbilityData> & {
+	gen?: number,
+	inherit: true,
+};
 
 interface Ability extends Readonly<BasicEffect & AbilityData> {
 	readonly effectType: 'Ability';
@@ -1032,7 +1035,10 @@ interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: string;
 }
 
-type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {inherit: true};
+type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+	gen?: number,
+	inherit: true,
+};
 
 interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';
