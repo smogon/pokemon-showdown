@@ -307,7 +307,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-class Trivia extends Rooms.RoomGame {
+export class Trivia extends Rooms.RoomGame {
 	playerTable: {[k: string]: TriviaPlayer};
 	gameid: ID;
 	minPlayers: number;
@@ -791,7 +791,7 @@ const hrtimeToNanoseconds = (hrtime: number[]) => {
  * First mode rewards points to the first user to answer the question
  * correctly.
  */
-class FirstModeTrivia extends Trivia {
+export class FirstModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return this.room.tr('You are not a player in the current trivia game.');
@@ -854,7 +854,7 @@ class FirstModeTrivia extends Trivia {
  * Timer mode rewards up to 5 points to all players who answer correctly
  * depending on how quickly they answer the question.
  */
-class TimerModeTrivia extends Trivia {
+export class TimerModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return this.room.tr('You are not a player in the current trivia game.');
@@ -956,7 +956,7 @@ class TimerModeTrivia extends Trivia {
  * depending on the ratio of correct players to total players (lower ratio is
  * better).
  */
-class NumberModeTrivia extends Trivia {
+export class NumberModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return this.room.tr('You are not a player in the current trivia game.');
@@ -1028,7 +1028,7 @@ class NumberModeTrivia extends Trivia {
 /**
  * Triumvirate mode rewards points to the top three users to answer the question correctly.
  */
-class TriumvirateModeTrivia extends Trivia {
+export class TriumvirateModeTrivia extends Trivia {
 	answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) return this.room.tr('You are not a player in the current trivia game.');
@@ -1088,7 +1088,7 @@ class TriumvirateModeTrivia extends Trivia {
 	}
 }
 
-const commands: ChatCommands = {
+const subCommands: ChatCommands = {
 	new(target, room, user) {
 		if (!room) return this.requiresRoom();
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in the Trivia room.");
@@ -1799,77 +1799,61 @@ const commands: ChatCommands = {
 		return this.parse(`${this.cmdToken}help trivia`);
 	},
 	triviahelp() {
-		this.sendReply('|html|<div class="infobox infobox-limited">' + [
-			`<strong>Modes:</strong>`,
-			`- First: the first correct responder gains 5 points.`,
-			`- Timer: each correct responder gains up to 5 points based on how quickly they answer.`,
-			`- Number: each correct responder gains up to 5 points based on how many participants are correct.`,
-			`- Triumvirate: The first correct responder gains 5 points, the second 3 points, and the third 1 point.`,
-			`- Random: randomly chooses one of First, Timer, Number, or Triumvirate.`,
-			``,
-			`<strong>Categories</strong>: <code>Arts &amp; Entertainment</code>, <code>Pok&eacute;mon</code>, <code>Science &amp; Geography</code>, <code>Society &amp; Humanities</code>, <code>Random</code>, and <code>All</code>.`,
-			``,
-			`<strong>Game lengths:</strong>`,
-			`- Short: 20 point score cap. The winner gains 3 leaderboard points.`,
-			`- Medium: 35 point score cap. The winner gains 4 leaderboard points.`,
-			`- Long: 50 point score cap. The winner gains 5 leaderboard points.`,
-			`- Infinite: No score cap. The winner gains 5 leaderboard points, which increases the more questions they answer.`,
-			``,
-			`<strong>Game commands:</strong>`,
-			`- <code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &`,
-			`- <code>/trivia join</code> - Join a trivia game during signups.`,
-			`- <code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &`,
-			`- <code>/ta [answer]</code> - Answer the current question.`,
-			`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &`,
-			`- <code>/trivia leave</code> - Makes the player leave the game.`,
-			`- <code>/trivia end</code> - End a trivia game. Requires: + % @ # &`,
-			`- <code>/trivia win</code> - End a trivia game and tally the points to find winners. Requires: + % @ # & in Infinite length, else # &`,
-			`- <code>/trivia pause</code> - Pauses a trivia game. Requires: + % @ # &`,
-			`- <code>/trivia resume</code> - Resumes a paused trivia game. Requires: + % @ # &`,
-			``,
-			`<strong>Question-modifying commands:</strong>`,
-			`- <code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`,
-			`- <code>/trivia review</code> - View the list of submitted questions. Requires: @ # &`,
-			`- <code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`,
-			`- <code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`,
-			`- <code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # &`,
-			`- <code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &`,
-			`- <code>/trivia qs</code> - View the distribution of questions in the question database.`,
-			`- <code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &`,
-			`- <code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &`,
-			``,
-			`<strong>Informational commands:</strong>`,
-			`- <code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # &`,
-			`- <code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
-			`- <code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.`,
-			`- <code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.`,
-			`- <code>/trivia alltimeladder</code> - View information about the top 15 users on the all time trivia leaderboard`,
-			`- <code>/trivia history</code> - View a list of the 10 most recently played trivia games.`,
-		].join('<br />') + '</div>');
+		this.sendReply(
+			`|html|<div class="infobox">` +
+			`<strong>Categories</strong>: <code>Arts &amp; Entertainment</code>, <code>Pok&eacute;mon</code>, <code>Science &amp; Geography</code>, <code>Society &amp; Humanities</code>, <code>Random</code>, and <code>All</code>.<br />` +
+			`<details><summary><strong>Modes</strong></summary><ul>` +
+				`<li>First: the first correct responder gains 5 points.</li>` +
+				`<li>Timer: each correct responder gains up to 5 points based on how quickly they answer.</li>` +
+				`<li>Number: each correct responder gains up to 5 points based on how many participants are correct.</li>` +
+				`<li>Triumvirate: The first correct responder gains 5 points, the second 3 points, and the third 1 point.</li>` +
+				`<li>Random: randomly chooses one of First, Timer, Number, or Triumvirate.</li>` +
+			`</ul></details>` +
+			`<details><summary><strong>Game lengths</strong></summary><ul>` +
+				`<li>Short: 20 point score cap. The winner gains 3 leaderboard points.</li>` +
+				`<li>Medium: 35 point score cap. The winner gains 4 leaderboard points.</li>` +
+				`<li>Long: 50 point score cap. The winner gains 5 leaderboard points.</li>` +
+				`<li>Infinite: No score cap. The winner gains 5 leaderboard points, which increases the more questions they answer.</li>` +
+			`</ul></details>` +
+			`<details><summary><strong>Game commands</strong></summary><ul>` +
+				`<li><code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &</li>` +
+				`<li><code>/trivia join</code> - Join a trivia game during signups.</li>` +
+				`<li><code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &</li>` +
+				`<li><code>/ta [answer]</code> - Answer the current question.</li>` +
+				`<li><code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &</li>` +
+				`<li><code>/trivia leave</code> - Makes the player leave the game.</li>` +
+				`<li><code>/trivia end</code> - End a trivia game. Requires: + % @ # &</li>` +
+				`<li><code>/trivia win</code> - End a trivia game and tally the points to find winners. Requires: + % @ # & in Infinite length, else # &</li>` +
+				`<li><code>/trivia pause</code> - Pauses a trivia game. Requires: + % @ # &</li>` +
+				`<li><code>/trivia resume</code> - Resumes a paused trivia game. Requires: + % @ # &</li>` +
+			`</ul></details>` +
+				`<details><summary><strong>Question-modifying commands</strong></summary><ul>` +
+				`<li><code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # &</li>` +
+				`<li><code>/trivia review</code> - View the list of submitted questions. Requires: @ # &</li>` +
+				`<li><code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &</li>` +
+				`<li><code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &</li>` +
+				`<li><code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # &</li>` +
+				`<li><code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &</li>` +
+				`<li><code>/trivia qs</code> - View the distribution of questions in the question database.</li>` +
+				`<li><code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &</li>` +
+				`<li><code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &</li>` +
+			`</ul></details>` +
+			`<details><summary><strong>Informational commands</strong></summary><ul>` +
+				`<li><code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # &</li>` +
+				`<li><code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.</li>` +
+				`<li><code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.</li>` +
+				`<li><code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.</li>` +
+				`<li><code>/trivia alltimeladder</code> - View information about the top 15 users on the all time trivia leaderboard</li>` +
+				`<li><code>/trivia history</code> - View a list of the 10 most recently played trivia games.</li>` +
+			`</ul></details>`
+		);
 	},
 };
 
-module.exports = {
-	ALL_CATEGORIES,
-	MAIN_CATEGORIES,
-	SPECIAL_CATEGORIES,
-	MODES,
-	LENGTHS,
-
-	triviaData,
-	writeTriviaData,
-
-	Trivia,
-	FirstModeTrivia,
-	TimerModeTrivia,
-	NumberModeTrivia,
-	TriumvirateModeTrivia,
-
-	commands: {
-		trivia: commands,
-		ta: commands.answer,
-		triviahelp: commands.triviahelp,
-	},
+export const commands: ChatCommands = {
+	trivia: subCommands,
+	ta: subCommands.answer,
+	triviahelp: subCommands.triviahelp,
 };
 
 process.nextTick(() => {
