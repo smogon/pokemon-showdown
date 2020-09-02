@@ -1658,13 +1658,13 @@ export class GameRoom extends BasicRoom {
 				user.popup(`The battle <<${this.roomid}>> has been made private; you must log in to watch private battles.`);
 			}
 		}
-		if (this.roomid.endsWith('pw')) return Promise.resolve(true);
+		if (this.roomid.endsWith('pw')) return true;
 		this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
 	}
 
 	makePublic() {
 		this.settings.isPrivate = false;
-		if (!this.roomid.endsWith('pw')) return Promise.resolve(true);
+		if (!this.roomid.endsWith('pw')) return true;
 		this.rename(this.title, this.getReplayData().id as RoomID);
 	}
 }
