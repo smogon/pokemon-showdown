@@ -3,7 +3,7 @@ import {getName} from './conditions';
 import {ssbSets} from "./random-teams";
 import {changeSet, changeMoves} from "./abilities";
 
-export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
 	moveid: {
@@ -3748,8 +3748,8 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		accuracy: 90,
 		basePower: 120,
 		category: "Physical",
-		desc: "Forces the opponent out. +1 Def",
-		shortDesc: "Forces the opponent out. +1 Def",
+		desc: "Forces the opponent out. The user's Defense is raised by 1 stage upon hitting.",
+		shortDesc: "Forces the opponent out. +1 Def.",
 		name: "Bad Opinion",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3775,6 +3775,75 @@ export const Moves: {[k: string]: ModdedMoveData & {gen?: number}} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
+	},
+
+	// Seso
+	legendaryswordsman: {
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback(source, target, move) {
+			if (source.m.parriedPower) {
+				return source.m.parriedPower;
+			}
+			return 0;
+		},
+		beforeTurnCallback(pokemon, target) {
+			const willMove = this.queue.willMove(target);
+			if (willMove) {
+				const move = this.dex.getMove(willMove.move);
+				if (move.category === "Status") {
+					this.boost({def: -1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
+					this.add(`c|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
+				} else {
+					if (this.randomChance(85, 100)) {
+						pokemon.addVolatile('parry');
+						this.boost({spe: 2}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
+						pokemon.m.parriedPower = move.basePower * 1.15;
+						this.add(`c|${getName('Seso')}|Too slow!`);
+					} else {
+						target.addVolatile('failedparry');
+						this.add(`c|${getName('Seso')}|Scars on the back are a swordsman's shame.`);
+					}
+				}
+			} else if (this.queue.willSwitch(target)) {
+				this.add(`c|${getName('Seso')}|COWARD!`);
+				this.boost({spe: 1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
+			}
+		},
+		category: "Physical",
+		desc: "This move has an 85% chance to parry the target's move. If the target uses a status move, the parry fails and the user's Defense is lowered 1 stage. If the target switches, the user gains +1 Speed. If the user successfully parries, this move's base power becomes the base power of the target's move multiplied by 1.15. If the parry fails and the target is using an attacking move, the target's move is guaranteed to hit.",
+		shortDesc: "Various things. Hits Flying NVE.",
+		name: "Legendary Swordsman",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1},
+		ignoreImmunity: {'Ground': true},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Flying') return -1;
+		},
+		onTryMove(source, target, move) {
+			this.attrLastMove('[still]');
+			if (!source.volatiles['parry']) {
+				this.add('-fail', source, 'move: Legendary Swordsman');
+				return null;
+			}
+		},
+		onPrepareHit(target, source) {
+			this.add(`c|${getName('Seso')}|FORWARD!`);
+			if (source.volatiles['parry']) {
+				this.add('-anim', source, 'Gear Grind', target);
+				this.add('-anim', source, 'Thief', target);
+			}
+		},
+		onAfterHit(source, target, move) {
+			delete source.volatiles['parry'];
+			delete source.m.parriedPower;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ground",
 	},
 
 	// Shadecession

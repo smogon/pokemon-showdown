@@ -582,6 +582,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Bad Opinion',
 		evs: {hp: 252, atk: 56, def: 200}, nature: 'Impish', shiny: 2,
 	},
+	Seso: {
+		species: 'Nidoking', ability: 'Intrepid Sword', item: 'Weakness Policy', gender: 'M',
+		moves: ['Sacred Sword', 'Leaf Blade', 'Behemoth Blade'],
+		signatureMove: 'Legendary Swordsman',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: true,
+	},
 	Shadecession: {
 		species: 'Honchkrow', ability: 'Shady Deal', item: 'Heavy Duty Boots', gender: 'M',
 		moves: ['Knock Off', 'Roost', 'Brave Bird'],

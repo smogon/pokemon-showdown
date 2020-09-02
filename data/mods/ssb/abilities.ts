@@ -81,7 +81,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 	return result;
 }
 
-export const Abilities: {[k: string]: ModdedAbilityData & {gen?: number}} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
 	"abilityid": {

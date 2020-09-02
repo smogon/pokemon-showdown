@@ -1343,11 +1343,23 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart() {
 			this.add(`c|${getName('sejesensei')}|yoyo, what’ve you been reading lately`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c|${getName('sejesensei')}|bbl, gonna go read some manga`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c|${getName('sejesensei')}|B-but, this didn’t happen in the manga…`);
+		},
+	},
+	seso: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Seso')}|I have good spacial awareness, and I'm pretty comfortable with a sword.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Seso')}|In the blink of an eye.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Seso')}|I feel just, you know, defeated.`);
 		},
 	},
 	shadecession: {
@@ -1355,10 +1367,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart() {
 			this.add(`c|${getName('Shadecession')}|Better put on my Shadecessions`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c|${getName('Shadecession')}|⌐■_■`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c|${getName('Shadecession')}|ah, gg fam`);
 		},
 	},
@@ -1367,10 +1379,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart() {
 			this.add(`c|${getName('Spandan')}|Mareanie!`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c|${getName('Spandan')}|You can't end this toxic relationship just like that!`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c|${getName('Spandan')}|You didnt do shit. I coded myself to faint.`);
 		},
 	},
@@ -1383,7 +1395,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Struchni')}|~tt endgame`);
 			if (source.m.typeEff) delete source.m.typeEff;
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c|${getName('Struchni')}|**selfveto**`);
 		},
 		// Needed for Veto move
@@ -1912,6 +1924,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
+			}
+		},
+	},
+	failedparry: {
+		name: "Failed Parry",
+		duration: 1,
+		onModifyMove(move, source, target) {
+			if (source.volatiles['failedparry']) {
+				move.accuracy = true;
 			}
 		},
 	},
