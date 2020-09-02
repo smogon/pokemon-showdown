@@ -91,10 +91,10 @@ export class Modlog {
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
-			`SELECT * FROM modlog WHERE (roomid LIKE 'global-%' OR roomid = 'global')` +
-			` AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])})` +
-			` AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)` +
-			` AND timestamp > ?`
+			`SELECT * FROM modlog WHERE (roomid = 'global' OR roomid LIKE 'global-%') ` +
+			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) ` +
+			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
+			`AND timestamp > ?`
 		);
 
 		this.insertionTransaction = this.database.transaction((
@@ -130,7 +130,8 @@ export class Modlog {
 		if (overrideID) entry.visualRoomID = overrideID;
 		if (!entry.roomID) entry.roomID = roomid;
 		this.insertionTransaction(
-			entry.roomID, entry.action, entry.time || Date.now(), entry.visualRoomID, entry.userid,
+			entry.isGlobal && entry.roomID !== 'global' ? `global-${entry.roomID}` : entry.roomID,
+			entry.action, entry.time || Date.now(), entry.visualRoomID, entry.userid,
 			entry.autoconfirmedID, entry.ip, entry.loggedBy, entry.note, entry.alts,
 		);
 	}
