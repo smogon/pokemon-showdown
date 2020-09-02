@@ -1655,7 +1655,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 1] NU",
 		threads: [
-			`&bullet <a href="https://www.smogon.com/forums/threads/3668913/">RBY NU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668913/">RBY NU Viability Ranking</a>`,
 		],
 
 		mod: 'gen1',
