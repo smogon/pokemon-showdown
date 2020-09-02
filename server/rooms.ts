@@ -696,7 +696,7 @@ export abstract class BasicRoom {
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
 	 * @param noAlias Set this param to true to not redirect aliases and the room's old name to its new name.
 	 */
-	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
+	rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
 		this.validateTitle(newTitle, newID);
 		if (this.type === 'chat' && this.game) {
@@ -756,7 +756,7 @@ export abstract class BasicRoom {
 		this.settings.title = newTitle;
 		this.saveSettings();
 
-		return this.log.rename(newID);
+		void this.log.rename(newID);
 	}
 
 	onConnect(user: User, connection: Connection) {
@@ -1659,13 +1659,13 @@ export class GameRoom extends BasicRoom {
 			}
 		}
 		if (this.roomid.endsWith('pw')) return Promise.resolve(true);
-		return this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
+		this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
 	}
 
 	makePublic() {
 		this.settings.isPrivate = false;
 		if (!this.roomid.endsWith('pw')) return Promise.resolve(true);
-		return this.rename(this.title, this.getReplayData().id as RoomID);
+		this.rename(this.title, this.getReplayData().id as RoomID);
 	}
 }
 
@@ -1783,11 +1783,11 @@ export const Rooms = {
 
 		if (privacySetter.size) {
 			if (battle.forcePublic) {
-				void room.makePublic();
+				room.makePublic();
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
-				void room.makePrivate('hidden');
+				room.makePrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {
