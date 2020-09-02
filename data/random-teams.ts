@@ -24,15 +24,10 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 
-	randomCAP1v1Sets: AnyObject;
-
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-		// this.randomFactorySets = randomFactorySets;
-		// this.randomBSSFactorySets = randomBSSFactorySets;
-		this.randomCAP1v1Sets = require('./cap-1v1-sets.json');
 
 		this.factoryTier = '';
 		this.format = format;
@@ -1595,6 +1590,8 @@ export class RandomTeams {
 
 		return pokemon;
 	}
+
+	randomCAP1v1Sets: AnyObject = require('./cap-1v1-sets.json');
 
 	randomCAP1v1Team() {
 		const pokemon = [];
