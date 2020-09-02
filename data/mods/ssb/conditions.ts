@@ -490,7 +490,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			let activeMon;
 			activeMon = source.side.foe.active[0];
 			activeMon = activeMon.illusion ? activeMon.illusion.name : activeMon.name;
-			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie', 'sundar'];
+			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie'];
 			if (this.toID(activeMon) === 'hoeenhero') {
 				this.add(`c|${getName('fart')}|🎵 it's friday, friday, gotta get down on friday 🎵`);
 			} else if (this.toID(activeMon) === 'grimauxiliatrix') {
@@ -510,7 +510,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			let activeMon;
 			activeMon = pokemon.side.foe.active[0];
 			activeMon = this.toID(activeMon.illusion ? activeMon.illusion.name : activeMon.name);
-			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie', 'sundar'];
+			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie'];
 			if (family.includes(activeMon)) {
 				this.add(`c|${getName('fart')}|at least I wasn't boring, right?`);
 			} else {
