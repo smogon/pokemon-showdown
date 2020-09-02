@@ -767,7 +767,7 @@ export const commands: ChatCommands = {
 		};
 
 		this.sendReply(`Fetching newest version...`);
-		this.addGlobalModAction(`${user.name} used /updateserver ${isPrivate ? `private` : `public`}`);
+		this.addGlobalModAction(`${user.name} used /updateserver${isPrivate ? ` private` : ``}`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
@@ -782,7 +782,7 @@ export const commands: ChatCommands = {
 		if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
 		const oldHash = String(stdout).trim();
 
-		[code, stdout, stderr] = await exec(`git stash save --include-untracked "PS /updateserver autostash"`);
+		[code, stdout, stderr] = await exec(`git stash save "PS /updateserver autostash"`);
 		let stashedChanges = true;
 		if (code) throw new Error(`updateserver: Crash while stashing`);
 		if ((stdout + stderr).includes("No local changes")) {
@@ -796,7 +796,7 @@ export const commands: ChatCommands = {
 		// errors can occur while rebasing or popping the stash; make sure to recover
 		try {
 			this.sendReply(`Rebasing...`);
-			[code] = await exec(`git rebase FETCH_HEAD`);
+			[code] = await exec(`git rebase --no-autostash FETCH_HEAD`);
 			if (code) {
 				// conflict while rebasing
 				await exec(`git rebase --abort`);
