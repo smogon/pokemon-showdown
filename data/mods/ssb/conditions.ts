@@ -836,6 +836,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('KennedyLFC')}|I'm not meant to score goals anyway, I'm a defensive striker.`);
 		},
 	},
+	kev: {
+		noCopy: true,
+		onStart() {
+			// this.add(`c|${getName('Kev')}|`);
+		},
+		onSwitchOut() {
+			// this.add(`c|${getName('Kev')}|`);
+		},
+		onFaint() {
+			// this.add(`c|${getName('Kev')}|`);
+		},
+	},
 	kingbaruk: {
 		noCopy: true,
 		onStart() {

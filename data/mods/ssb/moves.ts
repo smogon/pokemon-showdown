@@ -2265,6 +2265,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Kev
+	kevcustommove: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Special Attack by 1 stage and Speed by 2 stages.",
+		shortDesc: "Gives user +1 Sp. Atk and +2 Spe.",
+		name: "Kev Custom Move",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]')
+		},
+		onPrepareHit(target) {
+			this.add('-anim', target, 'Dragon Dance', target);
+		},
+		self: {
+			boosts: {
+				spa: 1,
+				spe: 2,
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Water",
+	},
+
 	// Kingbaruk
 	leaveittotheteam: {
 		accuracy: true,
