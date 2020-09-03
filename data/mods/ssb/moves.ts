@@ -2279,7 +2279,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		onTryMove() {
-			this.attrLastMove('[still]')
+			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target) {
 			this.add('-anim', target, 'Dragon Dance', target);
