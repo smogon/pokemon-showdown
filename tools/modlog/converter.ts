@@ -393,7 +393,7 @@ export class ModlogConverterSQLite {
 					autoconfirmedID: result.autoconfirmed_userid,
 					alts: result.alts?.split(','),
 					ip: result.ip,
-					isGlobal: result.roomid?.startsWith('global-'),
+					isGlobal: result.roomid?.startsWith('global-') || result.roomid === 'global',
 					loggedBy: result.action_taker_userid,
 					note: result.note,
 					time: result.timestamp,
@@ -402,7 +402,7 @@ export class ModlogConverterSQLite {
 				if (!rawLogs[key]) rawLogs[key] = [];
 				const rawLog = rawifyLog(entry);
 				rawLogs[key].push(rawLog);
-				if (entry.isGlobal && key !== 'global') {
+				if (entry.isGlobal) {
 					if (!rawLogs.global) rawLogs.global = [];
 					rawLogs.global.push(rawLog);
 				}

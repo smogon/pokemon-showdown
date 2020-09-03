@@ -40,7 +40,7 @@ interface ModlogResults {
 	duration?: number;
 }
 
-interface ModlogQuery {
+interface ModlogQuery<T> {
 	statement: Database.Statement<T>;
 	args: T[];
 }
@@ -71,14 +71,15 @@ export interface ModlogEntry {
 export class Modlog {
 	readonly database: Database.Database;
 	readonly usePM: boolean;
-	readonly modlogInsertionQuery: Database.Statement;
-	readonly altsInsertionQuery: Database.Statement;
-	readonly renameQuery: Database.Statement;
-	readonly globalPunishmentsSearchQuery: Database.Statement;
+	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
+	readonly altsInsertionQuery: Database.Statement<[number, string]>;
+	readonly renameQuery: Database.Statement<[string, string]>;
+	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
 	readonly insertionTransaction: Database.Transaction;
 
 	constructor(path: string, noProcessManager = false) {
 		this.database = new Database(path);
+		this.database.exec("PRAGMA foreign_keys = ON;");
 		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync()); // Set up tables, etc.
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
 			return Number(RegExp(regexString).test(toMatch));
@@ -86,40 +87,50 @@ export class Modlog {
 
 		this.modlogInsertionQuery = this.database.prepare(
 			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
-			` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
 		);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
 			`SELECT * FROM modlog WHERE (roomid = 'global' OR roomid LIKE 'global-%') ` +
-			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) ` +
 			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
-			`AND timestamp > ?`
+			`AND timestamp > ?` +
+			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) `
 		);
 
-		this.insertionTransaction = this.database.transaction((
-			roomID: string, action: string, time: number, visualRoomID?: string, userid?: string,
-			autoconfirmedID?: string, ip?: string, loggedBy?: string, note?: string, alts?: string[]
-		) => {
-			const args = [time, roomID, visualRoomID, action, userid, autoconfirmedID, ip, loggedBy, note].map(arg => arg || null);
-			const result = this.modlogInsertionQuery.run(...args);
-			for (const alt of alts || []) {
-				this.altsInsertionQuery.run(result.lastInsertRowid, alt);
+		this.insertionTransaction = this.database.transaction((entry: {
+			action: string,
+			roomID: string,
+			visualRoomID: string,
+			userid: ID,
+			autoconfirmedID: ID,
+			ip: string,
+			loggedBy: ID,
+			note: string,
+			time: number,
+			alts: ID[],
+		}) => {
+			const result = this.modlogInsertionQuery.run(entry);
+			for (const alt of entry.alts || []) {
+				this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
 			}
 		});
 		this.usePM = !noProcessManager && !Config.nofswriting;
 	}
 
-	async runSQL(query: ModlogQuery, forceNoPM = false): Promise<Database.RunResult | any[]> {
+	async runSQL(query: ModlogQuery<any>, forceNoPM = false): Promise<Database.RunResult> {
 		if (!forceNoPM && this.usePM) {
-			return PM.query(query);
+			return PM.query({query, returnsResults: false});
 		} else {
-			try {
-				return query.statement.all(...query.args);
-			} catch (e) {
-				if (e.message.includes('statement does not return data')) return query.statement.run(...query.args);
-				throw e;
-			}
+			return query.statement.run(query.args);
+		}
+	}
+
+	async runSQLWithResults(query: ModlogQuery<any>, forceNoPM = false): Promise<unknown[]> {
+		if (!forceNoPM && this.usePM) {
+			return PM.query({query, returnsResults: true});
+		} else {
+			return query.statement.all(query.args);
 		}
 	}
 
@@ -127,13 +138,20 @@ export class Modlog {
 	 * Writes to the modlog
 	 */
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
-		if (overrideID) entry.visualRoomID = overrideID;
-		if (!entry.roomID) entry.roomID = roomid;
-		this.insertionTransaction(
-			entry.isGlobal && entry.roomID !== 'global' ? `global-${entry.roomID}` : entry.roomID,
-			entry.action, entry.time || Date.now(), entry.visualRoomID, entry.userid,
-			entry.autoconfirmedID, entry.ip, entry.loggedBy, entry.note, entry.alts,
-		);
+		roomid = entry.roomID || roomid;
+		if (entry.isGlobal && roomid !== 'global' && !roomid.startsWith('global-')) roomid = `global-${roomid}`;
+		this.insertionTransaction({
+			action: entry.action,
+			roomID: roomid,
+			visualRoomID: overrideID || entry.visualRoomID,
+			userid: entry.userid,
+			autoconfirmedID: entry.autoconfirmedID,
+			ip: entry.ip,
+			loggedBy: entry.loggedBy,
+			note: entry.note,
+			time: entry.time || Date.now(),
+			alts: entry.alts,
+		});
 	}
 
 	rename(oldID: ModlogID, newID: ModlogID) {
@@ -161,7 +179,7 @@ export class Modlog {
 
 	prepareSearch(
 		rooms: ModlogID[], maxLines: number, onlyPunishments: boolean, search: ModlogSearch
-	): ModlogQuery {
+	): ModlogQuery<string | number> {
 		for (const room of [...rooms]) {
 			rooms.push(`global-${room}` as ModlogID);
 		}
@@ -223,9 +241,9 @@ export class Modlog {
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const userid = toID(user);
 		const args: (string | number)[] = [
-			...GLOBAL_PUNISHMENTS, userid, userid, userid, (Date.now() / 1000) - (days * 24 * 60 * 60),
+			userid, userid, userid, (Date.now() / 1000) - (days * 24 * 60 * 60), ...GLOBAL_PUNISHMENTS,
 		];
-		const results = await this.runSQL({statement: this.globalPunishmentsSearchQuery, args}) as any[];
+		const results = await this.runSQLWithResults({statement: this.globalPunishmentsSearchQuery, args});
 		return results.length;
 	}
 
@@ -247,8 +265,8 @@ export class Modlog {
 
 		const query = this.prepareSearch(rooms, maxLines, onlyPunishments, search);
 		const start = Date.now();
-		const rows = await this.runSQL(query) as any[];
-		const results: ModlogEntry[] = rows.map((row: AnyObject) => {
+		const rows = await this.runSQLWithResults(query);
+		const results: ModlogEntry[] = rows.map((row: any) => {
 			return {
 				action: row.action,
 				roomID: row.roomid?.replace(/^global-/, ''),
@@ -272,13 +290,19 @@ export class Modlog {
 	}
 }
 
-export const PM = new QueryProcessManager<ModlogQuery, any[] | Database.RunResult | undefined>(module, data => {
-	try {
-		return modlog.runSQL(data, true);
-	} catch (err) {
-		Monitor.crashlog(err, 'A modlog query', data);
+// eslint-disable-next-line max-len
+export const PM = new QueryProcessManager<{query: ModlogQuery<string | number>, returnsResults: boolean}, unknown[] | Database.RunResult | undefined>(
+	module,
+	data => {
+		const {query, returnsResults} = data;
+		try {
+			if (returnsResults) return modlog.runSQLWithResults(query, true);
+			return modlog.runSQL(query, true);
+		} catch (err) {
+			Monitor.crashlog(err, 'A modlog query', data);
+		}
 	}
-});
+);
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 

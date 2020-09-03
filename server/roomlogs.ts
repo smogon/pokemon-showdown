@@ -228,7 +228,7 @@ export class Roomlog {
 	async rename(newID: RoomID): Promise<true> {
 		const roomlogPath = `logs/chat`;
 		const roomlogStreamExisted = this.roomlogStream !== null;
-		await this.destroy(); // don't destroy modlog, since it's renamed later
+		await this.destroy();
 		await Promise.all([
 			FS(roomlogPath + `/${this.roomid}`).exists(),
 			FS(roomlogPath + `/${newID}`).exists(),

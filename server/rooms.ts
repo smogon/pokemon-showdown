@@ -339,8 +339,10 @@ export abstract class BasicRoom {
 		return this;
 	}
 	modlog(entry: ModlogEntry) {
-		if (this.tour && !entry.visualRoomID) entry.visualRoomID = `${this.roomid} tournament: ${this.tour.roomid}`;
-		this.log.modlog(entry);
+		this.log.modlog({
+			...entry,
+			visualRoomID: (this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined),
+		});
 		return this;
 	}
 	uhtmlchange(name: string, message: string) {
@@ -1022,8 +1024,7 @@ export class GlobalRoomState {
 	}
 
 	modlog(entry: ModlogEntry, overrideID?: string) {
-		if (overrideID && !entry.visualRoomID) entry.visualRoomID = overrideID;
-		void Rooms.Modlog.write('global', entry);
+		void Rooms.Modlog.write('global', {...entry, visualRoomID: overrideID});
 	}
 
 	writeChatRoomData() {
