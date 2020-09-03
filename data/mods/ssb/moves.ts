@@ -2232,7 +2232,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
-	// KennedyLFC
+	// Kennedy
 	topbins: {
 		accuracy: 70,
 		basePower: 130,

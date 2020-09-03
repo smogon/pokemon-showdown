@@ -824,16 +824,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
-	kennedylfc: {
+	kennedy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('KennedyLFC')}|up the reds`);
+			this.add(`c|${getName('Kennedy')}|up the reds`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('KennedyLFC')}|brb Jayi is PMing me (again) -_-`);
+			this.add(`c|${getName('Kennedy')}|brb Jayi is PMing me (again) -_-`);
 		},
 		onFaint() {
-			this.add(`c|${getName('KennedyLFC')}|I'm not meant to score goals anyway, I'm a defensive striker.`);
+			this.add(`c|${getName('Kennedy')}|I'm not meant to score goals anyway, I'm a defensive striker.`);
 		},
 	},
 	kev: {

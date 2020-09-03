@@ -354,7 +354,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blackbird',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
-	KennedyLFC: {
+	Kennedy: {
 		species: 'Cinderace', ability: 'False Nine', item: 'Choice Band', gender: 'M',
 		moves: ['High Jump Kick', 'Triple Axel', 'U-turn'],
 		signatureMove: 'Top Bins',

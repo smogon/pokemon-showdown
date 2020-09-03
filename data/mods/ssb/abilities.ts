@@ -1044,7 +1044,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// KennedyLFC
+	// Kennedy
 	falsenine: {
 		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This Pokemon's critical hit ratio is raised by 1 stage.",
 		shortDesc: "Pokemon's type changes to match the type of the move it's about to use. +1 crit ratio.",
