@@ -154,7 +154,7 @@ export class Modlog {
 		return `[^a-zA-Z0-9]?${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 
-	formatArray(arr: any[], args: any[]) {
+	formatArray(arr: unknown[], args: unknown[]) {
 		args.push(...arr);
 		return [...'?'.repeat(arr.length)].join(', ');
 	}
