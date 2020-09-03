@@ -152,7 +152,6 @@ Staff
 
 - Andrew Werner [HoeenHero] - Development
 - Chris Monsanto [chaos] - Sysadmin
-- Kirk Scheibelhut [pre] - Development, Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
 
