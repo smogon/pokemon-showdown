@@ -1700,7 +1700,7 @@ export const commands: ChatCommands = {
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of Austin &amp; pre)<br />` +
+				`Random Battles damage calculator. (Courtesy of Austin)<br />` +
 				`- <a href="https://calc.pokemonshowdown.com/randoms.html">Random Battles Damage Calculator</a>`
 			);
 		}
