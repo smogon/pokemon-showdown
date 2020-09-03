@@ -41,8 +41,8 @@ interface ModlogResults {
 }
 
 interface ModlogQuery {
-	statement: Database.Statement;
-	args: any[];
+	statement: Database.Statement<T>;
+	args: T[];
 }
 
 export interface ModlogSearch {
