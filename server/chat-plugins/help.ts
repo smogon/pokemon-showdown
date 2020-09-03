@@ -106,6 +106,8 @@ export class HelpResponder {
 		throw new Chat.ErrorMessage(`There is no room configured to use the Help filter.`);
 	}
 	find(question: string, user?: User) {
+		// sanity slice, APPARENTLY people are dumb.
+		question = question.slice(0, 300);
 		const room = this.getRoom();
 		if (!room) return;
 		const helpFaqs = roomFaqs[room.roomid];
@@ -293,9 +295,10 @@ export class HelpResponder {
 
 export const Answerer = new HelpResponder(helpData);
 
-export const chatfilter: ChatFilter = (message, user, room) => {
+export const chatfilter: ChatFilter = function (message, user, room) {
 	const helpRoom = Answerer.getRoom();
 	if (!helpRoom) return message;
+	if (!this.canTalk(message, helpRoom)) return;
 	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.settings.filterDisabled) {
 		if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 		const reply = Answerer.visualize(message, false, user);
