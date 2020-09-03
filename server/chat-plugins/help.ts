@@ -298,7 +298,6 @@ export const Answerer = new HelpResponder(helpData);
 export const chatfilter: ChatFilter = function (message, user, room) {
 	const helpRoom = Answerer.getRoom();
 	if (!helpRoom) return message;
-	if (!this.canTalk(message, helpRoom)) return;
 	if (room?.roomid === helpRoom.roomid && helpRoom.auth.get(user.id) === ' ' && !Answerer.settings.filterDisabled) {
 		if (message.startsWith('a:') || message.startsWith('A:')) return message.replace(/(a|A):/, '');
 		const reply = Answerer.visualize(message, false, user);
