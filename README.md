@@ -167,7 +167,6 @@ Retired Staff
 
 Major Contributors
 
-- [Anubis, Lusamine] - Research (game mechanics), Sysadmin
 - Austin Couturier [Austin] - Development (damage calculator)
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
