@@ -547,6 +547,9 @@ export const LogSearcher = new class {
 			});
 			results = stdout.split('--');
 		} catch (e) {
+			if (e.message.includes('No such file or directory')) {
+				throw new Chat.ErrorMessage(`Logs for date '${month}' do not exist.`);
+			}
 			if (e.code !== 1 && !e.message.includes('stdout maxBuffer')) throw e; // 2 means an error in ripgrep
 			if (e.stdout) {
 				results = e.stdout.split('--');
@@ -564,11 +567,10 @@ export const LogSearcher = new class {
 		date?: string | null
 	) {
 		if (date) {
+			// if it's more than 7 chars, assume it's a month
 			if (date.length > 7) date = date.substr(0, 7);
-			// if the date is the same length as a month, assume it is and check to see if that folder exists
-			if (!FS(`logs/chat/${roomid}/${date}`).existsSync() && date.length === 7) {
-				throw new Chat.ErrorMessage(`No logs for date '${date}'.`);
-			}
+			// if it's less, assume they were trying a year
+			else if (date.length < 7) date = date.substr(0, 4);
 		}
 		const months = (date && toID(date) !== 'all' ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
 		let count = 0;
