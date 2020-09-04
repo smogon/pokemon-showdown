@@ -563,7 +563,13 @@ export const LogSearcher = new class {
 		limit?: number | null,
 		date?: string | null
 	) {
-		if (date && date.length > 7) date = date?.substr(0, 7);
+		if (date) {
+			if (date.length > 7) date = date.substr(0, 7);
+			// if the date is the same length as a month, assume it is and check to see if that folder exists
+			if (!FS(`logs/chat/${roomid}/${date}`).existsSync() && date.length === 7) {
+				throw new Chat.ErrorMessage(`No logs for date '${date}'.`);
+			}
+		}
 		const months = (date && toID(date) !== 'all' ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
 		let count = 0;
 		let results: string[] = [];
@@ -638,6 +644,7 @@ export const pages: PageTable = {
 		}
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
+		if (date) date = date.trim();
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
