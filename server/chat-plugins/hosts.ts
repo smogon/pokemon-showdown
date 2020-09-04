@@ -10,7 +10,7 @@ import {GlobalPermission} from "../user-groups";
 
 const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
 
-const WHITELISTED_USERIDS = ['anubis'];
+const WHITELISTED_USERIDS: ID[] = [];
 
 function canPerform(context: PageContext | CommandContext, user: User, permission: GlobalPermission = 'lockdown') {
 	return WHITELISTED_USERIDS.includes(user.id) || context.can(permission);
