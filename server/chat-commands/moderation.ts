@@ -576,7 +576,10 @@ export const commands: ChatCommands = {
 	unmutehelp: [`/unmute [username] - Removes mute from user. Requires: % @ # &`],
 
 	rb: 'ban',
+	weekban: 'ban',
+	wrb: 'ban',
 	forceroomban: 'ban',
+	forceweekban: 'ban',
 	forcerb: 'ban',
 	roomban: 'ban',
 	b: 'ban',
@@ -584,6 +587,7 @@ export const commands: ChatCommands = {
 		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return;
+		const week = ['wrb', 'forceweekban', 'weekban'].includes(cmd);
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -598,11 +602,11 @@ export const commands: ChatCommands = {
 		}
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
-		const force = cmd === 'forcerb' || cmd === 'forceroomban';
+		const force = ['forcerb', 'forceroomban', 'forceweekban'].includes(cmd);
 		if (targetUser.trusted) {
 			if (!force) {
 				return this.sendReply(
-					`${name} is a trusted user. If you are sure you would like to ban them use /forceroomban.`
+					`${name} is a trusted user. If you are sure you would like to ban them, use /force${week ? 'week' : ''}roomban.`
 				);
 			}
 		} else if (force) {
@@ -619,14 +623,19 @@ export const commands: ChatCommands = {
 
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Utils.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
+				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
+				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
+				`</p>${(target ? `<p>Reason: ${Utils.escapeHTML(target)}</p>` : ``)}` +
+				`<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. ` +
+				`</p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
 		const reason = (target ? ` (${target})` : ``);
-		this.addModAction(`${name} was banned from ${room.title} by ${user.name}.${reason}`);
+		this.addModAction(`${name} was banned ${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${reason}`);
 
-		const affected = Punishments.roomBan(room, targetUser, null, null, target);
+		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
+		const affected = Punishments.roomBan(room, targetUser, time, null, target);
 
 		if (!room.settings.isPrivate && room.persist) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -642,13 +651,16 @@ export const commands: ChatCommands = {
 		room.hideText([userid, toID(this.inputUsername)]);
 
 		if (room.settings.isPrivate !== true && room.persist) {
-			this.globalModlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		} else {
-			this.modlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.modlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		}
 		return true;
 	},
-	banhelp: [`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # &`],
+	banhelp: [
+		`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # &`,
+		`/weekban [username, reason] - Bans the user from the room you are in for a week. Requires: @ # &`,
+	],
 
 	unroomban: 'unban',
 	roomunban: 'unban',
