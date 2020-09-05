@@ -1578,7 +1578,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			validate: [2, 4],
 			battle: 2,
 		},
-		ruleset: ['[Gen 5] Doubles OU'],
+		ruleset: ['[Gen 5] Doubles OU', 'Accuracy Moves Clause'],
 		banlist: ['Kingdra', 'Focus Sash', 'Final Gambit', 'Perish Song'],
 	},
 	{
