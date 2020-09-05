@@ -306,7 +306,7 @@ export const LogViewer = new class {
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
 			const group = name.charAt(0) !== ' ' ? `<small>${name.charAt(0)}</small>` : ``;
-			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${name.slice(1)}:</strong> <q>${Chat.formatText(message)}</q></div>`;
+			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${Utils.escapeHTML(name.slice(1))}:</strong> <q>${Chat.formatText(message)}</q></div>`;
 		}
 		case 'html': case 'raw': {
 			const [, html] = Utils.splitFirst(line, '|', 1);
