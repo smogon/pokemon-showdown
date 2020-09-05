@@ -232,6 +232,7 @@ export const commands: ChatCommands = {
 
 	highlighthtmlpage(target, room, user) {
 		target = target.trim();
+		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
 		let [userid, pageid, highlight] = Utils.splitFirst(target, ',', 2);
 		pageid = `${user.id}-${toID(pageid)}`;
