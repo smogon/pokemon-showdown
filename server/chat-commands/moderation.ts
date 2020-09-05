@@ -1073,27 +1073,35 @@ export const commands: ChatCommands = {
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],
 
 	rangelock: 'lockip',
-	lockip(target, room, user) {
+	yearlockip: 'lockip',
+	lockip(target, room, user, connection, cmd) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help lockip');
 		if (!reason) return this.errorReply("/lockip requires a lock reason");
 
 		if (!this.can('rangeban')) return false;
-		const ipDesc = `IP ${(ip.endsWith('*') ? `range ` : ``)}${ip}`;
+		const ipDesc = ip.endsWith('*') ? `IP range ${ip}` : `IP ${ip}`;
 
+		const year = cmd === 'yearlockip';
 		const curPunishment = Punishments.ipSearch(ip);
-		if (curPunishment && (curPunishment[0] === 'BAN' || curPunishment[0] === 'LOCK')) {
+		if (!year && curPunishment && (curPunishment[0] === 'BAN' || curPunishment[0] === 'LOCK')) {
 			const punishDesc = curPunishment[0] === 'BAN' ? `temporarily banned` : `temporarily locked`;
 			return this.errorReply(`The ${ipDesc} is already ${punishDesc}.`);
 		}
 
-		Punishments.lockRange(ip, reason);
+		const time = year ? Date.now() + 365 * 24 * 60 * 60 * 1000 : null;
+		Punishments.lockRange(ip, reason, time);
 
-		this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
-		this.modlog('RANGELOCK', null, reason);
+		if (year) {
+			this.addGlobalModAction(`${user.name} year-locked the ${ipDesc}: ${reason}`);
+		} else {
+			this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
+		}
+		this.modlog(year ? 'YEARLOCK' : 'RANGELOCK', null, reason);
 	},
 	lockiphelp: [
 		`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
+		`/yearlockip [ip] - Globally locks this IP or IP range for one year. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: &`,
 	],
 
