@@ -41,7 +41,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		addNewMoves('appletun', ['earthpower', 'flamethrower', 'leafstorm']);
 		addNewMoves('sandaconda', ['bodyslam', 'flamethrower', 'shoreup']);
 		addNewMoves('toxtricity', ['nastyplot'], ['dracometeor', 'burningjealousy']);
-		addNewMoves('toxtricitylowkey', ['nastyplot'], ['dracometeor', 'burningjealosy']);
+		addNewMoves('toxtricitylowkey', ['nastyplot'], ['dracometeor', 'burningjealousy']);
 		addNewMoves('centiskorch', ['earthquake', 'strengthsap']);
 		addNewMoves('hatterene', ['moonblast', 'gravity']);
 		addNewMoves('grimmsnarl', ['yawn', 'honeclaws']);
