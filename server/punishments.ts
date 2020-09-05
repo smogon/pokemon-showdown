@@ -880,12 +880,14 @@ export const Punishments = new class {
 		}
 	}
 
-	lockRange(range: string, reason: string) {
-		const punishment = ['LOCK', '#rangelock', Date.now() + RANGELOCK_DURATION, reason] as Punishment;
+	lockRange(range: string, reason: string, expireTime?: number | null) {
+		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
+		const punishment = ['LOCK', '#rangelock', expireTime, reason] as Punishment;
 		Punishments.ips.set(range, punishment);
 	}
-	banRange(range: string, reason: string) {
-		const punishment = ['BAN', '#rangelock', Date.now() + RANGELOCK_DURATION, reason] as Punishment;
+	banRange(range: string, reason: string, expireTime?: number | null) {
+		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
+		const punishment = ['BAN', '#rangelock', expireTime, reason] as Punishment;
 		Punishments.ips.set(range, punishment);
 	}
 
