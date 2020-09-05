@@ -3140,7 +3140,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = {boosts: {spe: -1, atk: 1, def: 1}};
-			} else if (move.volatileStatus && target.volatiles.curse) {
+			} else if (move.volatileStatus && target.volatiles['curse']) {
 				return false;
 			}
 		},
@@ -6176,10 +6176,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 95,
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
-			if (!pokemon.volatiles.furycutter || move.hit === 1) {
+			if (!pokemon.volatiles['furycutter'] || move.hit === 1) {
 				pokemon.addVolatile('furycutter');
 			}
-			return this.clampIntRange(move.basePower * pokemon.volatiles.furycutter.multiplier, 1, 160);
+			return this.clampIntRange(move.basePower * pokemon.volatiles['furycutter'].multiplier, 1, 160);
 		},
 		category: "Physical",
 		desc: "Power doubles with each successful hit, up to a maximum of 160 power. The power is reset if this move misses or another move is used.",
@@ -9274,11 +9274,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
-				bp *= Math.pow(2, pokemon.volatiles.iceball.hitCount);
+			if (pokemon.volatiles['iceball'] && pokemon.volatiles['iceball'].hitCount) {
+				bp *= Math.pow(2, pokemon.volatiles['iceball'].hitCount);
 			}
 			if (pokemon.status !== 'slp') pokemon.addVolatile('iceball');
-			if (pokemon.volatiles.defensecurl) {
+			if (pokemon.volatiles['defensecurl']) {
 				bp *= 2;
 			}
 			this.debug("Ice Ball bp: " + bp);
@@ -15433,11 +15433,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
-				bp *= Math.pow(2, pokemon.volatiles.rollout.hitCount);
+			if (pokemon.volatiles['rollout'] && pokemon.volatiles['rollout'].hitCount) {
+				bp *= Math.pow(2, pokemon.volatiles['rollout'].hitCount);
 			}
 			if (pokemon.status !== 'slp') pokemon.addVolatile('rollout');
-			if (pokemon.volatiles.defensecurl) {
+			if (pokemon.volatiles['defensecurl']) {
 				bp *= 2;
 			}
 			this.debug("Rollout bp: " + bp);
@@ -18503,7 +18503,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === 'move' ? action.move : null;
-			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles.mustrecharge) {
+			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
 				this.add('-fail', source);
 				this.attrLastMove('[still]');
 				return null;
