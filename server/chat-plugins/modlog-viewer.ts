@@ -61,6 +61,20 @@ function getMoreButton(
 	}
 }
 
+function getRoomID(id: ModlogID) {
+	switch (id) {
+	case 'helpticket':
+		return 'help-rooms' as ModlogID;
+	case 'groupchat':
+		return 'groupchat-rooms' as ModlogID;
+	case 'battle':
+		return 'battle-rooms' as ModlogID;
+	// more aliases can be added here
+	default:
+		return id;
+	}
+}
+
 function prettifyResults(
 	resultArray: string[], roomid: ModlogID, searchString: string, exactSearch: boolean,
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
@@ -145,6 +159,7 @@ async function getModlog(
 ) {
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
+	roomid = getRoomID(roomid);
 
 	// permission checking
 	if (roomid === 'all' || roomid === 'public') {
