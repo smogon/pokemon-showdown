@@ -147,7 +147,7 @@ function merge(
 			   side: FormatList[]
 ): FormatList[] {
 	// result that is return and makes the actual list for formats.
-	const result: FormatList[] = [];
+	let result: FormatList[] = [];
 
 	// used as a intermediary to build the final list.
 	const build: FormatSection[] = [];
@@ -170,20 +170,10 @@ function merge(
 	for (const element of side) {
 		// finds the section and makes it if it doesn't exist.
 		if (element.section) {
-			loc = 0;
-			let found = false;
-
-			// finds the loc of the section header (or next loc if it's new)
-			for (const entry of build) {
-				if (entry.section === element.section) {
-					found = true;
-					break;
-				}
-				loc++;
-			}
+			loc = build.findIndex(x => x === element.section);
 
 			// if it's new it makes a new entry.
-			if (!found) {
+			if (loc === -1) {
 				build.push({section: element.section, column: element.column, formats: []});
 			}
 		} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
@@ -195,11 +185,7 @@ function merge(
 	for (const element of build) {
 		// adds the section to the list.
 		result.push({section: element.section, column: element.column});
-
-		// adds all the formats in the section.
-		for (const entry of element.formats) {
-			result.push(entry);
-		}
+		result = result.concat(element.formats);
 	}
 
 	return result;
