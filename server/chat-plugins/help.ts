@@ -509,7 +509,7 @@ export const commands: ChatCommands = {
 			if (!helpRoom) HelpResponder.roomNotFound();
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`Must be used in the Help room.`);
 			target = target.trim();
-	  		this.checkCan('ban', null, room);
+			this.checkCan('ban', null, room);
 			if (!target) {
 				return this.sendReply(`The Help suggestion queue is currently ${Answerer.settings.queueDisabled ? 'OFF' : 'ON'}.`);
 			}
