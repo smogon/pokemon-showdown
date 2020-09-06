@@ -660,7 +660,7 @@ export const commands: ChatCommands = {
 	},
 	banhelp: [
 		`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # &`,
-		`/weekban [username, reason] - Bans the user from the room you are in for a week. Requires: @ # &`,
+		`/weekban [username], [reason] - Bans the user from the room you are in for a week. Requires: @ # &`,
 	],
 
 	unroomban: 'unban',
