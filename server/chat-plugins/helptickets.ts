@@ -755,7 +755,7 @@ export const pages: PageTable = {
 		tickets(query, user, connection) {
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.title = this.tr`Ticket List`;
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button> <button class="button" name="send" value="/helpticket stats" style="float: right"><i class="fa fa-th-list"></i> ${this.tr`Help Ticket Stats`}</button><br /><br />`;
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
 			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
@@ -856,7 +856,7 @@ export const pages: PageTable = {
 			// view-help-stats-TABLE-YYYY-MM-COL
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.title = this.tr`Ticket Stats`;
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 
 			let [table, yearString, monthString, col] = query;
 			if (!['staff', 'tickets'].includes(table)) table = 'tickets';
@@ -1222,13 +1222,13 @@ export const commands: ChatCommands = {
 		},
 
 		list(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
 		stats(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
@@ -1261,7 +1261,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help helpticket ban');
 			target = this.splitTarget(target, true);
 			const targetUser = this.targetUser;
-			if (!this.can('lock', targetUser)) return;
+			this.checkCan('lock', targetUser);
 
 			const ticket = tickets[toID(this.inputUsername)];
 			const ticketBan = ticketBans[toID(this.inputUsername)];
@@ -1361,7 +1361,7 @@ export const commands: ChatCommands = {
 		unban(target, room, user) {
 			if (!target) return this.parse('/help helpticket unban');
 
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			const targetUser = Users.get(target, true);
 			const ticket = ticketBans[toID(target)];
 			if (!ticket || !ticket.banned) {
@@ -1391,7 +1391,7 @@ export const commands: ChatCommands = {
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
 		ignore(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			if (user.settings.ignoreTickets) {
 				return this.errorReply(this.tr`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
@@ -1402,7 +1402,7 @@ export const commands: ChatCommands = {
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
 
 		unignore(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			if (!user.settings.ignoreTickets) {
 				return this.errorReply(this.tr`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
@@ -1414,7 +1414,7 @@ export const commands: ChatCommands = {
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
-			if (!this.can('makeroom')) return;
+			this.checkCan('makeroom');
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(this.tr`${target} does not have a ticket.`);

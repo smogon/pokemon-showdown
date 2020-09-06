@@ -664,9 +664,9 @@ export const pages: PageTable = {
 			if (!room.checkModjoin(user) && !user.can('bypassall')) {
 				return LogViewer.error("Access denied");
 			}
-			if (!user.can('lock') && !this.can('mute', null, room)) return;
+			if (!user.can('lock')) this.checkCan('mute', null, room);
 		} else {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 		}
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
@@ -731,7 +731,7 @@ export const commands: ChatCommands = {
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		target = target.trim();
 		const args = target.split(',').map(item => item.trim());
 		if (!target) return this.parse('/help searchlogs');

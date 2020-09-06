@@ -770,7 +770,7 @@ export const Formats: FormatList[] = [
 
 		mod: 'gen8',
 		ruleset: ['350 Cup Mod', 'Standard', 'Dynamax Clause'],
-		banlist: ['Abra', 'Gastly', 'Pawniard', 'Rufflet', 'Eviolite', 'Light Ball', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Abra', 'Gastly', 'Pawniard', 'Rufflet', 'Woobat', 'Eviolite', 'Light Ball', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
 	},
 
 	// Other Metagames
@@ -1252,8 +1252,9 @@ export const Formats: FormatList[] = [
 			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 		restricted: [
-			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock', 'Nature Power',
-			'Parting Shot', 'Psycho Shift', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
+			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Disable', 'Encore', 'Ingrain', 'King\'s Shield',
+			'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock', 'Nature Power', 'Parting Shot', 'Psycho Shift', 'Protect',
+			'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
