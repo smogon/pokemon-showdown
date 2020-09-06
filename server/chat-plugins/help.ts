@@ -504,11 +504,11 @@ export const commands: ChatCommands = {
 			return this.modlog(`HELPFILTER ${unban ? 'UN' : ''}SUGGESTIONBAN`, userid, reason);
 		},
 		queue(target, room, user) {
-			if (!room) return this.requiresRoom();
+			if (!room) return this.requireRoom();
 			const helpRoom = Answerer.getRoom();
 			if (!helpRoom) HelpResponder.roomNotFound();
 			if (room.roomid !== helpRoom.roomid) return this.errorReply(`Must be used in the Help room.`);
-	  	this.checkCan('ban', null, room);
+	  		this.checkCan('ban', null, room);
 			target = target.trim();
 			if (!target) {
 				return this.sendReply(`The Help suggestion queue is currently ${Answerer.settings.queueDisabled ? 'OFF' : 'ON'}.`);

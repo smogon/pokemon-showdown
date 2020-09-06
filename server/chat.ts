@@ -2107,6 +2107,12 @@ CommandContext.prototype.canBroadcast = CommandContext.prototype.checkBroadcast;
 CommandContext.prototype.canHTML = CommandContext.prototype.checkHTML;
 // @ts-ignore
 CommandContext.prototype.canEmbedURI = CommandContext.prototype.checkEmbedURI;
+// @ts-ignore
+CommandContext.prototype.canPMHTML = CommandContext.prototype.checkPMHTML;
+// @ts-ignore
+CommandContext.prototype.privatelyCan = CommandContext.prototype.privatelyCheckCan;
+// @ts-ignore
+CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
 
 /**
  * Used by ChatMonitor.

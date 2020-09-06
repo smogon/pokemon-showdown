@@ -1585,7 +1585,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`You can't specify a line count when using /hidealtstext.`);
 		}
 		const userid = toID(this.inputUsername);
-      
+
 		this.checkCan('mute', null, room);
 
 		// if the user hiding their own text, it would clear the "cleared" message,
