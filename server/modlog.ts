@@ -136,7 +136,7 @@ export class Modlog {
 	}
 
 	getSharedID(roomid: ModlogID): ID | false {
-		return roomid.includes('-') ? toID(roomid.split('-')[0]) : false;
+		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
 	}
 
 	/**
