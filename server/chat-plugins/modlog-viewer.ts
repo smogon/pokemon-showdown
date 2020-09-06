@@ -72,13 +72,6 @@ function getRoomID(id: string) {
 	return id as ModlogID;
 }
 
-function getAlias(id: string) {
-	for (const [alias, value] of Object.entries(ALIASES)) {
-		if (id === value) return alias as ModlogID;
-	}
-	return id as ModlogID;
-}
-
 function prettifyResults(
 	resultArray: ModlogEntry[], roomid: ModlogID, search: ModlogSearch, searchCmd: string,
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
