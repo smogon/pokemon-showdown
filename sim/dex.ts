@@ -47,7 +47,7 @@ import * as path from 'path';
 import * as Data from './dex-data';
 import {PRNG, PRNGSeed} from './prng';
 import {Utils} from '../lib/utils';
-import {FormatList} from '../config/custom-formats';
+import { FormatList } from './global-types';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
@@ -142,50 +142,47 @@ interface FormatSection {
 }
 
 // function for merging the two lists
-function merge(
-			   main: FormatList[],
-			   side: FormatList[]
-): FormatList[] {
+function merge(main: FormatList[], custom: FormatList[]): FormatList[] {
 	// result that is return and makes the actual list for formats.
-	let result: FormatList[] = [];
+	const result: FormatList[] = [];
 
 	// used as a intermediary to build the final list.
 	const build: FormatSection[] = [];
 
-	// used to track location to keep formats under their sections.
-	let loc = -1;
+	// used to track current section to keep formats under their sections.
+	let current: FormatSection | undefiend = {section: "", formats: []};
 
 	// populates the original sections and formats easily
 	// there should be no repeat sections at this point.
 	for (const element of main) {
 		if (element.section) {
-			build.push({section: element.section, column: element.column, formats: []});
-			loc++;
+			current = {section: element.section, column: element.column, formats: []};
+			build.push(current);
 		} else if ((element as FormatData).name) {
-			build[loc].formats.push((element as FormatData));
+			current.formats.push((element as FormatData));
 		}
 	}
 
 	// merges the second list the hard way. Accounts for repeats.
-	for (const element of side) {
+	for (const element of custom) {
 		// finds the section and makes it if it doesn't exist.
 		if (element.section) {
-			loc = build.findIndex(x => x === element.section);
+			current = build.find(e => e.section === element.section);
 
 			// if it's new it makes a new entry.
-			if (loc === -1) {
-				build.push({section: element.section, column: element.column, formats: []});
+			if (current === undefined) {
+				current = {section: element.section, column: element.column, formats: []};
+				build.push(current);
 			}
 		} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
-			build[loc].formats.push(element as FormatData);
+			current.formats.push(element as FormatData);
 		}
 	}
 
 	// builds the final result.
 	for (const element of build) {
 		// adds the section to the list.
-		result.push({section: element.section, column: element.column});
-		result = result.concat(element.formats);
+		result.push({section: element.section, column: element.column}, ...element.formats);
 	}
 
 	return result;
@@ -1570,7 +1567,7 @@ export class ModdedDex {
 		// Load formats
 		let Formats;
 		try {
-			Formats = (merge(require(MAIN_FORMATS).MainFormats, require(CUSTOM_FORMATS).CustomFormats) as any);
+			Formats = (merge(require(MAIN_FORMATS).Formats, require(CUSTOM_FORMATS).Formats) as any);
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
 				throw e;
