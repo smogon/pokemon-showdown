@@ -1654,7 +1654,8 @@ const subCommands: ChatCommands = {
 		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # &",
 	],
 
-	search(target, room, user) {
+	casesensitivesearch: 'search',
+	search(target, room, user, connection, cmd) {
 		if (!room) return this.requiresRoom();
 		if (room.roomid !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
 		if (!this.can('show', null, room)) return false;
@@ -1672,11 +1673,18 @@ const subCommands: ChatCommands = {
 			);
 		}
 
-		const queryString = query.join(',').trim();
+		let queryString = query.join(',').trim();
 		if (!queryString) return this.errorReply(this.tr("No valid search query as entered."));
 
-		const results = (triviaData as any)[type]
-			.filter((q: TriviaQuestion) => q.question.includes(queryString) && !SPECIAL_CATEGORIES[q.category]);
+
+		let transformQuestion = (question: string) => question;
+		if (cmd !== 'casesensitivesearch') {
+			queryString = queryString.toLowerCase();
+			transformQuestion = (question: string) => question.toLowerCase();
+		}
+		const results = (triviaData as any)[type].filter((q: TriviaQuestion) => {
+			return transformQuestion(q.question).includes(queryString) && !SPECIAL_CATEGORIES[q.category];
+		});
 		if (!results.length) return this.sendReply(this.tr`No results found under the ${type} list.`);
 
 		let buffer = `|raw|<div class="ladder"><table><tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th></tr>` +
@@ -1688,7 +1696,10 @@ const subCommands: ChatCommands = {
 
 		this.sendReply(buffer);
 	},
-	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * &`],
+	searchhelp: [
+		`/trivia search [type], [query] - Searches for questions based on their type and their query. This command is case-insensitive. Valid types: submissions, subs, questions, qs. Requires: + % @ * &`,
+		`/trivia casesensitivesearch [type], [query] - Like /trivia search, but is case sensitive (capital letters matter). Requires: + % @ * &`,
+	],
 
 	rank(target, room, user) {
 		if (!room) return this.requiresRoom();
@@ -1840,6 +1851,7 @@ const subCommands: ChatCommands = {
 			`</ul></details>` +
 			`<details><summary><strong>Informational commands</strong></summary><ul>` +
 				`<li><code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # &</li>` +
+				`<li><code>/trivia casesensitivesearch [type], [query]</code> - Like <code>/trivia search</code>, but is case sensitive (i.e., capitalization matters). Requires: + % @ * &</li>` +
 				`<li><code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.</li>` +
 				`<li><code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.</li>` +
 				`<li><code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.</li>` +
