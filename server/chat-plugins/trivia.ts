@@ -1654,6 +1654,7 @@ const subCommands: ChatCommands = {
 		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # &",
 	],
 
+	cssearch: 'search',
 	casesensitivesearch: 'search',
 	search(target, room, user, connection, cmd) {
 		room = this.requireRoom();
@@ -1678,7 +1679,7 @@ const subCommands: ChatCommands = {
 
 
 		let transformQuestion = (question: string) => question;
-		if (cmd !== 'casesensitivesearch') {
+		if (cmd === 'search') {
 			queryString = queryString.toLowerCase();
 			transformQuestion = (question: string) => question.toLowerCase();
 		}
