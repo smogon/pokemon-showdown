@@ -490,7 +490,7 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.title = 'Filters';
 		let buf = `<div class="pad ladder"><h2>Filters</h2>`;
-		if (!this.can('lock')) return;
+		this.checkCan('lock');
 		let content = ``;
 		for (const key in Chat.monitors) {
 			content += `<tr><th colspan="2"><h3>${Chat.monitors[key].label} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
@@ -527,7 +527,7 @@ export const commands: ChatCommands = {
 	filters: 'filter',
 	filter: {
 		add(target, room, user) {
-			if (!this.can('rangeban')) return false;
+			this.checkCan('rangeban');
 
 			let [list, ...rest] = target.split(target.includes('\n') ? '\n' : ',');
 			list = toID(list);
@@ -581,7 +581,7 @@ export const commands: ChatCommands = {
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		remove(target, room, user) {
-			if (!this.can('rangeban')) return false;
+			this.checkCan('rangeban');
 
 			let [list, ...words] = target.split(target.includes('\n') ? '\n' : ',').map(param => param.trim());
 			list = toID(list);
@@ -619,7 +619,7 @@ export const commands: ChatCommands = {
 		`- /filter view - Opens the list of filtered words. Requires: % @ &`,
 	],
 	allowname(target, room, user) {
-		if (!this.can('forcerename')) return false;
+		this.checkCan('forcerename');
 		target = toID(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
 		Chat.namefilterwhitelist.set(target, user.name);
