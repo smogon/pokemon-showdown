@@ -91,10 +91,25 @@ class OtdHandler {
 				entry.time = Number(entry.time) || 0;
 				this.winners.push(entry);
 			}
+			this.convertNominations();
 		}).catch((error: string & {code: string}) => {
 			if (error.code !== 'ENOENT') throw new Error(error);
 			return;
 		});
+	}
+
+	/**
+	 * Handles old-format data from the IP and userid refactor
+	 */
+	convertNominations() {
+		for (const value of this.nominations.values()) {
+			if (!Array.isArray(value.userids)) value.userids = Object.keys(value.userids);
+			if (!Array.isArray(value.ips)) value.ips = Object.keys(value.ips);
+		}
+		for (const value of this.removedNominations.values()) {
+			if (!Array.isArray(value.userids)) value.userids = Object.keys(value.userids);
+			if (!Array.isArray(value.ips)) value.ips = Object.keys(value.ips);
+		}
 	}
 
 	startVote() {

@@ -577,7 +577,11 @@ export const commands: ChatCommands = {
 	unmutehelp: [`/unmute [username] - Removes mute from user. Requires: % @ # &`],
 
 	rb: 'ban',
+	weekban: 'ban',
+	wb: 'ban',
+	wrb: 'ban',
 	forceroomban: 'ban',
+	forceweekban: 'ban',
 	forcerb: 'ban',
 	roomban: 'ban',
 	b: 'ban',
@@ -585,6 +589,7 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help ban');
 		this.checkChat();
+		const week = ['wrb', 'wb', 'forceweekban', 'weekban'].includes(cmd);
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -599,15 +604,15 @@ export const commands: ChatCommands = {
 		}
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
-		const force = cmd === 'forcerb' || cmd === 'forceroomban';
+		const force = cmd.startsWith('force');
 		if (targetUser.trusted) {
 			if (!force) {
 				return this.sendReply(
-					`${name} is a trusted user. If you are sure you would like to ban them use /forceroomban.`
+					`${name} is a trusted user. If you are sure you would like to ban them, use /force${week ? 'week' : 'room'}ban.`
 				);
 			}
 		} else if (force) {
-			return this.errorReply(`Use /roomban; ${name} is not a trusted user.`);
+			return this.errorReply(`Use /${week ? 'week' : 'room'}ban; ${name} is not a trusted user.`);
 		}
 		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
 			const problem = " but was already banned";
@@ -620,14 +625,19 @@ export const commands: ChatCommands = {
 
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Utils.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
+				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
+				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
+				`</p>${(target ? `<p>Reason: ${Utils.escapeHTML(target)}</p>` : ``)}` +
+				`<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. ` +
+				`</p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
 		const reason = (target ? ` (${target})` : ``);
-		this.addModAction(`${name} was banned from ${room.title} by ${user.name}.${reason}`);
+		this.addModAction(`${name} was banned ${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${reason}`);
 
-		const affected = Punishments.roomBan(room, targetUser, null, null, target);
+		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
+		const affected = Punishments.roomBan(room, targetUser, time, null, target);
 
 		if (!room.settings.isPrivate && room.persist) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -643,13 +653,16 @@ export const commands: ChatCommands = {
 		room.hideText([userid, toID(this.inputUsername)]);
 
 		if (room.settings.isPrivate !== true && room.persist) {
-			this.globalModlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		} else {
-			this.modlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.modlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		}
 		return true;
 	},
-	banhelp: [`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # &`],
+	banhelp: [
+		`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # &`,
+		`/weekban [username], [reason] - Bans the user from the room you are in for a week. Requires: @ # &`,
+	],
 
 	unroomban: 'unban',
 	roomunban: 'unban',
@@ -1074,27 +1087,35 @@ export const commands: ChatCommands = {
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],
 
 	rangelock: 'lockip',
-	lockip(target, room, user) {
+	yearlockip: 'lockip',
+	lockip(target, room, user, connection, cmd) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help lockip');
 		if (!reason) return this.errorReply("/lockip requires a lock reason");
 
 		this.checkCan('rangeban');
-		const ipDesc = `IP ${(ip.endsWith('*') ? `range ` : ``)}${ip}`;
+		const ipDesc = ip.endsWith('*') ? `IP range ${ip}` : `IP ${ip}`;
 
+		const year = cmd === 'yearlockip';
 		const curPunishment = Punishments.ipSearch(ip);
-		if (curPunishment && (curPunishment[0] === 'BAN' || curPunishment[0] === 'LOCK')) {
+		if (!year && curPunishment && (curPunishment[0] === 'BAN' || curPunishment[0] === 'LOCK')) {
 			const punishDesc = curPunishment[0] === 'BAN' ? `temporarily banned` : `temporarily locked`;
 			return this.errorReply(`The ${ipDesc} is already ${punishDesc}.`);
 		}
 
-		Punishments.lockRange(ip, reason);
+		const time = year ? Date.now() + 365 * 24 * 60 * 60 * 1000 : null;
+		Punishments.lockRange(ip, reason, time);
 
-		this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
-		this.modlog('RANGELOCK', null, reason);
+		if (year) {
+			this.addGlobalModAction(`${user.name} year-locked the ${ipDesc}: ${reason}`);
+		} else {
+			this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
+		}
+		this.modlog(year ? 'YEARLOCK' : 'RANGELOCK', null, reason);
 	},
 	lockiphelp: [
 		`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
+		`/yearlockip [ip] - Globally locks this IP or IP range for one year. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: &`,
 	],
 
@@ -1524,15 +1545,12 @@ export const commands: ChatCommands = {
 	hidealtstext: 'hidetext',
 	htext: 'hidetext',
 	forcehidetext: 'hidetext',
-	forcehtext: 'hidetext',
 	hidelines: 'hidetext',
-	forcehidelines: 'hidetext',
 	hlines: 'hidetext',
 	cleartext: 'hidetext',
 	clearaltstext: 'hidetext',
 	clearlines: 'hidetext',
 	forcecleartext: 'hidetext',
-	forceclearlines: 'hidetext',
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 		room = this.requireRoom();
@@ -1567,11 +1585,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`You can't specify a line count when using /hidealtstext.`);
 		}
 		const userid = toID(this.inputUsername);
-
+      
 		this.checkCan('mute', null, room);
-		if (targetUser?.trusted && targetUser !== user && !cmd.includes('force')) {
-			return this.errorReply(`${name} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
-		}
 
 		// if the user hiding their own text, it would clear the "cleared" message,
 		// so we can't attribute it in that case
