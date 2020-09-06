@@ -122,15 +122,27 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		const roomPermissions = room ? room.settings.permissions : null;
 		if (roomPermissions) {
-			if (cmd && roomPermissions[`/${cmd}`]) {
-				if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-				jurisdiction = 'u';
-			} else if (roomPermissions[permission]) {
+			let foundSpecificPermission = false;
+			if (cmd) {
+				const namespace = cmd.slice(0, cmd.indexOf(' '));
+				if (roomPermissions[`/${cmd}`]) {
+					// this checks sub commands and command objects, but it checks to see if a sub-command
+					// overrides (should a perm for the command object exist) first
+					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+					jurisdiction = 'su';
+					foundSpecificPermission = true;
+				} else if (roomPermissions[`/${namespace}`]) {
+					// if it's for one command object
+					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
+					jurisdiction = 'su';
+					foundSpecificPermission = true;
+				}
+			}
+			if (!foundSpecificPermission && roomPermissions[permission]) {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
 				jurisdiction = 'u';
 			}
 		}
-
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol as GroupSymbol);
 	}
 	static atLeast(symbol: EffectiveGroupSymbol, symbol2: EffectiveGroupSymbol) {
@@ -145,6 +157,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				permissions.push(`/${cmd}`);
 			}
 			if (typeof entry === 'object') {
+				permissions.push(`/${cmd}`);
 				for (const subCommand in entry) {
 					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
 					if (typeof subEntry !== 'function') continue;

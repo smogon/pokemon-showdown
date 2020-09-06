@@ -457,7 +457,7 @@ export const Punishments = new class {
 			}
 		}
 
-		for (const ip in user.ips) {
+		for (const ip of user.ips) {
 			const {hostType} = await IPTools.lookup(ip);
 			if (hostType !== 'mobile') {
 				Punishments.ips.set(ip, punishment);
@@ -583,7 +583,7 @@ export const Punishments = new class {
 	}
 
 	roomPunishInner(roomid: RoomID, user: User, punishment: Punishment, userids: Set<string>, ips: Set<string>) {
-		for (const ip in user.ips) {
+		for (const ip of user.ips) {
 			Punishments.roomIps.nestedSet(roomid, ip, punishment);
 			ips.add(ip);
 		}
@@ -871,7 +871,7 @@ export const Punishments = new class {
 			if (punishment && punishment[0] === 'BATTLEBAN') return punishment;
 		}
 
-		for (const ip in user.ips) {
+		for (const ip of user.ips) {
 			punishment = Punishments.roomIps.nestedGet("battle", ip);
 			if (punishment && punishment[0] === 'BATTLEBAN') {
 				if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
@@ -880,12 +880,14 @@ export const Punishments = new class {
 		}
 	}
 
-	lockRange(range: string, reason: string) {
-		const punishment = ['LOCK', '#rangelock', Date.now() + RANGELOCK_DURATION, reason] as Punishment;
+	lockRange(range: string, reason: string, expireTime?: number | null) {
+		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
+		const punishment = ['LOCK', '#rangelock', expireTime, reason] as Punishment;
 		Punishments.ips.set(range, punishment);
 	}
-	banRange(range: string, reason: string) {
-		const punishment = ['BAN', '#rangelock', Date.now() + RANGELOCK_DURATION, reason] as Punishment;
+	banRange(range: string, reason: string, expireTime?: number | null) {
+		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
+		const punishment = ['BAN', '#rangelock', expireTime, reason] as Punishment;
 		Punishments.ips.set(range, punishment);
 	}
 
@@ -985,7 +987,7 @@ export const Punishments = new class {
 		void Punishments.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
-			if (user.locked && user.locked !== user.id && ip in user.ips) {
+			if (user.locked && user.locked !== user.id && user.ips.includes(ip)) {
 				if (!user.autoconfirmed) {
 					user.semilocked = `#sharedip ${user.locked}` as PunishType;
 				}
@@ -1328,7 +1330,7 @@ export const Punishments = new class {
 		}
 
 		if (!user.trusted) {
-			for (const ip in user.ips) {
+			for (const ip of user.ips) {
 				punishment = Punishments.roomIps.nestedGet(roomid, ip);
 				if (punishment) {
 					if (punishment[0] === 'ROOMBAN') {
@@ -1372,7 +1374,7 @@ export const Punishments = new class {
 				continue;
 			} else if (options?.checkIps) {
 				if (typeof user !== 'string') {
-					for (const ip in user.ips) {
+					for (const ip of user.ips) {
 						punishment = Punishments.roomIps.nestedGet(curRoom.roomid, ip);
 						if (punishment) {
 							punishments.push([curRoom, punishment]);
