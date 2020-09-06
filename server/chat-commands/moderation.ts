@@ -577,6 +577,7 @@ export const commands: ChatCommands = {
 
 	rb: 'ban',
 	weekban: 'ban',
+	wb: 'ban',
 	wrb: 'ban',
 	forceroomban: 'ban',
 	forceweekban: 'ban',
@@ -587,7 +588,7 @@ export const commands: ChatCommands = {
 		if (!room) return this.requiresRoom();
 		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return;
-		const week = ['wrb', 'forceweekban', 'weekban'].includes(cmd);
+		const week = ['wrb', 'wb', 'forceweekban', 'weekban'].includes(cmd);
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -602,15 +603,15 @@ export const commands: ChatCommands = {
 		}
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
-		const force = ['forcerb', 'forceroomban', 'forceweekban'].includes(cmd);
+		const force = cmd.startsWith('force');
 		if (targetUser.trusted) {
 			if (!force) {
 				return this.sendReply(
-					`${name} is a trusted user. If you are sure you would like to ban them, use /force${week ? 'week' : ''}roomban.`
+					`${name} is a trusted user. If you are sure you would like to ban them, use /force${week ? 'week' : 'room'}ban.`
 				);
 			}
 		} else if (force) {
-			return this.errorReply(`Use /roomban; ${name} is not a trusted user.`);
+			return this.errorReply(`Use /${week ? 'week' : 'room'}ban; ${name} is not a trusted user.`);
 		}
 		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
 			const problem = " but was already banned";
@@ -659,7 +660,7 @@ export const commands: ChatCommands = {
 	},
 	banhelp: [
 		`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # &`,
-		`/weekban [username, reason] - Bans the user from the room you are in for a week. Requires: @ # &`,
+		`/weekban [username], [reason] - Bans the user from the room you are in for a week. Requires: @ # &`,
 	],
 
 	unroomban: 'unban',
