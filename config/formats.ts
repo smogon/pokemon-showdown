@@ -1261,9 +1261,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			for (const trademark in teamHas.trademarks) {
 				if (teamHas.trademarks[trademark] > 1) {
 					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks[trademark]} Pok\u00e9mon with ${trademark} as a Trademark.)`);
-					if (trademark === 'Trick' || trademark === 'Switcheroo') {
-						problems.push(`(Trick and Switcheroo are complex banned as trademarks.)`);
-					}
 				}
 			}
 			return problems;
@@ -1289,13 +1286,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			problems = problems.concat(validator.validateSet(set, teamHas) || []);
 			set.ability = ability.id;
 			if (!teamHas.trademarks) teamHas.trademarks = {};
-			if (!teamHas.trademarks[ability.name]) teamHas.trademarks[ability.name] = 0;
-			teamHas.trademarks[ability.name] += 1;
-			if ('Switcheroo' in teamHas.trademarks) {
-				teamHas.trademarks['Trick'] = teamHas.trademarks['Switcheroo'];
-			} else if ('Trick' in teamHas.trademarks) {
-				teamHas.trademarks['Switcheroo'] = teamHas.trademarks['Trick'];
-			}
+			teamHas.trademarks[ability.name] = (teamHas.trademarks[ability.name] || 0) + 1;
 			return problems.length ? problems : null;
 		},
 		pokemon: {
