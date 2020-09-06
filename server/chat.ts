@@ -1150,7 +1150,7 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
 		}
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
-			throw new Chat.ErrorMessage("You do not have permission to use this command to users who are not in this room.");
+			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
 		if (targetUser.settings.blockPMs &&
 			(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs)) &&

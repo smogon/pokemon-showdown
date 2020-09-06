@@ -1363,8 +1363,8 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <comma-separated arguments>`);
 			}
-			const name = this.checkChat(params[0].trim());
-			if (!name || typeof name !== 'string') return;
+			const name = params[0].trim();
+			this.checkChat(name);
 
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) {
 				return this.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);

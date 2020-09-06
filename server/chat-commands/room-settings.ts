@@ -1294,7 +1294,7 @@ export const commands: ChatCommands = {
 		}
 		this.checkCan('editroom', null, room);
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deleteroomintro"?');
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 		if (!target.includes("<")) {
 			// not HTML, do some simple URL linking
 			const re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
@@ -1342,7 +1342,7 @@ export const commands: ChatCommands = {
 		this.checkCan('ban', null, room);
 		this.checkChat();
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deletestaffintro"?');
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 		if (!target.includes("<")) {
 			// not HTML, do some simple URL linking
 			const re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;

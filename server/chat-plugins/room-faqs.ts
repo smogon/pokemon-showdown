@@ -59,7 +59,7 @@ export const commands: ChatCommands = {
 	},
 	removefaq(target, room, user) {
 		room = this.requireRoom();
-		if (!this.checkChat()) return this.errorReply("You cannot do this while unable to talk.");
+		this.checkChat();
 		this.checkCan('ban', null, room);
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const topic = toID(target);
@@ -79,7 +79,7 @@ export const commands: ChatCommands = {
 	},
 	addalias(target, room, user) {
 		room = this.requireRoom();
-		if (!this.checkChat()) return this.errorReply("You cannot do this while unable to talk.");
+		this.checkChat();
 		this.checkCan('ban', null, room);
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		const [alias, topic] = target.split(',').map(val => toID(val));

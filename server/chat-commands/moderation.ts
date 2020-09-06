@@ -1324,7 +1324,7 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('gdeclare');
 		this.checkChat();
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 
 		for (const u in room.users) {
 			Users.get(u)?.sendTo(
@@ -1341,7 +1341,7 @@ export const commands: ChatCommands = {
 	globaldeclare(target, room, user) {
 		if (!target) return this.parse('/help globaldeclare');
 		this.checkCan('gdeclare');
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
@@ -1354,7 +1354,7 @@ export const commands: ChatCommands = {
 	chatdeclare(target, room, user) {
 		if (!target) return this.parse('/help chatdeclare');
 		this.checkCan('gdeclare');
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type !== 'battle') {
@@ -1371,8 +1371,7 @@ export const commands: ChatCommands = {
 
 		if (room) this.checkCan('announce', null, room);
 
-		(target as string | null) = this.checkChat(target);
-		if (!target) return;
+		this.checkChat(target);
 
 		return `/announce ${target}`;
 	},

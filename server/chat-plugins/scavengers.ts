@@ -1056,9 +1056,7 @@ const ScavengerCommands: ChatCommands = {
 		room = this.requireRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply("There is no scavenger hunt currently running.");
-		if (!this.checkChat()) {
-			return this.errorReply("You cannot participate in the scavenger hunt when you are unable to talk.");
-		}
+		this.checkChat();
 
 		game.onSubmit(user, target);
 	},
@@ -1067,7 +1065,7 @@ const ScavengerCommands: ChatCommands = {
 		room = this.requireRoom();
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply("There is no scavenger hunt currently running.");
-		if (!this.checkChat()) return this.errorReply("You cannot join the scavenger hunt when you are unable to talk.");
+		this.checkChat();
 
 		game.joinGame(user);
 	},

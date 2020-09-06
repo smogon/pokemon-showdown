@@ -26,7 +26,7 @@ export const commands: ChatCommands = {
 	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
 		room = this.requireRoom();
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 		target = Chat.collapseLineBreaksHTML(target);
 		this.checkBroadcast(true, '!htmlbox');
 		if (this.broadcastMessage) this.checkCan('declare', null, room);
@@ -47,7 +47,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help ' + cmd);
 		room = this.requireRoom();
 		this.checkChat();
-		target = this.checkHTML(target);
+		this.checkHTML(target);
 		this.checkCan('addhtml', null, room);
 		target = Chat.collapseLineBreaksHTML(target);
 		if (!user.can('addhtml')) {
@@ -143,7 +143,8 @@ export const commands: ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.checkHTML(this.splitTarget(target));
+		target = this.splitTarget(target);
+		this.checkHTML(target);
 		const targetUser = this.targetUser!;
 		this.checkPMHTML(targetUser);
 
@@ -165,7 +166,8 @@ export const commands: ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		target = this.checkHTML(this.splitTarget(target));
+		target = this.splitTarget(target);
+		this.checkHTML(target);
 		const targetUser = this.targetUser!;
 		this.checkPMHTML(targetUser);
 

@@ -732,7 +732,8 @@ const cmds: ChatCommands = {
 	join(target, room, user, conn, cmd) {
 		room = this.requireRoom();
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
-		if (!this.checkChat() || user.semilocked) return;
+		this.checkChat();
+		if (user.semilocked) return;
 		const giveaway = room.giveaway as LotteryGiveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (giveaway.type !== 'lottery') return this.errorReply("This is not a lottery giveaway.");
