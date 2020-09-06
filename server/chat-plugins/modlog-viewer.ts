@@ -38,6 +38,12 @@ const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const IPS_REGEX = /[([]([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]/g;
 
+const ALIASES: {[k: string]: string} = {
+	'helpticket': 'help-rooms',
+	'groupchat': 'groupchat-rooms',
+	'battle': 'battle-rooms',
+};
+
 /*********************************************************
  * Modlog Functions
  *********************************************************/
@@ -61,18 +67,16 @@ function getMoreButton(
 	}
 }
 
-function getRoomID(id: ModlogID) {
-	switch (id) {
-	case 'helpticket':
-		return 'help-rooms' as ModlogID;
-	case 'groupchat':
-		return 'groupchat-rooms' as ModlogID;
-	case 'battle':
-		return 'battle-rooms' as ModlogID;
-	// more aliases can be added here
-	default:
-		return id;
+function getRoomID(id: string) {
+	if (id in ALIASES) return ALIASES[id] as ModlogID;
+	return id as ModlogID;
+}
+
+function getAlias(id: string) {
+	for (const [alias, value] of Object.entries(ALIASES)) {
+		if (id === value) return alias as ModlogID;
 	}
+	return id as ModlogID;
 }
 
 function prettifyResults(
@@ -149,7 +153,8 @@ function prettifyResults(
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
 			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
 	}
-	const moreButton = getMoreButton(roomid, searchString, exactSearch, lines, maxLines, onlyPunishments);
+
+	const moreButton = getMoreButton(getAlias(roomid), searchString, exactSearch, lines, maxLines, onlyPunishments);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
