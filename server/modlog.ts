@@ -43,6 +43,7 @@ interface ModlogResults {
 interface ModlogQuery<T> {
 	statement: Database.Statement<T>;
 	args: T[];
+	returnsResults?: boolean;
 }
 
 export interface ModlogSearch {
@@ -67,6 +68,7 @@ export interface ModlogEntry {
 	/** Milliseconds since the epoch */
 	time?: number;
 }
+
 
 export class Modlog {
 	readonly database: Database.Database;
@@ -119,16 +121,18 @@ export class Modlog {
 	}
 
 	async runSQL(query: ModlogQuery<any>, forceNoPM = false): Promise<Database.RunResult> {
+		query.returnsResults = false;
 		if (!forceNoPM && this.usePM) {
-			return PM.query({query, returnsResults: false});
+			return PM.query(query);
 		} else {
 			return query.statement.run(query.args);
 		}
 	}
 
 	async runSQLWithResults(query: ModlogQuery<any>, forceNoPM = false): Promise<unknown[]> {
+		query.returnsResults = true;
 		if (!forceNoPM && this.usePM) {
-			return PM.query({query, returnsResults: true});
+			return PM.query(query);
 		} else {
 			return query.statement.all(query.args);
 		}
@@ -195,7 +199,7 @@ export class Modlog {
 
 		if (search.action) {
 			query += ` AND action LIKE '%' || ? || '%'`;
-			args.push(search.action.toUpperCase());
+			args.push(search.action);
 		} else if (onlyPunishments) {
 			query += ` AND action IN (${this.formatArray(PUNISHMENTS, args)})`;
 		}
@@ -217,17 +221,12 @@ export class Modlog {
 		}
 
 		if (search.note) {
-			if (search.note.searches.length === 1) {
-				query += ` AND regex(?, note)`;
-				args.push(this.generateRegex(search.note.searches[0], search.note.isExact));
-			} else {
-				const parts = [];
-				for (const noteSearch of search.note.searches) {
-					parts.push(`regex(?, note)`);
-					args.push(this.generateRegex(noteSearch, search.note.isExact));
-				}
-				query += ` AND (${parts.join(' OR ')})`;
+			const parts = [];
+			for (const noteSearch of search.note.searches) {
+				parts.push(`regex(?, note)`);
+				args.push(this.generateRegex(noteSearch, search.note.isExact));
 			}
+			query += ` AND ${parts.join(' OR ')}`;
 		}
 
 		query += ` ORDER BY timestamp DESC`;
@@ -241,7 +240,7 @@ export class Modlog {
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const userid = toID(user);
 		const args: (string | number)[] = [
-			userid, userid, userid, (Date.now() / 1000) - (days * 24 * 60 * 60), ...GLOBAL_PUNISHMENTS,
+			userid, userid, userid, Date.now() - (days * 24 * 60 * 60 * 1000), ...GLOBAL_PUNISHMENTS,
 		];
 		const results = await this.runSQLWithResults({statement: this.globalPunishmentsSearchQuery, args});
 		return results.length;
@@ -265,9 +264,11 @@ export class Modlog {
 
 		const query = this.prepareSearch(rooms, maxLines, onlyPunishments, search);
 		const start = Date.now();
-		const rows = await this.runSQLWithResults(query);
-		const results: ModlogEntry[] = rows.map((row: any) => {
-			return {
+		const rows = await this.runSQLWithResults(query) as AnyObject[];
+		const results: ModlogEntry[] = [];
+		for (const row of rows) {
+			if (!row.action) continue;
+			results.push({
 				action: row.action,
 				roomID: row.roomid?.replace(/^global-/, ''),
 				visualRoomID: row.visual_roomid,
@@ -279,8 +280,8 @@ export class Modlog {
 				loggedBy: row.action_taker_userid,
 				note: row.note,
 				time: row.timestamp,
-			};
-		}).filter((entry: ModlogEntry) => entry.action);
+			});
+		}
 		const duration = Date.now() - start;
 
 		if (duration > LONG_QUERY_DURATION) {
@@ -291,13 +292,15 @@ export class Modlog {
 }
 
 // eslint-disable-next-line max-len
-export const PM = new QueryProcessManager<{query: ModlogQuery<string | number>, returnsResults: boolean}, unknown[] | Database.RunResult | undefined>(
+export const PM = new QueryProcessManager<ModlogQuery<any>, unknown[] | Database.RunResult | undefined>(
 	module,
 	data => {
-		const {query, returnsResults} = data;
 		try {
-			if (returnsResults) return modlog.runSQLWithResults(query, true);
-			return modlog.runSQL(query, true);
+			if (data.returnsResults) {
+				return modlog.runSQLWithResults(data, true);
+			} else {
+				return modlog.runSQL(data, true);
+			}
 		} catch (err) {
 			Monitor.crashlog(err, 'A modlog query', data);
 		}
