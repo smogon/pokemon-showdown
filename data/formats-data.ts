@@ -753,7 +753,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC Uber",
 	},
 	haunter: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "NFE",
 	},
 	gengar: {
@@ -840,7 +840,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["dragonpulse", "energyball", "flamethrower", "protect", "trickroom"],
 		randomDoubleBattleLevel: 88,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	cubone: {
@@ -1116,7 +1116,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["bodyslam", "closecombat", "lashout", "protect", "rockslide"],
 		randomDoubleBattleLevel: 84,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	magikarp: {
