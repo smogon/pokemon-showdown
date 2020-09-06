@@ -318,7 +318,7 @@ export const pages: PageTable = {
 	},
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.can('forcewin')) return;
+		this.checkCan('forcewin');
 		const userid = toID(args.shift());
 		const turnLimit = parseInt(args.shift()!);
 		if (!userid || !turnLimit || turnLimit < 1) {
@@ -485,7 +485,7 @@ export const commands: ChatCommands = {
 
 	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
-		if (!this.can('forcewin')) return;
+		this.checkCan('forcewin');
 
 		const userid = toID(target.split(',')[0]);
 		let turnLimit = parseInt(target.split(',')[1]);

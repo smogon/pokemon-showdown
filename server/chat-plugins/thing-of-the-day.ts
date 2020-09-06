@@ -451,13 +451,13 @@ function selectHandler(message: string) {
 
 export const otdCommands: ChatCommands = {
 	start(target, room, user, connection, cmd) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		if (handler.voting) {
 			return this.errorReply(
@@ -472,13 +472,13 @@ export const otdCommands: ChatCommands = {
 	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`],
 
 	end(target, room, user) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		if (!handler.voting) {
 			return this.errorReply(`There is no ${handler.name} of the ${handler.timeLabel} nomination in progress.`);
@@ -496,7 +496,7 @@ export const otdCommands: ChatCommands = {
 	],
 
 	nom(target, room, user) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!target) return this.parse('/help otd');
 
 		const handler = selectHandler(this.message);
@@ -512,7 +512,7 @@ export const otdCommands: ChatCommands = {
 	nomhelp: [`/-otd nom [nomination] - Nominate something for Thing of the Day.`],
 
 	view(target, room, user, connection) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!this.runBroadcast()) return false;
 
 		const handler = selectHandler(this.message);
@@ -529,13 +529,13 @@ export const otdCommands: ChatCommands = {
 	viewhelp: [`/-otd view - View the current nominations for the Thing of the Day.`],
 
 	remove(target, room, user) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		const userid = toID(target);
 		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
@@ -553,14 +553,14 @@ export const otdCommands: ChatCommands = {
 	],
 
 	force(target, room, user) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!target) return this.parse('/help aotd force');
 
 		const handler = selectHandler(this.message);
 
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
-		if (!this.can('declare', null, room)) return false;
+		this.checkCan('declare', null, room);
 
 		if (!toNominationId(target).length || target.length > 50) {
 			return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
@@ -575,13 +575,13 @@ export const otdCommands: ChatCommands = {
 	],
 
 	delay(target, room, user) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		if (!(handler.voting && handler.timer)) {
 			return this.errorReply(`There is no ${handler.name} of the ${handler.timeLabel} nomination to disable the timer for.`);
@@ -595,13 +595,13 @@ export const otdCommands: ChatCommands = {
 	],
 
 	set(target, room, user) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 
 		const params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
@@ -672,7 +672,7 @@ export const otdCommands: ChatCommands = {
 	],
 
 	winners(target, room, user, connection) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
@@ -684,7 +684,7 @@ export const otdCommands: ChatCommands = {
 	winnershelp: [`/-otd winners - Displays a list of previous things of the day.`],
 
 	''(target, room) {
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!this.runBroadcast()) return false;
 
 		const handler = selectHandler(this.message);

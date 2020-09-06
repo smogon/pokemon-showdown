@@ -22,7 +22,7 @@ const REQUIRE_REASONS = true;
 export const commands: ChatCommands = {
 
 	roomowner(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.persist) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
@@ -37,7 +37,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${this.targetUsername}' is offline and unrecognized, and so can't be promoted.`);
 		}
 
-		if (!this.can('makeroom')) return false;
+		this.checkCan('makeroom');
 		if (room.auth.getDirect(userid) === '#') return this.errorReply(`${name} is already a room owner.`);
 
 		room.auth.set(userid, '#');
@@ -64,7 +64,7 @@ export const commands: ChatCommands = {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
 			return this.errorReply("This command is only available in rooms");
 		}
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (!target) return this.parse('/help roompromote');
 
 		const force = cmd.startsWith('force');
@@ -388,8 +388,8 @@ export const commands: ChatCommands = {
 	k: 'warn',
 	warn(target, room, user) {
 		if (!target) return this.parse('/help warn');
-		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return;
+		room = this.requireRoom();
+		this.checkChat();
 		if (room.settings.isPersonal && !user.can('warn' as any)) {
 			return this.errorReply("Warning is unavailable in group chats.");
 		}
@@ -410,7 +410,7 @@ export const commands: ChatCommands = {
 		const targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
-			if (!this.can('warn', null, room)) return false;
+			this.checkCan('warn', null, room);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(publicReason ? ` (${publicReason})` : ``)}`);
 			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${publicReason} ${privateReason}` : ``)}`);
@@ -422,7 +422,7 @@ export const commands: ChatCommands = {
 		if (publicReason.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
-		if (!this.can('warn', targetUser, room)) return false;
+		this.checkCan('warn', targetUser, room);
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to warn upper staff members.");
 
 		const now = Date.now();
@@ -458,7 +458,7 @@ export const commands: ChatCommands = {
 
 	redirect: 'redir',
 	redir(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help redirect');
 		if (room.settings.isPrivate || room.settings.isPersonal) {
 			return this.errorReply("Users cannot be redirected from private or personal rooms.");
@@ -469,9 +469,10 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.settings.modjoin || targetRoom.settings.staffRoom) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
+		this.checkCan('warn', targetUser, room);
+		this.checkCan('warn', targetUser, targetRoom);
 
-		if (!this.can('rangeban', targetUser)) {
+		if (!user.can('rangeban', targetUser)) {
 			this.errorReply(`Redirects have been deprecated. Instead of /redirect, use <<room links>> or /invite to guide users to the correct room, and punish if users don't cooperate.`);
 			return;
 		}
@@ -502,9 +503,9 @@ export const commands: ChatCommands = {
 
 	m: 'mute',
 	mute(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help mute');
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -514,7 +515,7 @@ export const commands: ChatCommands = {
 		}
 
 		const muteDuration = ((cmd === 'hm' || cmd === 'hourmute') ? HOURMUTE_LENGTH : MUTE_LENGTH);
-		if (!this.can('mute', targetUser, room)) return false;
+		this.checkCan('mute', targetUser, room);
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to mute upper staff members.");
 		const canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
 		if (targetUser.locked ||
@@ -554,12 +555,12 @@ export const commands: ChatCommands = {
 
 	um: 'unmute',
 	unmute(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help unmute');
 		target = this.splitTarget(target);
 		if (target) return this.errorReply(`This command does not support specifying a reason.`);
-		if (!this.canTalk()) return;
-		if (!this.can('mute', null, room)) return false;
+		this.checkChat();
+		this.checkCan('mute', null, room);
 
 		const targetUser = this.targetUser;
 		const successfullyUnmuted = room.unmute(
@@ -585,9 +586,9 @@ export const commands: ChatCommands = {
 	roomban: 'ban',
 	b: 'ban',
 	ban(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help ban');
-		if (!this.canTalk()) return;
+		this.checkChat();
 		const week = ['wrb', 'wb', 'forceweekban', 'weekban'].includes(cmd);
 
 		target = this.splitTarget(target);
@@ -596,7 +597,7 @@ export const commands: ChatCommands = {
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
-		if (!this.can('ban', targetUser, room)) return false;
+		this.checkCan('ban', targetUser, room);
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to ban upper staff members.");
 		if (Punishments.getRoomPunishType(room, this.targetUsername) === 'BLACKLIST') {
 			return this.errorReply(`This user is already blacklisted from ${room.roomid}.`);
@@ -666,9 +667,9 @@ export const commands: ChatCommands = {
 	unroomban: 'unban',
 	roomunban: 'unban',
 	unban(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help unban');
-		if (!this.can('ban', null, room)) return false;
+		this.checkCan('ban', null, room);
 
 		const name = Punishments.roomUnban(room, target);
 
@@ -706,8 +707,8 @@ export const commands: ChatCommands = {
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
-		if (!this.can('lock', targetUser)) return false;
-		if (month && !this.can('rangeban')) return false;
+		this.checkCan('lock', targetUser);
+		if (month) this.checkCan('rangeban');
 
 		let name;
 		let userid: ID;
@@ -810,7 +811,7 @@ export const commands: ChatCommands = {
 
 	unlock(target, room, user) {
 		if (!target) return this.parse('/help unlock');
-		if (!this.can('lock')) return false;
+		this.checkCan('lock');
 
 		const targetUser = Users.get(target);
 		if (targetUser?.namelocked) {
@@ -833,7 +834,7 @@ export const commands: ChatCommands = {
 	},
 	unlockname(target, room, user) {
 		if (!target) return this.parse('/help unlock');
-		if (!this.can('lock')) return false;
+		this.checkCan('lock');
 
 		const userid = toID(target);
 		const punishment = Punishments.userids.get(userid);
@@ -860,9 +861,9 @@ export const commands: ChatCommands = {
 	unlockip(target, room, user) {
 		target = target.trim();
 		if (!target) return this.parse('/help unlock');
-		if (!this.can('globalban')) return false;
+		this.checkCan('globalban');
 		const range = target.charAt(target.length - 1) === '*';
-		if (range && !this.can('rangeban')) return false;
+		if (range) this.checkCan('rangeban');
 
 		if (!(range ? IPTools.ipRangeRegex : IPTools.ipRegex).test(target)) {
 			return this.errorReply("Please enter a valid IP address.");
@@ -913,7 +914,7 @@ export const commands: ChatCommands = {
 		if (!target && REQUIRE_REASONS) {
 			return this.errorReply("Global bans require a reason.");
 		}
-		if (!this.can('globalban', targetUser)) return false;
+		this.checkCan('globalban', targetUser);
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
 
@@ -980,7 +981,7 @@ export const commands: ChatCommands = {
 	globalunban: 'unglobalban',
 	unglobalban(target, room, user) {
 		if (!target) return this.parse(`/help unglobalban`);
-		if (!this.can('globalban')) return false;
+		this.checkCan('globalban');
 
 		const name = Punishments.unban(target);
 
@@ -994,7 +995,7 @@ export const commands: ChatCommands = {
 	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ &`],
 
 	unbanall(target, room, user) {
-		if (!this.can('rangeban')) return false;
+		this.checkCan('rangeban');
 		if (!target) {
 			user.lastCommand = '/unbanall';
 			this.errorReply("THIS WILL UNBAN AND UNLOCK ALL USERS.");
@@ -1015,8 +1016,8 @@ export const commands: ChatCommands = {
 	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: &`],
 
 	deroomvoiceall(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!this.can('editroom', null, room)) return false;
+		room = this.requireRoom();
+		this.checkCan('editroom', null, room);
 		if (!room.auth.size) return this.errorReply("Room does not have roomauth.");
 		if (!target) {
 			user.lastCommand = '/deroomvoiceall';
@@ -1051,7 +1052,7 @@ export const commands: ChatCommands = {
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help banip');
 		if (!reason) return this.errorReply("/banip requires a ban reason");
 
-		if (!this.can('rangeban')) return false;
+		this.checkCan('rangeban');
 		const ipDesc = `IP ${(ip.endsWith('*') ? `range ` : ``)}${ip}`;
 
 		const curPunishment = Punishments.ipSearch(ip);
@@ -1074,7 +1075,7 @@ export const commands: ChatCommands = {
 		if (!target) {
 			return this.parse('/help unbanip');
 		}
-		if (!this.can('rangeban')) return false;
+		this.checkCan('rangeban');
 		if (!Punishments.ips.has(target)) {
 			return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
 		}
@@ -1092,7 +1093,7 @@ export const commands: ChatCommands = {
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help lockip');
 		if (!reason) return this.errorReply("/lockip requires a lock reason");
 
-		if (!this.can('rangeban')) return false;
+		this.checkCan('rangeban');
 		const ipDesc = ip.endsWith('*') ? `IP range ${ip}` : `IP ${ip}`;
 
 		const year = cmd === 'yearlockip';
@@ -1124,14 +1125,14 @@ export const commands: ChatCommands = {
 
 	mn: 'modnote',
 	modnote(target, room, user, connection) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help modnote');
-		if (!this.canTalk()) return;
+		this.checkChat();
 
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The note is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
-		if (!this.can('receiveauthmessages', null, room)) return false;
+		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
 		if (room.roomid === 'staff' || room.roomid === 'upperstaff') {
 			this.globalModlog('NOTE', null, ` by ${user.id}: ${target}`);
@@ -1220,7 +1221,7 @@ export const commands: ChatCommands = {
 	forcetrustuser: 'trustuser',
 	trustuser(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help trustuser');
-		if (!this.can('promote')) return;
+		this.checkCan('promote');
 
 		const force = cmd.includes('force');
 		const untrust = cmd.includes('un');
@@ -1284,7 +1285,7 @@ export const commands: ChatCommands = {
 
 	forcepromote(target, room, user, connection) {
 		// warning: never document this command in /help
-		if (!this.can('forcepromote')) return false;
+		this.checkCan('forcepromote');
 		target = this.splitTarget(target, true);
 		let name = this.filter(this.targetUsername);
 		if (!name) return;
@@ -1326,9 +1327,9 @@ export const commands: ChatCommands = {
 	declare(target, room, user) {
 		target = target.trim();
 		if (!target) return this.parse('/help declare');
-		if (!room) return this.requiresRoom();
-		if (!this.can('declare', null, room)) return false;
-		if (!this.canTalk()) return;
+		room = this.requireRoom();
+		this.checkCan('declare', null, room);
+		this.checkChat();
 		if (target.length > 2000) return this.errorReply("Declares should not exceed 2000 characters.");
 
 		for (const id in room.users) {
@@ -1341,11 +1342,10 @@ export const commands: ChatCommands = {
 
 	htmldeclare(target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
-		if (!room) return this.requiresRoom();
-		if (!this.can('gdeclare')) return false;
-		if (!this.canTalk()) return;
-		(target as string | null) = this.canHTML(target);
-		if (!target) return;
+		room = this.requireRoom();
+		this.checkCan('gdeclare');
+		this.checkChat();
+		this.checkHTML(target);
 
 		for (const u in room.users) {
 			Users.get(u)?.sendTo(
@@ -1361,9 +1361,8 @@ export const commands: ChatCommands = {
 	gdeclare: 'globaldeclare',
 	globaldeclare(target, room, user) {
 		if (!target) return this.parse('/help globaldeclare');
-		if (!this.can('gdeclare')) return false;
-		(target as string | null) = this.canHTML(target);
-		if (!target) return;
+		this.checkCan('gdeclare');
+		this.checkHTML(target);
 
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
@@ -1375,9 +1374,8 @@ export const commands: ChatCommands = {
 	cdeclare: 'chatdeclare',
 	chatdeclare(target, room, user) {
 		if (!target) return this.parse('/help chatdeclare');
-		if (!this.can('gdeclare')) return false;
-		(target as string | null) = this.canHTML(target);
-		if (!target) return;
+		this.checkCan('gdeclare');
+		this.checkHTML(target);
 
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type !== 'battle') {
@@ -1392,10 +1390,9 @@ export const commands: ChatCommands = {
 	announce(target, room, user) {
 		if (!target) return this.parse('/help announce');
 
-		if (room && !this.can('announce', null, room)) return false;
+		if (room) this.checkCan('announce', null, room);
 
-		(target as string | null) = this.canTalk(target);
-		if (!target) return;
+		this.checkChat(target);
 
 		return `/announce ${target}`;
 	},
@@ -1403,10 +1400,10 @@ export const commands: ChatCommands = {
 
 	notifyoffrank: 'notifyrank',
 	notifyrank(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse(`/help notifyrank`);
-		if (!this.can('addhtml', null, room)) return false;
-		if (!this.canTalk()) return;
+		this.checkCan('addhtml', null, room);
+		this.checkChat();
 		let [rank, titleNotification] = this.splitOne(target);
 		if (rank === 'all') rank = ` `;
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
@@ -1452,7 +1449,7 @@ export const commands: ChatCommands = {
 			}
 			return this.errorReply(`User '${target}' not found.`);
 		}
-		if (!this.can('forcerename', targetUser)) return false;
+		this.checkCan('forcerename', targetUser);
 
 		let forceRenameMessage;
 		if (targetUser.connected) {
@@ -1499,7 +1496,7 @@ export const commands: ChatCommands = {
 		if (targetUser.id !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
 			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
-		if (!this.can('forcerename', targetUser)) return false;
+		this.checkCan('forcerename', targetUser);
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 
 		const reasonText = reason ? ` (${reason})` : `.`;
@@ -1523,7 +1520,7 @@ export const commands: ChatCommands = {
 	unl: 'unnamelock',
 	unnamelock(target, room, user) {
 		if (!target) return this.parse('/help unnamelock');
-		if (!this.can('forcerename')) return false;
+		this.checkCan('forcerename');
 
 		const targetUser = Users.get(target);
 		let reason = '';
@@ -1556,7 +1553,7 @@ export const commands: ChatCommands = {
 	forcecleartext: 'hidetext',
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		const hasLineCount = cmd.includes('lines');
 		const hideRevealButton = cmd.includes('clear');
 		target = this.splitTarget(target);
@@ -1589,7 +1586,7 @@ export const commands: ChatCommands = {
 		}
 		const userid = toID(this.inputUsername);
 
-		if (!this.can('mute', null, room)) return;
+		this.checkCan('mute', null, room);
 
 		// if the user hiding their own text, it would clear the "cleared" message,
 		// so we can't attribute it in that case
@@ -1634,9 +1631,9 @@ export const commands: ChatCommands = {
 	forceblacklist: 'blacklist',
 	forcebl: 'blacklist',
 	blacklist(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklist');
-		if (!this.canTalk()) return;
+		this.checkChat();
 		if (toID(target) === 'show') return this.errorReply(`You're looking for /showbl`);
 
 		target = this.splitTarget(target);
@@ -1645,7 +1642,7 @@ export const commands: ChatCommands = {
 			this.errorReply(`User ${this.targetUsername} not found.`);
 			return this.errorReply(`If you want to blacklist an offline account by name (not IP), consider /blacklistname`);
 		}
-		if (!this.can('editroom', targetUser, room)) return false;
+		this.checkCan('editroom', targetUser, room);
 		if (!room.persist) {
 			return this.errorReply(`This room is not going to last long enough for a blacklist to matter - just ban the user`);
 		}
@@ -1716,7 +1713,7 @@ export const commands: ChatCommands = {
 
 	forcebattleban: 'battleban',
 	battleban(target, room, user, connection, cmd) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse(`/help battleban`);
 
 		const reason = this.splitTarget(target);
@@ -1732,7 +1729,7 @@ export const commands: ChatCommands = {
 		if (!room.battle && !includesUrl && cmd !== 'forcebattleban') {
 			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
-		if (!this.can('rangeban', targetUser)) {
+		if (!user.can('rangeban', targetUser)) {
 			this.errorReply(`Battlebans have been deprecated. Alternatives:`);
 			this.errorReply(`- timerstalling and bragging about it: lock`);
 			this.errorReply(`- other timerstalling: they're not timerstalling, leave them alone`);
@@ -1768,7 +1765,7 @@ export const commands: ChatCommands = {
 
 	unbattleban(target, room, user) {
 		if (!target) return this.parse('/help unbattleban');
-		if (!this.can('lock')) return;
+		this.checkCan('lock');
 
 		const targetUser = Users.get(target);
 		const unbanned = Punishments.unbattleban(target);
@@ -1785,10 +1782,10 @@ export const commands: ChatCommands = {
 
 	nameblacklist: 'blacklistname',
 	blacklistname(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklistname');
-		if (!this.canTalk()) return;
-		if (!this.can('editroom', null, room)) return false;
+		this.checkChat();
+		this.checkCan('editroom', null, room);
 		if (!room.persist) {
 			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");
 		}
@@ -1801,7 +1798,8 @@ export const commands: ChatCommands = {
 		const targets = targetStr.split(',').map(s => toID(s));
 
 		const duplicates = targets.filter(userid => (
-			Punishments.roomUserids.nestedGet(room.roomid, userid)?.[0] === 'BLACKLIST'
+			// can be asserted, room should always exist
+			Punishments.roomUserids.nestedGet(room!.roomid, userid)?.[0] === 'BLACKLIST'
 		));
 		if (duplicates.length) {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
@@ -1835,9 +1833,9 @@ export const commands: ChatCommands = {
 
 	unab: 'unblacklist',
 	unblacklist(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!target) return this.parse('/help unblacklist');
-		if (!this.can('editroom', null, room)) return false;
+		this.checkCan('editroom', null, room);
 
 		const name = Punishments.roomUnblacklist(room, target);
 
@@ -1853,8 +1851,8 @@ export const commands: ChatCommands = {
 	unblacklisthelp: [`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # &`],
 
 	unblacklistall(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!this.can('editroom', null, room)) return false;
+		room = this.requireRoom();
+		this.checkCan('editroom', null, room);
 
 		if (!target) {
 			user.lastCommand = '/unblacklistall';
@@ -1881,7 +1879,7 @@ export const commands: ChatCommands = {
 	showblacklist(target, room, user, connection, cmd) {
 		if (target) room = Rooms.search(target)!;
 		if (!room) return this.errorReply(`The room "${target}" was not found.`);
-		if (!this.can('mute', null, room)) return false;
+		this.checkCan('mute', null, room);
 		const SOON_EXPIRING_TIME = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
 		if (!room.persist) return this.errorReply("This room does not support blacklists.");
