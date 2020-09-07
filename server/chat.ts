@@ -635,25 +635,25 @@ export class CommandContext extends MessageContext {
 		if (user.can('bypassall')) return true;
 
 		if (room.settings.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
-			return this.errorReply(`Your username contains too much stretching, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your username contains too much stretching, which this room doesn't allow.`);
 		}
 		if (room.settings.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
-			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
 		if (room.settings.filterEmojis && EMOJI_REGEX.test(user.name)) {
-			return this.errorReply(`Your username contains emojis, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your username contains emojis, which this room doesn't allow.`);
 		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
 		if (room.settings.filterStretching && /(.+?)\1{7,}/i.test(message)) {
-			return this.errorReply(`Your message contains too much stretching, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your message contains too much stretching, which this room doesn't allow.`);
 		}
 		if (room.settings.filterCaps && /[A-Z\s]{18,}/.test(message)) {
-			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
 		if (room.settings.filterEmojis && EMOJI_REGEX.test(message)) {
-			return this.errorReply(`Your message contains emojis, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your message contains emojis, which this room doesn't allow.`);
 		}
 
 		return true;
@@ -663,7 +663,9 @@ export class CommandContext extends MessageContext {
 		if (!room || !room.settings.slowchat) return true;
 		if (user.can('show', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
-		if (lastActiveSeconds < room.settings.slowchat) return false;
+		if (lastActiveSeconds < room.settings.slowchat) {
+			throw new Chat.ErrorMessage(this.tr`This room has slow-chat enabled. You can only talk once every ${room.settings.slowchat} seconds.`);
+		}
 		return true;
 	}
 
@@ -678,7 +680,7 @@ export class CommandContext extends MessageContext {
 		}
 		if (!message) return true;
 		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
-			return false;
+			throw new Chat.ErrorMessage(`Your username, status, or message contained a word banned by this room.`);
 		}
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
@@ -1068,29 +1070,17 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		if (!this.checkFormat(room, user, message)) {
-			return null;
-		}
+		this.checkFormat(room, user, message);
 
-		if (!this.checkSlowchat(room, user)) {
-			throw new Chat.ErrorMessage(
-				this.tr`This room has slow-chat enabled. You can only talk once every ${room!.settings.slowchat} seconds.`
-			);
-		}
+		this.checkSlowchat(room, user);
 
-		if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
-			throw new Chat.ErrorMessage(this.tr(`Your username contains a phrase banned by this room.`));
-		}
-		if (user.userMessage && (!this.checkBanwords(room, user.userMessage) && !user.can('bypassall'))) {
-			throw new Chat.ErrorMessage(this.tr(`Your status message contains a phrase banned by this room.`));
-		}
-		if (!this.checkBanwords(room, message) && !user.can('mute', null, room!)) {
-			throw new Chat.ErrorMessage(this.tr("Your message contained banned words in this room."));
-		}
+		if (!user.can('bypassall')) this.checkBanwords(room, user.name);
+		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.userMessage);
+		if (room && !user.can('mute', null, room)) this.checkBanwords(room, message);
 
 		const gameFilter = this.checkGameFilter();
 		if (typeof gameFilter === 'string') {
-			if (gameFilter) this.errorReply(gameFilter);
+			if (gameFilter) throw new Chat.ErrorMessage(gameFilter);
 			return null;
 		}
 
