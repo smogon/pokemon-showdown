@@ -662,7 +662,7 @@ export const commands: ChatCommands = {
 
 	clearstatus(target, room, user) {
 		if (target) {
-			if (!room) return this.requiresRoom();
+			room = this.requireRoom();
 			// Clearing another user's status
 			const reason = this.splitTarget(target);
 			const targetUser = this.targetUser;
@@ -1257,7 +1257,7 @@ export const commands: ChatCommands = {
 
 	autotimer: 'forcetimer',
 	forcetimer(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		target = toID(target);
 		this.checkCan('autotimer');
 		if (this.meansNo(target) || target === 'stop') {
