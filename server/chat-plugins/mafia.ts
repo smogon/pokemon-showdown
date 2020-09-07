@@ -2129,7 +2129,7 @@ export const commands: ChatCommands = {
 			game.logAction(user, `set playercap to ${num}`);
 		},
 		playercaphelp: [
-			`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires:host % @ # &`,
+			`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires host % @ # &`,
 		],
 
 		close(target, room, user) {
