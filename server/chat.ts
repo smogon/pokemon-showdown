@@ -1081,8 +1081,7 @@ export class CommandContext extends MessageContext {
 
 		const gameFilter = this.checkGameFilter();
 		if (typeof gameFilter === 'string') {
-			if (gameFilter) throw new Chat.ErrorMessage(gameFilter);
-			return null;
+			throw new Chat.ErrorMessage(gameFilter);
 		}
 
 		if (room) {
