@@ -370,7 +370,7 @@ export const commands: ChatCommands = {
 		if (this.cmd === 'mee' && /[A-Z-a-z0-9/]/.test(target.charAt(0))) {
 			return this.errorReply(this.tr`/mee - must not start with a letter or number`);
 		}
-		this.checkChat(`/${this.cmd} ${target || ''}`);
+		target = this.checkChat(`/${this.cmd} ${target || ''}`);
 
 		if (this.message.startsWith(`/ME`)) {
 			const uppercaseIdentity = user.getIdentity(room?.roomid).toUpperCase();

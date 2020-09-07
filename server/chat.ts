@@ -317,7 +317,7 @@ export class PageContext extends MessageContext {
 			res = await handler.call(this, parts, this.user, this.connection);
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
-				this.errorReply(err.message);
+				if (err.message) this.errorReply(err.message);
 				return;
 			}
 			Monitor.crashlog(err, 'A chat page', {
@@ -946,11 +946,17 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
+	checkChat(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
+		// @ts-ignore
+		const out = this.checkChat2(message, room, targetUser);
+		if (!out) throw new Chat.ErrorMessage('');
+		return out;
+	}
 	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	checkChat(message: string, room?: Room | null, targetUser?: User | null): string | null;
-	checkChat(message?: null, room?: Room | null, targetUser?: User | null): true | null;
-	checkChat(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
+	checkChat2(message: string, room?: Room | null, targetUser?: User | null): string | null;
+	checkChat2(message?: null, room?: Room | null, targetUser?: User | null): true | null;
+	checkChat2(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
 		if (!targetUser && this.pmTarget) {
 			targetUser = this.pmTarget;
 		}
