@@ -987,9 +987,7 @@ export class CommandContext extends MessageContext {
 					}
 					if (room.settings.modchat === 'trusted') {
 						throw new Chat.ErrorMessage(
-							this.tr(
-								`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
-							)
+							this.tr`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
 						);
 					}
 					const groupName = Config.groups[room.settings.modchat] && Config.groups[room.settings.modchat].name ||
