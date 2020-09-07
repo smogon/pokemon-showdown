@@ -102,6 +102,12 @@ interface DexTableData {
 	Conditions: DexTable<EffectData>;
 	TypeChart: DexTable<TypeData>;
 }
+interface TextTableData {
+	Abilities: AnyObject;
+	Items: AnyObject;
+	Moves: AnyObject;
+	Pokedex: AnyObject;
+}
 
 const Natures: {[k: string]: Nature} = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
@@ -155,6 +161,7 @@ export class ModdedDex {
 	modsLoaded: boolean;
 
 	dataCache: DexTableData | null;
+	textCache: TextTableData | null;
 	formatsCache: DexTable<Format> | null;
 
 	deepClone = Utils.deepClone;
@@ -182,6 +189,7 @@ export class ModdedDex {
 		this.modsLoaded = false;
 
 		this.dataCache = null;
+		this.textCache = null;
 		this.formatsCache = null;
 
 		if (!isOriginal) {
@@ -472,6 +480,35 @@ export class ModdedDex {
 		return learnsetData;
 	}
 
+	getDescs(table: keyof TextTableData, id: ID, dataEntry: AnyObject) {
+		if (dataEntry.shortDesc) {
+			return {
+				desc: dataEntry.desc,
+				shortDesc: dataEntry.shortDesc,
+			};
+		}
+		const entry = this.loadTextData()[table][id];
+		if (!entry) return null;
+		const descs = {
+			desc: '',
+			shortDesc: '',
+		};
+		for (let i = this.gen; i < dexes['base'].gen; i++) {
+			const curDesc = entry[`descGen${i}`];
+			const curShortDesc = entry[`shortDescGen${i}`];
+			if (!descs.desc && curDesc) {
+				descs.desc = curDesc;
+			}
+			if (!descs.shortDesc && curShortDesc) {
+				descs.shortDesc = curShortDesc;
+			}
+			if (descs.desc && descs.shortDesc) break;
+		}
+		if (!descs.shortDesc) descs.shortDesc = entry.shortDesc || '';
+		if (!descs.desc) descs.desc = entry.desc || descs.shortDesc;
+		return descs;
+	}
+
 	getMove(name?: string | Move): Move {
 		if (name && typeof name !== 'string') return name;
 
@@ -490,7 +527,9 @@ export class ModdedDex {
 			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
 		}
 		if (id && this.data.Moves.hasOwnProperty(id)) {
-			move = new Data.Move({name}, this.data.Moves[id]);
+			const moveData = this.data.Moves[id];
+			const moveTextData = this.getDescs('Moves', id, moveData);
+			move = new Data.Move({name}, moveData, moveTextData);
 			if (move.gen > this.gen) {
 				(move as any).isNonstandard = 'Future';
 			}
@@ -655,7 +694,9 @@ export class ModdedDex {
 			return item;
 		}
 		if (id && this.data.Items.hasOwnProperty(id)) {
-			item = new Data.Item({name}, this.data.Items[id]);
+			const itemData = this.data.Items[id];
+			const itemTextData = this.getDescs('Items', id, itemData);
+			item = new Data.Item({name}, itemData, itemTextData);
 			if (item.gen > this.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
@@ -685,7 +726,9 @@ export class ModdedDex {
 			return ability;
 		}
 		if (id && this.data.Abilities.hasOwnProperty(id)) {
-			ability = new Data.Ability({name}, this.data.Abilities[id]);
+			const abilityData = this.data.Abilities[id];
+			const abilityTextData = this.getDescs('Abilities', id, abilityData);
+			ability = new Data.Ability({name}, abilityData, abilityTextData);
 			if (ability.gen > this.gen) {
 				(ability as any).isNonstandard = 'Future';
 			}
@@ -1401,6 +1444,11 @@ export class ModdedDex {
 		return {};
 	}
 
+	loadTextFile(name: string, exportName: string): AnyObject {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		return require(`${DATA_DIR}/text/${name}`)[exportName];
+	}
+
 	includeMods(): ModdedDex {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
@@ -1423,6 +1471,17 @@ export class ModdedDex {
 	includeData(): ModdedDex {
 		this.loadData();
 		return this;
+	}
+
+	loadTextData() {
+		if (dexes['base'].textCache) return dexes['base'].textCache;
+		dexes['base'].textCache = {
+			Pokedex: this.loadTextFile('pokedex', 'PokedexText'),
+			Moves: this.loadTextFile('moves', 'MovesText'),
+			Abilities: this.loadTextFile('abilities', 'AbilitiesText'),
+			Items: this.loadTextFile('items', 'ItemsText'),
+		};
+		return dexes['base'].textCache;
 	}
 
 	loadData(): DexTableData {

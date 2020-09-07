@@ -16,6 +16,7 @@
     "include": [
         "./config/*.ts",
         "./data/*",
+        "./data/text/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
         "./lib/*",
