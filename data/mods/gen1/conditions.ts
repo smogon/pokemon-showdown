@@ -138,8 +138,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onBeforeMovePriority: 3,
 		onBeforeMove(pokemon, target) {
-			pokemon.volatiles.confusion.time--;
-			if (!pokemon.volatiles.confusion.time) {
+			pokemon.volatiles['confusion'].time--;
+			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
