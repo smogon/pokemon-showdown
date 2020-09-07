@@ -529,8 +529,8 @@
 		"You may only set a temporary symbol below your current rank.": "",
 		"Your temporary group symbol is now": "",
 		"Currently, you're viewing Pokémon Showdown in ${language}.": "",
-		"Valid languages are: ": "",
-		"Pokémon Showdown will now be displayed in ${Chat.languages.get(target)} (except in language rooms).": "",
+		"Valid languages are: ${languages}": "",
+		"Pokémon Showdown will now be displayed in ${language} (except in language rooms).": "",
 		"Note that rooms can set their own language, which will override this setting.": "",
 		"/updatesettings expects JSON encoded object.": "",
 		"Unable to parse settings in /updatesettings!": "",
@@ -624,7 +624,7 @@
 		"'${command}' is a help command.": "",
 		"The command '/${target}' does not exist.": "",
 		"Could not find help for '/${target}'. Try /help for general help.": "",
-		"Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead": ""
+		"Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead": ""
 
 	}
 }

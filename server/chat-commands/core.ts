@@ -762,11 +762,13 @@ export const commands: ChatCommands = {
 		}
 		target = toID(target);
 		if (!Chat.languages.has(target)) {
-			return this.errorReply(`${this.tr`Valid languages are: `}${[...Chat.languages.values()].join(', ')}`);
+			const languages = [...Chat.languages.values()].join(', ');
+			return this.errorReply(this.tr`Valid languages are: ${languages}`);
 		}
 		user.language = target;
 		user.update();
-		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${Chat.languages.get(target)} (except in language rooms).`);
+		const language = Chat.languages.get(target);
+		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
 	},
 	languagehelp: [
 		`/language - View your current language setting.`,
@@ -1683,11 +1685,12 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`Could not find help for '/${target}'. Try /help for general help.`);
 		}
 
+		const closestHelp = currentBestHelp.for.join(' ');
 		if (currentBestHelp.for.length < cmds.length) {
-			this.errorReply(this.tr`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
+			this.errorReply(this.tr`Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead`);
 		}
 
-		const curHandler = this.parseCommand(`/${currentBestHelp.for.join(' ')}`)?.handler;
+		const curHandler = this.parseCommand(`/${closestHelp}`)?.handler;
 		if (curHandler?.isPrivate && !user.can('lock')) {
 			return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 		}
