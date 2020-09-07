@@ -1168,8 +1168,8 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
 		this.canPM(targetUser);
-		if (targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs)) &&
+		if (targetUser.settings.blockPMs.all &&
+			(targetUser.settings.blockPMs.all === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs.all)) &&
 			!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
