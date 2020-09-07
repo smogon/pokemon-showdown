@@ -218,18 +218,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|+Arsenal|Wenger Out`);
 		},
 	},
-	asheviere: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Asheviere|Blessings to you.`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Asheviere|Don't trade me for someone else :(`);
-		},
-		onFaint() {
-			this.add(`c|+Asheviere|Who will lead my kingdom now?`);
-		},
-	},
 	averardo: {
 		noCopy: true,
 		onStart() {
