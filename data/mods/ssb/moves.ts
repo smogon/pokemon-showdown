@@ -1,6 +1,6 @@
 // Used Snaquaza's move
 import {RandomStaffBrosTeams} from './random-teams';
-import {Pokemon, EffectState} from '../../../sim/pokemon';
+import {Pokemon} from '../../../sim/pokemon';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
