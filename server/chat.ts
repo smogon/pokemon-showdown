@@ -317,7 +317,7 @@ export class PageContext extends MessageContext {
 			res = await handler.call(this, parts, this.user, this.connection);
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
-				this.errorReply(err.message);
+				if (err.message) this.errorReply(err.message);
 				return;
 			}
 			Monitor.crashlog(err, 'A chat page', {
