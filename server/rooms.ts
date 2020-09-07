@@ -734,6 +734,14 @@ export abstract class BasicRoom {
 				}
 			}
 			this.settings.aliases = undefined;
+
+			if (this.battle) {
+				for (const player of this.battle.players) {
+					const user = player.getUser();
+					user?.games.delete(oldID);
+					user?.games.add(newID);
+				}
+			}
 		}
 		this.saveSettings();
 
