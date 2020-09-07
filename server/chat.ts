@@ -186,7 +186,6 @@ export class ErrorMessage extends Error {
 		Error.captureStackTrace(this, ErrorMessage);
 	}
 }
-
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
 	readonly user: User;
@@ -964,7 +963,6 @@ export class CommandContext extends MessageContext {
 		const connection = this.connection;
 
 		if (!user.named) {
-			connection.popup(this.tr(`You must choose a name before you can talk.`));
 			throw new Chat.ErrorMessage(this.tr(`You must choose a name before you can talk.`));
 		}
 		if (!user.can('bypassall')) {
@@ -981,9 +979,7 @@ export class CommandContext extends MessageContext {
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
 						throw new Chat.ErrorMessage(
-							this.tr(
-								`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
-							)
+							this.tr`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
 						);
 					}
 					if (room.settings.modchat === 'trusted') {
