@@ -129,12 +129,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Come on you Gunners',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {hp: 20, def: 20, spd: 20}, nature: 'Naive',
 			},
-			Asheviere: {
-				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'F',
-				moves: ['Scald', 'Slack Off', 'Psyshock'],
-				signatureMove: 'Wonder Trade',
-				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
-			},
 			Averardo: {
 				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: 'M',
 				moves: ['Head Smash', 'Flare Blitz', 'Photon Geyser'],
