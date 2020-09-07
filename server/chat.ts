@@ -186,6 +186,7 @@ export class ErrorMessage extends Error {
 		Error.captureStackTrace(this, ErrorMessage);
 	}
 }
+
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
 	readonly user: User;
