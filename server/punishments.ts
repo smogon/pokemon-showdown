@@ -1493,7 +1493,7 @@ export const Punishments = new class {
 		const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3);
 		if (!minPunishments) return;
 
-		const punishments = Punishments.getRoomPunishments(user, {publicOnly: true});
+		const punishments = Punishments.getRoomPunishments(user, {checkIps: true, publicOnly: true});
 
 		if (punishments.length >= minPunishments) {
 			let points = 0;
