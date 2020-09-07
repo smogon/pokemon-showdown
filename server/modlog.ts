@@ -171,9 +171,7 @@ export class Modlog {
 	async rename(oldID: ModlogID, newID: ModlogID) {
 		const streamExists = this.streams.has(oldID);
 		if (streamExists) await this.destroy(oldID);
-		if (!this.getSharedID(oldID)) {
-			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
-		}
+		await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
 		if (streamExists) this.initialize(newID);
 	}
 
