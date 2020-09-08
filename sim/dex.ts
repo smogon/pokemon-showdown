@@ -174,7 +174,7 @@ function mergeFormats (main: FormatList, custom: FormatList | undefined): Format
 			// finds the section and makes it if it doesn't exist.
 			if (element.section) {
 				current = build.find(e => e.section === element.section);
-	
+
 				// if it's new it makes a new entry.
 				if (current === undefined) {
 					current = {section: element.section, column: element.column, formats: []};
