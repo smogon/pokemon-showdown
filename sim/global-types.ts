@@ -1253,7 +1253,7 @@ interface FormatData extends EventMethods {
 	column?: number;
 }
 
-type FormatList = (FormatData | {section: string, column?: number});
+type FormatList = FormatData | {section: string, column?: number};
 type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
 
 interface Format extends Readonly<BasicEffect & FormatData> {
