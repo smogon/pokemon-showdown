@@ -184,7 +184,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Arcticblast')}|oh no`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Arcticblast')}|single battles are bad anyway, why am I here?`);
+			if (this.randomChance(1, 100)) {
+				this.add(`c|${getName('Arcticblast')}|get **mished** kid`);
+			} else {
+				this.add(`c|${getName('Arcticblast')}|single battles are bad anyway, why am I here?`);
+			}
 		},
 	},
 	averardo: {
