@@ -378,6 +378,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Clash of Pangoros',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish', shiny: true,
 	},
+	Kipkluif: {
+		species: 'Gossifleur', ability: 'Degenerator', item: 'Eviolite', gender: 'M',
+		moves: ['Leech Seed', 'Apple Acid', 'Court Change'],
+		signatureMove: 'Kip Up',
+		evs: {hp: 196, def: 116, spa: 36, spd: 116, spe: 36}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+	},
 	Kris: {
 		species: 'Unown', ability: 'Protean', item: 'Life Orb', gender: 'N',
 		moves: ['Light of Ruin', 'Psystrike', ['Secret Sword', 'Mind Blown', 'Seed Flare']],

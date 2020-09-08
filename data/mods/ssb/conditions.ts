@@ -872,6 +872,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('KingSwordYT')}|**__Se anula el host__**`);
 		},
 	},
+	kipkluif: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Kipkluif')}|Please play LCUU, it's fun`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Kipkluif')}| /teleport`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Kipkluif')}|I've failed you.. I pray you hurry.. with those reinforcments.. you promised..`);
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart(source) {

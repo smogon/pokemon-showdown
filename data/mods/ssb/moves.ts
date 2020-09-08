@@ -2389,6 +2389,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
+	// Kipkluif
+	kipup: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "When used, if hit by an attack on the same turn this move was used, this Pokemon boost defense and special defense by 2 if the relevant stat is at 0 or lower, or 1 if the relevant stat is at +1 or higher, and increases priority of the next used move by 1.",
+		shortDesc: "If used and hit by an attack on the same turn, boosts defenses; boosts next moves priority by 1.",
+		name: "Kip Up",
+		pp: 10,
+		priority: 3,
+		flags: {protect: 1, mirror: 1},
+		beforeTurnCallback(pokemon) {
+			this.add('-anim', pokemon, 'Focus Energy', pokemon);
+			pokemon.addVolatile('kipup');
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-message', 'This Pokémon prepares itself to be knocked down!');
+			},
+			onHit(pokemon, source, move) {
+				if (this.effectData.gotHit) return;
+				if (pokemon.side !== source.side && move.category !== 'Status') {
+					this.effectData.gotHit = true;
+					this.add('-message', 'Gossifleur was prepared for the impact!');
+					const boosts: {[k: string]: number} = {def: 2, spd: 2};
+					if (pokemon.boosts.def >= 1) boosts.def--;
+					if (pokemon.boosts.spd >= 1) boosts.spd--;
+					this.boost(boosts, pokemon);
+					this.add('-message', "Gossifleur did a Kip Up and can jump right back into the action!");
+					this.effectData.duration++;
+				}
+			},
+			onModifyPriority(priority, pokemon, target, move) {
+				if (!this.effectData.gotHit) return priority;
+				return priority + 1;
+			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		secondary: null,
+		target: "self",
+		type: "Fighting",
+	},
+
 	// Kris
 	alphabetsoup: {
 		accuracy: true,

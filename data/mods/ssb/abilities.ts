@@ -1135,6 +1135,38 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Kipkluif
+	degenerator: {
+		shortDesc: "Opponents that switch out while this Pokémon is active lose 33% of their health.",
+		onStart(pokemon) {
+			pokemon.side.foe.addSideCondition('degenerator', pokemon);
+			const data = pokemon.side.foe.getSideConditionData('degenerator');
+			if (!data.sources) {
+				data.sources = [];
+			}
+			data.sources.push(pokemon);
+		},
+		onEnd(pokemon) {
+			pokemon.side.foe.removeSideCondition('degenerator');
+		},
+		condition: {
+			onBeforeSwitchOut(pokemon) {
+				let alreadyAdded = false;
+				for (const source of this.effectData.sources) {
+					if (!source.hp || source.volatiles('gastroacid')) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon, 'ability: Degenerator');
+						alreadyAdded = true;
+					}
+					this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
+				}
+			},
+		},
+		name: "Degenerator",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Lamp
 	candlewax: {
 		shortDesc: "Soul-Heart + Levitate.",
