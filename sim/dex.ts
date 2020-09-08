@@ -47,7 +47,6 @@ import * as path from 'path';
 import * as Data from './dex-data';
 import {PRNG, PRNGSeed} from './prng';
 import {Utils} from '../lib/utils';
-import { FormatList } from './global-types';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
@@ -156,7 +155,7 @@ function merge(main: FormatList[], custom: FormatList[]): FormatList[] {
 	const build: FormatSection[] = [];
 
 	// used to track current section to keep formats under their sections.
-	let current: FormatSection | undefiend = {section: "", formats: []};
+	let current: FormatSection | undefined = {section: "", formats: []};
 
 	// populates the original sections and formats easily
 	// there should be no repeat sections at this point.
