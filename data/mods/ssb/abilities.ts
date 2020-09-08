@@ -1601,6 +1601,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Soft Flex
+	eyeofthestorm: {
+		name: "Eye of the Storm",
+		shortDesc: "For 5 turns, a tempest boosts Water and Electric moves, among many effects.",
+		desc: "Summons a Tempest weather that combines the base effects of Rain Dance and Electric Terrain(with the animations of those two moves in that order upon set-up) that overwrites existing weather and terrain.In addition, at the end of each turn that the weather is up, all Electric-type Pokémon on the field are healed by 1 / 16th and all Flying or Steel types lose 1 / 8th of their health. If a Pokémon is both Electric and either Flying or Steel, they only receive the 1 / 16th heal. If a Pokémon is Ground-type, no effect from tempest takes place regardless of combination with the aforementioned types. This weather can be extended with Damp Rock but is overwritten by any effect or switch that would set a weather or terrain (including standard rain or standard Electric Terrain).",
+		onStart(source) {
+			this.field.setWeather('tempest');
+			this.field.setTerrain('tempestterrain');
+		},
+	},
 	// Spandan
 	hackedcorrosion: {
 		shortDesc: "Unaware + Corrosion.",

@@ -1419,6 +1419,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Shadecession')}|ah, gg fam`);
 		},
 	},
+	softflex: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Soft Flex')}|:]`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Soft Flex')}|:[`);
+		},
+	},
 	spandan: {
 		noCopy: true,
 		onStart() {
@@ -1976,6 +1985,63 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (source.volatiles['failedparry']) {
 				move.accuracy = true;
 			}
+		},
+	},
+
+	tempest: {
+		name: 'Tempest',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('damprock')) {
+				return 8;
+			}
+			return 5;
+		},
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella')) return;
+			if (move.type === 'Water') {
+				this.debug('rain water boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Fire') {
+				this.debug('rain fire suppress');
+				return this.chainModify(0.5);
+			}
+		},
+		onStart(battle, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
+				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'RainDance');
+			}
+		},
+		onUpdate() {
+			if (!this.field.isTerrain('tempestterrain')) {
+				this.add('-end', 'RainDance');
+			}
+		},
+		onResidualOrder: 1,
+		onResidual() {
+			if (!this.field.isTerrain('tempestterrain')) {
+				this.add('-end', 'RainDance');
+			}
+			this.add('-weather', 'RainDance', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (target.hasType('Ground')) return;
+			if (target.hasType('Electric')) {
+				this.heal(target.baseMaxhp / 16);
+				return;
+			}
+			if (!target.hasType('Electric') && target.hasType(['Flying', 'Steel'])) {
+				this.damage(target.baseMaxhp / 8);
+			}
+		},
+		onEnd() {
+			this.add('-weather', 'none');
 		},
 	},
 };

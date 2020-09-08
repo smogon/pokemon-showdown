@@ -721,7 +721,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Used for Brandon's ability
 	baneterrain: {
-		num: 580,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -3994,6 +3993,136 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
+	},
+
+	// Soft Flex
+	updraft: {
+		accuracy: 75,
+		basePower: 75,
+		category: "Special",
+		desc: "Doesn't miss in rain/tempest, changes target's secondary typing to Flying for 2-5 turns. Secondary effects fail if the target is Ground-type or affected by Ingrain.",
+		shortDesc: "Temporarily adds Flying type to the target. Rain/Tempest: never misses.",
+		name: "Updraft",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Twister', target);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (['raindance', 'primordialsea', 'tempest'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
+		},
+		condition: {
+			noCopy: true,
+			duration: 5,
+			durationCallback(target, source) {
+				return this.random(5, 7);
+			},
+			onStart(target) {
+				this.effectData.origTypes = target.getTypes(); // store original types
+				if (target.getTypes().length === 1) { // single type mons
+					if (!target.addType('Flying')) return false;
+					this.add('-start', target, 'typeadd', 'Flying', '[from] move: Updraft');
+				} else { // dual typed mons
+					const primary = target.getTypes()[0]; // take the first type
+					if (!target.setType([primary, 'Flying'])) return false;
+					this.add('-start', target, 'typechange', primary + '/Flying', '[from] move: Updraft');
+				}
+			},
+			onEnd(target) {
+				if (!target.setType(this.effectData.origTypes)) return false; // reset the types
+				this.add('-start', target, 'typechange', this.effectData.origTypes.join('/'), '[silent]');
+			},
+		},
+		secondary: {
+			chance: 100,
+			onHit(target) {
+				if (target.hasType(['Flying', 'Ground']) || target.volatiles['ingrain']) return false;
+				target.addVolatile('Updraft');
+			},
+		},
+		target: "normal",
+		type: "Flying",
+	},
+
+	// used for Soft Flex's ability
+	tempestterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Basically Electric Terrain.",
+		shortDesc: "Basically Electric Terrain.",
+		name: "Tempest Terrain",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		terrain: 'tempestterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('damprock')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Tempest Terrain');
+					}
+					return false;
+				}
+			},
+			onTryAddVolatile(status, target) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Tempest Terrain');
+					return null;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('tempest terrain boost');
+					return this.chainModify([0x14CD, 0x1000]);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Tempest Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Tempest Terrain');
+				}
+			},
+			onUpdate() {
+				if (!this.field.isWeather('tempest')) {
+					this.field.clearTerrain();
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+				if (!this.field.isWeather('tempest')) {
+					this.field.clearTerrain();
+				}
+			},
+			onEnd() {
+				this.add('-fieldend', 'move: Tempest Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Electric",
+		zMove: {boost: {spe: 1}},
+		contestType: "Clever",
 	},
 
 	// Spandan

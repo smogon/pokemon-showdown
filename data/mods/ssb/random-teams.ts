@@ -606,6 +606,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shade Uppercut',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
+	'Soft Flex': {
+		species: 'Zapdos', ability: 'Eye of the Storm', item: ['Leftovers', 'Damp Rock'], gender: '',
+		moves: ['Thunder', 'Roost', ['Defog', 'Toxic']],
+		signatureMove: 'Updraft',
+		evs: {hp: 252, def: 252, spe: 8}, ivs: {atk: 0}, nature: 'Bold', shiny: 1024,
+	},
 	Spandan: {
 		species: 'Mareanie', ability: 'Hacked Corrosion', item: 'Eviolite', gender: 'M',
 		moves: ['Toxic', 'Recover', 'Spiky Shield'],
