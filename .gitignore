@@ -1,6 +1,5 @@
 /config/*
 !/config/formats.ts
-!/config/custom-formats.ts
 /logs/*
 /test/modlogs
 /node_modules
