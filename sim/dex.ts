@@ -140,7 +140,7 @@ const Natures: {[k: string]: Nature} = {
 export const toID = Data.toID;
 
 // function for merging the two lists
-function mergeFormats (main: FormatList, custom: FormatList | undefined): FormatList {
+function mergeFormats(main: FormatList, custom: FormatList | undefined): FormatList {
 	// interface for the builder.
 	interface FormatSection {
 		section: string;
