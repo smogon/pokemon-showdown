@@ -10,7 +10,7 @@ past the following code into the file and add your desired formats and their sec
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.ts
 
-export const Formats: FormatList[] = [
+export const Formats: FormatList = [
 ];
 --------------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
-export const Formats: FormatList[] = [
+export const Formats: FormatList = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////

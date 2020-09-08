@@ -139,17 +139,17 @@ const Natures: {[k: string]: Nature} = {
 };
 export const toID = Data.toID;
 
-// interface for the builder.
-interface FormatSection {
-	section: string;
-	column?: number;
-	formats: FormatData[];
-}
-
 // function for merging the two lists
-function merge(main: FormatList[], custom: FormatList[] | undefined): FormatList[] {
+function mergeFormats (main: FormatList, custom: FormatList | undefined): FormatList {
+	// interface for the builder.
+	interface FormatSection {
+		section: string;
+		column?: number;
+		formats: FormatData[];
+	}
+
 	// result that is return and makes the actual list for formats.
-	const result: FormatList[] = [];
+	const result: FormatList = [];
 
 	// used as a intermediary to build the final list.
 	const build: FormatSection[] = [];
@@ -1624,7 +1624,7 @@ export class ModdedDex {
 			}
 		}
 		try {
-			Formats = merge(require(MAIN_FORMATS).Formats, customFormats);
+			Formats = mergeFormats(require(MAIN_FORMATS).Formats, customFormats);
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
 				throw e;
