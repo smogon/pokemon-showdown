@@ -747,7 +747,7 @@ export const commands: ChatCommands = {
 		}
 		user.tempGroup = group;
 		user.updateIdentity();
-		this.sendReply(`|c|~|/text ${this.tr`Your temporary group symbol is now`} \`\`${user.tempGroup}\`\`.`);
+		this.sendReply(`|c|~|${this.tr`Your temporary group symbol is now`} \`\`${user.tempGroup}\`\`.`);
 	},
 	showrankhelp: 'hiderankhelp',
 	hiderankhelp: [
