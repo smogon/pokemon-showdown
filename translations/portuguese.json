@@ -533,7 +533,6 @@
 		"${target} does not have a ticket.": "${target} não tem um pedido de ajuda.",
 		"You deleted ${target}'s ticket.": "Você deletou o pedido de ajuda de ${target}.",
 
-
 		"Server version: <b>${version}</b>": "Versão do servidor: <b>${version}</b>",
 		"/mee - must not start with a letter or number": "/mee - não deve iniciar com uma letra ou número",
 		"What?! How are you not more excited to battle?! Try /battle! to show me you're ready.": "O quê?! Como assim você não está mais animado para batalhar?! Tente fazer /battle! para me mostrar que está preparado.",
@@ -664,6 +663,22 @@
 		"pages/faq": "pages/faq",
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
-		"pages/staff": "pages/staff"
+		"pages/staff": "pages/staff",
+
+		"Repeated phrases in ${roomid}": "",
+		"No such room: \"${roomid}\".": "",
+		"There are no repeated phrases in ${roomid}.": "",
+		"Phrase": "",
+		"Interval": "",
+		"every ${minutes} minute(s)": "",
+		"Remove": "",
+		"You must specify a numerical interval of at least 1 minute.": "",
+		"The phrase \"${message}\" is already being repeated in this room.": "",
+		"${user.name} set the phrase \"${message}\" to be repeated every ${interval} minute(s).": "",
+		"The phrase \"${target}\" is not being repeated in this room.": "",
+		"${user.name} removed the repeated phrase \"${target}\".": "",
+		"There are no repeated phrases in this room.": "",
+		"${user.name} removed all repeated phrases.": "",
+		"You must specify a room when using this command in PMs.": ""
 	}
 }
