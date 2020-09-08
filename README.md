@@ -132,6 +132,14 @@ If you'd like to contribute to programming and don't know where to start, feel f
 
   [9]: https://github.com/smogon/pokemon-showdown/issues/2444
 
+## Documentation
+This is a list of documentation that has been created over the course of working on this project:
+* [PROTOCOL.md][11] - The protocol used by the server to communicate with clients.
+* [SIM-PROTOL.md][12] - The protocol used for battles and battle messages.
+* [Bot FAQ][13] - An FAQ compiled by @Kaiepi regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
+    [11]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
+    [12]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
+    [13]: https://gist.github.com/Kaiepi/becc5d0ecd576f5e7733b57b4e3fa97e
 
 License
 ------------------------------------------------------------------------
