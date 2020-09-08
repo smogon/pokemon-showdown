@@ -2216,7 +2216,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			const game = room.getGame(MafiaTracker);
 			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
-			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.checkCan('mute', null, room)) return;
+			if (game.hostid !== user.id && !game.cohosts.includes(user.id)) this.checkCan('mute', null, room);
 			const reset = cmd.includes('reset');
 			if (reset) {
 				if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
