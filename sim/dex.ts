@@ -1565,9 +1565,9 @@ export class ModdedDex {
 		if (!this.formatsCache) this.formatsCache = {};
 
 		// Load formats
-		let Formats;
+		let Formats: any;
 		try {
-			Formats = (merge(require(MAIN_FORMATS).Formats, require(CUSTOM_FORMATS).Formats) as any);
+			Formats = merge(require(MAIN_FORMATS).Formats, require(CUSTOM_FORMATS).Formats);
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
 				throw e;
