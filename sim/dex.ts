@@ -147,7 +147,7 @@ interface FormatSection {
 }
 
 // function for merging the two lists
-function merge(main: FormatList[], custom: FormatList[]): FormatList[] {
+function merge(main: FormatList[], custom: FormatList[] | undefined): FormatList[] {
 	// result that is return and makes the actual list for formats.
 	const result: FormatList[] = [];
 
@@ -169,18 +169,20 @@ function merge(main: FormatList[], custom: FormatList[]): FormatList[] {
 	}
 
 	// merges the second list the hard way. Accounts for repeats.
-	for (const element of custom) {
-		// finds the section and makes it if it doesn't exist.
-		if (element.section) {
-			current = build.find(e => e.section === element.section);
-
-			// if it's new it makes a new entry.
-			if (current === undefined) {
-				current = {section: element.section, column: element.column, formats: []};
-				build.push(current);
+	if (custom !== undefined) {
+		for (const element of custom) {
+			// finds the section and makes it if it doesn't exist.
+			if (element.section) {
+				current = build.find(e => e.section === element.section);
+	
+				// if it's new it makes a new entry.
+				if (current === undefined) {
+					current = {section: element.section, column: element.column, formats: []};
+					build.push(current);
+				}
+			} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
+				current.formats.push(element as FormatData);
 			}
-		} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
-			current.formats.push(element as FormatData);
 		}
 	}
 
@@ -1613,8 +1615,16 @@ export class ModdedDex {
 
 		// Load formats
 		let Formats: any;
+		let customFormats;
 		try {
-			Formats = merge(require(MAIN_FORMATS).Formats, require(CUSTOM_FORMATS).Formats);
+			customFormats = require(CUSTOM_FORMATS).Formats;
+		} catch (e) {
+			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
+				throw e;
+			}
+		}
+		try {
+			Formats = merge(require(MAIN_FORMATS).Formats, customFormats);
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
 				throw e;
