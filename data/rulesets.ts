@@ -995,7 +995,7 @@ export const Formats: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Allow AVs',
 		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
-		// Implemented in mods/letsgo/rulesets.js
+		// implemented in TeamValidator#validateStats
 	},
 	nfeclause: {
 		effectType: 'ValidatorRule',

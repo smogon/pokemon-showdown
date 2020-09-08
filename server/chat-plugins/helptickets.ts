@@ -1265,8 +1265,9 @@ export const commands: ChatCommands = {
 
 			const ticket = tickets[toID(this.inputUsername)];
 			const ticketBan = ticketBans[toID(this.inputUsername)];
-			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length && !ticket && !ticketBan) {
-				return this.errorReply(this.tr`User '${this.targetUsername}' not found.`);
+			const targetUsername = this.targetUsername;
+			if (!targetUser && !Punishments.search(toID(targetUsername)).length && !ticket && !ticketBan) {
+				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
 			}
 			if (target.length > 300) {
 				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);

@@ -2,7 +2,7 @@
 // The rules that formats use are stored in data/rulesets.ts
 import {Utils} from './../lib/utils';
 
-export const Formats: FormatList[] = [
+export const Formats: (FormatData | {section: string, column?: number})[] = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
