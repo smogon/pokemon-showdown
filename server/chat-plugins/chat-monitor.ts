@@ -44,7 +44,7 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	m: [
 		"m", "ᗰ", "M", "ⓜ", "Ⓜ", "м", "͏", "₥", "ṃ", "Ṃ", "Ꮇ", "ϻ", "Μ", "ṁ", "Ṁ", "ʍ", "̾", "ｍ", "Ｍ", "ᴍ", "ɯ", "🅜", "𝐦", "𝐌", "𝘮", "𝘔", "𝙢", "𝙈", "𝓂", "𝓶", "𝓜", "𝕞", "𝕂", "𝔪", "𝔍", "𝖒", "𝕸", "🄼", "🅼", "𝑀", "ɱ", "𝚖", "𝙼", "♔", "ⅿ",
 	],
-	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո"],
+	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո", 'η'],
 	o: ["o", "0", "ó", "ô", "õ", "ú", "O", "ⓞ", "Ⓞ", "σ", "͏", "Ø", "ö", "Ö", "Ꭷ", "Θ", "ṏ", "Ṏ", "Ꮎ", "օ", "̾", "ｏ", "Ｏ", "ᴏ", "🅞", "𝐨", "𝐎", "𝘰", "𝘖", "𝙤", "𝙊", "ℴ", "𝓸", "𝓞", "𝕠", "𝕄", "𝔬", "𝔏", "𝖔", "𝕺", "🄾", "🅾", "𝑜", "𝒪", "𝚘", "𝙾", "⊙", "ο"],
 	p: ["p", "ᑭ", "P", "ⓟ", "Ⓟ", "ρ", "₱", "ṗ", "Ṗ", "Ꭾ", "Ƥ", "Ꮲ", "ք", "ｐ", "Ｐ", "ᴘ", "🅟", "𝐩", "𝐏", "𝘱", "𝘗", "𝙥", "𝙋", "𝓅", "𝓹", "𝓟", "𝕡", "ℕ", "𝔭", "𝔐", "𝖕", "𝕻", "🄿", "🅿", "𝒫", "𝚙", "𝙿", "р"],
 	q: [
@@ -111,7 +111,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<<${room.roomid}>> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					`<<${room.roomid}>> ${user.name}: SPOILER: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
@@ -370,7 +370,7 @@ export const namefilter: NameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
-						`using an inappropriate name: ${name} (from ${user.name})`, false, name
+						`using an inappropriate name: SPOILER: ${name} (from ${user.name})`, false, name
 					);
 				}
 				line[4]++;
@@ -429,7 +429,7 @@ export const nicknamefilter: NameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
-						`${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
+						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
 					);
 				} else if (Chat.monitors[list].punishment === 'EVASION') {
 					void Punishments.autolock(
@@ -472,7 +472,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
-						`${user.name} - using an inappropriate status: ${status}`, true
+						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
 					);
 				}
 				line[4]++;

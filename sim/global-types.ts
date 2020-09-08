@@ -1253,8 +1253,8 @@ interface FormatData extends EventMethods {
 	column?: number;
 }
 
-export type FormatList = (FormatData | {section: string, column?: number});
-type ModdedFormatsData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
+type FormatList = (FormatData | {section: string, column?: number});
+type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
 
 interface Format extends Readonly<BasicEffect & FormatData> {
 	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
