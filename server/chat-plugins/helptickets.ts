@@ -214,6 +214,16 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.room.modlog(text);
 	}
 
+	getButton() {
+		const notifying = this.ticket.claimed ? `` : `notifying`;
+		const creator = (
+			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
+		);
+		return (
+			`<a class="button ${notifying}" href="/help-${this.ticket.userid}"` +
+			` ${this.getPreview()}>Help ${creator}: ${this.ticket.type}</a> `
+		);
+	}
 	getPreview() {
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
@@ -419,8 +429,6 @@ export function notifyStaff() {
 				continue;
 			}
 		}
-		const creator = ticket.claimed ? Utils.html`${ticket.creator}` : Utils.html`<strong>${ticket.creator}</strong>`;
-		const notifying = ticket.claimed ? `` : ` notifying`;
 		// should always exist
 		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
 		const ticketGame = ticketRoom.getGame(HelpTicket)!;
@@ -428,7 +436,7 @@ export function notifyStaff() {
 			hasUnclaimed = true;
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
-		buf += `<a class="button${notifying}" href="/help-${ticket.userid}" ${ticketGame.getPreview()}>Help ${creator}: ${ticket.type}</a> `;
+		buf += ticketGame.getButton();
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
@@ -448,7 +456,9 @@ export function notifyStaff() {
 	if (room.userCount) {
 		for (const user of Object.values(room.users)) {
 			// respect ignoring tickets
-			if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, `>view-help-tickets\n${buf}`);
+			if (user.can('lock') && !user.settings.ignoreTickets) {
+				for (const conn of user.connections) conn.send(`>view-help-tickets\n${buf}`);
+			}
 		}
 	}
 	if (hasUnclaimed) {
