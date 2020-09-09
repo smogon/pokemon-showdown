@@ -652,6 +652,13 @@ exports.grouplist = [
 		nooverride: true,
 	},
 	{
+		symbol: '^',
+		id: "prizewinner",
+		name: "Prize Winner",
+		inherit: '+',
+		roomonly: true,
+	},
+	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
