@@ -413,8 +413,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
 				) {
 					// it failed
-					this.add('-fail', source);
-					this.attrLastMove('[still]');
 					return false;
 				}
 				this.effectData.move = target.lastMove.id;
