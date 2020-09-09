@@ -234,9 +234,9 @@ export const commands: ChatCommands = {
 		target = target.trim();
 		if (!room) return this.requiresRoom();
 		if (!this.can('addhtml', null, room)) return false;
-		let [userid, pageid, highlight] = Utils.splitFirst(target, ',', 2);
+		let [userid, pageid, title, highlight] = Utils.splitFirst(target, ',', 2);
 		pageid = `${user.id}-${toID(pageid)}`;
-		if (!userid || !pageid || !target) return this.parse(`/help highlighthtmlpage`);
+		if (!userid || !pageid || !title || !target) return this.parse(`/help highlighthtmlpage`);
 		const targetUser = Users.get(userid);
 		if (!targetUser || !targetUser.connected) {
 			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
@@ -245,7 +245,7 @@ export const commands: ChatCommands = {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them highlights.");
 		}
 
-		const buf = `|tempnotify|bot-${pageid}|A bot has notified you!|${highlight ? highlight : ''}`;
+		const buf = `|tempnotify|bot-${pageid}|${title} [From ${user.name}]|${highlight ? highlight : ''}`;
 		let targetConnections = [];
 		if (!this.canPMHTML(targetUser)) return;
 		// try to locate connections that have requested the page recently
@@ -263,7 +263,7 @@ export const commands: ChatCommands = {
 		}
 	},
 	highlighthtmlpagehelp: [
-		`/highlighthtmlpage [userid], [pageid], [optional highlight] - Send a highlight to [userid] if they're viewing the bot page [pageid].`,
+		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Send a highlight to [userid] if they're viewing the bot page [pageid].`,
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
 
