@@ -12,15 +12,13 @@ export interface RepeatedPhrase {
 
 export const pages: PageTable = {
 	repeats(args, user) {
-		const roomid = args[0];
-		this.title = `Repeated phrases in ${roomid}`;
-		const room = Rooms.get(roomid);
 		const room = this.requireRoom();
+		this.title = `Repeated phrases in ${room.roomid}`;
 		this.checkCan("mute", null, room);
-		if (!room.settings.repeats) return `<h1>${this.tr`There are no repeated phrases in ${roomid}.`}</h1>`;
-		let html = `<div class="ladder pad"><h1>${this.tr`Repeated phrases in ${roomid}`}</h1>`;
+		if (!room.settings.repeats) return `<h1>${this.tr`There are no repeated phrases in ${room.roomid}.`}</h1>`;
+		let html = `<div class="ladder pad"><h1>${this.tr`Repeated phrases in ${room.roomid}`}</h1>`;
 		html += `<table><tr><th>${this.tr`Phrase`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
-		html += `<button class="button" name="send" value="/join view-repeats-${roomid}" style="float: right">`;
+		html += `<button class="button" name="send" value="/join view-repeats-${room.roomid}" style="float: right">`;
 		html += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (60 * 1000);

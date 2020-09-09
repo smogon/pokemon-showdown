@@ -665,9 +665,9 @@
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
 
-		"Repeated phrases in ${roomid}": "",
+		"Repeated phrases in ${room.roomid}": "",
 		"No such room: \"${roomid}\".": "",
-		"There are no repeated phrases in ${roomid}.": "",
+		"There are no repeated phrases in ${room.roomid}.": "",
 		"Phrase": "",
 		"Interval": "",
 		"every ${minutes} minute(s)": "",
