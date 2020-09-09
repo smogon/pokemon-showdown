@@ -124,7 +124,7 @@ Documentation
 This is a list of documentation that has been created over the course of working on this project:
 * [PROTOCOL.md][10] - The protocol used by the server to communicate with clients.
 * [SIM-PROTOCOL.md][11] - The protocol used for battles and battle messages.
-* [CONTRIBUTING.md][12] - The document to read before attempting to contribute to any Smogon project.
+* [CONTRIBUTING.md][12] - Useful code standards to understand if you want to send pull requests to PS (not necessary if you're just using the code and not planning to contribute back).
 * [Bot FAQ][13] - An FAQ compiled by Kaiepi [Kaiepi] regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
     [10]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
     [11]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
