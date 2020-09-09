@@ -34,9 +34,9 @@ export const commands: ChatCommands = {
 	repeat(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
-		const [intervalText, message] = this.splitOne(target);
-		const interval = parseInt(intervalText);
-		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalText) || interval < 1) {
+		const [intervalString, message] = this.splitOne(target);
+		const interval = parseInt(intervalString);
+		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1) {
 			return this.errorReply(this.tr`You must specify a numerical interval of at least 1 minute.`);
 		}
 
