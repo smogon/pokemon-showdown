@@ -506,7 +506,7 @@
 		"Avatar changed to:": "Avatar geändert zu:",
 		"Artist: ": "Ersteller: ",
 		"No one has PMed you yet.": "Niemand hat dir bisher eine private Nachricht geschrieben.",
-		"You forgot the comma.": "Du hast das Komma vergessen.",.
+		"You forgot the comma.": "Du hast das Komma vergessen.",
 		"User ${targetUsername} not found. Did you misspell their name?": "Der Nutzer ${targetUsername} wurde nicht gefunden. Hast du den Namen falsch geschrieben?",
 		"User ${targetUsername} is offline.": "Der Nutzer ${targetUsername} ist offline.",
 		"The user \"${targetUsername}\" was not found.": "Der Nutzer \"${targetUsername}\" wurde nicht gefunden.",
