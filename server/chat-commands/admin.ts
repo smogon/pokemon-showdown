@@ -851,6 +851,27 @@ export const commands: ChatCommands = {
 		this.sendReply(`Rebuilt.`);
 	},
 
+	reloadschemas(target, room, user) {
+		if (!this.canUseConsole()) return;
+		target = toID(target);
+		if (target && target !== 'all') return this.parse(`/help reloadschemas`);
+		const isAll = target === 'all';
+		const result = Chat.loadPluginDatabases(isAll);
+		if (!result) {
+			return this.errorReply(`${isAll ? 'All' : 'Chat-plugin'} schemas could not be loaded - set up Config.storage and try again.`);
+		}
+		this.sendReply(`Reloaded ${isAll ? "all" : 'chat-plugin'} database schemas.`);
+		Rooms.global.notifyRooms(
+			['development', 'staff', 'upperstaff'] as RoomID[],
+			`|c|${user.getIdentity()}|/log ${user.name} used /reloadschemas${isAll ? ' all' : ''}.`
+		);
+	},
+	reloadschemashelp: [
+		`/reloadschemas - Reloads databases schemas. `,
+		`Defaults to loading chat-plugin schemas, unless 'all' is specified, in which case all schemas are loaded.`,
+		`Requires: & console access.`,
+	],
+
 	/*********************************************************
 	 * Low-level administration commands
 	 *********************************************************/

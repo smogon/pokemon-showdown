@@ -1387,7 +1387,7 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
-		this.loadDatabases();
+		this.loadPluginDatabases();
 	}
 	translationsLoaded = false;
 	readonly multiLinePattern = new PatternTester();
@@ -1607,14 +1607,23 @@ export const Chat = new class {
 	/*********************************************************
 	 * Intialize databases for plugins
 	 **********************************************************/
-
 	database?: Sqlite.Database;
-
-	loadDatabases() {
-		if (Config.storage?.plugins !== 'sqlite') return;
+	/**
+	 * Load database schemas in the /databases/schemas folder.
+	 * @param loadAll Whether or not to load all database schemas vs just chat plugin schemas. Defaults to just plugins.
+	 */
+	loadPluginDatabases(loadAll = false) {
+		if (!Config.storage || !loadAll && Config.storage.plugins !== 'sqlite' ||
+			!Object.values(Config.storage).includes('sqlite') && loadAll) {
+			return;
+		}
 		this.database = new Sqlite(`${__dirname}/../databases/chat-plugins.db`);
 		// try to create all SQL tables listed in the /schemas/ directory
-		const files = this.getFiles('./databases', '').filter(item => item.endsWith('.sql'));
+		const files = this.getFiles('./databases/schemas', '').filter(item => {
+			if (!item.endsWith('.sql')) return false;
+			if (!loadAll && !item.includes('chat-plugins')) return false;
+			return true;
+		});
 		for (const file of files) {
 			const schemaContent = FS(`./databases/${file}`).readSync();
 			let databaseName = `chat-plugins.db`;
@@ -1623,6 +1632,7 @@ export const Chat = new class {
 			}
 			new Sqlite(`${__dirname}/../databases/${databaseName}`).exec(schemaContent);
 		}
+		return files;
 	}
 
 	readonly MessageContext = MessageContext;
