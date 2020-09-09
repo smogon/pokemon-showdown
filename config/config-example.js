@@ -652,7 +652,7 @@ exports.grouplist = [
 		nooverride: true,
 	},
 	{
-		symbol: '\u265b',
+		symbol: '^',
 		id: "prizewinner",
 		name: "Prize Winner",
 		inherit: '+',
