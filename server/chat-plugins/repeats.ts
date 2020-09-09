@@ -45,7 +45,7 @@ export const commands: ChatCommands = {
 		}
 
 		room.addRepeat({
-			phrase: message,
+			phrase: Chat.formatText(message).replace(/\n/g, `<br />`),
 			interval: interval * 60 * 1000, // convert to milliseconds
 		});
 
@@ -60,7 +60,7 @@ export const commands: ChatCommands = {
 			`<code>/repeat [minutes], [phrase]</code>: repeats a given phrase every [minutes] minutes.<br />` +
 			`<code>/removerepeat [phrase]</code>: removes a repeated phrase.<br />` +
 			`/viewrepeats [optional room] - Displays all repeated phrases in a room.<br />` +
-			`Phrases for <code>/repeat</code> can include normal chat formatting, but not commands (except for <code>/announce</code>). Requires: % @ # &`
+			`Phrases for <code>/repeat</code> can include normal chat formatting, but not commands. Requires: % @ # &`
 		);
 	},
 
@@ -104,3 +104,7 @@ export const commands: ChatCommands = {
 		this.parse(`/j view-repeats-${roomid}`);
 	},
 };
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/repeat ');
+});

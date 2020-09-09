@@ -736,7 +736,7 @@ export abstract class BasicRoom {
 		this.repeatIntervals.set(
 			repeat.phrase,
 			setInterval((phrase) => {
-				this.add(`|c|~|${phrase}`);
+				this.add(`|html|<div class="infobox">${phrase}</div>`);
 				this.update();
 			}, repeat.interval, repeat.phrase)
 		);
