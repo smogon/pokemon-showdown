@@ -15,7 +15,7 @@ export const pages: PageTable = {
 		const roomid = args[0];
 		this.title = `Repeated phrases in ${roomid}`;
 		const room = Rooms.get(roomid);
-		if (!room) throw new Chat.ErrorMessage(`<h2>${this.tr`No such room: "${roomid}".`}</h2>`);
+		const room = this.requireRoom();
 		this.checkCan("mute", null, room);
 		if (!room.settings.repeats) return `<h1>${this.tr`There are no repeated phrases in ${roomid}.`}</h1>`;
 		let html = `<div class="ladder pad"><h1>${this.tr`Repeated phrases in ${roomid}`}</h1>`;
