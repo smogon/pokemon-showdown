@@ -199,7 +199,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
 				if (moveIndex < 0 || noEncore.includes(lockedMove) || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
-					this.add('-fail', target);
 					return false;
 				}
 				this.effectData.move = lockedMove;
