@@ -380,7 +380,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	}
 }
 
-function notifyStaff() {
+export function notifyStaff() {
 	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
@@ -445,15 +445,18 @@ function notifyStaff() {
 	} else {
 		buf = `|tempnotifyoff|helptickets`;
 	}
-	if (room.userCount) Sockets.roomBroadcast(room.roomid, `>view-help-tickets\n${buf}`);
+	if (room.userCount) {
+		for (const user of Object.values(room.users)) {
+			// respect ignoring tickets
+			if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, `>view-help-tickets\n${buf}`);
+		}
+	}
 	if (hasUnclaimed) {
 		// only notify for people highlighting
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
 	}
-	for (const i in room.users) {
-		// FIXME: TypeScript bug: I have no clue why TypeScript can't figure out this type
-		const user: User = room.users[i];
-		if (user.can('mute', null, room) && !user.settings.ignoreTickets) user.sendTo(room, buf);
+	for (const user of Object.values(room.users)) {
+		if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, buf);
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
