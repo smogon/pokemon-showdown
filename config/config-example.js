@@ -559,6 +559,7 @@ exports.grouplist = [
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
+		roomprizewinner: true,
 		editroom: true,
 		declare: true,
 		addhtml: true,
