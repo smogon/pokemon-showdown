@@ -10,6 +10,57 @@ export interface RepeatedPhrase {
 	interval: number;
 }
 
+/** roomid:phrase:timeout map */
+export const repeats = new Map<RoomID, Map<string, NodeJS.Timeout | null>>();
+
+export function hasRepeat(room: BasicRoom, phrase: string) {
+	return !!repeats.get(room.roomid)?.get(phrase);
+}
+
+export function addRepeat(room: BasicRoom, repeat: RepeatedPhrase) {
+	if (!room.settings.repeats) room.settings.repeats = [];
+	room.settings.repeats.push(repeat);
+	room.saveSettings();
+	runRepeat(room, repeat);
+}
+
+export function removeRepeat(room: BasicRoom, phrase: string) {
+	if (!room.settings.repeats) return false;
+	room.settings.repeats = room.settings.repeats.filter(repeat => repeat.phrase !== phrase);
+	room.saveSettings();
+
+	if (!repeats.has(room.roomid)) return;
+
+	const oldInterval = repeats.get(room.roomid)?.get(phrase);
+	if (oldInterval) clearInterval(oldInterval);
+	repeats.get(room.roomid)?.set(phrase, null);
+}
+
+function runRepeat(room: BasicRoom, repeat: RepeatedPhrase) {
+	if (!repeats.has(room.roomid)) {
+		repeats.set(room.roomid, new Map<string, NodeJS.Timeout | null>());
+	}
+
+	const displayRepeat = (targetRoom: BasicRoom, phrase: string) => {
+		targetRoom.add(`|html|<div class="infobox">${phrase}</div>`);
+		targetRoom.update();
+	};
+
+	repeats.get(room.roomid)?.set(
+		repeat.phrase,
+		setInterval(displayRepeat, repeat.interval, room, repeat.phrase)
+	);
+}
+
+function loadRepeats() {
+	for (const room of Rooms.rooms.values()) {
+		if (!room.settings?.repeats?.length) continue;
+		for (const repeat of room.settings.repeats) {
+			runRepeat(room, repeat);
+		}
+	}
+}
+
 export const pages: PageTable = {
 	repeats(args, user) {
 		const room = this.requireRoom();
@@ -40,11 +91,11 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`You must specify a numerical interval of at least 1 minute.`);
 		}
 
-		if (room.hasRepeat(message)) {
+		if (hasRepeat(room, message)) {
 			return this.errorReply(this.tr`The phrase "${message}" is already being repeated in this room.`);
 		}
 
-		room.addRepeat({
+		addRepeat(room, {
 			phrase: Chat.formatText(message).replace(/\n/g, `<br />`),
 			interval: interval * 60 * 1000, // convert to milliseconds
 		});
@@ -72,11 +123,11 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help repeat');
 		target = target.trim();
 
-		if (!room.hasRepeat(target)) {
+		if (!hasRepeat(room, target)) {
 			return this.errorReply(this.tr`The phrase "${target}" is not being repeated in this room.`);
 		}
 
-		room.removeRepeat(target);
+		removeRepeat(room, target);
 
 		this.modlog('REMOVE REPEATPHRASE', null, `"${target}"`);
 		this.privateModAction(room.tr`${user.name} removed the repeated phrase "${target}".`);
@@ -90,7 +141,7 @@ export const commands: ChatCommands = {
 		}
 
 		for (const repeat of room.settings.repeats) {
-			room.removeRepeat(repeat.phrase);
+			removeRepeat(room, repeat.phrase);
 		}
 
 		this.modlog('REMOVE REPEATPHRASE', null, 'all repeated phrases');
@@ -104,6 +155,8 @@ export const commands: ChatCommands = {
 		this.parse(`/j view-repeats-${roomid}`);
 	},
 };
+
+loadRepeats();
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/repeat ');

@@ -196,8 +196,6 @@ export abstract class BasicRoom {
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
 	pendingApprovals: Map<string, ShowRequest> | null;
-	/** phrase:timeout Map */
-	repeatIntervals: Map<string, NodeJS.Timeout | null>;
 
 	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		this.users = Object.create(null);
@@ -289,12 +287,6 @@ export abstract class BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.pendingApprovals = null;
-		this.repeatIntervals = new Map<string, NodeJS.Timeout>();
-		if (this.settings.repeats) {
-			for (const repeat of this.settings.repeats) {
-				this.runRepeat(repeat);
-			}
-		}
 
 		this.tour = null;
 		this.game = null;
@@ -709,37 +701,6 @@ export abstract class BasicRoom {
 		const end = this.roomid.length - 2;
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
 		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen, end)};
-	}
-
-	hasRepeat(phrase: string) {
-		return !!this.repeatIntervals.get(phrase);
-	}
-
-	addRepeat(repeat: RepeatedPhrase) {
-		if (!this.settings.repeats) this.settings.repeats = [];
-		this.settings.repeats.push(repeat);
-		this.saveSettings();
-		this.runRepeat(repeat);
-	}
-
-	removeRepeat(phrase: string) {
-		if (!this.settings.repeats) return false;
-		this.settings.repeats = this.settings.repeats.filter(repeat => repeat.phrase !== phrase);
-		this.saveSettings();
-
-		const oldInterval = this.repeatIntervals.get(phrase);
-		if (oldInterval) clearInterval(oldInterval);
-		this.repeatIntervals.set(phrase, null);
-	}
-
-	runRepeat(repeat: RepeatedPhrase) {
-		this.repeatIntervals.set(
-			repeat.phrase,
-			setInterval((phrase) => {
-				this.add(`|html|<div class="infobox">${phrase}</div>`);
-				this.update();
-			}, repeat.interval, repeat.phrase)
-		);
 	}
 
 	/**
