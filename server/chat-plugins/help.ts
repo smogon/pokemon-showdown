@@ -544,7 +544,7 @@ export const commands: ChatCommands = {
 			`<code>/helpfilter add [input] => [faq]</code> - Adds regex made from the input string to the Help filter, to respond with [faq] to matches.`,
 			`<code>/helpfilter remove [faq], [regex index]</code> - removes the regex matching the [index] from the Help filter's responses for [faq].`,
 			`<code>/helpfilter suggest [regex] => [faq]</code> - Adds [regex] for [faq] to the queue for Help staff to review.`,
-			`<code>/helpfilter [ban|unban] [username], [reason] - Bans or unbans a user from making suggestions to the Help filter.`,
+			`<code>/helpfilter [ban|unban] [username], [reason]</code> - Bans or unbans a user from making suggestions to the Help filter.`,
 			`<code>/helpfilter approve [index]</code> - Approves the regex at position [index] in the queue for use in the Help filter.`,
 			`<code>/helpfilter deny [index]</code> - Denies the regex at position [index] in the Help filter queue.`,
 			`Indexes can be found in /helpfilter keys.`,
