@@ -405,7 +405,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You must be autoconfirmed to suggest regexes to the Help filter.`);
 			}
 			const faq = Answerer.getFaqID(target.split('=>')[1]);
-			if (this.filter(this.message) !== target) {
+			if (this.filter(this.message) !== this.message) {
 				return this.errorReply(`Invalid suggestion.`);
 			}
 			if (Answerer.settings.queueDisabled) {
