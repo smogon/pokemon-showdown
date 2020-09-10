@@ -133,7 +133,7 @@ export const commands: ChatCommands = {
 				}
 			}
 			if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
-				this.errorReply(`${name} is locked and therefore can't be promoted.`);
+				this.errorReply(`${name} is locked and can't be promoted.`);
 				continue;
 			}
 
