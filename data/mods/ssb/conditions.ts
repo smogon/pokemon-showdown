@@ -752,16 +752,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Iyarito')}|RIP Patrona`);
 		},
 	},
-	jettxx: {
+	jett: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Jett x~x')}|It's a good day for a hunt.`);
+			this.add(`c|${getName('Jett')}|It's a good day for a hunt.`);
 		},
-		onSwitchOut(source) {
-			this.add(`c|${getName('Jett x~x')}|I'll be back for more.`);
+		onSwitchOut() {
+			this.add(`c|${getName('Jett')}|I'll be back for more.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Jett x~x')}|They got lucky.`);
+			this.add(`c|${getName('Jett')}|They got lucky.`);
 		},
 	},
 	jho: {

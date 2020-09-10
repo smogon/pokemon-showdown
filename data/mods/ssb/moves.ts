@@ -1982,7 +1982,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
-	// Jett x~x
+	// Jett
 	thehuntison: {
 		accuracy: 100,
 		basePower: 55,
@@ -2029,7 +2029,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) {
-				this.add(`c|${getName('Jett xx')}|Owned!`);
+				this.add(`c|${getName('Jett')}|Owned!`);
 			}
 		},
 		condition: {
