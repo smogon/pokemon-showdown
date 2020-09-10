@@ -124,16 +124,16 @@ export const commands: ChatCommands = {
 			}
 			if (!user.can('makeroom')) {
 				if (currentGroup.id && !user.can(`room${currentGroup.id || 'voice'}` as 'roomvoice', null, room)) {
-					this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${currentGroupName}.`);
+					this.errorReply(`/${cmd} - Access denied for promoting/demoting ${name} from ${currentGroupName}.`);
 					continue;
 				}
 				if (nextSymbol !== ' ' && !user.can(`room${nextGroup.id || 'voice'}` as 'roomvoice', null, room)) {
-					this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${nextGroupName}.`);
+					this.errorReply(`/${cmd} - Access denied for promoting/demoting ${name} to ${nextGroupName}.`);
 					continue;
 				}
 			}
 			if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
-				this.errorReply("Locked users can't be promoted.");
+				this.errorReply(`${name} is locked and therefore can't be promoted.`);
 				continue;
 			}
 
