@@ -192,7 +192,7 @@ export const AbilitiesText = {
 		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
 		descGen4: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		descGen3: "There is a 1/3 chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender. This effect does not happen if this Pokemon did not lose HP from the attack.",
-		shortdescGen3: "1/3 chance of infatuating Pokemon of the opposite gender if they make contact.",
+		shortDescGen3: "1/3 chance of infatuating Pokemon of the opposite gender if they make contact.",
 	},
 	damp: {
 		name: "Damp",
