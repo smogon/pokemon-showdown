@@ -543,19 +543,19 @@ export const ItemsText = {
 	},
 	fossilizedbird: {
 		name: "Fossilized Bird",
-		desc: "Can revive into Arctovish with Fossilized Fish or Arctozolt with Fossilized Dino.",
+		desc: "Can revive into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Dino.",
 	},
 	fossilizeddino: {
 		name: "Fossilized Dino",
-		desc: "Can revive into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
+		desc: "Can revive into Arctovish with Fossilized Fish or Arctozolt with Fossilized Bird.",
 	},
 	fossilizeddrake: {
 		name: "Fossilized Drake",
-		desc: "Can revive into Dracozolt with Fossilized Dino or Dracovish with Fossilized Fish.",
+		desc: "Can revive into Dracozolt with Fossilized Bird or Dracovish with Fossilized Fish.",
 	},
 	fossilizedfish: {
 		name: "Fossilized Fish",
-		desc: "Can revive into Dracovish with Fossilized Drake or Arctovish with Fossilized Bird.",
+		desc: "Can revive into Dracovish with Fossilized Drake or Arctovish with Fossilized Dino.",
 	},
 	friendball: {
 		name: "Friend Ball",
