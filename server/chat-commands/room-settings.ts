@@ -222,7 +222,7 @@ export const commands: ChatCommands = {
 			return false;
 		}
 		room.saveSettings();
-		if (target === 'sync' && !room.settings.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
+		if (target === 'sync' && !room.settings.modchat) this.parse(`/modchat ${Config.groupsranking[3]}`);
 		if (!room.settings.isPrivate) this.parse('/hiddenroom');
 	},
 	modjoinhelp: [
