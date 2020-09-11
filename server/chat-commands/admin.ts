@@ -319,7 +319,7 @@ export const commands: ChatCommands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				global.Tournaments = require('../tournaments').Tournaments;
-				Chat.loadPluginData(Tournaments);
+				Chat.loadPluginData(Tournaments, 'tournaments');
 				this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'formats' || target === 'battles') {
 				patch = 'formats';
