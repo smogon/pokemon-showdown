@@ -670,6 +670,7 @@
 		"Interval": "",
 		"every ${minutes} minute(s)": "",
 		"Remove": "",
+		"Remove all repeats": "",
 		"You must specify a numerical interval of at least 1 minute.": "",
 		"The phrase \"${message}\" is already being repeated in this room.": "",
 		"${user.name} set the phrase \"${message}\" to be repeated every ${interval} minute(s).": "",

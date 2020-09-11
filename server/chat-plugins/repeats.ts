@@ -75,7 +75,11 @@ export const pages: PageTable = {
 			html += `<tr><td>${repeat.phrase}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
 			html += `<td><button class="button" name="send" value="/removerepeat ${repeat.phrase}">${this.tr`Remove`}</button></td>`;
 		}
-		html += `</table></div>`;
+		html += `</table>`;
+		if (user.can("editroom", null, room)) {
+			html += `<br /><button class="button" name="send" value="/removeallrepeats">${this.tr`Remove all repeats`}</button>`;
+		}
+		html += `</div>`;
 		return html;
 	},
 };
