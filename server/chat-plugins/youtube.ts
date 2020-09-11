@@ -2,7 +2,8 @@
  * Youtube room chat-plugin.
  * Supports adding channels and selecting a random channel.
  * Also supports showing video data on request.
- * Written by mia-pi, with some code / design concepts from Asheviere.
+ * Written by Mia, with some design concepts from bumbadadabum.
+ * @author mia-pi-git
  */
 
 import {Net} from '../../lib/net';
@@ -61,7 +62,7 @@ export class YoutubeInterface {
 		// url isn't needed but it destructures wrong without it
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const {name, description, url, icon, videos, subs, views, username} = await this.get(id);
-		// credits asheviere for most of the html
+		// credits bumbadadabum for most of the html
 		let buf = `<div class="infobox"><table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
 		buf += `<div style="padding:5px;background:white;border:1px solid black;margin:auto;max-width:100px;max-height:100px;">`;

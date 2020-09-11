@@ -1,6 +1,7 @@
 /**
  * Tests for the Help room auto-answerer.
- * Written by mia-pi.
+ * Written by Mia.
+ * @author mia-pi-git
  */
 
 'use strict';
