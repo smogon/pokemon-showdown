@@ -112,7 +112,7 @@ export interface RoomSettings {
 	requestShowEnabled?: boolean | null;
 	showEnabled?: GroupSymbol | true;
 	permissions?: {[k: string]: GroupSymbol};
-	quotes?: {user: string, quote: string, date: number}[];
+	quotes?: {userid: string, quote: string, date: number}[];
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];

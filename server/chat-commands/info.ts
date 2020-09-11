@@ -2538,7 +2538,7 @@ export const commands: ChatCommands = {
 		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
 		return this.sendReplyBox(
 			`${formatted}<br />` +
-			`Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}`
+			`<hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`
 		);
 	},
 
@@ -2554,8 +2554,11 @@ export const commands: ChatCommands = {
 		if (Object.values(room.settings.quotes).filter(item => item.quote === target).length) {
 			return this.errorReply(`"${target}" is already quoted in this room.`);
 		}
-		if (room.settings.quotes.length >= 50) {
-			return this.errorReply(`This room already has 50 quotes, which is the maximum.`);
+		if (target.length > 300) {
+			return this.errorReply(`Your quote is too long.`);
+		}
+		if (room.settings.quotes.length >= 100) {
+			return this.errorReply(`This room already has 100 quotes, which is the maximum.`);
 		}
 		room.settings.quotes.push({userid: user.id, quote: target, date: Date.now()});
 		room.saveSettings();
