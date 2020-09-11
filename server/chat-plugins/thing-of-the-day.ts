@@ -171,7 +171,7 @@ class OtdHandler {
 		const nomObj = {
 			nomination: nomination,
 			name: user.name,
-			userids: user.previousIDs.slice(),
+			userids: user.previousIDs.concat(user.id),
 			ips: user.ips.slice(),
 		};
 
