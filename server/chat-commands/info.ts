@@ -2536,11 +2536,13 @@ export const commands: ChatCommands = {
 		this.runBroadcast();
 		const {quote, date, userid} = room.settings.quotes[Math.floor(Math.random() * room.settings.quotes.length)];
 		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
+		const attribute = toID(target) === 'showauthor';
 		return this.sendReplyBox(
 			`${formatted}<br />` +
-			`<hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`
+			attribute ? `<hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>` : ''
 		);
 	},
+	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 
 	addquote: 'quote',
 	quote(target, room, user) {
@@ -2551,7 +2553,7 @@ export const commands: ChatCommands = {
 		if (this.filter(target) !== target) {
 			return this.errorReply(`Invalid quote.`);
 		}
-		if (Object.values(room.settings.quotes).filter(item => item.quote === target).length) {
+		if (room.settings.quotes.filter(item => item.quote === target).length) {
 			return this.errorReply(`"${target}" is already quoted in this room.`);
 		}
 		if (target.length > 300) {
