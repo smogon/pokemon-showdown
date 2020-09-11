@@ -214,6 +214,16 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.room.modlog(text);
 	}
 
+	getButton() {
+		const notifying = this.ticket.claimed ? `` : `notifying`;
+		const creator = (
+			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
+		);
+		return (
+			`<a class="button ${notifying}" href="/help-${this.ticket.userid}"` +
+			` ${this.getPreview()}>Help ${creator}: ${this.ticket.type}</a> `
+		);
+	}
 	getPreview() {
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
@@ -380,7 +390,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	}
 }
 
-function notifyStaff() {
+export function notifyStaff() {
 	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
@@ -419,8 +429,6 @@ function notifyStaff() {
 				continue;
 			}
 		}
-		const creator = ticket.claimed ? Utils.html`${ticket.creator}` : Utils.html`<strong>${ticket.creator}</strong>`;
-		const notifying = ticket.claimed ? `` : ` notifying`;
 		// should always exist
 		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
 		const ticketGame = ticketRoom.getGame(HelpTicket)!;
@@ -428,7 +436,7 @@ function notifyStaff() {
 			hasUnclaimed = true;
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
-		buf += `<a class="button${notifying}" href="/help-${ticket.userid}" ${ticketGame.getPreview()}>Help ${creator}: ${ticket.type}</a> `;
+		buf += ticketGame.getButton();
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
@@ -445,15 +453,20 @@ function notifyStaff() {
 	} else {
 		buf = `|tempnotifyoff|helptickets`;
 	}
-	if (room.userCount) Sockets.roomBroadcast(room.roomid, `>view-help-tickets\n${buf}`);
+	if (room.userCount) {
+		for (const user of Object.values(room.users)) {
+			// respect ignoring tickets
+			if (user.can('lock') && !user.settings.ignoreTickets) {
+				for (const conn of user.connections) conn.send(`>view-help-tickets\n${buf}`);
+			}
+		}
+	}
 	if (hasUnclaimed) {
 		// only notify for people highlighting
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
 	}
-	for (const i in room.users) {
-		// FIXME: TypeScript bug: I have no clue why TypeScript can't figure out this type
-		const user: User = room.users[i];
-		if (user.can('mute', null, room) && !user.settings.ignoreTickets) user.sendTo(room, buf);
+	for (const user of Object.values(room.users)) {
+		if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, buf);
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
