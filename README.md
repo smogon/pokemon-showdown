@@ -168,8 +168,8 @@ Staff
 
 Retired Staff
 
-- Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Bill Meltsner [bmelts] - Development, Sysadmin
+- [bumbadadabum] - Development
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 - Hugh Gordon [V4] - Research (game mechanics), Development
 - Juanma Serrano [Joim] - Development, Sysadmin
