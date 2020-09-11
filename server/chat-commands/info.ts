@@ -2534,7 +2534,7 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		if (!room.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
 		this.runBroadcast();
-		const [quote] = Utils.shuffle(room.settings.quotes);
+		const quote = room.settings.quotes[Math.floor(Math.random() * room.settings.quotes.length)];
 		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
 		return this.sendReplyBox(formatted);
 	},
