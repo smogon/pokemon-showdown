@@ -2059,7 +2059,7 @@ export const commands: ChatCommands = {
 			case '':
 			case 'show':
 			case 'view':
-				this.checkBroadcast();
+				if (!this.runBroadcast()) return;
 				this.sendReplyBox(`<strong>Host Queue:</strong> ${hostQueue.join(', ')}`);
 				break;
 			default:
