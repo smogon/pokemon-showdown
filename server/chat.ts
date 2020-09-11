@@ -1384,6 +1384,8 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
+	/** The key is the name of the plugin. */
+	readonly plugins: {[k: string]: AnyObject} = {};
 	roomSettings: SettingsHandler[] = [];
 
 	/*********************************************************
@@ -1646,7 +1648,7 @@ export const Chat = new class {
 		} else {
 			return;
 		}
-		this.loadPluginData(plugin);
+		this.loadPluginData(plugin, file.split('/').pop()?.slice(0, -3) || file);
 	}
 	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
@@ -1682,7 +1684,7 @@ export const Chat = new class {
 		}
 		return commandTable;
 	}
-	loadPluginData(plugin: AnyObject) {
+	loadPluginData(plugin: AnyObject, name: string) {
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -1699,6 +1701,7 @@ export const Chat = new class {
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
+		Chat.plugins[name] = plugin;
 	}
 	loadPlugins() {
 		if (Chat.commands) return;
@@ -1737,8 +1740,8 @@ export const Chat = new class {
 		Chat.pages = Object.assign(Object.create(null), Chat.basePages);
 
 		// Load filters from Config
-		this.loadPluginData(Config);
-		this.loadPluginData(Tournaments);
+		this.loadPluginData(Config, 'config');
+		this.loadPluginData(Tournaments, 'tournaments');
 
 		let files = FS('server/chat-plugins').readdirSync();
 		try {
