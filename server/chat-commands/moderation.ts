@@ -97,7 +97,7 @@ export const commands: ChatCommands = {
 		for (const toPromote of users) {
 			const targetUser = Users.get(toPromote);
 			const userid = toID(toPromote);
-			let name = targetUser ? targetUser.name : this.filter(this.targetUsername);
+			let name = targetUser ? targetUser.name : this.filter(toPromote);
 			if (!name) continue;
 			name = name.slice(0, 18);
 
