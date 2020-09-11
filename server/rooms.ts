@@ -287,7 +287,6 @@ export abstract class BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.pendingApprovals = null;
-
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
