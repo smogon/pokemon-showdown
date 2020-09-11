@@ -243,7 +243,7 @@ export const commands: ChatCommands = {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them highlights.");
 		}
 
-		const buf = `|tempnotify|bot-${pageid}|A bot has notified you!|${highlight ? highlight : ''}`;
+		const buf = `|tempnotify|bot-${pageid}|${title} [from ${user.name}]|${highlight ? highlight : ''}`;
 		let targetConnections = [];
 		this.checkPMHTML(targetUser);
 		// try to locate connections that have requested the page recently
