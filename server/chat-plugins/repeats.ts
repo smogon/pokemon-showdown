@@ -25,12 +25,11 @@ export function addRepeat(room: BasicRoom, repeat: RepeatedPhrase) {
 }
 
 export function removeRepeat(room: BasicRoom, phrase: string) {
-	if (!room.settings.repeats) return false;
+	if (!room.settings.repeats) return;
 	room.settings.repeats = room.settings.repeats.filter(repeat => repeat.phrase !== phrase);
 	room.saveSettings();
 
 	if (!repeats.has(room.roomid)) return;
-
 	const oldInterval = repeats.get(room.roomid)?.get(phrase);
 	if (oldInterval) clearInterval(oldInterval);
 	repeats.get(room.roomid)?.set(phrase, null);
