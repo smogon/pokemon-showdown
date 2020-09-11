@@ -660,6 +660,7 @@ export const commands: ChatCommands = {
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
+	cs: 'clearstatus',
 	clearstatus(target, room, user) {
 		if (target) {
 			room = this.requireRoom();
