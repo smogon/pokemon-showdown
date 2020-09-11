@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatsData} = {
+export const Formats: {[k: string]: ModdedFormatData} = {
 	alolapokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Alola Pokedex',

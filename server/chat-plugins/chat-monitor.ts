@@ -44,7 +44,7 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	m: [
 		"m", "ᗰ", "M", "ⓜ", "Ⓜ", "м", "͏", "₥", "ṃ", "Ṃ", "Ꮇ", "ϻ", "Μ", "ṁ", "Ṁ", "ʍ", "̾", "ｍ", "Ｍ", "ᴍ", "ɯ", "🅜", "𝐦", "𝐌", "𝘮", "𝘔", "𝙢", "𝙈", "𝓂", "𝓶", "𝓜", "𝕞", "𝕂", "𝔪", "𝔍", "𝖒", "𝕸", "🄼", "🅼", "𝑀", "ɱ", "𝚖", "𝙼", "♔", "ⅿ",
 	],
-	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո"],
+	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո", 'η'],
 	o: ["o", "0", "ó", "ô", "õ", "ú", "O", "ⓞ", "Ⓞ", "σ", "͏", "Ø", "ö", "Ö", "Ꭷ", "Θ", "ṏ", "Ṏ", "Ꮎ", "օ", "̾", "ｏ", "Ｏ", "ᴏ", "🅞", "𝐨", "𝐎", "𝘰", "𝘖", "𝙤", "𝙊", "ℴ", "𝓸", "𝓞", "𝕠", "𝕄", "𝔬", "𝔏", "𝖔", "𝕺", "🄾", "🅾", "𝑜", "𝒪", "𝚘", "𝙾", "⊙", "ο"],
 	p: ["p", "ᑭ", "P", "ⓟ", "Ⓟ", "ρ", "₱", "ṗ", "Ṗ", "Ꭾ", "Ƥ", "Ꮲ", "ք", "ｐ", "Ｐ", "ᴘ", "🅟", "𝐩", "𝐏", "𝘱", "𝘗", "𝙥", "𝙋", "𝓅", "𝓹", "𝓟", "𝕡", "ℕ", "𝔭", "𝔐", "𝖕", "𝕻", "🄿", "🅿", "𝒫", "𝚙", "𝙿", "р"],
 	q: [
@@ -111,7 +111,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<<${room.roomid}>> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					`<<${room.roomid}>> ${user.name}: SPOILER: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
@@ -370,7 +370,7 @@ export const namefilter: NameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
-						`using an inappropriate name: ${name} (from ${user.name})`, false, name
+						`using an inappropriate name: SPOILER: ${name} (from ${user.name})`, false, name
 					);
 				}
 				line[4]++;
@@ -417,13 +417,24 @@ export const nicknamefilter: NameFilter = (name, user) => {
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (const line of filterWords[list]) {
-			const [regex] = line;
+			let [regex, word] = line;
+			if (Chat.monitors[list].punishment === 'EVASION') {
+				// Evasion banwords by default require whitespace on either side.
+				// If we didn't remove it here, it would be quite easy to evade the filter
+				// and use slurs in Pokémon nicknames.
+				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
+			}
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
-						`${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
+						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
+					);
+				} else if (Chat.monitors[list].punishment === 'EVASION') {
+					void Punishments.autolock(
+						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
+						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
 					);
 				}
 				line[4]++;
@@ -449,9 +460,8 @@ export const statusfilter: StatusFilter = (status, user) => {
 	// Check for blatant staff impersonation attempts. Ideally this could be completely generated from Config.grouplist
 	// for better support for side servers, but not all ranks are staff ranks or should necessarily be filted.
 	// eslint-disable-next-line max-len
-	if (/\b(?:global|room|upper|senior)?\s*(?:staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)\b/gi.test(lcStatus)) {
-		return '';
-	}
+	const impersonationRegex = /\b(?:global|room|upper|senior)?\s*(?:staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)\b/gi;
+	if (!user.can('lock') && impersonationRegex.test(lcStatus)) return '';
 
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
@@ -462,7 +472,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
-						`${user.name} - using an inappropriate status: ${status}`, true
+						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
 					);
 				}
 				line[4]++;
@@ -480,7 +490,7 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.title = 'Filters';
 		let buf = `<div class="pad ladder"><h2>Filters</h2>`;
-		if (!this.can('lock')) return;
+		this.checkCan('lock');
 		let content = ``;
 		for (const key in Chat.monitors) {
 			content += `<tr><th colspan="2"><h3>${Chat.monitors[key].label} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
@@ -517,7 +527,7 @@ export const commands: ChatCommands = {
 	filters: 'filter',
 	filter: {
 		add(target, room, user) {
-			if (!this.can('rangeban')) return false;
+			this.checkCan('rangeban');
 
 			let [list, ...rest] = target.split(target.includes('\n') ? '\n' : ',');
 			list = toID(list);
@@ -571,7 +581,7 @@ export const commands: ChatCommands = {
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		remove(target, room, user) {
-			if (!this.can('rangeban')) return false;
+			this.checkCan('rangeban');
 
 			let [list, ...words] = target.split(target.includes('\n') ? '\n' : ',').map(param => param.trim());
 			list = toID(list);
@@ -609,7 +619,7 @@ export const commands: ChatCommands = {
 		`- /filter view - Opens the list of filtered words. Requires: % @ &`,
 	],
 	allowname(target, room, user) {
-		if (!this.can('forcerename')) return false;
+		this.checkCan('forcerename');
 		target = toID(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
 		Chat.namefilterwhitelist.set(target, user.name);

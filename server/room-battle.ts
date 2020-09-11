@@ -477,6 +477,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	ended: boolean;
 	active: boolean;
 	replaySaved: boolean;
+	forcePublic: string | null = null;
 	playerTable: {[userid: string]: RoomBattlePlayer};
 	players: RoomBattlePlayer[];
 	p1: RoomBattlePlayer;
@@ -1025,17 +1026,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
-		if (user) this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
+		if (user) {
+			this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
+			if (this.rated && !this.forcePublic) {
+				this.forcePublic = user.battlesForcedPublic();
+			}
+		}
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
-	}
-
-	forcedPublic() {
-		if (!this.rated) return;
-		for (const player of this.players) {
-			const user = player.getUser();
-			if (user?.forcedPublic) return user.forcedPublic;
-		}
 	}
 
 	makePlayer(user: User) {

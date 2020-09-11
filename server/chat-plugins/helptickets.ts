@@ -214,6 +214,16 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.room.modlog(text);
 	}
 
+	getButton() {
+		const notifying = this.ticket.claimed ? `` : `notifying`;
+		const creator = (
+			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
+		);
+		return (
+			`<a class="button ${notifying}" href="/help-${this.ticket.userid}"` +
+			` ${this.getPreview()}>Help ${creator}: ${this.ticket.type}</a> `
+		);
+	}
 	getPreview() {
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
@@ -380,7 +390,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	}
 }
 
-function notifyStaff() {
+export function notifyStaff() {
 	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
@@ -419,8 +429,6 @@ function notifyStaff() {
 				continue;
 			}
 		}
-		const creator = ticket.claimed ? Utils.html`${ticket.creator}` : Utils.html`<strong>${ticket.creator}</strong>`;
-		const notifying = ticket.claimed ? `` : ` notifying`;
 		// should always exist
 		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
 		const ticketGame = ticketRoom.getGame(HelpTicket)!;
@@ -428,7 +436,7 @@ function notifyStaff() {
 			hasUnclaimed = true;
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
-		buf += `<a class="button${notifying}" href="/help-${ticket.userid}" ${ticketGame.getPreview()}>Help ${creator}: ${ticket.type}</a> `;
+		buf += ticketGame.getButton();
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
@@ -445,15 +453,20 @@ function notifyStaff() {
 	} else {
 		buf = `|tempnotifyoff|helptickets`;
 	}
-	if (room.userCount) Sockets.roomBroadcast(room.roomid, `>view-help-tickets\n${buf}`);
+	if (room.userCount) {
+		for (const user of Object.values(room.users)) {
+			// respect ignoring tickets
+			if (user.can('lock') && !user.settings.ignoreTickets) {
+				for (const conn of user.connections) conn.send(`>view-help-tickets\n${buf}`);
+			}
+		}
+	}
 	if (hasUnclaimed) {
 		// only notify for people highlighting
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
 	}
-	for (const i in room.users) {
-		// FIXME: TypeScript bug: I have no clue why TypeScript can't figure out this type
-		const user: User = room.users[i];
-		if (user.can('mute', null, room) && !user.settings.ignoreTickets) user.sendTo(room, buf);
+	for (const user of Object.values(room.users)) {
+		if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, buf);
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
@@ -755,7 +768,7 @@ export const pages: PageTable = {
 		tickets(query, user, connection) {
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.title = this.tr`Ticket List`;
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button> <button class="button" name="send" value="/helpticket stats" style="float: right"><i class="fa fa-th-list"></i> ${this.tr`Help Ticket Stats`}</button><br /><br />`;
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
 			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
@@ -856,7 +869,7 @@ export const pages: PageTable = {
 			// view-help-stats-TABLE-YYYY-MM-COL
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.title = this.tr`Ticket Stats`;
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 
 			let [table, yearString, monthString, col] = query;
 			if (!['staff', 'tickets'].includes(table)) table = 'tickets';
@@ -1118,7 +1131,7 @@ export const commands: ChatCommands = {
 				` and if this happened in a specific place on the site.`,
 			};
 			const staffContexts: {[k: string]: string} = {
-				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${Object.keys(user.ips).map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
+				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${user.ips.map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
 			};
 			ticket = {
 				creator: user.name,
@@ -1222,13 +1235,13 @@ export const commands: ChatCommands = {
 		},
 
 		list(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
 		stats(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
@@ -1261,12 +1274,13 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help helpticket ban');
 			target = this.splitTarget(target, true);
 			const targetUser = this.targetUser;
-			if (!this.can('lock', targetUser)) return;
+			this.checkCan('lock', targetUser);
 
 			const ticket = tickets[toID(this.inputUsername)];
 			const ticketBan = ticketBans[toID(this.inputUsername)];
-			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length && !ticket && !ticketBan) {
-				return this.errorReply(this.tr`User '${this.targetUsername}' not found.`);
+			const targetUsername = this.targetUsername;
+			if (!targetUser && !Punishments.search(toID(targetUsername)).length && !ticket && !ticketBan) {
+				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
 			}
 			if (target.length > 300) {
 				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
@@ -1361,7 +1375,7 @@ export const commands: ChatCommands = {
 		unban(target, room, user) {
 			if (!target) return this.parse('/help helpticket unban');
 
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			const targetUser = Users.get(target, true);
 			const ticket = ticketBans[toID(target)];
 			if (!ticket || !ticket.banned) {
@@ -1391,7 +1405,7 @@ export const commands: ChatCommands = {
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
 		ignore(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			if (user.settings.ignoreTickets) {
 				return this.errorReply(this.tr`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
@@ -1402,7 +1416,7 @@ export const commands: ChatCommands = {
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
 
 		unignore(target, room, user) {
-			if (!this.can('lock')) return;
+			this.checkCan('lock');
 			if (!user.settings.ignoreTickets) {
 				return this.errorReply(this.tr`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
@@ -1414,7 +1428,7 @@ export const commands: ChatCommands = {
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
-			if (!this.can('makeroom')) return;
+			this.checkCan('makeroom');
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(this.tr`${target} does not have a ticket.`);
