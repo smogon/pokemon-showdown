@@ -2534,9 +2534,12 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		if (!room.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
 		this.runBroadcast();
-		const quote = room.settings.quotes[Math.floor(Math.random() * room.settings.quotes.length)];
+		const {quote, date, userid} = room.settings.quotes[Math.floor(Math.random() * room.settings.quotes.length)];
 		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
-		return this.sendReplyBox(formatted);
+		return this.sendReplyBox(
+			`${formatted}<br />` +
+			`Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}`
+		);
 	},
 
 	addquote: 'quote',
@@ -2548,13 +2551,13 @@ export const commands: ChatCommands = {
 		if (this.filter(target) !== target) {
 			return this.errorReply(`Invalid quote.`);
 		}
-		if (room.settings.quotes.includes(target)) {
+		if (Object.values(room.settings.quotes).filter(item => item.quote === target).length) {
 			return this.errorReply(`"${target}" is already quoted in this room.`);
 		}
 		if (room.settings.quotes.length >= 50) {
 			return this.errorReply(`This room already has 50 quotes, which is the maximum.`);
 		}
-		room.settings.quotes.push(target);
+		room.settings.quotes.push({userid: user.id, quote: target, date: Date.now()});
 		room.saveSettings();
 		this.privateModAction(`${user.name} added the quote "${target}"`);
 		return this.modlog(`ADDQUOTE`, null, target);
@@ -2570,13 +2573,13 @@ export const commands: ChatCommands = {
 		this.room = targetRoom;
 		this.checkCan('mute', null, targetRoom);
 		if (!targetRoom.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
-		const index = targetRoom.settings.quotes.findIndex(item => item === quote);
+		const index = targetRoom.settings.quotes.findIndex(item => item.quote === quote);
 		if (index < 0) {
 			return this.errorReply(`Quote not found.`);
 		}
 		const [removed] = targetRoom.settings.quotes.splice(index, 1);
-		this.privateModAction(`${user.name} removed quote ${index + 1}: "${removed}"`);
-		this.modlog(`REMOVEQUOTE`, null, removed);
+		this.privateModAction(`${user.name} removed quote ${index + 1}: "${quote}" (originally added by ${removed.userid})`);
+		this.modlog(`REMOVEQUOTE`, null, quote);
 		return targetRoom.saveSettings();
 	},
 	removequotehelp: [`/removequote [quote] - Removes the quote from the room's quotes (must be exact). Requires: % @ # &`],
@@ -2772,9 +2775,11 @@ export const pages: PageTable = {
 		}
 
 		buffer = `${buffer}<h2>Quotes on ${room.title}: (${room.settings.quotes.length})</h2>`;
-		for (const quote of room.settings.quotes) {
-			const index = room.settings.quotes.indexOf(quote) + 1;
+		for (const entry of room.settings.quotes) {
+			const index = room.settings.quotes.indexOf(entry) + 1;
+			const {quote, userid, date} = entry;
 			buffer += `<div class="infobox">${index}: ${Chat.collapseLineBreaksHTML(Chat.formatText(quote))}`;
+			buffer += `<br /> Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}`;
 			if (user.can('mute', null, room)) {
 				buffer += `<br /><button class="button" name="send" value="/removequote ${quote}|${room.roomid}">Remove</button></div>`;
 			}
