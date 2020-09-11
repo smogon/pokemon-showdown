@@ -2530,6 +2530,63 @@ export const commands: ChatCommands = {
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
+	randquote(target, room, user) {
+		room = this.requireRoom();
+		if (!room.settings.quotes) return this.errorReply(`This room has no quotes.`);
+		this.runBroadcast();
+		const [quote] = Utils.shuffle(room.settings.quotes);
+		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
+		return this.sendReplyBox(formatted);
+	},
+
+	addquote: 'quote',
+	quote(target, room, user) {
+		room = this.requireRoom();
+		target = target.trim();
+		this.checkCan('mute', null, room);
+		if (!room.settings.quotes) room.settings.quotes = [];
+		if (this.filter(target) !== target) {
+			return this.errorReply(`Invalid quote.`);
+		}
+		if (room.settings.quotes.includes(target)) {
+			return this.errorReply(`You already have a quote in this room that matches "${target}".`);
+		}
+		if (room.settings.quotes.length >= 50) {
+			return this.errorReply(`You already have 50 quotes, which is the maximum.`);
+		}
+		room.settings.quotes.push(target);
+		room.saveSettings();
+		this.privateModAction(`${user.name} added the quote "${target}"`);
+		return this.modlog(`ADDQUOTE`, null, target);
+	},
+	quotehelp: [`/quote [quote] - Adds [quote] to the room's quotes. Requires: % @ # &`],
+
+	removequote(target, room, user) {
+		room = this.requireRoom();
+		target = target.trim();
+		const [quote, roomid] = Utils.splitFirst(target, '|');
+		const targetRoom = roomid ? Rooms.search(roomid) : room;
+		if (!targetRoom) return this.errorReply(`Invalid room.`);
+		this.room = targetRoom;
+		this.checkCan('mute', null, targetRoom);
+		if (!targetRoom.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
+		const index = targetRoom.settings.quotes.findIndex(item => item === quote);
+		if (index < 0) {
+			return this.errorReply(`Quote not found.`);
+		}
+		const [removed] = targetRoom.settings.quotes.splice(index, 1);
+		this.privateModAction(`${user.name} removed quote ${index + 1}: "${removed}"`);
+		this.modlog(`REMOVEQUOTE`, null, removed);
+		return targetRoom.saveSettings();
+	},
+	removequotehelp: [`/removequote [quote] - Removes the quote from the room's quotes (must be exact). Requires: % @ # &`],
+
+	quotes(target, room) {
+		const targetRoom = target ? Rooms.search(target) : room;
+		if (!targetRoom) return this.errorReply(`Invalid room.`);
+		return this.parse(`/join view-quotes-${targetRoom.roomid}`);
+	},
+
 	approvallog(target, room, user) {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
@@ -2703,11 +2760,34 @@ export const pages: PageTable = {
 		}
 		return buf;
 	},
+	quotes(args, user) {
+		const room = this.requireRoom();
+		// allow it for users if they can access the room
+		if (!user.inRooms.has(room.roomid) && room.settings.isPrivate && !user.isStaff) {
+			return this.errorReply(`Access denied.`);
+		}
+		if (!room.settings.quotes) {
+			return `<div class="pad"><h2>This room has no quotes.</h2></div>`;
+		}
+
+		let buffer = `<div class="pad"><h2>Quotes on ${room.title}: (${room.settings.quotes.length})</h2>`;
+		for (const quote of room.settings.quotes) {
+			const index = room.settings.quotes.indexOf(quote) + 1;
+			buffer += `<div class="infobox">${index}: ${Chat.collapseLineBreaksHTML(Chat.formatText(quote))}`;
+			if (user.can('mute', null, room)) {
+				buffer += `<br /><button class="button" name="send" value="/removequote ${quote}|${room.roomid}">Remove</button></div>`;
+			}
+			buffer += `</div>`;
+		}
+		buffer += `</div>`;
+		return buffer;
+	}
 };
 
 process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
-		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+		'/htmlbox', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
+		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
 	);
 });
