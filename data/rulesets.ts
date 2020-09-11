@@ -965,7 +965,7 @@ export const Formats: {[k: string]: FormatData} = {
 								if (prevo.evos.includes(formeName)) continue;
 							}
 							const forme = dex.getSpecies(formeName);
-							if (forme.changesFrom === originalForme.name) {
+							if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
 								types = types.concat(forme.types);
 							}
 						}
