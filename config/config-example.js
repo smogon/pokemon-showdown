@@ -654,13 +654,6 @@ exports.grouplist = [
 		nooverride: true,
 	},
 	{
-		symbol: '^',
-		id: "prizewinner",
-		name: "Prize Winner",
-		inherit: '+',
-		roomonly: true,
-	},
-	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
@@ -673,6 +666,12 @@ exports.grouplist = [
 		showmedia: true,
 		exportinputlog: true,
 		importinputlog: true,
+	},
+	{
+		symbol: '^',
+		id: "prizewinner",
+		name: "Prize Winner",
+		roomonly: true,
 	},
 	{
 		symbol: 'whitelist',
