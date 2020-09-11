@@ -2532,7 +2532,7 @@ export const commands: ChatCommands = {
 
 	randquote(target, room, user) {
 		room = this.requireRoom();
-		if (!room.settings.quotes) return this.errorReply(`This room has no quotes.`);
+		if (!room.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
 		this.runBroadcast();
 		const [quote] = Utils.shuffle(room.settings.quotes);
 		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
@@ -2549,10 +2549,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Invalid quote.`);
 		}
 		if (room.settings.quotes.includes(target)) {
-			return this.errorReply(`You already have a quote in this room that matches "${target}".`);
+			return this.errorReply(`"${target}" is already quoted in this room.`);
 		}
 		if (room.settings.quotes.length >= 50) {
-			return this.errorReply(`You already have 50 quotes, which is the maximum.`);
+			return this.errorReply(`This room already has 50 quotes, which is the maximum.`);
 		}
 		room.settings.quotes.push(target);
 		room.saveSettings();
@@ -2766,11 +2766,12 @@ export const pages: PageTable = {
 		if (!user.inRooms.has(room.roomid) && room.settings.isPrivate && !user.isStaff) {
 			return this.errorReply(`Access denied.`);
 		}
-		if (!room.settings.quotes) {
-			return `<div class="pad"><h2>This room has no quotes.</h2></div>`;
+		let buffer = `<div class="pad">`;
+		if (!room.settings.quotes?.length) {
+			return `${buffer}<h2>This room has no quotes.</h2></div>`;
 		}
 
-		let buffer = `<div class="pad"><h2>Quotes on ${room.title}: (${room.settings.quotes.length})</h2>`;
+		buffer = `${buffer}<h2>Quotes on ${room.title}: (${room.settings.quotes.length})</h2>`;
 		for (const quote of room.settings.quotes) {
 			const index = room.settings.quotes.indexOf(quote) + 1;
 			buffer += `<div class="infobox">${index}: ${Chat.collapseLineBreaksHTML(Chat.formatText(quote))}`;
@@ -2781,7 +2782,7 @@ export const pages: PageTable = {
 		}
 		buffer += `</div>`;
 		return buffer;
-	}
+	},
 };
 
 process.nextTick(() => {
