@@ -126,10 +126,11 @@ This is a list of documentation that has been created over the course of working
 * [SIM-PROTOCOL.md][11] - The protocol used for battles and battle messages.
 * [CONTRIBUTING.md][12] - Useful code standards to understand if you want to send pull requests to PS (not necessary if you're just using the code and not planning to contribute back).
 * [Bot FAQ][13] - An FAQ compiled by Kaiepi [Kaiepi] regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
-    [10]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
-    [11]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
-    [12]: https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md
-    [13]: https://gist.github.com/Kaiepi/becc5d0ecd576f5e7733b57b4e3fa97e
+
+  [10]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
+  [11]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
+  [12]: https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md
+  [13]: https://gist.github.com/Kaiepi/becc5d0ecd576f5e7733b57b4e3fa97e
 
 Community
 ------------------------------------------------------------------------
@@ -147,7 +148,7 @@ If you'd like to contribute to programming and don't know where to start, feel f
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][10].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][14].
 
   [14]: https://github.com/smogon/pokemon-showdown/blob/master/LICENSE
 
