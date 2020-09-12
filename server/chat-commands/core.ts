@@ -928,6 +928,7 @@ export const commands: ChatCommands = {
 	async showset(target, room, user, connection, cmd) {
 		this.checkChat();
 		const showAll = cmd === 'showteam';
+		const hideStats = target === 'hidestats';
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
@@ -937,21 +938,23 @@ export const commands: ChatCommands = {
 		if (target) {
 			const parsed = parseInt(target);
 			if (parsed > 6) return this.errorReply(this.tr`Use a number between 1-6 to view a specific set.`);
-			if (isNaN(parsed)) {
-				const matchedSet = teamStrings.filter(set => {
-					const id = toID(target);
-					return toID(set.name) === id || toID(set.species) === id;
-				})[0];
-				if (!matchedSet) return this.errorReply(this.tr`The Pokemon "${target}" is not in your team.`);
-				teamStrings = [matchedSet];
-			} else {
-				const setIndex = parsed - 1;
-				const indexedSet = teamStrings[setIndex];
-				if (!indexedSet) return this.errorReply(this.tr`That Pokemon is not in your team.`);
-				teamStrings = [indexedSet];
+			if (!hideStats) {
+				if (isNaN(parsed)) {
+					const matchedSet = teamStrings.filter(set => {
+						const id = toID(target);
+						return toID(set.name) === id || toID(set.species) === id;
+					})[0];
+					if (!matchedSet) return this.errorReply(this.tr`The Pokemon "${target}" is not in your team.`);
+					teamStrings = [matchedSet];
+				} else {
+					const setIndex = parsed - 1;
+					const indexedSet = teamStrings[setIndex];
+					if (!indexedSet) return this.errorReply(this.tr`That Pokemon is not in your team.`);
+					teamStrings = [indexedSet];
+				}
 			}
 		}
-		let resultString = Dex.stringifyTeam(teamStrings);
+		let resultString = Dex.stringifyTeam(teamStrings, false, hideStats);
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
@@ -960,6 +963,7 @@ export const commands: ChatCommands = {
 	},
 	showsethelp: [
 		`!showteam - show the team you're using in the current battle (must be used in a battle you're a player in).`,
+		`!showteam hidestats - show the team you're using in the current battle, without displaying any stat-related information.`,
 		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
 
