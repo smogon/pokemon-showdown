@@ -1220,7 +1220,7 @@ export class RandomTeams {
 				if (hasAbility['Ripen']) ability = 'Ripen';
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
 				if (hasAbility['Storm Drain']) ability = 'Storm Drain';
-				if (hasAbility['Telepathy'] && ability === 'Pressure') ability = 'Telepathy';
+				if (hasAbility['Telepathy'] && (ability === 'Pressure' || hasAbility['Analytic'])) ability = 'Telepathy';
 				if (hasAbility['Triage']) ability = 'Triage';
 			}
 		} else {
