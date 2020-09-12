@@ -636,7 +636,7 @@ export class RandomGen7Teams extends RandomTeams {
 				} else if (ability === 'Download' || ability === 'Hyper Cutter') {
 					rejectAbility = species.nfe;
 				} else if (ability === 'Flash Fire') {
-					rejectAbility = (hasAbility['Drought']);
+					rejectAbility = (abilities.includes('Drought'));
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Harvest') {
@@ -708,7 +708,7 @@ export class RandomGen7Teams extends RandomTeams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = (abilities.includes('Prankster') || (!counter.setupType && !hasMove['acrobatics']) || species.isMega);
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = (abilities.includes('Volt Absorb') || hasMove['raindance'] || hasAbility['Drizzle']);
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb') || hasMove['raindance']);
 				} else if (ability === 'Weak Armor') {
 					rejectAbility = counter.setupType !== 'Physical';
 				}
