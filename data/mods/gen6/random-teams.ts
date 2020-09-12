@@ -613,6 +613,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					rejectAbility = species.nfe;
 				} else if (ability === 'Flare Boost' || ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
+				} else if (ability === 'Flash Fire') {
+					rejectAbility = (abilities.includes('Drought'));
 				} else if (ability === 'Harvest') {
 					rejectAbility = abilities.includes('Frisk');
 				} else if (ability === 'Hustle') {
@@ -674,7 +676,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = abilities.includes('Prankster') || (!counter.setupType && !hasMove['acrobatics']) || !!species.isMega;
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = abilities.includes('Volt Absorb') || hasMove['raindance'];
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb') || hasMove['raindance']);
 				} else if (ability === 'Weak Armor') {
 					rejectAbility = counter.setupType !== 'Physical';
 				}
