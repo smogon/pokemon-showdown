@@ -1449,11 +1449,11 @@ export class ModdedDex {
 		let output = '';
 		for (const [i, mon] of team.entries()) {
 			const species = Dex.getSpecies(mon.species);
-			const name = mon.gigantamax ? `${species.name}-Gmax` : species.name;
-			output += nicknames ? `${nicknames?.[i]} (${name})` : name;
-			output += mon.item ? ` @ ${Dex.getItem(mon.item).name}<br />` : '<br />';
+			output += nicknames ? `${nicknames?.[i]} (${species.name})` : species.name;
+			output += mon.item ? ` @ ${Dex.getItem(mon.item).name}<br />` : `<br />`;
 			output += `Ability: ${Dex.getAbility(mon.ability).name}<br />`;
 			if (typeof mon.happiness === 'number' && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br />`;
+			if (mon.gigantamax) output += `Gigantamax: Yes<br />`;
 			if (!hideStats) {
 				const evs = [];
 				for (const stat in mon.evs) {
