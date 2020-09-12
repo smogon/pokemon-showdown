@@ -954,7 +954,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		}
-		let resultString = Dex.stringifyTeam(teamStrings, false, hideStats);
+		let resultString = Dex.stringifyTeam(teamStrings, undefined, hideStats);
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
