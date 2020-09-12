@@ -935,23 +935,21 @@ export const commands: ChatCommands = {
 		if (!battle) return this.errorReply(this.tr("This command can only be used in a battle."));
 		let teamStrings = await battle.getTeam(user);
 		if (!teamStrings) return this.errorReply(this.tr("Only players can extract their team."));
-		if (target) {
+		if (target && !hideStats) {
 			const parsed = parseInt(target);
 			if (parsed > 6) return this.errorReply(this.tr`Use a number between 1-6 to view a specific set.`);
-			if (!hideStats) {
-				if (isNaN(parsed)) {
-					const matchedSet = teamStrings.filter(set => {
-						const id = toID(target);
-						return toID(set.name) === id || toID(set.species) === id;
-					})[0];
-					if (!matchedSet) return this.errorReply(this.tr`The Pokemon "${target}" is not in your team.`);
-					teamStrings = [matchedSet];
-				} else {
-					const setIndex = parsed - 1;
-					const indexedSet = teamStrings[setIndex];
-					if (!indexedSet) return this.errorReply(this.tr`That Pokemon is not in your team.`);
-					teamStrings = [indexedSet];
-				}
+			if (isNaN(parsed)) {
+				const matchedSet = teamStrings.filter(set => {
+					const id = toID(target);
+					return toID(set.name) === id || toID(set.species) === id;
+				})[0];
+				if (!matchedSet) return this.errorReply(this.tr`The Pokemon "${target}" is not in your team.`);
+				teamStrings = [matchedSet];
+			} else {
+				const setIndex = parsed - 1;
+				const indexedSet = teamStrings[setIndex];
+				if (!indexedSet) return this.errorReply(this.tr`That Pokemon is not in your team.`);
+				teamStrings = [indexedSet];
 			}
 		}
 		let resultString = Dex.stringifyTeam(teamStrings, undefined, hideStats);
