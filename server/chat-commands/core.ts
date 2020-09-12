@@ -928,7 +928,7 @@ export const commands: ChatCommands = {
 	async showset(target, room, user, connection, cmd) {
 		this.checkChat();
 		const showAll = cmd === 'showteam';
-		const hideStats = target === 'hidestats';
+		const hideStats = toID(target) === 'hidestats';
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
