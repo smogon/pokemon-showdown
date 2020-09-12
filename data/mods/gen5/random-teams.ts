@@ -468,7 +468,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = species.baseStats.spe > 100;
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = (abilities.includes('Volt Absorb') || abilities.includes('Drizzle'));
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb'));
 				}
 
 				if (rejectAbility) {
