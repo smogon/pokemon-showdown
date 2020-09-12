@@ -421,7 +421,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = !counter['inaccurate'];
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = (!counter['Physical'] && !hasMove['batonpass']);
-				} else if (ability = 'Flash Fire') {
+				} else if (ability === 'Flash Fire') {
 					rejectAbility = (abilities.includes('Drought'));
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
