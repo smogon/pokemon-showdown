@@ -457,7 +457,7 @@ export class RandomTeams {
 		// Moves that shouldn't be the only STAB moves:
 		const NoStab = [
 			'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'flipturn',
-			'iceshard', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'selfdestruct', 'skydrop', 'suckerpunch', 'watershuriken',
+			'iceshard', 'machpunch', 'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'selfdestruct', 'skydrop', 'suckerpunch', 'watershuriken',
 
 			'clearsmog', 'eruption', 'icywind', 'incinerate', 'snarl', 'vacuumwave', 'voltswitch', 'waterspout',
 		];
@@ -1006,7 +1006,7 @@ export class RandomTeams {
 					(hasType['Grass'] && !counter['Grass'] && (hasAbility['Grassy Surge'] || !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel'])) ||
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && (!counter['Ice'] || (hasAbility['Snow Warning'] && movePool.includes('blizzard') && !hasMove['hypervoice']))) ||
-					((hasType['Normal'] && hasAbility['Guts'] && movePool.includes('facade')) || (hasAbility['Pixilate'] && !counter['Normal'])) ||
+					((hasType['Normal'] && hasAbility['Guts'] && movePool.includes('facade')) || ((hasAbility['Pixilate'] || hasAbility['Liquid Voice']) && !counter['Normal'])) ||
 					(hasType['Poison'] && !counter['Poison'] && (hasAbility['Adaptability'] || hasAbility['Sheer Force'] || counter.setupType || movePool.includes('gunkshot'))) ||
 					(hasType['Psychic'] && !counter['Psychic'] && !hasType['Ghost'] && !hasType['Steel'] && (hasAbility['Psychic Surge'] || counter.setupType || movePool.includes('psychicfangs'))) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 80) ||
@@ -1074,7 +1074,7 @@ export class RandomTeams {
 				} else if (['Adaptability', 'Contrary', 'Serene Grace', 'Skill Link', 'Strong Jaw'].includes(ability)) {
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Analytic') {
-					rejectAbility = (hasMove['rapidspin'] || species.nfe);
+					rejectAbility = (hasMove['rapidspin'] || species.nfe || isDoubles);
 				} else if (ability === 'Bulletproof' || ability === 'Overcoat') {
 					rejectAbility = (counter.setupType && hasAbility['Soundproof']);
 				} else if (ability === 'Chlorophyll') {
@@ -1101,6 +1101,8 @@ export class RandomTeams {
 					rejectAbility = (hasAbility['Frisk'] && !isDoubles);
 				} else if (ability === 'Hustle' || ability === 'Inner Focus') {
 					rejectAbility = counter.Physical < 2;
+				} else if (ability === 'Infiltrator') {
+					rejectAbility = (isDoubles && hasAbility['Clear Body']);
 				} else if (ability === 'Intimidate') {
 					rejectAbility = (hasMove['bodyslam'] || hasMove['bounce'] || hasMove['tripleaxel']);
 				} else if (ability === 'Iron Fist') {
@@ -1150,7 +1152,7 @@ export class RandomTeams {
 				} else if (ability === 'Slush Rush') {
 					rejectAbility = (!teamDetails['hail'] && !hasAbility['Swift Swim']);
 				} else if (ability === 'Sniper') {
-					rejectAbility = (counter['Water'] > 1 || isDoubles && !hasMove['focusenergy']);
+					rejectAbility = (counter['Water'] > 1 && !hasMove['focusenergy']);
 				} else if (ability === 'Steely Spirit') {
 					rejectAbility = (hasMove['fakeout'] && !isDoubles);
 				} else if (ability === 'Sturdy') {
@@ -1300,7 +1302,7 @@ export class RandomTeams {
 		} else if (isDoubles && counter.Physical >= 4 && (hasType['Dragon'] || hasType['Fighting'] || hasMove['flipturn'] || hasMove['uturn']) &&
 			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']
 		) {
-			item = (!hasMove['aerialace'] && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
+			item = (!hasMove['aerialace'] && !hasAbility['Speed Boost'] && !counter['priority'] && species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		} else if (isDoubles && ((counter.Special >= 4 && (hasType['Dragon'] || hasType ['Fighting'] || hasMove['voltswitch'])) || (counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) &&
 			!hasMove['acidspray'] && !hasMove['electroweb'])
 		) {
