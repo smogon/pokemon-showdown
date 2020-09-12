@@ -92,7 +92,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	}
 	getEffectiveSymbol(user: ID | User): EffectiveGroupSymbol {
 		const group = this.get(user);
-		if (this.has(typeof user !== 'string' ? (user as User).id : user) && group === Auth.defaultSymbol()) {
+		if (this.has(toID(user)) && group === Auth.defaultSymbol()) {
 			return 'whitelist';
 		}
 		return group;
