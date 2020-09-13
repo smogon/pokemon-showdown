@@ -422,7 +422,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = (!counter['Physical'] && !hasMove['batonpass']);
 				} else if (ability === 'Flash Fire') {
-					rejectAbility = (abilities.includes('Drought'));
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
