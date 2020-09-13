@@ -614,7 +614,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				} else if (ability === 'Flare Boost' || ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
 				} else if (ability === 'Flash Fire') {
-					rejectAbility = (abilities.includes('Drought'));
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Harvest') {
 					rejectAbility = abilities.includes('Frisk');
 				} else if (ability === 'Hustle') {
