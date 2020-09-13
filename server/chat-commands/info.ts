@@ -2536,11 +2536,9 @@ export const commands: ChatCommands = {
 		this.runBroadcast();
 		const {quote, date, userid} = room.settings.quotes[Math.floor(Math.random() * room.settings.quotes.length)];
 		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
-		const attribute = toID(target) === 'showauthor';
-		return this.sendReplyBox(
-			`${formatted}<br />` +
-			attribute ? `<hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>` : ''
-		);
+		const time = Chat.toTimestamp(new Date(date), {human: true});
+		const attribution = toID(target) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
+		return this.sendReplyBox(`${formatted}<br />` + attribution);
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 
