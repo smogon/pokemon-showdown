@@ -935,7 +935,7 @@ export const commands: ChatCommands = {
 		if (!battle) return this.errorReply(this.tr("This command can only be used in a battle."));
 		let teamStrings = await battle.getTeam(user);
 		if (!teamStrings) return this.errorReply(this.tr("Only players can extract their team."));
-		if (target && !hideStats) {
+		if (!showAll) {
 			const parsed = parseInt(target);
 			if (parsed > 6) return this.errorReply(this.tr`Use a number between 1-6 to view a specific set.`);
 			if (isNaN(parsed)) {
