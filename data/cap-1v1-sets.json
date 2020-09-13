@@ -19,18 +19,18 @@
 		"moves": ["Mach Punch", "Aqua Jet", "Earthquake", "Knock Off"]
 	}],
 	"Astrolotl": [{
-		"item": "Choice Band",
+		"item": "Life Orb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "atk": 252, "spe": 224},
 		"nature": "Jolly",
-		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Trick"]
+		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Taunt"]
 	}, {
-		"item": "Choice Specs",
+		"item": "Life Orb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "spa": 252, "spe": 224},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Draco Meteor", "Overheat", "Dazzling Gleam", "Trick"]
+		"moves": ["Fire Blast", "Draco Meteor", "Dazzling Gleam", "Taunt"]
 	}, {
 		"item": "Shuca Berry",
 		"ability": "Vital Spirit",
@@ -150,14 +150,14 @@
 	}],
 	"Equilibra": [{
 		"item": "Choice Scarf",
-		"ability": ["Bulletproof", "Levitate"],
+		"ability": "Levitate",
 		"evs": {"hp": 24, "spa": 252, "spd": 4, "spe": 228},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
 		"moves": ["Earth Power", "Steel Beam", "Aura Sphere", "Hyper Beam"]
 	}, {
 		"item": "Choice Specs",
-		"ability": ["Levitate", "Bulletproof"],
+		"ability": "Levitate",
 		"evs": {"hp": 248, "def": 40, "spa": 160, "spd": 60},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
