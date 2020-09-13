@@ -1110,18 +1110,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
-	naziel: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Naziel')}|ay ola soy nasieeeeeeel`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Naziel')}|YAY, I WILL NOT DIE THIS TIME`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Naziel')}|Toy xikito no puedo ;-;`);
-		},
-	},
 	n10sit: {
 		noCopy: true,
 		onStart(source) {
@@ -1132,6 +1120,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('n10siT')}|Hoopa never saw one of those!`);
+		},
+	},
+	naziel: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Naziel')}|ay ola soy nasieeeeeeel`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Naziel')}|YAY, I WILL NOT DIE THIS TIME`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Naziel')}|Toy xikito no puedo ;-;`);
 		},
 	},
 	nolali: {
@@ -1175,6 +1175,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Notater517')}|This is probably a good time to fix my sleep schedule`);
+		},
+	},
+	nui: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('nui')}|Poggaroo`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('nui')}|Pog pepe`);
+		},
+		onFaint() {
+			this.add(`c|${getName('nui')}|just a sad pepe`);
 		},
 	},
 	overneat: {
@@ -2036,6 +2048,39 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (source.volatiles['failedparry']) {
 				move.accuracy = true;
 			}
+		},
+	},
+
+	// genderless infatuation for nui's Condition Override
+	attract: {
+		name: 'attract',
+		inherit: true,
+		onStart(pokemon, source, effect) {
+			if (!source.hasAbility('conditionoverride') ||
+          (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M'))) {
+				this.debug('incompatible gender');
+				return false;
+			}
+			if (!this.runEvent('Attract', pokemon, source)) {
+				this.debug('Attract event failed');
+				return false;
+			}
+
+			if (effect.id === 'cutecharm') {
+				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+			} else if (effect.id === 'destinyknot') {
+				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+			} else {
+				this.add('-start', pokemon, 'Attract');
+			}
+		},
+		onModifySpDPriority: 1,
+		onModifySpD(spd, pokemon) {
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('conditionoverride')) return this.chainModify(0.75);
+			}
+			return;
 		},
 	},
 

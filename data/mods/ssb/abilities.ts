@@ -1357,6 +1357,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// nui
+	conditionoverride: {
+		desc: "On switch-in, this Pokemon attracts the opponents regardless of gender. Pokemon who are attracted have their Special Defense stat reduced by 25%.",
+		shortDesc: "Attracts opponent. Attracted Pokemon have SpD reduced by 25%.",
+		// See conditions.ts for implementation
+		name: "Condition Override",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Overneat
 	darkestwings: {
 		desc: "This Pokemon's contact moves have their power multiplied by 1.3. This Pokemon's Defense is doubled.",

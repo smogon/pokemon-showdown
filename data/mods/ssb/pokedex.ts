@@ -143,6 +143,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ["Ghost", "Normal"],
 	},
+	// nui
+	jigglypuff: {
+		inherit: true,
+		baseStats: {hp: 115, atk: 128, def: 62, spa: 128, spd: 78, spe: 62},
+	},
 	// Overneat
 	absolmega: {
 		inherit: true,

@@ -2798,36 +2798,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
-	// naziel
-	notsoworthypirouette: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		desc: "55% chance to OHKO the target; otherwise, it OHKOs itself.",
-		shortDesc: "55% chance to OHKO target. 45% to OHKO user.",
-		name: "Not-so-worthy Pirouette",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "High Jump Kick", target);
-		},
-		onHit(target, source) {
-			if (this.randomChance(11, 20)) {
-				target.faint();
-			} else {
-				source.faint();
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
-	},
-
 	// n10siT
 	"unbind": {
 		accuracy: 100,
@@ -2868,6 +2838,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
+	},
+
+	// naziel
+	notsoworthypirouette: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "55% chance to OHKO the target; otherwise, it OHKOs itself.",
+		shortDesc: "55% chance to OHKO target. 45% to OHKO user.",
+		name: "Not-so-worthy Pirouette",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "High Jump Kick", target);
+		},
+		onHit(target, source) {
+			if (this.randomChance(11, 20)) {
+				target.faint();
+			} else {
+				source.faint();
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
 	},
 
 	// Nolali
@@ -2926,6 +2926,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
+	},
+
+	// nui
+	wincondition: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Inflicts the opponent with random status of sleep, paralysis, burn, or toxic. Then uses Dream Eater, Iron Head, Fire Blast, or Venoshock, respectively.",
+		shortDesc: "Causes sleep and uses Dream Eater, para and Iron Head, burn and Fire Blast, or tox and Venoshock.",
+		name: "Win Condition",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Celebrate", target);
+		},
+		onHit(target, source) {
+			const hax = this.sample(['slp', 'brn', 'par', 'tox']);
+			target.trySetStatus(hax, source);
+			if (hax === 'slp') {
+				this.useMove('Dream Eater', source);
+			} else if (hax === 'par') {
+				this.useMove('Iron Head', source);
+			} else if (hax === 'brn') {
+				this.useMove('Fire Blast', source);
+			} else if (hax === 'tox') {
+				this.useMove('Venoshock', source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
 	},
 
 	// OM~!
