@@ -24,6 +24,7 @@ To reload chat commands:
 */
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
+import type {Punishment} from './punishments';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -84,6 +85,7 @@ export type ChatFilter = (
 
 export type NameFilter = (name: string, user: User) => string;
 export type StatusFilter = (status: string, user: User) => string;
+export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void;
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
 export type HostFilter = (host: string, user: User, connection: Connection, hostType: string) => void;
 
@@ -1485,6 +1487,13 @@ export const Chat = new class {
 		}
 	}
 
+	readonly punishmentfilters: PunishmentFilter[] = [];
+	punishmentfilter(user: User | ID, punishment: Punishment) {
+		for (const curFilter of Chat.punishmentfilters) {
+			curFilter(user, punishment);
+		}
+	}
+
 	readonly nicknamefilters: NameFilter[] = [];
 	nicknamefilter(nickname: string, user: User) {
 		for (const curFilter of Chat.nicknamefilters) {
@@ -1700,6 +1709,7 @@ export const Chat = new class {
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
+		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		Chat.plugins[name] = plugin;
