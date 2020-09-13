@@ -636,7 +636,7 @@ export class RandomGen7Teams extends RandomTeams {
 				} else if (ability === 'Download' || ability === 'Hyper Cutter') {
 					rejectAbility = species.nfe;
 				} else if (ability === 'Flash Fire') {
-					rejectAbility = (abilities.includes('Drought'));
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Harvest') {
