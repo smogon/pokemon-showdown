@@ -623,7 +623,7 @@ export class RandomGen7Teams extends RandomTeams {
 					rejectAbility = !counter['Normal'];
 				} else if (ability === 'Battle Armor' || ability === 'Sturdy') {
 					rejectAbility = (!!counter['recoil'] && !counter['recovery']);
-				} else if (ability === 'Battle Bond' || ability === 'Flare Boost' || ability === 'Moody') {
+				} else if (ability === 'Battle Bond' || ability === 'Dazzling' || ability === 'Flare Boost' || ability === 'Moody') {
 					rejectAbility = true;
 				} else if (ability === 'Chlorophyll' || ability === 'Leaf Guard') {
 					rejectAbility = (species.baseStats.spe > 100 || abilities.includes('Harvest') || !hasMove['sunnyday'] && !teamDetails['sun']);
@@ -635,6 +635,8 @@ export class RandomGen7Teams extends RandomTeams {
 					rejectAbility = !counter['Physical'] || hasMove['dragontail'];
 				} else if (ability === 'Download' || ability === 'Hyper Cutter') {
 					rejectAbility = species.nfe;
+				} else if (ability === 'Flash Fire') {
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Harvest') {
@@ -706,7 +708,7 @@ export class RandomGen7Teams extends RandomTeams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = (abilities.includes('Prankster') || (!counter.setupType && !hasMove['acrobatics']) || species.isMega);
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = (abilities.includes('Volt Absorb') || hasMove['raindance']);
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb') || hasMove['raindance']);
 				} else if (ability === 'Weak Armor') {
 					rejectAbility = counter.setupType !== 'Physical';
 				}
@@ -900,7 +902,7 @@ export class RandomGen7Teams extends RandomTeams {
 		// Medium priority
 		} else if ((ability === 'Speed Boost' || ability === 'Stance Change' || species.name === 'Pheromosa') && counter.Physical + counter.Special > 2 && !hasMove['uturn']) {
 			item = 'Life Orb';
-		} else if (isDoubles && hasMove['uturn'] && counter.Physical === 4) {
+		} else if (isDoubles && hasMove['uturn'] && counter.Physical === 4 && !hasMove['fakeout']) {
 			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		} else if (isDoubles && counter.Special === 4 && hasMove['waterspout'] || hasMove['eruption']) {
 			item = 'Choice Scarf';

@@ -421,6 +421,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = !counter['inaccurate'];
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = (!counter['Physical'] && !hasMove['batonpass']);
+				} else if (ability === 'Flash Fire') {
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
@@ -466,7 +468,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = species.baseStats.spe > 100;
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = abilities.includes('Volt Absorb');
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb'));
 				}
 
 				if (rejectAbility) {
