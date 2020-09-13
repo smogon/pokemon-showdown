@@ -2568,24 +2568,26 @@ export const commands: ChatCommands = {
 	quotehelp: [`/quote [quote] - Adds [quote] to the room's quotes. Requires: % @ # &`],
 
 	removequote(target, room, user) {
-		room = this.requireRoom();
 		target = target.trim();
-		const [quote, roomid] = Utils.splitFirst(target, '|');
+		const [idx, roomid] = Utils.splitFirst(target, ',');
 		const targetRoom = roomid ? Rooms.search(roomid) : room;
 		if (!targetRoom) return this.errorReply(`Invalid room.`);
 		this.room = targetRoom;
 		this.checkCan('mute', null, targetRoom);
 		if (!targetRoom.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
-		const index = targetRoom.settings.quotes.findIndex(item => item.quote === quote);
-		if (index < 0) {
+		const index = parseInt(idx);
+		if (isNaN(index)) {
+			return this.errorReply(`Invalid index.`);
+		}
+		if (!targetRoom.settings.quotes[index - 1]) {
 			return this.errorReply(`Quote not found.`);
 		}
-		const [removed] = targetRoom.settings.quotes.splice(index, 1);
-		this.privateModAction(`${user.name} removed quote ${index + 1}: "${quote}" (originally added by ${removed.userid})`);
-		this.modlog(`REMOVEQUOTE`, null, quote);
+		const [removed] = targetRoom.settings.quotes.splice(index - 1, 1);
+		this.privateModAction(`${user.name} removed quote ${index}: "${removed.quote}" (originally added by ${removed.userid})`);
+		this.modlog(`REMOVEQUOTE`, null, removed.quote);
 		return targetRoom.saveSettings();
 	},
-	removequotehelp: [`/removequote [quote] - Removes the quote from the room's quotes (must be exact). Requires: % @ # &`],
+	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
 
 	quotes(target, room) {
 		const targetRoom = target ? Rooms.search(target) : room;
@@ -2784,7 +2786,7 @@ export const pages: PageTable = {
 			buffer += `<div class="infobox">${index}: ${Chat.collapseLineBreaksHTML(Chat.formatText(quote))}`;
 			buffer += `<br /> Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}`;
 			if (user.can('mute', null, room)) {
-				buffer += `<br /><button class="button" name="send" value="/removequote ${quote}|${room.roomid}">Remove</button></div>`;
+				buffer += `<br /><button class="button" name="send" value="/removequote ${index},${room.roomid}">Remove</button></div>`;
 			}
 			buffer += `</div>`;
 		}
