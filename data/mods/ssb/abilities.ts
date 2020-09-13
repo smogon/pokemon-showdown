@@ -151,22 +151,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// aegii
-	newstage: {
-		desc: "Stance Change; Haze, Heal Bell and Embargo start on switch in.",
-		shortDesc: "Stance Change; Haze, Heal Bell and Embargo start on switch in.",
+	setthestage: {
+		desc: "Stance Change + Adaptability, on switch in, selects physical or special set.",
+		shortDesc: "Stance Change + Adaptability, on switch in, selects physical or special set.",
+		onStart(source) {
+			if (source.species.baseSpecies !== 'Aegislash') return;
+			source.m.swapSets(true);
+		},
+		onModifyMove(move) {
+			move.stab = 2;
+		},
 		onBeforeMovePriority: 0.5,
 		onBeforeMove(attacker, defender, move) {
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
-			if (move.category === 'Status' && move.id !== 'kingsshield' && move.id !== 'kshield') return;
-			const targetForme = (move.id === 'kingsshield' || move.id === 'kshield' ? 'Aegislash' : 'Aegislash-Blade');
+			if (move.category === 'Status' && move.id !== 'kingsshield' && move.id !== 'reset') return;
+			const targetForme = (move.id === 'kingsshield' || move.id === 'reset' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
-		onStart(pokemon) {
-			this.useMove('Haze', pokemon);
-			this.useMove('Heal Bell', pokemon);
-			this.useMove('Embargo', pokemon);
-		},
-		name: "New Stage",
+		name: "Set the Stage",
 		isNonstandard: "Custom",
 		gen: 8,
 	},

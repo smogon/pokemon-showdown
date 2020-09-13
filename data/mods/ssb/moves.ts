@@ -101,20 +101,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// aegii
-	kshield: {
+	reset: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "King's Shield; except reduces Special Attack or Attack by 2 according to the move used by the opponent. Boosts Attack or Special Attack of user according to its set.",
-		shortDesc: "King's Shield; reduces SpA or Atk by 2 based on move category; Boost users Atk or SpA according to user's set.",
-		name: "K-Shield",
+		desc: "King's Shield; except reduces the opponent's attacking stat by 1 if hit by a Special or contact move. Changes the user's set from Physical to Special or Special to Physical.",
+		shortDesc: "King's Shield; reduces attacking stat by 1 if hit by a contact or special move; Changes the user's set.",
+		name: "Reset",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
 		priority: 4,
 		flags: {},
 		stallingMove: true,
-		volatileStatus: 'kshield',
+		volatileStatus: 'reset',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -127,6 +127,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
+			if (pokemon.species.baseSpecies !== 'Aegislash') return;
+			pokemon.m.swapSets();
 		},
 		condition: {
 			duration: 1,
@@ -142,7 +144,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					this.add('-activate', target, 'move: K-Shield');
+					this.add('-activate', target, 'move: Reset');
 				}
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -152,28 +154,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				if (move.category === "Special") {
-					this.boost({spa: -2}, source, target, this.dex.getActiveMove("K-Shield"));
-				} else {
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("K-Shield"));
+					this.boost({spa: -1}, source, target, this.dex.getActiveMove("Reset"));
+				} else if (move.category === "Physical" && move.flags["contact"]) {
+					this.boost({atk: -1}, source, target, this.dex.getActiveMove("Reset"));
 				}
-				let specCount = 0;
-				let physCount = 0;
-				for (const moveSlot of target.moveSlots) {
-					const moveid = moveSlot.id;
-					const theMove = this.dex.getMove(moveid);
-					if (theMove.category === "Special") {
-						specCount++;
-					} else if (theMove.category === "Physical") {
-						physCount++;
-					}
-				}
-				const boost: {[key: string]: number} = {};
-				if (specCount > physCount) {
-					boost['spa'] = 1;
-				} else {
-					boost['atk'] = 1;
-				}
-				this.boost(boost, target);
 				return this.NOT_FAIL;
 			},
 		},
