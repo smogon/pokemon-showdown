@@ -1,9 +1,12 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import type {Punishment} from '../punishments';
 
 const TICKET_FILE = 'config/tickets.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
+
+Punishments.roomPunishmentTypes.set(`TICKETBAN`, 'banned from creating help tickets');
 
 interface TicketState {
 	creator: string;
@@ -14,27 +17,10 @@ interface TicketState {
 	created: number;
 	claimed: string | null;
 	ip: string;
-	escalator?: string;
-}
-interface BannedTicketState {
-	banned: string;
-	creator?: string;
-	userid: string;
-	open?: boolean;
-	type?: string;
-	created: number;
-	claimed?: string;
-	ip: string;
-	escalator?: string;
-	name: string;
-	by: string;
-	reason: string;
-	expires: number;
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
 const tickets: {[k: string]: TicketState} = {};
-const ticketBans: {[k: string]: BannedTicketState} = {};
 
 try {
 	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
@@ -42,7 +28,8 @@ try {
 		const ticket = ticketData[t];
 		if (ticket.banned) {
 			if (ticket.expires && ticket.expires <= Date.now()) continue;
-			ticketBans[t] = ticket;
+			Punishments.roomPunish(`staff`, ticket.userid, ['TICKETBAN', ticket.userid, ticket.expires, ticket.reason]);
+			delete ticketData[t]; // delete the old format
 		} else {
 			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
 				// Tickets that have been open for 24+ hours will be automatically closed.
@@ -66,7 +53,7 @@ try {
 
 function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(() => (
-		JSON.stringify(Object.assign({}, tickets, ticketBans))
+		JSON.stringify(Object.assign({}, tickets))
 	));
 }
 
@@ -343,6 +330,37 @@ export class HelpTicket extends Rooms.RoomGame {
 		// @ts-ignore
 		this.playerTable = null;
 	}
+	static ban(user: string, reason = '') {
+		const userid = toID(user);
+		const punishment: Punishment = ['TICKETBAN', userid, Date.now() + TICKET_BAN_DURATION, reason];
+		return Punishments.roomPunish('staff', userid, punishment);
+	}
+	static unban(user: string) {
+		user = toID(user);
+		return Punishments.roomUnpunish('staff', user, 'TICKETBAN');
+	}
+	static checkBanned(user: User) {
+		const staffRoom = Rooms.get('staff');
+		if (!staffRoom) return;
+		const punishment = Punishments.getRoomPunishType(staffRoom, user.id);
+		if (punishment === 'TICKETBAN') {
+			return `You are banned from creating tickets.`;
+		}
+		// skip if the user is autoconfirmed and on a shared ip
+		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
+
+		for (const ip of user.ips) {
+			const curPunishment = Punishments.roomIps.get('staff')?.get(ip);
+			if (curPunishment && curPunishment[0] === 'TICKETBAN') {
+				const [, userid,, reason] = curPunishment;
+				return (
+					`You are banned from creating help tickets` +
+					`${userid !== user.id ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
+				);
+			}
+		}
+		return false;
+	}
 }
 
 const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
@@ -480,44 +498,6 @@ function checkIp(ip: string) {
 	return false;
 }
 
-function checkTicketBanned(user: User) {
-	let ticket = ticketBans[user.id];
-	if (ticket) {
-		if (ticket.expires > Date.now()) {
-			return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
-		} else {
-			delete ticketBans[ticket.userid];
-			writeTickets();
-			return false;
-		}
-	} else {
-		let bannedTicket: BannedTicketState | null = null;
-		// Skip the IP based check if the user is autoconfirmed and on a shared IP.
-		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
-
-		for (const t in ticketBans) {
-			if (ticketBans[t].ip === user.latestIp) {
-				bannedTicket = ticketBans[t];
-				// A match was found, if its not expired, ticket ban them. Otherwise remove the expired entry and keep searching.
-				if (bannedTicket.expires > Date.now()) {
-					ticket = Object.assign({}, bannedTicket);
-					ticket.name = user.name;
-					ticket.userid = user.id;
-					ticket.by = bannedTicket.by + ' (IP)';
-					ticketBans[user.id] = ticket;
-					writeTickets();
-					return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
-				} else {
-					delete ticketBans[bannedTicket.userid];
-					writeTickets();
-				}
-			}
-		}
-		// No un-expired IP matches found.
-		return false;
-	}
-}
-
 // Prevent a desynchronization issue when hotpatching
 for (const room of Rooms.rooms.values()) {
 	if (!room.settings.isHelp || !room.game) continue;
@@ -583,7 +563,7 @@ export const pages: PageTable = {
 			this.title = this.tr`Request Help`;
 			let buf = `<div class="pad"><h2>${this.tr`Request help from global staff`}</h2>`;
 
-			const banMsg = checkTicketBanned(user);
+			const banMsg = HelpTicket.checkBanned(user);
 			if (banMsg) return connection.popup(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
@@ -825,43 +805,19 @@ export const pages: PageTable = {
 				buf += '</td></tr>';
 				count++;
 			}
-
-			const banKeys = Object.keys(ticketBans).sort((aKey, bKey) => {
-				const a = ticketBans[aKey];
-				const b = ticketBans[bKey];
-				return b.created - a.created;
-			});
-			let hasBanHeader = false;
-			count = 0;
-			for (const key of banKeys) {
-				const ticket = ticketBans[key];
-				if (ticket.expires <= Date.now()) continue;
-				if (!hasBanHeader) {
-					buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Username`}</th><th>${this.tr`Banned by`}</th><th>${this.tr`Expires`}</th><th>${this.tr`Logs`}</th></tr>`;
-					hasBanHeader = true;
-				}
-				if (count >= 100 && query[0] !== 'all') {
-					buf += `<tr><td colspan="5">${this.tr`And ${banKeys.length - count} more ticket bans.`} <a class="button" href="/view-help-tickets-all" target="replace">${this.tr`View all tickets`}</a></td></tr>`;
-					break;
-				}
-				buf += `<tr><td><span style="color:gray"><i class="fa fa-ban"></i> ${this.tr`Banned`}</td>`;
-				buf += Utils.html`<td>${ticket.name}</td>`;
-				buf += Utils.html`<td>${ticket.by}</td>`;
-				buf += `<td>${Chat.toDurationString(ticket.expires - Date.now(), {precision: 1})}</td>`;
-				buf += `<td>`;
-				const roomid = 'help-' + ticket.userid;
-				let logUrl = '';
-				if (Config.modloglink) {
-					const modlogDate = new Date(ticket.created || (ticket.banned ? ticket.expires - TICKET_BAN_DURATION : 0));
-					logUrl = Config.modloglink(modlogDate, roomid);
-				}
-				if (logUrl) {
-					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
-				}
-				buf += '</td></tr>';
-				count++;
+			buf += `<tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Ticket Bans`} <i class="fa fa-ban"></i></h1></th></tr>`;
+			buf += `<tr><th>Userids</th><th>IPs</th><th>Expires</th><th>Reason</th></tr>`;
+			const ticketBans = Array.from(Punishments.getPunishments('staff'))
+				.sort((a, b) => a[1].expireTime - b[1].expireTime)
+				.filter(item => item[1].punishType === 'TICKETBAN');
+			for (const [userid, entry] of ticketBans) {
+				let ids = [userid];
+				if (entry.userids) ids = ids.concat(entry.userids);
+				buf += `<tr><td>${ids.map(Utils.escapeHTML).join(', ')}</td>`;
+				buf += `<td>${entry.ips.join(', ')}</td>`;
+				buf += `<td>${Chat.toDurationString(entry.expireTime - Date.now(), {precision: 1})}</td>`;
+				buf += `<td>${entry.reason || ''}</td></tr>`;
 			}
-
 			buf += `</tbody></table></div>`;
 			return buf;
 		},
@@ -1095,7 +1051,7 @@ export const commands: ChatCommands = {
 				return this.popupReply(this.tr`Global staff can't make tickets. They can only use the form for reference.`);
 			}
 			if (!user.named) return this.popupReply(this.tr`You need to choose a username before doing this.`);
-			const banMsg = checkTicketBanned(user);
+			const banMsg = HelpTicket.checkBanned(user);
 			if (banMsg) return this.popupReply(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
@@ -1276,11 +1232,9 @@ export const commands: ChatCommands = {
 			const targetUser = this.targetUser;
 			this.checkCan('lock', targetUser);
 
-			const ticket = tickets[toID(this.inputUsername)];
-			const ticketBan = ticketBans[toID(this.inputUsername)];
-			const targetUsername = this.targetUsername;
-			if (!targetUser && !Punishments.search(toID(targetUsername)).length && !ticket && !ticketBan) {
-				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
+			const punishment = Punishments.roomUserids.nestedGet('staff', toID(this.targetUsername));
+			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length) {
+				return this.errorReply(this.tr`User '${this.targetUsername}' not found.`);
 			}
 			if (target.length > 300) {
 				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
@@ -1292,7 +1246,7 @@ export const commands: ChatCommands = {
 			if (targetUser) {
 				username = targetUser.getLastName();
 				userid = targetUser.getLastId();
-				if (ticketBan && ticketBan.expires > Date.now()) {
+				if (punishment) {
 					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 				if (targetUser.trusted) {
@@ -1301,7 +1255,7 @@ export const commands: ChatCommands = {
 			} else {
 				username = this.targetUsername;
 				userid = toID(this.targetUsername);
-				if (ticketBan && ticketBan.expires > Date.now()) {
+				if (punishment) {
 					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 			}
@@ -1310,38 +1264,8 @@ export const commands: ChatCommands = {
 				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
+			const affected = HelpTicket.ban(userid, target);
 			this.addModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
-
-			let affected: any[] = [];
-			const punishment: BannedTicketState = {
-				banned: username,
-				name: username,
-				userid: toID(username),
-				by: user.name,
-				created: Date.now(),
-				expires: Date.now() + TICKET_BAN_DURATION,
-				reason: target,
-				ip: (targetUser ? targetUser.latestIp : ticket ? ticket.ip : ticketBan.ip),
-			};
-
-			if (targetUser) {
-				affected.push(targetUser);
-				affected = affected.concat(targetUser.getAltUsers(false, true));
-			} else {
-				const foundKeys = Punishments.search(userid).map(([key]) => key);
-				const userids = new Set([userid]);
-				const ips = new Set();
-				for (const key of foundKeys) {
-					if (key.includes('.')) {
-						ips.add(key);
-					} else {
-						userids.add(key);
-					}
-				}
-				affected = Users.findUsers([...userids] as ID[], [...ips] as string[], {includeTrusted: true, forPunishment: true});
-				affected.unshift(userid);
-			}
-
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -1363,10 +1287,8 @@ export const commands: ChatCommands = {
 					ticketGame.writeStats('ticketban');
 					helpRoom.destroy();
 				}
-				ticketBans[userObjID] = punishment;
 			}
 			writeTickets();
-			notifyStaff();
 			notifyStaff();
 			return true;
 		},
@@ -1377,28 +1299,14 @@ export const commands: ChatCommands = {
 
 			this.checkCan('lock');
 			const targetUser = Users.get(target, true);
-			const ticket = ticketBans[toID(target)];
-			if (!ticket || !ticket.banned) {
+			if (!targetUser) return this.errorReply(`User not found.`);
+			const banned = HelpTicket.checkBanned(targetUser);
+			if (!banned) {
 				return this.errorReply(this.tr`${targetUser ? targetUser.name : target} is not ticket banned.`);
 			}
-			if (ticket.expires <= Date.now()) {
-				delete tickets[ticket.userid];
-				writeTickets();
-				return this.errorReply(this.tr`${targetUser ? targetUser.name : target}'s ticket ban is already expired.`);
-			}
 
-			const affected = [];
-			for (const t in ticketBans) {
-				if (toID(ticketBans[t].banned) === toID(ticket.banned) && ticketBans[t].userid !== ticket.userid) {
-					affected.push(ticketBans[t].name);
-					delete ticketBans[t];
-				}
-			}
-			affected.unshift(ticket.name);
-			delete ticketBans[ticket.userid];
-			writeTickets();
-
-			this.addModAction(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
+			const affected = HelpTicket.unban(target);
+			this.addModAction(`${affected} was ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},
