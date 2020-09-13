@@ -2833,7 +2833,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	lopunny: {
 		randomBattleMoves: ["closecombat", "facade", "healingwish", "switcheroo"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["entrainment", "fakeout", "switcheroo", "uturn"],
+		randomDoubleBattleMoves: ["closecombat", "fakeout", "switcheroo", "uturn"],
 		randomDoubleBattleLevel: 92,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -4849,7 +4849,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	pyukumuku: {
 		randomBattleMoves: ["counter", "mirrorcoat", "recover", "toxic"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["helpinghand", "memento", "screech", "toxic"],
+		randomDoubleBattleMoves: ["helpinghand", "lightscreen", "memento", "reflect"],
 		randomDoubleBattleLevel: 90,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -5188,7 +5188,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	necrozmaduskmane: {
 		randomBattleMoves: ["dragondance", "earthquake", "morningsun", "photongeyser", "sunsteelstrike"],
 		randomBattleLevel: 72,
-		randomDoubleBattleMoves: ["dragondance", "morningsun", "photongeyser", "protect", "sunsteelstrike"],
+		randomDoubleBattleMoves: ["dragondance", "photongeyser", "protect", "sunsteelstrike"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -5196,7 +5196,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	necrozmadawnwings: {
 		randomBattleMoves: ["autotomize", "calmmind", "heatwave", "moongeistbeam", "photongeyser"],
 		randomBattleLevel: 74,
-		randomDoubleBattleMoves: ["heatwave", "moonblast", "moongeistbeam", "photongeyser", "protect"],
+		randomDoubleBattleMoves: ["heatwave", "moongeistbeam", "photongeyser", "protect", "thunderwave"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",
 		doublesTier: "DUber",
