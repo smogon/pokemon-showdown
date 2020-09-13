@@ -2535,10 +2535,9 @@ export const commands: ChatCommands = {
 		if (!room.settings.quotes?.length) return this.errorReply(`This room has no quotes.`);
 		this.runBroadcast();
 		const {quote, date, userid} = room.settings.quotes[Math.floor(Math.random() * room.settings.quotes.length)];
-		const formatted = quote.split('\n').map(item => Chat.formatText(item)).join('<br />');
 		const time = Chat.toTimestamp(new Date(date), {human: true});
-		const attribution = toID(target) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
-		return this.sendReplyBox(`${formatted}<br />` + attribution);
+		const attribution = toID(target) === 'showauthor' ? `<br /><hr /><small>Added by ${userid} on ${time}</small>` : '';
+		return this.sendReplyBox(`${Chat.formatText(quote).replace(/\n/g, '<br />')}${attribution}`);
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 
@@ -2547,6 +2546,9 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		target = target.trim();
 		this.checkCan('mute', null, room);
+		if (!target) {
+			return this.parse(`/help quote`);
+		}
 		if (!room.settings.quotes) room.settings.quotes = [];
 		if (this.filter(target) !== target) {
 			return this.errorReply(`Invalid quote.`);
@@ -2562,8 +2564,8 @@ export const commands: ChatCommands = {
 		}
 		room.settings.quotes.push({userid: user.id, quote: target, date: Date.now()});
 		room.saveSettings();
-		this.privateModAction(`${user.name} added the quote "${target}"`);
-		return this.modlog(`ADDQUOTE`, null, target);
+		this.privateModAction(`${user.name} added a new quote.`);
+		return this.modlog(`ADDQUOTE`, null, Chat.collapseLineBreaksHTML(target).replace(/&#10;/g, ' '));
 	},
 	quotehelp: [`/quote [quote] - Adds [quote] to the room's quotes. Requires: % @ # &`],
 
@@ -2583,17 +2585,19 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Quote not found.`);
 		}
 		const [removed] = targetRoom.settings.quotes.splice(index - 1, 1);
-		this.privateModAction(`${user.name} removed quote ${index}: "${removed.quote}" (originally added by ${removed.userid})`);
-		this.modlog(`REMOVEQUOTE`, null, removed.quote);
+		this.privateModAction(`${user.name} removed quote indexed at ${index} (originally added by ${removed.userid}).`);
+		this.modlog(`REMOVEQUOTE`, null, Chat.collapseLineBreaksHTML(removed.quote).replace(/&#10;/g, ' '));
 		return targetRoom.saveSettings();
 	},
 	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
 
+	viewquotes: 'quotes',
 	quotes(target, room) {
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) return this.errorReply(`Invalid room.`);
 		return this.parse(`/join view-quotes-${targetRoom.roomid}`);
 	},
+	quoteshelp: [`/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.`],
 
 	approvallog(target, room, user) {
 		room = this.requireRoom();
@@ -2770,23 +2774,25 @@ export const pages: PageTable = {
 	},
 	quotes(args, user) {
 		const room = this.requireRoom();
+		this.title = `[Quotes]`;
 		// allow it for users if they can access the room
 		if (!user.inRooms.has(room.roomid) && room.settings.isPrivate && !user.isStaff) {
 			return this.errorReply(`Access denied.`);
 		}
 		let buffer = `<div class="pad">`;
+		buffer += `<button style="float:right;" class="button" name="send" value="/join view-quotes-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
 		if (!room.settings.quotes?.length) {
 			return `${buffer}<h2>This room has no quotes.</h2></div>`;
 		}
 
-		buffer = `${buffer}<h2>Quotes on ${room.title}: (${room.settings.quotes.length})</h2>`;
+		buffer += `<h2>Quotes for ${room.title} (${room.settings.quotes.length}):</h2>`;
 		for (const entry of room.settings.quotes) {
 			const index = room.settings.quotes.indexOf(entry) + 1;
 			const {quote, userid, date} = entry;
-			buffer += `<div class="infobox">${index}: ${Chat.collapseLineBreaksHTML(Chat.formatText(quote))}`;
-			buffer += `<br /> Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}`;
+			buffer += `<div class="infobox">${index}: ${Chat.formatText(quote).replace(/\n/g, '<br />')}`;
+			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`;
 			if (user.can('mute', null, room)) {
-				buffer += `<br /><button class="button" name="send" value="/removequote ${index},${room.roomid}">Remove</button></div>`;
+				buffer += `<br /><hr /><button class="button" name="send" value="/removequote ${index},${room.roomid}">Remove</button>`;
 			}
 			buffer += `</div>`;
 		}
@@ -2798,7 +2804,7 @@ export const pages: PageTable = {
 process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
-		'/htmlbox', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
+		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
 		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
 	);
 });
