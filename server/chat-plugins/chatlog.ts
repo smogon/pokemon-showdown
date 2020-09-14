@@ -737,11 +737,13 @@ export const commands: ChatCommands = {
 		let date = 'all';
 		const searches: string[] = [];
 		let limit = '500';
-		let tarRoom = room?.roomid;
 		for (const arg of args) {
 			if (arg.startsWith('room:')) {
 				const id = arg.slice(5);
-				tarRoom = id as RoomID;
+				room = Rooms.search(id as RoomID) as Room | null;
+				if (!room) {
+					return this.errorReply(`Room "${id}" not found.`);
+				}
 			} else if (arg.startsWith('limit:')) {
 				limit = arg.slice(6);
 			} else if (arg.startsWith('date:')) {
@@ -750,14 +752,11 @@ export const commands: ChatCommands = {
 				searches.push(arg);
 			}
 		}
-		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
-		if (!curRoom) {
-			return this.errorReply(
-				`Invalid room${this.room ? '' : ` (When using this command in a PM, you must specify a room)`}.`
-			);
+		if (!room) {
+			return this.parse(`/help searchlogs`);
 		}
 		return this.parse(
-			`/join view-chatlog-${curRoom}--${date}--search-${Dashycode.encode(searches.join('+'))}--limit-${limit}`
+			`/join view-chatlog-${room.roomid}--${date}--search-${Dashycode.encode(searches.join('+'))}--limit-${limit}`
 		);
 	},
 	searchlogshelp() {
