@@ -64,9 +64,14 @@ const QUESTION_PHASE = 'question';
 const INTERMISSION_PHASE = 'intermission';
 const LIMBO_PHASE = 'limbo';
 
+const MASTERMIND_ROUNDS_PHASE = 'rounds';
+const MASTERMIND_FINALS_PHASE = 'finals';
+
 const MINIMUM_PLAYERS = 3;
 const START_TIMEOUT = 30 * 1000;
+const MASTERMIND_FINALS_START_TIMEOUT = 30 * 1000;
 const INTERMISSION_INTERVAL = 20 * 1000;
+const MASTERMIND_INTERMISSION_INTERVAL = 30 * 1000;
 const PAUSE_INTERMISSION = 5 * 1000;
 
 const MAX_QUESTION_LENGTH = 252;
@@ -141,10 +146,24 @@ function getTriviaGame(room: Room | null) {
 	if (!game) {
 		throw new Chat.ErrorMessage(room.tr`There is no game in progress.`);
 	}
-	if (!game.constructor.name.endsWith('Trivia')) {
+	if (game.gameid !== 'trivia') {
 		throw new Chat.ErrorMessage(room.tr`The currently running game is not Trivia, it's ${game.title}.`);
 	}
 	return game as Trivia;
+}
+
+function getMastermindGame(room: Room | null) {
+	if (!room) {
+		throw new Chat.ErrorMessage(`This command can only be used in the Trivia room.`);
+	}
+	const game = room.game;
+	if (!game) {
+		throw new Chat.ErrorMessage(room.tr`There is no game in progress.`);
+	}
+	if (game.gameid !== 'mastermind') {
+		throw new Chat.ErrorMessage(room.tr`The currently running game is not Mastermind, it's ${game.title}.`);
+	}
+	return game as Mastermind;
 }
 
 function writeTriviaData() {
@@ -200,6 +219,39 @@ function sliceCategory(category: string): TriviaQuestion[] {
 	if (sliceFrom === sliceUpTo) return [];
 
 	return questions.slice(sliceFrom, sliceUpTo);
+}
+
+/**
+ * Generates and broadcasts the HTML for a generic announcement containing
+ * a title and an optional message.
+ */
+function broadcast(room: BasicRoom, title: string, message?: string) {
+	let buffer = `<div class="broadcast-blue"><strong>${title}</strong>`;
+	if (message) buffer += `<br />${message}`;
+	buffer += '</div>';
+
+	return room.addRaw(buffer).update();
+}
+
+function getQuestions(category: ID): TriviaQuestion[] {
+	const isRandomCategory = (category === 'random');
+	const isAll = (category === 'all');
+	if (isRandomCategory) {
+		const lastCategoryID = toID(triviaData.history?.slice(-1)[0].category).replace("random", "");
+		const categories = Object.keys(MAIN_CATEGORIES).filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID);
+		const randCategory = categories[Math.floor(Math.random() * categories.length)];
+		return sliceCategory(randCategory);
+	} else if (isAll) {
+		let questions = triviaData.questions!.slice();
+		for (const categoryStr in SPECIAL_CATEGORIES) {
+			questions = questions.filter(q => q.category !== categoryStr);
+		}
+		return questions;
+	} else if (ALL_CATEGORIES[category]) {
+		return sliceCategory(category);
+	} else {
+		throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+	}
 }
 
 class Ladder {
@@ -435,7 +487,8 @@ export class Trivia extends Rooms.RoomGame {
 			this.playerTable[i].clearAnswer();
 		}
 
-		this.broadcast(
+		broadcast(
+			this.room,
 			this.room.tr('Enough players have returned to continue the game!'),
 			this.room.tr('The game will continue with the next question.')
 		);
@@ -458,7 +511,8 @@ export class Trivia extends Rooms.RoomGame {
 		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
 		this.phase = LIMBO_PHASE;
-		this.broadcast(
+		broadcast(
+			this.room,
 			this.room.tr('Not enough players are participating to continue the game!'),
 			this.room.tr`Until there are ${MINIMUM_PLAYERS} players participating and present, the game will be paused.`
 		);
@@ -470,24 +524,12 @@ export class Trivia extends Rooms.RoomGame {
 	 */
 	init() {
 		const cap = this.getCap() || this.room.tr("Infinite");
-		this.broadcast(
+		broadcast(
+			this.room,
 			this.room.tr('Signups for a new trivia game have begun!'),
 			this.room.tr`Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${cap}<br />` +
 			this.room.tr('Enter /trivia join to sign up for the trivia game.')
 		);
-	}
-
-	/**
-	 * Generates and broadcasts the HTML for a generic announcement containing
-	 * a title and an optional message.
-	 */
-	broadcast(title: string, message?: string) {
-		let buffer = `<div class="broadcast-blue"><strong>${title}</strong>`;
-		if (message) buffer += `<br />${message}`;
-		buffer += '</div>';
-
-		if (!this.room) return null;
-		return this.room.addRaw(buffer).update();
 	}
 
 	getDescription() {
@@ -556,7 +598,7 @@ export class Trivia extends Rooms.RoomGame {
 			return this.room.tr`Not enough players have signed up yet! At least ${this.minPlayers} players to begin.`;
 		}
 
-		this.broadcast(this.room.tr`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
+		broadcast(this.room, this.room.tr`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
 		this.phase = INTERMISSION_PHASE;
 		this.setPhaseTimeout(() => this.askQuestion(), START_TIMEOUT);
 	}
@@ -565,13 +607,13 @@ export class Trivia extends Rooms.RoomGame {
 		if (this.isPaused) return this.room.tr("The trivia game is already paused.");
 		if (this.phase === QUESTION_PHASE) return this.room.tr("You cannot pause the trivia game during a question.");
 		this.isPaused = true;
-		this.broadcast(this.room.tr("The Trivia game has been paused."));
+		broadcast(this.room, this.room.tr("The Trivia game has been paused."));
 	}
 
 	resume() {
 		if (!this.isPaused) return this.room.tr("The trivia game is not paused.");
 		this.isPaused = false;
-		this.broadcast(this.room.tr("The Trivia game has been resumed."));
+		broadcast(this.room, this.room.tr("The Trivia game has been resumed."));
 		if (this.phase === INTERMISSION_PHASE) this.setPhaseTimeout(() => this.askQuestion(), PAUSE_INTERMISSION);
 	}
 
@@ -584,7 +626,8 @@ export class Trivia extends Rooms.RoomGame {
 		if (!this.questions.length) {
 			if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
 			this.phaseTimeout = null;
-			this.broadcast(
+			broadcast(
+				this.room,
 				this.room.tr('No questions are left!'),
 				this.room.tr('The game has reached a stalemate')
 			);
@@ -600,7 +643,10 @@ export class Trivia extends Rooms.RoomGame {
 		this.curQuestion = question.question;
 		this.curAnswers = question.answers;
 		this.sendQuestion(question);
+		this.setTallyTimeout();
+	}
 
+	setTallyTimeout() {
 		this.setPhaseTimeout(() => this.tallyAnswers(), this.getRoundLength());
 	}
 
@@ -608,7 +654,8 @@ export class Trivia extends Rooms.RoomGame {
 	 * Broadcasts to the room what the next question is.
 	 */
 	sendQuestion(question: TriviaQuestion) {
-		this.broadcast(
+		broadcast(
+			this.room,
 			this.room.tr`Question${this.game.length === 'infinite' ? ` ${this.questionNumber}` : ''}: ${question.question}`,
 			this.room.tr`Category: ${ALL_CATEGORIES[question.category]}`
 		);
@@ -668,7 +715,7 @@ export class Trivia extends Rooms.RoomGame {
 		this.phaseTimeout = null;
 		const winners = this.getTopPlayers({max: 3});
 		buffer += '<br />' + this.getWinningMessage(winners);
-		this.broadcast(this.room.tr('The answering period has ended!'), buffer);
+		broadcast(this.room, this.room.tr('The answering period has ended!'), buffer);
 
 		for (const userid in this.playerTable) {
 			const player = this.playerTable[userid];
@@ -774,7 +821,7 @@ export class Trivia extends Rooms.RoomGame {
 	}
 
 	end(user: User) {
-		this.broadcast(Utils.html`${this.room.tr`The game was forcibly ended by ${user.name}.`}`);
+		broadcast(this.room, Utils.html`${this.room.tr`The game was forcibly ended by ${user.name}.`}`);
 		this.destroy();
 	}
 }
@@ -821,7 +868,7 @@ export class FirstModeTrivia extends Trivia {
 			this.playerTable[i].clearAnswer();
 		}
 
-		this.broadcast(this.room.tr('The answering period has ended!'), buffer);
+		broadcast(this.room, this.room.tr('The answering period has ended!'), buffer);
 		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 
@@ -838,14 +885,18 @@ export class FirstModeTrivia extends Trivia {
 			player.clearAnswer();
 		}
 
-		this.broadcast(
+		broadcast(
+			this.room,
 			this.room.tr('The answering period has ended!'),
 			this.room.tr('Correct: no one...') + `<br />` +
 			this.room.tr`Answers: ${this.curAnswers.join(', ')}` + `<br />` +
 			this.room.tr('Nobody gained any points.') + `<br />` +
 			this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`
 		);
+		this.setAskTimeout();
+	}
 
+	setAskTimeout() {
 		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -946,7 +997,7 @@ export class TimerModeTrivia extends Trivia {
 		if (winner) return this.win(buffer);
 
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		this.broadcast(this.room.tr('The answering period has ended!'), buffer);
+		broadcast(this.room, this.room.tr('The answering period has ended!'), buffer);
 		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1020,7 +1071,7 @@ export class NumberModeTrivia extends Trivia {
 		}
 
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		this.broadcast(this.room.tr('The answering period has ended!'), buffer);
+		broadcast(this.room, this.room.tr('The answering period has ended!'), buffer);
 		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1083,15 +1134,277 @@ export class TriumvirateModeTrivia extends Trivia {
 		}
 
 		if (winner) return this.win(buffer);
-		this.broadcast(this.room.tr('The answering period has ended!'), buffer);
+		broadcast(this.room, this.room.tr('The answering period has ended!'), buffer);
 		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
 
-const subCommands: ChatCommands = {
+/**
+ * Mastermind is a separate, albeit similar, game from regular Trivia.
+ *
+ * In Mastermind, each player plays their own personal round of Trivia,
+ * and the top n players from those personal rounds go on to the finals,
+ * which is a game of First mode trivia that ends after a specified interval.
+ */
+export class Mastermind extends Rooms.RoomGame {
+	/** userid:score Map */
+	leaderboard: Map<ID, number>;
+	phase: string;
+	currentRound: MastermindRound | MastermindFinals | null;
+	numFinalists: number;
+
+	constructor(room: Room, numFinalists: number) {
+		super(room);
+
+		this.leaderboard = new Map<ID, number>();
+		this.gameid = 'mastermind' as ID;
+		this.title = 'Mastermind';
+		this.allowRenames = true;
+		this.playerCap = Number.MAX_SAFE_INTEGER;
+		this.phase = SIGNUP_PHASE;
+		this.currentRound = null;
+		this.numFinalists = numFinalists;
+		this.init();
+	}
+
+	init() {
+		broadcast(
+			this.room,
+			this.room.tr`Signups for a new Mastermind game have begun!`,
+			this.room.tr`The top <strong>${this.numFinalists}</strong> players will advance to the finals!` + `<br />` +
+			this.room.tr`Type <code>/mastermind join</code> to sign up for the game.`
+		);
+	}
+
+	addTriviaPlayer(user: User) {
+		if (user.previousIDs.concat(user.id).some(id => id in this.playerTable)) {
+			throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+		}
+
+		for (const targetUser of Object.keys(this.playerTable).map(id => Users.get(id))) {
+			if (!targetUser) continue;
+			const isSameUser = (
+				targetUser.previousIDs.includes(user.id) ||
+				targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
+				targetUser.ips.some(ip => user.ips.includes(ip))
+			);
+			if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+		}
+
+		this.addPlayer(user);
+	}
+
+	formatPlayerList() {
+		return Object.values(this.playerTable)
+			.map(player => Utils.html`${player.name} (${this.leaderboard.get(player.id) || "0"})`)
+			.join(', ');
+	}
+
+	/**
+	 * Starts a new round for a particular player.
+	 * @param playerID the user ID of the player
+	 * @param category the category to ask questions in (e.g. Pokémon)
+	 * @param questions an array of TriviaQuestions to be asked
+	 * @param timeout the period of time to end the round after (in seconds)
+	 */
+	startRound(playerID: ID, category: string, questions: TriviaQuestion[], timeout: number) {
+		if (this.currentRound) {
+			throw new Chat.ErrorMessage(this.room.tr`There is already a round of Mastermind in progress.`);
+		}
+		if (!(playerID in this.playerTable)) {
+			throw new Chat.ErrorMessage(this.room.tr`That user is not signed up for Mastermind!`);
+		}
+		if (this.leaderboard.has(playerID)) {
+			throw new Chat.ErrorMessage(this.room.tr`The user "${playerID}" has already played their round of Mastermind.`);
+		}
+		if (this.playerCount <= this.numFinalists) {
+			throw new Chat.ErrorMessage(this.room.tr`You cannot start the game of Mastermind until there are more players than finals slots.`);
+		}
+
+		this.phase = MASTERMIND_ROUNDS_PHASE;
+
+		this.currentRound = new MastermindRound(this.room, category, questions, playerID);
+		setTimeout((id) => {
+			if (!this.currentRound) return;
+			const points = this.currentRound.playerTable[playerID]?.points;
+			const player = this.playerTable[id].name;
+			broadcast(
+				this.room,
+				this.room.tr`The round of Mastermind has ended!`,
+				points ? this.room.tr`${player} earned ${points} points!` : undefined
+			);
+
+			this.leaderboard.set(id, points || 0);
+			this.currentRound.destroy();
+			this.currentRound = null;
+		}, timeout * 1000, playerID);
+	}
+
+	/**
+	 * Starts the Mastermind finals.
+	 * According the specification given by Trivia auth,
+	 * Mastermind finals are always in the 'all' category.
+	 * @param timeout timeout in seconds
+	 */
+	startFinals(timeout: number) {
+		if (this.currentRound) {
+			throw new Chat.ErrorMessage(this.room.tr`There is already a round of Mastermind in progress.`);
+		}
+		for (const player in this.playerTable) {
+			if (!this.leaderboard.has(toID(player))) {
+				throw new Chat.ErrorMessage(this.room.tr`You cannot start finals until the user '${player}' has played a round.`);
+			}
+		}
+
+		const questions = getQuestions('all' as ID);
+		if (!questions.length) throw new Chat.ErrorMessage(this.room.tr`There are no questions in the Trivia database.`);
+
+		this.currentRound = new MastermindFinals(this.room, 'all', questions, this.getTopPlayers(this.numFinalists));
+
+		this.phase = MASTERMIND_FINALS_PHASE;
+		setTimeout(() => {
+			if (!this.currentRound) return;
+			this.currentRound.win();
+			const [winner, second, third] = this.currentRound.getTopPlayers();
+			this.currentRound.destroy();
+			this.currentRound = null;
+
+			let buf = this.room.tr`No one scored any points, so it's a tie!`;
+			if (winner) {
+				const winnerName = Utils.escapeHTML(winner.name);
+				buf = this.room.tr`${winnerName} won the game of Mastermind with ${winner.player.points} points!`;
+			}
+
+			let smallBuf;
+			if (second && third) {
+				const secondPlace = Utils.escapeHTML(second.name);
+				const thirdPlace = Utils.escapeHTML(second.name);
+				smallBuf = `<br />${this.room.tr`${secondPlace} and ${thirdPlace} were runners-up with ${second.player.points} and ${third.player.points} points, respectively.`}`;
+			} else if (second) {
+				const secondPlace = Utils.escapeHTML(second.name);
+				smallBuf = `<br />${this.room.tr`${secondPlace} was a runner up with ${second.player.points} points.`}`;
+			}
+
+			broadcast(this.room, buf, smallBuf);
+			this.destroy();
+		}, timeout * 1000);
+	}
+
+	getTopPlayers(n: number) {
+		return [...this.leaderboard]
+			.sort((a, b) => a[1] - b[1]) // sort by number of points
+			.map(entry => entry[0]) // convert to an array of IDs
+			.slice(0, n); // get the top n players
+	}
+
+	end(user: User) {
+		broadcast(this.room, this.room.tr`The game of Mastermind was forcibly ended by ${user.name}.`);
+		if (this.currentRound) this.currentRound.destroy();
+		this.destroy();
+	}
+}
+
+export class MastermindRound extends FirstModeTrivia {
+	constructor(room: Room, category: string, questions: TriviaQuestion[], playerID?: ID) {
+		/**
+		 * The RoomGame constructor automatically sets room.game to the newly created game.
+		 * We don't want this, since MastermindRounds are an attribute of the correct room.game,
+		 * which is a Mastermind object. Thus, we manually reset room.game when creating a new MastermindRound.
+		 */
+		const trueGame = room.game;
+		super(room, 'first', category, 'infinite', questions, 'Automatically Created');
+		room.game = trueGame;
+
+		this.playerCap = 1;
+		this.minPlayers = 0;
+		if (playerID) {
+			const player = Users.get(playerID);
+			const targetUsername = playerID;
+			if (!player) throw new Chat.ErrorMessage(this.room.tr`User "${targetUsername}" not found.`);
+			this.addPlayer(player);
+		}
+		this.game.mode = 'Mastermind';
+		this.start();
+	}
+
+	init() {
+		return;
+	}
+	start(): string | undefined {
+		const player = Utils.escapeHTML(this.players[0]?.name || '');
+		broadcast(this.room, this.room.tr`A Mastermind round in the ${this.game.category} category for ${player} is starting!`);
+		this.phase = INTERMISSION_PHASE;
+		// Use the regular start timeout since there are many players
+		this.setPhaseTimeout(() => this.askQuestion(), MASTERMIND_FINALS_START_TIMEOUT);
+		return;
+	}
+
+	win() {
+		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
+	}
+
+	setTallyTimeout() {
+		// Players must use /mastermind pass to pass on a question
+		return;
+	}
+
+	pass() {
+		this.tallyAnswers();
+	}
+
+	setAskTimeout() {
+		this.setPhaseTimeout(() => this.askQuestion(), MASTERMIND_INTERMISSION_INTERVAL);
+	}
+
+	destroy() {
+		// Just like in the constructor, we need to ensure that room.game is not overwritten.
+		const room = this.room;
+		const trueGame = room.game;
+		super.destroy();
+		room.game = trueGame;
+	}
+}
+
+export class MastermindFinals extends MastermindRound {
+	constructor(room: Room, category: string, questions: TriviaQuestion[], players: ID[]) {
+		super(room, category, questions);
+		this.playerCap = players.length;
+		for (const id of players) {
+			const player = Users.get(id);
+			if (!player) continue;
+			this.addPlayer(player);
+		}
+	}
+
+	start(): string | undefined {
+		broadcast(this.room, this.room.tr`The Mastermind finals are starting!`);
+		this.phase = INTERMISSION_PHASE;
+		// Use the regular start timeout since there are many players
+		this.setPhaseTimeout(() => this.askQuestion(), MASTERMIND_FINALS_START_TIMEOUT);
+		return;
+	}
+
+	win() {
+		super.win();
+		const points = new Map<string, number>();
+		for (const id in this.playerTable) {
+			points.set(id, this.playerTable[id].points);
+		}
+		return points;
+	}
+
+	setTallyTimeout = FirstModeTrivia.prototype.setTallyTimeout;
+
+	pass() {
+		throw new Chat.ErrorMessage(this.room.tr`You cannot pass in the finals.`);
+	}
+}
+
+const triviaCommands: ChatCommands = {
 	new(target, room, user) {
 		room = this.requireRoom();
-		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in the Trivia room.");
+		if (!isTriviaRoom(room)) return this.errorReply(this.tr`This command can only be used in the Trivia room.`);
 		this.checkCan('show', null, room);
 		this.checkChat();
 		if (room.game) {
@@ -1109,37 +1422,19 @@ const subCommands: ChatCommands = {
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		const category = toID(targets[1]);
-		const isRandomCategory = (category === 'random');
-		const isAll = (category === 'all');
-		let questions;
-		if (isRandomCategory) {
-			const lastCategoryID = toID(triviaData.history?.slice(-1)[0].category).replace("random", "");
-			const categories = Object.keys(MAIN_CATEGORIES).filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID);
-			const randCategory = categories[Math.floor(Math.random() * categories.length)];
-			questions = sliceCategory(randCategory);
-		} else if (isAll) {
-			questions = triviaData.questions!.slice();
-			for (const categoryStr in SPECIAL_CATEGORIES) {
-				questions = questions.filter(q => q.category !== categoryStr);
-			}
-		} else if (ALL_CATEGORIES[category]) {
-			questions = sliceCategory(category);
-		} else {
-			return this.errorReply(this.tr`"${category}" is an invalid category.`);
-		}
-
+		const category = toID(target[1]);
+		let questions = getQuestions(category);
 		// Randomizes the order of the questions.
 		const length = toID(targets[2]);
 		if (!LENGTHS[length]) return this.errorReply(this.tr`"${length}" is an invalid game length.`);
 		// Assume that infinite mode will take at least 75 questions
 		if (questions.length < (LENGTHS[length].cap || 75) / 5) {
-			if (isRandomCategory) {
+			if (category === 'random') {
 				return this.errorReply(
 					this.tr`There are not enough questions in the randomly chosen category to finish a trivia game.`
 				);
 			}
-			if (isAll) {
+			if (category === 'all') {
 				return this.errorReply(
 					this.tr("There are not enough questions in the trivia database to finish a trivia game.")
 				);
@@ -1173,7 +1468,7 @@ const subCommands: ChatCommands = {
 		if (res) return this.errorReply(res);
 		this.sendReply(this.tr('You are now signed up for this game!'));
 	},
-	joinhelp: [`/trivia join - Join the current trivia game.`],
+	joinhelp: [`/trivia join - Join the current game of Trivia or Mastermind.`],
 
 	kick(target, room, user) {
 		room = this.requireRoom();
@@ -1207,18 +1502,24 @@ const subCommands: ChatCommands = {
 
 		const res = game.start();
 		if (res) return this.errorReply(res);
-		// ...
 	},
 	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # &`],
 
 	answer(target, room, user) {
 		room = this.requireRoom();
-		const game = getTriviaGame(room);
+		let game: Trivia | MastermindRound | MastermindFinals;
+		try {
+			const mastermindRound = getMastermindGame(room).currentRound;
+			if (!mastermindRound) throw new Error;
+			game = mastermindRound;
+		} catch (e) {
+			game = getTriviaGame(room);
+		}
 
 		const answer = toID(target);
 		if (!answer) return this.errorReply(this.tr("No valid answer was entered."));
 
-		if (!Object.keys(game.playerTable).includes(user.id)) {
+		if (room.game?.gameid === 'trivia' && !Object.keys(game.playerTable).includes(user.id)) {
 			const res = game.addTriviaPlayer(user);
 			if (res) return this.errorReply(res);
 		}
@@ -1243,7 +1544,12 @@ const subCommands: ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('show', null, room);
 		this.checkChat();
-		const game = getTriviaGame(room);
+		let game: Mastermind | Trivia;
+		try {
+			game = getMastermindGame(room);
+		} catch (e) {
+			game = getTriviaGame(room);
+		}
 
 		game.end(user);
 	},
@@ -1829,7 +2135,7 @@ const subCommands: ChatCommands = {
 			`</ul></details>` +
 			`<details><summary><strong>Game commands</strong></summary><ul>` +
 				`<li><code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &</li>` +
-				`<li><code>/trivia join</code> - Join a trivia game during signups.</li>` +
+				`<li><code>/trivia join</code> - Join a game of Trivia or Mastermind during signups.</li>` +
 				`<li><code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &</li>` +
 				`<li><code>/ta [answer]</code> - Answer the current question.</li>` +
 				`<li><code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &</li>` +
@@ -1863,10 +2169,130 @@ const subCommands: ChatCommands = {
 	},
 };
 
+
+const mastermindCommands: ChatCommands = {
+	answer: triviaCommands.answer,
+	end: triviaCommands.end,
+
+	new(target, room, user) {
+		room = this.requireRoom();
+		if (!isTriviaRoom(room)) return this.errorReply(this.tr`This command can only be used in the Trivia room.`);
+		this.checkCan('show', null, room);
+
+		const finalists = parseInt(target);
+		if (isNaN(finalists) || finalists < 2) {
+			return this.errorReply(this.tr`You must specify a number that is at least 2 for finalists.`);
+		}
+
+		room.game = new Mastermind(room, finalists);
+	},
+	newhelp: [
+		`/mastermind new [number of finalists] — Starts a new game of Mastermind with the specified number of finalists. Requires: + % @ # &`,
+	],
+
+	start(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('show', null, room);
+		this.checkChat();
+		const game = getMastermindGame(room);
+
+		const [category, timeoutString, player] = target.split(',').map(toID);
+		if (!player) return this.parse(`/help mastermind start`);
+		if (!(category in ALL_CATEGORIES)) {
+			return this.errorReply(this.tr`${category} is not a valid category.`);
+		}
+		const categoryName = ALL_CATEGORIES[category];
+		const timeout = parseInt(timeoutString);
+		if (isNaN(timeout) || timeout < 1) {
+			return this.errorReply(this.tr`You must specify a round length of at least 1 second.`);
+		}
+
+		const questions = getQuestions(category);
+		if (!questions.length) {
+			return this.errorReply(this.tr`There are no questions in the ${categoryName} category.`);
+		}
+
+		game.startRound(player, category, questions, timeout);
+	},
+	starthelp: [
+		`/mastermind start [category], [length in seconds], [player] — Starts a round of Mastermind for a player. Requires: + % @ # &`,
+	],
+
+	finals(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('show', null, room);
+		this.checkChat();
+		const game = getMastermindGame(room);
+		if (!target) return this.parse(`/help mastermind finals`);
+
+		const timeout = parseInt(target);
+		if (isNaN(timeout) || timeout < 1) {
+			return this.errorReply(this.tr`You must specify a length of at least 1 second.`);
+		}
+
+		game.startFinals(timeout);
+	},
+	finalshelp: [`/mastermind finals [length in seconds] — Starts the Mastermind finals. Requires: + % @ # &`],
+
+	join(target, room, user) {
+		room = this.requireRoom();
+		getMastermindGame(room).addTriviaPlayer(user);
+		this.sendReply(this.tr('You are now signed up for this game!'));
+	},
+	joinhelp: [`/mastermind join — Joins the current game of Mastermind.`],
+
+	pass(target, room, user) {
+		room = this.requireRoom();
+		const round = getMastermindGame(room).currentRound;
+		if (!round) return this.errorReply(this.tr`No round of Mastermind is currently being played.`);
+		if (!(user.id in round.playerTable)) {
+			return this.errorReply(this.tr`You are not a player in the current round of Mastermind.`);
+		}
+		round.pass();
+	},
+	passhelp: [`/mastermind pass — Passes on the current question. Must be the player of the current round of Mastermind.`],
+
+	'': 'players',
+	players(target, room, user) {
+		room = this.requireRoom();
+		if (!this.runBroadcast()) return false;
+		const game = getMastermindGame(room);
+
+		let buf = this.tr`There is a Mastermind game in progress, and it is in its ${game.phase} phase.`;
+		buf += `<br /><hr>${this.tr`Players`}: ${game.formatPlayerList()}`;
+
+		this.sendReplyBox(buf);
+	},
+
+	help() {
+		return this.parse(`${this.cmdToken}help mastermind`);
+	},
+
+	mastermindhelp() {
+		if (!this.runBroadcast()) return;
+		const commandHelp = [
+			`<code>/mastermind new [number of finalists]</code>: starts a new game of Mastermind with the specified number of finalists. Requires: + % @ # &`,
+			`<code>/mastermind start [category], [length in seconds], [player]</code>: starts a round of Mastermind for a player. Requires: + % @ # &`,
+			`<code>/mastermind finals [length in seconds]</code>: starts the Mastermind finals. Requires: + % @ # &`,
+			`<code>/mastermind join</code>: joins the current game of Mastermind.`,
+			`<code>/mastermind answer [answer]</code>: answers a question in a round of Mastermind.`,
+			`<code>/mastermind pass</code>: passes on the current question. Must be the player of the current round of Mastermind.`,
+		];
+		return this.sendReplyBox(
+			`<strong>Mastermind</strong> is a game in which each player tries to score as many points as possible in a timed round where only they can answer, ` +
+			`and the top X players advance to the finals, which is a timed game of Trivia in which only the first player to answer a question recieves points.` +
+			`<details><summary><strong>Commands</strong></summary>${commandHelp.join('<br />')}</details>`
+		);
+	},
+};
+
 export const commands: ChatCommands = {
-	trivia: subCommands,
-	ta: subCommands.answer,
-	triviahelp: subCommands.triviahelp,
+	mm: mastermindCommands,
+	mastermind: mastermindCommands,
+	mastermindhelp: mastermindCommands.mastermindhelp,
+	trivia: triviaCommands,
+	ta: triviaCommands.answer,
+	triviahelp: triviaCommands.triviahelp,
 };
 
 process.nextTick(() => {
