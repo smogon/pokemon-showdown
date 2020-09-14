@@ -1445,27 +1445,30 @@ export class ModdedDex {
 	/**
 	* Use instead of Dex.packTeam to generate more human-readable team output.
 	*/
-	stringifyTeam(team: PokemonSet[], nicknames?: string[]) {
+	stringifyTeam(team: PokemonSet[], nicknames?: string[], hideStats?: boolean) {
 		let output = '';
 		for (const [i, mon] of team.entries()) {
 			const species = Dex.getSpecies(mon.species);
 			output += nicknames ? `${nicknames?.[i]} (${species.name})` : species.name;
-			output += ` @ ${Dex.getItem(mon.item).name}<br/>`;
-			output += `Ability: ${Dex.getAbility(mon.ability).name}<br/>`;
-			if (typeof mon.happiness === 'number' && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br/>`;
-			const evs = [];
-			for (const stat in mon.evs) {
-				if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
+			output += mon.item ? ` @ ${Dex.getItem(mon.item).name}<br />` : `<br />`;
+			output += `Ability: ${Dex.getAbility(mon.ability).name}<br />`;
+			if (typeof mon.happiness === 'number' && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br />`;
+			if (mon.gigantamax) output += `Gigantamax: Yes<br />`;
+			if (!hideStats) {
+				const evs = [];
+				for (const stat in mon.evs) {
+					if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
+				}
+				if (evs.length) output += `EVs: ${evs.join(' / ')}<br />`;
+				if (mon.nature) output += `${this.getNature(mon.nature).name} Nature<br />`;
+				const ivs = [];
+				for (const stat in mon.ivs) {
+					if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
+				}
+				if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br />`;
 			}
-			if (evs.length) output += `EVs: ${evs.join(' / ')}<br/>`;
-			if (mon.nature) output += `${this.getNature(mon.nature).name} Nature<br/>`;
-			const ivs = [];
-			for (const stat in mon.ivs) {
-				if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
-			}
-			if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br/>`;
-			output += mon.moves.map(move => `- ${Dex.getMove(move).name}<br/>`).join('');
-			output += '<br/>';
+			output += mon.moves.map(move => `- ${Dex.getMove(move).name}<br />`).join('');
+			output += '<br />';
 		}
 		return output;
 	}
