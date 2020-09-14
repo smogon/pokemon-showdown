@@ -238,8 +238,8 @@ export const LogViewer = new class {
 			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
 			buf += `<br><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
+				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:${limit + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:3000">View all<br />&#x25bc;</button></div>`;
 			}
 		}
 		buf += `</div>`;
@@ -629,8 +629,8 @@ export const LogSearcher = new class {
 		buf += sorted.filter(Boolean).join('<hr>');
 		if (limit) {
 			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${limit}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${limit + 200}">View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
+			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:${limit + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:3000">View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
 	}
@@ -731,14 +731,13 @@ export const commands: ChatCommands = {
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
-		room = this.requireRoom();
 		target = target.trim();
 		const args = target.split(',').map(item => item.trim());
 		if (!target) return this.parse('/help searchlogs');
 		let date = 'all';
 		const searches: string[] = [];
 		let limit = '500';
-		let tarRoom = room.roomid;
+		let tarRoom = room?.roomid;
 		for (const arg of args) {
 			if (arg.startsWith('room:')) {
 				const id = arg.slice(5);
@@ -752,6 +751,11 @@ export const commands: ChatCommands = {
 			}
 		}
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
+		if (!curRoom) {
+			return this.errorReply(
+				`Invalid room${this.room ? '' : ` (When using this command in a PM, you must specify a room)`}.`
+			);
+		}
 		return this.parse(
 			`/join view-chatlog-${curRoom}--${date}--search-${Dashycode.encode(searches.join('+'))}--limit-${limit}`
 		);
