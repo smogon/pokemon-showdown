@@ -157,11 +157,6 @@ describe('Trivia', function () {
 		assert.equal(this.game.verifyAnswer('not the right answer'), false);
 	});
 
-	it('should not throw when attempting to broadcast after the game has ended', function () {
-		this.game.destroy();
-		assert.doesNotThrow(() => this.game.broadcast('ayy', 'lmao'));
-	});
-
 	context('marking player absence', function () {
 		beforeEach(function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
