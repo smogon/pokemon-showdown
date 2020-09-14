@@ -2590,6 +2590,7 @@ export const commands: ChatCommands = {
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
 
+	regdate: 'registertime',
 	regtime: 'registertime',
 	async registertime(target, room, user) {
 		this.checkChat();
@@ -2598,12 +2599,12 @@ export const commands: ChatCommands = {
 		target = toID(target);
 		if (!target) target = user.id;
 		const raw = await Net(`https://${Config.routes.root}/users/${target}.json`).get().catch(() => {});
-		if (!raw) return this.errorReply(`An error occurred when retrieving user data.`);
+		if (!raw) return this.sendReplyBox(`The user '${target}' is unregistered.`);
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(raw);
-		const time = new Date(result.registertime * 1000);
-		const regTime = Chat.toTimestamp(new Date(time), {human: true});
-		const regTimeAgo = Chat.toDurationString(Date.now() - time, {precision: 1});
+		const date = new Date(result.registertime * 1000);
+		const regDate = Chat.toTimestamp(date, {human: true});
+		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
 		this.sendReplyBox(
 			`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`
 		);
