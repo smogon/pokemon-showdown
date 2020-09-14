@@ -1922,6 +1922,14 @@ export const Chat = new class {
 		return `${arr.slice(0, -1).join(", ")}, or ${arr.slice(-1)[0]}`;
 	}
 
+	/**
+	 * Convert multiline HTML into a single line without losing whitespace (so
+	 * <pre> blocks still render correctly). Linebreaks inside <> are replaced
+	 * with ` `, and linebreaks outside <> are replaced with `&#10;`.
+	 *
+	 * PS's protocol often requires sending a block of HTML in a single line,
+	 * so this ensures any block of HTML ends up as a single line.
+	 */
 	collapseLineBreaksHTML(htmlContent: string) {
 		htmlContent = htmlContent.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
 		htmlContent = htmlContent.replace(/\n/g, '&#10;');
