@@ -2601,12 +2601,11 @@ export const commands: ChatCommands = {
 		if (!raw) return this.errorReply(`An error occurred when retrieving user data.`);
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(raw);
-		const time = result.registertime * 1000;
-		const [day, minutes] = Chat.toTimestamp(new Date(time), {human: true}).split(' ');
-		return this.sendReplyBox(
-			`The user '${target}' registered ` +
-			`${Chat.toDurationString(Date.now() - time, {precision: 1})} ago, ` +
-			`on the date ${day}, at ${minutes}.`
+		const time = new Date(result.registertime * 1000);
+		const regTime = Chat.toTimestamp(new Date(time), {human: true});
+		const regTimeAgo = Chat.toDurationString(Date.now() - time, {precision: 1});
+		this.sendReplyBox(
+			`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`
 		);
 	},
 	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],
