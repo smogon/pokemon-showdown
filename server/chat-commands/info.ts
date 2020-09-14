@@ -11,6 +11,7 @@
 import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
+import {Net} from '../../lib/net';
 
 export const commands: ChatCommands = {
 	ip: 'whois',
@@ -2588,6 +2589,27 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
+
+	regtime: 'registertime',
+	async registertime(target, room, user) {
+		this.checkChat();
+		this.runBroadcast();
+		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
+		target = toID(target);
+		if (!target) target = user.id;
+		const raw = await Net(`https://${Config.routes.root}/users/${target}.json`).get().catch(() => {});
+		if (!raw) return this.errorReply(`An error occurred when retrieving user data.`);
+		// not in a try-catch block because if this doesn't work, this is a problem that should be known
+		const result = JSON.parse(raw);
+		const time = result.registertime * 1000;
+		const [day, minutes] = Chat.toTimestamp(new Date(time), {human: true}).split(' ');
+		return this.sendReplyBox(
+			`The user '${target}' registered ` +
+			`${Chat.toDurationString(Date.now() - time, {precision: 1})} ago, ` +
+			`on the date ${day}, at ${minutes}.`
+		);
+	},
+	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],
 
 	pi(target, room, user) {
 		if (!this.runBroadcast()) return false;
