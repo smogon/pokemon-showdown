@@ -544,11 +544,12 @@ export const commands: ChatCommands = {
 			return this.parse(`/pm ${targetUsername}, /invite ${targetRoom.roomid}`);
 		}
 
-		const targetUser = this.pmTarget!; // not room means it's a PM
+		const targetUser = this.pmTarget; // not room means it's a PM
 
 		if (!targetRoom) {
 			return this.errorReply(this.tr`The room "${target}" was not found.`);
 		}
+		if (!targetUser) return this.parse(`/help invite`);
 		if (!targetRoom.checkModjoin(targetUser)) {
 			this.room = targetRoom;
 			this.parse(`/roomvoice ${targetUser.name}`);
