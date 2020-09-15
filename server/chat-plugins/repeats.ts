@@ -37,7 +37,7 @@ export function removeRepeat(room: BasicRoom, phrase: string) {
 
 function runRepeat(room: BasicRoom, repeat: RepeatedPhrase) {
 	if (!repeats.has(room.roomid)) {
-		repeats.set(room.roomid, new Map<string, NodeJS.Timeout | null>());
+		repeats.set(room.roomid, new Map());
 	}
 
 	const displayRepeat = (targetRoom: BasicRoom, phrase: string) => {
