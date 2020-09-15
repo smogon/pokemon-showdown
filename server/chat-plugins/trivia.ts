@@ -1422,7 +1422,7 @@ const triviaCommands: ChatCommands = {
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		const category = toID(target[1]);
+		const category = toID(targets[1]);
 		let questions = getQuestions(category);
 		// Randomizes the order of the questions.
 		const length = toID(targets[2]);
