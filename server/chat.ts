@@ -1671,7 +1671,7 @@ export const Chat = new class {
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /\bthis\.requires?Room\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
-			entry.broadcastable = /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
+			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
 
 			// assign properties from the base command if the current command uses CommandContext.run.
