@@ -2607,7 +2607,7 @@ export const commands: ChatCommands = {
 			else throw new Chat.ErrorMessage(e.message);
 		}
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
-		const result = JSON.parse(raw);
+		const result = JSON.parse(rawResult);
 		const date = new Date(result.registertime * 1000);
 		const regDate = Chat.toTimestamp(date, {human: true});
 		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
