@@ -45,7 +45,7 @@ function runRepeat(room: BasicRoom, repeat: RepeatedPhrase) {
 		targetRoom.update();
 	};
 
-	repeats.get(room.roomid)?.set(
+	repeats.get(room.roomid)!.set(
 		repeat.phrase,
 		setInterval(displayRepeat, repeat.interval, room, repeat.phrase)
 	);
