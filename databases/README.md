@@ -9,4 +9,4 @@ All tables should use `CREATE ... IF NOT EXISTS` syntax so that they can be run 
 
 ## Chat Plugins
 
-All chat plugins tables should be prefixed by the name of said plugin, to avoid namespace errors. For example, the Help filter pluginm ight have a table called `help_regexes`, or the Trivia plugin might have a table called `trivia_questions`.
+All chat plugins tables should be prefixed by the name of said plugin, to avoid namespace errors. For example, the Help filter plugin might have a table called `help_regexes`, or the Trivia plugin might have a table called `trivia_questions`
