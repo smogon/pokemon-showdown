@@ -1172,7 +1172,7 @@ export class RandomTeams {
 					rejectAbility = (hasType['Steel'] && !hasMove['fakeout']);
 				} else if (ability === 'Triage') {
 					rejectAbility = (!counter['recovery']);
- 				} else if (ability === 'Unaware') {
+				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
 					rejectAbility = (hasAbility['Prankster'] || !counter.setupType && !isDoubles);
@@ -1343,7 +1343,8 @@ export class RandomTeams {
 			item = 'Leftovers';
 
 		// Better than Leftovers
-		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !hasMove['substitute'] && !hasMove['tailslap'] && !counter['recoil'] && !counter['recovery'] && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 255 && !isDoubles) {
+		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !hasMove['substitute'] && !hasMove['tailslap'] && !counter['recoil'] && !counter['recovery'] &&
+			species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 255 && !isDoubles) {
 			item = 'Focus Sash';
 		} else if (ability === 'Water Bubble' && !isDoubles) {
 			item = 'Mystic Water';
