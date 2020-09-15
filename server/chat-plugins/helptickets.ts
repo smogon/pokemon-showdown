@@ -206,9 +206,10 @@ export class HelpTicket extends Rooms.RoomGame {
 		const creator = (
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
+		const ticketUser = Users.get(this.ticket.userid);
 		return (
 			`<a class="button ${notifying}" href="/help-${this.ticket.userid}"` +
-			` ${this.getPreview()}>Help ${creator}: ${this.ticket.type}</a> `
+			` ${this.getPreview()}>${creator}${ticketUser?.language ? ` <small>(${ticketUser.language})</small>` : ``}: ${this.ticket.type}</a> `
 		);
 	}
 	getPreview() {
