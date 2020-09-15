@@ -2599,10 +2599,13 @@ export const commands: ChatCommands = {
 		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
 		target = toID(target);
 		if (!target) target = user.id;
-		const raw = await Net(`https://${Config.routes.root}/users/${target}.json`).get().catch(e => {
+		let rawResult;
+		try {
+			rawResult = await Net(`https://${Config.routes.root}/users/${target}.json`).get();
+		} catch (e) {
 			if (e.message.includes('Not found')) throw new Chat.ErrorMessage(`User '${target}' is unregistered.`);
 			else throw new Chat.ErrorMessage(e.message);
-		});
+		}
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(raw);
 		const date = new Date(result.registertime * 1000);
