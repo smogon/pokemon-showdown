@@ -2567,7 +2567,7 @@ export const commands: ChatCommands = {
 		}
 		room.settings.quotes.push({userid: user.id, quote: target, date: Date.now()});
 		room.saveSettings();
-		const collapsedQuote = Chat.collapseLineBreaksHTML(target).replace(/&#10;/g, ' ');
+		const collapsedQuote = target.replace(/\n/g, ' ');
 		this.privateModAction(`${user.name} added a new quote: "${collapsedQuote}".`);
 		return this.modlog(`ADDQUOTE`, null, collapsedQuote);
 	},
@@ -2592,7 +2592,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Quote not found.`);
 		}
 		const [removed] = targetRoom.settings.quotes.splice(index - 1, 1);
-		const collapsedQuote = Chat.collapseLineBreaksHTML(removed.quote).replace(/&#10;/g, ' ');
+		const collapsedQuote = target.replace(/\n/g, ' ');
 		this.privateModAction(`${user.name} removed quote indexed at ${index}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
 		this.modlog(`REMOVEQUOTE`, null, collapsedQuote);
 		targetRoom.saveSettings();
