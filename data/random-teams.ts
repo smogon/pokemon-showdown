@@ -810,9 +810,6 @@ export class RandomTeams {
 				case 'facade':
 					if (!!counter['recovery'] || movePool.includes('doubleedge')) rejected = true;
 					break;
-				case 'hypervoice':
-					if (hasMove['blizzard']) rejected = true;
-					break;
 				case 'quickattack':
 					if (!!counter['speedsetup'] || hasType['Rock'] && !!counter.Status) rejected = true;
 					if (counter.Physical > 3 && movePool.includes('uturn')) rejected = true;
@@ -1013,7 +1010,7 @@ export class RandomTeams {
 					(hasType['Psychic'] && !counter['Psychic'] && !hasType['Ghost'] && !hasType['Steel'] && (hasAbility['Psychic Surge'] || counter.setupType || movePool.includes('psychicfangs'))) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 80) ||
 					((hasType['Steel'] || hasAbility['Steelworker']) && (!counter['Steel'] || (hasMove['bulletpunch'] && counter.stab < 2)) && species.baseStats.atk >= 95) ||
-					(hasType['Water'] && !counter['Water'] && (!isDoubles || movePool.includes('hypervoice'))) ||
+					(hasType['Water'] && !counter['Water'] || movePool.includes('hypervoice')) ||
 					((hasAbility['Moody'] || hasMove['wish']) && movePool.includes('protect')) ||
 					((hasMove['lightscreen'] && movePool.includes('reflect')) || (hasMove['reflect'] && movePool.includes('lightscreen'))) ||
 					((movePool.includes('milkdrink') || movePool.includes('recover') || movePool.includes('roost') || movePool.includes('slackoff') || movePool.includes('softboiled')) &&
@@ -1071,7 +1068,7 @@ export class RandomTeams {
 			let rejectAbility: boolean;
 			do {
 				rejectAbility = false;
-				if (['Cloud Nine', 'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine', 'Weak Armor'].includes(ability)) {
+				if (['Cloud Nine', 'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge', 'Power Construct', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine', 'Weak Armor'].includes(ability)) {
 					rejectAbility = true;
 				} else if (['Adaptability', 'Contrary', 'Serene Grace', 'Skill Link', 'Strong Jaw'].includes(ability)) {
 					rejectAbility = !counter[toID(ability)];
@@ -1129,8 +1126,6 @@ export class RandomTeams {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Own Tempo') {
 					rejectAbility = isDoubles;
-				} else if (ability === 'Power Construct') {
-					rejectAbility = true;
 				} else if (ability === 'Prankster') {
 					rejectAbility = !counter['Status'];
 				} else if (ability === 'Pressure') {
@@ -1176,8 +1171,8 @@ export class RandomTeams {
 				} else if (ability === 'Tough Claws') {
 					rejectAbility = (hasType['Steel'] && !hasMove['fakeout']);
 				} else if (ability === 'Triage') {
-					rejectAbility = (!counter['recovery'] && !hasMove['aromatherapy']);
-				} else if (ability === 'Unaware') {
+					rejectAbility = (!counter['recovery']);
+ 				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
 					rejectAbility = (hasAbility['Prankster'] || !counter.setupType && !isDoubles);
@@ -1348,7 +1343,7 @@ export class RandomTeams {
 			item = 'Leftovers';
 
 		// Better than Leftovers
-		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !hasMove['substitute'] && !counter['recoil'] && !counter['recovery'] && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 255 && !isDoubles) {
+		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !hasMove['substitute'] && !hasMove['tailslap'] && !counter['recoil'] && !counter['recovery'] && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 255 && !isDoubles) {
 			item = 'Focus Sash';
 		} else if (ability === 'Water Bubble' && !isDoubles) {
 			item = 'Mystic Water';
