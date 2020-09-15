@@ -541,6 +541,11 @@ export const Formats: FormatList = [
 				return [`You are limited to one Arceus forme.`, `(You have ${arceus} Arceus formes.)`];
 			}
 		},
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldexbh') {
+				this.add('html', '<div class="broadcast-blue"><strong>National Dex BH is currently suspecting Bolt Beak and Fishious Rend! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658587/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 
 	// Pet Mods
