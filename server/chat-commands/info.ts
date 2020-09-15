@@ -1995,7 +1995,6 @@ export const commands: ChatCommands = {
 
 	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
-		target = target.toLowerCase().trim();
 		target = toID(target);
 		const showAll = target === 'all';
 		if (showAll && this.broadcasting) {
