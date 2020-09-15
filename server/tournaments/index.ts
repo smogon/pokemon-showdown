@@ -1832,7 +1832,6 @@ export const commands: ChatCommands = {
 		forcetimer(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			checkPermissions(this, room, user);
-			this.checkCan('gamemanagement', null, room);
 			const tournament = room.getGame(Tournament);
 			if (!tournament) return this.errorReply(`There is no tournament running.`);
 			target = target.trim();
