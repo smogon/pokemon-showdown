@@ -564,6 +564,7 @@ exports.grouplist = [
 		declare: true,
 		addhtml: true,
 		gamemanagement: true,
+		tournaments: true,
 	},
 	{
 		symbol: '*',
@@ -593,6 +594,7 @@ exports.grouplist = [
 		declare: true,
 		modchat: true,
 		gamemanagement: true,
+		tournaments: true,
 		joinbattle: true,
 	},
 	{
@@ -610,7 +612,6 @@ exports.grouplist = [
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true,
 		game: true,
 	},
 	{
@@ -649,7 +650,6 @@ exports.grouplist = [
 		modchat: true,
 		editprivacy: true,
 		gamemanagement: true,
-		tournaments: true,
 		joinbattle: true,
 		nooverride: true,
 	},
