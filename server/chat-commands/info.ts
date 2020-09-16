@@ -2611,9 +2611,7 @@ export const commands: ChatCommands = {
 		const date = new Date(result.registertime * 1000);
 		const regDate = Chat.toTimestamp(date, {human: true});
 		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
-		this.sendReplyBox(
-			`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`
-		);
+		this.sendReplyBox(Chat.html`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`);
 	},
 	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],
 
