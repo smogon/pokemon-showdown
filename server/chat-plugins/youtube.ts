@@ -186,6 +186,7 @@ export const commands: ChatCommands = {
 	youtube: {
 		async addchannel(target, room, user) {
 			room = this.requireRoom();
+			this.slowCommand();
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			let [id, name] = target.split(',');
 			if (name) name = name.trim();

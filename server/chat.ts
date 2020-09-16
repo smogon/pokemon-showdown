@@ -48,6 +48,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	cmd: string,
 	fullCmd: string,
 	isPrivate: boolean,
+	isSlow: boolean,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -1339,6 +1340,14 @@ export class CommandContext extends MessageContext {
 		}
 		return this.room;
 	}
+	slowCommand() {
+		this.handler!.isSlow = true;
+		const throttle = this.user.trusted ? 100 : 600;
+		if (this.user.lastSlowCommand && (Date.now() - this.user.lastSlowCommand) < throttle) {
+			throw new Chat.ErrorMessage(`You are using the command /${this.fullCmd} too quickly - please wait a bit and try again.`);
+		}
+		this.user.lastSlowCommand = Date.now();
+	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
 			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
@@ -1654,6 +1663,7 @@ export const Chat = new class {
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
+			entry.isSlow = /this\.slowCommand/.test(handlerCode);
 
 			// assign properties from the base command if the current command uses CommandContext.run.
 			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
@@ -1665,6 +1675,7 @@ export const Chat = new class {
 					if (baseEntry.hasRoomPermissions) entry.hasRoomPermissions = baseEntry.hasRoomPermissions;
 					if (baseEntry.broadcastable) entry.broadcastable = baseEntry.broadcastable;
 					if (baseEntry.isPrivate) entry.isPrivate = baseEntry.isPrivate;
+					if (baseEntry.isSlow) entry.isSlow = baseEntry.isSlow;
 				}
 			}
 

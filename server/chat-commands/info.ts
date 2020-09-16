@@ -2560,6 +2560,7 @@ export const commands: ChatCommands = {
 
 		let buf;
 		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			this.slowCommand();
 			const YouTube = new YoutubeInterface();
 			buf = await YouTube.generateVideoDisplay(link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
@@ -2594,7 +2595,7 @@ export const commands: ChatCommands = {
 	regdate: 'registertime',
 	regtime: 'registertime',
 	async registertime(target, room, user) {
-		this.checkChat();
+		this.slowCommand();
 		this.runBroadcast();
 		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
 		target = toID(target);
