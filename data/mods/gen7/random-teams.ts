@@ -116,6 +116,9 @@ export class RandomGen7Teams extends RandomTeams {
 				case 'icebeam':
 					if (hasAbility['Tinted Lens'] && !!counter['Status']) rejected = true;
 					break;
+				case 'morningsun':
+					if (counter.damagingMoves.length < 1) rejected = true;
+					break;
 				case 'perishsong':
 					if (!hasMove['protect']) rejected = true;
 					break;
