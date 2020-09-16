@@ -1995,7 +1995,7 @@ export const commands: ChatCommands = {
 
 	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
-		target = target.toLowerCase().trim();
+		target = toID(target);
 		const showAll = target === 'all';
 		if (showAll && this.broadcasting) {
 			return this.sendReplyBox(this.tr`You cannot broadcast all FAQs at once.`);
@@ -2023,7 +2023,11 @@ export const commands: ChatCommands = {
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(this.tr`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
 		}
-		if (showAll || !buffer.length) {
+		if (!buffer.length && target) {
+			this.errorReply(`'${target}' is an invalid FAQ.`);
+			return this.parse(`/help faq`);
+		}
+		if (showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/pages/faq">${this.tr`Frequently Asked Questions`}</a>`);
 		}
 		this.sendReplyBox(buffer.join(`<br />`));
