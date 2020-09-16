@@ -187,6 +187,14 @@ export class ErrorMessage extends Error {
 	}
 }
 
+export class Interruption extends Error {
+	constructor() {
+		super('');
+		this.name = 'Interruption';
+		Error.captureStackTrace(this, ErrorMessage);
+	}
+}
+
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
 	readonly user: User;
@@ -318,6 +326,9 @@ export class PageContext extends MessageContext {
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
 				if (err.message) this.errorReply(err.message);
+				return;
+			}
+			if (err.name.endsWith('Interruption')) {
 				return;
 			}
 			Monitor.crashlog(err, 'A chat page', {
@@ -465,6 +476,9 @@ export class CommandContext extends MessageContext {
 				this.errorReply(err.message);
 				return false;
 			}
+			if (err.name.endsWith('Interruption')) {
+				return;
+			}
 			Monitor.crashlog(err, 'A chat command', {
 				user: this.user.name,
 				room: this.room?.roomid,
@@ -485,6 +499,9 @@ export class CommandContext extends MessageContext {
 				if (err.name?.endsWith('ErrorMessage')) {
 					this.errorReply(err.message);
 					return false;
+				}
+				if (err.name.endsWith('Interruption')) {
+					return;
 				}
 				Monitor.crashlog(err, 'An async chat command', {
 					user: this.user.name,
@@ -1079,6 +1096,7 @@ export class CommandContext extends MessageContext {
 
 		const gameFilter = this.checkGameFilter();
 		if (typeof gameFilter === 'string') {
+			if (gameFilter === '') throw new Chat.Interruption();
 			throw new Chat.ErrorMessage(gameFilter);
 		}
 
@@ -1547,6 +1565,7 @@ export const Chat = new class {
 	readonly CommandContext = CommandContext;
 	readonly PageContext = PageContext;
 	readonly ErrorMessage = ErrorMessage;
+	readonly Interruption = Interruption;
 	/**
 	 * Command parser
 	 *
