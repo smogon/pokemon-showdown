@@ -2604,7 +2604,7 @@ export const commands: ChatCommands = {
 			rawResult = await Net(`https://${Config.routes.root}/users/${target}.json`).get();
 		} catch (e) {
 			if (e.message.includes('Not found')) throw new Chat.ErrorMessage(`User '${target}' is unregistered.`);
-			else throw new Chat.ErrorMessage(e.message);
+			throw new Chat.ErrorMessage(e.message);
 		}
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(rawResult);
