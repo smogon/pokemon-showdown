@@ -498,9 +498,9 @@ export const pages: PageTable = {
 				content += filterWords[key].map(([regex, word, reason, filterTo, hits]) => {
 					let entry = '';
 					if (filterTo) {
-						entry = `<abbr title="${reason}"><code>${word}</code></abbr> &rArr; ${filterTo}`;
+						entry = Utils.html`<abbr title="${reason}"><code>${word}</code></abbr> &rArr; ${filterTo}`;
 					} else {
-						entry = `<abbr title="${reason}">${word}</abbr>`;
+						entry = Utils.html`<abbr title="${reason}">${word}</abbr>`;
 					}
 					return `<tr><td>${entry}</td><td>${hits}</td></tr>`;
 				}).join('');
