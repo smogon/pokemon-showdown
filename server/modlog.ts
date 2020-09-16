@@ -10,11 +10,8 @@
 
 
 import {FS} from '../lib/fs';
-import {QueryProcessManager} from '../lib/process-manager';
-import {Repl} from '../lib/repl';
 import * as Database from 'better-sqlite3';
 
-const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
 const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
@@ -120,22 +117,12 @@ export class Modlog {
 		this.usePM = !noProcessManager && !Config.nofswriting;
 	}
 
-	async runSQL(query: ModlogQuery<any>, forceNoPM = false): Promise<Database.RunResult> {
-		query.returnsResults = false;
-		if (!forceNoPM && this.usePM) {
-			return PM.query(query);
-		} else {
-			return query.statement.run(query.args);
-		}
+	runSQL(query: ModlogQuery<any>): Database.RunResult {
+		return query.statement.run(query.args);
 	}
 
-	async runSQLWithResults(query: ModlogQuery<any>, forceNoPM = false): Promise<unknown[]> {
-		query.returnsResults = true;
-		if (!forceNoPM && this.usePM) {
-			return PM.query(query);
-		} else {
-			return query.statement.all(query.args);
-		}
+	runSQLWithResults(query: ModlogQuery<any>): unknown[] {
+		return query.statement.all(query.args);
 	}
 
 	/**
@@ -166,13 +153,12 @@ export class Modlog {
 	/******************************************
 	 * Methods for reading (searching) modlog *
 	 ******************************************/
-	generateRegex(search: string, isExact?: boolean) {
+	generateRegex(search: string) {
 		// Ensure the generated regex can never be greater than or equal to the value of
 		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
 		// search with max length MAX_QUERY_LENGTH. Otherwise, the modlog
 		// child process will crash when attempting to execute any RegExp
 		// constructed with it (i.e. when not configured to use ripgrep).
-		if (isExact) return search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 		return `[^a-zA-Z0-9]?${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 
@@ -205,26 +191,30 @@ export class Modlog {
 		}
 
 		if (userid) {
-			const regex = this.generateRegex(userid, true);
-			query += ` AND (regex(?, userid) OR regex(?, autoconfirmed_userid) OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND regex(?, userid)))`;
-			args.push(regex, regex, regex);
+			query += ` AND (userid LIKE '%' || ? || '%' OR autoconfirmed_userid LIKE '%' || ? || '%' OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE '%' || ? || '%'))`;
+			args.push(userid, userid, userid);
 		}
 
 		if (search.ip) {
-			query += ` AND regex(?, ip)`;
-			args.push(this.generateRegex(search.ip, true));
+			query += ` AND ip LIKE '%' || ? || '%'`;
+			args.push(search.ip);
 		}
 
 		if (search.actionTaker) {
-			query += ` AND regex(?, action_taker_userid)`;
-			args.push(this.generateRegex(search.actionTaker, true));
+			query += ` AND action_taker_userid LIKE '%' || ? || '%'`;
+			args.push(search.actionTaker);
 		}
 
 		if (search.note) {
 			const parts = [];
 			for (const noteSearch of search.note.searches) {
-				parts.push(`regex(?, note)`);
-				args.push(this.generateRegex(noteSearch, search.note.isExact));
+				if (!search.note.isExact) {
+					parts.push(`regex(?, note)`);
+					args.push(this.generateRegex(noteSearch));
+				} else {
+					parts.push(`note LIKE '%' || ? || '%'`);
+					args.push(noteSearch);
+				}
 			}
 			query += ` AND ${parts.join(' OR ')}`;
 		}
@@ -237,21 +227,21 @@ export class Modlog {
 		return {statement: this.database.prepare(query), args};
 	}
 
-	async getGlobalPunishments(user: User | string, days = 30) {
+	getGlobalPunishments(user: User | string, days = 30) {
 		const userid = toID(user);
 		const args: (string | number)[] = [
 			userid, userid, userid, Date.now() - (days * 24 * 60 * 60 * 1000), ...GLOBAL_PUNISHMENTS,
 		];
-		const results = await this.runSQLWithResults({statement: this.globalPunishmentsSearchQuery, args});
+		const results = this.runSQLWithResults({statement: this.globalPunishmentsSearchQuery, args});
 		return results.length;
 	}
 
-	async search(
+	search(
 		roomid: ModlogID = 'global',
 		search: ModlogSearch = {},
 		maxLines = 20,
 		onlyPunishments = false
-	): Promise<ModlogResults> {
+	): ModlogResults {
 		const rooms = (roomid === 'public' || roomid === 'all' ?
 			[...Rooms.rooms.values(), {roomid: 'global', settings: {isPrivate: false, isPersonal: false}}]
 				.filter(room => {
@@ -264,7 +254,7 @@ export class Modlog {
 
 		const query = this.prepareSearch(rooms, maxLines, onlyPunishments, search);
 		const start = Date.now();
-		const rows = await this.runSQLWithResults(query) as AnyObject[];
+		const rows = this.runSQLWithResults(query) as AnyObject[];
 		const results: ModlogEntry[] = [];
 		for (const row of rows) {
 			if (!row.action) continue;
@@ -289,45 +279,6 @@ export class Modlog {
 		}
 		return {results, duration};
 	}
-}
-
-// eslint-disable-next-line max-len
-export const PM = new QueryProcessManager<ModlogQuery<any>, unknown[] | Database.RunResult | undefined>(
-	module,
-	data => {
-		try {
-			if (data.returnsResults) {
-				return modlog.runSQLWithResults(data, true);
-			} else {
-				return modlog.runSQL(data, true);
-			}
-		} catch (err) {
-			Monitor.crashlog(err, 'A modlog query', data);
-		}
-	}
-);
-if (!PM.isParentProcess) {
-	global.Config = require('./config-loader').Config;
-
-	// @ts-ignore ???
-	global.Monitor = {
-		crashlog(error: Error, source = 'A modlog process', details: {} | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore please be silent
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-	};
-
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A modlog child process');
-		}
-	});
-
-	// eslint-disable-next-line no-eval
-	Repl.start('modlog', cmd => eval(cmd));
-} else {
-	PM.spawn(MAX_PROCESSES);
 }
 
 export const modlog = new Modlog(MODLOG_DB_PATH);

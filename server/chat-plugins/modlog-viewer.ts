@@ -144,7 +144,7 @@ function prettifyResults(
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
 			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
 	}
-	const moreButton = getMoreButton(getAlias(roomid), searchCmd, lines, maxLines, onlyPunishments);
+	const moreButton = getMoreButton(roomid, searchCmd, lines, maxLines, onlyPunishments);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
