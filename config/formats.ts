@@ -187,6 +187,11 @@ export const Formats: FormatList = [
 			'Mimikyu', 'Necrozma', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Sableye', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Focus Sash', 'Moody', 'Perish Song',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen81v1') {
+				this.add('html', '<div class="broadcast-blue"><strong>1v1 is currently suspecting Togekiss! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670621/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Anything Goes",
