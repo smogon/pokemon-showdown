@@ -189,6 +189,14 @@ export class ErrorMessage extends Error {
 	}
 }
 
+export class Interruption extends Error {
+	constructor() {
+		super('');
+		this.name = 'Interruption';
+		Error.captureStackTrace(this, ErrorMessage);
+	}
+}
+
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
 	readonly user: User;
@@ -320,6 +328,9 @@ export class PageContext extends MessageContext {
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
 				if (err.message) this.errorReply(err.message);
+				return;
+			}
+			if (err.name.endsWith('Interruption')) {
 				return;
 			}
 			Monitor.crashlog(err, 'A chat page', {
@@ -467,6 +478,9 @@ export class CommandContext extends MessageContext {
 				this.errorReply(err.message);
 				return false;
 			}
+			if (err.name.endsWith('Interruption')) {
+				return;
+			}
 			Monitor.crashlog(err, 'A chat command', {
 				user: this.user.name,
 				room: this.room?.roomid,
@@ -487,6 +501,9 @@ export class CommandContext extends MessageContext {
 				if (err.name?.endsWith('ErrorMessage')) {
 					this.errorReply(err.message);
 					return false;
+				}
+				if (err.name.endsWith('Interruption')) {
+					return;
 				}
 				Monitor.crashlog(err, 'An async chat command', {
 					user: this.user.name,
@@ -638,25 +655,25 @@ export class CommandContext extends MessageContext {
 		if (user.can('bypassall')) return true;
 
 		if (room.settings.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
-			return this.errorReply(`Your username contains too much stretching, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your username contains too much stretching, which this room doesn't allow.`);
 		}
 		if (room.settings.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
-			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
 		if (room.settings.filterEmojis && EMOJI_REGEX.test(user.name)) {
-			return this.errorReply(`Your username contains emojis, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your username contains emojis, which this room doesn't allow.`);
 		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
 		if (room.settings.filterStretching && /(.+?)\1{7,}/i.test(message)) {
-			return this.errorReply(`Your message contains too much stretching, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your message contains too much stretching, which this room doesn't allow.`);
 		}
 		if (room.settings.filterCaps && /[A-Z\s]{18,}/.test(message)) {
-			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
 		if (room.settings.filterEmojis && EMOJI_REGEX.test(message)) {
-			return this.errorReply(`Your message contains emojis, which this room doesn't allow.`);
+			throw new Chat.ErrorMessage(`Your message contains emojis, which this room doesn't allow.`);
 		}
 
 		return true;
@@ -666,7 +683,9 @@ export class CommandContext extends MessageContext {
 		if (!room || !room.settings.slowchat) return true;
 		if (user.can('show', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
-		if (lastActiveSeconds < room.settings.slowchat) return false;
+		if (lastActiveSeconds < room.settings.slowchat) {
+			throw new Chat.ErrorMessage(this.tr`This room has slow-chat enabled. You can only talk once every ${room.settings.slowchat} seconds.`);
+		}
 		return true;
 	}
 
@@ -681,7 +700,7 @@ export class CommandContext extends MessageContext {
 		}
 		if (!message) return true;
 		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
-			return false;
+			throw new Chat.ErrorMessage(`Your username, status, or message contained a word banned by this room.`);
 		}
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
@@ -950,17 +969,11 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
-	checkChat(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
-		// @ts-ignore
-		const out = this.checkChat2(message, room, targetUser);
-		if (!out) throw new Chat.ErrorMessage('');
-		return out;
-	}
 	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	checkChat2(message: string, room?: Room | null, targetUser?: User | null): string | null;
-	checkChat2(message?: null, room?: Room | null, targetUser?: User | null): true | null;
-	checkChat2(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
+	checkChat(message: string, room?: Room | null, targetUser?: User | null): string;
+	checkChat(message?: null, room?: Room | null, targetUser?: User | null): void;
+	checkChat(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
 		if (!targetUser && this.pmTarget) {
 			targetUser = this.pmTarget;
 		}
@@ -974,45 +987,35 @@ export class CommandContext extends MessageContext {
 		const connection = this.connection;
 
 		if (!user.named) {
-			connection.popup(this.tr(`You must choose a name before you can talk.`));
-			return null;
+			throw new Chat.ErrorMessage(this.tr(`You must choose a name before you can talk.`));
 		}
 		if (!user.can('bypassall')) {
 			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
 			const lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
 				if (lockType && !room.settings.isHelp) {
-					this.errorReply(this.tr `You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr("Get help with this")}</a>`);
-					return null;
+					throw new Chat.ErrorMessage(this.tr `You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 				}
 				if (room.isMuted(user)) {
-					this.errorReply(this.tr(`You are muted and cannot talk in this room.`));
-					return null;
+					throw new Chat.ErrorMessage(this.tr(`You are muted and cannot talk in this room.`));
 				}
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
-						this.errorReply(
-							this.tr(
-								`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
-							)
+						throw new Chat.ErrorMessage(
+							this.tr`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
 						);
-						return null;
 					}
 					if (room.settings.modchat === 'trusted') {
-						this.errorReply(
-							this.tr(
-								`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
-							)
+						throw new Chat.ErrorMessage(
+							this.tr`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
 						);
-						return null;
 					}
 					const groupName = Config.groups[room.settings.modchat] && Config.groups[room.settings.modchat].name ||
 						room.settings.modchat;
-					this.errorReply(
+					throw new Chat.ErrorMessage(
 						this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
-					return null;
 				}
 				if (!(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
@@ -1021,37 +1024,31 @@ export class CommandContext extends MessageContext {
 			}
 			if (targetUser) {
 				if (lockType && !targetUser.can('lock')) {
-					this.errorReply(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
-					return null;
+					throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
 				}
 				if (targetUser.locked && !user.can('lock')) {
-					this.errorReply(this.tr`The user "${targetUser.name}" is locked and cannot be PMed.`);
-					return null;
+					throw new Chat.ErrorMessage(this.tr`The user "${targetUser.name}" is locked and cannot be PMed.`);
 				}
 				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 					!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)) {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					this.errorReply(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
-					return null;
+					throw new Chat.ErrorMessage(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
 				if (targetUser.settings.blockPMs &&
 					(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockPMs)) &&
 					!user.can('lock')) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
-						this.errorReply(this.tr`This user is blocking private messages right now.`);
-						return null;
+						throw new Chat.ErrorMessage(this.tr`This user is blocking private messages right now.`);
 					} else {
-						this.errorReply(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 						this.sendReply(`|html|${this.tr`If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`}`);
-						return null;
+						throw new Chat.ErrorMessage(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 					}
 				}
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
 					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock')) {
-					this.errorReply(this.tr`You are blocking private messages right now.`);
-					return null;
+					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
 			}
 		}
@@ -1059,22 +1056,19 @@ export class CommandContext extends MessageContext {
 		if (typeof message !== 'string') return true;
 
 		if (!message) {
-			this.errorReply(this.tr("Your message can't be blank."));
-			return null;
+			throw new Chat.ErrorMessage(this.tr("Your message can't be blank."));
 		}
 		let length = message.length;
 		length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
 		if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			this.errorReply(this.tr("Your message is too long: ") + message);
-			return null;
+			throw new Chat.ErrorMessage(this.tr("Your message is too long: ") + message);
 		}
 
 		// remove zalgo
 		// eslint-disable-next-line max-len
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
-			this.errorReply(this.tr("Your message contains banned characters."));
-			return null;
+			throw new Chat.ErrorMessage(this.tr("Your message contains banned characters."));
 		}
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
@@ -1092,39 +1086,22 @@ export class CommandContext extends MessageContext {
 				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 			});
 			if (!allLinksWhitelisted && !(targetUser?.can('lock') || room?.settings.isHelp)) {
-				this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
-				return null;
+				throw new Chat.ErrorMessage("Your account must be autoconfirmed to send links to other users, except for global staff.");
 			}
 		}
 
-		if (!this.checkFormat(room, user, message)) {
-			return null;
-		}
+		this.checkFormat(room, user, message);
 
-		if (!this.checkSlowchat(room, user)) {
-			this.errorReply(
-				this.tr`This room has slow-chat enabled. You can only talk once every ${room!.settings.slowchat} seconds.`
-			);
-			return null;
-		}
+		this.checkSlowchat(room, user);
 
-		if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
-			this.errorReply(this.tr(`Your username contains a phrase banned by this room.`));
-			return null;
-		}
-		if (user.userMessage && (!this.checkBanwords(room, user.userMessage) && !user.can('bypassall'))) {
-			this.errorReply(this.tr(`Your status message contains a phrase banned by this room.`));
-			return null;
-		}
-		if (!this.checkBanwords(room, message) && !user.can('mute', null, room!)) {
-			this.errorReply(this.tr("Your message contained banned words in this room."));
-			return null;
-		}
+		if (!user.can('bypassall')) this.checkBanwords(room, user.name);
+		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.userMessage);
+		if (room && !user.can('mute', null, room)) this.checkBanwords(room, message);
 
 		const gameFilter = this.checkGameFilter();
 		if (typeof gameFilter === 'string') {
-			if (gameFilter) this.errorReply(gameFilter);
-			return null;
+			if (gameFilter === '') throw new Chat.Interruption();
+			throw new Chat.ErrorMessage(gameFilter);
 		}
 
 		if (room) {
@@ -1133,8 +1110,7 @@ export class CommandContext extends MessageContext {
 				!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
 				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)
 			) {
-				this.errorReply(this.tr("You can't send the same message again so soon."));
-				return null;
+				throw new Chat.ErrorMessage(this.tr("You can't send the same message again so soon."));
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
@@ -1143,10 +1119,9 @@ export class CommandContext extends MessageContext {
 		if (room?.settings.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2 &&
 			!user.can('show', null, room)) {
-			this.errorReply(
+			throw new Chat.ErrorMessage(
 				this.tr('Due to this room being a high traffic room, your message must contain at least two letters.')
 			);
-			return null;
 		}
 
 		if (Chat.filters.length) {
@@ -1604,6 +1579,7 @@ export const Chat = new class {
 	readonly CommandContext = CommandContext;
 	readonly PageContext = PageContext;
 	readonly ErrorMessage = ErrorMessage;
+	readonly Interruption = Interruption;
 	/**
 	 * Command parser
 	 *
