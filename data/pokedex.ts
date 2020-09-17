@@ -7956,7 +7956,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Electabuzz",
 		evoType: "trade",
-		evoItem: "Electrizer",
+		evoItem: "Electirizer",
 		eggGroups: ["Human-Like"],
 	},
 	magmortar: {
