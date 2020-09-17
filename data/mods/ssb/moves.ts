@@ -1593,94 +1593,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Gimmick
-	alternatingcurrent: {
+	justchillin: {
 		accuracy: 100,
-		basePower: 95,
-		category: "Special",
-		desc: "Forces the target to switch out. Deal 1.5x damage on the target if the user attacks first next turn. Will fail if used consecutively.",
-		shortDesc: "Forces the target to switch out. Deal 1.5x damage on the target if the user attacks first next turn. Will fail if used consecutively.",
-		name: "Alternating Current",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: -1,
-		flags: {protect: 1, mirror: 1},
-		ignoreAbility: true,
+		basePower: 85,
+		basePowerCallback(pokemon, target, move) {
+			if (target.newlySwitched || this.queue.willMove(target)) {
+				this.debug('Just Chillin\' damage boost');
+				return move.basePower * 2;
+			}
+			this.debug('Just Chillin\' NOT boosted');
+			return move.basePower;
+		},
+		category: "Physical",
+		desc: "Power doubles if the user moves before the target.",
+		shortDesc: "Power doubles if user moves before the target.",
+		name: "Just Chillin'",
+		pp: 10,
+		priority: 0,
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Charge', source);
-			this.add('-anim', source, 'Double Team', source);
+			this.add('-anim', source, 'Icicle Spear', target);
 			this.add('-anim', source, 'Plasma Fists', target);
-			return this.runEvent('StallMove', source);
 		},
-		onHit(target, source) {
-			source.addVolatile('stall');
-			source.addVolatile('alternatingcurrent');
-		},
-		condition: {
-			duration: 2,
-			onBasePower(basePower, pokemon, target, move) {
-				if (target.newlySwitched || this.queue.willMove(target)) {
-					this.debug('Alternating Current damage boost');
-					return this.chainModify(2);
-				}
-				this.debug('Alternating Current NOT boosted');
-			},
-		},
-		forceSwitch: true,
 		secondary: null,
 		target: "normal",
-		type: "Electric",
-	},
-
-	// used for Gimmick's ability
-	gimmickterrain: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "For 5 turns, the terrain becomes Wave Terrain. During the effect, the accuracy of Water type moves is multiplied by 1.2, even if the user is not grounded. Hazards and screens are removed and cannot be set while Wave Terrain is active. Fails if the current terrain is Inversion Terrain.",
-		shortDesc: "5 turns. Removes hazards. Water move acc 1.2x.",
-		name: "Gimmick Terrain",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {},
-		terrain: 'gimmickterrain',
-		condition: {
-			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onStart(battle, source, effect) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Gimmick Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Gimmick Terrain');
-				}
-				this.add('-message', 'The battlefield suddenly gimmicky!');
-			},
-			onModifyPriority(priority, pokemon, target, move) {
-				return priority * -1;
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
-				this.eachEvent('Terrain');
-			},
-			onEnd() {
-				if (!this.effectData.duration) this.eachEvent('Terrain');
-				this.add('-fieldend', 'move: Gimmick Terrain');
-			},
-		},
-		secondary: null,
-		target: "all",
-		type: "Water",
+		type: "Ice",
 	},
 
 	// GMars

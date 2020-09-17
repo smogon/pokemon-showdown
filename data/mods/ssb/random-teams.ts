@@ -270,9 +270,9 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Gimmick: {
-		species: 'Tynamo', ability: 'What a Gimmick', item: 'Focus Sash', gender: 'M',
-		moves: ['Bolt Beak', 'Fishious Rend', ['U-turn', 'Volt Switch']],
-		signatureMove: 'Alternating Current',
+		species: 'Eelektrik', ability: 'What a Gimmick', item: 'Eviolite', gender: 'M',
+		moves: ['Bolt Beak', 'Fishious Rend', 'U-turn'],
+		signatureMove: 'Just Chillin\'',
 		evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
 	},
 	GMars: {

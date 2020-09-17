@@ -684,14 +684,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 
 	pokemon: {
-		getActionSpeed() {
-			let speed = this.getStat('spe', false, false);
-			if ((this.battle.field.getPseudoWeather('trickroom') || this.battle.field.isTerrain('gimmickterrain')) &&
-				 !(this.battle.field.getPseudoWeather('trickroom') && this.battle.field.isTerrain('gimmickterrain'))) {
-				speed = 0x2710 - speed;
-			}
-			return this.battle.trunc(speed, 13);
-		},
 		isGrounded(negateImmunity) {
 			if ('gravity' in this.battle.field.pseudoWeather) return true;
 			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;

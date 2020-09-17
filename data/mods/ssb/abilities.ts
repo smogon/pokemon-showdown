@@ -840,9 +840,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Gimmick
 	whatagimmick: {
 		name: "What a Gimmick",
-		shortDesc: "On switch-in, this Pokemon summons Gimmick Terrain.",
+		shortDesc: "On switch-in, this Pokemon summons Trick Room.",
 		onStart(source) {
-			this.field.setTerrain('gimmickterrain');
+			this.field.addPseudoWeather('trickroom');
 		},
 		isNonstandard: "Custom",
 		gen: 8,
