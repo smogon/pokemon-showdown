@@ -192,6 +192,29 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 69, atk: 125, def: 75, spa: 45, spd: 75, spe: 101},
 	},
+	// tIKsi
+	alcremie: {
+		inherit: true,
+		abilities: {0: 'Fickle Decorator'},
+	},
+	alcremielemoncream: {
+		inherit: true,
+		abilities: {0: 'Winding Song'},
+		baseStats: {hp: 65, atk: 60, def: 121, spa: 75, spd: 64, spe: 110},
+		types: ['Fairy', 'Rock'],
+	},
+	alcremierubyswirl: {
+		inherit: true,
+		abilities: {0: 'Winding Song'},
+		baseStats: {hp: 65, atk: 60, def: 64, spa: 110, spd: 75, spe: 121},
+		types: ['Fairy', 'Fire'],
+	},
+	alcremiemintcream: {
+		inherit: true,
+		abilities: {0: 'Winding Song'},
+		baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
+		types: ['Fairy', 'Water'],
+	},
 	// yuki
 	pikachucosplay: {
 		inherit: true,

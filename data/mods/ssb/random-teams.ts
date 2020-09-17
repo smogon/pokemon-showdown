@@ -257,6 +257,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rigged Dice',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
 	},
+	Finland: {
+		species: 'Alcremie', ability: 'Fickle Decorator', item: 'Leftovers', gender: 'M',
+		moves: ['Shore Up', 'Moonblast', 'Mean Look'],
+		signatureMove: 'Cradily Chaos',
+		evs: {hp: 252, def: 64, spa: 64, spd: 64, spe: 64}, ivs: {atk: 0}, nature: 'Serious',
+	},
 	'frostyicelad ❆': {
 		species: 'Frosmoth', ability: 'Ice Shield', item: 'Ice Stone', gender: 'M',
 		moves: ['Quiver Dance', 'Bug Buzz', ['Earth Power', 'Sparkling Aria']],

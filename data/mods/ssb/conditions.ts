@@ -571,6 +571,89 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Felucia')}|%remp Felucia`);
 		},
 	},
+	finland: {
+		noCopy: true,
+		onStart(pokemon) {
+			const roll = this.random(20);
+			let message: string;
+			if (roll >= 0 && roll < 14) {
+				message = 'pog';
+			} else if (roll >= 14 && roll < 16) {
+				message = 'very pog';
+			} else if (roll >= 16 && roll < 18) {
+				message = 'poggaroo';
+			} else if (roll === 18) {
+				message = 'PogU';
+			} else {
+				message = 'poog';
+			}
+			this.add(`c|${getName('Finland')}|${message}`);
+			// to avoid writing this function everywhere, im just gonna write it here and call it from wherever i want like the move or ability
+			pokemon.m.changeForme = function (formeNumber: number) {
+				const formes = [
+					{
+						name: 'Alcremie',
+						species: 'Alcremie',
+						movepool: ['Shore Up', 'Moonblast', 'Mean Look', 'Cradily Chaos'],
+					},
+					{
+						name: 'Alcremie-Tsikhe',
+						species: 'Alcremie-Lemon-Cream',
+						movepool: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen'][this.random(2)], 'Cradily Chaos'],
+					},
+					{
+						name: 'Alcremie-Nezavisa',
+						species: 'Alcremie-Ruby-Swirl',
+						movepool: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond'][this.random(2)], 'Cradily Chaos'],
+					},
+					{
+						name: 'Alcremie-Järvilaulu',
+						species: 'Alcremie-Mind-Cream',
+						movepool: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria'][this.random(2)], 'Cradily Chaos'],
+					},
+				];
+				const forme = formes[formeNumber];
+				pokemon.formeChange(forme.species, this.effect);
+				pokemon.battle.add('-message', `Alcremie changes its forme to ${forme.name}`);
+				const newMoves = forme.movepool;
+				const carryOver = pokemon.moveSlots.slice().map(m => {
+					return m.pp / m.maxpp;
+				});
+				// Incase theres ever less than 4 moves
+				while (carryOver.length < 4) {
+					carryOver.push(1);
+				}
+				pokemon.moveSlots = [];
+				let slot = 0;
+				for (const newMove of newMoves) {
+					const moveData = pokemon.battle.dex.getMove(this.toID(newMove));
+					if (!moveData.id) continue;
+					pokemon.moveSlots.push({
+						move: moveData.name,
+						id: moveData.id,
+						pp: ((moveData.noPPBoosts || moveData.isZ) ? Math.floor(moveData.pp * carryOver[slot]) : moveData.pp * 8 / 5),
+						maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
+						target: moveData.target,
+						disabled: false,
+						disabledSource: '',
+						used: false,
+					});
+					slot++;
+				}
+			};
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('tiki')}|i hope running away is safe on shield?`);
+		},
+		onFaint() {
+			if (this.random(100) < 99) {
+				this.add(`c|${getName('Finland')}|FINLAND!!!`);
+			} else {
+				// personally i like young link from oot3d and mm3d - sp
+				this.add(`c|${getName('Finland')}|i hate young link. i hate you i hate you i hate you. i hate you. young link i hate you. i despise you. i loathe you. your existence is an affront to my person. to my own existence. it's an offense. a despicable crime. a wretched abomination. even worse than mega man. a cruel barbarity. an awful curse from capricious, pernicious fate. oh do i hate young link. i scorn you. i cast you away to ignominy and hatred even worse than mega man. you are shameful young link, and you should never show your face again`);
+			}
+		},
+	},
 	frostyicelad: {
 		noCopy: true,
 		onStart(source) {

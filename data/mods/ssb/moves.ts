@@ -1524,6 +1524,48 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Finland
+	cradilychaos: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Please refer to the guide for information on this move.",
+		shortDesc: "Please refer to the guide for information on this move.",
+		name: "Cradily Chaos",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		status: 'tox',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Psywave', target);
+		},
+		onHit(target, source, move) {
+			const boosts: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+			const selfBoost: SparseBoostsTable = {};
+			selfBoost[boosts[this.random(5)]] = 1;
+			const oppBoost: SparseBoostsTable = {};
+			oppBoost[boosts[this.random(5)]] = 1;
+			this.boost(selfBoost, source);
+			this.boost(oppBoost, target);
+			const formes = ['Alcremie-Lemon-Cream', 'Alcremie-Ruby-Swirl', 'Alcremie-Mint-Cream'];
+			if (formes.includes(source.species.name)) {
+				let formenum = formes.indexOf(source.species.name) + 1;
+				if (formenum >= formes.length) formenum = 0;
+				return source.m.changeForme(formenum + 1);
+			}
+			source.m.changeForme(this.random(3) + 1);
+		},
+		ignoreAbility: true,
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
+
 	// frostyicelad
 	frostywave: {
 		accuracy: 100,

@@ -1,4 +1,5 @@
 import {SSBSet, ssbSets} from "./random-teams";
+import {ChosenAction} from "../../../sim/side";
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail'];
@@ -758,6 +759,63 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				used: false,
 				virtual: true,
 			};
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
+	// Finland
+	fickledecorater: {
+		desc: "Changes forme, before all turn action, depending on move used. +1 SpA and +1 SpD on switch-in.",
+		shortDesc: "Changes forme, before all turn action, depending on move used. +1 SpA and +1 SpD on switch-in.",
+		name: "Fickle Decorator",
+		onStart(pokemon) {
+			this.boost({spa: 1, spd: 1});
+		},
+		onAnyBeforeTurn(pokemon) {
+			const actions = pokemon.side.foe.choice.actions;
+			let flag = true;
+			let action: ChosenAction;
+			let move: ActiveMove | undefined;
+			for (action of actions) {
+				if (action.choice === 'move') {
+					move = action.move;
+					flag = false;
+				}
+			}
+			if (flag || !move) return;
+			const moveData = this.dex.getMove(move.id);
+			if (moveData.category !== 'Status') {
+				return pokemon.m.changeForme(2);
+			} else {
+				if (!toID(moveData.target).includes('self')) {
+					return pokemon.m.changeForme(3);
+				} else {
+					return pokemon.m.changeForme(1);
+				}
+			}
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+	windingsong: {
+		desc: "Changes form, after all action, depending on move used. Returns the user to Alcremie (Vanilla Cream) form after all action if no move is used in the turn.",
+		shortDesc: "Changes forme, after all turn action, depending on move used. Returns to Alcremie Vanilla if no move was used.",
+		name: "Winding Song",
+		onResidual(pokemon) {
+			const moveData = this.dex.getMove(this.lastSuccessfulMoveThisTurn || undefined);
+			if (!moveData.exists) {
+				return pokemon.m.changeForme(0);
+			}
+			if (moveData.category !== 'Status') {
+				return pokemon.m.changeForme(2);
+			} else {
+				if (!toID(moveData.target).includes('self')) {
+					return pokemon.m.changeForme(3);
+				} else {
+					return pokemon.m.changeForme(1);
+				}
+			}
 		},
 		isNonstandard: "Custom",
 		gen: 8,
