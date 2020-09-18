@@ -2596,7 +2596,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Quote not found.`);
 		}
 		const [removed] = targetRoom.settings.quotes.splice(index - 1, 1);
-		const collapsedQuote = target.replace(/\n/g, ' ');
+		const collapsedQuote = removed.quote.replace(/\n/g, ' ');
 		this.privateModAction(`${user.name} removed quote indexed at ${index}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
 		this.modlog(`REMOVEQUOTE`, null, collapsedQuote);
 		targetRoom.saveSettings();
