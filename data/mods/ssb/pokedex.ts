@@ -154,6 +154,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Darkest Wings'},
 		types: ['Dark', 'Fairy'],
 	},
+	// Psynergy
+	rayquaza: {
+		inherit: true,
+		abilities: {0: 'Supernova'},
+	},
+	rayquazamega: {
+		inherit: true,
+		abilities: {0: 'Supernova'},
+		requiredMove: 'Clear Breath',
+	},
 	// quadrophenic
 	porygon: {
 		inherit: true,

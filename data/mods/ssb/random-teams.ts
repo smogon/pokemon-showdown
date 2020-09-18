@@ -522,6 +522,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Dungeons & Dragons',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Psynergy: {
+		species: 'Rayquaza', ability: 'Supernova', item: 'Wise Glasses', gender: 'M',
+		moves: ['Bouncy Bubble', 'Discharge', 'Lava Plume'],
+		signatureMove: 'Clear Breath',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Serious', shiny: true,
+	},
 	ptoad: {
 		species: 'Palpitoad', ability: 'Swampy Surge', item: 'Eviolite', gender: 'M',
 		moves: ['Recover', 'Refresh', ['Sludge Bomb', 'Sludge Wave']],

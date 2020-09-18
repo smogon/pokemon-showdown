@@ -3215,6 +3215,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dragon",
 	},
 
+	// Psynergy
+	clearbreath: {
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback(pokemon, target) {
+			let power = 60 + 20 * target.positiveBoosts();
+			if (power > 200) power = 200;
+			return power;
+		},
+		category: "Special",
+		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
+		shortDesc: "60 power +20 for each of the target's stat boosts.",
+		isNonstandard: "Custom",
+		gen: 8,
+		name: "Clear Breath",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Breath', target);
+			this.add('-anim', source, 'Haze', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			return 0;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
+
 	// ptoad
 	croak: {
 		accuracy: 100,

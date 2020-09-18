@@ -1373,6 +1373,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	psynergy: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Psynergy')}|Will you survive?`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Psynergy')}|yadon moment`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Psynergy')}|oh`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart() {
