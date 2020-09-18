@@ -490,7 +490,7 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.title = 'Filters';
 		let buf = `<div class="pad ladder"><h2>Filters</h2>`;
-		this.checkCan('lock');
+		if (!user.can('addhtml')) this.checkCan('lock');
 		let content = ``;
 		for (const key in Chat.monitors) {
 			content += `<tr><th colspan="2"><h3>${Chat.monitors[key].label} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
