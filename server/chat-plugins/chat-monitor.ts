@@ -627,11 +627,9 @@ export const commands: ChatCommands = {
 		}
 
 		const msg = `${target} was allowed as a username by ${user.name}.`;
-		const staffRoom = Rooms.get('staff');
-		const upperStaffRoom = Rooms.get('upperstaff');
-		if (staffRoom) staffRoom.add(msg).update();
-		if (upperStaffRoom) upperStaffRoom.add(msg).update();
-		if (room !== staffRoom && room !== upperStaffRoom) {
+		const toNotify: RoomID[] = ['staff', 'upperstaff'];
+		Rooms.global.notifyRooms(toNotify, `|c|${user.getIdentity()}|/log ${msg}`);
+		if (!room || !toNotify.includes(room.roomid)) {
 			this.sendReply(msg);
 		}
 		this.globalModlog(`ALLOWNAME`, null, `${target} by ${user.name}`);
