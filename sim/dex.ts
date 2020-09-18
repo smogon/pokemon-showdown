@@ -636,8 +636,7 @@ export class ModdedDex {
 		}
 		if (effect) {
 			this.effectCache.set(id, effect);
-			// @ts-ignore
-			return effect;
+			return effect as Condition;
 		}
 		return this.getEffectByID(id, effect);
 	}

@@ -39,8 +39,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			return this.randomChance(1, counter);
 		},
 		onRestart() {
-			// @ts-ignore
-			if (this.effectData.counter < this.effect.counterMax) {
+			if (this.effectData.counter < (this.effect as Condition).counterMax!) {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;

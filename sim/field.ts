@@ -229,7 +229,6 @@ export class Field {
 		// deallocate ourself
 
 		// get rid of some possibly-circular references
-		// @ts-ignore - readonly
-		this.battle = null!;
+		(this as any).battle = null!;
 	}
 }
