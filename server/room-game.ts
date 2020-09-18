@@ -95,6 +95,8 @@ export class RoomGame {
 	playerCount: number;
 	playerCap: number;
 	ended: boolean;
+	/** Does `/guess` or `/choose` require the user to be able to talk? */
+	checkChat = false;
 	/**
 	 * We should really resolve this collision at _some_ point, but it will have
 	 * to be later. The /timer command is written to be resilient to this.
