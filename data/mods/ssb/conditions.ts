@@ -161,6 +161,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Alpha')}|caio`);
 		},
 	},
+	andrew: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Andrew')}|SQUAD IN`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Andrew')}|SQUAD OUT`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Andrew')}|Dormammu I've come to bargain`);
+		},
+	},
 	annika: {
 		noCopy: true,
 		onStart() {

@@ -339,6 +339,59 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Andrew
+	squadup: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Refer to manual",
+		shortDesc: "Refer to manual",
+		name: "SQUAD UP",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 1,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Spotlight', pokemon);
+			this.add('-anim', pokemon, 'Double Team', pokemon);
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			this.heal(pokemon.maxhp);
+			if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
+			pokemon.cureStatus();
+			pokemon.volatiles['ninjasquad'].clones = 6;
+			this.add("-message", `Venomoth now has ${6} ninja clones!`);
+			pokemon.m.squadup = true;
+		},
+		secondary: null,
+		target: "self",
+		type: "Poison",
+	},
+	clonemove: {
+		accuracy: 100,
+		basePower: 0,
+		damageCallback(pokemon, target) {
+			return this.clampIntRange(target.maxhp / 50, 1);
+		},
+		category: "Physical",
+		desc: "Deals damage to the target equal to 2% of its max HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 2% of target's max HP.",
+		name: "Clone Move",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Annika
 	refactor: {
 		accuracy: true,

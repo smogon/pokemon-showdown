@@ -77,6 +77,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+	Andrew: {
+		species: 'Venomoth', ability: 'NINJA SQUAD', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Extrasensory', 'Sludge Bomb', 'Bug Buzz'],
+		signatureMove: 'SQUAD UP',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+	},
 	Annika: {
 		species: 'Mewtwo', ability: 'Overprotective', item: 'Mewtwonite Y', gender: 'F',
 		moves: [['Rising Voltage', 'Lava Plume'], ['Hex', 'Aurora Beam'], ['Psychic', 'Psyshock']],

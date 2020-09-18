@@ -254,6 +254,59 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Andrew
+	ninjasquad: {
+		desc: "REFER TO MANUAL",
+		shortDesc: "REFER TO MANUAL",
+		onStart(pokemon) {
+			if (pokemon.m.squadup) return;
+			pokemon.addVolatile('ninjasquad');
+			pokemon.volatiles['ninjasquad'].clones = 3;
+			this.add("-message", `Venomoth uses its Koga training to create 3 ninja clones!`);
+			pokemon.volatiles['ninjasquad'].damageTaken = 0;
+		},
+		name: "NINJA SQUAD",
+		condition: {
+			onModifySpA(spa, pokemon) {
+				if (!this.effectData.clones) return;
+				return this.chainModify(1 + (this.effectData.clones / 10));
+			},
+			onModifySpe(spa, pokemon) {
+				if (!this.effectData.clones) return;
+				return this.chainModify(1 + (this.effectData.clones / 10));
+			},
+			onHit(target, source, move) {
+				if (move.category === 'Status' || move.selfdestruct) return;
+				if (source.m.squadup) return;
+				this.effectData.clones += 2;
+				this.add("-message", `Venomoth uses its Koga training to create 2 ninja clones!`);
+			},
+			onDamage(damage, target, source, effect) {
+				this.effectData.damageTaken += damage;
+				if (this.effectData.damageTaken >= 50) {
+					const clonesLost = this.effectData.damageTaken / 50;
+					this.effectData.damageTaken = this.effectData.damageTaken % 50;
+					this.add("-message", `Venomoth took damage and lost ${clonesLost} ninja clones!`);
+					this.effectData.clones -= clonesLost;
+					if (this.effectData.clones < 0) this.effectData.clones = 0;
+				}
+			},
+			onBeforeMove(source, target, move) {
+				if (move.category === 'Status' || !this.effectData.clones) return;
+				this.add('-message', `Venomoth's ${this.effectData.clones} will attack!`);
+				const cloneMove = Object.assign({}, this.dex.getActiveMove("Clone Move"));
+				cloneMove.type = move.type;
+				cloneMove.category = move.category;
+				if (move.secondary && this.random(100) < 25) {
+					cloneMove.secondary = Object.assign({}, move.secondary);
+				}
+				for (let i = 0; i < this.effectData.clones; i++) {
+					this.useMove(cloneMove, source, target);
+				}
+			},
+		},
+	},
+
 	// Annika
 	overprotective: {
 		desc: "If this Pokemon is the last unfainted team member, its Speed is raised by 1 stage.",
