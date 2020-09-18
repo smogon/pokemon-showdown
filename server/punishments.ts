@@ -405,7 +405,7 @@ export const Punishments = new class {
 	 * Adding and removing
 	 *********************************************************/
 
-	async punish(user: User | ID, punishment: Punishment, ignoreAlts: boolean) {
+	async punish(user: User | ID, punishment: Punishment, ignoreAlts: boolean, bypassPunishmentfilter = false) {
 		if (typeof user === 'string') {
 			return Punishments.punishName(user, punishment);
 		}
@@ -439,7 +439,7 @@ export const Punishments = new class {
 			}
 		}
 
-		Chat.punishmentfilter(user, punishment);
+		if (!bypassPunishmentfilter) Chat.punishmentfilter(user, punishment);
 		return affected;
 	}
 
@@ -703,12 +703,17 @@ export const Punishments = new class {
 		return Punishments.unpunish(name, 'BAN');
 	}
 	async lock(
-		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
+		user: User | ID,
+		expireTime: number | null,
+		id: ID | PunishType | null,
+		ignoreAlts: boolean,
+		reason: string,
+		bypassPunishmentfilter = false
 	) {
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
-		const punishment = ['LOCK', id, expireTime, ...reason] as Punishment;
+		const punishment = ['LOCK', id, expireTime, reason] as Punishment;
 
-		const affected = await Punishments.punish(user, punishment, ignoreAlts);
+		const affected = await Punishments.punish(user, punishment, ignoreAlts, bypassPunishmentfilter);
 
 		for (const curUser of affected) {
 			curUser.locked = punishment[1];
