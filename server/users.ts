@@ -926,9 +926,8 @@ export class User extends Chat.MessageContext {
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		if (this.statusType === 'busy' || oldUser.statusType === 'busy') {
-			this.setStatusType('busy');
-		}
+		const isBusy = this.statusType === 'busy' || oldUser.statusType === 'busy';
+		this.setStatusType(isBusy ? 'busy' : 'online');
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);
