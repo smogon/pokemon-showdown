@@ -567,7 +567,7 @@ export class Trivia extends Rooms.RoomGame {
 
 			for (const id of user.previousIDs) {
 				if (this.kickedUsers.has(id)) {
-					throw new Chat.ErrorMessage(`User ${user.name} has already been kicked from the game.`);
+					throw new Chat.ErrorMessage(this.room.tr`User ${user.name} has already been kicked from the game.`);
 				}
 			}
 
