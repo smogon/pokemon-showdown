@@ -965,6 +965,11 @@ export const Formats: FormatList = [
 			'Pawniard', 'Pikachu', 'Porygon2', 'Rhydon', 'Rufflet', 'Scyther', 'Sneasel', 'Type: Null',
 			'Arena Trap', 'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nfe') {
+				this.add('html', '<div class="broadcast-blue"><strong>NFE is currently suspecting Raboot! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670673/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Camomons",
