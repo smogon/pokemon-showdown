@@ -1484,6 +1484,9 @@ export const commands: ChatCommands = {
 		);
 
 		targetUser.resetName(true);
+		if (Punishments.namefilterwhitelist.has(targetUser.id)) {
+			Punishments.unwhitelistName(targetUser.id);
+		}
 		return true;
 	},
 	forcerenamehelp: [

@@ -348,7 +348,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 
 export const namefilter: NameFilter = (name, user) => {
 	const id = toID(name);
-	if (Monitor.namefilterwhitelist.has(id)) return name;
+	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (id === toID(user.trackRename)) return '';
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -393,7 +393,7 @@ export const loginfilter: LoginFilter = user => {
 		);
 		user.trackRename = '';
 	}
-	if (Monitor.namefilterwhitelist.has(user.id)) return;
+	if (Punishments.namefilterwhitelist.has(user.id)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
 		Rooms.global.notifyRooms(
@@ -507,9 +507,9 @@ export const pages: PageTable = {
 			}
 		}
 
-		if (Monitor.namefilterwhitelist.size) {
+		if (Punishments.namefilterwhitelist.size) {
 			content += `<tr><th colspan="2"><h3>Whitelisted names</h3></tr></th>`;
-			for (const [val] of Monitor.namefilterwhitelist) {
+			for (const [val] of Punishments.namefilterwhitelist) {
 				content += `<tr><td>${val}</td></tr>`;
 			}
 		}
@@ -622,13 +622,18 @@ export const commands: ChatCommands = {
 		this.checkCan('forcerename');
 		target = toID(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
-		Monitor.namefilterwhitelist.set(target, user.name);
+		if (!Punishments.whitelistName(target, user.name)) {
+			return this.errorReply(`${target} is already allowed as a username.`);
+		}
 
 		const msg = `${target} was allowed as a username by ${user.name}.`;
 		const staffRoom = Rooms.get('staff');
 		const upperStaffRoom = Rooms.get('upperstaff');
 		if (staffRoom) staffRoom.add(msg).update();
 		if (upperStaffRoom) upperStaffRoom.add(msg).update();
+		if (room !== staffRoom && room !== upperStaffRoom) {
+			this.sendReply(msg);
+		}
 		this.globalModlog(`ALLOWNAME`, null, `${target} by ${user.name}`);
 	},
 };
