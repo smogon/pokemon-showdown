@@ -575,6 +575,7 @@ exports.grouplist = [
 		globalGroupInPersonalRoom: '*',
 
 		addhtml: true,
+		tournaments: true,
 		declare: true,
 		bypassafktimer: true,
 
