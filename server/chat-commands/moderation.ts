@@ -95,7 +95,7 @@ export const commands: ChatCommands = {
 		const nextGroupName = nextGroup.name || "regular user";
 
 		for (const toPromote of users) {
-			const targetUser = Users.get(toPromote);
+			const targetUser = Users.getExact(toPromote);
 			const userid = toID(toPromote);
 			let name = targetUser ? targetUser.name : this.filter(toPromote);
 			if (!name) continue;
