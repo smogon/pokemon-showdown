@@ -1074,7 +1074,7 @@ export const Formats: {[k: string]: FormatData} = {
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			const reversedNums = Object.values(newSpecies.baseStats).reverse();
-			for (const [i, statName] of Object.keys(newSpecies).entries()) {
+			for (const [i, statName] of Object.keys(newSpecies.baseStats).entries()) {
 				newSpecies.baseStats[statName] = reversedNums[i];
 			}
 			return newSpecies;
