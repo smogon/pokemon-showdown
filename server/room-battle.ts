@@ -1276,8 +1276,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			PM._sendParent(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 	global.__version = {head: ''};

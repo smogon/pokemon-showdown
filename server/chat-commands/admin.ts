@@ -522,10 +522,10 @@ export const commands: ChatCommands = {
 		let buf = `<strong>${process.pid}</strong> - Main<br />`;
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
-				buf += `<strong>${process.getProcess().pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
+				buf += `<strong>${process.pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()})<br />`;
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
-				buf += `<strong>${process.getProcess().pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
+				buf += `<strong>${process.pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()})<br />`;
 			}
 		}
 
