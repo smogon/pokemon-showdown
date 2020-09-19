@@ -364,9 +364,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
 				data.moveData.stab = 2;
 			}
-			const hitMove: Move = new this.dex.Data.Move(data.moveData);
+			const hitMove = new this.dex.Data.Move(data.moveData) as Move as ActiveMove;
 
-			this.trySpreadMoveHit([target], data.source, hitMove as ActiveMove);
+			this.trySpreadMoveHit([target], data.source, hitMove);
 		},
 	},
 	healreplacement: {
