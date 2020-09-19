@@ -120,16 +120,6 @@ export const commands: ChatCommands = {
 
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
-		// /viewfaq doesn't show source
-		if (!this.broadcasting && user.can('ban', null, room) && cmd !== 'viewfaq') {
-			const src = Utils.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
-			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
-			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room!.roomid, val) === topic);
-			if (aliases.length) {
-				extra += `<br /><br />Aliases: ${aliases.join(', ')}`;
-			}
-			this.sendReplyBox(extra);
-		}
 	},
 	roomfaqhelp: [
 		`/roomfaq - Shows the list of all available FAQ topics`,
@@ -145,8 +135,8 @@ export const pages: PageTable = {
 		const room = this.requireRoom();
 		this.title = `[Room FAQs]`;
 		// allow it for users if they can access the room
-		if (!user.inRooms.has(room.roomid) && room.settings.isPrivate && !user.isStaff) {
-			return this.errorReply(`Access denied.`);
+		if (!room.checkModjoin(user)) {
+			throw new Chat.ErrorMessage(`<h2>Access denied.</h2>`);
 		}
 		let buf = `<div class="pad"><button style="float:right;" class="button" name="send" value="/join view-roomfaqs-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
 		if (!roomFaqs[room.roomid]) {
@@ -154,16 +144,15 @@ export const pages: PageTable = {
 		}
 
 		buf += `<h2>FAQs for ${room.title}:</h2>`;
-		const keys = Object.keys(roomFaqs[room.roomid]).filter(
-			val => !getAlias(room.roomid, val)
-		).sort((a, b) => a.localeCompare(b));
-		for (const key of keys) {
+		const keys = Object.keys(roomFaqs[room.roomid]);
+		const sortedKeys = keys.filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b));
+		for (const key of sortedKeys) {
 			const topic = roomFaqs[room.roomid][key];
 			buf += `<div class="infobox">`;
 			buf += `<h3>${key}</h3>`;
 			buf += `<hr />`;
 			buf += Chat.formatText(topic, true).replace(/\n/g, '<br />');
-			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === key);
+			const aliases = keys.filter(val => getAlias(room.roomid, val) === key);
 			if (aliases.length) {
 				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;
 			}
