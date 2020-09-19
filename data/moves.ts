@@ -16441,6 +16441,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		isNonstandard: "Past",
 		name: "Spotlight",
 		pp: 15,
 		priority: 3,
