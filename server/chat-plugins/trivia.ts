@@ -163,7 +163,7 @@ function getMastermindGame(room: Room | null) {
 	if (game.gameid !== 'mastermind') {
 		throw new Chat.ErrorMessage(room.tr`The currently running game is not Mastermind, it's ${game.title}.`);
 	}
-	return game;
+	return game as Mastermind;
 }
 
 function writeTriviaData() {
@@ -379,7 +379,7 @@ export class Trivia extends Rooms.RoomGame {
 		length: string, questions: TriviaQuestion[], creator: string,
 		isRandomMode = false, isSubGame = false
 	) {
-		super(room);
+		super(room, isSubGame);
 		this.playerTable = {};
 		this.gameid = 'trivia' as ID;
 		this.title = 'Trivia';
@@ -1323,7 +1323,7 @@ export class Mastermind extends Rooms.RoomGame {
 
 export class MastermindRound extends FirstModeTrivia {
 	constructor(room: Room, category: string, questions: TriviaQuestion[], playerID?: ID) {
-		super(room, 'first', category, 'infinite', questions, 'Automatically Created');
+		super(room, 'first', category, 'infinite', questions, 'Autosmatically Created', false, true);
 
 		this.playerCap = 1;
 		this.minPlayers = 0;
@@ -2184,7 +2184,7 @@ const mastermindCommands: ChatCommands = {
 			return this.errorReply(this.tr`You must specify a number that is at least 2 for finalists.`);
 		}
 
-		room.mastermindGame = new Mastermind(room, finalists);
+		room.game = new Mastermind(room, finalists);
 	},
 	newhelp: [
 		`/mastermind new [number of finalists] — Starts a new game of Mastermind with the specified number of finalists. Requires: + % @ # &`,
