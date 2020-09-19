@@ -163,7 +163,7 @@ function getMastermindGame(room: Room | null) {
 	if (game.gameid !== 'mastermind') {
 		throw new Chat.ErrorMessage(room.tr`The currently running game is not Mastermind, it's ${game.title}.`);
 	}
-	return game as Mastermind;
+	return game;
 }
 
 function writeTriviaData() {
@@ -376,7 +376,8 @@ export class Trivia extends Rooms.RoomGame {
 	askedAt: number[];
 	constructor(
 		room: Room, mode: string, category: string,
-		length: string, questions: TriviaQuestion[], creator: string, isRandomMode = false
+		length: string, questions: TriviaQuestion[], creator: string,
+		isRandomMode = false, isSubGame = false
 	) {
 		super(room);
 		this.playerTable = {};
@@ -1322,14 +1323,7 @@ export class Mastermind extends Rooms.RoomGame {
 
 export class MastermindRound extends FirstModeTrivia {
 	constructor(room: Room, category: string, questions: TriviaQuestion[], playerID?: ID) {
-		/**
-		 * The RoomGame constructor automatically sets room.game to the newly created game.
-		 * We don't want this, since MastermindRounds are an attribute of the correct room.game,
-		 * which is a Mastermind object. Thus, we manually reset room.game when creating a new MastermindRound.
-		 */
-		const trueGame = room.game;
 		super(room, 'first', category, 'infinite', questions, 'Automatically Created');
-		room.game = trueGame;
 
 		this.playerCap = 1;
 		this.minPlayers = 0;
@@ -1360,6 +1354,10 @@ export class MastermindRound extends FirstModeTrivia {
 		this.phaseTimeout = null;
 	}
 
+	addTriviaPlayer(user: User): string | undefined {
+		throw new Chat.ErrorMessage(`This is a round of Mastermind; to join the overall game of Mastermind, use /mm join`);
+	}
+
 	setTallyTimeout() {
 		// Players must use /mastermind pass to pass on a question
 		return;
@@ -1374,11 +1372,7 @@ export class MastermindRound extends FirstModeTrivia {
 	}
 
 	destroy() {
-		// Just like in the constructor, we need to ensure that room.game is not overwritten.
-		const room = this.room;
-		const trueGame = room.game;
 		super.destroy();
-		room.game = trueGame;
 	}
 }
 
@@ -2190,7 +2184,7 @@ const mastermindCommands: ChatCommands = {
 			return this.errorReply(this.tr`You must specify a number that is at least 2 for finalists.`);
 		}
 
-		room.game = new Mastermind(room, finalists);
+		room.mastermindGame = new Mastermind(room, finalists);
 	},
 	newhelp: [
 		`/mastermind new [number of finalists] — Starts a new game of Mastermind with the specified number of finalists. Requires: + % @ # &`,
