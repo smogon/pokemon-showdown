@@ -2123,7 +2123,14 @@ CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
 /**
  * Used by ChatMonitor.
  */
-export type FilterWord = [RegExp, string, string, string | null, number];
+export interface FilterWord {
+	regex: RegExp;
+	word: string;
+	reason: string;
+	publicReason?: string;
+	replacement?: string;
+	hits: number;
+}
 
 export type MonitorHandler = (
 	this: CommandContext,
