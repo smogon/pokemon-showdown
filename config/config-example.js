@@ -567,12 +567,25 @@ exports.grouplist = [
 		tournaments: true,
 	},
 	{
+		symbol: '\u2605',
+		id: "host",
+		name: "Host",
+		inherit: '@',
+		jurisdiction: 'u',
+		roomonly: true,
+
+		declare: true,
+		modchat: 'a',
+		gamemanagement: true,
+		tournaments: true,
+		joinbattle: true,
+	},
+	{
 		symbol: '*',
 		id: "bot",
 		name: "Bot",
 		inherit: '%',
 		jurisdiction: 'u',
-		globalGroupInPersonalRoom: '*',
 
 		addhtml: true,
 		tournaments: true,
@@ -583,20 +596,6 @@ exports.grouplist = [
 		globalban: false,
 		lock: false,
 		alts: false,
-	},
-	{
-		symbol: '\u2605',
-		id: "host",
-		name: "Host",
-		inherit: '@',
-		jurisdiction: 'u',
-		roomonly: true,
-
-		declare: true,
-		modchat: true,
-		gamemanagement: true,
-		tournaments: true,
-		joinbattle: true,
 	},
 	{
 		symbol: '@',
@@ -639,6 +638,7 @@ exports.grouplist = [
 		joinbattle: true,
 		minigame: true,
 		modchat: true,
+		hiderank: true,
 	},
 	{
 		symbol: '\u2606',
