@@ -2790,7 +2790,7 @@ export const pages: PageTable = {
 		const room = this.requireRoom();
 		this.title = `[Quotes]`;
 		// allow it for users if they can access the room
-		if (!user.inRooms.has(room.roomid) && room.settings.isPrivate && !user.isStaff) {
+		if (!room.checkModjoin(user)) {
 			return this.errorReply(`Access denied.`);
 		}
 		let buffer = `<div class="pad">`;
