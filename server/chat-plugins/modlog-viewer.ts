@@ -383,7 +383,9 @@ function buildResults(
 ) {
 	let buf = `>view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm\n|init|html\n|title|[Battle Search][${userids.join('-')}][${tierid}][${month}]\n`;
 	buf += `|pagehtml|<div class="pad ladder"><p>`;
-	buf += `${tierid} battles on ${month} where the user(s) ${userids.join(', ')} were players and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}:</p>`;
+	buf += `${tierid} battles on ${month} where `;
+	buf += userids.length > 1 ? `the users ${userids.join(', ')} were players` : `the user ${userids[0]} was a player`;
+	buf += ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}:</p>`;
 	buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace">`;
 	buf += `<button class="button">Back</button></a></li><br />`;
 	if (userids.length > 1) {
@@ -459,7 +461,7 @@ export const pages: PageTable = {
 			return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
 		}
 		this.title = `[Battle Search][${userids.join(', ')}]`;
-		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid (s): ${userids.join(', ')}</p><p>Maximum Turns: ${turnLimit}</p>`;
+		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid${Chat.plural(userids)}: ${userids.join(', ')}</p><p>Maximum Turns: ${turnLimit}</p>`;
 
 		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
 			const a = aKey.split('-').map(n => parseInt(n));
@@ -520,15 +522,24 @@ export const pages: PageTable = {
 			buf += `<p><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
 		}
 
+		const [userid] = userids;
 		if (toID(confirmation) !== 'confirm') {
-			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${month} where the user(s) ${userids.join(', ')} were players and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
+			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${month} `;
+			buf += `where the ${userids.length > 1 ? `user(s) ${userids.join(', ')} were players` : `the user ${userid} was a player`}`;
+			buf += ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
 			buf += `<p><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
 			return `${buf}</div>`;
 		}
 
 		// Run search
 		void getBattleSearch(connection, userids, turnLimit, month, tierid);
-		return `<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${month} where the user(s) ${userids.join(', ')} were players player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
+		return (
+			`<div class="pad ladder"><h2>Battle Search</h2><p>` +
+			`Searching for ${tierid} battles on ${month} where the ` +
+			`${userids.length > 1 ? `user(s) ${userids.join(', ')} were players` : `the user ${userid} was a player`} ` +
+			`and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.` +
+			`</p><p>Loading... (this will take a while)</p></div>`
+		);
 	},
 };
 
@@ -597,7 +608,7 @@ export const commands: ChatCommands = {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');
 
-		const [num, ids] = Utils.splitFirst(target, ',');
+		const [num, ids] = Utils.splitFirst(target, ',').map(item => item.trim());
 		let turnLimit = parseInt(num);
 		if (!ids) return this.parse('/help battlesearch');
 		if (!turnLimit) {
@@ -608,7 +619,7 @@ export const commands: ChatCommands = {
 			}
 		}
 		// Selection on month, tier, and date will be handled in the HTML room
-		return this.parse(`/join view-battlesearch-${ids.split(',').join('-')}--${turnLimit}`);
+		return this.parse(`/join view-battlesearch-${ids.split(',').map(toID).join('-')}--${turnLimit}`);
 	},
 	battlesearchhelp: [
 		'/battlesearch [turn limit], [userids] - Searches rated battle history for the provided [userids] and returns information on battles that ended in less than [turn limit] turns. Requires &',
