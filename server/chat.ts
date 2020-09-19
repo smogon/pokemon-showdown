@@ -2082,11 +2082,6 @@ export const Chat = new class {
 
 	readonly filterWords: {[k: string]: FilterWord[]} = {};
 	readonly monitors: {[k: string]: Monitor} = {};
-	readonly namefilterwhitelist = new Map<string, string>();
-	/**
-	 * Inappropriate userid : number of times the name has been forcerenamed
-	 */
-	readonly forceRenames = new Map<ID, number>();
 
 	registerMonitor(id: string, entry: Monitor) {
 		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];

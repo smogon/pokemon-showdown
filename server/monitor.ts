@@ -68,6 +68,10 @@ export const Monitor = new class {
 
 	updateServerLock = false;
 	cleanInterval: NodeJS.Timeout | null = null;
+	/**
+	 * Inappropriate userid : number of times the name has been forcerenamed
+	 */
+	readonly forceRenames = new Map<ID, number>();
 
 	/*********************************************************
 	 * Logging

@@ -18,6 +18,7 @@ const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
 const SHAREDIPS_FILE = 'config/sharedips.tsv';
 const SHAREDIPS_BLACKLIST_FILE = 'config/sharedips-blacklist.tsv';
+const WHITELISTED_NAMES_FILE = 'config/name-whitelist.tsv';
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
@@ -143,6 +144,10 @@ export const Punishments = new class {
 	 */
 	readonly sharedIpBlacklist = new Map<string, string>();
 	/**
+	 * namefilterwhitelist is a whitelistedname:whitelister Map
+	 */
+	readonly namefilterwhitelist = new Map<string, string>();
+	/**
 	 * Connection flood table. Separate table from IP bans.
 	 */
 	readonly cfloods = new Set<string>();
@@ -188,6 +193,7 @@ export const Punishments = new class {
 			void Punishments.loadBanlist();
 			void Punishments.loadSharedIps();
 			void Punishments.loadSharedIpBlacklist();
+			void Punishments.loadWhitelistedNames();
 		});
 	}
 
@@ -399,6 +405,29 @@ export const Punishments = new class {
 			buf += `${ip}\t${reason}\r\n`;
 		});
 		return FS(SHAREDIPS_BLACKLIST_FILE).write(buf);
+	}
+
+	async loadWhitelistedNames() {
+		const data = await FS(WHITELISTED_NAMES_FILE).readIfExists();
+		if (!data) return;
+		const lines = data.split('\n');
+		lines.shift();
+		for (const line of lines) {
+			const [userid, whitelister] = line.split('\t');
+			this.namefilterwhitelist.set(userid, whitelister);
+		}
+	}
+
+	appendWhitelistedName(name: string, whitelister: string) {
+		return FS(WHITELISTED_NAMES_FILE).append(`${toID(name)}\t${toID(whitelister)}\r\n`);
+	}
+
+	saveNameWhitelist() {
+		let buf = `Userid\tWhitelister\t\r\n`;
+		Punishments.namefilterwhitelist.forEach((userid, whitelister) => {
+			buf += `${userid}\t${whitelister}\r\n`;
+		});
+		return FS(WHITELISTED_NAMES_FILE).write(buf);
 	}
 
 	/*********************************************************
@@ -1021,6 +1050,23 @@ export const Punishments = new class {
 	removeBlacklistedSharedIp(ip: string) {
 		Punishments.sharedIpBlacklist.delete(ip);
 		void Punishments.saveSharedIpBlacklist();
+	}
+
+	whitelistName(name: string, whitelister: string) {
+		if (this.namefilterwhitelist.has(name)) return false;
+		name = toID(name);
+		whitelister = toID(whitelister);
+		this.namefilterwhitelist.set(name, whitelister);
+		void this.appendWhitelistedName(name, whitelister);
+		return true;
+	}
+
+	unwhitelistName(name: string) {
+		name = toID(name);
+		if (!this.namefilterwhitelist.has(name)) return false;
+		this.namefilterwhitelist.delete(name);
+		void this.saveNameWhitelist();
+		return true;
 	}
 
 	/*********************************************************
