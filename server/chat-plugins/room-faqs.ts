@@ -58,24 +58,31 @@ export const commands: ChatCommands = {
 		this.modlog('RFAQ', null, `added '${topic}'`);
 	},
 	removefaq(target, room, user) {
-		room = this.requireRoom();
+		target = target.trim();
+		let [topic, roomid] = Utils.splitFirst(target, ',');
+		const targetRoom = roomid ? Rooms.search(roomid) : room;
+		if (!targetRoom) return this.errorReply(`Invalid room.`);
+		if (!targetRoom.persist) {
+			return this.errorReply("This command is unavailable in temporary rooms.");
+		}
+		this.room = targetRoom;
 		this.checkChat();
-		this.checkCan('ban', null, room);
-		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-		const topic = toID(target);
+		this.checkCan('ban', null, targetRoom);
+		topic = toID(topic);
 		if (!topic) return this.parse('/help roomfaq');
 
-		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
-		delete roomFaqs[room.roomid][topic];
-		Object.keys(roomFaqs[room.roomid]).filter(
-			val => getAlias(room!.roomid, val) === topic
+		if (!(roomFaqs[targetRoom.roomid] && roomFaqs[targetRoom.roomid][topic])) return this.errorReply("Invalid topic.");
+		delete roomFaqs[targetRoom.roomid][topic];
+		Object.keys(roomFaqs[targetRoom.roomid]).filter(
+			val => getAlias(targetRoom!.roomid, val) === topic
 		).map(
-			val => delete roomFaqs[room!.roomid][val]
+			val => delete roomFaqs[targetRoom!.roomid][val]
 		);
-		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
+		if (!Object.keys(roomFaqs[targetRoom.roomid]).length) delete roomFaqs[targetRoom.roomid];
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
+		if (roomid) this.parse(`/join view-roomfaqs-${targetRoom.roomid}`);
 	},
 	addalias(target, room, user) {
 		room = this.requireRoom();
@@ -106,7 +113,7 @@ export const commands: ChatCommands = {
 		let topic: string = toID(target);
 		if (topic === 'constructor') return false;
 		if (!topic) {
-			return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room!.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/viewfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
+			return this.parse(`/join view-roomfaqs-${room.roomid}`);
 		}
 		if (!roomFaqs[room.roomid][topic]) return this.errorReply("Invalid topic.");
 		topic = getAlias(room.roomid, topic) || topic;
@@ -131,6 +138,46 @@ export const commands: ChatCommands = {
 		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: @ # &`,
 		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # &`,
 	],
+};
+
+export const pages: PageTable = {
+	roomfaqs(args, user) {
+		const room = this.requireRoom();
+		this.title = `[Room FAQs]`;
+		// allow it for users if they can access the room
+		if (!user.inRooms.has(room.roomid) && room.settings.isPrivate && !user.isStaff) {
+			return this.errorReply(`Access denied.`);
+		}
+		let buf = `<div class="pad"><button style="float:right;" class="button" name="send" value="/join view-roomfaqs-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
+		if (!roomFaqs[room.roomid]) {
+			return `${buf}<h2>This room has no FAQs.</h2></div>`;
+		}
+
+		buf += `<h2>FAQs for ${room.title}:</h2>`;
+		const keys = Object.keys(roomFaqs[room.roomid]).filter(
+			val => !getAlias(room.roomid, val)
+		).sort((a, b) => a.localeCompare(b));
+		for (const key of keys) {
+			const topic = roomFaqs[room.roomid][key];
+			buf += `<div class="infobox">`;
+			buf += `<h3>${key}</h3>`;
+			buf += `<hr />`;
+			buf += Chat.formatText(topic, true).replace(/\n/g, '<br />');
+			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === key);
+			if (aliases.length) {
+				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;
+			}
+			if (user.can('ban', null, room)) {
+				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
+				buf += `<hr /><details><summary>Raw text</summary>`;
+				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;
+				buf += `<hr /><button class="button" name="send" value="/removefaq ${key},${room.roomid}">Delete FAQ</button>`;
+			}
+			buf += `</div>`;
+		}
+		buf += `</div>`;
+		return buf;
+	},
 };
 
 process.nextTick(() => {
