@@ -294,7 +294,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					(hasType['Normal'] && !counter['Normal'] && counter.setupType === 'Physical') ||
 					(hasType['Psychic'] && (movePool.includes('psychic') || movePool.includes('psychoboost')) && species.baseStats.spa >= 100) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 100) ||
-					(hasType['Water'] && !counter['Water'] && !hasMove['icebeam'] && counter.setupType !== 'Physical' && species.baseStats.spa >= 60) ||
+					(hasType['Water'] && !counter['Water'] && counter.setupType !== 'Physical' && species.baseStats.spa >= 60) ||
 					(movePool.includes('meteormash') || movePool.includes('spore')) ||
 					(hasMove['protect'] && movePool.includes('wish')) ||
 					(hasMove['substitute'] && movePool.includes('morningsun')) ||
