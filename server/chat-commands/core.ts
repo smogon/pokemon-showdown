@@ -1058,12 +1058,17 @@ export const commands: ChatCommands = {
 		room.game.forfeit(user);
 	},
 
+	guess: 'choose',
 	choose(target, room, user) {
 		room = this.requireRoom();
 		if (!room.game) return this.errorReply(this.tr("This room doesn't have an active game."));
 		if (!room.game.choose) return this.errorReply(this.tr("This game doesn't support /choose"));
+		if (room.game.checkChat) this.checkChat();
 		room.game.choose(user, target);
 	},
+	choosehelp: [
+		`/choose [text] - Make a choice for the currently active game.`,
+	],
 
 	mv: 'move',
 	attack: 'move',
