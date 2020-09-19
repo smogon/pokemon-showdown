@@ -74,9 +74,9 @@ export const commands: ChatCommands = {
 		if (!(roomFaqs[targetRoom.roomid] && roomFaqs[targetRoom.roomid][topic])) return this.errorReply("Invalid topic.");
 		delete roomFaqs[targetRoom.roomid][topic];
 		Object.keys(roomFaqs[targetRoom.roomid]).filter(
-			val => getAlias(targetRoom!.roomid, val) === topic
+			val => getAlias(targetRoom.roomid, val) === topic
 		).map(
-			val => delete roomFaqs[targetRoom!.roomid][val]
+			val => delete roomFaqs[targetRoom.roomid][val]
 		);
 		if (!Object.keys(roomFaqs[targetRoom.roomid]).length) delete roomFaqs[targetRoom.roomid];
 		saveRoomFaqs();
