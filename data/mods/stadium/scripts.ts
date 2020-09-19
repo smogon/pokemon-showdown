@@ -55,8 +55,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (delta) changed = true;
 			}
-			// @ts-ignore
-			this.recalculateStats();
+			this.recalculateStats!();
 			return changed;
 		},
 	},
@@ -335,8 +334,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (moveData.status) {
 				if (!target.status) {
 					target.setStatus(moveData.status, pokemon, move);
-					// @ts-ignore
-					target.recalculateStats();
+					target.recalculateStats!();
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
 						this.add('-fail', target, target.status);
@@ -348,8 +346,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-					// @ts-ignore
-					target.recalculateStats();
+					target.recalculateStats!();
 					didSomething = true;
 				}
 			}

@@ -942,8 +942,7 @@ export class Side {
 		// get rid of some possibly-circular references
 		this.pokemon = [];
 		this.active = [];
-		// @ts-ignore - readonly
-		this.battle = null!;
 		this.foe = null!;
+		(this as any).battle = null!;
 	}
 }

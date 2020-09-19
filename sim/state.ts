@@ -147,10 +147,8 @@ export const State = new class {
 		battle.prng = new PRNG(state.prng);
 		const queue = this.deserializeWithRefs(state.queue, battle);
 		battle.queue.list = queue;
-		// @ts-ignore - readonly
-		battle.hints = new Set(state.hints);
-		// @ts-ignore - readonly
-		battle.log = state.log;
+		(battle as any).hints = new Set(state.hints);
+		(battle as any).log = state.log;
 		return battle;
 	}
 
@@ -223,8 +221,7 @@ export const State = new class {
 
 	deserializePokemon(state: /* Pokemon */ AnyObject, pokemon: Pokemon) {
 		this.deserialize(state, pokemon, POKEMON, pokemon.battle);
-		// @ts-ignore - readonly
-		pokemon.set = state.set;
+		(pokemon as any).set = state.set;
 		// baseMoveSlots and moveSlots need to point to the same objects (ie. identity, not equality).
 		// If we serialized the baseMoveSlots, replace any that match moveSlots to preserve the
 		// identity relationship requirement.
@@ -240,8 +237,7 @@ export const State = new class {
 		} else {
 			baseMoveSlots = pokemon.moveSlots.slice();
 		}
-		// @ts-ignore - readonly
-		pokemon.baseMoveSlots = baseMoveSlots;
+		(pokemon as any).baseMoveSlots = baseMoveSlots;
 		if (state.showCure === undefined) pokemon.showCure = undefined;
 	}
 

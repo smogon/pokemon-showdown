@@ -291,10 +291,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	clearbody: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			for (const i in boost) {
-				// @ts-ignore
-				if (boost[i] < 0) {
-					// @ts-ignore
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
@@ -305,10 +304,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	whitesmoke: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			for (const i in boost) {
-				// @ts-ignore
-				if (boost[i] < 0) {
-					// @ts-ignore
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}

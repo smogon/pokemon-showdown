@@ -2015,8 +2015,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (user.illusion) {
 				const illusionMoves = user.illusion.moves.filter(m => this.dex.getMove(m).category !== 'Status');
 				if (!illusionMoves.length) return;
-				// @ts-ignore I'll figure out a better fix for this later
-				move.name = this.dex.getMove(this.sample(illusionMoves)).name;
+				// I'll figure out a better fix for this later
+				(move as any).name = this.dex.getMove(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",

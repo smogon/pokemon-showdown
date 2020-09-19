@@ -4783,18 +4783,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit(target, source, move) {
-			for (const action of this.queue) {
+			for (const action of this.queue.list as MoveAction[]) {
 				if (
-					// @ts-ignore
 					!action.move || !action.pokemon || !action.pokemon.isActive ||
-					// @ts-ignore
 					action.pokemon.fainted || action.maxMove || action.zmove
 				) {
 					continue;
 				}
-				// @ts-ignore
 				if (action.pokemon.side === source.side && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
-					// @ts-ignore
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
@@ -6945,18 +6941,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit(target, source, move) {
-			for (const action of this.queue) {
+			for (const action of this.queue.list as MoveAction[]) {
 				if (
-					// @ts-ignore
 					!action.move || !action.pokemon || !action.pokemon.isActive ||
-					// @ts-ignore
 					action.pokemon.fainted || action.maxMove || action.zmove
 				) {
 					continue;
 				}
-				// @ts-ignore
 				if (action.pokemon.side === source.side && ['waterpledge', 'firepledge'].includes(action.move.id)) {
-					// @ts-ignore
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
@@ -14336,12 +14328,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		onTry(target, source, move) {
-			for (const action of this.queue) {
-				// @ts-ignore
+			for (const action of this.queue.list as MoveAction[]) {
 				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
-				// @ts-ignore
-				if (action.move?.id === 'round') {
-					// @ts-ignore
+				if (action.move.id === 'round') {
 					this.queue.prioritizeAction(action, move);
 					return;
 				}
