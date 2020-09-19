@@ -351,6 +351,8 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	timerEnd: number | null;
 	timer: NodeJS.Timer | null;
 
+	readonly checkChat = true;
+
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(
 		room: Room,
@@ -589,7 +591,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return minutes || 'off';
 	}
 
-	onSubmit(user: User, value: string) {
+	choose(user: User, value: string) {
 		if (!(user.id in this.playerTable)) {
 			if (!this.joinGame(user)) return false;
 		}
@@ -616,7 +618,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			}
 		} else {
 			if (this.runEvent('IncorrectAnswer', player, value)) return;
-			player.sendRoom("That is not the answer - try again!");
+			throw new Chat.ErrorMessage("That is not the answer - try again!");
 		}
 	}
 
@@ -1053,12 +1055,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	guess(target, room, user) {
-		room = this.requireRoom();
-		const game = room.getGame(ScavengerHunt);
-		if (!game) return this.errorReply("There is no scavenger hunt currently running.");
-		this.checkChat();
-
-		game.onSubmit(user, target);
+		this.parse(`/choose ${target}`);
 	},
 
 	join(target, room, user) {
