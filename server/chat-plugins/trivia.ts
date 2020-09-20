@@ -120,7 +120,7 @@ const PATH = 'config/chat-plugins/triviadata.json';
 /**
  * TODO: move trivia database code to a separate file once relevant.
  */
-let triviaData: TriviaData = {};
+export let triviaData: TriviaData = {};
 try {
 	triviaData = JSON.parse(FS(PATH).readIfExistsSync() || "{}");
 } catch (e) {} // file doesn't exist or contains invalid JSON
@@ -133,6 +133,9 @@ if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 if (triviaData.questions.some(q => !('type' in q))) {
 	triviaData.questions = triviaData.questions.map(q => Object.assign(Object.create(null), q, {type: 'trivia'}));
 }
+
+/** from:to Map */
+export const pendingAltMerges = new Map<ID, ID>();
 
 function isTriviaRoom(room: Room) {
 	return room.roomid === 'trivia';
@@ -166,7 +169,7 @@ function getMastermindGame(room: Room | null) {
 	return game as Mastermind;
 }
 
-function writeTriviaData() {
+export function writeTriviaData() {
 	FS(PATH).writeUpdate(() => (
 		JSON.stringify(triviaData, null, 2)
 	));
@@ -254,6 +257,56 @@ function getQuestions(category: ID): TriviaQuestion[] {
 	}
 }
 
+function hasLeaderboardEntry(userid: ID) {
+	return userid in triviaData.leaderboard! || userid in triviaData.altLeaderboard!;
+}
+
+/**
+ * Records a pending alt merge
+ */
+export function requestAltMerge(from: ID, to: ID) {
+	if (from === to) throw new Chat.ErrorMessage(`You cannot merge leaderboard entries with yourself!`);
+	if (!hasLeaderboardEntry(from)) {
+		throw new Chat.ErrorMessage(`The user '${from}' does not have an entry in the Trivia leaderboard.`);
+	}
+	if (!hasLeaderboardEntry(to)) {
+		throw new Chat.ErrorMessage(`The user '${to}' does not have an entry in the Trivia leaderboard.`);
+	}
+
+	pendingAltMerges.set(from, to);
+}
+
+
+/**
+ * Checks that it has been approved by both users,
+ * and merges two alts on the Trivia leaderboard.
+ */
+export function mergeAlts(from: ID, to: ID) {
+	if (pendingAltMerges.get(from) !== to) {
+		throw new Chat.ErrorMessage(`Both '${from}' and '${to}' must use /trivia mergescore to approve the merge.`);
+	}
+
+	if (!hasLeaderboardEntry(to)) {
+		throw new Chat.ErrorMessage(`The user '${to}' does not have an entry in the Trivia leaderboard.`);
+	}
+	if (!hasLeaderboardEntry(from)) {
+		throw new Chat.ErrorMessage(`The user '${from}' does not have an entry in the Trivia leaderboard.`);
+	}
+
+	for (const leaderboard of [triviaData.altLeaderboard!, triviaData.leaderboard!]) {
+		if (leaderboard[to] && leaderboard[from]) {
+			for (let i = 0; i < leaderboard[to].length; i++) {
+				leaderboard[to][i] += leaderboard[from][i];
+			}
+			delete leaderboard[from];
+		}
+	}
+
+	writeTriviaData();
+	cachedLadder.invalidateCache();
+	cachedAltLadder.invalidateCache();
+}
+
 class Ladder {
 	leaderboard: TriviaLeaderboard;
 	cache: {ladder: TriviaLadder, ranks: TriviaLeaderboard} | null;
@@ -303,8 +356,8 @@ class Ladder {
 	}
 }
 
-const cachedLadder = new Ladder(triviaData.leaderboard);
-const cachedAltLadder = new Ladder(triviaData.altLeaderboard);
+export const cachedLadder = new Ladder(triviaData.leaderboard);
+export const cachedAltLadder = new Ladder(triviaData.altLeaderboard);
 
 class TriviaPlayer extends Rooms.RoomGamePlayer {
 	points: number;
@@ -2113,6 +2166,97 @@ const triviaCommands: ChatCommands = {
 	},
 	historyhelp: [`/trivia history - View a list of the 10 most recently played trivia games.`],
 
+	removepoints: 'addpoints',
+	addpoints(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		if (room.roomid !== 'trivia') return this.errorReply(this.tr("This command can only be used in Trivia."));
+		this.checkCan('editroom', null, room);
+
+		const [userid, pointString] = this.splitOne(target).map(toID);
+
+		const points = parseInt(pointString);
+		if (isNaN(points)) return this.errorReply(`You must specify a number of points to add/remove.`);
+		const isRemoval = cmd === 'removepoints';
+
+		if (!hasLeaderboardEntry(userid)) {
+			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
+		}
+
+		if (userid in triviaData.leaderboard!) triviaData.leaderboard![userid][0] += (isRemoval ? points * -1 : points);
+		if (userid in triviaData.altLeaderboard!) triviaData.altLeaderboard![userid][0] += (isRemoval ? points * -1 : points);
+		writeTriviaData();
+		cachedLadder.invalidateCache();
+		cachedAltLadder.invalidateCache();
+
+		this.modlog(`TRIVIAPOINTS ${isRemoval ? 'REMOVE' : 'ADD'}`, userid, `${points} points`);
+		this.privateModAction(
+			isRemoval ?
+				`${user.name} removed ${points} points from ${userid}'s Trivia leaderboard score.` :
+				`${user.name} added ${points} points to ${userid}'s Trivia leaderboard score.`
+		);
+	},
+	addpointshelp: [
+		`/trivia removepoints [user], [points] - Remove points from a given user's score on the Trivia leaderboard.`,
+		`/trivia addpoints [user], [points] - Add points to a given user's score on the Trivia leaderboard.`,
+		`Requires: # &`,
+	],
+
+	removeleaderboardentry(target, room, user) {
+		room = this.requireRoom();
+		if (room.roomid !== 'trivia') return this.errorReply(this.tr("This command can only be used in Trivia."));
+		this.checkCan('editroom', null, room);
+
+		const userid = toID(target);
+		if (!userid) return this.parse('/help trivia removeleaderboardentry');
+		if (hasLeaderboardEntry(userid)) {
+			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
+		}
+
+		const command = `/trivia removeleaderboardentry ${userid}`;
+		if (user.lastCommand !== command) {
+			user.lastCommand = command;
+			this.sendReply(`Are you sure you want to DELETE ALL LEADERBOARD SCORES FOR '${userid}'?`);
+			this.sendReply(`If so, type ${command} to confirm.`);
+			return;
+		}
+		user.lastCommand = '';
+
+		if (userid in triviaData.leaderboard!) delete triviaData.leaderboard![userid];
+		if (userid in triviaData.altLeaderboard!) delete triviaData.altLeaderboard![userid];
+		writeTriviaData();
+		cachedLadder.invalidateCache();
+		cachedAltLadder.invalidateCache();
+
+		this.modlog(`TRIVIAPOINTS DELETE`, userid);
+		this.privateModAction(`${user.name} removed ${userid}'s Trivia leaderboard entries.`);
+	},
+	removeleaderboardentryhelp: [
+		`/trivia removeleaderboardentry [user] — Remove all leaderboard entries for a user. Requires: # &`,
+	],
+
+	mergealt: 'mergescore',
+	mergescores: 'mergescore',
+	mergescore(target, room, user) {
+		const altid = toID(target);
+		if (!altid) return this.parse('/help trivia mergescore');
+
+		try {
+			mergeAlts(user.id, altid);
+			return this.sendReply(`Your Trivia leaderboard score has been transferred to '${altid}'!`);
+		} catch (err) {
+			if (!err.message.includes('/trivia mergescore')) throw err;
+
+			requestAltMerge(altid, user.id);
+			return this.sendReply(
+				`A Trivia leaderboard score merge with ${altid} is now pending! ` +
+				`To complete the merge, log in on the account '${altid}' and type /trivia mergescore ${user.id}`
+			);
+		}
+	},
+	mergescorehelp: [
+		`/trivia mergescore [user] — Merge another user's Trivia leaderboard score with yours.`,
+	],
+
 	help(target, room, user) {
 		return this.parse(`${this.cmdToken}help trivia`);
 	},
@@ -2161,9 +2305,16 @@ const triviaCommands: ChatCommands = {
 				`<li><code>/trivia casesensitivesearch [type], [query]</code> - Like <code>/trivia search</code>, but is case sensitive (i.e., capitalization matters). Requires: + % @ * &</li>` +
 				`<li><code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.</li>` +
 				`<li><code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.</li>` +
-				`<li><code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.</li>` +
-				`<li><code>/trivia alltimeladder</code> - View information about the top 15 users on the all time trivia leaderboard</li>` +
 				`<li><code>/trivia history</code> - View a list of the 10 most recently played trivia games.</li>` +
+			`</ul></details>` +
+			`<details><summary><strong>Leaderboard commands</strong></summary><ul>` +
+				`<li><code>/trivia ladder</code> - View information about the top 15 users on the Trivia leaderboard.</li>` +
+				`<li><code>/trivia alltimeladder</code> - View information about the top 15 users on the all time Trivia leaderboard.</li>` +
+				`<li><code>/trivia mergescore [user]</code> — Merge another user's Trivia leaderboard score with yours.</li>` +
+				`<li><code>/trivia addpoints [user], [points]</code> - Add points to a given user's score on the Trivia leaderboard. Requires: # &</li>` +
+				`<li><code>/trivia removepoints [user], [points]</code> - Remove points from a given user's score on the Trivia leaderboard. Requires: # &</li>` +
+				`<li><code>/trivia removeleaderboardentry [user]</code> — Remove all Trivia leaderboard entries for a user. Requires: # &</li>` +
+
 			`</ul></details>`
 		);
 	},
