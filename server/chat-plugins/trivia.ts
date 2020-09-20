@@ -120,7 +120,7 @@ const PATH = 'config/chat-plugins/triviadata.json';
 /**
  * TODO: move trivia database code to a separate file once relevant.
  */
-let triviaData: TriviaData = {};
+export let triviaData: TriviaData = {};
 try {
 	triviaData = JSON.parse(FS(PATH).readIfExistsSync() || "{}");
 } catch (e) {} // file doesn't exist or contains invalid JSON
@@ -133,6 +133,9 @@ if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 if (triviaData.questions.some(q => !('type' in q))) {
 	triviaData.questions = triviaData.questions.map(q => Object.assign(Object.create(null), q, {type: 'trivia'}));
 }
+
+/** from:to Map */
+export const pendingAltMerges = new Map<ID, ID>();
 
 function isTriviaRoom(room: Room) {
 	return room.roomid === 'trivia';
@@ -166,7 +169,7 @@ function getMastermindGame(room: Room | null) {
 	return game as Mastermind;
 }
 
-function writeTriviaData() {
+export function writeTriviaData() {
 	FS(PATH).writeUpdate(() => (
 		JSON.stringify(triviaData, null, 2)
 	));
@@ -254,6 +257,56 @@ function getQuestions(category: ID): TriviaQuestion[] {
 	}
 }
 
+function hasLeaderboardEntry(userid: ID) {
+	return userid in triviaData.leaderboard! || userid in triviaData.altLeaderboard!;
+}
+
+/**
+ * Records a pending alt merge
+ */
+export function requestAltMerge(from: ID, to: ID) {
+	if (from === to) throw new Chat.ErrorMessage(`You cannot merge leaderboard entries with yourself!`);
+	if (!hasLeaderboardEntry(from)) {
+		throw new Chat.ErrorMessage(`The user '${from}' does not have an entry in the Trivia leaderboard.`);
+	}
+	if (!hasLeaderboardEntry(to)) {
+		throw new Chat.ErrorMessage(`The user '${to}' does not have an entry in the Trivia leaderboard.`);
+	}
+
+	pendingAltMerges.set(from, to);
+}
+
+
+/**
+ * Checks that it has been approved by both users,
+ * and merges two alts on the Trivia leaderboard.
+ */
+export function mergeAlts(from: ID, to: ID) {
+	if (pendingAltMerges.get(from) !== to) {
+		throw new Chat.ErrorMessage(`Both '${from}' and '${to}' must use /trivia mergescore to approve the merge.`);
+	}
+
+	if (!hasLeaderboardEntry(to)) {
+		throw new Chat.ErrorMessage(`The user '${to}' does not have an entry in the Trivia leaderboard.`);
+	}
+	if (!hasLeaderboardEntry(from)) {
+		throw new Chat.ErrorMessage(`The user '${from}' does not have an entry in the Trivia leaderboard.`);
+	}
+
+	for (const leaderboard of [triviaData.altLeaderboard!, triviaData.leaderboard!]) {
+		if (leaderboard[to] && leaderboard[from]) {
+			for (let i = 0; i < leaderboard[to].length; i++) {
+				leaderboard[to][i] += leaderboard[from][i];
+			}
+			delete leaderboard[from];
+		}
+	}
+
+	writeTriviaData();
+	cachedLadder.invalidateCache();
+	cachedAltLadder.invalidateCache();
+}
+
 class Ladder {
 	leaderboard: TriviaLeaderboard;
 	cache: {ladder: TriviaLadder, ranks: TriviaLeaderboard} | null;
@@ -303,8 +356,8 @@ class Ladder {
 	}
 }
 
-const cachedLadder = new Ladder(triviaData.leaderboard);
-const cachedAltLadder = new Ladder(triviaData.altLeaderboard);
+export const cachedLadder = new Ladder(triviaData.leaderboard);
+export const cachedAltLadder = new Ladder(triviaData.altLeaderboard);
 
 class TriviaPlayer extends Rooms.RoomGamePlayer {
 	points: number;
@@ -2125,7 +2178,7 @@ const triviaCommands: ChatCommands = {
 		if (isNaN(points)) return this.errorReply(`You must specify a number of points to add/remove.`);
 		const isRemoval = cmd === 'removepoints';
 
-		if (!(userid in triviaData.leaderboard!) && !(userid in triviaData.altLeaderboard!)) {
+		if (!hasLeaderboardEntry(userid)) {
 			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
 		}
 
@@ -2155,7 +2208,7 @@ const triviaCommands: ChatCommands = {
 
 		const userid = toID(target);
 		if (!userid) return this.parse('/help trivia removeleaderboardentry');
-		if (!(userid in triviaData.leaderboard!) && !(userid in triviaData.altLeaderboard!)) {
+		if (hasLeaderboardEntry(userid)) {
 			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
 		}
 
@@ -2179,6 +2232,29 @@ const triviaCommands: ChatCommands = {
 	},
 	removeleaderboardentryhelp: [
 		`/trivia removeleaderboardentry [user] — Removes all leaderboard entries for a user. Requires: # &`,
+	],
+
+	mergealt: 'mergescore',
+	mergescores: 'mergescore',
+	mergescore(target, room, user) {
+		const altid = toID(target);
+		if (!altid) return this.parse('/help trivia mergescore');
+
+		try {
+			mergeAlts(user.id, altid);
+			return this.sendReply(`Your Trivia leaderboard score has been transferred to '${altid}'!`);
+		} catch (err) {
+			if (!err.message.includes('/trivia mergescore')) throw err;
+
+			requestAltMerge(altid, user.id);
+			return this.sendReply(
+				`A Trivia leaderboard score merge with ${altid} is now pending! ` +
+				`To complete the merge, log in on the account '${altid}' and type /trivia mergescore ${user.id}`
+			);
+		}
+	},
+	mergescorehelp: [
+		`/trivia mergescore [user] — Merges a user's Trivia leaderboard score with yours.`,
 	],
 
 	help(target, room, user) {
