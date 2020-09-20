@@ -1143,7 +1143,11 @@ export const commands: ChatCommands = {
 		}
 		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
-		if (room.roomid === 'staff' || room.roomid === 'upperstaff' || (Rooms.Modlog.getSharedID(room.roomid) && user.can('modlog'))) {
+		if (
+			room.roomid === 'staff' ||
+			room.roomid === 'upperstaff' ||
+			(Rooms.Modlog.getSharedID(room.roomid) && user.can('modlog'))
+		) {
 			this.globalModlog('NOTE', null, ` by ${user.id}: ${target}`);
 		} else {
 			this.modlog('NOTE', null, target);
