@@ -405,4 +405,36 @@ describe('Trivia', function () {
 			assert.ok(!isNaN(this.player.points));
 		});
 	});
+
+	context('alt merging', () => {
+		it('should only allow merging approved alts', () => {
+			trivia.triviaData.leaderboard = {
+				annika: [0, 0, 0],
+				heartofetheria: [0, 0, 0],
+				somerandomreg: [0, 0, 0],
+			};
+
+			assert.throws(() => trivia.mergeAlts('annika', 'heartofetheria'));
+
+			trivia.requestAltMerge('annika', 'somerandomreg');
+			trivia.requestAltMerge('heartofetheria', 'somerandomreg');
+			assert.throws(() => trivia.mergeAlts('annika', 'heartofetheria'));
+
+			trivia.requestAltMerge('annika', 'heartofetheria');
+			assert.doesNotThrow(() => trivia.mergeAlts('annika', 'heartofetheria'));
+		});
+
+		it('should correctly merge alts', () => {
+			trivia.triviaData.leaderboard = {
+				annika: [3, 2, 1],
+				heartofetheria: [1, 2, 3],
+			};
+
+			trivia.requestAltMerge('heartofetheria', 'annika');
+			trivia.mergeAlts('heartofetheria', 'annika');
+
+			assert.deepStrictEqual(trivia.triviaData.leaderboard.annika, [4, 4, 4]);
+			assert.strictEqual(trivia.triviaData.leaderboard.heartofetheria, undefined);
+		});
+	});
 });
