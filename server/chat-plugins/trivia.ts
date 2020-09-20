@@ -2196,8 +2196,8 @@ const triviaCommands: ChatCommands = {
 		);
 	},
 	addpointshelp: [
-		`/trivia removepoints [user], [points] - Removes points from a given user's score on the Trivia leaderboard.`,
-		`/trivia addpoints [user], [points] - Adds points to a given user's score on the Trivia leaderboard.`,
+		`/trivia removepoints [user], [points] - Remove points from a given user's score on the Trivia leaderboard.`,
+		`/trivia addpoints [user], [points] - Add points to a given user's score on the Trivia leaderboard.`,
 		`Requires: # &`,
 	],
 
@@ -2231,7 +2231,7 @@ const triviaCommands: ChatCommands = {
 		this.privateModAction(`${user.name} removed ${userid}'s Trivia leaderboard entries.`);
 	},
 	removeleaderboardentryhelp: [
-		`/trivia removeleaderboardentry [user] — Removes all leaderboard entries for a user. Requires: # &`,
+		`/trivia removeleaderboardentry [user] — Remove all leaderboard entries for a user. Requires: # &`,
 	],
 
 	mergealt: 'mergescore',
@@ -2254,7 +2254,7 @@ const triviaCommands: ChatCommands = {
 		}
 	},
 	mergescorehelp: [
-		`/trivia mergescore [user] — Merges a user's Trivia leaderboard score with yours.`,
+		`/trivia mergescore [user] — Merge another user's Trivia leaderboard score with yours.`,
 	],
 
 	help(target, room, user) {
@@ -2305,9 +2305,16 @@ const triviaCommands: ChatCommands = {
 				`<li><code>/trivia casesensitivesearch [type], [query]</code> - Like <code>/trivia search</code>, but is case sensitive (i.e., capitalization matters). Requires: + % @ * &</li>` +
 				`<li><code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.</li>` +
 				`<li><code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.</li>` +
-				`<li><code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.</li>` +
-				`<li><code>/trivia alltimeladder</code> - View information about the top 15 users on the all time trivia leaderboard</li>` +
 				`<li><code>/trivia history</code> - View a list of the 10 most recently played trivia games.</li>` +
+			`</ul></details>` +
+			`<details><summary><strong>Leaderboard commands</strong></summary><ul>` +
+				`<li><code>/trivia ladder</code> - View information about the top 15 users on the Trivia leaderboard.</li>` +
+				`<li><code>/trivia alltimeladder</code> - View information about the top 15 users on the all time Trivia leaderboard.</li>` +
+				`<li><code>/trivia mergescore [user]</code> — Merge another user's Trivia leaderboard score with yours.</li>` +
+				`<li><code>/trivia addpoints [user], [points]</code> - Add points to a given user's score on the Trivia leaderboard. Requires: # &</li>` +
+				`<li><code>/trivia removepoints [user], [points]</code> - Remove points from a given user's score on the Trivia leaderboard. Requires: # &</li>` +
+				`<li><code>/trivia removeleaderboardentry [user]</code> — Remove all Trivia leaderboard entries for a user. Requires: # &</li>` +
+
 			`</ul></details>`
 		);
 	},
