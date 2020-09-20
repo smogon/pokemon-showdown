@@ -475,6 +475,18 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 8] National Dex Monotype",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8376523/">National Dex Monotype</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['[Gen 8] National Dex', 'Same Type Clause'],
+		banlist: ['Aegislash', 'Hoopa-Unbound', 'Kartana', 'Magearna', 'Tapu Lele', 'Zygarde-10%', 'Battle Bond', 'Damp Rock', 'Smooth Rock'],
+		unbanlist: ['Alakazam-Mega', 'Darmanitan-Galar', 'Deoxys-Speed', 'Landorus-Base', 'Tornadus-Therian', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Arena Trap'],
+	},
+	{
 		name: "[Gen 8] National Dex AG",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656779/">AG Metagame Discussion</a>`,
