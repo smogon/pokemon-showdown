@@ -2113,6 +2113,74 @@ const triviaCommands: ChatCommands = {
 	},
 	historyhelp: [`/trivia history - View a list of the 10 most recently played trivia games.`],
 
+	removepoints: 'addpoints',
+	addpoints(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		if (room.roomid !== 'trivia') return this.errorReply(this.tr("This command can only be used in Trivia."));
+		this.checkCan('editroom', null, room);
+
+		const [userid, pointString] = this.splitOne(target).map(toID);
+
+		const points = parseInt(pointString);
+		if (isNaN(points)) return this.errorReply(`You must specify a number of points to add/remove.`);
+		const isRemoval = cmd === 'removepoints';
+
+		if (!(userid in triviaData.leaderboard!) && !(userid in triviaData.altLeaderboard!)) {
+			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
+		}
+
+		if (userid in triviaData.leaderboard!) triviaData.leaderboard![userid][0] += (isRemoval ? points * -1 : points);
+		if (userid in triviaData.altLeaderboard!) triviaData.altLeaderboard![userid][0] += (isRemoval ? points * -1 : points);
+		writeTriviaData();
+		cachedLadder.invalidateCache();
+		cachedAltLadder.invalidateCache();
+
+		this.modlog(`TRIVIAPOINTS ${isRemoval ? 'REMOVE' : 'ADD'}`, userid, `${points} points`);
+		this.privateModAction(
+			isRemoval ?
+				`${user.name} removed ${points} points from ${userid}'s Trivia leaderboard score.` :
+				`${user.name} added ${points} points to ${userid}'s Trivia leaderboard score.`
+		);
+	},
+	addpointshelp: [
+		`/trivia removepoints [user], [points] - Removes points from a given user's score on the Trivia leaderboard.`,
+		`/trivia addpoints [user], [points] - Adds points to a given user's score on the Trivia leaderboard.`,
+		`Requires: # &`,
+	],
+
+	removeleaderboardentry(target, room, user) {
+		room = this.requireRoom();
+		if (room.roomid !== 'trivia') return this.errorReply(this.tr("This command can only be used in Trivia."));
+		this.checkCan('editroom', null, room);
+
+		const userid = toID(target);
+		if (!userid) return this.parse('/help trivia removeleaderboardentry');
+		if (!(userid in triviaData.leaderboard!) && !(userid in triviaData.altLeaderboard!)) {
+			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
+		}
+
+		const command = `/trivia removeleaderboardentry ${userid}`;
+		if (user.lastCommand !== command) {
+			user.lastCommand = command;
+			this.sendReply(`Are you sure you want to DELETE ALL LEADERBOARD SCORES FOR '${userid}'?`);
+			this.sendReply(`If so, type ${command} to confirm.`);
+			return;
+		}
+		user.lastCommand = '';
+
+		if (userid in triviaData.leaderboard!) delete triviaData.leaderboard![userid];
+		if (userid in triviaData.altLeaderboard!) delete triviaData.altLeaderboard![userid];
+		writeTriviaData();
+		cachedLadder.invalidateCache();
+		cachedAltLadder.invalidateCache();
+
+		this.modlog(`TRIVIAPOINTS DELETE`, userid);
+		this.privateModAction(`${user.name} removed ${userid}'s Trivia leaderboard entries.`);
+	},
+	removeleaderboardentryhelp: [
+		`/trivia removeleaderboardentry [user] — Removes all leaderboard entries for a user. Requires: # &`,
+	],
+
 	help(target, room, user) {
 		return this.parse(`${this.cmdToken}help trivia`);
 	},
