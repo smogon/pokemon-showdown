@@ -67,7 +67,7 @@ class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-interface ProcessWrapper {
+export interface ProcessWrapper {
 	load: number;
 	process: ChildProcess | Worker;
 	release: () => Promise<void>;
@@ -83,8 +83,8 @@ export class QueryProcessWrapper implements ProcessWrapper {
 	resolveRelease: (() => void) | null;
 	debug?: string;
 
-	constructor(file: string) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
+	constructor(file: string, options?: AnyObject) {
+		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env: options});
 		this.taskId = 0;
 		this.pendingTasks = new Map();
 		this.pendingRelease = null;
@@ -449,7 +449,7 @@ export abstract class ProcessManager {
 		return unspawned;
 	}
 	abstract listen(): void;
-	abstract createProcess(): ProcessWrapper;
+	abstract createProcess(...args: any): ProcessWrapper;
 	destroyProcess(process: ProcessWrapper) {}
 	destroy() {
 		const index = processManagers.indexOf(this);
