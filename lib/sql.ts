@@ -46,8 +46,8 @@ if (process.send) {
 	}
 	database.pragma(`foreign_keys=on`);
 	process.on('message', message => {
-		console.log(message);
-		const query: DatabaseQuery = JSON.parse(message);
+		const [taskid, input] = message.split('\n');
+		const query: DatabaseQuery = JSON.parse(input);
 		let statement;
 		let results;
 		switch (query.type) {
@@ -56,7 +56,7 @@ if (process.send) {
 			const newStatement = database.prepare(data);
 			const nextNum = statementNum++;
 			statements.set(nextNum, newStatement);
-			return process.send!(nextNum);
+			return process.send!(`${taskid}\n${nextNum}`);
 		}
 		case 'all': {
 			const {num, data} = query;
@@ -82,17 +82,17 @@ if (process.send) {
 		}
 			break;
 		}
-		process.send!(results);
+		process.send!(`${taskid}\n${JSON.stringify(results || {})}`);
 	});
 }
 
 export class DatabaseWrapper implements ProcessWrapper {
 	statements: Map<string, number>;
 	process: child_process.ChildProcess;
-	pendingRequests: ((data: string | DataType | null) => any)[];
+	pendingRequests: Map<number, (data: string | DataType | null) => any>;
 	constructor(options: SQLOptions) {
 		this.statements = new Map();
-		this.pendingRequests = [];
+		this.pendingRequests = new Map();
 		this.process = child_process.fork(__filename, [], {
 			env: options as AnyObject, cwd: path.resolve(__dirname, '..'),
 		});
@@ -102,19 +102,23 @@ export class DatabaseWrapper implements ProcessWrapper {
 		return this.process;
 	}
 	listen() {
-		this.process.on("message", (message: DataType) => {
-			const resolver = this.pendingRequests.shift();
-			if (resolver) return resolver(message);
+		this.process.on("message", (message: string) => {
+			const [taskNum, input] = message.split('\n');
+			const resolver = this.pendingRequests.get(parseInt(taskNum));
+			if (resolver) return resolver(JSON.parse(input));
 			throw new Error(`Database wrapper received a message, but there was no pending request.`);
 		});
 	}
-	async release() {
+	release() {
 		this.statements.clear();
 		this.process.kill();
-		await Promise.all(this.pendingRequests.map(item => item(null)));
+		for (const resolver of this.pendingRequests.values()) {
+			resolver(null);
+		}
+		return Promise.resolve();
 	}
 	get load() {
-		return this.pendingRequests.length;
+		return this.pendingRequests.size;
 	}
 	async prepare(statement: string) {
 		const cachedStatement = this.statements.get(statement);
@@ -151,9 +155,10 @@ export class DatabaseWrapper implements ProcessWrapper {
 		return this.query({type: 'exec', data: statement});
 	}
 	query(args: DatabaseQuery) {
-		this.process.send(JSON.stringify(args));
+		const taskid = this.load + 1;
+		this.process.send(`${taskid}\n${JSON.stringify(args)}`);
 		return new Promise<any>(resolve => {
-			this.pendingRequests.push(resolve);
+			this.pendingRequests.set(taskid, resolve);
 		});
 	}
 }

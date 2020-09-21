@@ -83,8 +83,8 @@ export class QueryProcessWrapper implements ProcessWrapper {
 	resolveRelease: (() => void) | null;
 	debug?: string;
 
-	constructor(file: string, options?: AnyObject) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env: options});
+	constructor(file: string) {
+		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 		this.taskId = 0;
 		this.pendingTasks = new Map();
 		this.pendingRelease = null;
