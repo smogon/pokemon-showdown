@@ -32,60 +32,6 @@ export type DatabaseQuery = {
 	type: 'run', data: DataType, num: number,
 };
 
-if (process.send) {
-	let statementNum = 0;
-	const statements: Map<number, Sqlite.Statement> = new Map();
-	const {file, extension} = process.env;
-	const database = new Sqlite(file!);
-	if (extension) {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const functions: {[k: string]: (...params: any) => any} = require(`../${extension}`);
-		for (const key in functions) {
-			database.function(key, functions[key]);
-		}
-	}
-	database.pragma(`foreign_keys=on`);
-	process.on('message', message => {
-		const [taskid, input] = message.split('\n');
-		const query: DatabaseQuery = JSON.parse(input);
-		let statement;
-		let results;
-		switch (query.type) {
-		case 'prepare': {
-			const {data} = query;
-			const newStatement = database.prepare(data);
-			const nextNum = statementNum++;
-			statements.set(nextNum, newStatement);
-			return process.send!(`${taskid}\n${nextNum}`);
-		}
-		case 'all': {
-			const {num, data} = query;
-			statement = statements.get(num);
-			results = statement?.all(data);
-		}
-			break;
-		case 'get': {
-			const {num, data} = query;
-			statement = statements.get(num);
-			results = statement?.get(data);
-		}
-			break;
-		case 'run': {
-			const {num, data} = query;
-			statement = statements.get(num);
-			results = statement?.run(data);
-		}
-			break;
-		case 'exec': {
-			const {data} = query;
-			database.exec(data);
-		}
-			break;
-		}
-		process.send!(`${taskid}\n${JSON.stringify(results || {})}`);
-	});
-}
-
 export class DatabaseWrapper implements ProcessWrapper {
 	statements: Map<string, number>;
 	process: child_process.ChildProcess;
@@ -180,6 +126,60 @@ class SQLProcessManager extends ProcessManager {
 }
 
 export const PM = new SQLProcessManager(module);
+
+if (!PM.isParentProcess) {
+	let statementNum = 0;
+	const statements: Map<number, Sqlite.Statement> = new Map();
+	const {file, extension} = process.env;
+	const database = new Sqlite(file!);
+	if (extension) {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		const functions: {[k: string]: (...params: any) => any} = require(`../${extension}`);
+		for (const key in functions) {
+			database.function(key, functions[key]);
+		}
+	}
+	database.pragma(`foreign_keys=on`);
+	process.on('message', message => {
+		const [taskid, input] = message.split('\n');
+		const query: DatabaseQuery = JSON.parse(input);
+		let statement;
+		let results;
+		switch (query.type) {
+		case 'prepare': {
+			const {data} = query;
+			const newStatement = database.prepare(data);
+			const nextNum = statementNum++;
+			statements.set(nextNum, newStatement);
+			return process.send!(`${taskid}\n${nextNum}`);
+		}
+		case 'all': {
+			const {num, data} = query;
+			statement = statements.get(num);
+			results = statement?.all(data);
+		}
+			break;
+		case 'get': {
+			const {num, data} = query;
+			statement = statements.get(num);
+			results = statement?.get(data);
+		}
+			break;
+		case 'run': {
+			const {num, data} = query;
+			statement = statements.get(num);
+			results = statement?.run(data);
+		}
+			break;
+		case 'exec': {
+			const {data} = query;
+			database.exec(data);
+		}
+			break;
+		}
+		process.send!(`${taskid}\n${JSON.stringify(results || {})}`);
+	});
+}
 
 /**
  * @param options Either an object of filename, extension, or just the string filename
