@@ -28,16 +28,17 @@ const flags = parseFlags();
 
 const databasePath = flags['--db'];
 const textLogPath = flags['--logdir'];
+const outputLogPath = flags['--outputlogdir'];
 const from = flags['--from'];
 const to = flags['--to'];
 
-if (!(databasePath && textLogPath && from && to) || !['txt', 'sqlite'].includes(from) || !['txt', 'sqlite'].includes(to)) {
+if (
+	!((databasePath || outputLogPath) && textLogPath && from && to) ||
+	!['txt', 'sqlite'].includes(from) ||
+	!['txt', 'sqlite'].includes(to)
+) {
 	throw new Error(`Invalid arguments specified.\nUsage: node tools/modlog/convert --db path/to/database --logdir path/to/modlogs --from <database format> --to <database format>.`);
 }
 
-if (from === to) {
-	throw new Error(`Cannot convert to the same storage format.`);
-}
-
 console.log(`Converting ${from === 'txt' ? `the text modlog files in ${textLogPath}` : `${databasePath}`} from ${from} to ${to}...`);
-ModlogConverter.convert(from, to, databasePath, textLogPath);
+ModlogConverter.convert(from, to, databasePath, textLogPath, outputLogPath);
