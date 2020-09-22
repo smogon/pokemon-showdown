@@ -1482,6 +1482,7 @@ namespace RandomTeamsTypes {
 		stickyWeb?: number;
 		rapidSpin?: number;
 		defog?: number;
+		screens?: number;
 		illusion?: number;
 		statusCure?: number;
 	}

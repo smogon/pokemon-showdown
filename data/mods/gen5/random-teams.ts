@@ -58,7 +58,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// These moves can be used even if we aren't setting up to use them:
 		const SetupException = ['closecombat', 'dracometeor', 'extremespeed', 'suckerpunch', 'superpower'];
 
-		const counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
+		const counterAbilities = ['Adaptability', 'Contrary', 'Iron Fist', 'Skill Link'];
 
 		let hasMove: {[k: string]: boolean} = {};
 		let counter;
@@ -411,7 +411,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			do {
 				rejectAbility = false;
 				if (counterAbilities.includes(ability)) {
-					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
+					// Adaptability, Contrary, Iron Fist, Skill Link
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Anger Point' || ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
@@ -425,6 +425,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
+				} else if (ability === 'Hustle') {
+					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Immunity') {
