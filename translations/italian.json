@@ -532,7 +532,7 @@
 
 		"Server version: <b>${version}</b>": "Versione del server: <b>${version}</b>",
 		"/mee - must not start with a letter or number": "/mee - non deve iniziare con una lettera o un numero",
-		"What?! How are you not more excited to battle?! Try /battle! to show me you're ready.": "",
+		"What?! How are you not more excited to battle?! Try /battle! to show me you're ready.": "Cosa?! Non sei più emozionato di lottare? Usa /battle! e dimostrami che sei pronto.",
 		"Access denied for custom avatar - make sure you're on the right account?": "Accesso negato per il custom avatar - sei sicuro di essere sul giusto account?",
 		"Invalid avatar.": "Avatar non valido.",
 		"Avatar changed to:": "Avatar cambiato in:",
