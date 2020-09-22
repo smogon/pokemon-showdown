@@ -142,7 +142,7 @@ export class HelpResponder {
 		return null;
 	}
 	getFaqID(faq: string) {
-		faq = faq.trim();
+		faq = (faq || '').trim();
 		if (!faq) return;
 		const room = this.getRoom();
 		if (!room) return;
