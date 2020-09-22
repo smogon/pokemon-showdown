@@ -380,7 +380,8 @@ export class RandomGen7Teams extends RandomTeams {
 					if (!isLead && !hasAbility['Defeatist']) rejected = true;
 					break;
 				case 'explosion':
-					if (counter.setupType || (hasAbility['Refrigerate'] && hasMove['freezedry']) || hasMove['wish']) rejected = true;
+					if (counter.setupType || !!counter['recovery'] || hasMove['wish']) rejected = true;
+					if (hasAbility['Refrigerate'] && hasMove['freezedry']) rejected = true;
 					break;
 				case 'extremespeed':
 					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
@@ -970,7 +971,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// Banned Ability
 				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
 				// Holistic judgement
-				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
+				'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
 			const tier = toID(species.tier).replace('bl', '');
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
