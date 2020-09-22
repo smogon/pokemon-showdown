@@ -30,15 +30,17 @@ export type DatabaseQuery = {
 } | {
 	/** Run a prepared statement. */
 	type: 'run', data: DataType, num: number,
+} | {
+	type: 'transaction', num: number, data: DataType,
 };
 
 export class DatabaseWrapper implements ProcessWrapper {
 	statements: Map<string, number>;
 	process: child_process.ChildProcess;
-	pendingRequests: Map<number, (data: string | DataType | null) => any>;
+	pendingRequests: ((data: string | DataType | null) => any)[];
 	constructor(options: SQLOptions) {
 		this.statements = new Map();
-		this.pendingRequests = new Map();
+		this.pendingRequests = [];
 		this.process = child_process.fork(__filename, [], {
 			env: options as AnyObject, cwd: path.resolve(__dirname, '..'),
 		});
@@ -48,10 +50,9 @@ export class DatabaseWrapper implements ProcessWrapper {
 		return this.process;
 	}
 	listen() {
-		this.process.on("message", (message: string) => {
-			const [taskNum, input] = message.split('\n');
-			const resolver = this.pendingRequests.get(parseInt(taskNum));
-			if (resolver) return resolver(JSON.parse(input));
+		this.process.on("message", (message: DataType) => {
+			const resolver = this.pendingRequests.shift();
+			if (resolver) return resolver(message);
 			throw new Error(`Database wrapper received a message, but there was no pending request.`);
 		});
 	}
@@ -64,7 +65,7 @@ export class DatabaseWrapper implements ProcessWrapper {
 		return Promise.resolve();
 	}
 	get load() {
-		return this.pendingRequests.size;
+		return this.pendingRequests.length;
 	}
 	async prepare(statement: string) {
 		const cachedStatement = this.statements.get(statement);
@@ -101,10 +102,9 @@ export class DatabaseWrapper implements ProcessWrapper {
 		return this.query({type: 'exec', data: statement});
 	}
 	query(args: DatabaseQuery) {
-		const taskid = this.load + 1;
-		this.process.send(`${taskid}\n${JSON.stringify(args)}`);
+		this.process.send(args);
 		return new Promise<any>(resolve => {
-			this.pendingRequests.set(taskid, resolve);
+			this.pendingRequests.push(resolve);
 		});
 	}
 }
@@ -130,19 +130,22 @@ export const PM = new SQLProcessManager(module);
 if (!PM.isParentProcess) {
 	let statementNum = 0;
 	const statements: Map<number, Sqlite.Statement> = new Map();
+	const transactions: Map<number, Sqlite.Transaction> = new Map();
 	const {file, extension} = process.env;
 	const database = new Sqlite(file!);
 	if (extension) {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const functions: {[k: string]: (...params: any) => any} = require(`../${extension}`);
-		for (const key in functions) {
-			database.function(key, functions[key]);
+		const {functions, storedTransactions} = require(`../${extension}`);
+		for (const k in functions) {
+			database.function(k, functions[k]);
+		}
+		for (const t in storedTransactions) {
+			const transaction = database.transaction(storedTransactions[t]);
+			transactions.set(transactions.size + 1, transaction);
 		}
 	}
 	database.pragma(`foreign_keys=on`);
-	process.on('message', message => {
-		const [taskid, input] = message.split('\n');
-		const query: DatabaseQuery = JSON.parse(input);
+	process.on('message', (query: DatabaseQuery) => {
 		let statement;
 		let results;
 		switch (query.type) {
@@ -151,7 +154,7 @@ if (!PM.isParentProcess) {
 			const newStatement = database.prepare(data);
 			const nextNum = statementNum++;
 			statements.set(nextNum, newStatement);
-			return process.send!(`${taskid}\n${nextNum}`);
+			return process.send!(nextNum);
 		}
 		case 'all': {
 			const {num, data} = query;
@@ -176,8 +179,15 @@ if (!PM.isParentProcess) {
 			database.exec(data);
 		}
 			break;
+		case 'transaction': {
+			const {num, data} = query;
+			const transaction = transactions.get(num);
+			if (!transaction) break;
+			results = transaction(data);
 		}
-		process.send!(`${taskid}\n${JSON.stringify(results || {})}`);
+			break;
+		}
+		process.send!(results);
 	});
 }
 
