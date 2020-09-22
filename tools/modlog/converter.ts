@@ -314,8 +314,13 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		return log;
 	} else {
 		log.action = action;
+		if (log.action === 'OLD MODLOG') {
+			log.loggedBy = 'unknown' as ID;
+			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length);
+			return log;
+		}
+		line = line.slice(actionColonIndex + 2);
 	}
-	line = line.slice(actionColonIndex + 2);
 
 	if (line[0] === '[') {
 		const userid = toID(parseBrackets(line, '['));
@@ -359,12 +364,12 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 }
 
 export function rawifyLog(log: ModlogEntry) {
-	let result = `[${new Date(log.time || Date.now()).toJSON()}] (${(log.visualRoomID || log.roomID || 'global').replace(/^global-/, '')}) ${log.action}:`;
-	if (log.userid) result += ` [${log.userid}]`;
+	let result = `[${new Date(log.time || Date.now()).toJSON()}] (${(log.visualRoomID || log.roomID || 'global').replace(/^global-/, '')}) ${log.action}`;
+	if (log.userid) result += `: [${log.userid}]`;
 	if (log.autoconfirmedID) result += ` ac: [${log.autoconfirmedID}]`;
 	if (log.alts) result += ` alts: [${log.alts.join('], [')}]`;
 	if (log.ip) result += ` [${log.ip}]`;
-	if (log.loggedBy) result += ` by ${log.loggedBy}`;
+	if (log.loggedBy) result += `${result.endsWith(']') ? '' : ':'} by ${log.loggedBy}`;
 	if (log.note) result += `: ${log.note}`;
 	return result + `\n`;
 }

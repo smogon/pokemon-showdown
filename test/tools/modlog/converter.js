@@ -393,7 +393,24 @@ describe('Modlog conversion script', () => {
 			assert.strictEqual(withVisualID.roomID, 'battle-gen7randombattle-1');
 
 			const noVisualID = converter.parseModlog(`[time] (battle-gen7randombattle-1) SOMETHINGBORING: by annika`);
-			assert.equal(noVisualID.visualRoomID, undefined);
+			assert.strictEqual(noVisualID.visualRoomID, undefined);
+		});
+
+		it('should properly handle OLD MODLOG', () => {
+			assert.deepStrictEqual(
+				converter.parseModlog(`[2014-11-20T13:46:00.288Z] (lobby) OLD MODLOG: by unknown: [punchoface] would be muted by [thecaptain] but was already muted.)`),
+				{
+					action: 'OLD MODLOG', roomID: 'lobby', isGlobal: false, loggedBy: 'unknown',
+					note: `[punchoface] would be muted by [thecaptain] but was already muted.)`, time: 1416491160288,
+				}
+			);
+		});
+
+		it('should correctly handle hangman', () => {
+			assert.deepStrictEqual(
+				converter.parseModlog(`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl`),
+				{action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}
+			);
 		});
 	});
 
@@ -415,6 +432,38 @@ describe('Modlog conversion script', () => {
 				converter.rawifyLog(entry),
 				`[2020-08-23T19:50:49.944Z] (development) UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Hey Adora~\n`
 			);
+		});
+
+		it('should handle OLD MODLOG', () => {
+			assert.deepStrictEqual(
+				converter.rawifyLog({
+					action: 'OLD MODLOG', roomID: 'development', isGlobal: false, loggedBy: 'unknown',
+					note: `hello hi test`, time: 1598212249944,
+				}),
+				`[2020-08-23T19:50:49.944Z] (development) OLD MODLOG: by unknown: hello hi test\n`,
+			);
+		});
+
+		it('should handle hangman', () => {
+			assert.deepStrictEqual(
+				converter.rawifyLog({action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}),
+				`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl\n`
+			);
+		});
+	});
+
+	describe('reversability', () => {
+		it('should be reversible', () => {
+			const tests = [
+				`[2020-08-23T19:50:49.944Z] (development) OLD MODLOG: by unknown: hello hi test`,
+				`[2014-11-20T13:46:00.288Z] (lobby) OLD MODLOG: by unknown: [punchoface] would be muted by [thecaptain] but was already muted.)`,
+				`[2017-04-20T18:20:42.408Z] (1v1) OLD MODLOG: by unknown: The tournament auto disqualify timer was set to 2 by Scrappie`,
+				`[2020-09-19T23:28:49.309Z] (lobby) HANGMAN: by archastl`,
+				`[2020-09-20T22:57:27.263Z] (lobby) NOTIFYRANK: by officerjenny: %, You are the last staff left in lobby.`,
+			];
+			for (const test of tests) {
+				assert.strictEqual(test, converter.rawifyLog(converter.parseModlog(test)).replace('\n', ''));
+			}
 		});
 	});
 
