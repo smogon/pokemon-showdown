@@ -48,7 +48,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666169/">OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668322/">OU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666247/">OU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666340/">OU Viability Rankings</a>`,
 		],
@@ -75,7 +75,7 @@ export const Formats: FormatList = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666897/">Ubers Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658364/">Ubers Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661412/">Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668107/">Ubers Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -86,9 +86,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666248/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3670407/">UU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3659681/">UU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659427/">UU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668357/">UU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -105,7 +105,7 @@ export const Formats: FormatList = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666733/">RU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661013/">RU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660617/">RU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3669026/">RU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -115,7 +115,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] NU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666717/">NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3669764/">NU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3662169/">NU Viability Rankings</a>`,
 		],
 
@@ -280,7 +280,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Doubles OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666636/">Doubles OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3669212/">Doubles OU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658826/">Doubles OU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658242/">Doubles OU Viability Rankings</a>`,
 		],
@@ -293,7 +293,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Doubles Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers</a>`,
 		],
 
 		mod: 'gen8',
@@ -304,7 +304,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Doubles UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU</a>`,
 		],
 
 		mod: 'gen8',
@@ -331,6 +331,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Battle Stadium Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3670056/">Series 6 Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
