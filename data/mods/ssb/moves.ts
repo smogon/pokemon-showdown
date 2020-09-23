@@ -404,6 +404,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		flags: {authentic: 1},
+		boosts: {
+			spa: 1,
+		},
 		priority: -7,
 		onHit(target, source, move) {
 			for (const pokemon of this.getAllActive()) {
