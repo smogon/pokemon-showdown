@@ -8074,7 +8074,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Porygon2",
 		evoType: "trade",
-		evoItem: "Dubious Disk",
+		evoItem: "Dubious Disc",
 		eggGroups: ["Mineral"],
 	},
 	gallade: {
