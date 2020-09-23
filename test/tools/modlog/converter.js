@@ -460,14 +460,24 @@ describe('Modlog conversion script', () => {
 				`[2017-04-20T18:20:42.408Z] (1v1) OLD MODLOG: by unknown: The tournament auto disqualify timer was set to 2 by Scrappie`,
 				`[2020-09-19T23:28:49.309Z] (lobby) HANGMAN: by archastl`,
 				`[2020-09-20T22:57:27.263Z] (lobby) NOTIFYRANK: by officerjenny: %, You are the last staff left in lobby.`,
+				`[2020-08-12T00:23:49.183Z] (lobby) MUTE: [hypergigahax] [127.0.0.1]: please only speak english. Checking your modlog you should have understood the rules`,
+				`[2020-09-07T02:17:22.132Z] (lobby) ROOMBAN: [gamingisawesome] [127.0.0.1] by tenshi: wow this is the most written by a 10 year old sentence I've read in a long time`,
 			];
 			for (const test of tests) {
 				assert.strictEqual(test, converter.rawifyLog(converter.parseModlog(test)).replace('\n', ''));
 			}
 		});
+
+		it('multiline entries should be reversible', () => {
+			const originalConvert = converter.rawifyLog(converter.parseModlog(
+				`[2014-11-20T16:30:17.661Z] (lobby) LOCK: [violight] (spamming) by joim`,
+				`[2014-11-20T16:30:17.673Z] (lobby) (violight's ac account: violight)`
+			)).replace('\n', '');
+			assert.strictEqual(originalConvert, converter.rawifyLog(converter.parseModlog(originalConvert)).replace('\n', ''));
+		});
 	});
 
-	describe('integration tests', () => {
+	describe.skip('integration tests', () => {
 		it('should convert from SQLite to text', async () => {
 			const modlog = new ml.Modlog(':memory:', true);
 			const mlConverter = new converter.ModlogConverterSQLite('', '', modlog.database);

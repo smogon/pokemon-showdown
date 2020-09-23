@@ -309,13 +309,13 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		// no action (probably an old-format log that slipped past the modernizer)
 		log.action = 'OLD MODLOG';
 		log.loggedBy = 'unknown' as ID;
-		log.note = line;
+		log.note = line.trim();
 		return log;
 	} else {
 		log.action = action;
 		if (log.action === 'OLD MODLOG') {
 			log.loggedBy = 'unknown' as ID;
-			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length);
+			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length).trim();
 			return log;
 		}
 		line = line.slice(actionColonIndex + 2);
@@ -349,15 +349,20 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		}
 	}
 
-	const actionTakerIndex = line.indexOf(' by ');
-	if (actionTakerIndex) {
-		const colonIndex = line.indexOf(':');
+	let regex = /by .*:/;
+	let actionTakerIndex = regex.exec(line)?.index;
+	if (!actionTakerIndex && actionTakerIndex !== 0) {
+		actionTakerIndex = line.indexOf('by ');
+		regex = /by .*/;
+	}
+	if (actionTakerIndex !== -1) {
+		const colonIndex = line.indexOf(': ');
 		const actionTaker = line.slice(actionTakerIndex + 3, colonIndex > -1 ? colonIndex : undefined);
 		log.loggedBy = toID(actionTaker) || undefined;
 		if (colonIndex > -1) line = line.slice(colonIndex);
-		line = line.replace(/by .*/, '').replace(/^\s?:\s?/, '');
+		line = line.replace(regex, '').replace(/^\s?:\s?/, '');
 	}
-	if (line) log.note = line;
+	if (line) log.note = line.trim();
 
 	return log;
 }
