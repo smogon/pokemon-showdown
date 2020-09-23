@@ -3038,7 +3038,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Overneat
 	healingyou: {
 		accuracy: 100,
-		basePower: 117,
+		basePower: 115,
 		category: "Physical",
 		desc: "Heals foe 50% and eliminates any status problem but it lowers Defense and Special Defense stat by 1 stage, then proceeds to attack the foe.",
 		shortDesc: "Heals foe and gets rid of their status but the foe's Def and SpD by 1, attacks the foe.",
@@ -3057,7 +3057,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.boost({def: -1, spd: -1}, target);
 			this.add('-anim', source, 'Close Combat', target);
 		},
-		flags: {mirror: 1, protect: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
