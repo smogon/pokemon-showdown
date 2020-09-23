@@ -1313,11 +1313,12 @@ export class GlobalRoomState {
 				i--;
 				continue;
 			}
+			const globalGroup = Users.globalAuth.get(user.id);
 			if (room.settings.staffAutojoin === true && user.isStaff ||
-					typeof room.settings.staffAutojoin === 'string' && room.settings.staffAutojoin.includes(user.tempGroup) ||
+				typeof room.settings.staffAutojoin === 'string' && room.settings.staffAutojoin.includes(globalGroup) ||
 					room.auth.has(user.id)) {
 				// if staffAutojoin is true: autojoin if isStaff
-				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
+				// if staffAutojoin is String: autojoin if user's global group in staffAutojoin
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
 				user.joinRoom(room.roomid, connection);
 			}
