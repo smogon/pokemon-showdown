@@ -1195,8 +1195,7 @@ export const Scripts: BattleScriptsData = {
 			return altForme.name;
 		}
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		const speciesName = species.battleOnly ? species.baseSpecies : species.name;
-		if (item.megaEvolves === speciesName && item.megaStone !== species.name) {
+		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
 			return item.megaStone;
 		}
 		return null;
