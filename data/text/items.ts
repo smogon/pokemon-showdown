@@ -565,6 +565,10 @@ export const ItemsText = {
 		name: "Full Incense",
 		desc: "Holder moves last in its priority bracket.",
 	},
+	galaricacuff: {
+		name: "Galarica Cuff",
+		desc: "Evolves Galarian Slowpoke into Galarian Slowbro when used.",
+	},
 	galladite: {
 		name: "Galladite",
 		desc: "If held by a Gallade, this item allows it to Mega Evolve in battle.",
