@@ -80170,7 +80170,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 5, level: 20, gender: "F", moves: ["acid", "nightslash"]},
 			{generation: 5, level: 20, gender: "M", moves: ["acid", "doubleedge"]},
 			{generation: 5, level: 20, gender: "F", moves: ["acid", "rockslide"]},
-			{generation: 5, level: 20, gender: "M", moves: ["acid", "thudnerpunch"]},
+			{generation: 5, level: 20, gender: "M", moves: ["acid", "thunderpunch"]},
 			{generation: 5, level: 20, gender: "F", moves: ["acid", "icepunch"]},
 			{generation: 5, level: 40, gender: "F", moves: ["explosion", "selfdestruct"]},
 			{generation: 5, level: 40, gender: "F", moves: ["shadowclaw", "scratch"]},
