@@ -141,8 +141,9 @@ export class HelpResponder {
 		}
 		return null;
 	}
-	getFaqID(faq: string) {
-		faq = (faq || '').trim();
+	getFaqID(faq?: string) {
+		if (!faq) throw new Chat.ErrorMessage(`Invalid FAQ.`);
+		faq = faq.trim();
 		if (!faq) return;
 		const room = this.getRoom();
 		if (!room) return;
