@@ -16,7 +16,6 @@ type ChatFilter = Chat.ChatFilter;
 type NameFilter = Chat.NameFilter;
 type StatusFilter = Chat.StatusFilter;
 type LoginFilter = Chat.LoginFilter;
-type PunishmentFilter = Chat.PunishmentFilter;
 namespace Chat {
 	export type CommandContext = import('./chat').CommandContext;
 	export type PageContext = import('./chat').PageContext;

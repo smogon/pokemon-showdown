@@ -1371,7 +1371,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const punishmentfilter: PunishmentFilter = (user, punishment) => {
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 	if (punishment[0] !== 'BAN') return;
 
 	const helpRoom = Rooms.get(`help-${toID(user)}`);
