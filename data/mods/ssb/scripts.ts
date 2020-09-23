@@ -718,7 +718,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (!ignoreImmunities && status.id && !source?.hasAbility('burnitdown') &&
+			if (!ignoreImmunities && status.id && 
 					!((source?.hasAbility('corrosion') || source?.hasAbility('hackedcorrosion') || sourceEffect?.id === 'cradilychaos') &&
 					['tox', 'psn'].includes(status.id))) {
 				// the game currently never ignores immunities
