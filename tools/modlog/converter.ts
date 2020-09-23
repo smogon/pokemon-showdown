@@ -1,3 +1,4 @@
+
 /**
  * Converts modlogs between text and SQLite; also modernizes old-format modlogs
  * @author Annika
@@ -7,10 +8,17 @@
 // @ts-ignore Needed for FS
 if (!global.Config) global.Config = {nofswriting: false};
 
-import {ModlogEntry} from '../../server/modlog';
+import * as Database from 'better-sqlite3';
+import iterateLines = require('lines-async-iterator');
+
+import {FS} from '../../lib/fs';
+import {Modlog, ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
 
 type ModlogFormat = 'txt' | 'sqlite';
+
+/** The number of modlog entries to write to the database on each transaction */
+const ENTRIES_TO_BUFFER = 100;
 
 export function parseBrackets(line: string, openingBracket: '(' | '[') {
 	const brackets = {
@@ -306,8 +314,13 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		return log;
 	} else {
 		log.action = action;
+		if (log.action === 'OLD MODLOG') {
+			log.loggedBy = 'unknown' as ID;
+			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length);
+			return log;
+		}
+		line = line.slice(actionColonIndex + 2);
 	}
-	line = line.slice(actionColonIndex + 2);
 
 	if (line[0] === '[') {
 		const userid = toID(parseBrackets(line, '['));
@@ -321,14 +334,15 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		}
 		if (line.startsWith('alts:')) {
 			line = line.slice(5).trim();
-			log.alts = [];
+			const alts = new Set<ID>(); // we need to weed out duplicate alts
 			let alt = parseBrackets(line, '[');
 			do {
 				if (IPTools.ipRegex.test(alt)) break;
-				log.alts.push(toID(alt));
+				alts.add(toID(alt));
 				line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
 				alt = parseBrackets(line, '[');
 			} while (alt);
+			log.alts = [...alts];
 		}
 		if (line[0] === '[') {
 			log.ip = parseBrackets(line, '[');
@@ -350,12 +364,264 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 }
 
 export function rawifyLog(log: ModlogEntry) {
-	let result = `[${new Date(log.time || Date.now()).toJSON()}] (${log.visualRoomID || log.roomID || 'global'}) ${log.action}:`;
-	if (log.userid) result += ` [${log.userid}]`;
+	let result = `[${new Date(log.time || Date.now()).toJSON()}] (${(log.visualRoomID || log.roomID || 'global').replace(/^global-/, '')}) ${log.action}`;
+	if (log.userid) result += `: [${log.userid}]`;
 	if (log.autoconfirmedID) result += ` ac: [${log.autoconfirmedID}]`;
 	if (log.alts) result += ` alts: [${log.alts.join('], [')}]`;
 	if (log.ip) result += ` [${log.ip}]`;
-	if (log.loggedBy) result += ` by ${log.loggedBy}`;
+	if (log.loggedBy) result += `${result.endsWith(']') ? '' : ':'} by ${log.loggedBy}`;
 	if (log.note) result += `: ${log.note}`;
 	return result + `\n`;
+}
+
+export class ModlogConverterSQLite {
+	readonly databaseFile: string;
+	readonly textLogDir: string;
+	readonly isTesting: {files: Map<string, string>, db: Database.Database} | null = null;
+
+	constructor(databaseFile: string, textLogDir: string, isTesting?: Database.Database) {
+		this.databaseFile = databaseFile;
+		this.textLogDir = textLogDir;
+		if (isTesting || Config.nofswriting) {
+			this.isTesting = {files: new Map<string, string>(), db: isTesting || new Database(':memory')};
+		}
+	}
+
+	async toTxt() {
+		const database = this.isTesting?.db || new Database(this.databaseFile, {fileMustExist: true});
+		const roomids = database.prepare('SELECT DISTINCT roomid FROM modlog').all();
+		const globalEntries = [];
+		for (const {roomid} of roomids) {
+			if (!Config.nofswriting) console.log(`Reading ${roomid}...`);
+			const results = database.prepare(
+				`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts ` +
+				`FROM modlog WHERE roomid = ? ORDER BY timestamp ASC`
+			).all(roomid);
+
+			const trueRoomID = roomid.replace(/^global-/, '');
+
+			let entriesLogged = 0;
+			let entries: string[] = [];
+
+			const insertEntries = async () => {
+				entriesLogged += entries.length;
+				if (!Config.nofswriting && (entriesLogged % ENTRIES_TO_BUFFER === 0 || entriesLogged < ENTRIES_TO_BUFFER)) {
+					process.stdout.clearLine(0);
+					process.stdout.cursorTo(0);
+					process.stdout.write(`Wrote ${entriesLogged} entries from '${trueRoomID}'`);
+				}
+				await this.writeFile(`${this.textLogDir}/modlog_${trueRoomID}.txt`, entries.join(''));
+				entries = [];
+			};
+
+			for (const result of results) {
+				const entry: ModlogEntry = {
+					action: result.action,
+					roomID: result.roomid?.replace(/^global-/, ''),
+					visualRoomID: result.visual_roomid,
+					userid: result.userid,
+					autoconfirmedID: result.autoconfirmed_userid,
+					alts: result.alts?.split(','),
+					ip: result.ip,
+					isGlobal: result.roomid?.startsWith('global-') || result.roomid === 'global',
+					loggedBy: result.action_taker_userid,
+					note: result.note,
+					time: result.timestamp,
+				};
+
+				const rawLog = rawifyLog(entry);
+				entries.push(rawLog);
+				if (entry.isGlobal) {
+					globalEntries.push(rawLog);
+				}
+				if (entries.length === ENTRIES_TO_BUFFER) await insertEntries();
+			}
+			await insertEntries();
+			if (entriesLogged) process.stdout.write('\n');
+		}
+		if (!Config.nofswriting) console.log(`Writing the global modlog...`);
+		await this.writeFile(`${this.textLogDir}/modlog_global.txt`, globalEntries.join(''));
+	}
+
+	async writeFile(path: string, text: string) {
+		if (this.isTesting) {
+			const old = this.isTesting.files.get(path);
+			return this.isTesting.files.set(path, `${old || ''}${text}`);
+		}
+		return FS(path).append(text);
+	}
+}
+
+export class ModlogConverterTxt {
+	readonly databaseFile: string;
+	readonly database: Database.Database;
+	readonly insertionQuery: Database.Statement;
+	readonly altsInsertionQuery: Database.Statement;
+	readonly insertionTransaction: Database.Transaction;
+	readonly textLogDir: string;
+	readonly isTesting: {files: Map<string, string>, ml?: Modlog} | null = null;
+	constructor(databaseFile: string, textLogDir: string, isTesting?: Map<string, string>) {
+		this.databaseFile = databaseFile;
+		this.textLogDir = textLogDir;
+		if (isTesting || Config.nofswriting) {
+			this.isTesting = {
+				files: isTesting || new Map<string, string>(),
+			};
+		}
+
+		this.database = Database(this.isTesting ? ':memory:' : `${__dirname}/../../${this.databaseFile}`);
+		this.database.exec(FS(`databases/schemas/modlog.sql`).readIfExistsSync());
+
+		this.insertionQuery = this.database.prepare(
+			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
+			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
+		);
+		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
+		this.insertionTransaction = this.database.transaction((entries: ModlogEntry[]) => {
+			for (const entry of entries) {
+				const result = this.insertionQuery.run(entry);
+				for (const alt of entry.alts || []) {
+					this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
+				}
+			}
+		});
+	}
+
+	async toSQLite() {
+		const files = this.isTesting ? [...this.isTesting.files.keys()] : await FS(this.textLogDir).readdir();
+		// Read global modlog last to avoid inserting duplicate data to database
+		if (files.includes('modlog_global.txt')) {
+			files.splice(files.indexOf('modlog_global.txt'), 1);
+			files.push('modlog_global.txt');
+		}
+		for (const file of files) {
+			if (file === 'README.md') continue;
+			const roomid = file.slice(7, -4);
+			const lines = this.isTesting ?
+				this.isTesting.files.get(file)?.split('\n') || [] :
+				iterateLines(`${this.textLogDir}/${file}`);
+
+			let entriesLogged = 0;
+			let lastLine = undefined;
+			let entries: ModlogEntry[] = [];
+
+			const insertEntries = () => {
+				this.insertionTransaction(entries);
+				entriesLogged += entries.length;
+				if (!Config.nofswriting && (entriesLogged % ENTRIES_TO_BUFFER === 0 || entriesLogged < ENTRIES_TO_BUFFER)) {
+					process.stdout.clearLine(0);
+					process.stdout.cursorTo(0);
+					process.stdout.write(`Inserted ${entriesLogged} entries from '${roomid}'`);
+				}
+				entries = [];
+			};
+
+			for await (const line of lines) {
+				const entry = parseModlog(line, lastLine, roomid === 'global');
+				lastLine = line;
+				if (!entry || roomid === 'global' && entry.roomID === 'global') continue;
+				entries.push({
+					action: entry.action,
+					roomID: entry.isGlobal ? `global-${entry.roomID}` : entry.roomID,
+					visualRoomID: entry.visualRoomID,
+					userid: entry.userid,
+					autoconfirmedID: entry.autoconfirmedID,
+					ip: entry.ip,
+					loggedBy: entry.loggedBy,
+					note: entry.note,
+					time: entry.time || Date.now(),
+					alts: entry.alts,
+				});
+				if (entries.length === ENTRIES_TO_BUFFER) insertEntries();
+			}
+			insertEntries();
+			process.stdout.write('\n');
+		}
+		return this.database;
+	}
+}
+
+export class ModlogConverterTest {
+	readonly inputDir: string;
+	readonly outputDir: string;
+
+	constructor(inputDir: string, outputDir: string) {
+		this.inputDir = inputDir;
+		this.outputDir = outputDir;
+	}
+
+	async toTxt() {
+		const files = await FS(this.inputDir).readdir();
+		// Read global modlog last to avoid inserting duplicate data to database
+		if (files.includes('modlog_global.txt')) {
+			files.splice(files.indexOf('modlog_global.txt'), 1);
+			files.push('modlog_global.txt');
+		}
+
+		const globalEntries = [];
+
+		for (const file of files) {
+			if (file === 'README.md') continue;
+			const roomid = file.slice(7, -4);
+
+			let entriesLogged = 0;
+			let lastLine = undefined;
+			let entries: string[] = [];
+
+			const insertEntries = async () => {
+				entriesLogged += entries.length;
+				if (!Config.nofswriting && (entriesLogged % ENTRIES_TO_BUFFER === 0 || entriesLogged < ENTRIES_TO_BUFFER)) {
+					process.stdout.clearLine(0);
+					process.stdout.cursorTo(0);
+					process.stdout.write(`Wrote ${entriesLogged} entries from '${roomid}'`);
+				}
+				await FS(`${this.outputDir}/modlog_${roomid}.txt`).append(entries.join(''));
+				entries = [];
+			};
+
+			for await (const line of iterateLines(`${this.inputDir}/${file}`)) {
+				const entry = parseModlog(line, lastLine, roomid === 'global');
+				lastLine = line;
+				if (!entry || roomid === 'global' && entry.roomID === 'global') continue;
+				const rawLog = rawifyLog(entry);
+				entries.push(rawLog);
+				if (entry.isGlobal) {
+					globalEntries.push(rawLog);
+				}
+				if (entries.length === ENTRIES_TO_BUFFER) await insertEntries();
+			}
+			await insertEntries();
+			if (entriesLogged) process.stdout.write('\n');
+		}
+
+		if (!Config.nofswriting) console.log(`Writing the global modlog...`);
+		await FS(`${this.outputDir}/modlog_global.txt`).append(globalEntries.join(''));
+	}
+}
+
+export class ModlogConverter {
+	static async convert(
+		from: ModlogFormat, to: ModlogFormat, databasePath: string,
+		textLogDirectoryPath: string, outputLogPath?: string
+	) {
+		if (from === 'sqlite' && to === 'txt') {
+			const converter = new ModlogConverterSQLite(databasePath, textLogDirectoryPath);
+			return converter.toTxt().then(() => {
+				console.log("Done!");
+				process.exit();
+			});
+		} else if (from === 'txt' && to === 'sqlite') {
+			const converter = new ModlogConverterTxt(databasePath, textLogDirectoryPath);
+			return converter.toSQLite().then(() => {
+				console.log("\nDone!");
+				process.exit();
+			});
+		} else if (from === 'txt' && to === 'txt' && outputLogPath) {
+			const converter = new ModlogConverterTest(textLogDirectoryPath, outputLogPath);
+			return converter.toTxt().then(() => {
+				console.log("\nDone!");
+				process.exit();
+			});
+		}
+	}
 }
