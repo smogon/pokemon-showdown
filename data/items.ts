@@ -1951,6 +1951,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 316,
 		gen: 4,
 	},
+	galaricacuff: {
+		name: "Galarica Cuff",
+		spritenum: 739,
+		fling: {
+			basePower: 30,
+		},
+		num: 1582,
+		gen: 8,
+	},
 	galladite: {
 		name: "Galladite",
 		spritenum: 616,
