@@ -130,7 +130,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			}
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
-			this.modnote(user, `${user.name} claimed this ticket.`);
+			this.modnote(`${user.name} claimed this ticket.`, user);
 			notifyStaff();
 		} else {
 			this.claimQueue.push(user.name);
@@ -147,11 +147,11 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (toID(this.ticket.claimed) === user.id) {
 			if (this.claimQueue.length) {
 				this.ticket.claimed = this.claimQueue.shift() || null;
-				this.modnote(user, `This ticket is now claimed by ${this.ticket.claimed}.`);
+				this.modnote(`This ticket is now claimed by ${this.ticket.claimed}.`, user);
 			} else {
 				this.ticket.claimed = null;
 				this.lastUnclaimedStart = Date.now();
-				this.modnote(user, `This ticket is no longer claimed.`);
+				this.modnote(`This ticket is no longer claimed.`, user);
 				notifyStaff();
 			}
 			tickets[this.ticket.userid] = this.ticket;
@@ -190,14 +190,19 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (!(user.id in this.playerTable)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;
-		this.modnote(user, `${user.name} is no longer interested in this ticket.`);
+		this.modnote(`${user.name} is no longer interested in this ticket.`, user);
 		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
-		this.close(user, !!(this.firstClaimTime));
+		this.close(!!(this.firstClaimTime), user);
 		return true;
 	}
 
-	modnote(user: User, text: string) {
-		this.room.addByUser(user, text).update();
+	modnote(text: string, user?: User) {
+		if (user) {
+			this.room.addByUser(user, text);
+		} else {
+			this.room.add(text);
+		}
+		this.room.update();
 		this.room.modlog(text);
 	}
 
@@ -232,11 +237,11 @@ export class HelpTicket extends Rooms.RoomGame {
 		return `title="${hoverText.reverse().join(`&#10;`)}"`;
 	}
 
-	close(staff: User, result: boolean | 'ticketban' | 'deleted') {
+	close(result: boolean | 'ticketban' | 'deleted', staff?: User) {
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
 		writeTickets();
-		this.modnote(staff, `${staff.name} closed this ticket.`);
+		this.modnote(staff ? `${staff.name} closed this ticket.` : `This ticket was closed.`, staff);
 		notifyStaff();
 		this.room.pokeExpireTimer();
 		for (const ticketGameUser of Object.values(this.playerTable)) {
@@ -245,7 +250,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			if (user) user.updateSearch();
 		}
 		if (!this.involvedStaff.size) {
-			if (staff.isStaff && staff.id !== this.ticket.userid) {
+			if (staff?.isStaff && staff.id !== this.ticket.userid) {
 				this.involvedStaff.add(staff.id);
 			} else {
 				this.involvedStaff.add(toID(this.ticket.claimed));
@@ -300,8 +305,8 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	deleteTicket(staff: User) {
-		this.close(staff, 'deleted');
-		this.modnote(staff, `${staff.name} deleted this ticket.`);
+		this.close('deleted', staff);
+		this.modnote(`${staff.name} deleted this ticket.`, staff);
 		delete tickets[this.ticket.userid];
 		writeTickets();
 		notifyStaff();
@@ -1171,7 +1176,7 @@ export const commands: ChatCommands = {
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
-			ticketGame.modnote(user, `${user.name} opened a new ticket. Issue: ${ticket.type}`);
+			ticketGame.modnote(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			this.parse(`/join help-${user.id}`);
 			if (!(user.id in ticketGame.playerTable)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
@@ -1216,7 +1221,7 @@ export const commands: ChatCommands = {
 				if (ticket.userid === user.id && !user.isStaff) {
 					result = !!(ticketGame.firstClaimTime);
 				}
-				ticketGame.close(user, result);
+				ticketGame.close(result, user);
 			} else {
 				ticket.open = false;
 				notifyStaff();
@@ -1364,4 +1369,14 @@ export const commands: ChatCommands = {
 		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
 	],
+};
+
+export const punishmentfilter: PunishmentFilter = (user, punishment) => {
+	if (punishment[0] !== 'BAN') return;
+
+	const helpRoom = Rooms.get(`help-${toID(user)}`);
+	if (helpRoom?.game?.gameid !== 'helpticket') return;
+
+	const ticket = helpRoom.game as HelpTicket;
+	ticket.close('ticketban');
 };
