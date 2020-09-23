@@ -11,10 +11,16 @@ import * as child_process from 'child_process';
 import * as util from 'util';
 import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
+import {QueryProcessManager} from "../../lib/process-manager";
+import {Repl} from '../../lib/repl';
+import {Config} from '../config-loader';
+import {Dex} from '../../sim/dex';
+import {Chat} from '../chat';
 
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
 const MAX_MEMORY = 67108864; // 64MB
+const MAX_PROCESSES = 1;
 const execFile = util.promisify(child_process.execFile);
 
 export class LogReaderRoom {
@@ -230,13 +236,13 @@ export const LogViewer = new class {
 		}
 
 		let buf = (
-			`<br><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr>`
+			`<br /><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr />`
 		);
 		buf += this.renderDayResults(results, roomid);
 		if (total > limit) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
-			buf += `<br><div style="text-align:center">`;
+			buf += `<br /><strong>Max results reached, capped at ${limit}</strong>`;
+			buf += `<br /><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:${limit + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:3000">View all<br />&#x25bc;</button></div>`;
@@ -254,15 +260,15 @@ export const LogViewer = new class {
 		}
 		let buf = '';
 		if (year) {
-			buf += `<div class="pad"><strong><br>Searching year: ${year}: </strong><hr>`;
+			buf += `<div class="pad"><strong><br />Searching year: ${year}: </strong><hr />`;
 		}	else {
-			buf += `<div class="pad"><strong><br>Searching all logs: </strong><hr>`;
+			buf += `<div class="pad"><strong><br />Searching all logs: </strong><hr />`;
 		}
 		buf += this.renderDayResults(results, roomid);
 		if (total > limit) {
 			// cap is met
-			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
-			buf += `<br><div style="text-align:center">`;
+			buf += `<br /><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br /><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
@@ -588,47 +594,50 @@ export const LogSearcher = new class {
 			const diff = count - MAX_RESULTS;
 			results = results.slice(0, -diff);
 		}
-		return this.render(results, roomid, search, limit, date);
+		return this.renderResults(results, roomid, search, limit, date);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, limit: number, month?: string | null) {
-		if (results.filter(Boolean).length < 1) return LogViewer.error('No results found.');
-		const exactMatches = [];
+	renderResults(results: string[], roomid: RoomID, search: string, limit: number, month?: string | null) {
+		results = results.filter(Boolean);
+		if (results.length < 1) return LogViewer.error('No results found.');
+		let exactMatches = 0;
 		let curDate = '';
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const searchRegex = new RegExp(this.constructRegex(search), "i");
-		const sorted = results.sort().map(chunk => {
-			const section = chunk.split('\n').map(line => {
+		const sorted = results.sort((aLine, bLine) => {
+			const [aName] = aLine.split('.txt');
+			const [bName] = bLine.split('.txt');
+			const aDate = new Date(aName.split('/').pop()!);
+			const bDate = new Date(bName.split('/').pop()!);
+			return bDate.getTime() - aDate.getTime();
+		}).map(chunk => {
+			return chunk.split('\n').map(line => {
+				if (exactMatches > limit || !toID(line)) return null; // return early so we don't keep sorting
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
 				const [name, text] = line.split(sep);
-				const rendered = LogViewer.renderLine(text, 'all');
-				if (!rendered || name.includes('today') || !toID(line)) return '';
+				line = LogViewer.renderLine(text, 'all');
+				if (!line || name.includes('today')) return null;
 				 // gets rid of some edge cases / duplicates
 				let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
-				let matched = (
-					searchRegex.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
-				);
+				if (searchRegex.test(line)) {
+					if (++exactMatches > limit) return null;
+					line = `<div class="chat chatmessage highlighted">${line}</div>`;
+				}
 				if (curDate !== date) {
 					curDate = date;
 					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-					matched = `${date} ${matched}`;
 				} else {
 					date = '';
 				}
-				if (matched.includes('chat chatmessage highlighted')) {
-					exactMatches.push(matched);
-				}
-				if (exactMatches.length > limit) return null;
-				return matched;
+				return `${date} ${line}`;
 			}).filter(Boolean).join(' ');
-			return section;
-		});
+		}).filter(Boolean);
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
-		buf += !limit ? ` ${exactMatches.length}` : '';
-		buf += !limit ? `<hr></div><blockquote>` : ` (capped at ${limit})<hr></div><blockquote>`;
-		buf += sorted.filter(Boolean).join('<hr>');
+		buf += limit ? ` ${exactMatches} (capped at ${limit})` : '';
+		buf += `<hr /></div><blockquote>`;
+		buf += sorted.join('<hr />');
 		if (limit) {
-			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${limit}.</strong><br>`;
+			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
 			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:${limit + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:3000">View all<br />&#x25bc;</button></div>`;
 		}
@@ -636,13 +645,60 @@ export const LogSearcher = new class {
 	}
 };
 
+
+export const PM = new QueryProcessManager<AnyObject, string | undefined>(module, async data => {
+	try {
+		const {date, search, roomid, limit} = data;
+		switch (Config.chatlogreader) {
+		case 'fs':
+			return await LogSearcher.fsSearch(roomid, search, date, limit);
+		case 'ripgrep':
+			return await LogSearcher.ripgrepSearch(roomid, search, limit, date);
+		default:
+			return LogViewer.error(`Config.chatlogreader is not configured.`);
+		}
+	} catch (e) {
+		Monitor.crashlog(e, 'A chatlog search query', data);
+		return (
+			`<div class="pad"><p class="message-error">` +
+			`Sorry! Your chatlog search crashed. We've been notified and will fix this.` +
+			`</p></div>`
+		);
+	}
+});
+
+if (!PM.isParentProcess) {
+	// This is a child process!
+	global.Config = Config;
+	// @ts-ignore ???
+	global.Monitor = {
+		crashlog(error: Error, source = 'A chatlog search process', details: {} | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			// @ts-ignore
+			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	global.Chat = Chat;
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			Monitor.crashlog(err, 'A chatlog search child process');
+		}
+	});
+	global.Dex = Dex;
+	global.toID = Dex.toID;
+	// eslint-disable-next-line no-eval
+	Repl.start('chatlog', cmd => eval(cmd));
+} else {
+	PM.spawn(MAX_PROCESSES);
+}
+
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 
 export const pages: PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!user.trusted) {
-			return LogViewer.error("Access denied");
+			return this.errorReply("Access denied.");
 		}
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
@@ -655,14 +711,14 @@ export const pages: PageTable = {
 		// permission check
 		const room = Rooms.get(roomid);
 		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
-			return LogViewer.error("SPL team discussions are super secret.");
+			return this.errorReply("SPL team discussions are super secret.");
 		}
 		if (roomid.startsWith('wcop') && !user.can('rangeban')) {
-			return LogViewer.error("WCOP team discussions are super secret.");
+			return this.errorReply("WCOP team discussions are super secret.");
 		}
 		if (room) {
 			if (!room.checkModjoin(user) && !user.can('bypassall')) {
-				return LogViewer.error("Access denied");
+				return this.errorReply("Access denied.");
 			}
 			if (!user.can('lock')) this.checkCan('mute', null, room);
 		} else {
@@ -678,7 +734,7 @@ export const pages: PageTable = {
 			let [input, limitString] = opts.split('--limit-');
 			input = input.slice(7);
 			search = Dashycode.decode(input);
-			if (search.length < 3) return LogViewer.error(`Too short of a search query.`);
+			if (search.length < 3) return this.errorReply(`That's too short of a search query.`);
 			if (limitString) {
 				limit = parseInt(limitString) || null;
 			} else {
@@ -692,15 +748,13 @@ export const pages: PageTable = {
 		const validDateStrings = ['all', 'alltime', 'today'];
 		// this is apparently the best way to tell if a date is invalid
 		if (date && isNaN(parsedDate.getTime()) && !validDateStrings.includes(toID(date))) {
-			return LogViewer.error(`Invalid date.`);
+			return this.errorReply(`Invalid date.`);
 		}
 
 		if (date && search) {
 			this.title = `[Search] [${room}] ${search}`;
-			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
-				return LogSearcher.fsSearch(roomid, search, date, limit);
-			} else if (Config.chatlogreader === 'ripgrep') {
-				return LogSearcher.ripgrepSearch(roomid, search, limit, isAll ? null : date);
+			if (['ripgrep', 'fs'].includes(Config.chatlogreader)) {
+				return PM.query({search, limit, roomid, date: isAll ? null : date});
 			} else {
 				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
 			}
