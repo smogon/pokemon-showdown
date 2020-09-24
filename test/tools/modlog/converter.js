@@ -33,6 +33,11 @@ describe('Modlog conversion script', () => {
 				'[2020-08-23T19:48:14.823Z] (help-uwu) TICKETCLOSE: by annika',
 				'[2020-08-23T19:48:14.823Z] (development) ROOMBAN: [sometroll] alts:[alt1], [alt2] ac:[autoconfirmed] [127.0.0.1] by annika: never uses the room for development',
 				'[2018-01-18T14:30:02.564Z] (tournaments) TOUR CREATE: by ladymonita: gen7randombattle',
+				`[2014-11-24T11:10:34.798Z] (lobby) NOTE: by joimnotesyakcity: lled by his friends`,
+				`[2015-03-18T20:56:19.462Z] (lobby) WARN: [peterpablo] by xfix (Frost was banned for a reason - don't talk about Frost.)`,
+				`[2015-10-23T19:13:58.190Z] (lobby) NOTE: by imas234: [2015-07-31 01:54pm] (lobby) Tru identity was locked from talking by Trickster. (bad Chingu)  uh....`,
+				`[2015-11-27T12:26:15.741Z] (lobby) NOTE: by theraven: Arik Ex was banned under Eastglo`,
+				`[2018-01-07T07:13:10.279Z] (lobby) NOTE: by gentlejellicent: Ah, you changed the staffintro to have bloodtext in it`,
 			];
 			for (const log of modernLogs) {
 				assert.strictEqual(converter.modernizeLog(log), log);
@@ -84,6 +89,13 @@ describe('Modlog conversion script', () => {
 			assert.strictEqual(
 				converter.modernizeLog(`[2020-08-23T19:50:49.944Z] (development) ([annika] notes: I'm making a modnote)`),
 				`[2020-08-23T19:50:49.944Z] (development) NOTE: by annika: I'm making a modnote`
+			);
+		});
+
+		it('should correctly parse userids containing `notes`', () => {
+			assert.strictEqual(
+				converter.modernizeLog(`[2014-11-24T11:10:34.798Z] (lobby) ([joimnotesyakcity] was trolled by his friends)`),
+				`[2014-11-24T11:10:34.798Z] (lobby) [joimnotesyakcity] was trolled by his friends`
 			);
 		});
 
@@ -309,6 +321,13 @@ describe('Modlog conversion script', () => {
 			assert.strictEqual(
 				converter.modernizeLog(`[2020-08-23T19:50:49.944Z] (wifi) GTS FINISHED: Annika has finished their GTS giveaway for "deluxe shitposter 2000"`),
 				`[2020-08-23T19:50:49.944Z] (wifi) GTS FINISHED: [annika]: their GTS giveaway for "deluxe shitposter 2000"`
+			);
+		});
+
+		it('should handle global declarations mentioning promotions correctly', () => {
+			assert.strictEqual(
+				converter.modernizeLog(`[2015-07-21T06:04:54.369Z] (lobby) xfix declared GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`),
+				`[2015-07-21T06:04:54.369Z] (lobby) DECLARE: by xfix: GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`
 			);
 		});
 	});

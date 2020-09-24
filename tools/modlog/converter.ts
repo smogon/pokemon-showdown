@@ -40,6 +40,7 @@ export function modernizeLog(line: string, nextLine?: string) {
 	if (!prefix) return;
 	if (/\]'s\s.*\salts: \[/.test(line)) return;
 	line = line.replace(prefix, '');
+
 	if (line.startsWith('(') && line.endsWith(')')) {
 		line = line.slice(1, -1);
 	}
@@ -54,6 +55,22 @@ export function modernizeLog(line: string, nextLine?: string) {
 	};
 
 	// Special cases
+
+	if (line.startsWith('SCAV ')) {
+		line = line.replace(/: (\[room: .*?\]) by (.*)/, (match, roominfo, rest) => `: by ${rest} ${roominfo}`);
+	}
+	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): (.*?)(won|has finished)/, (match, action, user) => {
+		return `${action}: [${toID(user)}]:`;
+	});
+
+	if (line.includes(':')) {
+		const possibleModernAction = line.slice(0, line.indexOf(':')).trim();
+		if (possibleModernAction === possibleModernAction.toUpperCase()) {
+			// Log is already modernized
+			return `${prefix}${line}`;
+		}
+	}
+
 	if (/\[(the|a)poll\] was (started|ended) by/.test(line)) {
 		const actionTaker = toID(line.slice(line.indexOf(' by ') + ' by '.length));
 		const isEnding = line.includes('was ended by');
@@ -62,70 +79,8 @@ export function modernizeLog(line: string, nextLine?: string) {
 	if (/User (.*?) won the game of (.*?) mode trivia/.test(line)) {
 		return `${prefix}TRIVIAGAME: by unknown: ${line}`;
 	}
-	if (line.startsWith('SCAV ')) {
-		line = line.replace(/: (\[room: .*?\]) by (.*)/, (match, roominfo, rest) => `: by ${rest} ${roominfo}`);
-	}
-	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): (.*?)(won|has finished)/, (match, action, user) => {
-		return `${action}: [${toID(user)}]:`;
-	});
 
 	const modernizerTransformations: {[k: string]: (log: string) => string} = {
-		'was promoted to ': (log) => {
-			const isDemotion = log.includes('was demoted to ');
-			const userid = parseBrackets(log, '[');
-			log = log.slice(userid.length + 3);
-			log = log.slice(`was ${isDemotion ? 'demoted' : 'promoted'} to `.length);
-			let rank = log.slice(0, log.indexOf(' by')).replace(/ /, '').toUpperCase();
-
-			log = log.slice(`${rank} by `.length);
-			if (!rank.startsWith('ROOM')) rank = `GLOBAL ${rank}`;
-			const actionTaker = parseBrackets(log, '[');
-			return `${rank}: [${userid}] by ${actionTaker}${isDemotion ? ': (demote)' : ''}`;
-		},
-		'was demoted to ': (log) => modernizerTransformations['was promoted to '](log),
-		'was appointed Room Owner by ': (log) => {
-			const userid = parseBrackets(log, '[');
-			log = log.slice(userid.length + 3);
-			log = log.slice('was appointed Room Owner by '.length);
-			const actionTaker = parseBrackets(log, '[');
-			return `ROOMOWNER: [${userid}] by ${actionTaker}`;
-		},
-
-		'set modchat to ': (log) => {
-			const actionTaker = parseBrackets(log, '[');
-			log = log.slice(actionTaker.length + 3);
-			log = log.slice('set modchat to '.length);
-			return `MODCHAT: by ${actionTaker}: to ${log}`;
-		},
-		'set modjoin to ': (log) => {
-			const actionTakerName = log.slice(0, log.lastIndexOf(' set'));
-			log = log.slice(actionTakerName.length + 1);
-			log = log.slice('set modjoin to '.length);
-			const rank = log.startsWith('sync') ? 'sync' : log.replace('.', '');
-			return `MODJOIN${rank === 'sync' ? ' SYNC' : ''}: by ${toID(actionTakerName)}${rank !== 'sync' ? `: ${rank}` : ``}`;
-		},
-		'turned off modjoin': (log) => {
-			const actionTakerName = log.slice(0, log.lastIndexOf(' turned off modjoin'));
-			return `MODJOIN: by ${toID(actionTakerName)}: OFF`;
-		},
-
-		'notes': (log) => {
-			const actionTaker = parseBrackets(log, '[');
-			log = log.slice(actionTaker.length + 3);
-			log = log.slice('notes: '.length);
-			return `NOTE: by ${actionTaker}: ${log}`;
-		},
-
-		'changed the roomintro': (log) => {
-			const isDeletion = /deleted the (staff|room)intro/.test(log);
-			const isRoomintro = log.includes('roomintro');
-			const actionTaker = toID(log.slice(0, log.indexOf(isDeletion ? 'deleted' : 'changed')));
-			return `${isDeletion ? 'DELETE' : ''}${isRoomintro ? 'ROOM' : 'STAFF'}INTRO: by ${actionTaker}`;
-		},
-		'deleted the roomintro': (log) => modernizerTransformations['changed the roomintro'](log),
-		'changed the staffintro': (log) => modernizerTransformations['changed the roomintro'](log),
-		'deleted the staffintro': (log) => modernizerTransformations['changed the roomintro'](log),
-
 		'changed the roomdesc to: ': (log) => {
 			const actionTaker = parseBrackets(log, '[');
 			log = log.slice(actionTaker.length + 3);
@@ -166,6 +121,62 @@ export function modernizeLog(line: string, nextLine?: string) {
 			const eventName = log.slice(` ${action} roomevent titled `.length, -2);
 			return `ROOMEVENT: by ${toID(actionTakerName)}: ${action.split(' ')[0]} "${eventName}"`;
 		},
+
+		'was promoted to ': (log) => {
+			const isDemotion = log.includes('was demoted to ');
+			const userid = parseBrackets(log, '[');
+			log = log.slice(userid.length + 3);
+			log = log.slice(`was ${isDemotion ? 'demoted' : 'promoted'} to `.length);
+			let rank = log.slice(0, log.indexOf(' by')).replace(/ /, '').toUpperCase();
+
+			log = log.slice(`${rank} by `.length);
+			if (!rank.startsWith('ROOM')) rank = `GLOBAL ${rank}`;
+			const actionTaker = parseBrackets(log, '[');
+			return `${rank}: [${userid}] by ${actionTaker}${isDemotion ? ': (demote)' : ''}`;
+		},
+		'was demoted to ': (log) => modernizerTransformations['was promoted to '](log),
+		'was appointed Room Owner by ': (log) => {
+			const userid = parseBrackets(log, '[');
+			log = log.slice(userid.length + 3);
+			log = log.slice('was appointed Room Owner by '.length);
+			const actionTaker = parseBrackets(log, '[');
+			return `ROOMOWNER: [${userid}] by ${actionTaker}`;
+		},
+
+		'set modchat to ': (log) => {
+			const actionTaker = parseBrackets(log, '[');
+			log = log.slice(actionTaker.length + 3);
+			log = log.slice('set modchat to '.length);
+			return `MODCHAT: by ${actionTaker}: to ${log}`;
+		},
+		'set modjoin to ': (log) => {
+			const actionTakerName = log.slice(0, log.lastIndexOf(' set'));
+			log = log.slice(actionTakerName.length + 1);
+			log = log.slice('set modjoin to '.length);
+			const rank = log.startsWith('sync') ? 'sync' : log.replace('.', '');
+			return `MODJOIN${rank === 'sync' ? ' SYNC' : ''}: by ${toID(actionTakerName)}${rank !== 'sync' ? `: ${rank}` : ``}`;
+		},
+		'turned off modjoin': (log) => {
+			const actionTakerName = log.slice(0, log.lastIndexOf(' turned off modjoin'));
+			return `MODJOIN: by ${toID(actionTakerName)}: OFF`;
+		},
+
+		'notes: ': (log) => {
+			const actionTaker = parseBrackets(log, '[');
+			log = log.slice(actionTaker.length + 3);
+			log = log.slice('notes: '.length);
+			return `NOTE: by ${actionTaker}: ${log}`;
+		},
+
+		'changed the roomintro': (log) => {
+			const isDeletion = /deleted the (staff|room)intro/.test(log);
+			const isRoomintro = log.includes('roomintro');
+			const actionTaker = toID(log.slice(0, log.indexOf(isDeletion ? 'deleted' : 'changed')));
+			return `${isDeletion ? 'DELETE' : ''}${isRoomintro ? 'ROOM' : 'STAFF'}INTRO: by ${actionTaker}`;
+		},
+		'deleted the roomintro': (log) => modernizerTransformations['changed the roomintro'](log),
+		'changed the staffintro': (log) => modernizerTransformations['changed the roomintro'](log),
+		'deleted the staffintro': (log) => modernizerTransformations['changed the roomintro'](log),
 
 		'created a tournament in': (log) => {
 			const actionTaker = parseBrackets(log, '[');
