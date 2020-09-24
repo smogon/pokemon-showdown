@@ -557,6 +557,11 @@ export const IPTools = new class {
 		if (Punishments.sharedIps.has(ip)) {
 			return 'shared';
 		}
+		if (this.singleIPOpenProxies.has(ip)) {
+			// single-IP open proxies
+			return 'proxy';
+		}
+
 		if (/^he\.net(\?|)\/proxy$/.test(host)) {
 			// Known to only be VPN services
 			if (['74.82.60.', '72.52.87.', '65.49.126.'].some(range => ip.startsWith(range))) {
@@ -585,10 +590,6 @@ export const IPTools = new class {
 		}
 		if (/^ip-[0-9]+-[0-9]+-[0-9]+\.net$/.test(host) || /^ip-[0-9]+-[0-9]+-[0-9]+\.eu$/.test(host)) {
 			// OVH
-			return 'proxy';
-		}
-		if (this.singleIPOpenProxies.has(ip)) {
-			// single-IP open proxies
 			return 'proxy';
 		}
 
