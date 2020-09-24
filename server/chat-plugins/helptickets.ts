@@ -17,6 +17,14 @@ interface TicketState {
 	created: number;
 	claimed: string | null;
 	ip: string;
+	resolution?: 'unknown' | 'dead' | 'unresolved' | 'resolved';
+	result?: TicketResult;
+	claimQueue?: string[];
+	involvedStaff?: ID[];
+	createTime?: number;
+	emptyRoom?: boolean;
+	firstClaimTime?: number;
+	unclaimedTime?: number;
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
@@ -90,19 +98,19 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.gameid = "helpticket" as ID;
 		this.allowRenames = true;
 		this.ticket = ticket;
-		this.claimQueue = [];
+		this.claimQueue = ticket.claimQueue || [];
 
 		/* Stats */
-		this.involvedStaff = new Set();
-		this.createTime = Date.now();
+		this.involvedStaff = new Set(ticket.involvedStaff || []);
+		this.createTime = ticket.createTime || Date.now();
 		this.activationTime = (ticket.active ? this.createTime : 0);
-		this.emptyRoom = false;
-		this.firstClaimTime = 0;
-		this.unclaimedTime = 0;
+		this.emptyRoom = ticket.emptyRoom || false;
+		this.firstClaimTime = ticket.firstClaimTime || 0;
+		this.unclaimedTime = ticket.unclaimedTime || 0;
 		this.lastUnclaimedStart = (ticket.active ? this.createTime : 0);
 		this.closeTime = 0;
-		this.resolution = 'unknown';
-		this.result = null;
+		this.resolution = ticket.resolution || 'unknown';
+		this.result = ticket.result || null;
 	}
 
 	onJoin(user: User, connection: Connection) {
@@ -506,7 +514,9 @@ function checkIp(ip: string) {
 for (const room of Rooms.rooms.values()) {
 	if (!room.settings.isHelp || !room.game) continue;
 	const game = room.getGame(HelpTicket)!;
-	if (game.ticket) game.ticket = tickets[game.ticket.userid];
+	if (game) {
+		room.game = new HelpTicket(room as ChatRoom, tickets[game.ticket.userid]);
+	}
 }
 
 const ticketTitles: {[k: string]: string} = Object.assign(Object.create(null), {
@@ -1378,4 +1388,25 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 
 	const ticket = helpRoom.game as HelpTicket;
 	ticket.close('ticketban');
+};
+
+// save ticket state before hotpatch
+export const destroy = () => {
+	for (const room of Rooms.rooms.values()) {
+		if (!room.settings.isHelp || !room.game) continue;
+		const game: HelpTicket = room.getGame(HelpTicket)!;
+		const entry: TicketState = {
+			...game.ticket,
+			resolution: game.resolution,
+			result: game.result || undefined,
+			claimQueue: game.claimQueue,
+			involvedStaff: [...game.involvedStaff],
+			createTime: game.createTime,
+			emptyRoom: game.emptyRoom,
+			firstClaimTime: game.firstClaimTime,
+			unclaimedTime: game.unclaimedTime,
+		};
+		tickets[game.ticket.userid] = entry;
+	}
+	writeTickets();
 };
