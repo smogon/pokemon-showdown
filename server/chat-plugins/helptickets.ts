@@ -477,14 +477,7 @@ export function notifyStaff() {
 	} else {
 		buf = `|tempnotifyoff|helptickets`;
 	}
-	if (room.userCount) {
-		for (const user of Object.values(room.users)) {
-			// respect ignoring tickets
-			if (user.can('lock') && !user.settings.ignoreTickets) {
-				for (const conn of user.connections) conn.send(`>view-help-tickets\n${buf}`);
-			}
-		}
-	}
+
 	if (hasUnclaimed) {
 		// only notify for people highlighting
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
