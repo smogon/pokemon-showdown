@@ -6658,12 +6658,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 80,
 		},
-		onHitPriority: 1,
-		onHit(target, source, move) {
-			if (
-				target.hp && move.category !== 'Status' && !move.damage &&
-				!move.damageCallback && target.getMoveHitData(move).typeMod > 0
-			) {
+		onDamagingHit(damage, target, source, move) {
+			if (!move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
 				target.useItem();
 			}
 		},
