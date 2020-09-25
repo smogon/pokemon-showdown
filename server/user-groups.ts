@@ -56,7 +56,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
-		return this.has(userid) && this.get(userid) !== '+';
+		return this.has(userid) && Auth.atLeast(this.get(userid), '%');
 	}
 	atLeast(user: User, group: AuthLevel) {
 		if (user.hasSysopAccess()) return true;
