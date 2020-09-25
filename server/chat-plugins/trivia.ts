@@ -1266,7 +1266,12 @@ export class Mastermind extends Rooms.RoomGame {
 
 	formatPlayerList() {
 		return Object.values(this.playerTable)
-			.map(player => Utils.html`${player.name} (${this.leaderboard.get(player.id) || "0"})`)
+			.sort((a, b) => (this.leaderboard.get(b.id) || 0) - (this.leaderboard.get(a.id) || 0))
+			.map(player => {
+				const isFinalist = this.currentRound instanceof MastermindFinals && player.id in this.currentRound.playerTable;
+				const name = isFinalist ? Utils.html`<strong>${player.name}</strong>` : Utils.escapeHTML(player.name);
+				return `${name} (${this.leaderboard.get(player.id) || "0"})`;
+			})
 			.join(', ');
 	}
 
@@ -1326,7 +1331,7 @@ export class Mastermind extends Rooms.RoomGame {
 			}
 		}
 
-		const questions = getQuestions('all' as ID);
+		const questions = Utils.shuffle(getQuestions('all' as ID));
 		if (!questions.length) throw new Chat.ErrorMessage(this.room.tr`There are no questions in the Trivia database.`);
 
 		this.currentRound = new MastermindFinals(this.room, 'all', questions, this.getTopPlayers(this.numFinalists));
@@ -1362,7 +1367,7 @@ export class Mastermind extends Rooms.RoomGame {
 
 	getTopPlayers(n: number) {
 		return [...this.leaderboard]
-			.sort((a, b) => a[1] - b[1]) // sort by number of points
+			.sort((a, b) => b[1] - a[1]) // sort by number of points
 			.map(entry => entry[0]) // convert to an array of IDs
 			.slice(0, n); // get the top n players
 	}
@@ -1371,6 +1376,14 @@ export class Mastermind extends Rooms.RoomGame {
 		broadcast(this.room, this.room.tr`The game of Mastermind was forcibly ended by ${user.name}.`);
 		if (this.currentRound) this.currentRound.destroy();
 		this.destroy();
+	}
+
+	leave(user: User) {
+		if (!this.playerTable[user.id]) {
+			throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current game.`);
+		}
+		this.leaderboard.delete(user.id);
+		super.removePlayer(user);
 	}
 }
 
@@ -2358,7 +2371,7 @@ const mastermindCommands: ChatCommands = {
 			return this.errorReply(this.tr`You must specify a round length of at least 1 second.`);
 		}
 
-		const questions = getQuestions(category);
+		const questions = Utils.shuffle(getQuestions(category));
 		if (!questions.length) {
 			return this.errorReply(this.tr`There are no questions in the ${categoryName} category.`);
 		}
@@ -2391,6 +2404,13 @@ const mastermindCommands: ChatCommands = {
 		this.sendReply(this.tr('You are now signed up for this game!'));
 	},
 	joinhelp: [`/mastermind join — Joins the current game of Mastermind.`],
+
+
+	leave(target, room, user) {
+		getMastermindGame(room).leave(user);
+		this.sendReply(this.tr("You have left the current game of Mastermind."));
+	},
+	leavehelp: [`/mastermind leave - Makes the player leave the game.`],
 
 	pass(target, room, user) {
 		room = this.requireRoom();
