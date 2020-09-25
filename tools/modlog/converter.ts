@@ -34,7 +34,7 @@ function toID(text: any): ID {
 	return (text && typeof text === "string" ? text : "").toLowerCase().replace(/[^a-z0-9]+/g, "") as ID;
 }
 
-export function modernizeLog(line: string, nextLine?: string) {
+export function modernizeLog(line: string, nextLine?: string): string | undefined {
 	// first we save and remove the timestamp and the roomname
 	const prefix = line.match(/\[.+?\] \(.+?\) /i)?.[0];
 	if (!prefix) return;
@@ -66,6 +66,15 @@ export function modernizeLog(line: string, nextLine?: string) {
 	if (line.includes(':')) {
 		const possibleModernAction = line.slice(0, line.indexOf(':')).trim();
 		if (possibleModernAction === possibleModernAction.toUpperCase()) {
+			if (possibleModernAction.includes('[')) {
+				// for corrupted lines
+				return modernizeLog(line.slice(line.indexOf('[')));
+			}
+			if (/\(.+\) by [a-z0-9]+$/.test(line)) {
+				// weird reason formatting
+				const reason = parseBrackets(line, '(');
+				return `${prefix}${line.replace(reason, '')}: ${reason}`;
+			}
 			// Log is already modernized
 			return `${prefix}${line}`;
 		}
@@ -81,11 +90,11 @@ export function modernizeLog(line: string, nextLine?: string) {
 	}
 
 	const modernizerTransformations: {[k: string]: (log: string) => string} = {
-		'changed the roomdesc to: ': (log) => {
+		'notes: ': (log) => {
 			const actionTaker = parseBrackets(log, '[');
 			log = log.slice(actionTaker.length + 3);
-			log = log.slice('changed the roomdesc to: '.length + 1, -2);
-			return `ROOMDESC: by ${actionTaker}: to "${log}"`;
+			log = log.slice('notes: '.length);
+			return `NOTE: by ${actionTaker}: ${log}`;
 		},
 
 		' declared ': (log) => {
@@ -105,6 +114,13 @@ export function modernizeLog(line: string, nextLine?: string) {
 			log = log.slice(actionTakerName.length);
 			log = log.slice(oldAction.length);
 			return `${newAction}: by ${actionTakerName}: ${log}`;
+		},
+
+		'changed the roomdesc to: ': (log) => {
+			const actionTaker = parseBrackets(log, '[');
+			log = log.slice(actionTaker.length + 3);
+			log = log.slice('changed the roomdesc to: '.length + 1, -2);
+			return `ROOMDESC: by ${actionTaker}: to "${log}"`;
 		},
 
 		'roomevent titled "': (log) => {
@@ -159,13 +175,6 @@ export function modernizeLog(line: string, nextLine?: string) {
 		'turned off modjoin': (log) => {
 			const actionTakerName = log.slice(0, log.lastIndexOf(' turned off modjoin'));
 			return `MODJOIN: by ${toID(actionTakerName)}: OFF`;
-		},
-
-		'notes: ': (log) => {
-			const actionTaker = parseBrackets(log, '[');
-			log = log.slice(actionTaker.length + 3);
-			log = log.slice('notes: '.length);
-			return `NOTE: by ${actionTaker}: ${log}`;
 		},
 
 		'changed the roomintro': (log) => {
@@ -345,11 +354,21 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		if (line.startsWith('alts:')) {
 			line = line.slice(5).trim();
 			const alts = new Set<ID>(); // we need to weed out duplicate alts
+
 			let alt = parseBrackets(line, '[');
 			do {
-				if (IPTools.ipRegex.test(alt)) break;
-				alts.add(toID(alt));
-				line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
+				if (alt.includes(', ')) {
+					// old alt format
+					for (const trueAlt of alt.split(', ')) {
+						alts.add(toID(trueAlt));
+					}
+					line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
+					if (!line.startsWith('[')) line = `[${line}`;
+				} else {
+					if (IPTools.ipRegex.test(alt)) break;
+					alts.add(toID(alt));
+					line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
+				}
 				alt = parseBrackets(line, '[');
 			} while (alt);
 			log.alts = [...alts];
@@ -362,7 +381,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 
 	let regex = /by .*:/;
 	let actionTakerIndex = regex.exec(line)?.index;
-	if (!actionTakerIndex && actionTakerIndex !== 0) {
+	if (actionTakerIndex === undefined) {
 		actionTakerIndex = line.indexOf('by ');
 		regex = /by .*/;
 	}
