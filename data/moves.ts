@@ -7238,10 +7238,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
 				if (effect.effectType === 'Move' && !effect.isFutureMove && source.lastMove) {
+					let move: Move = source.lastMove;
+					if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+
 					for (const moveSlot of source.moveSlots) {
-						if (moveSlot.id === source.lastMove.id) {
+						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
-							this.add('-activate', source, 'move: Grudge', this.dex.getMove(source.lastMove.id).name);
+							this.add('-activate', source, 'move: Grudge', move.name);
 						}
 					}
 				}
