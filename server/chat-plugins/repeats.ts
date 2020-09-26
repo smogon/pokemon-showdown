@@ -100,7 +100,7 @@ export const pages: PageTable = {
 		this.title = `Repeated phrases in ${room.roomid}`;
 		this.checkCan("mute", null, room);
 		if (!room.settings.repeats) return `<h1>${this.tr`There are no repeated phrases in ${room.roomid}.`}</h1>`;
-		let html = `<div class="ladder pad"><h1>${this.tr`Repeated phrases in ${room.roomid}`}</h1>`;
+		let html = `<div class="ladder pad"><h2>${this.tr`Repeated phrases in ${room.roomid}`}</h2>`;
 		html += `<table><tr><th>${this.tr`Phrase`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
 		html += `<button class="button" name="send" value="/join view-repeats-${room.roomid}" style="float: right">`;
 		html += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
