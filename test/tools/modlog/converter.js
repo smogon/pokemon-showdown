@@ -431,6 +431,22 @@ describe('Modlog conversion script', () => {
 				{action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}
 			);
 		});
+
+		it('should correctly handle nonstandard alt formats', () => {
+			assert.deepStrictEqual(
+				converter.parseModlog(
+					`[2018-01-18T19:47:11.404Z] (battle-gen7randombattle-690788015) AUTOLOCK: [trreckko] alts:[MasterOP13, [luckyfella], Derp11223, [askul], vfffgcfvgvfghj, trreckko, MrShnugglebear] [127.0.0.1]: Pornhub__.__com/killyourself`
+				).alts,
+				['masterop13', 'luckyfella', 'derp11223', 'askul', 'vfffgcfvgvfghj', 'trreckko', 'mrshnugglebear']
+			);
+
+			assert.deepStrictEqual(
+				converter.parseModlog(
+					`[2018-01-20T10:19:19.763Z] (battle-gen7randombattle-691544312) AUTOLOCK: [zilgo] alts:[[ghjkjguygjbjb], zilgo] [127.0.0.1]: www__.__pornhub__.__com`
+				).alts,
+				['ghjkjguygjbjb', 'zilgo']
+			);
+		});
 	});
 
 	describe('ModlogEntry to text converter', () => {

@@ -44,7 +44,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	if (line.startsWith('(') && line.endsWith(')')) {
 		line = line.slice(1, -1);
 	}
-	const getAlts = (userid: ID) => {
+	const getAlts = () => {
 		let alts;
 		const regex = new RegExp(`\\(\\[.*\\]'s (locked|muted|banned) alts: (\\[.*\\])\\)`);
 		nextLine?.replace(regex, (a, b, rawAlts) => {
@@ -68,9 +68,11 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 		if (possibleModernAction === possibleModernAction.toUpperCase()) {
 			if (possibleModernAction.includes('[')) {
 				// for corrupted lines
-				return modernizeLog(line.slice(line.indexOf('[')));
+				const [drop, ...keep] = line.split('[');
+				process.stderr.write(`Ignoring malformed line: ${drop}\n`);
+				return modernizeLog(keep.join(''));
 			}
-			if (/\(.+\) by [a-z0-9]+$/.test(line)) {
+			if (/\(.+\) by [a-z0-9]+$/.test(line) && !['OLD MODLOG', 'NOTE'].includes(possibleModernAction)) {
 				// weird reason formatting
 				const reason = parseBrackets(line, '(');
 				return `${prefix}${line.replace(reason, '')}: ${reason}`;
@@ -140,7 +142,10 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 
 		'was promoted to ': (log) => {
 			const isDemotion = log.includes('was demoted to ');
-			const userid = parseBrackets(log, '[');
+			const userid = parseBrackets(log.split(' was ')[0], '[');
+			if (!userid) {
+				throw new Error(`Ignoring malformed line: ${prefix}${log}`);
+			}
 			log = log.slice(userid.length + 3);
 			log = log.slice(`was ${isDemotion ? 'demoted' : 'promoted'} to `.length);
 			let rank = log.slice(0, log.indexOf(' by')).replace(/ /, '').toUpperCase();
@@ -216,7 +221,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `ROOMBAN: [${banned}] ${getAlts(banned)}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `ROOMBAN: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was muted by ': (log) => {
 			let muted = '';
@@ -234,7 +239,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				isHour = true;
 				actionTaker = actionTaker.replace(/^(.*)(for1hour)$/, (match, staff) => staff) as ID;
 			}
-			return `${isHour ? 'HOUR' : ''}MUTE: [${muted}] ${getAlts(muted as ID)}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `${isHour ? 'HOUR' : ''}MUTE: [${muted}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was locked from talking ': (log) => {
 			const isWeek = log.includes(' was locked from talking for a week ');
@@ -247,7 +252,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `${isWeek ? 'WEEK' : ''}LOCK: [${locked}] ${getAlts(locked)}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `${isWeek ? 'WEEK' : ''}LOCK: [${locked}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was banned ': (log) => {
 			if (log.includes(' was banned from room ')) return modernizerTransformations[' was banned from room '](log);
@@ -260,7 +265,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `BAN: [${banned}] ${getAlts(banned)}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `BAN: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 
 		' claimed this ticket': (log) => {
@@ -304,7 +309,14 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	};
 
 	for (const oldAction in modernizerTransformations) {
-		if (line.includes(oldAction)) return prefix + modernizerTransformations[oldAction](line);
+		if (line.includes(oldAction)) {
+			try {
+				return prefix + modernizerTransformations[oldAction](line);
+			} catch (err) {
+				if (Config.nofswriting) throw err;
+				process.stderr.write(`${err.message}\n`);
+			}
+		}
 	}
 
 	return `${prefix}${line}`;
@@ -368,6 +380,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 					if (IPTools.ipRegex.test(alt)) break;
 					alts.add(toID(alt));
 					line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
+					if (alt.includes('[') && !line.startsWith('[')) line = `[${line}`;
 				}
 				alt = parseBrackets(line, '[');
 			} while (alt);
@@ -389,11 +402,10 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		const colonIndex = line.indexOf(': ');
 		const actionTaker = line.slice(actionTakerIndex + 3, colonIndex > -1 ? colonIndex : undefined);
 		log.loggedBy = toID(actionTaker) || undefined;
-		if (colonIndex > -1) line = line.slice(colonIndex);
+		if (colonIndex > actionTakerIndex) line = line.slice(colonIndex);
 		line = line.replace(regex, '').replace(/^\s?:\s?/, '');
 	}
 	if (line) log.note = line.trim();
-
 	return log;
 }
 
@@ -436,6 +448,7 @@ export class ModlogConverterTest {
 			let entries: string[] = [];
 
 			const insertEntries = async () => {
+				if (roomid === 'global') return;
 				entriesLogged += entries.length;
 				if (!Config.nofswriting && (entriesLogged % ENTRIES_TO_BUFFER === 0 || entriesLogged < ENTRIES_TO_BUFFER)) {
 					process.stdout.clearLine(0);
@@ -449,9 +462,9 @@ export class ModlogConverterTest {
 			for await (const line of iterateLines(`${this.inputDir}/${file}`)) {
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
-				if (!entry || roomid === 'global' && entry.roomID === 'global') continue;
+				if (!entry) continue;
 				const rawLog = rawifyLog(entry);
-				entries.push(rawLog);
+				if (roomid !== 'global') entries.push(rawLog);
 				if (entry.isGlobal) {
 					globalEntries.push(rawLog);
 				}
@@ -480,3 +493,4 @@ export class ModlogConverter {
 		}
 	}
 }
+
