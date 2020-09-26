@@ -460,8 +460,6 @@ export class ModlogConverterTest {
 				entries = [];
 			};
 
-			const readStream = FS(`${this.inputDir}/${file}`).createReadStream();
-
 			for await (const line of iterateLines(`${this.inputDir}/${file}`)) {
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
