@@ -2,6 +2,7 @@ import {Utils} from '../../lib/utils';
 import {FS} from '../../lib/fs';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
+const MAX_QUOTES = 200;
 
 interface Quote {
 	userid: string;
@@ -74,8 +75,8 @@ export const commands: ChatCommands = {
 		if (target.length > 8192) {
 			return this.errorReply(`Your quote cannot exceed 8192 characters.`);
 		}
-		if (room.settings.isPrivate !== undefined && roomQuotes.length >= 200) {
-			return this.errorReply(`This room already has 200 quotes, which is the maximum for private rooms.`);
+		if (room.settings.isPrivate !== undefined && roomQuotes.length >= MAX_QUOTES) {
+			return this.errorReply(`This room already has ${MAX_QUOTES} quotes, which is the maximum for private rooms.`);
 		}
 		roomQuotes.push({userid: user.id, quote: target, date: Date.now()});
 		saveQuotes();
