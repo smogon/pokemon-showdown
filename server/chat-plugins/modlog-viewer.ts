@@ -538,7 +538,7 @@ export const commands: ChatCommands = {
 		let lines;
 		const search: ModlogSearch = {};
 		for (const option of target.split(',')) {
-			let [param, value] = option.trim().split('=');
+			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
 				// We should guess what parameter they meant
 				value = param.trim();
@@ -623,6 +623,7 @@ export const commands: ChatCommands = {
 			`<li><code>note=[text]</code> - searches the contents of notes/reasons</li>` +
 			`<li><code>ip=[IP address]</code> - searches for an IP address (or fragment of one)</li>` +
 			`<li><code>staff=[user]</code> - searches for actions taken by a particular staff member</li>` +
+			`<li><code>action=[type]</code> - searches for a particular type of action</li>` +
 			`<li><code>lines=[number]</code> - displays the given number of lines</li>` +
 			`</ul>` +
 			`</details>`
