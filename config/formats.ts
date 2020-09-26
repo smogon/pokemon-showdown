@@ -106,6 +106,11 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
 		banlist: ['UU', 'RUBL'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8ru') {
+				this.add('html', '<div class="broadcast-blue"><strong>RU is currently suspecting Sigilyph! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3671022/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] NU",
