@@ -8,8 +8,6 @@
 // @ts-ignore Needed for FS
 if (!global.Config) global.Config = {nofswriting: false};
 
-import iterateLines = require('lines-async-iterator');
-
 import {FS} from '../../lib/fs';
 import {ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
@@ -19,13 +17,13 @@ type ModlogFormat = 'txt';
 /** The number of modlog entries to write to the database on each transaction */
 const ENTRIES_TO_BUFFER = 100;
 
-export function parseBrackets(line: string, openingBracket: '(' | '[') {
+export function parseBrackets(line: string, openingBracket: '(' | '[', greedy?: boolean) {
 	const brackets = {
 		'(': ')',
 		'[': ']',
 	};
 	const bracketOpenIndex = line.indexOf(openingBracket);
-	const bracketCloseIndex = line.indexOf(brackets[openingBracket]);
+	const bracketCloseIndex = greedy ? line.lastIndexOf(brackets[openingBracket]) : line.indexOf(brackets[openingBracket]);
 	if (bracketCloseIndex < 0 || bracketOpenIndex < 0) return '';
 	return line.slice(bracketOpenIndex + 1, bracketCloseIndex);
 }
@@ -59,7 +57,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	if (line.startsWith('SCAV ')) {
 		line = line.replace(/: (\[room: .*?\]) by (.*)/, (match, roominfo, rest) => `: by ${rest} ${roominfo}`);
 	}
-	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): (.*?)(won|has finished)/, (match, action, user) => {
+	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/, (match, action, user) => {
 		return `${action}: [${toID(user)}]:`;
 	});
 
@@ -72,10 +70,10 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				process.stderr.write(`Ignoring malformed line: ${drop}\n`);
 				return modernizeLog(keep.join(''));
 			}
-			if (/\(.+\) by [a-z0-9]+$/.test(line) && !['OLD MODLOG', 'NOTE'].includes(possibleModernAction)) {
+			if (/\(.+\) by [a-z0-9]{1,19}$/.test(line) && !['OLD MODLOG', 'NOTE'].includes(possibleModernAction)) {
 				// weird reason formatting
-				const reason = parseBrackets(line, '(');
-				return `${prefix}${line.replace(reason, '')}: ${reason}`;
+				const reason = parseBrackets(line, '(', true);
+				return `${prefix}${line.replace(` (${reason})`, '')}: ${reason}`;
 			}
 			// Log is already modernized
 			return `${prefix}${line}`;
@@ -93,21 +91,19 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 
 	const modernizerTransformations: {[k: string]: (log: string) => string} = {
 		'notes: ': (log) => {
-			const actionTaker = parseBrackets(log, '[');
-			log = log.slice(actionTaker.length + 3);
-			log = log.slice('notes: '.length);
-			return `NOTE: by ${actionTaker}: ${log}`;
+			const [actionTaker, ...rest] = line.split(' notes: ');
+			return `NOTE: by ${toID(actionTaker)}: ${rest.join('')}`;
 		},
 
-		' declared ': (log) => {
+		' declared': (log) => {
 			let newAction = 'DECLARE';
-			let oldAction = ' declared ';
-			if (log.includes(' globally declared ')) {
-				oldAction = ' globally declared ';
+			let oldAction = ' declared';
+			if (log.includes(' globally declared')) {
+				oldAction = ' globally declared';
 				newAction = 'GLOBALDECLARE';
 			}
 			if (log.includes('(chat level)')) {
-				oldAction += '(chat level) ';
+				oldAction += ' (chat level)';
 				newAction = `CHATDECLARE`;
 			}
 
@@ -115,6 +111,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 
 			log = log.slice(actionTakerName.length);
 			log = log.slice(oldAction.length);
+			log = log.replace(/^\s?:/, '').trim();
 			return `${newAction}: by ${actionTakerName}: ${log}`;
 		},
 
@@ -138,30 +135,6 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			log = log.slice(actionTakerName.length + 1);
 			const eventName = log.slice(` ${action} roomevent titled `.length, -2);
 			return `ROOMEVENT: by ${toID(actionTakerName)}: ${action.split(' ')[0]} "${eventName}"`;
-		},
-
-		'was promoted to ': (log) => {
-			const isDemotion = log.includes('was demoted to ');
-			const userid = parseBrackets(log.split(' was ')[0], '[');
-			if (!userid) {
-				throw new Error(`Ignoring malformed line: ${prefix}${log}`);
-			}
-			log = log.slice(userid.length + 3);
-			log = log.slice(`was ${isDemotion ? 'demoted' : 'promoted'} to `.length);
-			let rank = log.slice(0, log.indexOf(' by')).replace(/ /, '').toUpperCase();
-
-			log = log.slice(`${rank} by `.length);
-			if (!rank.startsWith('ROOM')) rank = `GLOBAL ${rank}`;
-			const actionTaker = parseBrackets(log, '[');
-			return `${rank}: [${userid}] by ${actionTaker}${isDemotion ? ': (demote)' : ''}`;
-		},
-		'was demoted to ': (log) => modernizerTransformations['was promoted to '](log),
-		'was appointed Room Owner by ': (log) => {
-			const userid = parseBrackets(log, '[');
-			log = log.slice(userid.length + 3);
-			log = log.slice('was appointed Room Owner by '.length);
-			const actionTaker = parseBrackets(log, '[');
-			return `ROOMOWNER: [${userid}] by ${actionTaker}`;
 		},
 
 		'set modchat to ': (log) => {
@@ -266,6 +239,30 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			}
 			const actionTaker = toID(log);
 			return `BAN: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+		},
+
+		'was promoted to ': (log) => {
+			const isDemotion = log.includes('was demoted to ');
+			const userid = toID(log.split(' was ')[0]);
+			if (!userid) {
+				throw new Error(`Ignoring malformed line: ${prefix}${log}`);
+			}
+			log = log.slice(userid.length + 3);
+			log = log.slice(`was ${isDemotion ? 'demoted' : 'promoted'} to `.length);
+			let rank = log.slice(0, log.indexOf(' by')).replace(/ /, '').toUpperCase();
+
+			log = log.slice(`${rank} by `.length);
+			if (!rank.startsWith('ROOM')) rank = `GLOBAL ${rank}`;
+			const actionTaker = parseBrackets(log, '[');
+			return `${rank}: [${userid}] by ${actionTaker}${isDemotion ? ': (demote)' : ''}`;
+		},
+		'was demoted to ': (log) => modernizerTransformations['was promoted to '](log),
+		'was appointed Room Owner by ': (log) => {
+			const userid = parseBrackets(log, '[');
+			log = log.slice(userid.length + 3);
+			log = log.slice('was appointed Room Owner by '.length);
+			const actionTaker = parseBrackets(log, '[');
+			return `ROOMOWNER: [${userid}] by ${actionTaker}`;
 		},
 
 		' claimed this ticket': (log) => {
@@ -400,12 +397,14 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 	}
 	if (actionTakerIndex !== -1) {
 		const colonIndex = line.indexOf(': ');
-		const actionTaker = line.slice(actionTakerIndex + 3, colonIndex > -1 ? colonIndex : undefined);
-		log.loggedBy = toID(actionTaker) || undefined;
-		if (colonIndex > actionTakerIndex) line = line.slice(colonIndex);
-		line = line.replace(regex, '').replace(/^\s?:\s?/, '');
+		const actionTaker = line.slice(actionTakerIndex + 3, colonIndex > actionTakerIndex ? colonIndex : undefined);
+		if (toID(actionTaker).length < 19) {
+			log.loggedBy = toID(actionTaker) || undefined;
+			if (colonIndex > actionTakerIndex) line = line.slice(colonIndex);
+			line = line.replace(regex, '');
+		}
 	}
-	if (line) log.note = line.trim();
+	if (line) log.note = line.replace(/^\s?:\s?/, '').trim();
 	return log;
 }
 
@@ -459,7 +458,11 @@ export class ModlogConverterTest {
 				entries = [];
 			};
 
-			for await (const line of iterateLines(`${this.inputDir}/${file}`)) {
+			const readStream = FS(`${this.inputDir}/${file}`).createReadStream();
+
+			let line;
+			while ((line = await readStream.readLine() !== null)) {
+				line = line.toString();
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
 				if (!entry) continue;
