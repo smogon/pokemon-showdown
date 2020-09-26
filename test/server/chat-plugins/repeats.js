@@ -6,7 +6,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const repeats = require('../../../.server-dist/chat-plugins/repeats');
+const Repeats = require('../../../.server-dist/chat-plugins/repeats').Repeats;
 
 describe("Repeats plugin", () => {
 	before(() => {
@@ -14,34 +14,34 @@ describe("Repeats plugin", () => {
 	});
 
 	it('should add repeats correctly', () => {
-		assert.ok(!repeats.repeats.has(this.room.roomid));
-		repeats.addRepeat(this.room, {phrase: "^_^", interval: 1});
+		assert.ok(!Repeats.repeats.has(this.room));
+		Repeats.addRepeat(this.room, {phrase: "^_^", interval: 1});
 
-		assert.ok(repeats.repeats.has(this.room.roomid));
+		assert.ok(Repeats.repeats.has(this.room));
 
-		assert.ok(repeats.repeats.get(this.room.roomid).has("^_^"));
+		assert.ok(Repeats.repeats.get(this.room).has("^_^"));
 
 		assert.ok(this.room.settings.repeats);
 		assert.ok(this.room.settings.repeats.some(repeat => repeat.phrase === "^_^"));
 	});
 
 	it('should remove repeats correctly', () => {
-		repeats.addRepeat(this.room, {phrase: "^_^", interval: 1});
-		assert.ok(repeats.repeats.get(this.room.roomid).has("^_^"));
-		assert.ok(this.room.settings.repeats.some(repeat => repeat.phrase === "^_^"));
+		Repeats.addRepeat(this.room, {phrase: "^_-", interval: 1});
+		assert.ok(Repeats.repeats.get(this.room).has("^_-"));
+		assert.ok(this.room.settings.repeats.some(repeat => repeat.phrase === "^_-"));
 
-		repeats.removeRepeat(this.room, "^_^");
-		assert.strictEqual(repeats.repeats.get(this.room.roomid).get("^_^"), null);
-		assert.ok(!this.room.settings.repeats.some(repeat => repeat.phrase === "^_^"));
+		Repeats.removeRepeat(this.room, "^_-");
+		assert.strictEqual(Repeats.repeats.get(this.room).get("^_-"), undefined);
+		assert.ok(!this.room.settings.repeats.some(repeat => repeat.phrase === "^_-"));
 	});
 
 	it('should be able to tell if a repeat exists or not', () => {
-		assert.ok(!repeats.hasRepeat(this.room, "-_-"));
+		assert.ok(!Repeats.hasRepeat(this.room, "-_-"));
 
-		repeats.addRepeat(this.room, {phrase: "-_-", interval: 1});
-		assert.ok(repeats.hasRepeat(this.room, "-_-"));
+		Repeats.addRepeat(this.room, {phrase: "-_-", interval: 1});
+		assert.ok(Repeats.hasRepeat(this.room, "-_-"));
 
-		repeats.removeRepeat(this.room, "-_-");
-		assert.ok(!repeats.hasRepeat(this.room, "-_-"));
+		Repeats.removeRepeat(this.room, "-_-");
+		assert.ok(!Repeats.hasRepeat(this.room, "-_-"));
 	});
 });
