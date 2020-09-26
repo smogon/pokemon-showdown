@@ -2782,6 +2782,134 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
+	// Meicoo
+	spamguess: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Calls the following moves in order, with their normal respective accuracy: Haze -> Worry Seed -> Poison Powder -> Stun Spore -> Leech Seed -> Struggle (for each of the 5 preceding moves that has no effect, increases Struggle's base power by 40)",
+		shortDesc: "Does many things then struggles.",
+		name: "spamguess",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.effectData.failCount = 0;
+			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		/* onPrepareHit(target, source) {
+			this.add('-anim', source, 'TBD', source);
+		}, */
+		// fruit this move.
+		onHit(target, source) {
+			source.addVolatile('spamguess'); // apparently adding it with self {} doesn't add it in time but if it wasn't with self {} it would add it instantly to the foe
+			this.add('-message', `${source.side.name}'s ${source.name} called upon the effects of Haze.`);
+			// Haze
+			this.add('-clearallboost');
+			let cleared = false;
+			for (const pokemon of this.getAllActive()) {
+				let stat: BoostName;
+				const stats: BoostName[] = [];
+				for (stat in pokemon.boosts) {
+					if (pokemon.boosts[stat]) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					pokemon.clearBoosts();
+					cleared = true;
+				}
+			}
+
+			if (!cleared) {
+				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+				source.volatiles["spamguess"].failCount++;
+			}
+
+			// Worry Seed
+			this.add('-message', `${source.side.name}'s ${source.name} called upon the effects of Worry Seed.`);
+			// added Set The Stage due to being "Stance Change+" this note is for me to remember to comment on this when making the pr and to remove this comment before opening the pr
+			const bannedAbilities = [
+				'battlebond', 'comatose', 'disguise', 'insomnia', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'setthestage', 'truant', 'zenmode',
+			];
+			if (bannedAbilities.includes(target.ability)) {
+				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+				source.volatiles["spamguess"].failCount++;
+			} else {
+				const oldAbility = target.setAbility('insomnia');
+				if (oldAbility) {
+					this.add('-ability', target, 'Insomnia', '[from] move: Worry Seed');
+					if (target.status === 'slp') {
+						target.cureStatus();
+					}
+				} else {
+					this.add('-message', `Worry Seed had no effect.`);
+					this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+					source.volatiles["spamguess"].failCount++;
+				}
+			}
+
+			// Poison Powder
+			this.add('-message', `${source.side.name}'s ${source.name} called upon the effects of Poison Powder.`);
+			if (this.randomChance(3, 4)) { // Powder accuracy
+				if (!target.trySetStatus('psn', source)) {
+					this.add('-message', `Poison Powder had no effect.`);
+					this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+					source.volatiles["spamguess"].failCount++;
+				}
+			} else {
+				this.add('-message', `Poison Powder missed!`);
+				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+				source.volatiles["spamguess"].failCount++;
+			}
+
+			// Stun Spore
+			this.add('-message', `${source.side.name}'s ${source.name} called upon the effects of Stun Spore.`);
+			if (this.randomChance(3, 4)) { // Powder accuracy
+				if (!target.trySetStatus('par', source)) {
+					this.add('-message', `Stun spore had no effect.`);
+					this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+					source.volatiles["spamguess"].failCount++;
+				}
+			} else {
+				this.add('-message', `Stun Spore missed!`);
+				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+				source.volatiles["spamguess"].failCount++;
+			}
+
+			// Leech Seed
+			this.add('-message', `${source.side.name}'s ${source.name} called upon the effects of Leech Seed.`);
+			if (this.randomChance(9, 10)) {
+				if (target.hasType('Grass')) {
+					this.add('-message', `Leech Seed had no effect.`);
+					this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+					source.volatiles["spamguess"].failCount++;
+				} else if (!target.addVolatile('leechseed', source)) {
+					this.add('-message', `Leech Seed had no effect.`);
+					this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+					source.volatiles["spamguess"].failCount++;
+				}
+			} else {
+				this.add('-message', `Leech Seed missed!`);
+				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+				source.volatiles["spamguess"].failCount++;
+			}
+
+			this.useMove('Struggle', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
+
+
 	// Mitsuki
 	terraforming: {
 		accuracy: 100,
@@ -5307,6 +5435,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.field.clearTerrain();
 				return success;
 			},
+		},
+	},
+	// modified for meicoo's move calling struggle with adjusted basePower
+	struggle: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.volatiles["spamguess"] && pokemon.volatiles["spamguess"].failCount) {
+				return move.basePower + (40 * pokemon.volatiles["spamguess"].failCount);
+			}
+			return move.basePower;
 		},
 	},
 };

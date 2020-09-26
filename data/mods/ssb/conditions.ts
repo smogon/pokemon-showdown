@@ -1175,6 +1175,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Marshmallon')}|I'm still hungry. rawr. :c`);
 		},
 	},
+	meicoo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Meicoo')}|cool quiz`);
+		},
+		onSwitchOut(source) {
+			this.add(`c|${getName('Meicoo')}|/leavehunt`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Meicoo')}|/endhunt`);
+		},
+	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {

@@ -438,6 +438,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'RAWWWR',
 		evs: {hp: 248, def: 252, spd: 8}, ivs: {spe: 0}, nature: 'Relaxed',
 	},
+	Meicoo: {
+		species: 'Venusaur', ability: 'Regenerator', item: 'Venusaurite', gender: 'M',
+		moves: ['Sludge Bomb', ['Giga Drain', 'Knock Off', 'Flamethrower'], ['Recover', 'Strength Sap']],
+		signatureMove: 'spamguess',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Nature',
+	},
 	Mitsuki: {
 		species: 'Leafeon', ability: 'Photosynthesis', item: ['Life Orb', 'Miracle Seed'], gender: 'M',
 		moves: ['Leaf Blade', 'Attack Order', 'Thousand Arrows'],
