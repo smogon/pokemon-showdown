@@ -9,3 +9,4 @@ server/chat-plugins/othermetas.ts @KrisXV @TheImmortal
 server/chat-plugins/random-battles.ts @KrisXV @TheImmortal
 server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
 server/chat-plugins/trivia.ts @AnnikaCodes
+server/chat-plugins/quotes.ts @mia-pi-git @KrisXV
