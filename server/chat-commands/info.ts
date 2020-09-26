@@ -19,7 +19,8 @@ export const commands: ChatCommands = {
 	alts: 'whois',
 	whoare: 'whois',
 	altsnorecurse: 'whois',
-	whois(target, room: Room | null, user, connection, cmd) {
+	profile: 'whois',
+	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
 		const targetUser = this.targetUserOrSelf(target, user.tempGroup === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
