@@ -97,11 +97,14 @@ export const commands: ChatCommands = {
 		for (const toPromote of users) {
 			const targetUser = Users.getExact(toPromote);
 			const userid = toID(toPromote);
-			let name = targetUser ? targetUser.name : this.filter(toPromote);
+			const name = targetUser ? targetUser.name : this.filter(toPromote);
 			if (!name) continue;
-			name = name.slice(0, 18);
 
 			if (!userid) return this.parse('/help roompromote');
+			if (userid.length > 18) {
+				this.errorReply(`User '${name}' does not exist (the username is too long).`);
+				continue;
+			}
 			if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
 				this.errorReply(`User '${name}' is offline and unrecognized, and so can't be promoted.`);
 				continue;
