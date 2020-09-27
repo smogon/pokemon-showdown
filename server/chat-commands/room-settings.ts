@@ -730,6 +730,13 @@ export const commands: ChatCommands = {
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
+
+		const groupchatbanned = Punishments.isGroupchatBanned(user);
+		if (groupchatbanned) {
+			const expireText = Punishments.checkPunishmentExpiration(groupchatbanned);
+			return this.errorReply(`You are banned from using groupchats ${expireText}.`);
+		}
+
 		if (cmd === 'subroomgroupchat') {
 			if (!user.can('mute', null, room)) {
 				return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");

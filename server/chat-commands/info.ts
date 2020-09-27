@@ -152,20 +152,21 @@ export const commands: ChatCommands = {
 					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
 				}
 			}
+
 			const battlebanned = Punishments.isBattleBanned(targetUser);
 			if (battlebanned) {
 				buf += `<br />BATTLEBANNED: ${battlebanned[1]}`;
-				const expiresIn = new Date(battlebanned[2]).getTime() - Date.now();
-				const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-				let expiresText = ``;
-				if (expiresDays >= 1) {
-					expiresText = `in around ${Chat.count(expiresDays, "days")}`;
-				} else {
-					expiresText = `soon`;
-				}
-				if (expiresIn > 1) buf += ` (expires ${expiresText})`;
+				buf += ` (expires ${Punishments.checkPunishmentExpiration(battlebanned)})`;
 				if (battlebanned[3]) buf += Utils.html` (reason: ${battlebanned[3]})`;
 			}
+
+			const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
+			if (groupchatbanned) {
+				buf += `<br />Banned from using groupchats${groupchatbanned[1] !== targetUser.id ? `: ${groupchatbanned[1]}` : ``}`;
+				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
+				if (groupchatbanned[3]) buf += Utils.html` (reason: ${groupchatbanned[3]})`;
+			}
+
 			if (targetUser.semilocked) {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
