@@ -1,6 +1,6 @@
 import {FS} from '../../lib/fs';
 
-const SUSPECTS_FILE = 'config/chat-plugins/suspects.json';
+const SUSPECTS_FILE = 'config/suspects.json';
 
 interface SuspectTest {
 	tier: string;

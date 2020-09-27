@@ -15,7 +15,7 @@ import {BattleQueue, Action} from './battle-queue';
 import {Utils} from '../lib/utils';
 import {FS} from '../lib/fs';
 
-const suspectTests = JSON.parse(FS('../config/chat-plugins/suspects.json').readIfExistsSync() || "{}");
+const suspectTests = JSON.parse(FS('../config/suspects.json').readIfExistsSync() || "{}");
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
