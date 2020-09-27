@@ -22,33 +22,29 @@ type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | '
 
 const tickets: {[k: string]: TicketState} = {};
 
-try {
-	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
-	for (const t in ticketData) {
-		const ticket = ticketData[t];
-		if (ticket.banned) {
-			if (ticket.expires && ticket.expires <= Date.now()) continue;
-			Punishments.roomPunish(`staff`, ticket.userid, ['TICKETBAN', ticket.userid, ticket.expires, ticket.reason]);
-			delete ticketData[t]; // delete the old format
-		} else {
-			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
-				// Tickets that have been open for 24+ hours will be automatically closed.
-				const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
-				if (ticketRoom) {
-					const ticketGame = ticketRoom.game as HelpTicket;
-					ticketGame.writeStats(false);
-					ticketRoom.expire();
-				}
-				continue;
+const ticketData = JSON.parse(FS(TICKET_FILE).readIfExistsSync());
+for (const t in ticketData) {
+	const ticket = ticketData[t];
+	if (ticket.banned) {
+		if (ticket.expires && ticket.expires <= Date.now()) continue;
+		Punishments.roomPunish(`staff`, ticket.userid, ['TICKETBAN', ticket.userid, ticket.expires, ticket.reason]);
+		delete ticketData[t]; // delete the old format
+	} else {
+		if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
+			// Tickets that have been open for 24+ hours will be automatically closed.
+			const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
+			if (ticketRoom) {
+				const ticketGame = ticketRoom.game as HelpTicket;
+				ticketGame.writeStats(false);
+				ticketRoom.expire();
 			}
-			// Close open tickets after a restart
-			// (i.e. if the server has been running for less than a minute)
-			if (ticket.open && process.uptime() <= 60) ticket.open = false;
-			tickets[t] = ticket;
+			continue;
 		}
+		// Close open tickets after a restart
+		// (i.e. if the server has been running for less than a minute)
+		if (ticket.open && process.uptime() <= 60) ticket.open = false;
+		tickets[t] = ticket;
 	}
-} catch (e) {
-	if (e.code !== 'ENOENT') throw e;
 }
 
 function writeTickets() {

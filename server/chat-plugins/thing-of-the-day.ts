@@ -25,13 +25,7 @@ const ATHOTDS_FILE = 'config/chat-plugins/sports-athletes.tsv';
 const VGOTDS_FILE = 'config/chat-plugins/videogames-games.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
-let prenoms: {[k: string]: [string, AnyObject][]} = {};
-try {
-	prenoms = require(`../../${PRENOMS_FILE}`);
-} catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-}
-if (!prenoms || typeof prenoms !== 'object') prenoms = {};
+const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 
 function savePrenoms() {
 	return FS(PRENOMS_FILE).write(JSON.stringify(prenoms));

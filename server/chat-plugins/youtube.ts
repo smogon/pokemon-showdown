@@ -12,13 +12,7 @@ import {Utils} from '../../lib/utils';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
-let channelData: AnyObject;
-
-try {
-	channelData = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
-} catch (e) {
-	channelData = {};
-}
+const channelData: AnyObject = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
 
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;

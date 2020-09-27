@@ -10,13 +10,7 @@ interface Quote {
 	date: number;
 }
 
-let quotes: {[room: string]: Quote[]} = {};
-
-try {
-	quotes = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
-} catch (e) {
-	if (e.code !== 'ENOENT') throw e;
-}
+const quotes: {[room: string]: Quote[]} = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
 
 // migrate quotes out of roomsettings
 function convertOldQuotes() {
