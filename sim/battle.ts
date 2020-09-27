@@ -13,7 +13,9 @@ import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {Utils} from '../lib/utils';
-import {suspectTests} from '../server/chat-plugins/suspect-tests';
+import {FS} from '../lib/fs';
+
+const suspectTests = JSON.parse(FS('../config/chat-plugins/suspects.json').readIfExistsSync() || "{}");
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {

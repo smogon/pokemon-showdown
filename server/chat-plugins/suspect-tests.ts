@@ -9,7 +9,7 @@ interface SuspectTest {
 	url: string;
 }
 
-export const suspectTests: {[format: string]: SuspectTest} = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
+const suspectTests: {[format: string]: SuspectTest} = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
 
 function saveSuspectTests() {
 	FS(SUSPECTS_FILE).writeUpdate(() => JSON.stringify(suspectTests));
@@ -56,7 +56,7 @@ export const commands: ChatCommands = {
 				!['https://www.smogon.com/forums/threads/', 'https://www.smogon.com/forums/posts/']
 					.some(prefix => urlActual.startsWith(prefix))
 			) {
-				return this.errorReply("Suspect test URLs must be Smogon threads or posts.");
+				throw new Chat.ErrorMessage("Suspect test URLs must be Smogon threads or posts.");
 			}
 
 			this.privateGlobalModAction(`${user.name} ${suspectTests[format.id] ? "edited the" : "added a"} ${format.name} suspect test.`);
