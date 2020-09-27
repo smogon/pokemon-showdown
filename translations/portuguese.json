@@ -554,7 +554,7 @@
 		"${targetUser.name} does not have a status set.": "${targetUser.name} não tem uma mensagem de status.",
 		"${targetUser.name}'s status \"${targetUser.userMessage}\" was cleared by ${user.name}${displayReason}": "O status \"${targetUser.userMessage}\" de ${targetUser.name} foi removido por ${user.name}${displayReason}",
 		"You don't have a status message set.": "Você não tem uma mensagem de status.",
-		"You have cleared your status message.": "Você remevou a sua mensagem de status.",
+		"You have cleared your status message.": "Você removeu a sua mensagem de status.",
 		"This user has not played any ladder games yet.": "Este usuário ainda não jogou nenhuma partida na ladder.",
 		"W[TN: initial for Wins]": "V",
 		"L[TN: initial for Losses]": "D",
