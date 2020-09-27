@@ -12,6 +12,7 @@
 'use strict';
 
 const ModlogConverter = require(`${__dirname}/converter.js`).ModlogConverter;
+const path = require('path');
 
 function parseFlags() {
 	const args = process.argv.slice(2);
@@ -41,4 +42,4 @@ if (
 }
 
 console.log(`Converting ${from === 'txt' ? `the text modlog files in ${textLogPath}` : `${databasePath}`} from ${from} to ${to}...`);
-ModlogConverter.convert(from, to, databasePath, textLogPath, outputLogPath);
+ModlogConverter.convert(from, to, path.resolve(`./${databasePath}`), path.resolve(`./${textLogPath}`), path.resolve(`./${outputLogPath}`));
