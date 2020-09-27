@@ -4,13 +4,7 @@ import {Utils} from '../../lib/utils';
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
-export let roomFaqs: {[k: string]: {[k: string]: string}} = {};
-try {
-	roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
-} catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-}
-if (!roomFaqs || typeof roomFaqs !== 'object') roomFaqs = {};
+export const roomFaqs: {[k: string]: {[k: string]: string}} = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 
 function saveRoomFaqs() {
 	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));

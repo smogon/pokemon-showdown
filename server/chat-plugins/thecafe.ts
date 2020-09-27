@@ -5,13 +5,7 @@ const FOODFIGHT_COOLDOWN = 5 * 60 * 1000;
 
 const thecafe = Rooms.get('thecafe') as ChatRoom;
 
-let dishes: {[k: string]: string[]} = {};
-try {
-	dishes = JSON.parse(FS(DISHES_FILE).readIfExistsSync() || "{}");
-} catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-}
-if (!dishes || typeof dishes !== 'object') dishes = {};
+const dishes: {[k: string]: string[]} = JSON.parse(FS(DISHES_FILE).readIfExistsSync() || "{}");
 
 function saveDishes() {
 	void FS(DISHES_FILE).write(JSON.stringify(dishes));
