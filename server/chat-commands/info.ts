@@ -1419,7 +1419,10 @@ export const commands: ChatCommands = {
 						realStat *= 2 / (2 + modifier);
 					}
 
-					baseStat = Math.ceil((100 * Math.ceil(realStat) - nature * (level * (Math.floor(ev / 4) + iv) + 500)) / (2 * level * nature));
+					baseStat = Math.ceil(
+						(100 * Math.ceil(realStat) - nature * (level * (Math.floor(ev / 4) + iv) + 500)) /
+						(2 * level * nature)
+					);
 				}
 				if (baseStat < 0) {
 					return this.sendReplyBox('No valid value for base stat possible with given parameters.');
