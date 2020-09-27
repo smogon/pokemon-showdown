@@ -13,6 +13,7 @@ import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {Utils} from '../lib/utils';
+import {suspectTests} from '../server/chat-plugins/suspect-tests';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -1616,6 +1617,10 @@ export class Battle {
 		if (this.rated) {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
+			// Suspect test notice
+			if (suspectTests[format.id]) {
+				this.add('html', `<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTests[format.id].suspect}! For information on how to participate check out the <a href="${suspectTests[format.id].url}">suspect thread</a>.</strong></div>`);
+			}
 		}
 
 		if (format.onBegin) format.onBegin.call(this);
