@@ -105,6 +105,7 @@ export class ReadStream {
 		this.buf.copy(newBuf, 0, this.bufStart, this.bufEnd);
 		this.bufEnd -= this.bufStart;
 		this.bufStart = 0;
+		this.bufCapacity = newCapacity;
 		this.buf = newBuf;
 	}
 
@@ -200,7 +201,7 @@ export class ReadStream {
 		);
 		if (!this.errorBuf && !this.atEOF && this.bufSize < this.readSize) {
 			let bytes: number | null = this.readSize - this.bufSize;
-			if (bytes === Infinity || byteCount === null) bytes = null;
+			if (bytes === Infinity || byteCount === null || byteCount === true) bytes = null;
 			return this.doLoad(bytes, readError);
 		}
 	}
@@ -252,8 +253,10 @@ export class ReadStream {
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
 			this.bufEnd = 0;
+			this.readSize = 0;
 		} else {
 			this.bufStart += byteCount;
+			this.readSize -= byteCount;
 		}
 		return out;
 	}
