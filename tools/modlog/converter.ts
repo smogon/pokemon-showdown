@@ -8,8 +8,6 @@
 // @ts-ignore Needed for FS
 if (!global.Config) global.Config = {nofswriting: false};
 
-import iterateLines = require('lines-async-iterator');
-
 import {FS} from '../../lib/fs';
 import {ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
@@ -460,7 +458,8 @@ export class ModlogConverterTest {
 				entries = [];
 			};
 
-			for await (const line of iterateLines(`${this.inputDir}/${file}`)) {
+			const readStream = FS(`${this.inputDir}/${file}`).createReadStream();
+			for await (const line of readStream.byLine()) {
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
 				if (!entry) continue;
