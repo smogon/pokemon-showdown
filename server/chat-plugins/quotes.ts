@@ -139,7 +139,7 @@ export const pages: PageTable = {
 			return `${buffer}<h2>This room has no quotes.</h2></div>`;
 		}
 
-		buffer += `<h2>Quotes for ${room.title} (${roomQuotes.length}):</h2>`;
+		buffer += Utils.html`<h2>Quotes for ${room.title} (${roomQuotes.length}):</h2>`;
 		for (const [i, quoteObj] of roomQuotes.entries()) {
 			const index = i + 1;
 			const {quote, userid, date} = quoteObj;
