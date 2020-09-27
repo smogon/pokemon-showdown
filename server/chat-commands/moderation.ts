@@ -19,6 +19,85 @@ const HOURMUTE_LENGTH = 60 * 60 * 1000;
 /** Require reasons for punishment commands */
 const REQUIRE_REASONS = true;
 
+/**
+ * Promotes a user within a room. Returns a User object if a popup should be shown to the user,
+ * and null otherwise. Throws a Chat.ErrorMesage on an error.
+ *
+ * @param promoter the User object of the user who is promoting
+ * @param room the Room in which the promotion is happening
+ * @param userid the ID of the user to promote
+ * @param symbol the GroupSymbol to promote to
+ * @param username the username of the user to promote
+ * @param force whether or not to forcibly promote
+ */
+export function runPromote(
+	promoter: User,
+	room: Room,
+	userid: ID,
+	symbol: GroupSymbol,
+	username?: string,
+	force?: boolean
+) {
+	const targetUser = Users.getExact(userid);
+	username = username || userid;
+	if (!username) return;
+
+	if (userid.length > 18) {
+		throw new Chat.ErrorMessage(`User '${username}' does not exist (the username is too long).`);
+	}
+	if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
+		throw new Chat.ErrorMessage(`User '${username}' is offline and unrecognized, and so can't be promoted.`);
+	}
+	if (targetUser && !targetUser.registered) {
+		throw new Chat.ErrorMessage(`User '${username}' is unregistered, and so can't be promoted.`);
+	}
+
+	let currentSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
+	if (room.auth.has(userid) && currentSymbol === Users.Auth.defaultSymbol()) {
+		currentSymbol = 'whitelist';
+	}
+	const currentGroup = Users.Auth.getGroup(currentSymbol);
+	const currentGroupName = currentGroup.name || "regular user";
+
+	const nextGroup = Config.groups[symbol];
+
+	if (currentSymbol === symbol) {
+		throw new Chat.ErrorMessage(`User '${username}' is already a ${nextGroup.name || 'regular user'} in this room.`);
+	}
+	if (!promoter.can('makeroom')) {
+		if (currentGroup.id && !promoter.can(`room${currentGroup.id || 'voice'}` as 'roomvoice', null, room)) {
+			throw new Chat.ErrorMessage(`Access denied for promoting/demoting ${username} from ${currentGroupName}.`);
+		}
+		if (symbol !== ' ' && !promoter.can(`room${nextGroup.id || 'voice'}` as 'roomvoice', null, room)) {
+			throw new Chat.ErrorMessage(`Access denied for promoting/demoting ${username} to ${nextGroup.name}.`);
+		}
+	}
+	if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
+		throw new Chat.ErrorMessage(`${username} is locked and can't be promoted.`);
+	}
+
+	if (symbol === Users.Auth.defaultSymbol()) {
+		room.auth.delete(userid);
+	} else {
+		room.auth.set(userid, symbol);
+	}
+
+	if (targetUser) {
+		targetUser.updateIdentity(room.roomid);
+		if (room.subRooms) {
+			for (const subRoom of room.subRooms.values()) {
+				targetUser.updateIdentity(subRoom.roomid);
+			}
+		}
+	}
+
+	// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
+	if (targetUser && room.users[targetUser.id] && room.persist && room.settings.isPrivate !== true) {
+		return targetUser;
+	}
+	return null;
+}
+
 export const commands: ChatCommands = {
 
 	roomowner(target, room, user) {
@@ -95,70 +174,27 @@ export const commands: ChatCommands = {
 		const nextGroupName = nextGroup.name || "regular user";
 
 		for (const toPromote of users) {
-			const targetUser = Users.getExact(toPromote);
 			const userid = toID(toPromote);
-			const name = targetUser ? targetUser.name : this.filter(toPromote);
-			if (!name) continue;
-
 			if (!userid) return this.parse('/help roompromote');
-			if (userid.length > 18) {
-				this.errorReply(`User '${name}' does not exist (the username is too long).`);
-				continue;
-			}
-			if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
-				this.errorReply(`User '${name}' is offline and unrecognized, and so can't be promoted.`);
-				continue;
-			}
-			if (targetUser && !targetUser.registered) {
-				this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
-				continue;
-			}
 
-			let currentSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
-			if (room.auth.has(userid) && currentSymbol === Users.Auth.defaultSymbol()) {
-				currentSymbol = 'whitelist';
-			}
-			const currentGroup = Users.Auth.getGroup(currentSymbol);
-			const currentGroupName = currentGroup.name || "regular user";
-
-			if (currentSymbol === nextSymbol) {
-				this.errorReply(`User '${name}' is already a ${nextGroupName} in this room.`);
+			const oldSymbol = room.auth.getDirect(userid);
+			let shouldPopup;
+			try {
+				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
+			} catch (err) {
+				if (err.name?.endsWith('ErrorMessage')) this.errorReply(err.message);
 				continue;
 			}
-			if (!user.can('makeroom')) {
-				if (currentGroup.id && !user.can(`room${currentGroup.id || 'voice'}` as 'roomvoice', null, room)) {
-					this.errorReply(`/${cmd} - Access denied for promoting/demoting ${name} from ${currentGroupName}.`);
-					continue;
-				}
-				if (nextSymbol !== ' ' && !user.can(`room${nextGroup.id || 'voice'}` as 'roomvoice', null, room)) {
-					this.errorReply(`/${cmd} - Access denied for promoting/demoting ${name} to ${nextGroupName}.`);
-					continue;
-				}
-			}
-			if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
-				this.errorReply(`${name} is locked and can't be promoted.`);
-				continue;
-			}
-
-			if (nextSymbol === Users.Auth.defaultSymbol()) {
-				room.auth.delete(userid);
-			} else {
-				room.auth.set(userid, nextSymbol);
-			}
-
-			// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
-			const shouldPopup = (
-				targetUser && room.users[targetUser.id] && room.persist && room.settings.isPrivate !== true ?
-					targetUser : null
-			);
+			const targetUser = Users.get(userid);
+			const name = targetUser?.name || toPromote;
 
 			if (this.pmTarget && targetUser) {
 				const text = `${targetUser.name} was invited (and promoted to Room ${nextGroupName}) by ${user.name}.`;
 				room.add(`|c|${user.getIdentity(room.roomid)}|/log ${text}`).update();
 				this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
 			} else if (
-				nextSymbol in Config.groups && currentSymbol in Config.groups &&
-				nextGroup.rank < currentGroup.rank
+				nextSymbol in Config.groups && oldSymbol in Config.groups &&
+				nextGroup.rank < Config.groups[oldSymbol].rank
 			) {
 				if (targetUser && room.users[targetUser.id] && !nextGroup.modlog) {
 					// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
@@ -168,11 +204,11 @@ export const commands: ChatCommands = {
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
 				shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else if (nextSymbol === '#') {
-				this.addModAction(`${'' + name} was promoted to ${nextGroupName} by ${user.name}.`);
+				this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
 				this.modlog('ROOM OWNER', userid);
 				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else {
-				this.addModAction(`${'' + name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+				this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
 				shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			}
