@@ -52,10 +52,7 @@ export const commands: ChatCommands = {
 			const dateActual = `${month}/${day}`;
 
 			const urlActual = url.trim();
-			if (
-				!['https://www.smogon.com/forums/threads/', 'https://www.smogon.com/forums/posts/']
-					.some(prefix => urlActual.startsWith(prefix))
-			) {
+			if (!/^https:\/\/www\.smogon\.com\/forums\/(threads|posts)\//.test(urlActual)) {
 				throw new Chat.ErrorMessage("Suspect test URLs must be Smogon threads or posts.");
 			}
 
