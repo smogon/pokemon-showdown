@@ -23,20 +23,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Quagsire with Scorching Sands, it can use Bounty Place.",
 	},
 
-	// frostyicelad ❆
-	icestone: {
-		inherit: true,
-		megaStone: "Frosmoth-Mega",
-		megaEvolves: "Frosmoth",
-		itemUser: ["Frosmoth"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		fling: undefined,
-		shortDesc: "If held by an Frosmoth, this item allows it to Mega Evolve in battle.",
-	},
-
 	// Kalalokki
 	kalalokkiumz: {
 		name: "Kalalokkium Z",

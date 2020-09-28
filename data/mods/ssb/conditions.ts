@@ -670,8 +670,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		onStart(source) {
 			this.add(`c|${getName('frostyicelad ❆')}|Oh i guess its my turn now! Time to sweep!`);
-			if (source.species.id !== 'frosmothmega' || source.illusion) return;
-			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut(source) {
 			this.add(`c|${getName('frostyicelad ❆')}|Hey! ${source.side.name} why dont you keep me in and let me sweep? Mean.`);

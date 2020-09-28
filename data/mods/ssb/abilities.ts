@@ -871,18 +871,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Frostyicelad
 	iceshield: {
-		desc: "This Pokemon receives 1/2 damage from special attacks. This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage.",
-		shortDesc: "Receives 1/2 damage from Special Attacks and can only be damaged by direct attacks.",
+		desc: "This Pokemon can only be damaged by direct attacks. This Pokemon cannot lose its held item due to another Pokemon's attack.",
+		shortDesc: "Can only be damaged by direct attacks. Cannot lose its held item.",
 		name: "Ice Shield",
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category === 'Special') {
-				return this.chainModify(0.5);
-			}
-		},
 		onDamage(damage, target, source, effect) {
-			if (effect.id === 'heavyhailstorm') return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if (this.suppressingAttackEvents(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
+			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
+				this.add('-activate', pokemon, 'ability: Ice Shield');
 				return false;
 			}
 		},

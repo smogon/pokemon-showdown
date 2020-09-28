@@ -1641,9 +1641,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Boomburst', target);
-			this.add('-anim', source, 'Blizzard', target);
+			this.add('-anim', source, 'Frost Breath', target);
 		},
-		secondary: null,
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: {
+					spa: 1,
+				},
+			},
+		},
 		target: "allAdjacentFoes",
 		type: "Ice",
 	},
