@@ -111,6 +111,7 @@ function prettifyResults(
 	const lines = resultArray.length;
 	let curDate = '';
 	let resultString = resultArray.map(result => {
+		if (!result) return '';
 		const date = new Date(result.time || Date.now());
 		const entryRoom = result.visualRoomID || result.roomID || 'global';
 		let [dateString, timestamp] = Chat.toTimestamp(date, {human: true}).split(' ');
