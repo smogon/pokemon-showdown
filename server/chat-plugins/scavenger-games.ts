@@ -135,11 +135,11 @@ const TWISTS: {[k: string]: Twist} = {
 		desc: "Players can choose whether or not they choose to complete the 4th question.",
 
 		onAfterLoad() {
-			if (this.questions.length !== 4) {
-				this.announce('This twist requires exactly four questions.  Please reset the hunt and make it again.');
+			if (this.questions.length === 3) {
+				this.announce('This twist requires at least four questions.  Please reset the hunt and make it again.');
 				this.huntLocked = true;
 			} else {
-				this.questions[3].hint += ' (You may choose to skip this question using ``/scavenge skip``.)';
+				this.questions[this.questions.length - 1].hint += ' (You may choose to skip this question using ``/scavenge skip``.)';
 			}
 		},
 
