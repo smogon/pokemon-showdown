@@ -9,7 +9,7 @@
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
-import {ModlogEntry} from './modlog';
+import type {ModlogEntry} from './modlog';
 
 interface RoomlogOptions {
 	isMultichannel?: boolean;
