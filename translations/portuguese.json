@@ -21,6 +21,7 @@
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Eles podem fazer qualquer coisa, como mudar o que esta mensagem diz",
 
 		"<strong>Room ranks</strong>": "<strong>Cargos da Sala</strong>",
+    "^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Eles não têm poder algum além de um símbolo.",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Eles podem usar comandos com !, tal como !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - O de cima, além de poderem dar mutes e avisos",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - O de cima, além de poderem banir usuários da sala",
