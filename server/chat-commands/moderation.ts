@@ -1123,7 +1123,7 @@ export const commands: ChatCommands = {
 		} else {
 			this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
 		}
-		this.modlog(year ? 'YEARLOCK' : 'RANGELOCK', null, reason);
+		this.globalModlog(`${year ? 'YEAR' : 'RANGE'}LOCK`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: by ${user.id}: ${reason}`);
 	},
 	lockiphelp: [
 		`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
