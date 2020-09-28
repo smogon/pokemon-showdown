@@ -331,8 +331,7 @@ export class Modlog {
 			maxLines: maxLines,
 			onlyPunishments: onlyPunishments,
 		};
-		const rawResponse = await PM.query(query);
-		const response = rawResponse.map((line: string, index: number) => parseModlog(line, rawResponse[index + 1]));
+		const response = await PM.query(query);
 
 		if (response.duration > LONG_QUERY_DURATION) {
 			Monitor.log(`Long modlog query took ${response.duration} ms to complete: ${query}`);
@@ -352,14 +351,21 @@ export class Modlog {
 	}
 }
 
-export const PM = new QueryProcessManager<ModlogQuery, string[] | undefined>(module, async data => {
+// if I don't do this TypeScript thinks that (ModlogResult | undefined)[] is a function
+// and complains about spacing for function calls even though it's a type not a function...
+type ModlogResult = ModlogEntry | undefined;
+
+export const PM = new QueryProcessManager<ModlogQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
-		return await modlog.runSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = await modlog.runSearch(rooms, regexString, maxLines, onlyPunishments);
+		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
+		return [];
 	}
 });
+
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	global.toID = require('../sim/dex').Dex.toID;
