@@ -110,7 +110,7 @@ function prettifyResults(
 	const title = `[${roomid}] ${searchCmd}`;
 	const lines = resultArray.length;
 	let curDate = '';
-	let resultString = resultArray.map(result => {
+	const resultString = resultArray.map(result => {
 		if (!result) return '';
 		const date = new Date(result.time || Date.now());
 		const entryRoom = result.visualRoomID || result.roomID || 'global';
@@ -142,7 +142,6 @@ function prettifyResults(
 		return `${dateString}<small>[${timestamp}] (${thisRoomID})</small>${line}`;
 	}).join(`<br />`);
 	const [dateString, timestamp] = Chat.toTimestamp(new Date(), {human: true}).split(' ');
-	resultString += `${dateString !== curDate ? `</p><p>[${dateString}]` : ``}<br /><small>[${timestamp}] \u2190 current server time</small>`;
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
@@ -152,6 +151,7 @@ function prettifyResults(
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
 			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
 	}
+	preamble += `</p><p>[${dateString}]<br /><small>[${timestamp}] \u2190 current server time</small>`;
 	const moreButton = getMoreButton(roomid, searchCmd, lines, maxLines, onlyPunishments);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
@@ -538,13 +538,17 @@ export const commands: ChatCommands = {
 		let roomid: ModlogID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 		let lines;
 		const search: ModlogSearch = {};
-		for (const option of target.split(',')) {
+		const targets = target.split(',');
+		for (const option of targets) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
 				// We should guess what parameter they meant
 				value = param.trim();
 				if (/^[0-9]{1,3}\.[0-9]{1,3}/.test(value)) {
 					param = 'ip';
+				} else if (targets.indexOf(option) === 0) {
+					// they might mean a roomid, as per the old format of /modlog
+					param = 'room';
 				} else if (value === value.toUpperCase()) {
 					param = 'action';
 				} else if (toID(param).length < 19) {
