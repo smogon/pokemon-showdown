@@ -546,7 +546,7 @@ export const commands: ChatCommands = {
 				value = param.trim();
 				if (/^[0-9]{1,3}\.[0-9]{1,3}/.test(value)) {
 					param = 'ip';
-				} else if (i === 0) {
+				} else if (i === 0 && targets.length > 1) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
 				} else if (value === value.toUpperCase()) {
