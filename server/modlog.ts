@@ -352,7 +352,8 @@ export class Modlog {
 }
 
 // if I don't do this TypeScript thinks that (ModlogResult | undefined)[] is a function
-// and complains about spacing for function calls even though it's a type not a function...
+// and complains about an "nexpected newline between function name and paren"
+// even though it's a type not a function...
 type ModlogResult = ModlogEntry | undefined;
 
 export const PM = new QueryProcessManager<ModlogQuery, ModlogResult[]>(module, async data => {
