@@ -539,7 +539,7 @@ export const commands: ChatCommands = {
 		let lines;
 		const search: ModlogSearch = {};
 		const targets = target.split(',');
-		for (const [i, option] of targets) {
+		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
 				// We should guess what parameter they meant
