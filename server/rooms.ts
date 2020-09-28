@@ -128,7 +128,7 @@ import type {Poll} from './chat-plugins/poll';
 import type {Announcement} from './chat-plugins/announcements';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';
-import {ModlogEntry} from './modlog';
+import type {ModlogEntry} from './modlog';
 
 export abstract class BasicRoom {
 	roomid: RoomID;
