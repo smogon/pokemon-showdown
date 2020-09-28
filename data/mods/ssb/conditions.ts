@@ -1567,16 +1567,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart() {
 			this.add(`c|${getName('Segmr')}|*awakens conquerors haki* Greetings.`);
 		},
-		onSwitchOut(pokemon) {
-			if (!pokemon.switchFlag || pokemon.switchFlag !== 'disconnect') {
-				this.add(`c|${getName('Segmr')}|The beauty of a stable internet connection is it allows you to`);
-			}
+		onSwitchOut() {
+			this.add(`c|${getName('Segmr')}|Lemme show you this`);
 			this.add(`l|Segmr`);
 		},
 		onFaint(pokemon) {
 			const name = pokemon.side.foe.active[0].illusion ?
 				pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name;
-			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me`);
+			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me?`);
 		},
 	},
 	sejesensei: {
@@ -1955,44 +1953,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-		},
-	},
-	// Modified futuremove support for Segmr's move (Disconnect)
-	futuremove: {
-		// this is a slot condition
-		name: 'futuremove',
-		duration: 3,
-		onResidualOrder: 3,
-		onEnd(target) {
-			const data = this.effectData;
-			// time's up; time to hit! :D
-			const move = this.dex.getMove(data.move);
-			if (target.fainted || target === data.source) {
-				this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
-				return;
-			}
-
-			this.add('-end', target, 'move: ' + move.name);
-			target.removeVolatile('Protect');
-			target.removeVolatile('Endure');
-
-			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
-				data.moveData.infiltrates = true;
-			}
-			if (data.source.hasAbility('normalize') && this.gen >= 6) {
-				data.moveData.type = 'Normal';
-			}
-			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
-				data.moveData.stab = 2;
-			}
-			// @ts-ignore
-			const hitMove: ActiveMove = new this.dex.Data.Move(data.moveData);
-
-			// Support for Segmr's custom move
-			if (move.name === 'Disconnect') this.add(`j|${getName('Segmr')}`);
-			this.trySpreadMoveHit([target], data.source, hitMove);
-			// Support for Segmr's custom move
-			if (move.name === 'Disconnect') this.add(`c|${getName('Segmr')}|so as i was saying, then move hits`);
 		},
 	},
 	raindrop: {

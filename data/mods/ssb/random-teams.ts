@@ -625,10 +625,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', shiny: true,
 	},
 	Segmr: {
-		species: 'Ninetales-Alola', ability: 'wAll In', item: 'Light Clay', gender: 'M',
-		moves: ['Recover', 'Will-O-Wisp', 'Freeze-Dry'],
-		signatureMove: 'Disconnect',
-		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
+		species: 'Runerigus', ability: 'Skill Drain', item: 'Leftovers', gender: 'M',
+		moves: ['Recover', 'Will-O-Wisp', 'Protect'],
+		signatureMove: 'Tsukuyomi',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm', shiny: true,
 	},
 	sejesensei: {
 		species: 'Garbodor', ability: 'Trash Consumer', item: 'Red Card', gender: 'M',

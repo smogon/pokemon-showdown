@@ -4145,13 +4145,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Segmr
-	disconnect: {
+	tsukuyomi: {
 		accuracy: 100,
-		basePower: 150,
-		category: "Special",
-		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Doom Desire, or Future Sight is already in effect for the target's position. Switches the user out.",
-		shortDesc: "Hits 2 turns after use. User switches out.",
-		name: "Disconnect",
+		basePower: 0,
+		category: "Status",
+		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
+		shortDesc: "Curse + Mean Look.",
+		name: "Tsukuyomi",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 5,
@@ -4162,40 +4162,50 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Doom Desire', target);
-		},
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) {
-				source.switchFlag = 'disconnect' as ID;
-				return false;
+			this.add('-anim', source, 'Dark Void', target);
+			if (source.hasType('Ghost')) {
+				this.add('-anim', source, 'Curse', target);
 			} else {
-				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-					move: 'disconnect',
-					source: source,
-					moveData: {
-						id: 'disconnect',
-						name: "Disconnect",
-						isNonstandard: "Custom",
-						gen: 8,
-						accuracy: 100,
-						basePower: 150,
-						category: "Special",
-						priority: 0,
-						flags: {},
-						effectType: 'Move',
-						isFutureMove: true,
-						type: 'Fairy',
-					},
-				});
-				this.add('-start', source, 'Disconnect');
-				this.add(`c|${getName('Segmr')}|Lemme show you this`);
-				source.switchFlag = 'disconnect' as ID;
-				return null;
+				this.add('-anim', source, 'Curse', source);
 			}
+		},
+		volatileStatus: 'curse',
+		onModifyMove(move, source, target) {
+			if (!source.hasType('Ghost')) {
+				move.target = move.nonGhostTarget as MoveTarget;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (!source.hasType('Ghost')) {
+				delete move.volatileStatus;
+				move.onHit = function (t, s, m) {
+					s.side.foe.active[0].addVolatile('trapped', s, m, 'trapper');
+				};
+				move.self = {boosts: {spe: -1, atk: 1, def: 1}};
+			} else if (move.volatileStatus && target.volatiles['curse']) {
+				return false;
+			}
+		},
+		onHit(target, source, move) {
+			this.directDamage(source.maxhp / 2, source, source);
+			source.side.foe.active[0].addVolatile('trapped', source, move, 'trapper');
+			if (source.name === 'Segmr' && !source.illusion) {
+				this.add(`c|${getName('Segmr')}|I don't like naruto actually let someone else write this message plz.`);
+			}
+		},
+		condition: {
+			onStart(pokemon, source) {
+				this.add('-start', pokemon, 'Curse', '[of] ' + source);
+			},
+			onResidualOrder: 10,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 4);
+			},
 		},
 		secondary: null,
 		target: "normal",
-		type: "Fairy",
+		type: "Dark",
+		nonGhostTarget: "self",
 	},
 
 	// sejesensei

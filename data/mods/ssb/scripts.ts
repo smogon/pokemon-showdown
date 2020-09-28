@@ -347,7 +347,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing']))) {
+		if (
+			!move.negateSecondary &&
+			!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing'])) &&
+			!this.getAllActive().some(x => x.hasAbility('skilldrain'))
+		) {
 			const originalHp = pokemon.hp;
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -358,11 +362,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 
+		if ((move.forceSwitch || move.selfSwitch) && this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
+			this.hint(`Self-switching and force switch moves don't trigger when a Pokemon with Skill Drain is active.`);
+		}
+
 		return true;
 	},
 	afterMoveSecondaryEvent(targets, pokemon, move) {
 		// console.log(`${targets}, ${pokemon}, ${move}`)
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing']))) {
+		if (
+			!move.negateSecondary &&
+			!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing'])) &&
+			!this.getAllActive().some(x => x.hasAbility('skilldrain'))
+		) {
 			this.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		}
@@ -511,7 +523,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing']))) {
+		if (
+			!move.negateSecondary &&
+			!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing'])) &&
+			!this.getAllActive().some(x => x.hasAbility('skilldrain'))
+		) {
 			for (const [i, d] of damage.entries()) {
 				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
@@ -681,6 +697,132 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// Calculate damage modifiers separately (order differs between generations)
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
+	},
+
+	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
+		let didAnything: number | boolean | null | undefined = damage.reduce(this.combineResults);
+		for (const [i, target] of targets.entries()) {
+			if (target === false) continue;
+			let hitResult;
+			let didSomething: number | boolean | null | undefined = undefined;
+
+			if (target) {
+				if (moveData.boosts && !target.fainted) {
+					hitResult = this.boost(moveData.boosts, target, pokemon, move, isSecondary, isSelf);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.heal && !target.fainted) {
+					if (target.hp >= target.maxhp) {
+						this.add('-fail', target, 'heal');
+						this.attrLastMove('[still]');
+						damage[i] = this.combineResults(damage[i], false);
+						didAnything = this.combineResults(didAnything, null);
+						continue;
+					}
+					const amount = target.baseMaxhp * moveData.heal[0] / moveData.heal[1];
+					const d = target.heal((this.gen < 5 ? Math.floor : Math.round)(amount));
+					if (!d && d !== 0) {
+						this.add('-fail', pokemon);
+						this.attrLastMove('[still]');
+						this.debug('heal interrupted');
+						damage[i] = this.combineResults(damage[i], false);
+						didAnything = this.combineResults(didAnything, null);
+						continue;
+					}
+					this.add('-heal', target, target.getHealth);
+					didSomething = true;
+				}
+				if (moveData.status) {
+					hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
+					if (!hitResult && move.status) {
+						damage[i] = this.combineResults(damage[i], false);
+						didAnything = this.combineResults(didAnything, null);
+						continue;
+					}
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.forceStatus) {
+					hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.volatileStatus) {
+					hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.sideCondition) {
+					hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.slotCondition) {
+					hitResult = target.side.addSlotCondition(target, moveData.slotCondition, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.weather) {
+					hitResult = this.field.setWeather(moveData.weather, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.terrain) {
+					hitResult = this.field.setTerrain(moveData.terrain, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.pseudoWeather) {
+					hitResult = this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.forceSwitch && !this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
+					hitResult = !!this.canSwitch(target.side);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				// Hit events
+				//   These are like the TryHit events, except we don't need a FieldHit event.
+				//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
+				if (move.target === 'all' && !isSelf) {
+					if (moveData.onHitField) {
+						hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+				} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+					if (moveData.onHitSide) {
+						hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+				} else {
+					if (moveData.onHit) {
+						hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+					if (!isSelf && !isSecondary) {
+						this.runEvent('Hit', target, pokemon, move);
+					}
+				}
+			}
+			if (moveData.selfSwitch && !this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
+				if (this.canSwitch(pokemon.side)) {
+					didSomething = true;
+				} else {
+					didSomething = this.combineResults(didSomething, false);
+				}
+			}
+			// Move didn't fail because it didn't try to do anything
+			if (didSomething === undefined) didSomething = true;
+			damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
+			didAnything = this.combineResults(didAnything, didSomething);
+		}
+
+
+		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfdestruct) {
+			if (!isSelf && !isSecondary) {
+				if (didAnything === false) {
+					this.add('-fail', pokemon);
+					this.attrLastMove('[still]');
+				}
+			}
+			this.debug('move failed because it did nothing');
+		} else if (move.selfSwitch && pokemon.hp && !this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
+			pokemon.switchFlag = move.id;
+		}
+
+		return damage;
 	},
 
 	pokemon: {

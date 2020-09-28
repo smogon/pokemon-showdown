@@ -1728,14 +1728,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Segmr
-	wallin: {
-		desc: "When this Pokemon switches in, Aurora Veil automatically gets set up.",
-		shortDesc: "Sets up Aurora Veil on switch-in.",
-		name: "wAll In",
-		onSwitchIn(pokemon) {
-			if (pokemon.side.getSideCondition('auroraveil')) return;
-			pokemon.side.addSideCondition('auroraveil');
+	skilldrain: {
+		desc: "Secondary effects are nullified when this Pokemon is active, and switching moves lose effect.",
+		name: "Skill Drain",
+		onAnyModifyMove(move) {
+			delete move.secondaries;
 		},
+		// afterSecondarySelf and switch nullifying handled in ssb/scripts.ts
 		isNonstandard: "Custom",
 		gen: 8,
 	},
