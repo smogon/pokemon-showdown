@@ -1494,6 +1494,37 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// pants
+	ghostspores: {
+		desc: "This Pokemon ignores the foe's stat boosts. On switch-out, regenerates 1/3 health. If hit by an attack, foe is Leech Seeded. If knocked out, foe is Cursed.",
+		shortDesc: "Unaware + Regenerator. If hit, foe is Leech Seeded. If KOed, foe is Cursed.",
+		name: 'Ghost Spores',
+		onDamagingHit(damage, target, source, move) {
+			source.addVolatile('leechseed', target);
+			if (!target.hp) {
+				source.addVolatile('curse');
+			}
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			const unawareUser = this.effectData.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['def'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+	},
+
 	// Perish Song
 	soupsipper: {
 		desc: "This Pokemon is immune to Grass- and Water-type moves, restores 1/4 of its maximum HP, rounded down, when hit by these types, and boosts its Attack by 1 stage when hit by these types.",

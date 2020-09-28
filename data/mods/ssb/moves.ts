@@ -3201,6 +3201,67 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
+	// Pants
+	wistfulthinking: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Burns the opponent and switches out. For five turns, Pokemon on the user's side heal 6.25% damage.",
+		shortDesc: "Burn foe; switch out. Heals replacement for 5 turns.",
+		name: "Wistful Thinking",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Will-O-Wisp', target);
+			this.add('-anim', source, 'Parting Shot', target);
+		},
+		onHit(target, source) {
+			target.setStatus('brn', source, null, true);
+		},
+		self: {
+			sideCondition: 'wistfulthoughts',
+		},
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		selfSwitch: 'copyvolatile',
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
+	// Side condition for pants' healing
+	wistfulthoughts: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Wistful Thoughts",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		sideCondition: 'wistfulthoughts',
+		condition: {
+			duration: 5,
+			onStart(side) {
+				this.add('-sidestart', side, 'Wistful Thoughts');
+			},
+			onResidualOrder: 21,
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					this.heal(pokemon.baseMaxhp / 16, pokemon);
+				}
+			},
+			onEnd(side) {
+				this.add('-sideend', side, 'Wistful Thoughts');
+			},
+		},
+		secondary: null,
+		target: "allySide",
+		type: "Ghost",
+	},
+
 	// Paradise
 	rapidturn: {
 		accuracy: 100,

@@ -1320,6 +1320,22 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('OM~!')}|ugh, I ${['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got critfroze by ice beam asfgegkhalfewgihons'][this.random(3)]}`);
 		},
 	},
+	pants: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('pants')}|neat`);
+		},
+		onSwitchOut(source) {
+			if (source.side.slotConditions) {
+				this.add(`c|${getName('pants')}|brb contemplating things`);
+			} else {
+				this.add(`c|${getName('pants')}|brb dying a little`);
+			}
+		},
+		onFaint() {
+			this.add(`c|${getName('pants')}|how do you even knock out something that's already dead? i call bs`);
+		},
+	},
 	paradise: {
 		noCopy: true,
 		onStart() {

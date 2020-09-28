@@ -498,6 +498,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Healing you?',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	pants: {
+		species: 'Phantump', ability: 'Ghost Spores', item: 'Eviolite', gender: 'M',
+		moves: ['Taunt', 'Spirit Shackle', ['Horn Leech', 'U-turn', 'Flip Turn']],
+		signatureMove: 'Wistful Thinking',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Impish', shiny: true,
+	},
 	'Paradise ╱╲☼': {
 		species: 'Slaking', ability: 'Unaware', item: 'Choice Scarf', gender: '',
 		moves: ['Sacred Fire', 'Spectral Thief', 'Icicle Crash'],
