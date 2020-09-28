@@ -115,7 +115,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onComplete(player, time, blitz) {
-			const isPerfect = Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
+			const isPerfect = !this.leftGame?.includes(player.id) &&
+				Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
 			return {name: player.name, time, blitz, isPerfect};
 		},
 
@@ -124,6 +125,53 @@ const TWISTS: {[k: string]: Twist} = {
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) {
 				this.announce(Utils.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
+			}
+		},
+	},
+
+	bonusround: {
+		name: 'Bonus Round',
+		id: 'bonusround',
+		desc: "Players can choose whether or not they choose to complete the 4th question.",
+
+		onAfterLoad() {
+			if (this.questions.length === 3) {
+				this.announce('This twist requires at least four questions.  Please reset the hunt and make it again.');
+				this.huntLocked = true;
+			} else {
+				this.questions[this.questions.length - 1].hint += ' (You may choose to skip this question using ``/scavenge skip``.)';
+			}
+		},
+
+		onAnySubmit(player) {
+			if (this.huntLocked) {
+				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				return true;
+			}
+		},
+
+		onSubmitPriority: 1,
+		onSubmit(player, value) {
+			const currentQuestion = player.currentQuestion;
+
+			if (value === 'skip' && currentQuestion + 1 === this.questions.length) {
+				player.sendRoom('You have opted to skip the current question.');
+				player.skippedQuestion = true;
+				this.onComplete(player);
+				return true;
+			}
+		},
+
+		onComplete(player, time, blitz) {
+			const noSkip = !player.skippedQuestion;
+			return {name: player.name, time, blitz, noSkip};
+		},
+
+		onAfterEndPriority: 1,
+		onAfterEnd() {
+			const noSkip = this.completed.filter(entry => entry.noSkip).map(entry => entry.name);
+			if (noSkip.length) {
+				this.announce(Utils.html`${Chat.toListString(noSkip)} ${noSkip.length > 1 ? 'have' : 'has'} completed the hunt without skipping the last question!`);
 			}
 		},
 	},
