@@ -165,7 +165,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// Dancer Petal Dance hack
 		// TODO: implement properly
-		const noLock = externalMove && !pokemon.volatiles.lockedmove;
+		const noLock = externalMove && !pokemon.volatiles['lockedmove'];
 
 		if (zMove) {
 			if (pokemon.illusion) {
@@ -206,7 +206,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.dex.getAbility('dancer'), undefined, true);
 			}
 		}
-		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
+		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 	},
 
 	// For Jett's The Hunt is On!

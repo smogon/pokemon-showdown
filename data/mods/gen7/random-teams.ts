@@ -6,13 +6,10 @@ import {Utils} from '../../../lib/utils';
 import {toID} from '../../../sim/dex';
 
 export class RandomGen7Teams extends RandomTeams {
-	randomFactorySets: AnyObject;
-	randomBSSFactorySets: AnyObject;
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.randomFactorySets = require('./factory-sets.json');
-		this.randomBSSFactorySets = require('./bss-factory-sets.json');
 	}
+
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false, isDoubles = false): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
@@ -383,7 +380,8 @@ export class RandomGen7Teams extends RandomTeams {
 					if (!isLead && !hasAbility['Defeatist']) rejected = true;
 					break;
 				case 'explosion':
-					if (counter.setupType || (hasAbility['Refrigerate'] && hasMove['freezedry']) || hasMove['wish']) rejected = true;
+					if (counter.setupType || !!counter['recovery'] || hasMove['wish']) rejected = true;
+					if (hasAbility['Refrigerate'] && hasMove['freezedry']) rejected = true;
 					break;
 				case 'extremespeed':
 					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
@@ -626,7 +624,7 @@ export class RandomGen7Teams extends RandomTeams {
 					rejectAbility = !counter['Normal'];
 				} else if (ability === 'Battle Armor' || ability === 'Sturdy') {
 					rejectAbility = (!!counter['recoil'] && !counter['recovery']);
-				} else if (ability === 'Battle Bond' || ability === 'Flare Boost' || ability === 'Moody') {
+				} else if (ability === 'Battle Bond' || ability === 'Dazzling' || ability === 'Flare Boost' || ability === 'Moody') {
 					rejectAbility = true;
 				} else if (ability === 'Chlorophyll' || ability === 'Leaf Guard') {
 					rejectAbility = (species.baseStats.spe > 100 || abilities.includes('Harvest') || !hasMove['sunnyday'] && !teamDetails['sun']);
@@ -638,6 +636,8 @@ export class RandomGen7Teams extends RandomTeams {
 					rejectAbility = !counter['Physical'] || hasMove['dragontail'];
 				} else if (ability === 'Download' || ability === 'Hyper Cutter') {
 					rejectAbility = species.nfe;
+				} else if (ability === 'Flash Fire') {
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
 				} else if (ability === 'Harvest') {
@@ -709,7 +709,7 @@ export class RandomGen7Teams extends RandomTeams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = (abilities.includes('Prankster') || (!counter.setupType && !hasMove['acrobatics']) || species.isMega);
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = (abilities.includes('Volt Absorb') || hasMove['raindance']);
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb') || hasMove['raindance']);
 				} else if (ability === 'Weak Armor') {
 					rejectAbility = counter.setupType !== 'Physical';
 				}
@@ -903,7 +903,7 @@ export class RandomGen7Teams extends RandomTeams {
 		// Medium priority
 		} else if ((ability === 'Speed Boost' || ability === 'Stance Change' || species.name === 'Pheromosa') && counter.Physical + counter.Special > 2 && !hasMove['uturn']) {
 			item = 'Life Orb';
-		} else if (isDoubles && hasMove['uturn'] && counter.Physical === 4) {
+		} else if (isDoubles && hasMove['uturn'] && counter.Physical === 4 && !hasMove['fakeout']) {
 			item = (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		} else if (isDoubles && counter.Special === 4 && hasMove['waterspout'] || hasMove['eruption']) {
 			item = 'Choice Scarf';
@@ -971,7 +971,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// Banned Ability
 				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
 				// Holistic judgement
-				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
+				'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
 			const tier = toID(species.tier).replace('bl', '');
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
@@ -1206,6 +1206,8 @@ export class RandomGen7Teams extends RandomTeams {
 
 		return pokemon;
 	}
+
+	randomFactorySets: AnyObject = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -1498,6 +1500,8 @@ export class RandomGen7Teams extends RandomTeams {
 
 		return pokemon;
 	}
+
+	randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails

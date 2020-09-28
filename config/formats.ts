@@ -1,8 +1,23 @@
 // Note: This is the list of formats
-// The rules that formats use are stored in data/rulesets.js
-import {Utils} from './../lib/utils';
+// The rules that formats use are stored in data/rulesets.ts
+/*
+If you want to add custom formats, create a file in this folder named: "custom-formats.ts"
 
-export const Formats: (FormatsData | {section: string, column?: number})[] = [
+past the following code into the file and add your desired formats and their sections between the brackets
+--------------------------------------------------------------------------------
+// Note: This is the list of formats
+// The rules that formats use are stored in data/rulesets.ts
+
+export const Formats: FormatList = [
+];
+--------------------------------------------------------------------------------
+
+If you specify a section that already exists, your format will be added to the bottom of that section.
+New sections will be added to the bottom of the specified column.
+The column value will be ignored for repeat sections.
+*/
+
+export const Formats: FormatList = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
@@ -33,7 +48,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666169/">OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668322/">OU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666247/">OU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666340/">OU Viability Rankings</a>`,
 		],
@@ -41,19 +56,26 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		unbanlist: ['Cinderace'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8ou') {
+				this.add('html', '<div class="broadcast-blue"><strong>OU is currently suspecting Cinderace! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670532/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', 'Blitz'],
+		banlist: ['Cinderace'],
 	},
 	{
 		name: "[Gen 8] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666897/">Ubers Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658364/">Ubers Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661412/">Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668107/">Ubers Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -64,31 +86,36 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666248/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3670407/">UU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3659681/">UU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659427/">UU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668357/">UU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['OU', 'UUBL', 'Drizzle'],
+		banlist: ['OU', 'UUBL', 'Cinderace', 'Drizzle'],
 	},
 	{
 		name: "[Gen 8] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666733/">RU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661013/">RU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660617/">RU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3669026/">RU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
 		banlist: ['UU', 'RUBL'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8ru') {
+				this.add('html', '<div class="broadcast-blue"><strong>RU is currently suspecting Sigilyph! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3671022/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] NU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666717/">NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3669764/">NU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3662169/">NU Viability Rankings</a>`,
 		],
 
@@ -160,6 +187,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Mimikyu', 'Necrozma', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Sableye', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Focus Sash', 'Moody', 'Perish Song',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen81v1') {
+				this.add('html', '<div class="broadcast-blue"><strong>1v1 is currently suspecting Togekiss! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670621/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Anything Goes",
@@ -192,7 +224,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Clefable', 'Crucibelle-Mega'],
+		banlist: ['Cinderace', 'Clefable', 'Crucibelle-Mega'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
@@ -248,7 +280,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] Doubles OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666636/">Doubles OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3669212/">Doubles OU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658826/">Doubles OU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658242/">Doubles OU Viability Rankings</a>`,
 		],
@@ -261,7 +293,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] Doubles Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers</a>`,
 		],
 
 		mod: 'gen8',
@@ -272,7 +304,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	{
 		name: "[Gen 8] Doubles UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU</a>`,
 		],
 
 		mod: 'gen8',
@@ -299,6 +331,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 	},
 	{
 		name: "[Gen 8] Battle Stadium Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3670056/">Series 6 Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
@@ -420,6 +455,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Tornadus-Therian', 'Urshifu-Base', 'Xerneas', 'Yveltal',
 			'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldex') {
+				this.add('html', '<div class="broadcast-blue"><strong>National Dex is currently suspecting Dracovish! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670967/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] National Dex UU",
@@ -441,6 +481,18 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Kyurem', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mawile-Mega', 'Mew',
 			'Pinsir-Mega', 'Scolipede', 'Staraptor', 'Thundurus', 'Thundurus-Therian', 'Victini', 'Drizzle', 'Drought', 'Aurora Veil',
 		],
+	},
+	{
+		name: "[Gen 8] National Dex Monotype",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8376523/">National Dex Monotype</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['[Gen 8] National Dex', 'Same Type Clause'],
+		banlist: ['Aegislash', 'Hoopa-Unbound', 'Kartana', 'Magearna', 'Tapu Lele', 'Zygarde-10%', 'Battle Bond', 'Damp Rock', 'Smooth Rock'],
+		unbanlist: ['Alakazam-Mega', 'Darmanitan-Galar', 'Deoxys-Speed', 'Landorus-Base', 'Tornadus-Therian', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Arena Trap'],
 	},
 	{
 		name: "[Gen 8] National Dex AG",
@@ -514,6 +566,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				return [`You are limited to one Arceus forme.`, `(You have ${arceus} Arceus formes.)`];
 			}
 		},
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldexbh') {
+				this.add('html', '<div class="broadcast-blue"><strong>National Dex BH is currently suspecting Bolt Beak and Fishious Rend! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658587/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 
 	// Pet Mods
@@ -531,8 +588,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'megamax',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
-		unbanlist: ['Cinderace'],
+		banlist: ['Cinderace', 'Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
 		onChangeSet(set) {
 			if (set.species.endsWith('-Gmax')) set.species = set.species.slice(0, -5);
 		},
@@ -588,6 +644,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'optimons',
 		searchShow: false,
 		ruleset: ['[Gen 8] OU'],
+		banlist: ['Cinderace'],
 		unbanlist: ['Electabuzz', 'Electivire', 'Elekid', 'Magby', 'Magmar', 'Magmortar', 'Yanma', 'Yanmega'],
 		onSwitchIn(pokemon) {
 			const baseSpecies = this.dex.mod('gen8').getSpecies(pokemon.species.name);
@@ -771,7 +828,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['350 Cup Mod', 'Standard', 'Dynamax Clause'],
-		banlist: ['Abra', 'Gastly', 'Pawniard', 'Rufflet', 'Eviolite', 'Light Ball', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Abra', 'Gastly', 'Pawniard', 'Rufflet', 'Woobat', 'Eviolite', 'Light Ball', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
 	},
 
 	// Other Metagames
@@ -889,17 +946,12 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', '!Obtainable Abilities', 'Species Clause', 'Nickname Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
-			'Dracovish', 'Dragapult', 'Eternatus', 'Keldeo', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings',
+			'Dracovish', 'Dragapult', 'Eternatus', 'Keldeo', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings',
 			'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zamazenta', 'Zekrom', 'Zeraora',
 			'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Intrepid Sword',
 			'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
 			'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8almostanyability') {
-				this.add('html', '<div class="broadcast-blue"><strong>Almost Any Ability is currently suspecting Magearna! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3669035/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] STABmons",
@@ -933,6 +985,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Pawniard', 'Pikachu', 'Porygon2', 'Rhydon', 'Rufflet', 'Scyther', 'Sneasel', 'Type: Null',
 			'Arena Trap', 'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nfe') {
+				this.add('html', '<div class="broadcast-blue"><strong>NFE is currently suspecting Raboot! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670673/">suspect thread</a>.</strong></div>');
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Camomons",
@@ -1072,7 +1129,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			let i: StatName;
 			for (i in species.baseStats) {
 				const statChange = crossSpecies.baseStats[i] - crossPrevoSpecies.baseStats[i];
-				mixedSpecies.baseStats[i] = Utils.clampIntRange(species.baseStats[i] + statChange, 1, 255);
+				mixedSpecies.baseStats[i] = this.clampIntRange(species.baseStats[i] + statChange, 1, 255);
 			}
 			if (crossSpecies.types[0] !== crossPrevoSpecies.types[0]) mixedSpecies.types[0] = crossSpecies.types[0];
 			if (crossSpecies.types[1] !== crossPrevoSpecies.types[1]) {
@@ -1215,7 +1272,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Damp Rock', 'Eviolite', 'Heat Rock'],
+		banlist: ['Cinderace', 'Damp Rock', 'Eviolite', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: {[tier: string]: number} = {
@@ -1237,7 +1294,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			let statName: StatName;
 			for (statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
-				pokemon.baseStats[statName] = Utils.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
 			return pokemon;
 		},
@@ -1258,8 +1315,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 		restricted: [
-			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock', 'Nature Power',
-			'Parting Shot', 'Psycho Shift', 'Protect', 'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
+			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Disable', 'Encore', 'Ingrain', 'King\'s Shield',
+			'Mean Look', 'move:Metronome', 'Obstruct', 'Octolock', 'Nature Power', 'Parting Shot', 'Psycho Shift', 'Protect',
+			'Roar', 'Skill Swap', 'Sleep Talk', 'Spiky Shield', 'Substitute', 'Teleport', 'Whirlwind', 'Wish', 'Yawn',
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
@@ -1326,72 +1384,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Groudon-Primal', 'Rayquaza-Mega', 'Gengarite', 'Comatose + Sleep Talk', 'Chatter',
 			'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
-	},
-	{
-		name: "[Gen 7] Mix and Mega",
-		desc: `Mega Stones and Primal Orbs can be used on almost any Pok&eacute;mon with no Mega Evolution limit.`,
-
-		mod: 'mixandmega7',
-		searchShow: false,
-		ruleset: ['Standard', 'Mega Rayquaza Clause'],
-		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
-		restricted: [
-			'Arceus', 'Deoxys', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Landorus-Therian', 'Lugia',
-			'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shuckle',
-			'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Beedrillite', 'Blazikenite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z',
-		],
-		unbanlist: ['Deoxys-Defense', 'Kyurem-Base', 'Necrozma-Base'],
-		onValidateTeam(team) {
-			const itemTable = new Set<ID>();
-			for (const set of team) {
-				const item = this.dex.getItem(set.item);
-				if (!item.exists) continue;
-				if (itemTable.has(item.id) && (item.megaStone || item.onPrimal)) {
-					return [
-						`You are limited to one of each Mega Stone and Primal Orb.`,
-						`(You have more than one ${item.name}.)`,
-					];
-				}
-				itemTable.add(item.id);
-			}
-		},
-		onValidateSet(set) {
-			const species = this.dex.getSpecies(set.species);
-			const item = this.dex.getItem(set.item);
-			if (!item.megaEvolves && !item.onPrimal && item.id !== 'ultranecroziumz') return;
-			if (species.baseSpecies === item.megaEvolves || (item.onPrimal && item.itemUser?.includes(species.baseSpecies)) ||
-				(species.name.startsWith('Necrozma-') && item.id === 'ultranecroziumz')) {
-				return;
-			}
-			if (this.ruleTable.isRestricted(`item:${item.id}`) || this.ruleTable.isRestrictedSpecies(species) ||
-				set.ability === 'Power Construct') {
-				return [`${set.species} is not allowed to hold ${item.name}.`];
-			}
-		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
-			}
-		},
-		onSwitchIn(pokemon) {
-			// @ts-ignore
-			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
-			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
-				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-				const oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
-				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-				}
-			}
-		},
-		onSwitchOut(pokemon) {
-			// @ts-ignore
-			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
-			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
-				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-			}
-		},
 	},
 
 	// Randomized Metas
@@ -1657,13 +1649,13 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			validate: [2, 4],
 			battle: 2,
 		},
-		ruleset: ['[Gen 5] Doubles OU'],
+		ruleset: ['[Gen 5] Doubles OU', 'Accuracy Moves Clause'],
 		banlist: ['Kingdra', 'Focus Sash', 'Final Gambit', 'Perish Song'],
 	},
 	{
 		name: "[Gen 1] NU",
 		threads: [
-			`&bullet <a href="https://www.smogon.com/forums/threads/3668913/">RBY NU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668913/">RBY NU Viability Ranking</a>`,
 		],
 
 		mod: 'gen1',

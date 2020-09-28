@@ -136,7 +136,7 @@ export class Modlog {
 	}
 
 	getSharedID(roomid: ModlogID): ID | false {
-		return roomid.includes('-') ? toID(roomid.split('-')[0]) : false;
+		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
 	}
 
 	/**
@@ -171,7 +171,9 @@ export class Modlog {
 	async rename(oldID: ModlogID, newID: ModlogID) {
 		const streamExists = this.streams.has(oldID);
 		if (streamExists) await this.destroy(oldID);
-		await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
+		if (!this.getSharedID(oldID)) {
+			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
+		}
 		if (streamExists) this.initialize(newID);
 	}
 
@@ -292,8 +294,7 @@ export class Modlog {
 
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
 		const fileStream = FS(path).createReadStream();
-		let line;
-		while ((line = await fileStream.readLine()) !== null) {
+		for await (const line of fileStream.byLine()) {
 			if (!regex || regex.test(line)) {
 				results.insert(line);
 			}

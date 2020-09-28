@@ -754,9 +754,9 @@ export class User extends Chat.MessageContext {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
 				this.permalocked = userid;
-				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`);
+				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`, true);
 			} else if (userType === '6') {
-				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`);
+				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`, true);
 				this.disconnectAll();
 			}
 		}
@@ -926,9 +926,8 @@ export class User extends Chat.MessageContext {
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		if (this.statusType === 'busy' || oldUser.statusType === 'busy') {
-			this.setStatusType('busy');
-		}
+		const isBusy = this.statusType === 'busy' || oldUser.statusType === 'busy';
+		this.setStatusType(isBusy ? 'busy' : 'online');
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);
@@ -1134,9 +1133,6 @@ export class User extends Chat.MessageContext {
 				}
 				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms.get(roomid)!, connection);
-				}
-				if (!this.connections.some(curConnection => curConnection.ip === connection.ip)) {
-					this.ips = this.ips.filter(ip => ip !== connection.ip);
 				}
 				break;
 			}

@@ -97,7 +97,6 @@ export interface RoomSettings {
 	unoDisabled?: boolean;
 	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
-	toursEnabled?: '%' | boolean;
 	tourAnnouncements?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
@@ -142,10 +141,13 @@ export abstract class BasicRoom {
 	 */
 	readonly log: Roomlog;
 	/**
-	 * The room's current RoomGame, if it exists. Each room can only have 0 or 1
+	 * The room's current RoomGame, if it exists. Each room can have 0 to 2
 	 * `RoomGame`s, and `this.game.room === this`.
+	 * Rooms may also have an additional game in `this.subGame`.
+	 * However, `subGame`s do not update `user.game`.
 	 */
 	game: RoomGame | null;
+	subGame: RoomGame | null;
 	/**
 	 * The room's current battle. Battles are a type of RoomGame, so in battle
 	 * rooms (which can only be `GameRoom`s), `this.battle === this.game`.
@@ -200,6 +202,7 @@ export abstract class BasicRoom {
 
 		this.battle = null;
 		this.game = null;
+		this.subGame = null;
 		this.tour = null;
 
 		this.roomid = roomid;

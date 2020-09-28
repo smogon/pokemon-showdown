@@ -531,10 +531,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-					// @ts-ignore
-					if (moveData.forceStatus === 'brn') target.modifyStat('atk', 0.5);
-					// @ts-ignore
-					if (moveData.forceStatus === 'par') target.modifyStat('spe', 0.25);
+					if (moveData.forceStatus === 'brn') target.modifyStat!('atk', 0.5);
+					if (moveData.forceStatus === 'par') target.modifyStat!('spe', 0.25);
 					didSomething = true;
 				}
 			}
@@ -617,8 +615,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				let msg = '-boost';
 				if (boost[i]! < 0) {
 					msg = '-unboost';
-					// @ts-ignore
-					boost[i] = -boost[i];
+					boost[i] = -boost[i]!;
 					// Re-add attack and speed drops if not present
 					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
 						target.addVolatile('brnattackdrop');
@@ -636,10 +633,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (!effect || effect.effectType === 'Move') {
-					// @ts-ignore
 					this.add(msg, target, i, boost[i]);
 				} else {
-					// @ts-ignore
 					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);

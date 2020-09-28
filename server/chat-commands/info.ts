@@ -19,7 +19,8 @@ export const commands: ChatCommands = {
 	alts: 'whois',
 	whoare: 'whois',
 	altsnorecurse: 'whois',
-	whois(target, room: Room | null, user, connection, cmd) {
+	profile: 'whois',
+	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
 		const targetUser = this.targetUserOrSelf(target, user.tempGroup === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
@@ -190,11 +191,11 @@ export const commands: ChatCommands = {
 		const gameRooms = [];
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
-			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL) {
-				if (curRoom.settings.isPrivate && !canViewAlts) {
-					continue;
-				}
+			const inPlayerTable = targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid);
+			const hasPlayerSymbol = curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL;
+			const canSeeRoom = canViewAlts || user === targetUser || !curRoom.settings.isPrivate;
+
+			if ((inPlayerTable || hasPlayerSymbol) && canSeeRoom) {
 				gameRooms.push(curRoom.roomid);
 			}
 		}
@@ -311,7 +312,7 @@ export const commands: ChatCommands = {
 
 	sbtl: 'sharedbattles',
 	sharedbattles(target, room) {
-		if (!this.can('lock')) return false;
+		this.checkCan('lock');
 
 		const [targetUsername1, targetUsername2] = target.split(',');
 		if (!targetUsername1 || !targetUsername2) return this.parse(`/help sharedbattles`);
@@ -342,7 +343,7 @@ export const commands: ChatCommands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
 		}
@@ -352,14 +353,14 @@ export const commands: ChatCommands = {
 
 	sgp: 'showglobalpunishments',
 	showglobalpunishments(target, room, user) {
-		if (!this.can('lock')) return;
+		this.checkCan('lock');
 		return this.parse(`/join view-globalpunishments`);
 	},
 	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
 
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		if (!this.can('ip')) return;
+		this.checkCan('ip');
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
@@ -374,7 +375,7 @@ export const commands: ChatCommands = {
 	hostsearch: 'ipsearch',
 	ipsearch(target, room, user, connection, cmd) {
 		if (!target.trim()) return this.parse(`/help ipsearch`);
-		if (!this.can('rangeban')) return;
+		this.checkCan('rangeban');
 
 		let [ip, roomid] = this.splitOne(target);
 		const targetRoom = roomid ? Rooms.get(roomid) : null;
@@ -426,8 +427,8 @@ export const commands: ChatCommands = {
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
 	checkchallenges(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!user.can('addhtml', null, room) && !this.can('ban', null, room)) return false;
+		room = this.requireRoom();
+		if (!user.can('addhtml', null, room)) this.checkCan('ban', null, room);
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
 			this.errorReply(`This command must be broadcast:`);
@@ -1411,7 +1412,7 @@ export const commands: ChatCommands = {
 		if (realSet) {
 			if (!baseSet) {
 				if (calcHP) {
-					baseStat = Math.ceil((100 * realStat - 10 - level * (ev / 4 + iv + 100)) / (2 * level));
+					baseStat = Math.ceil((100 * realStat - 10 - level * (Math.floor(ev / 4) + iv + 100)) / (2 * level));
 				} else {
 					if (!positiveMod) {
 						realStat *= (2 + modifier) / 2;
@@ -1419,7 +1420,10 @@ export const commands: ChatCommands = {
 						realStat *= 2 / (2 + modifier);
 					}
 
-					baseStat = Math.ceil((100 * Math.ceil(realStat) - nature * (level * (ev / 4 + iv) + 500)) / (2 * level * nature));
+					baseStat = Math.ceil(
+						(100 * Math.ceil(realStat) - nature * (level * (Math.floor(ev / 4) + iv) + 500)) /
+						(2 * level * nature)
+					);
 				}
 				if (baseStat < 0) {
 					return this.sendReplyBox('No valid value for base stat possible with given parameters.');
@@ -1452,9 +1456,9 @@ export const commands: ChatCommands = {
 		let output: number;
 
 		if (calcHP) {
-			output = (((iv + (2 * baseStat) + (ev / 4) + 100) * level) / 100) + 10;
+			output = (((iv + (2 * baseStat) + Math.floor(ev / 4) + 100) * level) / 100) + 10;
 		} else {
-			output = Math.floor(nature * Math.floor((((iv + (2 * baseStat) + (ev / 4)) * level) / 100) + 5));
+			output = Math.floor(nature * Math.floor((((iv + (2 * baseStat) + Math.floor(ev / 4)) * level) / 100) + 5));
 			if (positiveMod) {
 				output *= (2 + modifier) / 2;
 			} else {
@@ -1503,6 +1507,7 @@ export const commands: ChatCommands = {
 
 		const roomRanks = [
 			`<strong>Room ranks</strong>`,
+			`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
 			`+ <strong>Voice</strong> - They can use ! commands like !groups`,
 			`% <strong>Driver</strong> - The above, and they can mute and warn`,
 			`@ <strong>Moderator</strong> - The above, and they can room ban users`,
@@ -1542,6 +1547,7 @@ export const commands: ChatCommands = {
 			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
 			`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
 			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
+			`<strong>weekban</strong> - Bans a user from the room for a week.`,
 			`<strong>blacklist</strong> - Bans a user for a year.`,
 		];
 
@@ -1571,7 +1577,7 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown is open source:<br />` +
-			`- Language: TypeScript and JavaScript (Node.js)<br />` +
+			`- Language: mostly TypeScript, a little PHP<br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
@@ -1700,7 +1706,7 @@ export const commands: ChatCommands = {
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of Austin &amp; pre)<br />` +
+				`Random Battles damage calculator. (Courtesy of Austin)<br />` +
 				`- <a href="https://calc.pokemonshowdown.com/randoms.html">Random Battles Damage Calculator</a>`
 			);
 		}
@@ -1838,19 +1844,19 @@ export const commands: ChatCommands = {
 				if (rules.length > 0) {
 					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
-					rulesetHtml = `No ruleset found for ${format.name}`;
+					rulesetHtml = `No ruleset found for ${subformat.name}`;
 				}
 			}
-			let formatType: string = (format.gameType || "singles");
+			let formatType: string = (subformat.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc && !format.threads) {
-				if (format.effectType === 'Format') {
-					return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.<br />${rulesetHtml}`);
+			if (!subformat.desc && !subformat.threads) {
+				if (subformat.effectType === 'Format') {
+					return this.sendReplyBox(`No description found for this ${formatType} ${subformat.section} format.<br />${rulesetHtml}`);
 				} else {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
+			const descHtml = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
 			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
 		}
 
@@ -1878,9 +1884,9 @@ export const commands: ChatCommands = {
 	},
 
 	roomhelp(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!this.canBroadcast(false, '!htmlbox')) return;
-		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
+		room = this.requireRoom();
+		this.checkBroadcast(false, '!htmlbox');
+		if (this.broadcastMessage) this.checkCan('declare', null, room);
 
 		if (!this.runBroadcast(false, '!htmlbox')) return;
 
@@ -1941,7 +1947,7 @@ export const commands: ChatCommands = {
 	},
 
 	restarthelp(target, room, user) {
-		if (!Rooms.global.lockdown && !this.can('lockdown')) return false;
+		if (!Rooms.global.lockdown) this.checkCan('lockdown');
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`The server is restarting. Things to know:<br />` +
@@ -1966,7 +1972,7 @@ export const commands: ChatCommands = {
 		if (!room) {
 			return this.errorReply(`This is not a room you can set the rules of.`);
 		}
-		if (!this.can('editroom', null, room)) return;
+		this.checkCan('editroom', null, room);
 		if (target.length > 150) {
 			return this.errorReply(`Error: Room rules link is too long (must be under 150 characters). You can use a URL shortener to shorten the link.`);
 		}
@@ -1995,7 +2001,7 @@ export const commands: ChatCommands = {
 
 	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
-		target = target.toLowerCase().trim();
+		target = toID(target);
 		const showAll = target === 'all';
 		if (showAll && this.broadcasting) {
 			return this.sendReplyBox(this.tr`You cannot broadcast all FAQs at once.`);
@@ -2023,7 +2029,11 @@ export const commands: ChatCommands = {
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(this.tr`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
 		}
-		if (showAll || !buffer.length) {
+		if (!buffer.length && target) {
+			this.errorReply(`'${target}' is an invalid FAQ.`);
+			return this.parse(`/help faq`);
+		}
+		if (showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/pages/faq">${this.tr`Frequently Asked Questions`}</a>`);
 		}
 		this.sendReplyBox(buffer.join(`<br />`));
@@ -2434,8 +2444,8 @@ export const commands: ChatCommands = {
 	},
 
 	async requestshow(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!this.canTalk()) return false;
+		room = this.requireRoom();
+		this.checkChat();
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
@@ -2474,8 +2484,8 @@ export const commands: ChatCommands = {
 	requestshowhelp: [`/requestshow [link], [comment] - Requests permission to show media in the room.`],
 
 	async approveshow(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!this.can('mute', null, room)) return false;
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
@@ -2512,8 +2522,8 @@ export const commands: ChatCommands = {
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
 
 	denyshow(target, room, user) {
-		if (!room) return this.requiresRoom();
-		if (!this.can('mute', null, room)) return false;
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
@@ -2531,12 +2541,12 @@ export const commands: ChatCommands = {
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
 	approvallog(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
 
 	viewapprovals(target, room, user) {
-		if (!room) return this.requiresRoom();
+		room = this.requireRoom();
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
 
@@ -2562,7 +2572,7 @@ export const commands: ChatCommands = {
 		}
 		if (comment) buf += Utils.html`<br>(${comment.trim()})</div>`;
 
-		if (!this.canBroadcast()) return false;
+		this.checkBroadcast();
 		if (this.broadcastMessage) {
 			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
 			const auth = room?.auth || Users.globalAuth;
@@ -2596,10 +2606,10 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help code');
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
 		if (target.length < 80 && !target.includes('\n') && !target.includes('```') && this.shouldBroadcast()) {
-			return this.canTalk(`\`\`\`${target}\`\`\``);
+			return this.checkChat(`\`\`\`${target}\`\`\``);
 		}
 
-		if (!this.canBroadcast(true, '!code')) return;
+		this.checkBroadcast(true, '!code');
 
 		const code = Chat.getReadmoreCodeBlock(target);
 		this.runBroadcast(true);
@@ -2663,7 +2673,7 @@ export const pages: PageTable = {
 		let buf = "";
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!room.persist) return;
-		if (!this.can('mute', null, room)) return;
+		this.checkCan('mute', null, room);
 		// Ascending order
 		const sortedPunishments = Array.from(Punishments.getPunishments(room.roomid))
 			.sort((a, b) => a[1].expireTime - b[1].expireTime);
@@ -2678,7 +2688,7 @@ export const pages: PageTable = {
 		this.title = 'Global Punishments';
 		let buf = "";
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.can('lock')) return;
+		this.checkCan('lock');
 		// Ascending order
 		const sortedPunishments = Array.from(Punishments.getPunishments()).sort((a, b) => a[1].expireTime - b[1].expireTime);
 		const sP = new Map();
@@ -2690,7 +2700,7 @@ export const pages: PageTable = {
 	},
 	approvals(args) {
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
-		if (!this.can('mute', null, room)) return;
+		this.checkCan('mute', null, room);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;
 		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
@@ -2708,6 +2718,7 @@ export const pages: PageTable = {
 process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
-		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
+		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
 	);
 });

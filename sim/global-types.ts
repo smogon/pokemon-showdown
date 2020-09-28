@@ -2,6 +2,7 @@ type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
 type Field = import('./field').Field;
 type Action = import('./battle-queue').Action;
+type MoveAction = import('./battle-queue').MoveAction;
 type ActionChoice = import('./battle-queue').ActionChoice;
 type ModdedDex = import('./dex').ModdedDex;
 type Pokemon = import('./pokemon').Pokemon;
@@ -1198,7 +1199,7 @@ interface GameTimerSettings {
 	accelerate: boolean;
 }
 
-interface FormatsData extends EventMethods {
+interface FormatData extends EventMethods {
 	name: string;
 
 	banlist?: string[];
@@ -1260,9 +1261,10 @@ interface FormatsData extends EventMethods {
 	column?: number;
 }
 
-type ModdedFormatsData = FormatsData | Omit<FormatsData, 'name'> & {inherit: true};
+type FormatList = (FormatData | {section: string, column?: number})[];
+type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
 
-interface Format extends Readonly<BasicEffect & FormatsData> {
+interface Format extends Readonly<BasicEffect & FormatData> {
 	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 	readonly baseRuleset: string[];
 	readonly banlist: string[];
@@ -1487,6 +1489,7 @@ namespace RandomTeamsTypes {
 		stickyWeb?: number;
 		rapidSpin?: number;
 		defog?: number;
+		screens?: number;
 		illusion?: number;
 		statusCure?: number;
 	}
