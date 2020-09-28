@@ -129,9 +129,9 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 	},
 
-	skip: {
-		name: 'Skip!',
-		id: 'skip',
+	bonusround: {
+		name: 'Bonus Round',
+		id: 'bonusround',
 		desc: "Players can choose whether or not they choose to complete the 4th question.",
 
 		onAfterLoad() {
