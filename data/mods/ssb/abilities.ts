@@ -869,7 +869,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Frostyicelad
+	// frostyicelad
 	iceshield: {
 		desc: "This Pokemon can only be damaged by direct attacks. This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		shortDesc: "Can only be damaged by direct attacks. Cannot lose its held item.",

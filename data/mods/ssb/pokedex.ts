@@ -61,25 +61,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ["Psychic", "Normal"],
 	},
-	// Frostyicelad
-	frosmoth: {
+	// frostyicelad
+	laprasgmax: {
 		inherit: true,
-		otherFormes: ["Frosmoth-Mega"],
-		formeOrder: ["Frosmoth", "Frosmoth-Mega"],
-	},
-	frosmothmega: {
-		num: 873,
-		name: "Frosmoth-Mega",
-		baseSpecies: "Frosmoth",
-		forme: "Mega",
-		types: ["Ice", "Bug"],
-		baseStats: {hp: 70, atk: 75, def: 100, spa: 130, spd: 100, spe: 100},
-		abilities: {0: "Punk Rock"},
-		heightm: 1.3,
-		weightkg: 42,
-		color: "White",
-		eggGroups: ["Bug"],
-		requiredItem: "Ice Stone",
+		heightm: 2.5,
+		weightkg: 220,
 	},
 	// GMars
 	minior: {
@@ -173,11 +159,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	porygon: {
 		inherit: true,
 		baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
-	},
-	// Raj.Shoot
-	swampertmega: {
-		inherit: true,
-		abilities: {0: "Sap Sipper"},
 	},
 	// Robb576
 	necrozmadawnwings: {

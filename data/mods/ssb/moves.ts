@@ -3862,8 +3862,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "The user gets its Attack and Speed raised by 1 stage before using this move. If the user is a Swampert in its base form, it will Mega Evolve.",
-		shortDesc: "+1 Atk/Spe before moving. Mega evolves user.",
+		desc: "The user gets its Attack and Speed raised by 1 stage after KOing a target. If the user is a Charizard in its base form, it will Mega Evolve into Mega Charizard X.",
+		shortDesc: "+1 Atk/Spe after KO. Mega evolves user.",
 		name: "Fan Service",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3874,17 +3874,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
-			this.boost({atk: 1, spe: 1}, source, source, move);
 			this.add('-anim', source, 'Sacred Fire', target);
 		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				this.boost({atk: 1, spe: 1}, pokemon, pokemon, move);
+			}
+		},
 		onHit(target, source) {
-			if (source.species.id === 'swampert') {
+			if (source.species.id === 'charizard') {
 				this.runMegaEvo(source);
 			}
 		},
 		secondary: null,
 		target: "normal",
-		type: "Fire",
+		type: "Grass",
 	},
 
 	// Ransei

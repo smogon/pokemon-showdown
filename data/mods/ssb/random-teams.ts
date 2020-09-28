@@ -581,8 +581,8 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	'Raj.Shoot': {
-		species: 'Swampert', ability: 'Sap Sipper', item: 'Life Orb', gender: 'N',
-		moves: ['Earthquake', 'Waterfall', 'Ice Punch'],
+		species: 'Charizard', ability: 'Tough Claws', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Flare Blitz', 'Dragon Claw', 'Roost'],
 		signatureMove: 'Fan Service',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
