@@ -678,6 +678,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('frostyicelad ❆')}|So c-c-cold`);
 		},
 	},
+	gallantspear: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('gallant\'s pear')}|**Rejoice! The one to inherit all Rider powers, the time king who will rule over the past and the future.**`);
+		},
+		onSwitchOut(source) {
+			this.add(`c|${getName('gallant\'s pear')}|My Overlord..`);
+		},
+		onFaint() {
+			this.add(`c|${getName('gallant\'s pear')}|Damn you, Decade!!!`);
+		},
+	},
 	gimmick: {
 		noCopy: true,
 		onStart() {

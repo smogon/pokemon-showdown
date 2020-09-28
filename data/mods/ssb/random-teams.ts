@@ -275,6 +275,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Frosty Wave',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	'gallant\'s pear': {
+		species: 'Orbeetle', ability: 'Armor Time', item: ['Life Orb', 'Heavy-Duty Boots'], gender: 'M',
+		moves: ['Bug Buzz', 'Nasty Plot', 'Snipe Shot'],
+		signatureMove: 'King Giri Giri Slash',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid',
+	},
 	Gimmick: {
 		species: 'Eelektrik', ability: 'What a Gimmick', item: 'Eviolite', gender: 'M',
 		moves: ['Bolt Beak', 'Fishious Rend', 'U-turn'],

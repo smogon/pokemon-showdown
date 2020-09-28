@@ -1653,6 +1653,47 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// gallant's pear
+	kinggirigirislash: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "Breaks barriers. Secondary depends on type.",
+		name: "King Giri Giri Slash",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onModifyMove(move, pokemon) {
+			move.type = pokemon.types[1];
+		},
+		onTryHit(pokemon, target, move) {
+			// will shatter screens through sub, before you hit
+			if (target.runImmunity(move.type)) {
+				target.side.removeSideCondition('reflect');
+				target.side.removeSideCondition('lightscreen');
+				target.side.removeSideCondition('auroraveil');
+				target.side.removeSideCondition('safeguard');
+			}
+			if (move.type === 'Rock') move.volatileStatus = 'smackdown';
+			if (this.random(10)) {
+				if (move.type === 'Fire') move.status = 'brn' as ID;
+				if (move.type === 'Steel') move.volatileStatus = 'flinch';
+				if (move.type === 'Electric') move.status = 'par' as ID;
+			}
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Solar Blade', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Gimmick
 	justchillin: {
 		accuracy: 100,

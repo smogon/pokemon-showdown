@@ -892,6 +892,39 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// gallant's pear
+	armortime: {
+		name: "Armor Time",
+		shortDesc: "On status or custom, this Pokemon changes type.",
+		onPrepareHit(source, target, move) {
+			if (move.category !== "Status" && move.isNonstandard !== "Custom") return;
+			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
+			const type = ['Bug', this.sample(types)];
+			if (!source.setType(type)) return;
+			this.add('-start', source, 'typechange', type.join('/'), '[from] ability: Armor Time');
+			switch (type[1]) {
+			case 'Fire':
+				this.boost({spa: 1}, source);
+				this.add('-message', 'Armor Time: Fire Armor!');
+				break;
+			case 'Steel':
+				this.boost({def: 1}, source);
+				this.add('-message', 'Armor Time: Steel Armor!');
+				break;
+			case 'Rock':
+				this.add('-message', 'Armor Time: Rock Armor!');
+				this.boost({spa: 1}, source);
+				break;
+			case 'Electric':
+				this.add('-message', 'Armor Time: Electric Armor!');
+				this.boost({spe: 1}, source);
+				break;
+			}
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Gimmick
 	whatagimmick: {
 		name: "What a Gimmick",
