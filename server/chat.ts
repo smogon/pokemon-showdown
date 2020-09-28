@@ -824,7 +824,8 @@ export class CommandContext extends MessageContext {
 				if (alts.length) entry.alts = alts;
 			}
 		}
-		(this.room || Rooms.global).modlog(entry, this.room?.roomid);
+		this.room?.modlog(entry);
+		Rooms.global.modlog(entry, this.room?.roomid);
 	}
 	modlog(
 		action: string,
