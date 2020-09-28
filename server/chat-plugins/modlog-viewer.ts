@@ -539,14 +539,14 @@ export const commands: ChatCommands = {
 		let lines;
 		const search: ModlogSearch = {};
 		const targets = target.split(',');
-		for (const option of targets) {
+		for (const [i, option] of targets) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
 				// We should guess what parameter they meant
 				value = param.trim();
 				if (/^[0-9]{1,3}\.[0-9]{1,3}/.test(value)) {
 					param = 'ip';
-				} else if (targets.indexOf(option) === 0) {
+				} else if (i === 0) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
 				} else if (value === value.toUpperCase()) {
