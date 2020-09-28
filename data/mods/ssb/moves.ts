@@ -1117,16 +1117,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let species = target.species;
 			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
 			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
-			if (!isSingleStage) return 0;
+			if (isSingleStage) return this.chainModify(1.5);
 		},
 		onHit(target, source, move) {
 			let species = target.species;
 			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
 			const ability = target.ability;
 			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
-			if (isSingleStage) {
-				target.forceSwitchFlag = true;
-			} else {
+			if (!isSingleStage) {
 				let prevo = species.prevo;
 				if (this.dex.getSpecies(prevo).prevo) {
 					prevo = this.dex.getSpecies(prevo).prevo;
