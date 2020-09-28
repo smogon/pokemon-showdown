@@ -57,7 +57,7 @@ export const commands: ChatCommands = {
 			}
 
 			this.privateGlobalModAction(`${user.name} ${suspectTests[format.id] ? "edited the" : "added a"} ${format.name} suspect test.`);
-			this.globalModlog('SUSPECTTEST', null, `by ${user.id}: ${suspectTests[format.id] ? "edited" : "added"} ${format.name}`);
+			this.globalModlog('SUSPECTTEST', null, `${suspectTests[format.id] ? "edited" : "added"} ${format.name}`);
 
 			suspectTests[format.id] = {
 				tier: format.name,
@@ -76,7 +76,7 @@ export const commands: ChatCommands = {
 			if (!suspectTests[format]) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
 
 			this.privateGlobalModAction(`${user.name} removed the ${suspectTests[format].tier} suspect test.`);
-			this.globalModlog('SUSPECTTEST', null, `by ${user.id}: removed ${suspectTests[format].tier}`);
+			this.globalModlog('SUSPECTTEST', null, `removed ${suspectTests[format].tier}`);
 
 			delete suspectTests[format];
 			saveSuspectTests();
