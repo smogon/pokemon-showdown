@@ -551,7 +551,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 export const PM = new RawProcessManager({
 	module,
 	setupChild: () => new ServerStream(Config),
-	isCluster: true,
+	type: 'cluster',
 });
 
 if (!PM.isParentProcess) {

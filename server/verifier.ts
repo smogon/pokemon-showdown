@@ -24,7 +24,7 @@ export const PM = new QueryProcessManager<{data: string, signature: string}, boo
 	} catch (e) {}
 
 	return success;
-});
+}, 'worker');
 
 export function verify(data: string, signature: string): Promise<boolean> {
 	return PM.query({data, signature});
