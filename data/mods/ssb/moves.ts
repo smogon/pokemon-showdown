@@ -804,6 +804,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Beautiful",
 	},
 
+	// brouha
+	brouhacustommove: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "Badly poisons the target. If it is the user's first turn out, this move has +3 priority.",
+		shortDesc: "First turn: +3 priority. Target: TOX.",
+		name: "brouha Custom Move",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aeroblast', target);
+			this.add('-anim', source, 'Haze', target);
+		},
+		onModifyPriority(priority, source) {
+			if (source.activeMoveActions < 1) return priority + 3;
+		},
+		status: 'tox',
+		secondary: null,
+		target: 'normal',
+		type: 'Flying',
+	},
+
 	// Cake
 	kevin: {
 		accuracy: true,

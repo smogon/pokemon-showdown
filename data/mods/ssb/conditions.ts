@@ -316,6 +316,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Brandon')}|${[`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`][this.random(3)]}`);
 		},
 	},
+	brouha: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('brouha')}|lmf`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('brouha')}|....`);
+		},
+		onFaint() {
+			this.add(`c|${getName('brouha')}|sobL`);
+		},
+	},
 	cake: {
 		noCopy: true,
 		onStart(target, pokemon) {
@@ -2256,6 +2268,43 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			if (!target.hasType('Electric') && target.hasType(['Flying', 'Steel'])) {
 				this.damage(target.baseMaxhp / 8);
+			}
+		},
+		onEnd() {
+			this.add('-weather', 'none');
+		},
+	},
+	
+	// condition used for brouha's ability
+	spinnywind: {
+		name: 'SpinnyWind',
+		effectType: 'Weather',
+		duration: 0,
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Flying') && this.field.isWeather('spinnywind')) {
+				return this.modify(def, 1.5);
+			}
+		},
+		onStart(battle, source, effect) {
+			this.add('-weather', 'SpinnyWind', '[from] ability: ' + effect, '[of] ' + source);
+		},
+		onResidualOrder: 1,
+		onResidual() {
+			this.add('-weather', 'SpinnyWind', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (!target.hasType('Flying')) this.damage(target.baseMaxhp * 0.06);
+			if (this.sides.some(side => Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod').length)) {
+				this.add(`-message`, 'The Spinny Wind blew away the hazards on both sides!');
+			}
+			for (const side of this.sides) {
+				const keys = Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod');
+				for (const key of keys) {
+					side.removeSideCondition(key);
+					this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Spinny Wind');
+				}
 			}
 		},
 		onEnd() {

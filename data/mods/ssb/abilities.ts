@@ -2,7 +2,7 @@ import {SSBSet, ssbSets} from "./random-teams";
 import {ChosenAction} from "../../../sim/side";
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail'];
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'spinnywind'];
 const HEAVY_RAIN_ABILITIES = ['primordialsea', 'tropicalcyclone', 'rainyseason'];
 
 /**
@@ -486,6 +486,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.field.setTerrain('baneterrain');
 		},
 		name: "Bane Surge",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
+	// brouha
+	spinnywind: {
+		onStart(source) {
+			this.field.setWeather('spinnywind');
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'spinnywind' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('spinnywind')) {
+					this.field.weatherData.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		name: "Spinny Wind",
 		isNonstandard: "Custom",
 		gen: 8,
 	},
