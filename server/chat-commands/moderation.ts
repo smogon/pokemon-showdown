@@ -456,12 +456,14 @@ export const commands: ChatCommands = {
 		}
 
 		const targetUser = this.targetUser;
+		const saveReplay = globalWarn && room.battle;
 		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 			this.checkCan('warn', null, room);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(publicReason ? ` (${publicReason})` : ``)}`);
 			this.globalModlog('WARN OFFLINE', targetUser, target ? `: ${publicReason} ${privateReason}` : ``);
+			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
 		if (!(targetUser.id in room.users) && !globalWarn) {
@@ -496,7 +498,7 @@ export const commands: ChatCommands = {
 		targetUser.lastWarnedAt = now;
 
 		// Automatically upload replays as evidence/reference to the punishment
-		if (globalWarn && room.battle) this.parse('/savereplay forpunishment');
+		if (saveReplay) this.parse('/savereplay forpunishment');
 	},
 	warnhelp: [
 		`/warn OR /k [username], [reason] - Warns a user showing them the site rules and [reason] in an overlay.`,
