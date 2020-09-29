@@ -2037,6 +2037,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Volco
+	speedrunning: {
+		desc: "This Pokemon's speed stat is raised by 1 stage if it attacks and knocks out another Pokemon. Moves that are 60 Base Power or lower gain an additional 25 Base Power. Freezes can only be broken out of naturally, no moves can defrost a frozen Pokemon while this one is active.",
+		shortDesc: "Speed +1 on kill, Weak moves get a 25 Base Power buff. Moves cannot defrost, only natural thaws.",
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({spe: 1}, source);
+			}
+		},
+		onAnyModifyMove(move, pokemon) {
+			if (move.thawsTarget) {
+				delete move.thawsTarget;
+			}
+			if (move.flags["defrost"]) {
+				delete move.flags["defrost"];
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.basePower <= 60) return basePower + 25;
+		},
+		name: "Speedrunning",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Vexen
 	aquilasblessing: {
 		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If this Pokemon gets hit by a damaging Fire type move, its Defense and Special Defense get raised by 1 stage.",

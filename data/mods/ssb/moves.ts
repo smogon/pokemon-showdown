@@ -4924,6 +4924,76 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Volco
+	glitchexploiting: {
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		desc: "1/4096 chance to nuke the user and the foe, 1/1024 chance to switch out both the user and foe, 20% to burn, 30% chance to confuse both have a 10% chance to freeze / para instead.",
+		shortDesc: "Has the chance to do many things.",
+		name: "Glitch Exploiting",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Explosion', target);
+			this.add('-anim', source, 'Tackle', source);
+			this.add('-anim', source, 'Blue Flare', target);
+		},
+		onHit(target, source, move) {
+			const random = this.random(4096);
+			if (random === 1) {
+				target.faint(source, move);
+				source.faint(source, move);
+			} else if ([1024, 2048, 3072, 4096].includes(random)) {
+				this.add(`c|${getName('Volco')}|haha memory corruption go brrr...`);
+				target.forceSwitchFlag = true;
+				source.forceSwitchFlag = true;
+			}
+		},
+		secondaries: [
+			{
+				chance: 20,
+				onHit(target, source) {
+					if (this.randomChance(1, 10)) {
+						const status = this.sample(['frz', 'par']);
+						this.add(`c|${getName('Volco')}|Ever just screw up the trick and corrupt the memory and cause the wrong thing to happen possibly ruining a run? No? Just me? okay...`);
+						if (this.randomChance(1, 2)) {
+							target.trySetStatus(status);
+						} else {
+							source.trySetStatus(status);
+						}
+					} else {
+						target.trySetStatus('brn');
+					}
+				},
+			},
+			{
+				chance: 30,
+				onHit(target, source) {
+					if (this.randomChance(1, 10)) {
+						const status = this.sample(['frz', 'par']);
+						this.add(`c|${getName('Volco')}|Ever just screw up the trick and corrupt the memory and cause the wrong thing to happen possibly ruining a run? No? Just me? okay...`);
+						if (this.randomChance(1, 2)) {
+							target.trySetStatus(status);
+						} else {
+							source.trySetStatus(status);
+						}
+					} else {
+						target.addVolatile('confusion');
+					}
+				},
+			},
+		],
+		target: "normal",
+		type: "Fire",
+	},
+
 	// vooper
 	pandaexpress: {
 		accuracy: 100,

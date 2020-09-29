@@ -732,6 +732,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'DRIP BAYLESS',
 		evs: {hp: 252, spa: 252, def: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	Volco: {
+		species: 'Volcanion', ability: 'Speedrunning', item: 'Choice Specs',
+		moves: ['Steam Eruption', ['Vacuum Wave', 'Secret Sword'], 'Overdrive'],
+		signatureMove: 'Glitch Exploiting',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', gender: 'N',
+	},
 	vooper: {
 		species: 'Pancham', ability: 'Qi-Gong', item: 'Eviolite', gender: 'M',
 		moves: ['Drain Punch', 'Knock Off', 'Swords Dance'],

@@ -1773,6 +1773,23 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('vivalospride')}|classic honestly`);
 		},
 	},
+	volco: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Volco')}|/me loud controller noises`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Volco')}|/me controller clicking fades`);
+		},
+		onFaint(source, target, effect) {
+			if (effect.id === 'glitchexploiting') {
+				this.add(`c|${getName('Volco')}|Dammit, time for a reset.`);
+				return;
+			}
+			this.add(`c|${getName('Volco')}|Looks like the game fro-`);
+			this.add(`raw|<div class="broadcast-red"><strong>This Pokemon Showdown battle has frozen!</strong><br />Don't worry, we're working on fixing it, so just carry on like you never saw this.</div>`);
+		},
+	},
 	vooper: {
 		noCopy: true,
 		onStart() {
