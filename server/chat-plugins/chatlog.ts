@@ -659,10 +659,9 @@ export const PM = new QueryProcessManager<AnyObject, string | undefined>(module,
 	} catch (e) {
 		if (e.name?.endsWith('ErrorMessage')) {
 			return LogViewer.error(e.message);
-		} else {
-			Monitor.crashlog(e, 'A chatlog search query', data);
-			return LogViewer.error(`Sorry! Your chatlog search crashed. We've been notified and will fix this.`);
 		}
+		Monitor.crashlog(e, 'A chatlog search query', data);
+		return LogViewer.error(`Sorry! Your chatlog search crashed. We've been notified and will fix this.`);
 	}
 });
 
