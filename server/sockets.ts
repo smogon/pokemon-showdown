@@ -564,9 +564,7 @@ if (!PM.isParentProcess) {
 			crashlogger(err, `Socket process ${PM.workerid} (${process.pid})`);
 		});
 		process.on('unhandledRejection', err => {
-			if (err instanceof Error) {
-				crashlogger(err, `Socket process ${PM.workerid} (${process.pid}) Promise`);
-			}
+			crashlogger(err as any || {}, `Socket process ${PM.workerid} (${process.pid}) Promise`);
 		});
 	}
 

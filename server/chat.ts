@@ -1500,7 +1500,6 @@ export const Chat = new class {
 				interface TRStrings {
 					[k: string]: string;
 				}
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
 				const id = fname.slice(0, -5);
 

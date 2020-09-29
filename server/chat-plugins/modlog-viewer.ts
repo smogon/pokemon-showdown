@@ -679,9 +679,8 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = Config;
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A battle search process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);

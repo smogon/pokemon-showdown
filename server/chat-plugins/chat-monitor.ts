@@ -1,23 +1,6 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
-type MonitorHandler = (
-	this: CommandContext,
-	line: Chat.FilterWord,
-	room: Room | null,
-	user: User,
-	message: string,
-	lcMessage: string,
-	isStaff: boolean
-) => string | false | undefined;
-interface Monitor {
-	location: string;
-	punishment: string;
-	label: string;
-	condition?: string;
-	monitor?: MonitorHandler;
-}
-
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 

@@ -1496,7 +1496,7 @@ export class ChatRoom extends BasicRoom {
 	battle: null;
 	active: false;
 	type: 'chat';
-	parent: ChatRoom | null;;
+	parent: ChatRoom | null;
 	constructor() {
 		super('');
 		this.battle = null;

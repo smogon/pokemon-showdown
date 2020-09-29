@@ -2413,11 +2413,9 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, q
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// tslint:disable-next-line: no-var-requires
 	global.Config = require('../config-loader').Config;
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A datasearch process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -2429,17 +2427,14 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	// tslint:disable-next-line: no-var-requires
 	global.Dex = require('../../sim/dex').Dex;
-	// tslint:disable-next-line: no-var-requires
 	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
-	// tslint:disable-next-line: no-var-requires
 	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 	// @ts-ignore
-	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval, @typescript-eslint/no-var-requires
+	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval
 } else {
 	PM.spawn(MAX_PROCESSES);
 }

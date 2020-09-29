@@ -146,10 +146,8 @@ if (Config.crashguard) {
 		Monitor.crashlog(err, 'The main process');
 	});
 
-	// Typescript doesn't like this call
-	// @ts-ignore
-	process.on('unhandledRejection', (err: Error, promise: Promise<any>) => {
-		Monitor.crashlog(err, 'A main process Promise');
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as any, 'A main process Promise');
 	});
 }
 

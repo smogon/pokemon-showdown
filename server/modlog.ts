@@ -371,9 +371,8 @@ if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	global.toID = require('../sim/dex').Dex.toID;
 
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A modlog process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore please be silent
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
