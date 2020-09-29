@@ -2274,7 +2274,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
-	
+
 	// condition used for brouha's ability
 	spinnywind: {
 		name: 'SpinnyWind',
