@@ -657,12 +657,11 @@ export const PM = new QueryProcessManager<AnyObject, string | undefined>(module,
 			return LogViewer.error(`Config.chatlogreader is not configured.`);
 		}
 	} catch (e) {
+		if (e.name?.endsWith('ErrorMessage')) {
+			return LogViewer.error(e.message);
+		}
 		Monitor.crashlog(e, 'A chatlog search query', data);
-		return (
-			`<div class="pad"><p class="message-error">` +
-			`Sorry! Your chatlog search crashed. We've been notified and will fix this.` +
-			`</p></div>`
-		);
+		return LogViewer.error(`Sorry! Your chatlog search crashed. We've been notified and will fix this.`);
 	}
 });
 
