@@ -459,8 +459,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = (!!counter['recoil'] && !counter['recovery']);
 				} else if (ability === 'Swarm') {
 					rejectAbility = !counter['Bug'];
-				} else if (ability === 'Swift Swim') {
-					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
 				} else if (ability === 'Technician') {
 					rejectAbility = (!counter['technician'] || abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
 				} else if (ability === 'Tinted Lens') {

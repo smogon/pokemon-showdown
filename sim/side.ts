@@ -293,7 +293,7 @@ export class Side {
 		return true;
 	}
 
-	// tslint:disable-next-line:ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	send(...parts: (string | number | Function | AnyObject)[]) {
 		const sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;

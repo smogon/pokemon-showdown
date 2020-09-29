@@ -45,10 +45,10 @@ interface EventListenerWithoutPriority {
 	effect: Effect;
 	target?: Pokemon;
 	index?: number;
-	// tslint:disable-next-line: ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	callback?: Function;
 	state: EffectState | null;
-	// tslint:disable-next-line: ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	end: Function | null;
 	endCallArgs?: any[];
 	effectHolder: Pokemon | Side | Field | Battle;
@@ -888,7 +888,7 @@ export class Battle {
 			const slotConditionData = side.slotConditions[pokemon.position][conditionid];
 			const slotCondition = side.getSlotCondition(pokemon, conditionid)!;
 			// @ts-ignore - dynamic lookup
-			callback = slotCondition[callbackName] as Function | undefined;
+			callback = slotCondition[callbackName];
 			if (callback !== undefined || (getKey && slotConditionData[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: slotCondition,
@@ -2859,13 +2859,13 @@ export class Battle {
 		this.addSplit(side!, secret, shared);
 	}
 
-	// tslint:disable-next-line:ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
 		this.log.push(`|${args.join('|')}`);
 	}
 
-	// tslint:disable-next-line:ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	attrLastMove(...args: (string | number | Function | AnyObject)[]) {
 		if (this.lastMoveLine < 0) return;
 		if (this.log[this.lastMoveLine].startsWith('|-anim|')) {
