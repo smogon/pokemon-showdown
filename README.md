@@ -213,3 +213,4 @@ Contributors
 Special thanks
 
 - See http://pokemonshowdown.com/credits
+[![Run on Repl.it](https://repl.it/badge/github/smogon/pokemon-showdown)](https://repl.it/github/smogon/pokemon-showdown)
