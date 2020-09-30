@@ -4,6 +4,9 @@
  */
 import {Utils} from '../../lib/utils';
 
+/** Map<[to, from], [from, rounds]> */
+const challengeRequests: Map<string, [string, string]> = new Map();
+
 const TIMEOUT = 10 * 1000;
 const MAX_ROUNDS = 10;
 const ICONS: {[k: string]: string} = {
@@ -331,29 +334,48 @@ export const commands: ChatCommands = {
 					`User ${this.targetUsername} not found. Either specify a username or use this command in PMs.`
 				);
 			}
-			const options = {
-				modchat: '+',
-				isPrivate: true,
-			};
 			const existingRoom = findExisting(user.id, targetUser.id);
 			const roomid = existingRoom ? existingRoom.roomid : `rps-${user.id}-${targetUser.id}`;
 			if (existingRoom?.game && !existingRoom.game.ended) {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
 			}
+			if (!this.pmTarget) this.pmTarget = targetUser;
+			challengeRequests.set(targetUser.id, [user.id, rounds]);
+			this.sendChatMessage(
+				`/raw ${user.name} challenged you to Rock, Paper, Scissors!` +
+				`<button class="button" name="send" value="/j ${roomid}"><strong>Accept</strong></button></div>`,
+			);
+		},
+
+		accept(target, room, user) {
+			const request = challengeRequests.get(user.id);
+			if (!request) return this.errorReply(`You have no Rock, Paper, Scissors request pending from ${target}.`);
+			const [id, rounds] = request;
+			const targetUser = Users.get(id)!;
+			const existingRoom = findExisting(user.id, targetUser.id);
+			const options = {
+				modchat: '+',
+				isPrivate: true,
+			};
+			const roomid = `rps-${targetUser.id}-${user.id}`;
 			const gameRoom = existingRoom ? existingRoom : Rooms.createGameRoom(
 				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, options
 			);
-			gameRoom.game = new RPSGame(gameRoom, roundsNum);
+			gameRoom.game = new RPSGame(gameRoom, parseInt(rounds));
 			gameRoom.add(
 				`|raw|<h2>Rock Paper Scissors: ${user.name} vs ${targetUser.name}!</h2>` +
 				`Use /rps start to start the game, once both players have joined!`
 			).update();
 			user.joinRoom(gameRoom.roomid);
-			if (!this.pmTarget) this.pmTarget = targetUser;
-			this.sendChatMessage(
-				`/raw <button class="button" name="send" value="/j ${roomid}">` +
-				`${user.name} has challenged you to a Rock Paper Scissors game! (Click to accept)</button></div>`,
-			);
+			targetUser.joinRoom(gameRoom.roomid);
+		},
+
+		deny(target, room, user) {
+			const request = challengeRequests.get(user.id);
+			if (!request) return this.errorReply(`You have no Rock, Paper, Scissors challenge pending.`);
+			const [sender] = request;
+			Users.get(sender)?.popup(`${user.name} denied your Rock, Paper, Scissors challenge.`);
+			challengeRequests.delete(user.id);
 		},
 
 		end(target, room, user) {
