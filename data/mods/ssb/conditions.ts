@@ -1372,6 +1372,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Paradise ╱╲☼')}|Paradise has been kicked, not banned, therefore you could still potentially invite them back. However, do not do this @${pokemon.side.name}, unless of course, you want to be banned too, because if you invite them back you and Paradise will both be banned.`);
 		},
 	},
+	peapodc: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('peapod c')}|/me sprints into the room`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('peapod c')}|Must maintain m o m e n t u m`);
+		},
+		onFaint() {
+			this.add(`c|${getName('peapod c')}|They say sleep is the cousin of death — but even ghosts need to sleep!`);
+		},
+	},
 	perishsonguser: {
 		noCopy: true,
 		onStart() {

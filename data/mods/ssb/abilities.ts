@@ -1582,6 +1582,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// peapod
+	stealthblack: {
+		desc: "User boosts +1 Speed upon switch-in.",
+		shortDesc: "+1 Speed on switch-in.",
+		name: 'Stealth Black',
+		onStart(pokemon) {
+			this.boost({spe: 1}, pokemon);
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Perish Song
 	soupsipper: {
 		desc: "This Pokemon is immune to Grass- and Water-type moves, restores 1/4 of its maximum HP, rounded down, when hit by these types, and boosts its Attack by 1 stage when hit by these types.",
