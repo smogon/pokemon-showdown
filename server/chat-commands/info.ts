@@ -2614,9 +2614,11 @@ export const commands: ChatCommands = {
 
 		const isPMOrPersonalRoom = this.room?.settings.isPersonal !== false;
 
-		if (this.broadcasting && isPMOrPersonalRoom) {
-			target = Chat.filter(this, target, user, room, connection, this.pmTarget)!;
-			if (!target) return this.errorReply(`Invalid code.`);
+		if (this.broadcasting) {
+			if (isPMOrPersonalRoom) {
+				target = Chat.filter(this, target, user, room, connection, this.pmTarget)!;
+				if (!target) return this.errorReply(`Invalid code.`);
+			}
 			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
 			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
