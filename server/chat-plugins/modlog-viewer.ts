@@ -619,7 +619,7 @@ export const commands: ChatCommands = {
 			connection,
 			roomid,
 			search,
-			target.replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
+			target.replace(/^\s?([^,=]*),\s?/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
 			lines,
 			(cmd === 'punishlog' || cmd === 'pl'),
 			cmd === 'timedmodlog'
