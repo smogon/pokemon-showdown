@@ -6,6 +6,11 @@ import {Utils} from '../../lib/utils';
 
 const TIMEOUT = 10 * 1000;
 const MAX_ROUNDS = 10;
+const ICONS: {[k: string]: string} = {
+	Rock: `<i class="fa fa-circle"></i>`,
+	Paper: '<i class="fa fa-file"></i>',
+	Scissors: '<i class="fa fa-scissors"></i>',
+};
 
 export class RPSPlayer extends Rooms.RoomGamePlayer {
 	user: User;
@@ -82,7 +87,7 @@ export class RPSGame extends Rooms.RoomGame {
 		};
 		let buf = `<center><strong>Make your choice, quick!</strong><br />`;
 		for (const item of ['Rock', 'Paper', 'Scissors']) {
-			buf += `${button(`choose ${item}`, item)}`;
+			buf += `${button(`choose ${item}`, `${item} ${ICONS[item]}`)}`;
 		}
 		buf += `<br />${button('leave', "Leave game")}</center>`;
 		this.addControls(buf);
