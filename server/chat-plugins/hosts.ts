@@ -356,7 +356,7 @@ export const commands: ChatCommands = {
 		this.globalModlog(
 			removing ? 'REMOVEHOSTS' : 'ADDHOSTS',
 			null,
-			`by ${user.id}: ${hosts.length} hosts to category '${type}'`
+			`${hosts.length} hosts to category '${type}'`
 		);
 		return this.sendReply(`${removing ? 'Removed' : 'Added'} ${hosts.length} hosts!`);
 	},

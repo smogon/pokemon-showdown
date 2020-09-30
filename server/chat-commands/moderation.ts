@@ -811,7 +811,7 @@ export const commands: ChatCommands = {
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
 		this.globalModlog(
-			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, ` by ${user.id}${globalReason}`
+			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, `${globalReason}`
 		);
 
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
