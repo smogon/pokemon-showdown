@@ -1934,7 +1934,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'Heavy Hailstorm');
+			this.add('-weather', 'Hail');
 			this.effectData.source = source;
 		},
 		onModifyMove(move, pokemon, target) {
@@ -1956,7 +1956,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Heavy Hailstorm', '[upkeep]');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
@@ -1965,7 +1965,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
 		},
 		onEnd() {
-			this.add('-end', 'Heavy Hailstorm');
+			this.add('-weather', 'none');
 		},
 	},
 	// Forever Winter Hail support for piloswine gripado
@@ -1993,7 +1993,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(target.baseMaxhp / 8);
 		},
 		onEnd() {
-			this.add('-weather', 'none');
+			this.add('-end', 'hail');
 		},
 	},
 	raindrop: {
