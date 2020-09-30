@@ -2612,7 +2612,9 @@ export const commands: ChatCommands = {
 		this.checkBroadcast(true, '!code');
 		this.runBroadcast(true);
 
-		if (this.broadcasting) {
+		const isPMOrPersonalRoom = this.room?.settings.isPersonal !== false;
+
+		if (this.broadcasting && isPMOrPersonalRoom) {
 			target = Chat.filter(this, target, user, room, connection, this.pmTarget)!;
 			if (!target) return this.errorReply(`Invalid code.`);
 			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
