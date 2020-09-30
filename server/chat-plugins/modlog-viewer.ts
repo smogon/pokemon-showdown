@@ -100,7 +100,7 @@ function prettifyResults(
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
 	if (search.note) searchString += `with a note including any of: ${search.note.searches.join(', ')} `;
-	if (search.user) searchString += `taken against ${search.user} `;
+	if (search.user) searchString += `taken against ${search.user.search} `;
 	if (search.ip) searchString += `taken against a user on the IP ${search.ip} `;
 	if (search.action) searchString += `of the type ${search.action} `;
 	if (search.actionTaker) searchString += `taken by ${search.actionTaker} `;
@@ -195,6 +195,14 @@ async function getModlog(
 				search.note.isExact = true;
 			}
 		}
+	}
+
+	if (search.user) {
+		if (/^["'].+["']$/.test(search.user.search)) {
+			search.user.search = search.user.search.substring(1, search.user.search.length - 1);
+			search.user.isExact = true;
+		}
+		search.user.search = toID(search.user.search);
 	}
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
@@ -564,7 +572,7 @@ export const commands: ChatCommands = {
 				search.note.searches.push(value);
 				break;
 			case 'user': case 'name': case 'username': case 'userid':
-				search.user = toID(value);
+				search.user = {search: value};
 				break;
 			case 'ip': case 'ipaddress': case 'ipaddr':
 				search.ip = value;
