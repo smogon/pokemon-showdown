@@ -654,6 +654,11 @@
 		"'${command}' is a help command.": "${command}' est une commande d'aide.",
 		"The command '/${target}' does not exist.": "La commande '/${target}' n'existe pas.",
 		"Could not find help for '/${target}'. Try /help for general help.": "Aucune aide trouvée pour '/${target}'. Essaie /help pour une aide plus générale.",
-		"Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead": "Impossible de trouver de l'aide pour '/${target}' - voici celle pour '/${closestHelp}' à la place"
+		"Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead": "Impossible de trouver de l'aide pour '/${target}' - voici celle pour '/${closestHelp}' à la place",
+
+		"pages/faq": "pages/faq",
+		"pages/ladderhelp": "pages/ladderhelp",
+		"pages/rng": "pages/rng",
+		"pages/staff": "pages/staff"
 	}
 }
