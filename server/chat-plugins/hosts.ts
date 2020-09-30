@@ -377,7 +377,7 @@ export const commands: ChatCommands = {
 	markshared(target, room, user) {
 		if (!target) return this.parse('/help markshared');
 		checkCanPerform(this, user, 'globalban');
-		let [ip, note] = this.splitOne(target);
+		const [ip, note] = this.splitOne(target);
 		if (!IPTools.ipRegex.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
 		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
@@ -391,10 +391,8 @@ export const commands: ChatCommands = {
 		}
 
 		Punishments.addSharedIp(ip, note);
-		note = ` (${note})`;
-
-		this.privateGlobalModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
-		this.globalModlog('SHAREDIP', ip, note);
+		this.privateGlobalModAction(`The IP '${ip}' was marked as shared by ${user.name}. (${note})`);
+		this.globalModlog('SHAREDIP', null, note, ip);
 	},
 	marksharedhelp: [
 		`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
@@ -411,7 +409,7 @@ export const commands: ChatCommands = {
 		Punishments.removeSharedIp(target);
 
 		this.privateGlobalModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
-		this.globalModlog('UNSHAREDIP', target);
+		this.globalModlog('UNSHAREDIP', null, null, target);
 	},
 	unmarksharedhelp: [`/unmarkshared [IP] - Unmarks a shared IP address. Requires @ &`],
 
