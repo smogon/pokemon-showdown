@@ -2610,17 +2610,15 @@ export const commands: ChatCommands = {
 		}
 
 		this.checkBroadcast(true, '!code');
-
-		const filteredCode = Chat.filter(this, target, user, room, connection, this.pmTarget);
-		if (!filteredCode) return;
-		target = filteredCode;
-
-		const code = Chat.getReadmoreCodeBlock(target);
 		this.runBroadcast(true);
+
 		if (this.broadcasting) {
-			return `/raw <div class="infobox">${code}</div>`;
+			const filteredCode = Chat.filter(this, target, user, room, connection, this.pmTarget);
+			if (!filteredCode) return;
+			target = filteredCode;
+			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
-			this.sendReplyBox(code);
+			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
 		}
 	},
 	codehelp: [
