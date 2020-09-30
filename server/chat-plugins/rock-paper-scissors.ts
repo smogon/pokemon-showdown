@@ -4,14 +4,14 @@
  */
 import {Utils} from '../../lib/utils';
 
-/** Map<[to, from], [from, rounds]> */
+/** Map<to, [from, rounds]> */
 const challengeRequests: Map<string, [string, string]> = new Map();
 
 const TIMEOUT = 10 * 1000;
 const MAX_ROUNDS = 10;
 const ICONS: {[k: string]: string} = {
-	Rock: `<i class="fa fa-circle"></i>`,
-	Paper: '<i class="fa fa-file"></i>',
+	Rock: `<i class="fa fa-hand-rock-o"></i>`,
+	Paper: '<i class="fa fa-hand-paper-o"></i>',
 	Scissors: '<i class="fa fa-scissors"></i>',
 };
 
