@@ -2599,7 +2599,7 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	code(target, room, user) {
+	code(target, room, user, connection) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
@@ -2610,13 +2610,18 @@ export const commands: ChatCommands = {
 		}
 
 		this.checkBroadcast(true, '!code');
-
-		const code = Chat.getReadmoreCodeBlock(target);
 		this.runBroadcast(true);
+
+		const isPMOrPersonalRoom = this.room?.settings.isPersonal !== false;
+
 		if (this.broadcasting) {
-			return `/raw <div class="infobox">${code}</div>`;
+			if (isPMOrPersonalRoom) {
+				target = Chat.filter(this, target, user, room, connection, this.pmTarget)!;
+				if (!target) return this.errorReply(`Invalid code.`);
+			}
+			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
-			this.sendReplyBox(code);
+			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
 		}
 	},
 	codehelp: [
