@@ -2613,7 +2613,7 @@ export const commands: ChatCommands = {
 		this.runBroadcast(true);
 
 		if (this.broadcasting) {
-			target = Chat.filter(this, target, room, user, connection, this.pmTarget)!;
+			target = Chat.filter(this, target, user, room, connection, this.pmTarget)!;
 			if (!target) return this.errorReply(`Invalid code.`);
 			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
