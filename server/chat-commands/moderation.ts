@@ -185,7 +185,7 @@ export const commands: ChatCommands = {
 				if (err.name?.endsWith('ErrorMessage')) this.errorReply(err.message);
 				continue;
 			}
-			const targetUser = Users.get(userid);
+			const targetUser = Users.getExact(userid);
 			const name = targetUser?.name || toPromote;
 
 			if (this.pmTarget && targetUser) {
