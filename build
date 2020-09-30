@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 try {
-	RegExp("\\p{Emoji}", "u");
+	// technically this was introduced in Node 11, but we'll ask for the most recent LTS with it to be safe
+	[].flatMap(x => x);
 } catch (e) {
-	console.log("We require Node.js version 10 or later; you're using " + process.version);
+	console.log("We require Node.js version 12 or later; you're using " + process.version);
 	process.exit(1);
 }
 
@@ -112,7 +113,7 @@ function sucrase(src, out, opts) {
 if (sucrase('./config', './.config-dist')) {
 	replace('.config-dist', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-	]);	
+	]);
 }
 
 if (sucrase('./data', './.data-dist')) {
@@ -138,6 +139,12 @@ if (sucrase('./server', './.server-dist')) {
 if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
 	replace('./tools/set-import/importer.js', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (sucrase('./tools/modlog', './tools/modlog')) {
+	replace('./tools/modlog/converter.js', [
+		{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
 	]);
 }
 

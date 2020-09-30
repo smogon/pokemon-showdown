@@ -56,19 +56,12 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
-		unbanlist: ['Cinderace'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8ou') {
-				this.add('html', '<div class="broadcast-blue"><strong>OU is currently suspecting Cinderace! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3670532/">suspect thread</a>.</strong></div>');
-			}
-		},
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', 'Blitz'],
-		banlist: ['Cinderace'],
 	},
 	{
 		name: "[Gen 8] Ubers",
@@ -218,13 +211,13 @@ export const Formats: FormatList = [
 		name: "[Gen 8] CAP",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656824/">CAP Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3662655/">CAP Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3671157/">CAP Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658514/">CAP Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Cinderace', 'Clefable', 'Crucibelle-Mega'],
+		banlist: ['Clefable', 'Crucibelle-Mega'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
@@ -588,7 +581,7 @@ export const Formats: FormatList = [
 
 		mod: 'megamax',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Cinderace', 'Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
+		banlist: ['Corviknight-Gmax', 'Melmetal-Gmax', 'Urshifu-Gmax'],
 		onChangeSet(set) {
 			if (set.species.endsWith('-Gmax')) set.species = set.species.slice(0, -5);
 		},
@@ -644,7 +637,6 @@ export const Formats: FormatList = [
 		mod: 'optimons',
 		searchShow: false,
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Cinderace'],
 		unbanlist: ['Electabuzz', 'Electivire', 'Elekid', 'Magby', 'Magmar', 'Magmortar', 'Yanma', 'Yanmega'],
 		onSwitchIn(pokemon) {
 			const baseSpecies = this.dex.mod('gen8').getSpecies(pokemon.species.name);
@@ -1272,7 +1264,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Cinderace', 'Damp Rock', 'Eviolite', 'Heat Rock'],
+		banlist: ['Damp Rock', 'Eviolite', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: {[tier: string]: number} = {

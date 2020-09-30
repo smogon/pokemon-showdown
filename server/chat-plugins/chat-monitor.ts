@@ -1,23 +1,6 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 
-type MonitorHandler = (
-	this: CommandContext,
-	line: Chat.FilterWord,
-	room: Room | null,
-	user: User,
-	message: string,
-	lcMessage: string,
-	isStaff: boolean
-) => string | false | undefined;
-interface Monitor {
-	location: string;
-	punishment: string;
-	label: string;
-	condition?: string;
-	monitor?: MonitorHandler;
-}
-
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
@@ -579,9 +562,9 @@ export const commands: ChatCommands = {
 			}
 			filterWords[list].push({regex, word, reason, publicReason, replacement, hits: 0});
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
-				this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${replacement}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
+				this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${replacement}' to ${list} list${reason ? ` (${reason})` : ''}`);
 			} else {
-				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
+				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list${reason ? ` (${reason})` : ''}`);
 			}
 			saveFilters(true);
 			const output = `'${word}' was added to the ${list} list.`;
@@ -606,7 +589,7 @@ export const commands: ChatCommands = {
 			}
 			filterWords[list] = filterWords[list].filter(entry => !words.includes(entry.word));
 
-			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
+			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list`);
 			saveFilters(true);
 			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
 			Rooms.get('upperstaff')?.add(output).update();
@@ -641,7 +624,7 @@ export const commands: ChatCommands = {
 		if (!room || !toNotify.includes(room.roomid)) {
 			this.sendReply(msg);
 		}
-		this.globalModlog(`ALLOWNAME`, null, `${target} by ${user.name}`);
+		this.globalModlog(`ALLOWNAME`, null, target);
 	},
 };
 

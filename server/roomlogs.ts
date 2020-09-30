@@ -9,6 +9,7 @@
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
+import type {ModlogEntry} from './modlog';
 
 interface RoomlogOptions {
 	isMultichannel?: boolean;
@@ -223,8 +224,8 @@ export class Roomlog {
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 		void this.roomlogStream.write(timestamp + message + '\n');
 	}
-	modlog(message: string, overrideID?: string) {
-		void Rooms.Modlog.write(this.roomid, message, overrideID);
+	modlog(entry: ModlogEntry, overrideID?: string) {
+		void Rooms.Modlog.write(this.roomid, entry, overrideID);
 	}
 	async rename(newID: RoomID): Promise<true> {
 		const roomlogPath = `logs/chat`;

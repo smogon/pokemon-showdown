@@ -52,9 +52,9 @@
 try {
 	// I've gotten enough reports by people who don't use the launch
 	// script that this is worth repeating here
-	RegExp("\\p{Emoji}", "u");
+	[].flatMap(x => x);
 } catch (e) {
-	throw new Error("We require Node.js version 10 or later; you're using " + process.version);
+	throw new Error("We require Node.js version 12 or later; you're using " + process.version);
 }
 
 try {
@@ -146,10 +146,8 @@ if (Config.crashguard) {
 		Monitor.crashlog(err, 'The main process');
 	});
 
-	// Typescript doesn't like this call
-	// @ts-ignore
-	process.on('unhandledRejection', (err: Error, promise: Promise<any>) => {
-		Monitor.crashlog(err, 'A main process Promise');
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as any, 'A main process Promise');
 	});
 }
 
