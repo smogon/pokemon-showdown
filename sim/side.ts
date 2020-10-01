@@ -55,6 +55,8 @@ export class Side {
 	pokemonLeft: number;
 	faintedLastTurn: boolean;
 	faintedThisTurn: boolean;
+	pokemonFaintedLastTurn: Pokemon | null;
+	pokemonFaintedThisTurn: Pokemon | null;
 	zMoveUsed: boolean;
 
 	sideConditions: {[id: string]: EffectState};
@@ -102,6 +104,8 @@ export class Side {
 		this.pokemonLeft = this.pokemon.length;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
+		this.pokemonFaintedLastTurn = null;
+		this.pokemonFaintedThisTurn = null;
 		this.zMoveUsed = false;
 
 		this.sideConditions = {};

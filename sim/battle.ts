@@ -1509,7 +1509,9 @@ export class Battle {
 			trappedBySide.push(sideTrapped);
 			stalenessBySide.push(sideStaleness);
 			side.faintedLastTurn = side.faintedThisTurn;
+			side.pokemonFaintedLastTurn = side.pokemonFaintedThisTurn;
 			side.faintedThisTurn = false;
+			side.pokemonFaintedThisTurn = null;
 		}
 
 		if (this.maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide)) return;
@@ -2399,6 +2401,7 @@ export class Battle {
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
 				pokemon.side.faintedThisTurn = true;
+				pokemon.side.pokemonFaintedThisTurn = pokemon;
 			}
 		}
 
