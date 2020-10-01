@@ -104,7 +104,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = source.side.foe.active[0];
 
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'gmaxsteelsurge', 'ferrofluid',
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
@@ -568,6 +569,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last and stats Pokemon in before it.",
 		shortDesc: "Switching out: Regenerator. Switching in: Resists weaknesses of last Pokemon.",
 		name: "Guardian Angel",
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.side.sideConditions['trackermod'].newAtk) {
+				return pokemon.side.sideConditions['trackermod'].newAtk;
+			}
+		},
+		onModifyDef(def, pokemon) {
+			if (pokemon.side.sideConditions['trackermod'].newDef) {
+				return pokemon.side.sideConditions['trackermod'].newDef;
+			}
+		},
+		onModifySpA(spa, pokemon) {
+			if (pokemon.side.sideConditions['trackermod'].newSpa) {
+				return pokemon.side.sideConditions['trackermod'].newSpa;
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (pokemon.side.sideConditions['trackermod'].newSpd) {
+				return pokemon.side.sideConditions['trackermod'].newSpd;
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.side.sideConditions['trackermod'].newSpe) {
+				return pokemon.side.sideConditions['trackermod'].newSpe;
+			}
+		},
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},

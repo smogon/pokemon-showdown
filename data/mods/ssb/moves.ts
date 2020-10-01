@@ -1,7 +1,6 @@
 import {getName} from './conditions';
-// Used for grimAuxiliatrix's move
-import {ssbSets} from "./random-teams";
 import {changeSet, changeMoves} from "./abilities";
+import {ssbSets} from "./random-teams";
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
@@ -66,7 +65,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
+				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
@@ -80,7 +80,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
+				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
@@ -1831,13 +1832,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// grimAuxiliatrix
-	donotsteel: {
+	fuelleak: {
 		accuracy: true,
-		basePower: 0,
+		basePower: 50,
 		category: "Special",
-		desc: "Randomly calls SSB moves.",
-		shortDesc: "Randomly calls SSB moves.",
-		name: "Do Not Steel",
+		desc: "Summons ferrofluid to the users side.",
+		shortDesc: "Gives you ferrofluid",
+		name: "Fuel Leak",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -1847,43 +1848,67 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Nasty plot', source);
+			this.add('-anim', source, 'Steel Beam', target);
 		},
-		onHit(target, source, move) {
-			// @ts-ignore this is a really dumb hack
-			if (!move.curHits) move.curHits = 1;
-			const moves: MoveData[] = [];
-			for (const member in ssbSets) {
-				// No way in hell am I letting this infinitely recurse
-				if (member === 'grimAuxiliatrix') continue;
-				const set = ssbSets[member];
-				if (set.skip) continue;
-				moves.push(this.dex.getMove(set.signatureMove));
-			}
-
-			let randomMove;
-			if (moves.length) {
-				moves.sort((a, b) => a.num! - b.num!);
-				randomMove = this.sample(moves);
-			}
-			if (!randomMove) {
-				return false;
-			}
-
-			this.useMove(randomMove.name, source);
-			if (randomMove.category !== 'Status') {
-				delete move.onHit;
-				delete move.multihit;
-				// @ts-ignore this is a really dumb hack
-				this.add('-hitcount', source, move.curHits);
-				return;
-			}
-			// @ts-ignore this is a really dumb hack
-			move.curHits++;
+		onAfterMoveSecondarySelf(source, target) {
+			source.side.addSideCondition('ferrofluid');
 		},
-		multihit: [1, 3],
 		secondary: null,
 		target: "normal",
+		type: "Steel",
+	},
+
+	// for grimAuxiliatrix's move
+	ferrofluid: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Heals 25% on switch in.",
+		shortDesc: "Heals 25% on switch in.",
+		name: "Ferrofluid",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {reflectable: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Acid Downpour', target);
+		},
+		sideCondition: 'ferrofluid',
+		condition: {
+			// this is a side condition
+			onStart(side) {
+				if (this.field.isTerrain('waveterrain')) {
+					this.add('-message', `Wave Terrain prevented Ferrofluid from starting!`);
+					return null;
+				}
+				this.add('-sidestart', side, 'Ferrofluid');
+				this.add("-message", `Ferrofluid was spilled!`);
+				this.effectData.layers = 1;
+			},
+			onRestart(side) {
+				if (this.effectData.layers >= 3) return false;
+				this.add('-sidestart', side, 'Ferrofluid');
+				this.effectData.layers++;
+			},
+			onSwitchIn(pokemon) {
+				if (pokemon.hasItem('heavydutyboots')) return;
+				this.add("-message", `Magnetized particles mends your wounds!`);
+				this.heal(pokemon.baseMaxhp / 4);
+				this.effectData.layers--;
+				if (this.effectData.layers < 1) {
+					pokemon.side.removeSideCondition(`ferrofluid`);
+				}
+			},
+			onEnd(side) {
+				this.add('-sideend', side, 'move: Ferrofluid');
+			},
+		},
+		secondary: null,
+		target: "foeSide",
 		type: "Steel",
 	},
 
@@ -2362,13 +2387,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Kev
-	kevcustommove: {
+	 kingstrident: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack by 1 stage and Speed by 2 stages.",
 		shortDesc: "Gives user +1 Sp. Atk and +2 Spe.",
-		name: "Kev Custom Move",
+		name: "King's Trident",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -3351,7 +3376,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'U-turn', target);
 		},
 		onAfterHit(target, pokemon) {
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
+				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
@@ -3362,7 +3388,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onAfterSubDamage(damage, target, pokemon) {
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
+				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
@@ -3434,7 +3461,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			// this is a side condition
 			onStart(side) {
+				if (this.field.isTerrain('waveterrain')) {
+					this.add('-message', `Wave Terrain prevented Shifting Rocks from starting!`);
+					return null;
+				}
 				this.add('-sidestart', side, 'Shifting Rocks');
+				this.add("-message", `Shifting Rocks were set!`);
 				this.effectData.damage = 7;
 			},
 			onSwitchIn(pokemon) {
@@ -3456,6 +3488,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.damage(this.effectData.damage * pokemon.maxhp / 100);
 				this.effectData.damage++;
+			},
+			onEnd(side) {
+				this.add('-sideend', side, 'move: Shifting Rocks');
 			},
 		},
 		secondary: null,
@@ -4090,7 +4125,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield suddenly flooded!');
 				const removeAll = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 				];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
@@ -4769,7 +4804,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 		onAfterMoveSecondarySelf(source, target) {
-			this.boost({spa: 1}, target, target, this.dex.getActiveMove('dropadraco'));
+			this.boost({spa: 1}, source, source, this.dex.getActiveMove('dropadraco'));
 		},
 		secondary: null,
 		target: "normal",
@@ -5433,6 +5468,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				factor = 0.667;
 				break;
 			case 'raindance':
+			case 'tempest':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'heavyhailstorm':
@@ -5454,6 +5490,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				factor = 0.667;
 				break;
 			case 'raindance':
+			case 'tempest':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'heavyhailstorm':
@@ -5497,6 +5534,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				factor = 0.667;
 				break;
 			case 'raindance':
+			case 'tempest':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'heavyhailstorm':
@@ -5517,6 +5555,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.type = 'Fire';
 				break;
 			case 'raindance':
+			case 'tempest':
 			case 'primordialsea':
 				move.type = 'Water';
 				break;
@@ -5536,6 +5575,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.basePower *= 2;
 				break;
 			case 'raindance':
+			case 'tempest':
 			case 'primordialsea':
 				move.basePower *= 2;
 				break;
@@ -5565,10 +5605,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
 			const removeTarget = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 			];
 			const removeAll = [
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 			];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -5593,7 +5633,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
+				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
@@ -5607,7 +5648,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
+				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
@@ -5624,7 +5666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const sourceSide = source.side;
 			const targetSide = source.side.foe;
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'ferrofluid', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];
 			let success = false;
 			for (const id of sideConditions) {
@@ -5666,10 +5708,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(source) {
 				let success = false;
 				const removeTarget = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 				];
 				const removeAll = [
-					'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'gmaxsteelsurge',
+					'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 				];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
@@ -5697,6 +5739,92 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return move.basePower + (40 * pokemon.volatiles["spamguess"].failCount);
 			}
 			return move.basePower;
+		},
+	},
+	// genderless infatuation for nui's Condition Override
+	attract: {
+		inherit: true,
+		volatileStatus: 'attract',
+		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(pokemon, source, effect) {
+				if (!source.hasAbility('conditionoverride')) {
+					if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
+						this.debug('incompatible gender');
+						return false;
+					}
+				}
+				if (!this.runEvent('Attract', pokemon, source)) {
+					this.debug('Attract event failed');
+					return false;
+				}
+
+				if (effect.id === 'cutecharm') {
+					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+				} else if (effect.id === 'destinyknot') {
+					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+				} else {
+					this.add('-start', pokemon, 'Attract');
+				}
+			},
+			onUpdate(pokemon) {
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
+					this.debug('Removing Attract volatile on ' + pokemon);
+					pokemon.removeVolatile('attract');
+				}
+			},
+			onModifySpDPriority: 1,
+			onModifySpD(spd, pokemon) {
+				for (const target of this.getAllActive()) {
+					if (target === pokemon) continue;
+					if (target.hasAbility('conditionoverride')) return this.chainModify(0.75);
+				}
+				return;
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove(pokemon, target, move) {
+				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
+				if (this.randomChance(1, 2)) {
+					this.add('cant', pokemon, 'Attract');
+					return false;
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Attract', '[silent]');
+			},
+		},
+	},
+	// Soft flex tempest accuracy modifier
+	thunder: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			switch (target.effectiveWeather()) {
+			case 'raindance':
+			case 'tempest':
+			case 'primordialsea':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
+		},
+	},
+	hurricane: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			switch (target.effectiveWeather()) {
+			case 'raindance':
+			case 'tempest':
+			case 'primordialsea':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
 		},
 	},
 };

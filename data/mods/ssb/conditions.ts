@@ -843,27 +843,63 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	instructuser: {
 		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Instruct')}|♫ I just can't fail ♫`);
-			this.add(`c|${getName('Instruct')}|♫ I figured, hell, why not ♫`);
-			this.add(`c|${getName('Instruct')}|♫ Be what I'm supposed to be? ♫`);
-			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you listen closely ♫`);
-			this.add(`c|${getName('Instruct')}|♫ They suck ♫`);
-			this.add(`c|${getName('Instruct')}|♫ I mean they just succeed ♫`);
+		onStart(pokemon) {
+			pokemon.m.quote = this.random(5);
+			switch (pokemon.m.quote) {
+			case 0:
+				this.add(`c|${getName('Instruct')}|My grandmomma had high hopes, I don't want to die bro`);
+				break;
+			case 1:
+				this.add(`c|${getName('Instruct')}|One time just a little bit, I`);
+				break;
+			case 2:
+				this.add(`c|${getName('Instruct')}|It's just me and this guitar, playing this song`);
+				break;
+			case 3:
+				this.add(`c|${getName('Instruct')}|Did I really just forget that melody?`);
+				break;
+			default:
+				this.add(`c|${getName('Instruct')}|Yeah, all you self-promoters are janky`);
+				break;
+			}
 		},
-		onSwitchOut() {
-			this.add(`c|${getName('Instruct')}|♫ Oh, tell me how to fail ♫`);
-			this.add(`c|${getName('Instruct')}|♫ When you look at all I've got ♫`);
-			this.add(`c|${getName('Instruct')}|♫ And what's in front of me ♫`);
-			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you're looking at me ♫`);
-			this.add(`c|${getName('Instruct')}|♫ I buss for fun while they succeed ♫`);
+		onSwitchOut(pokemon) {
+			switch (pokemon.m.quote) {
+			case 0:
+				this.add(`c|${getName('Instruct')}|My demons keep me up, swear to God, I cannot get any sleep`);
+				break;
+			case 1:
+				this.add(`c|${getName('Instruct')}|I haven't been the same since I lost my bro`);
+				break;
+			case 2:
+				this.add(`c|${getName('Instruct')}|You can try stealing my heart, it's already gone`);
+				break;
+			case 3:
+				this.add(`c|${getName('Instruct')}|I shine my wrist, it go like shashasha, shashasha`);
+				break;
+			default:
+				this.add(`c|${getName('Instruct')}|No way out 'cause I'm already in it`);
+				break;
+			}
 		},
-		onFaint() {
-			this.add(`c|${getName('Instruct')}|♫ Oh, I don't know how to fail ♫`);
-			this.add(`c|${getName('Instruct')}|♫ I've never not been hot ♫`);
-			this.add(`c|${getName('Instruct')}|♫ Look what you've done to me ♫`);
-			this.add(`c|${getName('Instruct')}|♫ And then if you can't tell when you're close to me ♫`);
-			this.add(`c|${getName('Instruct')}|♫ I'm what you'd be if you didn't succeed ♫`);
+		onFaint(pokemon) {
+			switch (pokemon.m.quote) {
+			case 0:
+				this.add(`c|${getName('Instruct')}|Don't gamble with your life like a semi-game parlay`);
+				break;
+			case 1:
+				this.add(`c|${getName('Instruct')}|I say I'm gonna change when I know I won't`);
+				break;
+			case 2:
+				this.add(`c|${getName('Instruct')}|I don't even know where to start, I'm just done`);
+				break;
+			case 3:
+				this.add(`c|${getName('Instruct')}|How I stride like that`);
+				break;
+			default:
+				this.add(`c|${getName('Instruct')}|Costa Careyes, I got her kidnapped. She ain't sorry and I ain't sorry, it's too late for sorry.`);
+				break;
+			}
 		},
 		//  Innate
 		onSourceHit(target, source, move) {
@@ -2052,11 +2088,21 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			const mon = source.active[0];
 			if (mon.name !== 'Darth') {
 				this.effectData.storedTypes = mon.getTypes();
+				this.effectData.newAtk = mon.getStat('atk');
+				this.effectData.newDef = mon.getStat('def');
+				this.effectData.newSpa = mon.getStat('spa');
+				this.effectData.newSpd = mon.getStat('spd');
+				this.effectData.newSpe = mon.getStat('spe');
 			}
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.name !== 'Darth') {
 				this.effectData.storedTypes = pokemon.getTypes();
+				this.effectData.newAtk = pokemon.getStat('atk');
+				this.effectData.newDef = pokemon.getStat('def');
+				this.effectData.newSpa = pokemon.getStat('spa');
+				this.effectData.newSpd = pokemon.getStat('spd');
+				this.effectData.newSpe = pokemon.getStat('spe');
 			}
 		},
 	},
@@ -2196,40 +2242,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
-
-	// genderless infatuation for nui's Condition Override
-	attract: {
-		name: 'attract',
-		inherit: true,
-		onStart(pokemon, source, effect) {
-			if (!source.hasAbility('conditionoverride') ||
-          (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M'))) {
-				this.debug('incompatible gender');
-				return false;
-			}
-			if (!this.runEvent('Attract', pokemon, source)) {
-				this.debug('Attract event failed');
-				return false;
-			}
-
-			if (effect.id === 'cutecharm') {
-				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
-			} else if (effect.id === 'destinyknot') {
-				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
-			} else {
-				this.add('-start', pokemon, 'Attract');
-			}
-		},
-		onModifySpDPriority: 1,
-		onModifySpD(spd, pokemon) {
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('conditionoverride')) return this.chainModify(0.75);
-			}
-			return;
-		},
-	},
-
 	tempest: {
 		name: 'Tempest',
 		effectType: 'Weather',
@@ -2321,6 +2333,256 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onEnd() {
 			this.add('-weather', 'none');
+		},
+	},
+	// Modded hazard moves to fail when Wave terrain is active
+	auroraveil: {
+		name: "Aurora Veil",
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source?.hasItem('lightclay')) {
+				return 8;
+			}
+			return 5;
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== source && target.side === this.effectData.target) {
+				if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
+					return;
+				}
+				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					this.debug('Aurora Veil weaken');
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Aurora Veil from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Aurora Veil');
+		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 1,
+		onEnd(side) {
+			this.add('-sideend', side, 'move: Aurora Veil');
+		},
+	},
+	lightscreen: {
+		name: "Light Screen",
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source?.hasItem('lightclay')) {
+				return 8;
+			}
+			return 5;
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					this.debug('Light Screen weaken');
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Light Screen from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Light Screen');
+		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 1,
+		onEnd(side) {
+			this.add('-sideend', side, 'move: Light Screen');
+		},
+	},
+	mist: {
+		name: "Mist",
+		duration: 5,
+		onBoost(boost, target, source, effect) {
+			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (source && target !== source) {
+				let showMsg = false;
+				let i: BoostName;
+				for (i in boost) {
+					if (boost[i]! < 0) {
+						delete boost[i];
+						showMsg = true;
+					}
+				}
+				if (showMsg && !(effect as ActiveMove).secondaries) {
+					this.add('-activate', target, 'move: Mist');
+				}
+			}
+		},
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Mist from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Mist');
+		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 3,
+		onEnd(side) {
+			this.add('-sideend', side, 'Mist');
+		},
+	},
+	reflect: {
+		name: "Reflect",
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source?.hasItem('lightclay')) {
+				return 8;
+			}
+			return 5;
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					this.debug('Reflect weaken');
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Reflect from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'Reflect');
+		},
+		onResidualOrder: 21,
+		onEnd(side) {
+			this.add('-sideend', side, 'Reflect');
+		},
+	},
+	safeguard: {
+		name: "Safeguard",
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source?.hasAbility('persistent')) {
+				this.add('-activate', source, 'ability: Persistent', effect);
+				return 7;
+			}
+			return 5;
+		},
+		onSetStatus(status, target, source, effect) {
+			if (!effect || !source) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (target !== source) {
+				this.debug('interrupting setStatus');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					this.add('-activate', target, 'move: Safeguard');
+				}
+				return null;
+			}
+		},
+		onTryAddVolatile(status, target, source, effect) {
+			if (!effect || !source) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
+				if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+				return null;
+			}
+		},
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Safeguard from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Safeguard');
+		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 2,
+		onEnd(side) {
+			this.add('-sideend', side, 'Safeguard');
+		},
+	},
+	spikes: {
+		name: "Spikes",
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Spikes from starting!`);
+				return null;
+			}
+			this.effectData.layers = 1;
+			this.add('-sidestart', side, 'move: Spikes');
+		},
+		onRestart(side) {
+			if (this.effectData.layers >= 3) return false;
+			this.add('-sidestart', side, 'Spikes');
+			this.effectData.layers++;
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.isGrounded()) return;
+			const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
+			this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+		},
+	},
+	stealthrock: {
+		name: "Stealth Rock",
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Stealth Rock from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Stealth Rock');
+		},
+		onSwitchIn(pokemon) {
+			const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+			this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+		},
+	},
+	stickyweb: {
+		name: "Sticky Web",
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Sticky Web from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Sticky Web');
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.isGrounded()) return;
+			this.add('-activate', pokemon, 'move: Sticky Web');
+			this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
+		},
+	},
+	toxicspikes: {
+		name: "Toxic Spikes",
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Toxic Spikes from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Toxic Spikes');
+			this.effectData.layers = 1;
+		},
+		onRestart(side) {
+			if (this.effectData.layers >= 2) return false;
+			this.add('-sidestart', side, 'move: Toxic Spikes');
+			this.effectData.layers++;
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.isGrounded()) return;
+			if (pokemon.hasType('Poison')) {
+				this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+				pokemon.side.removeSideCondition('toxicspikes');
+			} else if (pokemon.hasType('Steel')) {
+				return;
+			} else if (this.effectData.layers >= 2) {
+				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
+			} else {
+				pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+			}
 		},
 	},
 };

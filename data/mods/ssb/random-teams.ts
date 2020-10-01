@@ -302,7 +302,7 @@ export const ssbSets: SSBSets = {
 	grimAuxiliatrix: {
 		species: 'Duraludon', ability: 'Bio-steel', item: 'Assault Vest', gender: '',
 		moves: [['Core Enforcer', 'Draco Meteor'], 'Flash Cannon', ['Thunderbolt', 'Fire Blast']],
-		signatureMove: 'Do Not Steel',
+		signatureMove: 'Fuel Leak',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	HoeenHero: {
@@ -387,7 +387,7 @@ export const ssbSets: SSBSets = {
 	Kev: {
 		species: 'Kingdra', ability: 'King of Atlantis', item: 'Life Orb', gender: 'M',
 		moves: ['Hydro Pump', 'Core Enforcer', 'Hurricane'],
-		signatureMove: 'Kev Custom Move',
+		signatureMove: ' King\'s Trident',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Kingbaruk: {
@@ -902,6 +902,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (team.length === 6 && set.ability === 'Illusion') {
 				team[5] = team[4];
 				team[4] = set;
+			}
+			// Requested by Darth to not go first in team preview ever
+			if (team.length === 6 && team[0].name === 'Darth') {
+				const temporary = team[0];
+				team[0] = team[1];
+				team[1] = temporary;
 			}
 		}
 		return team;
