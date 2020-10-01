@@ -9,22 +9,22 @@ const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 Punishments.roomPunishmentTypes.set(`TICKETBAN`, 'banned from creating help tickets');
 
 interface TicketState {
-	creator: string;
-	userid: ID;
-	open: boolean;
-	active: boolean;
-	type: string;
-	created: number;
-	claimed: string | null;
-	ip: string;
-	resolution?: 'unknown' | 'dead' | 'unresolved' | 'resolved';
-	result: TicketResult | null;
-	claimQueue?: string[];
-	involvedStaff?: ID[];
-	createTime?: number;
-	emptyRoom?: boolean;
-	firstClaimTime?: number;
-	unclaimedTime?: number;
+	readonly creator: string;
+	readonly userid: ID;
+	readonly open: boolean;
+	readonly active: boolean;
+	readonly type: string;
+	readonly created: number;
+	readonly claimed: string | null;
+	readonly ip: string;
+	readonly resolution?: 'unknown' | 'dead' | 'unresolved' | 'resolved';
+	readonly result: TicketResult | null;
+	readonly claimQueue?: string[];
+	readonly involvedStaff?: ID[];
+	readonly createTime?: number;
+	readonly emptyRoom?: boolean;
+	readonly firstClaimTime?: number;
+	readonly unclaimedTime?: number;
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
@@ -414,7 +414,7 @@ try {
 				continue;
 			}
 			// Close open tickets after a restart
-			if (ticket.open && !Chat.oldPlugins.helptickets) ticket.open = false;
+			if (!Chat.oldPlugins.helptickets) continue;
 
 			// recreate tickets
 			for (const room of Rooms.rooms.values()) {
@@ -628,7 +628,6 @@ export const pages: PageTable = {
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
 					// Should never happen
-					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
 					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
@@ -1264,25 +1263,18 @@ export const commands: ChatCommands = {
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
-			const tickets = getTickets();
-			const ticket = tickets[toID(this.inputUsername)];
-			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) {
-				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
-			}
-			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
+
+			const helpRoom = Rooms.get(`help-${toID(target)}`) as ChatRoom | null;
 			if (helpRoom) {
 				const ticketGame = helpRoom.getGame(HelpTicket)!;
-				if (ticket.userid === user.id && !user.isStaff) {
+				if (ticketGame.userid === user.id && !user.isStaff) {
 					result = !!(ticketGame.firstClaimTime);
 				}
 				ticketGame.close(result, user);
 			} else {
-				ticket.open = false;
-				notifyStaff();
-				writeTickets();
+				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
 			}
-			ticket.claimed = user.name;
-			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
+			this.sendReply(`You closed ${this.inputUsername}'s ticket.`);
 		},
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
