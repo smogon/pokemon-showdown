@@ -111,7 +111,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "On switch in, this Pokemon and its allies use Charge.",
 		onStart(source) {
 			for (const ally of source.side.active) {
-				this.useMove('charge', ally, ally, this.dex.getAbility('battery'));
+				ally.addVolatile('charge');
 			}
 		},
 		name: "Battery",
@@ -149,12 +149,95 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(source) {
 			if (source.side.pokemonFaintedLastTurn) {
 				const fainted = source.side.pokemonFaintedLastTurn;
-				const ability = fainted.ability;
+				const ability = fainted.getAbility();
+				const bannedAbilities = [
+					'battlebond', 'comatose', 'disguise', 'download', 'flowergift', 'forecast', 'gorillatactics', 'gulpmissile', 'hugepower', 'hungerswitch', 'hustle', 'iceface', 'illusion', 'intrepidsword', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'purepower', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode']
+				;
+				if (bannedAbilities.includes(ability.id)) return;
 				source.setAbility(ability);
 				source.baseAbility = fainted.baseAbility;
 				source.ability = fainted.ability;
 			}
 		},
 		name: "Receiver",
+	},
+	sweetveil: {
+		shortDesc: "On switch-in, this Pokemon's side gets a side condition that heals any active Pokemon by 1/16.",
+		onStart(source) {
+			if (!source.side.getSideCondition('sweetveil')) source.side.addSideCondition('sweetveil');
+		},
+		condition: {
+			onResidualOrder: 5,
+			onResidualSubOrder: 2,
+			onResidual(pokemon) {
+				if (this.field.isTerrain('grassyterrain')) return;
+				for (const ally of pokemon.side.active) {
+					this.heal(ally.maxhp / 16);
+				}
+			},
+			onTerrain(pokemon) {
+				if (!this.field.isTerrain('grassyterrain')) return;
+				for (const ally of pokemon.side.active) {
+					this.heal(ally.maxhp / 16);
+				}
+			},
+		},
+		name: "Sweet Veil",
+	},
+	mummy: {
+		shortDesc: "Gives all active Pokemon the Heal Block effect upon switching in.",
+		onStart() {
+			for (const poke of this.getAllActive()) {
+				poke.addVolatile('healblock');
+			}
+		},
+		name: "Mummy",
+	},
+	runaway: {
+		shortDesc: "This Pokemon immediately switches out if an opponent with a super effective/OHKO move switches in.",
+		onStart(pokemon) {
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.getMove(moveSlot.move);
+					if (move.category === 'Status') continue;
+					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+					if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					) {
+						this.add('-ability', pokemon, 'Run Away');
+						pokemon.switchFlag = true;
+						return;
+					}
+				}
+			}
+		},
+		onFoeSwitchIn(pokemon) {
+			if (!pokemon || pokemon.fainted) return;
+			const me = pokemon.side.foe.active.filter(x => x.getAbility().id === 'runaway')[0];
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = this.dex.getMove(moveSlot.move);
+				if (move.category === 'Status') continue;
+				const moveType = move.id === 'hiddenpower' ? pokemon.hpType : move.type;
+				if (
+					this.dex.getImmunity(moveType, me) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+					move.ohko
+				) {
+					this.add('-ability', me, 'Run Away');
+					me.switchFlag = true;
+					return;
+				}
+			}
+		},
+		name: "Run Away",
+	},
+	tangledfeet: {
+		shortDesc: "This Pokemon's first move will have +1 priority until the end of the turn.",
+		onModifyPriority(priority, source, target, move) {
+			if (source.activeMoveActions > 1) return priority;
+			return move.priority + 1;
+		},
+		name: "Tangled Feet",
 	},
 };
