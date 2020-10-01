@@ -50,11 +50,11 @@ export class RPSGame extends Rooms.RoomGame {
 		this.room.update();
 		this.room.add(`|controlshtml|<center>Waiting for another player to join....</center>`);
 		this.room.add(`|fieldhtml|<center><h2>Waiting to start the game...</h2></center>`);
-		this.start();
 	}
 	onJoin(user: User) {
 		if (user.id in this.playerTable) return;
-		if (Object.keys(this.playerTable).length < 2) {
+		const players = Object.keys(this.playerTable);
+		if (players.length < 2) {
 			this.addPlayer(user);
 		}
 	}
@@ -91,7 +91,7 @@ export class RPSGame extends Rooms.RoomGame {
 		for (const item of ['Rock', 'Paper', 'Scissors']) {
 			buf += `${button(`choose ${item}`, `${item} ${ICONS[item]}`)}`;
 		}
-		buf += `<br />${button('leave', "Leave game")}</center>`;
+		buf += `<br />${button('rps end', "End game")}</center>`;
 		this.addControls(buf);
 	}
 	sendFullLog() {
@@ -124,16 +124,16 @@ export class RPSGame extends Rooms.RoomGame {
 		if (this.wins.length) {
 			buf += `<br />`;
 			for (const [i, entry] of this.wins.entries()) {
-				if (!entry) {
-					buf += `<div class="broadcast-red">Nobody won round ${i + 1}...</div>`;
-					continue;
-				}
-				const {name, choice} = entry;
 				if (this.wins.length > 6) {
 					// we only wanna show the last 6 rounds
 					const diff = this.wins.length - 6;
 					if (i < diff) continue;
 				}
+				if (!entry) {
+					buf += `<div class="broadcast-red">Nobody won round ${i + 1}...</div>`;
+					continue;
+				}
+				const {name, choice} = entry;
 				buf += Utils.html`<div class="broadcast-green">${name} won round ${i + 1} with ${choice}!</div>`;
 			}
 		}
@@ -253,7 +253,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.room.pokeExpireTimer();
 		this.addControls(`The game has ended.`);
 		this.ended = true;
-		this.room.add(`The game has been forcefully ended.`); // for the benefit of those in the room
+		this.room.add(`The game has been ended.`); // for the benefit of those in the room
 		this.room.log.log = [];
 		for (const id in this.playerTable) {
 			this.playerTable[id].unlinkUser();
@@ -316,7 +316,6 @@ export const commands: ChatCommands = {
 				);
 			}
 			const existingRoom = findExisting(user.id, targetUser.id);
-			const roomid = existingRoom ? existingRoom.roomid : `rps-${user.id}-${targetUser.id}`;
 			if (existingRoom?.game && !existingRoom.game.ended) {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
 			}
@@ -324,7 +323,7 @@ export const commands: ChatCommands = {
 			challengeRequests.set(targetUser.id, user.id);
 			this.sendChatMessage(
 				`/raw ${user.name} challenged you to Rock, Paper, Scissors!` +
-				`<button class="button" name="send" value="/j ${roomid}"><strong>Accept</strong></button></div>`,
+				`<button class="button" name="send" value="/rps accept"><strong>Accept</strong></button></div>`,
 			);
 		},
 
@@ -348,6 +347,7 @@ export const commands: ChatCommands = {
 			).update();
 			user.joinRoom(gameRoom.roomid);
 			targetUser.joinRoom(gameRoom.roomid);
+			(gameRoom.game as RPSGame).start();
 		},
 
 		deny(target, room, user) {
