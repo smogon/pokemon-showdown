@@ -548,12 +548,17 @@ export const commands: ChatCommands = {
 		let lines;
 		const search: ModlogSearch = {};
 		const targets = target.split(',');
-		for (const option of targets) {
+		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
 				// If no specific parameter is specified, we should search all fields
 				value = param.trim();
-				param = 'any';
+				if (i === 0 && targets.length > 1) {
+					// they might mean a roomid, as per the old format of /modlog
+					param = 'room';
+				} else {
+					param = 'any';
+				}
 			}
 			param = toID(param);
 			switch (param) {
