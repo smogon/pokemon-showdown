@@ -462,7 +462,7 @@ export const commands: ChatCommands = {
 			this.checkCan('warn', null, room);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(publicReason ? ` (${publicReason})` : ``)}`);
-			this.globalModlog('WARN OFFLINE', targetUser, target ? `: ${publicReason} ${privateReason}` : ``);
+			this.globalModlog('WARN OFFLINE', targetUser, target ? `${publicReason} ${privateReason}` : ``);
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
@@ -484,7 +484,7 @@ export const commands: ChatCommands = {
 
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(publicReason ? ` (${publicReason})` : ``)}`);
 		if (globalWarn) {
-			this.globalModlog('WARN', targetUser, target ? `: ${publicReason} ${privateReason}` : ``);
+			this.globalModlog('WARN', targetUser, target ? `${publicReason} ${privateReason}` : ``);
 		} else {
 			this.modlog('WARN', targetUser, target ? `${publicReason} ${privateReason}` : ``, {noalts: 1});
 		}
@@ -809,9 +809,9 @@ export const commands: ChatCommands = {
 			affected = await Punishments.lock(userid, duration, null, false, userReason);
 		}
 
-		const globalReason = (target ? `: ${userReason} ${proof}` : '');
+		const globalReason = (target ? `${userReason} ${proof}` : '');
 		this.globalModlog(
-			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, `${globalReason}`
+			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, globalReason
 		);
 
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
@@ -940,7 +940,7 @@ export const commands: ChatCommands = {
 		}
 
 		this.privateGlobalModAction(`${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
-		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target);
+		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, null, null, target);
 	},
 	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ &`],
 	unlocknamehelp: [`/unlockname [name] - Unlocks a punished alt, leaving the original lock intact. Requires: % @ &`],
@@ -1019,7 +1019,7 @@ export const commands: ChatCommands = {
 
 		room?.hideText([userid, toID(this.inputUsername)]);
 
-		const globalReason = (target ? `: ${userReason} ${proof}` : '');
+		const globalReason = (target ? `${userReason} ${proof}` : '');
 		this.globalModlog("BAN", targetUser, globalReason);
 		return true;
 	},
@@ -1508,7 +1508,7 @@ export const commands: ChatCommands = {
 		let forceRenameMessage;
 		if (targetUser.connected) {
 			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
-			this.globalModlog('FORCERENAME', targetUser, reason ? `: ${reason}` : ``);
+			this.globalModlog('FORCERENAME', targetUser, reason);
 			Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
