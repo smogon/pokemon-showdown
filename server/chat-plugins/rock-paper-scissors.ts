@@ -5,14 +5,14 @@
 import {Utils} from '../../lib/utils';
 
 /** Map<to, [from, rounds]> */
-const challengeRequests: Map<string, [string, string]> = new Map();
+const challengeRequests: Map<string, string> = new Map();
 
+const MAX_ROUNDS = 500;
 const TIMEOUT = 10 * 1000;
-const MAX_ROUNDS = 10;
 const ICONS: {[k: string]: string} = {
 	Rock: `<i class="fa fa-hand-rock-o"></i>`,
 	Paper: '<i class="fa fa-hand-paper-o"></i>',
-	Scissors: '<i class="fa fa-scissors"></i>',
+	Scissors: '<i class="fa fa-hand-scissors-o"></i>',
 };
 
 export class RPSPlayer extends Rooms.RoomGamePlayer {
@@ -29,7 +29,6 @@ export class RPSPlayer extends Rooms.RoomGamePlayer {
 
 export class RPSGame extends Rooms.RoomGame {
 	room: Room;
-	rounds: number;
 	points: {[k: string]: number};
 	currentRound: number;
 	playerTable: {[k: string]: RPSPlayer};
@@ -37,10 +36,9 @@ export class RPSGame extends Rooms.RoomGame {
 	roundTimer?: NodeJS.Timeout;
 	players: RPSPlayer[];
 	wins: ({name: string, choice: string} | null)[];
-	constructor(room: Room, rounds = 3) {
+	constructor(room: Room) {
 		super(room);
 		this.room = room;
-		this.rounds = rounds;
 		this.points = {};
 		this.currentRound = 0;
 		this.playerTable = {};
@@ -52,6 +50,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.room.update();
 		this.room.add(`|controlshtml|<center>Waiting for another player to join....</center>`);
 		this.room.add(`|fieldhtml|<center><h2>Waiting to start the game...</h2></center>`);
+		this.start();
 	}
 	onJoin(user: User) {
 		if (user.id in this.playerTable) return;
@@ -143,20 +142,11 @@ export class RPSGame extends Rooms.RoomGame {
 	sendScrollback() {
 		this.room.add(this.getScrollback()).update();
 	}
-	end(force = false) {
+	end() {
 		const [p1, p2] = Object.keys(this.playerTable).map(item => this.playerTable[item]);
 		this.addControls(`<h2>The game is over!</h2>`);
-		if (force) {
-			this.addField(`The game was forcefully ended.`);
-			return this.destroy();
-		} else if (this.points[p1?.id] === this.points[p2?.id]) {
-			if (this.rounds === MAX_ROUNDS + 5) {
-				this.add(`Nobody can win....`);
-				this.add(`The game has been ended.`);
-				return this.destroy();
-			}
-			this.addField(Utils.html`Tie between ${p1} and ${p2}! Another round will be played to decide the winner!`);
-			this.rounds++;
+		if (this.points[p1?.id] === this.points[p2?.id]) {
+			this.addField(Utils.html`Tie between ${p1} and ${p2}!`);
 			return this.startNextRound();
 		}
 		const winner = (this.points[p1.id] || 0) > (this.points[p2.id] || 0) ? p1 : p2;
@@ -198,11 +188,12 @@ export class RPSGame extends Rooms.RoomGame {
 				choice: winner.currentChoice,
 			});
 		}
-		this.clearChoices();
-		this.sendScrollback();
-		if (this.currentRound === this.rounds) {
+		if (this.currentRound === MAX_ROUNDS) {
+			this.add(`The game has hit the max number of rounds, and so will be ending.`);
 			return this.end();
 		}
+		this.clearChoices();
+		this.sendScrollback();
 		return this.startNextRound();
 	}
 	addPoint(player: RPSPlayer) {
@@ -220,8 +211,8 @@ export class RPSGame extends Rooms.RoomGame {
 			throw new Chat.ErrorMessage(`Not enough players to start the game.`);
 		}
 		this.players = players;
-		this.addField(`The Rock Paper Scissors match has begun!`);
-		this.add(Utils.html`There will be ${this.rounds} rounds - whoever has the most points at the end wins!`);
+		this.addField(`The Rock, Paper, Scissors match has begun!`);
+		this.add(Utils.html`(Use /rps end to end the game)`);
 		this.startNextRound();
 	}
 	getPlayer(user: User) {
@@ -247,7 +238,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.currentRound++;
 		if (this.currentRound > 0) {
 			this.addField(
-				`Round ${this.currentRound} of ${this.rounds} has begun! ` +
+				`Round ${this.currentRound} has begun! ` +
 				`Players, you have ${Chat.toDurationString(TIMEOUT)} to make your moves!`
 			);
 		}
@@ -316,17 +307,7 @@ export const commands: ChatCommands = {
 		challenge: 'create',
 		create(target, room, user) {
 			target = target.trim();
-			const [rounds, userid] = target.split(',');
-			if (!rounds || !target) {
-				return this.parse('/help rps');
-			}
-			const roundsNum = parseInt(target);
-			if (isNaN(roundsNum)) {
-				return this.errorReply(`Invalid round number.`);
-			}
-			if (roundsNum > MAX_ROUNDS) {
-				return this.errorReply(`You cannot set more than ${MAX_ROUNDS} rounds.`);
-			}
+			const userid = toID(target);
 			const targetUser = userid ? Users.get(userid) : this.pmTarget;
 			if (targetUser === user) return this.errorReply(`You cannot challenge yourself.`);
 			if (!targetUser) {
@@ -340,7 +321,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
 			}
 			if (!this.pmTarget) this.pmTarget = targetUser;
-			challengeRequests.set(targetUser.id, [user.id, rounds]);
+			challengeRequests.set(targetUser.id, user.id);
 			this.sendChatMessage(
 				`/raw ${user.name} challenged you to Rock, Paper, Scissors!` +
 				`<button class="button" name="send" value="/j ${roomid}"><strong>Accept</strong></button></div>`,
@@ -348,9 +329,8 @@ export const commands: ChatCommands = {
 		},
 
 		accept(target, room, user) {
-			const request = challengeRequests.get(user.id);
-			if (!request) return this.errorReply(`You have no Rock, Paper, Scissors request pending from ${target}.`);
-			const [id, rounds] = request;
+			const id = challengeRequests.get(user.id);
+			if (!id) return this.errorReply(`You have no Rock, Paper, Scissors request pending from ${target}.`);
 			const targetUser = Users.get(id)!;
 			const existingRoom = findExisting(user.id, targetUser.id);
 			const options = {
@@ -361,7 +341,7 @@ export const commands: ChatCommands = {
 			const gameRoom = existingRoom ? existingRoom : Rooms.createGameRoom(
 				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, options
 			);
-			gameRoom.game = new RPSGame(gameRoom, parseInt(rounds));
+			gameRoom.game = new RPSGame(gameRoom);
 			gameRoom.add(
 				`|raw|<h2>Rock Paper Scissors: ${user.name} vs ${targetUser.name}!</h2>` +
 				`Use /rps start to start the game, once both players have joined!`
@@ -383,7 +363,7 @@ export const commands: ChatCommands = {
 			if (!game.playerTable[user.id]) {
 				return this.errorReply(`You are not a player, and so cannot end the game.`);
 			}
-			game.end(true);
+			game.end();
 		},
 
 		choose(target, room, user) {
