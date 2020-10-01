@@ -99,6 +99,7 @@ function prettifyResults(
 	}
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
+	if (search.anyField) searchString += `containing ${search.anyField}`;
 	if (search.note) searchString += `with a note including any of: ${search.note.searches.join(', ')} `;
 	if (search.user) searchString += `taken against ${search.user.search} `;
 	if (search.ip) searchString += `taken against a user on the IP ${search.ip} `;
@@ -550,23 +551,20 @@ export const commands: ChatCommands = {
 		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
-				// We should guess what parameter they meant
+				// If no specific parameter is specified, we should search all fields
 				value = param.trim();
-				if (/^[0-9]{1,3}\.[0-9]{1,3}/.test(value)) {
-					param = 'ip';
-				} else if (i === 0 && targets.length > 1) {
+				if (i === 0 && targets.length > 1) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
-				} else if (value === value.toUpperCase()) {
-					param = 'action';
-				} else if (toID(param).length < 19) {
-					param = 'user';
 				} else {
-					param = 'note';
+					param = 'any';
 				}
 			}
 			param = toID(param);
 			switch (param) {
+			case 'any':
+				search.anyField = value;
+				break;
 			case 'note': case 'text':
 				if (!search.note?.searches) search.note = {searches: []};
 				search.note.searches.push(value);
@@ -592,7 +590,7 @@ export const commands: ChatCommands = {
 				break;
 			default:
 				this.errorReply(`Invalid modlog parameter: '${param}'.`);
-				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`);
+				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', 'any', or 'lines'.`);
 			}
 		}
 
@@ -628,10 +626,11 @@ export const commands: ChatCommands = {
 	modloghelp() {
 		this.sendReplyBox(
 			`<code>/modlog [comma-separated list of parameters]</code>: searches the moderator log, defaulting to the current room unless specified otherwise.<br />` +
-			`If an unnamed parameter is specified, <code>/modlog</code> will make its best guess as to which search you meant.<br />` +
+			`If an unnamed parameter is specified, <code>/modlog</code> will search all fields at once.<br />` +
 			`<details><summary>Parameters:</summary>` +
 			`<ul>` +
 			`<li><code>room=[room]</code> - searches a room's modlog</li>` +
+			`<li><code>any=[text]</code> - searches for modlog entries containing the specified text in any field</li>` +
 			`<li><code>userid=[user]</code> - searches for a username (or fragment of one)</li>` +
 			`<li><code>note=[text]</code> - searches the contents of notes/reasons</li>` +
 			`<li><code>ip=[IP address]</code> - searches for an IP address (or fragment of one)</li>` +
