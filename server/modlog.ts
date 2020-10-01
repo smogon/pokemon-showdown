@@ -315,7 +315,7 @@ export class Modlog {
 		// child process will crash when attempting to execute any RegExp
 		// constructed with it (i.e. when not configured to use ripgrep).
 		let regexString = '.*?';
-		if (search.anyField) regexString += `${this.escapeRegex(search.anyField)}.*?`
+		if (search.anyField) regexString += `${this.escapeRegex(search.anyField)}.*?`;
 		if (search.action) regexString += `\\) .*?${this.escapeRegex(search.action)}.*?: .*?`;
 		if (search.user) {
 			const wildcard = search.user.isExact ? `` : `.*?`;

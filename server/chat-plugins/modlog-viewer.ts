@@ -548,7 +548,7 @@ export const commands: ChatCommands = {
 		let lines;
 		const search: ModlogSearch = {};
 		const targets = target.split(',');
-		for (const [i, option] of targets.entries()) {
+		for (const option of targets) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
 				// If no specific parameter is specified, we should search all fields
