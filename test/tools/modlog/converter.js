@@ -493,6 +493,23 @@ describe('Modlog conversion script', () => {
 				['ghjkjguygjbjb', 'zilgo']
 			);
 		});
+
+		it('should correctly handle modlog entries with an IP but no userid', () => {
+			assert.deepStrictEqual(
+				converter.parseModlog(`[2020-09-30T20:02:12.456Z] (lobby) SHAREDIP: [127.0.0.1] by annika: j`),
+				{
+					action: 'SHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika',
+					note: `j`, time: 1601496132456, ip: "127.0.0.1",
+				}
+			);
+			assert.deepStrictEqual(
+				converter.parseModlog(`[2020-09-30T20:02:12.456Z] (lobby) UNSHAREDIP: [127.0.0.1] by annika`),
+				{
+					action: 'UNSHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika',
+					time: 1601496132456, ip: "127.0.0.1",
+				}
+			);
+		});
 	});
 
 	describe('ModlogEntry to text converter', () => {

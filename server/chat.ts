@@ -810,7 +810,7 @@ export class CommandContext extends MessageContext {
 		}
 		this.roomlog(`(${msg})`);
 	}
-	globalModlog(action: string, user: string | User | null, note?: string | null) {
+	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
 		const entry: ModlogEntry = {action, isGlobal: true, loggedBy: this.user.id, note: note?.replace(/\n/gm, ' ')};
 		if (user) {
 			if (typeof user === 'string') {
@@ -824,6 +824,7 @@ export class CommandContext extends MessageContext {
 				if (alts.length) entry.alts = alts;
 			}
 		}
+		if (ip) entry.ip = ip;
 		this.room?.modlog(entry);
 		Rooms.global.modlog(entry, this.room?.roomid);
 	}

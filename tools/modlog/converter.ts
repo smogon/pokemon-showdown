@@ -17,6 +17,10 @@ type ModlogFormat = 'txt';
 /** The number of modlog entries to write to the database on each transaction */
 const ENTRIES_TO_BUFFER = 100;
 
+const IP_ONLY_ACTIONS = new Set([
+	'SHAREDIP', 'UNSHAREDIP', 'UNLOCKIP', 'UNLOCKRANGE', 'RANGEBAN', 'RANGELOCK',
+]);
+
 export function parseBrackets(line: string, openingBracket: '(' | '[', greedy?: boolean) {
 	const brackets = {
 		'(': ')',
@@ -351,37 +355,39 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 	}
 
 	if (line[0] === '[') {
-		const userid = toID(parseBrackets(line, '['));
-		log.userid = userid;
-		line = line.slice(userid.length + 3).trim();
-		if (line.startsWith('ac:')) {
-			line = line.slice(3).trim();
-			const ac = parseBrackets(line, '[');
-			log.autoconfirmedID = toID(ac);
-			line = line.slice(ac.length + 3).trim();
-		}
-		if (line.startsWith('alts:')) {
-			line = line.slice(5).trim();
-			const alts = new Set<ID>(); // we need to weed out duplicate alts
+		if (!IP_ONLY_ACTIONS.has(log.action)) {
+			const userid = toID(parseBrackets(line, '['));
+			log.userid = userid;
+			line = line.slice(userid.length + 3).trim();
+			if (line.startsWith('ac:')) {
+				line = line.slice(3).trim();
+				const ac = parseBrackets(line, '[');
+				log.autoconfirmedID = toID(ac);
+				line = line.slice(ac.length + 3).trim();
+			}
+			if (line.startsWith('alts:')) {
+				line = line.slice(5).trim();
+				const alts = new Set<ID>(); // we need to weed out duplicate alts
 
-			let alt = parseBrackets(line, '[');
-			do {
-				if (alt.includes(', ')) {
-					// old alt format
-					for (const trueAlt of alt.split(', ')) {
-						alts.add(toID(trueAlt));
+				let alt = parseBrackets(line, '[');
+				do {
+					if (alt.includes(', ')) {
+						// old alt format
+						for (const trueAlt of alt.split(', ')) {
+							alts.add(toID(trueAlt));
+						}
+						line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
+						if (!line.startsWith('[')) line = `[${line}`;
+					} else {
+						if (IPTools.ipRegex.test(alt)) break;
+						alts.add(toID(alt));
+						line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
+						if (alt.includes('[') && !line.startsWith('[')) line = `[${line}`;
 					}
-					line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
-					if (!line.startsWith('[')) line = `[${line}`;
-				} else {
-					if (IPTools.ipRegex.test(alt)) break;
-					alts.add(toID(alt));
-					line = line.slice(line.indexOf(`[${alt}],`) + `[${alt}],`.length).trim();
-					if (alt.includes('[') && !line.startsWith('[')) line = `[${line}`;
-				}
-				alt = parseBrackets(line, '[');
-			} while (alt);
-			log.alts = [...alts];
+					alt = parseBrackets(line, '[');
+				} while (alt);
+				log.alts = [...alts];
+			}
 		}
 		if (line[0] === '[') {
 			log.ip = parseBrackets(line, '[');
