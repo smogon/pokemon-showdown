@@ -38,7 +38,7 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes?.length) return this.errorReply(`This room has no quotes.`);
-		this.runBroadcast();
+		this.runBroadcast(true);
 		const {quote, date, userid} = roomQuotes[Math.floor(Math.random() * roomQuotes.length)];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		const attribution = toID(target) === 'showauthor' ? `<br /><hr /><small>Added by ${userid} on ${time}</small>` : '';
