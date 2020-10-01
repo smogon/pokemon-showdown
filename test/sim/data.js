@@ -158,7 +158,7 @@ describe('Dex data', function () {
 
 					let prevLearnedGen = 10;
 					let prevLearnedTypeIndex = -1;
-					const LEARN_ORDER = 'MTLREDSVC';
+					const LEARN_ORDER = 'MTLREVDSC';
 					for (const learned of entry.learnset[moveid]) {
 						// See the definition of MoveSource in sim/global-types
 						assert(/^[1-8][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
@@ -169,7 +169,7 @@ describe('Dex data', function () {
 						const learnedTypeIndex = LEARN_ORDER.indexOf(learned.charAt(1));
 						assert(learnedGen <= prevLearnedGen, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in order from newest to oldest gen`);
 						if (learnedGen === prevLearnedGen) {
-							assert(learnedTypeIndex >= prevLearnedTypeIndex, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in MTLREDSVC order`);
+							assert(learnedTypeIndex >= prevLearnedTypeIndex, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in MTLREVDSC order`);
 						}
 						prevLearnedGen = learnedGen;
 						prevLearnedTypeIndex = learnedTypeIndex;
