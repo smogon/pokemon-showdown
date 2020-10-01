@@ -1610,10 +1610,10 @@ export const Formats: FormatList = [
 		mod: 'gen2',
 		ruleset: ['[Gen 2] NU'],
 		banlist: [
-			'Xatu', 'Weezing', 'Primeape', 'Dewgong', 'Pineco', 'Chinchou', 'Ninetales', 'Kingler', 'Hitmonlee', 'Dugtrio',
-			'Sudowoodo', 'Rapidash', 'Magnemite', 'Octillery', 'Stantler', 'Wigglytuff', 'Fearow', 'Magmar', 'Flareon',
-			'Lickitung', 'Azumarill', 'Gloom', 'Dunsparce', 'Farfetch\u2019d', 'Arbok', 'Porygon', 'Shuckle', 'Graveler', 'Exeggcute',
-			'Pupitar', 'Sneasel', 'Persian', 'Pidgeot', 'Ledian', 'Raticate', 'Houndour', 'Dragonair',
+			'Arbok', 'Azumarill', 'Chinchou', 'Dewgong', 'Dragonair', 'Dugtrio', 'Dunsparce', 'Exeggcute', 'Farfetch\u2019d',
+			'Fearow', 'Flareon', 'Gloom', 'Graveler', 'Hitmonlee', 'Houndour', 'Kingler', 'Ledian', 'Lickitung', 'Magmar',
+			'Magnemite', 'Ninetales', 'Octillery', 'Persian', 'Pidgeot', 'Pineco', 'Porygon', 'Primeape', 'Pupitar', 'Rapidash',
+			'Raticate', 'Shuckle', 'Sneasel', 'Stantler', 'Sudowoodo', 'Weezing', 'Wigglytuff', 'Xatu',
 		],
 	},
 
