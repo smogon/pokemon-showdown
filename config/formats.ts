@@ -455,9 +455,9 @@ export const Formats: FormatList = [
 			'Magnezone', 'Medicham-Mega', 'Melmetal', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Slowbro-Mega', 'Swampert-Mega',
 			'Tangrowth', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Tyranitar', 'Tyranitar-Mega', 'Victini', 'Volcanion', 'Volcarona', 'Zapdos',
 			'nduubl', // National Dex UUBL
-			'Aegislash', 'Alakazam', 'Azumarill', 'Charizard-Mega-X', 'Deoxys-Defense', 'Dragonite', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Hawlucha',
-			'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Kyurem', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mawile-Mega', 'Mew', 'Pinsir-Mega',
-			'Scolipede', 'Staraptor', 'Thundurus', 'Thundurus-Therian', 'Victini', 'Drizzle', 'Drought', 'Aurora Veil',
+			'Aegislash', 'Alakazam', 'Azumarill', 'Charizard-Mega-X', 'Deoxys-Defense', 'Dragonite', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar',
+			'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Kyurem', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mawile-Mega', 'Mew',
+			'Pinsir-Mega', 'Scolipede', 'Staraptor', 'Thundurus', 'Thundurus-Therian', 'Drizzle', 'Drought', 'Aurora Veil',
 		],
 	},
 	{
