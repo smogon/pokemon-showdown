@@ -28,43 +28,19 @@ interface TicketState {
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
-export const tickets: {[k: string]: TicketState} = {};
-
-try {
-	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
-	for (const t in ticketData) {
-		const ticket = ticketData[t];
-		if (ticket.banned) {
-			if (ticket.expires && ticket.expires <= Date.now()) continue;
-			Punishments.roomPunish(`staff`, ticket.userid, ['TICKETBAN', ticket.userid, ticket.expires, ticket.reason]);
-			delete ticketData[t]; // delete the old format
-		} else {
-			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
-				// Tickets that have been open for 24+ hours will be automatically closed.
-				const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
-				if (ticketRoom) {
-					const ticketGame = ticketRoom.game as HelpTicket;
-					ticketGame.writeStats(false);
-					ticketRoom.expire();
-				}
-				continue;
-			}
-			// Close open tickets after a restart
-			if (ticket.open && !Chat.oldPlugins.helptickets) ticket.open = false;
-			tickets[t] = ticket;
-		}
-	}
-} catch (e) {
-	if (e.code !== 'ENOENT') throw e;
-}
-
-function writeTickets() {
+function getTickets() {
+	const tickets: {[k: string]: TicketState} = {};
 	for (const room of Rooms.rooms.values()) {
 		if (!room.settings.isHelp || !room.game) continue;
 		const ticket = room.getGame(HelpTicket)!;
-		if (!tickets[ticket.userid]) continue; // we only want to update open ticket state here
+		if (!ticket.open) continue;
 		tickets[ticket.userid] = ticket.toJSON();
 	}
+	return tickets;
+}
+
+function writeTickets() {
+	const tickets = getTickets();
 	FS(TICKET_FILE).writeUpdate(() => (
 		JSON.stringify(Object.assign({}, tickets))
 	));
@@ -358,7 +334,6 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.close('deleted', staff);
 		this.room.modlog({action: 'TICKETDELETE', isGlobal: true, loggedBy: staff.id});
 		this.addText(`${staff.name} deleted this ticket.`, staff);
-		delete tickets[this.userid];
 		writeTickets();
 		notifyStaff();
 		this.room.destroy();
@@ -366,11 +341,10 @@ export class HelpTicket extends Rooms.RoomGame {
 
 	// Modified version of RoomGame.destory
 	destroy() {
-		if (tickets[this.userid] && this.open) {
+		if (this.open) {
 			// Ticket was not deleted - deleted tickets already have this done to them - and was not closed.
 			// Write stats and change flags as appropriate prior to deletion.
 			this.open = false;
-			tickets[this.userid] = this.toJSON();
 			notifyStaff();
 			writeTickets();
 			this.writeStats(false);
@@ -418,6 +392,42 @@ export class HelpTicket extends Rooms.RoomGame {
 		}
 		return false;
 	}
+}
+
+try {
+	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
+	for (const t in ticketData) {
+		const ticket = ticketData[t];
+		if (ticket.banned) {
+			if (ticket.expires && ticket.expires <= Date.now()) continue;
+			Punishments.roomPunish(`staff`, ticket.userid, ['TICKETBAN', ticket.userid, ticket.expires, ticket.reason]);
+			delete ticketData[t]; // delete the old format
+		} else {
+			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
+				// Tickets that have been open for 24+ hours will be automatically closed.
+				const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
+				if (ticketRoom) {
+					const ticketGame = ticketRoom.game as HelpTicket;
+					ticketGame.writeStats(false);
+					ticketRoom.expire();
+				}
+				continue;
+			}
+			// Close open tickets after a restart
+			if (ticket.open && !Chat.oldPlugins.helptickets) ticket.open = false;
+
+			// recreate tickets
+			for (const room of Rooms.rooms.values()) {
+				if (!room.settings.isHelp || !room.game) continue;
+				const game = room.getGame(HelpTicket)!;
+				if (game) {
+					room.game = new HelpTicket(room as ChatRoom, ticketData[game.userid]);
+				}
+			}
+		}
+	}
+} catch (e) {
+	if (e.code !== 'ENOENT') throw e;
 }
 
 const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
@@ -469,6 +479,7 @@ export function notifyStaff() {
 	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
+	const tickets = getTickets();
 	const keys = Object.keys(tickets).sort((aKey, bKey) => {
 		const a = tickets[aKey];
 		const b = tickets[bKey];
@@ -540,21 +551,13 @@ export function notifyStaff() {
 }
 
 function checkIp(ip: string) {
+	const tickets = getTickets();
 	for (const t in tickets) {
 		if (tickets[t].ip === ip && tickets[t].open && !Punishments.sharedIps.has(ip)) {
 			return tickets[t];
 		}
 	}
 	return false;
-}
-
-// Prevent a desynchronization issue when hotpatching
-for (const room of Rooms.rooms.values()) {
-	if (!room.settings.isHelp || !room.game) continue;
-	const game = room.getGame(HelpTicket)!;
-	if (game) {
-		room.game = new HelpTicket(room as ChatRoom, tickets[game.userid]);
-	}
 }
 
 const ticketTitles: {[k: string]: string} = Object.assign(Object.create(null), {
@@ -617,6 +620,7 @@ export const pages: PageTable = {
 
 			const banMsg = HelpTicket.checkBanned(user);
 			if (banMsg) return connection.popup(banMsg);
+			const tickets = getTickets();
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
@@ -805,6 +809,7 @@ export const pages: PageTable = {
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
 			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
 
+			const tickets = getTickets();
 			const keys = Object.keys(tickets).sort((aKey, bKey) => {
 				const a = tickets[aKey];
 				const b = tickets[bKey];
@@ -1105,6 +1110,7 @@ export const commands: ChatCommands = {
 			if (!user.named) return this.popupReply(this.tr`You need to choose a username before doing this.`);
 			const banMsg = HelpTicket.checkBanned(user);
 			if (banMsg) return this.popupReply(banMsg);
+			const tickets = getTickets();
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
@@ -1112,7 +1118,6 @@ export const commands: ChatCommands = {
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
 					// Should never happen
-					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
 					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
@@ -1259,6 +1264,7 @@ export const commands: ChatCommands = {
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
+			const tickets = getTickets();
 			const ticket = tickets[toID(this.inputUsername)];
 			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) {
 				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
@@ -1333,8 +1339,6 @@ export const commands: ChatCommands = {
 			this.globalModlog(`TICKETBAN`, targetUser || userid, target);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
-				const targetTicket = tickets[userObjID];
-				if (targetTicket?.open) targetTicket.open = false;
 				const helpRoom = Rooms.get(`help-${userObjID}`);
 				if (helpRoom) {
 					const ticketGame = helpRoom.getGame(HelpTicket)!;
@@ -1392,16 +1396,14 @@ export const commands: ChatCommands = {
 			// This is a utility only to be used if something goes wrong
 			this.checkCan('makeroom');
 			if (!target) return this.parse(`/help helpticket delete`);
-			const ticket = tickets[toID(target)];
-			if (!ticket) return this.errorReply(this.tr`${target} does not have a ticket.`);
-			const targetRoom = Rooms.get(`help-${ticket.userid}`);
+			const targetRoom = Rooms.get(`help-${toID(target)}`);
 			if (targetRoom) {
 				targetRoom.getGame(HelpTicket)!.deleteTicket(user);
 			} else {
-				delete tickets[ticket.userid];
-				writeTickets();
-				notifyStaff();
+				return this.errorReply(`${target} does not have a ticket.`);
 			}
+			writeTickets();
+			notifyStaff();
 			this.sendReply(this.tr`You deleted ${target}'s ticket.`);
 		},
 		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
