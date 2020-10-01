@@ -387,7 +387,7 @@ export const ssbSets: SSBSets = {
 	Kev: {
 		species: 'Kingdra', ability: 'King of Atlantis', item: 'Life Orb', gender: 'M',
 		moves: ['Hydro Pump', 'Core Enforcer', 'Hurricane'],
-		signatureMove: ' King\'s Trident',
+		signatureMove: 'King\'s Trident',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Kingbaruk: {
