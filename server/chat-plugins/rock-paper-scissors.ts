@@ -4,9 +4,6 @@
  */
 import {Utils} from '../../lib/utils';
 
-/** Map<to, [from, rounds]> */
-const challengeRequests: Map<string, string> = new Map();
-
 const MAX_ROUNDS = 500;
 const TIMEOUT = 10 * 1000;
 const ICONS: {[k: string]: string} = {
@@ -15,21 +12,15 @@ const ICONS: {[k: string]: string} = {
 	Scissors: '<i class="fa fa-hand-scissors-o"></i>',
 };
 
+export const challenges: Map<string, string> = Chat.oldPlugins['rockpaperscissors']?.challenges || new Map();
+
 export class RPSPlayer extends Rooms.RoomGamePlayer {
-	user: User;
-	currentChoice: string;
-	name: string;
-	constructor(user: User, game: RPSGame) {
-		super(user, game);
-		this.user = user;
-		this.name = user.name;
-		this.currentChoice = "";
-	}
+	currentChoice = '';
+	points = 0;
 }
 
 export class RPSGame extends Rooms.RoomGame {
 	room: Room;
-	points: {[k: string]: number};
 	currentRound: number;
 	playerTable: {[k: string]: RPSPlayer};
 	readonly checkChat = true;
@@ -39,7 +30,6 @@ export class RPSGame extends Rooms.RoomGame {
 	constructor(room: Room) {
 		super(room);
 		this.room = room;
-		this.points = {};
 		this.currentRound = 0;
 		this.playerTable = {};
 		this.title = 'Rock Paper Scissors';
@@ -117,8 +107,9 @@ export class RPSGame extends Rooms.RoomGame {
 		let buf = `|fieldhtml|<div class="broadcast-blue"><table style="width: 100%; background-color: #9CBEDF; margin: 2px 0">`;
 		buf += `<tr style="background-color: #6688AA"><th>Username</th><th>Points</th></tr>`;
 		for (const id in this.playerTable) {
-			buf += Utils.html`<tr style="background-color: #6688AA"><td>${this.playerTable[id].name}</td>`;
-			buf += Utils.html`<td style="text-align: center">${this.points[id] || 0}</td></tr>`;
+			const player = this.playerTable[id];
+			buf += Utils.html`<tr style="background-color: #6688AA"><td>${player.name}</td>`;
+			buf += Utils.html`<td style="text-align: center">${player.points}</td></tr>`;
 		}
 		buf += `</table></div>`;
 		if (this.wins.length) {
@@ -145,12 +136,12 @@ export class RPSGame extends Rooms.RoomGame {
 	end() {
 		const [p1, p2] = Object.keys(this.playerTable).map(item => this.playerTable[item]);
 		this.addControls(`<h2>The game is over!</h2>`);
-		if (this.points[p1?.id] === this.points[p2?.id]) {
+		if (p1?.points === p2?.points) {
 			this.addField(Utils.html`Tie between ${p1} and ${p2}!`);
 			return this.startNextRound();
 		}
-		const winner = (this.points[p1.id] || 0) > (this.points[p2.id] || 0) ? p1 : p2;
-		const points = this.points[winner.id];
+		const winner = p1.points > p2.points ? p1 : p2;
+		const points = winner.points;
 		const message = Utils.html`<strong>${winner.name} won the game with ${Chat.count(points, 'points')}!</strong>`;
 		this.addField(message);
 		this.add(message);
@@ -182,7 +173,7 @@ export class RPSGame extends Rooms.RoomGame {
 		} else {
 			const winner = result === true ? p1 : p2;
 			this.add(Utils.html`${winner.name} wins the round! They gain a point.`);
-			this.addPoint(winner);
+			winner.points++;
 			this.wins.push({
 				name: winner.name,
 				choice: winner.currentChoice,
@@ -195,12 +186,6 @@ export class RPSGame extends Rooms.RoomGame {
 		this.clearChoices();
 		this.sendScrollback();
 		return this.startNextRound();
-	}
-	addPoint(player: RPSPlayer) {
-		const id = player.user.id;
-		if (!this.points[id]) this.points[id] = 0;
-		this.points[id]++;
-		return this.points[id];
 	}
 	add(message: string) {
 		return this.room.add(`|html|${message}`).update();
@@ -320,7 +305,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
 			}
 			if (!this.pmTarget) this.pmTarget = targetUser;
-			challengeRequests.set(targetUser.id, user.id);
+			challenges.set(targetUser.id, user.id);
 			this.sendChatMessage(
 				`/raw ${user.name} challenged you to Rock, Paper, Scissors!` +
 				`<button class="button" name="send" value="/rps accept"><strong>Accept</strong></button></div>`,
@@ -328,7 +313,7 @@ export const commands: ChatCommands = {
 		},
 
 		accept(target, room, user) {
-			const id = challengeRequests.get(user.id);
+			const id = challenges.get(user.id);
 			if (!id) return this.errorReply(`You have no Rock, Paper, Scissors request pending from ${target}.`);
 			const targetUser = Users.get(id)!;
 			const existingRoom = findExisting(user.id, targetUser.id);
@@ -351,11 +336,11 @@ export const commands: ChatCommands = {
 		},
 
 		deny(target, room, user) {
-			const request = challengeRequests.get(user.id);
+			const request = challenges.get(user.id);
 			if (!request) return this.errorReply(`You have no Rock, Paper, Scissors challenge pending.`);
 			const [sender] = request;
 			Users.get(sender)?.popup(`${user.name} denied your Rock, Paper, Scissors challenge.`);
-			challengeRequests.delete(user.id);
+			challenges.delete(user.id);
 		},
 
 		end(target, room, user) {
