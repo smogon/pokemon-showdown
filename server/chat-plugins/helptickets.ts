@@ -42,8 +42,7 @@ try {
 				continue;
 			}
 			// Close open tickets after a restart
-			// (i.e. if the server has been running for less than a minute)
-			if (ticket.open && process.uptime() <= 60) ticket.open = false;
+			if (ticket.open && !Chat.oldPlugins.helptickets) ticket.open = false;
 			tickets[t] = ticket;
 		}
 	}
