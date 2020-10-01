@@ -1574,45 +1574,46 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 4] Ubers",
+		name: "[Gen 5] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286279/">DPP Ubers</a>`,
-		],
-
-		mod: 'gen4',
-		// searchShow: false,
-		ruleset: ['Standard', 'Arceus EV Limit'],
-	},
-	{
-		name: "[Gen 5] 2v2 Doubles",
-		desc: `Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8457486/">BW 2v2 Doubles</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286278/">BW2 Ubers</a>`,
 		],
 
 		mod: 'gen5',
-		gameType: 'doubles',
-		teamLength: {
-			validate: [2, 4],
-			battle: 2,
-		},
-		ruleset: ['[Gen 5] Doubles OU', 'Accuracy Moves Clause'],
-		banlist: ['Kingdra', 'Focus Sash', 'Final Gambit', 'Perish Song'],
+		// searchShow: false,
+		ruleset: ['Standard', '!Evasion Moves Clause', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 1] NU",
+		name: "[Gen 6] Monotype",
+		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3668913/">RBY NU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8411583/">ORAS Monotype</a>`,
 		],
 
-		mod: 'gen1',
-		ruleset: ['[Gen 1] UU'],
+		mod: 'gen6',
+		// searchShow: false,
+		ruleset: ['Standard', 'Swagger Clause', 'Same Type Clause'],
 		banlist: [
-			// UU
-			'Articuno', 'Dodrio', 'Dragonite', 'Dugtrio', 'Electabuzz', 'Golem', 'Gyarados', 'Haunter', 'Hypno',
-			'Kadabra', 'Kangaskhan', 'Omastar', 'Persian', 'Poliwrath', 'Raichu', 'Tangela', 'Tentacruel', 'Vaporeon',
-			// NUBL
-			'Golduck',
+			'Aegislash', 'Altaria-Mega', 'Arceus', 'Blaziken', 'Charizard-Mega-X', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga',
+			'Genesect', 'Gengar-Mega', 'Giratina', 'Greninja', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kyogre',
+			'Kyurem-White', 'Lucario-Mega', 'Lugia', 'Mawile-Mega', 'Medicham-Mega', 'Metagross-Mega', 'Mewtwo', 'Palkia', 'Rayquaza',
+			'Reshiram', 'Sableye-Mega', 'Salamence-Mega', 'Shaymin-Sky', 'Slowbro-Mega', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Shadow Tag', 'Damp Rock', 'Smooth Rock', 'Soul Dew', 'Baton Pass',
+		],
+	},
+	{
+		name: "[Gen 2] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8609597/">GSC PU</a>`,
+		],
+
+		mod: 'gen2',
+		ruleset: ['[Gen 2] NU'],
+		banlist: [
+			'Arbok', 'Azumarill', 'Chinchou', 'Dewgong', 'Dragonair', 'Dugtrio', 'Dunsparce', 'Exeggcute', 'Farfetch\u2019d',
+			'Fearow', 'Flareon', 'Gloom', 'Graveler', 'Hitmonlee', 'Houndour', 'Kingler', 'Ledian', 'Lickitung', 'Magmar',
+			'Magnemite', 'Ninetales', 'Octillery', 'Persian', 'Pidgeot', 'Pineco', 'Porygon', 'Primeape', 'Pupitar', 'Rapidash',
+			'Raticate', 'Shuckle', 'Sneasel', 'Stantler', 'Sudowoodo', 'Weezing', 'Wigglytuff', 'Xatu',
 		],
 	},
 
@@ -2158,24 +2159,6 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 6] Monotype",
-		desc: `All the Pok&eacute;mon on a team must share a type.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8411583/">ORAS Monotype</a>`,
-		],
-
-		mod: 'gen6',
-		searchShow: false,
-		ruleset: ['Standard', 'Swagger Clause', 'Same Type Clause'],
-		banlist: [
-			'Aegislash', 'Altaria-Mega', 'Arceus', 'Blaziken', 'Charizard-Mega-X', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga',
-			'Genesect', 'Gengar-Mega', 'Giratina', 'Greninja', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kyogre',
-			'Kyurem-White', 'Lucario-Mega', 'Lugia', 'Mawile-Mega', 'Medicham-Mega', 'Metagross-Mega', 'Mewtwo', 'Palkia', 'Rayquaza',
-			'Reshiram', 'Sableye-Mega', 'Salamence-Mega', 'Shaymin-Sky', 'Slowbro-Mega', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Shadow Tag', 'Damp Rock', 'Smooth Rock', 'Soul Dew', 'Baton Pass',
-		],
-	},
-	{
 		name: "[Gen 6] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
@@ -2385,16 +2368,6 @@ export const Formats: FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 5] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286278/">BW2 Ubers</a>`,
-		],
-
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['Standard', '!Evasion Moves Clause', 'Sleep Clause Mod'],
-	},
-	{
 		name: "[Gen 5] UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3474024/">BW2 UU Viability Rankings</a>`,
@@ -2587,6 +2560,16 @@ export const Formats: FormatList = [
 	{
 		section: "DPP Singles",
 		column: 5,
+	},
+	{
+		name: "[Gen 4] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286279/">DPP Ubers</a>`,
+		],
+
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['Standard', 'Arceus EV Limit'],
 	},
 	{
 		name: "[Gen 4] UU",
