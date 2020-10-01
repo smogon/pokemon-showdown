@@ -219,6 +219,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(html);
 		room.update();
 	},
+	dailies: 'viewspotlights',
 	viewspotlights(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
