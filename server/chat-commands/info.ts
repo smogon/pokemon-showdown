@@ -2595,7 +2595,9 @@ export const commands: ChatCommands = {
 	regtime: 'registertime',
 	async registertime(target, room, user, connection) {
 		this.runBroadcast();
-		Monitor.countCommands(connection.ip);
+		if (Monitor.countNetRequests(connection.ip)) {
+			return this.errorReply(`You are using this command to quickly. Wait a bit and try again.`);
+		}
 		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
 		target = toID(target);
 		if (!target) target = user.id;
@@ -2611,7 +2613,7 @@ export const commands: ChatCommands = {
 		const date = new Date(result.registertime * 1000);
 		const regDate = Chat.toTimestamp(date, {human: true});
 		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
-		this.sendReplyBox(Chat.html`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`);
+		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`);
 	},
 	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],
 

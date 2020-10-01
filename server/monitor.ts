@@ -53,7 +53,7 @@ if (('Config' in global) &&
 
 export const Monitor = new class {
 	connections = new TimedCounter();
-	commands = new TimedCounter();
+	netRequests = new TimedCounter();
 	battles = new TimedCounter();
 	battlePreps = new TimedCounter();
 	groupChats = new TimedCounter();
@@ -220,11 +220,11 @@ export const Monitor = new class {
 	/**
 	 * Counts commands that use HTTPs requests. Returns true if too many.
 	 */
-	countCommands(ip: string) {
-		const [count] = this.commands.increment(ip, 1 * 60 * 1000);
+	countNetRequests(ip: string) {
+		const [count] = this.netRequests.increment(ip, 1 * 60 * 1000);
 		if (count <= 10) return false;
 		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
-		throw new Chat.ErrorMessage('Due to high load, you are limited to 10 high-load commands every 1 minute.');
+		return true;
 	}
 
 	/**
