@@ -4,7 +4,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (addedMoves) {
 				for (const move of addedMoves) {
 					const modData = this.modData('Learnsets', this.toID(mon));
-					if (this.toID(move) in modData.learnset) modData.learnset[this.toID(move)] = [];
+					if (!(this.toID(move) in modData.learnset)) modData.learnset[this.toID(move)] = [];
 					modData.learnset[this.toID(move)].push("8M");
 				}
 			}
