@@ -551,7 +551,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		let answer: string[] = [];
 		if (question_answer === 'answer') {
-			if (value.includes(',')) return false;
 			answer = value.split(';').map(p => p.trim());
 		}
 
@@ -1593,11 +1592,8 @@ const ScavengerCommands: ChatCommands = {
 		) {
 			return this.errorReply("You cannot edit the hints and answers if you are not the host.");
 		}
-		const parts = target.split(',');
-		const question = parseInt(parts[0]);
-		const type = parts[1];
-		const value = parts.slice(2).join(',').trim();
-		if (!game.onEditQuestion(parseInt(question), toID(type), value)) {
+		const [question, type, ...value] = target.split(',');
+		if (!game.onEditQuestion(parseInt(question), toID(type), value.join(',').trim())) {
 			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
 		}
 	},
