@@ -17,7 +17,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		moddedLearnset('porygon2', null, ['teleport']);
 		moddedLearnset('jellicent', ['haze'], ['toxic', 'recover']);
 		moddedLearnset('crabominable', ['hammerarm', 'icehammer'], ['payback']);
-		moddedLearnset('oricoriosensu', ['reflecttype'], ['calmmind']);
+		moddedLearnset('oricorio', ['reflecttype'], ['calmmind']);
 		moddedLearnset('wigglytuff', ['earthquake', 'jumpkick'], ['teleport']);
 		moddedLearnset('wormadamtrash', ['spikes', 'healorder'], ['quiverdance']);
 		moddedLearnset('heatmor', ['dragondance'], ['knockoff', 'suckerpunch', 'thunderpunch']);
