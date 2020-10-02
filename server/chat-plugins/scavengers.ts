@@ -225,7 +225,7 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 					(q, i) => {
 						if (i % 2) {
 							q = q as string[];
-							return Utils.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />`;
+							return Utils.html`<span style="color: green"><em>[${q.join(' ; ')}]</em></span><br />`;
 						} else {
 							q = q as string;
 							return Utils.escapeHTML(q);
@@ -1593,9 +1593,11 @@ const ScavengerCommands: ChatCommands = {
 		) {
 			return this.errorReply("You cannot edit the hints and answers if you are not the host.");
 		}
-
-		const [question, type, ...value] = target.split(',');
-		if (!game.onEditQuestion(parseInt(question), toID(type), value.join(',').trim())) {
+		const parts = target.split(',');
+		const question = parseInt(parts[0]);
+		const type = parts[1];
+		const value = parts.slice(2).join(',').trim();
+		if (!game.onEditQuestion(parseInt(question), toID(type), value)) {
 			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
 		}
 	},
