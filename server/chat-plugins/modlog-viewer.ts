@@ -99,7 +99,7 @@ function prettifyResults(
 	}
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
-	if (search.anyField) searchString += `containing ${search.anyField}`;
+	if (search.anyField) searchString += `containing ${search.anyField} `;
 	if (search.note) searchString += `with a note including any of: ${search.note.searches.join(', ')} `;
 	if (search.user) searchString += `taken against ${search.user.search} `;
 	if (search.ip) searchString += `taken against a user on the IP ${search.ip} `;
