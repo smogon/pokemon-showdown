@@ -620,21 +620,18 @@ export const pages: PageTable = {
 
 			const banMsg = HelpTicket.checkBanned(user);
 			if (banMsg) return connection.popup(banMsg);
-			const tickets = getTickets();
-			let ticket = tickets[user.id];
+			let helpRoom = Rooms.get(`help-${user.id}`);
+			let ticket = helpRoom?.getGame(HelpTicket)?.toJSON();
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
-				if (!ticket && ipTicket) ticket = ipTicket;
-				const helpRoom = Rooms.get(`help-${ticket.userid}`);
-				if (!helpRoom) {
-					// Should never happen
-					writeTickets();
-				} else {
-					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
-					connection.popup(this.tr`You already have a Help ticket.`);
-					user.joinRoom(`help-${ticket.userid}` as RoomID);
-					return this.close();
+				if (!ticket && ipTicket) {
+					ticket = ipTicket;
+					helpRoom = Rooms.get(`help-${toID(ticket.creator)}`);
 				}
+				if (!helpRoom?.auth.has(user.id)) helpRoom!.auth.set(user.id, '+');
+				connection.popup(this.tr`You already have a Help ticket.`);
+				user.joinRoom(`help-${ticket?.userid || user.id}` as RoomID);
+				return this.close();
 			}
 
 			const isStaff = user.can('lock');
@@ -1109,20 +1106,17 @@ export const commands: ChatCommands = {
 			if (!user.named) return this.popupReply(this.tr`You need to choose a username before doing this.`);
 			const banMsg = HelpTicket.checkBanned(user);
 			if (banMsg) return this.popupReply(banMsg);
-			const tickets = getTickets();
-			let ticket = tickets[user.id];
+			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
+			let ticket = (helpRoom?.game as HelpTicket | null)?.toJSON();
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
-				if (!ticket && ipTicket) ticket = ipTicket;
-				const helpRoom = Rooms.get(`help-${ticket.userid}`);
-				if (!helpRoom) {
-					// Should never happen
-					writeTickets();
-				} else {
-					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
-					this.parse(`/join help-${ticket.userid}`);
-					return this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
+				if (!ticket && ipTicket) {
+					ticket = ipTicket;
+					helpRoom = Rooms.get(`help-${toID(ticket.creator)}`) as ChatRoom | null;
 				}
+				if (!helpRoom!.auth.has(user.id)) helpRoom!.auth.set(user.id, '+');
+				this.parse(`/join help-${ticket?.userid || user.id}`);
+				return this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
 			}
 			if (Monitor.countTickets(user.latestIp)) {
 				const maxTickets = Punishments.sharedIps.has(user.latestIp) ? `50` : `5`;
@@ -1207,7 +1201,6 @@ export const commands: ChatCommands = {
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong>`;
 			}
-			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(`help-${user.id}` as RoomID, `[H] ${user.name}`, {
 					isPersonal: true,
@@ -1242,7 +1235,6 @@ export const commands: ChatCommands = {
 				helpRoom.add(pmRequestButton);
 				helpRoom.update();
 			}
-			tickets[user.id] = ticket;
 			writeTickets();
 			notifyStaff();
 			connection.send(`>view-help-request\n|deinit`);
