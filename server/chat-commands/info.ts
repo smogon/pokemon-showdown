@@ -12,6 +12,20 @@ import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 
+export function getCommonBattles(userID1: ID, user1: User | null, userID2: ID, user2: User | null) {
+	const battles = [];
+	for (const curRoom of Rooms.rooms.values()) {
+		if (!curRoom.battle) continue;
+		if (
+			(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
+			(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
+		) {
+			battles.push(curRoom.roomid);
+		}
+	}
+	return battles;
+}
+
 export const commands: ChatCommands = {
 	ip: 'whois',
 	rooms: 'whois',
@@ -321,16 +335,7 @@ export const commands: ChatCommands = {
 		const userID1 = toID(targetUsername1);
 		const userID2 = toID(targetUsername2);
 
-		const battles = [];
-		for (const curRoom of Rooms.rooms.values()) {
-			if (!curRoom.battle) continue;
-			if (
-				(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID1)) &&
-				(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID2))
-			) {
-				battles.push(curRoom.roomid);
-			}
-		}
+		const battles = getCommonBattles(userID1, user1, userID2, user2);
 
 		if (!battles.length) return this.sendReply(`${targetUsername1} and ${targetUsername2} have no common battles.`);
 
