@@ -578,6 +578,27 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 8] CCAPM 2020",
+		desc: `A community-created Pet Mod.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3667802/">CCAPM 2020</a>`,
+		],
+
+		mod: 'ccapm2',
+		searchShow: false,
+		ruleset: ['Obtainable', '!Obtainable Abilities', 'Species Clause', 'Nickname Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
+		banlist: ['All Pokemon', 'All Abilities', 'Baton Pass'],
+		unbanlist: [
+			// Pokemon
+			'Aegislash', 'Beheeyem', 'Camerupt', 'Chesnaught', 'Crabominable', 'Delibird', 'Dragonair', 'Eelektross', 'Empoleon', 'Frosmoth',
+			'Garchomp', 'Golbat', 'Heatmor', 'Jellicent', 'Lycanroc-Dusk', 'Oricorio-Sensu', 'Porygon2', 'Reshiram', 'Skuntank', 'Togedemaru',
+			'Whimsicott', 'Wigglytuff', 'Wormadam-Trash',
+			// Abilities
+			'Adaptive', 'Contradict', 'Counter Shield', 'Elemental', 'Embargo Act', 'Exhaust', 'Forager', 'Identity Theft', 'Inextremis',
+			'Lag Behind', 'Prepared', 'Survey', 'Terror', 'Trigger Finger', 'Unflagging',
+		],
+	},
+	{
 		name: "[Gen 6] Gen-NEXT OU",
 
 		mod: 'gennext',
