@@ -83,7 +83,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
-				move.type = 'Telepathy';
+				move.type = 'Psychic';
 				// @ts-ignore
 				move.telepathyBoosted = true;
 			}
@@ -103,6 +103,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onAfterMove(pokemon, target, move) {
 			if (move.id === 'shellsmash') {
 				pokemon.setAbility('weakarmor');
+				this.add('-message', `${pokemon.name}'s ability changed to Weak Armor!`);
 			}
 		},
 		name: "Shell Armor",
@@ -111,7 +112,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "On switch in, this Pokemon and its allies use Charge.",
 		onStart(source) {
 			for (const ally of source.side.active) {
-				ally.addVolatile('charge');
+				this.useMove('charge', ally);
 			}
 		},
 		name: "Battery",
@@ -139,7 +140,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	ironfist: {
 		shortDesc: "This Pokemon's punch moves are super effective against Fairy-types.",
-		onSourceEffectiveness(typeMod, target, type, move) {
+		onFoeEffectiveness(typeMod, target, type, move) {
 			if (move.flags['punch'] && target?.hasType('Fairy')) return 1;
 		},
 		name: "Iron Fist",
@@ -147,16 +148,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	receiver: {
 		shortDesc: "Permanently copies the ability of the ally that fainted before switching in.",
 		onStart(source) {
-			if (source.side.pokemonFaintedLastTurn) {
-				const fainted = source.side.pokemonFaintedLastTurn;
-				const ability = fainted.getAbility();
+			if (source.side.faintedThisTurn) {
+				const fainted = source.side.faintedThisTurn;
 				const bannedAbilities = [
-					'battlebond', 'comatose', 'disguise', 'download', 'flowergift', 'forecast', 'gorillatactics', 'gulpmissile', 'hugepower', 'hungerswitch', 'hustle', 'iceface', 'illusion', 'intrepidsword', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'purepower', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode']
-				;
-				if (bannedAbilities.includes(ability.id)) return;
-				source.setAbility(ability);
+					'battlebond', 'comatose', 'disguise', 'download', 'flowergift', 'forecast', 'gorillatactics', 'gulpmissile', 'hugepower', 'hungerswitch', 'hustle', 'iceface', 'illusion', 'intrepidsword', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'purepower', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				];
+				if (bannedAbilities.includes(this.toID(fainted.ability))) return;
+				source.setAbility(fainted.ability);
 				source.baseAbility = fainted.baseAbility;
 				source.ability = fainted.ability;
+				this.add('-message', `${source.name} received ${fainted.name}'s ability!`);
 			}
 		},
 		name: "Receiver",
@@ -164,23 +165,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	sweetveil: {
 		shortDesc: "On switch-in, this Pokemon's side gets a side condition that heals any active Pokemon by 1/16.",
 		onStart(source) {
-			if (!source.side.getSideCondition('sweetveil')) source.side.addSideCondition('sweetveil');
-		},
-		condition: {
-			onResidualOrder: 5,
-			onResidualSubOrder: 2,
-			onResidual(pokemon) {
-				if (this.field.isTerrain('grassyterrain')) return;
-				for (const ally of pokemon.side.active) {
-					this.heal(ally.maxhp / 16);
-				}
-			},
-			onTerrain(pokemon) {
-				if (!this.field.isTerrain('grassyterrain')) return;
-				for (const ally of pokemon.side.active) {
-					this.heal(ally.maxhp / 16);
-				}
-			},
+			source.side.addSideCondition('sweetveilscreen');
 		},
 		name: "Sweet Veil",
 	},
@@ -221,7 +206,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (move.category === 'Status') continue;
 				const moveType = move.id === 'hiddenpower' ? pokemon.hpType : move.type;
 				if (
-					this.dex.getImmunity(moveType, me) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+					this.dex.getImmunity(moveType, me) && this.dex.getEffectiveness(moveType, me) > 0 ||
 					move.ohko
 				) {
 					this.add('-ability', me, 'Run Away');
@@ -235,7 +220,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	tangledfeet: {
 		shortDesc: "This Pokemon's first move will have +1 priority until the end of the turn.",
 		onModifyPriority(priority, source, target, move) {
-			if (source.activeMoveActions > 1) return priority;
+			if (source.activeMoveActions > 0) return priority;
 			return move.priority + 1;
 		},
 		name: "Tangled Feet",

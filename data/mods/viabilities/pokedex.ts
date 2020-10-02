@@ -1,4 +1,4 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	accelgor: {
 		inherit: true,
 		abilities: {0: "Hydration", 1: "Sticky Hold", H: "Unburden", S: "Shell Armor"},
@@ -83,13 +83,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	glaceon: {
 		inherit: true,
-		baseStats: {hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65},
 		abilities: {0: "Snow Cloak", 1: "Run Away", H: "Ice Body", S: "Anticipation"},
 	},
 	golurk: {
 		inherit: true,
 		baseStats: {hp: 89, atk: 139, def: 80, spa: 50, spd: 80, spe: 70},
-		abilities: {0: "Iron Fist", 1: "Klutz", H: "No Guard"},
 	},
 	goodra: {
 		inherit: true,
@@ -100,21 +98,25 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 70, atk: 100, def: 122, spa: 53, spd: 80, spe: 94},
 		abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia", S: "Illuminate"},
+		unreleasedHidden: false,
 	},
 	gourgeistlarge: {
 		inherit: true,
 		baseStats: {hp: 85, atk: 100, def: 122, spa: 53, spd: 85, spe: 74},
 		abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia", S: "Illuminate"},
+		unreleasedHidden: false,
 	},
 	gourgeistsmall: {
 		inherit: true,
 		baseStats: {hp: 55, atk: 100, def: 122, spa: 53, spd: 75, spe: 114},
 		abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia", S: "Illuminate"},
+		unreleasedHidden: false,
 	},
 	gourgeistsuper: {
 		inherit: true,
 		baseStats: {hp: 100, atk: 100, def: 122, spa: 53, spd: 90, spe: 54},
 		abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia", S: "Illuminate"},
+		unreleasedHidden: false,
 	},
 	grapploct: {
 		inherit: true,
@@ -129,36 +131,29 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	hatterene: {
 		inherit: true,
 		baseStats: {hp: 72, atk: 90, def: 100, spa: 136, spd: 108, spe: 29},
-		abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
 	},
 	hitmonchan: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 112, def: 85, spa: 20, spd: 112, spe: 91},
-		abilities: {0: "Keen Eye", 1: "Iron Fist", H: "Inner Focus"},
 	},
 	jolteon: {
 		inherit: true,
-		baseStats: {hp: 65, atk: 65, def: 60, spa: 110, spd: 95, spe: 130},
 		abilities: {0: "Volt Absorb", 1: "Battery", H: "Quick Feet", S: "Anticipation"},
 	},
 	kingler: {
 		inherit: true,
 		baseStats: {hp: 70, atk: 130, def: 115, spa: 50, spd: 50, spe: 85},
-		abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
 	},
 	lanturn: {
 		inherit: true,
 		baseStats: {hp: 125, atk: 43, def: 68, spa: 91, spd: 91, spe: 67},
-		abilities: {0: "Volt Absorb", 1: "Illuminate", H: "Water Absorb"},
 	},
 	lapras: {
 		inherit: true,
 		baseStats: {hp: 130, atk: 75, def: 95, spa: 100, spd: 95, spe: 65},
-		abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
 	},
 	leafeon: {
 		inherit: true,
-		baseStats: {hp: 65, atk: 110, def: 130, spa: 60, spd: 65, spe: 95},
 		abilities: {0: "Leaf Guard", 1: "Run Away", H: "Chlorophyll", S: "Anticipation"},
 	},
 	ludicolo: {
@@ -169,22 +164,18 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	musharna: {
 		inherit: true,
 		baseStats: {hp: 131, atk: 45, def: 100, spa: 112, spd: 110, spe: 14},
-		abilities: {0: "Forewarn", 1: "Synchronize", H: "Telepathy"},
 	},
 	ninjask: {
 		inherit: true,
-		baseStats: {hp: 61, atk: 90, def: 45, spa: 50, spd: 50, spe: 160},
 		abilities: {0: "Speed Boost", 1: "Run Away", H: "Infiltrator"},
 	},
 	orbeetle: {
 		inherit: true,
 		baseStats: {hp: 75, atk: 40, def: 110, spa: 92, spd: 120, spe: 93},
-		abilities: {0: "Swarm", 1: "Frisk", H: "Telepathy"},
 	},
 	passimian: {
 		inherit: true,
 		baseStats: {hp: 105, atk: 125, def: 90, spa: 40, spd: 60, spe: 95},
-		abilities: {0: "Receiver", 1: "NA", H: "Defiant"},
 	},
 	pincurchin: {
 		inherit: true,
@@ -194,37 +185,30 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	rapidash: {
 		inherit: true,
 		baseStats: {hp: 65, atk: 115, def: 70, spa: 80, spd: 80, spe: 115},
-		abilities: {0: "Run Away", 1: "Flash Fire", H: "Flame Body"},
 	},
 	rapidashgalar: {
 		inherit: true,
 		baseStats: {hp: 75, atk: 110, def: 75, spa: 75, spd: 80, spe: 110},
-		abilities: {0: "Run Away", 1: "Pastel Veil", H: "Anticipation"},
 	},
 	shedinja: {
 		inherit: true,
-		baseStats: {hp: 1, atk: 90, def: 45, spa: 30, spd: 30, spe: 40},
-		abilities: {0: "Wonder Guard", 1: "Run Away", H: "NA"},
+		abilities: {0: "Wonder Guard", H: "Run Away"},
 	},
 	skuntank: {
 		inherit: true,
 		baseStats: {hp: 113, atk: 93, def: 67, spa: 86, spd: 76, spe: 69},
-		abilities: {0: "Stench", 1: "Aftermath", H: "Keen Eye"},
 	},
 	stoutland: {
 		inherit: true,
-		baseStats: {hp: 85, atk: 110, def: 90, spa: 45, spd: 90, spe: 80},
 		abilities: {0: "Intimidate", 1: "Sand Rush", H: "Scrappy", S: "Run Away"},
 	},
 	sylveon: {
 		inherit: true,
-		baseStats: {hp: 95, atk: 65, def: 65, spa: 110, spd: 130, spe: 60},
 		abilities: {0: "Cute Charm", 1: "Run Away", H: "Pixilate", S: "Anticipation"},
 	},
 	toxicroak: {
 		inherit: true,
 		baseStats: {hp: 83, atk: 116, def: 65, spa: 86, spd: 65, spe: 95},
-		abilities: {0: "Anticipation", 1: "Dry Skin", H: "Poison Touch"},
 	},
 	toxtricity: {
 		inherit: true,
@@ -238,12 +222,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	umbreon: {
 		inherit: true,
-		baseStats: {hp: 95, atk: 65, def: 110, spa: 60, spd: 130, spe: 65},
 		abilities: {0: "Synchronize", 1: "Run Away", H: "Inner Focus", S: "Anticipation"},
 	},
 	vaporeon: {
 		inherit: true,
-		baseStats: {hp: 130, atk: 65, def: 60, spa: 110, spd: 95, spe: 65},
 		abilities: {0: "Water Absorb", 1: "Run Away", H: "Hydration", S: "Anticipation"},
 	},
 	vespiquen: {
@@ -254,16 +236,14 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	vikavolt: {
 		inherit: true,
 		baseStats: {hp: 77, atk: 70, def: 95, spa: 145, spd: 80, spe: 58},
-		abilities: {0: "Levitate", 1: "Battery", H: "NA"},
+		abilities: {0: "Levitate", H: "Battery"},
 	},
 	vileplume: {
 		inherit: true,
-		baseStats: {hp: 75, atk: 80, def: 85, spa: 110, spd: 90, spe: 50},
 		abilities: {0: "Chlorophyll", 1: "Stench", H: "Effect Spore", S: "Run Away"},
 	},
 	weezinggalar: {
 		inherit: true,
-		baseStats: {hp: 65, atk: 90, def: 120, spa: 85, spd: 70, spe: 60},
 		abilities: {0: "Levitate", 1: "Neutralizing Gas", H: "Misty Surge", S: "Stench"},
 	},
 };
