@@ -225,7 +225,7 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 					(q, i) => {
 						if (i % 2) {
 							q = q as string[];
-							return Utils.html`<span style="color: green"><em>[${q.join(' ; ')}]</em></span><br />`;
+							return Utils.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />`;
 						} else {
 							q = q as string;
 							return Utils.escapeHTML(q);
@@ -699,7 +699,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						this.forceWrap(q.answer.join(' / '))
+						this.forceWrap(q.answer.join(' ; '))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
