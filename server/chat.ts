@@ -1852,7 +1852,7 @@ export const Chat = new class {
 	 *
 	 * options.human = true will reports hours human-readable
 	 */
-	toTimestamp(date: Date, options: {human?: any} = {}) {
+	toTimestamp(date: Date, options: {human?: boolean} = {}) {
 		const human = options.human;
 		let parts: any[] = [
 			date.getFullYear(),	date.getMonth() + 1, date.getDate(),
