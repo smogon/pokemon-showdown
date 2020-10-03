@@ -69,7 +69,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		pseudoWeather: 'trickroom',
 		secondary: null,
-		target: "All",
+		target: "all",
 		type: "Fire",
 	},
 
