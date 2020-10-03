@@ -1434,7 +1434,8 @@ export class ModdedDex {
 		let output = '';
 		for (const [i, mon] of team.entries()) {
 			const species = Dex.getSpecies(mon.species);
-			output += nicknames ? `${nicknames?.[i]} (${species.name})` : species.name;
+			const nickname = nicknames?.[i];
+			output += nickname && nickname !== species.name ? `${nickname} (${species.name})` : species.name;
 			output += mon.item ? ` @ ${Dex.getItem(mon.item).name}<br />` : `<br />`;
 			output += `Ability: ${Dex.getAbility(mon.ability).name}<br />`;
 			if (typeof mon.happiness === 'number' && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br />`;
