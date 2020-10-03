@@ -4433,7 +4433,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		beforeTurnCallback(pokemon, target) {
 			const willMove = this.queue.willMove(target);
 			if (willMove) {
-				const move = this.dex.getMove(willMove.move);
+				const move = this.dex.getActiveMove(willMove.move.id);
 				if (move.category === "Status") {
 					this.boost({def: -1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
 					this.add(`c|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
