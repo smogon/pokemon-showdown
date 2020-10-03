@@ -2509,6 +2509,26 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-sideend', side, 'Safeguard');
 		},
 	},
+	gmaxsteelsurge: {
+		onStart(side) {
+			if (this.field.isTerrain('waveterrain')) {
+				this.add('-message', `Wave Terrain prevented Steel Spikes from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: G-Max Steelsurge');
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.hasItem('heavydutyboots')) return;
+			// Ice Face and Disguise correctly get typed damage from Stealth Rock
+			// because Stealth Rock bypasses Substitute.
+			// They don't get typed damage from Steelsurge because Steelsurge doesn't,
+			// so we're going to test the damage of a Steel-type Stealth Rock instead.
+			const steelHazard = this.dex.getActiveMove('Stealth Rock');
+			steelHazard.type = 'Steel';
+			const typeMod = this.clampIntRange(pokemon.runEffectiveness(steelHazard), -6, 6);
+			this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+		},
+	},
 	spikes: {
 		name: "Spikes",
 		onStart(side) {
@@ -2526,6 +2546,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
+			if (pokemon.hasItem('heavydutyboots')) return;
 			const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 			this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 		},
@@ -2540,6 +2561,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-sidestart', side, 'move: Stealth Rock');
 		},
 		onSwitchIn(pokemon) {
+			if (pokemon.hasItem('heavydutyboots')) return;
 			const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 			this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 		},
@@ -2555,6 +2577,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
+			if (pokemon.hasItem('heavydutyboots')) return;
 			this.add('-activate', pokemon, 'move: Sticky Web');
 			this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
 		},
@@ -2579,7 +2602,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (pokemon.hasType('Poison')) {
 				this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 				pokemon.side.removeSideCondition('toxicspikes');
-			} else if (pokemon.hasType('Steel')) {
+			} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
 				return;
 			} else if (this.effectData.layers >= 2) {
 				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
