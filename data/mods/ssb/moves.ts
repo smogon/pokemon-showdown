@@ -2367,7 +2367,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Kev
-	 kingstrident: {
+	kingstrident: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
