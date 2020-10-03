@@ -4669,7 +4669,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Sludge Wave', target);
 		},
 		ignoreImmunity: {
-			'Steel': true,
+			'Poison': true,
 		},
 		secondary: null,
 		target: "normal",
