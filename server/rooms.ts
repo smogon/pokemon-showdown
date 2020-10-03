@@ -38,6 +38,7 @@ import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
 import {modlog, ModlogEntry} from './modlog';
+
 /*********************************************************
  * the Room object.
  *********************************************************/
