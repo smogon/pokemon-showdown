@@ -877,7 +877,7 @@ export class CommandContext extends MessageContext {
 	}
 	filter(message: string) {
 		if (!this.room) return null;
-		return Chat.filter(this, message);
+		return Chat.filter(message, this);
 	}
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
@@ -1129,7 +1129,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (Chat.filters.length) {
-			return Chat.filter(this, message);
+			return this.filter(message);
 		}
 
 		return message;
@@ -1376,7 +1376,7 @@ export const Chat = new class {
 	 * Load chat filters
 	 *********************************************************/
 	readonly filters: ChatFilter[] = [];
-	filter(context: CommandContext, message: string) {
+	filter(message: string, context: CommandContext) {
 		// Chat filters can choose to:
 		// 1. return false OR null - to not send a user's message
 		// 2. return an altered string - to alter a user's message
