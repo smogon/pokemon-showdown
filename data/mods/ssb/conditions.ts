@@ -667,7 +667,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			};
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('tiki')}|i hope running away is safe on shield?`);
+			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);
 		},
 		onFaint() {
 			if (this.random(100) < 99) {
