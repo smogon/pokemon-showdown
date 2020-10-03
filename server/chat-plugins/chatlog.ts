@@ -713,10 +713,10 @@ export const pages: PageTable = {
 			return this.errorReply("WCOP team discussions are super secret.");
 		}
 		if (room) {
-			if (!room.checkModjoin(user) && !user.can('bypassall')) {
-				return this.errorReply("Access denied.");
+			if (!user.can('lock')) {
+				if (!room.persist) return this.errorReply(`Access denied.`);
+				this.checkCan('mute', null, room);
 			}
-			if (!user.can('lock')) this.checkCan('mute', null, room);
 		} else {
 			this.checkCan('lock');
 		}
