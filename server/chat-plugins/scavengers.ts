@@ -551,7 +551,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		let answer: string[] = [];
 		if (question_answer === 'answer') {
-			if (value.includes(',')) return false;
 			answer = value.split(';').map(p => p.trim());
 		}
 
@@ -699,7 +698,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						this.forceWrap(q.answer.join(' / '))
+						this.forceWrap(q.answer.join(' ; '))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
