@@ -322,7 +322,7 @@ export class Modlog {
 			regexString += `.*?\\[${wildcard}${this.escapeRegex(search.user.search)}${wildcard}\\].*?`;
 		}
 		if (search.ip) regexString += `${this.escapeRegex(`[${search.ip}`)}.*?\\].*?`;
-		if (search.actionTaker) regexString += `${this.escapeRegex(`by ${search.actionTaker}: `)}.*?`;
+		if (search.actionTaker) regexString += `${this.escapeRegex(`by ${search.actionTaker}`)}.*?`;
 		if (search.note) {
 			const regexGenerator = search.note.isExact ? this.generateRegex : this.escapeRegex;
 			for (const noteSearch of search.note.searches) {
