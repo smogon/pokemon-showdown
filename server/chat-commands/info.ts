@@ -12,6 +12,20 @@ import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 
+export function getCommonBattles(userID1: ID, user1: User | null, userID2: ID, user2: User | null) {
+	const battles = [];
+	for (const curRoom of Rooms.rooms.values()) {
+		if (!curRoom.battle) continue;
+		if (
+			(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
+			(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
+		) {
+			battles.push(curRoom.roomid);
+		}
+	}
+	return battles;
+}
+
 export const commands: ChatCommands = {
 	ip: 'whois',
 	rooms: 'whois',
@@ -321,16 +335,7 @@ export const commands: ChatCommands = {
 		const userID1 = toID(targetUsername1);
 		const userID2 = toID(targetUsername2);
 
-		const battles = [];
-		for (const curRoom of Rooms.rooms.values()) {
-			if (!curRoom.battle) continue;
-			if (
-				(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID1)) &&
-				(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID2))
-			) {
-				battles.push(curRoom.roomid);
-			}
-		}
+		const battles = getCommonBattles(userID1, user1, userID2, user2);
 
 		if (!battles.length) return this.sendReply(`${targetUsername1} and ${targetUsername2} have no common battles.`);
 
@@ -2009,13 +2014,13 @@ export const commands: ChatCommands = {
 
 		const buffer = [];
 		if (showAll || target === 'staff') {
-			buffer.push(`<a href="https://pokemonshowdown.com/pages/staff">${this.tr`Staff FAQ`}</a>`);
+			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/staff`}">${this.tr`Staff FAQ`}</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(this.tr`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
-			buffer.push(`<a href="https://${Config.routes.root}/pages/ladderhelp">${this.tr`How the ladder works`}</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/ladderhelp`}">${this.tr`How the ladder works`}</a>`);
 		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">${this.tr`Tiering FAQ`}</a>`);
@@ -2024,7 +2029,7 @@ export const commands: ChatCommands = {
 			buffer.push(`<a href="https://www.smogon.com/badge_faq">${this.tr`Badge FAQ`}</a>`);
 		}
 		if (showAll || target === 'rng') {
-			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">${this.tr`Common misconceptions about our RNG`}</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/rng`}">${this.tr`Common misconceptions about our RNG`}</a>`);
 		}
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(this.tr`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
@@ -2034,7 +2039,7 @@ export const commands: ChatCommands = {
 			return this.parse(`/help faq`);
 		}
 		if (showAll) {
-			buffer.unshift(`<a href="https://pokemonshowdown.com/pages/faq">${this.tr`Frequently Asked Questions`}</a>`);
+			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
 		}
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
@@ -2599,7 +2604,7 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	code(target, room, user) {
+	code(target, room, user, connection) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
@@ -2610,13 +2615,18 @@ export const commands: ChatCommands = {
 		}
 
 		this.checkBroadcast(true, '!code');
-
-		const code = Chat.getReadmoreCodeBlock(target);
 		this.runBroadcast(true);
+
+		const isPMOrPersonalRoom = this.room?.settings.isPersonal !== false;
+
 		if (this.broadcasting) {
-			return `/raw <div class="infobox">${code}</div>`;
+			if (isPMOrPersonalRoom) {
+				target = Chat.filter(this, target, user, room, connection, this.pmTarget)!;
+				if (!target) return this.errorReply(`Invalid code.`);
+			}
+			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
-			this.sendReplyBox(code);
+			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
 		}
 	},
 	codehelp: [

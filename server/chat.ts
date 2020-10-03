@@ -56,6 +56,14 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
+export interface ChatPlugin {
+	commands?: AnnotatedChatCommands;
+	pages?: PageTable;
+	destroy?: () => void;
+	roomSettings?: SettingsHandler | SettingsHandler[];
+	[k: string]: any;
+}
+
 export type SettingsHandler = (
 	room: Room,
 	user: User,
@@ -810,7 +818,7 @@ export class CommandContext extends MessageContext {
 		}
 		this.roomlog(`(${msg})`);
 	}
-	globalModlog(action: string, user: string | User | null, note?: string | null) {
+	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
 		const entry: ModlogEntry = {action, isGlobal: true, loggedBy: this.user.id, note: note?.replace(/\n/gm, ' ')};
 		if (user) {
 			if (typeof user === 'string') {
@@ -824,6 +832,7 @@ export class CommandContext extends MessageContext {
 				if (alts.length) entry.alts = alts;
 			}
 		}
+		if (ip) entry.ip = ip;
 		this.room?.modlog(entry);
 		Rooms.global.modlog(entry, this.room?.roomid);
 	}
@@ -1358,7 +1367,9 @@ export const Chat = new class {
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
 	/** The key is the name of the plugin. */
-	readonly plugins: {[k: string]: AnyObject} = {};
+	readonly plugins: {[k: string]: ChatPlugin} = {};
+	/** Will be empty except during hotpatch */
+	oldPlugins: {[k: string]: ChatPlugin} = {};
 	roomSettings: SettingsHandler[] = [];
 
 	/*********************************************************
@@ -1684,8 +1695,9 @@ export const Chat = new class {
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		Chat.plugins[name] = plugin;
 	}
-	loadPlugins() {
+	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
 		if (Chat.commands) return;
+		if (oldPlugins) Chat.oldPlugins = oldPlugins;
 
 		void FS('package.json').readIfExists().then(data => {
 			if (data) Chat.packageData = JSON.parse(data);
@@ -1736,6 +1748,7 @@ export const Chat = new class {
 		for (const file of files) {
 			this.loadPlugin(`chat-plugins/${file}`);
 		}
+		Chat.oldPlugins = {};
 	}
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {

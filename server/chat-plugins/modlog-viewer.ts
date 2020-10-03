@@ -70,7 +70,7 @@ function getMoreButton(
 	if (!newLines || lines < maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
-		return `<br /><div style="text-align:center"><button class="button" name="send" value="/${onlyPunishments ? 'punish' : 'mod'}log room=${roomid}, ${searchCmd}, ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+		return Utils.html`<br /><div style="text-align:center"><button class="button" name="send" value="/${onlyPunishments ? 'punish' : 'mod'}log room=${roomid}, ${searchCmd}, ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
 	}
 }
 
@@ -99,8 +99,9 @@ function prettifyResults(
 	}
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
+	if (search.anyField) searchString += `containing ${search.anyField} `;
 	if (search.note) searchString += `with a note including any of: ${search.note.searches.join(', ')} `;
-	if (search.user) searchString += `taken against ${search.user} `;
+	if (search.user) searchString += `taken against ${search.user.search} `;
 	if (search.ip) searchString += `taken against a user on the IP ${search.ip} `;
 	if (search.action) searchString += `of the type ${search.action} `;
 	if (search.actionTaker) searchString += `taken by ${search.actionTaker} `;
@@ -195,6 +196,14 @@ async function getModlog(
 				search.note.isExact = true;
 			}
 		}
+	}
+
+	if (search.user) {
+		if (/^["'].+["']$/.test(search.user.search)) {
+			search.user.search = search.user.search.substring(1, search.user.search.length - 1);
+			search.user.isExact = true;
+		}
+		search.user.search = toID(search.user.search);
 	}
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
@@ -542,29 +551,26 @@ export const commands: ChatCommands = {
 		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
-				// We should guess what parameter they meant
+				// If no specific parameter is specified, we should search all fields
 				value = param.trim();
-				if (/^[0-9]{1,3}\.[0-9]{1,3}/.test(value)) {
-					param = 'ip';
-				} else if (i === 0 && targets.length > 1) {
+				if (i === 0 && targets.length > 1) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
-				} else if (value === value.toUpperCase()) {
-					param = 'action';
-				} else if (toID(param).length < 19) {
-					param = 'user';
 				} else {
-					param = 'note';
+					param = 'any';
 				}
 			}
 			param = toID(param);
 			switch (param) {
+			case 'any':
+				search.anyField = value;
+				break;
 			case 'note': case 'text':
 				if (!search.note?.searches) search.note = {searches: []};
 				search.note.searches.push(value);
 				break;
 			case 'user': case 'name': case 'username': case 'userid':
-				search.user = toID(value);
+				search.user = {search: value};
 				break;
 			case 'ip': case 'ipaddress': case 'ipaddr':
 				search.ip = value;
@@ -584,7 +590,7 @@ export const commands: ChatCommands = {
 				break;
 			default:
 				this.errorReply(`Invalid modlog parameter: '${param}'.`);
-				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`);
+				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', 'any', or 'lines'.`);
 			}
 		}
 
@@ -611,7 +617,7 @@ export const commands: ChatCommands = {
 			connection,
 			roomid,
 			search,
-			target.replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
+			target.replace(/^\s?([^,=]*),\s?/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
 			lines,
 			(cmd === 'punishlog' || cmd === 'pl'),
 			cmd === 'timedmodlog'
@@ -620,10 +626,11 @@ export const commands: ChatCommands = {
 	modloghelp() {
 		this.sendReplyBox(
 			`<code>/modlog [comma-separated list of parameters]</code>: searches the moderator log, defaulting to the current room unless specified otherwise.<br />` +
-			`If an unnamed parameter is specified, <code>/modlog</code> will make its best guess as to which search you meant.<br />` +
+			`If an unnamed parameter is specified, <code>/modlog</code> will search all fields at once.<br />` +
 			`<details><summary>Parameters:</summary>` +
 			`<ul>` +
 			`<li><code>room=[room]</code> - searches a room's modlog</li>` +
+			`<li><code>any=[text]</code> - searches for modlog entries containing the specified text in any field</li>` +
 			`<li><code>userid=[user]</code> - searches for a username (or fragment of one)</li>` +
 			`<li><code>note=[text]</code> - searches the contents of notes/reasons</li>` +
 			`<li><code>ip=[IP address]</code> - searches for an IP address (or fragment of one)</li>` +
