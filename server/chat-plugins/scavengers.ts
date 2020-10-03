@@ -1592,6 +1592,7 @@ const ScavengerCommands: ChatCommands = {
 		) {
 			return this.errorReply("You cannot edit the hints and answers if you are not the host.");
 		}
+
 		const [question, type, ...value] = target.split(',');
 		if (!game.onEditQuestion(parseInt(question), toID(type), value.join(',').trim())) {
 			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
