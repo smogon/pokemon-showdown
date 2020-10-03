@@ -326,7 +326,7 @@ export class Modlog {
 		if (search.note) {
 			const regexGenerator = search.note.isExact ? this.generateRegex : this.escapeRegex;
 			for (const noteSearch of search.note.searches) {
-				regexString += `${regexGenerator(noteSearch)}.*?`;
+				regexString += `${regexGenerator(toID(noteSearch))}.*?`;
 			}
 		}
 
