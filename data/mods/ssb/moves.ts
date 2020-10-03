@@ -445,9 +445,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const newMoveIDs: (string | string[])[] = [ssbSets[pokemon.name].signatureMove];
 				while (newMoveIDs.length < 4) {
 					const randomIndex = Math.floor(Math.random() * ssbSets[pokemon.name].moves.length);
-					const move = ssbSets[pokemon.name].moves[randomIndex];
-					if (!newMoveIDs.includes(move)) {
-						newMoveIDs.push(move);
+					const m = ssbSets[pokemon.name].moves[randomIndex];
+					if (!newMoveIDs.includes(m)) {
+						newMoveIDs.push(m);
 					}
 				}
 				const newMoves = changeMoves(this, pokemon, newMoveIDs);
