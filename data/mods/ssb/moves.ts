@@ -1332,57 +1332,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: 'Fairy',
 	},
 
-	// Elsa
-	bigbang: {
-		accuracy: 100,
-		basePower: 120,
-		category: "Special",
-		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
-		shortDesc: "33% recoil; removes hazards/weather/terrain.",
-		name: "Big Bang",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Extreme Evoboost', source);
-			this.add('-anim', source, 'Light of Ruin', target);
-			this.add('-anim', source, 'Dark Void', target);
-		},
-		onHit(target, source, move) {
-			let success = false;
-			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
-			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
-			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
-				}
-				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
-				}
-			}
-			this.field.clearTerrain();
-			this.field.clearWeather();
-			return success;
-		},
-		recoil: [33, 100],
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
-	},
-
 	// Emeri
 	forcedlanding: {
 		accuracy: true,
@@ -2719,6 +2668,57 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.useMove(randomMove, source);
 		},
 		multihit: [2, 4],
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
+	// Lionyx
+	bigbang: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		desc: "The user loses 33% of the damage dealt by this attack. Resets the field by clearing all hazards, terrains, walls, and weather.",
+		shortDesc: "33% recoil; removes hazards/weather/terrain.",
+		name: "Big Bang",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			this.add('-anim', source, 'Light of Ruin', target);
+			this.add('-anim', source, 'Dark Void', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+			];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
+					}
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						success = true;
+					}
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			return success;
+		},
+		recoil: [33, 100],
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -4723,34 +4723,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-	},
-
-	// tennisace
-	corgistampede: {
-		accuracy: 100,
-		basePower: 30,
-		category: "Physical",
-		desc: "This attack always hits 4 times in a row. Hits Ground-type Pokemon super-effectively.",
-		shortDesc: "Hits 4 times. Super effective on Ground.",
-		name: "Corgi Stampede",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', target, 'Rollout', target);
-			this.add('-anim', target, 'Thundershock', target);
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Ground') return 1;
-		},
-		ignoreImmunity: {Electric: true},
-		multihit: 4,
-		secondary: null,
-		target: "normal",
-		type: "Electric",
 	},
 
 	// Tenshi

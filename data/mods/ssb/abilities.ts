@@ -712,47 +712,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Elsa
-	tension: {
-		desc: "On switch-in, the Pokémon builds up tension, making its next hit a critical hit, and guaranteeing that it will hit.",
-		shortDesc: "On switch-in, the Pokemon's next attack will always be a critical hit and will always hit.",
-		name: "Tension",
-		onStart(pokemon) {
-			this.add("-message", `${pokemon.name} has built up tension!`);
-			// i could just add laserfocus and lockon volatiles here but its an ability soooo
-			pokemon.addVolatile('tension');
-		},
-		condition: {
-			onStart(pokemon, source, effect) {
-				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
-					this.add('-start', pokemon, 'move: Tension', '[silent]');
-				} else {
-					this.add('-start', pokemon, 'move: Tension');
-				}
-			},
-			onModifyCritRatio(critRatio) {
-				return 5;
-			},
-			onAnyInvulnerability(target, source, move) {
-				if (move && (source === this.effectData.target || target === this.effectData.target)) return 0;
-			},
-			onAnyAccuracy(accuracy, target, source, move) {
-				if (move && (source === this.effectData.target || target === this.effectData.target)) {
-					return true;
-				}
-				return accuracy;
-			},
-			onAfterMove(pokemon, source) {
-				pokemon.removeVolatile('tension');
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'move: Tension', '[silent]');
-			},
-		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
 	// Emeri
 	dracovoice: {
 		desc: "This Pokemon's sound-based moves become Dragon-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -1373,6 +1332,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Lionyx
+	tension: {
+		desc: "On switch-in, the Pokémon builds up tension, making its next hit a critical hit, and guaranteeing that it will hit.",
+		shortDesc: "On switch-in, the Pokemon's next attack will always be a critical hit and will always hit.",
+		name: "Tension",
+		onStart(pokemon) {
+			this.add("-message", `${pokemon.name} has built up tension!`);
+			// i could just add laserfocus and lockon volatiles here but its an ability soooo
+			pokemon.addVolatile('tension');
+		},
+		condition: {
+			onStart(pokemon, source, effect) {
+				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+					this.add('-start', pokemon, 'move: Tension', '[silent]');
+				} else {
+					this.add('-start', pokemon, 'move: Tension');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return 5;
+			},
+			onAnyInvulnerability(target, source, move) {
+				if (move && (source === this.effectData.target || target === this.effectData.target)) return 0;
+			},
+			onAnyAccuracy(accuracy, target, source, move) {
+				if (move && (source === this.effectData.target || target === this.effectData.target)) {
+					return true;
+				}
+				return accuracy;
+			},
+			onAfterMove(pokemon, source) {
+				pokemon.removeVolatile('tension');
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'move: Tension', '[silent]');
+			},
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// LittEleven
 	darkroyalty: {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect. Dark type moves are boosted 1.2x.",
@@ -1974,25 +1974,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isNonstandard: "Custom",
 		gen: 8,
-	},
-
-	// tennisace
-	stoutbuild: {
-		desc: "If a Pokemon uses a Ground-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon.",
-		shortDesc: "Ground moves do half damage to this Pokemon.",
-		name: "Stout Build",
-		onSourceModifyAtkPriority: 6,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ground') {
-				return this.chainModify(0.5);
-			}
-		},
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ground') {
-				return this.chainModify(0.5);
-			}
-		},
 	},
 
 	// Tenshi

@@ -485,18 +485,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Elgino')}|I'm out of fairies D:!`);
 		},
 	},
-	elsa: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Elsa')}|Hi, this is ps-chan, how may I help you, user-kun? (｡◕‿‿◕｡)`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Elsa')}|Teclis au secours`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Elsa')}|The cold never bothered me anyway...`);
-		},
-	},
 	emeri: {
 		noCopy: true,
 		onStart() {
@@ -1185,6 +1173,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	lionyx: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Lionyx')}|Hi, this is ps-chan, how may I help you, user-kun? (｡◕‿‿◕｡)`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Lionyx')}|Teclis au secours`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Lionyx')}|The cold never bothered me anyway...`);
+		},
+	},
 	litteleven: {
 		noCopy: true,
 		onStart() {
@@ -1733,19 +1733,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Teclis')}|Magic never dies. It merely fades away.`);
-		},
-	},
-	tennisace: {
-		noCopy: true,
-		// TODO: Replace text with corgi images, contact Hoeen about uploading some images for ssb
-		onStart() {
-			// this.add(`c|${getName('tennisace')}|Hi`);
-		},
-		onSwitchOut() {
-			// this.add(`c|${getName('tennisace')}|Mmph`);
-		},
-		onFaint() {
-			// this.add(`c|${getName('tennisace')}|Bye`);
 		},
 	},
 	tenshi: {
