@@ -42,6 +42,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	abdelrahman: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Abdelrahman')}|good morning, i'm town`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Abdelrahman')}|brb gonna go lynch scum`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Abdelrahman')}|I CC COP TOWN FAILED`);
+		},
+	},
 	adri: {
 		noCopy: true,
 		onStart() {

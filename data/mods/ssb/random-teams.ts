@@ -35,6 +35,12 @@ export const ssbSets: SSBSets = {
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	Abdelrahman: {
+		species: 'Camerupt', ability: 'Water Absorb', item: 'Cameruptite', gender: 'M',
+		moves: ['Eruption', 'Earth Power', 'Fire Blast'],
+		signatureMove: 'The Town Outplay',
+		evs: {hp: 252, spd: 172, spe: 84}, nature: 'Calm',
+	},
 	Adri: {
 		species: 'Latios', ability: 'Psychic Surge', item: 'Leftovers', gender: 'M',
 		moves: ['Psyshock', 'Calm Mind', 'Aura Sphere'],

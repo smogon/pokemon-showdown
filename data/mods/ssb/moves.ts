@@ -42,6 +42,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Abdelrahman
+	thetownoutplay: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Sets Trick Room and has 10% chance to burn the opponent.",
+		shortDesc: "Trick Room & 10% Burn",
+		name: "The Town Outplay",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: -5,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Trick Room', target);
+		},
+		onHit(target, source, move) {
+			const foe = source.side.foe.active[0];
+			if (foe && this.randomChance(1, 10)) {
+				foe.trySetStatus('brn', source);
+			}
+		},
+		pseudoWeather: 'trickroom',
+		secondary: null,
+		target: "All",
+		type: "Fire",
+	},
+
 	// Adri
 	skystriker: {
 		accuracy: 100,
