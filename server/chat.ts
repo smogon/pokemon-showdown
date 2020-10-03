@@ -1919,7 +1919,7 @@ export const Chat = new class {
 		return htmlContent;
 	}
 	/**
-	 * Takes a string of code and transforms it into a block of html using the details tag.
+	 * Takes a string of text and transforms it into a block of html using the details tag.
 	 * If it has a newline, will make the 3 lines the preview, and fill the rest in.
 	 * @param str string to block
 	 */

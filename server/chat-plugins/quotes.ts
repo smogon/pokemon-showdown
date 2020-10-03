@@ -42,7 +42,6 @@ export const commands: ChatCommands = {
 		const {quote, date, userid} = roomQuotes[Math.floor(Math.random() * roomQuotes.length)];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		const attribution = toID(target) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
-
 		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}${attribution}`);
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
