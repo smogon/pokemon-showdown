@@ -18,7 +18,7 @@
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
 		"<strong>Room ranks</strong>": "<strong>Rangs des room</strong>",
-    "^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, ils ont seulement un symbole.",
+    "^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir mute et warn",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room",
@@ -62,6 +62,9 @@
 		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OU /wall <em>message</em> : Fait une annonce",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>pseudo</em> : Affiche l'historique de mod&eacute;ration d'un utilisateur dans la room ",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>note</em> : Ajoute une note de mod&eacute;ration qui peut &ecirc;tre lue dans le modlog",
+		"- !show [image or youtube link]: display given media in chat.": "- !show [image ou lien youtube]: Affiche le m&eacute;dia donn&eacute; dans le chat.",
+		"- /whitelist [user]: whitelist a non-staff user to use !show.": "- /whitelist [pseudo]: Ajoute un utilisateur hors staff &agrave; la liste blanche pour utiliser !show",
+		"- /unwhitelist [user]: removes the user from !show whitelist.": "- /unwhitelist [pseudo]: Retire l'acc&egrave;s &agrave; un utilisateur au !show et de la whitelist",
 
 		"<strong>Room moderators (@)</strong> can also use:": "<strong>Les Moderators d'une room (@)</strong> peuvent &eacute;galement utiliser :",
 		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban OU /rb <em>pseudo</em>: Bannit l'utilisateur de la room",
