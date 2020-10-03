@@ -1,5 +1,6 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import {getCommonBattles} from '../chat-commands/info';
 import type {Punishment} from '../punishments';
 
 const TICKET_FILE = 'config/tickets.json';
@@ -1153,6 +1154,19 @@ export const commands: ChatCommands = {
 				}
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong>`;
+				if (ticket.type === 'Battle Harassment') {
+					const commonBattles = getCommonBattles(
+						toID(reportTarget), Users.get(reportTarget),
+						ticket.userid, Users.get(ticket.userid)
+					);
+
+					if (!commonBattles.length) {
+						reportTargetInfo += `There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
+					} else {
+						reportTargetInfo += `Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
+						reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+					}
+				}
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
 			if (!helpRoom) {
