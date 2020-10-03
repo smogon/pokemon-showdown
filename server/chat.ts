@@ -1923,7 +1923,7 @@ export const Chat = new class {
 	 * If it has a newline, will make the 3 lines the preview, and fill the rest in.
 	 * @param str string to block
 	 */
-	getReadmoreCodeBlock(str: string, cutoff = 3) {
+	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output = [];
 		for (const param of params) {
@@ -1932,16 +1932,21 @@ export const Chat = new class {
 		}
 
 		if (output.length > cutoff) {
-			return `<details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
+			return `<details class="readmore${isCode ? ` code` : ``}" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
 				output.slice(0, cutoff).join('<br />')
 			}</summary>${
 				output.slice(cutoff).join('<br />')
 			}</details>`;
 		} else {
-			return `<code style="white-space: pre-wrap; display: table; tab-size: 3">${
+			const tag = isCode ? `code` : `div`;
+			return `<${tag} style="white-space: pre-wrap; display: table; tab-size: 3">${
 				output.join('<br />')
-			}</code>`;
+			}</${tag}>`;
 		}
+	}
+
+	getReadmoreCodeBlock(str: string, cutoff?: number) {
+		return Chat.getReadmoreBlock(str, true, cutoff);
 	}
 
 	getDataPokemonHTML(species: Species, gen = 8, tier = '') {
