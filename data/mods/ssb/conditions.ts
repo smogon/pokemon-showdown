@@ -1096,10 +1096,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add(`c|${getName('Kris')}|hi ${foeName}`);
 			}
 		},
-		onFaint(target, source) {
-			const foeName = source.side.foe.active[0].illusion ?
-				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
-			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
+		onFaint(target) {
+			const foeName = target.illusion ?
+				target.illusion.name : target.name;
+			if (foeName === 'Aeonic' || target.side.name === 'Aeonic') {
 				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
 			} else {
 				this.add(`c|${getName('Kris')}|Fortnite Battle Royale`);
