@@ -206,6 +206,15 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
 		types: ['Fairy', 'Water'],
 	},
+	// vivalospride's interaction with Coconut's move
+	darumaka: {
+		inherit: true,
+		evos: ['Darmanitan', 'Darmanitan-Zen'],
+	},
+	darmanitanzen: {
+		inherit: true,
+		prevo: 'Darumaka',
+	},
 	// yuki
 	pikachucosplay: {
 		inherit: true,

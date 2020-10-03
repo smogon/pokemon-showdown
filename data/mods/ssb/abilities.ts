@@ -278,14 +278,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onHit(target, source, move) {
 				if (move.category === 'Status' || move.selfdestruct) return;
-				if (source.m.squadup) return;
+				if (target.m.squadup) return;
 				this.effectData.clones += 2;
 				this.add("-message", `Venomoth uses its Koga training to create 2 ninja clones!`);
 			},
 			onDamage(damage, target, source, effect) {
 				this.effectData.damageTaken += damage;
 				if (this.effectData.damageTaken >= 50) {
-					const clonesLost = this.effectData.damageTaken / 50;
+					const clonesLost = Math.floor(this.effectData.damageTaken / 50);
 					this.effectData.damageTaken = this.effectData.damageTaken % 50;
 					this.add("-message", `Venomoth took damage and lost ${clonesLost} ninja clones!`);
 					this.effectData.clones -= clonesLost;
@@ -295,11 +295,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onBeforeMove(source, target, move) {
 				if (move.category === 'Status' || !this.effectData.clones) return;
 				this.add('-message', `Venomoth's ${this.effectData.clones} will attack!`);
-				const cloneMove = Object.assign({}, this.dex.getActiveMove("Clone Move"));
+				const cloneMove = this.dex.getActiveMove("Clone Move");
 				cloneMove.type = move.type;
 				cloneMove.category = move.category;
 				if (move.secondary && this.random(100) < 25) {
-					cloneMove.secondary = Object.assign({}, move.secondary);
+					cloneMove.secondary = move.secondary;
 				}
 				for (let i = 0; i < this.effectData.clones; i++) {
 					this.useMove(cloneMove, source, target);
@@ -493,6 +493,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// brouha
 	spinnywind: {
+		shortDesc: "Clears terrain/hazards at end of each turn. Non-Flying lose 6% HP. Flying get 1.5x Def.",
 		onStart(source) {
 			this.field.setWeather('spinnywind');
 		},
@@ -826,7 +827,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Changes forme, before all turn action, depending on move used. +1 SpA and +1 SpD on switch-in.",
 		shortDesc: "Changes forme, before all turn action, depending on move used. +1 SpA and +1 SpD on switch-in.",
 		name: "Fickle Decorator",
-		onStart(pokemon) {
+		onStart() {
 			this.boost({spa: 1, spd: 1});
 		},
 		onAnyBeforeTurn(pokemon) {
@@ -843,12 +844,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (flag || !move) return;
 			const moveData = this.dex.getMove(move.id);
 			if (moveData.category !== 'Status') {
-				return pokemon.m.changeForme(2);
+				return pokemon.m.changeForme(this, 2);
 			} else {
 				if (!toID(moveData.target).includes('self')) {
-					return pokemon.m.changeForme(3);
+					return pokemon.m.changeForme(this, 3);
 				} else {
-					return pokemon.m.changeForme(1);
+					return pokemon.m.changeForme(this, 1);
 				}
 			}
 		},
@@ -862,15 +863,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidual(pokemon) {
 			const moveData = this.dex.getMove(this.lastSuccessfulMoveThisTurn || undefined);
 			if (!moveData.exists) {
-				return pokemon.m.changeForme(0);
+				return pokemon.m.changeForme(this, 0);
 			}
 			if (moveData.category !== 'Status') {
-				return pokemon.m.changeForme(2);
+				return pokemon.m.changeForme(this, 2);
 			} else {
 				if (!toID(moveData.target).includes('self')) {
-					return pokemon.m.changeForme(3);
+					return pokemon.m.changeForme(this, 3);
 				} else {
-					return pokemon.m.changeForme(1);
+					return pokemon.m.changeForme(this, 1);
 				}
 			}
 		},
@@ -1767,13 +1768,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
 				if (totalatk && totalatk >= totalspa) {
-					this.boost({atk: -1}, target);
+					this.boost({atk: -1}, target, pokemon, this.dex.getAbility('burnitdown'));
 				} else if (totalspa) {
-					this.boost({spa: -1}, target);
+					this.boost({spa: -1}, target, pokemon, this.dex.getAbility('burnitdown'));
 				}
 			}
 		},
-		// status ignoring in scripts.ts:Pokemon#setStatus
 		name: "BURN IT DOWN!",
 		isNonstandard: "Custom",
 		gen: 8,

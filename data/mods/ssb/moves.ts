@@ -397,7 +397,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
 			pokemon.cureStatus();
 			pokemon.volatiles['ninjasquad'].clones = 6;
-			this.add("-message", `Venomoth now has ${6} ninja clones!`);
+			this.add("-message", `Venomoth now has ${pokemon.volatiles['ninjasquad'].clones} ninja clones!`);
 			pokemon.m.squadup = true;
 		},
 		secondary: null,
@@ -1620,9 +1620,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (formes.includes(source.species.name)) {
 				let formenum = formes.indexOf(source.species.name) + 1;
 				if (formenum >= formes.length) formenum = 0;
-				return source.m.changeForme(formenum + 1);
+				return source.m.changeForme(this, formenum + 1);
 			}
-			source.m.changeForme(this.random(3) + 1);
+			source.m.changeForme(this, this.random(3) + 1);
 		},
 		ignoreAbility: true,
 		secondary: null,
@@ -2764,7 +2764,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "If not damaged this turn, switches out and gives next Pokemon Download boost; fails otherwise.",
 		name: "/nexthunt",
 		pp: 10,
-		priority: 0,
+		priority: -6,
 		flags: {protect: 1, mirror: 1},
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('nexthuntcheck');
@@ -4558,7 +4558,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			onHit(target) {
 				if (target.hasType(['Flying', 'Ground']) || target.volatiles['ingrain']) return false;
-				target.addVolatile('Updraft');
+				target.addVolatile('updraft');
 			},
 		},
 		target: "normal",

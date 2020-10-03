@@ -613,7 +613,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			this.add(`c|${getName('Finland')}|${message}`);
 			// to avoid writing this function everywhere, im just gonna write it here and call it from wherever i want like the move or ability
-			pokemon.m.changeForme = function (formeNumber: number) {
+			pokemon.m.changeForme = (context: Battle, formeNumber: number) => {
 				const formes = [
 					{
 						name: 'Alcremie',
@@ -623,21 +623,21 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 					{
 						name: 'Alcremie-Tsikhe',
 						species: 'Alcremie-Lemon-Cream',
-						movepool: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen'][this.random(2)], 'Cradily Chaos'],
+						movepool: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen'][context.random(2)], 'Cradily Chaos'],
 					},
 					{
 						name: 'Alcremie-Nezavisa',
 						species: 'Alcremie-Ruby-Swirl',
-						movepool: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond'][this.random(2)], 'Cradily Chaos'],
+						movepool: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond'][context.random(2)], 'Cradily Chaos'],
 					},
 					{
 						name: 'Alcremie-Järvilaulu',
 						species: 'Alcremie-Mind-Cream',
-						movepool: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria'][this.random(2)], 'Cradily Chaos'],
+						movepool: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria'][context.random(2)], 'Cradily Chaos'],
 					},
 				];
 				const forme = formes[formeNumber];
-				pokemon.formeChange(forme.species, this.effect);
+				pokemon.formeChange(forme.species, context.effect);
 				pokemon.battle.add('-message', `Alcremie changes its forme to ${forme.name}`);
 				const newMoves = forme.movepool;
 				const carryOver = pokemon.moveSlots.slice().map(m => {
@@ -650,7 +650,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				pokemon.moveSlots = [];
 				let slot = 0;
 				for (const newMove of newMoves) {
-					const moveData = pokemon.battle.dex.getMove(this.toID(newMove));
+					const moveData = pokemon.battle.dex.getMove(context.toID(newMove));
 					if (!moveData.id) continue;
 					pokemon.moveSlots.push({
 						move: moveData.name,
@@ -680,7 +680,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	frostyicelad: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('frostyicelad ❆')}|Oh i guess its my turn now! Time to sweep!`);
 		},
 		onSwitchOut(source) {
@@ -2310,17 +2310,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'SpinnyWind', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'SpinnyWind', '[upkeep]');
+			this.add('-weather', 'DeltaStream', '[upkeep]');
 			this.eachEvent('Weather');
 		},
 		onWeather(target) {
 			if (!target.hasType('Flying')) this.damage(target.baseMaxhp * 0.06);
 			if (this.sides.some(side => Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod').length)) {
 				this.add(`-message`, 'The Spinny Wind blew away the hazards on both sides!');
+			}
+			if (this.field.terrain) {
+				this.add(`-message`, 'The Spinny Wind blew away the terrain!');
 			}
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod');
@@ -2329,6 +2332,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 					this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Spinny Wind');
 				}
 			}
+			this.field.clearTerrain();
 		},
 		onEnd() {
 			this.add('-weather', 'none');
