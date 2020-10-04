@@ -490,7 +490,7 @@ export const otdCommands: ChatCommands = {
 	],
 
 	nom(target, room, user) {
-		this.checkChat();
+		this.checkChat(target);
 		if (!target) return this.parse('/help otd');
 
 		const handler = selectHandler(this.message);
