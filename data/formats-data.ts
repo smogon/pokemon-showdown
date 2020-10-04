@@ -4234,8 +4234,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["fakeout", "nastyplot", "psychic", "shadowball", "thunderbolt"],
 		randomDoubleBattleLevel: 88,
-		tier: "PU",
-		doublesTier: "(DUU)",
+		tier: "(PU)",
+		doublesTier: "DUU",
 	},
 	honedge: {
 		tier: "LC",
