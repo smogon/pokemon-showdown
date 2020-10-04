@@ -46,5 +46,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves('toxicroak', ['highjumpkick']);
 		newMoves('umbreon', ['highhorsepower', 'earthpower', 'playrough']);
 		newMoves('vaporeon', ['highhorsepower', 'earthpower', 'playrough']);
+		newMoves('vespiquen', ['suckerpunch', 'stickyweb', 'earthquake']);
 	},
 };
