@@ -4433,8 +4433,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		beforeTurnCallback(pokemon, target) {
 			const willMove = this.queue.willMove(target);
 			if (willMove) {
-				const move = this.dex.getActiveMove(willMove.move.id);
-				if (move.category === "Status") {
+				const move = this.dex.getMove(willMove.move.id);
+				if (move.category === 'Status') {
 					this.boost({def: -1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
 					this.add(`c|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
 				} else {
@@ -4480,7 +4480,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', source, 'Thief', target);
 			}
 		},
-		onAfterHit(source, target, move) {
+		onAfterMove(source, target, move) {
 			delete source.volatiles['parry'];
 			delete source.m.parriedPower;
 		},
@@ -4668,9 +4668,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Sludge Bomb', target);
 			this.add('-anim', source, 'Sludge Wave', target);
 		},
-		ignoreImmunity: {
-			'Steel': true,
-		},
+		ignoreImmunity: {'Poison': true},
 		secondary: null,
 		target: "normal",
 		type: "Poison",

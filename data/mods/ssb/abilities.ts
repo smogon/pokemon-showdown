@@ -1306,7 +1306,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onBeforeSwitchOut(pokemon) {
 				let alreadyAdded = false;
 				for (const source of this.effectData.sources) {
-					if (!source.hp || source.volatiles('gastroacid')) continue;
+					if (!source.hp || source.volatiles['gastroacid']) continue;
 					if (!alreadyAdded) {
 						this.add('-activate', pokemon, 'ability: Degenerator');
 						alreadyAdded = true;

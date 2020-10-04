@@ -348,7 +348,7 @@ function SSBSets(target: string) {
 			typeof dex.getItem(set.item).zMove === 'string' ?
 			dex.getMove(dex.getItem(set.item).zMove as string) : dex.getMove(set.signatureMove);
 		if (sigMove.shortDesc || sigMove.desc) {
-			buf += `<details><summary><strong>Custom Move</strong>: ${sigMove.name}</summary><ul>`;
+			buf += `<details><summary><strong>Custom Move</strong>: ${sigMove.name} (${sigMove.basePower} BP)</summary><ul>`;
 			if (sigMove.shortDesc) buf += `<li><strong>Shortened Description</strong>: ${sigMove.shortDesc}</li>`;
 			if (sigMove.desc) buf += `<li><details><summary><strong>Description</strong></summary>${sigMove.desc}</details></li>`;
 			buf += `<li><strong>Type</strong>: <img src="https://${Config.routes.client}/sprites/types/${dex.getType(sigMove.type).name}.png" /></li>`;

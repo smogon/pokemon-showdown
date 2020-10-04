@@ -338,7 +338,7 @@ export const ssbSets: SSBSets = {
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
 	},
 	Jett: {
-		species: 'Sneasel', ability: 'Deceiver', item: 'Heavy Duty Boots', gender: 'M',
+		species: 'Sneasel', ability: 'Deceiver', item: 'Heavy Duty Boots', gender: 'F',
 		moves: ['Knock Off', 'Triple Axel', 'Counter'],
 		signatureMove: 'The Hunt is On!',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
