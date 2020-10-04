@@ -176,7 +176,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					this.add('-activate', target, 'move: Reset');
+					this.add('-activate', target, 'move: Protect');
 				}
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -1085,7 +1085,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Status Guard');
+				this.add('-singleturn', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -1098,7 +1098,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					this.add('-activate', target, 'move: Status Guard');
+					this.add('-activate', target, 'move: Protect');
 				}
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
