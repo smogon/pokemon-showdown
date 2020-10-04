@@ -227,7 +227,7 @@ async function getModlog(
  * Battle Search Functions
  *********************************************************/
 
-export async function runBattleSearch(userids: ID[], turnLimit: number, month: string, tierid: ID) {
+export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
 	const useRipgrep = await checkRipgrepAvailability();
 	const pathString = `logs/${month}/${tierid}/`;
 	const results: {[k: string]: BattleSearchResults} = {};
@@ -278,7 +278,7 @@ export async function runBattleSearch(userids: ID[], turnLimit: number, month: s
 				if (!(p1id === userid || p2id === userid)) continue;
 			}
 
-			if (data.turns > turnLimit) continue;
+			if (turnLimit && data.turns > turnLimit) continue;
 			if (!results[day]) {
 				results[day] = {
 					totalBattles: 0,
@@ -334,7 +334,7 @@ export async function runBattleSearch(userids: ID[], turnLimit: number, month: s
 			} else {
 				if (!(p1id === userid || p2id === userid)) continue;
 			}
-			if (data.turns > turnLimit) continue;
+			if (turnLimit && data.turns > turnLimit) continue;
 			if (!results[day]) {
 				results[day] = {
 					totalBattles: 0,
@@ -381,14 +381,14 @@ export async function runBattleSearch(userids: ID[], turnLimit: number, month: s
 
 function buildResults(
 	data: {[k: string]: BattleSearchResults}, userids: ID[],
-	turnLimit: number, month: string, tierid: ID
+	month: string, tierid: ID, turnLimit?: number
 ) {
 	let buf = `>view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm\n|init|html\n|title|[Battle Search][${userids.join('-')}][${tierid}][${month}]\n`;
 	buf += `|pagehtml|<div class="pad ladder"><p>`;
 	buf += `${tierid} battles on ${month} where `;
 	buf += userids.length > 1 ? `the users ${userids.join(', ')} were players` : `the user ${userids[0]} was a player`;
-	buf += ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}:</p>`;
-	buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace">`;
+	buf += turnLimit ? ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}` : '';
+	buf += `:</p><li style="display: inline; list-style: none"><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace">`;
 	buf += `<button class="button">Back</button></a></li><br />`;
 	if (userids.length > 1) {
 		const outcomes: BattleOutcome[] = [];
@@ -434,15 +434,15 @@ function buildResults(
 }
 
 async function getBattleSearch(
-	connection: Connection, userids: string[], turnLimit = 1,
-	month: string, tierid: ID
+	connection: Connection, userids: string[], month: string,
+	tierid: ID, turnLimit?: number
 ) {
 	userids = userids.map(toID);
 	const user = connection.user;
 	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
-	const response = await PM.query({userids, turnLimit, month, tierid});
-	connection.send(buildResults(response, userids as ID[], turnLimit, month, tierid));
+	const response = await PM.query({userids, turnLimit: turnLimit, month, tierid});
+	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
 export const pages: PageTable = {
@@ -450,13 +450,18 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
 		const [ids, rawLimit, month, formatid, confirmation] = Utils.splitFirst(this.pageid.slice(18), '--', 5);
+		let turnLimit: number | undefined = parseInt(rawLimit);
+		if (isNaN(turnLimit)) turnLimit = undefined;
 		const userids = ids.split('-');
-		const turnLimit = parseInt(rawLimit);
-		if (!ids || !turnLimit || turnLimit < 1) {
+		if (!ids || turnLimit && turnLimit < 1) {
 			return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
 		}
 		this.title = `[Battle Search][${userids.join(', ')}]`;
-		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid${Chat.plural(userids)}: ${userids.join(', ')}</p><p>Maximum Turns: ${turnLimit}</p>`;
+		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid${Chat.plural(userids)}: ${userids.join(', ')}</p><p>`;
+		if (turnLimit) {
+			buf += `Maximum Turns: ${turnLimit}`;
+		}
+		buf += `</p>`;
 
 		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
 			const a = aKey.split('-').map(n => parseInt(n));
@@ -521,18 +526,18 @@ export const pages: PageTable = {
 		if (toID(confirmation) !== 'confirm') {
 			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${month} `;
 			buf += `where the ${userids.length > 1 ? `user(s) ${userids.join(', ')} were players` : `the user ${userid} was a player`}`;
-			buf += ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
-			buf += `<p><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
+			if (turnLimit) buf += ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}`;
+			buf += `?</p><p><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
 			return `${buf}</div>`;
 		}
 
 		// Run search
-		void getBattleSearch(connection, userids, turnLimit, month, tierid);
+		void getBattleSearch(connection, userids, month, tierid, turnLimit);
 		return (
 			`<div class="pad ladder"><h2>Battle Search</h2><p>` +
 			`Searching for ${tierid} battles on ${month} where the ` +
 			`${userids.length > 1 ? `user(s) ${userids.join(', ')} were players` : `the user ${userid} was a player`} ` +
-			`and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.` +
+			(turnLimit ? `and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.` : '') +
 			`</p><p>Loading... (this will take a while)</p></div>`
 		);
 	},
@@ -646,21 +651,20 @@ export const commands: ChatCommands = {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');
 
-		const [num, ids] = Utils.splitFirst(target, ',').map(item => item.trim());
-		let turnLimit = parseInt(num);
-		if (!ids) return this.parse('/help battlesearch');
-		if (!turnLimit) {
-			turnLimit = 1;
-		} else {
-			if (isNaN(turnLimit) || turnLimit < 1) {
-				return this.errorReply(`The turn limit should be a number that is greater than 0.`);
-			}
+		const parts = target.split(',');
+		let turnLimit;
+		const ids = [];
+		for (const part of parts) {
+			const parsed = parseInt(part);
+			if (!isNaN(parsed)) turnLimit = parsed;
+			else ids.push(part);
 		}
 		// Selection on month, tier, and date will be handled in the HTML room
-		return this.parse(`/join view-battlesearch-${ids.split(',').map(toID).join('-')}--${turnLimit}`);
+		return this.parse(`/join view-battlesearch-${ids.map(toID).join('-')}--${turnLimit || ""}`);
 	},
 	battlesearchhelp: [
-		'/battlesearch [turn limit], [userids] - Searches rated battle history for the provided [userids] and returns information on battles that ended in less than [turn limit] turns. Requires &',
+		'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.',
+		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assuemd to be userids. Requires &`,
 	],
 };
 
@@ -671,7 +675,7 @@ export const commands: ChatCommands = {
 export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
 	try {
-		return await runBattleSearch(userids, turnLimit, month, tierid);
+		return await runBattleSearch(userids, month, tierid, turnLimit);
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,
