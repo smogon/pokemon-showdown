@@ -322,9 +322,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onSwitchOut() {
 			this.add(`c|${getName('Brandon')}|${[`I need to catch my breath`, `brb getting a snack`][this.random(2)]}`);
 		},
-		onFaint(target, source) {
-			const foeName = source.side.foe.active[0].illusion ?
-				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
+		onFaint(target) {
+			const foeName = target.side.foe.active[0].illusion ?
+				target.side.foe.active[0].illusion.name : target.side.foe.active[0].name;
 			this.add(`c|${getName('Brandon')}|${[`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`][this.random(3)]}`);
 		},
 	},
@@ -2299,13 +2299,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 
 	// condition used for brouha's ability
-	spinnywind: {
-		name: 'SpinnyWind',
+	turbulence: {
+		name: 'Turbulence',
 		effectType: 'Weather',
 		duration: 0,
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Flying') && this.field.isWeather('spinnywind')) {
+			if (pokemon.hasType('Flying') && this.field.isWeather('turbulence')) {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -2320,16 +2320,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onWeather(target) {
 			if (!target.hasType('Flying')) this.damage(target.baseMaxhp * 0.06);
 			if (this.sides.some(side => Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod').length)) {
-				this.add(`-message`, 'The Spinny Wind blew away the hazards on both sides!');
+				this.add(`-message`, 'The Turbulence blew away the hazards on both sides!');
 			}
 			if (this.field.terrain) {
-				this.add(`-message`, 'The Spinny Wind blew away the terrain!');
+				this.add(`-message`, 'The Turbulence blew away the terrain!');
 			}
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod');
 				for (const key of keys) {
 					side.removeSideCondition(key);
-					this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Spinny Wind');
+					this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
 				}
 			}
 			this.field.clearTerrain();

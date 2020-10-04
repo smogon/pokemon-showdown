@@ -2,7 +2,7 @@ import {SSBSet, ssbSets} from "./random-teams";
 import {ChosenAction} from "../../../sim/side";
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'spinnywind'];
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'turbulence'];
 const HEAVY_RAIN_ABILITIES = ['primordialsea', 'tropicalcyclone', 'rainyseason'];
 
 /**
@@ -492,26 +492,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// brouha
-	spinnywind: {
+	turbulence: {
 		shortDesc: "Clears terrain/hazards at end of each turn. Non-Flying lose 6% HP. Flying get 1.5x Def.",
 		onStart(source) {
-			this.field.setWeather('spinnywind');
+			this.field.setWeather('turbulence');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'spinnywind' && !STRONG_WEATHERS.includes(weather.id)) return false;
+			if (this.field.getWeather().id === 'turbulence' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
-				if (target.hasAbility('spinnywind')) {
+				if (target.hasAbility('turbulence')) {
 					this.field.weatherData.source = target;
 					return;
 				}
 			}
 			this.field.clearWeather();
 		},
-		name: "Spinny Wind",
+		name: "Turbulence",
 		isNonstandard: "Custom",
 		gen: 8,
 	},

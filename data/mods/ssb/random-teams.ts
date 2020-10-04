@@ -156,9 +156,9 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84}, nature: 'Quirky',
 	},
 	brouha: {
-		species: 'Mantine', ability: 'Spinny Wind', item: 'Leftovers', gender: 'M',
+		species: 'Mantine', ability: 'Turbulence', item: 'Leftovers', gender: 'M',
 		moves: ['Scald', 'Recover', 'Haze'],
-		signatureMove: 'brouha Custom Move',
+		signatureMove: 'Kinetosis',
 		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
 	Cake: {

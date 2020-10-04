@@ -840,13 +840,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// brouha
-	brouhacustommove: {
+	kinetosis: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
 		desc: "Badly poisons the target. If it is the user's first turn out, this move has +3 priority.",
 		shortDesc: "First turn: +3 priority. Target: TOX.",
-		name: "brouha Custom Move",
+		name: "Kinetosis",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
