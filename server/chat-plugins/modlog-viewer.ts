@@ -441,7 +441,7 @@ async function getBattleSearch(
 	const user = connection.user;
 	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
-	const response = await PM.query({userids, turnLimit: turnLimit, month, tierid});
+	const response = await PM.query({userids, turnLimit, month, tierid});
 	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
