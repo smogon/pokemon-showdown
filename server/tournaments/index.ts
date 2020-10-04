@@ -595,7 +595,7 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		if (this.players.length < 2) {
-			if (output.target.startsWith('autostart')) {
+			if (output.cmd === 'autostart' || output.cmd === 'setautostart') {
 				this.room.send('|tournament|error|NotEnoughUsers');
 				this.forceEnd();
 				this.room.update();
