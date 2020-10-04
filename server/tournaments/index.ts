@@ -1,3 +1,4 @@
+
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
 import {Utils} from '../../lib/utils';
@@ -588,14 +589,14 @@ export class Tournament extends Rooms.RoomGame {
 		return data;
 	}
 
-	startTournament(output: CommandContext) {
+	startTournament(output: CommandContext, isAutostart?: boolean) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|AlreadyStarted');
 			return false;
 		}
 
 		if (this.players.length < 2) {
-			if (output.target.startsWith('autostart')) {
+			if (isAutostart) {
 				this.room.send('|tournament|error|NotEnoughUsers');
 				this.forceEnd();
 				this.room.update();
@@ -774,7 +775,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (timeout === Infinity) {
 			this.room.add('|tournament|autostart|off');
 		} else {
-			this.autoStartTimer = setTimeout(() => this.startTournament(output), timeout);
+			this.autoStartTimer = setTimeout(() => this.startTournament(output, true), timeout);
 			this.room.add(`|tournament|autostart|on|${timeout}`);
 		}
 		this.autoStartTimeout = timeout;
