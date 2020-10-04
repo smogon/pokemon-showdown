@@ -876,7 +876,6 @@ export class CommandContext extends MessageContext {
 		if (this.room) this.room.update();
 	}
 	filter(message: string) {
-		if (!this.room) return null;
 		return Chat.filter(message, this);
 	}
 	statusfilter(status: string) {
