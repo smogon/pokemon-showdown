@@ -1159,7 +1159,8 @@ export const commands: ChatCommands = {
 						toID(reportTarget), Users.get(reportTarget),
 						ticket.userid, Users.get(ticket.userid)
 					);
-
+					
+					reportTargetInfo += `<p></p>`;
 					if (!commonBattles.length) {
 						reportTargetInfo += `There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
 					} else {
