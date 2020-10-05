@@ -2095,7 +2095,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.25);
 		},
-		rating: 2.5,
+		rating: 2,
 		num: 152,
 	},
 	naturalcure: {
