@@ -1507,6 +1507,7 @@ export const commands: ChatCommands = {
 
 	groups(target, room, user) {
 		if (!this.runBroadcast()) return;
+		target = target.toLowerCase();
 		const showRoom = (target !== 'global');
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
