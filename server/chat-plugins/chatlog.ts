@@ -439,6 +439,21 @@ export const LogViewer = new class {
 type SearchMatch = readonly [string, string, string, string, string];
 
 export const LogSearcher = new class {
+	async runSearch(
+		context: PageContext, search: string, roomid: RoomID, date: string | null, limit: number | null
+	) {
+		context.title = `[Search] [${roomid}] ${search}`;
+		if (!['ripgrep', 'fs'].includes(Config.chatlogreader)) {
+			throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
+		}
+		context.send(
+			`<div class="pad"><h2>Running a chatlog search for "${search}" on room ${roomid}` +
+			(date ? date !== 'all' ? `, on the date "${date}"` : ', on all dates' : '') +
+			`.</h2></div>`
+		)
+		const response = await PM.query({search, roomid, date, limit});
+		return context.send(response);
+	}
 	constructRegex(str: string) {
 		// modified regex replace
 		str = str.replace(/[\\^$.*?()[\]{}|]/g, '\\$&');
@@ -748,12 +763,7 @@ export const pages: PageTable = {
 		}
 
 		if (date && search) {
-			this.title = `[Search] [${room}] ${search}`;
-			if (['ripgrep', 'fs'].includes(Config.chatlogreader)) {
-				return PM.query({search, limit, roomid, date: isAll ? null : date});
-			} else {
-				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
-			}
+			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit)
 		} else if (date) {
 			if (date === 'today') {
 				return LogViewer.day(roomid, LogReader.today(), opts);
@@ -779,6 +789,7 @@ export const commands: ChatCommands = {
 	],
 
 	sl: 'searchlogs',
+	logsearch: 'searchlogs',
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
 		target = target.trim();
