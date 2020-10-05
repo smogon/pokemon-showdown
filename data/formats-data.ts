@@ -1140,7 +1140,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	laprasgmax: {
-		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt", "toxic"],
+		randomBattleMoves: ["freezedry", "icebeam", "protect", "sparklingaria", "thunderbolt", "toxic"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["freezedry", "helpinghand", "hydropump", "icywind", "protect", "thunderbolt"],
 		randomDoubleBattleLevel: 84,
@@ -2591,7 +2591,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	latios: {
-		randomBattleMoves: ["aurasphere", "defog", "dracometeor", "psyshock", "roost", "trick"],
+		randomBattleMoves: ["aurasphere", "calmmind", "dracometeor", "psyshock", "roost", "trick"],
 		randomBattleLevel: 80,
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -3050,7 +3050,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	palkia: {
 		randomBattleMoves: ["dracometeor", "fireblast", "hydropump", "spacialrend", "thunderwave"],
-		randomBattleLevel: 72,
+		randomBattleLevel: 74,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -3068,13 +3068,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	giratina: {
 		randomBattleMoves: ["aurasphere", "calmmind", "dracometeor", "rest", "shadowball", "sleeptalk", "willowisp"],
-		randomBattleLevel: 72,
+		randomBattleLevel: 74,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	giratinaorigin: {
 		randomBattleMoves: ["defog", "dracometeor", "earthquake", "hex", "thunderwave", "willowisp"],
-		randomBattleLevel: 72,
+		randomBattleLevel: 74,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4471,7 +4471,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	noivern: {
-		randomBattleMoves: ["boomburst", "dracometeor", "flamethrower", "hurricane", "roost", "uturn"],
+		randomBattleMoves: ["defog", "dracometeor", "flamethrower", "hurricane", "roost", "switcheroo"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["boomburst", "dracometeor", "flamethrower", "hurricane", "protect", "tailwind"],
 		randomDoubleBattleLevel: 84,
@@ -4490,7 +4490,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	yveltal: {
 		randomBattleMoves: ["defog", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch"],
-		randomBattleLevel: 72,
+		randomBattleLevel: 74,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4501,7 +4501,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	zygarde10: {
-		randomBattleMoves: ["dragondance", "extremespeed", "irontail", "outrage", "thousandarrows"],
+		randomBattleMoves: ["coil", "extremespeed", "irontail", "outrage", "thousandarrows"],
 		randomBattleLevel: 84,
 		isNonstandard: "Past",
 		tier: "Illegal",
