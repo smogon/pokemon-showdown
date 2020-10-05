@@ -875,9 +875,8 @@ export class CommandContext extends MessageContext {
 	update() {
 		if (this.room) this.room.update();
 	}
-	filter(message: string, targetUser: User | null = null) {
-		if (!this.room) return null;
-		return Chat.filter(this, message, this.user, this.room, this.connection, targetUser);
+	filter(message: string) {
+		return Chat.filter(message, this);
 	}
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
@@ -1129,7 +1128,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (Chat.filters.length) {
-			return Chat.filter(this, message, user, room, connection, targetUser);
+			return this.filter(message);
 		}
 
 		return message;
@@ -1376,21 +1375,22 @@ export const Chat = new class {
 	 * Load chat filters
 	 *********************************************************/
 	readonly filters: ChatFilter[] = [];
-	filter(
-		context: CommandContext,
-		message: string,
-		user: User,
-		room: Room | null,
-		connection: Connection,
-		targetUser: User | null = null
-	) {
+	filter(message: string, context: CommandContext) {
 		// Chat filters can choose to:
 		// 1. return false OR null - to not send a user's message
 		// 2. return an altered string - to alter a user's message
 		// 3. return undefined to send the original message through
 		const originalMessage = message;
 		for (const curFilter of Chat.filters) {
-			const output = curFilter.call(context, message, user, room, connection, targetUser, originalMessage);
+			const output = curFilter.call(
+				context,
+				message,
+				context.user,
+				context.room,
+				context.connection,
+				context.pmTarget,
+				originalMessage
+			);
 			if (output === false) return null;
 			if (!output && output !== undefined) return output;
 			if (output !== undefined) message = output;

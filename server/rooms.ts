@@ -37,6 +37,7 @@ import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
+import {modlog, ModlogEntry} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -127,7 +128,6 @@ import type {Poll} from './chat-plugins/poll';
 import type {Announcement} from './chat-plugins/announcements';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';
-import type {ModlogEntry} from './modlog';
 
 export abstract class BasicRoom {
 	roomid: RoomID;
@@ -1658,7 +1658,7 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	Modlog: require('./modlog').modlog,
+	Modlog: modlog,
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
