@@ -450,7 +450,7 @@ export const LogSearcher = new class {
 			`<div class="pad"><h2>Running a chatlog search for "${search}" on room ${roomid}` +
 			(date ? date !== 'all' ? `, on the date "${date}"` : ', on all dates' : '') +
 			`.</h2></div>`
-		)
+		);
 		const response = await PM.query({search, roomid, date, limit});
 		return context.send(response);
 	}
@@ -763,7 +763,7 @@ export const pages: PageTable = {
 		}
 
 		if (date && search) {
-			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit)
+			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit);
 		} else if (date) {
 			if (date === 'today') {
 				return LogViewer.day(roomid, LogReader.today(), opts);
