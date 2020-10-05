@@ -32,6 +32,7 @@ import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
+import {RepeatedPhrase} from './chat-plugins/repeats';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
@@ -111,6 +112,7 @@ export interface RoomSettings {
 	requestShowEnabled?: boolean | null;
 	showEnabled?: GroupSymbol | true;
 	permissions?: {[k: string]: GroupSymbol};
+	repeats?: RepeatedPhrase[];
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
