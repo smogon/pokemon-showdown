@@ -2082,12 +2082,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Volco
 	speedrunning: {
-		desc: "This Pokemon's speed stat is raised by 1 stage if it attacks and knocks out another Pokemon. Moves that are 60 Base Power or lower gain an additional 25 Base Power. Freezes can only be broken out of naturally, no moves can defrost a frozen Pokemon while this one is active.",
-		shortDesc: "Speed +1 on kill, Weak moves get a 25 Base Power buff. Moves cannot defrost, only natural thaws.",
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.boost({spe: 1}, source);
-			}
+		desc: "Soul Heart + Moves that are 60 Base Power or lower gain an additional 25 Base Power. Freezes can only be broken out of naturally, no moves can defrost a frozen Pokemon while this one is active.",
+		shortDesc: "Soul Heart + Weak moves get a 25 Base Power buff. Moves cannot defrost, only natural thaws.",
+		onAnyFaintPriority: 1,
+		onAnyFaint() {
+			this.boost({spa: 1}, this.effectData.target);
 		},
 		onAnyModifyMove(move, pokemon) {
 			if (move.thawsTarget) {

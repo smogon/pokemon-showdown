@@ -745,7 +745,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, spa: 252, def: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Volco: {
-		species: 'Volcanion', ability: 'Speedrunning', item: 'Choice Specs',
+		species: 'Volcanion', ability: 'Speedrunning', item: 'Choice Scarf',
 		moves: ['Steam Eruption', ['Vacuum Wave', 'Secret Sword'], 'Overdrive'],
 		signatureMove: 'Glitch Exploiting',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', gender: 'N',
