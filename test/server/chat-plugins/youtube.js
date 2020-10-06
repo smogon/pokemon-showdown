@@ -1,6 +1,7 @@
 /**
  * Tests for the Youtube room plugin.
- * Written by mia-pi.
+ * Written by Mia.
+ * @author mia-pi-git
  */
 'use strict';
 const YoutubeInterface = require('../../../.server-dist/chat-plugins/youtube').YoutubeInterface;

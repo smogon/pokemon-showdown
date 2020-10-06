@@ -1,6 +1,6 @@
 /*
  * Poll chat plugin
- * By Asheviere and Zarel.
+ * By bumbadadabum and Zarel.
  */
 import {Utils} from '../../lib/utils';
 

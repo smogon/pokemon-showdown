@@ -205,7 +205,7 @@ Contributors
 - Jacob McLemore [McLemore] - Development
 - Jeremy Piemonte [panpawn] - Development
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
-- Mia A. [mia-pi] - Development
+- Mia A. [Mia] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
 - Spandan Punwatkar [Spandan]- Development
 - Waleed Hassan [jetou] - Development
