@@ -914,16 +914,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-start', source, 'typechange', type.join('/'), '[from] ability: Armor Time');
 			switch (type[1]) {
 			case 'Fire':
-				this.boost({spa: 1}, source);
 				this.add('-message', 'Armor Time: Fire Armor!');
+				this.boost({spa: 1}, source);
 				break;
 			case 'Steel':
-				this.boost({def: 1}, source);
 				this.add('-message', 'Armor Time: Steel Armor!');
+				this.boost({def: 1}, source);
 				break;
 			case 'Rock':
 				this.add('-message', 'Armor Time: Rock Armor!');
-				this.boost({spa: 1}, source);
+				this.boost({spd: 1}, source);
 				break;
 			case 'Electric':
 				this.add('-message', 'Armor Time: Electric Armor!');
