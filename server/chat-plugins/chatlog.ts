@@ -174,7 +174,7 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<a roomid="view-chatlog-${roomid}">${roomid}</a> /  ` +
 			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
-			`<strong>${day}</strong></p><hr />`;
+			`<strong>${day}</strong></p><small>${opts ? `Options in use: ${opts}` : ''}</small> <hr />`;
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
@@ -279,6 +279,7 @@ export const LogViewer = new class {
 
 	renderLine(fullLine: string, opts?: string) {
 		if (!fullLine) return ``;
+		if (opts === 'txt') return `<div class="chat">${fullLine}</div>`;
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
@@ -293,6 +294,10 @@ export const LogViewer = new class {
 		)) return ``;
 
 		const cmd = line.slice(0, line.indexOf('|'));
+		if (opts?.includes('onlychat')) {
+			if (cmd !== 'c') return '';
+			if (opts.includes('txt')) return `<div class="chat">${fullLine}</div>`;
+		}
 		switch (cmd) {
 		case 'c': {
 			const [, name, message] = Utils.splitFirst(line, '|', 2);
@@ -352,7 +357,11 @@ export const LogViewer = new class {
 			return this.linkify(buf);
 		} else {
 			for (const day of days) {
-				buf += `<p>- <a roomid="view-chatlog-${roomid}--${day}">${day}</a></p>`;
+				buf += `<p>- <a roomid="view-chatlog-${roomid}--${day}">${day}</a> <small>`;
+				for (const opt of ['txt', 'onlychat', 'all', 'txt-onlychat']) {
+					buf += ` (<a roomid="view-chatlog-${roomid}--${day}--${opt}">${opt}</a>) `;
+				}
+				buf += `</small></p>`;
 			}
 		}
 
@@ -780,13 +789,25 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	chatlog(target, room, user) {
-		const targetRoom = target ? Rooms.search(target) : room;
+		const [tarRoom, ...opts] = target.split(',');
+		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const roomid = targetRoom ? targetRoom.roomid : target;
-		this.parse(`/join view-chatlog-${roomid}--today`);
+		this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
 	},
-	chatloghelp: [
-		`/chatlog [optional room] - View chatlogs from the given room. If none is specified, shows logs from the room you're in. Requires: % @ * # &`,
-	],
+
+	chatloghelp() {
+		const strings = [
+			`/chatlog [optional room], [opts] - View chatlogs from the given room. `,
+			`If none is specified, shows logs from the room you're in. Requires: % @ * # &`,
+			`Supported options:`,
+			`<code>txt</code> - Do not render logs.`,
+			`<code>txt-onlychat</code> - Show only chat lines, untransformed.`,
+			`<code>onlychat</code> - Show only chat lines.`,
+			`<code>all</code> - Show all lines, including userstats and join/leave messages.`,
+		];
+		this.runBroadcast();
+		return this.sendReplyBox(strings.join('<br />'));
+	},
 
 	sl: 'searchlogs',
 	logsearch: 'searchlogs',
