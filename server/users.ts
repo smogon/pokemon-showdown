@@ -361,7 +361,6 @@ export class User extends Chat.MessageContext {
 	chatQueueTimeout: NodeJS.Timeout | null;
 	lastChatMessage: number;
 	lastCommand: string;
-	lastSlowCommand: number | null;
 
 	notified: {
 		blockChallenges: boolean,
@@ -448,7 +447,6 @@ export class User extends Chat.MessageContext {
 		this.chatQueueTimeout = null;
 		this.lastChatMessage = 0;
 		this.lastCommand = '';
-		this.lastSlowCommand = null;
 
 		// for the anti-spamming mechanism
 		this.lastMessage = ``;
