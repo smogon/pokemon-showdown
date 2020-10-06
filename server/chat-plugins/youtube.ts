@@ -104,7 +104,7 @@ export class YoutubeInterface {
 		let id = '';
 		if (!link) return null;
 		if (channelData[link]) return link;
-		if (!link.includes('channel')) {
+		if (!link.includes('channel/')) {
 			if (link.includes('youtube')) {
 				id = link.split('v=')[1] || '';
 			} else if (link.includes('youtu.be')) {
