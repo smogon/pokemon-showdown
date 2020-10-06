@@ -1810,9 +1810,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.baseSpecies.baseSpecies !== 'Necrozma' || target.transformed) return;
 			if (target.side.pokemonLeft <= 3) {
 				if (target.species.name === 'Necrozma-Dusk-Mane' && target.side.pokemonLeft === 1 && target.m.flag2) {
-					changeSet(this, target, ssbSets.Robb576Ultra);
+					changeSet(this, target, ssbSets['Robb576-Ultra']);
 				} else if (target.species.name === "Necrozma-Dawn-Wings" && target.m.flag1) {
-					changeSet(this, target, ssbSets.Robb576DuskMane);
+					changeSet(this, target, ssbSets['Robb576-Dusk-Mane']);
 					target.m.flag2 = true;
 				}
 			}

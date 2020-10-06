@@ -13,7 +13,7 @@ export interface SSBSet {
 	shiny?: number | boolean;
 	level?: number;
 	happiness?: number;
-	skip?: boolean;
+	skip?: string;
 }
 interface SSBSets {[k: string]: SSBSet}
 
@@ -354,7 +354,7 @@ export const ssbSets: SSBSets = {
 		moves: ['Aura Sphere', 'Boomburst', 'Volt Switch'],
 		signatureMove: 'Genre Change',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
-		skip: true,
+		skip: 'Jho',
 	},
 	Jordy: {
 		species: 'Archeops', ability: 'Divine Sandstorm', item: 'Life Orb', gender: 'M',
@@ -628,19 +628,19 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mode [5: Offensive]',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	Robb576DuskMane: {
+	'Robb576-Dusk Mane': {
 		species: 'Necrozma-Dusk-Mane', ability: 'The Numbers Game', item: 'Leftovers', gender: 'M',
 		moves: ['Sunsteel Strike', 'Toxic', 'Rapid Spin'],
 		signatureMove: 'Mode [7: Defensive]',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful',
-		skip: true, // This set is transformed into by The Numbers Game ability
+		skip: 'Robb576', // This set is transformed into by The Numbers Game ability
 	},
-	Robb576Ultra: {
+	'Robb576-Ultra': {
 		species: 'Necrozma-Ultra', ability: 'The Numbers Game', item: 'Modium-6 Z', gender: 'M',
 		moves: ['Earthquake', 'Dynamax Cannon', 'Fusion Flare'],
 		signatureMove: 'Photon Geyser',
 		evs: {atk: 204, spa: 200, spe: 104}, ivs: {atk: 0}, nature: 'Hasty',
-		skip: true, // This set is transformed into by The Numbers Game ability
+		skip: 'Robb576', // This set is transformed into by The Numbers Game ability
 	},
 	SectoniaServant: {
 		species: 'Reuniclus', ability: 'Magic Guard', item: 'Leftovers', gender: 'M',
@@ -773,35 +773,35 @@ export const ssbSets: SSBSets = {
 		moves: ['Parabolic Charge', 'Wish', 'Baton Pass'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
-		skip: true,
+		skip: 'yuki',
 	},
 	'yuki-Dancer': {
 		species: 'Pikachu-Pop-Star', ability: 'Dancer', item: 'Light Ball', gender: 'F',
 		moves: ['Fiery Dance', 'Revelation Dance', 'Lunar Dance'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
-		skip: true,
+		skip: 'yuki',
 	},
 	'yuki-Ninja': {
 		species: 'Pikachu-Libre', ability: 'White Smoke', item: 'Light Ball', gender: 'F',
 		moves: ['Water Shuriken', 'Acrobatics', 'Toxic'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
-		skip: true,
+		skip: 'yuki',
 	},
 	'yuki-Songstress': {
 		species: 'Pikachu-Rock-Star', ability: 'Punk Rock', item: 'Light Ball', gender: 'F',
 		moves: ['Hyper Voice', 'Overdrive', 'Sing'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
-		skip: true,
+		skip: 'yuki',
 	},
 	'yuki-Jester': {
 		species: 'Pikachu-Belle', ability: 'Tangled Feet', item: 'Light Ball', gender: 'F',
 		moves: ['Present', 'Metronome', 'Teeter Dance'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
-		skip: true,
+		skip: 'yuki',
 	},
 	Zalm: {
 		species: 'Weedle', ability: 'Berserk', item: 'Sitrus Berry', gender: 'M',

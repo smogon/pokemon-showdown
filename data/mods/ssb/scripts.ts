@@ -26,7 +26,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.runEvent('AfterMega', pokemon);
 
-		// Kaiju Bunny becomes Normal/Fairy when mega evolving
 		if (['Kaiju Bunny', 'Overneat', 'frostyicelad ❆', 'EpicNikolai'].includes(pokemon.name) && !pokemon.illusion) {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
 		}

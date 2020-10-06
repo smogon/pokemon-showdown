@@ -1077,6 +1077,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	kris: {
+		name: "phuck",
+		shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
 		noCopy: true,
 		onStart(source) {
 			const foeName = source.side.foe.active[0].illusion ?
