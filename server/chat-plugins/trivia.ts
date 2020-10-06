@@ -1578,6 +1578,7 @@ const triviaCommands: ChatCommands = {
 
 	answer(target, room, user) {
 		room = this.requireRoom();
+		this.checkChat();
 		let game: Trivia | MastermindRound | MastermindFinals;
 		try {
 			const mastermindRound = getMastermindGame(room).currentRound;
