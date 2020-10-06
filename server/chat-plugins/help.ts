@@ -146,7 +146,7 @@ export class HelpResponder {
 		faq = faq.trim();
 		if (!faq) throw new Chat.ErrorMessage(`Your FAQ ID can't be empty.`);
 		const room = this.getRoom();
-		if (!room) throw new Chat.ErrorMessage(`This command must be used in a chatroom.`);
+		if (!room) throw new Chat.ErrorMessage(`The Help filter room is not configured, and so cannot be used.`);
 		const entry: string = roomFaqs[room.roomid][faq];
 		if (!entry) throw new Chat.ErrorMessage(`FAQ ID "${faq}" not found.`);
 
