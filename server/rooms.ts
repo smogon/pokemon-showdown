@@ -116,6 +116,8 @@ export interface RoomSettings {
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
 	permissions?: {[k: string]: GroupSymbol};
+	minorActivity?: PollData | AnnouncementData;
+	minorActivityQueue?: (PollData | AnnouncementData)[];
 	repeats?: RepeatedPhrase[];
 
 	scavSettings?: AnyObject;
@@ -130,9 +132,9 @@ export interface RoomSettings {
 	isMultichannel?: boolean;
 }
 export type Room = GameRoom | ChatRoom;
-import type {Poll} from './chat-plugins/poll';
+import type {Poll, PollData} from './chat-plugins/poll';
+import type {Announcement, AnnouncementData} from './chat-plugins/announcements';
 import type {AutoResponder} from './chat-plugins/responder';
-import type {Announcement} from './chat-plugins/announcements';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';
 
