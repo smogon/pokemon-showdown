@@ -1266,15 +1266,11 @@ export const PM = new StreamProcessManager(module, () => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// tslint:disable-next-line: no-var-requires
 	global.Config = require('./config-loader').Config;
-	// tslint:disable-next-line: no-var-requires
 	global.Chat = require('./chat').Chat;
-	// tslint:disable-next-line: no-var-requires
 	global.Dex = require('../sim/dex').Dex;
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -1299,9 +1295,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A simulator process');
 		});
 		process.on('unhandledRejection', err => {
-			if (err instanceof Error) {
-				Monitor.crashlog(err, 'A simulator process Promise');
-			}
+			Monitor.crashlog(err as any || {}, 'A simulator process Promise');
 		});
 	}
 

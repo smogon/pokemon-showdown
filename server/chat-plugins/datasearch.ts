@@ -75,7 +75,7 @@ export const commands: ChatCommands = {
 	dsearch: 'dexsearch',
 	nds: 'dexsearch',
 	dexsearch(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
@@ -139,7 +139,7 @@ export const commands: ChatCommands = {
 			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pokemon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
-			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
+			`You can search for info in a specific generation by appending the generation to ds or by using the <code>maxgen</code> keyword; e.g. <code>/ds1 normal</code> or <code>/ds normal, maxgen1</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
 			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
@@ -150,7 +150,7 @@ export const commands: ChatCommands = {
 	rollmove: 'randommove',
 	randmove: 'randommove',
 	randommove(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		this.checkBroadcast(true);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -195,7 +195,7 @@ export const commands: ChatCommands = {
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		this.checkBroadcast(true);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -250,7 +250,7 @@ export const commands: ChatCommands = {
 	msearch: 'movesearch',
 	nms: 'movesearch',
 	movesearch(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		this.checkBroadcast();
 		if (!target) return this.parse('/help movesearch');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
@@ -309,7 +309,7 @@ export const commands: ChatCommands = {
 	is7: 'itemsearch',
 	is8: 'itemsearch',
 	itemsearch(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		this.checkBroadcast();
 		if (!target) return this.parse('/help itemsearch');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
@@ -353,7 +353,7 @@ export const commands: ChatCommands = {
 	as7: 'abilitysearch',
 	as8: 'abilitysearch',
 	abilitysearch(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		this.checkBroadcast();
 		if (!target) return this.parse('/help abilitysearch');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
@@ -398,7 +398,7 @@ export const commands: ChatCommands = {
 	usumlearn: 'learn',
 	learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
-		if (!this.canBroadcast()) return;
+		this.checkBroadcast();
 
 		return runSearch({
 			tar: target,
@@ -2413,11 +2413,9 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, q
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// tslint:disable-next-line: no-var-requires
 	global.Config = require('../config-loader').Config;
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A datasearch process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -2429,17 +2427,14 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	// tslint:disable-next-line: no-var-requires
 	global.Dex = require('../../sim/dex').Dex;
-	// tslint:disable-next-line: no-var-requires
 	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
-	// tslint:disable-next-line: no-var-requires
 	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 	// @ts-ignore
-	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval, @typescript-eslint/no-var-requires
+	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval
 } else {
 	PM.spawn(MAX_PROCESSES);
 }

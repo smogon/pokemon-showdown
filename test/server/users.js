@@ -78,6 +78,14 @@ describe('Users features', function () {
 			});
 		});
 		describe('User', function () {
+			it('should store IP addresses after disconnect', () => {
+				const conn = new Connection('127.0.0.1');
+				const user = new User(conn);
+				assert.deepStrictEqual(['127.0.0.1'], user.ips);
+				user.onDisconnect(conn);
+				assert.deepStrictEqual(['127.0.0.1'], user.ips);
+			});
+
 			describe('#disconnectAll', function () {
 				for (const totalConnections of [1, 2]) {
 					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
@@ -135,14 +143,6 @@ describe('Users features', function () {
 					const users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
 					await Punishments.ban(users[0]);
 					assert.equal(users[1].connected, true);
-				});
-
-				it('should update IP count properly', async function () {
-					const user = new User();
-					await Punishments.ban(user);
-					for (const ip in user.ips) {
-						assert.equal(user.ips[ip], 0);
-					}
 				});
 			});
 

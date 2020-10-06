@@ -53,8 +53,8 @@ export class Side {
 	active: Pokemon[];
 
 	pokemonLeft: number;
-	faintedLastTurn: boolean;
-	faintedThisTurn: boolean;
+	faintedLastTurn: Pokemon | null;
+	faintedThisTurn: Pokemon | null;
 	zMoveUsed: boolean;
 
 	sideConditions: {[id: string]: EffectState};
@@ -100,8 +100,8 @@ export class Side {
 		}
 
 		this.pokemonLeft = this.pokemon.length;
-		this.faintedLastTurn = false;
-		this.faintedThisTurn = false;
+		this.faintedLastTurn = null;
+		this.faintedThisTurn = null;
 		this.zMoveUsed = false;
 
 		this.sideConditions = {};
@@ -293,7 +293,7 @@ export class Side {
 		return true;
 	}
 
-	// tslint:disable-next-line:ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	send(...parts: (string | number | Function | AnyObject)[]) {
 		const sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
@@ -942,8 +942,7 @@ export class Side {
 		// get rid of some possibly-circular references
 		this.pokemon = [];
 		this.active = [];
-		// @ts-ignore - readonly
-		this.battle = null!;
 		this.foe = null!;
+		(this as any).battle = null!;
 	}
 }

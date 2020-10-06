@@ -8,7 +8,7 @@ export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
@@ -56,7 +56,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
-		return this.has(userid) && this.get(userid) !== '+';
+		return this.has(userid) && Auth.atLeast(this.get(userid), '%');
 	}
 	atLeast(user: User, group: AuthLevel) {
 		if (user.hasSysopAccess()) return true;
@@ -122,15 +122,27 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		const roomPermissions = room ? room.settings.permissions : null;
 		if (roomPermissions) {
-			if (cmd && roomPermissions[`/${cmd}`]) {
-				if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-				jurisdiction = 'u';
-			} else if (roomPermissions[permission]) {
+			let foundSpecificPermission = false;
+			if (cmd) {
+				const namespace = cmd.slice(0, cmd.indexOf(' '));
+				if (roomPermissions[`/${cmd}`]) {
+					// this checks sub commands and command objects, but it checks to see if a sub-command
+					// overrides (should a perm for the command object exist) first
+					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+					jurisdiction = 'su';
+					foundSpecificPermission = true;
+				} else if (roomPermissions[`/${namespace}`]) {
+					// if it's for one command object
+					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
+					jurisdiction = 'su';
+					foundSpecificPermission = true;
+				}
+			}
+			if (!foundSpecificPermission && roomPermissions[permission]) {
 				if (!auth.atLeast(user, roomPermissions[permission])) return false;
 				jurisdiction = 'u';
 			}
 		}
-
 		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol as GroupSymbol);
 	}
 	static atLeast(symbol: EffectiveGroupSymbol, symbol2: EffectiveGroupSymbol) {
@@ -145,6 +157,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				permissions.push(`/${cmd}`);
 			}
 			if (typeof entry === 'object') {
+				permissions.push(`/${cmd}`);
 				for (const subCommand in entry) {
 					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
 					if (typeof subEntry !== 'function') continue;

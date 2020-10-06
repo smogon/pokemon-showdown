@@ -68,11 +68,16 @@ export const Monitor = new class {
 
 	updateServerLock = false;
 	cleanInterval: NodeJS.Timeout | null = null;
+	/**
+	 * Inappropriate userid : number of times the name has been forcerenamed
+	 */
+	readonly forceRenames = new Map<ID, number>();
 
 	/*********************************************************
 	 * Logging
 	 *********************************************************/
-	crashlog(error: Error, source = 'The main process', details: {} | null = null) {
+	crashlog(error: Error, source = 'The main process', details: AnyObject | null = null) {
+		if (!error) error = {} as any;
 		if ((error.stack || '').startsWith('@!!@')) {
 			try {
 				const stack = (error.stack || '');

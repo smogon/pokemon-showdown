@@ -16,11 +16,12 @@ import {FS} from '../lib/fs';
 import {QueryProcessManager} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
 
+import {parseModlog} from '../tools/modlog/converter';
+
 const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
 const MODLOG_PATH = 'logs/modlog';
-
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -43,16 +44,39 @@ const execFile = util.promisify(child_process.execFile);
 export type ModlogID = RoomID | 'global';
 
 interface ModlogResults {
-	results: string[];
+	results: ModlogEntry[];
 	duration?: number;
 }
 
 interface ModlogQuery {
 	rooms: ModlogID[];
-	search: string;
-	isExact: boolean;
+	regexString: string;
 	maxLines: number;
 	onlyPunishments: boolean | string;
+}
+
+export interface ModlogSearch {
+	note?: {searches: string[], isExact?: boolean};
+	user?: {search: string, isExact?: boolean};
+	anyField?: string;
+	ip?: string;
+	action?: string;
+	actionTaker?: string;
+}
+
+export interface ModlogEntry {
+	action: string;
+	roomID?: string;
+	visualRoomID?: string;
+	userid?: ID;
+	autoconfirmedID?: ID;
+	alts?: ID[];
+	ip?: string;
+	isGlobal?: boolean;
+	loggedBy?: ID;
+	note?: string;
+	/** Milliseconds since the epoch */
+	time?: number;
 }
 
 class SortedLimitedLengthList {
@@ -136,19 +160,26 @@ export class Modlog {
 	}
 
 	getSharedID(roomid: ModlogID): ID | false {
-		return roomid.includes('-') ? toID(roomid.split('-')[0]) : false;
+		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
 	}
 
 	/**
 	 * Writes to the modlog
-	 * @param overrideID Specify this parameter for when the room ID to be displayed
-	 * is different from the ID for the modlog stream
-	 * (The primary use case of this is tournament battles.)
 	 */
-	write(roomid: ModlogID, message: string, overrideID?: string) {
-		const stream = this.streams.get(roomid);
+	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
+		roomid = entry.roomID || roomid;
+		const stream = this.streams.get(roomid as ModlogID);
 		if (!stream) throw new Error(`Attempted to write to an uninitialized modlog stream for the room '${roomid}'`);
-		void stream.write(`[${new Date().toJSON()}] (${overrideID || roomid}) ${message}\n`);
+
+		let buf = `[${new Date(entry.time || Date.now()).toJSON()}] (${overrideID || entry.visualRoomID || roomid}) ${entry.action}:`;
+		if (entry.userid) buf += ` [${entry.userid}]`;
+		if (entry.autoconfirmedID) buf += ` ac:[${entry.autoconfirmedID}]`;
+		if (entry.alts) buf += ` alts:[${entry.alts.join('], [')}]`;
+		if (entry.ip) buf += ` [${entry.ip}]`;
+		if (entry.loggedBy) buf += ` by ${entry.loggedBy}`;
+		if (entry.note) buf += `: ${entry.note}`;
+
+		void stream.write(`${buf}\n`);
 	}
 
 	async destroy(roomid: ModlogID) {
@@ -171,7 +202,9 @@ export class Modlog {
 	async rename(oldID: ModlogID, newID: ModlogID) {
 		const streamExists = this.streams.has(oldID);
 		if (streamExists) await this.destroy(oldID);
-		await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
+		if (!this.getSharedID(oldID)) {
+			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
+		}
 		if (streamExists) this.initialize(newID);
 	}
 
@@ -183,7 +216,7 @@ export class Modlog {
 	 * Methods for reading (searching) modlog *
 	 ******************************************/
 	 async runSearch(
-		rooms: ModlogID[], search: string, isExact: boolean, maxLines: number, onlyPunishments: boolean | string
+		rooms: ModlogID[], regexString: string, maxLines: number, onlyPunishments: boolean | string
 	) {
 		const useRipgrep = await checkRipgrepAvailability();
 		let fileNameList: string[] = [];
@@ -201,20 +234,6 @@ export class Modlog {
 		}
 		fileNameList = fileNameList.map(filename => `${this.logPath}/${filename}`);
 
-		// Ensure regexString can never be greater than or equal to the value of
-		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
-		// searchString with max length MAX_QUERY_LENGTH. Otherwise, the modlog
-		// child process will crash when attempting to execute any RegExp
-		// constructed with it (i.e. when not configured to use ripgrep).
-		let regexString;
-		if (!search) {
-			regexString = '.';
-		} else if (isExact) {
-			regexString = search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
-		} else {
-			search = toID(search);
-			regexString = `[^a-zA-Z0-9]${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
-		}
 		if (onlyPunishments) {
 			regexString = `${onlyPunishments === 'global' ? GLOBAL_PUNISHMENTS_REGEX_STRING : PUNISHMENTS_REGEX_STRING}${regexString}`;
 		}
@@ -224,7 +243,7 @@ export class Modlog {
 			if (checkAllRooms) fileNameList = [this.logPath];
 			await this.runRipgrepSearch(fileNameList, regexString, results, maxLines);
 		} else {
-			const searchStringRegex = (search || onlyPunishments) ? new RegExp(regexString, 'i') : undefined;
+			const searchStringRegex = new RegExp(regexString, 'i');
 			for (const fileName of fileNameList) {
 				await this.readRoomModlog(fileName, results, searchStringRegex);
 			}
@@ -258,16 +277,31 @@ export class Modlog {
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const response = await PM.query({
 			rooms: ['global' as ModlogID],
-			search: toID(user),
-			isExact: true,
+			regexString: `[${this.escapeRegex(toID(user))}]`,
 			maxLines: days * 10,
 			onlyPunishments: 'global',
 		});
 		return response.length;
 	}
 
+	generateRegex(search: string) {
+		// Ensure the generated regex can never be greater than or equal to the value of
+		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
+		// search with max length MAX_QUERY_LENGTH. Otherwise, the modlog
+		// child process will crash when attempting to execute any RegExp
+		// constructed with it (i.e. when not configured to use ripgrep).
+		return `[^a-zA-Z0-9]?${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
+	}
+
+	escapeRegex(search: string) {
+		return search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
+	}
+
 	async search(
-		roomid: ModlogID = 'global', search = '', maxLines = 20, exactSearch = false, onlyPunishments = false
+		roomid: ModlogID = 'global',
+		search: ModlogSearch = {},
+		maxLines = 20,
+		onlyPunishments = false
 	): Promise<ModlogResults> {
 		const rooms = (roomid === 'public' ?
 			[...Rooms.rooms.values()]
@@ -275,10 +309,30 @@ export class Modlog {
 				.map(room => room.roomid) :
 			[roomid]);
 
+		// Ensure regexString can never be greater than or equal to the value of
+		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
+		// searchString with max length MAX_QUERY_LENGTH. Otherwise, the modlog
+		// child process will crash when attempting to execute any RegExp
+		// constructed with it (i.e. when not configured to use ripgrep).
+		let regexString = '.*?';
+		if (search.anyField) regexString += `${this.escapeRegex(search.anyField)}.*?`;
+		if (search.action) regexString += `\\) .*?${this.escapeRegex(search.action)}.*?: .*?`;
+		if (search.user) {
+			const wildcard = search.user.isExact ? `` : `.*?`;
+			regexString += `.*?\\[${wildcard}${this.escapeRegex(search.user.search)}${wildcard}\\].*?`;
+		}
+		if (search.ip) regexString += `${this.escapeRegex(`[${search.ip}`)}.*?\\].*?`;
+		if (search.actionTaker) regexString += `${this.escapeRegex(`by ${search.actionTaker}`)}.*?`;
+		if (search.note) {
+			const regexGenerator = search.note.isExact ? this.generateRegex : this.escapeRegex;
+			for (const noteSearch of search.note.searches) {
+				regexString += `${regexGenerator(toID(noteSearch))}.*?`;
+			}
+		}
+
 		const query = {
 			rooms: rooms,
-			search: search,
-			isExact: exactSearch,
+			regexString,
 			maxLines: maxLines,
 			onlyPunishments: onlyPunishments,
 		};
@@ -292,8 +346,7 @@ export class Modlog {
 
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
 		const fileStream = FS(path).createReadStream();
-		let line;
-		while ((line = await fileStream.readLine()) !== null) {
+		for await (const line of fileStream.byLine()) {
 			if (!regex || regex.test(line)) {
 				results.insert(line);
 			}
@@ -303,21 +356,28 @@ export class Modlog {
 	}
 }
 
-export const PM = new QueryProcessManager<ModlogQuery, string[] | undefined>(module, async data => {
-	const {rooms, search, isExact, maxLines, onlyPunishments} = data;
+// if I don't do this TypeScript thinks that (ModlogResult | undefined)[] is a function
+// and complains about an "nexpected newline between function name and paren"
+// even though it's a type not a function...
+type ModlogResult = ModlogEntry | undefined;
+
+export const PM = new QueryProcessManager<ModlogQuery, ModlogResult[]>(module, async data => {
+	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
-		return await modlog.runSearch(rooms, search, isExact, maxLines, onlyPunishments);
+		const results = await modlog.runSearch(rooms, regexString, maxLines, onlyPunishments);
+		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
+		return [];
 	}
 });
+
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	global.toID = require('../sim/dex').Dex.toID;
 
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A modlog process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore please be silent
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);

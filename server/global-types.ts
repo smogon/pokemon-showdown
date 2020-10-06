@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow */
+
 type Config = typeof import('../config/config-example') & AnyObject;
 
 type GroupSymbol = import('./user-groups').GroupSymbol;
@@ -27,6 +29,8 @@ namespace Chat {
 	export type NameFilter = import('./chat').NameFilter;
 	export type StatusFilter = import('./chat').StatusFilter;
 	export type LoginFilter = import('./chat').LoginFilter;
+	export type PunishmentFilter = import('./chat').PunishmentFilter;
+	export type FilterWord = import('./chat').FilterWord;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
 }
@@ -54,7 +58,6 @@ namespace Rooms {
 
 // Streams
 // (I don't understand why eslint only has a problem with this - it's used in room-battle)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Streams {
 	export type WriteStream = import('../lib/streams').WriteStream;
 	export type ReadStream = import('../lib/streams').ReadStream;

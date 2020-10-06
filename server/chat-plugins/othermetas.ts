@@ -547,10 +547,12 @@ export const commands: ChatCommands = {
 		const mixedSpecies = Utils.deepClone(species);
 		mixedSpecies.abilities = Utils.deepClone(crossSpecies.abilities);
 		mixedSpecies.baseStats = Utils.deepClone(mixedSpecies.baseStats);
+		mixedSpecies.bst = 0;
 		let statName: StatName;
 		for (statName in species.baseStats) {
 			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(mixedSpecies.baseStats[statName] + statChange, 1, 255);
+			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.types = [species.types[0]];
 		if (species.types[1]) mixedSpecies.types.push(species.types[1]);
@@ -614,10 +616,12 @@ export const commands: ChatCommands = {
 		const deltas = Utils.deepClone(evo);
 		deltas.tier = 'CE';
 		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+		deltas.bst = 0;
 		let i: StatName;
 		for (i in evo.baseStats) {
 			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
 			deltas.baseStats[i] = statChange;
+			deltas.bst += deltas.baseStats[i];
 		}
 		deltas.types = [];
 		if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];

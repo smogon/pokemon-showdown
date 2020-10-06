@@ -192,9 +192,9 @@ export class TeamValidator {
 	readonly minSourceGen: number;
 
 	readonly toID: (str: any) => ID;
-	constructor(format: string | Format) {
-		this.format = Dex.getFormat(format);
-		this.dex = Dex.forFormat(this.format);
+	constructor(format: string | Format, dex = Dex) {
+		this.format = dex.getFormat(format);
+		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.getRuleTable(this.format);
 
@@ -772,9 +772,9 @@ export class TeamValidator {
 
 		const cantBreedNorEvolve = (species.eggGroups[0] === 'Undiscovered' && !species.prevo && !species.nfe);
 		const isLegendary = (cantBreedNorEvolve && ![
-			'Unown', 'Pikachu',
+			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish',
 		].includes(species.baseSpecies)) || [
-			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Manaphy', 'Meltan', 'Melmetal',
+			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
 		].includes(species.baseSpecies);
 		const diancieException = species.name === 'Diancie' && set.shiny;
 		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
@@ -792,7 +792,7 @@ export class TeamValidator {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				const reason = (this.minSourceGen === 6 ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6`);
+				const reason = (this.minSourceGen === 6 ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6 or later`);
 				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
 			}
 		}
@@ -959,7 +959,7 @@ export class TeamValidator {
 		let eventSpecies = species;
 		if (source.charAt(1) === 'S') {
 			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
-			const dex = (this.dex.gen === 1 ? Dex.mod('gen2') : this.dex);
+			const dex = (this.dex.gen === 1 ? this.dex.mod('gen2') : this.dex);
 			eventSpecies = dex.getSpecies(splitSource[1]);
 			const eventLsetData = this.dex.getLearnsetData(eventSpecies.id);
 			eventData = eventLsetData.eventData?.[parseInt(splitSource[0])];
@@ -1027,7 +1027,7 @@ export class TeamValidator {
 		if (!getAll && eggMoves.length <= 1) return true;
 
 		// gen 1 eggs come from gen 2 breeding
-		const dex = this.dex.gen === 1 ? Dex.mod('gen2') : this.dex;
+		const dex = this.dex.gen === 1 ? this.dex.mod('gen2') : this.dex;
 		// In Gen 5 and earlier, egg moves can only be inherited from the father
 		// we'll test each possible father separately
 		let eggGroups = species.eggGroups;
@@ -1188,7 +1188,7 @@ export class TeamValidator {
 					}
 				} else {
 					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-					const baseSpecies = Dex.getSpecies(species.changesFrom);
+					const baseSpecies = this.dex.getSpecies(species.changesFrom);
 					problems.push(
 						`${name} needs to hold ${species.requiredItems.join(' or ')} to be in its ${species.forme} forme.`,
 						`(It will revert to its ${baseSpecies.baseForme} forme if you remove the item or give it a different item.)`
@@ -1196,7 +1196,7 @@ export class TeamValidator {
 				}
 			}
 			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
-				const baseSpecies = Dex.getSpecies(species.changesFrom);
+				const baseSpecies = this.dex.getSpecies(species.changesFrom);
 				problems.push(
 					`${name} needs to know the move ${species.requiredMove} to be in its ${species.forme} forme.`,
 					`(It will revert to its ${baseSpecies.baseForme} forme if it forgets the move.)`
@@ -1562,9 +1562,6 @@ export class TeamValidator {
 			}
 		} else {
 			requiredIVs = eventData.perfectIVs || 0;
-			if (eventData.generation >= 6 && eventData.perfectIVs === undefined && TeamValidator.hasLegendaryIVs(species)) {
-				requiredIVs = 3;
-			}
 		}
 		if (requiredIVs && set.ivs) {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
@@ -1578,8 +1575,6 @@ export class TeamValidator {
 				if (fastReturn) return true;
 				if (eventData.perfectIVs) {
 					problems.push(`${name} must have at least ${requiredIVs} perfect IVs${etc}.`);
-				} else {
-					problems.push(`${name} is a legendary and must have at least three perfect IVs${etc}.`);
 				}
 			}
 			// The perfect IV count affects Hidden Power availability
@@ -2015,11 +2010,6 @@ export class TeamValidator {
 			return this.dex.getSpecies(species.changesFrom);
 		}
 		return null;
-	}
-
-	static hasLegendaryIVs(species: Species) {
-		return ((species.eggGroups[0] === 'Undiscovered' || species.name === 'Manaphy') &&
-			!species.prevo && !species.nfe && species.name !== 'Unown' && species.baseSpecies !== 'Pikachu');
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {

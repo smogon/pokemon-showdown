@@ -40,14 +40,14 @@ function splitFirst(str: string, delimiter: string, limit = 1) {
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
-	replay: boolean;
+	replay: boolean | 'spectator';
 	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean} = {}) {
+	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator'} = {}) {
 		super();
 		this.debug = !!options.debug;
-		this.replay = !!options.replay;
+		this.replay = options.replay || false;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
 	}
@@ -74,7 +74,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	pushMessage(type: string, data: string) {
 		if (this.replay) {
 			if (type === 'update') {
-				this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+				if (this.replay === 'spectator') {
+					this.push(data.replace(/\n\|split\|p[1234]\n(?:[^\n]*)\n([^\n]*)/g, '\n$1'));
+				} else {
+					this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+				}
 			}
 			return;
 		}
