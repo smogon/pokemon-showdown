@@ -528,6 +528,32 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it.skip('should not allow evolutions of Shiny-locked events to be Shiny', function () {
+		const team = [
+			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
+			{species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it.skip('should not allow unreleased Gmax formes', function () {
+		const team = [
+			{species: 'melmetal-gmax', ability: 'ironfist', moves: ['doubleironbash'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it.skip('should not allow events to use moves only obtainable in a previous generation', function () {
+		const team = [
+			{species: 'zeraora', ability: 'voltabsorb', shiny: true, moves: ['knockoff'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+
 	/*********************************************************
  	* Custom rules
  	*********************************************************/
