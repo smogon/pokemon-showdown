@@ -745,14 +745,7 @@ export class User extends Chat.MessageContext {
 		if (userType !== '1') {
 			registered = true;
 
-			if (userType === '3') {
-				this.isSysop = true;
-				this.isStaff = true;
-				this.trusted = userid;
-				this.autoconfirmed = userid;
-			} else if (userType === '4') {
-				this.autoconfirmed = userid;
-			} else if (userType === '5') {
+			if (userType === '5') {
 				this.permalocked = userid;
 				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`, true);
 			} else if (userType === '6') {
@@ -804,6 +797,16 @@ export class User extends Chat.MessageContext {
 		}
 		Rooms.global.checkAutojoin(this);
 		Chat.loginfilter(this, null, userType);
+
+		if (userType === '4') {
+			this.autoconfirmed = userid;
+		} else if (userType === '3') {
+			this.isSysop = true;
+			this.isStaff = true;
+			this.trusted = userid;
+			this.autoconfirmed = userid;
+		}
+
 		return true;
 	}
 	forceRename(name: string, registered: boolean, isForceRenamed = false) {
