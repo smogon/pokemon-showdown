@@ -53,6 +53,7 @@ if (('Config' in global) &&
 
 export const Monitor = new class {
 	connections = new TimedCounter();
+	netRequests = new TimedCounter();
 	battles = new TimedCounter();
 	battlePreps = new TimedCounter();
 	groupChats = new TimedCounter();
@@ -214,6 +215,16 @@ export const Monitor = new class {
 	countGroupChat(ip: string) {
 		const count = this.groupChats.increment(ip, 60 * 60 * 1000)[0];
 		return count > 4;
+	}
+
+	/**
+	 * Counts commands that use HTTPs requests. Returns true if too many.
+	 */
+	countNetRequests(ip: string) {
+		const [count] = this.netRequests.increment(ip, 1 * 60 * 1000);
+		if (count <= 10) return false;
+		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
+		return true;
 	}
 
 	/**
