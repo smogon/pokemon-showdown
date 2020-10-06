@@ -883,7 +883,7 @@ export const commands: ChatCommands = {
 	},
 
 	reloadschemas(target, room, user) {
-		if (!this.canUseConsole()) return;
+		this.canUseConsole();
 		target = toID(target);
 		if (target && target !== 'all') return this.parse(`/help reloadschemas`);
 		const isAll = target === 'all';

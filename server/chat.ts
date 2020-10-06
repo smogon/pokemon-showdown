@@ -1586,9 +1586,9 @@ export const Chat = new class {
 	}
 
 	/*********************************************************
-	 * Intialize databases for plugins
+	 * Intialize plugin databases
 	 **********************************************************/
-	database?: Sqlite.Database;
+	database: Sqlite.Database = null!;
 	/**
 	 * Load database schemas in the /databases/schemas folder.
 	 * @param loadAll Whether or not to load all database schemas vs just chat plugin schemas. Defaults to just plugins.
