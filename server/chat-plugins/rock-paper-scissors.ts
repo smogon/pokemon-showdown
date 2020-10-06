@@ -1,5 +1,5 @@
 /**
- * Rock, Paper, Scissors plugin by Mia
+ * Rock Paper Scissors plugin by Mia
  * @author mia-pi-git
  */
 import {Utils} from '../../lib/utils';
