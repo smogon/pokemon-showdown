@@ -196,7 +196,7 @@ export class RPSGame extends Rooms.RoomGame {
 			throw new Error(`Starting a ${this.title} game with less than 2 players.`);
 		}
 		this.players = players;
-		this.addField(`The Rock, Paper, Scissors match has begun!`);
+		this.addField(`The Rock Paper Scissors match has begun!`);
 		this.add(Utils.html`(Use /rps end to end the game)`);
 		this.startNextRound();
 	}
@@ -307,14 +307,14 @@ export const commands: ChatCommands = {
 			if (!this.pmTarget) this.pmTarget = targetUser;
 			challenges.set(targetUser.id, user.id);
 			this.sendChatMessage(
-				`/raw ${user.name} challenged you to Rock, Paper, Scissors!` +
+				`/raw ${user.name} challenged you to Rock Paper Scissors!` +
 				`<button class="button" name="send" value="/rps accept"><strong>Accept</strong></button></div>`,
 			);
 		},
 
 		accept(target, room, user) {
 			const id = challenges.get(user.id);
-			if (!id) return this.errorReply(`You have no Rock, Paper, Scissors request pending from ${target}.`);
+			if (!id) return this.errorReply(`You have no Rock Paper Scissors request pending from ${target}.`);
 			const targetUser = Users.get(id)!;
 			const existingRoom = findExisting(user.id, targetUser.id);
 			const options = {
@@ -337,9 +337,9 @@ export const commands: ChatCommands = {
 
 		deny(target, room, user) {
 			const request = challenges.get(user.id);
-			if (!request) return this.errorReply(`You have no Rock, Paper, Scissors challenge pending.`);
+			if (!request) return this.errorReply(`You have no Rock Paper Scissors challenge pending.`);
 			const [sender] = request;
-			Users.get(sender)?.popup(`${user.name} denied your Rock, Paper, Scissors challenge.`);
+			Users.get(sender)?.popup(`${user.name} denied your Rock Paper Scissors challenge.`);
 			challenges.delete(user.id);
 		},
 
