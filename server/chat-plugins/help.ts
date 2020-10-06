@@ -3,7 +3,8 @@
  * Uses Regex to match room frequently asked question (RFAQ) entries,
  * and replies if a match is found.
  * Supports configuration.
- * Written by mia-pi.
+ * Written by Mia.
+ * @author mia-pi-git
  */
 
 import {FS} from '../../lib/fs';
