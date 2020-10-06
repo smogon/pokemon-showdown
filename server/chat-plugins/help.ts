@@ -240,8 +240,8 @@ export class HelpResponder {
 		return FS(PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
 	tryAddRegex(inputString: string, raw?: boolean) {
-		let [args, faq] = inputString.split('=>').map(item => item.trim());
-		faq = this.getFaqID(toID(faq)) as string;
+		let [args, faq] = inputString.split('=>').map(item => item.trim()) as [string, string | undefined];
+		faq = this.getFaqID(toID(faq));
 		if (!faq) throw new Chat.ErrorMessage("Invalid FAQ.");
 		if (!this.data.pairs) this.data.pairs = {};
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
@@ -254,12 +254,12 @@ export class HelpResponder {
 		return this.writeState();
 	}
 	tryRemoveRegex(faq: string, index: number) {
-		faq = this.getFaqID(faq) as string;
-		if (!faq) throw new Chat.ErrorMessage("Invalid FAQ.");
+		const faqid = this.getFaqID(faq);
+		if (!faqid) throw new Chat.ErrorMessage("Invalid FAQ.");
 		if (!this.data.pairs) this.data.pairs = {};
-		if (!this.data.pairs[faq]) throw new Chat.ErrorMessage(`There are no regexes for ${faq}.`);
-		if (!this.data.pairs[faq][index]) throw new Chat.ErrorMessage("Your provided index is invalid.");
-		this.data.pairs[faq].splice(index, 1);
+		if (!this.data.pairs[faqid]) throw new Chat.ErrorMessage(`There are no regexes for ${faqid}.`);
+		if (!this.data.pairs[faqid][index]) throw new Chat.ErrorMessage("Your provided index is invalid.");
+		this.data.pairs[faqid].splice(index, 1);
 		this.writeState();
 		return true;
 	}
