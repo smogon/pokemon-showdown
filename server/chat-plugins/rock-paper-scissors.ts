@@ -193,7 +193,7 @@ export class RPSGame extends Rooms.RoomGame {
 	start() {
 		const players = this.getPlayers();
 		if (players.length < 2) {
-			throw new Chat.ErrorMessage(`Not enough players to start the game.`);
+			throw new Error(`Starting a ${this.title} game with less than 2 players.`);
 		}
 		this.players = players;
 		this.addField(`The Rock, Paper, Scissors match has begun!`);
@@ -357,12 +357,6 @@ export const commands: ChatCommands = {
 
 		leave(target, room, user) {
 			this.parse(`/leavegame`);
-		},
-
-		start(target, room, user) {
-			const game = getGame(this);
-			if (game.roundTimer) return this.errorReply(`The game has already started.`);
-			game.start();
 		},
 
 		pause(target, room, user) {
