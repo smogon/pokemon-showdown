@@ -444,8 +444,10 @@ export const commands: ChatCommands = {
 			}
 			const {regexString, userid} = Answerer.queue[index];
 			const regex = Answerer.stringRegex(regexString);
-			// validated on submission
+
+			// validated on submission but FAQs may have changed since then
 			const faq = Answerer.getFaqID(regexString.split('=>')[1].trim());
+
 			if (!Answerer.data.pairs[faq]) helpData.pairs[faq] = [];
 			Answerer.data.pairs[faq].push(regex);
 			Answerer.queue.splice(index, 1);
