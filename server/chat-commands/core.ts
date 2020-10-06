@@ -1676,6 +1676,15 @@ export const commands: ChatCommands = {
 				return this.parse(`/${target}`);
 			}
 			if (!nextNamespace) {
+				for (const g in Config.groups) {
+					const groupid = Config.groups[g].id;
+					if (new RegExp(`(global)?(un|de)?${groupid}`).test(target)) {
+						return this.parse(`/help promote`);
+					}
+					if (new RegExp(`room(un|de)?${groupid}`).test(target)) {
+						return this.parse(`/help roompromote`);
+					}
+				}
 				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 			}
 
