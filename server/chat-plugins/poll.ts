@@ -10,8 +10,7 @@ interface Option {
 	name: string; votes: number; correct?: boolean;
 }
 
-export interface PollData {
-	readonly activityId: 'poll';
+export interface PollOptions {
 	pollNumber?: number;
 	question: string;
 	supportHTML: boolean;
@@ -25,6 +24,10 @@ export interface PollData {
 	isQuiz?: boolean;
 	questions: (string | Option)[];
 	queued?: boolean;
+}
+
+export interface PollData extends PollOptions {
+	readonly activityId: 'poll';
 }
 
 export class Poll {
@@ -44,7 +47,7 @@ export class Poll {
 	options: Map<number, Option>;
 	timerEnd?: number;
 	queued?: boolean;
-	constructor(room: Room, options: PollData) {
+	constructor(room: Room, options: PollOptions) {
 		this.activityId = 'poll';
 		this.pollNumber = options.pollNumber || room.nextGameNumber();
 		this.room = room;
@@ -358,11 +361,15 @@ export class Poll {
 		room.saveSettings();
 		return poll;
 	}
+	destroy() {
+		this.room.minorActivity = null;
+	}
 }
 
-for (const room of Rooms.rooms.values()) { // hotpatching!
+// should handle restarts and also hotpatches
+for (const room of Rooms.rooms.values()) {
 	if (room.settings.minorActivity?.activityId === 'poll') {
-		if (room.minorActivity?.timeout) clearTimeout(room.minorActivity.timeout);
+		room.minorActivity?.endTimer();
 		room.minorActivity = new Poll(room, room.settings.minorActivity);
 	}
 	if (room.settings.minorActivityQueue) { // rebuild queue
@@ -433,7 +440,7 @@ export const commands: ChatCommands = {
 			if (room.minorActivity) {
 				if (!room.minorActivityQueue) room.minorActivityQueue = [];
 				const poll = new Poll(room, {
-					question: params[0], supportHTML, questions, multiPoll, queued: true, activityId: 'poll',
+					question: params[0], supportHTML, questions, multiPoll, queued: true,
 				});
 				room.minorActivityQueue.push(poll);
 				poll.save();
@@ -441,7 +448,7 @@ export const commands: ChatCommands = {
 				return this.privateModAction(room.tr`${user.name} queued a poll.`);
 			}
 			room.minorActivity = new Poll(room, {
-				question: params[0], supportHTML, questions, multiPoll, activityId: 'poll',
+				question: params[0], supportHTML, questions, multiPoll,
 			});
 			room.minorActivity.display();
 			room.minorActivity.save();
