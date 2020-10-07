@@ -2192,16 +2192,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-		// TODO Will abilities that already started start again? (Intimidate seems like a good test case)
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityData.ending = false;
 		},
 		onEnd(source) {
+			this.add('-fieldend', 'ability: Neutralizing Gas');
+
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
 			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
-			// (If your tackling this, do note extreme weathers have the same issue)
+			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
 			source.abilityData.ending = true;
