@@ -6,12 +6,15 @@ import {Utils} from '../../lib/utils';
 
 const MINUTE = 60000;
 
-export interface AnnouncementData {
-	activityId: 'announcement';
+export interface AnnouncementOptions {
 	announcementNumber?: number;
 	source: string;
 	timeoutMins?: number;
 	timerEnd?: number;
+}
+
+export interface AnnouncementData extends AnnouncementOptions {
+	readonly activityId: 'announcement';
 }
 
 export class Announcement {
@@ -22,7 +25,7 @@ export class Announcement {
 	timeout: NodeJS.Timer | null;
 	timeoutMins: number;
 	timerEnd?: number;
-	constructor(room: Room, options: AnnouncementData) {
+	constructor(room: Room, options: AnnouncementOptions) {
 		this.activityId = 'announcement';
 		this.announcementNumber = options.announcementNumber || room.nextGameNumber();
 		this.room = room;
@@ -91,9 +94,10 @@ export class Announcement {
 	}
 }
 
-for (const room of Rooms.rooms.values()) { // hotpatching!
+// should handle restarts and also hotpatches
+for (const room of Rooms.rooms.values()) {
 	if (room.settings.minorActivity?.activityId === 'announcement') {
-		if (room.minorActivity?.timeout) clearTimeout(room.minorActivity.timeout);
+		room.minorActivity?.endTimer();
 		room.minorActivity = new Announcement(room, room.settings.minorActivity);
 	}
 }
@@ -122,7 +126,7 @@ export const commands: ChatCommands = {
 
 			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
 
-			room.minorActivity = new Announcement(room, {source, activityId: 'announcement'});
+			room.minorActivity = new Announcement(room, {source});
 			room.minorActivity.display();
 			room.minorActivity.save();
 
