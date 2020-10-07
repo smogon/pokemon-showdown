@@ -11,7 +11,7 @@ interface Option {
 }
 
 export interface PollData {
-	readonly activityId?: 'poll';
+	readonly activityId: 'poll';
 	pollNumber?: number;
 	question: string;
 	supportHTML: boolean;
@@ -362,6 +362,7 @@ export class Poll {
 
 for (const room of Rooms.rooms.values()) { // hotpatching!
 	if (room.settings.minorActivity?.activityId === 'poll') {
+		if (room.minorActivity?.timeout) clearTimeout(room.minorActivity.timeout);
 		room.minorActivity = new Poll(room, room.settings.minorActivity);
 	}
 	if (room.settings.minorActivityQueue) { // rebuild queue
@@ -432,7 +433,7 @@ export const commands: ChatCommands = {
 			if (room.minorActivity) {
 				if (!room.minorActivityQueue) room.minorActivityQueue = [];
 				const poll = new Poll(room, {
-					question: params[0], supportHTML, questions, multiPoll, queued: true,
+					question: params[0], supportHTML, questions, multiPoll, queued: true, activityId: 'poll',
 				});
 				room.minorActivityQueue.push(poll);
 				poll.save();
@@ -440,7 +441,7 @@ export const commands: ChatCommands = {
 				return this.privateModAction(room.tr`${user.name} queued a poll.`);
 			}
 			room.minorActivity = new Poll(room, {
-				question: params[0], supportHTML, questions, multiPoll,
+				question: params[0], supportHTML, questions, multiPoll, activityId: 'poll',
 			});
 			room.minorActivity.display();
 			room.minorActivity.save();

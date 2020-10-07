@@ -7,7 +7,7 @@ import {Utils} from '../../lib/utils';
 const MINUTE = 60000;
 
 export interface AnnouncementData {
-	activityId?: 'announcement';
+	activityId: 'announcement';
 	announcementNumber?: number;
 	source: string;
 	timeoutMins?: number;
@@ -93,6 +93,7 @@ export class Announcement {
 
 for (const room of Rooms.rooms.values()) { // hotpatching!
 	if (room.settings.minorActivity?.activityId === 'announcement') {
+		if (room.minorActivity?.timeout) clearTimeout(room.minorActivity.timeout);
 		room.minorActivity = new Announcement(room, room.settings.minorActivity);
 	}
 }
@@ -121,7 +122,7 @@ export const commands: ChatCommands = {
 
 			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
 
-			room.minorActivity = new Announcement(room, {source});
+			room.minorActivity = new Announcement(room, {source, activityId: 'announcement'});
 			room.minorActivity.display();
 			room.minorActivity.save();
 
