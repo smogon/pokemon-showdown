@@ -198,7 +198,7 @@ export abstract class BasicRoom {
 	reportJoinsInterval: NodeJS.Timer | null;
 
 	minorActivity: Poll | Announcement | null;
-	minorActivityQueue: Poll[] | null;
+	minorActivityQueue: PollData[] | null;
 	banwordRegex: RegExp | true | null;
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
