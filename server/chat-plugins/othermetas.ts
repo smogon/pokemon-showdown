@@ -190,23 +190,22 @@ export const commands: ChatCommands = {
 		if (stone && dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id)) {
 			return this.errorReply("The Orbs do not exist in Gen 8 and later.");
 		}
-		let stones;
+		let stones = [];
 		if (!stone) {
 			const species = dex.getSpecies(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
 			if (!species.exists) return this.errorReply(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) return this.errorReply(`Error: Mega Evolution not found.`);
-			const megas = species.otherFormes.filter(poke => /(?:-Primal|-Mega(?:-[XY])?)$/.test(poke));
-			if (!megas.length) return this.errorReply(`Error: Mega Evolution not found.`);
-			stones = megas.map(poke => {
+			for (let poke of species.otherFormes) {
+				if (!/(?:-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
 				const megaPoke = dex.getSpecies(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
-				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.getSpecies(targetid))) return null;
-				if (!flag) return null;
-				return getMegaStone(flag, sep[1]);
-			}).filter(poke => poke !== null);
+				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.getSpecies(targetid))) continue;
+				if (!flag) continue;
+				stones.push(getMegaStone(flag, sep[1]));
+			}
 			if (!stones.length) return this.errorReply(`Error: Mega Evolution not found.`);
 		}
-		const toDisplay = (stones || [stone]);
+		const toDisplay = (stones.length ? stones : [stone]);
 		const banlist = Dex.getFormat('gen8mixandmega').banlist;
 		for (const aStone of toDisplay) {
 			if (!aStone) return;
