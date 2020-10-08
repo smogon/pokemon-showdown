@@ -208,7 +208,7 @@ export const commands: ChatCommands = {
 		}
 		const toDisplay = (stones || [stone]);
 		const banlist = Dex.getFormat('gen8mixandmega').banlist;
-		toDisplay.forEach(aStone => {
+		for (const aStone of toDisplay) {
 			if (!aStone) return;
 			if (banlist.includes(aStone.name)) {
 				this.errorReply(`Warning: ${aStone.name} is banned from Mix and Mega.`);
@@ -293,7 +293,7 @@ export const commands: ChatCommands = {
 			buf += `</li>`;
 			this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
 			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}</font>`);
-		});
+		}
 	},
 	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pokemon.`],
 
