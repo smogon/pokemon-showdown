@@ -209,7 +209,7 @@ export const commands: ChatCommands = {
 		const ruleTable = Dex.getRuleTable(Dex.getFormat('gen8mixandmega'));
 		for (const aStone of toDisplay) {
 			if (!aStone) return;
-			if (banlist.includes(aStone.name)) {
+			if (ruleTable.isBanned(`${aStone.name === 'Dragon Ascent' ? 'move' : 'item'}:${aStone.name}`)) {
 				this.errorReply(`Warning: ${aStone.name} is banned from Mix and Mega.`);
 			}
 			if (aStone.name === 'Dragon Ascent') {
