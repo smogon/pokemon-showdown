@@ -187,7 +187,9 @@ export const commands: ChatCommands = {
 		const targetid = toID(sep[0]);
 		if (!targetid) return this.parse('/help stone');
 		const stone = getMegaStone(targetid, sep[1]);
-		if (stone && dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id)) return this.errorReply("The Orbs do not exist in Gen 8 and later.");
+		if (stone && dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id)) {
+			return this.errorReply("The Orbs do not exist in Gen 8 and later.");
+		}
 		let stones;
 		if (!stone) {
 			const species = dex.getSpecies(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
@@ -208,8 +210,7 @@ export const commands: ChatCommands = {
 			}).filter(poke => poke !== null);
 			if (!stones.length) return this.errorReply(`Error: Mega Evolution not found.`);
 		}
-		let toDisplay = (stones || [stone]);
-		const banlist = Dex.getFormat('gen8mixandmega').banlist;
+		const toDisplay = (stones || [stone]), banlist = Dex.getFormat('gen8mixandmega').banlist;
 		toDisplay.forEach(singleStone => {
 			if (!singleStone) return;
 			if (banlist.includes(singleStone.name)) {
