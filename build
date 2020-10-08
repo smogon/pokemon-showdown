@@ -136,11 +136,7 @@ if (sucrase('./server', './.server-dist')) {
 	]);
 }
 
-if (sucrase('./translations', './.translations-dist')) {
-	replace('.translations-dist', [
-		{regex: /(require\(.*?)(server)/g, replace: `$1.$2-dist`},
-	]);
-}
+sucrase('./translations', './.translations-dist');
 
 if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
 	replace('./tools/set-import/importer.js', [
