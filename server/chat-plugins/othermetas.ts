@@ -211,25 +211,25 @@ export const commands: ChatCommands = {
 			if (!stones.length) return this.errorReply(`Error: Mega Evolution not found.`);
 		}
 		const toDisplay = (stones || [stone]), banlist = Dex.getFormat('gen8mixandmega').banlist;
-		toDisplay.forEach(singleStone => {
-			if (!singleStone) return;
-			if (banlist.includes(singleStone.name)) {
-				this.errorReply(`Warning: ${singleStone.name} is banned from Mix and Mega.`);
+		toDisplay.forEach(aStone => {
+			if (!aStone) return;
+			if (banlist.includes(aStone.name)) {
+				this.errorReply(`Warning: ${aStone.name} is banned from Mix and Mega.`);
 			}
-			if (singleStone.name === 'Dragon Ascent') {
+			if (aStone.name === 'Dragon Ascent') {
 				this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
 			}
 			// Fake Mega Stones
-			if (singleStone.isNonstandard === 'CAP') {
-				this.errorReply(`Warning: ${singleStone.name} is a fake mega stone created by the CAP Project and is restricted to the CAP ${singleStone.megaEvolves}.`);
+			if (aStone.isNonstandard === 'CAP') {
+				this.errorReply(`Warning: ${aStone.name} is a fake mega stone created by the CAP Project and is restricted to the CAP ${aStone.megaEvolves}.`);
 			}
-			let baseSpecies = dex.getSpecies(singleStone.megaEvolves);
-			let megaSpecies = dex.getSpecies(singleStone.megaStone);
-			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(singleStone.id)) return this.errorReply("The Orbs do not exist in Gen 8 and later.");
-			if (singleStone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
+			let baseSpecies = dex.getSpecies(aStone.megaEvolves);
+			let megaSpecies = dex.getSpecies(aStone.megaStone);
+			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(aStone.id)) return this.errorReply("The Orbs do not exist in Gen 8 and later.");
+			if (aStone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
 				megaSpecies = dex.getSpecies("Groudon-Primal");
 				baseSpecies = dex.getSpecies("Groudon");
-			} else if (singleStone.id === 'blueorb') {
+			} else if (aStone.id === 'blueorb') {
 				megaSpecies = dex.getSpecies("Kyogre-Primal");
 				baseSpecies = dex.getSpecies("Kyogre");
 			}
@@ -250,28 +250,28 @@ export const commands: ChatCommands = {
 				deltas.type = megaSpecies.types[1];
 			}
 			const details = {
-				Gen: singleStone.gen,
+				Gen: aStone.gen,
 				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 			};
 			let tier;
-			if (['redorb', 'blueorb'].includes(singleStone.id)) {
+			if (['redorb', 'blueorb'].includes(aStone.id)) {
 				tier = "Orb";
-			} else if (singleStone.name === "Dragon Ascent") {
+			} else if (aStone.name === "Dragon Ascent") {
 				tier = "Move";
 			} else {
 				tier = "Stone";
 			}
 			let buf = `<li class="result">`;
 			buf += `<span class="col numcol">${tier}</span> `;
-			if (singleStone.name === "Dragon Ascent") {
+			if (aStone.name === "Dragon Ascent") {
 				buf += `<span class="col itemiconcol"></span>`;
 			} else {
-				buf += `<span class="col itemiconcol"><psicon item="${toID(singleStone)}"/></span> `;
+				buf += `<span class="col itemiconcol"><psicon item="${toID(aStone)}"/></span> `;
 			}
-			if (singleStone.name === "Dragon Ascent") {
+			if (aStone.name === "Dragon Ascent") {
 				buf += `<span class="col movenamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/moves/${targetid}" target="_blank">Dragon Ascent</a></span> `;
 			} else {
-				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/items/${singleStone.id}" target="_blank">${singleStone.name}</a></span> `;
+				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/items/${aStone.id}" target="_blank">${aStone.name}</a></span> `;
 			}
 			if (deltas.type && deltas.type !== 'mono') {
 				buf += `<span class="col typecol"><img src="https://${Config.routes.client}/sprites/types/${deltas.type}.png" alt="${deltas.type}" height="14" width="32"></span> `;
