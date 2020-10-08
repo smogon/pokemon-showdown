@@ -225,7 +225,9 @@ export const commands: ChatCommands = {
 			}
 			let baseSpecies = dex.getSpecies(aStone.megaEvolves);
 			let megaSpecies = dex.getSpecies(aStone.megaStone);
-			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(aStone.id)) return this.errorReply("The Orbs do not exist in Gen 8 and later.");
+			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(aStone.id)) {
+				return this.errorReply("The Orbs do not exist in Gen 8 and later.");
+			}
 			if (aStone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
 				megaSpecies = dex.getSpecies("Groudon-Primal");
 				baseSpecies = dex.getSpecies("Groudon");
