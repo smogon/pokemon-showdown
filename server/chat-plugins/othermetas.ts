@@ -190,7 +190,7 @@ export const commands: ChatCommands = {
 		if (stone && dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id)) {
 			return this.errorReply("The Orbs do not exist in Gen 8 and later.");
 		}
-		let stones = [];
+		const stones = [];
 		if (!stone) {
 			const species = dex.getSpecies(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
 			if (!species.exists) return this.errorReply(`Error: Mega Stone not found.`);
