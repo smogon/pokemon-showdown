@@ -161,7 +161,7 @@ export const commands: ChatCommands = {
 			`<code>/repeat [minutes], [phrase]</code>: repeats a given phrase every [minutes] minutes.<br />` +
 			`<code>/repeatfaq [minutes], [FAQ name/alias]</code>: repeats a given Room FAQ every [minutes] minutes.<br />` +
 			`<code>/removerepeat [phrase]</code>: removes a repeated phrase.<br />` +
-			`<code>/removerepeatfaq [faq]</code>: removes a repeated FAQ.<br />` +
+			`<code>/removerepeatfaq [FAQ name/alias]</code>: removes a repeated FAQ.<br />` +
 			`<code>/viewrepeats [optional room]</code>: Displays all repeated phrases in a room.<br />` +
 			`Phrases for <code>/repeat</code> can include normal chat formatting, but not commands. Requires: % @ # &`
 		);
