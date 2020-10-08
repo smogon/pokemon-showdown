@@ -213,9 +213,9 @@ export const commands: ChatCommands = {
 		}
 		this.room = targetRoom;
 		this.checkCan('mute', null, targetRoom);
-		if (cmd === 'removerepeatfaq' &&
-			roomFaqs[targetRoom.roomid][getAlias(targetRoom.roomid, toID(repeat)) || toID(repeat)]) {
-			repeat = roomFaqs[targetRoom.roomid][getAlias(targetRoom.roomid, toID(repeat)) || toID(repeat)];
+		const possibleFaqText = roomFaqs[targetRoom.roomid][getAlias(targetRoom.roomid, toID(repeat)) || toID(repeat)];
+		if (cmd === 'removerepeatfaq' && possibleFaqText) {
+			repeat = possibleFaqText;
 		} else if (!roomid) {
 			repeat = Chat.formatText(repeat.trim()).replace(/\n/g, '<br />');
 		}
