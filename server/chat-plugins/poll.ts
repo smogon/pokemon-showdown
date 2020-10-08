@@ -23,7 +23,6 @@ export interface PollOptions {
 	timerEnd?: number;
 	isQuiz?: boolean;
 	questions: (string | Option)[];
-	queued?: boolean;
 }
 
 export interface PollData extends PollOptions {
@@ -46,7 +45,6 @@ export class Poll {
 	isQuiz: boolean;
 	options: Map<number, Option>;
 	timerEnd?: number;
-	queued?: boolean;
 	constructor(room: Room, options: PollOptions) {
 		this.activityId = 'poll';
 		this.pollNumber = options.pollNumber || room.nextGameNumber();
@@ -73,7 +71,6 @@ export class Poll {
 		}
 
 		this.timeout = options.timerEnd ? this.runTimeout((options.timerEnd - Date.now()) / MINUTE) : null;
-		this.queued = options.queued;
 	}
 
 	select(user: User, option: number) {
@@ -308,16 +305,8 @@ export class Poll {
 			timerEnd: this.timerEnd,
 			isQuiz: this.isQuiz,
 			questions: [...this.options.values()],
-			queued: this.queued,
 		};
-		if (this.queued) {
-			if (!this.room.settings.minorActivityQueue) {
-				this.room.settings.minorActivityQueue = [];
-			}
-			this.room.settings.minorActivityQueue.push(entry);
-		} else {
-			this.room.settings.minorActivity = entry;
-		}
+		this.room.settings.minorActivity = entry;
 		this.room.saveSettings();
 		return entry;
 	}
@@ -332,7 +321,7 @@ export class Poll {
 			if (room.minorActivityQueue?.length) {
 				const next = Poll.next(room);
 				if (next) {
-					room.minorActivity = room.minorActivityQueue.shift()!;
+					room.minorActivity = new Poll(room, room.minorActivityQueue.shift()!);
 					room.add(`|c|&|/log ${room.tr`The queued poll was started.`}`).update();
 					room.modlog({
 						action: 'POLL',
@@ -353,8 +342,9 @@ export class Poll {
 		return this;
 	}
 	static next(room: Room) {
-		const poll = room.minorActivityQueue?.shift();
-		if (!poll) return;
+		const pollData = room.minorActivityQueue?.shift();
+		if (!pollData) return;
+		const poll = new Poll(room, pollData);
 		room.settings.minorActivityQueue!.shift();
 		if (!room.minorActivityQueue?.length) room.minorActivityQueue = null;
 		if (!room.settings.minorActivityQueue?.length) delete room.settings.minorActivityQueue;
@@ -371,13 +361,6 @@ for (const room of Rooms.rooms.values()) {
 	if (room.settings.minorActivity?.activityId === 'poll') {
 		room.minorActivity?.endTimer();
 		room.minorActivity = new Poll(room, room.settings.minorActivity);
-	}
-	if (room.settings.minorActivityQueue) { // rebuild queue
-		room.minorActivityQueue = [];
-		for (const queued of room.settings.minorActivityQueue) {
-			if (queued.activityId !== 'poll') continue;
-			room.minorActivityQueue.push(new Poll(room, queued));
-		}
 	}
 }
 
@@ -439,11 +422,10 @@ export const commands: ChatCommands = {
 
 			if (room.minorActivity) {
 				if (!room.minorActivityQueue) room.minorActivityQueue = [];
-				const poll = new Poll(room, {
-					question: params[0], supportHTML, questions, multiPoll, queued: true,
+				room.minorActivityQueue.push({
+					question: params[0], supportHTML, questions, multiPoll, activityId: 'poll',
 				});
-				room.minorActivityQueue.push(poll);
-				poll.save();
+				room.settings.minorActivityQueue = room.minorActivityQueue;
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(room.tr`${user.name} queued a poll.`);
 			}
@@ -680,7 +662,7 @@ export const pages: PageTable = {
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
-			buf += `${button}<br />${poll.generateResults()}`;
+			buf += `${button}<br />${new Poll(room, poll).generateResults()}`;
 		}
 		buf += `<hr />`;
 		return buf;
