@@ -57,19 +57,9 @@ export class Poll {
 		this.voterIps = options.voterIps || {};
 		this.totalVotes = options.totalVotes || 0;
 		this.timeoutMins = options.timeoutMins || 0;
-		this.isQuiz = options.isQuiz || false;
 
-		this.options = new Map();
-		for (const [i, option] of options.questions.entries()) {
-			const info: Option = typeof option === 'object' ? option : {name: option, votes: 0};
-			if (info.name.startsWith('+')) {
-				this.isQuiz = true;
-				info.correct = true;
-				info.name = info.name.slice(1);
-			}
-			this.options.set(i + 1, info);
-		}
-
+		this.options = Poll.sortQuestions(options.questions);
+		this.isQuiz = options.isQuiz || !![...this.options.values()].filter(item => item.name.startsWith('+'));
 		this.timeout = options.timerEnd ? this.runTimeout((options.timerEnd - Date.now()) / MINUTE) : null;
 	}
 
@@ -140,7 +130,8 @@ export class Poll {
 		const iconText = this.isQuiz ?
 			`<i class="fa fa-question"></i> ${this.room.tr`Quiz`}` :
 			`<i class="fa fa-bar-chart"></i> ${this.room.tr`Poll`}`;
-		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px">${iconText}</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
+		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px">${iconText}</span>`;
+		output += ` <strong style="font-size:11pt">${Poll.getQuestionMarkup(this.question, this.supportHTML)}</strong></p>`;
 
 		if (this.multiPoll) {
 			const empty = `<i class="fa fa-square-o" aria-hidden="true"></i>`;
@@ -149,7 +140,8 @@ export class Poll {
 			const pendingVotes = (user && this.pendingVotes[user.id]) || [];
 			for (const [num, option] of this.options) {
 				const selected = pendingVotes.includes(num);
-				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Utils.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
+				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Utils.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. `;
+				output += `${Poll.getOptionMarkup(option, this.supportHTML)}${selected ? "</strong>" : ''}</button></div>`;
 			}
 			// eslint-disable-next-line max-len
 			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="${this.room.tr`Submit your vote`}"><strong>${this.room.tr`Submit`}</strong></button>` : `<button class="button" value="/poll results" name="send" title="${this.room.tr`View results`} - ${this.room.tr`you will not be able to vote after viewing results`}">(${this.room.tr`View results`})</button`;
@@ -157,7 +149,8 @@ export class Poll {
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
-				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="${this.room.tr`Vote for ${num}`}. ${Utils.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
+				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="${this.room.tr`Vote for ${num}`}. ${Utils.escapeHTML(option.name)}">${num}.`;
+				output += ` <strong>${Poll.getOptionMarkup(option, this.supportHTML)}</strong></button></div>`;
 			}
 			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="${this.room.tr`View results`} - ${this.room.tr`you will not be able to vote after viewing results`}"><small>(${this.room.tr`View results`})</small></button></div>`;
 			output += `</div>`;
@@ -166,21 +159,22 @@ export class Poll {
 		return output;
 	}
 
-	generateResults(ended = false, option: number[] | null = null) {
-		const iconText = this.isQuiz ?
-			`<i class="fa fa-question"></i> ${this.room.tr`Quiz`}` :
-			`<i class="fa fa-bar-chart"></i> ${this.room.tr`Poll`}`;
-		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + this.room.tr`ended` : ""}</span> <small>${this.totalVotes} ${this.room.tr`votes`}</small>`;
-		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
-		const iter = this.options.entries();
+	static generateResults(options: PollData, room: Room, ended = false, option: number[] | null = null) {
+		const iconText = options.isQuiz ?
+			`<i class="fa fa-question"></i> ${room.tr`Quiz`}` :
+			`<i class="fa fa-bar-chart"></i> ${room.tr`Poll`}`;
+		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes} ${room.tr`votes`}</small>`;
+		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question)}</strong></p>`;
+		const questions = Poll.sortQuestions(options.questions);
+		const iter = questions.entries();
 
 		let i = iter.next();
 		let c = 0;
 		const colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
 			const selected = option?.includes(i.value[0]);
-			const percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			const answerMarkup = this.isQuiz ?
+			const percentage = Math.round((i.value[1].votes * 100) / (options.totalVotes || 1));
+			const answerMarkup = options.isQuiz ?
 				`<span style="color:${i.value[1].correct ? 'green' : 'red'};">${i.value[1].correct ? '' : '<s>'}${this.getOptionMarkup(i.value[1])}${i.value[1].correct ? '' : '</s>'}</span>` :
 				this.getOptionMarkup(i.value[1]);
 			output += `<div style="margin-top: 3px">${i.value[0]}. <strong>${selected ? '<em>' : ''}${answerMarkup}${selected ? '</em>' : ''}</strong> <small>(${i.value[1].votes} vote${i.value[1].votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[c % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
@@ -188,33 +182,37 @@ export class Poll {
 			c++;
 		}
 		if (!option && !ended) {
-			output += `<div><small>(${this.room.tr`You can't vote after viewing results`})</small></div>`;
+			output += `<div><small>(${room.tr`You can't vote after viewing results`})</small></div>`;
 		}
 		output += '</div>';
 
 		return output;
 	}
 
-	getQuestionMarkup() {
-		if (this.supportHTML) return this.question;
-		return Chat.formatText(this.question);
+	static getQuestionMarkup(question: string, supportHTML = false) {
+		if (supportHTML) return question;
+		return Chat.formatText(question);
 	}
 
-	getOptionMarkup(option: Option) {
-		if (this.supportHTML) return option.name;
+	static getOptionMarkup(option: Option, supportHTML = false) {
+		if (supportHTML) return option.name;
 		return Chat.formatText(option.name);
 	}
 
 	update() {
+		const state = this.toJSON();
 		// Update the poll results for everyone that has voted
-		const blankvote = this.generateResults(false);
+		const blankvote = Poll.generateResults(state, this.room, false);
 
 		for (const id in this.room.users) {
 			const user = this.room.users[id];
 			const selection = this.voters[user.id] || this.voterIps[user.latestIp];
 			if (selection) {
 				if (selection.length) {
-					user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, selection)}`);
+					user.sendTo(
+						this.room,
+						`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`
+					);
 				} else {
 					user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${blankvote}`);
 				}
@@ -223,25 +221,34 @@ export class Poll {
 	}
 
 	updateTo(user: User, connection: Connection | null = null) {
+		const state = this.toJSON();
 		const recipient = connection || user;
 		const selection = this.voters[user.id] || this.voterIps[user.latestIp];
 		if (selection) {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, selection)}`);
+			recipient.sendTo(
+				this.room,
+				`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`
+			);
 		} else {
 			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
 	updateFor(user: User) {
+		const state = this.toJSON();
 		if (user.id in this.voters) {
-			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
+			user.sendTo(
+				this.room,
+				`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
+			);
 		} else {
 			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
 	display() {
-		const blankvote = this.generateResults(false);
+		const state = this.toJSON();
+		const blankvote = Poll.generateResults(state, this.room, false);
 		const blankquestions = this.generateVotes(null);
 
 		for (const id in this.room.users) {
@@ -249,7 +256,7 @@ export class Poll {
 			const selection = this.voters[thisUser.id] || this.voterIps[thisUser.latestIp];
 			if (selection) {
 				if (selection.length) {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, selection)}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`);
 				} else {
 					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankvote}`);
 				}
@@ -264,13 +271,16 @@ export class Poll {
 	}
 
 	displayTo(user: User, connection: Connection | null = null) {
+		const state = this.toJSON();
 		const recipient = connection || user;
 		if (user.id in this.voters) {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
+			recipient.sendTo(
+				this.room,
+				`|uhtml|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
+			);
 		} else if (user.latestIp in this.voterIps && !Config.noipchecks) {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(
-				false,
-				this.voterIps[user.latestIp]
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${Poll.generateResults(
+				state, this.room, false, this.voterIps[user.latestIp]
 			)}`);
 		} else {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes(user)}`);
@@ -282,7 +292,7 @@ export class Poll {
 	}
 
 	end() {
-		const results = this.generateResults(true);
+		const results = Poll.generateResults(this.toJSON(), this.room, true);
 		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
 		this.room.add(`|html|${results}`).update();
 		this.endTimer();
@@ -290,8 +300,8 @@ export class Poll {
 		delete this.room.settings.minorActivity;
 		this.room.saveSettings();
 	}
-	save() {
-		const entry: PollData = {
+	toJSON() {
+		return {
 			activityId: 'poll',
 			pollNumber: this.pollNumber,
 			question: this.question,
@@ -305,7 +315,10 @@ export class Poll {
 			timerEnd: this.timerEnd,
 			isQuiz: this.isQuiz,
 			questions: [...this.options.values()],
-		};
+		} as PollData;
+	}
+	save() {
+		const entry = this.toJSON();
 		this.room.settings.minorActivity = entry;
 		this.room.saveSettings();
 		return entry;
@@ -351,15 +364,27 @@ export class Poll {
 		room.saveSettings();
 		return poll;
 	}
+	static sortQuestions(questions: (string | Option)[]) {
+		const options = new Map();
+		for (const [i, option] of questions.entries()) {
+			const info: Option = typeof option === 'object' ? option : {name: option, votes: 0};
+			if (info.name.startsWith('+')) {
+				info.correct = true;
+				info.name = info.name.slice(1);
+			}
+			options.set(i + 1, info);
+		}
+		return options;
+	}
 	destroy() {
-		this.room.minorActivity = null;
+		this.endTimer();
 	}
 }
 
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
 	if (room.settings.minorActivity?.activityId === 'poll') {
-		room.minorActivity?.endTimer();
+		room.minorActivity?.destroy();
 		room.minorActivity = new Poll(room, room.settings.minorActivity);
 	}
 }
@@ -662,7 +687,7 @@ export const pages: PageTable = {
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
-			buf += `${button}<br />${new Poll(room, poll).generateResults()}`;
+			buf += `${button}<br />${Poll.generateResults(poll, room, true)}`;
 		}
 		buf += `<hr />`;
 		return buf;
