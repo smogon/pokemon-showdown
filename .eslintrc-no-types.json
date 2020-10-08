@@ -192,7 +192,7 @@
     {
       "files": [
         "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
-        "./tools/set-import/*.ts",  "./tools/modlog/*.ts"
+         "./tools/set-import/*.ts",  "./tools/modlog/*.ts", "./translations/**/*.ts"
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
@@ -299,6 +299,12 @@
         // whitespace, overriding base
         "indent": "off",
         "@typescript-eslint/indent": ["error", "tab", {"flatTernaryExpressions": true}]
+      }
+    },
+    {
+      "files": ["./translations/**/*.ts"],
+      "rules": {
+        "no-template-curly-in-string": "off"
       }
     },
     {
