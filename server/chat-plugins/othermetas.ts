@@ -195,7 +195,7 @@ export const commands: ChatCommands = {
 			const species = dex.getSpecies(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
 			if (!species.exists) return this.errorReply(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) return this.errorReply(`Error: Mega Evolution not found.`);
-			for (let poke of species.otherFormes) {
+			for (const poke of species.otherFormes) {
 				if (!/(?:-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
 				const megaPoke = dex.getSpecies(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
