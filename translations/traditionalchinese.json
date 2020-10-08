@@ -657,9 +657,9 @@
 		"Could not find help for '/${target}'. Try /help for general help.": "",
 		"Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead": "",
 
-		"Repeated phrases in ${room.roomid}": "",
+		"Repeated phrases in ${room.title}": "",
 		"No such room: \"${roomid}\".": "",
-		"There are no repeated phrases in ${room.roomid}.": "",
+		"There are no repeated phrases in ${room.title}.": "",
 		"Phrase": "",
 		"Interval": "",
 		"every ${minutes} minute(s)": "",

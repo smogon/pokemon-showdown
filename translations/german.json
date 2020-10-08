@@ -663,9 +663,9 @@
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff-de",
 
-		"Repeated phrases in ${room.roomid}": "Wiederholte Ausdrücke in ${room.roomid}",
+		"Repeated phrases in ${room.title}": "Wiederholte Ausdrücke in ${room.title}",
 		"No such room: \"${roomid}\".": "Kein derartiger Raum: \"${roomid}\".",
-		"There are no repeated phrases in ${room.roomid}.": "Es liegen keine wiederholten Ausdrücke in ${room.roomid} vor.",
+		"There are no repeated phrases in ${room.title}.": "Es liegen keine wiederholten Ausdrücke in ${room.title} vor.",
 		"Phrase": "Ausdruck",
 		"Interval": "Zeitspanne",
 		"every ${minutes} minute(s)": "jede ${minutes} Minute(n)",
