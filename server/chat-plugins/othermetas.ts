@@ -201,11 +201,7 @@ export const commands: ChatCommands = {
 				const megaPoke = dex.getSpecies(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
 				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.getSpecies(targetid))) return null;
-				if (!flag) {
-					console.log(megaPoke);
-					console.log(flag);
-					return null;
-				}
+				if (!flag) return null;
 				return getMegaStone(flag, sep[1]);
 			}).filter(poke => poke !== null);
 			if (!stones.length) return this.errorReply(`Error: Mega Evolution not found.`);
