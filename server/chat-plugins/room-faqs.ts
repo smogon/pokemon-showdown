@@ -68,9 +68,9 @@ export const commands: ChatCommands = {
 		if (!(roomFaqs[targetRoom.roomid] && roomFaqs[targetRoom.roomid][topic])) return this.errorReply("Invalid topic.");
 		if (
 			targetRoom.settings.repeats?.length &&
-			targetRoom.settings.repeats.filter(x => x.faq === (getAlias(targetRoom.roomid, topic) || topic)).length
+			targetRoom.settings.repeats.filter(x => x.faq && x.id === (getAlias(targetRoom.roomid, topic) || topic)).length
 		) {
-			this.parse(`/removerepeatfaq ${getAlias(targetRoom.roomid, topic) || topic}`);
+			this.parse(`/removerepeat ${getAlias(targetRoom.roomid, topic) || topic},${targetRoom.roomid}`);
 		}
 		delete roomFaqs[targetRoom.roomid][topic];
 		Object.keys(roomFaqs[targetRoom.roomid]).filter(
