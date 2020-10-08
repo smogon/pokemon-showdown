@@ -6,6 +6,7 @@ import {ProcessWrapper, ProcessManager} from './process-manager';
 import * as Sqlite from 'better-sqlite3';
 import * as child_process from 'child_process';
 import * as path from 'path';
+import {FS} from './fs';
 
 interface SQLOptions {
 	file: string;
@@ -66,6 +67,13 @@ export class DatabaseWrapper implements ProcessWrapper {
 	}
 	get load() {
 		return this.pendingRequests.length;
+	}
+	runFile(filename: string) {
+		const file = FS(filename);
+		if (!file.existsSync()) throw new Error(`File passed to runFile does not exist.`);
+		if (!filename.endsWith('.sql')) throw new Error(`File passed to runFile is not a .sql file.`);
+		const content = file.readSync();
+		void this.exec(content);
 	}
 	async prepare(statement: string) {
 		const cachedStatement = this.statements.get(statement);
