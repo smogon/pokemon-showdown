@@ -952,9 +952,9 @@ export const commands: ChatCommands = {
 				teamStrings = [indexedSet];
 			}
 		}
-		const nicknames = teamStrings.map(item => {
-			const species = Dex.getSpecies(item.species).baseSpecies;
-			return species !== item.name ? item.name : species;
+		const nicknames = teamStrings.map(set => {
+			const species = Dex.getSpecies(set.species).baseSpecies;
+			return species !== set.name ? set.name : species;
 		});
 		let resultString = Dex.stringifyTeam(teamStrings, nicknames, hideStats);
 		if (showAll) {
