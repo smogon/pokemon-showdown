@@ -92,6 +92,9 @@ export class Announcement {
 		delete this.timerEnd;
 		return this;
 	}
+	destroy() {
+		this.endTimer();
+	}
 }
 
 // should handle restarts and also hotpatches
