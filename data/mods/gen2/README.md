@@ -29,4 +29,4 @@ Critical hits ignore defensive boosts but not defensive drops.
 
 Status
 ------
-Sleep lasts 1-5 turns and you the counter is not reset upon switch.
+Sleep lasts 1-5 turns and the counter is not reset upon switch.
