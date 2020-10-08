@@ -78,7 +78,8 @@ export const Repeats = new class {
 					this.clearRepeats(room);
 					return;
 				}
-				const phrase = !repeat.faq ? repeat.phrase : Chat.formatText(roomFaqs[room.roomid][repeat.faq], true).replace(/\n/g, '<br />');
+				const phrase = !repeat.faq ? repeat.phrase :
+					Chat.formatText(roomFaqs[room.roomid][repeat.faq], true).replace(/\n/g, '<br />');
 				room.add(`|html|<div class="infobox">${phrase}</div>`);
 				room.update();
 			}, repeat.interval)
