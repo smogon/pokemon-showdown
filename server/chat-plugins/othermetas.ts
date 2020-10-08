@@ -206,7 +206,7 @@ export const commands: ChatCommands = {
 			if (!stones.length) return this.errorReply(`Error: Mega Evolution not found.`);
 		}
 		const toDisplay = (stones.length ? stones : [stone]);
-		const banlist = Dex.getFormat('gen8mixandmega').banlist;
+		const ruleTable = Dex.getRuleTable(Dex.getFormat('gen8mixandmega'));
 		for (const aStone of toDisplay) {
 			if (!aStone) return;
 			if (banlist.includes(aStone.name)) {
