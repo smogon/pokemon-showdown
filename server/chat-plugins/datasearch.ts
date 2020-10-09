@@ -78,6 +78,10 @@ export const commands: ChatCommands = {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
 		target = target.slice(0, 300);
+		// make sure there isn't more than 10 arguments to prevent exploitability
+		if (target.split(",").length > 10) {
+			target = target.split(",").splice(0, 10).join(",");
+		}
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (targetGen && targetGen === 5) {
