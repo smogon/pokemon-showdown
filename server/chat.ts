@@ -1508,7 +1508,7 @@ export const Chat = new class {
 	readonly translations = new Map<ID, Map<string, [string, string[], string[]]>>();
 
 	loadTranslations() {
-		return FS(TRANSLATION_DIRECTORY).readdir().then(directories => {
+		return FS(TRANSLATION_DIRECTORY).readdir().then(async directories => {
 			// ensure that english is the first entry when we iterate over Chat.languages
 			Chat.languages.set('english' as ID, 'English');
 			for (const dirname of directories) {
@@ -1517,7 +1517,7 @@ export const Chat = new class {
 
 				// For some reason, toID() isn't available as a global when this executes.
 				const languageID = Dex.toID(dirname);
-				void dir.readdir().then(files => {
+				await dir.readdir().then(files => {
 					for (const filename of files) {
 						if (!filename.endsWith('.js')) continue;
 
