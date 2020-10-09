@@ -138,9 +138,9 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	htmlrepeat: 'repeat',
+	repeathtml: 'repeat',
 	repeat(target, room, user, connection, cmd) {
-		const isHTML = cmd === 'htmlrepeat';
+		const isHTML = cmd === 'repeathtml';
 		room = this.requireRoom();
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
@@ -148,12 +148,14 @@ export const commands: ChatCommands = {
 		const message = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
-			return this.errorReply(this.tr`You must specify a interval as a number of minutes between 1 and 1440.`);
+			throw new Chat.ErrorMessage(this.tr`You must specify a interval as a number of minutes between 1 and 1440.`);
 		}
 
 		if (Repeats.hasRepeat(room, id)) {
-			return this.errorReply(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
+			throw new Chat.ErrorMessage(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
 		}
+
+		if (isHTML) this.checkHTML(message);
 
 		Repeats.addRepeat(room, {
 			id,
@@ -170,7 +172,7 @@ export const commands: ChatCommands = {
 		this.runBroadcast();
 		this.sendReplyBox(
 			`<code>/repeat [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes.<br />` +
-			`<code>/repeathtml [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes. Requires: # &<br />` +
+			`<code>/repeathtml [minutes], [id], [phrase]</code>: repeats a given phrase containing HTML every [minutes] minutes. Requires: # &<br />` +
 			`<code>/repeatfaq [minutes], [FAQ name/alias]</code>: repeats a given Room FAQ every [minutes] minutes.<br />` +
 			`<code>/removerepeat [id]</code>: removes a repeated phrase.<br />` +
 			`<code>/viewrepeats [optional room]</code>: Displays all repeated phrases in a room.<br />` +
