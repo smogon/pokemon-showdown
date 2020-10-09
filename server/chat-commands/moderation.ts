@@ -120,7 +120,13 @@ export const commands: ChatCommands = {
 		if (room.auth.getDirect(userid) === '#') return this.errorReply(`${name} is already a room owner.`);
 
 		room.auth.set(userid, '#');
-		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
+		const message = Utils.html`${name} was appointed Room Owner by ${user.name}.`;
+		if (room.settings.isPrivate === true) {
+			this.addModAction(message);
+			Rooms.get(`upperstaff`)?.addByUser(user, `<<${room.roomid}>> ${message}`).update();
+		} else {
+			this.addGlobalModAction(message);
+		}
 		this.modlog('ROOMOWNER', userid);
 		if (targetUser) {
 			targetUser.popup(`You were appointed Room Owner by ${user.name} in ${room.roomid}.`);
