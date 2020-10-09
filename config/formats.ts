@@ -1399,10 +1399,6 @@ export const Formats: FormatList = [
 			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
-			if (!pokemon.side.getSideCondition('trackermod') && pokemon.side.pokemon.some(x => x.name === 'Darth')) {
-				// Initialize the tracker side condition for Darth's ability
-				pokemon.side.addSideCondition('trackermod');
-			}
 		},
 	},
 	{

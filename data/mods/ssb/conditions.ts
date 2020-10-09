@@ -440,25 +440,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		// no quotes
 	},
-	darth: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Darth')}|Let the Guardian Angel protect thee!`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Darth')}|Well, everyone needs a break at some point.`);
-		},
-		onHit(target, source, move) {
-			if (target.getMoveHitData(move).typeMod < 0) {
-				if (this.random(1000) === 114) {
-					// Should almost never happen, but will be hilarious when it does.
-					// Basically, roll a 1000 sided die, if it lands on 114 forcibly give the user's trainer the win
-					this.add(`c|${getName('Darth')}|Fear not, ${target.side.name}, your Guardian Angel shall grant you victory.`);
-					this.win(target.side);
-				}
-			}
-		},
-	},
 	drampasgrandpa: {
 		noCopy: true,
 		onStart() {
@@ -2083,30 +2064,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
-	// Custom side condition to allow the ability to track what mon was last in for Darth's Ability.
-	trackermod: {
-		onStart(source) {
-			const mon = source.active[0];
-			if (mon.name !== 'Darth') {
-				this.effectData.storedTypes = mon.getTypes();
-				this.effectData.newAtk = mon.getStat('atk');
-				this.effectData.newDef = mon.getStat('def');
-				this.effectData.newSpa = mon.getStat('spa');
-				this.effectData.newSpd = mon.getStat('spd');
-				this.effectData.newSpe = mon.getStat('spe');
-			}
-		},
-		onSwitchIn(pokemon) {
-			if (pokemon.name !== 'Darth') {
-				this.effectData.storedTypes = pokemon.getTypes();
-				this.effectData.newAtk = pokemon.getStat('atk');
-				this.effectData.newDef = pokemon.getStat('def');
-				this.effectData.newSpa = pokemon.getStat('spa');
-				this.effectData.newSpd = pokemon.getStat('spd');
-				this.effectData.newSpe = pokemon.getStat('spe');
-			}
-		},
-	},
 	// Custom status for A Quag To The Past's signature move
 	bounty: {
 		name: 'bounty',
@@ -2321,14 +2278,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onWeather(target) {
 			if (!target.hasType('Flying')) this.damage(target.baseMaxhp * 0.06);
-			if (this.sides.some(side => Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod').length)) {
+			if (this.sides.some(side => Object.keys(side.sideConditions).length)) {
 				this.add(`-message`, 'The Turbulence blew away the hazards on both sides!');
 			}
 			if (this.field.terrain) {
 				this.add(`-message`, 'The Turbulence blew away the terrain!');
 			}
 			for (const side of this.sides) {
-				const keys = Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod');
+				const keys = Object.keys(side.sideConditions);
 				for (const key of keys) {
 					side.removeSideCondition(key);
 					this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence');

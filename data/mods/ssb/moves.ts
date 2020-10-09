@@ -1203,53 +1203,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
-	// Darth
-	archangelsrequiem: {
-		accuracy: 100,
-		basePower: 80,
-		category: "Special",
-		desc: "This move type is always the user's secondary typing. If this move is successful, both the target and the user ar forced out, and the user's replacement gets 1/3 of its maximum health restored.",
-		shortDesc: "Type=2nd type,both mons switch,replacement: heal.",
-		name: "Archangel's Requiem",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: -5,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Roost', source);
-			this.add('-anim', source, 'Whirlwind', target);
-			this.add('-anim', source, 'Whirlwind', source);
-		},
-		onModifyType(move, pokemon) {
-			const type = pokemon.types[1] ? pokemon.types[1] : pokemon.types[0];
-			move.type = type;
-		},
-		onHit(target, source, move) {
-			if (source && source !== target && target.hp) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
-				if (source.switchFlag === true) return;
-				target.switchFlag = true;
-				source.side.addSideCondition('archangelsrequiem');
-			}
-		},
-		condition: {
-			duration: 1,
-			onSwitchInPriority: -1,
-			onSwitchIn(pokemon) {
-				this.add(`c|${getName('Darth')}|Take my place, serve the Angel of Stall!`);
-				pokemon.heal(pokemon.baseMaxhp / 3);
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			},
-		},
-		selfSwitch: true,
-		target: "normal",
-		type: "Normal",
-	},
-
 	// drampa's grandpa
 	getoffmylawn: {
 		accuracy: 100,

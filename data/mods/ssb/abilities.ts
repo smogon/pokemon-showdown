@@ -565,70 +565,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Darth
-	guardianangel: {
-		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out. When switching in, this Pokemon's types are changed to resist the weakness of the last and stats Pokemon in before it.",
-		shortDesc: "Switching out: Regenerator. Switching in: Resists weaknesses of last Pokemon.",
-		name: "Guardian Angel",
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.side.sideConditions['trackermod'].newAtk) {
-				return pokemon.side.sideConditions['trackermod'].newAtk;
-			}
-		},
-		onModifyDef(def, pokemon) {
-			if (pokemon.side.sideConditions['trackermod'].newDef) {
-				return pokemon.side.sideConditions['trackermod'].newDef;
-			}
-		},
-		onModifySpA(spa, pokemon) {
-			if (pokemon.side.sideConditions['trackermod'].newSpa) {
-				return pokemon.side.sideConditions['trackermod'].newSpa;
-			}
-		},
-		onModifySpD(spd, pokemon) {
-			if (pokemon.side.sideConditions['trackermod'].newSpd) {
-				return pokemon.side.sideConditions['trackermod'].newSpd;
-			}
-		},
-		onModifySpe(spe, pokemon) {
-			if (pokemon.side.sideConditions['trackermod'].newSpe) {
-				return pokemon.side.sideConditions['trackermod'].newSpe;
-			}
-		},
-		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.baseMaxhp / 3);
-		},
-		onSwitchIn(pokemon) {
-			const possibleTypes = [];
-			const newTypes = [];
-			const weaknesses = [];
-			const types = pokemon.side.sideConditions['trackermod'].storedTypes;
-			if (!types) return;
-			for (const type in this.dex.data.TypeChart) {
-				const typeMod = this.dex.getEffectiveness(type, types);
-				if (typeMod > 0 && this.dex.getImmunity(type, types)) weaknesses.push(type);
-			}
-			const combo = this.sample(weaknesses);
-			for (const type in this.dex.data.TypeChart) {
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[combo];
-				if (typeCheck === 2 || typeCheck === 3) {
-					possibleTypes.push(type);
-				}
-			}
-			if (possibleTypes.length < 2) return;
-
-			newTypes.push(this.sample(possibleTypes), this.sample(possibleTypes));
-			while (newTypes[0] === newTypes[1] && possibleTypes.length > 1) {
-				newTypes[1] = this.sample(possibleTypes);
-			}
-
-			if (!pokemon.setType(newTypes)) return;
-			this.add('-start', pokemon, 'typechange', newTypes.join('/'));
-		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
 	// drampa's grandpa
 	oldmanpa: {
 		desc: "This Pokemon's sound-based moves have their power multiplied by 1.3. This Pokemon takes halved damage from sound-based moves. This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage. Upon switching in, this Pokemon's Defense and Special Defense are raised by 1 stage.",
@@ -677,7 +613,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Greed Punisher",
 		onSwitchIn(pokemon) {
 			const side = pokemon.side;
-			const sideConditions = Object.keys(side.sideConditions).filter(x => this.toID(x) !== 'trackermod');
+			const sideConditions = Object.keys(side.sideConditions);
 			const activeCount = sideConditions.length;
 			if (activeCount > 0) {
 				const stats: BoostName[] = [];

@@ -197,12 +197,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Devolution Beam',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
-	Darth: {
-		species: 'Articuno', ability: 'Guardian Angel', item: 'Heavy Duty Boots', gender: 'M',
-		moves: ['Revelation Dance', ['Recover', 'Roost'], 'U-turn'],
-		signatureMove: 'Archangel\'s Requiem',
-		evs: {hp: 252, def: 128, spd: 128}, nature: 'Bold',
-	},
 	DragonWhale: {
 		species: 'Mimikyu', ability: 'Disguise', item: 'Life Orb', gender: 'M',
 		moves: ['Play Rough', 'Spectral Thief', 'Shadow Sneak'],
@@ -902,12 +896,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (team.length === 6 && set.ability === 'Illusion') {
 				team[5] = team[4];
 				team[4] = set;
-			}
-			// Requested by Darth to not go first in team preview ever
-			if (team.length === 6 && team[0].name === 'Darth') {
-				const temporary = team[0];
-				team[0] = team[1];
-				team[1] = temporary;
 			}
 		}
 		return team;
