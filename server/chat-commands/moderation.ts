@@ -9,7 +9,6 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
-import { throws } from 'assert';
 
 /* eslint no-else-return: "error" */
 
