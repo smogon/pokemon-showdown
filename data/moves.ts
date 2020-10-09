@@ -9053,9 +9053,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {heal: 1, authentic: 1, mystery: 1},
 		onHit(pokemon) {
-			pokemon.cureStatus();
+			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
+			return pokemon.cureStatus() || success;
 		},
-		heal: [1, 4],
 		secondary: null,
 		target: "allies",
 		type: "Grass",
