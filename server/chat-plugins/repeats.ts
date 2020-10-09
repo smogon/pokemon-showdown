@@ -138,9 +138,11 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	repeat(target, room, user) {
+	htmlrepeat: 'repeat',
+	repeat(target, room, user, connection, cmd) {
+		const isHTML = cmd === 'htmlrepeat';
 		room = this.requireRoom();
-		this.checkCan('mute', null, room);
+		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
 		const message = messageArray.join(',').trim();
@@ -155,19 +157,20 @@ export const commands: ChatCommands = {
 
 		Repeats.addRepeat(room, {
 			id,
-			phrase: Chat.formatText(message).replace(/\n/g, `<br />`),
+			phrase: isHTML ? message : Chat.formatText(message).replace(/\n/g, `<br />`),
 			interval: interval * 60 * 1000, // convert to milliseconds
 		});
 
 		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: "${message}"`);
 		this.privateModAction(
-			room.tr`${user.name} set the phrase "${message}" to be repeated every ${interval} minute(s).`
+			room.tr`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).`
 		);
 	},
 	repeathelp() {
 		this.runBroadcast();
 		this.sendReplyBox(
 			`<code>/repeat [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes.<br />` +
+			`<code>/repeathtml [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes. Requires: # &<br />` +
 			`<code>/repeatfaq [minutes], [FAQ name/alias]</code>: repeats a given Room FAQ every [minutes] minutes.<br />` +
 			`<code>/removerepeat [id]</code>: removes a repeated phrase.<br />` +
 			`<code>/viewrepeats [optional room]</code>: Displays all repeated phrases in a room.<br />` +
