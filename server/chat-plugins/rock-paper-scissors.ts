@@ -360,11 +360,6 @@ export const commands: ChatCommands = {
 			game.unpause(user);
 		},
 
-		start() {
-			const game = getGame(this);
-			game.start();
-		},
-
 		help() {
 			this.runBroadcast();
 			const strings = [
