@@ -145,8 +145,8 @@ export const commands: ChatCommands = {
 		const id = toID(name);
 		const message = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
-		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1) {
-			return this.errorReply(this.tr`You must specify a numerical interval of at least 1 minute.`);
+		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
+			return this.errorReply(this.tr`You must specify a interval as a number of minutes between 1 and 1440.`);
 		}
 
 		if (Repeats.hasRepeat(room, id)) {
