@@ -44,7 +44,7 @@ const DEFAULT_RESULTS_LENGTH = 100;
 const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
-const IPS_REGEX = /[([]([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]/g;
+const IPS_REGEX = /[([]?([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]?/g;
 
 const ALIASES: {[k: string]: string} = {
 	'helpticket': 'help-rooms',
@@ -139,7 +139,10 @@ function prettifyResults(
 			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 		}
 		line = Utils.escapeHTML(line.slice(line.indexOf(')') + ` </small>`.length));
-		if (!hideIps) line = line.replace(IPS_REGEX, `[<a href="https://whatismyipaddress.com/ip/$1" target="_blank">$1</a>]`);
+		line = line.replace(
+			IPS_REGEX,
+			hideIps ? '' : `[<a href="https://whatismyipaddress.com/ip/$1" target="_blank">$1</a>]`
+		);
 		return `${dateString}<small>[${timestamp}] (${thisRoomID})</small>${line}`;
 	}).join(`<br />`);
 	const [dateString, timestamp] = Chat.toTimestamp(new Date(), {human: true}).split(' ');
