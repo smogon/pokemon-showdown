@@ -87,7 +87,7 @@ export interface RoomSettings {
 	modjoin?: AuthLevel | true | null;
 	modchat?: AuthLevel | null;
 	staffRoom?: boolean;
-	language?: string | false;
+	language?: ID | false;
 	slowchat?: number | false;
 	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
 	filterStretching?: boolean;
@@ -914,7 +914,7 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 	}
 	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english', strings, ...keys);
+		return Chat.tr(this.settings.language || 'english' as ID, strings, ...keys);
 	}
 }
 

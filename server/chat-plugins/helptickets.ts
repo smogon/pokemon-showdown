@@ -86,7 +86,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	constructor(room: ChatRoom, ticket: TicketState) {
 		super(room);
 		this.room = room;
-		this.room.settings.language = Users.get(ticket.creator)?.language || 'english';
+		this.room.settings.language = Users.get(ticket.creator)?.language || 'english' as ID;
 		this.title = `Help Ticket - ${ticket.type}`;
 		this.gameid = "helpticket" as ID;
 		this.allowRenames = true;
