@@ -47,31 +47,19 @@ export class RPSGame extends Rooms.RoomGame {
 			this.addPlayer(user);
 		}
 	}
-	/**
-	 * True - Attacker wins. False - Attacker loses. Null - tie.
-	 */
-	static checkMatchup(attacker: string, defender: string): boolean | null {
-		if (attacker === defender) return null;
-		switch (attacker) {
-		case 'rock': {
-			if (defender === 'scissors') return true;
-			if (defender === 'paper') return false;
-			break;
-		}
-		case 'scissors': {
-			if (defender === 'paper') return true;
-			if (defender === 'rock') return false;
-			break;
-		}
-		case 'paper': {
-			if (defender === 'rock') return true;
-			if (defender === 'scissors') return false;
-			break;
-		}
-		}
-		if (attacker && !defender) return true;
-		if (!attacker) return false;
-		return null;
+	checkMatchup(attacker: RPSPlayer, defender: RPSPlayer) {
+		const attackerChoice = attacker.currentChoice;
+		const defenderChoice = defender.currentChoice;
+		if (attackerChoice === defenderChoice) return null;
+		const matchups: {[k: string]: boolean} = {
+			paperrock: true,
+			scissorspaper: true,
+			rockscissors: true,
+		};
+		if (matchups[attackerChoice + defenderChoice]) return attacker;
+		if (matchups[defenderChoice + attackerChoice]) return defender;
+		if (!attackerChoice && defenderChoice) return defender;
+		return attacker;
 	}
 	sendOptions() {
 		const button = (cmd: string, title: string) => {
@@ -162,12 +150,11 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	runMatch() {
 		const [p1, p2] = this.players;
-		const result = RPSGame.checkMatchup(p1.currentChoice, p2.currentChoice);
-		if (result === null) { // tie
+		const winner = this.checkMatchup(p1, p2);
+		if (winner === null) { // tie
 			this.add(`The players have tied! Nobody wins this round....`);
 			this.wins.push(null);
 		} else {
-			const winner = result === true ? p1 : p2;
 			this.add(Utils.html`${winner.name} wins the round! They gain a point.`);
 			winner.points++;
 			this.wins.push({
@@ -188,7 +175,7 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	start() {
 		if (this.players.length < 2) {
-			this.add(`|html|<h2>There are not enough players to start. Use /rps start to start when all players are ready.</h2>`);
+			this.add(`<h2>There are not enough players to start. Use /rps start to start when all players are ready.</h2>`);
 			return;
 		}
 		this.addField(`The Rock Paper Scissors match has begun!`);
@@ -311,7 +298,7 @@ export const commands: ChatCommands = {
 			);
 			targetUser.send(
 				`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
-				`<button class="button" name="send" value="/rps accept"><strong>Accept</strong></button></div>`
+				`/raw <button class="button" name="send" value="/rps accept"><strong>Accept</strong></button></div>`
 			);
 		},
 
