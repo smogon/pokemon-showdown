@@ -77,7 +77,7 @@ export const commands: ChatCommands = {
 	dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (targetGen && targetGen === 5) {
@@ -152,7 +152,7 @@ export const commands: ChatCommands = {
 	randmove: 'randommove',
 	randommove(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -198,7 +198,7 @@ export const commands: ChatCommands = {
 	randpoke: 'randompokemon',
 	randompokemon(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -255,7 +255,7 @@ export const commands: ChatCommands = {
 	movesearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help movesearch');
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (cmd === 'nms') target += ', natdex';
@@ -315,7 +315,7 @@ export const commands: ChatCommands = {
 	itemsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help itemsearch');
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
@@ -360,7 +360,7 @@ export const commands: ChatCommands = {
 	abilitysearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help abilitysearch');
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
@@ -404,7 +404,7 @@ export const commands: ChatCommands = {
 	usumlearn: 'learn',
 	learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
-		this.checkChat(target);
+		target = target.slice(0, 300);
 		this.checkBroadcast();
 
 		return runSearch({
