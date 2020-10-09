@@ -960,7 +960,7 @@ export const commands: ChatCommands = {
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
-		this.runBroadcast();
+		this.runBroadcast(true);
 		return this.sendReplyBox(resultString);
 	},
 	showsethelp: [
