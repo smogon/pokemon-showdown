@@ -2054,7 +2054,7 @@ const triviaCommands: ChatCommands = {
 		}
 
 		let queryString = query.join(',').trim();
-		if (!queryString) return this.errorReply(this.tr("No valid search query as entered."));
+		if (!queryString) return this.errorReply(this.tr("No valid search query was entered."));
 
 
 		let transformQuestion = (question: string) => question;
