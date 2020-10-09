@@ -318,6 +318,7 @@ export class GlobalAuth extends Auth {
 			user.tempGroup = group;
 			user.updateIdentity();
 			username = user.name;
+			Rooms.global.checkAutojoin(user);
 		}
 		this.usernames.set(id, username);
 		super.set(id, group);
