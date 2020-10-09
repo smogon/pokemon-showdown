@@ -97,13 +97,9 @@ export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
 export type HostFilter = (host: string, user: User, connection: Connection, hostType: string) => void;
 
-export interface TRStrings {
-	[k: string]: string;
-}
-
 export interface Translations {
 	name?: string;
-	strings: TRStrings;
+	strings: {[english: string]: string};
 }
 
 const LINK_WHITELIST = [
