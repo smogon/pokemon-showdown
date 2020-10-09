@@ -185,8 +185,8 @@ export const commands: ChatCommands = {
 		this.checkCan('mute', null, room);
 		let [intervalString, topic] = target.split(',');
 		const interval = parseInt(intervalString);
-		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a numerical interval of at least 1 minute.`);
+		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
+			throw new Chat.ErrorMessage(this.tr`You must specify a interval as a number of minutes between 1 and 1440.`);
 		}
 		if (!roomFaqs[room.roomid]) {
 			throw new Chat.ErrorMessage(`This room has no FAQs.`);
