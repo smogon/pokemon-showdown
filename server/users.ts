@@ -325,7 +325,7 @@ export class User extends Chat.MessageContext {
 	id: ID;
 	tempGroup: GroupSymbol;
 	avatar: string | number;
-	language: string | null;
+	language: ID | null;
 
 	connected: boolean;
 	connections: Connection[];

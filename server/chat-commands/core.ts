@@ -758,17 +758,17 @@ export const commands: ChatCommands = {
 
 	language(target, room, user) {
 		if (!target) {
-			const language = Chat.languages.get(user.language || 'english');
+			const language = Chat.languages.get(user.language || 'english' as ID);
 			return this.sendReply(this.tr`Currently, you're viewing Pokémon Showdown in ${language}.`);
 		}
-		target = toID(target);
-		if (!Chat.languages.has(target)) {
+		const languageID = toID(target);
+		if (!Chat.languages.has(languageID)) {
 			const languages = [...Chat.languages.values()].join(', ');
 			return this.errorReply(this.tr`Valid languages are: ${languages}`);
 		}
-		user.language = target;
+		user.language = languageID;
 		user.update();
-		const language = Chat.languages.get(target);
+		const language = Chat.languages.get(languageID);
 		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
 	},
 	languagehelp: [
