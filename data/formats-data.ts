@@ -2581,7 +2581,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	latias: {
-		randomBattleMoves: ["aurasphere", "calmmind", "dracometeor", "healingwish", "psychic", "roost"],
+		randomBattleMoves: ["calmmind", "dracometeor", "healingwish", "mysticalfire", "psychic", "roost"],
 		randomBattleLevel: 82,
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -3664,7 +3664,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	emolga: {
-		randomBattleMoves: ["airslash", "defog", "encore", "energyball", "roost", "voltswitch"],
+		randomBattleMoves: ["airslash", "encore", "energyball", "roost", "toxic", "voltswitch"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["acrobatics", "helpinghand", "nuzzle", "tailwind", "taunt"],
 		randomDoubleBattleLevel: 88,
@@ -5207,7 +5207,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	magearna: {
-		randomBattleMoves: ["agility", "calmmind", "flashcannon", "fleurcannon", "focusblast", "trick", "voltswitch"],
+		randomBattleMoves: ["agility", "calmmind", "flashcannon", "fleurcannon", "focusblast", "voltswitch"],
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["agility", "aurasphere", "dazzlinggleam", "flashcannon", "fleurcannon", "protect", "trick"],
 		randomDoubleBattleLevel: 72,
