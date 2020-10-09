@@ -1507,54 +1507,53 @@ export const Chat = new class {
 	/** language id -> (english string -> translated string) */
 	readonly translations = new Map<ID, Map<string, [string, string[], string[]]>>();
 
-	loadTranslations() {
-		return FS(TRANSLATION_DIRECTORY).readdir().then(async directories => {
-			// ensure that english is the first entry when we iterate over Chat.languages
-			Chat.languages.set('english' as ID, 'English');
-			for (const dirname of directories) {
-				const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
-				if (!dir.isDirectorySync()) continue;
+	async loadTranslations() {
+		const directories = await FS(TRANSLATION_DIRECTORY).readdir();
 
-				// For some reason, toID() isn't available as a global when this executes.
-				const languageID = Dex.toID(dirname);
-				await dir.readdir().then(files => {
-					for (const filename of files) {
-						if (!filename.endsWith('.js')) continue;
+		// ensure that english is the first entry when we iterate over Chat.languages
+		Chat.languages.set('english' as ID, 'English');
+		for (const dirname of directories) {
+			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
+			if (!dir.isDirectorySync()) continue;
 
-						const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
+			// For some reason, toID() isn't available as a global when this executes.
+			const languageID = Dex.toID(dirname);
+			const files = await dir.readdir();
+			for (const filename of files) {
+				if (!filename.endsWith('.js')) continue;
 
-						if (!Chat.translations.has(languageID)) {
-							Chat.translations.set(languageID, new Map());
-						}
-						const translationsSoFar = Chat.translations.get(languageID)!;
+				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
-						if (content.name && !Chat.languages.has(languageID)) {
-							Chat.languages.set(languageID, content.name);
-						}
+				if (!Chat.translations.has(languageID)) {
+					Chat.translations.set(languageID, new Map());
+				}
+				const translationsSoFar = Chat.translations.get(languageID)!;
 
-						if (content.strings) {
-							for (const key in content.strings) {
-								const keyLabels: string[] = [];
-								const valLabels: string[] = [];
-								const newKey = key.replace(/\${.+?}/g, str => {
-									keyLabels.push(str);
-									return '${}';
-								}).replace(/\[TN: ?.+?\]/g, '');
-								const val = content.strings[key].replace(/\${.+?}/g, (str: string) => {
-									valLabels.push(str);
-									return '${}';
-								}).replace(/\[TN: ?.+?\]/g, '');
-								translationsSoFar.set(newKey, [val, keyLabels, valLabels]);
-							}
-						}
+				if (content.name && !Chat.languages.has(languageID)) {
+					Chat.languages.set(languageID, content.name);
+				}
+
+				if (content.strings) {
+					for (const key in content.strings) {
+						const keyLabels: string[] = [];
+						const valLabels: string[] = [];
+						const newKey = key.replace(/\${.+?}/g, str => {
+							keyLabels.push(str);
+							return '${}';
+						}).replace(/\[TN: ?.+?\]/g, '');
+						const val = content.strings[key].replace(/\${.+?}/g, (str: string) => {
+							valLabels.push(str);
+							return '${}';
+						}).replace(/\[TN: ?.+?\]/g, '');
+						translationsSoFar.set(newKey, [val, keyLabels, valLabels]);
 					}
-					if (!Chat.languages.has(languageID)) {
-						// Fallback in case no translation files provide the language's name
-						Chat.languages.set(languageID, "Unknown Language");
-					}
-				});
+				}
 			}
-		});
+			if (!Chat.languages.has(languageID)) {
+				// Fallback in case no translation files provide the language's name
+				Chat.languages.set(languageID, "Unknown Language");
+			}
+		}
 	}
 	tr(language: ID | null): (fStrings: TemplateStringsArray | string, ...fKeys: any) => string;
 	tr(language: ID | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
