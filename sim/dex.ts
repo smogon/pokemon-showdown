@@ -644,7 +644,7 @@ export class ModdedDex {
 			(this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).condition) ||
 			(this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).condition)
 		) {
-			effect = new Data.Condition({name: found.name || id}, found.condition!);
+			effect = new Data.Condition({name: found.name || id}, found.condition);
 		} else if (id === 'recoil') {
 			effect = new Data.Condition({id, name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
