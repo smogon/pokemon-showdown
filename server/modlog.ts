@@ -277,7 +277,7 @@ export class Modlog {
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const response = await PM.query({
 			rooms: ['global' as ModlogID],
-			regexString: `[${this.escapeRegex(toID(user))}]`,
+			regexString: this.escapeRegex(`[${toID(user)}]`),
 			maxLines: days * 10,
 			onlyPunishments: 'global',
 		});
