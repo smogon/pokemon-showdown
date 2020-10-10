@@ -16,7 +16,7 @@ interface Question {
 export class Jeopardy extends Rooms.RoomGame {
 	playerTable: {[userid: string]: JeopardyGamePlayer};
 	host: User;
-	state: string;
+	state: 'signups' | 'selecting' | 'answering' | 'wagering' | 'buzzing' | 'checking' | 'round2';
 	gameid: ID;
 	categories: string[];
 	question: Question;
