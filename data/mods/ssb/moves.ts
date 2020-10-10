@@ -482,7 +482,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Data Corruption",
 		isNonstandard: "Custom",
 		gen: 8,
-		pp: 5,
+		pp: 1,
+		noPPBoosts: true,
 		flags: {authentic: 1},
 		priority: 3,
 		onPrepareHit(target, source) {
