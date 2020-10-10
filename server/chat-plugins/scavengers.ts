@@ -578,7 +578,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		if (this.timer) {
 			clearTimeout(this.timer);
-			delete this.timer;
+			this.timer = null;
 			this.timerEnd = null;
 		}
 
@@ -865,7 +865,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.playerTable[i].destroy();
 		}
 		// destroy this game
-		delete this.room.game;
+		this.room.game = null;
 	}
 
 	announce(msg: string) {
