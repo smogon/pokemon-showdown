@@ -92,7 +92,7 @@ export const ssbSets: SSBSets = {
 	Annika: {
 		species: 'Mewtwo', ability: 'Overprotective', item: 'Mewtwonite Y', gender: 'F',
 		moves: [['Rising Voltage', 'Lava Plume'], ['Hex', 'Aurora Beam'], ['Psychic', 'Psyshock']],
-		signatureMove: 'Refactor',
+		signatureMove: 'Data Corruption',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Quirky', shiny: true,
 	},
 	'A Quag To The Past': {
