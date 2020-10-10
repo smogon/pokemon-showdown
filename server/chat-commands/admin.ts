@@ -374,7 +374,7 @@ export const commands: ChatCommands = {
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
 				// rebuild the formats list
-				delete Rooms.global.formatList;
+				Rooms.global.formatList = '';
 				// respawn validator processes
 				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes

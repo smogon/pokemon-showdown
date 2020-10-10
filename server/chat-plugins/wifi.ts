@@ -76,7 +76,7 @@ class Giveaway {
 	clearTimer() {
 		if (this.timer) {
 			clearTimeout(this.timer);
-			delete this.timer;
+			this.timer = null;
 		}
 	}
 
@@ -538,7 +538,7 @@ export class GTSGiveaway {
 	clearTimer() {
 		if (this.timer) {
 			clearTimeout(this.timer);
-			delete this.timer;
+			this.timer = null;
 		}
 	}
 
