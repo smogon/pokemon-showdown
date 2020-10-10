@@ -138,36 +138,41 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	repeat(target, room, user) {
+	repeathtml: 'repeat',
+	repeat(target, room, user, connection, cmd) {
+		const isHTML = cmd === 'repeathtml';
 		room = this.requireRoom();
-		this.checkCan('mute', null, room);
+		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
 		const message = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
-			return this.errorReply(this.tr`You must specify a interval as a number of minutes between 1 and 1440.`);
+			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes between 1 and 1440.`);
 		}
 
 		if (Repeats.hasRepeat(room, id)) {
-			return this.errorReply(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
+			throw new Chat.ErrorMessage(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
 		}
+
+		if (isHTML) this.checkHTML(message);
 
 		Repeats.addRepeat(room, {
 			id,
-			phrase: Chat.formatText(message).replace(/\n/g, `<br />`),
+			phrase: isHTML ? message : Chat.formatText(message).replace(/\n/g, `<br />`),
 			interval: interval * 60 * 1000, // convert to milliseconds
 		});
 
 		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: "${message}"`);
 		this.privateModAction(
-			room.tr`${user.name} set the phrase "${message}" to be repeated every ${interval} minute(s).`
+			room.tr`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).`
 		);
 	},
 	repeathelp() {
 		this.runBroadcast();
 		this.sendReplyBox(
 			`<code>/repeat [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes.<br />` +
+			`<code>/repeathtml [minutes], [id], [phrase]</code>: repeats a given phrase containing HTML every [minutes] minutes. Requires: # &<br />` +
 			`<code>/repeatfaq [minutes], [FAQ name/alias]</code>: repeats a given Room FAQ every [minutes] minutes.<br />` +
 			`<code>/removerepeat [id]</code>: removes a repeated phrase.<br />` +
 			`<code>/viewrepeats [optional room]</code>: Displays all repeated phrases in a room.<br />` +
@@ -180,8 +185,8 @@ export const commands: ChatCommands = {
 		this.checkCan('mute', null, room);
 		let [intervalString, topic] = target.split(',');
 		const interval = parseInt(intervalString);
-		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a numerical interval of at least 1 minute.`);
+		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
+			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes between 1 and 1440.`);
 		}
 		if (!roomFaqs[room.roomid]) {
 			throw new Chat.ErrorMessage(`This room has no FAQs.`);
