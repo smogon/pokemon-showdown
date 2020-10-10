@@ -97,6 +97,11 @@ export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
 export type HostFilter = (host: string, user: User, connection: Connection, hostType: string) => void;
 
+export interface Translations {
+	name?: string;
+	strings: {[english: string]: string};
+}
+
 const LINK_WHITELIST = [
 	'*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us',
 	'*.smogon.com', '*.pastebin.com', '*.hastebin.com',
@@ -112,7 +117,7 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-const TRANSLATION_DIRECTORY = 'translations/';
+import {resolve as resolvePath} from 'path';
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
@@ -124,6 +129,7 @@ import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
+const TRANSLATION_DIRECTORY = resolvePath(__dirname, '../.translations-dist');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -209,9 +215,9 @@ export class Interruption extends Error {
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
 	readonly user: User;
-	language: string | null;
+	language: ID | null;
 	recursionDepth: number;
-	constructor(user: User, language: string | null = null) {
+	constructor(user: User, language: ID | null = null) {
 		this.user = user;
 		this.language = language;
 		this.recursionDepth = 0;
@@ -250,7 +256,7 @@ export class PageContext extends MessageContext {
 	initialized: boolean;
 	title: string;
 	args: string[];
-	constructor(options: {pageid: string, user: User, connection: Connection, language?: string}) {
+	constructor(options: {pageid: string, user: User, connection: Connection, language?: ID}) {
 		super(options.user, options.language);
 
 		this.connection = options.connection;
@@ -1210,7 +1216,7 @@ export class CommandContext extends MessageContext {
 		const tags = htmlContent.match(/<!--.*?-->|<\/?[^<>]*/g);
 		if (tags) {
 			const ILLEGAL_TAGS = [
-				'script', 'head', 'body', 'html', 'canvas', 'base', 'meta', 'link',
+				'script', 'head', 'body', 'html', 'canvas', 'base', 'meta', 'link', 'iframe',
 			];
 			const LEGAL_AUTOCLOSE_TAGS = [
 				// void elements (no-close tags)
@@ -1497,25 +1503,35 @@ export const Chat = new class {
 	 * Translations
 	 *********************************************************/
 	/** language id -> language name */
-	readonly languages = new Map<string, string>();
+	readonly languages = new Map<ID, string>();
 	/** language id -> (english string -> translated string) */
-	readonly translations = new Map<string, Map<string, [string, string[], string[]]>>();
+	readonly translations = new Map<ID, Map<string, [string, string[], string[]]>>();
 
-	loadTranslations() {
-		return FS(TRANSLATION_DIRECTORY).readdir().then(files => {
-			// ensure that english is the first entry when we iterate over Chat.languages
-			Chat.languages.set('english', 'English');
-			for (const fname of files) {
-				if (!fname.endsWith('.json')) continue;
+	async loadTranslations() {
+		const directories = await FS(TRANSLATION_DIRECTORY).readdir();
 
-				interface TRStrings {
-					[k: string]: string;
+		// ensure that english is the first entry when we iterate over Chat.languages
+		Chat.languages.set('english' as ID, 'English');
+		for (const dirname of directories) {
+			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
+			if (!dir.isDirectorySync()) continue;
+
+			// For some reason, toID() isn't available as a global when this executes.
+			const languageID = Dex.toID(dirname);
+			const files = await dir.readdir();
+			for (const filename of files) {
+				if (!filename.endsWith('.js')) continue;
+
+				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
+
+				if (!Chat.translations.has(languageID)) {
+					Chat.translations.set(languageID, new Map());
 				}
-				const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
-				const id = fname.slice(0, -5);
+				const translationsSoFar = Chat.translations.get(languageID)!;
 
-				Chat.languages.set(id, content.name || "Unknown Language");
-				Chat.translations.set(id, new Map());
+				if (content.name && !Chat.languages.has(languageID)) {
+					Chat.languages.set(languageID, content.name);
+				}
 
 				if (content.strings) {
 					for (const key in content.strings) {
@@ -1529,17 +1545,20 @@ export const Chat = new class {
 							valLabels.push(str);
 							return '${}';
 						}).replace(/\[TN: ?.+?\]/g, '');
-						Chat.translations.get(id)!.set(newKey, [val, keyLabels, valLabels]);
+						translationsSoFar.set(newKey, [val, keyLabels, valLabels]);
 					}
 				}
 			}
-		});
+			if (!Chat.languages.has(languageID)) {
+				// Fallback in case no translation files provide the language's name
+				Chat.languages.set(languageID, "Unknown Language");
+			}
+		}
 	}
-	tr(language: string | null): (fStrings: TemplateStringsArray | string, ...fKeys: any) => string;
-	tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
-	tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
-		if (!language) language = 'english';
-		language = toID(language);
+	tr(language: ID | null): (fStrings: TemplateStringsArray | string, ...fKeys: any) => string;
+	tr(language: ID | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
+	tr(language: ID | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
+		if (!language) language = 'english' as ID;
 		// If strings is an array (normally the case), combine before translating.
 		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
 
@@ -1919,11 +1938,11 @@ export const Chat = new class {
 		return htmlContent;
 	}
 	/**
-	 * Takes a string of code and transforms it into a block of html using the details tag.
+	 * Takes a string of text and transforms it into a block of html using the details tag.
 	 * If it has a newline, will make the 3 lines the preview, and fill the rest in.
 	 * @param str string to block
 	 */
-	getReadmoreCodeBlock(str: string, cutoff = 3) {
+	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output = [];
 		for (const param of params) {
@@ -1932,16 +1951,21 @@ export const Chat = new class {
 		}
 
 		if (output.length > cutoff) {
-			return `<details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
+			return `<details class="readmore${isCode ? ` code` : ``}" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
 				output.slice(0, cutoff).join('<br />')
 			}</summary>${
 				output.slice(cutoff).join('<br />')
 			}</details>`;
 		} else {
-			return `<code style="white-space: pre-wrap; display: table; tab-size: 3">${
+			const tag = isCode ? `code` : `div`;
+			return `<${tag} style="white-space: pre-wrap; display: table; tab-size: 3">${
 				output.join('<br />')
-			}</code>`;
+			}</${tag}>`;
 		}
+	}
+
+	getReadmoreCodeBlock(str: string, cutoff?: number) {
+		return Chat.getReadmoreBlock(str, true, cutoff);
 	}
 
 	getDataPokemonHTML(species: Species, gen = 8, tier = '') {

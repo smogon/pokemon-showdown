@@ -27,6 +27,13 @@ const ALL_CATEGORIES: {[k: string]: string} = {
 	subcat: 'Sub-Category',
 };
 
+/**
+ * Aliases for keys in the ALL_CATEGORIES object.
+ */
+const CATEGORY_ALIASES: {[k: string]: ID} = {
+	poke: 'pokemon' as ID,
+};
+
 const MODES: {[k: string]: string} = {
 	first: 'First',
 	number: 'Number',
@@ -449,7 +456,7 @@ export class Trivia extends Rooms.RoomGame {
 		case 'random':
 			category = this.room.tr`Random (${ALL_CATEGORIES[questions[0].category]})`; break;
 		default:
-			category = ALL_CATEGORIES[category];
+			category = ALL_CATEGORIES[CATEGORY_ALIASES[category] || category];
 		}
 
 		this.game = {
@@ -1504,7 +1511,8 @@ const triviaCommands: ChatCommands = {
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		const category = toID(targets[1]);
+		const categoryID = toID(targets[1]);
+		const category = CATEGORY_ALIASES[categoryID] || categoryID;
 		let questions = getQuestions(category);
 		// Randomizes the order of the questions.
 		const length = toID(targets[2]);
@@ -1578,6 +1586,7 @@ const triviaCommands: ChatCommands = {
 
 	answer(target, room, user) {
 		room = this.requireRoom();
+		this.checkChat();
 		let game: Trivia | MastermindRound | MastermindFinals;
 		try {
 			const mastermindRound = getMastermindGame(room).currentRound;
@@ -1694,7 +1703,8 @@ const triviaCommands: ChatCommands = {
 				continue;
 			}
 
-			const category = toID(param[0]);
+			const categoryID = toID(param[0]);
+			const category = CATEGORY_ALIASES[categoryID] || categoryID;
 			if (!ALL_CATEGORIES[category]) {
 				this.errorReply(this.tr`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
 				continue;
@@ -1930,7 +1940,8 @@ const triviaCommands: ChatCommands = {
 				continue;
 			}
 
-			const category = toID(param[0]);
+			const categoryID = toID(param[0]);
+			const category = CATEGORY_ALIASES[categoryID] || categoryID;
 			if (!ALL_CATEGORIES[category]) {
 				this.errorReply(this.tr`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
 				continue;
@@ -1996,7 +2007,8 @@ const triviaCommands: ChatCommands = {
 
 		this.checkCan('mute', null, room);
 
-		const category = toID(target);
+		target = toID(target);
+		const category = CATEGORY_ALIASES[target] || target;
 		if (category === 'random') return false;
 		if (!ALL_CATEGORIES[category]) {
 			return this.errorReply(this.tr`'${target}' is not a valid category. View /help trivia for more information.`);
@@ -2009,7 +2021,7 @@ const triviaCommands: ChatCommands = {
 		}
 
 		if (user.can('ban', null, room)) {
-			const cat = ALL_CATEGORIES[target];
+			const cat = ALL_CATEGORIES[category];
 			buffer += `<tr><td colspan="3">${this.tr`There are <strong>${list.length}</strong> questions in the ${cat} category.`}</td></tr>` +
 				`<tr><th>#</th><th>${this.tr`Question`}</th><th>${this.tr`Answer(s)`}</th></tr>`;
 			for (const [i, entry] of list.entries()) {
@@ -2053,7 +2065,7 @@ const triviaCommands: ChatCommands = {
 		}
 
 		let queryString = query.join(',').trim();
-		if (!queryString) return this.errorReply(this.tr("No valid search query as entered."));
+		if (!queryString) return this.errorReply(this.tr("No valid search query was entered."));
 
 
 		let transformQuestion = (question: string) => question;
@@ -2150,7 +2162,8 @@ const triviaCommands: ChatCommands = {
 			return this.errorReply(this.tr("This command can only be used in Question Workshop"));
 		}
 		this.checkCan('declare', null, room);
-		const category = toID(target);
+		target = toID(target);
+		const category = CATEGORY_ALIASES[target] || target;
 		if (ALL_CATEGORIES[category]) {
 			if (SPECIAL_CATEGORIES[category]) {
 				triviaData.questions = triviaData.questions!.filter(q => q.category !== category);
@@ -2371,7 +2384,7 @@ const mastermindCommands: ChatCommands = {
 		if (!(category in ALL_CATEGORIES)) {
 			return this.errorReply(this.tr`${category} is not a valid category.`);
 		}
-		const categoryName = ALL_CATEGORIES[category];
+		const categoryName = ALL_CATEGORIES[CATEGORY_ALIASES[category] || category];
 		const timeout = parseInt(timeoutString);
 		if (isNaN(timeout) || timeout < 1) {
 			return this.errorReply(this.tr`You must specify a round length of at least 1 second.`);

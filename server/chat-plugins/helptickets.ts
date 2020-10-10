@@ -86,7 +86,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	constructor(room: ChatRoom, ticket: TicketState) {
 		super(room);
 		this.room = room;
-		this.room.settings.language = Users.get(ticket.creator)?.language || 'english';
+		this.room.settings.language = Users.get(ticket.creator)?.language || 'english' as ID;
 		this.title = `Help Ticket - ${ticket.type}`;
 		this.gameid = "helpticket" as ID;
 		this.allowRenames = true;
@@ -1160,6 +1160,7 @@ export const commands: ChatCommands = {
 						ticket.userid, Users.get(ticket.userid)
 					);
 
+					reportTargetInfo += `<p></p>`;
 					if (!commonBattles.length) {
 						reportTargetInfo += `There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
 					} else {

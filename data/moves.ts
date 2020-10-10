@@ -9051,11 +9051,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Jungle Healing",
 		pp: 10,
 		priority: 0,
-		flags: {distance: 1, heal: 1, authentic: 1, mystery: 1},
+		flags: {heal: 1, authentic: 1, mystery: 1},
 		onHit(pokemon) {
-			pokemon.cureStatus();
+			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
+			return pokemon.cureStatus() || success;
 		},
-		heal: [1, 4],
 		secondary: null,
 		target: "allies",
 		type: "Grass",
@@ -17179,7 +17179,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Surging Strikes",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
 		willCrit: true,
 		multihit: 3,
 		secondary: null,
@@ -19043,7 +19043,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Wicked Blow",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
 		willCrit: true,
 		secondary: null,
 		target: "normal",

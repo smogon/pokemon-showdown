@@ -32,6 +32,7 @@ import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
+import {RepeatedPhrase} from './chat-plugins/repeats';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
@@ -86,7 +87,7 @@ export interface RoomSettings {
 	modjoin?: AuthLevel | true | null;
 	modchat?: AuthLevel | null;
 	staffRoom?: boolean;
-	language?: string | false;
+	language?: ID | false;
 	slowchat?: number | false;
 	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
 	filterStretching?: boolean;
@@ -111,6 +112,7 @@ export interface RoomSettings {
 	requestShowEnabled?: boolean | null;
 	showEnabled?: GroupSymbol | true;
 	permissions?: {[k: string]: GroupSymbol};
+	repeats?: RepeatedPhrase[];
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -912,7 +914,7 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 	}
 	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english', strings, ...keys);
+		return Chat.tr(this.settings.language || 'english' as ID, strings, ...keys);
 	}
 }
 

@@ -2,7 +2,7 @@
 * TCG & Tabletop: Yugioh wiki plugin
 * This is a command that allows users to search the yugioh wiki for cards.
 * It will display the closest match with a given query, or a separate message if there isn't anything found.
-* By Asheviere with help from ascriptmaster, codelegend and the PS development team.
+* By bumbadadabum with help from ascriptmaster, codelegend and the PS development team.
 */
 
 
