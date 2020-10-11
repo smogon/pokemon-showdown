@@ -151,7 +151,7 @@ export const pages: PageTable = {
 			buf += `<div class="infobox">`;
 			buf += `<h3>${key}</h3>`;
 			buf += `<hr />`;
-			buf += Chat.formatText(topic, true).replace(/\n/g, '<br />');
+			buf += Chat.formatText(topic, true);
 			const aliases = keys.filter(val => getAlias(room.roomid, val) === key);
 			if (aliases.length) {
 				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;

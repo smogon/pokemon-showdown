@@ -88,5 +88,17 @@ describe('Chat', function () {
 			Chat.formatText(`:)`, true),
 			`:)`
 		);
+		assert.equal(
+			Chat.formatText(`a\nb\nc`),
+			`a\nb\nc`
+		);
+		assert.equal(
+			Chat.formatText(`a\nb\nc`, true),
+			`a<br />b<br />c`
+		);
+		assert.equal(
+			Chat.formatText(`a\nb\nc`, false, true),
+			`a<br />b<br />c`
+		);
 	});
 });

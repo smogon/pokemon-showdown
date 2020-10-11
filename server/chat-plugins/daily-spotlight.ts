@@ -43,7 +43,7 @@ async function renderSpotlight(description: string, image?: string) {
 		} catch (err) {}
 	}
 
-	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
+	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true)}</td>${imgHTML}</tr></table>`;
 }
 
 export const destroy = () => {

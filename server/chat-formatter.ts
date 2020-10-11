@@ -69,10 +69,11 @@ class TextFormatter {
 	readonly buffers: string[];
 	readonly stack: FormatSpan[];
 	readonly isTrusted: boolean;
+	readonly replaceLinebreaks: boolean;
 	/** offset of str that's been parsed so far */
 	offset: number;
 
-	constructor(str: string, isTrusted = false) {
+	constructor(str: string, isTrusted = false, replaceLinebreaks = false) {
 		// escapeHTML, without escaping /
 		str = `${str}`
 			.replace(/&/g, '&amp;')
@@ -108,6 +109,7 @@ class TextFormatter {
 		this.buffers = [];
 		this.stack = [];
 		this.isTrusted = isTrusted;
+		this.replaceLinebreaks = this.isTrusted || replaceLinebreaks;
 		this.offset = 0;
 	}
 	// eslint-disable-next-line max-len
@@ -441,7 +443,7 @@ class TextFormatter {
 			case '\r':
 			case '\n':
 				this.popAllSpans(i);
-				if (this.isTrusted) {
+				if (this.replaceLinebreaks) {
 					this.buffers.push(`<br />`);
 					this.offset++;
 				}
@@ -458,8 +460,8 @@ class TextFormatter {
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  */
-export function formatText(str: string, isTrusted = false) {
-	return new TextFormatter(str, isTrusted).get();
+export function formatText(str: string, isTrusted = false, replaceLinebreaks = false) {
+	return new TextFormatter(str, isTrusted, replaceLinebreaks).get();
 }
 
 /**
