@@ -69,11 +69,11 @@ describe('Unburden', function () {
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), originalSpeed);
 	});
 
-	it.skip(`should not trigger when Neutralizing Gas is active on the field`, function () {
+	it(`should not trigger when Neutralizing Gas is active on the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
-			{species: "Pancham", ability: 'neutralizingas', moves: ['sleeptalk']},
+			{species: "Pancham", ability: 'neutralizinggas', moves: ['sleeptalk']},
 			{species: "Whismur", moves: ['sleeptalk']},
 		]]);
 
@@ -92,7 +92,7 @@ describe('Unburden', function () {
 			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
 			{species: "Whismur", moves: ['sleeptalk']},
-			{species: "Pancham", ability: 'neutralizingas', moves: ['sleeptalk']},
+			{species: "Pancham", ability: 'neutralizinggas', moves: ['sleeptalk']},
 		]]);
 
 		const wynaut = battle.p1.active[0];
