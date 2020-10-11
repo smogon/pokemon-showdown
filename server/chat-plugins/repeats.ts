@@ -167,7 +167,7 @@ export const commands: ChatCommands = {
 			isHTML,
 		});
 
-		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: "${phrase}"`);
+		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: "${phrase.replace(/\n/g, ' ')}"`);
 		this.privateModAction(
 			room.tr`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).`
 		);
