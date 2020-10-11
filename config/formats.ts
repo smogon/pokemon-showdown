@@ -495,6 +495,12 @@ export const Formats: FormatList = [
 			'Gyarados', 'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Kyurem', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega', 'Mew', 'Pinsir-Mega',
 			'Scolipede', 'Staraptor', 'Thundurus', 'Venusaur-Mega', 'Xurkitree', 'Drizzle', 'Drought', 'Aurora Veil',
 		],
+		// Used to distinguish UU from below UU in the client
+		restricted: [
+			'Alomomola', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Blissey', 'Breloom', 'Buzzwole', 'Celesteela', 'Chandelure', 'Conkeldurr',
+			'Diancie-Mega', 'Hippowdon', 'Infernape', 'Jirachi', 'Keldeo', 'Krookodile', 'Latias', 'Mamoswine', 'Mandibuzz', 'Manectric-Mega', 'Moltres',
+			'Primarina', 'Rotom-Heat', 'Rotom-Wash', 'Salamence', 'Scizor', 'Tapu Bulu', 'Urshifu-Rapid-Strike', 'Weavile', 'Weezing-Galar', 'Zeraora',
+		],
 	},
 	{
 		name: "[Gen 8] National Dex Monotype",
