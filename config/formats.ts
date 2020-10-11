@@ -2584,8 +2584,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		searchShow: false,
-		banlist: ['AG'],
 		ruleset: ['Standard'],
+		banlist: ['AG'],
 	},
 	{
 		name: "[Gen 4] UU",
