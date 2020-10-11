@@ -4874,23 +4874,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		onHit(target, source) {
 			let effects = 0;
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(4, 10)) {
 				this.useMove('Spikes', source, target);
 				effects++;
 			}
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(4, 10)) {
 				this.useMove('Heal Bell', source);
 				effects++;
 			}
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(4, 10)) {
 				this.useMove('Leech Seed', source, target);
 				effects++;
 			}
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(4, 10)) {
 				this.useMove('Tailwind', source, target);
 				effects++;
 			}
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(4, 10)) {
 				this.useMove('Octolock', source);
 				effects++;
 			}
