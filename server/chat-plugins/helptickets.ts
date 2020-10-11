@@ -1154,7 +1154,7 @@ export const commands: ChatCommands = {
 				}
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong>`;
-				if (ticket.type === 'Battle Harassment') {
+				if (ticket.type === 'Battle Harassment' || ticket.type === 'PM Harassment') {
 					const commonBattles = getCommonBattles(
 						toID(reportTarget), Users.get(reportTarget),
 						ticket.userid, Users.get(ticket.userid)
