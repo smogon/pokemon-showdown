@@ -5058,6 +5058,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Blue Flare', target);
 		},
 		onHit(target, source, move) {
+			if (this.random(1000) === 69) {
+				this.add(`raw|<div class="broadcast-red"><strong>Pokemon Showdown has not crashed!</strong><br />It just got sick of all the rng in Volco's Glitch Exploiting move and gave up.<br /><small>(Do not report this, this is intended.)</small></div>`);
+				this.tie();
+			}
 			const random = this.random(4096);
 			if (random === 1) {
 				target.faint(source, move);
