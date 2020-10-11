@@ -64,8 +64,46 @@ describe('Unburden', function () {
 		battle.setPlayer('p2', {team: [{species: 'Togekiss', ability: 'serenegrace', item: 'laggingtail', moves: ['bestow', 'followme']}]});
 		const originalSpeed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move machpunch', 'move followme');
-		assert.equal(battle.p1.active[0].getStat('spe'), 2 * originalSpeed);
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), 2 * originalSpeed);
 		battle.makeChoices('move machpunch', 'move bestow');
-		assert.equal(battle.p1.active[0].getStat('spe'), originalSpeed);
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), originalSpeed);
+	});
+
+	it.skip(`should not trigger when Neutralizing Gas is active on the field`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
+		], [
+			{species: "Pancham", ability: 'neutralizingas', moves: ['sleeptalk']},
+			{species: "Whismur", moves: ['sleeptalk']},
+		]]);
+
+		const wynaut = battle.p1.active[0];
+		const originalSpeed = wynaut.getStat('spe');
+		battle.makeChoices();
+		assert.strictEqual(wynaut.getStat('spe'), originalSpeed);
+
+		//The chance to trigger Unburden is gone, so it missed the timing and doesn't gain the speed post-NGas removal
+		battle.makeChoices('auto', 'switch 2');
+		assert.strictEqual(wynaut.getStat('spe'), originalSpeed);
+	});
+
+	it.skip(`should be negated while Neutralizing Gas is active on the field`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
+		], [
+			{species: "Whismur", moves: ['sleeptalk']},
+			{species: "Pancham", ability: 'neutralizingas', moves: ['sleeptalk']},
+		]]);
+
+		const wynaut = battle.p1.active[0];
+		const originalSpeed = wynaut.getStat('spe');
+		battle.makeChoices();
+		assert.strictEqual(wynaut.getStat('spe'), originalSpeed * 2);
+
+		battle.makeChoices('auto', 'switch 2');
+		assert.strictEqual(wynaut.getStat('spe'), originalSpeed);
+
+		battle.makeChoices('auto', 'switch 2');
+		assert.strictEqual(wynaut.getStat('spe'), originalSpeed * 2);
 	});
 });
