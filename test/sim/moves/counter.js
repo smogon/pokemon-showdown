@@ -29,7 +29,7 @@ describe('Counter', function () {
 		});
 
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
 	it('should fail if user is not damaged by Physical attacks this turn', function () {
@@ -97,7 +97,7 @@ describe('Mirror Coat', function () {
 		});
 
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
 	it('should fail if user is not damaged by Special attacks this turn', function () {
@@ -136,5 +136,19 @@ describe('Mirror Coat', function () {
 		battle.makeChoices('move mirrorcoat, move splash', 'move venoshock 1, move followme');
 		assert.false.fullHP(battle.p2.active[1]);
 		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it.skip(`should not have its target changed by Stalwart`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['sleeptalk']},
+			{species: "Noivern", moves: ['dragonpulse']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move dragonpulse 1');
+		assert.strictEqual(wynaut.maxhp, wynaut.hp);
 	});
 });
