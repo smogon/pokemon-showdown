@@ -59,7 +59,7 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('move toxic', 'move uturn');
 		battle.makeChoices('', 'switch 2');
 		battle.makeChoices('switch 2', 'switch 2');
-		assert.equal(battle.p2.active[0].status, 'tox');
+		assert.strictEqual(battle.p2.active[0].status, 'tox');
 	});
 
 	it('should negate abilities that modify move type', function () {
@@ -80,5 +80,21 @@ describe('Neutralizing Gas', function () {
 		]});
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
+	});
+
+	it.skip(`should not trigger twice if negated then replaced`, function () {
+		battle = common.createBattle([[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", ability: 'intrepidsword', moves: ['gastroacid', 'simplebeam']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices();
+		assert.statStage(wynaut, 'atk', 1);
+
+		// We already negated NGas, so it shouldn't run other abilities again
+		battle.makeChoices('auto', 'move simplebeam');
+		assert.statStage(wynaut, 'atk', 1);
 	});
 });
