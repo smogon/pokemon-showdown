@@ -1800,7 +1800,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	arceus: {
 		randomBattleMoves: ["swordsdance", "extremespeed", "shadowclaw", "earthquake", "recover"],
-		tier: "Uber",
+		tier: "AG",
 	},
 	arceusbug: {
 		randomBattleMoves: ["calmmind", "judgment", "earthpower", "icebeam", "recover"],
