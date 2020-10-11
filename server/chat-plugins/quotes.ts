@@ -137,7 +137,7 @@ export const pages: PageTable = {
 		for (const [i, quoteObj] of roomQuotes.entries()) {
 			const index = i + 1;
 			const {quote, userid, date} = quoteObj;
-			buffer += `<div class="infobox">${Chat.formatText(quote).replace(/\n/g, '<br />')}`;
+			buffer += `<div class="infobox">${Chat.formatText(quote, false, true)}`;
 			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`;
 			if (user.can('mute', null, room)) {
 				buffer += ` <button class="button" name="send" value="/removequote ${index},${room.roomid}">Remove</button>`;

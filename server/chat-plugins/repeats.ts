@@ -83,7 +83,7 @@ export const Repeats = new class {
 				this.clearRepeats(room);
 				return;
 			}
-			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[room.roomid][repeat.id], true).replace(/\n/g, '<br />') :
+			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[room.roomid][repeat.id], true) :
 				repeat.phrase;
 			room.add(`|html|<div class="infobox">${formattedText}</div>`);
 			room.update();
@@ -123,7 +123,7 @@ export const pages: PageTable = {
 				html += `<tr><td>${repeat.id}</td><td>${repeat.phrase}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			} else {
-				const phrase = Chat.formatText(roomFaqs[room.roomid][repeat.id], true).replace(/\n/g, '<br />');
+				const phrase = Chat.formatText(roomFaqs[room.roomid][repeat.id], true);
 				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			}
@@ -159,7 +159,7 @@ export const commands: ChatCommands = {
 
 		Repeats.addRepeat(room, {
 			id,
-			phrase: isHTML ? message : Chat.formatText(message).replace(/\n/g, `<br />`),
+			phrase: isHTML ? message : Chat.formatText(message, false, true),
 			interval: interval * 60 * 1000, // convert to milliseconds
 		});
 
