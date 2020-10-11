@@ -1684,7 +1684,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'Sand Veil', 'Soul Dew', 'Swinub + Snow Cloak', 'Piloswine + Snow Cloak', 'Mamoswine + Snow Cloak', 'Baton Pass'],
+		banlist: ['AG', 'Uber', 'Sand Veil', 'Soul Dew', 'Swinub + Snow Cloak', 'Piloswine + Snow Cloak', 'Mamoswine + Snow Cloak', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 3] OU",
@@ -2584,7 +2584,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Standard', 'Arceus EV Limit'],
+		banlist: ['AG'],
+		ruleset: ['Standard'],
 	},
 	{
 		name: "[Gen 4] UU",
