@@ -18,9 +18,9 @@ describe(`Emergency Exit`, function () {
 		const eePokemon = battle.p1.active[0];
 		const foePokemon = battle.p2.active[0];
 		battle.makeChoices('move superfang', 'move superfang');
-		assert.equal(foePokemon.hp, foePokemon.maxhp);
+		assert.strictEqual(foePokemon.hp, foePokemon.maxhp);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 	});
 
 	it(`should request switch-out at the end of a multi-hit move`, function () {
@@ -30,7 +30,7 @@ describe(`Emergency Exit`, function () {
 		]);
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 	});
 
 	it(`should request switch-out if brought below half HP by residual damage`, function () {
@@ -42,7 +42,7 @@ describe(`Emergency Exit`, function () {
 		]]);
 		battle.p2.active[0].hp = Math.floor(battle.p2.active[0].maxhp / 2 + 2);
 		battle.makeChoices();
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 	});
 
 	it(`should request switch-out if brought below half HP by Photon Geyser`, function () {
@@ -53,16 +53,18 @@ describe(`Emergency Exit`, function () {
 			{species: "Shaymin", moves: ['splash']},
 		]]);
 		battle.makeChoices();
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 	});
 
 	it(`should not request switch-out if attacked and healed by berry`, function () {
-		battle = common.createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
-			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
-		]);
-		battle.makeChoices('move sleeptalk', 'move superfang');
-		assert.equal(battle.requestState, 'move');
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS},
+			{species: "Clefable", ability: 'unaware', moves: ['metronome']},
+		], [
+			{species: "Raticate", ability: 'guts', moves: ['superfang']},
+		]]);
+		battle.makeChoices();
+		assert.strictEqual(battle.requestState, 'move');
 	});
 
 	it(`should not request switch-out if fainted`, function () {
@@ -105,7 +107,7 @@ describe(`Emergency Exit`, function () {
 		battle.makeChoices('move splash', 'move spikes');
 		battle.makeChoices('switch 2', 'move dragonascent');
 		assert(battle.p1.active[0].hp);
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 	});
 
 	it('should request switch-out after taking Life Orb recoil', function () {
@@ -116,10 +118,10 @@ describe(`Emergency Exit`, function () {
 			{species: "stufful", ability: 'compoundeyes', moves: ['superfang']},
 		]]);
 		battle.makeChoices();
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 	});
 
-	it(`should not request switch-out after taking residual damage and getting healed by berry`, function () {
+	it(`should not request switch-out after taking entry hazard damage and getting healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", ability: 'swiftswim', moves: ['splash']}],
 			[{species: "Ferrothorn", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'protect']}],
@@ -130,7 +132,7 @@ describe(`Emergency Exit`, function () {
 		battle.makeChoices('move splash', 'move spikes');
 		battle.makeChoices('move splash', 'move spikes');
 		battle.makeChoices('switch 2', 'move protect');
-		assert.equal(battle.requestState, 'move');
+		assert.strictEqual(battle.requestState, 'move');
 	});
 
 	it.skip(`should not request switch-out after taking poison damage and getting healed by berry`, function () {
@@ -141,7 +143,7 @@ describe(`Emergency Exit`, function () {
 		battle.makeChoices('move substitute', 'move toxic');
 		battle.makeChoices('move sleeptalk', 'move nightshade');
 		battle.makeChoices('move sleeptalk', 'move protect');
-		assert.equal(battle.requestState, 'move');
+		assert.strictEqual(battle.requestState, 'move');
 	});
 
 	it(`should not request switch-out on usage of Substitute`, function () {
@@ -154,10 +156,10 @@ describe(`Emergency Exit`, function () {
 		assert.false.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		battle.makeChoices('move substitute', 'move thunderbolt');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.equal(battle.requestState, 'move');
+		assert.strictEqual(battle.requestState, 'move');
 	});
 
-	it(`should prevent Volt Switch after-switches`, function () {
+	it(`should prevent Volt Switch after switches`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Zekrom", ability: 'pressure', moves: ['voltswitch']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
@@ -167,7 +169,7 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 
 		battle.makeChoices('default', '');
 		assert.species(battle.p1.active[0], 'Clefable');
@@ -184,7 +186,7 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 
 		battle.makeChoices('auto', '');
 		assert.species(battle.p1.active[0], 'Clefable');
@@ -201,7 +203,7 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
 
 		battle.makeChoices('auto', '');
 		assert.species(battle.p1.active[0], 'Clefable');
@@ -215,7 +217,7 @@ describe(`Emergency Exit`, function () {
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move thunder');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.equal(battle.requestState, 'move');
+		assert.strictEqual(battle.requestState, 'move');
 	});
 
 	it('should not request switchout if its HP is already below 50%', function () {
@@ -231,7 +233,7 @@ describe(`Emergency Exit`, function () {
 		// Switch Goliosopod back in
 		battle.makeChoices('switch 2', 'auto');
 		battle.makeChoices('move tackle', 'move sleeptalk');
-		assert.equal(battle.requestState, 'move');
+		assert.strictEqual(battle.requestState, 'move');
 	});
 
 	it('should request switchout if its HP was restored to above 50% and brought down again', function () {
@@ -247,6 +249,18 @@ describe(`Emergency Exit`, function () {
 		// Switch Goliosopod back in and heal it before switching it back out again
 		battle.makeChoices('switch 2', 'move healpulse');
 		battle.makeChoices('auto', 'move superfang');
-		assert.equal(battle.requestState, 'switch');
+		assert.strictEqual(battle.requestState, 'switch');
+	});
+
+	it.skip('should not request switchout if its HP is already below 50% and an effect heals it', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", level: 65, item: 'figyberry', ability: 'emergencyexit', moves: ['sleeptalk']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "ursaring", ability: 'sheerforce', moves: ['falseswipe', 'crunch']},
+		]]);
+		battle.makeChoices('auto', 'move crunch');
+		battle.makeChoices();
+		assert.strictEqual(battle.requestState, 'move');
 	});
 });
