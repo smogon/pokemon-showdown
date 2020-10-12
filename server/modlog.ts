@@ -229,7 +229,6 @@ export class Modlog {
 		return search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	}
 
-
 	/**************************************
 	 * Methods for writing to the modlog. *
 	 **************************************/
@@ -287,7 +286,6 @@ export class Modlog {
 
 		void stream.write(`${buf}\n`);
 	}
-
 
 	async destroy(roomid: ModlogID) {
 		const stream = this.streams.get(roomid);
@@ -394,7 +392,7 @@ export class Modlog {
 	async getGlobalPunishmentsText(userid: ID, days: number) {
 		const response = await PM.query({
 			rooms: ['global' as ModlogID],
-			regexString: this.escapeRegex(`[${toID(userid)}]`),
+			regexString: this.escapeRegex(`[${userid}]`),
 			maxLines: days * 10,
 			onlyPunishments: 'global',
 		});
