@@ -13,6 +13,7 @@ export interface RepeatedPhrase {
 	/** interval in milliseconds */
 	interval: number;
 	faq?: boolean;
+	isHTML?: boolean;
 }
 
 export const Repeats = new class {
@@ -83,8 +84,8 @@ export const Repeats = new class {
 				this.clearRepeats(room);
 				return;
 			}
-			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[room.roomid][repeat.id], true).replace(/\n/g, '<br />') :
-				repeat.phrase;
+			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[room.roomid][repeat.id], true) :
+				repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
 			room.add(`|html|<div class="infobox">${formattedText}</div>`);
 			room.update();
 		}, interval)));
@@ -116,15 +117,16 @@ export const pages: PageTable = {
 			return `${html}<h1>${this.tr`There are no repeated phrases in ${room.title}.`}</h1></div>`;
 		}
 		html += `<h2>${this.tr`Repeated phrases in ${room.title}`}</h2>`;
-		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
+		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Raw text`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (60 * 1000);
 			if (!repeat.faq) {
-				html += `<tr><td>${repeat.id}</td><td>${repeat.phrase}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
+				const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
+				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeat.phrase)}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			} else {
-				const phrase = Chat.formatText(roomFaqs[room.roomid][repeat.id], true).replace(/\n/g, '<br />');
-				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
+				const phrase = Chat.formatText(roomFaqs[room.roomid][repeat.id], true);
+				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(roomFaqs[room.roomid][repeat.id])}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			}
 		}
@@ -132,42 +134,49 @@ export const pages: PageTable = {
 		if (user.can("editroom", null, room)) {
 			html += `<br /><button class="button" name="send" value="/removeallrepeats ${room.roomid}">${this.tr`Remove all repeats`}</button>`;
 		}
+		html += `<br /><small>(Do your repeats look weird? Try removing and re-adding them!)</small>`;
 		html += `</div>`;
 		return html;
 	},
 };
 
 export const commands: ChatCommands = {
-	repeat(target, room, user) {
+	repeathtml: 'repeat',
+	repeat(target, room, user, connection, cmd) {
+		const isHTML = cmd === 'repeathtml';
 		room = this.requireRoom();
-		this.checkCan('mute', null, room);
+		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
-		const message = messageArray.join(',').trim();
+		const phrase = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
-			return this.errorReply(this.tr`You must specify a interval as a number of minutes between 1 and 1440.`);
+			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes between 1 and 1440.`);
 		}
 
 		if (Repeats.hasRepeat(room, id)) {
-			return this.errorReply(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
+			throw new Chat.ErrorMessage(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
 		}
+
+		if (isHTML) this.checkHTML(phrase);
 
 		Repeats.addRepeat(room, {
 			id,
-			phrase: Chat.formatText(message).replace(/\n/g, `<br />`),
+			phrase,
 			interval: interval * 60 * 1000, // convert to milliseconds
+			isHTML,
 		});
 
-		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: "${message}"`);
+		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: "${phrase.replace(/\n/g, ' ')}"`);
 		this.privateModAction(
-			room.tr`${user.name} set the phrase "${message}" to be repeated every ${interval} minute(s).`
+			room.tr`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).`
 		);
 	},
 	repeathelp() {
 		this.runBroadcast();
 		this.sendReplyBox(
 			`<code>/repeat [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes.<br />` +
+			`<code>/repeathtml [minutes], [id], [phrase]</code>: repeats a given phrase containing HTML every [minutes] minutes. Requires: # &<br />` +
 			`<code>/repeatfaq [minutes], [FAQ name/alias]</code>: repeats a given Room FAQ every [minutes] minutes.<br />` +
 			`<code>/removerepeat [id]</code>: removes a repeated phrase.<br />` +
 			`<code>/viewrepeats [optional room]</code>: Displays all repeated phrases in a room.<br />` +
@@ -180,8 +189,8 @@ export const commands: ChatCommands = {
 		this.checkCan('mute', null, room);
 		let [intervalString, topic] = target.split(',');
 		const interval = parseInt(intervalString);
-		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a numerical interval of at least 1 minute.`);
+		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
+			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes between 1 and 1440.`);
 		}
 		if (!roomFaqs[room.roomid]) {
 			throw new Chat.ErrorMessage(`This room has no FAQs.`);

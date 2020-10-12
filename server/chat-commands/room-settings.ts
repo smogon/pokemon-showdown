@@ -869,7 +869,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (room.settings.isPersonal) {
+		if (room.roomid.startsWith('groupchat-')) {
 			this.checkCan('gamemanagement', null, room);
 		} else {
 			this.checkCan('makeroom');

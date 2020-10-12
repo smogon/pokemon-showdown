@@ -558,7 +558,7 @@ export class UNO extends Rooms.RoomGame {
 		for (const i in this.playerTable) {
 			this.playerTable[i].destroy();
 		}
-		delete this.room.game;
+		this.room.game = null;
 	}
 }
 
