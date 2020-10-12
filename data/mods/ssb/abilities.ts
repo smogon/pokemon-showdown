@@ -201,30 +201,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Primordial Sea + Swift Swim. Restore HP if raining. Collect raindrops.",
 		name: "Rainy Season",
 		onStart(source) {
-			this.field.setWeather('primordialsea');
-		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
-		onEnd(pokemon) {
-			if (this.field.weatherData.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility(HEAVY_RAIN_ABILITIES)) {
-					this.field.weatherData.source = target;
-					return;
-				}
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
-			this.field.clearWeather();
+			this.field.setWeather('raindance');
 		},
 		onWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
-			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
-				if (!target.hasItem('Big Root')) {
-					this.heal(target.baseMaxhp / 8);
-				} else {
-					this.heal(target.baseMaxhp / 6);
-				}
+			if (['raindance', 'primordialsea'].includes(effect.id)) {
+				this.heal(target.baseMaxhp / (target.hasItem('bigroot') ? 6 : 8));
 				if (!target.volatiles['raindrop']) target.addVolatile('raindrop');
 			}
 		},

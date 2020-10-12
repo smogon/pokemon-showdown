@@ -2555,7 +2555,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Kris
 	alphabetsoup: {
 		accuracy: true,
-		basePower: 81,
+		basePower: 100,
 		category: "Special",
 		desc: "The user changes into a random Pokemon with a first name letter that matches the forme Unown is currently in (A -> Alakazam, etc) that has base stats that would benefit from Unown's EV/IV/Nature spread and moves. Using it while in a forme that is not Unown will make it revert back to the Unown forme it transformed in (If an Unown transforms into Alakazam, it'll transform back to Unown-A when used again). Light of Ruin becomes Strange Steam, Psystrike becomes Psyshock, Secret Sword becomes Aura Sphere, Mind Blown becomes Flamethrower, and Seed Flare becomes Apple Acid while in a non-Unown forme.",
 		shortDesc: "Transform into Unown. Unown: Transform into mon.",
@@ -2576,6 +2576,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Dark Pulse', target);
 			this.add('-anim', source, 'Teleport', source);
+		},
+		onModifyType(move, pokemon) {
+			let type = pokemon.types[0];
+			if (type === "Bird") type = "???";
+			move.type = type;
 		},
 		onHit(target, source) {
 			if (!source) return;
@@ -3686,7 +3691,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			return move.basePower + 20 * pokemon.positiveBoosts();
+			const bp = move.basePower + 20 * pokemon.positiveBoosts();
+			if (bp >= 140) return 140;
+			return bp;
 		},
 		category: "Special",
 		desc: "Randomly raises two stats (other than evasion and accuracy) by 1 before attacking. + 20 power for each of the user's stat boosts. Sound based move.",
@@ -3714,11 +3721,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				let randomStat = this.sample(stats);
 				const boost: SparseBoostsTable = {};
 				boost[randomStat] = 1;
-				if (stats.length > 1) {
-					stats.splice(stats.indexOf(randomStat), 1);
-					randomStat = this.sample(stats);
-					boost[randomStat] = 1;
-				}
 				this.boost(boost, source, source, move);
 			}
 			this.add('-anim', source, 'Hyper Voice', source);
