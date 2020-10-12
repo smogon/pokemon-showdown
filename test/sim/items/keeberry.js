@@ -14,7 +14,7 @@ describe('Kee Berry', function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['doubleironbash']},
 		], [
-			{species: "Alakazam", item: 'keeberry', moves: ['sleeptalk']},
+			{species: "Alakazam", item: 'keeberry', ability: 'shellarmor', moves: ['sleeptalk']},
 		]]);
 
 		const alakazam = battle.p2.active[0];
