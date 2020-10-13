@@ -109,7 +109,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pichu: {
 		inherit: true,
 		types: ["Electric", "Water"],
-		baseStats: {hp: 20, atk: 80, def: 55, spa: 75, spd: 75, spe: 100},
+		baseStats: {hp: 70, atk: 80, def: 55, spa: 75, spd: 75, spe: 100},
 	},
 	// Kaiju Bunny
 	lopunnymega: {
