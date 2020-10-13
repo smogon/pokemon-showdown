@@ -235,6 +235,7 @@ export const commands: ChatCommands = {
 			phrase: roomFaqs[room.roomid][topic],
 			interval: interval * (isByMessages ? 1 : 60 * 1000),
 			faq: true,
+			isByMessages,
 		});
 
 		this.modlog('REPEATPHRASE', null, `every ${interval} ${isByMessages ? 'chat message' : 'minute'}${Chat.plural(interval)}: the Room FAQ for "${topic}"`);
