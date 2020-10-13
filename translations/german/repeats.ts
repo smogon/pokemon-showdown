@@ -10,6 +10,7 @@ export const translations: Translations = {
 		"Interval": "Zeitspanne",
 		"every ${minutes} minute(s)": "jede ${minutes} Minute(n)",
 		"Raw text": "Rohtext",
+		"every ${messages} chat message(s)": "",
 		"Remove": "Entfernen",
 		"Remove all repeats": "Entferne alle Wiederholungen",
 		"You must specify an interval as a number of minutes or chat messages between 1 and 1440.": "Du musst eine Zeitspanne (oder Chat-Nachrichten) als eine Zahl zwischen 1 und 1440 angeben.",

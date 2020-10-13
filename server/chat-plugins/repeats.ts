@@ -32,6 +32,14 @@ export const Repeats = new class {
 		}
 	}
 
+	removeRepeatHandler(room: BasicRoom, handler?: NodeJS.Timeout | MessageHandler) {
+		if (typeof handler === 'function') {
+			room.nthMessageHandlers.delete(handler);
+		} else if (typeof handler === 'object') {
+			clearInterval(handler);
+		}
+	}
+
 	hasRepeat(room: BasicRoom, id: ID) {
 		return !!this.repeats.get(room)?.get(id);
 	}
@@ -53,11 +61,7 @@ export const Repeats = new class {
 		const roomRepeats = this.repeats.get(room);
 		if (!roomRepeats) return;
 		const oldInterval = roomRepeats.get(id)?.get(phrase!);
-		if (typeof oldInterval === 'function') {
-			room.nthMessageHandlers.delete(oldInterval);
-		} else if (typeof oldInterval === 'object') {
-			clearInterval(oldInterval);
-		}
+		this.removeRepeatHandler(room, oldInterval);
 		roomRepeats.delete(id);
 	}
 
@@ -66,11 +70,7 @@ export const Repeats = new class {
 		if (!roomRepeats) return;
 		for (const ids of roomRepeats.values()) {
 			for (const interval of ids.values()) {
-				if (typeof interval === 'function') {
-					room.nthMessageHandlers.delete(interval);
-				} else if (typeof interval === 'object') {
-					clearInterval(interval);
-				}
+				this.removeRepeatHandler(room, interval);
 			}
 		}
 		this.repeats.delete(room);
@@ -111,11 +111,7 @@ export const Repeats = new class {
 		for (const [room, roomRepeats] of this.repeats) {
 			for (const ids of roomRepeats.values()) {
 				for (const interval of ids.values()) {
-					if (typeof interval === 'function') {
-						room.nthMessageHandlers.delete(interval);
-					} else if (typeof interval === 'object') {
-						clearInterval(interval);
-					}
+					this.removeRepeatHandler(room, interval);
 				}
 			}
 		}
@@ -142,11 +138,11 @@ export const pages: PageTable = {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
 			if (!repeat.faq) {
 				const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
-				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeat.phrase)}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
+				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeat.phrase)}</td><td>${repeat.isHTML ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			} else {
 				const phrase = Chat.formatText(roomFaqs[room.roomid][repeat.id], true);
-				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(roomFaqs[room.roomid][repeat.id])}</td><td>${this.tr`every ${minutes} minute(s)`}</td>`;
+				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(roomFaqs[room.roomid][repeat.id])}</td><td>${repeat.isHTML ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			}
 		}
@@ -202,23 +198,25 @@ export const commands: ChatCommands = {
 		this.runBroadcast();
 		this.sendReplyBox(
 			`<code>/repeat [minutes], [id], [phrase]</code>: repeats a given phrase every [minutes] minutes. Requires: % @ # &<br />` +
-			`<code>/repeatbymessages [messages], [id], [phrase]</code>: repeats a given phrase every [messages] messages sent in chat. Requires: % @ # &<br />` +
 			`<code>/repeathtml [minutes], [id], [phrase]</code>: repeats a given phrase containing HTML every [minutes] minutes. Requires: # &<br />` +
-			`<code>/repeathtmlbymessages [messages], [id], [phrase]</code>: repeats a given phrase containing HTML every [messages] messages sent in chat. Requires: # &<br />` +
 			`<code>/repeatfaq [minutes], [FAQ name/alias]</code>: repeats a given Room FAQ every [minutes] minutes. Requires: % @ # &<br />` +
 			`<code>/removerepeat [id]</code>: removes a repeated phrase. Requires: % @ # &<br />` +
 			`<code>/viewrepeats [optional room]</code>: Displays all repeated phrases in a room. Requires: % @ # &<br />` +
+			`You can append <code>bymessages</code> to a <code>/repeat</code> command to repeat a phrase based on how many messages have been sent in chat. For example, <code>/repeatfaqbymessages ...</code><br />` +
 			`Phrases for <code>/repeat</code> can include normal chat formatting, but not commands.`
 		);
 	},
 
-	repeatfaq(target, room, user) {
+	repeatfaqbymessages: 'repeatfaq',
+	repeatfaq(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
+		const isByMessages = cmd.includes('bymessages');
+
 		let [intervalString, topic] = target.split(',');
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
-			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes between 1 and 1440.`);
+			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes or chat messages between 1 and 1440.`);
 		}
 		if (!roomFaqs[room.roomid]) {
 			throw new Chat.ErrorMessage(`This room has no FAQs.`);
@@ -235,13 +233,15 @@ export const commands: ChatCommands = {
 		Repeats.addRepeat(room, {
 			id: topic as ID,
 			phrase: roomFaqs[room.roomid][topic],
-			interval: interval * 60 * 1000,
+			interval: interval * (isByMessages ? 1 : 60 * 1000),
 			faq: true,
 		});
 
-		this.modlog('REPEATPHRASE', null, `every ${interval} minute${Chat.plural(interval)}: the Room FAQ for "${topic}"`);
+		this.modlog('REPEATPHRASE', null, `every ${interval} ${isByMessages ? 'chat message' : 'minute'}${Chat.plural(interval)}: the Room FAQ for "${topic}"`);
 		this.privateModAction(
-			room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).`
+			isByMessages ?
+				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).` :
+				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).`
 		);
 	},
 
