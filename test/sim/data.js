@@ -93,7 +93,7 @@ describe('Dex data', function () {
 
 			if (entry.evoItem) {
 				const item = Dex.getItem(entry.evoItem);
-				assert.equal(entry.evoItem, item.exists && item.name, `Mispelled/nonexistent evo item "${entry.evoItem}" of ${entry.name}`);
+				assert.equal(entry.evoItem, item.exists && item.name, `Misspelled/nonexistent evo item "${entry.evoItem}" of ${entry.name}`);
 			}
 
 			const battleOnly = ['Mega', 'Mega-X', 'Mega-Y', 'Primal'].includes(entry.forme) ? entry.baseSpecies : entry.battleOnly;
