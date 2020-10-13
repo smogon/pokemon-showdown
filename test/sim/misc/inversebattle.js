@@ -30,7 +30,7 @@ describe('Inverse Battle', function () {
 		battle.makeChoices('move vitalthrow', 'move rest');
 		battle.makeChoices('move vitalthrow', 'move rest');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should affect Stealth Rock damage', function () {

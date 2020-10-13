@@ -75,7 +75,7 @@ describe('Misty Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]});
 		battle.makeChoices('move mistyterrain', 'move doubleedge');
 		battle.makeChoices('move rest', 'move rest');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 

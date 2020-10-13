@@ -34,7 +34,7 @@ describe("Repeats plugin", () => {
 		assert.ok(this.room.settings.repeats.some(repeat => repeat.phrase === "^_-"));
 
 		Repeats.removeRepeat(this.room, 'weirdface');
-		assert.strictEqual(Repeats.repeats.get(this.room).get('weirdface'), undefined);
+		assert.equal(Repeats.repeats.get(this.room).get('weirdface'), undefined);
 		assert.ok(!this.room.settings.repeats.some(repeat => repeat.phrase === "^_-"));
 	});
 

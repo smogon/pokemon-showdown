@@ -84,9 +84,9 @@ describe('Primordial Sea', function () {
 		battle.makeChoices('move sonicboom', 'switch 2');
 		assert.equal(myActive[0].getStat('spe'), 2 * myActive[0].storedStats['spe'], "Kingdra's Speed should be doubled by Swift Swim");
 		battle.makeChoices('move sonicboom', 'switch 3');
-		assert.notStrictEqual(myActive[0].maxhp - myActive[0].hp, 20);
+		assert.notEqual(myActive[0].maxhp - myActive[0].hp, 20);
 		battle.makeChoices('move sonicboom', 'switch 4');
-		assert.notStrictEqual(myActive[0].maxhp - myActive[0].hp, 20);
+		assert.notEqual(myActive[0].maxhp - myActive[0].hp, 20);
 		battle.makeChoices('move sonicboom', 'switch 5');
 		battle.makeChoices('move sonicboom', 'move rest');
 		assert.equal(myActive[0].status, '');

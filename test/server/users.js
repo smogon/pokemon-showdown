@@ -81,9 +81,9 @@ describe('Users features', function () {
 			it('should store IP addresses after disconnect', () => {
 				const conn = new Connection('127.0.0.1');
 				const user = new User(conn);
-				assert.deepStrictEqual(['127.0.0.1'], user.ips);
+				assert.deepEqual(['127.0.0.1'], user.ips);
 				user.onDisconnect(conn);
-				assert.deepStrictEqual(['127.0.0.1'], user.ips);
+				assert.deepEqual(['127.0.0.1'], user.ips);
 			});
 
 			describe('#disconnectAll', function () {

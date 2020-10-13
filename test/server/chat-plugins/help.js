@@ -24,7 +24,7 @@ describe('Help', function () {
 
 	it('should produce valid regexes', function () {
 		const regexString = Help.stringRegex(`uwu & awa`);
-		assert.strictEqual(regexString, "(?=.*?(uwu))(?=.*?(awa))");
+		assert.equal(regexString, "(?=.*?(uwu))(?=.*?(awa))");
 		const regex = new RegExp(regexString);
 		assert.ok(regex.test('uwu awa'));
 	});

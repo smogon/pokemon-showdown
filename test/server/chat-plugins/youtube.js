@@ -22,8 +22,8 @@ describe(`Youtube features`, function () {
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		const channelId = 'UCuAXFkgsw1L7xaCfnd5JJOw';
 		await Youtube.getChannelData(url, 'Pickle Rick');
-		assert.strictEqual(channelId, Youtube.channelSearch('Pickle Rick'));
-		assert.strictEqual(channelId, Youtube.channelSearch('Official Rick Astley'));
+		assert.equal(channelId, Youtube.channelSearch('Pickle Rick'));
+		assert.equal(channelId, Youtube.channelSearch('Official Rick Astley'));
 	});
 
 	it.skip(`should correctly parse channel links`, function () {
@@ -32,8 +32,8 @@ describe(`Youtube features`, function () {
 		const channelUrl = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		const Youtube = new YoutubeInterface({});
 		const videoId = Youtube.getId(videoUrl);
-		assert.strictEqual(videoId, 'dQw4w9WgXcQ');
+		assert.equal(videoId, 'dQw4w9WgXcQ');
 		const channelId = Youtube.getId(channelUrl);
-		assert.strictEqual(channelId, 'UCuAXFkgsw1L7xaCfnd5JJOw');
+		assert.equal(channelId, 'UCuAXFkgsw1L7xaCfnd5JJOw');
 	});
 });

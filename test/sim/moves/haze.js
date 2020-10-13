@@ -35,7 +35,7 @@ describe('Haze - RBY', function () {
 		assert.equal(battle.p2.active[0].status, 'par');
 
 		battle.makeChoices('move haze', 'move splash');
-		assert.notStrictEqual(battle.p2.active[0].status, 'par');
+		assert.notEqual(battle.p2.active[0].status, 'par');
 	});
 
 	it('should not remove user\'s status', function () {

@@ -167,7 +167,7 @@ assert.constant = function (getter, fn, message) {
 };
 
 assert.sets = function (getter, value, fn, message) {
-	assert.notStrictEqual(getter(), value, `Function was prematurely equal to ${value}.`);
+	assert.notEqual(getter(), value, `Function was prematurely equal to ${value}.`);
 	fn();
 	const finalValue = getter();
 	if (finalValue === value) return;
@@ -178,6 +178,19 @@ assert.sets = function (getter, value, fn, message) {
 		message: message,
 		stackStartFunction: assert.sets,
 	});
+};
+
+assert.strictEqual = () => {
+	throw new Error(`This API is deprecated; please use assert.equal`);
+};
+assert.deepStrictEqual = () => {
+	throw new Error(`This API is deprecated; please use assert.deepEqual`);
+};
+assert.notStrictEqual = () => {
+	throw new Error(`This API is deprecated; please use assert.notEqual`);
+};
+assert.notDeepStrictEqual = () => {
+	throw new Error(`This API is deprecated; please use assert.notDeepEqual`);
 };
 
 const assertMethods = Object.getOwnPropertyNames(assert).filter(methodName => (

@@ -130,7 +130,7 @@ describe.skip('Modlog (with FS writes)', () => {
 		await modlog.destroy('newroom'); // ensure all writes have synced to disk
 
 		lastLine = (await getLines('newroom')).lastLine;
-		assert.strictEqual(
+		assert.equal(
 			normalizeModlogEntry(lastLine),
 			normalizeModlogEntry('[2020-07-29T23:29:49.797Z] (newroom) ROOMBAN: [kjnhvgcfg] [127.0.0.1] by annika')
 		);
@@ -142,7 +142,7 @@ describe.skip('Modlog (with FS writes)', () => {
 		await modlog.destroy('battle-gen8randombattle-1337'); // ensure all writes have synced to disk
 
 		const lastLine = (await getLines('battle-gen8randombattle-1337')).lastLine;
-		assert.strictEqual(
+		assert.equal(
 			normalizeModlogEntry(lastLine),
 			normalizeModlogEntry('[2020-07-29T23:29:49.797Z] (actually this: cool name) MODCHAT: by annika: to +')
 		);
@@ -167,15 +167,15 @@ describe.skip('Modlog (with FS writes)', () => {
 		const exactUpper = await modlog.runSearch(['readingtest'], 'sOmEtRoLl', true, 10000, false);
 		const exactLower = await modlog.runSearch(['readingtest'], 'sOmEtRoLl', true, 10000, false);
 
-		assert.deepStrictEqual(notExactUpper, notExactLower);
-		assert.deepStrictEqual(exactUpper, exactLower);
+		assert.deepEqual(notExactUpper, notExactLower);
+		assert.deepEqual(exactUpper, exactLower);
 	});
 
 	it('should respect isExact', async () => {
 		const notExact = await modlog.runSearch(['readingtest'], 'troll', false, 10000, false);
 		const exact = await modlog.runSearch(['readingtest'], 'troll', true, 10000, false);
 
-		assert.strictEqual(notExact.length, 0);
+		assert.equal(notExact.length, 0);
 		assert.ok(exact.length);
 	});
 
@@ -187,7 +187,7 @@ describe.skip('Modlog (with FS writes)', () => {
 
 		const search = await modlog.runSearch(['lifotest'], '', false, 10000, false);
 
-		assert.strictEqual(search.length, 2);
+		assert.equal(search.length, 2);
 
 		assert.ok(search[0].includes('secondwrite'));
 		assert.ok(!search[0].includes('firstwrite'));
@@ -218,7 +218,7 @@ describe.skip('Modlog (with FS writes)', () => {
 		const onlyPunishments = await modlog.runSearch(['readingtest2'], '', false, 10000, true);
 
 		assert.ok(all.length > onlyPunishments.length);
-		assert.strictEqual(
+		assert.equal(
 			onlyPunishments.filter(result => result.includes('ROOMBAN')).length,
 			onlyPunishments.length
 		);

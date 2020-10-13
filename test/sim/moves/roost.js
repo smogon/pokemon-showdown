@@ -40,13 +40,13 @@ describe('Roost', function () {
 		battle.makeChoices('move mudslap', 'move doubleedge');
 
 		battle.makeChoices('move mudslap', 'move roost');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by Mud Slap
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by Mud Slap
 
 		// Ensure that Aerodactyl has some damage
 		battle.makeChoices('move mudslap', 'move doubleedge');
 
 		battle.makeChoices('move hiddenpowergrasss', 'move roost');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by HP Grass
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by HP Grass
 	});
 
 	it('should suppress Flying type yet to be acquired this turn', function () {
@@ -93,9 +93,9 @@ describe('Roost - DPP', function () {
 
 		battle.makeChoices('move roost', 'move astonish');
 		battle.makeChoices('move roost', 'move astonish');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Affected by Astonish
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Affected by Astonish
 
 		battle.makeChoices('move roost', 'move earthpower');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Affected by Earth Power
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Affected by Earth Power
 	});
 });
