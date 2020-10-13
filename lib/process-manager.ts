@@ -474,6 +474,9 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 	}
 	async query(input: T) {
 		const process = this.acquire() as QueryProcessWrapper;
+
+		if (!process) return this._query(input);
+
 		const timeout = setTimeout(() => {
 			const debugInfo = process.debug || "No debug information found.";
 			process.destroy();
@@ -482,7 +485,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 			);
 		}, this.timeout);
 
-		const result = process ? await process.query(input) : this._query(input);
+		const result = await process.query(input);
 
 		clearTimeout(timeout);
 		return result;
