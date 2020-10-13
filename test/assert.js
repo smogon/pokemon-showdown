@@ -10,7 +10,8 @@
 
 'use strict';
 
-const assert = require('assert').strict;
+const legacyAssert = require('assert');
+const assert = legacyAssert.strict;
 const AssertionError = assert.AssertionError;
 
 assert.bounded = function (value, range, message) {
@@ -192,6 +193,13 @@ assert.notStrictEqual = () => {
 assert.notDeepStrictEqual = () => {
 	throw new Error(`This API is deprecated; please use assert.notDeepEqual`);
 };
+for (const fn in legacyAssert) {
+	if (fn !== 'strict' && typeof legacyAssert[fn] === 'function') {
+		legacyAssert[fn] = () => {
+			throw new Error(`This API is deprecated; please use assert.strict`);
+		};
+	}
+}
 
 const assertMethods = Object.getOwnPropertyNames(assert).filter(methodName => (
 	methodName !== 'constructor' && methodName !== 'AssertionError' && typeof assert[methodName] === 'function'
