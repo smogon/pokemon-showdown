@@ -1212,17 +1212,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				target.formeChange('cramorant', move);
 			}
 		},
-		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.js
-		onAnyDamage(damage, target, source, effect) {
-			if (
-				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
-				source.species.name === 'Cramorant' && !source.transformed
-			) {
-				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
-				source.formeChange(forme, effect);
-			}
-		},
-		onAnyAfterSubDamage(damage, target, source, effect) {
+		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.ts
+		onSourceTryPrimaryHit(target, source, effect) {
 			if (
 				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
 				source.species.name === 'Cramorant' && !source.transformed
