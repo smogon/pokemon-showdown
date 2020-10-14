@@ -16,7 +16,7 @@ describe('Cloud Nine', function () {
 		battle.setPlayer('p2', {team: [{species: 'Cherrim', ability: 'flowergift', item: 'laggingtail', moves: ['solarbeam']}]});
 		const [weatherSuppressor, weatherUser] = [battle.p1.active[0], battle.p2.active[0]];
 		assert.false.hurts(weatherSuppressor, () => battle.makeChoices('move sunnyday', 'move solarbeam')); // Solar Beam must charge
-		assert.ok(battle.field.isWeather(''));
+		assert(battle.field.isWeather(''));
 		assert.species(weatherUser, 'Cherrim');
 	});
 

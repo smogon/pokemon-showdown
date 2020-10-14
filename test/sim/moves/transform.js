@@ -28,8 +28,8 @@ describe('Transform', function () {
 		for (const stat in p1poke.stats) {
 			assert.equal(p1poke.stats[stat], p2poke.stats[stat]);
 		}
-		assert.notStrictEqual(p1poke.hp, p2poke.hp);
-		assert.notStrictEqual(p1poke.maxhp, p2poke.maxhp);
+		assert.notEqual(p1poke.hp, p2poke.hp);
+		assert.notEqual(p1poke.maxhp, p2poke.maxhp);
 	});
 
 	it('should copy all stat changes', function () {
@@ -51,7 +51,7 @@ describe('Transform', function () {
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]});
 		battle.makeChoices('move transform', 'move focusenergy');
-		assert.ok(battle.p1.active[0].volatiles['focusenergy']);
+		assert(battle.p1.active[0].volatiles['focusenergy']);
 	});
 
 	it('should copy the target\'s moves with 5 PP each', function () {
@@ -84,7 +84,7 @@ describe('Transform', function () {
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint']}]});
 		battle.makeChoices('move transform', 'move feint');
-		assert.notStrictEqual(battle.p1.active[0].getStat('spe'), battle.p2.active[0].getStat('spe'));
+		assert.notEqual(battle.p1.active[0].getStat('spe'), battle.p2.active[0].getStat('spe'));
 	});
 
 	it('should fail against Pokemon with a Substitute', function () {
@@ -92,7 +92,7 @@ describe('Transform', function () {
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}]});
 		battle.makeChoices('move transform', 'move substitute');
-		assert.notStrictEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
 	it('should fail against Pokemon with Illusion active', function () {
@@ -103,7 +103,7 @@ describe('Transform', function () {
 			{species: "Mewtwo", ability: 'pressure', moves: ['rest']},
 		]});
 		battle.makeChoices('move transform', 'move rest');
-		assert.notStrictEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
 	it('should fail against tranformed Pokemon', function () {
@@ -117,7 +117,7 @@ describe('Transform', function () {
 		assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
 		battle.makeChoices('move splash', 'switch 2');
 		battle.makeChoices('move splash', 'move transform');
-		assert.notStrictEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
 	it(`should copy the target's real type, even if the target is an Arceus`, function () {
@@ -207,6 +207,6 @@ describe('Transform [Gen 1]', function () {
 		battle.setPlayer('p2', {team: [{species: "Gengar", moves: ['lick']}]});
 		battle.makeChoices('move transform', 'move lick');
 
-		assert.ok(battle.log.every(line => !line.startsWith('|-endability|')));
+		assert(battle.log.every(line => !line.startsWith('|-endability|')));
 	});
 });

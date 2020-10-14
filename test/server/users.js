@@ -15,12 +15,12 @@ describe('Users features', function () {
 		});
 		describe('connections', function () {
 			it('should be a Map', function () {
-				assert.ok(Users.connections instanceof Map);
+				assert(Users.connections instanceof Map);
 			});
 		});
 		describe('users', function () {
 			it('should be a Map', function () {
-				assert.ok(Users.users instanceof Map);
+				assert(Users.users instanceof Map);
 			});
 		});
 		describe('Connection', function () {
@@ -59,7 +59,7 @@ describe('Users features', function () {
 				it('should join a room if not already present', function () {
 					room = Rooms.createChatRoom('test');
 					this.connection.joinRoom(Rooms.get('test'));
-					assert.ok(this.connection.inRooms.has('test'));
+					assert(this.connection.inRooms.has('test'));
 				});
 			});
 
@@ -73,7 +73,7 @@ describe('Users features', function () {
 					room = Rooms.createChatRoom('test');
 					this.connection.joinRoom(room);
 					this.connection.leaveRoom(room);
-					assert.ok(!this.connection.inRooms.has('test'));
+					assert(!this.connection.inRooms.has('test'));
 				});
 			});
 		});
@@ -81,9 +81,9 @@ describe('Users features', function () {
 			it('should store IP addresses after disconnect', () => {
 				const conn = new Connection('127.0.0.1');
 				const user = new User(conn);
-				assert.deepStrictEqual(['127.0.0.1'], user.ips);
+				assert.deepEqual(['127.0.0.1'], user.ips);
 				user.onDisconnect(conn);
-				assert.deepStrictEqual(['127.0.0.1'], user.ips);
+				assert.deepEqual(['127.0.0.1'], user.ips);
 			});
 
 			describe('#disconnectAll', function () {
@@ -107,7 +107,7 @@ describe('Users features', function () {
 
 						user.disconnectAll();
 						for (let i = 0; i < totalConnections; i++) {
-							assert.ok(!Users.connections.has(connections[i].id));
+							assert(!Users.connections.has(connections[i].id));
 						}
 					});
 
