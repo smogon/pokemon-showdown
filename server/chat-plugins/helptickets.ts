@@ -1161,9 +1161,9 @@ export const commands: ChatCommands = {
 				);
 
 				if (!commonBattles.length) {
-					reportTargetInfo += `There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
+					reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
 				} else {
-					reportTargetInfo += `Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
+					reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
 					reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
 				}
 			}
