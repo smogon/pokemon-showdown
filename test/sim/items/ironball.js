@@ -27,11 +27,11 @@ describe('Iron Ball', function () {
 		]});
 		battle.makeChoices('move earthquake', 'move stealthrock');
 		// Earthquake neutral on Aerodactyl
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'switch 2');
 		// Earthquake neutral on Tropius
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -47,11 +47,11 @@ describe('Iron Ball', function () {
 
 		battle.makeChoices('move earthquake', 'move stealthrock');
 		// Earthquake supereffective on Aerodactyl
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'switch 2');
 		// Earthquake not very effective on Tropius
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -63,10 +63,10 @@ describe('Iron Ball', function () {
 			{species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest']},
 		]});
 		battle.makeChoices('move earthquake', 'move rest');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'switch 2');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 

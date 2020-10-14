@@ -182,16 +182,19 @@ assert.sets = function (getter, value, fn, message) {
 };
 
 assert.strictEqual = () => {
-	throw new Error(`This API is deprecated; please use assert.equal`);
+	throw new Error(`This API is deprecated; please use assert.equal()`);
 };
 assert.deepStrictEqual = () => {
-	throw new Error(`This API is deprecated; please use assert.deepEqual`);
+	throw new Error(`This API is deprecated; please use assert.deepEqual()`);
 };
 assert.notStrictEqual = () => {
-	throw new Error(`This API is deprecated; please use assert.notEqual`);
+	throw new Error(`This API is deprecated; please use assert.notEqual()`);
 };
 assert.notDeepStrictEqual = () => {
-	throw new Error(`This API is deprecated; please use assert.notDeepEqual`);
+	throw new Error(`This API is deprecated; please use assert.notDeepEqual()`);
+};
+assert.ok = () => {
+	throw new Error(`This API is deprecated; please use assert()`);
 };
 for (const fn in legacyAssert) {
 	if (fn !== 'strict' && typeof legacyAssert[fn] === 'function') {

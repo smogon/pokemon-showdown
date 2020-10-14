@@ -29,7 +29,7 @@ describe('Future Sight', function () {
 		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['futuresight']}]});
 		battle.makeChoices('auto', 'move futuresight');
 		battle.makeChoices('auto', 'move futuresight');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
 	it('[Gen 2] should damage in two turns, ignoring Protect', function () {

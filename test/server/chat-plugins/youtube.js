@@ -13,7 +13,7 @@ describe(`Youtube features`, function () {
 		const Youtube = new YoutubeInterface({});
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		await Youtube.getChannelData(url, undefined);
-		assert.ok(Youtube.data['UCuAXFkgsw1L7xaCfnd5JJOw']);
+		assert(Youtube.data['UCuAXFkgsw1L7xaCfnd5JJOw']);
 	});
 
 	it.skip(`should correctly handle PS names and channel names`, async function () {

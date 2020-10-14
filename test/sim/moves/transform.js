@@ -51,7 +51,7 @@ describe('Transform', function () {
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]});
 		battle.makeChoices('move transform', 'move focusenergy');
-		assert.ok(battle.p1.active[0].volatiles['focusenergy']);
+		assert(battle.p1.active[0].volatiles['focusenergy']);
 	});
 
 	it('should copy the target\'s moves with 5 PP each', function () {
@@ -207,6 +207,6 @@ describe('Transform [Gen 1]', function () {
 		battle.setPlayer('p2', {team: [{species: "Gengar", moves: ['lick']}]});
 		battle.makeChoices('move transform', 'move lick');
 
-		assert.ok(battle.log.every(line => !line.startsWith('|-endability|')));
+		assert(battle.log.every(line => !line.startsWith('|-endability|')));
 	});
 });

@@ -45,7 +45,7 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'mudslap']}]});
 		battle.setPlayer('p2', {team: [{species: "Ho-Oh", ability: 'shellarmor', item: 'ironball', moves: ['recover', 'trick']}]});
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		const hp = battle.p2.active[0].hp;
 		assert.notEqual(hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move mudslap', 'move trick');
@@ -60,12 +60,12 @@ describe('Thousand Arrows', function () {
 		// During Gravity, Thousand Arrows can be super effective but once it ends has to be neutral for one hit
 		while (battle.field.getPseudoWeather('gravity')) {
 			battle.makeChoices('move thousandarrows', 'move recover');
-			assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+			assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		}
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it('should hit Pokemon with Levitate and remove their Ground immunity', function () {

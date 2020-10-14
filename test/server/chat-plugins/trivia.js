@@ -204,7 +204,7 @@ describe('Trivia', function () {
 			this.user.joinRoom(this.room);
 			assert.equal(this.player.isAbsent, false);
 			assert.equal(this.game.phase, 'question');
-			assert.ok(this.game.phaseTimeout);
+			assert(this.game.phaseTimeout);
 		});
 	});
 
@@ -268,7 +268,7 @@ describe('Trivia', function () {
 		it('should not give NaN points to correct responders', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
-			assert.ok(!isNaN(this.player.points));
+			assert(!isNaN(this.player.points));
 		});
 	});
 
@@ -334,7 +334,7 @@ describe('Trivia', function () {
 				const hrtimeToNanoseconds = hrtime => hrtime[0] * 1e9 + hrtime[1];
 				const playerNs = hrtimeToNanoseconds(this.player.answeredAt);
 				const player2Ns = hrtimeToNanoseconds(this.game.playerTable[this.user2.id].answeredAt);
-				assert.ok(playerNs <= player2Ns);
+				assert(playerNs <= player2Ns);
 
 				done();
 			});
@@ -343,7 +343,7 @@ describe('Trivia', function () {
 		it('should not give NaN points to correct responders', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
-			assert.ok(!isNaN(this.player.points));
+			assert(!isNaN(this.player.points));
 		});
 	});
 
@@ -402,7 +402,7 @@ describe('Trivia', function () {
 		it('should not give NaN points to correct responders', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
-			assert.ok(!isNaN(this.player.points));
+			assert(!isNaN(this.player.points));
 		});
 	});
 

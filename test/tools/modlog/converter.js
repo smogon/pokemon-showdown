@@ -662,7 +662,7 @@ describe('Modlog conversion script', () => {
 
 			assert.equal(visualIDEntry.note, 'Write 3');
 			assert.equal(visualIDEntry.visual_roomid, 'development tournament: lobby');
-			assert.ok(!globalEntries[0].visual_roomid);
+			assert(!globalEntries[0].visual_roomid);
 
 			assert.equal(globalEntries[0].timestamp, 1598212249945);
 			assert.equal(globalEntries[0].roomid.replace(/^global-/, ''), 'development');

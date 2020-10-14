@@ -14,7 +14,7 @@ describe('Primordial Sea', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Abra", ability: 'magicguard', moves: ['teleport']}]});
-		assert.ok(battle.field.isWeather('primordialsea'));
+		assert(battle.field.isWeather('primordialsea'));
 	});
 
 	it('should increase the damage (not the basePower) of Water-type attacks', function () {
@@ -57,9 +57,9 @@ describe('Primordial Sea', function () {
 		]});
 		for (let i = 2; i <= 5; i++) {
 			battle.makeChoices('move helpinghand', 'switch ' + i);
-			assert.ok(battle.field.isWeather('primordialsea'));
+			assert(battle.field.isWeather('primordialsea'));
 			battle.makeChoices('auto', 'auto');
-			assert.ok(battle.field.isWeather('primordialsea'));
+			assert(battle.field.isWeather('primordialsea'));
 		}
 	});
 

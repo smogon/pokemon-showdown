@@ -13,7 +13,7 @@ describe('Rooms features', function () {
 		});
 		describe('Rooms.rooms', function () {
 			it('should be a Map', function () {
-				assert.ok(Rooms.rooms instanceof Map);
+				assert(Rooms.rooms instanceof Map);
 			});
 		});
 	});
@@ -57,7 +57,7 @@ describe('Rooms features', function () {
 					p1team: packedTeam,
 					p2team: packedTeam,
 				}, option));
-				assert.ok(room.battle.p1 && room.battle.p2); // Automatically joined
+				assert(room.battle.p1 && room.battle.p2); // Automatically joined
 			}
 		});
 

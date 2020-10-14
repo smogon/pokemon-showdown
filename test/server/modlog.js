@@ -48,12 +48,12 @@ async function getLines(roomid) {
 
 describe('Modlog (without FS writes)', () => {
 	it('should correctly determine if a room has a shared modlog', () => {
-		assert.ok(modlog.getSharedID('battle-gen8randombattle-42'));
-		assert.ok(modlog.getSharedID('groupchat-annika-shitposting'));
-		assert.ok(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
+		assert(modlog.getSharedID('battle-gen8randombattle-42'));
+		assert(modlog.getSharedID('groupchat-annika-shitposting'));
+		assert(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
 
-		assert.ok(!modlog.getSharedID('1v1'));
-		assert.ok(!modlog.getSharedID('development'));
+		assert(!modlog.getSharedID('1v1'));
+		assert(!modlog.getSharedID('development'));
 	});
 
 	it('should throw an error when writing to a destroyed modlog stream', () => {
@@ -120,11 +120,11 @@ describe.skip('Modlog (with FS writes)', () => {
 		modlog.write('oldroom', message);
 		await modlog.rename('oldroom', 'newroom');
 
-		assert.ok(FS(`${TEST_PATH}/modlog_newroom.txt`).existsSync());
+		assert(FS(`${TEST_PATH}/modlog_newroom.txt`).existsSync());
 		assert.throws(() => modlog.write('oldroom', 'something'));
 
 		let lastLine = (await getLines('newroom')).lastLine;
-		assert.ok(messageRegex.test(lastLine));
+		assert(messageRegex.test(lastLine));
 
 		modlog.write('newroom', 'ROOMBAN: [kjnhvgcfg] [127.0.0.1] by annika');
 		await modlog.destroy('newroom'); // ensure all writes have synced to disk
@@ -176,7 +176,7 @@ describe.skip('Modlog (with FS writes)', () => {
 		const exact = await modlog.runSearch(['readingtest'], 'troll', true, 10000, false);
 
 		assert.equal(notExact.length, 0);
-		assert.ok(exact.length);
+		assert(exact.length);
 	});
 
 	it('should be LIFO (last-in, first-out)', async () => {
@@ -189,11 +189,11 @@ describe.skip('Modlog (with FS writes)', () => {
 
 		assert.equal(search.length, 2);
 
-		assert.ok(search[0].includes('secondwrite'));
-		assert.ok(!search[0].includes('firstwrite'));
+		assert(search[0].includes('secondwrite'));
+		assert(!search[0].includes('firstwrite'));
 
-		assert.ok(search[1].includes('firstwrite'));
-		assert.ok(!search[1].includes('secondwrite'));
+		assert(search[1].includes('firstwrite'));
+		assert(!search[1].includes('secondwrite'));
 	});
 
 	it('should support limiting the number of responses', async () => {
@@ -201,23 +201,23 @@ describe.skip('Modlog (with FS writes)', () => {
 		const limited = await modlog.runSearch(['readingtest'], '', false, 5, false);
 
 		assert.equal(limited.length, 5);
-		assert.ok(unlimited.length > limited.length);
+		assert(unlimited.length > limited.length);
 
-		assert.ok(limited[0].includes('LAST ENTRY'));
-		assert.ok(unlimited[0].includes('LAST ENTRY'));
+		assert(limited[0].includes('LAST ENTRY'));
+		assert(unlimited[0].includes('LAST ENTRY'));
 
 		const limitedLast = limited.pop();
 		const unlimitedLast = unlimited.pop();
 
-		assert.ok(!limitedLast.includes('FIRST ENTRY'));
-		assert.ok(unlimitedLast.includes('FIRST ENTRY'));
+		assert(!limitedLast.includes('FIRST ENTRY'));
+		assert(unlimitedLast.includes('FIRST ENTRY'));
 	});
 
 	it('should support filtering out non-punishment-related logs', async () => {
 		const all = await modlog.runSearch(['readingtest2'], '', false, 10000, false);
 		const onlyPunishments = await modlog.runSearch(['readingtest2'], '', false, 10000, true);
 
-		assert.ok(all.length > onlyPunishments.length);
+		assert(all.length > onlyPunishments.length);
 		assert.equal(
 			onlyPunishments.filter(result => result.includes('ROOMBAN')).length,
 			onlyPunishments.length

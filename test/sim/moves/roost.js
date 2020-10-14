@@ -16,7 +16,7 @@ describe('Roost', function () {
 		battle.setPlayer('p1', {team: [{species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind']}]});
 		battle.setPlayer('p2', {team: [{species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost']}]});
 		battle.makeChoices('move calmmind', 'move roost');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
 	it('should heal the user', function () {
