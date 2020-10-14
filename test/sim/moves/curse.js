@@ -64,11 +64,11 @@ describe('Curse', function () {
 
 		battle.makeChoices('auto', 'auto');
 		const hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
-		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
+		assert.notEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
 		assert.equal(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
 
 		battle.makeChoices('move spite', 'auto');
-		assert.notStrictEqual(hps[0], battle.p1.active[0].hp); // Curse user is hurt by residual damage
+		assert.notEqual(hps[0], battle.p1.active[0].hp); // Curse user is hurt by residual damage
 		assert.equal(hps[1], battle.p2.active[0].hp); // Foe unaffected
 	});
 
@@ -79,13 +79,13 @@ describe('Curse', function () {
 
 		battle.makeChoices('auto', 'auto');
 		const hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
-		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down
-		assert.notStrictEqual(hps[1], battle.p2.active[0].maxhp); // Curse residual damage
+		assert.notEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down
+		assert.notEqual(hps[1], battle.p2.active[0].maxhp); // Curse residual damage
 
 		battle.makeChoices('move spite', 'auto');
 		// Check residual damage
 		assert.equal(hps[0], battle.p1.active[0].hp); // Curse user unaffected
-		assert.notStrictEqual(hps[1], battle.p2.active[0].hp); // Curse residual damage
+		assert.notEqual(hps[1], battle.p2.active[0].hp); // Curse residual damage
 	});
 });
 
@@ -118,21 +118,21 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}`
 		);
 
-		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
-		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
+		assert(curseUser.hasType('Ghost')); // Curse user must be Ghost
+		assert(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
 		const foeHP = [p2active[0].hp, p2active[1].hp];
 		battle.makeChoices(`move 2, move 2`, `move 2, move 2`);
 
-		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
+		assert.notEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
 		if (curseUser.position === 0) {
 			// Expected behavior
 			assert.equal(cursePartner.hp, cursePartner.maxhp); // Partner unaffected by Curse
-			assert.ok(foeHP[0] !== p2active[0].maxhp || foeHP[1] !== p2active[1].maxhp); // Foe afflicted by Curse
+			assert(foeHP[0] !== p2active[0].maxhp || foeHP[1] !== p2active[1].maxhp); // Foe afflicted by Curse
 		} else {
 			// Cartridge glitch
-			assert.notStrictEqual(cursePartner.hp, cursePartner.maxhp); // Partner afflicted by Curse
-			assert.ok(foeHP[0] === p2active[0].maxhp && foeHP[1] === p2active[1].maxhp); // Foes unaffected by Curse
+			assert.notEqual(cursePartner.hp, cursePartner.maxhp); // Partner afflicted by Curse
+			assert(foeHP[0] === p2active[0].maxhp && foeHP[1] === p2active[1].maxhp); // Foes unaffected by Curse
 		}
 	}
 
@@ -147,14 +147,14 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}, move harden`
 		);
 
-		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
-		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
+		assert(curseUser.hasType('Ghost')); // Curse user must be Ghost
+		assert(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
 		let cursedFoe = false;
 		for (let i = 0; i < 3; i++) {
 			const allyPokemon = p1active[i];
 			if (allyPokemon === curseUser) {
-				assert.notStrictEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
+				assert.notEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
 			} else {
 				assert.equal(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
 			}
@@ -164,7 +164,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 				cursedFoe = true;
 			}
 		}
-		assert.ok(cursedFoe);
+		assert(cursedFoe);
 	}
 
 	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', function () {

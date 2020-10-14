@@ -45,7 +45,7 @@ describe('Substitute', function () {
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move doubleedge', 'move nastyplot');
 		const pokemon = battle.p1.active[0];
-		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.notEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
 	it('should take specific recoil damage in Gen 1', function () {
@@ -117,7 +117,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop']}]});
 		battle.makeChoices('move substitute', 'move roost');
 		battle.makeChoices('move roost', 'move dualchop');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should track what the actual damage would have been without the substitute in Gen 1', function () {

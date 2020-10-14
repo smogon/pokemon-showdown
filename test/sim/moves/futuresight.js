@@ -20,7 +20,7 @@ describe('Future Sight', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'move Protect');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it(`should fail when already active for the target's position`, function () {
@@ -29,7 +29,7 @@ describe('Future Sight', function () {
 		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['futuresight']}]});
 		battle.makeChoices('auto', 'move futuresight');
 		battle.makeChoices('auto', 'move futuresight');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
 	it('[Gen 2] should damage in two turns, ignoring Protect', function () {
@@ -42,7 +42,7 @@ describe('Future Sight', function () {
 		battle.makeChoices('auto', 'auto');
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'move Protect');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 });

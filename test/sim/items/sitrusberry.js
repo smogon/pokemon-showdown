@@ -49,6 +49,6 @@ describe('Sitrus Berry', function () {
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move confuseray');
 		assert.holdsItem(holder);
-		assert.false.strictEqual(holder.hp, holder.maxhp);
+		assert.false.equal(holder.hp, holder.maxhp);
 	});
 });

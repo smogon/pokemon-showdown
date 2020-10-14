@@ -18,7 +18,7 @@ describe('Miracle Eye', function () {
 		]]);
 		battle.makeChoices('move miracle eye', 'move nasty plot');
 		battle.makeChoices('move psychic', 'move nasty plot');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should ignore the effect of positive evasion stat stages', function () {
@@ -31,7 +31,7 @@ describe('Miracle Eye', function () {
 		battle.boost({evasion: 6}, battle.p2.active[0]);
 		for (let i = 0; i < 3; i++) {
 			battle.makeChoices('move avalanche', 'move synthesis');
-			assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+			assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		}
 	});
 
@@ -45,7 +45,7 @@ describe('Miracle Eye', function () {
 		battle.boost({spe: 6, evasion: -6}, battle.p2.active[0]);
 		for (let i = 0; i < 3; i++) {
 			battle.makeChoices('move zap cannon', 'move roost');
-			assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+			assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		}
 	});
 });

@@ -22,7 +22,7 @@ describe('Neutralizing Gas', function () {
 		battle.setPlayer('p1', {team: [{species: "Weezing", ability: 'neutralizinggas', item: 'expertbelt', moves: ['sludgebomb']}]});
 		battle.setPlayer('p2', {team: [{species: "Mr. Mime", ability: 'filter', item: 'laggingtail', moves: ['substitute']}]});
 		battle.makeChoices('move sludgebomb', 'move substitute');
-		assert.ok(!battle.p1.active[0].volatiles['substitute']);
+		assert(!battle.p1.active[0].volatiles['substitute']);
 	});
 
 	it('should negate self-healing abilities', function () {

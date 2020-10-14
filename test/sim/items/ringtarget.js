@@ -20,15 +20,15 @@ describe('Ring Target', function () {
 			{species: "Absol", ability: 'superluck', item: 'ringtarget', moves: ['rest']},
 		]});
 		battle.makeChoices('move earthquake', 'move rest');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
 		battle.makeChoices('move vitalthrow', 'switch 2'); // Drifblim
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
 		battle.makeChoices('move shadowball', 'switch 3'); // Girafarig
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
 		battle.makeChoices('move psychic', 'switch 4'); // Absol

@@ -38,7 +38,7 @@ describe('G-Max Volcalith', function () {
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp - (Math.floor(battle.p2.active[0].maxhp / 6) * 4));
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp - (Math.floor(battle.p2.active[0].maxhp / 6) * 4));
 	});
 
 	it.skip('should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set', function () {
@@ -62,6 +62,6 @@ describe('G-Max Volcalith', function () {
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'switch 3, move superfang -1');
 		const maxHP = battle.p2.active[0].maxhp;
 		const expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 6);
-		assert.strictEqual(battle.p2.active[0].hp, expectedHP);
+		assert.equal(battle.p2.active[0].hp, expectedHP);
 	});
 });

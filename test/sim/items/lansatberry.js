@@ -17,7 +17,7 @@ describe('Lansat Berry', function () {
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
-		assert.ok('focusenergy' in holder.volatiles);
+		assert('focusenergy' in holder.volatiles);
 	});
 
 	it('should start to apply the effect even in middle of an attack', function () {

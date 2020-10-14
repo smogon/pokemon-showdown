@@ -28,7 +28,7 @@ describe('Imposter', function () {
 		]});
 		battle.makeChoices('move substitute', 'move uturn');
 		battle.makeChoices('', 'switch ditto');
-		assert.notStrictEqual(battle.p2.active[0].species, battle.p1.active[0].species);
+		assert.notEqual(battle.p2.active[0].species, battle.p1.active[0].species);
 	});
 
 	it('should not activate if Skill Swapped', function () {
@@ -41,7 +41,7 @@ describe('Imposter', function () {
 			{species: "Greninja", ability: 'torrent', moves: ['sleeptalk']},
 		]});
 		battle.makeChoices('move skillswap', 'switch greninja');
-		assert.notStrictEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
 	it('should not activate if Neutralizing Gas leaves the field', function () {
@@ -53,9 +53,9 @@ describe('Imposter', function () {
 		battle.setPlayer('p2', {team: [
 			{species: "Ditto", ability: 'imposter', moves: ['sleeptalk']},
 		]});
-		assert.notStrictEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 		battle.makeChoices('switch greninja', 'move sleeptalk');
-		assert.notStrictEqual(battle.p1.active[0].species, battle.p2.active[0].species);
-		assert.notStrictEqual(battle.p1.pokemon[1].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		assert.notEqual(battle.p1.pokemon[1].species, battle.p2.active[0].species);
 	});
 });

@@ -17,7 +17,7 @@ describe('Sky Drop', function () {
 		battle.makeChoices('move skydrop', 'move tackle');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		battle.makeChoices('move skydrop', 'move tackle');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should prevent its target from switching out when it is caught by the effect', function () {
@@ -120,7 +120,7 @@ describe('Sky Drop', function () {
 		battle.makeChoices('move Sky Drop', 'switch Ferrothorn');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		battle.makeChoices('move Sky Drop', 'move Harden');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should fail if the target has a Substitute', function () {
@@ -129,7 +129,7 @@ describe('Sky Drop', function () {
 		battle.setPlayer('p2', {team: [{species: "Lairon", ability: 'sturdy', moves: ['substitute', 'tackle']}]});
 		battle.makeChoices('move honeclaws', 'move substitute');
 		battle.makeChoices('move skydrop', 'move tackle');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should fail if the target is heavier than 200kg', function () {
@@ -137,7 +137,7 @@ describe('Sky Drop', function () {
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]});
 		battle.setPlayer('p2', {team: [{species: "Aggron", ability: 'sturdy', moves: ['tackle']}]});
 		battle.makeChoices('move skydrop', 'move tackle');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should fail if used against an ally', function () {
@@ -157,7 +157,7 @@ describe('Sky Drop', function () {
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move allyswitch');
 		assert.equal(battle.p2.active[1].species.id, 'lairon');
-		assert.notStrictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
 	it('should hit its target even if Follow Me is used that turn', function () {
@@ -167,7 +167,7 @@ describe('Sky Drop', function () {
 		]);
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move followme');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
@@ -254,18 +254,18 @@ describe('Sky Drop [Gen 5]', function () {
 
 		it('should end when the user switches out', function () {
 			battle.makeChoices('switch 3, move rockpolish', 'move tackle 2, move nastyplot');
-			assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
+			assert.notEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 		});
 
 		it('should end when the user faints', function () {
 			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move thunderbolt 1');
-			assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
+			assert.notEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 		});
 
 		it('should end when the user completes another two-turn move', function () {
 			battle.makeChoices('move dig 2, move recover', 'move sleeptalk, move nastyplot');
 			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move nastyplot');
-			assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
+			assert.notEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 		});
 	});
 });

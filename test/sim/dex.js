@@ -22,7 +22,7 @@ describe('Mod loader', function () {
 describe('Dex#getEffect', function () {
 	it('returns the same object for the same id', function () {
 		assert.equal(Dex.getEffect('Stealth Rock'), Dex.getEffect('stealthrock'));
-		assert.notStrictEqual(Dex.getEffect('move: Stealth Rock'), Dex.getEffect('stealthrock'));
+		assert.notEqual(Dex.getEffect('move: Stealth Rock'), Dex.getEffect('stealthrock'));
 	});
 
 	it('does not return elements from the Object prototype', function () {

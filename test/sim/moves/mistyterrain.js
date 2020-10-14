@@ -15,15 +15,15 @@ describe('Misty Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]});
 		battle.makeChoices('move mistyterrain', 'move mist');
-		assert.ok(battle.field.isTerrain('mistyterrain'));
+		assert(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain('mistyterrain'));
+		assert(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain('mistyterrain'));
+		assert(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain('mistyterrain'));
+		assert(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain(''));
+		assert(battle.field.isTerrain(''));
 	});
 
 	it('should halve the base power of Dragon-type attacks on grounded Pokemon', function () {
@@ -66,7 +66,7 @@ describe('Misty Terrain', function () {
 		assert.equal(battle.p1.active[0].status, '');
 		const dataLine = battle.log[battle.lastMoveLine + 1].split('|');
 		assert.equal(dataLine[1], '-start');
-		assert.ok(toID(dataLine[3]).endsWith('yawn'));
+		assert(toID(dataLine[3]).endsWith('yawn'));
 	});
 
 	it('should cause Rest to fail on grounded Pokemon', function () {
@@ -75,7 +75,7 @@ describe('Misty Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]});
 		battle.makeChoices('move mistyterrain', 'move doubleedge');
 		battle.makeChoices('move rest', 'move rest');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 

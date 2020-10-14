@@ -63,6 +63,6 @@ describe('room promotions', () => {
 
 	it('should update Room#auth', () => {
 		moderation.runPromote(this.user, this.room, this.targetUser.id, '#', undefined, true);
-		assert.strictEqual(this.room.auth.get(this.targetUser.id), '#');
+		assert.equal(this.room.auth.get(this.targetUser.id), '#');
 	});
 });

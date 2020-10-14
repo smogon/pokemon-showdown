@@ -11,25 +11,25 @@ const IPTools = require('../../.server-dist/ip-tools').IPTools;
 describe("IP tools", () => {
 	it('should resolve 127.0.0.1 to localhost', async () => {
 		const lookup = await IPTools.lookup('127.0.0.1');
-		assert.strictEqual(lookup.host, 'localhost');
+		assert.equal(lookup.host, 'localhost');
 	});
 
 	it('should resolve unknown IPs correctly', async () => {
 		const lookup = await IPTools.lookup('255.255.255.255');
-		assert.strictEqual(lookup.host, '255.255?/unknown');
-		assert.strictEqual(lookup.hostType, 'unknown');
+		assert.equal(lookup.host, '255.255?/unknown');
+		assert.equal(lookup.hostType, 'unknown');
 	});
 
 	it('should parse CIDR ranges', () => {
 		const range = IPTools.getCidrRange('42.42.0.0/18');
-		assert.strictEqual(range.minIP, IPTools.ipToNumber('42.42.0.0'));
-		assert.strictEqual(range.maxIP, IPTools.ipToNumber('42.42.63.255'));
+		assert.equal(range.minIP, IPTools.ipToNumber('42.42.0.0'));
+		assert.equal(range.maxIP, IPTools.ipToNumber('42.42.63.255'));
 	});
 
 	it('should guess whether a range is CIDR or hyphen', () => {
 		const cidrRange = IPTools.stringToRange('42.42.0.0/18');
 		const stringRange = IPTools.stringToRange('42.42.0.0 - 42.42.63.255');
-		assert.deepStrictEqual(cidrRange, stringRange);
+		assert.deepEqual(cidrRange, stringRange);
 	});
 
 	it('should check if an IP is in a range', () => {
@@ -49,22 +49,22 @@ describe("IP tools", () => {
 	});
 
 	it('should handle wildcards in string ranges', () => {
-		assert.deepStrictEqual(
+		assert.deepEqual(
 			IPTools.stringToRange('1.*'),
 			{minIP: IPTools.ipToNumber('1.0.0.0'), maxIP: IPTools.ipToNumber('1.255.255.255')}
 		);
-		assert.deepStrictEqual(
+		assert.deepEqual(
 			IPTools.stringToRange('1.1.*'),
 			{minIP: IPTools.ipToNumber('1.1.0.0'), maxIP: IPTools.ipToNumber('1.1.255.255')}
 		);
-		assert.deepStrictEqual(
+		assert.deepEqual(
 			IPTools.stringToRange('1.1.1.*'),
 			{minIP: IPTools.ipToNumber('1.1.1.0'), maxIP: IPTools.ipToNumber('1.1.1.255')}
 		);
 	});
 
 	it('should handle single IPs as string ranges', () => {
-		assert.deepStrictEqual(
+		assert.deepEqual(
 			IPTools.stringToRange('1.1.1.1'),
 			{minIP: IPTools.ipToNumber('1.1.1.1'), maxIP: IPTools.ipToNumber('1.1.1.1')}
 		);
@@ -76,7 +76,7 @@ describe("IP tools helper functions", () => {
 		const numTests = 10;
 		for (let i = 0; i < numTests; i++) {
 			const testNumber = Math.floor(Math.random() * 4294967294) + 1;
-			assert.strictEqual(IPTools.ipToNumber(IPTools.numberToIP(testNumber)), testNumber);
+			assert.equal(IPTools.ipToNumber(IPTools.numberToIP(testNumber)), testNumber);
 		}
 	});
 
@@ -85,19 +85,19 @@ describe("IP tools helper functions", () => {
 		const sortedIPs = ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0'];
 		const sortedIPNumbers = unsortedIPs.map(ip => IPTools.ipToNumber(ip));
 		sortedIPNumbers.sort((a, b) => a - b);
-		assert.deepStrictEqual(sortedIPNumbers.map(ipnum => IPTools.numberToIP(ipnum)), sortedIPs);
+		assert.deepEqual(sortedIPNumbers.map(ipnum => IPTools.numberToIP(ipnum)), sortedIPs);
 	});
 
 	it('should convert URLs to hosts', () => {
-		assert.strictEqual(IPTools.urlToHost('https://www.annika.codes/some/path'), 'annika.codes');
-		assert.strictEqual(IPTools.urlToHost('http://annika.codes/path'), 'annika.codes');
-		assert.strictEqual(IPTools.urlToHost('https://annika.codes/'), 'annika.codes');
+		assert.equal(IPTools.urlToHost('https://www.annika.codes/some/path'), 'annika.codes');
+		assert.equal(IPTools.urlToHost('http://annika.codes/path'), 'annika.codes');
+		assert.equal(IPTools.urlToHost('https://annika.codes/'), 'annika.codes');
 	});
 
 	it('should correctly sort a list of IP addresses', () => {
 		const ipList = ['2.3.4.5', '100.1.1.1', '2.3.5.4', '150.255.255.255', '240.0.0.0'];
 		ipList.sort(IPTools.ipSort);
-		assert.deepStrictEqual(ipList, ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0']);
+		assert.deepEqual(ipList, ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0']);
 	});
 });
 

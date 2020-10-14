@@ -35,7 +35,7 @@ describe('Unaware', function () {
 		pokemon.hp = pokemon.maxhp;
 		battle.resetRNG();
 		battle.makeChoices('move moonblast', 'move splash');
-		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.notEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
 
 	it('should ignore defense stage changes when Pokemon with it attack', function () {
@@ -62,7 +62,7 @@ describe('Unaware', function () {
 		pokemon.hp = pokemon.maxhp;
 		battle.resetRNG();
 		battle.makeChoices('move irondefense', 'move shadowsneak');
-		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.notEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
@@ -76,7 +76,7 @@ describe('Unaware', function () {
 		pokemon.hp = pokemon.maxhp;
 		battle.resetRNG();
 		battle.makeChoices('move splash', 'move shadowsneak');
-		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.notEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
 	it('should only apply to targets with Unaware in battles with multiple Pokemon', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[

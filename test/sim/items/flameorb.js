@@ -21,7 +21,7 @@ describe('Flame Orb', function () {
 		]});
 		battle.makeChoices('move splash', 'move bulletseed');
 		battle.makeChoices('switch 2', '');
-		assert.notStrictEqual(battle.p1.active[0].status, 'brn');
+		assert.notEqual(battle.p1.active[0].status, 'brn');
 	});
 
 	it('should trigger after one turn', function () {

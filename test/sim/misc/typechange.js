@@ -50,7 +50,7 @@ describe('Type addition', function () {
 						const target = battle.p2.active[0];
 						battle.makeChoices('move ' + moveData.name, 'move spikes');
 						assert.constant(() => target.getTypes().join('/'), () => battle.makeChoices('move ' + moveData.name, 'move spikes'));
-						assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
+						assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 					});
 				} else {
 					it('should override ' + moveData2.name, function () {

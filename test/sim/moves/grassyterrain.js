@@ -15,15 +15,15 @@ describe('Grassy Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'grassyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]});
 		battle.makeChoices('move grassyterrain', 'move mist');
-		assert.ok(battle.field.isTerrain('grassyterrain'));
+		assert(battle.field.isTerrain('grassyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain('grassyterrain'));
+		assert(battle.field.isTerrain('grassyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain('grassyterrain'));
+		assert(battle.field.isTerrain('grassyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain('grassyterrain'));
+		assert(battle.field.isTerrain('grassyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.field.isTerrain(''));
+		assert(battle.field.isTerrain(''));
 	});
 
 	it('should halve the base power of Earthquake, Bulldoze, Magnitude', function () {
