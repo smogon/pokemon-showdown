@@ -59,4 +59,50 @@ describe('Future Sight', function () {
 		const damage = scizor.maxhp - scizor.hp;
 		assert.bounded(damage, [19, 23]); // If it were doubled, would be 38-45
 	});
+
+	it.skip(`should not trigger Eject Button`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", moves: ['futuresight']},
+		], [
+			{species: "Scizor", item: 'ejectbutton', moves: ['sleeptalk']},
+			{species: "Roggenrola", moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'move');
+	});
+
+	it.skip(`should be able to set Future Sight against an empty target slot`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", moves: ['futuresight']},
+		], [
+			{species: "Shedinja", moves: ['finalgambit']},
+			{species: "Roggenrola", moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices();
+		const roggenrola = battle.p2.active[0];
+		assert.false.fullHP(roggenrola);
+	});
+
+	it.skip(`its damaging hit should not count as copyable for Copycat`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
+		], [
+			{species: "Liepard", moves: ['sleeptalk', 'copycat']},
+		]]);
+
+		battle.makeChoices('move futuresight', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move copycat'); // Should fail due to last move being Sleep Talk
+		battle.makeChoices();
+		battle.makeChoices();
+		const wynaut = battle.p1.active[0];
+		assert.fullHP(wynaut);
+	});
 });
