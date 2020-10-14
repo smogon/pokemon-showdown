@@ -200,11 +200,14 @@ describe('Dex data', function () {
 				}
 
 				if (entry.eventData) {
-					if (speciesid.startsWith('pokestar')) continue;
 					for (const [i, eventEntry] of entry.eventData.entries()) {
 						if (eventEntry.moves) {
 							const learned = `${eventEntry.generation}S${i}`;
 							for (const eventMove of eventEntry.moves) {
+								if (speciesid.startsWith('pokestar')) {
+									assert(Dex.data.Moves[eventMove], `${species.name}'s event move ${Dex.getMove(eventMove).name} should exist`);
+									continue;
+								}
 								assert(entry.learnset, `${species.name} has event moves but no learnset`);
 								assert(entry.learnset[eventMove].includes(learned), `${species.name}'s event move ${Dex.getMove(eventMove).name} should exist as "${learned}"`);
 							}
