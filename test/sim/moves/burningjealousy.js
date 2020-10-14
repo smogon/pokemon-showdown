@@ -17,7 +17,7 @@ describe('Burning Jealousy', function () {
 			{species: 'Torkoal', moves: ['burningjealousy']},
 		]]);
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].status, 'brn');
+		assert.equal(battle.p1.active[0].status, 'brn');
 	});
 
 	it(`should not burn a target whose stats were raised after the attack`, function () {
@@ -27,7 +27,7 @@ describe('Burning Jealousy', function () {
 			{species: 'Magearna', item: 'weaknesspolicy', moves: ['imprison']},
 		]]);
 		battle.makeChoices();
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 
 	it.skip(`should burn a target whose stats were boosted at the start of the match`, function () {
@@ -37,7 +37,7 @@ describe('Burning Jealousy', function () {
 			{species: 'Porygon', ability: 'download', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert.strictEqual(battle.p2.active[0].status, 'brn');
+		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 
 	it(`should not burn a target whose stats were boosted at a switch after a KO`, function () {
@@ -50,7 +50,7 @@ describe('Burning Jealousy', function () {
 		battle.makeChoices();
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 
 	it(`should be affected by Sheer Force`, function () {
@@ -60,6 +60,6 @@ describe('Burning Jealousy', function () {
 			{species: 'Darmanitan', ability: 'sheerforce', item: 'kingsrock', moves: ['burningjealousy']},
 		]]);
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].status, '');
+		assert.equal(battle.p1.active[0].status, '');
 	});
 });

@@ -20,6 +20,6 @@ describe('Berserk', function () {
 		battle.makeChoices();
 		const drampa = battle.p1.active[0];
 		assert.statStage(drampa, 'spa', 1);
-		assert.strictEqual(drampa.hp, Math.floor(drampa.maxhp / 2) + Math.floor(drampa.maxhp / 4));
+		assert.equal(drampa.hp, Math.floor(drampa.maxhp / 2) + Math.floor(drampa.maxhp / 4));
 	});
 });

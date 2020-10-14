@@ -36,6 +36,6 @@ describe('Perish Song', function () {
 		]]);
 
 		for (let i = 0; i < 4; i++) { battle.makeChoices(); }
-		assert.strictEqual(battle.winner, 'Player 2');
+		assert.equal(battle.winner, 'Player 2');
 	});
 });

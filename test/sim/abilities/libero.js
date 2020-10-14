@@ -20,10 +20,10 @@ describe('Libero', function () {
 
 		//Turn 1 of Bounce
 		battle.makeChoices();
-		assert.strictEqual(wynaut.getTypes().join('/'), 'Flying');
+		assert.equal(wynaut.getTypes().join('/'), 'Flying');
 
 		//Turn 2 of Bounce
 		battle.makeChoices();
-		assert.strictEqual(wynaut.getTypes().join('/'), 'Flying');
+		assert.equal(wynaut.getTypes().join('/'), 'Flying');
 	});
 });

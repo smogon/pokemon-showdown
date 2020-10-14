@@ -23,6 +23,6 @@ describe('Present', function () {
 		battle.makeChoices('move present 1, move present 2', 'move substitute, move laserfocus');
 		console.log(battle.getDebugLog());
 		const wynaut = battle.p2.active[0];
-		assert.strictEqual(wynaut.hp, wynaut.maxhp);
+		assert.equal(wynaut.hp, wynaut.maxhp);
 	});
 });

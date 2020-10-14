@@ -19,6 +19,6 @@ describe('Struggle', function () {
 
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.strictEqual(battle.winner, 'Player 2');
+		assert.equal(battle.winner, 'Player 2');
 	});
 });

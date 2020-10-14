@@ -59,7 +59,7 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('move toxic', 'move uturn');
 		battle.makeChoices('', 'switch 2');
 		battle.makeChoices('switch 2', 'switch 2');
-		assert.strictEqual(battle.p2.active[0].status, 'tox');
+		assert.equal(battle.p2.active[0].status, 'tox');
 	});
 
 	it('should negate abilities that modify move type', function () {

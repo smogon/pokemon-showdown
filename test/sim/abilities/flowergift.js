@@ -26,10 +26,10 @@ describe('Flower Gift', function () {
 
 		// Set the weather to sun and re-check
 		battle.field.setWeather('sunnyday', 'debug');
-		assert.strictEqual(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
-		assert.strictEqual(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
-		assert.strictEqual(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
-		assert.strictEqual(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
+		assert.equal(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
+		assert.equal(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
+		assert.equal(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
+		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
 	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, function () {
@@ -49,10 +49,10 @@ describe('Flower Gift', function () {
 
 		// Set the weather to sun and re-check
 		battle.field.setWeather('sunnyday', 'debug');
-		assert.strictEqual(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
-		assert.strictEqual(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
-		assert.strictEqual(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
-		assert.strictEqual(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
+		assert.equal(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
+		assert.equal(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
+		assert.equal(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
+		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
 	it.skip(`should not trigger if the Pokemon was KOed`, function () {

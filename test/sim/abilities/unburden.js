@@ -64,9 +64,9 @@ describe('Unburden', function () {
 		battle.setPlayer('p2', {team: [{species: 'Togekiss', ability: 'serenegrace', item: 'laggingtail', moves: ['bestow', 'followme']}]});
 		const originalSpeed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move machpunch', 'move followme');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), 2 * originalSpeed);
+		assert.equal(battle.p1.active[0].getStat('spe'), 2 * originalSpeed);
 		battle.makeChoices('move machpunch', 'move bestow');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), originalSpeed);
+		assert.equal(battle.p1.active[0].getStat('spe'), originalSpeed);
 	});
 
 	it(`should not trigger when Neutralizing Gas is active on the field`, function () {
@@ -80,11 +80,11 @@ describe('Unburden', function () {
 		const wynaut = battle.p1.active[0];
 		const originalSpeed = wynaut.getStat('spe');
 		battle.makeChoices();
-		assert.strictEqual(wynaut.getStat('spe'), originalSpeed);
+		assert.equal(wynaut.getStat('spe'), originalSpeed);
 
 		//The chance to trigger Unburden is gone, so it missed the timing and doesn't gain the speed post-NGas removal
 		battle.makeChoices('auto', 'switch 2');
-		assert.strictEqual(wynaut.getStat('spe'), originalSpeed);
+		assert.equal(wynaut.getStat('spe'), originalSpeed);
 	});
 
 	it.skip(`should be negated while Neutralizing Gas is active on the field`, function () {
@@ -98,12 +98,12 @@ describe('Unburden', function () {
 		const wynaut = battle.p1.active[0];
 		const originalSpeed = wynaut.getStat('spe');
 		battle.makeChoices();
-		assert.strictEqual(wynaut.getStat('spe'), originalSpeed * 2);
+		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
 
 		battle.makeChoices('auto', 'switch 2');
-		assert.strictEqual(wynaut.getStat('spe'), originalSpeed);
+		assert.equal(wynaut.getStat('spe'), originalSpeed);
 
 		battle.makeChoices('auto', 'switch 2');
-		assert.strictEqual(wynaut.getStat('spe'), originalSpeed * 2);
+		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
 	});
 });
