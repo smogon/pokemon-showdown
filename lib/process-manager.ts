@@ -465,7 +465,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 	/**
 	 * @param timeout The number of milliseconds to wait before terminating a query. Defaults to 900000 ms (15 minutes).
 	 */
-	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>, timeout: number = 15 * 60 * 1000) {
+	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>, timeout = 15 * 60 * 1000) {
 		super(module);
 		this._query = query;
 		this.timeout = timeout;
