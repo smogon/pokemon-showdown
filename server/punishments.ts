@@ -1434,13 +1434,14 @@ export const Punishments = new class {
 				continue;
 			} else if (options?.checkIps) {
 				if (typeof user !== 'string') {
+					let longestIPPunishment;
 					for (const ip of user.ips) {
 						punishment = Punishments.roomIps.nestedGet(curRoom.roomid, ip);
-						if (punishment) {
-							punishments.push([curRoom, punishment]);
-							continue;
+						if (punishment && (!longestIPPunishment || punishment[2] > longestIPPunishment[2])) {
+							longestIPPunishment = punishment;
 						}
 					}
+					if (longestIPPunishment) punishments.push([curRoom, longestIPPunishment]);
 				}
 			}
 			if (checkMutes && curRoom.muteQueue) {
