@@ -835,6 +835,7 @@ export const Aliases: {[alias: string]: string} = {
 	sideshellarm: "Shell Side Arm",
 	spin: "Rapid Spin",
 	sr: "Stealth Rock",
+	ssa: "Shell Side Arm",
 	sub: "Substitute",
 	tr: "Trick Room",
 	troom: "Trick Room",
