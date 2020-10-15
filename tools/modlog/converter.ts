@@ -510,11 +510,12 @@ export class ModlogConverterTxt {
 	readonly databaseFile: string;
 	readonly database: Database.Database;
 	readonly insertionQuery: Database.Statement;
+	readonly FTSInsertionQuery: Database.Statement;
 	readonly altsInsertionQuery: Database.Statement;
 	readonly insertionTransaction: Database.Transaction;
 	readonly textLogDir: string;
 	readonly isTesting: {files: Map<string, string>, ml?: Modlog} | null = null;
-	constructor(databaseFile: string, textLogDir: string, isTesting?: Map<string, string>) {
+	constructor(databaseFile: string, textLogDir: string, isTesting?: Map<string, string>, useFTSExtension?: boolean) {
 		this.databaseFile = databaseFile;
 		this.textLogDir = textLogDir;
 		if (isTesting || Config.nofswriting) {
@@ -525,17 +526,25 @@ export class ModlogConverterTxt {
 
 		this.database = Database(this.isTesting ? ':memory:' : this.databaseFile);
 		this.database.exec(FS(`databases/schemas/modlog.sql`).readIfExistsSync());
+		if (useFTSExtension) {
+			this.database.exec(`SELECT load_extension("native/fts_id_tokenizer.o")`);
+			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+		} else {
+			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
+		}
 
 		this.insertionQuery = this.database.prepare(
 			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
 			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
 		);
+		this.FTSInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.insertionTransaction = this.database.transaction((entries: ModlogEntry[]) => {
 			for (const entry of entries) {
 				const alts = entry.alts || [];
 				delete entry.alts;
 				const result = this.insertionQuery.run(entry);
+				this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
 				for (const alt of alts) {
 					this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
 				}
