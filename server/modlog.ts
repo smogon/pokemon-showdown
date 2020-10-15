@@ -24,7 +24,9 @@ const MAX_PROCESSES = 1;
 const LONG_QUERY_DURATION = 2000;
 const MODLOG_PATH = 'logs/modlog';
 const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
+
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
+const MODLOG_SCHEMA_WITH_FTS_PATH = 'databases/schemas/modlog-fts.sql';
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -153,21 +155,32 @@ export class Modlog {
 	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
 	readonly insertionTransaction: Database.Transaction;
 
+	readonly useFTS: boolean;
+
 	constructor(flatFilePath: string, databasePath: string) {
 		this.logPath = flatFilePath;
+		this.useFTS = Config.modlogfts;
 
 		this.database = new Database(databasePath);
 		this.database.exec("PRAGMA foreign_keys = ON;");
-		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync()); // Set up tables, etc.
+
+		// Set up tables, etc
+		this.database.exec(
+			FS(this.useFTS ? MODLOG_SCHEMA_WITH_FTS_PATH : MODLOG_SCHEMA_PATH).readIfExistsSync()
+		);
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
 			return Number(RegExp(regexString, 'i').test(toMatch));
 		});
 
 
-		this.modlogInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
-			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
-		);
+		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
+		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
+		if (this.useFTS) {
+			insertionQuerySource += `INSERT INTO modlog_fts (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
+			insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
+		}
+
+		this.modlogInsertionQuery = this.database.prepare(insertionQuerySource);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
@@ -498,8 +511,13 @@ export class Modlog {
 
 			args.push(...Array(6).fill(search.anyField));
 
-			query += ` OR regex(?, note)`;
-			args.push(this.generateIDRegex(toID(search.anyField)));
+			if (this.useFTS) {
+				query += ` OR note MATCH ?`;
+				args.push(toID(search.anyField));
+			} else {
+				query += ` OR note LIKE '%' || ? || '%'`;
+				args.push(search.anyField);
+			}
 		}
 
 		if (search.action) {
@@ -527,9 +545,9 @@ export class Modlog {
 		if (search.note) {
 			const parts = [];
 			for (const noteSearch of search.note.searches) {
-				if (!search.note.isExact) {
-					parts.push(`regex(?, note)`);
-					args.push(this.generateIDRegex(noteSearch));
+				if (this.useFTS && !search.note.isExact) {
+					parts.push(`note MATCH ?`);
+					args.push(toID(noteSearch));
 				} else {
 					parts.push(`note LIKE '%' || ? || '%'`);
 					args.push(noteSearch);
