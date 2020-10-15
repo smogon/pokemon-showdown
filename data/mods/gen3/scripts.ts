@@ -17,7 +17,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 	},
 	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
-		// DPP divides modifiers into several mathematically important stages
+		// RSE divides modifiers into several mathematically important stages
 		// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
 
 		if (!move.type) move.type = '???';
@@ -32,7 +32,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		baseDamage = this.runEvent('ModifyDamagePhase1', pokemon, target, move, baseDamage);
 
 		// Double battle multi-hit
-		// In Generation 3, the spread move modifier is 0.5x instead of 0.75x.
+		// In Generation 3, the spread move modifier is 0.5x instead of 0.75x. Moves that hit both foes
+		// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
 		const {targets} = pokemon.getMoveTargets(move, target);
 		if (move.target === 'allAdjacentFoes' && targets.length > 1) {
 			const spreadModifier = move.spreadModifier || 0.5;
@@ -43,7 +44,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Weather
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
-		if (this.gen === 3 && move.category === 'Physical' && !Math.floor(baseDamage)) {
+		if (move.category === 'Physical' && !Math.floor(baseDamage)) {
 			baseDamage = 1;
 		}
 
@@ -191,8 +192,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.add('-notarget', pokemon);
 				return false;
 			}
-			// In Generation 3, moves that hit both foes and the user's ally,
-			// like Earthquake and Explosion, don't get affected by spread modifiers
 			if (targets.length > 1) move.spreadHit = true;
 			const hitSlots = [];
 			for (const source of targets) {
@@ -208,9 +207,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (damage === this.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			}
-			if (move.spreadHit) {
-				this.attrLastMove('[spread] ' + hitSlots.join(','));
-			}
+			if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlots.join(','));
 		} else {
 			target = targets[0];
 			let lacksTarget = !target || target.fainted;
