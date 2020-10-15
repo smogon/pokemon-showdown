@@ -26,7 +26,7 @@ const MODLOG_PATH = 'logs/modlog';
 const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
 
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
-const MODLOG_SCHEMA_WITH_FTS_PATH = 'databases/schemas/modlog-fts.sql';
+const MODLOG_FTS_SCHEMA_PATH = 'databases/schemas/modlog-fts.sql';
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -150,6 +150,9 @@ export class Modlog {
 
 	readonly database: Database.Database;
 	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
+
+	/** null if FTS is disabled */
+	readonly FTSInsertionQuery: Database.Statement<[number, string]> | null;
 	readonly altsInsertionQuery: Database.Statement<[number, string]>;
 	readonly renameQuery: Database.Statement<[string, string]>;
 	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
@@ -165,9 +168,9 @@ export class Modlog {
 		this.database.exec("PRAGMA foreign_keys = ON;");
 
 		// Set up tables, etc
-		this.database.exec(
-			FS(this.useFTS ? MODLOG_SCHEMA_WITH_FTS_PATH : MODLOG_SCHEMA_PATH).readIfExistsSync()
-		);
+		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync());
+		if (this.useFTS) this.database.exec(FS(MODLOG_FTS_SCHEMA_PATH).readIfExistsSync());
+
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
 			return Number(RegExp(regexString, 'i').test(toMatch));
 		});
@@ -175,12 +178,9 @@ export class Modlog {
 
 		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
 		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
-		if (this.useFTS) {
-			insertionQuerySource += `INSERT INTO modlog_fts (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
-			insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
-		}
 
 		this.modlogInsertionQuery = this.database.prepare(insertionQuerySource);
+		if (this.useFTS) this.FTSInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
@@ -203,6 +203,9 @@ export class Modlog {
 			alts: ID[],
 		}) => {
 			const result = this.modlogInsertionQuery.run(entry);
+			if (this.useFTS) {
+				this.FTSInsertionQuery!.run(result.lastInsertRowid as number, entry.note);
+			}
 			for (const alt of entry.alts || []) {
 				this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
 			}
@@ -497,48 +500,49 @@ export class Modlog {
 		if (rooms.includes('global')) roomChecker = `(roomid LIKE 'global-%' OR ${roomChecker})`;
 
 		let query = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
+		if (this.useFTS) query += ` LEFT JOIN modlog_fts ON modlog_fts.rowid = modlog_id`;
 		query += ` WHERE ${roomChecker}`;
 
 		if (search.anyField) {
-			query += ` AND action LIKE '%' || ? || '%'`;
+			query += ` AND action LIKE ? || '%'`;
 
-			query += ` OR userid LIKE '%' || ? || '%'`;
-			query += ` OR autoconfirmed_userid LIKE '%' || ? || '%'`;
-			query += ` OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE '%' || ? || '%')`;
+			query += ` OR userid LIKE ? || '%'`;
+			query += ` OR autoconfirmed_userid LIKE ? || '%'`;
+			query += ` OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE ? || '%')`;
 
-			query += ` OR ip LIKE '%' || ? || '%'`;
-			query += ` OR action_taker_userid LIKE '%' || ? || '%'`;
+			query += ` OR ip LIKE ? || '%'`;
+			query += ` OR action_taker_userid LIKE ? || '%'`;
 
 			args.push(...Array(6).fill(search.anyField));
 
 			if (this.useFTS) {
-				query += ` OR note MATCH ?`;
+				query += ` OR modlog_fts.note MATCH ?`;
 				args.push(toID(search.anyField));
 			} else {
-				query += ` OR note LIKE '%' || ? || '%'`;
+				query += ` OR note LIKE ? || '%'`;
 				args.push(search.anyField);
 			}
 		}
 
 		if (search.action) {
-			query += ` AND action LIKE '%' || ? || '%'`;
+			query += ` AND action LIKE ? || '%'`;
 			args.push(search.action);
 		} else if (onlyPunishments) {
 			query += ` AND action IN (${this.formatArray(PUNISHMENTS, args)})`;
 		}
 
 		if (userid) {
-			query += ` AND (userid LIKE '%' || ? || '%' OR autoconfirmed_userid LIKE '%' || ? || '%' OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE '%' || ? || '%'))`;
+			query += ` AND (userid LIKE ? || '%' OR autoconfirmed_userid LIKE ? || '%' OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE ? || '%'))`;
 			args.push(userid, userid, userid);
 		}
 
 		if (search.ip) {
-			query += ` AND ip LIKE '%' || ? || '%'`;
+			query += ` AND ip LIKE ? || '%'`;
 			args.push(search.ip);
 		}
 
 		if (search.actionTaker) {
-			query += ` AND action_taker_userid LIKE '%' || ? || '%'`;
+			query += ` AND action_taker_userid LIKE ? || '%'`;
 			args.push(search.actionTaker);
 		}
 
@@ -546,10 +550,10 @@ export class Modlog {
 			const parts = [];
 			for (const noteSearch of search.note.searches) {
 				if (this.useFTS && !search.note.isExact) {
-					parts.push(`note MATCH ?`);
+					parts.push(`modlog_fts.note MATCH ?`);
 					args.push(toID(noteSearch));
 				} else {
-					parts.push(`note LIKE '%' || ? || '%'`);
+					parts.push(`note LIKE ? || '%'`);
 					args.push(noteSearch);
 				}
 			}

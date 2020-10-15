@@ -14,6 +14,7 @@ package-lock.json
 /tools/set-import/sets
 databases/*.db*
 *.o
+*.o.dSYM
 # Typescript build artifacts
 .*-dist/
 tools/set-import/importer.js
