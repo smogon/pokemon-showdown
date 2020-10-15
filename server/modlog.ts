@@ -26,7 +26,6 @@ const MODLOG_PATH = 'logs/modlog';
 const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
 
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
-const MODLOG_FTS_SCHEMA_PATH = 'databases/schemas/modlog-fts.sql';
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -151,25 +150,26 @@ export class Modlog {
 	readonly database: Database.Database;
 	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
 
-	/** null if FTS is disabled */
-	readonly FTSInsertionQuery: Database.Statement<[number, string]> | null;
+	readonly FTSInsertionQuery: Database.Statement<[number, string]>;
 	readonly altsInsertionQuery: Database.Statement<[number, string]>;
 	readonly renameQuery: Database.Statement<[string, string]>;
 	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
 	readonly insertionTransaction: Database.Transaction;
 
-	readonly useFTS: boolean;
-
 	constructor(flatFilePath: string, databasePath: string) {
 		this.logPath = flatFilePath;
-		this.useFTS = Config.modlogfts;
 
 		this.database = new Database(databasePath);
 		this.database.exec("PRAGMA foreign_keys = ON;");
 
 		// Set up tables, etc
 		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync());
-		if (this.useFTS) this.database.exec(FS(MODLOG_FTS_SCHEMA_PATH).readIfExistsSync());
+		if (Config.modlogftsextension) {
+			this.database.exec(`SELECT load_extension("native/fts_id_tokenizer.o")`);
+			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+		} else {
+			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
+		}
 
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
 			return Number(RegExp(regexString, 'i').test(toMatch));
@@ -180,7 +180,7 @@ export class Modlog {
 		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
 
 		this.modlogInsertionQuery = this.database.prepare(insertionQuerySource);
-		if (this.useFTS) this.FTSInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
+		this.FTSInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
@@ -203,9 +203,7 @@ export class Modlog {
 			alts: ID[],
 		}) => {
 			const result = this.modlogInsertionQuery.run(entry);
-			if (this.useFTS) {
-				this.FTSInsertionQuery!.run(result.lastInsertRowid as number, entry.note);
-			}
+			this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
 			for (const alt of entry.alts || []) {
 				this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
 			}
@@ -500,7 +498,7 @@ export class Modlog {
 		if (rooms.includes('global')) roomChecker = `(roomid LIKE 'global-%' OR ${roomChecker})`;
 
 		let query = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
-		if (this.useFTS) query += ` LEFT JOIN modlog_fts ON modlog_fts.rowid = modlog_id`;
+		query += ` LEFT JOIN modlog_fts ON modlog_fts.rowid = modlog_id`;
 		query += ` WHERE ${roomChecker}`;
 
 		if (search.anyField) {
@@ -515,13 +513,8 @@ export class Modlog {
 
 			args.push(...Array(6).fill(search.anyField));
 
-			if (this.useFTS) {
-				query += ` OR modlog_fts.note MATCH ?`;
-				args.push(toID(search.anyField));
-			} else {
-				query += ` OR note LIKE ? || '%'`;
-				args.push(search.anyField);
-			}
+			query += ` OR modlog_fts.note MATCH ?`;
+			args.push(toID(search.anyField));
 		}
 
 		if (search.action) {
@@ -549,13 +542,8 @@ export class Modlog {
 		if (search.note) {
 			const parts = [];
 			for (const noteSearch of search.note.searches) {
-				if (this.useFTS && !search.note.isExact) {
-					parts.push(`modlog_fts.note MATCH ?`);
-					args.push(toID(noteSearch));
-				} else {
-					parts.push(`note LIKE ? || '%'`);
-					args.push(noteSearch);
-				}
+				parts.push(`modlog_fts.note MATCH ?`);
+				args.push(toID(noteSearch));
 			}
 			query += ` AND ${parts.join(' OR ')}`;
 		}
