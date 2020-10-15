@@ -523,7 +523,7 @@ export class ModlogConverterTxt {
 			};
 		}
 
-		this.database = Database(this.isTesting ? ':memory:' : `${__dirname}/../../${this.databaseFile}`);
+		this.database = Database(this.isTesting ? ':memory:' : this.databaseFile);
 		this.database.exec(FS(`databases/schemas/modlog.sql`).readIfExistsSync());
 
 		this.insertionQuery = this.database.prepare(
