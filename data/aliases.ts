@@ -832,6 +832,7 @@ export const Aliases: {[alias: string]: string} = {
 	rocks: "Stealth Rock",
 	sd: "Swords Dance",
 	se: "Stone Edge",
+	sideshellarm: "Shell Side Arm",
 	spin: "Rapid Spin",
 	sr: "Stealth Rock",
 	sub: "Substitute",
