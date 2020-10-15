@@ -32,8 +32,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		baseDamage = this.runEvent('ModifyDamagePhase1', pokemon, target, move, baseDamage);
 
 		// Double battle multi-hit
-		if (move.spreadHit) {
-			// In Generation 3, the spread move modifier is 0.5x instead of 0.75x.
+		// In Generation 3, the spread move modifier is 0.5x instead of 0.75x.
+		const {targets} = pokemon.getMoveTargets(move, target);
+		if (move.target === 'allAdjacentFoes' && targets.length > 1) {
 			const spreadModifier = move.spreadModifier || 0.5;
 			this.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.modify(baseDamage, spreadModifier);
@@ -192,7 +193,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			// In Generation 3, moves that hit both foes and the user's ally,
 			// like Earthquake and Explosion, don't get affected by spread modifiers
-			if (targets.length === 2) move.spreadHit = true;
+			if (targets.length > 1) move.spreadHit = true;
 			const hitSlots = [];
 			for (const source of targets) {
 				const hitResult = this.tryMoveHit(source, pokemon, move);
@@ -207,7 +208,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (damage === this.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			}
-			if (move.spreadHit || move.target === "allAdjacent") {
+			if (move.spreadHit) {
 				this.attrLastMove('[spread] ' + hitSlots.join(','));
 			}
 		} else {
