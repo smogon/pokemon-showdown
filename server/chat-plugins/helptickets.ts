@@ -1153,20 +1153,18 @@ export const commands: ChatCommands = {
 					void (reportRoom as GameRoom).uploadReplay(user, connection, 'forpunishment');
 				}
 			} else if (reportTargetType === 'user') {
-				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong>`;
-				if (ticket.type === 'Battle Harassment') {
-					const commonBattles = getCommonBattles(
-						toID(reportTarget), Users.get(reportTarget),
-						ticket.userid, Users.get(ticket.userid)
-					);
+				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong><p></p>`;
 
-					reportTargetInfo += `<p></p>`;
-					if (!commonBattles.length) {
-						reportTargetInfo += `There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
-					} else {
-						reportTargetInfo += `Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
-						reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
-					}
+				const commonBattles = getCommonBattles(
+					toID(reportTarget), Users.get(reportTarget),
+					ticket.userid, Users.get(ticket.userid)
+				);
+
+				if (!commonBattles.length) {
+					reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
+				} else {
+					reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
+					reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
 				}
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;

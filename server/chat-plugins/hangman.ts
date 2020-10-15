@@ -197,13 +197,13 @@ export class Hangman extends Rooms.RoomGame {
 	end() {
 		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman was ended.)</div>');
 		this.room.add("The game of hangman was ended.");
-		delete this.room.game;
+		this.room.game = null;
 	}
 
 	finish() {
 		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
 		this.room.add(`|html|${this.generateWindow()}`);
-		delete this.room.game;
+		this.room.game = null;
 	}
 }
 

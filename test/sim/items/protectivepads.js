@@ -19,7 +19,7 @@ describe('Protective Pads', function () {
 		assert.equal(attacker.ability, 'thickfat');
 		const mummyActivationMessages = battle.log.filter(logStr => logStr.startsWith('|-activate|') && logStr.includes('Mummy'));
 		assert.equal(mummyActivationMessages.length, 1, "Mummy should activate only once");
-		assert.ok(mummyActivationMessages[0].includes('Cofagrigus'), "Source of Mummy activation should be included");
+		assert(mummyActivationMessages[0].includes('Cofagrigus'), "Source of Mummy activation should be included");
 		assert.false(mummyActivationMessages[0].includes('Thick Fat'), "Attacker's ability should not be revealed");
 	});
 
