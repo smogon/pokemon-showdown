@@ -208,8 +208,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (damage === this.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			}
 			if (move.spreadHit || move.target === "allAdjacent") {
-					this.attrLastMove('[spread] ' + hitSlots.join(','));
-				}
+				this.attrLastMove('[spread] ' + hitSlots.join(','));
+			}
 		} else {
 			target = targets[0];
 			let lacksTarget = !target || target.fainted;
