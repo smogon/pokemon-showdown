@@ -331,7 +331,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 
 	const log: ModlogEntry = {action: 'NULL', isGlobal};
 	const timestamp = parseBrackets(line, '[');
-	log.time = Math.floor(new Date(timestamp).getTime());
+	log.time = Math.floor(new Date(timestamp).getTime()) || Date.now();
 	line = line.slice(timestamp.length + 3);
 
 	const [roomid, ...bonus] = parseBrackets(line, '(').split(' ');
@@ -526,11 +526,11 @@ export class ModlogConverterTxt {
 
 		this.database = Database(this.isTesting ? ':memory:' : this.databaseFile);
 		this.database.exec(FS(`databases/schemas/modlog.sql`).readIfExistsSync());
-		if (useFTSExtension) {
+		if (useFTSExtension || Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension("native/fts_id_tokenizer.o")`);
-			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
 		} else {
-			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
 		}
 
 		this.insertionQuery = this.database.prepare(
@@ -542,8 +542,17 @@ export class ModlogConverterTxt {
 		this.insertionTransaction = this.database.transaction((entries: ModlogEntry[]) => {
 			for (const entry of entries) {
 				const alts = entry.alts || [];
-				delete entry.alts;
-				const result = this.insertionQuery.run(entry);
+				const result = this.insertionQuery.run({
+					action: entry.action,
+					roomID: entry.roomID,
+					time: entry.time,
+					visualRoomID: entry.visualRoomID || null,
+					userid: entry.userid || null,
+					autoconfirmedID: entry.autoconfirmedID || null,
+					ip: entry.ip || null,
+					loggedBy: entry.loggedBy || null,
+					note: entry.note || null,
+				});
 				this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
 				for (const alt of alts) {
 					this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
@@ -571,7 +580,7 @@ export class ModlogConverterTxt {
 
 			let entriesLogged = 0;
 			let lastLine = undefined;
-			let entries: string[] = [];
+			let entries: ModlogEntry[] = [];
 
 
 			const insertEntries = () => {
@@ -589,10 +598,9 @@ export class ModlogConverterTxt {
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
 				if (!entry) continue;
-				const rawLog = rawifyLog(entry);
-				if (roomid !== 'global') entries.push(rawLog);
+				if (roomid !== 'global') entries.push(entry);
 				if (entry.isGlobal) {
-					globalEntries.push(rawLog);
+					globalEntries.push(entry);
 				}
 				if (entries.length === ENTRIES_TO_BUFFER) insertEntries();
 			}

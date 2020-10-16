@@ -166,9 +166,9 @@ export class Modlog {
 		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync());
 		if (Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension("native/fts_id_tokenizer.o")`);
-			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
 		} else {
-			this.database.exec(`CREATE VIRTUAL TABLE modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
 		}
 
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
