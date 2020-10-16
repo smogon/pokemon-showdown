@@ -653,7 +653,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	magikarp: {
-		randomBattleMoves: ["tackle"],
+		randomBattleMoves: ["splash", "tackle"],
 		tier: "LC",
 	},
 	gyarados: {
