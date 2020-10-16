@@ -39,6 +39,7 @@ interface BattleSearchResults {
 const execFile = util.promisify(child_process.execFile);
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
+const BATTLESEARCH_QUERY_TIMEOUT = 90 * 60 * 60 * 1000; // 90 minutes
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
 const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
@@ -688,7 +689,7 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
-});
+}, BATTLESEARCH_QUERY_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!

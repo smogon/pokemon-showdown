@@ -460,17 +460,35 @@ export abstract class ProcessManager {
 
 export class QueryProcessManager<T = string, U = string> extends ProcessManager {
 	_query: (input: T) => U | Promise<U>;
+	timeout: number;
 
-	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>) {
+	/**
+	 * @param timeout The number of milliseconds to wait before terminating a query. Defaults to 900000 ms (15 minutes).
+	 */
+	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>, timeout = 15 * 60 * 1000) {
 		super(module);
 		this._query = query;
+		this.timeout = timeout;
 
 		processManagers.push(this);
 	}
-	query(input: T) {
+	async query(input: T) {
 		const process = this.acquire() as QueryProcessWrapper;
-		if (!process) return Promise.resolve(this._query(input));
-		return process.query(input);
+
+		if (!process) return this._query(input);
+
+		const timeout = setTimeout(() => {
+			const debugInfo = process.debug || "No debug information found.";
+			process.destroy();
+			throw new Error(
+				`A query originating in ${this.basename} took too long to complete; the process has been killed.\n${debugInfo}`
+			);
+		}, this.timeout);
+
+		const result = await process.query(input);
+
+		clearTimeout(timeout);
+		return result;
 	}
 	createProcess() {
 		return new QueryProcessWrapper(this.filename);
