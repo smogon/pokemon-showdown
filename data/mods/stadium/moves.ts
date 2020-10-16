@@ -178,8 +178,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 	struggle: {
-  		inherit: true,
-  		ignoreImmunity: {'Normal': true},
+		inherit: true,
+		ignoreImmunity: {'Normal': true},
 	},
 	wrap: {
 		inherit: true,
