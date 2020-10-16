@@ -553,7 +553,7 @@ export class ModlogConverterTxt {
 					loggedBy: entry.loggedBy || null,
 					note: entry.note || null,
 				});
-				this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
+				if (entry.note) this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
 				for (const alt of alts) {
 					this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
 				}

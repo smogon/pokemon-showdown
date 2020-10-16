@@ -203,7 +203,7 @@ export class Modlog {
 			alts: ID[],
 		}) => {
 			const result = this.modlogInsertionQuery.run(entry);
-			this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
+			if (entry.note) this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
 			for (const alt of entry.alts || []) {
 				this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
 			}
