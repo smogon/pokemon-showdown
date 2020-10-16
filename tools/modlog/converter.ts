@@ -17,7 +17,7 @@ import {IPTools} from '../../server/ip-tools';
 type ModlogFormat = 'txt' | 'sqlite';
 
 /** The number of modlog entries to write to the database on each transaction */
-const ENTRIES_TO_BUFFER = 100;
+const ENTRIES_TO_BUFFER = 25000;
 
 const IP_ONLY_ACTIONS = new Set([
 	'SHAREDIP', 'UNSHAREDIP', 'UNLOCKIP', 'UNLOCKRANGE', 'RANGEBAN', 'RANGELOCK',
