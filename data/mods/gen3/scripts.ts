@@ -34,8 +34,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Double battle multi-hit
 		// In Generation 3, the spread move modifier is 0.5x instead of 0.75x. Moves that hit both foes
 		// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
-		const {targets} = pokemon.getMoveTargets(move, target);
-		if (move.target === 'allAdjacentFoes' && targets.length > 1) {
+		if (move.spreadHit && move.target === 'allAdjacentFoes') {
 			const spreadModifier = move.spreadModifier || 0.5;
 			this.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.modify(baseDamage, spreadModifier);
