@@ -150,10 +150,7 @@ export class Modlog {
 	readonly database: Database.Database;
 
 	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
-	readonly noteInsertionQuery: Database.Statement<[number, string]>;
-	readonly useridInsertionQuery: Database.Statement<[number, string]>;
-	readonly autoconfirmedInsertionQuery: Database.Statement<[number, string]>;
-	readonly actionTakerInsertionQuery: Database.Statement<[number, string]>;
+	readonly FTSInsertionQuery: Database.Statement<[number, string?, string?, string?, string?]>;
 	readonly altsInsertionQuery: Database.Statement<[number, string]>;
 	readonly FTSAltsInsertionQuery: Database.Statement<[number, string]>;
 
@@ -187,14 +184,10 @@ export class Modlog {
 		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
 		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
 		this.modlogInsertionQuery = this.database.prepare(insertionQuerySource);
-		this.noteInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
-		this.useridInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, userid) VALUES (?, ?)`);
-		this.autoconfirmedInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog_fts (rowid, autoconfirmed_userid) VALUES (?, ?)`
+		this.FTSInsertionQuery = this.database.prepare(
+			`INSERT INTO modlog_fts (rowid, note, userid, autoconfirmed_userid, action_taker_userid) VALUES (?, ?, ?, ?, ?)`
 		);
-		this.actionTakerInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog_fts (rowid, action_taker_userid) VALUES (?, ?)`
-		);
+
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (modlog_id, userid) VALUES (?, ?)`);
 
@@ -227,10 +220,7 @@ export class Modlog {
 			const result = this.modlogInsertionQuery.run(entry);
 			const rowid = result.lastInsertRowid as number;
 
-			if (entry.note) this.noteInsertionQuery.run(rowid, entry.note);
-			if (entry.userid) this.useridInsertionQuery.run(rowid, entry.userid);
-			if (entry.autoconfirmedID) this.autoconfirmedInsertionQuery.run(rowid, entry.autoconfirmedID);
-			if (entry.loggedBy) this.actionTakerInsertionQuery.run(rowid, entry.loggedBy);
+			this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
 
 			for (const alt of entry.alts || []) {
 				this.altsInsertionTransaction(rowid, alt);

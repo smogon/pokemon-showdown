@@ -514,10 +514,7 @@ export class ModlogConverterTxt {
 	readonly database: Database.Database;
 
 	readonly insertionQuery: Database.Statement;
-	readonly noteInsertionQuery: Database.Statement<[number, string]>;
-	readonly useridInsertionQuery: Database.Statement<[number, string]>;
-	readonly autoconfirmedInsertionQuery: Database.Statement<[number, string]>;
-	readonly actionTakerInsertionQuery: Database.Statement<[number, string]>;
+	readonly FTSInsertionQuery: Database.Statement<[number, string?, string?, string?, string?]>;
 	readonly altsInsertionQuery: Database.Statement<[number, string]>;
 	readonly FTSAltsInsertionQuery: Database.Statement<[number, string]>;
 
@@ -538,7 +535,7 @@ export class ModlogConverterTxt {
 		this.database.exec(FS(`databases/schemas/modlog.sql`).readIfExistsSync());
 		if (useFTSExtension || Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
 		} else {
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
@@ -549,13 +546,8 @@ export class ModlogConverterTxt {
 			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
 			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
 		);
-		this.noteInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
-		this.useridInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, userid) VALUES (?, ?)`);
-		this.autoconfirmedInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog_fts (rowid, autoconfirmed_userid) VALUES (?, ?)`
-		);
-		this.actionTakerInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog_fts (rowid, action_taker_userid) VALUES (?, ?)`
+		this.FTSInsertionQuery = this.database.prepare(
+			`INSERT INTO modlog_fts (rowid, note, userid, autoconfirmed_userid, action_taker_userid) VALUES (?, ?, ?, ?, ?)`
 		);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (modlog_id, userid) VALUES (?, ?)`);
@@ -581,11 +573,7 @@ export class ModlogConverterTxt {
 					note: entry.note || null,
 				});
 				const rowid = result.lastInsertRowid as number;
-
-				if (entry.note) this.noteInsertionQuery.run(rowid, entry.note);
-				if (entry.userid) this.useridInsertionQuery.run(rowid, entry.userid);
-				if (entry.autoconfirmedID) this.autoconfirmedInsertionQuery.run(rowid, entry.autoconfirmedID);
-				if (entry.loggedBy) this.actionTakerInsertionQuery.run(rowid, entry.loggedBy);
+				this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
 
 				for (const alt of alts) {
 					this.altsInsertionTransaction(rowid, alt);
