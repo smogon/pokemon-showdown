@@ -183,10 +183,6 @@ export class YoutubeInterface {
 		}
 		return channel;
 	}
-	async runVideoSearch(query: string | boolean | number) {
-		const queryUrl = `${ROOT}search?part=snippet&order=relevance&maxResults=1&q=${encodeURIComponent(query)}`;
-		const raw = await Net(queryUrl).get({key: Config.youtubeKey});
-	}
 	getId(link: string) {
 		let id = '';
 		if (!link) throw new Chat.ErrorMessage('You must provide a YouTube link.');
