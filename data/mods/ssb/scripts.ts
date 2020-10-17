@@ -26,7 +26,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.runEvent('AfterMega', pokemon);
 
-		if (['Kaiju Bunny', 'Overneat', 'frostyicelad ❆', 'EpicNikolai'].includes(pokemon.name) && !pokemon.illusion) {
+		if (['Kaiju Bunny', 'Overneat', 'EpicNikolai'].includes(pokemon.name) && !pokemon.illusion) {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
 		}
 

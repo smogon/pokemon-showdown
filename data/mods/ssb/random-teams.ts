@@ -622,7 +622,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mode [5: Offensive]',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	'Robb576-Dusk Mane': {
+	'Robb576-Dusk-Mane': {
 		species: 'Necrozma-Dusk-Mane', ability: 'The Numbers Game', item: 'Leftovers', gender: 'M',
 		moves: ['Sunsteel Strike', 'Toxic', 'Rapid Spin'],
 		signatureMove: 'Mode [7: Defensive]',
