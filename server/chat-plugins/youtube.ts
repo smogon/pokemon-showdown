@@ -212,7 +212,7 @@ export class YoutubeInterface {
 		}
 		return room;
 	}
-	async searchVideo(name: string, limit?: number): Promise<string[]> {
+	async searchVideo(name: string, limit?: number): Promise<string[] | undefined> {
 		const raw = await Net(`${ROOT}search`).get({
 			query: {
 				part: 'snippet', q: name,
