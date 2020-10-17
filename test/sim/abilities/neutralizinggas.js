@@ -81,4 +81,20 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it.skip(`should not trigger twice if negated then replaced`, function () {
+		battle = common.createBattle([[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", ability: 'intrepidsword', moves: ['gastroacid', 'simplebeam']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices();
+		assert.statStage(wynaut, 'atk', 1);
+
+		// We already negated NGas, so it shouldn't run other abilities again
+		battle.makeChoices('auto', 'move simplebeam');
+		assert.statStage(wynaut, 'atk', 1);
+	});
 });
