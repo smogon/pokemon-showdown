@@ -148,13 +148,19 @@ export class Modlog {
 	streams: Map<ModlogID, Streams.WriteStream | null> = new Map();
 
 	readonly database: Database.Database;
-	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
 
-	readonly FTSInsertionQuery: Database.Statement<[number, string]>;
+	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
+	readonly noteInsertionQuery: Database.Statement<[number, string]>;
+	readonly useridInsertionQuery: Database.Statement<[number, string]>;
+	readonly autoconfirmedInsertionQuery: Database.Statement<[number, string]>;
+	readonly actionTakerInsertionQuery: Database.Statement<[number, string]>;
 	readonly altsInsertionQuery: Database.Statement<[number, string]>;
+	readonly FTSAltsInsertionQuery: Database.Statement<[number, string]>;
+
 	readonly renameQuery: Database.Statement<[string, string]>;
 	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
 	readonly insertionTransaction: Database.Transaction;
+	readonly altsInsertionTransaction: Database.Transaction;
 
 	constructor(flatFilePath: string, databasePath: string) {
 		this.logPath = flatFilePath;
@@ -165,10 +171,12 @@ export class Modlog {
 		// Set up tables, etc
 		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync());
 		if (Config.modlogftsextension) {
-			this.database.exec(`SELECT load_extension("native/fts_id_tokenizer.o")`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, tokenize='id_tokenizer')`);
 		} else {
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, content=modlog, content_rowid=modlog_id)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts)`);
 		}
 
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
@@ -178,10 +186,18 @@ export class Modlog {
 
 		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
 		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
-
 		this.modlogInsertionQuery = this.database.prepare(insertionQuerySource);
-		this.FTSInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
+		this.noteInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, note) VALUES (?, ?)`);
+		this.useridInsertionQuery = this.database.prepare(`INSERT INTO modlog_fts (rowid, userid) VALUES (?, ?)`);
+		this.autoconfirmedInsertionQuery = this.database.prepare(
+			`INSERT INTO modlog_fts (rowid, autoconfirmed_userid) VALUES (?, ?)`
+		);
+		this.actionTakerInsertionQuery = this.database.prepare(
+			`INSERT INTO modlog_fts (rowid, action_taker_userid) VALUES (?, ?)`
+		);
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
+		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (rowid, userid) VALUES (?, ?)`);
+
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
 			`SELECT * FROM modlog WHERE (roomid = 'global' OR roomid LIKE 'global-%') ` +
@@ -189,6 +205,12 @@ export class Modlog {
 			`AND timestamp > ?` +
 			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) `
 		);
+
+
+		this.altsInsertionTransaction = this.database.transaction((modlogID: number, userID: string) => {
+			const result = this.altsInsertionQuery.run(modlogID, userID);
+			this.FTSAltsInsertionQuery.run(result.lastInsertRowid as number, userID);
+		});
 
 		this.insertionTransaction = this.database.transaction((entry: {
 			action: string,
@@ -203,9 +225,15 @@ export class Modlog {
 			alts: ID[],
 		}) => {
 			const result = this.modlogInsertionQuery.run(entry);
-			if (entry.note) this.FTSInsertionQuery.run(result.lastInsertRowid as number, entry.note);
+			const rowid = result.lastInsertRowid as number;
+
+			if (entry.note) this.noteInsertionQuery.run(rowid, entry.note);
+			if (entry.userid) this.useridInsertionQuery.run(rowid, entry.userid);
+			if (entry.autoconfirmedID) this.autoconfirmedInsertionQuery.run(rowid, entry.autoconfirmedID);
+			if (entry.loggedBy) this.actionTakerInsertionQuery.run(rowid, entry.loggedBy);
+
 			for (const alt of entry.alts || []) {
-				this.altsInsertionQuery.run(result.lastInsertRowid as number, alt);
+				this.altsInsertionTransaction(rowid, alt);
 			}
 		});
 	}
@@ -504,12 +532,12 @@ export class Modlog {
 		if (search.anyField) {
 			query += ` AND action LIKE ? || '%'`;
 
-			query += ` OR userid LIKE ? || '%'`;
-			query += ` OR autoconfirmed_userid LIKE ? || '%'`;
-			query += ` OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE ? || '%')`;
+			query += ` OR modlog_fts.userid MATCH ?`;
+			query += ` OR modlog_fts.autoconfirmed_userid LIKE ?`;
+			query += ` OR EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = rowid WHERE alts.modlog_id = modlog.modlog_id AND userid MATCH ?)`;
+			query += ` OR modlog_fts.action_taker_userd MATCH ?`;
 
 			query += ` OR ip LIKE ? || '%'`;
-			query += ` OR action_taker_userid LIKE ? || '%'`;
 
 			args.push(...Array(6).fill(search.anyField));
 
@@ -525,7 +553,13 @@ export class Modlog {
 		}
 
 		if (userid) {
-			query += ` AND (userid LIKE ? || '%' OR autoconfirmed_userid LIKE ? || '%' OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid LIKE ? || '%'))`;
+			query += [
+				` AND (`,
+				`modlog_fts.userid MATCH ? OR`,
+				`modlog_fts.autoconfirmed_userid MATCH ? OR`,
+				`EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = rowid WHERE alts.modlog_id = modlog.modlog_id AND userid MATCH ?)`,
+				`)`,
+			].join(' ');
 			args.push(userid, userid, userid);
 		}
 
@@ -535,7 +569,7 @@ export class Modlog {
 		}
 
 		if (search.actionTaker) {
-			query += ` AND action_taker_userid LIKE ? || '%'`;
+			query += ` AND modlog_fts.action_taker_userid MATCH ?`;
 			args.push(search.actionTaker);
 		}
 
