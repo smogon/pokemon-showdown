@@ -68,4 +68,42 @@ describe('Unburden', function () {
 		battle.makeChoices('move machpunch', 'move bestow');
 		assert.equal(battle.p1.active[0].getStat('spe'), originalSpeed);
 	});
+
+	it(`should not trigger when Neutralizing Gas is active on the field`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
+		], [
+			{species: "Pancham", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Whismur", moves: ['sleeptalk']},
+		]]);
+
+		const wynaut = battle.p1.active[0];
+		const originalSpeed = wynaut.getStat('spe');
+		battle.makeChoices();
+		assert.equal(wynaut.getStat('spe'), originalSpeed);
+
+		//The chance to trigger Unburden is gone, so it missed the timing and doesn't gain the speed post-NGas removal
+		battle.makeChoices('auto', 'switch 2');
+		assert.equal(wynaut.getStat('spe'), originalSpeed);
+	});
+
+	it.skip(`should be negated while Neutralizing Gas is active on the field`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
+		], [
+			{species: "Whismur", moves: ['sleeptalk']},
+			{species: "Pancham", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		]]);
+
+		const wynaut = battle.p1.active[0];
+		const originalSpeed = wynaut.getStat('spe');
+		battle.makeChoices();
+		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
+
+		battle.makeChoices('auto', 'switch 2');
+		assert.equal(wynaut.getStat('spe'), originalSpeed);
+
+		battle.makeChoices('auto', 'switch 2');
+		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
+	});
 });

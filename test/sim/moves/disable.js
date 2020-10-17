@@ -10,11 +10,27 @@ describe('Disable', function () {
 		battle.destroy();
 	});
 
-	it('should prevent the use of the target\'s last move', function () {
-		battle = common.gen(7).createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Abra', ability: 'synchronize', item: 'laggingtail', moves: ['disable']}]});
-		battle.setPlayer('p2', {team: [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]});
-		battle.makeChoices('move disable', 'move teleport');
-		assert.cantMove(() => battle.makeChoices('move disable', 'move teleport'), 'Abra', 'Teleport');
+	it(`should prevent the use of the target's last move`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['disable']},
+		], [
+			{species: 'Spearow', moves: ['growl']},
+		]]);
+
+		battle.makeChoices();
+		assert.cantMove(() => battle.makeChoices('auto', 'move growl'), 'Spearow', 'growl');
+	});
+
+	it(`should interupt consecutively executed moves like Outrage`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['disable']},
+		], [
+			{species: 'Spearow', moves: ['outrage', 'sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		assert.cantMove(() => battle.makeChoices('auto', 'move sleeptalk'), 'Spearow', 'sleeptalk');
+		battle.makeChoices();
+		assert.cantMove(() => battle.makeChoices('auto', 'move outrage'));
 	});
 });
