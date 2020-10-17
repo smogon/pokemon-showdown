@@ -421,7 +421,10 @@ export function rawifyLog(log: ModlogEntry) {
 	if (log.userid) result += `: [${log.userid}]`;
 	if (log.autoconfirmedID) result += ` ac: [${log.autoconfirmedID}]`;
 	if (log.alts) result += ` alts: [${log.alts.join('], [')}]`;
-	if (log.ip) result += ` [${log.ip}]`;
+	if (log.ip) {
+		if (!log.userid) result += `:`;
+		result += ` [${log.ip}]`;
+	}
 	if (log.loggedBy) result += `${result.endsWith(']') ? '' : ':'} by ${log.loggedBy}`;
 	if (log.note) result += `: ${log.note}`;
 	return result + `\n`;
@@ -583,10 +586,14 @@ export class ModlogConverterTxt {
 			let entries: ModlogEntry[] = [];
 
 
-			const insertEntries = () => {
+			const insertEntries = (alwaysShowProgress: boolean) => {
 				this.insertionTransaction(entries);
 				entriesLogged += entries.length;
-				if (!Config.nofswriting && (entriesLogged % ENTRIES_TO_BUFFER === 0 || entriesLogged < ENTRIES_TO_BUFFER)) {
+				if (!Config.nofswriting && (
+					alwaysShowProgress ||
+					entriesLogged % ENTRIES_TO_BUFFER === 0 ||
+					entriesLogged < ENTRIES_TO_BUFFER
+				)) {
 					process.stdout.clearLine(0);
 					process.stdout.cursorTo(0);
 					process.stdout.write(`Inserted ${entriesLogged} entries from '${roomid}'`);
@@ -604,7 +611,7 @@ export class ModlogConverterTxt {
 				}
 				if (entries.length === ENTRIES_TO_BUFFER) insertEntries();
 			}
-			insertEntries();
+			insertEntries(true);
 			if (entriesLogged) process.stdout.write('\n');
 		}
 		return this.database;
