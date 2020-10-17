@@ -212,6 +212,16 @@ export class YoutubeInterface {
 		}
 		return room;
 	}
+	async searchVideo(name: string, limit?: number): Promise<string[]> {
+		const raw = await Net(`${ROOT}search`).get({
+			query: {
+				part: 'snippet', q: name,
+				key: Config.youtubeKey, order: 'relevance', maxResults: limit || 10,
+			},
+		});
+		const result = JSON.parse(raw);
+		return result.items?.map((item: AnyObject) => item?.id?.videoId).filter(Boolean);
+	}
 }
 
 export const YouTube = new YoutubeInterface(channelData);
