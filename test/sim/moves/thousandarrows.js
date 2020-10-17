@@ -15,9 +15,9 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Tropius", ability: 'harvest', moves: ['synthesis']}]});
 		battle.makeChoices('move thousandarrows', 'move synthesis');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'move synthesis');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should ignore type effectiveness on the first hit against Flying-type Pokemon', function () {
@@ -37,7 +37,7 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows']}]});
 		battle.setPlayer('p2', {team: [{species: "Ho-Oh", ability: 'wonderguard', item: 'ringtarget', moves: ['recover']}]});
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not ground or deal neutral damage to Flying-type Pokemon holding an Iron Ball', function () {
@@ -45,9 +45,9 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'mudslap']}]});
 		battle.setPlayer('p2', {team: [{species: "Ho-Oh", ability: 'shellarmor', item: 'ironball', moves: ['recover', 'trick']}]});
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		const hp = battle.p2.active[0].hp;
-		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
+		assert.notEqual(hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move mudslap', 'move trick');
 		assert.equal(hp, battle.p2.active[0].hp);
 	});
@@ -60,12 +60,12 @@ describe('Thousand Arrows', function () {
 		// During Gravity, Thousand Arrows can be super effective but once it ends has to be neutral for one hit
 		while (battle.field.getPseudoWeather('gravity')) {
 			battle.makeChoices('move thousandarrows', 'move recover');
-			assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+			assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		}
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it('should hit Pokemon with Levitate and remove their Ground immunity', function () {
@@ -73,9 +73,9 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Cresselia", ability: 'levitate', moves: ['recover']}]});
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'move recover');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should hit non-Flying-type Pokemon with Levitate with standard type effectiveness', function () {
@@ -92,9 +92,9 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Donphan", ability: 'sturdy', item: 'airballoon', moves: ['stealthrock']}]});
 		battle.makeChoices('move thousandarrows', 'move stealthrock');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'move stealthrock');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not hit Ground-type Pokemon when affected by Electrify', function () {

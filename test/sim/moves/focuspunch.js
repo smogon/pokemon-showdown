@@ -23,7 +23,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['toxic']}]});
 		battle.makeChoices('move focuspunch', 'move toxic');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not cause the user to lose focus if hit while behind a substitute', function () {
@@ -32,7 +32,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}]});
 		battle.makeChoices('move substitute', 'move magicalleaf');
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should cause the user to lose focus if hit by a move called by Nature Power', function () {
@@ -50,7 +50,7 @@ describe('Focus Punch', function () {
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move focuspunch', 'move toxic');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should cause the user to lose focus if hit by an attacking move followed by a status move in one turn', function () {

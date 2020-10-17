@@ -29,39 +29,37 @@ const DATASET_B = [
 	{action: 'TOUR START', loggedBy: 'annika'},
 ];
 
-
 function lastLine(database, roomid) {
 	return database.prepare(
 		`SELECT * FROM modlog WHERE roomid = ? ORDER BY modlog_id DESC LIMIT 1`
 	).get(roomid);
 }
 
-
 describe('Modlog', () => {
 	describe('Modlog#prepareSQLSearch', () => {
 		it('should respect the maxLines parameter', () => {
 			const query = modlog.prepareSQLSearch(['lobby'], 1337, false, {});
-			assert.ok(query.statement.source.endsWith('LIMIT ?'));
-			assert.ok(query.args.includes(1337));
+			assert(query.statement.source.endsWith('LIMIT ?'));
+			assert(query.args.includes(1337));
 
 			const noMaxLines = modlog.prepareSQLSearch(['lobby'], 0, false, {}).statement;
-			assert.ok(!noMaxLines.source.toUpperCase().includes('LIMIT'));
+			assert(!noMaxLines.source.toUpperCase().includes('LIMIT'));
 		});
 
 		it('should attempt to respect onlyPunishments', () => {
 			const query = modlog.prepareSQLSearch(['lobby'], 0, true, {});
-			assert.ok(query.statement.source.includes('action IN ('));
-			assert.ok(query.args.includes('WEEKLOCK'));
+			assert(query.statement.source.includes('action IN ('));
+			assert(query.args.includes('WEEKLOCK'));
 		});
 	});
 
 	describe('Modlog#getSharedID', () => {
-		assert.ok(modlog.getSharedID('battle-gen8randombattle-42'));
-		assert.ok(modlog.getSharedID('groupchat-annika-shitposting'));
-		assert.ok(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
+		assert(modlog.getSharedID('battle-gen8randombattle-42'));
+		assert(modlog.getSharedID('groupchat-annika-shitposting'));
+		assert(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
 
-		assert.ok(!modlog.getSharedID('1v1'));
-		assert.ok(!modlog.getSharedID('development'));
+		assert(!modlog.getSharedID('1v1'));
+		assert(!modlog.getSharedID('development'));
 	});
 
 	describe('Modlog#write', () => {
@@ -74,8 +72,8 @@ describe('Modlog', () => {
 				`SELECT * FROM modlog WHERE roomid = 'development' ORDER BY modlog_id DESC LIMIT 2`
 			).all();
 
-			assert.strictEqual(lines.pop().note, 'This message is logged first');
-			assert.strictEqual(lines.pop().note, 'This message is logged second');
+			assert.equal(lines.pop().note, 'This message is logged first');
+			assert.equal(lines.pop().note, 'This message is logged second');
 		});
 
 		it('should throw an error when writing to a destroyed modlog stream', () => {
@@ -96,8 +94,8 @@ describe('Modlog', () => {
 			modlog.initialize('battle-gen8randombattle-1337');
 			modlog.write('battle-gen8randombattle-1337', {note: "I'm testing overrideID", action: 'UNITTEST'}, 'heyadora');
 			const line = lastLine(modlog.database, 'battle-gen8randombattle-1337');
-			assert.strictEqual(line.note, "I'm testing overrideID");
-			assert.strictEqual(line.visual_roomid, 'heyadora');
+			assert.equal(line.note, "I'm testing overrideID");
+			assert.equal(line.visual_roomid, 'heyadora');
 		});
 	});
 
@@ -109,16 +107,16 @@ describe('Modlog', () => {
 		await modlog.rename('oldroom', 'newroom');
 		const line = lastLine(modlog.database, 'newroom');
 
-		assert.strictEqual(entry.action, line.action);
-		assert.strictEqual(entry.note, line.note);
+		assert.equal(entry.action, line.action);
+		assert.equal(entry.note, line.note);
 
 		const newEntry = {note: 'This modlog has been renamed!', action: 'UNITTEST'};
 		modlog.write('newroom', newEntry);
 
 		const newLine = lastLine(modlog.database, 'newroom');
 
-		assert.strictEqual(newEntry.action, newLine.action);
-		assert.strictEqual(newEntry.note, newLine.note);
+		assert.equal(newEntry.action, newLine.action);
+		assert.equal(newEntry.note, newLine.note);
 	});
 
 	// Skipped until SQL searching is properly implemented
@@ -136,7 +134,7 @@ describe('Modlog', () => {
 
 		it('should be capable of reading the entire modlog file', async () => {
 			const results = await modlog.search('readingtest2', {}, 10000);
-			assert.strictEqual(results.results.length, DATASET_B.length);
+			assert.equal(results.results.length, DATASET_B.length);
 		});
 
 		it('user searches should be case-insensitive', async () => {
@@ -145,15 +143,15 @@ describe('Modlog', () => {
 			const exactUpper = await modlog.search('readingtest', {user: {search: 'sOMEtroLL', isExact: true}});
 			const exactLower = await modlog.search('readingtest', {user: {search: 'sometroll', isExact: true}});
 
-			assert.deepStrictEqual(notExactUpper.results, notExactLower.results);
-			assert.deepStrictEqual(exactUpper.results, exactLower.results);
+			assert.deepEqual(notExactUpper.results, notExactLower.results);
+			assert.deepEqual(exactUpper.results, exactLower.results);
 		});
 
 		it('note searches should respect isExact', async () => {
 			const notExact = await modlog.search('readingtest', {note: {searches: ['has man'], isExact: false}});
 			const exact = await modlog.search('readingtest', {note: {searches: ['has man'], isExact: true}});
-			assert.strictEqual(notExact.results.length, 0);
-			assert.ok(exact.results.length);
+			assert.equal(notExact.results.length, 0);
+			assert(exact.results.length);
 		});
 
 		it.skip('should be LIFO (last-in, first-out)', async () => {
@@ -162,13 +160,13 @@ describe('Modlog', () => {
 			modlog.write('lifotest', {note: 'firstwrite', action: 'UNITTEST', timestamp: 1});
 			modlog.write('lifotest', {note: 'secondwrite', action: 'UNITTEST', timestamp: 2});
 			const search = await modlog.search('lifotest');
-			assert.strictEqual(search.results.length, 2);
+			assert.equal(search.results.length, 2);
 
-			assert.ok(search.results[0].note !== 'secondwrite');
-			assert.ok(search.results[0].note === 'firstwrite');
+			assert(search.results[0].note !== 'secondwrite');
+			assert(search.results[0].note === 'firstwrite');
 
-			assert.ok(search.results[1].note !== 'firstwrite');
-			assert.ok(search.results[1].note === 'secondwrite');
+			assert(search.results[1].note !== 'firstwrite');
+			assert(search.results[1].note === 'secondwrite');
 		});
 
 		it('should support limiting the number of responses', async () => {
@@ -176,24 +174,24 @@ describe('Modlog', () => {
 			const limited = await modlog.search('readingtest', {}, 5);
 
 			assert.equal(limited.results.length, 5);
-			assert.ok(unlimited.results.length > limited.results.length);
+			assert(unlimited.results.length > limited.results.length);
 
-			assert.ok(limited.results[0].note.includes('LAST ENTRY'));
-			assert.ok(unlimited.results[0].note.includes('LAST ENTRY'));
+			assert(limited.results[0].note.includes('LAST ENTRY'));
+			assert(unlimited.results[0].note.includes('LAST ENTRY'));
 
 			const limitedLast = limited.results.pop().note;
 			const unlimitedLast = unlimited.results.pop().note;
 
-			assert.ok(!limitedLast.includes('FIRST ENTRY'));
-			assert.ok(unlimitedLast.includes('FIRST ENTRY'));
+			assert(!limitedLast.includes('FIRST ENTRY'));
+			assert(unlimitedLast.includes('FIRST ENTRY'));
 		});
 
 		it('should support filtering out non-punishment-related logs', async () => {
 			const all = (await modlog.search('readingtest2', {}, 20, false)).results;
 			const onlyPunishments = (await modlog.search('readingtest2', {}, 20, true)).results;
 
-			assert.ok(all.length > onlyPunishments.length);
-			assert.strictEqual(
+			assert(all.length > onlyPunishments.length);
+			assert.equal(
 				onlyPunishments.filter(result => result.action === 'ROOMBAN').length,
 				onlyPunishments.length
 			);

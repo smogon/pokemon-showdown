@@ -56,7 +56,7 @@ describe('Ingrain', function () {
 		battle.setPlayer('p2', {team: [{species: 'Carnivine', ability: 'levitate', moves: ['earthquake', 'ingrain']}]});
 		battle.makeChoices('move ingrain', 'move ingrain');
 		battle.makeChoices('move earthquake', 'move earthquake');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 });

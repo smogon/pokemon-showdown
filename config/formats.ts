@@ -510,9 +510,14 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['[Gen 8] National Dex', 'Same Type Clause'],
-		banlist: ['Aegislash', 'Hoopa-Unbound', 'Kartana', 'Magearna', 'Tapu Lele', 'Zygarde-10%', 'Battle Bond', 'Damp Rock', 'Smooth Rock'],
-		unbanlist: ['Alakazam-Mega', 'Darmanitan-Galar', 'Deoxys-Speed', 'Landorus-Base', 'Tornadus-Therian', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Arena Trap'],
+		ruleset: ['Standard NatDex', 'Same Type Clause', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+		banlist: [
+			'Aegislash', 'Arceus', 'Blastoise-Mega', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Genesect', 'Gengar-Mega',
+			'Giratina', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lucario-Mega',
+			'Lugia', 'Magearna', 'Marshadow', 'Metagross-Mega', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
+			'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Tapu Lele', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zygarde',
+			'Arena Trap', 'Battle Bond', 'Moody', 'Shadow Tag', 'Damp Rock', 'Smooth Rock',
+		],
 	},
 	{
 		name: "[Gen 8] National Dex AG",
@@ -2667,7 +2672,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Arceus EV Limit', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 4] Custom Game",

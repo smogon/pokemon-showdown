@@ -25,7 +25,7 @@ describe('Most status moves', function () {
 		battle.makeChoices('move glare', 'switch 2'); // Dusknoir
 		assert.equal(battle.p2.active[0].status, 'par');
 		battle.makeChoices('move confuseray', 'switch 3'); // Slaking
-		assert.ok(battle.p2.active[0].volatiles['confusion']);
+		assert(battle.p2.active[0].volatiles['confusion']);
 		battle.makeChoices('move sandattack', 'switch 4'); // Tornadus
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);
 		battle.makeChoices('move sandattack', 'switch 5'); // Unown (Levitate)
@@ -46,27 +46,27 @@ describe('Most status moves', function () {
 
 		battle.makeChoices('move thunderwave', 'move charge');
 		assert.equal(battle.p2.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move willowisp', 'switch 2'); // Emboar
 		assert.equal(battle.p2.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move poisongas', 'switch 3'); // Muk
 		assert.equal(battle.p2.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move toxic', 'move shadowsneak');
 		assert.equal(battle.p2.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move poisongas', 'switch 4'); // Aron
 		assert.equal(battle.p2.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move toxic', 'move magnetrise');
 		assert.equal(battle.p2.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 	});
 });
 

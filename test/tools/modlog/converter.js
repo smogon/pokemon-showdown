@@ -35,16 +35,16 @@ const garfieldCopypasta = [
 describe('Modlog conversion script', () => {
 	describe('bracket parser', () => {
 		it('should correctly parse parentheses', () => {
-			assert.strictEqual(converter.parseBrackets('(id)', '('), 'id');
+			assert.equal(converter.parseBrackets('(id)', '('), 'id');
 		});
 
 		it('should correctly parse square brackets', () => {
-			assert.strictEqual(converter.parseBrackets('[id]', '['), 'id');
+			assert.equal(converter.parseBrackets('[id]', '['), 'id');
 		});
 
 		it('should correctly parse the wrong type of bracket coming before', () => {
-			assert.strictEqual(converter.parseBrackets('(something) [id]', '['), 'id');
-			assert.strictEqual(converter.parseBrackets('[something] (id)', '('), 'id');
+			assert.equal(converter.parseBrackets('(something) [id]', '['), 'id');
+			assert.equal(converter.parseBrackets('[something] (id)', '('), 'id');
 		});
 	});
 
@@ -65,197 +65,197 @@ describe('Modlog conversion script', () => {
 				garfieldCopypasta,
 			];
 			for (const log of modernLogs) {
-				assert.strictEqual(converter.modernizeLog(log), log);
+				assert.equal(converter.modernizeLog(log), log);
 			}
 		});
 
 		it('should correctly parse old-format promotions and demotions', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [annika] was promoted to Voice by [heartofetheria].'),
 				'[2020-08-23T19:50:49.944Z] (development) GLOBAL VOICE: [annika] by heartofetheria'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([annika] was demoted to Room regular user by [heartofetheria].)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMREGULAR USER: [annika] by heartofetheria: (demote)'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2017-05-31T22:00:33.159Z] (espanol) vodsrtrainer MAR cos was demoted to Room regular user by [blazask].`),
 				`[2017-05-31T22:00:33.159Z] (espanol) ROOMREGULAR USER: [vodsrtrainermarcos] by blazask: (demote)`
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([annika] was demoted to Room Moderator by [heartofetheria].)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMMODERATOR: [annika] by heartofetheria: (demote)'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [annika] was appointed Room Owner by [heartofetheria].'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMOWNER: [annika] by heartofetheria'
 			);
 		});
 
 		it('should correctly parse entries about modchat and modjoin', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([annika] set modchat to autoconfirmed)'),
 				'[2020-08-23T19:50:49.944Z] (development) MODCHAT: by annika: to autoconfirmed'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika set modjoin to +.'),
 				'[2020-08-23T19:50:49.944Z] (development) MODJOIN: by annika: +'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika turned off modjoin.'),
 				'[2020-08-23T19:50:49.944Z] (development) MODJOIN: by annika: OFF'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika set modjoin to sync.'),
 				'[2020-08-23T19:50:49.944Z] (development) MODJOIN SYNC: by annika'
 			);
 		});
 
 		it('should correctly parse modnotes', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2020-08-23T19:50:49.944Z] (development) ([annika] notes: I'm making a modnote)`),
 				`[2020-08-23T19:50:49.944Z] (development) NOTE: by annika: I'm making a modnote`
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2017-10-04T20:48:14.592Z] (bigbang) (Lionyx notes: test was banned by lionyx`),
 				`[2017-10-04T20:48:14.592Z] (bigbang) NOTE: by lionyx: test was banned by lionyx`
 			);
 		});
 
 		it('should correctly parse userids containing `notes`', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2014-11-24T11:10:34.798Z] (lobby) ([joimnotesyakcity] was trolled by his friends)`),
 				`[2014-11-24T11:10:34.798Z] (lobby) [joimnotesyakcity] was trolled by his friends`
 			);
 		});
 
 		it('should correctly parse roomintro and staffintro entries', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika changed the roomintro.)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMINTRO: by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika changed the staffintro.)'),
 				'[2020-08-23T19:50:49.944Z] (development) STAFFINTRO: by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika deleted the roomintro.)'),
 				'[2020-08-23T19:50:49.944Z] (development) DELETEROOMINTRO: by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika deleted the staffintro.)'),
 				'[2020-08-23T19:50:49.944Z] (development) DELETESTAFFINTRO: by annika'
 			);
 		});
 
 		it('should correctly parse room description changes', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([annika] changed the roomdesc to: "a description".)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMDESC: by annika: to "a description"'
 			);
 		});
 
 		it('should correctly parse declarations', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika declared I am declaring something'),
 				'[2020-08-23T19:50:49.944Z] (development) DECLARE: by annika: I am declaring something'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika declared: I am declaring something'),
 				'[2020-08-23T19:50:49.944Z] (development) DECLARE: by annika: I am declaring something'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika globally declared (chat level) I am chat declaring something'),
 				'[2020-08-23T19:50:49.944Z] (development) CHATDECLARE: by annika: I am chat declaring something'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) Annika globally declared I am globally declaring something'),
 				'[2020-08-23T19:50:49.944Z] (development) GLOBALDECLARE: by annika: I am globally declaring something'
 			);
 		});
 
 		it('should correctly parse entries about roomevents', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika edited the roomevent titled "Writing Unit Tests".)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMEVENT: by annika: edited "Writing Unit Tests"'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika removed a roomevent titled "Writing Unit Tests".)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMEVENT: by annika: removed "Writing Unit Tests"'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) (Annika added a roomevent titled "Writing Unit Tests".)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMEVENT: by annika: added "Writing Unit Tests"'
 			);
 		});
 
 		it('should correctly parse old-format tournament modlogs', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) ([annika] created a tournament in randombattle format.)'),
 				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR CREATE: by annika: randombattle'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) ([heartofetheria] was disqualified from the tournament by Annika)'),
 				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR DQ: [heartofetheria] by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto disqualify timeout was set to 2 by Annika)'),
 				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTODQ: by annika: 2'
 			);
 		});
 
 		it('should correctly parse old-format roombans', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was banned from room development by annika'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMBAN: [heartofetheria] by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was banned from room development by annika (reason)'),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMBAN: [heartofetheria] by annika: reason'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2015-06-07T13:44:30.057Z] (shituusers) ROOMBAN: [eyan] (You have been kicked by +Cynd(~'e')~quil. Reason: Undefined) by shituubot`),
 				`[2015-06-07T13:44:30.057Z] (shituusers) ROOMBAN: [eyan] by shituubot: You have been kicked by +Cynd(~'e')~quil. Reason: Undefined`
 			);
 		});
 
 		it('should correctly parse old-format mutes', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was muted by annikafor1hour (reason)'),
 				'[2020-08-23T19:50:49.944Z] (development) HOURMUTE: [heartofetheria] by annika: reason'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) heartofetheria was muted by Annika for 1 hour (reason)'),
 				'[2020-08-23T19:50:49.944Z] (development) HOURMUTE: [heartofetheria] by annika: reason'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2016-09-27T18:25:55.574Z] (swag) harembe⚠ was muted by rubyfor1hour (harembe was promoted to ! by ruby.)'),
 				'[2016-09-27T18:25:55.574Z] (swag) HOURMUTE: [harembe] by ruby: harembe was promoted to ! by ruby.'
 			);
 		});
 
 		it('should correctly parse old-format weeklocks', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) heartofetheria was locked from talking for a week by annika (reason) [IP]'),
 				'[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [heartofetheria] [IP] by annika: reason'
 			);
 		});
 
 		it('should correctly parse old-format global bans', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was banned by annika (reason) [IP]'),
 				'[2020-08-23T19:50:49.944Z] (development) BAN: [heartofetheria] [IP] by annika: reason'
 			);
 		});
 
 		it('should correctly parse alts using nextLine', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(
 					'[2020-08-23T19:50:49.944Z] (development) heartofetheria was locked from talking for a week by annika (reason)',
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s locked alts: [annika0], [hordeprime])`
@@ -263,7 +263,7 @@ describe('Modlog conversion script', () => {
 				'[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [heartofetheria] alts: [annika0], [hordeprime] by annika: reason'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(
 					'[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was banned from room development by annika',
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s banned alts: [annika0], [hordeprime])`
@@ -273,34 +273,34 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should correctly parse poll modlogs', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([apoll] was started by [annika].)',),
 				'[2020-08-23T19:50:49.944Z] (development) POLL: by annika'
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([thepoll] was ended by [annika].)',),
 				'[2020-08-23T19:50:49.944Z] (development) POLL END: by annika'
 			);
 		});
 
 		it('should correctly parse Trivia modlogs', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (trivia) (User annika won the game of Triumvirate mode trivia under the All category with a cap of 50 points, with 50 points and 10 correct answers! Second place: heartofetheria (10 points), third place: hordeprime (5 points))'),
 				'[2020-08-23T19:50:49.944Z] (trivia) TRIVIAGAME: by unknown: User annika won the game of Triumvirate mode trivia under the All category with a cap of 50 points, with 50 points and 10 correct answers! Second place: heartofetheria (10 points), third place: hordeprime (5 points)'
 			);
 		});
 
 		it('should handle claiming helptickets', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) Annika claimed this ticket.'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETCLAIM: by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) This ticket is now claimed by Annika.'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETCLAIM: by annika'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) This ticket is now claimed by [annika]'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETCLAIM: by annika'
 			);
@@ -308,49 +308,49 @@ describe('Modlog conversion script', () => {
 
 		it('should handle closing helptickets', () => {
 			// Abandonment
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) This ticket is no longer claimed.'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETUNCLAIM'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) Heart of Etheria is no longer interested in this ticket.'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETABANDON: by heartofetheria'
 			);
 
 			// Closing
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) Annika closed this ticket.'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETCLOSE: by annika'
 			);
 
 			// Deletion
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) Annika deleted this ticket.'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETDELETE: by annika'
 			);
 		});
 
 		it('should handle opening helptickets', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (help-heartofetheria) Heart of Etheria opened a new ticket. Issue: Being trapped in a unit test factory'),
 				'[2020-08-23T19:50:49.944Z] (help-heartofetheria) TICKETOPEN: by heartofetheria: Being trapped in a unit test factory'
 			);
 		});
 
 		it('should handle Scavengers modlogs', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (scavengers) SCAV SETHOSTPOINTS: [room: subroom] by annika: 42'),
 				'[2020-08-23T19:50:49.944Z] (scavengers) SCAV SETHOSTPOINTS: by annika: 42 [room: subroom]'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (scavengers) SCAV TWIST: [room: subroom] by annika: your mom'),
 				'[2020-08-23T19:50:49.944Z] (scavengers) SCAV TWIST: by annika: your mom [room: subroom]'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (scavengers) SCAV SETPOINTS: [room: subroom] by annika: ååååååå'),
 				'[2020-08-23T19:50:49.944Z] (scavengers) SCAV SETPOINTS: by annika: ååååååå [room: subroom]'
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (scavengers) ([annika] has been caught attempting a hunt with 2 connections on the account. The user has also been given 1 infraction point on the player leaderboard.)'),
 				'[2020-08-23T19:50:49.944Z] (scavengers) SCAV CHEATER: [annika]: caught attempting a hunt with 2 connections on the account; has also been given 1 infraction point on the player leaderboard'
 			);
@@ -360,18 +360,18 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should handle Wi-Fi modlogs', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2020-08-23T19:50:49.944Z] (wifi) GIVEAWAY WIN: Annika won Heart of Etheria's giveaway for a "deluxe shitposter 1000" (OT: Entrapta TID: 1337)`),
 				`[2020-08-23T19:50:49.944Z] (wifi) GIVEAWAY WIN: [annika]: Heart of Etheria's giveaway for a "deluxe shitposter 1000" (OT: Entrapta TID: 1337)`
 			);
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2020-08-23T19:50:49.944Z] (wifi) GTS FINISHED: Annika has finished their GTS giveaway for "deluxe shitposter 2000"`),
 				`[2020-08-23T19:50:49.944Z] (wifi) GTS FINISHED: [annika]: their GTS giveaway for "deluxe shitposter 2000"`
 			);
 		});
 
 		it('should handle global declarations mentioning promotions correctly', () => {
-			assert.strictEqual(
+			assert.equal(
 				converter.modernizeLog(`[2015-07-21T06:04:54.369Z] (lobby) xfix declared GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`),
 				`[2015-07-21T06:04:54.369Z] (lobby) DECLARE: by xfix: GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`
 			);
@@ -380,7 +380,7 @@ describe('Modlog conversion script', () => {
 
 	describe('text entry to ModlogEntry converter', () => {
 		it('should correctly parse modernized promotions and demotions', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) ROOMMODERATOR: [annika] by heartofetheria`),
 				{
 					action: 'ROOMMODERATOR', roomID: 'development', userid: 'annika',
@@ -388,7 +388,7 @@ describe('Modlog conversion script', () => {
 				}
 			);
 
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) ROOMVOICE: [annika] by heartofetheria: (demote)`),
 				{
 					action: 'ROOMVOICE', roomID: 'development', userid: 'annika',
@@ -399,7 +399,7 @@ describe('Modlog conversion script', () => {
 
 		it('should not mess up HIDEALTSTEXT', () => {
 			// HIDEALTSTEXT apparently was causing bugs
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) HIDEALTSTEXT: [auser] alts:[alt1] by annika: hnr`),
 				{
 					action: 'HIDEALTSTEXT', roomID: 'development', userid: 'auser', alts: ['alt1'],
@@ -409,14 +409,14 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should correctly parse modernized punishments, including alts/IP/autoconfirmed', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] ac: [annika] alts: [annalytically], [heartofetheria] [127.0.0.1] by somemod: terrible user`),
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg', autoconfirmedID: 'annika', alts: ['annalytically', 'heartofetheria'],
 					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944,
 				}
 			);
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] ac:[annika] alts:[annalytically], [heartofetheria] [127.0.0.1] by somemod: terrible user`),
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg', autoconfirmedID: 'annika', alts: ['annalytically', 'heartofetheria'],
@@ -425,7 +425,7 @@ describe('Modlog conversion script', () => {
 			);
 
 
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] alts:[annalytically] [127.0.0.1] by somemod: terrible user`),
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg', alts: ['annalytically'],
@@ -433,7 +433,7 @@ describe('Modlog conversion script', () => {
 				}
 			);
 
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] [127.0.0.1] by somemod: terrible user`),
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg',
@@ -443,7 +443,7 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should correctly parse modnotes', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) NOTE: by annika: HELP! I'm trapped in a unit test factory...`),
 				{
 					action: 'NOTE', roomID: 'development', isGlobal: false, loggedBy: 'annika',
@@ -454,15 +454,15 @@ describe('Modlog conversion script', () => {
 
 		it('should correctly parse visual roomids', () => {
 			const withVisualID = converter.parseModlog(`[time] (battle-gen7randombattle-1 tournament: development) SOMETHINGBORING: by annika`);
-			assert.strictEqual(withVisualID.visualRoomID, 'battle-gen7randombattle-1 tournament: development');
-			assert.strictEqual(withVisualID.roomID, 'battle-gen7randombattle-1');
+			assert.equal(withVisualID.visualRoomID, 'battle-gen7randombattle-1 tournament: development');
+			assert.equal(withVisualID.roomID, 'battle-gen7randombattle-1');
 
 			const noVisualID = converter.parseModlog(`[time] (battle-gen7randombattle-1) SOMETHINGBORING: by annika`);
-			assert.strictEqual(noVisualID.visualRoomID, undefined);
+			assert.equal(noVisualID.visualRoomID, undefined);
 		});
 
 		it('should properly handle OLD MODLOG', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2014-11-20T13:46:00.288Z] (lobby) OLD MODLOG: by unknown: [punchoface] would be muted by [thecaptain] but was already muted.)`),
 				{
 					action: 'OLD MODLOG', roomID: 'lobby', isGlobal: false, loggedBy: 'unknown',
@@ -472,21 +472,21 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should correctly handle hangman', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl`),
 				{action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}
 			);
 		});
 
 		it('should correctly handle nonstandard alt formats', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(
 					`[2018-01-18T19:47:11.404Z] (battle-gen7randombattle-690788015) AUTOLOCK: [trreckko] alts:[MasterOP13, [luckyfella], Derp11223, [askul], vfffgcfvgvfghj, trreckko, MrShnugglebear] [127.0.0.1]: Pornhub__.__com/killyourself`
 				).alts,
 				['masterop13', 'luckyfella', 'derp11223', 'askul', 'vfffgcfvgvfghj', 'trreckko', 'mrshnugglebear']
 			);
 
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(
 					`[2018-01-20T10:19:19.763Z] (battle-gen7randombattle-691544312) AUTOLOCK: [zilgo] alts:[[ghjkjguygjbjb], zilgo] [127.0.0.1]: www__.__pornhub__.__com`
 				).alts,
@@ -495,14 +495,14 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should correctly handle modlog entries with an IP but no userid', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-09-30T20:02:12.456Z] (lobby) SHAREDIP: [127.0.0.1] by annika: j`),
 				{
 					action: 'SHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika',
 					note: `j`, time: 1601496132456, ip: "127.0.0.1",
 				}
 			);
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.parseModlog(`[2020-09-30T20:02:12.456Z] (lobby) UNSHAREDIP: [127.0.0.1] by annika`),
 				{
 					action: 'UNSHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika',
@@ -526,14 +526,14 @@ describe('Modlog conversion script', () => {
 				note: 'Hey Adora~',
 				time: 1598212249944,
 			};
-			assert.strictEqual(
+			assert.equal(
 				converter.rawifyLog(entry),
 				`[2020-08-23T19:50:49.944Z] (development) UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Hey Adora~\n`
 			);
 		});
 
 		it('should handle OLD MODLOG', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.rawifyLog({
 					action: 'OLD MODLOG', roomID: 'development', isGlobal: false, loggedBy: 'unknown',
 					note: `hello hi test`, time: 1598212249944,
@@ -543,7 +543,7 @@ describe('Modlog conversion script', () => {
 		});
 
 		it('should handle hangman', () => {
-			assert.deepStrictEqual(
+			assert.deepEqual(
 				converter.rawifyLog({action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}),
 				`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl\n`
 			);
@@ -568,7 +568,7 @@ describe('Modlog conversion script', () => {
 				garfieldCopypasta,
 			];
 			for (const test of tests) {
-				assert.strictEqual(test, converter.rawifyLog(converter.parseModlog(test)).replace('\n', ''));
+				assert.equal(test, converter.rawifyLog(converter.parseModlog(test)).replace('\n', ''));
 			}
 		});
 
@@ -577,7 +577,7 @@ describe('Modlog conversion script', () => {
 				`[2014-11-20T16:30:17.661Z] (lobby) LOCK: [violight] (spamming) by joim`,
 				`[2014-11-20T16:30:17.673Z] (lobby) (violight's ac account: violight)`
 			)).replace('\n', '');
-			assert.strictEqual(originalConvert, converter.rawifyLog(converter.parseModlog(originalConvert)).replace('\n', ''));
+			assert.equal(originalConvert, converter.rawifyLog(converter.parseModlog(originalConvert)).replace('\n', ''));
 		});
 	});
 
@@ -621,7 +621,7 @@ describe('Modlog conversion script', () => {
 			});
 
 			await mlConverter.toTxt();
-			assert.strictEqual(
+			assert.equal(
 				mlConverter.isTesting.files.get('/modlog_development.txt'),
 				`[2020-08-23T19:50:49.944Z] (development) UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Write 1\n` +
 				`[2020-08-23T19:50:49.945Z] (development) UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Write 2\n` +
@@ -629,7 +629,7 @@ describe('Modlog conversion script', () => {
 				`[2020-08-23T19:50:49.947Z] (development) GLOBAL UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Global test\n`
 			);
 
-			assert.strictEqual(
+			assert.equal(
 				mlConverter.isTesting.files.get('/modlog_global.txt'),
 				`[2020-08-23T19:50:49.947Z] (development) GLOBAL UNITTEST: [annika] ac: [heartofetheria] alts: [googlegoddess], [princessentrapta] [127.0.0.1] by yourmom: Global test\n`
 			);
@@ -657,24 +657,24 @@ describe('Modlog conversion script', () => {
 				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid IN (?, ?) ORDER BY timestamp ASC`)
 				.all('development', 'trivia');
 
-			assert.strictEqual(globalEntries.length, globalLines.length);
-			assert.strictEqual(entries.length, lines.length);
+			assert.equal(globalEntries.length, globalLines.length);
+			assert.equal(entries.length, lines.length);
 
 			const visualIDEntry = entries[entries.length - 1];
 
-			assert.strictEqual(visualIDEntry.note, 'Write 3');
-			assert.strictEqual(visualIDEntry.visual_roomid, 'development tournament: lobby');
-			assert.ok(!globalEntries[0].visual_roomid);
+			assert.equal(visualIDEntry.note, 'Write 3');
+			assert.equal(visualIDEntry.visual_roomid, 'development tournament: lobby');
+			assert(!globalEntries[0].visual_roomid);
 
-			assert.strictEqual(globalEntries[0].timestamp, 1598212249945);
-			assert.strictEqual(globalEntries[0].roomid.replace(/^global-/, ''), 'development');
-			assert.strictEqual(globalEntries[0].action, 'GLOBAL UNITTEST');
-			assert.strictEqual(globalEntries[0].action_taker_userid, 'yourmom');
-			assert.strictEqual(globalEntries[0].userid, 'annika');
-			assert.strictEqual(globalEntries[0].autoconfirmed_userid, 'heartofetheria');
-			assert.strictEqual(globalEntries[0].ip, '127.0.0.1');
-			assert.strictEqual(globalEntries[0].note, 'Global Write');
-			assert.strictEqual(globalEntries[0].alts, 'googlegoddess,princessentrapta');
+			assert.equal(globalEntries[0].timestamp, 1598212249945);
+			assert.equal(globalEntries[0].roomid.replace(/^global-/, ''), 'development');
+			assert.equal(globalEntries[0].action, 'GLOBAL UNITTEST');
+			assert.equal(globalEntries[0].action_taker_userid, 'yourmom');
+			assert.equal(globalEntries[0].userid, 'annika');
+			assert.equal(globalEntries[0].autoconfirmed_userid, 'heartofetheria');
+			assert.equal(globalEntries[0].ip, '127.0.0.1');
+			assert.equal(globalEntries[0].note, 'Global Write');
+			assert.equal(globalEntries[0].alts, 'googlegoddess,princessentrapta');
 		});
 	});
 });

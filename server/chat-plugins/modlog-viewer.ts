@@ -39,6 +39,7 @@ interface BattleSearchResults {
 const execFile = util.promisify(child_process.execFile);
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
+const BATTLESEARCH_QUERY_TIMEOUT = 90 * 60 * 60 * 1000; // 90 minutes
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
 const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
@@ -667,7 +668,7 @@ export const commands: ChatCommands = {
 	},
 	battlesearchhelp: [
 		'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.',
-		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assuemd to be userids. Requires &`,
+		`If a number is provided in the [args], it is assumed to be a turn limit; otherwise, they're assumed to be userids. Requires &`,
 	],
 };
 
@@ -688,7 +689,7 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
-});
+}, BATTLESEARCH_QUERY_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!
