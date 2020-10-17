@@ -347,11 +347,7 @@ export abstract class BasicRoom {
 	 * join.
 	 */
 	add(message: string) {
-		this.messagesSent++;
 		this.log.add(message);
-		for (const [handler, numMessages] of this.nthMessageHandlers) {
-			if (this.messagesSent % numMessages === 0) handler(this, message);
-		}
 		return this;
 	}
 	roomlog(message: string) {
