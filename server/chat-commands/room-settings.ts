@@ -723,6 +723,7 @@ export const commands: ChatCommands = {
 	],
 
 	subroomgroupchat: 'makegroupchat',
+	mgc: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
@@ -854,12 +855,13 @@ export const commands: ChatCommands = {
 
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
+	dgc: 'deleteroom',
 	deleteroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (!room.settings.isPersonal || cmd !== "deletegroupchat") {
+			if (!room.settings.isPersonal || cmd !== "deletegroupchat" && cmd != "dgc") {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
