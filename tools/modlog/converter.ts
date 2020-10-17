@@ -539,10 +539,10 @@ export class ModlogConverterTxt {
 		if (useFTSExtension || Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
 		} else {
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid)`);
 		}
 
 		this.insertionQuery = this.database.prepare(
