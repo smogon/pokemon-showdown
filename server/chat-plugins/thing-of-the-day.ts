@@ -1,5 +1,6 @@
 import {FS, FSPath} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import {YouTube} from './youtube';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
@@ -27,6 +28,26 @@ const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 
+const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
+	cotw: async winner => {
+		const {channel, nominator} = winner;
+		const searchResults = await YouTube.searchChannel(channel, 1);
+		const result = searchResults?.[0];
+		if (result) {
+			if (YouTube.data.channels[result]) return;
+			void YouTube.getChannelData(`https://www.youtube.com/channel/${result}`);
+			rooms.youtube.sendMods(
+				`|c|&|/log The channel with ID ${result} was added to the YouTube channel database.`
+			);
+			rooms.youtube.modlog({
+				action: `ADDCHANNEL`,
+				note: `${result} (${toID(nominator)})`,
+				loggedBy: toID(`COTW`),
+			});
+		}
+	},
+};
+
 function savePrenoms() {
 	return FS(PRENOMS_FILE).write(JSON.stringify(prenoms));
 }
@@ -50,7 +71,7 @@ class OtdHandler {
 	lastPrenom: number;
 	winners: AnyObject[];
 	constructor(
-		id: string, name: string, room: ChatRoom, filename: string, keys: string[], keyLabels: string[], week = false
+		id: string, name: string, room: ChatRoom, filename: string,	keys: string[], keyLabels: string[], week = false,
 	) {
 		this.id = id;
 		this.name = name;
@@ -239,7 +260,7 @@ class OtdHandler {
 
 		const winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		if (!winner) return false; // Should never happen but shuts typescript up.
-		void this.appendWinner(winner.nomination, winner.name);
+		const winnerEntry = this.appendWinner(winner.nomination, winner.name);
 
 		const names = [...this.nominations.values()].map(obj => obj.name);
 
@@ -250,6 +271,10 @@ class OtdHandler {
 		}
 		const namesHTML = `<table><tr>${content}</tr></table></p></div>`;
 
+		const finishHandler = FINISH_HANDLERS[this.id];
+		if (finishHandler) {
+			void finishHandler(winnerEntry);
+		}
 		this.room.add(
 			Utils.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
 			`Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">` +
@@ -286,15 +311,16 @@ class OtdHandler {
 	}
 
 	forceWinner(winner: string, user: string) {
-		void this.appendWinner(winner, user);
+		this.appendWinner(winner, user);
 		this.finish();
 	}
 
-	appendWinner(nomination: string, user: string) {
+	appendWinner(nomination: string, user: string): AnyObject {
 		const entry: AnyObject = {time: Date.now(), nominator: user};
 		entry[this.keys[0]] = nomination;
 		this.winners.push(entry);
-		return this.saveWinners();
+		void this.saveWinners();
+		return entry;
 	}
 
 	setWinnerProperty(properties: {[k: string]: string}) {
