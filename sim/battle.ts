@@ -2011,15 +2011,18 @@ export class Battle {
 	}
 
 	natureModify(stats: StatsTable, set: PokemonSet): StatsTable {
+		// Natures are calculated with 16-bit truncation.
+		// This only affects Eternatus-Eternmax in Pure Hackmons.
+		const tr = this.trunc;
 		const nature = this.dex.getNature(set.nature);
 		let stat: keyof StatsTable;
 		if (nature.plus) {
 			stat = nature.plus;
-			stats[stat] = Math.floor(stats[stat] * 1.1);
+			stats[stat] = tr(tr(stats[stat] * 110, 16) / 100);
 		}
 		if (nature.minus) {
 			stat = nature.minus;
-			stats[stat] = Math.floor(stats[stat] * 0.9);
+			stats[stat] = tr(tr(stats[stat] * 90, 16) / 100);
 		}
 		return stats;
 	}
