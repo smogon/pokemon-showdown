@@ -412,7 +412,7 @@ export const commands: ChatCommands = {
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
 		if (target.startsWith('psim.us/')) target = target.slice(8);
-		const ret = user.tryJoinRoom(target as RoomID, connection);
+		const ret = await user.tryJoinRoom(target as RoomID, connection);
 		if (ret === Rooms.RETRY_AFTER_LOGIN) {
 			connection.sendTo(
 				target as RoomID,
