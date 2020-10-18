@@ -2047,9 +2047,10 @@ const ScavengerCommands: ChatCommands = {
 		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
-			const source = Object.entries(
-				{...DEFAULT_POINTS, ...(room.settings.scavSettings.winPoints || {})}
-			) as [string, number[]][];
+			const source = Object.entries({
+				...DEFAULT_POINTS,
+				...(room.settings.scavSettings.winPoints as typeof DEFAULT_POINTS || {}),
+			});
 
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1].map((p: number, i: number) => `(${(i + 1)}) ${p}`).join(', ')}`);
