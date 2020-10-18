@@ -170,10 +170,10 @@ export class Modlog {
 		if (Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
 		} else {
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid)`);
 		}
 
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
@@ -189,7 +189,7 @@ export class Modlog {
 		);
 
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
-		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (modlog_id, userid) VALUES (?, ?)`);
+		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (rowid, userid) VALUES (?, ?)`);
 
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 		this.globalPunishmentsSearchQuery = this.database.prepare(
@@ -524,7 +524,7 @@ export class Modlog {
 
 			query += ` OR modlog_fts.userid MATCH ?`;
 			query += ` OR modlog_fts.autoconfirmed_userid LIKE ?`;
-			query += ` OR EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.modlog_id = alts.modlog_id WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`;
+			query += ` OR EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = alts.rowid WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`;
 			query += ` OR modlog_fts.action_taker_userd MATCH ?`;
 
 			query += ` OR ip LIKE ? || '%'`;
@@ -547,7 +547,7 @@ export class Modlog {
 				` AND (`,
 				`modlog_fts.userid MATCH ? OR`,
 				`modlog_fts.autoconfirmed_userid MATCH ? OR`,
-				`EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = rowid WHERE alts.modlog_id = modlog.modlog_id AND userid MATCH ?)`,
+				`EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = modlog.rowid WHERE alts.modlog_id = modlog.modlog_id AND userid MATCH ?)`,
 				`)`,
 			].join(' ');
 			args.push(userid, userid, userid);

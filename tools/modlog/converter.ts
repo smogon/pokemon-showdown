@@ -536,10 +536,10 @@ export class ModlogConverterTxt {
 		if (useFTSExtension || Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
 		} else {
 			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(modlog_id, userid, content=alts, content_rowid=rowid)`);
+			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid)`);
 		}
 
 		this.insertionQuery = this.database.prepare(
@@ -549,10 +549,9 @@ export class ModlogConverterTxt {
 		this.FTSInsertionQuery = this.database.prepare(
 			`INSERT INTO modlog_fts (rowid, note, userid, autoconfirmed_userid, action_taker_userid) VALUES (?, ?, ?, ?, ?)`
 		);
-		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
-		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (modlog_id, userid) VALUES (?, ?)`);
-		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 
+		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
+		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (rowid, userid) VALUES (?, ?)`);
 		this.altsInsertionTransaction = this.database.transaction((modlogID: number, userID: string) => {
 			this.altsInsertionQuery.run(modlogID, userID);
 			this.FTSAltsInsertionQuery.run(modlogID, userID);
