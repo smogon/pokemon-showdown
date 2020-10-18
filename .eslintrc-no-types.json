@@ -123,6 +123,7 @@
 
     // syntax style (local syntactical, usually autofixable formatting decisions)
     "arrow-parens": "off",
+    "arrow-body-style": "error",
     "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
     "comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline", "imports": "always-multiline", "exports": "always-multiline", "functions": "ignore"}],
     "comma-style": ["error", "last"],

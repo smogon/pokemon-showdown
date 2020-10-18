@@ -1567,9 +1567,7 @@ export const Chat = new class {
 			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 		}
 		if (!strings.length) {
-			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
-				return Chat.tr(language, fStrings, ...fKeys);
-			});
+			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => Chat.tr(language, fStrings, ...fKeys));
 		}
 
 		const entry = Chat.translations.get(language)!.get(trString);

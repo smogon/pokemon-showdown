@@ -119,9 +119,9 @@ export class HelpTicket extends Rooms.RoomGame {
 				this.firstClaimTime = Date.now();
 				// I'd use the player list for this, but it dosen't track DCs so were checking the userlist
 				// Non-staff users in the room currently (+ the ticket creator even if they are staff)
-				const users = Object.entries(this.room.users).filter(u => {
-					return !((u[1].isStaff && u[1].id !== this.ticket.userid) || !u[1].named);
-				});
+				const users = Object.entries(this.room.users).filter(
+					u => !((u[1].isStaff && u[1].id !== this.ticket.userid) || !u[1].named)
+				);
 				if (!users.length) this.emptyRoom = true;
 			}
 			if (this.ticket.active) {

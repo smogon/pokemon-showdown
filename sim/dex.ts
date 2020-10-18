@@ -1212,6 +1212,10 @@ export class ModdedDex {
 	packTeam(team: PokemonSet[] | null): string {
 		if (!team) return '';
 
+		function getIv(ivs: StatsTable, s: keyof StatsTable): string {
+			return ivs[s] === 31 || ivs[s] === undefined ? '' : ivs[s].toString();
+		}
+
 		let buf = '';
 		for (const set of team) {
 			if (buf) buf += ']';
@@ -1254,9 +1258,6 @@ export class ModdedDex {
 			}
 
 			// ivs
-			const getIv = (ivs: StatsTable, s: keyof StatsTable): string => {
-				return ivs[s] === 31 || ivs[s] === undefined ? '' : ivs[s].toString();
-			};
 			let ivs = '|';
 			if (set.ivs) {
 				ivs = '|' + getIv(set.ivs, 'hp') + ',' + getIv(set.ivs, 'atk') + ',' + getIv(set.ivs, 'def') +

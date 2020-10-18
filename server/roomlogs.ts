@@ -234,13 +234,11 @@ export class Roomlog {
 		await Promise.all([
 			FS(roomlogPath + `/${this.roomid}`).exists(),
 			FS(roomlogPath + `/${newID}`).exists(),
-		]).then(([roomlogExists, newRoomlogExists]) => {
-			return Promise.all([
-				roomlogExists && !newRoomlogExists ?
-					FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`) :
-					undefined,
-			]);
-		});
+		]).then(([roomlogExists, newRoomlogExists]) => Promise.all([
+			roomlogExists && !newRoomlogExists ?
+				FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`) :
+				undefined,
+		]));
 		await Rooms.Modlog.rename(this.roomid, newID);
 		this.roomid = newID;
 		Roomlogs.roomlogs.set(newID, this);

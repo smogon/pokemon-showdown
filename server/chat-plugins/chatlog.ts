@@ -633,28 +633,26 @@ export const LogSearcher = new class {
 			const aDate = new Date(aName.split('/').pop()!);
 			const bDate = new Date(bName.split('/').pop()!);
 			return bDate.getTime() - aDate.getTime();
-		}).map(chunk => {
-			return chunk.split('\n').map(line => {
-				if (exactMatches > limit || !toID(line)) return null; // return early so we don't keep sorting
-				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
-				const [name, text] = line.split(sep);
-				line = LogViewer.renderLine(text, 'all');
-				if (!line || name.includes('today')) return null;
+		}).map(chunk => chunk.split('\n').map(line => {
+			if (exactMatches > limit || !toID(line)) return null; // return early so we don't keep sorting
+			const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
+			const [name, text] = line.split(sep);
+			line = LogViewer.renderLine(text, 'all');
+			if (!line || name.includes('today')) return null;
 				 // gets rid of some edge cases / duplicates
-				let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
-				if (searchRegex.test(line)) {
-					if (++exactMatches > limit) return null;
-					line = `<div class="chat chatmessage highlighted">${line}</div>`;
-				}
-				if (curDate !== date) {
-					curDate = date;
-					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-				} else {
-					date = '';
-				}
-				return `${date} ${line}`;
-			}).filter(Boolean).join(' ');
-		}).filter(Boolean);
+			let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
+			if (searchRegex.test(line)) {
+				if (++exactMatches > limit) return null;
+				line = `<div class="chat chatmessage highlighted">${line}</div>`;
+			}
+			if (curDate !== date) {
+				curDate = date;
+				date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
+			} else {
+				date = '';
+			}
+			return `${date} ${line}`;
+		}).filter(Boolean).join(' ')).filter(Boolean);
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
 		buf += limit ? ` ${exactMatches} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;

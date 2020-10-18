@@ -907,11 +907,9 @@ export class User extends Chat.MessageContext {
 			oldUser.locked !== oldUser.id &&
 			this.locked !== this.id &&
 			// Only unlock if no previous names are locked
-			!oldUser.previousIDs.some(id => {
-				return !!Punishments.search(id)
-					.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
-					.length;
-			})
+			!oldUser.previousIDs.some(id => !!Punishments.search(id)
+				.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
+				.length)
 		) {
 			this.locked = null;
 		} else if (this.locked !== this.id) {

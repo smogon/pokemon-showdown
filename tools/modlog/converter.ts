@@ -61,9 +61,10 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	if (line.startsWith('SCAV ')) {
 		line = line.replace(/: (\[room: .*?\]) by (.*)/, (match, roominfo, rest) => `: by ${rest} ${roominfo}`);
 	}
-	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/, (match, action, user) => {
-		return `${action}: [${toID(user)}]:`;
-	});
+	line = line.replace(
+		/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/,
+		(match, action, user) => `${action}: [${toID(user)}]:`
+	);
 
 	if (line.includes(':')) {
 		const possibleModernAction = line.slice(0, line.indexOf(':')).trim();
