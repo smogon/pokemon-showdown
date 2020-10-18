@@ -1994,6 +1994,36 @@ export class Battle {
 		return tr((tr(value * modifier) + 2048 - 1) / 4096);
 	}
 
+	/** Given a table of base stats and a pokemon set, return the actual stats. */
+	spreadModify(baseStats: StatsTable, set: PokemonSet): StatsTable {
+		const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const tr = this.trunc;
+		let statName: keyof StatsTable;
+		for (statName in modStats) {
+			const stat = baseStats[statName];
+			modStats[statName] = tr(tr(2 * stat + set.ivs[statName] + tr(set.evs[statName] / 4)) * set.level / 100 + 5);
+		}
+		if ('hp' in baseStats) {
+			const stat = baseStats['hp'];
+			modStats['hp'] = tr(tr(2 * stat + set.ivs['hp'] + tr(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+		}
+		return this.natureModify(modStats as StatsTable, set);
+	}
+
+	natureModify(stats: StatsTable, set: PokemonSet): StatsTable {
+		const nature = this.dex.getNature(set.nature);
+		let stat: keyof StatsTable;
+		if (nature.plus) {
+			stat = nature.plus;
+			stats[stat] = Math.floor(stats[stat] * 1.1);
+		}
+		if (nature.minus) {
+			stat = nature.minus;
+			stats[stat] = Math.floor(stats[stat] * 0.9);
+		}
+		return stats;
+	}
+
 	getCategory(move: string | Move) {
 		return this.dex.getMove(move).category || 'Physical';
 	}
