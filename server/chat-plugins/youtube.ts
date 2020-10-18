@@ -25,6 +25,19 @@ interface ChannelEntry {
 	category?: string;
 }
 
+interface VideoData {
+	id: ID;
+	title: string;
+	date: string;
+	description: string;
+	channelTitle: string;
+	channelUrl: string;
+	views: number;
+	thumbnail: string;
+	likes: number;
+	dislikes: number;
+}
+
 interface ChannelData {
 	channels: {[k: string]: ChannelEntry};
 	categories: string[];
@@ -43,12 +56,13 @@ function loadData() {
 	return raw as ChannelData;
 }
 
-const channelData: {channels: {[k: string]: ChannelEntry}, categories: string[]} = loadData();
+const channelData: ChannelData = loadData();
 
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
 	intervalTime: number;
 	data: ChannelData;
+	static linkRegex: RegExp = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i;
 	constructor(data?: ChannelData) {
 		this.data = data ? data : {categories: [], channels: {}};
 		this.interval = null;
@@ -129,6 +143,27 @@ export class YoutubeInterface {
 		if (!(id in this.data.channels)) return this.getChannelData(id, username);
 		return Promise.resolve({...this.data.channels[id]});
 	}
+	async getVideoData(link: string): Promise<VideoData | null> {
+		const id = this.getId(link);
+		const raw = await Net(`${ROOT}videos`).get({
+			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+		});
+		const res = JSON.parse(raw);
+		if (!res || !res.items || res.items.length < 1) return null;
+		const video = res.items[0];
+		return {
+			title: video.snippet.title,
+			id,
+			date: new Date(video.snippet.publishedAt).toString(),
+			description: video.snippet.description,
+			channelTitle: video.snippet.channelTitle,
+			channelUrl: video.snippet.channelId,
+			views: video.statistics.viewCount,
+			thumbnail: video.snippet.thumbnails.default.url,
+			likes: video.statistics.likeCount,
+			dislikes: video.statistics.dislikeCount,
+		} as VideoData;
+	}
 	channelSearch(search: string) {
 		let channel;
 		if (this.data.channels[search]) {
@@ -169,23 +204,8 @@ export class YoutubeInterface {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
 		const id = this.getId(link);
-		const raw = await Net(`${ROOT}videos`).get({
-			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
-		});
-		const res = JSON.parse(raw);
-		if (!res || !res.items || res.items.length < 1) throw new Chat.ErrorMessage("Video not found.");
-		const video = res.items[0];
-		const info = {
-			title: video.snippet.title,
-			date: new Date(video.snippet.publishedAt),
-			description: video.snippet.description,
-			channel: video.snippet.channelTitle,
-			channelUrl: video.snippet.channelId,
-			views: video.statistics.viewCount,
-			thumbnail: video.snippet.thumbnails.default.url,
-			likes: video.statistics.likeCount,
-			dislikes: video.statistics.dislikeCount,
-		};
+		const info = await this.getVideoData(id);
+		if (!info) throw new Chat.ErrorMessage(`Video not found.`);
 		let buf = `<table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
 		buf += `<div style="padding:5px;background:#b0b0b0;border:1px solid black;margin:auto;max-width:100px;max-height:100px;">`;
@@ -196,7 +216,7 @@ export class YoutubeInterface {
 		buf += `#white;width:100%;border-bottom:0px;vertical-align:top;">`;
 		buf += `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `${info.likes} likes | ${info.dislikes} dislikes | ${info.views} video views<br><br>`;
-		buf += `<small>Published on ${info.date} | ID: ${id}</small><br>Uploaded by: ${info.channel}</p>`;
+		buf += `<small>Published on ${info.date} | ID: ${id}</small><br>Uploaded by: ${info.channelTitle}</p>`;
 		buf += `<br><details><summary>Video Description</p></summary>`;
 		buf += `<p style="background: #e22828;max-width:500px;padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `<i>${info.description.slice(0, 400).replace(/\n/g, ' ')}${info.description.length > 400 ? '(...)' : ''}</p><i></details></td>`;
