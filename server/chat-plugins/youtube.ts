@@ -429,9 +429,8 @@ export const pages: PageTable = {
 				return this.errorReply(`There are currently no categories in the Youtube channel database.`);
 			}
 			const sorted: {[k: string]: string[]} = {};
-			const channels = Object.assign({}, YouTube.data.channels);
-			for (const id of Object.keys(channels)) {
-				const channel = channels[id];
+			const channels = YouTube.data.channels;
+			for (const [id, channel] of Object.entries(channels)) {
 				const category = channel.category || "No category";
 				if (!sorted[category]) {
 					sorted[category] = [];

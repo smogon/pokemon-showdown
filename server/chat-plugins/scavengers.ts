@@ -117,10 +117,10 @@ class Ladder {
 						lowestScore = chunk[sortBy];
 						lastPlacement = i + 1;
 					}
-					return Object.assign(
-						{rank: lastPlacement},
-						chunk
-					);
+					return {
+						rank: lastPlacement,
+						...chunk,
+					};
 				}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
@@ -2046,9 +2046,9 @@ const ScavengerCommands: ChatCommands = {
 		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
-			const source: [string, number[]][] = Object.entries(
-				Object.assign({}, DEFAULT_POINTS, room.settings.scavSettings.winPoints || {})
-			) as [];
+			const source = Object.entries(
+				{...DEFAULT_POINTS, ...(room.settings.scavSettings.winPoints || {})}
+			) as [string, number[]][];
 
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1].map((p: number, i: number) => `(${(i + 1)}) ${p}`).join(', ')}`);

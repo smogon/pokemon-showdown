@@ -52,9 +52,9 @@ try {
 }
 
 function writeTickets() {
-	FS(TICKET_FILE).writeUpdate(() => (
-		JSON.stringify(Object.assign({}, tickets))
-	));
+	FS(TICKET_FILE).writeUpdate(
+		() => JSON.stringify(tickets)
+	);
 }
 
 function writeStats(line: string) {
