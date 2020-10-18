@@ -62,7 +62,7 @@ export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
 	intervalTime: number;
 	data: ChannelData;
-	static linkRegex: RegExp = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i;
+	static linkRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i;
 	constructor(data?: ChannelData) {
 		this.data = data ? data : {categories: [], channels: {}};
 		this.interval = null;
