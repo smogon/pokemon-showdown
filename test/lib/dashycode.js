@@ -4,12 +4,12 @@ const assert = require('assert').strict;
 const Dashycode = require('./../../.lib-dist/dashycode');
 
 describe('Dashycode', function () {
-	const ascii = Array.from({length: 0x80}, (v, k) => k);
-	const iso88591 = Array.from({length: 0x80}, (v, k) => k + 0x80);
-	const utf16 = Array.from({length: 0xFF00}, (v, k) => k + 0x100);
+	const ascii = Array.from({length: 0x80}, (v, i) => i);
+	const iso88591 = Array.from({length: 0x80}, (v, i) => i + 0x80);
+	const utf16 = Array.from({length: 0xFF00}, (v, i) => i + 0x100);
 
-	const latinL = Array.from({length: 26}, (v, k) => k + 0x60);
-	const latinU = Array.from({length: 26}, (v, k) => k + 0x41);
+	const latinL = Array.from({length: 26}, (v, i) => i + 0x60);
+	const latinU = Array.from({length: 26}, (v, i) => i + 0x41);
 
 	const encoded = new Map();
 
@@ -56,15 +56,15 @@ describe('Dashycode', function () {
 	};
 
 	it('should encode all codepoints uniquely', function () {
-		return [...ascii, ...iso88591, ...utf16].reduce((p, codepoint) => (
-			p.then(v => encode(codepoint))
-		), Promise.resolve());
+		for (const codepoint of [...ascii, ...iso88591, ...utf16]) {
+			encode(codepoint);
+		}
 	});
 
 	it('should decode all codepoints accurately', function () {
-		return [...encoded.keys()].reduce((p, dashycode) => (
-			p.then(v => decode(dashycode))
-		), Promise.resolve());
+		for (const dashycode of encoded.keys()) {
+			decode(dashycode);
+		}
 	});
 
 	it('should transcode multiple spaces in a row', transcode('ayy  lmao'));

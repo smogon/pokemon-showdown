@@ -155,6 +155,7 @@ class PlayerLadder extends Ladder {
 	}
 
 	// add the different keys to the history - async for larger leaderboards
+	// FIXME: this is not what "async" means
 	softReset() {
 		return new Promise((resolve, reject) => {
 			for (const u in this.data) {
@@ -2165,11 +2166,10 @@ const ScavengerCommands: ChatCommands = {
 
 		if (target === 'RESET') {
 			this.checkCan('declare', null, room);
-			HostLeaderboard.softReset().then(() => {
-				HostLeaderboard.write();
-				this.privateModAction(`${user.name} has reset the host log leaderboard into the next month.`);
-				this.modlog('SCAV HUNTLOGS', null, 'RESET');
-			});
+			await HostLeaderboard.softReset();
+			HostLeaderboard.write();
+			this.privateModAction(`${user.name} has reset the host log leaderboard into the next month.`);
+			this.modlog('SCAV HUNTLOGS', null, 'RESET');
 			return;
 		} else if (target === 'HARD RESET') {
 			this.checkCan('declare', null, room);
@@ -2212,11 +2212,10 @@ const ScavengerCommands: ChatCommands = {
 
 		if (target === 'RESET') {
 			this.checkCan('declare', null, room);
-			PlayerLeaderboard.softReset().then(() => {
-				PlayerLeaderboard.write();
-				this.privateModAction(`${user.name} has reset the player log leaderboard into the next month.`);
-				this.modlog('SCAV PLAYLOGS', null, 'RESET');
-			});
+			await PlayerLeaderboard.softReset();
+			PlayerLeaderboard.write();
+			this.privateModAction(`${user.name} has reset the player log leaderboard into the next month.`);
+			this.modlog('SCAV PLAYLOGS', null, 'RESET');
 			return;
 		} else if (target === 'HARD RESET') {
 			this.checkCan('declare', null, room);

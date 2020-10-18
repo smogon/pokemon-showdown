@@ -74,7 +74,7 @@ export const commands: ChatCommands = {
 	ds8: 'dexsearch',
 	dsearch: 'dexsearch',
 	nds: 'dexsearch',
-	dexsearch(target, room, user, connection, cmd, message) {
+	async dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
 		target = target.slice(0, 300);
@@ -103,25 +103,23 @@ export const commands: ChatCommands = {
 			target = targArray.join(',');
 		}
 		if (cmd === 'nds') target += ', natdex';
-		return runSearch({
+		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				if (targetGen) response.dt += `, gen${targetGen}`;
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			if (targetGen) response.dt += `, gen${targetGen}`;
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 
 	dexsearchhelp() {
@@ -150,7 +148,7 @@ export const commands: ChatCommands = {
 
 	rollmove: 'randommove',
 	randmove: 'randommove',
-	randommove(target, room, user, connection, cmd, message) {
+	async randommove(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
 		target = target.slice(0, 300);
 		const targets = target.split(",");
@@ -170,24 +168,22 @@ export const commands: ChatCommands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 
-		return runSearch({
+		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast(true)) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast(true)) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	randommovehelp: [
 		`/randommove - Generates random Pok\u00e9mon Moves based on given search conditions.`,
@@ -196,7 +192,7 @@ export const commands: ChatCommands = {
 	],
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
-	randompokemon(target, room, user, connection, cmd, message) {
+	async randompokemon(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
 		target = target.slice(0, 300);
 		const targets = target.split(",");
@@ -216,24 +212,22 @@ export const commands: ChatCommands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 
-		return runSearch({
+		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast(true)) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast(true)) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	randompokemonhelp: [
 		`/randompokemon - Generates random Pok\u00e9mon based on given search conditions.`,
@@ -252,31 +246,29 @@ export const commands: ChatCommands = {
 	ms8: 'movesearch',
 	msearch: 'movesearch',
 	nms: 'movesearch',
-	movesearch(target, room, user, connection, cmd, message) {
+	async movesearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help movesearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (cmd === 'nms') target += ', natdex';
-		return runSearch({
+		const response = await runSearch({
 			target,
 			cmd: 'movesearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	movesearchhelp() {
 		this.sendReplyBox(
@@ -312,31 +304,29 @@ export const commands: ChatCommands = {
 	is6: 'itemsearch',
 	is7: 'itemsearch',
 	is8: 'itemsearch',
-	itemsearch(target, room, user, connection, cmd, message) {
+	async itemsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help itemsearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
-		return runSearch({
+		const response = await runSearch({
 			target,
 			cmd: 'itemsearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	itemsearchhelp() {
 		this.sendReplyBox(
@@ -357,31 +347,29 @@ export const commands: ChatCommands = {
 	as6: 'abilitysearch',
 	as7: 'abilitysearch',
 	as8: 'abilitysearch',
-	abilitysearch(target, room, user, connection, cmd, message) {
+	async abilitysearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help abilitysearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
-		return runSearch({
+		const response = await runSearch({
 			target,
 			cmd: 'abilitysearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	abilitysearchhelp() {
 		this.sendReplyBox(
@@ -402,25 +390,23 @@ export const commands: ChatCommands = {
 	bw2learn: 'learn',
 	oraslearn: 'learn',
 	usumlearn: 'learn',
-	learn(target, room, user, connection, cmd, message) {
+	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
 		target = target.slice(0, 300);
 		this.checkBroadcast();
 
-		return runSearch({
+		const response = await runSearch({
 			target,
 			cmd: 'learn',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: cmd,
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				throw new Chat.ErrorMessage(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		}
 	},
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,

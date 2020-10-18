@@ -486,18 +486,16 @@ export class ModlogConverterTest {
 	}
 }
 
-export class ModlogConverter {
-	static async convert(
+export const ModlogConverter = {
+	async convert(
 		from: ModlogFormat, to: ModlogFormat, databasePath: string,
 		textLogDirectoryPath: string, outputLogPath?: string
 	) {
 		if (from === 'txt' && to === 'txt' && outputLogPath) {
 			const converter = new ModlogConverterTest(textLogDirectoryPath, outputLogPath);
-			return converter.toTxt().then(() => {
-				console.log("\nDone!");
-				process.exit();
-			});
+			await converter.toTxt();
+			console.log("\nDone!");
+			process.exit();
 		}
-	}
-}
-
+	},
+};
