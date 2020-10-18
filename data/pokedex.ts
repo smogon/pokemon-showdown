@@ -16549,6 +16549,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Dragon", "Fairy"],
 		gen: 8,
 	},
+	miasmaw: {
+		num: -59,
+		name: "Miasmaw",
+		types: ["Bug", "Dragon"],
+		baseStats: {hp: 85, atk: 135, def: 60, spa: 115, spd: 85, spe: 89},
+		abilities: {0: "Neutralizing Gas", H: "Compound Eyes"},
+		heightm: 1.2,
+		weightkg: 57,
+		color: "Green",
+		eggGroups: ["Bug", "Dragon"],
+		gen: 8,
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
