@@ -215,8 +215,8 @@
         "@typescript-eslint/member-ordering": "off",
         // "@typescript-eslint/no-extraneous-class": "error",
         // "@typescript-eslint/no-type-alias": "error",
-        "@typescript-eslint/no-parameter-properties": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
+        // "@typescript-eslint/consistent-type-imports": "error", // TODO after no-duplicate-imports fix
 
         // test only (should never be committed, but useful when testing)
         "no-unused-vars": "off",
@@ -271,12 +271,12 @@
         "@typescript-eslint/array-type": "error",
         "@typescript-eslint/consistent-type-assertions": ["error", {"assertionStyle": "as"}],
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
-        // "@typescript-eslint/consistent-type-imports": "error", // TODO AUTOFIX
         "@typescript-eslint/explicit-member-accessibility": ["error", {"accessibility": "no-public"}],
         "@typescript-eslint/member-delimiter-style": ["error", {"overrides": {"typeLiteral": {
           "multiline": {"delimiter": "comma", "requireLast": true},
           "singleline": {"delimiter": "comma", "requireLast": false}
         }}}],
+        "@typescript-eslint/no-parameter-properties": "error",
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/prefer-as-const": "error",
         "@typescript-eslint/prefer-for-of": "error",
