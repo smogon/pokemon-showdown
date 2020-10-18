@@ -77,6 +77,7 @@ export const commands: ChatCommands = {
 	dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (targetGen && targetGen === 5) {
@@ -103,14 +104,14 @@ export const commands: ChatCommands = {
 		}
 		if (cmd === 'nds') target += ', natdex';
 		return runSearch({
-			tar: target,
+			target,
 			cmd: 'dexsearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -139,7 +140,7 @@ export const commands: ChatCommands = {
 			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pokemon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
-			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
+			`You can search for info in a specific generation by appending the generation to ds or by using the <code>maxgen</code> keyword; e.g. <code>/ds1 normal</code> or <code>/ds normal, maxgen1</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
 			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
@@ -151,6 +152,7 @@ export const commands: ChatCommands = {
 	randmove: 'randommove',
 	randommove(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
+		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -158,9 +160,9 @@ export const commands: ChatCommands = {
 			if (!arg) continue;
 			const num = Number(arg);
 			if (Number.isInteger(num)) {
-				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon Moves once.");
+				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
+				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -169,14 +171,14 @@ export const commands: ChatCommands = {
 		if (!qty) targetsBuffer.push("random1");
 
 		return runSearch({
-			tar: targetsBuffer.join(","),
+			target: targetsBuffer.join(","),
 			cmd: 'randmove',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -196,6 +198,7 @@ export const commands: ChatCommands = {
 	randpoke: 'randompokemon',
 	randompokemon(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
+		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -203,9 +206,9 @@ export const commands: ChatCommands = {
 			if (!arg) continue;
 			const num = Number(arg);
 			if (Number.isInteger(num)) {
-				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon once.");
+				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon must be between 1 and 15.");
+				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon must be between 1 and 15.");
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -214,14 +217,14 @@ export const commands: ChatCommands = {
 		if (!qty) targetsBuffer.push("random1");
 
 		return runSearch({
-			tar: targetsBuffer.join(","),
+			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -252,18 +255,19 @@ export const commands: ChatCommands = {
 	movesearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help movesearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (cmd === 'nms') target += ', natdex';
 		return runSearch({
-			tar: target,
+			target,
 			cmd: 'movesearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -311,18 +315,19 @@ export const commands: ChatCommands = {
 	itemsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help itemsearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
 		return runSearch({
-			tar: target,
+			target,
 			cmd: 'itemsearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -355,18 +360,19 @@ export const commands: ChatCommands = {
 	abilitysearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help abilitysearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
 		return runSearch({
-			tar: target,
+			target,
 			cmd: 'abilitysearch',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -398,17 +404,18 @@ export const commands: ChatCommands = {
 	usumlearn: 'learn',
 	learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
+		target = target.slice(0, 300);
 		this.checkBroadcast();
 
 		return runSearch({
-			tar: target,
+			target,
 			cmd: 'learn',
 			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: cmd,
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
 			if (response.error) {
-				this.errorReply(response.error);
+				throw new Chat.ErrorMessage(response.error);
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			}
@@ -428,6 +435,7 @@ export const commands: ChatCommands = {
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string) {
 	const searches: DexOrGroup[] = [];
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
+		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
@@ -1035,7 +1043,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const isRegionalForm = (dex[mon].forme === "Galar" || dex[mon].forme === "Alola") && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].name.endsWith('-Gmax') && !allowGmax) continue;
+		if (dex[mon].isNonstandard === 'Gigantamax && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
@@ -1229,7 +1237,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			if (0 < targetInt && targetInt < 9) {
 				if ((orGroup.gens[targetInt] && isNotSearch) || (orGroup.flags[targetInt] === false && !isNotSearch)) {
-					return {error: 'A search cannot both exclude and include \'' + target + '\'.'};
+					return {error: `A search cannot both exclude and include '${target}'.`};
 				}
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
@@ -1304,7 +1312,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				continue;
 			}
 
-			const species = Dex.getSpecies(target);
+			const species = Dex.mod(`gen${maxGen || 8}`).getSpecies(target);
 			if (species.exists) {
 				if (parameters.length > 1) return {error: "A Pok\u00e9mon learnset cannot have alternative parameters."};
 				if (targetMons.some(mon => mon.name === species.name && isNotSearch !== mon.shouldBeExcluded)) {
@@ -1489,7 +1497,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
 		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(Dex.getLearnsetData(usedSpecies.id));
+		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.getLearnsetData(usedSpecies.id));
 		if (!usedSpeciesLearnset.learnset) {
 			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
 			usedSpeciesLearnset.learnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
@@ -1510,7 +1518,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
 	const validMoves = new Set(Object.keys(Dex.data.Moves));
-	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const species = mod.getSpecies(mon.name);
 		const lsetData = getFullLearnsetOfPokemon(species);
@@ -2269,7 +2276,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		}
 		const move = validator.dex.getMove(arg);
 		moveNames.push(move.name);
-		if (!move.exists || move.id === 'magikarpsrevenge') {
+		if (!move.exists) {
 			return {error: `Move '${move.id}' not found.`};
 		}
 		if (move.gen > gen) {
@@ -2374,7 +2381,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	return {reply: buffer};
 }
 
-function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: string}) {
+function runSearch(query: {target: string, cmd: string, canAll: boolean, message: string}) {
 	return PM.query(query);
 }
 
@@ -2390,16 +2397,16 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, q
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
-			return runDexsearch(query.tar, query.cmd, query.canAll, query.message);
+			return runDexsearch(query.target, query.cmd, query.canAll, query.message);
 		case 'randmove':
 		case 'movesearch':
-			return runMovesearch(query.tar, query.cmd, query.canAll, query.message);
+			return runMovesearch(query.target, query.cmd, query.canAll, query.message);
 		case 'itemsearch':
-			return runItemsearch(query.tar, query.cmd, query.canAll, query.message);
+			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
 		case 'abilitysearch':
-			return runAbilitysearch(query.tar, query.cmd, query.canAll, query.message);
+			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
 		case 'learn':
-			return runLearn(query.tar, query.message, query.canAll, query.message);
+			return runLearn(query.target, query.message, query.canAll, query.message);
 		default:
 			return null;
 		}

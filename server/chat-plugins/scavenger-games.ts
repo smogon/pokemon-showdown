@@ -728,7 +728,7 @@ export class ScavengerGameTemplate {
 		if (this.timer) clearTimeout(this.timer);
 		const game = this.room.getGame(ScavengerHunt);
 		if (force && game) game.onEnd(false);
-		delete this.room.scavgame;
+		this.room.scavgame = null;
 	}
 
 	eliminate(userid: string) {

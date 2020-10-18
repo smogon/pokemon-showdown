@@ -1,7 +1,7 @@
 /**
  * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
  * Handles giveaways in the formats: question, lottery, gts
- * Written by Asheviere, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
+ * Written by bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
 import {FS} from '../../lib/fs';
@@ -76,7 +76,7 @@ class Giveaway {
 	clearTimer() {
 		if (this.timer) {
 			clearTimeout(this.timer);
-			delete this.timer;
+			this.timer = null;
 		}
 	}
 
@@ -538,7 +538,7 @@ export class GTSGiveaway {
 	clearTimer() {
 		if (this.timer) {
 			clearTimeout(this.timer);
-			delete this.timer;
+			this.timer = null;
 		}
 	}
 

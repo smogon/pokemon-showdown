@@ -3,7 +3,8 @@
  * Uses Regex to match room frequently asked question (RFAQ) entries,
  * and replies if a match is found.
  * Supports configuration.
- * Written by mia-pi.
+ * Written by Mia.
+ * @author mia-pi-git
  */
 
 import {FS} from '../../lib/fs';
@@ -141,17 +142,17 @@ export class HelpResponder {
 		}
 		return null;
 	}
-	getFaqID(faq: string) {
+	getFaqID(faq?: string) {
+		if (!faq) throw new Chat.ErrorMessage(`Your input must be in the format [input] => [faq].`);
 		faq = faq.trim();
-		if (!faq) return;
+		if (!faq) throw new Chat.ErrorMessage(`Your FAQ ID can't be empty.`);
 		const room = this.getRoom();
-		if (!room) return;
+		if (!room) throw new Chat.ErrorMessage(`The Help filter room is not configured, and so cannot be used.`);
 		const entry: string = roomFaqs[room.roomid][faq];
-		if (!entry) return;
-		// ignore short aliases, they cause too many false positives
-		if (faq.length <= MINIMUM_LENGTH || entry.startsWith('>') && entry.slice(1).length <= MINIMUM_LENGTH) return;
+		if (!entry) throw new Chat.ErrorMessage(`FAQ ID "${faq}" not found.`);
+
 		if (entry.charAt(0) !== '>') return faq; // not an alias
-		return entry.replace('>', '');
+		return entry.slice(1);
 	}
 	/**
 	 * Checks if the FAQ exists. If not, deletes all references to it.
@@ -239,9 +240,8 @@ export class HelpResponder {
 		return FS(PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
 	tryAddRegex(inputString: string, raw?: boolean) {
-		let [args, faq] = inputString.split('=>').map(item => item.trim());
-		faq = this.getFaqID(toID(faq)) as string;
-		if (!faq) throw new Chat.ErrorMessage("Invalid FAQ.");
+		let [args, faq] = inputString.split('=>').map(item => item.trim()) as [string, string | undefined];
+		faq = this.getFaqID(toID(faq));
 		if (!this.data.pairs) this.data.pairs = {};
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
 		const regex = raw ? args.trim() : this.stringRegex(args, raw);
@@ -253,8 +253,7 @@ export class HelpResponder {
 		return this.writeState();
 	}
 	tryRemoveRegex(faq: string, index: number) {
-		faq = this.getFaqID(faq) as string;
-		if (!faq) throw new Chat.ErrorMessage("Invalid FAQ.");
+		faq = this.getFaqID(faq);
 		if (!this.data.pairs) this.data.pairs = {};
 		if (!this.data.pairs[faq]) throw new Chat.ErrorMessage(`There are no regexes for ${faq}.`);
 		if (!this.data.pairs[faq][index]) throw new Chat.ErrorMessage("Your provided index is invalid.");
@@ -404,7 +403,10 @@ export const commands: ChatCommands = {
 			if (!user.autoconfirmed) {
 				return this.errorReply(`You must be autoconfirmed to suggest regexes to the Help filter.`);
 			}
-			const faq = Answerer.getFaqID(target.split('=>')[1]);
+
+			// validate
+			Answerer.getFaqID(target.split('=>')[1]);
+
 			if (this.filter(this.message) !== this.message) {
 				return this.errorReply(`Invalid suggestion.`);
 			}
@@ -414,7 +416,6 @@ export const commands: ChatCommands = {
 			if (Answerer.isBanned(user)) {
 				return this.errorReply(`You are banned from making suggestions to the Help filter.`);
 			}
-			if (!faq) return this.errorReply(`Invalid FAQ.`);
 			const regex = Answerer.stringRegex(target);
 			const entry = {
 				regexString: target,
@@ -444,9 +445,10 @@ export const commands: ChatCommands = {
 			}
 			const {regexString, userid} = Answerer.queue[index];
 			const regex = Answerer.stringRegex(regexString);
-			// validated on submission
+
+			// validated on submission but FAQs may have changed since then
 			const faq = Answerer.getFaqID(regexString.split('=>')[1].trim());
-			if (!faq) return this.errorReply(`Invalid FAQ.`);
+
 			if (!Answerer.data.pairs[faq]) helpData.pairs[faq] = [];
 			Answerer.data.pairs[faq].push(regex);
 			Answerer.queue.splice(index, 1);

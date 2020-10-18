@@ -53,6 +53,6 @@ describe('Fainting', function () {
 		]);
 		battle.makeChoices('move Explosion', 'move Substitute');
 		battle.makeChoices('switch Pikachu', '');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 });

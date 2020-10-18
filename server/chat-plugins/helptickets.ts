@@ -1,5 +1,6 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import {getCommonBattles} from '../chat-commands/info';
 import type {Punishment} from '../punishments';
 
 const TICKET_FILE = 'config/tickets.json';
@@ -85,7 +86,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	constructor(room: ChatRoom, ticket: TicketState) {
 		super(room);
 		this.room = room;
-		this.room.settings.language = Users.get(ticket.creator)?.language || 'english';
+		this.room.settings.language = Users.get(ticket.creator)?.language || 'english' as ID;
 		this.title = `Help Ticket - ${ticket.type}`;
 		this.gameid = "helpticket" as ID;
 		this.allowRenames = true;
@@ -1152,7 +1153,19 @@ export const commands: ChatCommands = {
 					void (reportRoom as GameRoom).uploadReplay(user, connection, 'forpunishment');
 				}
 			} else if (reportTargetType === 'user') {
-				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong>`;
+				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong><p></p>`;
+
+				const commonBattles = getCommonBattles(
+					toID(reportTarget), Users.get(reportTarget),
+					ticket.userid, Users.get(ticket.userid)
+				);
+
+				if (!commonBattles.length) {
+					reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
+				} else {
+					reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
+					reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+				}
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
 			if (!helpRoom) {

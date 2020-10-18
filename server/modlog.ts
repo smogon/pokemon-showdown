@@ -58,6 +58,7 @@ interface ModlogQuery {
 export interface ModlogSearch {
 	note?: {searches: string[], isExact?: boolean};
 	user?: {search: string, isExact?: boolean};
+	anyField?: string;
 	ip?: string;
 	action?: string;
 	actionTaker?: string;
@@ -276,7 +277,7 @@ export class Modlog {
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const response = await PM.query({
 			rooms: ['global' as ModlogID],
-			regexString: `[${this.escapeRegex(toID(user))}]`,
+			regexString: this.escapeRegex(`[${toID(user)}]`),
 			maxLines: days * 10,
 			onlyPunishments: 'global',
 		});
@@ -314,17 +315,18 @@ export class Modlog {
 		// child process will crash when attempting to execute any RegExp
 		// constructed with it (i.e. when not configured to use ripgrep).
 		let regexString = '.*?';
-		if (search.action) regexString += `${this.escapeRegex(`) ${search.action}: `)}.*?`;
+		if (search.anyField) regexString += `${this.escapeRegex(search.anyField)}.*?`;
+		if (search.action) regexString += `\\) .*?${this.escapeRegex(search.action)}.*?: .*?`;
 		if (search.user) {
 			const wildcard = search.user.isExact ? `` : `.*?`;
 			regexString += `.*?\\[${wildcard}${this.escapeRegex(search.user.search)}${wildcard}\\].*?`;
 		}
 		if (search.ip) regexString += `${this.escapeRegex(`[${search.ip}`)}.*?\\].*?`;
-		if (search.actionTaker) regexString += `${this.escapeRegex(`by ${search.actionTaker}: `)}.*?`;
+		if (search.actionTaker) regexString += `${this.escapeRegex(`by ${search.actionTaker}`)}.*?`;
 		if (search.note) {
 			const regexGenerator = search.note.isExact ? this.generateRegex : this.escapeRegex;
 			for (const noteSearch of search.note.searches) {
-				regexString += `${regexGenerator(noteSearch)}.*?`;
+				regexString += `${regexGenerator(toID(noteSearch))}.*?`;
 			}
 		}
 

@@ -63,7 +63,7 @@ export class FSPath {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return fs.readFileSync(this.path, options) as string;
+		return fs.readFileSync(this.path, options as {encoding: 'utf8'});
 	}
 
 	readBuffer(options: AnyObject | string = {}): Promise<Buffer> {
@@ -75,7 +75,7 @@ export class FSPath {
 	}
 
 	readBufferSync(options: AnyObject | string = {}) {
-		return fs.readFileSync(this.path, options) as Buffer;
+		return fs.readFileSync(this.path, options as {encoding: null});
 	}
 
 	exists(): Promise<boolean> {

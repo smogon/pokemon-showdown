@@ -38,11 +38,11 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes?.length) return this.errorReply(`This room has no quotes.`);
-		this.runBroadcast();
+		this.runBroadcast(true);
 		const {quote, date, userid} = roomQuotes[Math.floor(Math.random() * roomQuotes.length)];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
-		const attribution = toID(target) === 'showauthor' ? `<br /><hr /><small>Added by ${userid} on ${time}</small>` : '';
-		return this.sendReplyBox(`${Chat.formatText(quote).replace(/\n/g, '<br />')}${attribution}`);
+		const attribution = toID(target) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
+		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}${attribution}`);
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 
@@ -137,7 +137,7 @@ export const pages: PageTable = {
 		for (const [i, quoteObj] of roomQuotes.entries()) {
 			const index = i + 1;
 			const {quote, userid, date} = quoteObj;
-			buffer += `<div class="infobox">${Chat.formatText(quote).replace(/\n/g, '<br />')}`;
+			buffer += `<div class="infobox">${Chat.formatText(quote, false, true)}`;
 			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`;
 			if (user.can('mute', null, room)) {
 				buffer += ` <button class="button" name="send" value="/removequote ${index},${room.roomid}">Remove</button>`;
