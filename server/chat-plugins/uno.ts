@@ -680,7 +680,7 @@ export const commands: ChatCommands = {
 		setcap(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (game.state !== 'signups') {
 				throw new Chat.ErrorMessage(`There is no UNO game in the signups phase in this room, so adjusting the player cap would do nothing.`);
 			}
@@ -696,7 +696,7 @@ export const commands: ChatCommands = {
 		start(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (game.state !== 'signups') {
 				throw new Chat.ErrorMessage("There is no UNO game in signups phase in this room.");
 			}
@@ -722,7 +722,7 @@ export const commands: ChatCommands = {
 		timer(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			const amount = parseInt(target);
 			if (!amount || amount < 5 || amount > 300) {
 				throw new Chat.ErrorMessage("The amount must be a number between 5 and 300.");
@@ -740,7 +740,7 @@ export const commands: ChatCommands = {
 		autostart(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (toID(target) === 'off') {
 				if (!game.autostartTimer) throw new Chat.ErrorMessage("There is no autostart timer running on.");
 				this.addModAction(`${user.name} has turned off the UNO autostart timer.`);
@@ -763,7 +763,7 @@ export const commands: ChatCommands = {
 		disqualify(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 
 			const disqualified = game.eliminate(toID(target));
 			if (disqualified === false) throw new Chat.ErrorMessage(`Unable to disqualify ${target}.`);
@@ -775,7 +775,7 @@ export const commands: ChatCommands = {
 		// player/user commands
 		j: 'join',
 		join(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			this.checkChat();
 			if (!game.joinGame(user)) throw new Chat.ErrorMessage("Unable to join the game.");
 
@@ -784,13 +784,13 @@ export const commands: ChatCommands = {
 
 		l: 'leave',
 		leave(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game.leaveGame(user)) throw new Chat.ErrorMessage("Unable to leave the game.");
 			return this.sendReply("You have left the game of UNO.");
 		},
 
 		play(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
 			if (!player) throw new Chat.ErrorMessage(`You are not in the game of UNO.`);
@@ -809,7 +809,7 @@ export const commands: ChatCommands = {
 		},
 
 		pass(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 			if (game.currentPlayerid !== user.id) throw new Chat.ErrorMessage("It is currently not your turn.");
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
@@ -822,7 +822,7 @@ export const commands: ChatCommands = {
 		},
 
 		color(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
 			if (!player) throw new Chat.ErrorMessage(`You are not in the game of UNO.`);
 			let color: Color;
@@ -835,7 +835,7 @@ export const commands: ChatCommands = {
 		},
 
 		uno(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
 			if (!player) throw new Chat.ErrorMessage(`You are not in the game of UNO.`);
 			game.onUno(player, toID(target));
@@ -844,7 +844,7 @@ export const commands: ChatCommands = {
 		// information commands
 		'': 'hand',
 		hand(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			game.onSendHand(user);
 		},
 
@@ -852,7 +852,7 @@ export const commands: ChatCommands = {
 		users: 'getusers',
 		getplayers: 'getusers',
 		getusers(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!this.runBroadcast()) return false;
 			this.sendReplyBox(`<strong>Players (${game.playerCount})</strong>:${game.getPlayers()}`);
 		},
@@ -864,7 +864,7 @@ export const commands: ChatCommands = {
 		// suppression commands
 		suppress(target, room, user) {
 			room = this.requireRoom();
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			this.checkCan('minigame', null, room);
 
 			target = toID(target);
@@ -884,7 +884,7 @@ export const commands: ChatCommands = {
 		},
 
 		spectate(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 
 			if (!game.suppressMessages) throw new Chat.ErrorMessage("The current UNO game is not suppressing messages.");
@@ -895,7 +895,7 @@ export const commands: ChatCommands = {
 		},
 
 		unspectate(target, room, user) {
-			const game = this.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 
 			if (!game.suppressMessages) throw new Chat.ErrorMessage("The current UNO game is not suppressing messages.");

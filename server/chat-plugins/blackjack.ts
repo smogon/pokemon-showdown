@@ -675,7 +675,7 @@ export const commands: ChatCommands = {
 		start(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(Blackjack);
+			const game = this.requireGame(Blackjack);
 			if (game.state !== 'signups') return this.errorReply("This game of blackjack has already started.");
 
 			this.privateModAction(`The game of blackjack was started by ${user.name}.`);
@@ -686,7 +686,7 @@ export const commands: ChatCommands = {
 		end(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = this.getGame(Blackjack);
+			const game = this.requireGame(Blackjack);
 			const force = cmd === 'forceend' ? 'forcibly ' : '';
 
 			const end = game.end(user, cmd);
@@ -697,17 +697,17 @@ export const commands: ChatCommands = {
 		},
 		hit(target, room, user) {
 			room = this.requireRoom();
-			const game = this.getGame(Blackjack);
+			const game = this.requireGame(Blackjack);
 			game.hit(user);
 		},
 		stand(target, room, user) {
 			room = this.requireRoom();
-			const game = this.getGame(Blackjack);
+			const game = this.requireGame(Blackjack);
 			game.stand(user);
 		},
 		slide(target, room, user) { // undocumented (used in UI)
 			room = this.requireRoom();
-			const game = this.getGame(Blackjack);
+			const game = this.requireGame(Blackjack);
 			game.slide(user);
 		},
 		j: 'join',
@@ -721,7 +721,7 @@ export const commands: ChatCommands = {
 		unspectate: 'spectate',
 		spectate(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			const game = this.getGame(Blackjack);
+			const game = this.requireGame(Blackjack);
 			if (cmd === 'spectate') {
 				game.spectate(user);
 			} else if (cmd === 'unspectate') {

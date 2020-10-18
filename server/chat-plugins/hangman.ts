@@ -258,7 +258,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			const game = this.getGame(Hangman);
+			const game = this.requireGame(Hangman);
 			game.end();
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`The game of hangman was ended by ${user.name}.`);
@@ -289,7 +289,7 @@ export const commands: ChatCommands = {
 
 		display(target, room, user) {
 			room = this.requireRoom();
-			const game = this.getGame(Hangman);
+			const game = this.requireGame(Hangman);
 			if (!this.runBroadcast()) return;
 			room.update();
 

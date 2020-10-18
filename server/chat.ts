@@ -1345,7 +1345,7 @@ export class CommandContext extends MessageContext {
 		return this.room;
 	}
 	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
-	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T) {
+	requireGame<T extends RoomGame>(constructor: new (...args: any[]) => T) {
 		const room = this.requireRoom();
 		if (!room.game) throw new Chat.ErrorMessage(`There is no game going on in this room.`);
 		const game = room.getGame(constructor);

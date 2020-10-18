@@ -325,7 +325,7 @@ export const commands: ChatCommands = {
 		},
 
 		end(target, room, user) {
-			const game = this.getGame(RPSGame);
+			const game = this.requireGame(RPSGame);
 			if (!game.playerTable[user.id]) {
 				return this.errorReply(`You are not a player, and so cannot end the game.`);
 			}
@@ -341,12 +341,12 @@ export const commands: ChatCommands = {
 		},
 
 		pause(target, room, user) {
-			const game = this.getGame(RPSGame);
+			const game = this.requireGame(RPSGame);
 			game.pause(user);
 		},
 
 		resume(target, room, user) {
-			const game = this.getGame(RPSGame);
+			const game = this.requireGame(RPSGame);
 			game.unpause(user);
 		},
 
