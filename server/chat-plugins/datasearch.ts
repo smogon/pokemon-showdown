@@ -1043,7 +1043,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const isRegionalForm = (dex[mon].forme === "Galar" || dex[mon].forme === "Alola") && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].isNonstandard === 'Gigantamax && !allowGmax) continue;
+		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
