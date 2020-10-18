@@ -1,5 +1,6 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import type {FilterWord} from '../chat';
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
@@ -61,7 +62,7 @@ function constructEvasionRegex(str: string) {
 }
 
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {
-	return `${location}\t${word.word}\t${punishment}\t${word.reason}\t${word.hits}${word.publicReason ? `\t${word.publicReason}` : ''}${word.replacement ? `\t${word.replacement}` : ''}\r\n`;
+	return `${location}\t${word.word}\t${punishment}\t${word.reason}\t${word.hits}\t${word.replacement || ''}\t${word.publicReason || ''}\r\n`;
 }
 
 function saveFilters(force = false) {
@@ -260,13 +261,18 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 		for (const key in Chat.monitors) {
 			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
 				const replacement = rest[0];
+				const publicReason = rest[1];
 				let regex: RegExp;
 				if (punishment === 'EVASION') {
 					regex = constructEvasionRegex(word);
 				} else {
 					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'ig' : 'i');
 				}
-				filterWords[key].push({regex, word, reason, replacement, hits: parseInt(times) || 0});
+
+				const filterWord: FilterWord = {regex, word, reason, hits: parseInt(times) || 0};
+				if (publicReason) filterWord.publicReason = publicReason;
+				if (replacement) filterWord.replacement = replacement;
+				filterWords[key].push(filterWord);
 
 				continue loop;
 			}
