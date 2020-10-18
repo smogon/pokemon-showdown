@@ -44,6 +44,23 @@ interface ChannelData {
 	intervalTime?: number;
 }
 
+interface VideoData {
+	id: string;
+	title: string;
+	date: Date;
+	desc: string;
+	channel: {
+		title: string;
+		url: string;
+	};
+	stats: {
+		views: number;
+		likes: number;
+		dislikes: number;
+	};
+	thumbnail: string;
+}
+
 function loadData() {
 	const raw: AnyObject = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
 	if (!(raw.channels && raw.categories)) { // hasn't been converted to new format
@@ -212,9 +229,9 @@ export class YoutubeInterface {
 		let buf = `<table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
 		buf += `<div style="padding:5px;background:#b0b0b0;border:1px solid black;margin:auto;max-width:100px;max-height:100px;">`;
-		buf += `<a href="${ROOT}channel/${id}"><img src="${info.thumbnail}" width=100px height=100px/></a>`;
+		buf += `<a href="${ROOT}channel/${id}"><img src="${video.thumbnail}" width=100px height=100px/></a>`;
 		buf += `</div><p style="margin:5px 0px 4px 0px;word-wrap:break-word;">`;
-		buf += `<a style="font-weight:bold;color:#c70000;font-size:12pt;" href="https://www.youtube.com/watch?v=${id}">${info.title}</a>`;
+		buf += `<a style="font-weight:bold;color:#c70000;font-size:12pt;" href="https://www.youtube.com/watch?v=${id}">${video.title}</a>`;
 		buf += `</p></td><td style="padding: 0px 25px;font-size:10pt;max-width:100px;background:`;
 		buf += `#white;width:100%;border-bottom:0px;vertical-align:top;">`;
 		buf += `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
@@ -222,7 +239,7 @@ export class YoutubeInterface {
 		buf += `<small>Published on ${info.date} | ID: ${id}</small><br>Uploaded by: ${info.channelTitle}</p>`;
 		buf += `<br><details><summary>Video Description</p></summary>`;
 		buf += `<p style="background: #e22828;max-width:500px;padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
-		buf += `<i>${info.description.slice(0, 400).replace(/\n/g, ' ')}${info.description.length > 400 ? '(...)' : ''}</p><i></details></td>`;
+		buf += `<i>${video.desc.slice(0, 400).replace(/\n/g, ' ')}${video.desc.length > 400 ? '(...)' : ''}</p><i></details></td>`;
 		return buf;
 	}
 	save() {

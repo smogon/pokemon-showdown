@@ -13,22 +13,23 @@ const DEFAULT_IMAGES = [
 	'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png',
 ];
 
-interface SavedRecommendation {
+interface Recommendation {
 	artist: string;
 	title: string;
 	url: string;
 	description: string;
 	tags: string[];
+	userData: {
+		name: string;
+		avatar?: string;
+	};
+	likes: number;
 }
 
-interface SuggestedRecommendation extends SavedRecommendation {
-	submittee: string;
-}
-
-type Recommendation = {suggested: SuggestedRecommendation[], saved: SavedRecommendation[]};
+type Recommendations = {suggested: Recommendation[], saved: Recommendation[]};
 
 const lastfm: {[userid: string]: string} = JSON.parse(FS(LASTFM_DB).readIfExistsSync() || "{}");
-const recommendations: Recommendation = JSON.parse(FS(RECOMMENDATIONS).readIfExistsSync() || "{}");
+const recommendations: Recommendations = JSON.parse(FS(RECOMMENDATIONS).readIfExistsSync() || "{}");
 
 if (!recommendations.saved) recommendations.saved = [];
 if (!recommendations.suggested) recommendations.suggested = [];
@@ -72,7 +73,7 @@ export class LastFMInterface {
 			buf += `<br />`;
 			const trackName = `${track.artist?.['#text'] ? `${track.artist['#text']} - ` : ''}${track.name}`;
 			const videoIDs = await YouTube.searchVideo(trackName, 1);
-			if (!videoIDs.length) {
+			if (!videoIDs?.length) {
 				throw new Chat.ErrorMessage(`Something went wrong with the YouTube API.`);
 			}
 			buf += `<a href="https://youtu.be/${videoIDs[0]}">${Utils.escapeHTML(trackName)}</a>`;
@@ -158,17 +159,14 @@ export class LastFMInterface {
 	}
 }
 
-class Recommendations {
-	room: Room;
-	pending: AnyObject[];
-	timer: NodeJS.Timer | null;
-	lastRecommendation: AnyObject | null;
+class RecommendationsInterface {
+	lastRecommendation?: Recommendation;
+	intervalTime: number | null;
+	interval: NodeJS.Timer | null;
 
-	constructor(room: Room) {
-		this.room = room;
-		this.pending = [];
-		this.timer = null;
-		this.lastRecommendation = null;
+	constructor() {
+		this.intervalTime = null;
+		this.interval = null;
 	}
 
 	getRoom(context: CommandContext) {
@@ -179,15 +177,25 @@ class Recommendations {
 		return room;
 	}
 
-	add(artist: string, title: string, url: string, description: string, ...tags: string[]) {
+	async add(room: Room, artist: string, title: string, url: string, description: string, username: string, tags: string[],  avatar?: string) {
 		artist = artist.trim();
 		title = title.trim();
 		if (recommendations.saved.find(x => toID(x.title) === toID(title) && toID(x.artist) === toID(artist))) {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already recommended.`);
 		}
+		if (!/^https?:\/\//.test(url)) url = `https://${url}`;
+		if (!YouTube.validURL(url)) {
+			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
+		}
+		// JUST in case
 		if (!recommendations.saved) recommendations.saved = [];
-		recommendations.saved.push({artist, title, url, description, tags});
+		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
+		if (avatar) rec.userData.avatar = avatar;
+		recommendations.saved.push(rec);
 		saveRecommendations();
+		await this.render(room, rec);
+		this.collapse(room, this.lastRecommendation);
+		this.lastRecommendation = rec;
 	}
 
 	delete(artist: string, title: string) {
@@ -204,7 +212,10 @@ class Recommendations {
 		saveRecommendations();
 	}
 
-	suggest(submittee: string, artist: string, title: string, url: string, description: string, ...tags: string[]) {
+	async suggest(
+		room: Room, artist: string, title: string, url: string, description: string,
+		username: string, tags: string[], avatar?: string
+	) {
 		artist = artist.trim();
 		title = title.trim();
 		if (recommendations.saved.find(x => toID(x.title) === toID(title) && toID(x.artist) === toID(artist))) {
@@ -213,22 +224,30 @@ class Recommendations {
 		if (recommendations.suggested.find(x => toID(x.title) === toID(title) && toID(x.artist) === toID(artist))) {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already suggested.`);
 		}
-		recommendations.suggested.push({submittee, artist, title, url, description, tags});
+		if (!/^https?:\/\//.test(url)) url = `https://${url}`;
+		if (!YouTube.validURL(url)) {
+			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
+		}
+		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
+		if (avatar) rec.userData.avatar = avatar;
+		recommendations.suggested.push(rec);
 		saveRecommendations();
+		await this.render(room, rec, true);
 	}
 
-	approveSuggestion(artist: string, title: string) {
+	approveSuggestion(room: Room, artist: string, title: string) {
 		artist = artist.trim();
 		title = title.trim();
 		const index = recommendations.suggested.findIndex(x => toID(x.artist) === toID(artist) && toID(x.title) === toID(title));
 		if (index < 0) {
 			throw new Chat.ErrorMessage(`There is no song titled '${title}' by ${artist} suggested.`);
 		}
-		const {artist: artistName, title: titleName, url, description, tags} = recommendations.suggested[index];
+		const rec = recommendations.suggested[index];
 		if (!recommendations.saved) recommendations.saved = [];
-		recommendations.saved.push({artist: artistName, title: titleName, url, description, tags});
+		recommendations.saved.push(rec);
 		recommendations.suggested.splice(index, 1);
 		saveRecommendations();
+		this.collapse(room, rec, true);
 	}
 
 	denySuggestion(artist: string, title: string) {
@@ -241,13 +260,81 @@ class Recommendations {
 		recommendations.suggested.splice(index, 1);
 		saveRecommendations();
 	}
+
+	async render(room: Room, rec: Recommendation, suggested = false) {
+		const videoID = YouTube.getId(rec.url);
+		const videoInfo = await YouTube.getVideoInfo(videoID);
+		let buf = ``;
+		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
+		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
+		if (videoInfo) {
+			buf += `<td style="text-align:center;"><img src="${videoInfo.thumbnail}" width="120" height="67" /><br />`;
+			buf += `<small><em>${!suggested ? `${rec.likes} ${Chat.count(rec.likes, "points")}` : ``}${videoInfo.stats.views} views</em></small></td>`;
+		}
+		buf += Utils.html`<td style="max-width:300px"><a href="${rec.url}" style="color:#000;font-weight:bold;">${rec.artist} - ${rec.title}</a>`;
+		if (rec.tags?.length) {
+			buf += `<br /><strong>Tags:</strong> <em>${rec.tags.map(x => Utils.escapeHTML(x)).join(', ')}</em>`;
+		}
+		if (rec.description) {
+			buf += `<br /><span style="display:inline-block;line-height:1.15em;"><strong>Description:</strong> ${Utils.escapeHTML(rec.description)}</span>`;
+		}
+		if (!videoInfo && !suggested) {
+			buf += `<br /><strong>Score:</strong> ${rec.likes} ${Chat.count(rec.likes, "points")}`;
+		}
+		if (!rec.userData.avatar) {
+			buf += `<br /><strong>Recommended by:</strong> ${rec.userData.name}`;
+		}
+		buf += `<hr />`;
+		if (suggested) {
+			buf += `<button class="button" name="send" value="/approvesuggestion ${rec.userData.name}">Approve</button> | `;
+			buf += `<button class="button" name="send" value="/denysuggestion ${rec.userData.name}">Approve</button>`;
+		} else {
+			buf += `<button class="button" name="send" value="/likerec ${rec.artist}, ${rec.title}" style="float:right;display:inline;padding:3px 5px;font-size:8pt;">`;
+			buf += `<img src="https://${Config.routes.client}/sprites/bwicons/441.png" style="margin:-9px 0 -6px -7px;" width="32" height="32" />`;
+			buf += `<span style="position:relative;bottom:2.6px;">Upvote</span></button>`;
+		}
+		buf += `</td>`;
+		if (!suggested && rec.userData.avatar) {
+			buf += `<td style="text-align:center;width:110px;background:rgba(255,255,255,0.4);border-radius:15px;">`;
+			const isCustom = rec.userData.avatar.startsWith('#');
+			buf += `<img style="margin-bottom:-38px;" src="https://${Config.routes.client}/sprites/trainers${isCustom ? '-custom' : ''}/${isCustom ? rec.userData.avatar.slice(1) : rec.userData.avatar}.png" width="80" height="80" />`;
+			buf += `<br /><span style="background:rgba(0,0,0,0.5);padding:1.5px 4px;color:white;font-size:7pt;">Recommended by:`;
+			buf += `<br /><strong>${rec.userData.name}</strong></span></td>`;
+		}
+		buf += `</tbody></table>`;
+		buf += `</div>`;
+		if (!suggested) {
+			room.send(`|uhtml${this.lastRecommendation ? 'change' : ''}|studiorec-${toID(rec.artist)}-${toID(rec.title)}|${buf}`);
+			room.update();
+		} else {
+			room.sendRankedUsers(`|uhtml|studiorec-${toID(rec.artist)}-${toID(rec.title)}-suggestion|${buf}`, '%');
+			room.update();
+		}
+		this.lastRecommendation = rec;
+	}
+
+	collapse(room: Room, rec?: Recommendation, suggested = false) {
+		if (!rec) return;
+		let buf = ``;
+		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225));">`;
+		buf += `<table style="margin: auto;background:rgba(255,255,255,0.25);padding:3px"><tbody><tr>`;
+		buf += `<td style="text-align:center"><a href="${rec.url}" style="color:#000;font-weight:bold">${rec.artist} - ${rec.title}</a>`;
+		if (rec.tags?.length) {
+			buf += `<br /><strong>Tags:</strong> <em>${rec.tags.map(x => Utils.escapeHTML(x)).join(', ')}</em>`;
+		}
+		buf += `<br /><strong>Recommended by: ${rec.userData.name}</strong></td></tr></tbody></table></div>`;
+		if (!suggested) {
+			room.send(`|uhtmlchange|studiorec-${toID(rec.artist)}-${toID(rec.title)}|${buf}`);
+			room.update();
+		} else {
+			room.sendRankedUsers(`|uhtmlchange|studiorec-${toID(rec.artist)}-${toID(rec.title)}-suggestion|${buf}`, '%');
+			room.update();
+		}
+	}
 }
 
 export const LastFM = new LastFMInterface();
-export let Recs: Recommendations | null = null;
-if (Rooms.get('thestudio')) {
-	Recs = new Recommendations(Rooms.get('thestudio')!);
-}
+export const Recs = new RecommendationsInterface();
 
 export const commands: ChatCommands = {
 	registerlastfm(target, room, user) {
@@ -287,4 +374,20 @@ export const commands: ChatCommands = {
 	trackhelp: [
 		`/track [song name], [artist] - Displays the most relevant search result to the song name (and artist if specified) provided.`,
 	],
+
+	addrec: 'addrecommendation',
+	async addrecommendation(target, room, user) {
+		room = Recs.getRoom(this);
+		this.checkCan('show', null, room);
+		const [artist, title, url, description, ...tags] = target.split(target.includes('|') ? '|' : ',').map(x => x.trim());
+		if (!(artist && title && url && description && tags?.length)) {
+			return this.parse(`/help addrecommendation`);
+		}
+		// Noob proofing
+		let cleansedTags = tags.map(x => x.trim()).join('|').split(',');
+		await Recs.add(room, artist, title, url, description, user.name, cleansedTags, String(user.avatar));
+
+		this.privateModAction(``);
+		this.modlog(`RECOMMENDATION`, null, `added '${toID(title)}' by ${toID(artist)}`);
+	},
 };
