@@ -955,7 +955,7 @@ export const Formats: {[k: string]: FormatData} = {
 				if (species.forme || species.otherFormes) {
 					const baseSpecies = dex.getSpecies(species.baseSpecies);
 					const originalForme = dex.getSpecies(species.changesFrom || species.name);
-					types = originalForme.types;
+					types = originalForme.types || [];
 					if (baseSpecies.otherFormes) {
 						for (const formeName of baseSpecies.otherFormes) {
 							if (baseSpecies.prevo) {
@@ -964,7 +964,7 @@ export const Formats: {[k: string]: FormatData} = {
 							}
 							const forme = dex.getSpecies(formeName);
 							if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
-								types = types.concat(forme.types);
+								types.push(...forme.types);
 							}
 						}
 					}
@@ -975,7 +975,7 @@ export const Formats: {[k: string]: FormatData} = {
 				let prevo = species.prevo;
 				while (prevo) {
 					const prevoSpecies = dex.getSpecies(prevo);
-					types = types.concat(prevoSpecies.types);
+					types.push(...prevoSpecies.types);
 					prevo = prevoSpecies.prevo;
 				}
 				if (types.includes(move.type)) return null;
