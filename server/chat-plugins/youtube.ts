@@ -162,7 +162,7 @@ export class YoutubeInterface {
 			thumbnail: video.snippet.thumbnails.default.url,
 			likes: video.statistics.likeCount,
 			dislikes: video.statistics.dislikeCount,
-		} as VideoData;
+		};
 	}
 	channelSearch(search: string) {
 		let channel;
