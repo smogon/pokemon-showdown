@@ -26,7 +26,7 @@ interface ChannelEntry {
 }
 
 interface VideoData {
-	id: ID;
+	id: string;
 	title: string;
 	date: string;
 	description: string;
@@ -153,7 +153,7 @@ export class YoutubeInterface {
 		const video = res.items[0];
 		return {
 			title: video.snippet.title,
-			id as ID,
+			id,
 			date: new Date(video.snippet.publishedAt).toString(),
 			description: video.snippet.description,
 			channelTitle: video.snippet.channelTitle,
