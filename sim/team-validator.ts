@@ -456,7 +456,9 @@ export class TeamValidator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness value.`);
 		}
-		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toID(set.hpType)))) {
+		if (!dex.getType(set.hpType).exists) {
+			set.hpType = dex.getHiddenPower(set.ivs).type;
+		} else if (set.hpType && ['normal', 'fairy'].includes(toID(set.hpType))) {
 			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 		}
 
