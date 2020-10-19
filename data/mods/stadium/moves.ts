@@ -177,6 +177,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Normal",
 	},
+	struggle: {
+		inherit: true,
+		ignoreImmunity: {'Normal': true},
+	},
 	wrap: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
