@@ -50,13 +50,13 @@ interface VideoData {
 	date: Date;
 	desc: string;
 	channel: {
-		title: string;
-		url: string;
+		title: string,
+		url: string,
 	};
 	stats: {
-		views: number;
-		likes: number;
-		dislikes: number;
+		views: number,
+		likes: number,
+		dislikes: number,
 	};
 	thumbnail: string;
 }
