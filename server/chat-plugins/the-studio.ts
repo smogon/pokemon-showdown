@@ -1,7 +1,9 @@
 import {FS} from '../../lib/fs';
 import {Net} from '../../lib/net';
 import {Utils} from '../../lib/utils';
-import {YouTube} from './youtube';
+import {YoutubeInterface} from './youtube';
+
+const YouTube = new YoutubeInterface();
 
 const LASTFM_DB = 'config/chat-plugins/lastfm.json';
 const RECOMMENDATIONS = 'config/chat-plugins/the-studio.json';
@@ -188,7 +190,7 @@ class RecommendationsInterface {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already recommended.`);
 		}
 		if (!/^https?:\/\//.test(url)) url = `https://${url}`;
-		if (!YouTube.validURL(url)) {
+		if (!YoutubeInterface.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
 		// JUST in case
@@ -226,7 +228,7 @@ class RecommendationsInterface {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already suggested.`);
 		}
 		if (!/^https?:\/\//.test(url)) url = `https://${url}`;
-		if (!YouTube.validURL(url)) {
+		if (!YoutubeInterface.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
 		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
@@ -261,13 +263,13 @@ class RecommendationsInterface {
 
 	async render(rec: Recommendation, suggested = false) {
 		const videoID = YouTube.getId(rec.url);
-		const videoInfo = await YouTube.getVideoInfo(videoID);
+		const videoInfo = await YouTube.getVideoData(videoID);
 		let buf = ``;
 		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
 		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
 		if (videoInfo) {
 			buf += `<td style="text-align:center;"><img src="${videoInfo.thumbnail}" width="120" height="67" /><br />`;
-			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, "points")} | ` : ``}${videoInfo.stats.views} views</em></small></td>`;
+			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, "points")} | ` : ``}${videoInfo.views} views</em></small></td>`;
 		}
 		buf += Utils.html`<td style="max-width:300px"><a href="${rec.url}" style="color:#000;font-weight:bold;">${rec.artist} - ${rec.title}</a>`;
 		if (rec.tags?.length) {
@@ -549,7 +551,7 @@ export const commands: ChatCommands = {
 		this.parse(`/j view-recommendations-${targetRoom!.roomid}`);
 	},
 	viewrecommendationshelp: [
-		`/viewrecommendations OR /viewrecs - View all recommended songs.`
+		`/viewrecommendations OR /viewrecs - View all recommended songs.`,
 	],
 
 	viewsuggestions: 'viewsuggestedrecommendations',
@@ -561,7 +563,7 @@ export const commands: ChatCommands = {
 		this.parse(`/j view-suggestedrecommendations-${targetRoom!.roomid}`);
 	},
 	viewsuggestedrecommendationshelp: [
-		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # &`
+		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # &`,
 	],
 };
 
