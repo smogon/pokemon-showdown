@@ -21,12 +21,6 @@
     "es6": true,
     "node": true
   },
-  "globals": {
-    "Config": false, "Monitor": false, "toID": false, "Dex": false, "LoginServer": false,
-    "Users": false, "Punishments": false, "Rooms": false, "Verifier": false, "Chat": false,
-    "Tournaments": false, "IPTools": false, "Sockets": false, "TeamValidator": false,
-    "TeamValidatorAsync": false, "Ladders": false
-  },
   "extends": "eslint:recommended",
   "rules": {
     // TODO: add/revisit
@@ -101,7 +95,7 @@
     "no-shadow": "off",
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
-    "no-undef": ["error", {"typeof": true}],
+    "no-undef": "off",
     "no-unmodified-loop-condition": "error",
     "no-unused-expressions": "error",
     "no-unsafe-finally": "error",
@@ -312,10 +306,7 @@
       "env": {
         "mocha": true
       },
-      "files": ["test/**/*.js"],
-      "globals": {
-        "BattleEngine": false
-      }
+      "files": ["test/**/*.js"]
     }
   ]
 }
