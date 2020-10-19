@@ -227,7 +227,7 @@ export class Connection {
 	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
-	currentPages: null | Set<string>;
+	openPages: null | Set<string>;
 	constructor(
 		id: string,
 		worker: StreamWorker,
@@ -254,7 +254,7 @@ export class Connection {
 		this.autojoins = '';
 		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
-		this.currentPages = null;
+		this.openPages = null;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;

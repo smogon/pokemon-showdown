@@ -423,8 +423,8 @@ export const commands: ChatCommands = {
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) {
 			if (target.startsWith('view-')) {
-				connection.currentPages?.delete(target.slice(5));
-				if (!connection.currentPages?.size) connection.currentPages = null;
+				connection.openPages?.delete(target.slice(5));
+				if (!connection.openPages?.size) connection.openPages = null;
 				return;
 			}
 			return this.errorReply(`The room '${target}' does not exist.`);
