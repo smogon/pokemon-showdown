@@ -638,9 +638,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					Castform: ['Rain Dance', 'Sunny Day', 'Hail', 'Weather Forecast'],
 				};
 				// Store percentage of PP left for each moveSlot
-				const carryOver = pokemon.moveSlots.slice().map(m => {
-					return m.pp / m.maxpp;
-				});
+				const carryOver = pokemon.moveSlots.map(m => m.pp / m.maxpp);
 				// Incase theres ever less than 4 moves
 				while (carryOver.length < 4) {
 					carryOver.push(1);

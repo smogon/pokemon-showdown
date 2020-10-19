@@ -245,7 +245,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		throw err;
 	}
 	const [userid] = userids;
-	files = files.filter(item => item.slice(0, -3) === month).map(item => `logs/${month}/${tierid}/${item}`);
+	files = files.filter(file => file.startsWith(month)).map(file => `logs/${month}/${tierid}/${file}`);
 
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
@@ -491,8 +491,8 @@ export const pages: PageTable = {
 			// First sort by gen with the latest being first
 			let aGen = 6;
 			let bGen = 6;
-			if (a.substring(0, 3) === 'gen') aGen = parseInt(a.substring(3, 4));
-			if (b.substring(0, 3) === 'gen') bGen = parseInt(b.substring(3, 4));
+			if (a.startsWith('gen')) aGen = parseInt(a.substring(3, 4));
+			if (b.startsWith('gen')) bGen = parseInt(b.substring(3, 4));
 			if (aGen !== bGen) return bGen - aGen;
 			// Sort alphabetically
 			const aTier = a.substring(4);
@@ -505,7 +505,7 @@ export const pages: PageTable = {
 			const format = Dex.getFormat(tier);
 			if (format?.exists) tier = format.name;
 			// Otherwise format as best as possible
-			if (tier.substring(0, 3) === 'gen') {
+			if (tier.startsWith('gen')) {
 				return `[Gen ${tier.substring(3, 4)}] ${tier.substring(4)}`;
 			}
 			return tier;

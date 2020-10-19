@@ -646,7 +646,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (!token || token.charAt(0) === ';') {
+		if (!token || token.startsWith(';')) {
 			this.send(`|nametaken|${name}|Your authentication token was invalid.`);
 			return false;
 		}
@@ -907,11 +907,9 @@ export class User extends Chat.MessageContext {
 			oldUser.locked !== oldUser.id &&
 			this.locked !== this.id &&
 			// Only unlock if no previous names are locked
-			!oldUser.previousIDs.some(id => {
-				return !!Punishments.search(id)
-					.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
-					.length;
-			})
+			!oldUser.previousIDs.some(id => !!Punishments.search(id)
+				.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
+				.length)
 		) {
 			this.locked = null;
 		} else if (this.locked !== this.id) {
@@ -1580,7 +1578,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	// from propagating out of this function.
 
 	// drop legacy JSON messages
-	if (message.charAt(0) === '{') return;
+	if (message.startsWith('{')) return;
 
 	const pipeIndex = message.indexOf('|');
 	if (pipeIndex < 0) {

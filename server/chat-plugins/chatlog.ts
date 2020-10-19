@@ -41,7 +41,7 @@ export class LogReaderRoom {
 	async listDays(month: string) {
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
-			return listing.filter(file => /\.txt$/.test(file)).map(file => file.slice(0, -4));
+			return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
 		} catch (err) {
 			return [];
 		}
@@ -315,7 +315,7 @@ export const LogViewer = new class {
 				if (opts !== 'all') return `<div class="notice">[uhtml box hidden]</div>`;
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
-			const group = name.charAt(0) !== ' ' ? `<small>${name.charAt(0)}</small>` : ``;
+			const group = !name.startsWith(' ') ? `<small>${name.charAt(0)}</small>` : ``;
 			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${Utils.escapeHTML(name.slice(1))}:</strong> <q>${Chat.formatText(message)}</q></div>`;
 		}
 		case 'html': case 'raw': {
@@ -633,28 +633,26 @@ export const LogSearcher = new class {
 			const aDate = new Date(aName.split('/').pop()!);
 			const bDate = new Date(bName.split('/').pop()!);
 			return bDate.getTime() - aDate.getTime();
-		}).map(chunk => {
-			return chunk.split('\n').map(line => {
-				if (exactMatches > limit || !toID(line)) return null; // return early so we don't keep sorting
-				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
-				const [name, text] = line.split(sep);
-				line = LogViewer.renderLine(text, 'all');
-				if (!line || name.includes('today')) return null;
+		}).map(chunk => chunk.split('\n').map(line => {
+			if (exactMatches > limit || !toID(line)) return null; // return early so we don't keep sorting
+			const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
+			const [name, text] = line.split(sep);
+			line = LogViewer.renderLine(text, 'all');
+			if (!line || name.includes('today')) return null;
 				 // gets rid of some edge cases / duplicates
-				let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
-				if (searchRegex.test(line)) {
-					if (++exactMatches > limit) return null;
-					line = `<div class="chat chatmessage highlighted">${line}</div>`;
-				}
-				if (curDate !== date) {
-					curDate = date;
-					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-				} else {
-					date = '';
-				}
-				return `${date} ${line}`;
-			}).filter(Boolean).join(' ');
-		}).filter(Boolean);
+			let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
+			if (searchRegex.test(line)) {
+				if (++exactMatches > limit) return null;
+				line = `<div class="chat chatmessage highlighted">${line}</div>`;
+			}
+			if (curDate !== date) {
+				curDate = date;
+				date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
+			} else {
+				date = '';
+			}
+			return `${date} ${line}`;
+		}).filter(Boolean).join(' ')).filter(Boolean);
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
 		buf += limit ? ` ${exactMatches} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;

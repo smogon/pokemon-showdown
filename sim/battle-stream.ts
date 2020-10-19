@@ -64,7 +64,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 
 	_writeLines(chunk: string) {
 		for (const line of chunk.split('\n')) {
-			if (line.charAt(0) === '>') {
+			if (line.startsWith('>')) {
 				const [type, message] = splitFirst(line.slice(1), ' ');
 				this._writeLine(type, message);
 			}
@@ -227,7 +227,7 @@ export abstract class BattlePlayer {
 
 	receiveLine(line: string) {
 		if (this.debug) console.log(line);
-		if (line.charAt(0) !== '|') return;
+		if (!line.startsWith('|')) return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
 		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
 		if (cmd === 'error') return this.receiveError(new Error(rest));

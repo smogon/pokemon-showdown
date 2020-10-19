@@ -24,7 +24,7 @@
       "rules": {
         // TODO investigate
         "@typescript-eslint/restrict-plus-operands": "off",
-        "@typescript-eslint/prefer-string-starts-ends-with": "off",
+        // "@typescript-eslint/restrict-plus-operands": ["error", {"checkCompoundAssignments": true}],
         // "@typescript-eslint/switch-exhaustiveness-check": "error",
 
         // typescript-eslint defaults too strict
@@ -54,7 +54,8 @@
         "@typescript-eslint/no-unnecessary-qualifier": "off",
         "@typescript-eslint/no-unnecessary-type-arguments": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
-        "@typescript-eslint/prefer-regexp-exec": "error"
+        "@typescript-eslint/prefer-regexp-exec": "error",
+        "@typescript-eslint/prefer-string-starts-ends-with": "error"
       }
     }
   ]

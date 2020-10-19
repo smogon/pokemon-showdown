@@ -149,12 +149,12 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 		let discard = false;
 		let rerollsLeft = 3;
-		const isPhazingMove = (move: string) => {
-			return (move === "roar" || move === "whirlwind");
-		};
-		const isSleepMove = (move: string) => {
-			return (move === "sleeppowder" || move === "lovelykiss" || move === "sing" || move === "hypnosis" || move === "spore");
-		};
+		const isPhazingMove = (move: string) => (
+			move === "roar" || move === "whirlwind"
+		);
+		const isSleepMove = (move: string) => (
+			move === "sleeppowder" || move === "lovelykiss" || move === "sing" || move === "hypnosis" || move === "spore"
+		);
 
 		// Choose one of the available sets (up to four) at random
 		// Prevent certain moves from showing up more than once or twice:

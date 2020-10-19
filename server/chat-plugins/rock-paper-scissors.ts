@@ -62,9 +62,7 @@ export class RPSGame extends Rooms.RoomGame {
 		return attacker;
 	}
 	sendOptions() {
-		const button = (cmd: string, title: string) => {
-			return `<button class="button" name="send" value="/${cmd}">${title}</button>`;
-		};
+		const button = (cmd: string, title: string) => `<button class="button" name="send" value="/${cmd}">${title}</button>`;
 		let buf = `<center><strong>Make your choice, quick!</strong><br />`;
 		for (const item of ['Rock', 'Paper', 'Scissors']) {
 			buf += `${button(`choose ${item}`, `${item} ${ICONS[item]}`)}`;

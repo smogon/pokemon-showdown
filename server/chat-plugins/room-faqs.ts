@@ -18,7 +18,7 @@ function saveRoomFaqs() {
 export function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
 	const value = roomFaqs[roomid][key];
-	if (value && value[0] === '>') return value.substr(1);
+	if (value && value.startsWith('>')) return value.substr(1);
 	return false;
 }
 

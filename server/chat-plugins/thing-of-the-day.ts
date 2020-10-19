@@ -677,7 +677,7 @@ export const otdCommands: ChatCommands = {
 	},
 	winnershelp: [`/-otd winners - Displays a list of previous things of the day.`],
 
-	''(target, room) {
+	async ''(target, room) {
 		this.checkChat();
 		if (!this.runBroadcast()) return false;
 
@@ -686,11 +686,9 @@ export const otdCommands: ChatCommands = {
 
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		return handler.generateWinnerDisplay().then(text => {
-			if (!text) return this.errorReply("There is no winner yet.");
-			this.sendReplyBox(text);
-			room.update();
-		});
+		const text = await handler.generateWinnerDisplay();
+		if (!text) return this.errorReply("There is no winner yet.");
+		this.sendReplyBox(text);
 	},
 };
 

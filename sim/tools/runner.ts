@@ -55,8 +55,8 @@ export class Runner {
 
 		this.prng = (options.prng && !Array.isArray(options.prng)) ?
 			options.prng : new PRNG(options.prng);
-		this.p1options = Object.assign({}, Runner.AI_OPTIONS, options.p1options);
-		this.p2options = Object.assign({}, Runner.AI_OPTIONS, options.p2options);
+		this.p1options = {...Runner.AI_OPTIONS, ...options.p1options};
+		this.p2options = {...Runner.AI_OPTIONS, ...options.p2options};
 
 		this.input = !!options.input;
 		this.output = !!options.output;
@@ -84,10 +84,10 @@ export class Runner {
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
 
 		const p1 = this.p1options.createAI(
-			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)
+			streams.p1, {seed: this.newSeed(), ...this.p1options}
 		);
 		const p2 = this.p2options.createAI(
-			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)
+			streams.p2, {seed: this.newSeed(), ...this.p2options}
 		);
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
 		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).

@@ -19,9 +19,9 @@ const CONFIG_PATH = require.resolve('../config/config');
 
 export function load(invalidate = false) {
 	if (invalidate) delete require.cache[CONFIG_PATH];
-	const config = Object.assign({}, defaults, require('../config/config')) as ConfigType;
+	const config = ({...defaults, ...require('../config/config')}) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
-	config.routes = Object.assign({}, defaults.routes, config.routes);
+	config.routes = {...defaults.routes, ...config.routes};
 	cacheGroupData(config);
 	return config;
 }

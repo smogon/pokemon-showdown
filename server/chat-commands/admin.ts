@@ -959,7 +959,7 @@ export const commands: ChatCommands = {
 			cmd = target.toLowerCase();
 			target = '';
 		}
-		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
+		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 		const targets = target.split(',');
 		function getPlayer(input: string) {
 			const player = battle.playerTable[toID(input)];

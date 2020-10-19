@@ -90,7 +90,7 @@ class TextFormatter {
 			} else {
 				fulluri = uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1');
 				if (uri.substr(0, 24) === 'https://docs.google.com/' || uri.substr(0, 16) === 'docs.google.com/') {
-					if (uri.slice(0, 5) === 'https') uri = uri.slice(8);
+					if (uri.startsWith('https')) uri = uri.slice(8);
 					if (uri.substr(-12) === '?usp=sharing' || uri.substr(-12) === '&usp=sharing') uri = uri.slice(0, -12);
 					if (uri.substr(-6) === '#gid=0') uri = uri.slice(0, -6);
 					let slashIndex = uri.lastIndexOf('/');

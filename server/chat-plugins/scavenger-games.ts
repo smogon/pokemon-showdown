@@ -68,10 +68,10 @@ class Leaderboard {
 						lowestScore = bit[sortBy];
 						lastPlacement = i + 1;
 					}
-					return Object.assign(
-						{rank: lastPlacement},
-						bit
-					);
+					return {
+						rank: lastPlacement,
+						...bit,
+					};
 				}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);

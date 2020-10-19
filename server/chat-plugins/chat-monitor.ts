@@ -184,8 +184,8 @@ Chat.registerMonitor('wordfilter', {
 		while (match) {
 			let filtered = replacement || '';
 			if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
-			if (match[0][0] === match[0][0].toUpperCase()) {
-				filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+			if (match[0].startsWith(match[0].charAt(0).toUpperCase())) {
+				filtered = `${filtered ? filtered.charAt(0).toUpperCase() : ''}${filtered.slice(1)}`;
 			}
 			message = message.replace(match[0], filtered);
 			match = regex.exec(message);

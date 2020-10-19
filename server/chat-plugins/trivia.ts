@@ -858,11 +858,9 @@ export class Trivia extends Rooms.RoomGame {
 			if ((options.requirePoints && !player.points) || !user) continue;
 			ranks.push({id: userid, player, name: user.name});
 		}
-		ranks.sort((a, b) => {
-			return b.player.points - a.player.points ||
+		ranks.sort((a, b) => b.player.points - a.player.points ||
 				a.player.lastQuestion - b.player.lastQuestion ||
-				hrtimeToNanoseconds(a.player.answeredAt) - hrtimeToNanoseconds(b.player.answeredAt);
-		});
+				hrtimeToNanoseconds(a.player.answeredAt) - hrtimeToNanoseconds(b.player.answeredAt));
 		return options.max === null ? ranks : ranks.slice(0, options.max);
 	}
 
@@ -909,9 +907,7 @@ export class Trivia extends Rooms.RoomGame {
  * Helper function for timer and number modes. Milliseconds are not precise
  * enough to score players properly in rare cases.
  */
-const hrtimeToNanoseconds = (hrtime: number[]) => {
-	return hrtime[0] * 1e9 + hrtime[1];
-};
+const hrtimeToNanoseconds = (hrtime: number[]) => hrtime[0] * 1e9 + hrtime[1];
 
 /**
  * First mode rewards points to the first user to answer the question
@@ -2073,16 +2069,16 @@ const triviaCommands: ChatCommands = {
 			queryString = queryString.toLowerCase();
 			transformQuestion = (question: string) => question.toLowerCase();
 		}
-		const results = (triviaData as any)[type].filter((q: TriviaQuestion) => {
-			return transformQuestion(q.question).includes(queryString) && !SPECIAL_CATEGORIES[q.category];
-		});
+		const results = triviaData[type as 'questions' | 'submissions']!.filter(
+			q => transformQuestion(q.question).includes(queryString) && !SPECIAL_CATEGORIES[q.category]
+		);
 		if (!results.length) return this.sendReply(this.tr`No results found under the ${type} list.`);
 
 		let buffer = `|raw|<div class="ladder"><table><tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th></tr>` +
 			`<tr><td colspan="3">${this.tr`There are <strong>${results.length}</strong> matches for your query:`}</td></tr>`;
-		buffer += results.map((q: TriviaQuestion, i: number) => {
-			return this.tr`<tr><td><strong>${i + 1}</strong></td><td>${q.category}</td><td>${q.question}</td></tr>`;
-		}).join('');
+		buffer += results.map(
+			(q, i) => this.tr`<tr><td><strong>${i + 1}</strong></td><td>${q.category}</td><td>${q.question}</td></tr>`
+		).join('');
 		buffer += "</table></div>";
 
 		this.sendReply(buffer);
