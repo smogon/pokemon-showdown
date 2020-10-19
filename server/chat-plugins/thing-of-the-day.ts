@@ -71,7 +71,7 @@ class OtdHandler {
 	lastPrenom: number;
 	winners: AnyObject[];
 	constructor(
-		id: string, name: string, room: ChatRoom, filename: string,	keys: string[], keyLabels: string[], week = false,
+		id: string, name: string, room: ChatRoom, filename: string, keys: string[], keyLabels: string[], week = false
 	) {
 		this.id = id;
 		this.name = name;
