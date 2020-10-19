@@ -402,7 +402,7 @@ export const commands: ChatCommands = {
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
-		} else if (ip.slice(-1) === '*') {
+		} else if (ip.endsWith('*')) {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
@@ -1357,10 +1357,10 @@ export const commands: ChatCommands = {
 				if (['band', 'scarf', 'specs'].includes(arg)) {
 					modifier = 1;
 					modSet = true;
-				} else if (arg.charAt(0) === '+') {
+				} else if (arg.startsWith('+')) {
 					modifier = parseInt(arg.charAt(1));
 					modSet = true;
-				} else if (arg.charAt(0) === '-') {
+				} else if (arg.startsWith('-')) {
 					positiveMod = false;
 					modifier = parseInt(arg.charAt(1));
 					modSet = true;

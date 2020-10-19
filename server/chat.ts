@@ -1229,7 +1229,7 @@ export class CommandContext extends MessageContext {
 			const stack = [];
 			for (const tag of tags) {
 				const isClosingTag = tag.charAt(1) === '/';
-				const contentEndLoc = tag.charAt(tag.length - 1) === '/' ? -1 : undefined;
+				const contentEndLoc = tag.endsWith('/') ? -1 : undefined;
 				const tagContent = tag.slice(isClosingTag ? 2 : 1, contentEndLoc).replace(/\s+/, ' ').trim();
 				const tagNameEndIndex = tagContent.indexOf(' ');
 				const tagName = tagContent.slice(0, tagNameEndIndex >= 0 ? tagNameEndIndex : undefined).toLowerCase();

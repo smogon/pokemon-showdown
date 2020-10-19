@@ -872,7 +872,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User ${targetUser.name} is namelocked, not locked. Use /unnamelock to unnamelock them.`);
 		}
 		let reason = '';
-		if (targetUser?.locked && targetUser.locked.charAt(0) === '#') {
+		if (targetUser?.locked && targetUser.locked.startsWith('#')) {
 			reason = ` (${targetUser.locked})`;
 		}
 
@@ -916,7 +916,7 @@ export const commands: ChatCommands = {
 		target = target.trim();
 		if (!target) return this.parse('/help unlock');
 		this.checkCan('globalban');
-		const range = target.charAt(target.length - 1) === '*';
+		const range = target.endsWith('*');
 		if (range) this.checkCan('rangeban');
 
 		if (!(range ? IPTools.ipRangeRegex : IPTools.ipRegex).test(target)) {
@@ -1135,7 +1135,7 @@ export const commands: ChatCommands = {
 		}
 		Punishments.ips.delete(target);
 
-		this.addGlobalModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
+		this.addGlobalModAction(`${user.name} unbanned the ${(target.endsWith('*') ? "IP range" : "IP")}: ${target}`);
 		this.modlog('UNRANGEBAN', null, target);
 	},
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],

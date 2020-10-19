@@ -646,7 +646,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (!token || token.charAt(0) === ';') {
+		if (!token || token.startsWith(';')) {
 			this.send(`|nametaken|${name}|Your authentication token was invalid.`);
 			return false;
 		}
@@ -1578,7 +1578,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	// from propagating out of this function.
 
 	// drop legacy JSON messages
-	if (message.charAt(0) === '{') return;
+	if (message.startsWith('{')) return;
 
 	const pipeIndex = message.indexOf('|');
 	if (pipeIndex < 0) {

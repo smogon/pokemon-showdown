@@ -138,7 +138,7 @@ class PlayerLadder extends Ladder {
 	}
 
 	addPoints(name: string, aspect: string, points: number, noUpdate?: boolean) {
-		if (aspect.indexOf('cumulative-') !== 0) {
+		if (!aspect.startsWith('cumulative-')) {
 			this.addPoints(name, `cumulative-${aspect}`, points, noUpdate);
 		}
 		const userid = toID(name);
