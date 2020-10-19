@@ -749,8 +749,8 @@ export class TeamValidator {
 		for (const moveName of set.moves) {
 			const move = dex.getMove(moveName);
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
-				if (!set.hpType) {
-					set.hpType = move.type;
+				if (!set.hpType || this.toID(set.hpType) === 'undefined') {
+					set.hpType = move.type || dex.getHiddenPower(set.ivs).type;
 				} else if (set.hpType !== move.type && ruleTable.has('obtainablemisc')) {
 					problems.push(`${name}'s Hidden Power type ${set.hpType} is incompatible with Hidden Power ${move.type}`);
 				}

@@ -1290,8 +1290,8 @@ export class ModdedDex {
 			}
 
 			if (set.pokeball || set.hpType || set.gigantamax) {
-				buf += ',' + set.hpType;
-				buf += ',' + toID(set.pokeball);
+				buf += ',' + set.hpType || '';
+				buf += ',' + toID(set.pokeball || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
 			}
 		}
@@ -1416,8 +1416,8 @@ export class ModdedDex {
 			}
 			if (misc) {
 				set.happiness = (misc[0] ? Number(misc[0]) : 255);
-				set.hpType = misc[1];
-				set.pokeball = misc[2];
+				set.hpType = misc[1] || '';
+				set.pokeball = this.toID(misc[2] || '');
 				set.gigantamax = !!misc[3];
 			}
 			if (j < 0) break;
