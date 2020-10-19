@@ -326,21 +326,17 @@ class RecommendationsInterface {
 	get(artist: string, title: string, submitter?: string, fromSuggestions = false) {
 		let recs = recommendations.saved;
 		if (fromSuggestions) recs = recommendations.suggested;
-		return recs.find(x => {
-			return toID(x.artist) === toID(artist) &&
+		return recs.find(x => toID(x.artist) === toID(artist) &&
 			toID(x.title) === toID(title) &&
-			(submitter ? toID(x.userData.name) === toID(submitter) : true);
-		});
+			(submitter ? toID(x.userData.name) === toID(submitter) : true));
 	}
 
 	getIndex(artist: string, title: string, submitter?: string, fromSuggestions = false) {
 		let recs = recommendations.saved;
 		if (fromSuggestions) recs = recommendations.suggested;
-		const index = recs.findIndex(x => {
-			return toID(x.artist) === toID(artist) &&
+		const index = recs.findIndex(x => toID(x.artist) === toID(artist) &&
 				toID(x.title) === toID(title) &&
-				(submitter ? toID(x.userData.name) === toID(submitter) : true);
-		});
+				(submitter ? toID(x.userData.name) === toID(submitter) : true));
 		return index;
 	}
 }
