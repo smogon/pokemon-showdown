@@ -1155,16 +1155,19 @@ export const commands: ChatCommands = {
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong><p></p>`;
 
-				const commonBattles = getCommonBattles(
-					toID(reportTarget), Users.get(reportTarget),
-					ticket.userid, Users.get(ticket.userid)
-				);
+				const targetID = toID(reportTarget);
+				if (targetID !== ticket.userid) {
+					const commonBattles = getCommonBattles(
+						targetID, Users.get(reportTarget),
+						ticket.userid, Users.get(ticket.userid)
+					);
 
-				if (!commonBattles.length) {
-					reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
-				} else {
-					reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
-					reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+					if (!commonBattles.length) {
+						reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
+					} else {
+						reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
+						reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+					}
 				}
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
