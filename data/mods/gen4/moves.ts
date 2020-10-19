@@ -254,7 +254,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				delete move.onHit;
 				move.self = {boosts: {atk: 1, def: 1, spe: -1}};
 				move.target = move.nonGhostTarget as MoveTarget;
-			} else if (target.volatiles['substitute']) {
+			} else if (target?.volatiles['substitute']) {
 				delete move.volatileStatus;
 				delete move.onHit;
 			}
