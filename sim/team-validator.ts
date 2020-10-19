@@ -456,8 +456,13 @@ export class TeamValidator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness value.`);
 		}
-		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toID(set.hpType)))) {
-			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
+		if (set.hpType) {
+			const type = dex.getType(set.hpType);
+			if (!type.exists || ['normal', 'fairy'].includes(type.id)) {
+				problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
+			} else {
+				set.hpType = type.name;
+			}
 		}
 
 		if (ruleTable.has('obtainableformes')) {
@@ -749,8 +754,8 @@ export class TeamValidator {
 		for (const moveName of set.moves) {
 			const move = dex.getMove(moveName);
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
-				if (!set.hpType || this.toID(set.hpType) === 'undefined') {
-					set.hpType = move.type || dex.getHiddenPower(set.ivs).type;
+				if (!set.hpType) {
+					set.hpType = move.type;
 				} else if (set.hpType !== move.type && ruleTable.has('obtainablemisc')) {
 					problems.push(`${name}'s Hidden Power type ${set.hpType} is incompatible with Hidden Power ${move.type}`);
 				}
