@@ -476,6 +476,19 @@ export const commands: ChatCommands = {
 			room.saveSettings();
 		},
 
+		viewcategories: 'categories',
+		categories(target, room, user) {
+			room = this.requireRoom();
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
+			this.runBroadcast();
+
+			const categoryButtons = getAllCategories(room).map(
+				category => `<button class="button" name="send" value="/roomevents view ${category}">${category}</button>`
+			);
+			if (!categoryButtons.length) return this.errorReply(`There are no roomevent categories in ${room.title}.`);
+			this.sendReplyBox(`Roomevent categories in ${room.title}: ${categoryButtons.join(' ')}`);
+		},
+
 		help(target, room, user) {
 			return this.parse('/help roomevents');
 		},
@@ -569,7 +582,8 @@ export const commands: ChatCommands = {
 			`<code>/roomevents addtocategory [event name] | [category]</code>: adds the event to a category. Requires: @ # &<br />` +
 			`<code>/roomevents removefromcategory [event name] | [category]</code>: removes the event from a category. Requires: @ # &<br />` +
 			`<code>/roomevents sortby [column name] | [asc/desc (optional)]</code> sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default. Requires: @ # &<br />` +
-			`<code>/roomevents view [event name or category]</code>: displays information about a specific event or category of events.` +
+			`<code>/roomevents view [event name or category]</code>: displays information about a specific event or category of events.<br />` +
+			`<code>/roomevents viewcategories</code>: displays a list of event categories for that room.` +
 			`</details>`
 		);
 	},
