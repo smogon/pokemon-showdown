@@ -2565,10 +2565,9 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 
 		let buf;
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+		if (YoutubeInterface.linkRegex.test(link)) {
 			const YouTube = new YoutubeInterface();
 			buf = await YouTube.generateVideoDisplay(link);
-			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
