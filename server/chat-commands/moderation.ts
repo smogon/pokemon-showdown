@@ -670,7 +670,7 @@ export const commands: ChatCommands = {
 		} else if (force) {
 			return this.errorReply(`Use /${week ? 'week' : 'room'}ban; ${name} is not a trusted user.`);
 		}
-		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
+		if (!target && !week && Punishments.isRoomBanned(targetUser, room.roomid)) {
 			const problem = " but was already banned";
 			return this.privateModAction(`${name} would be banned by ${user.name} ${problem}.`);
 		}
