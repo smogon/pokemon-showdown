@@ -40,24 +40,32 @@ function splitFirst(str: string, delimiter: string, limit = 1) {
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
+	noCatch: boolean;
 	replay: boolean | 'spectator';
 	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator'} = {}) {
+	constructor(options: {
+		debug?: boolean, noCatch?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator',
+	} = {}) {
 		super();
 		this.debug = !!options.debug;
+		this.noCatch = !!options.noCatch;
 		this.replay = options.replay || false;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
 	}
 
 	_write(chunk: string) {
-		try {
+		if (this.noCatch) {
 			this._writeLines(chunk);
-		} catch (err) {
-			this.pushError(err, true);
-			return;
+		} else {
+			try {
+				this._writeLines(chunk);
+			} catch (err) {
+				this.pushError(err, true);
+				return;
+			}
 		}
 		if (this.battle) this.battle.sendUpdates();
 	}
