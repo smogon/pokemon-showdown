@@ -1624,9 +1624,9 @@ export class RandomTeams {
 				item: (Array.isArray(setData.item) ? this.sample(setData.item) : setData.item) || '',
 				ability: (Array.isArray(setData.ability) ? this.sample(setData.ability) : setData.ability),
 				shiny: this.randomChance(1, 1024),
-				evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.evs),
+				evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.evs},
 				nature: setData.nature,
-				ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.ivs || {}),
+				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.ivs || {}},
 				moves: setData.moves.map((move: any) => Array.isArray(move) ? this.sample(move) : move),
 			};
 			pokemon.push(set);

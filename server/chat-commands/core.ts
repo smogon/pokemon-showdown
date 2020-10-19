@@ -710,24 +710,23 @@ export const commands: ChatCommands = {
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 
-	rank(target, room, user) {
+	async rank(target, room, user) {
 		if (!target) target = user.name;
 
-		return Ladders.visualizeAll(target).then(values => {
-			let buffer = `<div class="ladder"><table>`;
-			buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
+		const values = await Ladders.visualizeAll(target);
+		let buffer = `<div class="ladder"><table>`;
+		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
-			const ratings = values.join(``);
-			if (!ratings) {
-				buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
-			} else {
-				buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
-				buffer += ratings;
-			}
-			buffer += `</table></div>`;
+		const ratings = values.join(``);
+		if (!ratings) {
+			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
+		} else {
+			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
+			buffer += ratings;
+		}
+		buffer += `</table></div>`;
 
-			this.sendReply(`|raw|${buffer}`);
-		});
+		this.sendReply(`|raw|${buffer}`);
 	},
 
 	showrank: 'hiderank',

@@ -364,15 +364,14 @@ export const commands: ChatCommands = {
 	},
 	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
 
-	host(target, room, user, connection, cmd) {
+	async host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		this.checkCan('ip');
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
-			const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
-			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
-		});
+		const {dnsbl, host, hostType} = await IPTools.lookup(target);
+		const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
+		this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
 
@@ -403,7 +402,7 @@ export const commands: ChatCommands = {
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
-		} else if (ip.slice(-1) === '*') {
+		} else if (ip.endsWith('*')) {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
@@ -1358,10 +1357,10 @@ export const commands: ChatCommands = {
 				if (['band', 'scarf', 'specs'].includes(arg)) {
 					modifier = 1;
 					modSet = true;
-				} else if (arg.charAt(0) === '+') {
+				} else if (arg.startsWith('+')) {
 					modifier = parseInt(arg.charAt(1));
 					modSet = true;
-				} else if (arg.charAt(0) === '-') {
+				} else if (arg.startsWith('-')) {
 					positiveMod = false;
 					modifier = parseInt(arg.charAt(1));
 					modSet = true;

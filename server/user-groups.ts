@@ -83,11 +83,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (fallback !== undefined) return fallback;
 
 		// unidentified groups are treated as voice
-		return Object.assign({}, Config.groups['+'] || {}, {
+		return {
+			...(Config.groups['+'] || {}),
 			symbol,
 			id: 'voice',
 			name: symbol,
-		});
+		};
 	}
 	getEffectiveSymbol(user: User): EffectiveGroupSymbol {
 		const group = this.get(user);
