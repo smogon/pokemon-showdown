@@ -1291,7 +1291,7 @@ export class ModdedDex {
 			}
 
 			if (set.pokeball || set.hpType || set.gigantamax) {
-				buf += ',' + set.hpType || '';
+				buf += ',' + (set.hpType || '');
 				buf += ',' + toID(set.pokeball || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
 			}
