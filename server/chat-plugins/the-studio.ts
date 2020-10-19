@@ -86,7 +86,7 @@ export class LastFMInterface {
 				throw new Chat.ErrorMessage(`Something went wrong with the YouTube API.`);
 			}
 			buf += `<a href="https://youtu.be/${videoIDs[0]}">${Utils.escapeHTML(trackName)}</a>`;
-			buf += `</td></tr></table>`;
+			buf += `</td></tr></table>${this.getScrobbleBadge()}`;
 		}
 		return buf;
 	}
@@ -151,7 +151,7 @@ export class LastFMInterface {
 			} else {
 				buf += `<a href="https://youtu.be/${videoIDs[0]}">YouTube link</a>`;
 			}
-			buf += `</td></tr></table>`;
+			buf += `</td></tr></table>${this.getScrobbleBadge()}`;
 		}
 		if (req.error) {
 			throw new Chat.ErrorMessage(`${req.message}.`);
@@ -165,6 +165,9 @@ export class LastFMInterface {
 		if (!Config.lastfmkey) {
 			throw new Chat.ErrorMessage(`This server does not support last.fm commands. If you're the owner, you can enable them by setting up Config.lastfmkey.`);
 		}
+	}
+	getScrobbleBadge() {
+		return `<div style="float:right;color:#888;font-size:8pt">[powered by AudioScrobbler]</div><div style="clear:both"></div>`;
 	}
 }
 
