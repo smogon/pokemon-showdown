@@ -861,7 +861,7 @@ export const commands: ChatCommands = {
 		const roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (!room.settings.isPersonal || cmd !== "deletegroupchat" && cmd !== "dgc") {
+			if (!room.settings.isPersonal || !['deletegroupchat', 'dgc'].includes(cmd)) {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
