@@ -485,6 +485,10 @@ export const LogSearcher = new class {
 
 		return `^` + searches.map(term => `(?=.*${term})`).join('');
 	}
+	constructUserRegex(user: string) {
+		const id = toID(user);
+		return `.${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*`;
+	}
 
 	fsSearch(roomid: RoomID, search: string, date: string, limit: number | null) {
 		const isAll = (date === 'all');
@@ -579,6 +583,7 @@ export const LogSearcher = new class {
 		if (!raw) {
 			search = this.constructSearchRegex(search);
 		}
+		const resultSep = args?.includes('-m') ? '--' : '\n';
 		try {
 			const options = [
 				'-e', search,
@@ -592,14 +597,13 @@ export const LogSearcher = new class {
 				maxBuffer: MAX_MEMORY,
 				cwd: path.normalize(`${__dirname}/../../`),
 			});
-			results = stdout.split('--');
+			results = stdout.split(resultSep);
 		} catch (e) {
-			if (e.message.includes('No such file or directory')) {
-				throw new Chat.ErrorMessage(`Logs for date '${month}' do not exist.`);
+			if (e.code !== 1 && !e.message.includes('stdout maxBuffer') && !e.message.includes('No such file or directory')) {
+				throw e; // 2 means an error in ripgrep
 			}
-			if (e.code !== 1 && !e.message.includes('stdout maxBuffer')) throw e; // 2 means an error in ripgrep
 			if (e.stdout) {
-				results = e.stdout.split('--');
+				results = e.stdout.split(resultSep);
 			} else {
 				results = [];
 			}
@@ -697,15 +701,15 @@ export const LogSearcher = new class {
 	async ripgrepSearchLinecounts(room: RoomID, month: string, user?: ID) {
 		// don't need to check if logs exist since ripgrepSearchMonth does that
 		// eslint-disable-next-line no-useless-escape
-		const regexString = user ? `"\|c\|.${[...user].join('[^a-zA-Z0-9]*')}\|"` : '"\|c\|"';
+		const regexString = user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|`;
 		const args = [user ? '--count' : ''];
 		const response = await this.ripgrepSearchMonth({
 			search: regexString, raw: true, date: month, room, args,
 		});
-		const rawResults = response.results.shift();
-		if (!rawResults) return LogViewer.error(`No results found.`);
+		const rawResults = response.results;
+		if (!rawResults.length) return LogViewer.error(`No results found.`);
 		const results: {[k: string]: {[userid: string]: number}} = {};
-		for (const fullLine of rawResults.split('\n')) {
+		for (const fullLine of rawResults) {
 			const [data, line] = fullLine.split('.txt:');
 			const date = data.split('/').pop()!;
 			if (!results[date]) results[date] = {};
@@ -750,8 +754,8 @@ export const LogSearcher = new class {
 		return this.renderLinecountResults(results, roomid, month, user);
 	}
 	renderLinecountResults(
-		results: {[date: string]: {[userid: string]: number}}, roomid: RoomID,
-		month: string, user?: ID
+		results: {[date: string]: {[userid: string]: number}},
+		roomid: RoomID, month: string, user?: ID
 	) {
 		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
 		buf += `${roomid}${user ? ` for the user ${user}` : ` (top ${MAX_TOPUSERS})`}</h2>`;
@@ -766,12 +770,14 @@ export const LogSearcher = new class {
 		}
 		buf += `<hr /><ol>`;
 		if (user) {
-			const sortedDays = Object.keys(results).sort((a, b) => {
-				return new Date(b).getTime() - new Date(a).getTime();
-			});
+			const sortedDays = Object.keys(results).sort((a, b) => (
+				new Date(b).getTime() - new Date(a).getTime()
+			));
 			for (const day of sortedDays) {
+				const dayResults = results[day][user];
+				if (isNaN(dayResults)) continue;
 				buf += `<li>[<a roomid="view-chatlog-${roomid}--${day}">${day}</a>]: `;
-				buf += `${Chat.count(results[day][user], 'lines')}</li>`;
+				buf += `${Chat.count(dayResults, 'lines')}</li>`;
 			}
 		} else {
 			// squish the results together
@@ -783,11 +789,12 @@ export const LogSearcher = new class {
 				}
 			}
 			const resultKeys = Object.keys(totalResults);
-			const sortedResults = resultKeys.sort((a, b) => {
-				return totalResults[b] - totalResults[a];
-			}).slice(0, MAX_TOPUSERS);
+			const sortedResults = resultKeys.sort((a, b) => (
+				totalResults[b] - totalResults[a]
+			)).slice(0, MAX_TOPUSERS);
 			for (const userid of sortedResults) {
-				buf += `<li><strong><span class="username">${userid}</span></strong>: ${Chat.count(totalResults[userid], 'lines')}</li>`;
+				buf += `<li><span class="username"><username>${userid}</username></span>: `;
+				buf += `${Chat.count(totalResults[userid], 'lines')}</li>`;
 			}
 		}
 		buf += `</div>`;
@@ -937,7 +944,7 @@ export const pages: PageTable = {
 		if (isNaN(new Date(date).getTime())) {
 			return this.errorReply(`Invalid date.`);
 		}
-		this.title = `[Room Stats] ${date}`;
+		this.title = `[Log Stats] ${date}`;
 		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[2] as RoomID, date, toID(target));
 	},
 };
