@@ -166,15 +166,13 @@ export class Modlog {
 		this.database.exec("PRAGMA foreign_keys = ON;");
 
 		// Set up tables, etc
-		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync());
+		let tokenizer = 'unicode61';
 		if (Config.modlogftsextension) {
 			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
-		} else {
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid)`);
+			tokenizer = 'id_tokenizer';
 		}
+
+		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync().replace(/%TOKENIZER%/g, tokenizer));
 
 		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
 			return Number(RegExp(regexString, 'i').test(toMatch));

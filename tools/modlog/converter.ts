@@ -511,15 +511,9 @@ export class ModlogConverterSQLite {
 
 export class ModlogConverterTxt {
 	readonly databaseFile: string;
-	readonly database: Database.Database;
+	readonly modlog: Modlog;
+	readonly batchInsertTransaction: Database.Transaction;
 
-	readonly insertionQuery: Database.Statement;
-	readonly FTSInsertionQuery: Database.Statement<[number, string?, string?, string?, string?]>;
-	readonly altsInsertionQuery: Database.Statement<[number, string]>;
-	readonly FTSAltsInsertionQuery: Database.Statement<[number, string]>;
-
-	readonly altsInsertionTransaction: Database.Transaction;
-	readonly insertionTransaction: Database.Transaction;
 	readonly textLogDir: string;
 	readonly isTesting: {files: Map<string, string>, ml?: Modlog} | null = null;
 	constructor(databaseFile: string, textLogDir: string, isTesting?: Map<string, string>, useFTSExtension?: boolean) {
@@ -531,52 +525,23 @@ export class ModlogConverterTxt {
 			};
 		}
 
-		this.database = Database(this.isTesting ? ':memory:' : this.databaseFile);
-		this.database.exec(FS(`databases/schemas/modlog.sql`).readIfExistsSync());
-		if (useFTSExtension || Config.modlogftsextension) {
-			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id, tokenize='id_tokenizer')`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid, tokenize='id_tokenizer')`);
-		} else {
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS modlog_fts USING fts5(note, userid, autoconfirmed_userid, action_taker_userid, content=modlog, content_rowid=modlog_id)`);
-			this.database.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS alts_fts USING fts5(userid, content=alts, content_rowid=rowid)`);
-		}
+		this.modlog = new Modlog(this.textLogDir, this.isTesting ? ':memory:' : this.databaseFile);
 
-		this.insertionQuery = this.database.prepare(
-			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)` +
-			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`
-		);
-		this.FTSInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog_fts (rowid, note, userid, autoconfirmed_userid, action_taker_userid) VALUES (?, ?, ?, ?, ?)`
-		);
-
-		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
-		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (rowid, userid) VALUES (?, ?)`);
-		this.altsInsertionTransaction = this.database.transaction((modlogID: number, userID: string) => {
-			this.altsInsertionQuery.run(modlogID, userID);
-			this.FTSAltsInsertionQuery.run(modlogID, userID);
-		});
-
-		this.insertionTransaction = this.database.transaction((entries: ModlogEntry[]) => {
+		// Custom transaction to allow for batching
+		this.batchInsertTransaction = this.modlog.database.transaction((entries: ModlogEntry[]) => {
 			for (const entry of entries) {
-				const alts = entry.alts || [];
-				const result = this.insertionQuery.run({
+				this.modlog.insertionTransaction({
 					action: entry.action,
 					roomID: entry.roomID,
-					time: entry.time,
-					visualRoomID: entry.visualRoomID || null,
-					userid: entry.userid || null,
-					autoconfirmedID: entry.autoconfirmedID || null,
-					ip: entry.ip || null,
-					loggedBy: entry.loggedBy || null,
-					note: entry.note || null,
+					visualRoomID: entry.visualRoomID,
+					userid: entry.userid,
+					autoconfirmedID: entry.autoconfirmedID,
+					ip: entry.ip,
+					loggedBy: entry.loggedBy,
+					note: entry.note,
+					time: entry.time || Date.now(),
+					alts: entry.alts,
 				});
-				const rowid = result.lastInsertRowid as number;
-				this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
-
-				for (const alt of alts) {
-					this.altsInsertionTransaction(rowid, alt);
-				}
 			}
 		});
 	}
@@ -604,7 +569,7 @@ export class ModlogConverterTxt {
 
 
 			const insertEntries = (alwaysShowProgress?: boolean) => {
-				this.insertionTransaction(entries);
+				this.batchInsertTransaction(entries);
 				entriesLogged += entries.length;
 				if (!Config.nofswriting && (
 					alwaysShowProgress ||
@@ -631,7 +596,7 @@ export class ModlogConverterTxt {
 			insertEntries(true);
 			if (entriesLogged) process.stdout.write('\n');
 		}
-		return this.database;
+		return this.modlog.database;
 	}
 }
 
@@ -716,6 +681,7 @@ export class ModlogConverter {
 			const converter = new ModlogConverterTxt(databasePath, textLogDirectoryPath);
 			return converter.toSQLite().then(() => {
 				console.log("\nDone!");
+				process.exit();
 			});
 		}
 	}
