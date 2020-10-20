@@ -1485,7 +1485,11 @@ export class MastermindFinals extends MastermindRound {
 }
 
 const triviaCommands: ChatCommands = {
-	new(target, room, user) {
+	sortednew: 'new',
+	newsorted: 'new',
+	new(target, room, user, connection, cmd) {
+		const randomizeQuestionOrder = !cmd.includes('sorted');
+
 		room = this.requireRoom();
 		if (!isTriviaRoom(room)) return this.errorReply(this.tr`This command can only be used in the Trivia room.`);
 		this.checkCan('show', null, room);
@@ -1510,10 +1514,9 @@ const triviaCommands: ChatCommands = {
 		const categoryID = toID(targets[1]);
 		const category = CATEGORY_ALIASES[categoryID] || categoryID;
 		let questions = getQuestions(category);
-		// Randomizes the order of the questions.
 		const length = toID(targets[2]);
 		if (!LENGTHS[length]) return this.errorReply(this.tr`"${length}" is an invalid game length.`);
-		// Assume that infinite mode will take at least 75 questions
+		// Assume that infinite mode will last for at least 75 points
 		if (questions.length < (LENGTHS[length].cap || 75) / 5) {
 			if (category === 'random') {
 				return this.errorReply(
@@ -1541,10 +1544,21 @@ const triviaCommands: ChatCommands = {
 			_Trivia = TimerModeTrivia;
 		}
 
-		questions = Utils.shuffle(questions);
+		if (randomizeQuestionOrder) {
+			// Randomizes the order of the questions.
+			questions = Utils.shuffle(questions);
+		} else {
+			// Reverses the order of the questions so that they appear
+			// in the order they were added to the Trivia question "database".
+			questions = questions.reverse();
+		}
 		room.game = new _Trivia(room, mode, category, length, questions, user.name, isRandomMode);
 	},
-	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # &`],
+	newhelp: [
+		`/trivia new [mode], [category], [length] - Begin a new Trivia game.`,
+		`/trivia sortednew [mode], [category], [length] — Begin a new Trivia game in which the question order is not randomized.`,
+		`Requires: + % @ # &`,
+	],
 
 	join(target, room, user) {
 		room = this.requireRoom();
@@ -2063,7 +2077,6 @@ const triviaCommands: ChatCommands = {
 		let queryString = query.join(',').trim();
 		if (!queryString) return this.errorReply(this.tr("No valid search query was entered."));
 
-
 		let transformQuestion = (question: string) => question;
 		if (cmd === 'search') {
 			queryString = queryString.toLowerCase();
@@ -2306,7 +2319,8 @@ const triviaCommands: ChatCommands = {
 				`<li>Infinite: No score cap. The winner gains 5 leaderboard points, which increases the more questions they answer.</li>` +
 			`</ul></details>` +
 			`<details><summary><strong>Game commands</strong></summary><ul>` +
-				`<li><code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &</li>` +
+				`<li><code>/trivia new [mode], [category], [length]</code> - Begin signups for a new Trivia game. Requires: + % @ # &</li>` +
+				`<li><code>/trivia sortednew [mode], [category], [length]</code> — Begin a new Trivia game in which the question order is not randomized. Requires: + % @ # &</li>` +
 				`<li><code>/trivia join</code> - Join a game of Trivia or Mastermind during signups.</li>` +
 				`<li><code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &</li>` +
 				`<li><code>/ta [answer]</code> - Answer the current question.</li>` +
