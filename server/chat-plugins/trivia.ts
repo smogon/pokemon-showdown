@@ -1396,7 +1396,7 @@ export class Mastermind extends Rooms.RoomGame {
 
 export class MastermindRound extends FirstModeTrivia {
 	constructor(room: Room, category: string, questions: TriviaQuestion[], playerID?: ID) {
-		super(room, 'first', category, 'infinite', questions, 'Autosmatically Created', false, true);
+		super(room, 'first', category, 'infinite', questions, 'Automatically Created', false, true);
 
 		this.playerCap = 1;
 		this.minPlayers = 0;
