@@ -319,7 +319,7 @@ export const Punishments = new class {
 	}
 
 	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {
-		if (id.charAt(0) === '#') return;
+		if (id.startsWith('#')) return;
 		const buf = Punishments.renderEntry(entry, id);
 		return FS(filename).append(buf);
 	}
@@ -500,7 +500,7 @@ export const Punishments = new class {
 		if (!lastUserId.startsWith('guest')) {
 			Punishments.userids.set(lastUserId, punishment);
 		}
-		if (user.locked && user.locked.charAt(0) !== '#') {
+		if (user.locked && !user.locked.startsWith('#')) {
 			Punishments.userids.set(user.locked, punishment);
 			userids.add(user.locked as ID);
 		}
@@ -812,7 +812,7 @@ export const Punishments = new class {
 			user.updateIdentity();
 			success.push(user.getLastName());
 		}
-		if (id.charAt(0) !== '#') {
+		if (!id.startsWith('#')) {
 			for (const curUser of Users.users.values()) {
 				if (curUser.locked === id) {
 					curUser.locked = null;
@@ -861,7 +861,7 @@ export const Punishments = new class {
 			user.resetName();
 			success.push(user.getLastName());
 		}
-		if (id.charAt(0) !== '#') {
+		if (!id.startsWith('#')) {
 			for (const curUser of Users.users.values()) {
 				if (curUser.locked === id) {
 					curUser.locked = null;
@@ -1464,7 +1464,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.charAt(0) === '#') return;
+			if (id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (entry) {
@@ -1485,7 +1485,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomUserids.get(roomid)! : Punishments.userids).forEach((punishment, userid) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.charAt(0) === '#') return;
+			if (id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (!entry) {

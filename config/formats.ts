@@ -680,7 +680,7 @@ export const Formats: FormatList = [
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.getMove(move.id).type))];
-			return Object.assign({}, species, {types: types});
+			return {...species, types: types};
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
@@ -815,7 +815,6 @@ export const Formats: FormatList = [
 		desc: `Pok&eacute;mon have access to almost any ability.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656414/">Almost Any Ability</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659124/">AAA Resources</a>`,
 		],
 
 		mod: 'gen8',
@@ -833,7 +832,6 @@ export const Formats: FormatList = [
 		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656429/">STABmons</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658578/">STABmons Resources</a>`,
 		],
 
 		mod: 'gen8',

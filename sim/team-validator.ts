@@ -456,8 +456,13 @@ export class TeamValidator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness value.`);
 		}
-		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toID(set.hpType)))) {
-			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
+		if (set.hpType) {
+			const type = dex.getType(set.hpType);
+			if (!type.exists || ['normal', 'fairy'].includes(type.id)) {
+				problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
+			} else {
+				set.hpType = type.name;
+			}
 		}
 
 		if (ruleTable.has('obtainableformes')) {

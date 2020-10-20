@@ -8359,7 +8359,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (target.effectiveWeather()) {
+			switch (target?.effectiveWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
@@ -15006,6 +15006,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
+			if (!target) return;
 			const atk = pokemon.getStat('atk', false, true);
 			const spa = pokemon.getStat('spa', false, true);
 			const def = target.getStat('def', false, true);
@@ -17963,7 +17964,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (target.effectiveWeather()) {
+			switch (target?.effectiveWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;

@@ -91,19 +91,19 @@ export class QueryProcessWrapper implements ProcessWrapper {
 		this.resolveRelease = null;
 
 		this.process.on('message', (message: string) => {
-			const nlLoc = message.indexOf('\n');
-			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
-			if (message.slice(0, nlLoc) === 'THROW') {
+			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = message.slice(nlLoc + 1);
+				error.stack = message.slice(6);
 				throw error;
 			}
 
-			if (message.slice(0, nlLoc) === 'DEBUG') {
-				this.debug = message.slice(nlLoc + 1);
+			if (message.startsWith('DEBUG\n')) {
+				this.debug = message.slice(6);
 				return;
 			}
 
+			const nlLoc = message.indexOf('\n');
+			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = parseInt(message.slice(0, nlLoc));
 			const resolve = this.pendingTasks.get(taskId);
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
@@ -180,19 +180,19 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 
 		this.process.on('message', (message: string) => {
-			let nlLoc = message.indexOf('\n');
-			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
-			if (message.slice(0, nlLoc) === 'THROW') {
+			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = message.slice(nlLoc + 1);
+				error.stack = message.slice(6);
 				throw error;
 			}
 
-			if (message.slice(0, nlLoc) === 'DEBUG') {
-				this.setDebug(message.slice(nlLoc + 1));
+			if (message.startsWith('DEBUG\n')) {
+				this.setDebug(message.slice(6));
 				return;
 			}
 
+			let nlLoc = message.indexOf('\n');
+			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = parseInt(message.slice(0, nlLoc));
 			const stream = this.activeStreams.get(taskId);
 			if (!stream) return; // stream already destroyed

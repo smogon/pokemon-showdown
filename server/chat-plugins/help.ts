@@ -151,7 +151,7 @@ export class HelpResponder {
 		const entry: string = roomFaqs[room.roomid][faq];
 		if (!entry) throw new Chat.ErrorMessage(`FAQ ID "${faq}" not found.`);
 
-		if (entry.charAt(0) !== '>') return faq; // not an alias
+		if (!entry.startsWith('>')) return faq; // not an alias
 		return entry.slice(1);
 	}
 	/**

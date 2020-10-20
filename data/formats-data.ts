@@ -833,7 +833,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["energyball", "protect", "psychic", "sleeppowder", "trickroom"],
 		randomDoubleBattleLevel: 88,
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	exeggutoralola: {
@@ -6134,6 +6134,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	astrolotl: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	miasmaw: {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
