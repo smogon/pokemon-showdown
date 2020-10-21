@@ -2363,7 +2363,7 @@ const mastermindCommands: ChatCommands = {
 		}
 		const categoryName = ALL_CATEGORIES[CATEGORY_ALIASES[category] || category];
 		const timeout = parseInt(timeoutString);
-		if (isNaN(timeout) || timeout < 1) {
+		if (isNaN(timeout) || timeout < 1 || (timeout * 1000) > Chat.MAX_TIMEOUT_DURATION) {
 			return this.errorReply(this.tr`You must specify a round length of at least 1 second.`);
 		}
 
@@ -2386,7 +2386,7 @@ const mastermindCommands: ChatCommands = {
 		if (!target) return this.parse(`/help mastermind finals`);
 
 		const timeout = parseInt(target);
-		if (isNaN(timeout) || timeout < 1) {
+		if (isNaN(timeout) || timeout < 1 || (timeout * 1000) > Chat.MAX_TIMEOUT_DURATION) {
 			return this.errorReply(this.tr`You must specify a length of at least 1 second.`);
 		}
 

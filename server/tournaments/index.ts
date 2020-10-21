@@ -1659,9 +1659,12 @@ const commands: ChatCommands = {
 					target = 'off';
 					tournament.autostartcap = false;
 				}
-				const timeout = target.toLowerCase() === 'off' ? Infinity : target;
-				if (tournament.setAutoStartTimeout(Number(timeout) * 60 * 1000, this)) {
-					this.privateModAction(`The tournament auto start timer was set to  ${target} by ${user.name}`);
+				const timeout = target.toLowerCase() === 'off' ? Infinity : Number(target) * 60 * 1000;
+				if (timeout <= 0 || (timeout !== Infinity && timeout > Chat.MAX_TIMEOUT_DURATION)) {
+					return this.errorReply(`The automatic tournament start timer must be set to a positive number.`);
+				}
+				if (tournament.setAutoStartTimeout(timeout, this)) {
+					this.privateModAction(`The tournament auto start timer was set to ${target} by ${user.name}`);
 					this.modlog('TOUR AUTOSTART', null, timeout === Infinity ? 'off' : target);
 				}
 			}
@@ -1682,6 +1685,9 @@ const commands: ChatCommands = {
 			}
 			if (target.toLowerCase() === 'infinity' || target === '0') target = 'off';
 			const timeout = target.toLowerCase() === 'off' ? Infinity : Number(target) * 60 * 1000;
+			if (timeout <= 0 || (timeout !== Infinity && timeout > Chat.MAX_TIMEOUT_DURATION)) {
+				return this.errorReply(`The automatic disqualification timer must be set to a positive number.`);
+			}
 			if (timeout === tournament.autoDisqualifyTimeout) {
 				return this.errorReply(`The automatic tournament disqualify timer is already set to ${target} minute(s).`);
 			}

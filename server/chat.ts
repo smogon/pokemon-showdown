@@ -1368,6 +1368,8 @@ export const Chat = new class {
 		});
 	}
 	translationsLoaded = false;
+	readonly MAX_TIMEOUT_DURATION = 2147483647; // (2^32 / 2) - 1
+
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
