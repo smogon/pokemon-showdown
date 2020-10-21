@@ -1338,9 +1338,16 @@ export class CommandContext extends MessageContext {
 		return rest;
 	}
 
-	requireRoom() {
+	requireRoom(id?: RoomID) {
 		if (!this.room) {
 			throw new Chat.ErrorMessage(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
+		}
+		if (id && this.room.roomid !== id) {
+			const targetRoom = Rooms.get(id);
+			if (!targetRoom) {
+				throw new Chat.ErrorMessage(`This command can only be used in the room '${id}', but that room does not exist.`);
+			}
+			throw new Chat.ErrorMessage(`This command can only be used in the ${targetRoom.title} room.`);
 		}
 		return this.room;
 	}

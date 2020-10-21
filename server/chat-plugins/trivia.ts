@@ -144,10 +144,6 @@ if (triviaData.questions.some(q => !('type' in q))) {
 /** from:to Map */
 export const pendingAltMerges = new Map<ID, ID>();
 
-function isTriviaRoom(room: Room) {
-	return room.roomid === 'trivia';
-}
-
 function getTriviaGame(room: Room | null) {
 	if (!room) {
 		throw new Chat.ErrorMessage(`This command can only be used in the Trivia room.`);
@@ -1490,8 +1486,7 @@ const triviaCommands: ChatCommands = {
 	new(target, room, user, connection, cmd) {
 		const randomizeQuestionOrder = !cmd.includes('sorted');
 
-		room = this.requireRoom();
-		if (!isTriviaRoom(room)) return this.errorReply(this.tr`This command can only be used in the Trivia room.`);
+		room = this.requireRoom('trivia' as RoomID);
 		this.checkCan('show', null, room);
 		this.checkChat();
 		if (room.game) {
@@ -2102,8 +2097,7 @@ const triviaCommands: ChatCommands = {
 	],
 
 	rank(target, room, user) {
-		room = this.requireRoom();
-		if (!isTriviaRoom(room)) return this.errorReply(this.tr("This command can only be used in Trivia."));
+		room = this.requireRoom('trivia' as RoomID);
 
 		let name;
 		let userid;
@@ -2135,8 +2129,7 @@ const triviaCommands: ChatCommands = {
 
 	alltimeladder: 'ladder',
 	ladder(target, room, user, connection, cmd) {
-		room = this.requireRoom();
-		if (!isTriviaRoom(room)) return this.errorReply('This command can only be used in Trivia.');
+		room = this.requireRoom('trivia' as RoomID);
 		if (!this.runBroadcast()) return false;
 		const cache = cmd === 'ladder' ? cachedAltLadder : cachedLadder;
 		const {ladder} = cache.get();
@@ -2368,8 +2361,7 @@ const mastermindCommands: ChatCommands = {
 	end: triviaCommands.end,
 
 	new(target, room, user) {
-		room = this.requireRoom();
-		if (!isTriviaRoom(room)) return this.errorReply(this.tr`This command can only be used in the Trivia room.`);
+		room = this.requireRoom('trivia' as RoomID);
 		this.checkCan('show', null, room);
 
 		const finalists = parseInt(target);
