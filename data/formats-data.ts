@@ -4039,7 +4039,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	kyuremblack: {
 		randomBattleMoves: ["dragondance", "fusionbolt", "iciclespear", "outrage"],
-		randomBattleLevel: 72,
+		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["dragonclaw", "dragondance", "fusionbolt", "iciclespear", "protect", "roost"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",
@@ -5705,7 +5705,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	eiscue: {
-		randomBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "reversal", "substitute"],
+		randomBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "reversal", "zenheadbutt"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "protect", "zenheadbutt"],
 		randomDoubleBattleLevel: 86,
