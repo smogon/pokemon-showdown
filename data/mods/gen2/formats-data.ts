@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -483,7 +483,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gloom: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	vileplume: {
 		randomSets: [
@@ -707,7 +707,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	poliwhirl: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	poliwrath: {
 		randomSets: [
@@ -795,7 +795,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	machoke: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	machamp: {
 		randomSets: [
@@ -838,7 +838,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	tentacool: {
-		tier: "LC",
+		tier: "NU",
 	},
 	tentacruel: {
 		randomSets: [
@@ -869,7 +869,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	graveler: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	golem: {
 		randomSets: [
@@ -909,7 +909,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	slowpoke: {
-		tier: "LC",
+		tier: "NU",
 	},
 	slowbro: {
 		randomSets: [
@@ -958,7 +958,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	magnemite: {
-		tier: "LC",
+		tier: "NU",
 	},
 	magneton: {
 		randomSets: [
@@ -1108,7 +1108,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	gastly: {
-		tier: "LC",
+		tier: "NU",
 	},
 	haunter: {
 		tier: "UU",
@@ -1212,7 +1212,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	voltorb: {
-		tier: "LC",
+		tier: "NU",
 	},
 	electrode: {
 		randomSets: [
@@ -1239,7 +1239,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	exeggcute: {
-		tier: "LC",
+		tier: "NU",
 	},
 	exeggutor: {
 		randomSets: [
@@ -1274,7 +1274,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	cubone: {
-		tier: "LC",
+		tier: "NU",
 	},
 	marowak: {
 		randomSets: [
@@ -1517,7 +1517,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	seadra: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	kingdra: {
 		randomSets: [
@@ -1742,7 +1742,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	elekid: {
-		tier: "LC",
+		tier: "NU",
 	},
 	electabuzz: {
 		randomSets: [
@@ -2085,7 +2085,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	porygon: {
-		tier: "LC",
+		tier: "NU",
 	},
 	porygon2: {
 		randomSets: [
@@ -2291,7 +2291,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dragonair: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	dragonite: {
 		randomSets: [
@@ -2378,7 +2378,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	bayleef: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	meganium: {
 		randomSets: [
@@ -2605,7 +2605,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	chinchou: {
-		tier: "LC",
+		tier: "NU",
 	},
 	lanturn: {
 		randomSets: [
@@ -2683,7 +2683,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	flaaffy: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	ampharos: {
 		randomSets: [
@@ -2981,7 +2981,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	pineco: {
-		tier: "LC",
+		tier: "NU",
 	},
 	forretress: {
 		randomSets: [
@@ -3299,7 +3299,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	houndour: {
-		tier: "LC",
+		tier: "NU",
 	},
 	houndoom: {
 		randomSets: [
@@ -3480,7 +3480,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	pupitar: {
-		tier: "NFE",
+		tier: "NU",
 	},
 	tyranitar: {
 		randomSets: [

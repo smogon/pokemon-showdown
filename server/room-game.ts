@@ -41,7 +41,7 @@ export class RoomGamePlayer {
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
-		if (user) {
+		if (user && !this.game.isSubGame) {
 			user.games.add(this.game.roomid);
 			user.updateSearch();
 		}
@@ -49,7 +49,7 @@ export class RoomGamePlayer {
 	unlinkUser() {
 		if (!this.id) return;
 		const user = Users.getExact(this.id);
-		if (user) {
+		if (user && !this.game.isSubGame) {
 			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
@@ -77,10 +77,15 @@ export class RoomGamePlayer {
  */
 export class RoomGame {
 	readonly roomid: RoomID;
-	room: ChatRoom | GameRoom;
+	/**
+	 * The room this roomgame is in. Rooms can have two RoomGames at a time,
+	 * which are available as `this.room.game === this` and `this.room.subGame === this`.
+	 */
+	room: Room;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
+	isSubGame: boolean;
 	/**
 	 * userid:player table.
 	 *
@@ -91,28 +96,39 @@ export class RoomGame {
 	playerCount: number;
 	playerCap: number;
 	ended: boolean;
+	/** Does `/guess` or `/choose` require the user to be able to talk? */
+	checkChat = false;
 	/**
 	 * We should really resolve this collision at _some_ point, but it will have
 	 * to be later. The /timer command is written to be resilient to this.
 	 */
 	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void} | NodeJS.Timer | null;
-	constructor(room: ChatRoom | GameRoom) {
+	constructor(room: Room, isSubGame = false) {
 		this.roomid = room.roomid;
 		this.room = room;
 		this.gameid = 'game' as ID;
 		this.title = 'Game';
 		this.allowRenames = false;
+		this.isSubGame = isSubGame;
 		this.playerTable = Object.create(null);
 		this.players = [];
 		this.playerCount = 0;
 		this.playerCap = 0;
 		this.ended = false;
 
-		this.room.game = this as RoomGame;
+		if (this.isSubGame) {
+			this.room.subGame = this as RoomGame;
+		} else {
+			this.room.game = this as RoomGame;
+		}
 	}
 
 	destroy() {
-		this.room.game = null;
+		if (this.isSubGame) {
+			this.room.subGame = null;
+		} else {
+			this.room.game = null;
+		}
 		// @ts-ignore
 		this.room = null;
 		for (const player of this.players) {
@@ -149,10 +165,7 @@ export class RoomGame {
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;
-			if (!this.room.auth) {
-				this.room.auth = {};
-			}
-			this.room.auth[player.id] = Users.PLAYER_SYMBOL;
+			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		} else {
 			player.unlinkUser();
 		}
@@ -261,7 +274,7 @@ export class RoomGame {
 	 */
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!(user.id in this.playerTable)) {
+			if (!(user.id in this.playerTable) && !this.isSubGame) {
 				user.games.delete(this.roomid);
 				user.updateSearch();
 			}
@@ -304,12 +317,11 @@ export class RoomGame {
 
 	/**
 	 * Called for every message a user sends while this game is active.
-	 * Return an error message to prevent the message from being sent, or
-	 * `false` to let it through.
+	 * Return an error message to prevent the message from being sent,
+	 * an empty string to prevent it with no error message, or
+	 * `undefined` to let it through.
 	 */
-	onChatMessage(message: string, user: User): string | false {
-		return false;
-	}
+	onChatMessage(message: string, user: User): string | void {}
 
 	/**
 	 * Called for every message a user sends while this game is active.

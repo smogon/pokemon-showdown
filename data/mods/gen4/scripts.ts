@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
 	init() {
@@ -59,7 +59,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
@@ -99,6 +99,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	},
 
 	calcRecoilDamage(damageDealt, move) {
-		return this.dex.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
+		return this.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	},
 };

@@ -71,7 +71,7 @@ describe("Dynamax", function () {
 
 	it('G-Max Steelsurge hazard should deal 2x damage to Eiscue', function () {
 		battle = common.createBattle([[
-			{species: "Copperajah-Gmax", moves: ['ironhead']},
+			{species: "Copperajah", moves: ['ironhead'], gigantamax: true},
 		], [
 			{species: "Pyukumuku", moves: ['uturn']},
 			{species: "Eiscue", ability: 'iceface', moves: ['splash']},
@@ -119,15 +119,16 @@ describe("Dynamax", function () {
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
 	});
 
-	it('Max Guard should be disallowed by Taunt', function () {
+	it.skip(`should not allow the user to select max moves with 0 base PP remaining`, function () {
 		battle = common.createBattle([[
-			{species: "Feebas", moves: ['splash', 'tackle']},
+			{species: 'pichu', ability: 'prankster', level: 1, moves: ['grudge']},
+			{species: 'wynaut', moves: ['sleeptalk']},
 		], [
-			{species: "Wynaut", moves: ['taunt', 'splash']},
+			{species: 'wynaut', moves: ['earthquake', 'sleeptalk']},
 		]]);
-		battle.makeChoices('move tackle dynamax', 'auto');
-		// battle.makeChoices('move splash', 'auto');
-		// console.log(battle.getDebugLog());
-		assert.cantMove(() => battle.choose('p1', 'move splash'), 'Feebas', 'Max Guard', false);
+
+		battle.makeChoices('auto', 'move earthquake dynamax');
+		battle.makeChoices();
+		assert.cantMove(() => battle.p2.chooseMove(1), 'wynaut', 'earthquake', true);
 	});
 });

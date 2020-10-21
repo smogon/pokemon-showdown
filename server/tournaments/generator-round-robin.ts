@@ -4,7 +4,7 @@ interface Match {
 	result?: string;
 }
 
-type TournamentPlayer = import('./index').TournamentPlayer;
+import type {TournamentPlayer} from './index';
 
 export class RoundRobin {
 	readonly name: string;
@@ -172,7 +172,7 @@ export class RoundRobin {
 	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
-		const sortedScores = this.players.sort(
+		const sortedScores = this.players.slice().sort(
 			(p1, p2) => p2.score - p1.score
 		);
 

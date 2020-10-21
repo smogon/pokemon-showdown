@@ -1,4 +1,4 @@
-export const BattleAliases: {[alias: string]: string} = {
+export const Aliases: {[alias: string]: string} = {
 	// formats
 	randbats: "[Gen 8] Random Battle",
 	uber: "[Gen 8] Ubers",
@@ -15,7 +15,10 @@ export const BattleAliases: {[alias: string]: string} = {
 	duu: "[Gen 8] Doubles UU",
 	"2v2": "[Gen 8] 2v2 Doubles",
 	natdex: "[Gen 8] National Dex",
+	natdexuu: "[Gen 8] National Dex UU",
+	natdexmonotype: "[Gen 8] National Dex Monotype",
 	natdexag: "[Gen 8] National Dex AG",
+	natdexbh: "[Gen 8] National Dex BH",
 	bh: "[Gen 8] Balanced Hackmons",
 	mnm: "[Gen 8] Mix and Mega",
 	aaa: "[Gen 8] Almost Any Ability",
@@ -42,8 +45,10 @@ export const BattleAliases: {[alias: string]: string} = {
 	gen7bsd: "[Gen 7] Battle Spot Doubles",
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
-	petmod: "[Gen 8 Pet Mod] Roulettemons",
-	roulettemons: "[Gen 8 Pet Mod] Roulettemons",
+	crossevo: "[Gen 8] Cross Evolution",
+	pmots: "[Gen 8] Megamax",
+	mbh: "[Gen 8] National Dex BH",
+	opti: "[Gen 8] Optimons",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
@@ -141,6 +146,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	darmanitanz: "Darmanitan-Zen",
 	darmanitanzenmode: "Darmanitan-Zen",
 	darmanitanzengalar: "Darmanitan-Galar-Zen",
+	darmgz: "Darmanitan-Galar-Zen",
 	deoxysnormal: "Deoxys",
 	deon: "Deoxys",
 	deoxysa: "Deoxys-Attack",
@@ -241,6 +247,8 @@ export const BattleAliases: {[alias: string]: string} = {
 	rime: "Mr. Rime",
 	zacianc: "Zacian-Crowned",
 	zamazentac: "Zamazenta-Crowned",
+	urshifurs: "Urshifu-Rapid-Style",
+	urshifurapid: "Urshifu-Rapid-Style",
 
 	// base formes
 	nidoranfemale: "Nidoran-F",
@@ -758,6 +766,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	ttar: "Tyranitar",
 	venu: "Venusaur",
 	viriz: "Virizion",
+	watershifu: "Urshifu-Rapid-Strike",
 	whimsi: "Whimsicott",
 	xern: "Xerneas",
 	xurk: "Xurkitree",
@@ -783,6 +792,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	// moves
 	bb: "Brave Bird",
 	bd: "Belly Drum",
+	bde: "Baby-Doll Eyes",
 	bpass: "Baton Pass",
 	bp: "Baton Pass",
 	cc: "Close Combat",
@@ -825,8 +835,10 @@ export const BattleAliases: {[alias: string]: string} = {
 	rocks: "Stealth Rock",
 	sd: "Swords Dance",
 	se: "Stone Edge",
+	sideshellarm: "Shell Side Arm",
 	spin: "Rapid Spin",
 	sr: "Stealth Rock",
+	ssa: "Shell Side Arm",
 	sub: "Substitute",
 	tr: "Trick Room",
 	troom: "Trick Room",

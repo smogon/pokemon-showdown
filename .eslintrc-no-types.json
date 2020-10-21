@@ -13,6 +13,7 @@
     ".*-dist/",
     "tools/set-import/importer.js",
     "tools/set-import/sets",
+    "tools/modlog/converter.js",
     "server/global-variables.d.ts",
     "sim/global-variables.d.ts"
  ],
@@ -20,16 +21,11 @@
     "es6": true,
     "node": true
   },
-  "globals": {
-    "Config": false, "Monitor": false, "toID": false, "Dex": false, "LoginServer": false,
-    "Users": false, "Punishments": false, "Rooms": false, "Verifier": false, "Chat": false,
-    "Tournaments": false, "IPTools": false, "Sockets": false, "TeamValidator": false,
-    "TeamValidatorAsync": false, "Ladders": false
-  },
   "extends": "eslint:recommended",
   "rules": {
-    // TODO: add
+    // TODO: add/revisit
     // "spaced-comment": ["error", "always", {"exceptions": ["*"]}],
+    // "no-use-before-define": "off",
 
     // test only (should never be committed, but useful when testing)
     "no-debugger": "warn",
@@ -99,12 +95,11 @@
     "no-shadow": "off",
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
-    "no-undef": ["error", {"typeof": true}],
+    "no-undef": "off",
     "no-unmodified-loop-condition": "error",
     "no-unused-expressions": "error",
     "no-unsafe-finally": "error",
     "no-unused-labels": "error",
-    "no-use-before-define": ["error", {"functions": false, "classes": false, "variables": false}],
     "use-isnan": "error",
     "valid-typeof": "error",
 
@@ -122,6 +117,7 @@
 
     // syntax style (local syntactical, usually autofixable formatting decisions)
     "arrow-parens": "off",
+    "arrow-body-style": "error",
     "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
     "comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline", "imports": "always-multiline", "exports": "always-multiline", "functions": "ignore"}],
     "comma-style": ["error", "last"],
@@ -189,7 +185,10 @@
   },
   "overrides": [
     {
-      "files": ["./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
+      "files": [
+        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
+        "./tools/set-import/*.ts",  "./tools/modlog/*.ts", "./translations/**/*.ts"
+      ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaVersion": 9,
@@ -205,12 +204,13 @@
       ],
       "rules": {
         // TODO revisit
-        "prefer-object-spread": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/member-ordering": "off",
         // "@typescript-eslint/no-extraneous-class": "error",
         // "@typescript-eslint/no-type-alias": "error",
-        "@typescript-eslint/no-parameter-properties": "off",
+        "@typescript-eslint/prefer-optional-chain": "off",
+        // "@typescript-eslint/consistent-type-imports": "error", // TODO after no-duplicate-imports fix
 
         // test only (should never be committed, but useful when testing)
         "no-unused-vars": "off",
@@ -218,25 +218,33 @@
         "max-len": ["warn", {
           "code": 120, "tabWidth": 0,
           // see bottom of file for source
-          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Utils\\.html|(?:this\\.)?(?:room\\.)?tr|\\$\\()?['\"`/]"
         }],
+        "prefer-const": ["warn", {"destructuring": "all"}], // typescript-eslint/recommended forces this so we need to re-override
 
         // PS code (code specific to PS)
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/unbound-method": "off", // used for sim event handlers, command handlers, etc
         "new-parens": "off", // used for the `new class {...}` pattern
         "no-prototype-builtins": "off",
-        "no-shadow": "error",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
+        "@typescript-eslint/no-var-requires": "off",
 
         // typescript-eslint defaults too strict
-        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-use-before-define": "off",
 
         // probably bugs
-        "@typescript-eslint/ban-types": "error",
+        "@typescript-eslint/ban-types": ["error", {
+          "extendDefaults": true,
+          "types": {
+            "object": false
+          }
+        }],
         "@typescript-eslint/no-dupe-class-members": "error",
         "@typescript-eslint/no-empty-interface": "error",
         "@typescript-eslint/no-extra-non-null-assertion": "error",
@@ -248,9 +256,10 @@
         "@typescript-eslint/no-unused-expressions": ["error", {"allowTernary": true}], // ternary is used to convert callbacks to Promises
 
         // naming style
-        "@typescript-eslint/camelcase": "off",
-        "@typescript-eslint/class-name-casing": "error",
-        "@typescript-eslint/interface-name-prefix": "error",
+        "@typescript-eslint/naming-convention": ["error", {
+          "selector": ["class", "interface", "typeAlias"],
+          "format": ["PascalCase"]
+        }],
 
         // syntax style (local syntactical, usually autofixable formatting decisions)
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -262,14 +271,14 @@
           "multiline": {"delimiter": "comma", "requireLast": true},
           "singleline": {"delimiter": "comma", "requireLast": false}
         }}}],
+        "@typescript-eslint/no-parameter-properties": "error",
         "@typescript-eslint/no-this-alias": "error",
-        "@typescript-eslint/no-var-requires": "error",
         "@typescript-eslint/prefer-as-const": "error",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-includes": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
-        "@typescript-eslint/prefer-optional-chain": "error",
+        "prefer-object-spread": "error",
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/unified-signatures": "error",
 
@@ -289,13 +298,16 @@
       }
     },
     {
+      "files": ["./translations/**/*.ts"],
+      "rules": {
+        "no-template-curly-in-string": "off"
+      }
+    },
+    {
       "env": {
         "mocha": true
       },
-      "files": ["test/**/*.js"],
-      "globals": {
-        "BattleEngine": false
-      }
+      "files": ["test/**/*.js"]
     }
   ]
 }
@@ -310,7 +322,7 @@ REGEXFREE SOURCE FOR IGNOREPATTERN: https://zarel.github.io/regexfree/
 
   (
     # define a variable, append to a variable, or define a single-arg arrow function
-    (export\ )? (let\ |const\ )? [a-zA-Z0-9$.]+ (\ \+?=>?\ )
+    (export\ )? (let\ |const\ )? [a-zA-Z0-9_$.]+ (\ \+?=>?\ )
   |
     # define a property (oversize arrays are only allowed in properties)
     [a-zA-Z0-9$]+:\ \[?
@@ -322,12 +334,13 @@ REGEXFREE SOURCE FOR IGNOREPATTERN: https://zarel.github.io/regexfree/
   )?
 
   (
-    Chat\.html
+    Utils\.html
+  |
+    (this\.)?(room\.)?tr
   |
     \$\(
   )?
 
   # start of string or regex
   ['"`\/]
-
 */

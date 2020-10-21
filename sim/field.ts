@@ -7,6 +7,7 @@
 
 import {State} from './state';
 import {EffectState} from './pokemon';
+import {toID} from './dex';
 
 export class Field {
 	readonly battle: Battle;
@@ -35,7 +36,7 @@ export class Field {
 		return State.serializeField(this);
 	}
 
-	setWeather(status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.getEffect(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -180,7 +181,7 @@ export class Field {
 	}
 
 	addPseudoWeather(
-		status: string | PureEffect,
+		status: string | Condition,
 		source: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	): boolean {
@@ -228,7 +229,6 @@ export class Field {
 		// deallocate ourself
 
 		// get rid of some possibly-circular references
-		// @ts-ignore - readonly
-		this.battle = null!;
+		(this as any).battle = null!;
 	}
 }

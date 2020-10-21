@@ -22,7 +22,7 @@ describe('Neutralizing Gas', function () {
 		battle.setPlayer('p1', {team: [{species: "Weezing", ability: 'neutralizinggas', item: 'expertbelt', moves: ['sludgebomb']}]});
 		battle.setPlayer('p2', {team: [{species: "Mr. Mime", ability: 'filter', item: 'laggingtail', moves: ['substitute']}]});
 		battle.makeChoices('move sludgebomb', 'move substitute');
-		assert.ok(!battle.p1.active[0].volatiles['substitute']);
+		assert(!battle.p1.active[0].volatiles['substitute']);
 	});
 
 	it('should negate self-healing abilities', function () {
@@ -80,5 +80,21 @@ describe('Neutralizing Gas', function () {
 		]});
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
+	});
+
+	it.skip(`should not trigger twice if negated then replaced`, function () {
+		battle = common.createBattle([[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", ability: 'intrepidsword', moves: ['gastroacid', 'simplebeam']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices();
+		assert.statStage(wynaut, 'atk', 1);
+
+		// We already negated NGas, so it shouldn't run other abilities again
+		battle.makeChoices('auto', 'move simplebeam');
+		assert.statStage(wynaut, 'atk', 1);
 	});
 });

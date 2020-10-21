@@ -1,7 +1,7 @@
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.
  */
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen1',
 	gen: 1,
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
@@ -11,7 +11,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat(statName, modifier) {
 			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
-			this.modifiedStats![statName] = this.battle.dex.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1);
+			this.modifiedStats![statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1);
 		},
 		// This is run on Stadium after boosts and status changes.
 		recalculateStats() {
@@ -55,8 +55,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				}
 				if (delta) changed = true;
 			}
-			// @ts-ignore
-			this.recalculateStats();
+			this.recalculateStats!();
 			return changed;
 		},
 	},
@@ -97,7 +96,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 
-		// If rival fainted
+		// If target fainted
 		if (target && target.hp <= 0) {
 			// We remove screens
 			target.side.removeSideCondition('reflect');
@@ -105,6 +104,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		} else {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
+		if (pokemon.volatiles['mustrecharge']) this.add('-mustrecharge', pokemon);
 
 		// For partial trapping moves, we are saving the target.
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
@@ -121,10 +121,17 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 	},
 	tryMoveHit(target, pokemon, move) {
-		let doSelfDestruct = true;
 		let damage: number | false | undefined = 0;
 
-		// First, check if the Pokémon is immune to this move.
+		// First, check if the target is semi-invulnerable
+		let hitResult = this.runEvent('Invulnerability', target, pokemon, move);
+		if (hitResult === false) {
+			if (!move.spreadHit) this.attrLastMove('[miss]');
+			this.add('-miss', pokemon);
+			return false;
+		}
+
+		// Then, check if the Pokemon is immune to this move.
 		if (
 			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
 			!target.runImmunity(move.type, true)
@@ -132,6 +139,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
+			return false;
+		}
+		hitResult = this.singleEvent('TryImmunity', move, null, target, pokemon, move);
+		if (hitResult === false) {
+			this.add('-immune', target);
 			return false;
 		}
 
@@ -219,9 +231,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
-		// Checking if substitute fainted
-		if (target.subFainted) doSelfDestruct = false;
-		if (move.selfdestruct && doSelfDestruct) {
+		if (move.selfdestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -324,8 +334,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (moveData.status) {
 				if (!target.status) {
 					target.setStatus(moveData.status, pokemon, move);
-					// @ts-ignore
-					target.recalculateStats();
+					target.recalculateStats!();
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
 						this.add('-fail', target, target.status);
@@ -337,8 +346,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-					// @ts-ignore
-					target.recalculateStats();
+					target.recalculateStats!();
 					didSomething = true;
 				}
 			}
@@ -465,7 +473,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		if (!basePower) {
 			return basePower === 0 ? undefined : basePower;
 		}
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 		let isCrit = move.willCrit || false;
@@ -498,7 +506,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 
 			// Now we make sure it's a number between 1 and 255.
-			critChance = this.dex.clampIntRange(critChance, 1, 255);
+			critChance = this.clampIntRange(critChance, 1, 255);
 
 			// Last, we check deppending on ratio if the move critical hits or not.
 			// We compare our critical hit chance against a random number between 0 and 255.
@@ -520,7 +528,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check attacker's and defender's stats.
 		let level = pokemon.level;
@@ -536,7 +544,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 			this.debug('Screen doubling (Sp)Def');
 			defense *= 2;
-			defense = this.dex.clampIntRange(defense, 1, 1998);
+			defense = this.clampIntRange(defense, 1, 1998);
 		}
 
 		// In the event of a critical hit, the offense and defense changes are ignored.
@@ -560,14 +568,14 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
 		// This is what cuases the roll over bugs.
 		if (attack >= 256 || defense >= 256) {
-			attack = this.dex.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-			defense = this.dex.clampIntRange(Math.floor(defense / 4) % 256, 1);
+			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
 		// Self destruct moves halve defense at this point.
 		if (move.selfdestruct && defType === 'def') {
-			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		// Let's go with the calculation now that we have what we need.
@@ -578,7 +586,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.dex.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB

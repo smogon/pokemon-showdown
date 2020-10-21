@@ -3,15 +3,12 @@
  * Some moves have had major changes, such as Bite's typing.
  */
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
-		desc: "The user recovers 1/2 the HP lost by the target, rounded down. If this move breaks the target's substitute, the user does not recover any HP.",
 	},
 	acid: {
 		inherit: true,
-		desc: "Has a 33% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "33% chance to lower the target's Defense by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -22,8 +19,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	amnesia: {
 		inherit: true,
-		desc: "Raises the user's Special by 2 stages.",
-		shortDesc: "Raises the user's Special by 2.",
 		boosts: {
 			spd: 2,
 			spa: 2,
@@ -31,8 +26,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	aurorabeam: {
 		inherit: true,
-		desc: "Has a 33% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "33% chance to lower the target's Attack by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -42,15 +35,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	barrage: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	bide: {
 		inherit: true,
-		desc: "The user spends two or three turns locked into this move and then, on the second or third turn after using this move, the user attacks the opponent, inflicting double the damage in HP it lost during those turns. This move ignores type immunity and cannot be avoided even if the target is using Dig or Fly. The user can choose to switch out during the effect. If the user switches out or is prevented from moving during this move's use, the effect ends. During the effect, if the opposing Pokemon switches out or uses Confuse Ray, Conversion, Focus Energy, Glare, Haze, Leech Seed, Light Screen, Mimic, Mist, Poison Gas, Poison Powder, Recover, Reflect, Rest, Soft-Boiled, Splash, Stun Spore, Substitute, Supersonic, Teleport, Thunder Wave, Toxic, or Transform, the previous damage dealt to the user will be added to the total.",
 		priority: 0,
 		accuracy: true,
 		ignoreEvasion: true,
-		effect: {
+		condition: {
 			duration: 2,
 			durationCallback(target, source, effect) {
 				return this.random(3, 4);
@@ -125,8 +116,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	bind: {
 		inherit: true,
-		desc: "The user spends two to five turns using this move. Has a 3/8 chance to last two or three turns, and a 1/8 chance to last four or five turns. The damage calculated for the first turn is used for every other turn. The user cannot select a move and the target cannot execute a move during the effect, but both may switch out. If the user switches out, the target remains unable to execute a move during that turn. If the target switches out, the user uses this move again automatically, and if it had 0 PP at the time, it becomes 63. If the user or the target switch out, or the user is prevented from moving, the effect ends. This move can prevent the target from moving even if it has type immunity, but will not deal damage.",
-		shortDesc: "Prevents the target from moving for 2-5 turns.",
 		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -149,8 +138,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	bite: {
 		inherit: true,
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch',
@@ -164,12 +151,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	bonemerang: {
 		inherit: true,
-		desc: "Hits twice. If the first hit breaks the target's substitute, the move ends.",
 	},
 	bubble: {
 		inherit: true,
-		desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "33% chance to lower the target's Speed by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -180,8 +164,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	bubblebeam: {
 		inherit: true,
-		desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "33% chance to lower the target's Speed by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -191,8 +173,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	clamp: {
 		inherit: true,
-		desc: "The user spends two to five turns using this move. Has a 3/8 chance to last two or three turns, and a 1/8 chance to last four or five turns. The damage calculated for the first turn is used for every other turn. The user cannot select a move and the target cannot execute a move during the effect, but both may switch out. If the user switches out, the target remains unable to execute a move during that turn. If the target switches out, the user uses this move again automatically, and if it had 0 PP at the time, it becomes 63. If the user or the target switch out, or the user is prevented from moving, the effect ends. This move can prevent the target from moving even if it has type immunity, but will not deal damage.",
-		shortDesc: "Prevents the target from moving for 2-5 turns.",
 		accuracy: 75,
 		pp: 10,
 		volatileStatus: 'partiallytrapped',
@@ -216,12 +196,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	cometpunch: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	constrict: {
 		inherit: true,
-		desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "33% chance to lower the target's Speed by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -231,8 +208,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	conversion: {
 		inherit: true,
-		desc: "Causes the user's types to become the same as the current types of the target.",
-		shortDesc: "User becomes the same type as the target.",
 		volatileStatus: 'conversion',
 		accuracy: true,
 		target: "normal",
@@ -243,7 +218,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	counter: {
 		inherit: true,
-		desc: "Deals damage to the opposing Pokemon equal to twice the damage dealt by the last move used in the battle. This move ignores type immunity. Fails if the user moves first, or if the opposing side's last move was Counter, had 0 power, or was not Normal or Fighting type. Fails if the last move used by either side did 0 damage and was not Confuse Ray, Conversion, Focus Energy, Glare, Haze, Leech Seed, Light Screen, Mimic, Mist, Poison Gas, Poison Powder, Recover, Reflect, Rest, Soft-Boiled, Splash, Stun Spore, Substitute, Supersonic, Teleport, Thunder Wave, Toxic, or Transform.",
 		ignoreImmunity: true,
 		willCrit: false,
 		damageCallback(pokemon, target) {
@@ -269,13 +243,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	defensecurl: {
 		inherit: true,
-		desc: "Raises the user's Defense by 1 stage.",
 	},
 	dig: {
 		inherit: true,
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Bide, Swift, and Transform. If the user is fully paralyzed on the second turn, it continues avoiding attacks until it switches out or successfully executes the second turn of this move or Fly.",
 		basePower: 100,
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'dig',
 			onInvulnerability(target, source, move) {
@@ -295,9 +267,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	disable: {
 		inherit: true,
-		desc: "For 0 to 7 turns, one of the target's known moves that has at least 1 PP remaining becomes disabled, at random. Fails if one of the target's moves is already disabled, or if none of the target's moves have PP remaining. If any Pokemon uses Haze, this effect ends. Whether or not this move was successful, it counts as a hit for the purposes of the opponent's use of Rage.",
-		shortDesc: "For 0-7 turns, disables one of the target's moves.",
-		effect: {
+		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
 				const duration = this.random(1, 7);
@@ -334,22 +304,17 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	dizzypunch: {
 		inherit: true,
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
 		secondary: null,
 	},
 	doubleedge: {
 		inherit: true,
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP. If this move breaks the target's substitute, the user does not take any recoil damage.",
 		basePower: 100,
 	},
 	doublekick: {
 		inherit: true,
-		desc: "Hits twice. Damage is calculated once for the first hit and used for both hits. If the first hit breaks the target's substitute, the move ends.",
 	},
 	doubleslap: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	dragonrage: {
 		inherit: true,
@@ -357,23 +322,17 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	dreameater: {
 		inherit: true,
-		desc: "The target is unaffected by this move unless it is asleep. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP. If this move breaks the target's substitute, the user does not recover any HP.",
 	},
 	earthquake: {
 		inherit: true,
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
 	},
 	explosion: {
 		inherit: true,
-		desc: "The user faints after using this move, unless this move broke the target's substitute. The target's Defense is halved during damage calculation.",
 		basePower: 170,
 		target: "normal",
 	},
 	fireblast: {
 		inherit: true,
-		desc: "Has a 30% chance to burn the target.",
-		shortDesc: "30% chance to burn the target.",
 		secondary: {
 			chance: 30,
 			status: 'brn',
@@ -381,8 +340,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	firespin: {
 		inherit: true,
-		desc: "The user spends two to five turns using this move. Has a 3/8 chance to last two or three turns, and a 1/8 chance to last four or five turns. The damage calculated for the first turn is used for every other turn. The user cannot select a move and the target cannot execute a move during the effect, but both may switch out. If the user switches out, the target remains unable to execute a move during that turn. If the target switches out, the user uses this move again automatically, and if it had 0 PP at the time, it becomes 63. If the user or the target switch out, or the user is prevented from moving, the effect ends. This move can prevent the target from moving even if it has type immunity, but will not deal damage.",
-		shortDesc: "Prevents the target from moving for 2-5 turns.",
 		accuracy: 70,
 		basePower: 15,
 		volatileStatus: 'partiallytrapped',
@@ -406,13 +363,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	fissure: {
 		inherit: true,
-		desc: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
-		shortDesc: "Deals 65535 damage. Fails if target is faster.",
 	},
 	fly: {
 		inherit: true,
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Bide, Swift, and Transform. If the user is fully paralyzed on the second turn, it continues avoiding attacks until it switches out or successfully executes the second turn of this move or Dig.",
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'fly',
 			onInvulnerability(target, source, move) {
@@ -432,9 +386,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	focusenergy: {
 		inherit: true,
-		desc: "While the user remains active, its chance for a critical hit is quartered. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
-		shortDesc: "Quarters the user's chance for a critical hit.",
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
@@ -444,21 +396,16 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	furyattack: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	furyswipes: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	glare: {
 		inherit: true,
-		desc: "Paralyzes the target.",
 		ignoreImmunity: true,
 	},
 	growth: {
 		inherit: true,
-		desc: "Raises the user's Special by 1 stage.",
-		shortDesc: "Raises the user's Special by 1.",
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -466,19 +413,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	guillotine: {
 		inherit: true,
-		desc: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
-		shortDesc: "Deals 65535 damage. Fails if target is faster.",
 	},
 	gust: {
 		inherit: true,
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
 		type: "Normal",
 	},
 	haze: {
 		inherit: true,
-		desc: "Resets the stat stages of both Pokemon to 0 and removes stat reductions due to burn and paralysis. Resets Toxic counters to 0 and removes the effect of confusion, Disable, Focus Energy, Leech Seed, Light Screen, Mist, and Reflect from both Pokemon. Removes the opponent's major status condition.",
-		shortDesc: "Resets all stat changes. Removes foe's status.",
 		onHit(target, source) {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
@@ -505,8 +446,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	highjumpkick: {
 		inherit: true,
-		desc: "If this attack misses the target, the user takes 1 HP of crash damage. If the user has a substitute, the crash damage is dealt to the target's substitute if it has one, otherwise no crash damage is dealt.",
-		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
 				this.directDamage(1, source, target);
@@ -515,18 +454,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	horndrill: {
 		inherit: true,
-		desc: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
-		shortDesc: "Deals 65535 damage. Fails if target is faster.",
 	},
 	hyperbeam: {
 		inherit: true,
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move, unless the target or its substitute was knocked out by this move.",
-		shortDesc: "Can't move next turn if target or sub is not KOed.",
 	},
 	jumpkick: {
 		inherit: true,
-		desc: "If this attack misses the target, the user takes 1 HP of crash damage. If the user has a substitute, the crash damage is dealt to the target's substitute if it has one, otherwise no crash damage is dealt.",
-		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
 				this.directDamage(1, source, target);
@@ -540,9 +473,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	leechseed: {
 		inherit: true,
-		desc: "At the end of each of the target's turns, The Pokemon at the user's position steals 1/16 of the target's maximum HP, rounded down and multiplied by the target's current Toxic counter if it has one, even if the target currently has less than that amount of HP remaining. If the target switches out or any Pokemon uses Haze, this effect ends. Grass-type Pokemon are immune to this move.",
 		onHit() {},
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
@@ -560,7 +492,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					residualdmg.counter++;
 					toxicCounter = residualdmg.counter;
 				}
-				const toLeech = this.dex.clampIntRange(Math.floor(pokemon.baseMaxhp / 16), 1) * toxicCounter;
+				const toLeech = this.clampIntRange(Math.floor(pokemon.baseMaxhp / 16), 1) * toxicCounter;
 				const damage = this.damage(toLeech, pokemon, leecher);
 				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (!damage || toLeech > damage) {
@@ -575,8 +507,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "While the user remains active, its Special is doubled when taking damage. Critical hits ignore this effect. If any Pokemon uses Haze, this effect ends.",
-		shortDesc: "While active, user's Special is 2x when damaged.",
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
@@ -587,7 +517,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Light Screen');
 			},
@@ -597,7 +527,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
-		desc: "A random move is selected for use, other than Metronome or Struggle.",
 		noMetronome: ["Metronome", "Struggle"],
 		secondary: null,
 		target: "self",
@@ -605,8 +534,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		desc: "While the user remains active, this move is replaced by a random move known by the target, even if the user already knows that move. The copied move keeps the remaining PP for this move, regardless of the copied move's maximum PP. Whenever one PP is used for a copied move, one PP is used for this move.",
-		shortDesc: "Random move known by the target replaces this.",
 		onHit(target, source) {
 			const moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
@@ -629,11 +556,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	minimize: {
 		inherit: true,
-		desc: "Raises the user's evasiveness by 1 stage.",
 	},
 	mirrormove: {
 		inherit: true,
-		desc: "The user uses the last move used by the target. Fails if the target has not made a move, or if the last move used was Mirror Move.",
 		onHit(pokemon) {
 			const foe = pokemon.side.foe.active[0];
 			if (!foe || !foe.lastMove || foe.lastMove.id === 'mirrormove') {
@@ -644,28 +569,20 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	mist: {
 		inherit: true,
-		desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon, unless caused by the secondary effect of a move. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
 	},
 	nightshade: {
 		inherit: true,
-		desc: "Deals damage to the target equal to the user's level. This move ignores type immunity.",
-		shortDesc: "Damage = user's level. Can hit Normal types.",
 		ignoreImmunity: true,
 		basePower: 1,
 	},
 	petaldance: {
 		inherit: true,
-		desc: "Whether or not this move is successful, the user spends three or four turns locked into this move and becomes confused immediately after its move on the last turn of the effect, even if it is already confused. If the user is prevented from moving, the effect ends without causing confusion. During the effect, this move's accuracy is overwritten every turn with the current calculated accuracy including stat stage changes, but not to less than 1/256 or more than 255/256.",
-		shortDesc: "Lasts 3-4 turns. Confuses the user afterwards.",
 	},
 	pinmissile: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	poisonsting: {
 		inherit: true,
-		desc: "Has a 20% chance to poison the target.",
-		shortDesc: "20% chance to poison the target.",
 		secondary: {
 			chance: 20,
 			status: 'psn',
@@ -673,8 +590,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	psychic: {
 		inherit: true,
-		desc: "Has a 33% chance to lower the target's Special by 1 stage.",
-		shortDesc: "33% chance to lower the target's Special by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -689,12 +604,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	rage: {
 		inherit: true,
-		desc: "Once this move is successfully used, the user automatically uses this move every turn and can no longer switch out. During the effect, the user's Attack is raised by 1 stage every time it is hit by the opposing Pokemon, and this move's accuracy is overwritten every turn with the current calculated accuracy including stat stage changes, but not to less than 1/256 or more than 255/256.",
-		shortDesc: "Lasts forever. Raises user's Attack by 1 when hit.",
 		self: {
 			volatileStatus: 'rage',
 		},
-		effect: {
+		condition: {
 			// Rage lock
 			duration: 255,
 			onStart(target, source, effect) {
@@ -720,14 +633,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	razorwind: {
 		inherit: true,
-		desc: "This attack charges on the first turn and executes on the second.",
-		shortDesc: "Charges turn 1. Hits turn 2.",
 		critRatio: 1,
 		target: "normal",
 	},
 	recover: {
 		inherit: true,
-		desc: "The user restores 1/2 of its maximum HP, rounded down. Fails if (user's maximum HP - user's current HP + 1) is divisible by 256.",
 		heal: null,
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
@@ -743,8 +653,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "While the user remains active, its Defense is doubled when taking damage. Critical hits ignore this protection. This effect can be removed by Haze.",
-		shortDesc: "While active, the user's Defense is doubled.",
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
@@ -755,7 +663,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 		},
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Reflect');
 			},
@@ -766,14 +674,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	rest: {
 		inherit: true,
-		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process. This does not remove the user's stat penalty for burn or paralysis. Fails if the user has full HP.",
 		onTryMove() {},
 		onHit(target, source, move) {
-			// Fails if the difference between
-			// max HP and current HP is 0, 255, or 511
-			if (target.hp >= target.maxhp ||
-			target.hp === (target.maxhp - 255) ||
-			target.hp === (target.maxhp - 511)) return false;
+			if (target.hp === target.maxhp) return false;
+			// Fail when health is 255 or 511 less than max
+			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
+				return false;
+			}
 			if (!target.setStatus('slp', source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
@@ -782,16 +690,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	roar: {
 		inherit: true,
-		desc: "No competitive use.",
-		shortDesc: "No competitive use.",
 		forceSwitch: false,
 		onTryHit() {},
 		priority: 0,
 	},
 	rockslide: {
 		inherit: true,
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
 		secondary: null,
 		target: "normal",
 	},
@@ -806,26 +710,21 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	seismictoss: {
 		inherit: true,
-		desc: "Deals damage to the target equal to the user's level. This move ignores type immunity.",
-		shortDesc: "Damage = user's level. Can hit Ghost types.",
 		ignoreImmunity: true,
 		basePower: 1,
 	},
 	selfdestruct: {
 		inherit: true,
-		desc: "The user faints after using this move, unless the target's substitute was broken by the damage. The target's Defense is halved during damage calculation.",
 		basePower: 130,
 		target: "normal",
 	},
 	skullbash: {
 		inherit: true,
-		desc: "This attack charges on the first turn and executes on the second.",
-		shortDesc: "Charges turn 1. Hits turn 2.",
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -839,12 +738,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	sludge: {
 		inherit: true,
-		desc: "Has a 40% chance to poison the target.",
-		shortDesc: "40% chance to poison the target.",
+		secondary: {
+			chance: 40,
+			status: 'psn',
+		},
 	},
 	softboiled: {
 		inherit: true,
-		desc: "The user restores 1/2 of its maximum HP, rounded down. Fails if (user's maximum HP - user's current HP + 1) is divisible by 256.",
 		heal: null,
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
@@ -857,44 +757,33 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	solarbeam: {
 		inherit: true,
-		desc: "This attack charges on the first turn and executes on the second.",
-		shortDesc: "Charges turn 1. Hits turn 2.",
 	},
 	sonicboom: {
 		inherit: true,
-		desc: "Deals 20 HP of damage to the target. This move ignores type immunity.",
 	},
 	spikecannon: {
 		inherit: true,
-		desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 	},
 	stomp: {
 		inherit: true,
-		desc: "Has a 30% chance to flinch the target.",
 	},
 	struggle: {
 		inherit: true,
-		desc: "Deals Normal-type damage. If this move was successful, the user takes damage equal to 1/2 the HP lost by the target, rounded down, but not less than 1 HP. This move is automatically used if none of the user's known moves can be selected.",
-		shortDesc: "User loses 1/2 the HP lost by the target.",
 		pp: 10,
 		recoil: [1, 2],
 		onModifyMove() {},
 	},
 	stunspore: {
 		inherit: true,
-		desc: "Paralyzes the target.",
 	},
 	submission: {
 		inherit: true,
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP. If this move breaks the target's substitute, the user does not take any recoil damage.",
 	},
 	substitute: {
 		num: 164,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute has 1 HP plus the HP used to create it, and is removed once enough damage is inflicted on it or 255 damage is inflicted at once, or if the user switches out or faints. Until the substitute is broken, it receives damage from all attacks made by the opposing Pokemon and shields the user from status effects and stat stage changes caused by the opponent, unless the effect is Disable, Leech Seed, sleep, primary paralysis, or secondary confusion and the user's substitute did not break. The user still takes normal damage from status effects while behind its substitute, unless the effect is confusion damage, which is applied to the opposing Pokemon's substitute instead. If the substitute breaks during a multi-hit attack, the attack ends. Fails if the user does not have enough HP remaining to create a substitute, or if it already has a substitute. The user will create a substitute and then faint if its current HP is exactly 1/4 of its maximum HP.",
-		shortDesc: "User takes 1/4 its max HP to put in a Substitute.",
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
@@ -918,7 +807,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				this.directDamage(target.maxhp / 4, target, target);
 			}
 		},
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4) + 1;
@@ -986,29 +875,20 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	superfang: {
 		inherit: true,
-		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP. This move ignores type immunity.",
-		shortDesc: "Damage = 1/2 target's current HP. Hits Ghosts.",
 		ignoreImmunity: true,
 		basePower: 1,
 	},
 	swift: {
 		inherit: true,
-		desc: "This move does not check accuracy and hits even if the target is using Dig or Fly.",
-		shortDesc: "Never misses, even against Dig and Fly.",
 	},
 	takedown: {
 		inherit: true,
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP. If this move breaks the target's substitute, the user does not take any recoil damage.",
 	},
 	thrash: {
 		inherit: true,
-		desc: "Whether or not this move is successful, the user spends three or four turns locked into this move and becomes confused immediately after its move on the last turn of the effect, even if it is already confused. If the user is prevented from moving, the effect ends without causing confusion. During the effect, this move's accuracy is overwritten every turn with the current calculated accuracy including stat stage changes, but not to less than 1/256 or more than 255/256.",
-		shortDesc: "Lasts 3-4 turns. Confuses the user afterwards.",
 	},
 	thunder: {
 		inherit: true,
-		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze the target.",
 		secondary: {
 			chance: 10,
 			status: 'par',
@@ -1026,24 +906,18 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	transform: {
 		inherit: true,
-		desc: "The user transforms into the target. The target's current stats, stat stages, types, moves, DVs, species, and sprite are copied. The user's level and HP remain the same and each copied move receives only 5 PP. This move can hit a target using Dig or Fly.",
 	},
 	triattack: {
 		inherit: true,
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
 		onHit() {},
 		secondary: null,
 	},
 	twineedle: {
 		inherit: true,
-		desc: "Hits twice, with the second hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, the move ends.",
 	},
 	whirlwind: {
 		inherit: true,
 		accuracy: 85,
-		desc: "No competitive use.",
-		shortDesc: "No competitive use.",
 		forceSwitch: false,
 		onTryHit() {},
 		priority: 0,
@@ -1054,8 +928,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	wrap: {
 		inherit: true,
-		desc: "The user spends two to five turns using this move. Has a 3/8 chance to last two or three turns, and a 1/8 chance to last four or five turns. The damage calculated for the first turn is used for every other turn. The user cannot select a move and the target cannot execute a move during the effect, but both may switch out. If the user switches out, the target remains unable to execute a move during that turn. If the target switches out, the user uses this move again automatically, and if it had 0 PP at the time, it becomes 63. If the user or the target switch out, or the user is prevented from moving, the effect ends. This move can prevent the target from moving even if it has type immunity, but will not deal damage.",
-		shortDesc: "Prevents the target from moving for 2-5 turns.",
 		accuracy: 85,
 		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',

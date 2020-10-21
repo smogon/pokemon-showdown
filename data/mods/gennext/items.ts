@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	burndrive: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {},
@@ -118,7 +118,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next
 		onModifyCritRatio(critRatio, user) {
-			if (user.species.name === 'Farfetch\'d') {
+			if (user.species.id === 'farfetchd') {
 				return critRatio + 2;
 			}
 		},
@@ -170,9 +170,9 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		},
 		// onResidual(pokemon) {
 		// 	if (pokemon.species.name === 'Shuckle') {
-		// 		this.heal(this.dex.clampIntRange(pokemon.maxhp / 16, 1));
+		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
-		desc: "Raises Farfetch'd's critical hit rate two stages.",
+		desc: "Raises Farfetch\u2019d's critical hit rate two stages.",
 	},
 };

@@ -44,7 +44,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 				# URLs usually don't end with punctuation, so don't allow
 				# punctuation symbols that probably arent related to URL.
 				(
-					[^\s`()[\]{}\".,!?;:&<>*`^~\\]
+					[^\s()[\]{}\".,!?;:&<>*`^~\\]
 				|
 					# annoyingly, Wikipedia URLs often end in )
 					\( ( [^\s()<>&] | &amp; )* \)
@@ -58,7 +58,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 	(?! [^ ]*&gt; )
 
 */
-export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s`()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
+export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
 type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
 
@@ -69,10 +69,11 @@ class TextFormatter {
 	readonly buffers: string[];
 	readonly stack: FormatSpan[];
 	readonly isTrusted: boolean;
+	readonly replaceLinebreaks: boolean;
 	/** offset of str that's been parsed so far */
 	offset: number;
 
-	constructor(str: string, isTrusted = false) {
+	constructor(str: string, isTrusted = false, replaceLinebreaks = false) {
 		// escapeHTML, without escaping /
 		str = `${str}`
 			.replace(/&/g, '&amp;')
@@ -89,7 +90,7 @@ class TextFormatter {
 			} else {
 				fulluri = uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1');
 				if (uri.substr(0, 24) === 'https://docs.google.com/' || uri.substr(0, 16) === 'docs.google.com/') {
-					if (uri.slice(0, 5) === 'https') uri = uri.slice(8);
+					if (uri.startsWith('https')) uri = uri.slice(8);
 					if (uri.substr(-12) === '?usp=sharing' || uri.substr(-12) === '&usp=sharing') uri = uri.slice(0, -12);
 					if (uri.substr(-6) === '#gid=0') uri = uri.slice(0, -6);
 					let slashIndex = uri.lastIndexOf('/');
@@ -108,6 +109,7 @@ class TextFormatter {
 		this.buffers = [];
 		this.stack = [];
 		this.isTrusted = isTrusted;
+		this.replaceLinebreaks = this.isTrusted || replaceLinebreaks;
 		this.offset = 0;
 	}
 	// eslint-disable-next-line max-len
@@ -309,17 +311,20 @@ class TextFormatter {
 						break;
 					case 'pokemon':
 					case 'item':
+					case 'type':
+					case 'category':
 						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
 
 						let display = '';
 						if (this.isTrusted) {
-							display = `<psicon ${key}="${term}"/>`;
+							display = `<psicon ${key}="${term}" />`;
 						} else {
 							display = `[${term}]`;
 						}
 
 						let dir = key;
 						if (key === 'item') dir += 's';
+						if (key === 'category') dir = 'categories' as 'category';
 
 						uri = `//dex.pokemonshowdown.com/${dir}/${toID(term)}`;
 						term = display;
@@ -438,7 +443,7 @@ class TextFormatter {
 			case '\r':
 			case '\n':
 				this.popAllSpans(i);
-				if (this.isTrusted) {
+				if (this.replaceLinebreaks) {
 					this.buffers.push(`<br />`);
 					this.offset++;
 				}
@@ -455,8 +460,8 @@ class TextFormatter {
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  */
-export function formatText(str: string, isTrusted = false) {
-	return new TextFormatter(str, isTrusted).get();
+export function formatText(str: string, isTrusted = false, replaceLinebreaks = false) {
+	return new TextFormatter(str, isTrusted, replaceLinebreaks).get();
 }
 
 /**

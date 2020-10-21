@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	/******************************************************************
 	Perfect accuracy moves:
 	- base power increased to 90
@@ -138,7 +138,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	******************************************************************/
 	substitute: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
@@ -172,7 +172,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil) {
-					this.damage(this.dex.clampIntRange(Math.round(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
+					this.damage(this.clampIntRange(Math.round(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
@@ -187,14 +187,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	protect: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (target.volatiles.substitute || !move.flags['protect']) return;
+				if (target.volatiles['substitute'] || !move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -209,14 +209,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	kingsshield: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (target.volatiles.substitute || !move.flags['protect'] || move.category === 'Status') return;
+				if (target.volatiles['substitute'] || !move.flags['protect'] || move.category === 'Status') return;
 				this.add('-activate', target, 'Protect');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -234,14 +234,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	spikyshield: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (target.volatiles.substitute || !move.flags['protect']) return;
+				if (target.volatiles['substitute'] || !move.flags['protect']) return;
 				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
 				this.add('-activate', target, 'move: Protect');
 				if (move.flags['contact']) {
@@ -296,7 +296,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'solarbeam',
 			onStart(pokemon) {
@@ -337,7 +337,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, move.name);
 			this.boost({def: 1, spd: 1, accuracy: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
@@ -624,7 +624,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onTryHit(pokemon) {
 			return this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'bide',
 			onStart(pokemon) {
@@ -821,7 +821,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	******************************************************************/
 	stealthrock: {
 		inherit: true,
-		effect: {
+		condition: {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
@@ -2015,8 +2015,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (user.illusion) {
 				const illusionMoves = user.illusion.moves.filter(m => this.dex.getMove(m).category !== 'Status');
 				if (!illusionMoves.length) return;
-				// @ts-ignore I'll figure out a better fix for this later
-				move.name = this.dex.getMove(this.sample(illusionMoves)).name;
+				// I'll figure out a better fix for this later
+				(move as any).name = this.dex.getMove(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",
@@ -2075,6 +2075,47 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	/******************************************************************
+	Custom moves:
+	******************************************************************/
+	magikarpsrevenge: {
+		num: 0,
+		accuracy: true,
+		basePower: 120,
+		category: "Physical",
+		desc: "Has a 100% chance to confuse the target and lower its Defense and Special Attack by 1 stage. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. The user steals the foe's boosts. If this move is successful, the weather changes to rain unless it is already in effect, and the user gains the effects of Aqua Ring and Magic Coat.",
+		shortDesc: "Does many things turn 1. Can't move turn 2.",
+		name: "Magikarp's Revenge",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1, heal: 1},
+		noSketch: true,
+		drain: [1, 2],
+		onTry(pokemon) {
+			if (pokemon.species.name !== 'Magikarp') {
+				this.add('-fail', pokemon, 'move: Magikarp\'s Revenge');
+				return null;
+			}
+		},
+		self: {
+			onHit(source) {
+				this.field.setWeather('raindance');
+				source.addVolatile('magiccoat');
+				source.addVolatile('aquaring');
+			},
+			volatileStatus: 'mustrecharge',
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion',
+			boosts: {
+				def: -1,
+				spa: -1,
+			},
+		},
+		stealsBoosts: true,
+		target: "normal",
+		type: "Water",
+		contestType: "Cute",
+	},
 };
-
-exports.BattleMovedex = BattleMovedex;

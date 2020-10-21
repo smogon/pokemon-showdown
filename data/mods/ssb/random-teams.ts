@@ -129,12 +129,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Come on you Gunners',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {hp: 20, def: 20, spd: 20}, nature: 'Naive',
 			},
-			Asheviere: {
-				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'F',
-				moves: ['Scald', 'Slack Off', 'Psyshock'],
-				signatureMove: 'Wonder Trade',
-				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
-			},
 			Averardo: {
 				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: 'M',
 				moves: ['Head Smash', 'Flare Blitz', 'Photon Geyser'],
@@ -297,12 +291,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Quick Reload',
 				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
 			},
-			Flare: {
-				species: 'Zoroark', ability: 'Super Illusion', item: 'Choice Scarf', gender: 'N',
-				moves: ['Fleur Cannon', 'Parting Shot', 'Sludge Bomb'],
-				signatureMove: 'Distortion Blast',
-				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-			},
 			FOMG: {
 				species: 'Golem', ability: 'Serene Grace', item: 'Astleyium Z', gender: 'M',
 				moves: ['Earthquake', 'Explosion', 'Iron Head'],
@@ -449,7 +437,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 			},
 			MacChaeger: {
-				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',
+				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'F',
 				moves: ['Scald', 'Aeroblast', 'Sleep Talk'],
 				signatureMove: 'Nap Time',
 				evs: {hp: 252, spa: 80, spe: 176}, ivs: {atk: 0}, nature: 'Modest',

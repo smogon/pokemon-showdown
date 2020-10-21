@@ -19,12 +19,16 @@ import {Tournaments as TournamentsType} from './tournaments';
 declare global {
 	namespace NodeJS {
 		interface Global {
+			Dex: any;
+			toID: (item: any) => ID;
 			IPTools: any;
 			Config: any;
 			Chat: any;
 			Tournaments: any;
 			LoginServer: any;
 			Punishments: any;
+			TeamValidator: any;
+			Monitor: any;
 			__version: {head: string, origin?: string, tree?: string};
 		}
 	}
@@ -43,4 +47,5 @@ declare global {
 	const Roomlogs: typeof RoomlogsType.Roomlogs;
 	const Users: typeof UsersType.Users;
 	const Verifier: typeof VerifierType;
+	const toID: typeof Dex.toID;
 }

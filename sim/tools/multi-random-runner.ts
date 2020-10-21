@@ -42,7 +42,7 @@ export class MultiRandomRunner {
 	private numGames: number;
 
 	constructor(options: MultiRandomRunnerOptions) {
-		this.options = Object.assign({}, options);
+		this.options = {...options};
 
 		this.totalGames = options.totalGames;
 
@@ -73,7 +73,7 @@ export class MultiRandomRunner {
 			}
 
 			const seed = this.prng.seed;
-			const game = new Runner(Object.assign({format}, this.options)).run().catch(err => {
+			const game = new Runner({format, ...this.options}).run().catch(err => {
 				failures++;
 				console.error(
 					`Run \`node tools/simulate multi 1 --format=${format} --seed=${seed.join()}\` ` +

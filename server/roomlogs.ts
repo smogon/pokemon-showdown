@@ -8,6 +8,14 @@
  */
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
+import type {ModlogEntry} from './modlog';
+
+interface RoomlogOptions {
+	isMultichannel?: boolean;
+	noAutoTruncate?: boolean;
+	noLogTimes?: boolean;
+}
 
 /**
  * Most rooms have three logs:
@@ -22,6 +30,8 @@ import {FS} from '../lib/fs';
  * The modlog is stored in
  * `logs/modlog/modlog_<ROOMID>.txt`
  * It contains moderator messages, formatted for ease of search.
+ * Direct modlog access is handled in modlog.ts; this file is just
+ * a wrapper to make other code more readable.
  *
  * The roomlog is stored in
  * `logs/chat/<ROOMID>/<YEAR>-<MONTH>/<YEAR>-<MONTH>-<DAY>.txt`
@@ -37,53 +47,42 @@ export class Roomlog {
 	 * Chat rooms auto-truncate, which means it only stores the recent
 	 * messages, if there are more.
 	 */
-	readonly autoTruncate: boolean;
+	readonly noAutoTruncate: boolean;
 	/**
 	 * Chat rooms include timestamps.
 	 */
-	readonly logTimes: boolean;
+	readonly noLogTimes: boolean;
 	roomid: RoomID;
 	/**
 	 * Scrollback log
 	 */
 	log: string[];
-	broadcastBuffer: string;
-	/**
-	 * undefined = uninitialized,
-	 * null = disabled
-	 */
-	modlogStream?: Streams.WriteStream | null;
+	broadcastBuffer: string[];
 	/**
 	 * undefined = uninitialized,
 	 * null = disabled
 	 */
 	roomlogStream?: Streams.WriteStream | null;
-	sharedModlog: boolean;
 	roomlogFilename: string;
-	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
+	constructor(room: BasicRoom, options: RoomlogOptions = {}) {
 		this.roomid = room.roomid;
 
 		this.isMultichannel = !!options.isMultichannel;
-		this.autoTruncate = !!options.autoTruncate;
-		this.logTimes = !!options.logTimes;
+		this.noAutoTruncate = !!options.noAutoTruncate;
+		this.noLogTimes = !!options.noLogTimes;
 
 		this.log = [];
-		this.broadcastBuffer = '';
+		this.broadcastBuffer = [];
 
-		this.modlogStream = undefined;
 		this.roomlogStream = undefined;
-
-		// modlog/roomlog state
-		this.sharedModlog = false;
-
 		this.roomlogFilename = '';
 
-		this.setupModlogStream();
+		Rooms.Modlog.initialize(this.roomid);
 		void this.setupRoomlogStream(true);
 	}
 	getScrollback(channel = 0) {
 		let log = this.log;
-		if (this.logTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
+		if (!this.noLogTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
 		if (!this.isMultichannel) {
 			return log.join('\n') + '\n';
 		}
@@ -101,21 +100,6 @@ export class Roomlog {
 			}
 		}
 		return log.join('\n') + '\n';
-	}
-	setupModlogStream() {
-		if (this.modlogStream !== undefined) return;
-		if (!this.roomid.includes('-')) {
-			this.modlogStream = FS(`logs/modlog/modlog_${this.roomid}.txt`).createAppendStream();
-			return;
-		}
-		const sharedStreamId = this.roomid.split('-')[0];
-		let stream = Roomlogs.sharedModlogs.get(sharedStreamId);
-		if (!stream) {
-			stream = FS(`logs/modlog/modlog_${sharedStreamId}.txt`).createAppendStream();
-			Roomlogs.sharedModlogs.set(sharedStreamId, stream);
-		}
-		this.modlogStream = stream;
-		this.sharedModlog = true;
 	}
 	async setupRoomlogStream(sync = false) {
 		if (this.roomlogStream === null) return;
@@ -142,7 +126,7 @@ export class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
-		if (this.roomlogStream) void this.roomlogStream.end();
+		if (this.roomlogStream) void this.roomlogStream.writeEnd();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
@@ -156,14 +140,18 @@ export class Roomlog {
 		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
 	add(message: string) {
-		if (message.startsWith('|uhtmlchange|')) return this.uhtmlchange(message);
 		this.roomlog(message);
-		if (this.logTimes && message.startsWith('|c|')) {
-			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
-		}
+		message = this.withTimestamp(message);
 		this.log.push(message);
-		this.broadcastBuffer += message + '\n';
+		this.broadcastBuffer.push(message);
 		return this;
+	}
+	private withTimestamp(message: string) {
+		if (!this.noLogTimes && message.startsWith('|c|')) {
+			return `|c:|${Math.trunc(Date.now() / 1000)}|${message.slice(3)}`;
+		} else {
+			return message;
+		}
 	}
 	hasUsername(username: string) {
 		const userid = toID(username);
@@ -179,14 +167,12 @@ export class Roomlog {
 		return false;
 	}
 	clearText(userids: ID[], lineCount = 0) {
-		const messageStart = this.logTimes ? '|c:|' : '|c|';
-		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		const cleared: ID[] = [];
 		const clearAll = (lineCount === 0);
 		this.log = this.log.reverse().filter(line => {
-			if (line.startsWith(messageStart)) {
-				const parts = Chat.splitFirst(line, '|', section);
-				const userid = toID(parts[section - 1]);
+			const parsed = this.parseChatLine(line);
+			if (parsed) {
+				const userid = toID(parsed.user);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
 					if (this.roomid.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence
@@ -202,17 +188,35 @@ export class Roomlog {
 		}).reverse();
 		return cleared;
 	}
-	uhtmlchange(message: string) {
-		const thirdPipe = message.indexOf('|', 13);
-		const originalStart = '|uhtml|' + message.slice(13, thirdPipe + 1);
+	uhtmlchange(name: string, message: string) {
+		const originalStart = '|uhtml|' + name + '|';
+		const fullMessage = originalStart + message;
 		for (const [i, line] of this.log.entries()) {
 			if (line.startsWith(originalStart)) {
-				this.log[i] = originalStart + message.slice(thirdPipe + 1);
+				this.log[i] = fullMessage;
 				break;
 			}
 		}
-		this.broadcastBuffer += message + '\n';
-		return this;
+		this.broadcastBuffer.push(fullMessage);
+	}
+	attributedUhtmlchange(user: User, name: string, message: string) {
+		const start = `/uhtmlchange ${name},`;
+		const fullMessage = this.withTimestamp(`|c|${user.getIdentity()}|${start}${message}`);
+		for (const [i, line] of this.log.entries()) {
+			if (this.parseChatLine(line)?.message.startsWith(start)) {
+				this.log[i] = fullMessage;
+				break;
+			}
+		}
+		this.broadcastBuffer.push(fullMessage);
+	}
+	private parseChatLine(line: string) {
+		const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
+		const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
+		if (line.startsWith(messageStart)) {
+			const parts = Utils.splitFirst(line, '|', section);
+			return {user: parts[section - 1], message: parts[section]};
+		}
 	}
 	roomlog(message: string, date = new Date()) {
 		if (!this.roomlogStream) return;
@@ -220,40 +224,26 @@ export class Roomlog {
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 		void this.roomlogStream.write(timestamp + message + '\n');
 	}
-	modlog(message: string) {
-		if (!this.modlogStream) return;
-		void this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+	modlog(entry: ModlogEntry, overrideID?: string) {
+		void Rooms.Modlog.write(this.roomid, entry, overrideID);
 	}
 	async rename(newID: RoomID): Promise<true> {
-		const modlogPath = `logs/modlog`;
 		const roomlogPath = `logs/chat`;
-		const modlogStreamExisted = this.modlogStream !== null;
 		const roomlogStreamExisted = this.roomlogStream !== null;
-		await this.destroy();
-		await Promise.all([
-			FS(modlogPath + `/modlog_${this.roomid}.txt`).exists(),
+		await this.destroy(false); // don't destroy modlog, since it's renamed later
+		const [roomlogExists, newRoomlogExists] = await Promise.all([
 			FS(roomlogPath + `/${this.roomid}`).exists(),
-			FS(modlogPath + `/modlog_${newID}.txt`).exists(),
 			FS(roomlogPath + `/${newID}`).exists(),
-		]).then(([modlogExists, roomlogExists, newModlogExists, newRoomlogExists]) => {
-			return Promise.all([
-				modlogExists && !newModlogExists ?
-					FS(modlogPath + `/modlog_${this.roomid}.txt`).rename(modlogPath + `/modlog_${newID}.txt`) :
-					undefined,
-				roomlogExists && !newRoomlogExists ?
-					FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`) :
-					undefined,
-			]);
-		});
+		]);
+		if (roomlogExists && !newRoomlogExists) {
+			await FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`);
+		}
+		await Rooms.Modlog.rename(this.roomid, newID);
 		this.roomid = newID;
 		Roomlogs.roomlogs.set(newID, this);
-		if (modlogStreamExisted) {
-			// set modlogStream to undefined (uninitialized) instead of null (disabled)
-			this.modlogStream = undefined;
-			this.setupModlogStream();
-		}
 		if (roomlogStreamExisted) {
 			this.roomlogStream = undefined;
+			this.roomlogFilename = "";
 			await this.setupRoomlogStream(true);
 		}
 		return true;
@@ -273,35 +263,27 @@ export class Roomlog {
 		Roomlogs.rollLogTimer = setTimeout(() => void Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {
-		if (!this.autoTruncate) return;
+		if (this.noAutoTruncate) return;
 		if (this.log.length > 100) {
 			this.log.splice(0, this.log.length - 100);
 		}
 	}
 
-	destroy() {
+	destroy(destroyModlog?: boolean) {
 		const promises = [];
-		if (this.sharedModlog) {
-			this.modlogStream = null;
-		}
-		if (this.modlogStream) {
-			promises.push(this.modlogStream.end());
-			this.modlogStream = null;
-		}
 		if (this.roomlogStream) {
-			promises.push(this.roomlogStream.end());
+			promises.push(this.roomlogStream.writeEnd());
 			this.roomlogStream = null;
 		}
+		if (destroyModlog) promises.push(Rooms.Modlog.destroy(this.roomid));
 		Roomlogs.roomlogs.delete(this.roomid);
 		return Promise.all(promises);
 	}
 }
 
-const sharedModlogs = new Map<string, Streams.WriteStream>();
-
 const roomlogs = new Map<string, Roomlog>();
 
-function createRoomlog(room: BasicChatRoom, options = {}) {
+function createRoomlog(room: BasicRoom, options = {}) {
 	let roomlog = Roomlogs.roomlogs.get(room.roomid);
 	if (roomlog) throw new Error(`Roomlog ${room.roomid} already exists`);
 
@@ -314,7 +296,6 @@ export const Roomlogs = {
 	create: createRoomlog,
 	Roomlog,
 	roomlogs,
-	sharedModlogs,
 
 	rollLogs: Roomlog.rollLogs,
 

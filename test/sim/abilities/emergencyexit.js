@@ -57,11 +57,13 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not request switch-out if attacked and healed by berry`, function () {
-		battle = common.createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
-			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
-		]);
-		battle.makeChoices('move sleeptalk', 'move superfang');
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS},
+			{species: "Clefable", ability: 'unaware', moves: ['metronome']},
+		], [
+			{species: "Raticate", ability: 'guts', moves: ['superfang']},
+		]]);
+		battle.makeChoices();
 		assert.equal(battle.requestState, 'move');
 	});
 
@@ -108,7 +110,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip('should request switch-out after taking Life Orb recoil', function () {
+	it('should request switch-out after taking Life Orb recoil', function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", item: "lifeorb", ability: 'emergencyexit', moves: ['peck']},
 			{species: "Wynaut", moves: ['sleeptalk']},
@@ -119,7 +121,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it(`should not request switch-out after taking residual damage and getting healed by berry`, function () {
+	it(`should not request switch-out after taking entry hazard damage and getting healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", ability: 'swiftswim', moves: ['splash']}],
 			[{species: "Ferrothorn", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'protect']}],
@@ -157,7 +159,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it(`should prevent Volt Switch after-switches`, function () {
+	it(`should prevent Volt Switch after switches`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Zekrom", ability: 'pressure', moves: ['voltswitch']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
@@ -215,6 +217,50 @@ describe(`Emergency Exit`, function () {
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move thunder');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
+		assert.equal(battle.requestState, 'move');
+	});
+
+	it('should not request switchout if its HP is already below 50%', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", evs: {hp: 4}, ability: 'emergencyexit', moves: ['sleeptalk', 'tackle']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "stufful", ability: 'compoundeyes', moves: ['superfang', 'sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2');
+
+		// Switch Goliosopod back in
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move tackle', 'move sleeptalk');
+		assert.equal(battle.requestState, 'move');
+	});
+
+	it('should request switchout if its HP was restored to above 50% and brought down again', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", evs: {hp: 4}, ability: 'emergencyexit', moves: ['sleeptalk']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "stufful", ability: 'compoundeyes', moves: ['superfang', 'healpulse']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2');
+
+		// Switch Goliosopod back in and heal it before switching it back out again
+		battle.makeChoices('switch 2', 'move healpulse');
+		battle.makeChoices('auto', 'move superfang');
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it.skip('should not request switchout if its HP is already below 50% and an effect heals it', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", level: 65, item: 'figyberry', ability: 'emergencyexit', moves: ['sleeptalk']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "ursaring", ability: 'sheerforce', moves: ['falseswipe', 'crunch']},
+		]]);
+		battle.makeChoices('auto', 'move crunch');
+		battle.makeChoices();
 		assert.equal(battle.requestState, 'move');
 	});
 });

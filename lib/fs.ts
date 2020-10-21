@@ -30,7 +30,7 @@ const ROOT_PATH = pathModule.resolve(__dirname, '..');
 interface PendingUpdate {
 	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle
 	pendingDataFetcher: (() => string | Buffer) | null;
-	pendingOptions: object | null;
+	pendingOptions: AnyObject | null;
 	throttleTime: number; // throttling until time (0 for no throttle)
 	throttleTimer: NodeJS.Timer | null;
 }
@@ -63,7 +63,7 @@ export class FSPath {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return fs.readFileSync(this.path, options) as string;
+		return fs.readFileSync(this.path, options as {encoding: 'utf8'});
 	}
 
 	readBuffer(options: AnyObject | string = {}): Promise<Buffer> {
@@ -75,7 +75,7 @@ export class FSPath {
 	}
 
 	readBufferSync(options: AnyObject | string = {}) {
-		return fs.readFileSync(this.path, options) as Buffer;
+		return fs.readFileSync(this.path, options as {encoding: null});
 	}
 
 	exists(): Promise<boolean> {
@@ -108,7 +108,7 @@ export class FSPath {
 		return '';
 	}
 
-	write(data: string | Buffer, options: object = {}) {
+	write(data: string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.writeFile(this.path, data, options, err => {
@@ -117,7 +117,7 @@ export class FSPath {
 		});
 	}
 
-	writeSync(data: string | Buffer, options: object = {}) {
+	writeSync(data: string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return;
 		return fs.writeFileSync(this.path, data, options);
 	}
@@ -128,12 +128,12 @@ export class FSPath {
 	 * Does not protect against simultaneous writing; use writeUpdate
 	 * for that.
 	 */
-	async safeWrite(data: string | Buffer, options: object = {}) {
+	async safeWrite(data: string | Buffer, options: AnyObject = {}) {
 		await FS(this.path + '.NEW').write(data, options);
 		await FS(this.path + '.NEW').rename(this.path);
 	}
 
-	safeWriteSync(data: string | Buffer, options: object = {}) {
+	safeWriteSync(data: string | Buffer, options: AnyObject = {}) {
 		FS(this.path + '.NEW').writeSync(data, options);
 		FS(this.path + '.NEW').renameSync(this.path);
 	}
@@ -156,7 +156,7 @@ export class FSPath {
 	 * No synchronous version because there's no risk of race conditions
 	 * with synchronous code; just use `safeWriteSync`.
 	 */
-	writeUpdate(dataFetcher: () => string | Buffer, options: object = {}) {
+	writeUpdate(dataFetcher: () => string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return;
 		const pendingUpdate: PendingUpdate | undefined = pendingUpdates.get(this.path);
 
@@ -177,7 +177,7 @@ export class FSPath {
 		this.writeUpdateNow(dataFetcher, options);
 	}
 
-	writeUpdateNow(dataFetcher: () => string | Buffer, options: object) {
+	writeUpdateNow(dataFetcher: () => string | Buffer, options: AnyObject) {
 		// @ts-ignore
 		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
 		const update = {
@@ -219,7 +219,7 @@ export class FSPath {
 		pendingUpdate.throttleTimer = setTimeout(() => this.checkNextUpdate(), throttleTime - Date.now());
 	}
 
-	append(data: string | Buffer, options: object = {}) {
+	append(data: string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.appendFile(this.path, data, options, err => {
@@ -228,7 +228,7 @@ export class FSPath {
 		});
 	}
 
-	appendSync(data: string | Buffer, options: object = {}) {
+	appendSync(data: string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return;
 		return fs.appendFileSync(this.path, data, options);
 	}
@@ -323,6 +323,20 @@ export class FSPath {
 		} catch (err) {
 			if (err.code !== 'ENOENT') throw err;
 		}
+	}
+
+	async rmdir(recursive?: boolean) {
+		if (Config.nofswriting) return Promise.resolve();
+		return new Promise((resolve, reject) => {
+			fs.rmdir(this.path, {recursive}, err => {
+				err ? reject(err) : resolve();
+			});
+		});
+	}
+
+	rmdirSync(recursive?: boolean) {
+		if (Config.nofswriting) return;
+		return fs.rmdirSync(this.path, {recursive});
 	}
 
 	mkdir(mode: string | number = 0o755) {

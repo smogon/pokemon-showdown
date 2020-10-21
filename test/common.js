@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert').strict;
+const assert = require('./assert');
 const Sim = require('./../.sim-dist');
 const Dex = Sim.Dex;
 
@@ -42,7 +42,7 @@ class TestTools {
 	getFormat(options) {
 		if (options.formatid) return Dex.getFormat(options.formatid);
 
-		const gameType = Dex.getId(options.gameType || 'singles');
+		const gameType = Dex.toID(options.gameType || 'singles');
 		const customRules = [
 			options.pokemon && '-Nonexistent',
 			options.legality && 'Obtainable',

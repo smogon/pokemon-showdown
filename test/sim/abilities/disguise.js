@@ -28,7 +28,7 @@ describe('Disguise', function () {
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Sableye', ability: 'prankster', moves: ['confuseray']}]});
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
-		assert.ok(battle.p1.active[0].abilityData.busted);
+		assert(battle.p1.active[0].abilityData.busted);
 	});
 
 	it('should not block damage from weather effects', function () {
@@ -75,7 +75,7 @@ describe('Disguise', function () {
 		assert.hurtsBy(battle.p2.active[0], 1, () => battle.makeChoices());
 	});
 
-	it.skip('should not trigger critical hits while active', function () {
+	it('should not trigger critical hits while active', function () {
 		battle = common.createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk']},
 		], [

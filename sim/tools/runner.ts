@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
+import {State} from '../state';
 import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 
@@ -54,8 +55,8 @@ export class Runner {
 
 		this.prng = (options.prng && !Array.isArray(options.prng)) ?
 			options.prng : new PRNG(options.prng);
-		this.p1options = Object.assign({}, Runner.AI_OPTIONS, options.p1options);
-		this.p2options = Object.assign({}, Runner.AI_OPTIONS, options.p2options);
+		this.p1options = {...Runner.AI_OPTIONS, ...options.p1options};
+		this.p2options = {...Runner.AI_OPTIONS, ...options.p2options};
 
 		this.input = !!options.input;
 		this.output = !!options.output;
@@ -83,10 +84,10 @@ export class Runner {
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
 
 		const p1 = this.p1options.createAI(
-			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)
+			streams.p1, {seed: this.newSeed(), ...this.p1options}
 		);
 		const p2 = this.p2options.createAI(
-			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)
+			streams.p2, {seed: this.newSeed(), ...this.p2options}
 		);
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
 		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
@@ -97,12 +98,10 @@ export class Runner {
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
 			`>player p2 ${JSON.stringify(p2spec)}`);
 
-		let chunk;
-		// tslint:disable-next-line no-conditional-assignment
-		while ((chunk = await streams.omniscient.read())) {
+		for await (const chunk of streams.omniscient) {
 			if (this.output) console.log(chunk);
 		}
-		return streams.omniscient.end();
+		return streams.omniscient.writeEnd();
 	}
 
 	// Same as PRNG#generatedSeed, only deterministic.
@@ -165,7 +164,7 @@ class DualStream {
 		const test = await this.test.read();
 		// In debug mode, wait to catch this as a difference in the inputLog
 		// and error there so we get the full battle state dumped instead.
-		if (!this.debug) assert.equal(test, control);
+		if (!this.debug) assert.equal(State.normalizeLog(test), State.normalizeLog(control));
 		return control;
 	}
 
@@ -175,11 +174,11 @@ class DualStream {
 		this.compare();
 	}
 
-	end() {
-		// We need to compare first because _end() destroys the battle object.
+	writeEnd() {
+		// We need to compare first because _writeEnd() destroys the battle object.
 		this.compare(true);
-		this.control._end();
-		this.test._end();
+		this.control._writeEnd();
+		this.test._writeEnd();
 	}
 
 	compare(end?: boolean) {
@@ -188,7 +187,7 @@ class DualStream {
 		const control = this.control.battle.toJSON();
 		const test = this.test.battle.toJSON();
 		try {
-			assert.deepEqual(test, control);
+			assert.deepEqual(State.normalize(test), State.normalize(control));
 		} catch (err) {
 			if (this.debug) {
 				// NOTE: diffing these directly won't work because the key ordering isn't stable.

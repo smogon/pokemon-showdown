@@ -15,9 +15,9 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
   [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
 [![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
-[![Dependency Status](https://david-dm.org/zarel/Pokemon-Showdown.svg)](https://david-dm.org/zarel/Pokemon-Showdown)
-[![devDependency Status](https://david-dm.org/zarel/Pokemon-Showdown/dev-status.svg)](https://david-dm.org/zarel/Pokemon-Showdown?type=dev)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/Zarel/Pokemon-Showdown.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Zarel/Pokemon-Showdown/alerts)
+[![Dependency Status](https://david-dm.org/smogon/pokemon-showdown.svg)](https://david-dm.org/smogon/pokemon-showdown)
+[![devDependency Status](https://david-dm.org/smogon/pokemon-showdown/dev-status.svg)](https://david-dm.org/smogon/pokemon-showdown?type=dev)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/smogon/pokemon-showdown.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smogon/pokemon-showdown/alerts)
 
 Introduction
 ------------------------------------------------------------------------
@@ -48,7 +48,7 @@ If your distro package manager has an old Node.js version, the simplest way to u
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][6] installed, v10.x or later.
+Pokémon Showdown requires you to have [Node.js][6] installed, v12.x or later.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone or download" button near the top right (it's green). I recommend the "Open in Desktop" method - you need to install GitHub Desktop which is more work than "Download ZIP", but it makes it much easier to update in the long run (it lets you use the `/updateserver` command).
 
@@ -91,19 +91,19 @@ If you truly want to host the client yourself, there is [a repository for the Po
 Setting up an Administrator account
 ------------------------------------------------------------------------
 
-Once your server is up, you probably want to make yourself an Administrator (~) on it.
+Once your server is up, you probably want to make yourself an Administrator (&) on it.
 
 ### config/usergroups.csv
 
 To become an Administrator, create a file named `config/usergroups.csv` containing
 
-    USER,~
+    USER,&
 
-Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the tilde.
+Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
 
 This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 
-Once you're an administrator, you can promote/demote others easily with the `/globaladmin`, `/globalleader`, `/globalmod`, etc commands.
+Once you're an administrator, you can promote/demote others easily with the `/globaladmin`, `/globalmod`, `/globaldriver`, etc commands.
 
 
 Browser support
@@ -125,6 +125,19 @@ Pokémon Showdown is usable, but expect degraded performance and certain feature
 
 Pokémon Showdown is mostly developed on Chrome, and Chrome or the desktop client is required for certain features like dragging-and-dropping teams from PS to your computer. However, bugs reported on any supported browser will usually be fixed pretty quickly.
 
+Documentation
+------------------------------------------------------------------------
+
+This is a list of documentation that has been created over the course of working on this project:
+* [PROTOCOL.md][10] - The protocol used by the server to communicate with clients.
+* [SIM-PROTOCOL.md][11] - The protocol used for battles and battle messages.
+* [CONTRIBUTING.md][12] - Useful code standards to understand if you want to send pull requests to PS (not necessary if you're just using the code and not planning to contribute back).
+* [Bot FAQ][13] - An FAQ compiled by Kaiepi [Kaiepi] regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
+
+  [10]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
+  [11]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
+  [12]: https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md
+  [13]: https://gist.github.com/Kaiepi/becc5d0ecd576f5e7733b57b4e3fa97e
 
 Community
 ------------------------------------------------------------------------
@@ -139,13 +152,12 @@ If you'd like to contribute to programming and don't know where to start, feel f
 
   [9]: https://github.com/smogon/pokemon-showdown/issues/2444
 
-
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][10].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][14].
 
-  [10]: https://github.com/smogon/pokemon-showdown/blob/master/LICENSE
+  [14]: https://github.com/smogon/pokemon-showdown/blob/master/LICENSE
 
 
 Credits
@@ -159,14 +171,13 @@ Staff
 
 - Andrew Werner [HoeenHero] - Development
 - Chris Monsanto [chaos] - Sysadmin
-- Kirk Scheibelhut [pre] - Development, Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
 
 Retired Staff
 
-- Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Bill Meltsner [bmelts] - Development, Sysadmin
+- [bumbadadabum] - Development
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 - Hugh Gordon [V4] - Research (game mechanics), Development
 - Juanma Serrano [Joim] - Development, Sysadmin
@@ -177,6 +188,7 @@ Major Contributors
 - Austin Couturier [Austin] - Development (damage calculator)
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
+- Kris Johnson [Kris] - Development
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Neil Rashbrook [urkerab] - Development
 - [peach] - Development
@@ -189,8 +201,8 @@ Major Contributors
 Contributors
 
 - Alexander B. [mathfreak231] - Development
-- [Anubis, Lusamine] - Research (game mechanics)
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- Annika L. [Annika] - Development
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
@@ -199,10 +211,10 @@ Contributors
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jacob McLemore [McLemore] - Development
 - Jeremy Piemonte [panpawn] - Development
-- Kris Johnson [Kris] - Development
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
+- Mia A. [Mia] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
-- Spandan Punwatkar [spandan]- Development
+- Spandan Punwatkar [Spandan]- Development
 - Waleed Hassan [jetou] - Development
 
 Special thanks

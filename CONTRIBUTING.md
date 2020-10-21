@@ -1,11 +1,36 @@
 Contributing to Pokémon Showdown
 ========================================================================
 
+Building and running
+------------------------------------------------------------------------
+
+The README contains most of the relevant information here.
+
+https://github.com/smogon/pokemon-showdown/blob/master/README.md
+
+Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
+
+PS has other useful command-line invocations, which you can investigate with `./pokemon-showdown help`.
+
+Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.
+
+
+Contributing
+------------------------------------------------------------------------
+
 In general, we welcome pull requests that fix bugs.
 
-For feature additions and large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
+For feature additions and large projects, please discuss with us at https://psim.us/development an/dor https://psim.us/devdiscord first. We'd hate to have to reject a pull request that you spent a long time working on.
 
-If you're looking for inspiration for something to do, the Ideas issue is a good place to look: https://github.com/smogon/pokemon-showdown/issues/2444
+If you're looking for inspiration for something to do, the Ideas issue has some ideas: https://github.com/smogon/pokemon-showdown/issues/2444
+
+Also useful is the Suggestions forum (you don't need to worry about approval if you take Approved suggestions): https://www.smogon.com/forums/forums/suggestions.517/
+
+Also useful is the Mechanics Bugs kanban board: https://github.com/smogon/pokemon-showdown/projects/3
+
+There's no need to worry about code standards too much (unit tests will automatically catch most of what we care about, we'll point out the rest if you make a pull request), but there here if you want them.
+
+We try to respond to pull requests within a few days, but feel free to bump yours if it seems like we forget about it. Sometimes we did, and sometimes there might be a miscommunication in terms of who is waiting for what.
 
 
 License
@@ -14,6 +39,32 @@ License
 Your submitted code should be MIT licensed. The GitHub ToS (and the fact that your fork also contains our LICENSE file) ensures this, so we won't ask when you submit a pull request, but keep this in mind.
 
 For simplicity (mostly to make relicensing easier), client code should be also be MIT licensed. The first time you make a client pull request, we'll ask you to explicitly state that you agree to MIT license it.
+
+
+Design standards
+------------------------------------------------------------------------
+
+We strive to be maximally intuitive and accessible. "That's what they all say", but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
+
+Some principles we try to design by:
+
+- Less text is better
+    - The fewer words you use, the less likely someone is to gloss over it, and the easier it is to find the important information. Compare "1234 battles" with "There are currently 1234 active battles being played on this server" - more words are usually only clutter that makes it hard to find the information you want.
+
+- Buttons should say what they do
+    - Buttons and links that say "Click here" or "Look at this" are bad for a number of reasons, but the most important one is probably because it violates the principle that you shouldn't need to read outside the button to know what the button does. The way people use interfaces is by looking for buttons that do what they want, not by reading every word from beginning to end.
+
+- Remove unnecessary clicks
+    - Whenever you give a user a button to click, always think "in what situations would a user want to click this? in what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
+
+- Remove unnecessary scrolling and mouse movement
+    - Similar to unnecessary clicks - if a user has a large screen and you show them a lot of text in a tiny scrollable region, that's incredibly user-hostile. Either the user wants to read the text or they don't: the perfect use-case for a "read more" or expand/collapse button.
+
+- Affordances are important
+    - This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
+
+- Feedback is important
+    - If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
 
 
 Commit standards
@@ -88,7 +139,7 @@ Unfortunately, since this is not a convention the linter can test for (and also 
 
 ### Optionals: `null` vs `undefined` vs `false`
 
-PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`. This is mostly because TypeScript expands `T?` to `T | null`.
+PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`.
 
 Some old code returns `T | undefined` (our previous convention). This is a relatively common standard (ironically, TypeScript itself uses it). Feel free to convert to `T | null` where you see it.
 
@@ -109,6 +160,18 @@ So, if Thunder Wave hits a Ground type, the immunity checker returns `false` to 
 If Volt Absorb absorbs Thunder Wave, Volt Absorb's TryHit handler shows the Volt Absorb message and returns `null` to indicate that no other failure message should be shown.
 
 If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler returns `undefined`, to show that Water Absorb does not interact with Thunder Wave.
+
+### `??` vs `||`
+
+We prefer using `||` instead of `??` for fallback, for a few reasons:
+
+- `sucrase` (our TypeScript to JavaScript compiler) makes `??` rather more complicated than ideal.
+
+- We rarely treat `0` or `''` differently from `null` (the same reason we use `!foo` instead of `foo == null` for null checks)
+
+- TypeScript does not actually allow us to have "non-empty strings" or "positive integers" as a type, so we have to deal with those cases no matter what.
+
+If, at a future point, TypeScript does allow us to constrain types better, we might consider using `??` for clarity. But for now, I see no reason to use `??` except in very niche situations where the difference matters.
 
 
 ES5 and ES6
@@ -148,12 +211,14 @@ In general, use modern features; recent versions of V8 have fixed the performanc
 
 - **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over, but be careful not to use them for IDs (follow the String standards). Look at existing uses for guidance.
 
+- **Multiline template strings: NEVER** - Multiline template strings are a frequent source of bugs, so it's better to be explicit with `\n`.
+
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
 
 
 TypeScript Features
 ------------------------------------------------------------------------
 
-- **Constant Enums: NEVER** - Not supported by Sucrase our current choice of transpiler.
+- **Constant Enums: NEVER** - Not supported by Sucrase, our current choice of transpiler. We prefer constant union types, anyway (like `type Category = 'Physical' | 'Special' | 'Status'`)
 
-- **Default Properties: NEVER** - Bad performance when used with Sucrase. Prefer setting properties directly in a constructor instead.
+- **Default Properties: SOMETIMES** - Bad performance when used with Sucrase. This is fine for objects that are rarely created, but prefer setting properties directly in a constructor, for objects created in inner loops.

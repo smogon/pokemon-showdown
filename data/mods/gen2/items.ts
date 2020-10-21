@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	berryjuice: {
 		inherit: true,
 		isNonstandard: null,
@@ -81,16 +81,16 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		desc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
 		onFractionalPriority(priority, pokemon) {
 			if (this.randomChance(60, 256)) {
-				return Math.round(priority) + 0.1;
+				return 0.1;
 			}
 		},
 	},
 	stick: {
 		inherit: true,
-		desc: "If held by a Farfetch'd, its critical hit ratio is always at stage 2. (25% crit rate)",
+		desc: "If held by a Farfetch\u2019d, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio(critRatio, user) {
-			if (user.species.name === 'Farfetch\'d') {
+			if (user.species.id === 'farfetchd') {
 				return 3;
 			}
 		},

@@ -18,7 +18,7 @@ import {Battle} from './battle';
  *
  * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
  *
- * `Chat.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
+ * `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
  *
  * Returns an array of length exactly limit + 1.
  */
@@ -40,31 +40,39 @@ function splitFirst(str: string, delimiter: string, limit = 1) {
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
-	replay: boolean;
+	noCatch: boolean;
+	replay: boolean | 'spectator';
 	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean} = {}) {
+	constructor(options: {
+		debug?: boolean, noCatch?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator',
+	} = {}) {
 		super();
 		this.debug = !!options.debug;
-		this.replay = !!options.replay;
+		this.noCatch = !!options.noCatch;
+		this.replay = options.replay || false;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
 	}
 
 	_write(chunk: string) {
-		try {
+		if (this.noCatch) {
 			this._writeLines(chunk);
-		} catch (err) {
-			this.pushError(err);
-			return;
+		} else {
+			try {
+				this._writeLines(chunk);
+			} catch (err) {
+				this.pushError(err, true);
+				return;
+			}
 		}
 		if (this.battle) this.battle.sendUpdates();
 	}
 
 	_writeLines(chunk: string) {
 		for (const line of chunk.split('\n')) {
-			if (line.charAt(0) === '>') {
+			if (line.startsWith('>')) {
 				const [type, message] = splitFirst(line.slice(1), ' ');
 				this._writeLine(type, message);
 			}
@@ -74,7 +82,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	pushMessage(type: string, data: string) {
 		if (this.replay) {
 			if (type === 'update') {
-				this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+				if (this.replay === 'spectator') {
+					this.push(data.replace(/\n\|split\|p[1234]\n(?:[^\n]*)\n([^\n]*)/g, '\n$1'));
+				} else {
+					this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+				}
 			}
 			return;
 		}
@@ -88,7 +100,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			options.send = (t: string, data: any) => {
 				if (Array.isArray(data)) data = data.join("\n");
 				this.pushMessage(t, data);
-				if (t === 'end' && !this.keepAlive) this.push(null);
+				if (t === 'end' && !this.keepAlive) this.pushEnd();
 			};
 			if (this.debug) options.debug = true;
 			this.battle = new Battle(options);
@@ -117,9 +129,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		}
 	}
 
-	_end() {
-		// this is in theory synchronous...
-		this.push(null);
+	_writeEnd() {
+		// if battle already ended, we don't need to pushEnd.
+		if (!this.atEOF) this.pushEnd();
 		this._destroy();
 	}
 
@@ -138,11 +150,11 @@ export function getPlayerStreams(stream: BattleStream) {
 			write(data: string) {
 				void stream.write(data);
 			},
-			end() {
-				return stream.end();
+			writeEnd() {
+				return stream.writeEnd();
 			},
 		}),
-		spectator: new Streams.ObjectReadStream({
+		spectator: new Streams.ObjectReadStream<string>({
 			read() {},
 		}),
 		p1: new Streams.ObjectReadWriteStream({
@@ -167,9 +179,7 @@ export function getPlayerStreams(stream: BattleStream) {
 		}),
 	};
 	(async () => {
-		let chunk;
-		// tslint:disable-next-line:no-conditional-assignment
-		while ((chunk = await stream.read())) {
+		for await (const chunk of stream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
@@ -190,11 +200,11 @@ export function getPlayerStreams(stream: BattleStream) {
 			}
 		}
 		for (const s of Object.values(streams)) {
-			s.push(null);
+			s.pushEnd();
 		}
 	})().catch(err => {
 		for (const s of Object.values(streams)) {
-			s.pushError(err);
+			s.pushError(err, true);
 		}
 	});
 	return streams;
@@ -212,9 +222,7 @@ export abstract class BattlePlayer {
 	}
 
 	async start() {
-		let chunk;
-		// tslint:disable-next-line:no-conditional-assignment
-		while ((chunk = await this.stream.read())) {
+		for await (const chunk of this.stream) {
 			this.receive(chunk);
 		}
 	}
@@ -227,7 +235,7 @@ export abstract class BattlePlayer {
 
 	receiveLine(line: string) {
 		if (this.debug) console.log(line);
-		if (line.charAt(0) !== '|') return;
+		if (!line.startsWith('|')) return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
 		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
 		if (cmd === 'error') return this.receiveError(new Error(rest));
@@ -256,13 +264,11 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	}
 
 	async start() {
-		let message;
-		// tslint:disable-next-line:no-conditional-assignment
-		while ((message = await this.battleStream.read())) {
+		for await (let message of this.battleStream) {
 			if (!message.endsWith('\n')) message += '\n';
 			this.push(message + '\n');
 		}
-		this.push(null);
+		this.pushEnd();
 	}
 
 	_write(message: string | Buffer) {
@@ -274,7 +280,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		}
 	}
 
-	_end() {
-		return this.battleStream.end();
+	_writeEnd() {
+		return this.battleStream.writeEnd();
 	}
 }

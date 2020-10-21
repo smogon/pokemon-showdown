@@ -1,6 +1,7 @@
 /config/*
-!/config/formats.js
+!/config/formats.ts
 /logs/*
+/test/modlogs
 /node_modules
 /eslint-cache
 /server/chat-plugins/private
@@ -8,7 +9,7 @@
 /server/chat-plugins/*-private.js
 npm-debug.log
 .eslintcache
-.eslintfullcache
+.eslintcache-no-types
 package-lock.json
 /tools/set-import/sets
 databases/*.db*
@@ -16,6 +17,7 @@ databases/*.db*
 # Typescript build artifacts
 .*-dist/
 tools/set-import/importer.js
+tools/modlog/converter.js
 
 # visual studio live share
 .vs

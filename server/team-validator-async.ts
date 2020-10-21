@@ -81,12 +81,10 @@ if (!PM.isParentProcess) {
 
 	global.TeamValidator = TeamValidator;
 
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A team validator process', details: any = null) {
+		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 
@@ -94,17 +92,13 @@ if (!PM.isParentProcess) {
 		process.on('uncaughtException', (err: Error) => {
 			Monitor.crashlog(err, `A team validator process`);
 		});
-		// Typescript doesn't like this call
-		// @ts-ignore
-		process.on('unhandledRejection', (err: Error, promise: Promise) => {
-			if (err instanceof Error) {
-				Monitor.crashlog(err, 'A team validator process Promise');
-			}
+		process.on('unhandledRejection', err => {
+			Monitor.crashlog(err as any || {}, 'A team validator process Promise');
 		});
 	}
 
 	global.Dex = importedDex.includeData();
-	global.toID = Dex.getId;
+	global.toID = Dex.toID;
 
 	// eslint-disable-next-line no-eval
 	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));

@@ -13,7 +13,7 @@ describe('Rooms features', function () {
 		});
 		describe('Rooms.rooms', function () {
 			it('should be a Map', function () {
-				assert.ok(Rooms.rooms instanceof Map);
+				assert(Rooms.rooms instanceof Map);
 			});
 		});
 	});
@@ -22,12 +22,12 @@ describe('Rooms features', function () {
 		describe('getGame', function () {
 			it('should return the game only when the gameids match', function () {
 				const Hangman = require('../../.server-dist/chat-plugins/hangman').Hangman;
-				const Uno = require('../../.server-dist/chat-plugins/uno').UnoGame;
+				const UNO = require('../../.server-dist/chat-plugins/uno').UNO;
 				const room = Rooms.createChatRoom('r/relationshipadvice');
 				const game = new Hangman(room, new User(), 'There\'s a lot of red flags here');
 				room.game = game;
 				assert.equal(room.getGame(Hangman), game);
-				assert.equal(room.getGame(Uno), null);
+				assert.equal(room.getGame(UNO), null);
 			});
 		});
 	});
@@ -57,13 +57,13 @@ describe('Rooms features', function () {
 					p1team: packedTeam,
 					p2team: packedTeam,
 				}, option));
-				assert.ok(room.battle.p1 && room.battle.p2); // Automatically joined
+				assert(room.battle.p1 && room.battle.p2); // Automatically joined
 			}
 		});
 
 		it('should copy auth from tournament', function () {
 			parent = Rooms.createChatRoom('parentroom', '', {});
-			parent.getAuth = () => '%';
+			parent.auth.get = () => '%';
 			const p1 = new User();
 			const p2 = new User();
 			const options = {
@@ -79,19 +79,19 @@ describe('Rooms features', function () {
 				},
 			};
 			room = Rooms.createBattle('customgame', options);
-			assert.equal(room.getAuth(new User()), '%');
+			assert.equal(room.auth.get(new User().id), '%');
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
 			parent = Rooms.createChatRoom('parentroom2', '', {});
-			parent.getAuth = () => '%';
+			parent.auth.get = () => '%';
 			const p1 = new User();
 			const p2 = new User();
 			const roomStaff = new User();
 			roomStaff.forceRename("Room auth", true);
 			const administrator = new User();
 			administrator.forceRename("Admin", true);
-			administrator.group = '~';
+			administrator.tempGroup = '~';
 			const options = {
 				p1,
 				p2,
@@ -107,11 +107,11 @@ describe('Rooms features', function () {
 			room = Rooms.createBattle('customgame', options);
 			roomStaff.joinRoom(room);
 			administrator.joinRoom(room);
-			assert.equal(room.getAuth(roomStaff), '%', 'before promotion attempt');
+			assert.equal(room.auth.get(roomStaff), '%', 'before promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, p1, p1.connections[0]);
-			assert.equal(room.getAuth(roomStaff), '%', 'after promotion attempt');
+			assert.equal(room.auth.get(roomStaff), '%', 'after promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, administrator, administrator.connections[0]);
-			assert.equal(room.getAuth(roomStaff), '+', 'after being promoted by an administrator');
+			assert.equal(room.auth.get(roomStaff), '%', 'after being promoted by an administrator');
 		});
 	});
 
@@ -135,15 +135,15 @@ describe('Rooms features', function () {
 			it("should rename its roomid and title", async function () {
 				room = Rooms.createChatRoom("test", "Test");
 				await room.rename("Test2");
-				assert.strictEqual(room.roomid, "test2");
-				assert.strictEqual(room.title, "Test2");
+				assert.equal(room.roomid, "test2");
+				assert.equal(room.title, "Test2");
 			});
 
 			it("should rename its key in Rooms.rooms", async function () {
 				room = Rooms.createChatRoom("test", "Test");
 				await room.rename("Test2");
-				assert.strictEqual(Rooms.rooms.has("test"), false);
-				assert.strictEqual(Rooms.rooms.has("test2"), true);
+				assert.equal(Rooms.rooms.has("test"), false);
+				assert.equal(Rooms.rooms.has("test2"), true);
 			});
 
 			it("should move the users and their connections", async function () {
@@ -151,25 +151,25 @@ describe('Rooms features', function () {
 				const user = new User();
 				user.joinRoom(room);
 				await room.rename("Test2");
-				assert.strictEqual(user.inRooms.has("test"), false);
-				assert.strictEqual(user.inRooms.has("test2"), true);
-				assert.strictEqual(user.connections[0].inRooms.has("test"), false);
-				assert.strictEqual(user.connections[0].inRooms.has("test2"), true);
+				assert.equal(user.inRooms.has("test"), false);
+				assert.equal(user.inRooms.has("test2"), true);
+				assert.equal(user.connections[0].inRooms.has("test"), false);
+				assert.equal(user.connections[0].inRooms.has("test2"), true);
 			});
 
 			it("should rename their parents subroom reference", async function () {
 				parent = Rooms.createChatRoom("parent", "Parent");
 				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
 				await subroom.rename("TheSubroom");
-				assert.strictEqual(parent.subRooms.has("subroom"), false);
-				assert.strictEqual(parent.subRooms.has("thesubroom"), true);
+				assert.equal(parent.subRooms.has("subroom"), false);
+				assert.equal(parent.subRooms.has("thesubroom"), true);
 			});
 
 			it("should rename their subrooms parent reference", async function () {
 				parent = Rooms.createChatRoom("parent", "Parent");
 				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
 				await parent.rename("TheParent");
-				assert.strictEqual(subroom.parent, parent);
+				assert.equal(subroom.parent, parent);
 			});
 		});
 	});

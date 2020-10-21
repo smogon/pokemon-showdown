@@ -89,12 +89,41 @@ Main's SSL deploy script from Let's Encrypt looks like:
 exports.proxyip = false;
 
 /**
- * ofe - write heapdumps if sockets.js workers run out of memory.
- *   If you wish to enable this, you will need to install node-oom-heapdump,
- *   as it is sometimes not installed by default:
- *     $ npm install node-oom-heapdump
+ * Various debug options
+ *
+ * ofe[something]
+ * ============================================================================
+ *
+ * Write heapdumps if that processs run out of memory.
+ *
+ * If you wish to enable this, you will need to install node-oom-heapdump:
+ *
+ *     $ npm install --no-save node-oom-heapdump
+ *
+ * We don't install it by default because it's super flaky and frequently
+ * crashes the installation process.
+ *
+ * You might also want to signal processes to put them in debug mode, for
+ * access to on-demand heapdumps.
+ *
+ *     kill -s SIGUSR1 [pid]
+ *
+ * debug[something]processes
+ * ============================================================================
+ *
+ * Attach a `debug` property to `ProcessWrapper`, allowing you to see the last
+ * message it received before it hit an infinite loop.
+ *
+ * For example:
+ *
+ *     >> ProcessManager.processManagers[4].processes[0].debug
+ *     << "{"tar":"spe=60,all,!lc,!nfe","cmd":"dexsearch","canAll":true,"message":"/ds spe=60,all,!lc,!nfe"}"
  */
-exports.ofe = false;
+exports.ofemain = false;
+exports.ofesockets = false;
+exports.debugsimprocesses = true;
+exports.debugvalidatorprocesses = true;
+exports.debugdexsearchprocesses = true;
 
 /**
  * Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
@@ -261,12 +290,12 @@ exports.restrictLinks = false;
 exports.chatmodchat = false;
 /**
  * battle modchat - default minimum group for speaking in battles; changeable with /modchat
- * @type {false | string}
+ * @type {false | AuthLevel}
  */
 exports.battlemodchat = false;
 /**
- * pm modchat - minimum group for PMing other users, challenging other users
- * @type {false | string}
+ * PM modchat - minimum group for sending private messages or challenges to other users
+ * @type {false | AuthLevel}
  */
 exports.pmmodchat = false;
 /**
@@ -281,6 +310,13 @@ exports.laddermodchat = false;
  *   This setting can also be turned on with the command /forcetimer.
  */
 exports.forcetimer = false;
+
+/**
+ * force register ELO - unregistered users cannot search for ladder battles
+ * in formats where their ELO is at or above this value.
+ * @type {false | number}
+ */
+exports.forceregisterelo = false;
 
 /**
  * backdoor - allows Pokemon Showdown system operators to provide technical
@@ -421,6 +457,12 @@ exports.forcedpublicprefixes = [];
  */
 exports.startuphook = function () {};
 
+
+/**
+ * chatlogreader - the search method used for searching chatlogs.
+ * @type {'ripgrep' | 'fs'}
+ */
+exports.chatlogreader = 'fs';
 /**
  * permissions and groups:
  *   Each entry in `grouplist` is a seperate group. Some of the members are "special"
@@ -453,7 +495,8 @@ exports.startuphook = function () {};
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
  *     - editroom: Editing properties of rooms
  *     - editprivacy: Set modjoin/privacy only for battles
- *     - ban: Banning and unbanning.
+ *     - globalban: Banning and unbanning from the entire server.
+ *     - ban: Banning and unbanning in rooms.
  *     - mute: Muting and unmuting.
  *     - lock: locking (ipmute) and unlocking.
  *     - receivemutedpms: Receive PMs from muted users.
@@ -461,7 +504,8 @@ exports.startuphook = function () {};
  *     - ip: IP checking.
  *     - alts: Alt checking.
  *     - modlog: view the moderator logs.
- *     - broadcast: Broadcast informational commands.
+ *     - show: Show command output to other users.
+ *     - showmedia: Show images and videos to other users.
  *     - declare: /declare command.
  *     - announce: /announce command.
  *     - modchat: Set modchat.
@@ -476,34 +520,33 @@ exports.startuphook = function () {};
  */
 exports.grouplist = [
 	{
-		symbol: '~',
+		symbol: '&',
 		id: "admin",
 		name: "Administrator",
-		root: true,
-		globalonly: true,
-	},
-	{
-		symbol: '&',
-		id: "leader",
-		name: "Leader",
 		inherit: '@',
 		jurisdiction: 'u',
-		promote: 'u',
+		globalonly: true,
+
+		console: true,
+		bypassall: true,
+		lockdown: true,
+		promote: '&u',
 		roomowner: true,
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
 		forcewin: true,
 		declare: true,
+		addhtml: true,
 		rangeban: true,
 		makeroom: true,
 		editroom: true,
+		editprivacy: true,
 		potd: true,
 		disableladder: true,
-		globalonly: true,
+		gdeclare: true,
 		gamemanagement: true,
 		exportinputlog: true,
-		editprivacy: true,
 	},
 	{
 		symbol: '#',
@@ -511,14 +554,17 @@ exports.grouplist = [
 		name: "Room Owner",
 		inherit: '@',
 		jurisdiction: 'u',
+		roomonly: true,
+
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
+		roomprizewinner: true,
 		editroom: true,
 		declare: true,
 		addhtml: true,
-		roomonly: true,
 		gamemanagement: true,
+		tournaments: true,
 	},
 	{
 		symbol: '\u2605',
@@ -526,22 +572,30 @@ exports.grouplist = [
 		name: "Host",
 		inherit: '@',
 		jurisdiction: 'u',
-		declare: true,
-		addhtml: true,
-		modchat: true,
 		roomonly: true,
+
+		declare: true,
+		modchat: 'a',
 		gamemanagement: true,
+		tournaments: true,
 		joinbattle: true,
 	},
 	{
 		symbol: '*',
 		id: "bot",
 		name: "Bot",
-		inherit: '@',
+		inherit: '%',
 		jurisdiction: 'u',
-		declare: true,
+
 		addhtml: true,
+		tournaments: true,
+		declare: true,
 		bypassafktimer: true,
+
+		ip: false,
+		globalban: false,
+		lock: false,
+		alts: false,
 	},
 	{
 		symbol: '@',
@@ -549,13 +603,15 @@ exports.grouplist = [
 		name: "Moderator",
 		inherit: '%',
 		jurisdiction: 'u',
+
+		globalban: true,
 		ban: true,
-		modchatall: true,
+		modchat: 'a',
 		roomvoice: true,
+		roomwhitelist: true,
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true,
 		game: true,
 	},
 	{
@@ -564,10 +620,12 @@ exports.grouplist = [
 		name: "Driver",
 		inherit: '+',
 		jurisdiction: 'u',
+		globalGroupInPersonalRoom: '@',
+
 		announce: true,
-		warn: '\u2606u',
+		warn: '\u2605u',
 		kick: true,
-		mute: '\u2606u',
+		mute: '\u2605u',
 		lock: true,
 		forcerename: true,
 		timer: true,
@@ -580,30 +638,57 @@ exports.grouplist = [
 		joinbattle: true,
 		minigame: true,
 		modchat: true,
+		hiderank: true,
 	},
 	{
 		symbol: '\u2606',
 		id: "player",
 		name: "Player",
 		inherit: '+',
+		battleonly: true,
+
 		roomvoice: true,
 		modchat: true,
-		roomonly: true,
+		editprivacy: true,
+		gamemanagement: true,
 		joinbattle: true,
 		nooverride: true,
-		editprivacy: true,
-		exportinputlog: true,
 	},
 	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
-		alts: 's',
-		broadcast: true,
+
+		altsself: true,
+		makegroupchat: true,
+		joinbattle: true,
+		show: true,
+		showmedia: true,
+		exportinputlog: true,
+		importinputlog: true,
+	},
+	{
+		symbol: '^',
+		id: "prizewinner",
+		name: "Prize Winner",
+		roomonly: true,
+	},
+	{
+		symbol: 'whitelist',
+		id: "whitelist",
+		name: "Whitelist",
+		inherit: ' ',
+		roomonly: true,
+		altsself: true,
+		show: true,
+		showmedia: true,
+		exportinputlog: true,
+		importinputlog: true,
 	},
 	{
 		symbol: ' ',
+		ipself: true,
 	},
 	{
 		name: 'Locked',

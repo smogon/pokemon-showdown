@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		pokemon.activeMoveActions++;
@@ -68,7 +68,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		// Dancer Petal Dance hack
 		// TODO: implement properly
-		const noLock = externalMove && !pokemon.volatiles.lockedmove;
+		const noLock = externalMove && !pokemon.volatiles['lockedmove'];
 
 		if (zMove) {
 			if (pokemon.illusion) {
@@ -104,7 +104,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				this.runMove(move.id, dancer, 0, this.dex.getAbility('dancer'), undefined, true);
 			}
 		}
-		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
+		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 	},
 	// Modded to allow arrays as Mega Stone options
 	canMegaEvo(pokemon) {
@@ -112,7 +112,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const item = pokemon.getItem();
 		if (
 			altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove
 		) {
 			return altForme.name;
 		}
@@ -327,7 +327,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);

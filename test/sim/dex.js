@@ -5,13 +5,11 @@ const assert = require('./../assert');
 describe('Mod loader', function () {
 	it('should work fine in any order', function () {
 		{
-			Chat.uncacheTree('./.sim-dist/dex');
 			const Dex = require('./../../.sim-dist/dex').Dex;
 			assert.equal(Dex.mod('gen2').getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
-			Chat.uncacheTree('./.sim-dist/dex');
 			const Dex = require('./../../.sim-dist/dex').Dex;
 			Dex.mod('gen2').getLearnsetData('nidoking');
 			Dex.mod('gen4').getMove('crunch');
@@ -24,7 +22,7 @@ describe('Mod loader', function () {
 describe('Dex#getEffect', function () {
 	it('returns the same object for the same id', function () {
 		assert.equal(Dex.getEffect('Stealth Rock'), Dex.getEffect('stealthrock'));
-		assert.notStrictEqual(Dex.getEffect('move: Stealth Rock'), Dex.getEffect('stealthrock'));
+		assert.notEqual(Dex.getEffect('move: Stealth Rock'), Dex.getEffect('stealthrock'));
 	});
 
 	it('does not return elements from the Object prototype', function () {
