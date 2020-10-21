@@ -275,8 +275,7 @@ class RecommendationsInterface {
 	}
 
 	async render(rec: Recommendation, suggested = false) {
-		const videoID = YouTube.getId(rec.url);
-		const videoInfo = await YouTube.getVideoData(videoID);
+		const videoInfo = await YouTube.getVideoData(rec.url);
 		let buf = ``;
 		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
 		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
