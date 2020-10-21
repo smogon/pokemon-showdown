@@ -586,7 +586,10 @@ export const commands: ChatCommands = {
 		if (targetUser.id in room.users) {
 			targetUser.popup(`|modal|${user.name} has muted you in ${room.roomid} for ${Chat.toDurationString(muteDuration)}. ${target}`);
 		}
-		this.addModAction(`${targetUser.name} was muted by ${user.name} for ${Chat.toDurationString(muteDuration)}.${(target ? ` (${target})` : ``)}`);
+		this.addModAction(
+			`${targetUser.name} was muted by ${user.name} for ${Chat.toDurationString(muteDuration, {precision: 1})}.` +
+			`${(target ? ` (${target})` : ``)}`
+		);
 		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target);
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.id) {
 			const displayMessage = `${targetUser.name}'s ac account: ${targetUser.autoconfirmed}`;
