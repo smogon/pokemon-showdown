@@ -1268,6 +1268,11 @@ export class TeamValidator {
 		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
+		// Only pokemon that can gigantamax should have the Gmax flag
+		if (!tierSpecies.canGigantamax && set.gigantamax) {
+			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
+		}
+
 		let banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {
 			return `${species.name} is ${banReason}.`;
