@@ -563,7 +563,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it.skip('should not allow unreleased Gmax formes', function () {
+	it('should not allow unreleased Gmax formes', function () {
 		const team = [
 			{species: 'melmetal-gmax', ability: 'ironfist', moves: ['doubleironbash'], evs: {hp: 1}},
 		];
