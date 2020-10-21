@@ -1865,8 +1865,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Leaderboard Commands
 	 */
 	addpoints(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const parts = target.split(',');
@@ -1883,8 +1882,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	removepoints(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const parts = target.split(',');
@@ -1901,8 +1899,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	resetladder(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('declare', null, room);
 
 		Leaderboard.reset().write();
@@ -2161,8 +2158,7 @@ const ScavengerCommands: ChatCommands = {
 	 */
 	huntcount: 'huntlogs',
 	async huntlogs(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		if (target === 'RESET') {
@@ -2207,8 +2203,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	async playlogs(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		if (target === 'RESET') {
@@ -2263,8 +2258,7 @@ const ScavengerCommands: ChatCommands = {
 
 	uninfract: "infract",
 	infract(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const targetId = toID(target);
