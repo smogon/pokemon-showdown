@@ -1,9 +1,15 @@
+/**
+ * The Studio room chat-plugin.
+ * Supports scrobbling and searching for music from last.fm.
+ * Also supports storing and suggesting recommendations.
+ * Written by Kris, loosely based on the concept from bumbadadabum.
+ * @author Kris
+ */
+
 import {FS} from '../../lib/fs';
 import {Net} from '../../lib/net';
 import {Utils} from '../../lib/utils';
-import {YoutubeInterface} from './youtube';
-
-const YouTube = new YoutubeInterface();
+import {YouTube} from './youtube';
 
 const LASTFM_DB = 'config/chat-plugins/lastfm.json';
 const RECOMMENDATIONS = 'config/chat-plugins/the-studio.json';
@@ -178,7 +184,7 @@ class RecommendationsInterface {
 	}
 
 	checkRoom(room: Room | null) {
-		if (!room || room.roomid !== 'thestudio') {
+		if (room?.roomid !== 'thestudio') {
 			throw new Chat.ErrorMessage(`This command can only be used in The Studio.`);
 		}
 	}
@@ -193,9 +199,11 @@ class RecommendationsInterface {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already recommended.`);
 		}
 		if (!/^https?:\/\//.test(url)) url = `https://${url}`;
-		if (!YoutubeInterface.linkRegex.test(url)) {
+		if (!YouTube.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
+		url = url.split('&')[0];
+		this.checkTags(tags);
 		// JUST in case
 		if (!recommendations.saved) recommendations.saved = [];
 		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
@@ -227,13 +235,15 @@ class RecommendationsInterface {
 		if (this.get(artist, title)) {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already recommended.`);
 		}
-		if (recommendations.suggested.find(x => toID(x.title) === toID(title) && toID(x.artist) === toID(artist))) {
+		if (this.get(artist, title, null, true)) {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} is already suggested.`);
 		}
 		if (!/^https?:\/\//.test(url)) url = `https://${url}`;
-		if (!YoutubeInterface.linkRegex.test(url)) {
+		if (!YouTube.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
+		url = url.split('&')[0];
+		this.checkTags(tags);
 		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
 		if (avatar) rec.userData.avatar = avatar;
 		recommendations.suggested.push(rec);
@@ -326,21 +336,34 @@ class RecommendationsInterface {
 		saveRecommendations();
 	}
 
-	get(artist: string, title: string, submitter?: string, fromSuggestions = false) {
+	get(artist: string, title: string, submitter: string | null = null, fromSuggestions = false) {
 		let recs = recommendations.saved;
 		if (fromSuggestions) recs = recommendations.suggested;
-		return recs.find(x => toID(x.artist) === toID(artist) &&
+		return recs.find(x => (
+			toID(x.artist) === toID(artist) &&
 			toID(x.title) === toID(title) &&
-			(submitter ? toID(x.userData.name) === toID(submitter) : true));
+			(!submitter || toID(x.userData.name) === toID(submitter))
+		));
 	}
 
-	getIndex(artist: string, title: string, submitter?: string, fromSuggestions = false) {
+	getIndex(artist: string, title: string, submitter: string | null = null, fromSuggestions = false) {
 		let recs = recommendations.saved;
 		if (fromSuggestions) recs = recommendations.suggested;
-		const index = recs.findIndex(x => toID(x.artist) === toID(artist) &&
-				toID(x.title) === toID(title) &&
-				(submitter ? toID(x.userData.name) === toID(submitter) : true));
-		return index;
+		return recs.findIndex(x => (
+			toID(x.artist) === toID(artist) &&
+			toID(x.title) === toID(title) &&
+			(!submitter || toID(x.userData.name) === toID(submitter))
+		));
+	}
+
+	checkTags(tags: string[]) {
+		const cleansedTags = new Set<ID>();
+		for (const tag of tags) {
+			if (cleansedTags.has(toID(tag))) {
+				throw new Chat.ErrorMessage(`Duplicate tag: ${tag.trim()}`);
+			}
+			cleansedTags.add(toID(tag));
+		}
 	}
 }
 
@@ -447,10 +470,12 @@ export const commands: ChatCommands = {
 		const cleansedTags = tags.map(x => x.trim());
 		Recs.suggest(artist, title, url, description, user.name, cleansedTags, String(user.avatar));
 		this.sendReply(`Your suggestion for '${title}' by ${artist} has been submitted.`);
-		room.sendRankedUsers(
-			`|html|${await Recs.render({artist, title, url, description, userData: {name: user.name, avatar: String(user.avatar)}, tags: cleansedTags, likes: 0}, true)}`,
-			'%'
-		);
+		const html = await Recs.render({
+			artist, title, url, description,
+			userData: {name: user.name, avatar: String(user.avatar)},
+			tags: cleansedTags, likes: 0,
+		}, true);
+		room.sendRankedUsers(`|html|${html}`, '%');
 	},
 	suggestrecommendationhelp: [
 		`/suggestrecommendation artist | song title | url | description | tag1 | tag2 | ... - Suggest a song recommendation.`,
@@ -569,9 +594,7 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	async recommendations(query, user, connection) {
 		const room = this.requireRoom();
-		if (!room.checkModjoin(user)) {
-			throw new Chat.ErrorMessage(`Access denied.`);
-		}
+		this.checkCan('mute', null, room);
 		if (!user.inRooms.has(room.roomid)) throw new Chat.ErrorMessage(`You must be in ${room.title} to view this page.`);
 		this.title = 'Recommendations';
 		let buf = `<div class="pad">`;

@@ -519,6 +519,7 @@ export class CommandContext extends MessageContext {
 					return false;
 				}
 				if (err.name.endsWith('Interruption')) {
+					this.update();
 					return;
 				}
 				Monitor.crashlog(err, 'An async chat command', {
