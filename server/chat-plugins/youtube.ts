@@ -147,8 +147,7 @@ export class YoutubeInterface {
 		if (!(id in this.data.channels)) return this.getChannelData(id, username);
 		return Promise.resolve({...this.data.channels[id]});
 	}
-	async getVideoData(link: string): Promise<VideoData | null> {
-		const id = this.getId(link);
+	async getVideoData(id: string): Promise<VideoData | null> {
 		const raw = await Net(`${ROOT}videos`).get({
 			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
 		});
