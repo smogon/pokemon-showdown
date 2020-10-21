@@ -721,7 +721,7 @@ export class RandomTeams {
 					break;
 
 				// Bad after setup
-				case 'counter': case 'irontail':
+				case 'counter': case 'reversal':
 					if (counter.setupType) rejected = true;
 					break;
 				case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
@@ -774,11 +774,6 @@ export class RandomTeams {
 					break;
 				case 'stickyweb':
 					if (counter.setupType === 'Special' || teamDetails.stickyWeb) rejected = true;
-					break;
-				case 'superpower':
-					if (hasMove['bellydrum'] || hasMove['substitute'] && !hasAbility['Contrary']) rejected = true;
-					if (hasMove['hydropump'] || counter.Physical >= 4 && movePool.includes('uturn')) rejected = true;
-					if (hasAbility['Contrary']) isSetup = true;
 					break;
 				case 'taunt':
 					if (hasMove['nastyplot'] || hasMove['swordsdance']) rejected = true;
@@ -873,11 +868,13 @@ export class RandomTeams {
 				case 'hammerarm':
 					if (hasMove['fakeout']) rejected = true;
 					break;
-				case 'reversal':
-					if (hasMove['liquidation']) rejected = true;
-					break;
 				case 'seismictoss':
 					if (hasMove['protect'] && hasType['Water']) rejected = true;
+					break;
+				case 'superpower':
+					if (hasMove['hydropump'] || counter.Physical >= 4 && movePool.includes('uturn')) rejected = true;
+					if (hasMove['substitute'] && !hasAbility['Contrary']) rejected = true;
+					if (hasAbility['Contrary']) isSetup = true;
 					break;
 				case 'poisonjab':
 					if (!hasType['Poison'] && counter.Status >= 2) rejected = true;
@@ -923,7 +920,7 @@ export class RandomTeams {
 					if (hasMove['dragondance']) rejected = true;
 					break;
 				case 'hurricane':
-					if (hasAbility['Tinted Lens'] && counter.setupType) rejected = true;
+					if (hasAbility['Tinted Lens'] && counter.setupType && !isDoubles) rejected = true;
 					break;
 				case 'poltergeist':
 					if (hasMove['knockoff']) rejected = true;
@@ -1120,7 +1117,7 @@ export class RandomTeams {
 				} else if (ability === 'Justified') {
 					rejectAbility = (isDoubles && hasAbility['Inner Focus']);
 				} else if (ability === 'Lightning Rod') {
-					rejectAbility = species.types.includes('Ground');
+					rejectAbility = (species.types.includes('Ground') || counter.setupType === 'Physical');
 				} else if (ability === 'Limber') {
 					rejectAbility = species.types.includes('Electric');
 				} else if (ability === 'Liquid Voice') {
@@ -1130,13 +1127,13 @@ export class RandomTeams {
 				} else if (ability === 'Mold Breaker') {
 					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Scrappy'] || (hasAbility['Sheer Force'] && !!counter['sheerforce']) || hasAbility['Unburden'] && counter.setupType);
 				} else if (ability === 'Moxie') {
-					rejectAbility = (!counter['Physical'] || hasMove['stealthrock']);
+					rejectAbility = (counter.Physical < 2 || hasMove['stealthrock']);
 				} else if (ability === 'Neutralizing Gas') {
 					rejectAbility = !hasMove['toxicspikes'];
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Own Tempo') {
-					rejectAbility = isDoubles;
+					rejectAbility = !hasMove['petaldance'];
 				} else if (ability === 'Power Construct') {
 					rejectAbility = true;
 				} else if (ability === 'Prankster') {
@@ -1172,13 +1169,13 @@ export class RandomTeams {
 				} else if (ability === 'Steely Spirit') {
 					rejectAbility = (hasMove['fakeout'] && !isDoubles);
 				} else if (ability === 'Sturdy') {
-					rejectAbility = (!!counter['recoil'] || hasAbility['Solid Rock']);
+					rejectAbility = (hasMove['bulkup'] || !!counter['recoil'] || hasAbility['Solid Rock']);
 				} else if (ability === 'Swarm') {
 					rejectAbility = (!counter['Bug'] || !!counter['recovery']);
 				} else if (ability === 'Sweet Veil') {
 					rejectAbility = hasType['Grass'];
 				} else if (ability === 'Swift Swim') {
-					rejectAbility = (hasAbility['Slush Rush'] || !hasMove['raindance'] && !counter.setupType);
+					rejectAbility = (!hasMove['raindance'] && (hasAbility['Intimidate'] || (hasAbility['Lightning Rod'] && !counter.setupType) || hasAbility['Rock Head'] || hasAbility['Slush Rush'] || hasAbility['Water Absorb']));
 				} else if (ability === 'Synchronize') {
 					rejectAbility = (counter.setupType || counter.Status < 2);
 				} else if (ability === 'Technician') {
