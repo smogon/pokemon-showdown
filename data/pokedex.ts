@@ -3048,7 +3048,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Zapdos-Galar"],
-		formeOrder: ["Zapdos", "Zapdos-Galar"],
 	},
 	zapdosgalar: {
 		num: 145,
@@ -15794,7 +15793,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	regieleki: {
 		num: 894,
 		name: "Regieleki",
-		types: ["Electic"],
+		types: ["Electric"],
 		gender: "N",
 		baseStats: {hp: 80, atk: 100, def: 50, spa: 100, spd: 50, spe: 200},
 		abilities: {0: "Transistor"},
