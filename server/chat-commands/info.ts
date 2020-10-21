@@ -1908,8 +1908,6 @@ export const commands: ChatCommands = {
 				`- /modlog <em>username</em>: search the moderator log of the room`,
 				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
 				`- !show [image or youtube link]: display given media in chat.`,
-				`- /whitelist [user]: whitelist a non-staff user to use !show.`,
-				`- /unwhitelist [user]: removes the user from !show whitelist.`,
 			],
 			[
 				`<strong>Room moderators (@)</strong> can also use:`,
