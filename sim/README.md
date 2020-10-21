@@ -3,12 +3,14 @@ Simulator
 
 Pokémon Showdown's simulator API is implemented as a `ReadWriteStream`. You write player choices to it, and you read protocol messages from it.
 
+`npm install pokemon-showdown`
+
 ```js
-const Sim = require('Pokemon-Showdown/sim');
+const Sim = require('pokemon-showdown');
 stream = new Sim.BattleStream();
 
 (async () => {
-    for await (let output of stream) {
+    for await (const output of stream) {
         console.log(output);
     }
 })();
@@ -18,7 +20,7 @@ stream.write(`>player p1 {"name":"Alice"}`);
 stream.write(`>player p2 {"name":"Bob"}`);
 ```
 
-The stream can be accessed from other programming languages using standard IO:
+The stream can also be accessed from other programming languages using standard IO:
 
 ```bash
 echo '>start {"formatid":"gen7randombattle"}
