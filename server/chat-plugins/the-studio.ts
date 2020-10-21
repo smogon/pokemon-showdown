@@ -412,8 +412,7 @@ export const commands: ChatCommands = {
 
 	addrec: 'addrecommendation',
 	addrecommendation(target, room, user) {
-		room = this.requireRoom();
-		Recs.checkRoom(room);
+		room = this.requireRoom('thestudio' as RoomID);
 		this.checkCan('show', null, room);
 		const [artist, title, url, description, ...tags] = target.split('|').map(x => x.trim());
 		if (!(artist && title && url && description && tags?.length)) {
@@ -455,8 +454,7 @@ export const commands: ChatCommands = {
 
 	suggestrec: 'suggestrecommendation',
 	async suggestrecommendation(target, room, user) {
-		room = this.requireRoom();
-		Recs.checkRoom(room);
+		room = this.requireRoom('thestudio' as RoomID);
 		if (!target) {
 			return this.parse('/help suggestrecommendation');
 		}
