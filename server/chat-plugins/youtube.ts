@@ -276,6 +276,10 @@ export class YoutubeInterface {
 
 export const YouTube = new YoutubeInterface(channelData);
 
+export function destroy() {
+	if (YouTube.interval) clearInterval(YouTube.interval);
+}
+
 export const commands: ChatCommands = {
 	async randchannel(target, room, user) {
 		room = YouTube.getRoom(this);
