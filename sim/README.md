@@ -112,7 +112,9 @@ Reading from the simulator
 
 The simulator will send back messages. In a data stream, they're delimited by `\n\n`. In an object stream, they will just be sent as separate strings.
 
-Messages start with a message type followed by `\n`. A message will never have two `\n` in a row, so that `\n\n` always delimits a  They look like:
+Messages start with a message type followed by `\n`. A message will never have two `\n` in a row, so that `\n\n` unambiguously separates messages.
+
+A message looks like:
 
     update
     MESSAGES
