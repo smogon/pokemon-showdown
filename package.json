@@ -1,8 +1,8 @@
 {
   "name": "pokemon-showdown",
-  "preferGlobal": true,
   "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.11.2",
+  "version": "0.11.3",
+  "main": ".sim-dist/index.js",
   "dependencies": {
     "probe-image-size": "^5.0.0",
     "sockjs": "0.3.20",
@@ -62,7 +62,6 @@
       "url": "http://www.meltsner.com"
     }
   ],
-  "private": true,
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.1",
