@@ -482,7 +482,7 @@ export const ssbSets: SSBSets = {
 	},
 	Nolali: {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
-		moves: ['Shadow Ball', 'Flamethrower', 'Memento'],
+		moves: ['Shadow Ball', 'Flamethrower', 'Trick Room'],
 		signatureMove: 'Mad Hacks',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
 	},
