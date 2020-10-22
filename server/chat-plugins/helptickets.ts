@@ -52,9 +52,9 @@ try {
 }
 
 function writeTickets() {
-	FS(TICKET_FILE).writeUpdate(() => (
-		JSON.stringify(Object.assign({}, tickets))
-	));
+	FS(TICKET_FILE).writeUpdate(
+		() => JSON.stringify(tickets)
+	);
 }
 
 function writeStats(line: string) {
@@ -119,9 +119,9 @@ export class HelpTicket extends Rooms.RoomGame {
 				this.firstClaimTime = Date.now();
 				// I'd use the player list for this, but it dosen't track DCs so were checking the userlist
 				// Non-staff users in the room currently (+ the ticket creator even if they are staff)
-				const users = Object.entries(this.room.users).filter(u => {
-					return !((u[1].isStaff && u[1].id !== this.ticket.userid) || !u[1].named);
-				});
+				const users = Object.entries(this.room.users).filter(
+					u => !((u[1].isStaff && u[1].id !== this.ticket.userid) || !u[1].named)
+				);
 				if (!users.length) this.emptyRoom = true;
 			}
 			if (this.ticket.active) {
@@ -1155,16 +1155,19 @@ export const commands: ChatCommands = {
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong><p></p>`;
 
-				const commonBattles = getCommonBattles(
-					toID(reportTarget), Users.get(reportTarget),
-					ticket.userid, Users.get(ticket.userid)
-				);
+				const targetID = toID(reportTarget);
+				if (targetID !== ticket.userid) {
+					const commonBattles = getCommonBattles(
+						targetID, Users.get(reportTarget),
+						ticket.userid, Users.get(ticket.userid)
+					);
 
-				if (!commonBattles.length) {
-					reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
-				} else {
-					reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
-					reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+					if (!commonBattles.length) {
+						reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
+					} else {
+						reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
+						reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+					}
 				}
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;

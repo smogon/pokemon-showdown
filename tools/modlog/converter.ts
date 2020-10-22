@@ -63,9 +63,10 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	if (line.startsWith('SCAV ')) {
 		line = line.replace(/: (\[room: .*?\]) by (.*)/, (match, roominfo, rest) => `: by ${rest} ${roominfo}`);
 	}
-	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/, (match, action, user) => {
-		return `${action}: [${toID(user)}]:`;
-	});
+	line = line.replace(
+		/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/,
+		(match, action, user) => `${action}: [${toID(user)}]:`
+	);
 
 	if (line.includes(':')) {
 		const possibleModernAction = line.slice(0, line.indexOf(':')).trim();
@@ -660,29 +661,26 @@ export class ModlogConverterTest {
 	}
 }
 
-export class ModlogConverter {
-	static async convert(
+export const ModlogConverter = {
+	async convert(
 		from: ModlogFormat, to: ModlogFormat, databasePath: string,
 		textLogDirectoryPath: string, outputLogPath?: string
 	) {
 		if (from === 'txt' && to === 'txt' && outputLogPath) {
 			const converter = new ModlogConverterTest(textLogDirectoryPath, outputLogPath);
-			return converter.toTxt().then(() => {
-				console.log("\nDone!");
-				process.exit();
-			});
+			await converter.toTxt();
+			console.log("\nDone!");
+			process.exit();
 		} else if (from === 'sqlite' && to === 'txt') {
 			const converter = new ModlogConverterSQLite(databasePath, textLogDirectoryPath);
-			return converter.toTxt().then(() => {
-				console.log("\nDone!");
-				process.exit();
-			});
+			await converter.toTxt();
+			console.log("\nDone!");
+			process.exit();
 		} else if (from === 'txt' && to === 'sqlite') {
 			const converter = new ModlogConverterTxt(databasePath, textLogDirectoryPath);
-			return converter.toSQLite().then(() => {
-				console.log("\nDone!");
-				process.exit();
-			});
+			await converter.toSQLite();
+			console.log("\nDone!");
+			process.exit();
 		}
 	}
 }

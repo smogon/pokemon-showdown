@@ -238,9 +238,9 @@ export const commands: ChatCommands = {
 				return this.errorReply('This room does not have a lottery running.');
 			}
 			const canSeeIps = user.can('ip');
-			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
-				return `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
-			});
+			const participants = Object.entries(lottery.participants).map(
+				([ip, participant]) => `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`
+			);
 			let buf = '';
 			if (user.can('declare', null, room)) {
 				buf += `<details class="readmore"><summary><strong>List of participants (${participants.length}):</strong></summary>${participants.join('<br>')}</details>`;

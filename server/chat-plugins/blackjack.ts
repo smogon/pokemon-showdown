@@ -667,7 +667,7 @@ export const commands: ChatCommands = {
 			if (room.game) return this.errorReply("There is already a game running in this room.");
 			if (room.settings.blackjackDisabled) return this.errorReply("Blackjack is currently disabled in this room.");
 			const autostartMinutes = target ? parseFloat(target) : 0;
-			if (isNaN(autostartMinutes)) {
+			if (isNaN(autostartMinutes) || autostartMinutes <= 0 || (autostartMinutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
 				return this.errorReply("Usage: /blackjack create [autostart] - where autostart is an integer");
 			}
 

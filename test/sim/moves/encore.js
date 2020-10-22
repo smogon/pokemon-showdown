@@ -120,4 +120,20 @@ describe('Encore', function () {
 		battle.makeChoices('move shelltrap, move teleport', 'move splash, move quickattack 1');
 		assert.notEqual(battle.p2.active[0].hp, hp);
 	});
+
+	it.skip(`should not cause self-targeting moves to redirect to the opponent`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Wynaut", moves: ['destinybond', 'counter']},
+			{species: "Octillery", moves: ['sleeptalk']},
+		], [
+			{species: "Raichu", moves: ['sleeptalk', 'encore']},
+			{species: "Raichu", moves: ['sleeptalk', 'aerialace']},
+		]]);
+
+		battle.makeChoices();
+
+		// This causes the Counter redirection and Encore redirection to screw up somehow
+		battle.makeChoices('move counter, move sleeptalk', 'move encore 1, move aerialace 1');
+		assert(battle.log.every(line => !line.includes('Raichu|Destiny Bond')));
+	});
 });
