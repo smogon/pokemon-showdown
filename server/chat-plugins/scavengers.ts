@@ -571,9 +571,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
-	setTimer(minutes: string | number) {
-		minutes = Number(minutes);
-
+	setTimer(minutes: number) {
 		if (this.timer) {
 			clearTimeout(this.timer);
 			this.timer = null;
@@ -1483,7 +1481,12 @@ const ScavengerCommands: ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
-		const result = game.setTimer(target);
+		const minutes = parseInt(target);
+		if (isNaN(minutes) || minutes <= 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
+			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
+		}
+
+		const result = game.setTimer(minutes);
 		const message = `The scavenger timer has been ${(result === 'off' ? "turned off" : `set to ${result} minutes`)}`;
 
 		room.add(message + '.');
