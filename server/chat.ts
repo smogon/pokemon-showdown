@@ -1368,6 +1368,13 @@ export const Chat = new class {
 		});
 	}
 	translationsLoaded = false;
+	/**
+	 * As per the node.js documentation at https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args,
+	 * timers with durations that are too long for a 32-bit signed integer will be invoked after 1 millisecond,
+	 * which tends to cause unexpected behavior.
+	 */
+	readonly MAX_TIMEOUT_DURATION = 2147483647;
+
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************

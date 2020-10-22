@@ -444,7 +444,9 @@ export const commands: ChatCommands = {
 					return this.add(this.tr("The poll timer was turned off."));
 				}
 				const timeout = parseFloat(target);
-				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply(this.tr("Invalid time given."));
+				if (isNaN(timeout) || timeout <= 0 || timeout > Chat.MAX_TIMEOUT_DURATION) {
+					return this.errorReply(this.tr("Invalid time given."));
+				}
 				if (poll.timeout) clearTimeout(poll.timeout);
 				poll.timeoutMins = timeout;
 				poll.timeout = setTimeout(() => {
