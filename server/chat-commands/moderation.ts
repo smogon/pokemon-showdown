@@ -1117,7 +1117,7 @@ export const commands: ChatCommands = {
 		Punishments.banRange(ip, reason);
 
 		this.addGlobalModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
-		this.modlog('RANGEBAN', null, reason);
+		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	baniphelp: [
 		`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
