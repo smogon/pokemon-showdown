@@ -224,10 +224,6 @@ export const Formats: FormatList = [
 			battle: 3,
 		},
 		ruleset: ['Standard GBU'],
-		banlist: [
-			'Cinderace', 'Dragapult', 'Excadrill', 'Gyarados', 'Hippowdon', 'Incineroar', 'Indeedee', 'Magnezone',
-			'Mimikyu', 'Porygon2', 'Rillaboom', 'Togekiss', 'Torkoal', 'Tyranitar', 'Venusaur', 'Whimsicott',
-		],
 		minSourceGen: 8,
 	},
 	{
@@ -311,26 +307,6 @@ export const Formats: FormatList = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU', 'VGC Timer'],
-		minSourceGen: 8,
-	},
-	{
-		name: "[Gen 8] Battle Stadium Doubles",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3670056/">Series 6 Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Standard GBU', 'VGC Timer'],
-		banlist: [
-			'Cinderace', 'Dragapult', 'Excadrill', 'Gyarados', 'Hippowdon', 'Incineroar', 'Indeedee', 'Magnezone',
-			'Mimikyu', 'Porygon2', 'Rillaboom', 'Togekiss', 'Torkoal', 'Tyranitar', 'Venusaur', 'Whimsicott',
-		],
 		minSourceGen: 8,
 	},
 	{
