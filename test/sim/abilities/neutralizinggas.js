@@ -82,7 +82,7 @@ describe('Neutralizing Gas', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not activate if Neutralizing Gas leaves the field', function () {
+	it('should not activate Imposter if Neutralizing Gas leaves the field', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Weezing", ability: 'neutralizinggas', moves: ['snore']},
@@ -160,11 +160,11 @@ describe('Neutralizing Gas', function () {
 		const regigigas = battle.p1.active[0];
 		const slowStartSpeed = regigigas.getStat('spe');
 
-		//Slow Start should be negated, so it should have its original, non-Slow Start speed
+		// Slow Start should be negated, so it should have its original, non-Slow Start speed
 		battle.makeChoices('auto', 'switch 2');
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed * 2);
 
-		//Slow Start should be turned back on, so it should have its Slow Start speed again
+		// Slow Start should be turned back on, so it should have its Slow Start speed again
 		battle.makeChoices('auto', 'switch 2');
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
