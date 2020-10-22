@@ -282,7 +282,7 @@ export class Modlog {
 	 */
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
 		roomid = entry.roomID || roomid;
-		this.writeSQL(roomid, entry, overrideID);
+		if (!Config.nosqlitemodlog) this.writeSQL(roomid, entry, overrideID);
 		this.writeText(roomid, entry, overrideID);
 	}
 
