@@ -57,19 +57,6 @@ describe('Illusion', function () {
 		assert(battle.log.every(line => !line.includes('Gmax')));
 	});
 
-	it.skip(`should instantly wear off when Neutralizing Gas enters the field`, function () {
-		battle = common.createBattle([[
-			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
-			{species: "Eternatus", moves: ['sleeptalk']},
-		], [
-			{species: "Wynaut", moves: ['sleeptalk']},
-			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices('auto', 'switch 2');
-		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
-	});
-
 	it(`should instantly wear off before using a Z-move`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: "Zoroark", ability: 'illusion', item: 'fightiniumz', moves: ['machpunch', 'sleeptalk']},
