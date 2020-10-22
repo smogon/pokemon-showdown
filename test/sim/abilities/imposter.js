@@ -43,19 +43,4 @@ describe('Imposter', function () {
 		battle.makeChoices('move skillswap', 'switch greninja');
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
-
-	it('should not activate if Neutralizing Gas leaves the field', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Weezing", ability: 'neutralizinggas', moves: ['snore']},
-			{species: "Greninja", ability: 'torrent', moves: ['teleport']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Ditto", ability: 'imposter', moves: ['sleeptalk']},
-		]});
-		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
-		battle.makeChoices('switch greninja', 'move sleeptalk');
-		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
-		assert.notEqual(battle.p1.pokemon[1].species, battle.p2.active[0].species);
-	});
 });
