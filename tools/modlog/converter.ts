@@ -512,7 +512,6 @@ export class ModlogConverterSQLite {
 export class ModlogConverterTxt {
 	readonly databaseFile: string;
 	readonly modlog: Modlog;
-	readonly batchInsertTransaction: Database.Transaction;
 
 	readonly textLogDir: string;
 	readonly isTesting: {files: Map<string, string>, ml?: Modlog} | null = null;
@@ -526,24 +525,6 @@ export class ModlogConverterTxt {
 		}
 
 		this.modlog = new Modlog(this.textLogDir, this.isTesting ? ':memory:' : this.databaseFile);
-
-		// Custom transaction to allow for batching
-		this.batchInsertTransaction = this.modlog.database.transaction((entries: ModlogEntry[]) => {
-			for (const entry of entries) {
-				this.modlog.insertionTransaction({
-					action: entry.action,
-					roomID: entry.roomID,
-					visualRoomID: entry.visualRoomID,
-					userid: entry.userid,
-					autoconfirmedID: entry.autoconfirmedID,
-					ip: entry.ip,
-					loggedBy: entry.loggedBy,
-					note: entry.note,
-					time: entry.time || Date.now(),
-					alts: entry.alts,
-				});
-			}
-		});
 	}
 
 	async toSQLite() {
@@ -569,7 +550,7 @@ export class ModlogConverterTxt {
 
 
 			const insertEntries = (alwaysShowProgress?: boolean) => {
-				this.batchInsertTransaction(entries);
+				this.modlog.writeSQL(entries);
 				entriesLogged += entries.length;
 				if (!Config.nofswriting && (
 					alwaysShowProgress ||

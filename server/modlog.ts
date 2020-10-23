@@ -174,7 +174,7 @@ export class Modlog {
 
 		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync().replace(/%TOKENIZER%/g, tokenizer));
 
-		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
+		this.database.function('regex', {deterministic: true}, (regexString: string, toMatch: string) => {
 			return Number(RegExp(regexString, 'i').test(toMatch));
 		});
 
@@ -281,40 +281,55 @@ export class Modlog {
 	 * Writes to the modlog
 	 */
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
-		roomid = entry.roomID || roomid;
-		this.writeSQL(roomid, entry, overrideID);
-		this.writeText(roomid, entry, overrideID);
+		if (!entry.roomID) entry.roomID = roomid;
+		if (entry.isGlobal && entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) {
+			entry.roomID = `global-${entry.roomID}`;
+		}
+		if (overrideID) entry.visualRoomID = overrideID;
+
+		const entries = [entry];
+		this.writeSQL(entries);
+		this.writeText(entries);
 	}
 
-	writeSQL(roomid: string, entry: ModlogEntry, overrideID?: string) {
-		if (entry.isGlobal && roomid !== 'global' && !roomid.startsWith('global-')) roomid = `global-${roomid}`;
-		this.insertionTransaction({
-			action: entry.action,
-			roomID: roomid,
-			visualRoomID: overrideID || entry.visualRoomID,
-			userid: entry.userid,
-			autoconfirmedID: entry.autoconfirmedID,
-			ip: entry.ip,
-			loggedBy: entry.loggedBy,
-			note: entry.note,
-			time: entry.time || Date.now(),
-			alts: entry.alts,
-		});
+	writeSQL(entries: Iterable<ModlogEntry>) {
+		for (const entry of entries) {
+			this.insertionTransaction({
+				action: entry.action,
+				roomID: entry.roomID,
+				visualRoomID: entry.visualRoomID,
+				userid: entry.userid,
+				autoconfirmedID: entry.autoconfirmedID,
+				ip: entry.ip,
+				loggedBy: entry.loggedBy,
+				note: entry.note,
+				time: entry.time || Date.now(),
+				alts: entry.alts,
+			});
+		}
 	}
 
-	writeText(roomid: string, entry: ModlogEntry, overrideID?: string) {
-		const stream = this.streams.get(roomid as ModlogID);
-		if (!stream) throw new Error(`Attempted to write to an uninitialized modlog stream for the room '${roomid}'`);
+	writeText(entries: Iterable<ModlogEntry>) {
+		const buffers = new Map<ModlogID, string>();
+		for (const entry of entries) {
+			const streamID = entry.roomID as ModlogID;
+			let buf = buffers.get(streamID) || '';
+			buf += `[${new Date(entry.time || Date.now()).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
+			if (entry.userid) buf += ` [${entry.userid}]`;
+			if (entry.autoconfirmedID) buf += ` ac:[${entry.autoconfirmedID}]`;
+			if (entry.alts) buf += ` alts:[${entry.alts.join('], [')}]`;
+			if (entry.ip) buf += ` [${entry.ip}]`;
+			if (entry.loggedBy) buf += ` by ${entry.loggedBy}`;
+			if (entry.note) buf += `: ${entry.note}`;
+			buf += `\n`;
+			buffers.set(streamID, buf);
+		}
 
-		let buf = `[${new Date(entry.time || Date.now()).toJSON()}] (${overrideID || entry.visualRoomID || roomid}) ${entry.action}:`;
-		if (entry.userid) buf += ` [${entry.userid}]`;
-		if (entry.autoconfirmedID) buf += ` ac:[${entry.autoconfirmedID}]`;
-		if (entry.alts) buf += ` alts:[${entry.alts.join('], [')}]`;
-		if (entry.ip) buf += ` [${entry.ip}]`;
-		if (entry.loggedBy) buf += ` by ${entry.loggedBy}`;
-		if (entry.note) buf += `: ${entry.note}`;
-
-		void stream.write(`${buf}\n`);
+		for (const [streamID, buffer] of buffers) {
+			const stream = this.streams.get(streamID);
+			if (!stream) throw new Error(`Attempted to write to an uninitialized modlog stream for the room '${streamID}'`);
+			void stream.write(buffer);
+		}
 	}
 
 	async destroy(roomid: ModlogID) {
