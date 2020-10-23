@@ -3048,6 +3048,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Zapdos-Galar"],
+		formeOrder: ["Zapdos", "Zapdos-Galar"],
 	},
 	zapdosgalar: {
 		num: 145,
