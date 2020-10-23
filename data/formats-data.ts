@@ -668,6 +668,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	slowkinggalar: {
+		randomBattleMoves: ["fireblast", "psyshock", "slackoff", "sludgebomb", "trick", "trickroom"],
+		randomBattleLevel: 82,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -1297,6 +1299,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	articunogalar: {
+		randomBattleMoves: ["airslash", "calmmind", "freezingglare", "recover"],
+		randomBattleLevel: 82,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -1307,6 +1311,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	zapdosgalar: {
+		randomBattleMoves: ["bulkup", "bravebird", "closecombat", "throatchop", "uturn"],
+		randomBattleLevel: 80,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -1317,6 +1323,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	moltresgalar: {
+		randomBattleMoves: ["fierywrath", "hurricane", "nastyplot", "substitute"],
+		randomBattleLevel: 84,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -5886,30 +5894,44 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Unreleased",
 	},
 	regieleki: {
+		randomBattleMoves: ["explosion", "substitute", "thunderbolt", "voltswitch"],
+		randomBattleLevel: 82,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	regidrago: {
+		randomBattleMoves: ["dracometeor", "dragondance", "firefang", "outrage", "thunderfang"],
+		randomBattleLevel: 82,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	glastrier: {
+		randomBattleMoves: ["closecombat", "highhorsepower", "iciclecrash", "swordsdance"],
+		randomBattleLevel: 80,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	spectrier: {
+		randomBattleMoves: ["darkpulse", "nastyplot", "shadowball", "substitute"],
+		randomBattleLevel: 80,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	calyrex: {
+		randomBattleMoves: ["calmmind", "gigadrain", "psyshock", "substitute"],
+		randomBattleLevel: 84,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	calyrexice: {
+		randomBattleMoves: ["closecombat", "highhorsepower", "iciclecrash", "swordsdance"],
+		randomBattleLevel: 76,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
 	calyrexshadow: {
+		randomBattleMoves: ["darkpulse", "nastyplot", "shadowball", "substitute"],
+		randomBattleLevel: 76,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
