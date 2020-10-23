@@ -66,6 +66,8 @@ export const AbilitiesText = {
 	asone: {
 		name: "As One",
 		shortDesc: "The combination of Unnerve and Chilling/Grim Neigh.",
+
+		start: "  [TEAM] is too nervous to eat Berries!",
 	},
 	aurabreak: {
 		name: "Aura Break",
