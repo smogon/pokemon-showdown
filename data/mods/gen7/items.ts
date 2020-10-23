@@ -7,10 +7,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	adamantorb: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	aerodactylite: {
 		inherit: true,
 		isNonstandard: null,
@@ -85,10 +81,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	burndrive: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	cameruptite: {
 		inherit: true,
 		isNonstandard: null,
@@ -98,10 +90,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	charizarditey: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	chilldrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -138,10 +126,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	domefossil: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	dousedrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -279,10 +263,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	griseousorb: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	groundgem: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -386,10 +366,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	lunaliumz: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	lustrousorb: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -576,10 +552,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	sharpedonite: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	shockdrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
