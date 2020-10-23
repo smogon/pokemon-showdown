@@ -502,8 +502,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	curiousmedicine: {
 		onStart(pokemon) {
-			for (const ally of pokemon.allies()) {
-				ally.clearBoosts();
+			for (const ally of pokemon.side.active) {
+				if (ally !== pokemon) {
+					ally.clearBoosts();
+					this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
+				}
 			}
 		},
 		name: "Curious Medicine",
