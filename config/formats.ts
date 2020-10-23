@@ -180,11 +180,10 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Anything Goes",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656317/">Anything Goes</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672172/">Anything Goes</a>`,
 		],
 
 		mod: 'gen8',
-		searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
