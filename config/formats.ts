@@ -208,7 +208,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Clefable', 'Crucibelle-Mega'],
+		banlist: ['Crucibelle-Mega'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
