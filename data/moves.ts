@@ -614,6 +614,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cute",
 	},
+	astralbarrage: {
+		num: 825,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		name: "Astral Barrage",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Ghost",
+	},
 	attackorder: {
 		num: 454,
 		accuracy: 100,
@@ -3654,6 +3667,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		maxMove: {basePower: 130},
 	},
+	dragonenergy: {
+		num: 820,
+		accuracy: 100,
+		basePower: 150,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower * pokemon.hp / pokemon.maxhp;
+		},
+		category: "Special",
+		name: "Dragon Energy",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Dragon",
+	},
 	dragonhammer: {
 		num: 692,
 		accuracy: 100,
@@ -3972,6 +4001,33 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
+	},
+	eeriespell: {
+		num: 826,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Eerie Spell",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		onHit(target, source, effect) {
+			if (!source || source.fainted || !effect) return;
+			if (effect.effectType === 'Move' && !effect.isFutureMove && source.lastMove) {
+				let move: Move = source.lastMove;
+				if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+
+				for (const moveSlot of source.moveSlots) {
+					if (moveSlot.id === move.id) {
+						moveSlot.pp -= 3;
+						this.add('-activate', source, 'move: Eerie Spell', move.name);
+					}
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
 	},
 	eggbomb: {
 		num: 121,
@@ -4686,6 +4742,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 		contestType: "Beautiful",
+	},
+	fierywrath: {
+		num: 822,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Fiery Wrath",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		target: "allAdjacentFoes",
+		type: "Dark",
 	},
 	finalgambit: {
 		num: 515,
@@ -5591,6 +5663,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+	freezingglare: {
+		num: 821,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Freezing Glare",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		target: "normal",
+		type: "Psychic",
+	},
 	freezyfrost: {
 		num: 739,
 		accuracy: 90,
@@ -5985,6 +6073,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
+	},
+	glaciallance: {
+		num: 824,
+		accuracy: 100,
+		basePower: 130,
+		category: "Physical",
+		name: "Glacial Lance",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Ice",
 	},
 	glaciate: {
 		num: 549,
@@ -18000,6 +18101,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	thundercage: {
+		num: 819,
+		accuracy: 90,
+		basePower: 80,
+		category: "Special",
+		name: "Thunder Cage",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		volatileStatus: 'partiallytrapped',
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+	},
 	thunderfang: {
 		num: 422,
 		accuracy: 95,
@@ -18021,6 +18136,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
+	},
+	thunderouskick: {
+		num: 823,
+		accuracy: 90,
+		basePower: 100,
+		category: "Physical",
+		name: "Thunderous Kick",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1,
+			},
+		},
+		target: "normal",
+		type: "Fighting",
 	},
 	thunderpunch: {
 		num: 9,
