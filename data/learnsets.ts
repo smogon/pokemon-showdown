@@ -10758,6 +10758,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "8L24", "7T", "7L32", "6T", "6L32", "5T", "5L32", "4T", "4L34"],
 		},
 	},
+	slowkinggalar: {
+		learnset: {},
+	},
 	magnemite: {
 		learnset: {
 			bide: ["7V"],
@@ -19902,6 +19905,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		],
 		eventOnly: true,
 	},
+	articunogalar: {
+		learnset: {},
+	},
 	zapdos: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
@@ -19995,6 +20001,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		],
 		eventOnly: true,
 	},
+	zapdosgalar: {
+		learnset: {},
+	},
 	moltres: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
@@ -20084,6 +20093,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 1, level: 50},
 		],
 		eventOnly: true,
+	},
+	moltresgalar: {
+		learnset: {},
 	},
 	dratini: {
 		learnset: {
@@ -75885,6 +75897,27 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 8, level: 60, nature: "Sassy", moves: ["closecombat", "powerwhip", "swagger", "snarl"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
+	},
+	regieleki: {
+		learnset: {},
+	},
+	regidrago: {
+		learnset: {},
+	},
+	glastrier: {
+		learnset: {},
+	},
+	spectrier: {
+		learnset: {},
+	},
+	calyrex: {
+		learnset: {},
+	},
+	calyrexice: {
+		learnset: {},
+	},
+	calyrexshadow: {
+		learnset: {},
 	},
 	tomohawk: {
 		learnset: {

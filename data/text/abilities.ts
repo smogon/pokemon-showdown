@@ -63,6 +63,10 @@ export const AbilitiesText = {
 
 		block: "  [POKEMON] is protected by an aromatic veil!",
 	},
+	asone: {
+		name: "As One",
+		shortDesc: "The combination of Unnerve and Chilling/Grim Neigh.",
+	},
 	aurabreak: {
 		name: "Aura Break",
 		desc: "While this Pokemon is active, the effects of the Dark Aura and Fairy Aura Abilities are reversed, multiplying the power of Dark- and Fairy-type moves, respectively, by 3/4 instead of 1.33.",
@@ -128,6 +132,11 @@ export const AbilitiesText = {
 		desc: "If this Pokemon eats a Berry, it restores 1/3 of its maximum HP, rounded down, in addition to the Berry's effect.",
 		shortDesc: "If this Pokemon eats a Berry, it restores 1/3 of its max HP after the Berry's effect.",
 	},
+	chillingneight: {
+		name: "Chilling Neigh",
+		desc: "This Pokemon's Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
+		shortDesc: "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
+	},
 	chlorophyll: {
 		name: "Chlorophyll",
 		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
@@ -180,6 +189,10 @@ export const AbilitiesText = {
 		name: "Cotton Down",
 		desc: "When this Pokemon is hit by an attack, the Speed of all other Pokemon on the field is lowered by 1 stage.",
 		shortDesc: "If this Pokemon is hit, it lowers the Speed of all other Pokemon on the field 1 stage.",
+	},
+	curiousmedicine: {
+		name: "Curious Medicine",
+		shortDesc: "On switch-in, allies stat changes are reset to 0.",
 	},
 	cursedbody: {
 		name: "Cursed Body",
@@ -262,6 +275,10 @@ export const AbilitiesText = {
 		name: "Download",
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
 		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
+	},
+	dragonsmaw: {
+		name: "Dragon's Maw",
+		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using an Electric-type attack.",
 	},
 	drizzle: {
 		name: "Drizzle",
@@ -415,6 +432,11 @@ export const AbilitiesText = {
 	grassysurge: {
 		name: "Grassy Surge",
 		shortDesc: "On switch-in, this Pokemon summons Grassy Terrain.",
+	},
+	grimneight: {
+		name: "Grim Neigh",
+		desc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
+		shortDesc: "This Pokemon's Sp. Atk is raised by 1 stage if it attacks and KOes another Pokemon.",
 	},
 	gulpmissile: {
 		name: "Gulp Missile",
@@ -1348,6 +1370,10 @@ export const AbilitiesText = {
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 
 		changeAbility: "  [POKEMON] traced [SOURCE]'s [ABILITY]!",
+	},
+	transistor: {
+		name: "Transistor",
+		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using an Electric-type attack.",
 	},
 	triage: {
 		name: "Triage",
