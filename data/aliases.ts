@@ -6,7 +6,7 @@ export const Aliases: {[alias: string]: string} = {
 	ag: "[Gen 8] Anything Goes",
 	bss: "[Gen 8] Battle Stadium Singles",
 	vgc: "[Gen 8] VGC 2020",
-	bsd: "[Gen 8] VGC 2020",
+	bsd: "[Gen 8] VGC 2021",
 	randdubs: "[Gen 8] Random Doubles Battle",
 	doubles: "[Gen 8] Doubles OU",
 	dou: "[Gen 8] Doubles OU",
@@ -247,8 +247,10 @@ export const Aliases: {[alias: string]: string} = {
 	rime: "Mr. Rime",
 	zacianc: "Zacian-Crowned",
 	zamazentac: "Zamazenta-Crowned",
-	urshifurs: "Urshifu-Rapid-Style",
-	urshifurapid: "Urshifu-Rapid-Style",
+	urshifurs: "Urshifu-Rapid-Strike",
+	urshifurapid: "Urshifu-Rapid-Strike",
+	calyrexir: "Calyrex-Ice",
+	calyrexsr: "Calyrex-Shadow",
 
 	// base formes
 	nidoranfemale: "Nidoran-F",
