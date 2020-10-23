@@ -299,7 +299,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657818/">VGC 2020 Sample Teams</a>`,
 		],
 
-		mod: 'gen8',
+		mod: 'vgc20',
 		gameType: 'doubles',
 		forcedLevel: 50,
 		teamLength: {
