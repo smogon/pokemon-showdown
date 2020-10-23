@@ -18113,8 +18113,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	thunderouskick: {
 		num: 823,
-		accuracy: 90,
-		basePower: 100,
+		accuracy: 100,
+		basePower: 90,
 		category: "Physical",
 		name: "Thunderous Kick",
 		pp: 10,
