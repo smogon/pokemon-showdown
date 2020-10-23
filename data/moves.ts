@@ -2504,7 +2504,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
 			const noAbilityChange = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
 			];
 			if (noAbilityChange.includes(target.ability)) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
@@ -2512,7 +2512,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onAfterSubDamage(damage, target) {
 			const noAbilityChange = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
 			];
 			if (noAbilityChange.includes(target.ability)) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
@@ -4365,10 +4365,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryHit(target, source) {
 			if (target === source || target.volatiles['dynamax']) return false;
 			const bannedTargetAbilities = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant',
 			];
 			const bannedSourceAbilities = [
-				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
 			];
 			if (
 				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) ||
@@ -5897,7 +5897,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'gastroacid',
 		onTryHit(pokemon) {
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
 			];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;
@@ -14269,10 +14269,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.ability === source.ability) return false;
 
 			const bannedTargetAbilities = [
-				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
 			];
 			const bannedSourceAbilities = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
 			];
 			if (bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability)) {
 				return false;
@@ -15278,7 +15278,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(pokemon) {
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'simple', 'stancechange', 'truant', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'simple', 'stancechange', 'truant', 'zenmode',
 			];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;
@@ -15396,7 +15396,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onTryHit(target, source) {
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'neutralizinggas', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'neutralizinggas', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode',
 			];
 			if (
 				target.volatiles['dynamax'] || bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)
@@ -19403,7 +19403,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(pokemon) {
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'insomnia', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'insomnia', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant', 'zenmode',
 			];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;

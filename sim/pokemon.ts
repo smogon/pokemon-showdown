@@ -712,7 +712,7 @@ export class Pokemon {
 
 	ignoringAbility() {
 		const abilities = [
-			'battlebond', 'comatose', 'disguise', 'gulpmissile', 'iceface', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+			'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'gulpmissile', 'iceface', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
 		];
 		// Check if any active pokemon have the ability Neutralizing Gas
 		let neutralizinggas = false;
@@ -1629,7 +1629,7 @@ export class Pokemon {
 		const oldAbility = this.ability;
 		if (!isFromFormeChange) {
 			const abilities = [
-				'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
 			];
 			if (ability.id === 'illusion' || abilities.includes(ability.id) || abilities.includes(oldAbility)) return false;
 			if (this.battle.gen >= 7 && (ability.id === 'zenmode' || oldAbility === 'zenmode')) return false;
