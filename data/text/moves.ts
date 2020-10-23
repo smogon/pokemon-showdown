@@ -175,6 +175,11 @@ export const MovesText = {
 		shortDesc: "30% chance to flinch the target.",
 		descGen3: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
 	},
+	astralbarrage: {
+		name: "Astral Barrage",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
+	},
 	attackorder: {
 		name: "Attack Order",
 		desc: "Has a higher chance for a critical hit.",
@@ -1070,6 +1075,11 @@ export const MovesText = {
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. In Double Battles, this move attempts to hit the targeted Pokemon and its ally once each. If hitting one of these Pokemon would be prevented by immunity, protection, semi-invulnerability, an Ability, or accuracy, it attempts to hit the other Pokemon twice instead. If this move is redirected, it hits that target twice.",
 		shortDesc: "Hits twice. Doubles: Tries to hit each foe once.",
 	},
+	dragonenergy: {
+		name: "Dragon Energy",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
+	},
 	dragonhammer: {
 		name: "Dragon Hammer",
 		shortDesc: "No additional effect.",
@@ -1169,6 +1179,10 @@ export const MovesText = {
 		name: "Eerie Impulse",
 		desc: "Lowers the target's Special Attack by 2 stages.",
 		shortDesc: "Lowers the target's Sp. Atk by 2.",
+	},
+	eeriespell: {
+		name: "Eerie Spell",
+		shortDesc: "Removes 3 PP from the target's last move.",
 	},
 	eggbomb: {
 		name: "Egg Bomb",
@@ -1367,6 +1381,10 @@ export const MovesText = {
 		name: "Fiery Dance",
 		desc: "Has a 50% chance to raise the user's Special Attack by 1 stage.",
 		shortDesc: "50% chance to raise the user's Sp. Atk by 1.",
+	},
+	fierywrath: {
+		name: "Fiery Wrath",
+		shortDesc: "Hits foe(s). 20% chance to flinch each foe.",
 	},
 	finalgambit: {
 		name: "Final Gambit",
@@ -1615,6 +1633,11 @@ export const MovesText = {
 		shortDesc: "Charges turn 1. Hits turn 2. 30% paralyze.",
 		prepare: "  [POKEMON] became cloaked in a freezing light!",
 	},
+	freezingglare: {
+		name: "Freezing Glare",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze the target.",
+	},
 	freezyfrost: {
 		name: "Freezy Frost",
 		desc: "Resets the stat stages of all active Pokemon to 0.",
@@ -1720,6 +1743,11 @@ export const MovesText = {
 	gigavolthavoc: {
 		name: "Gigavolt Havoc",
 		shortDesc: "Power is equal to the base move's Z-Power.",
+	},
+	glaciallance: {
+		name: "Glacial Lance",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 	},
 	glaciate: {
 		name: "Glaciate",
@@ -5022,10 +5050,20 @@ export const MovesText = {
 		desc: "Has a 10% chance to paralyze the target.",
 		shortDesc: "10% chance to paralyze the target.",
 	},
+	thundercage: {
+		name: "Thunder Cage",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
+	},
 	thunderfang: {
 		name: "Thunder Fang",
 		desc: "Has a 10% chance to paralyze the target and a 10% chance to flinch it.",
 		shortDesc: "10% chance to paralyze. 10% chance to flinch.",
+	},
+	thunderouskick: {
+		name: "Thunderous Kick",
+		desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "Lowers the target's Defense by 1.",
 	},
 	thunderpunch: {
 		name: "Thunder Punch",
