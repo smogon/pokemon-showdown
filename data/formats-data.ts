@@ -4059,16 +4059,20 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	genesectburn: {
-		isNonstandard: "Past",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	genesectchill: {
-		isNonstandard: "Past",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	genesectdouse: {
-		isNonstandard: "Past",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	genesectshock: {
-		isNonstandard: "Past",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	chespin: {
 		isNonstandard: "Past",

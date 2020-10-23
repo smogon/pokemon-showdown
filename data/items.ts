@@ -59,7 +59,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Dialga"],
 		num: 135,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
@@ -627,7 +626,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Burn"],
 		num: 118,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	cameruptite: {
 		name: "Cameruptite",
@@ -814,7 +812,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Chill"],
 		num: 119,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	chippedpot: {
 		name: "Chipped Pot",
@@ -1206,7 +1203,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Douse"],
 		num: 116,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	dracoplate: {
 		name: "Draco Plate",
@@ -2215,7 +2211,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Giratina-Origin"],
 		num: 112,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	groundgem: {
 		name: "Ground Gem",
@@ -3077,7 +3072,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Palkia"],
 		num: 136,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	luxuryball: {
 		name: "Luxury Ball",
@@ -4942,7 +4936,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Shock"],
 		num: 117,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	shucaberry: {
 		name: "Shuca Berry",
