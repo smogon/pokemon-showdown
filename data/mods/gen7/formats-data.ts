@@ -2267,6 +2267,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	kyogreprimal: {
 		randomBattleMoves: ["calmmind", "originpulse", "scald", "thunder", "icebeam", "toxic", "rest", "sleeptalk"],
 		randomDoubleBattleMoves: ["originpulse", "thunder", "icebeam", "calmmind", "protect"],
+		tier: "Uber",
+		doublesTier: "DUber",
 	},
 	groudon: {
 		randomBattleMoves: ["dragonclaw", "earthquake", "firepunch", "lavaplume", "roar", "stealthrock", "stoneedge", "thunderwave"],
@@ -2277,6 +2279,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	groudonprimal: {
 		randomBattleMoves: ["firepunch", "lavaplume", "precipiceblades", "rockpolish", "stealthrock", "stoneedge", "swordsdance", "toxic"],
 		randomDoubleBattleMoves: ["precipiceblades", "rockslide", "stoneedge", "swordsdance", "rockpolish", "firepunch", "protect"],
+		tier: "Uber",
+		doublesTier: "DUber",
 	},
 	rayquaza: {
 		randomBattleMoves: ["dracometeor", "dragondance", "earthquake", "extremespeed", "outrage", "vcreate"],
