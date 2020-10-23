@@ -172,20 +172,35 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 165,
 	},
-	asone: {
+	asoneglastrier: {
 		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'As One', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
 		},
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				if (source.species.id === 'calyrexice') this.boost({atk: length}, source);
-				if (source.species.id === 'calyrexshadow') this.boost({spa: length}, source);
+				this.add('-ability', source, 'Chilling Neigh');
+				this.boost({atk: length}, source, source, null, true);
 			}
 		},
-		name: "As One",
+		name: "As One (Glastrier)",
 		rating: 3.5,
 		num: 266,
+	},
+	asonespectrier: {
+		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+		},
+		onFoeTryEatItem: false,
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-ability', source, 'Grim Neigh');
+				this.boost({spa: length}, source, source, null, true);
+			}
+		},
+		name: "As One (Spectrier)",
+		rating: 3.5,
+		num: 267,
 	},
 	aurabreak: {
 		onStart(pokemon) {
@@ -2627,7 +2642,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
 			const bannedAbilities = [
-				'asone', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
 			];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
@@ -2836,7 +2851,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
 			const bannedAbilities = [
-				'asone', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
 			];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
@@ -3891,7 +3906,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const target = possibleTargets[rand];
 				const ability = target.getAbility();
 				const bannedAbilities = [
-					'noability', 'asone', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+					'noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
 				];
 				if (bannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
