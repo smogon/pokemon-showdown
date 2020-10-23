@@ -174,7 +174,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	asone: {
 		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'As One', pokemon.side.foe);
 		},
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
