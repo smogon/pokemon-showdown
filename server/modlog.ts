@@ -168,15 +168,17 @@ export class Modlog {
 		// Set up tables, etc
 		let tokenizer = 'unicode61';
 		if (Config.modlogftsextension) {
-			this.database.exec(`SELECT load_extension('native/fts_id_tokenizer.o')`);
+			this.database.loadExtension('native/fts_id_tokenizer.o');
 			tokenizer = 'id_tokenizer';
 		}
 
 		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync().replace(/%TOKENIZER%/g, tokenizer));
 
-		this.database.function('regex', {deterministic: true}, (regexString, toMatch) => {
-			return Number(RegExp(regexString, 'i').test(toMatch));
-		});
+		this.database.function(
+			'regex',
+			{deterministic: true},
+			(regexString, toMatch) => Number(RegExp(regexString, 'i').test(toMatch))
+		);
 
 
 		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
@@ -506,7 +508,6 @@ export class Modlog {
 		for (const room of [...rooms]) {
 			rooms.push(`global-${room}` as ModlogID);
 		}
-		const userid = toID(search.user);
 
 		const args: (string | number)[] = [];
 
@@ -523,7 +524,7 @@ export class Modlog {
 			query += ` OR modlog_fts.userid MATCH ?`;
 			query += ` OR modlog_fts.autoconfirmed_userid LIKE ?`;
 			query += ` OR EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = alts.rowid WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`;
-			query += ` OR modlog_fts.action_taker_userd MATCH ?`;
+			query += ` OR modlog_fts.action_taker_userid MATCH ?`;
 
 			query += ` OR ip LIKE ? || '%'`;
 
@@ -540,15 +541,26 @@ export class Modlog {
 			query += ` AND action IN (${this.formatArray(PUNISHMENTS, args)})`;
 		}
 
-		if (userid) {
-			query += [
-				` AND (`,
-				`modlog_fts.userid MATCH ? OR`,
-				`modlog_fts.autoconfirmed_userid MATCH ? OR`,
-				`EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = modlog.rowid WHERE alts.modlog_id = modlog.modlog_id AND userid MATCH ?)`,
-				`)`,
-			].join(' ');
-			args.push(userid, userid, userid);
+		if (search.user) {
+			if (search.user.isExact) {
+				query += [
+					` AND (`,
+					`modlog_fts.userid MATCH ? OR`,
+					`modlog_fts.autoconfirmed_userid MATCH ? OR`,
+					`EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = modlog.rowid WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`,
+					`)`,
+				].join(' ');
+				args.push(search.user.search, search.user.search, search.user.search);
+			} else {
+				query += [
+					` AND (`,
+					`modlog.userid = ? OR`,
+					`modlog.autoconfirmed_userid = ? OR`,
+					`EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid = ?)`,
+					`)`,
+				].join(' ');
+				args.push(search.user.search, search.user.search, search.user.search);
+			}
 		}
 
 		if (search.ip) {

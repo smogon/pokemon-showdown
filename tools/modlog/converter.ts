@@ -6,7 +6,7 @@
  */
 
 // @ts-ignore Needed for FS
-if (!global.Config) global.Config = {nofswriting: false};
+if (!global.Config) global.Config = {nofswriting: false, modlogftsextension: true};
 
 import * as Database from 'better-sqlite3';
 
@@ -682,5 +682,5 @@ export const ModlogConverter = {
 			console.log("\nDone!");
 			process.exit();
 		}
-	}
-}
+	},
+};
