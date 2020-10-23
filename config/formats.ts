@@ -72,9 +72,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard', 'Dynamax Ubers Clause'],
+		ruleset: ['Standard'],
 		banlist: ['Baton Pass'],
-		restricted: ['Ditto', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zekrom'],
 	},
 	{
 		name: "[Gen 8] UU",
