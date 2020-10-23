@@ -174,6 +174,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	asoneglastrier: {
 		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
 		},
 		onFoeTryEatItem: false,
@@ -189,6 +190,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	asonespectrier: {
 		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
 		},
 		onFoeTryEatItem: false,
