@@ -579,6 +579,23 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should allow use of a Hidden Ability if the format has the item Ability Patch', function () {
+		let team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'entei', ability: 'innerfocus', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'dracovish', ability: 'sandrush', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'zapdos', ability: 'static', moves: ['sleeptalk'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8vgc2021').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
 
 	/*********************************************************
  	* Custom rules
