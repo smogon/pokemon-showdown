@@ -433,7 +433,7 @@ export const AbilitiesText = {
 		name: "Grassy Surge",
 		shortDesc: "On switch-in, this Pokemon summons Grassy Terrain.",
 	},
-	grimneight: {
+	grimneigh: {
 		name: "Grim Neigh",
 		desc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
 		shortDesc: "This Pokemon's Sp. Atk is raised by 1 stage if it attacks and KOes another Pokemon.",
