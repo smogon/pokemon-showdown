@@ -523,7 +523,7 @@ export class Modlog {
 			query += ` AND action LIKE ? || '%'`;
 
 			query += ` OR modlog_fts.userid MATCH ?`;
-			query += ` OR modlog_fts.autoconfirmed_userid LIKE ?`;
+			query += ` OR modlog_fts.autoconfirmed_userid MATCH ?`;
 			query += ` OR EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = alts.rowid WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`;
 			query += ` OR modlog_fts.action_taker_userid MATCH ?`;
 
