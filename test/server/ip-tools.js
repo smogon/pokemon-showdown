@@ -72,11 +72,11 @@ describe("IP tools", () => {
 });
 
 describe("IP tools helper functions", () => {
-	it("ipToNumber and numberToIp should be each other's inverses", () => {
-		const numTests = 10;
-		for (let i = 0; i < numTests; i++) {
-			const testNumber = Math.floor(Math.random() * 4294967294) + 1;
-			assert.equal(IPTools.ipToNumber(IPTools.numberToIP(testNumber)), testNumber);
+	it("should produce idempotent IPv4 address representations", () => {
+		for (const address of [0x00000000, 0x7F000001, 0xFFFFFFFF]) {
+			const literal = IPTools.numberToIP(address);
+			const result = IPTools.ipToNumber(literal);
+			assert.equal(result, address);
 		}
 	});
 
