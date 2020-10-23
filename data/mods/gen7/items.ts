@@ -105,10 +105,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	custapberry: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	darkgem: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -170,10 +166,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: "Unobtainable",
 	},
 	electriumz: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	enigmaberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -322,10 +314,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	ironplate: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	jabocaberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -524,10 +512,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	rootfossil: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	rowapberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
