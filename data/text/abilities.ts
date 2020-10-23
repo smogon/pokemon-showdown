@@ -278,7 +278,7 @@ export const AbilitiesText = {
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
-		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using an Dragon-type attack.",
 	},
 	drizzle: {
 		name: "Drizzle",
