@@ -109,29 +109,35 @@ export const IPTools = new class {
 
 	ipToNumber(ip: string) {
 		ip = ip.trim();
-		if (ip.includes(':') && !ip.includes('.')) {
-			// IPv6
-			return -1;
-		}
 		if (ip.startsWith('::ffff:')) ip = ip.slice(7);
 		else if (ip.startsWith('::')) ip = ip.slice(2);
-		let num = 0;
-		const parts = ip.split('.');
-		for (const part of parts) {
-			num *= 256;
-			num += parseInt(part);
+
+		const octets = ip.split('.').map((o) => parseInt(o)).filter((o) => !isNaN(o) && o >= 0 && o <= 0xFF);
+		if (octets.length !== 4) return -1;
+
+		// As per ECMAScript 2019, << works with int32 on the LHS, so we can
+		// wind up with negative numbers for IP addresses. We want uint32
+		// instead, which >>> thankfully allows us to get.
+		//
+		// References:
+		// https://www.ecma-international.org/ecma-262/10.0/index.html#sec-left-shift-operator
+		// https://www.ecma-international.org/ecma-262/10.0/index.html#sec-unsigned-right-shift-operator
+		let numeric = 0;
+		for (const octet of octets) {
+			numeric <<= 8;
+			numeric |= octet;
 		}
-		return num;
+		return numeric >>> 0;
 	}
 
-	numberToIP(num: number) {
-		const ipParts: string[] = [];
-		while (num) {
-			const part = num % 256;
-			num = (num - part) / 256;
-			ipParts.unshift(part.toString());
+	numberToIP(numeric: number) {
+		/* FIXME: Is numeric a valid IPv4 address? Validate. */
+
+		const octets: string[] = [];
+		for (let i = 4; i--;) {
+			octets.push('' + (numeric >>> (i * 8) & 0xFF));
 		}
-		return ipParts.join('.');
+		return octets.join('.');
 	}
 
 	getCidrRange(cidr: string): AddressRange | null {
