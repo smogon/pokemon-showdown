@@ -3069,7 +3069,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Moltres",
 		types: ["Fire", "Flying"],
 		gender: "N",
-		baseStats: {hp: 90, atk: 85, def: 90, spa: 100, spd: 125, spe: 90},
+		baseStats: {hp: 90, atk: 100, def: 90, spa: 125, spd: 85, spe: 90},
 		abilities: {0: "Pressure", H: "Flame Body"},
 		heightm: 2,
 		weightkg: 60,
