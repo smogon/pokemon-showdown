@@ -205,25 +205,23 @@ export class Modlog {
 			this.FTSAltsInsertionQuery.run(modlogID, userID);
 		});
 
-		this.insertionTransaction = this.database.transaction((entry: {
-			action: string,
-			roomID: string,
-			visualRoomID: string,
-			userid: ID,
-			autoconfirmedID: ID,
-			ip: string,
-			loggedBy: ID,
-			note: string,
-			time: number,
-			alts: ID[],
-		}) => {
-			const result = this.modlogInsertionQuery.run(entry);
-			const rowid = result.lastInsertRowid as number;
+		this.insertionTransaction = this.database.transaction((entries: Iterable<ModlogEntry>) => {
+			for (const entry of entries) {
+				if (!entry.visualRoomID) entry.visualRoomID = undefined;
+				if (!entry.userid) entry.userid = undefined;
+				if (!entry.autoconfirmedID) entry.autoconfirmedID = undefined;
+				if (!entry.ip) entry.ip = undefined;
+				if (!entry.loggedBy) entry.loggedBy = undefined;
+				if (!entry.note) entry.note = undefined;
 
-			this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
+				const result = this.modlogInsertionQuery.run(entry);
+				const rowid = result.lastInsertRowid as number;
 
-			for (const alt of entry.alts || []) {
-				this.altsInsertionTransaction(rowid, alt);
+				this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
+
+				for (const alt of entry.alts || []) {
+					this.altsInsertionTransaction(rowid, alt);
+				}
 			}
 		});
 	}
@@ -284,6 +282,7 @@ export class Modlog {
 	 */
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
 		if (!entry.roomID) entry.roomID = roomid;
+		if (!entry.time) entry.time = Date.now();
 		if (entry.isGlobal && entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) {
 			entry.roomID = `global-${entry.roomID}`;
 		}
@@ -295,20 +294,7 @@ export class Modlog {
 	}
 
 	writeSQL(entries: Iterable<ModlogEntry>) {
-		for (const entry of entries) {
-			this.insertionTransaction({
-				action: entry.action,
-				roomID: entry.roomID,
-				visualRoomID: entry.visualRoomID,
-				userid: entry.userid,
-				autoconfirmedID: entry.autoconfirmedID,
-				ip: entry.ip,
-				loggedBy: entry.loggedBy,
-				note: entry.note,
-				time: entry.time || Date.now(),
-				alts: entry.alts,
-			});
-		}
+		this.insertionTransaction(entries);
 	}
 
 	writeText(entries: Iterable<ModlogEntry>) {
@@ -316,7 +302,7 @@ export class Modlog {
 		for (const entry of entries) {
 			const streamID = entry.roomID as ModlogID;
 			let buf = buffers.get(streamID) || '';
-			buf += `[${new Date(entry.time || Date.now()).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
+			buf += `[${new Date(entry.time!).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
 			if (entry.userid) buf += ` [${entry.userid}]`;
 			if (entry.autoconfirmedID) buf += ` ac:[${entry.autoconfirmedID}]`;
 			if (entry.alts) buf += ` alts:[${entry.alts.join('], [')}]`;
