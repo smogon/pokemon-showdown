@@ -3,6 +3,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	astralbarrage: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	coreenforcer: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -19,7 +23,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	dragonenergy: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	eeriespell: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	fierywrath: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	freezingglare: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	geomancy: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	glaciallance: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
@@ -100,6 +124,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Unobtainable",
 	},
 	thousandwaves: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	thundercage: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	thunderouskick: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
