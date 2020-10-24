@@ -1369,7 +1369,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	dragonite: {
 		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "firepunch", "outrage"],
 		randomBattleLevel: 80,
-		randomDoubleBattleMoves: ["dragondance", "dragonclaw", "dualwingbeat", "extremespeed", "firepunch"],
+		randomDoubleBattleMoves: ["dragonclaw", "dragondance", "dualwingbeat", "extremespeed", "firepunch"],
 		randomDoubleBattleLevel: 82,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -2673,7 +2673,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	kyogre: {
 		randomBattleMoves: ["calmmind", "icebeam", "surf", "thunder", "waterspout"],
 		randomBattleLevel: 72,
-		randomDoubleBattleMoves: ["originpulse", "icebeam", "thunder", "waterspout"],
+		randomDoubleBattleMoves: ["icebeam", "originpulse", "thunder", "waterspout"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -3147,7 +3147,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	heatran: {
 		randomBattleMoves: ["earthpower", "flashcannon", "lavaplume", "protect", "stealthrock", "taunt", "toxic"],
 		randomBattleLevel: 80,
-		randomDoubleBattleMoves: ["earthpower", "eruption", "magmastorm", "flashcannon", "protect"],
+		randomDoubleBattleMoves: ["earthpower", "eruption", "flashcannon", "magmastorm", "protect"],
 		randomDoubleBattleLevel: 80,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -6082,7 +6082,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	regidrago: {
 		randomBattleMoves: ["dracometeor", "dragondance", "firefang", "outrage", "thunderfang"],
 		randomBattleLevel: 82,
-		randomDoubleBattleMoves: ["dragonenergy", "dragonclaw", "firefang", "crunch"],
+		randomDoubleBattleMoves: ["crunch", "dragonclaw", "dragonenergy", "firefang"],
 		randomDoubleBattleLevel: 84,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -6106,7 +6106,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	calyrex: {
 		randomBattleMoves: ["calmmind", "gigadrain", "psyshock", "substitute"],
 		randomBattleLevel: 84,
-		randomDoubleBattleMoves: ["encore", "helpinghand", "pollenpuff", "protect", "leafstorm"],
+		randomDoubleBattleMoves: ["encore", "helpinghand", "leafstorm", "pollenpuff", "protect"],
 		randomDoubleBattleLevel: 88,
 		tier: "OU",
 		doublesTier: "DOU",
@@ -6122,7 +6122,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	calyrexshadow: {
 		randomBattleMoves: ["darkpulse", "nastyplot", "shadowball", "substitute"],
 		randomBattleLevel: 76,
-		randomDoubleBattleMoves: ["nastyplot", "pollenpuff", "psyshock", "shadowball", "protect"],
+		randomDoubleBattleMoves: ["astralbarrage", "nastyplot", "pollenpuff", "protect", "psyshock"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",
 		doublesTier: "DUber",

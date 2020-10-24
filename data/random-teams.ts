@@ -790,6 +790,7 @@ export class RandomTeams {
 					break;
 				case 'uturn':
 					if (!!counter['speedsetup'] || (counter.setupType && (!hasType['Bug'] || !counter.recovery))) rejected = true;
+					if (isDoubles && hasMove['leechlife'] || hasMove['shiftgear']) rejected = true;
 					break;
 
 				// Ineffective having both
