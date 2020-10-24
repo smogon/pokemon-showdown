@@ -9,8 +9,6 @@
 
 import {crashlogger} from '../lib/crashlogger';
 
-declare let global: any;
-
 export class TeamValidatorAsync {
 	format: Format;
 
@@ -71,7 +69,6 @@ export const PM = new QueryProcessManager<{
 });
 
 import {Repl} from '../lib/repl';
-import {Dex as importedDex} from '../sim/dex';
 import {TeamValidator} from '../sim/team-validator';
 import {Config} from './config-loader';
 
@@ -97,8 +94,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = importedDex.includeData();
-	global.toID = Dex.toID;
+	global.Dex = require('../sim/dex').Dex.includeData();
 
 	// eslint-disable-next-line no-eval
 	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));

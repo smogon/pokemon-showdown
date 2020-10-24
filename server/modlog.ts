@@ -9,7 +9,6 @@
  */
 
 import * as child_process from 'child_process';
-import {normalize as normalizePath} from 'path';
 import * as util from 'util';
 
 import {FS} from '../lib/fs';
@@ -250,7 +249,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await execFile('rg', options, {cwd: normalizePath(`${__dirname}/../`)});
+			output = await execFile('rg', options, {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
@@ -365,8 +364,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore please be silent
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 
