@@ -153,7 +153,10 @@ export const commands: ChatCommands = {
 					return this.add(this.tr("The announcement timer was turned off."));
 				}
 				const timeout = parseFloat(target);
-				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply(this.tr("Invalid time given."));
+				const timeoutMs = timeout * 60 * 1000;
+				if (isNaN(timeoutMs) || timeoutMs <= 0 || timeoutMs > Chat.MAX_TIMEOUT_DURATION) {
+					return this.errorReply(this.tr("Invalid time given."));
+				}
 				announcement.endTimer();
 				announcement.runTimeout(timeout);
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute${Chat.plural(timeout)}.`);
