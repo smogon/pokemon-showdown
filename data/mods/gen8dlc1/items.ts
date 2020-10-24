@@ -35,6 +35,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	micleberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	rowapberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",

@@ -3461,7 +3461,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
