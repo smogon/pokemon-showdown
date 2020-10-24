@@ -15,6 +15,7 @@ import * as util from 'util';
 import {FS} from '../lib/fs';
 import {QueryProcessManager} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
+import {checkRipgrepAvailability} from './config-loader';
 
 import {parseModlog} from '../tools/modlog/converter';
 
@@ -110,21 +111,6 @@ class SortedLimitedLengthList {
 			this.list.pop();
 		}
 	}
-}
-
-export function checkRipgrepAvailability() {
-	if (Config.ripgrepmodlog === undefined) {
-		Config.ripgrepmodlog = (async () => {
-			try {
-				await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				return true;
-			} catch (error) {
-				return false;
-			}
-		})();
-	}
-	return Config.ripgrepmodlog;
 }
 
 export class Modlog {
