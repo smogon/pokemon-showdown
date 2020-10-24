@@ -236,7 +236,7 @@ export class Modlog {
 		let output;
 		try {
 			const options = [
-				'rg', '-i',
+				'-i',
 				'-m', '' + lines,
 				'--pre', 'tac',
 				'-e', regexString,
@@ -245,12 +245,11 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await QueryProcessManager.exec(options, {cwd: normalizePath(`${__dirname}/../`)});
+			output = await QueryProcessManager.exec(['rg', ...options], {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
-		if (typeof output.stdout !== 'string') output.stdout = output.stdout.toString();
-		for (const fileName of output.stdout.split('\n').reverse()) {
+		for (const fileName of output.split('\n').reverse()) {
 			if (fileName) results.insert(fileName);
 		}
 		return results;

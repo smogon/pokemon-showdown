@@ -583,18 +583,17 @@ export const LogSearcher = new class {
 		const resultSep = args?.includes('-m') ? '--' : '\n';
 		try {
 			const options = [
-				'rg', '-e', search,
+				'-e', search,
 				`logs/chat/${roomid}/${month}`,
 				'-i',
 			];
 			if (args) {
 				options.push(...args);
 			}
-			let {stdout} = await QueryProcessManager.exec(options, {
+			const stdout = await QueryProcessManager.exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
-				cwd: path.normalize(`${__dirname}/../../`),
+				cwd: `${__dirname}/../../`,
 			});
-			if (typeof stdout !== 'string') stdout = stdout.toString();
 			results = stdout.split(resultSep);
 		} catch (e) {
 			if (e.code !== 1 && !e.message.includes('stdout maxBuffer') && !e.message.includes('No such file or directory')) {

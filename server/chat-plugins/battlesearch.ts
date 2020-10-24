@@ -50,8 +50,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		} catch (error) {
 			return results;
 		}
-		if (typeof output.stdout !== 'string') output.stdout = output.stdout.toString();
-		for (const line of output.stdout.split('\n').reverse()) {
+		for (const line of output.split('\n').reverse()) {
 			const [file, raw] = Utils.splitFirst(line, ':');
 			if (!raw || !line) continue;
 			const data = JSON.parse(raw);
