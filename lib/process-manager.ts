@@ -14,7 +14,6 @@ import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
 import * as util from 'util';
-import type {ExecOptions, ExecFileOptions} from 'child_process';
 
 type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
