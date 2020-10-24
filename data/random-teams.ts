@@ -2,8 +2,6 @@
 
 import {Dex, toID} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
-import { cachedDataVersionTag } from 'v8';
-import { ScavengerGameTemplate } from '../server/chat-plugins/scavenger-games';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
