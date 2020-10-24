@@ -372,7 +372,7 @@ export abstract class ProcessManager {
 
 		this.listen();
 	}
-	static exec(args: string | string[], execOptions?: ExecOptions | ExecFileOptions) {
+	static exec(args: string | string[], execOptions?: child_process.ExecOptions | child_process.ExecFileOptions) {
 		if (Array.isArray(args)) {
 			const cmd = args.shift();
 			if (!cmd) throw new Error(`You must pass a command to ProcessManager.exec.`);
