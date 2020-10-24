@@ -238,6 +238,21 @@ export const Formats: FormatList = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] Tundra Tourney",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672230/">Tundra Tourney</a>`,
+		],
+
+		mod: 'gen8',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Standard GBU', 'Crown Tundra Pokedex'],
+		minSourceGen: 8,
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
