@@ -595,7 +595,7 @@ export const LogSearcher = new class {
 			}
 			const {stdout} = await execFile('rg', options, {
 				maxBuffer: MAX_MEMORY,
-				cwd: path.normalize(`${__dirname}/../../`),
+				cwd: `${__dirname}/../../`,
 			});
 			results = stdout.split(resultSep);
 		} catch (e) {
