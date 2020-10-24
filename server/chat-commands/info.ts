@@ -2562,8 +2562,8 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 
 		let buf;
-		if (YoutubeInterface.linkRegex.test(link)) {
-			const YouTube = new YoutubeInterface();
+		const YouTube = new YoutubeInterface();
+		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
 		} else {
 			try {
