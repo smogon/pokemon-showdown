@@ -305,6 +305,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] VGC 2021",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672129/">VGC 2021 Metagame Discussion & Resources</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
