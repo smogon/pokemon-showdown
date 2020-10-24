@@ -774,7 +774,7 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'charizard-mega-y', ability: 'drought', item: 'charizarditey', moves: ['wingattack'], evs: {hp: 1}},
 		];
-		const illegal = TeamValidator.get('gen8customgame@@@Standard NatDex').validateTeam(team);
+		const illegal = TeamValidator.get('gen7customgame@@@Standard').validateTeam(team);
 		assert.equal(illegal, null);
 	});
 });
