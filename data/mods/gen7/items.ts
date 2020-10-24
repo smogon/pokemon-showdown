@@ -419,10 +419,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	micleberry: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	mimikiumz: {
 		inherit: true,
 		isNonstandard: null,
