@@ -515,9 +515,11 @@ export class CommandContext extends MessageContext {
 			}).catch(err => {
 				if (err.name?.endsWith('ErrorMessage')) {
 					this.errorReply(err.message);
+					this.update();
 					return false;
 				}
 				if (err.name.endsWith('Interruption')) {
+					this.update();
 					return;
 				}
 				Monitor.crashlog(err, 'An async chat command', {

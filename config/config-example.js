@@ -457,6 +457,11 @@ exports.forcedpublicprefixes = [];
  */
 exports.startuphook = function () {};
 
+/**
+ * lastfmkey - the API key to let users use the last.fm commands from The Studio's
+ * chat plugin.
+ */
+exports.lastfmkey = '';
 
 /**
  * chatlogreader - the search method used for searching chatlogs.
