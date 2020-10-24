@@ -3,7 +3,7 @@
  */
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
-import {QueryProcessManager} from '../../lib/process-manager';
+import {QueryProcessManager, exec} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {checkRipgrepAvailability} from '../config-loader';
 
@@ -46,7 +46,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		const regexString = userids.map(id => `(.*("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await QueryProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-tjson', ...files]);
+			output = await exec(['rg', '-i', regexString, '--no-line-number', '-tjson', ...files]);
 		} catch (error) {
 			return results;
 		}

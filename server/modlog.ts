@@ -7,10 +7,8 @@
  *
  * @license MIT
  */
-import {normalize as normalizePath} from 'path';
-
 import {FS} from '../lib/fs';
-import {QueryProcessManager} from '../lib/process-manager';
+import {QueryProcessManager, exec} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
 import {checkRipgrepAvailability} from './config-loader';
 
@@ -245,7 +243,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await QueryProcessManager.exec(['rg', ...options], {cwd: `${__dirname}/../`});
+			output = await exec(['rg', ...options], {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}

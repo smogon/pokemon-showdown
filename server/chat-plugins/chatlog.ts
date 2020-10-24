@@ -7,9 +7,8 @@
 
 import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
-import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
-import {QueryProcessManager} from "../../lib/process-manager";
+import {QueryProcessManager, exec} from "../../lib/process-manager";
 import {Repl} from '../../lib/repl';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
@@ -590,7 +589,7 @@ export const LogSearcher = new class {
 			if (args) {
 				options.push(...args);
 			}
-			const stdout = await QueryProcessManager.exec(['rg', ...options], {
+			const stdout = await exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
 				cwd: `${__dirname}/../../`,
 			});
