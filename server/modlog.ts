@@ -7,10 +7,7 @@
  *
  * @license MIT
  */
-
-import * as child_process from 'child_process';
 import {normalize as normalizePath} from 'path';
-import * as util from 'util';
 
 import {FS} from '../lib/fs';
 import {QueryProcessManager} from '../lib/process-manager';
@@ -39,8 +36,6 @@ const PUNISHMENTS = [
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK',
 ];
 const PUNISHMENTS_REGEX_STRING = `\\b(${PUNISHMENTS.join('|')}):.*`;
-
-const execFile = util.promisify(child_process.execFile);
 
 export type ModlogID = RoomID | 'global';
 
@@ -241,7 +236,7 @@ export class Modlog {
 		let output;
 		try {
 			const options = [
-				'-i',
+				'rg', '-i',
 				'-m', '' + lines,
 				'--pre', 'tac',
 				'-e', regexString,
@@ -250,10 +245,11 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await execFile('rg', options, {cwd: normalizePath(`${__dirname}/../`)});
+			output = await QueryProcessManager.exec(options, {cwd: normalizePath(`${__dirname}/../`)});
 		} catch (error) {
 			return results;
 		}
+		if (typeof output.stdout !== 'string') output.stdout = output.stdout.toString();
 		for (const fileName of output.stdout.split('\n').reverse()) {
 			if (fileName) results.insert(fileName);
 		}

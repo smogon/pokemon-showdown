@@ -13,6 +13,8 @@ import * as child_process from 'child_process';
 import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
+import * as util from 'util';
+import type {ExecOptions, ExecFileOptions} from 'child_process';
 
 type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
@@ -369,6 +371,15 @@ export abstract class ProcessManager {
 		this.isParentProcess = (process.mainModule !== module || !process.send);
 
 		this.listen();
+	}
+	static exec(args: string | string[], execOptions?: ExecOptions | ExecFileOptions) {
+		if (Array.isArray(args)) {
+			const cmd = args.shift();
+			if (!cmd) throw new Error(`You must pass a command to ProcessManager.exec.`);
+			return util.promisify(child_process.execFile)(cmd, args, execOptions);
+		} else {
+			return util.promisify(child_process.exec)(args, execOptions as ExecOptions);
+		}
 	}
 	acquire() {
 		if (!this.processes.length) {

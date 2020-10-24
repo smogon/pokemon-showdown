@@ -7,8 +7,6 @@
 
 import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
-import * as child_process from 'child_process';
-import * as util from 'util';
 import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
 import {QueryProcessManager} from "../../lib/process-manager";
@@ -22,7 +20,6 @@ const MAX_RESULTS = 3000;
 const MAX_MEMORY = 67108864; // 64MB
 const MAX_PROCESSES = 1;
 const MAX_TOPUSERS = 100;
-const execFile = util.promisify(child_process.execFile);
 
 interface ChatlogSearch {
 	raw?: boolean;
@@ -586,17 +583,18 @@ export const LogSearcher = new class {
 		const resultSep = args?.includes('-m') ? '--' : '\n';
 		try {
 			const options = [
-				'-e', search,
+				'rg', '-e', search,
 				`logs/chat/${roomid}/${month}`,
 				'-i',
 			];
 			if (args) {
 				options.push(...args);
 			}
-			const {stdout} = await execFile('rg', options, {
+			let {stdout} = await QueryProcessManager.exec(options, {
 				maxBuffer: MAX_MEMORY,
 				cwd: path.normalize(`${__dirname}/../../`),
 			});
+			if (typeof stdout !== 'string') stdout = stdout.toString();
 			results = stdout.split(resultSep);
 		} catch (e) {
 			if (e.code !== 1 && !e.message.includes('stdout maxBuffer') && !e.message.includes('No such file or directory')) {

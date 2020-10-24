@@ -7,9 +7,8 @@
 
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
-import * as child_process from 'child_process';
 import {normalize as normalizePath} from 'path';
-import * as util from 'util';
+import {ProcessManager} from '../lib/process-manager';
 
 
 export type ConfigType = typeof defaults & {
@@ -125,13 +124,12 @@ export function cacheGroupData(config: ConfigType) {
 	}
 }
 
-const execFile = util.promisify(child_process.execFile);
 export function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
 		Config.ripgrepmodlog = (async () => {
 			try {
-				await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
+				await ProcessManager.exec(['rg', '--version'], {cwd: normalizePath(`${__dirname}/../`)});
+				await ProcessManager.exec(['tac', '--version'], {cwd: normalizePath(`${__dirname}/../`)});
 				return true;
 			} catch (error) {
 				return false;

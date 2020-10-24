@@ -1,9 +1,6 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import * as child_process from 'child_process';
-import * as util from 'util';
-
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {QueryProcessManager} from '../../lib/process-manager';
@@ -25,8 +22,6 @@ interface BattleSearchResults {
 	totalTies: number;
 	timesBattled: {[k: string]: number};
 }
-
-const execFile = util.promisify(child_process.execFile);
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
@@ -51,10 +46,11 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		const regexString = userids.map(id => `(.*("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await execFile('rg', ['-i', regexString, '--no-line-number', '-tjson', ...files]);
+			output = await QueryProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-tjson', ...files]);
 		} catch (error) {
 			return results;
 		}
+		if (typeof output.stdout !== 'string') output.stdout = output.stdout.toString();
 		for (const line of output.stdout.split('\n').reverse()) {
 			const [file, raw] = Utils.splitFirst(line, ':');
 			if (!raw || !line) continue;
