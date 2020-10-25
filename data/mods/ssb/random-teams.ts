@@ -637,10 +637,10 @@ export const ssbSets: SSBSets = {
 		skip: 'Robb576', // This set is transformed into by The Numbers Game ability
 	},
 	SectoniaServant: {
-		species: 'Reuniclus', ability: 'Magic Guard', item: 'Leftovers', gender: 'M',
-		moves: [['Psystrike', 'Psychic'], 'Moonblast', 'Recover'],
+		species: 'Reuniclus', ability: 'Royal Aura', item: 'Leftovers', gender: 'M',
+		moves: ['Eerie Spell', 'Moonblast', 'Recover'],
 		signatureMove: 'Homunculus\'s Vanity',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', shiny: true,
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Relaxed', shiny: true,
 	},
 	Segmr: {
 		species: 'Runerigus', ability: 'Skill Drain', item: 'Leftovers', gender: 'M',

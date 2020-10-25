@@ -1744,6 +1744,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// 	SectoniaServant
+	royalaura: {
+		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. If move uses by it is self targetting, it loses only half.",
+		shortDesc: "If this Pokemon is the target of a foe's move, that move loses one additional PP. If it targets itself, it loses half than it should..",
+		name: "Royal Aura",
+		onDeductPP(target, source) {
+			if (target === source) return -0.5;
+			if (target.side === source.side) return;
+			return 1;
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Segmr
 	skilldrain: {
 		desc: "Secondary effects are nullified when this Pokemon is active, and switching moves lose effect.",
