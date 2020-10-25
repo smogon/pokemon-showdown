@@ -7,6 +7,7 @@
  *
  * @license MIT
  */
+
 import {FS} from '../lib/fs';
 import {QueryProcessManager, exec} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
@@ -358,8 +359,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore please be silent
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 

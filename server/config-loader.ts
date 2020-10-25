@@ -7,9 +7,7 @@
 
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
-import {normalize as normalizePath} from 'path';
 import {exec} from '../lib/process-manager';
-
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
@@ -128,8 +126,8 @@ export function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
 		Config.ripgrepmodlog = (async () => {
 			try {
-				await exec(['rg', '--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				await exec(['tac', '--version'], {cwd: normalizePath(`${__dirname}/../`)});
+				await exec(['rg', '--version'], {cwd: `${__dirname}/../`});
+				await exec(['tac', '--version'], {cwd: `${__dirname}/../`});
 				return true;
 			} catch (error) {
 				return false;

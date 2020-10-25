@@ -387,8 +387,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 	process.on('uncaughtException', err => {
@@ -396,7 +395,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A battle search child process');
 		}
 	});
-	global.Dex = require('../../data/').Dex;
+	global.Dex = require('../../sim/dex').Dex;
 	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
 	Repl.start('battlesearch', cmd => eval(cmd));

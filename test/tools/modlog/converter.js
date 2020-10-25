@@ -225,6 +225,26 @@ describe('Modlog conversion script', () => {
 			);
 		});
 
+		it('should correctly parse old-format blacklists', () => {
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was blacklisted from Development by Annika.'),
+				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] by annika'
+			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was blacklisted from Development by Annika. (reason)'),
+				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] by annika: reason'
+			);
+
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was nameblacklisted from Development by Annika.'),
+				'[2020-08-23T19:50:49.944Z] (development) NAMEBLACKLIST: [heartofetheria] by annika'
+			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was nameblacklisted from Development by Annika. (reason)'),
+				'[2020-08-23T19:50:49.944Z] (development) NAMEBLACKLIST: [heartofetheria] by annika: reason'
+			);
+		});
+
 		it('should correctly parse old-format mutes', () => {
 			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was muted by annikafor1hour (reason)'),
@@ -269,6 +289,14 @@ describe('Modlog conversion script', () => {
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s banned alts: [annika0], [hordeprime])`
 				),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMBAN: [heartofetheria] alts: [annika0], [hordeprime] by annika'
+			);
+
+			assert.equal(
+				converter.modernizeLog(
+					'[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was blacklisted from Development by Annika.',
+					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s blacklisted alts: [annika0], [hordeprime])`
+				),
+				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] alts: [annika0], [hordeprime] by annika'
 			);
 		});
 
