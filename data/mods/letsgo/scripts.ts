@@ -20,7 +20,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + 100) * set.level / 100 + 10);
 		}
-		return this.dex.natureModify(modStats, set);
+		return this.natureModify(modStats, set);
 	},
 
 	/**
