@@ -6308,6 +6308,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 						const ppDeducted = pokemon.deductPP(move.id, 2);
 						if (ppDeducted) {
 							this.add("-activate", pokemon, 'move: G-Max Depletion', move.name, ppDeducted);
+							// Don't return here because returning early doesn't trigger
+							// activation text for the second Pokemon in doubles
 						}
 					}
 					return false;
