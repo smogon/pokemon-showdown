@@ -100,12 +100,30 @@ function needsSucrase(source, dest, path = '') {
 	return false;
 }
 
+function clearPath(path, src, isJs = false) {
+	try {
+		const stats = fs.lstatSync(path);
+		if (stats.isDirectory()) {
+			for (const file of fs.readdirSync(path)) {
+				const source = src + '/' + file;
+				clearPath(path + '/' + file, source, fs.existsSync(source));
+			}
+			return;
+		}
+		if (!isJs) src = src.replace('.js', '.ts');
+		if (!fs.existsSync(src)) {
+			fs.unlinkSync(path);
+		}
+	} catch (e) {}
+}
+
 function sucrase(src, out, opts) {
 	try {
 		if (!force && src !== './config' && !needsSucrase(src, out)) {
 			return false;
 		}
 	} catch (e) {}
+	clearPath(out, src); // empty the dir to get rid of built js files with no ts couterpart
 	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 	return true;
 }
