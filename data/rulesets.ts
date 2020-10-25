@@ -117,6 +117,7 @@ export const Formats: {[k: string]: FormatData} = {
 			let kyuremCount = 0;
 			let necrozmaDMCount = 0;
 			let necrozmaDWCount = 0;
+			let calyrexCount = 0;
 			for (const set of team) {
 				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
 					if (kyuremCount > 0) {
@@ -144,6 +145,15 @@ export const Formats: {[k: string]: FormatData} = {
 						];
 					}
 					necrozmaDWCount++;
+				}
+				if (set.species === 'Calyrex-Ice' || set.species === 'Calyrex-Shadow') {
+					if (calyrexCount > 0) {
+						return [
+							`You cannot have more than one Calyrex-Ice/Calyrex-Shadow.`,
+							`(It's untradeable and you can only make one with the Reigns of Unity.)`,
+						];
+					}
+					calyrexCount++;
 				}
 			}
 			return [];
