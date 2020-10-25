@@ -8,9 +8,7 @@
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
 import * as child_process from 'child_process';
-import * as path from 'path';
 import * as util from 'util';
-
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
