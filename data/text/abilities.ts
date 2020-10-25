@@ -200,7 +200,7 @@ export const AbilitiesText = {
 	},
 	curiousmedicine: {
 		name: "Curious Medicine",
-		shortDesc: "On switch-in, allies stat changes are reset to 0.",
+		shortDesc: "On switch-in, this Pokemon's allies have their stat stages reset to 0.",
 	},
 	cursedbody: {
 		name: "Cursed Body",
@@ -286,7 +286,7 @@ export const AbilitiesText = {
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
-		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using an Dragon-type attack.",
+		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using a Dragon-type attack.",
 	},
 	drizzle: {
 		name: "Drizzle",
