@@ -310,7 +310,7 @@ export const Formats: {[k: string]: FormatData} = {
 			];
 			const species = this.dex.getSpecies(set.species || set.name);
 			if (!tundraDex.includes(species.baseSpecies) && !tundraDex.includes(species.name) &&
-				this.ruleTable.isBannedSpecies(species)) {
+				!this.ruleTable.has('+' + species.id)) {
 				return [`${species.baseSpecies} is not in the Crown Tundra Pokédex.`];
 			}
 		},
