@@ -790,7 +790,7 @@ export class RandomTeams {
 					break;
 				case 'uturn':
 					if (!!counter['speedsetup'] || (counter.setupType && (!hasType['Bug'] || !counter.recovery))) rejected = true;
-					if (isDoubles && hasMove['leechlife'] || hasMove['shiftgear']) rejected = true;
+					if (isDoubles && hasMove['leechlife']) rejected = true;
 					break;
 
 				// Ineffective having both
@@ -860,7 +860,7 @@ export class RandomTeams {
 				case 'drainpunch':
 					if (hasMove['closecombat'] || !hasType['Fighting'] && movePool.includes('swordsdance')) rejected = true;
 					break;
-				case 'dynamicpunch':
+				case 'dynamicpunch': case 'thunderouskick':
 					if (hasMove['closecombat'] || hasMove['facade']) rejected = true;
 					break;
 				case 'focusblast':
@@ -876,9 +876,6 @@ export class RandomTeams {
 					if (hasMove['hydropump'] || counter.Physical >= 4 && movePool.includes('uturn')) rejected = true;
 					if (hasMove['substitute'] && !hasAbility['Contrary']) rejected = true;
 					if (hasAbility['Contrary']) isSetup = true;
-					break;
-				case 'thunderouskick':
-					if (hasMove['closecombat']) rejected = true;
 					break;
 				case 'poisonjab':
 					if (!hasType['Poison'] && counter.Status >= 2) rejected = true;
@@ -973,9 +970,6 @@ export class RandomTeams {
 					if (counter.setupType || hasMove['hex'] && !hasMove['thunderwave'] && !hasMove['willowisp']) rejected = true;
 					if (hasMove['energyball'] && !hasType['Grass']) rejected = true;
 					break;
-				case 'helpinghand':
-					if (hasMove['acupressure']) rejected = true;
-					break;
 				case 'painsplit': case 'recover': case 'synthesis':
 					if (hasMove['rest'] || hasMove['wish']) rejected = true;
 					if (moveid === 'synthesis' && hasMove['gigadrain']) rejected = true;
@@ -989,6 +983,9 @@ export class RandomTeams {
 				case 'substitute':
 					if (hasMove['facade'] || hasMove['rest'] || hasMove['uturn']) rejected = true;
 					if (movePool.includes('bulkup') || movePool.includes('painsplit') || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
+					break;
+				case 'helpinghand':
+					if (hasMove['acupressure']) rejected = true;
 					break;
 				case 'wideguard':
 					if (hasMove['protect']) rejected = true;
