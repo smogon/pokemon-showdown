@@ -596,6 +596,14 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should not allow Gen 1 JP events', function () {
+		const team = [
+			{species: 'rapidash', moves: ['payday']},
+		];
+		const illegal = TeamValidator.get('gen1ou').validateTeam(team);
+		assert(illegal);
+	});
+
 
 	/*********************************************************
  	* Custom rules
