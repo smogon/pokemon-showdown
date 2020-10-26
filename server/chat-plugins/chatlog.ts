@@ -325,7 +325,7 @@ export const LogViewer = new class {
 				if (opts !== 'all') return `<div class="notice">[uhtml box hidden]</div>`;
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
-			const group = !name.startsWith(' ') ? `<small>${name.charAt(0)}</small>` : ``;
+			const group = !name.startsWith(' ') ? name.charAt(0) : ``;
 			return (
         `<div class="chat"><small>[${timestamp}] ${group}</small><username>${Utils.escapeHTML(name.slice(1))}:` +
         `</username> <q>${Chat.formatText(message)}</q></div>`
