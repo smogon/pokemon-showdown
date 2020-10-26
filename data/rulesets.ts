@@ -150,7 +150,7 @@ export const Formats: {[k: string]: FormatData} = {
 					if (calyrexCount > 0) {
 						return [
 							`You cannot have more than one Calyrex-Ice/Calyrex-Shadow.`,
-							`(It's untradeable and you can only make one with the Reigns of Unity.)`,
+							`(It's untradeable and you can only make one with the Reins of Unity.)`,
 						];
 					}
 					calyrexCount++;
