@@ -2661,7 +2661,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Power Spot",
-		rating: 0,
+		rating: 1,
 		num: 249,
 	},
 	prankster: {

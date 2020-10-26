@@ -887,7 +887,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	hitmonchan: {
-		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "machpunch", "rapidspin", "stoneedge"],
+		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "machpunch", "rapidspin", "throatchop"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["coaching", "drainpunch", "feint", "firepunch", "icepunch", "machpunch", "protect"],
 		randomDoubleBattleLevel: 88,
@@ -4629,8 +4629,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	zygarde: {
-		randomBattleMoves: ["dragondance", "extremespeed", "outrage", "stoneedge", "thousandarrows"],
-		randomBattleLevel: 80,
+		randomBattleMoves: ["dragondance", "outrage", "substitute", "thousandarrows"],
+		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["coil", "dragondance", "extremespeed", "glare", "irontail", "thousandarrows"],
 		randomDoubleBattleLevel: 72,
 		tier: "OU",
@@ -5233,7 +5233,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	tapukoko: {
-		randomBattleMoves: ["bravebird", "closecombat", "playrough", "uturn", "wildcharge"],
+		randomBattleMoves: ["calmmind", "dazzlinggleam", "grassknot", "substitute", "thunderbolt", "voltswitch"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["bravebird", "dazzlinggleam", "grassknot", "taunt", "thunderbolt", "uturn"],
 		randomDoubleBattleLevel: 80,
@@ -5249,7 +5249,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	tapubulu: {
-		randomBattleMoves: ["bulkup", "closecombat", "hornleech", "playrough", "stoneedge", "woodhammer"],
+		randomBattleMoves: ["closecombat", "hornleech", "megahorn", "stoneedge", "swordsdance", "woodhammer"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["closecombat", "highhorsepower", "hornleech", "protect", "stoneedge", "swordsdance", "woodhammer"],
 		randomDoubleBattleLevel: 80,
@@ -5311,7 +5311,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	xurkitree: {
-		randomBattleMoves: ["dazzlinggleam", "energyball", "tailglow", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["dazzlinggleam", "energyball", "thunderbolt", "voltswitch"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["dazzlinggleam", "energyball", "thunderbolt", "voltswitch"],
 		randomDoubleBattleLevel: 84,
@@ -6112,7 +6112,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	calyrexice: {
-		randomBattleMoves: ["closecombat", "highhorsepower", "iciclecrash", "swordsdance"],
+		randomBattleMoves: ["closecombat", "glaciallance", "highhorsepower", "trickroom"],
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["closecombat", "glaciallance", "highhorsepower", "swordsdance", "trickroom"],
 		randomDoubleBattleLevel: 72,
@@ -6120,7 +6120,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	calyrexshadow: {
-		randomBattleMoves: ["darkpulse", "nastyplot", "shadowball", "substitute"],
+		randomBattleMoves: ["astralbarrage", "darkpulse", "nastyplot", "substitute"],
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["astralbarrage", "nastyplot", "pollenpuff", "protect", "psyshock"],
 		randomDoubleBattleLevel: 72,

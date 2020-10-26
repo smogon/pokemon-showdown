@@ -687,7 +687,7 @@ export class RandomTeams {
 					if (counter.Physical + counter.Special < 3 || hasMove['futuresight'] || hasMove['rapidspin']) rejected = true;
 					break;
 				case 'trickroom':
-					if (counter.damagingMoves.length < 2 || movePool.includes('nastyplot') || isLead) rejected = true;
+					if (counter.damagingMoves.length < 2 || movePool.includes('nastyplot') || isLead || teamDetails.stickyWeb) rejected = true;
 					break;
 				case 'zenheadbutt':
 					if (movePool.includes('boltstrike')) rejected = true;
@@ -911,7 +911,6 @@ export class RandomTeams {
 				case 'stoneedge':
 					if (hasMove['rockblast'] || hasMove['rockslide'] || !!counter.Status && movePool.includes('rockslide')) rejected = true;
 					if (hasAbility['Guts'] && (!hasMove['dynamicpunch'] || hasMove['spikes'])) rejected = true;
-					if (hasAbility['Iron Fist'] && movePool.includes('machpunch')) rejected = true;
 					break;
 				case 'airslash':
 					if ((hasMove['hurricane'] && !counter.setupType) || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -1139,7 +1138,7 @@ export class RandomTeams {
 				} else if (ability === 'Own Tempo') {
 					rejectAbility = !hasMove['petaldance'];
 				} else if (ability === 'Power Construct') {
-					rejectAbility = true;
+					rejectAbility = species.forme === '10%';
 				} else if (ability === 'Prankster') {
 					rejectAbility = !counter['Status'];
 				} else if (ability === 'Pressure') {
