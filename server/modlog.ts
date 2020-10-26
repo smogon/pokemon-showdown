@@ -9,13 +9,13 @@
  */
 
 import * as child_process from 'child_process';
-import {normalize as normalizePath} from 'path';
 import * as util from 'util';
 
 import {FS} from '../lib/fs';
 import {QueryProcessManager} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
 import * as Database from 'better-sqlite3';
+import {checkRipgrepAvailability} from './config-loader';
 
 import {parseModlog} from '../tools/modlog/converter';
 
@@ -118,21 +118,6 @@ class SortedLimitedLengthList {
 			this.list.pop();
 		}
 	}
-}
-
-export function checkRipgrepAvailability() {
-	if (Config.ripgrepmodlog === undefined) {
-		Config.ripgrepmodlog = (async () => {
-			try {
-				await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				return true;
-			} catch (error) {
-				return false;
-			}
-		})();
-	}
-	return Config.ripgrepmodlog;
 }
 
 export class Modlog {
@@ -406,7 +391,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await execFile('rg', options, {cwd: normalizePath(`${__dirname}/../`)});
+			output = await execFile('rg', options, {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
@@ -630,8 +615,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore please be silent
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 

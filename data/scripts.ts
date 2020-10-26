@@ -1190,7 +1190,8 @@ export const Scripts: BattleScriptsData = {
 		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if (altForme?.isMega && altForme?.requiredMove &&
+		if ((this.gen <= 7 || this.ruleTable.has('standardnatdex')) &&
+			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}

@@ -20,7 +20,9 @@ stream.write(`>player p1 {"name":"Alice"}`);
 stream.write(`>player p2 {"name":"Bob"}`);
 ```
 
-The stream can also be accessed from other programming languages using standard IO:
+The stream can also be accessed from other programming languages using standard IO.
+
+In this case, you would clone the repository, and then run:
 
 ```bash
 echo '>start {"formatid":"gen7randombattle"}

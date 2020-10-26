@@ -9,7 +9,6 @@ import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
 import * as child_process from 'child_process';
 import * as util from 'util';
-import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
 import {QueryProcessManager} from "../../lib/process-manager";
 import {Repl} from '../../lib/repl';
@@ -595,7 +594,7 @@ export const LogSearcher = new class {
 			}
 			const {stdout} = await execFile('rg', options, {
 				maxBuffer: MAX_MEMORY,
-				cwd: path.normalize(`${__dirname}/../../`),
+				cwd: `${__dirname}/../../`,
 			});
 			results = stdout.split(resultSep);
 		} catch (e) {

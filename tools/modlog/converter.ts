@@ -50,7 +50,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	}
 	const getAlts = () => {
 		let alts;
-		const regex = new RegExp(`\\(\\[.*\\]'s (locked|muted|banned) alts: (\\[.*\\])\\)`);
+		const regex = new RegExp(`\\(\\[.*\\]'s (lock|mut|bann|blacklist)ed alts: (\\[.*\\])\\)`);
 		nextLine?.replace(regex, (a, b, rawAlts) => {
 			alts = rawAlts;
 			return '';
@@ -191,6 +191,20 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `TOUR AUTODQ: by ${toID(actionTaker)}: ${length.trim()}`;
 		},
 
+		' was blacklisted from ': (log) => {
+			const isName = log.includes(' was nameblacklisted from ');
+			const banned = toID(log.slice(0, log.indexOf(` was ${isName ? 'name' : ''}blacklisted from `)));
+			log = log.slice(log.indexOf(' by ') + ' by '.length);
+			let reason, ip;
+			if (/\(.*\)/.test(log)) {
+				reason = parseBrackets(log, '(');
+				if (/\[.*\]/.test(log)) ip = parseBrackets(log, '[');
+				log = log.slice(0, log.indexOf('('));
+			}
+			const actionTaker = toID(log);
+			return `${isName ? 'NAME' : ''}BLACKLIST: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+		},
+		' was nameblacklisted from ': (log) => modernizerTransformations[' was blacklisted from '](log),
 		' was banned from room ': (log) => {
 			const banned = toID(log.slice(0, log.indexOf(' was banned from room ')));
 			log = log.slice(log.indexOf(' by ') + ' by '.length);

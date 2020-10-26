@@ -7,6 +7,8 @@
 
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
+import * as child_process from 'child_process';
+import * as util from 'util';
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
@@ -120,6 +122,23 @@ export function cacheGroupData(config: ConfigType) {
 		};
 	}
 }
+
+const execFile = util.promisify(child_process.execFile);
+export function checkRipgrepAvailability() {
+	if (Config.ripgrepmodlog === undefined) {
+		Config.ripgrepmodlog = (async () => {
+			try {
+				await execFile('rg', ['--version'], {cwd: `${__dirname}/../`});
+				await execFile('tac', ['--version'], {cwd: `${__dirname}/../`});
+				return true;
+			} catch (error) {
+				return false;
+			}
+		})();
+	}
+	return Config.ripgrepmodlog;
+}
+
 
 function reportError(msg: string) {
 	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.
