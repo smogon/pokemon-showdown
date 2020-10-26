@@ -74803,17 +74803,17 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	toxel: {
 		learnset: {
-			acid: ["8L1"],
+			acid: ["8L1", "8S0"],
 			attract: ["8M"],
 			belch: ["8L1"],
 			encore: ["8M"],
 			endeavor: ["8E"],
 			endure: ["8M"],
 			facade: ["8M"],
-			flail: ["8L1"],
-			growl: ["8L1"],
+			flail: ["8L1", "8S0"],
+			growl: ["8L1", "8S0"],
 			metalsound: ["8E"],
-			nuzzle: ["8L1"],
+			nuzzle: ["8L1", "8S0"],
 			poweruppunch: ["8E"],
 			protect: ["8M"],
 			rest: ["8M"],
@@ -74823,6 +74823,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			substitute: ["8M"],
 			tearfullook: ["8L1"],
 		},
+		eventData: [
+			{generation: 8, level: 1, isHidden: false, moves: ["nuzzle", "growl", "flail", "acid"], pokeball: "luxuryball"},
+		],
 	},
 	toxtricity: {
 		learnset: {
