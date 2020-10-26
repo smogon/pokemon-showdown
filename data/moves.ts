@@ -9846,9 +9846,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		selfdestruct: "ifHit",
 		slotCondition: 'lunardance',
 		condition: {
-			onSwitchInPriority: 1,
-			onSwitchIn(target) {
-				if (!target.fainted) {
+			onSwap(target) {
+				if (
+					!target.fainted && (
+						target.hp < target.maxhp ||
+						target.status ||
+						target.moveSlots.some(moveSlot => moveSlot.pp < moveSlot.maxpp)
+					)
+				) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					for (const moveSlot of target.moveSlots) {
