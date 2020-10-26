@@ -180,8 +180,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.add('-ability', source, 'Chilling Neigh');
-				this.boost({atk: length}, source, source, null, true);
+				this.boost({atk: length}, source, source, this.dex.getEffect('chillingneigh'), true);
 			}
 		},
 		name: "As One (Glastrier)",
@@ -196,8 +195,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.add('-ability', source, 'Grim Neigh');
-				this.boost({spa: length}, source, source, null, true);
+				this.boost({spa: length}, source, source, this.dex.getEffect('grimneigh'), true);
 			}
 		},
 		name: "As One (Spectrier)",
