@@ -24,6 +24,7 @@ declare global {
 			IPTools: any;
 			Config: any;
 			Chat: any;
+			Rooms: any;
 			Tournaments: any;
 			LoginServer: any;
 			Punishments: any;

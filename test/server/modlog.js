@@ -5,7 +5,6 @@
 
 'use strict';
 
-const {Config} = require('../../.server-dist/config-loader');
 const ml = require('../../.server-dist/modlog');
 const modlog = new ml.Modlog('/dev/null', ':memory:');
 const assert = require('assert').strict;

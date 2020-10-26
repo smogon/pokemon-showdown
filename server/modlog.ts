@@ -22,8 +22,6 @@ import {parseModlog} from '../tools/modlog/converter';
 const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
-const MODLOG_PATH = 'logs/modlog';
-const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
 
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 
@@ -615,7 +613,7 @@ type ModlogResult = ModlogEntry | undefined;
 export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
-		const results = await modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
 		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
@@ -626,6 +624,8 @@ export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(modul
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	global.toID = require('../sim/dex').Dex.toID;
+
+	global.Rooms = require('./rooms').Rooms;
 
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
@@ -646,5 +646,3 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
-
-export const modlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
