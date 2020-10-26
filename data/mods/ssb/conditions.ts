@@ -594,31 +594,33 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			this.add(`c|${getName('Finland')}|${message}`);
 			// to avoid writing this function everywhere, im just gonna write it here and call it from wherever i want like the move or ability
+			pokemon.m.formes = [
+				{
+					name: 'Alcremie',
+					species: 'Alcremie',
+					movepool: ['Shore Up', 'Moonblast', ['Infestation', 'Whirlwind'], 'Cradily Chaos'],
+				},
+				{
+					name: 'Alcremie-Tsikhe',
+					species: 'Alcremie-Lemon-Cream',
+					movepool: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen'], 'Cradily Chaos'],
+				},
+				{
+					name: 'Alcremie-Nezavisa',
+					species: 'Alcremie-Ruby-Swirl',
+					movepool: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond'], 'Cradily Chaos'],
+				},
+				{
+					name: 'Alcremie-Järvilaulu',
+					species: 'Alcremie-Mind-Cream',
+					movepool: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria'], 'Cradily Chaos'],
+				},
+			];
 			pokemon.m.changeForme = (context: Battle, formeNumber: number) => {
-				const formes = [
-					{
-						name: 'Alcremie',
-						species: 'Alcremie',
-						movepool: ['Shore Up', 'Moonblast', 'Mean Look', 'Cradily Chaos'],
-					},
-					{
-						name: 'Alcremie-Tsikhe',
-						species: 'Alcremie-Lemon-Cream',
-						movepool: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen'][context.random(2)], 'Cradily Chaos'],
-					},
-					{
-						name: 'Alcremie-Nezavisa',
-						species: 'Alcremie-Ruby-Swirl',
-						movepool: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond'][context.random(2)], 'Cradily Chaos'],
-					},
-					{
-						name: 'Alcremie-Järvilaulu',
-						species: 'Alcremie-Mind-Cream',
-						movepool: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria'][context.random(2)], 'Cradily Chaos'],
-					},
-				];
-				const forme = formes[formeNumber];
+				const forme = Object.assign({}, pokemon.m.formes[formeNumber]);
+				forme.movepool[2] = Object.assign([], forme.movepool[2])[this.random(2)];
 				pokemon.formeChange(forme.species, context.effect);
+				pokemon.m.formeNumber = formeNumber;
 				pokemon.battle.add('-message', `Alcremie changes its forme to ${forme.name}`);
 				const newMoves = forme.movepool;
 				const carryOver = pokemon.moveSlots.slice().map(m => {

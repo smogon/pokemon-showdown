@@ -186,7 +186,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Finland
 	alcremie: {
 		inherit: true,
-		abilities: {0: 'Fickle Decorator'},
+		abilities: {0: 'Winding Song'},
 	},
 	alcremielemoncream: {
 		inherit: true,

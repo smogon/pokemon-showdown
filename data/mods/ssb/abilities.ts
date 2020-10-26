@@ -1,5 +1,5 @@
 import {SSBSet, ssbSets} from "./random-teams";
-import {ChosenAction} from "../../../sim/side";
+// import {ChosenAction} from "../../../sim/side"; ????
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'turbulence'];
@@ -745,57 +745,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Finland
-	fickledecorater: {
-		desc: "Changes forme, before all turn action, depending on move used. +1 SpA and +1 SpD on switch-in.",
-		shortDesc: "Changes forme, before all turn action, depending on move used. +1 SpA and +1 SpD on switch-in.",
-		name: "Fickle Decorator",
+	windingsong: {
+		desc: "Please refer to the user guide for more information.",
+		shortDesc: "Please refer to the user guide for more information.",
+		name: "Winding Song",
 		onStart() {
 			this.boost({spa: 1, spd: 1});
 		},
-		onAnyBeforeTurn(pokemon) {
-			const actions = pokemon.side.foe.choice.actions;
-			let flag = true;
-			let action: ChosenAction;
-			let move: ActiveMove | undefined;
-			for (action of actions) {
-				if (action.choice === 'move') {
-					move = action.move;
-					flag = false;
-				}
-			}
-			if (flag || !move) return;
-			const moveData = this.dex.getMove(move.id);
-			if (moveData.category !== 'Status') {
-				return pokemon.m.changeForme(this, 2);
-			} else {
-				if (!toID(moveData.target).includes('self')) {
-					return pokemon.m.changeForme(this, 3);
-				} else {
-					return pokemon.m.changeForme(this, 1);
-				}
-			}
-		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-	windingsong: {
-		desc: "Changes form, after all action, depending on move used. Returns the user to Alcremie (Vanilla Cream) form after all action if no move is used in the turn.",
-		shortDesc: "Changes forme, after all turn action, depending on move used. Returns to Alcremie Vanilla if no move was used.",
-		name: "Winding Song",
 		onResidual(pokemon) {
 			const moveData = this.dex.getMove(this.lastSuccessfulMoveThisTurn || undefined);
 			if (!moveData.exists) {
-				return pokemon.m.changeForme(this, 0);
+				pokemon.m.changeForme(this, 0);
 			}
-			if (moveData.category !== 'Status') {
-				return pokemon.m.changeForme(this, 2);
-			} else {
-				if (!toID(moveData.target).includes('self')) {
-					return pokemon.m.changeForme(this, 3);
-				} else {
-					return pokemon.m.changeForme(this, 1);
-				}
-			}
+			const thirdMove = this.dex.getMove(pokemon.moves[2]).name;
+			const newThirdMoveIndex = pokemon.m.formes[pokemon.m.formeNum].movepool[2].indexOf(thirdMove) ^ 1;
+			const newThirdMove = this.dex.getMove(pokemon.m.formes[pokemon.m.formeNum].movepool[newThirdMoveIndex]);
+			const carryOver = pokemon.moveSlots[2].pp / pokemon.moveSlots[2].maxpp;
+			pokemon.moveSlots[2] = {
+				move: newThirdMove.name,
+				id: newThirdMove.id,
+				pp: ((newThirdMove.noPPBoosts || newThirdMove.isZ) ? Math.floor(newThirdMove.pp * carryOver) : newThirdMove.pp * 8 / 5),
+				maxpp: ((newThirdMove.noPPBoosts || newThirdMove.isZ) ? newThirdMove.pp : newThirdMove.pp * 8 / 5),
+				target: newThirdMove.target,
+				disabled: false,
+				disabledSource: '',
+				used: false,
+			};
+			pokemon.battle.add('-message', `Alcremie changed its move ${thirdMove} to ${newThirdMove.name}!`);
 		},
 		isNonstandard: "Custom",
 		gen: 8,

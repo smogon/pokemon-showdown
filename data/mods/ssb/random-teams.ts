@@ -260,8 +260,8 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
 	},
 	Finland: {
-		species: 'Alcremie', ability: 'Fickle Decorator', item: 'Leftovers', gender: 'M',
-		moves: ['Shore Up', 'Moonblast', 'Mean Look'],
+		species: 'Alcremie', ability: 'Winding Song', item: 'Leftovers', gender: 'M',
+		moves: ['Shore Up', 'Moonblast', ['Infestation', 'Whirlwind']],
 		signatureMove: 'Cradily Chaos',
 		evs: {hp: 252, def: 64, spa: 64, spd: 64, spe: 64}, ivs: {atk: 0}, nature: 'Serious',
 	},

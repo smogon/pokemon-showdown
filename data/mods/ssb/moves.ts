@@ -1638,8 +1638,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return source.m.changeForme(this, formenum + 1);
 			}
 			source.m.changeForme(this, this.random(3) + 1);
+			source.addVolatile('gastroacid', source);
+			source.volatiles.gastroacid.duration = 1;
 		},
-		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
 		type: "Poison",
