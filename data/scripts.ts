@@ -464,7 +464,7 @@ export const Scripts: BattleScriptsData = {
 				let boost!: number;
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
-						boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+						boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 						boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
@@ -473,7 +473,7 @@ export const Scripts: BattleScriptsData = {
 						}
 					}
 					if (!move.ignoreEvasion) {
-						boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+						boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
 						boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
@@ -651,7 +651,7 @@ export const Scripts: BattleScriptsData = {
 				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
-						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 						const boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
@@ -660,7 +660,7 @@ export const Scripts: BattleScriptsData = {
 						}
 					}
 					if (!move.ignoreEvasion) {
-						const boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+						const boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
 						const boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
@@ -1190,7 +1190,8 @@ export const Scripts: BattleScriptsData = {
 		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if (altForme?.isMega && altForme?.requiredMove &&
+		if ((this.gen <= 7 || this.ruleTable.has('standardnatdex')) &&
+			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}

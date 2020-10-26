@@ -15,7 +15,7 @@ describe('Gravity', function () {
 		battle.setPlayer('p1', {team: [{species: 'Aerodactyl', ability: 'pressure', moves: ['gravity']}]});
 		battle.setPlayer('p2', {team: [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]});
 		battle.makeChoices('move gravity', 'move earthpower');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should ground Pokemon with Levitate and remove their Ground immunity', function () {
@@ -23,7 +23,7 @@ describe('Gravity', function () {
 		battle.setPlayer('p1', {team: [{species: 'Rotom', ability: 'levitate', moves: ['gravity']}]});
 		battle.setPlayer('p2', {team: [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]});
 		battle.makeChoices('move gravity', 'move earthpower');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should interrupt and disable the use of airborne moves', function () {
@@ -31,7 +31,7 @@ describe('Gravity', function () {
 		battle.setPlayer('p1', {team: [{species: 'Spiritomb', ability: 'pressure', moves: ['gravity']}]});
 		battle.setPlayer('p2', {team: [{species: 'Aerodactyl', ability: 'pressure', moves: ['fly']}]});
 		battle.makeChoices('move gravity', 'move fly');
-		assert.ok(!battle.p2.active[0].volatiles['twoturnmove']);
+		assert(!battle.p2.active[0].volatiles['twoturnmove']);
 		assert.cantMove(() => battle.makeChoices('move gravity', 'move fly'), 'Aerodactyl', 'Fly');
 	});
 });

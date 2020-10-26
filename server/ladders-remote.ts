@@ -118,7 +118,7 @@ export class LadderStore {
 			let elo = Math.round(p1rating.elo);
 			let act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
 			let reasons = `${elo - oldelo} for ${act}`;
-			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			if (!reasons.startsWith('-')) reasons = '+' + reasons;
 			room.addRaw(Utils.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
 			let minElo = elo;
 
@@ -126,7 +126,7 @@ export class LadderStore {
 			elo = Math.round(p2rating.elo);
 			act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
 			reasons = `${elo - oldelo} for ${act}`;
-			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			if (!reasons.startsWith('-')) reasons = '+' + reasons;
 			room.addRaw(Utils.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
 			if (elo < minElo) minElo = elo;
 			room.rated = minElo;

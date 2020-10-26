@@ -48,7 +48,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	}
 	const getAlts = () => {
 		let alts;
-		const regex = new RegExp(`\\(\\[.*\\]'s (locked|muted|banned) alts: (\\[.*\\])\\)`);
+		const regex = new RegExp(`\\(\\[.*\\]'s (lock|mut|bann|blacklist)ed alts: (\\[.*\\])\\)`);
 		nextLine?.replace(regex, (a, b, rawAlts) => {
 			alts = rawAlts;
 			return '';
@@ -61,9 +61,10 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	if (line.startsWith('SCAV ')) {
 		line = line.replace(/: (\[room: .*?\]) by (.*)/, (match, roominfo, rest) => `: by ${rest} ${roominfo}`);
 	}
-	line = line.replace(/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/, (match, action, user) => {
-		return `${action}: [${toID(user)}]:`;
-	});
+	line = line.replace(
+		/(GIVEAWAY WIN|GTS FINISHED): ([A-Za-z0-9].*?)(won|has finished)/,
+		(match, action, user) => `${action}: [${toID(user)}]:`
+	);
 
 	if (line.includes(':')) {
 		const possibleModernAction = line.slice(0, line.indexOf(':')).trim();
@@ -188,6 +189,20 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `TOUR AUTODQ: by ${toID(actionTaker)}: ${length.trim()}`;
 		},
 
+		' was blacklisted from ': (log) => {
+			const isName = log.includes(' was nameblacklisted from ');
+			const banned = toID(log.slice(0, log.indexOf(` was ${isName ? 'name' : ''}blacklisted from `)));
+			log = log.slice(log.indexOf(' by ') + ' by '.length);
+			let reason, ip;
+			if (/\(.*\)/.test(log)) {
+				reason = parseBrackets(log, '(');
+				if (/\[.*\]/.test(log)) ip = parseBrackets(log, '[');
+				log = log.slice(0, log.indexOf('('));
+			}
+			const actionTaker = toID(log);
+			return `${isName ? 'NAME' : ''}BLACKLIST: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+		},
+		' was nameblacklisted from ': (log) => modernizerTransformations[' was blacklisted from '](log),
 		' was banned from room ': (log) => {
 			const banned = toID(log.slice(0, log.indexOf(' was banned from room ')));
 			log = log.slice(log.indexOf(' by ') + ' by '.length);
@@ -485,18 +500,16 @@ export class ModlogConverterTest {
 	}
 }
 
-export class ModlogConverter {
-	static async convert(
+export const ModlogConverter = {
+	async convert(
 		from: ModlogFormat, to: ModlogFormat, databasePath: string,
 		textLogDirectoryPath: string, outputLogPath?: string
 	) {
 		if (from === 'txt' && to === 'txt' && outputLogPath) {
 			const converter = new ModlogConverterTest(textLogDirectoryPath, outputLogPath);
-			return converter.toTxt().then(() => {
-				console.log("\nDone!");
-				process.exit();
-			});
+			await converter.toTxt();
+			console.log("\nDone!");
+			process.exit();
 		}
-	}
-}
-
+	},
+};

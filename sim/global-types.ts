@@ -116,6 +116,8 @@ interface EventInfo {
 	moves?: string[];
 	pokeball?: string;
 	from?: string;
+	/** Japan-only events can't be transferred to international games in Gen 1 */
+	japan?: boolean;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -185,7 +187,7 @@ interface MoveEventMethods {
 	onHit?: CommonHandlers['ResultMove'];
 	onHitField?: CommonHandlers['ResultMove'];
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
-	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;

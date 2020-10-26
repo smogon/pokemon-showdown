@@ -384,7 +384,7 @@ export const commands: ChatCommands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
-	autojoin(target, room, user, connection) {
+	async autojoin(target, room, user, connection) {
 		const targets = target.split(',');
 		if (targets.length > 16 || connection.inRooms.size > 1) {
 			return connection.popup("To prevent DoS attacks, you can only use /autojoin for 16 or fewer rooms, when you haven't joined any rooms yet. Please use /join for each room separately.");
@@ -400,27 +400,26 @@ export const commands: ChatCommands = {
 			})
 		);
 
-		return Promise.all(promises).then(() => {
-			connection.autojoins = autojoins.join(',');
-		});
+		await Promise.all(promises);
+		connection.autojoins = autojoins.join(',');
 	},
 
 	joim: 'join',
 	j: 'join',
-	join(target, room, user, connection) {
+	async join(target, room, user, connection) {
 		if (!target) return this.parse('/help join');
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
+		if (target.startsWith(`${Config.routes.replays}/`)) target = `battle-${target.slice(Config.routes.replays.length + 1)}`;
 		if (target.startsWith('psim.us/')) target = target.slice(8);
-		return user.tryJoinRoom(target as RoomID, connection).then(ret => {
-			if (ret === Rooms.RETRY_AFTER_LOGIN) {
-				connection.sendTo(
-					target as RoomID,
-					`|noinit|namerequired|The room '${target}' does not exist or requires a login to join.`
-				);
-			}
-		});
+		const ret = await user.tryJoinRoom(target as RoomID, connection);
+		if (ret === Rooms.RETRY_AFTER_LOGIN) {
+			connection.sendTo(
+				target as RoomID,
+				`|noinit|namerequired|The room '${target}' does not exist or requires a login to join.`
+			);
+		}
 	},
 	joinhelp: [`/join [roomname] - Attempt to join the room [roomname].`],
 
@@ -670,7 +669,7 @@ export const commands: ChatCommands = {
 		} else if (force) {
 			return this.errorReply(`Use /${week ? 'week' : 'room'}ban; ${name} is not a trusted user.`);
 		}
-		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
+		if (!target && !week && Punishments.isRoomBanned(targetUser, room.roomid)) {
 			const problem = " but was already banned";
 			return this.privateModAction(`${name} would be banned by ${user.name} ${problem}.`);
 		}
@@ -874,7 +873,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User ${targetUser.name} is namelocked, not locked. Use /unnamelock to unnamelock them.`);
 		}
 		let reason = '';
-		if (targetUser?.locked && targetUser.locked.charAt(0) === '#') {
+		if (targetUser?.locked && targetUser.locked.startsWith('#')) {
 			reason = ` (${targetUser.locked})`;
 		}
 
@@ -918,7 +917,7 @@ export const commands: ChatCommands = {
 		target = target.trim();
 		if (!target) return this.parse('/help unlock');
 		this.checkCan('globalban');
-		const range = target.charAt(target.length - 1) === '*';
+		const range = target.endsWith('*');
 		if (range) this.checkCan('rangeban');
 
 		if (!(range ? IPTools.ipRangeRegex : IPTools.ipRegex).test(target)) {
@@ -1118,7 +1117,7 @@ export const commands: ChatCommands = {
 		Punishments.banRange(ip, reason);
 
 		this.addGlobalModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
-		this.modlog('RANGEBAN', null, reason);
+		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	baniphelp: [
 		`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
@@ -1137,7 +1136,7 @@ export const commands: ChatCommands = {
 		}
 		Punishments.ips.delete(target);
 
-		this.addGlobalModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
+		this.addGlobalModAction(`${user.name} unbanned the ${(target.endsWith('*') ? "IP range" : "IP")}: ${target}`);
 		this.modlog('UNRANGEBAN', null, target);
 	},
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],

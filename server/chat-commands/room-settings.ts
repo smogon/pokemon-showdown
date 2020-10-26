@@ -723,6 +723,7 @@ export const commands: ChatCommands = {
 	],
 
 	subroomgroupchat: 'makegroupchat',
+	mgc: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
@@ -854,12 +855,13 @@ export const commands: ChatCommands = {
 
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
+	dgc: 'deleteroom',
 	deleteroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (!room.settings.isPersonal || cmd !== "deletegroupchat") {
+			if (!room.settings.isPersonal || !['deletegroupchat', 'dgc'].includes(cmd)) {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
@@ -869,7 +871,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (room.settings.isPersonal) {
+		if (room.roomid.startsWith('groupchat-')) {
 			this.checkCan('gamemanagement', null, room);
 		} else {
 			this.checkCan('makeroom');
@@ -1267,10 +1269,10 @@ export const commands: ChatCommands = {
 		if (normalizedTarget.includes(' welcome ')) {
 			return this.errorReply(`Error: Room description must not contain the word "welcome".`);
 		}
-		if (normalizedTarget.slice(0, 9) === ' discuss ') {
+		if (normalizedTarget.startsWith(' discuss ')) {
 			return this.errorReply(`Error: Room description must not start with the word "discuss".`);
 		}
-		if (normalizedTarget.slice(0, 12) === ' talk about ' || normalizedTarget.slice(0, 17) === ' talk here about ') {
+		if (normalizedTarget.startsWith(' talk about ') || normalizedTarget.startsWith(' talk here about ')) {
 			return this.errorReply(`Error: Room description must not start with the phrase "talk about".`);
 		}
 

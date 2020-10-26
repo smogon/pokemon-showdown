@@ -89,7 +89,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			if (lsetData.learnset) {
 				for (const move in lsetData.learnset) {
 					if (this.dex.getMove(move).gen !== 1) continue;
-					if (lsetData.learnset[move].some(learned => learned[0] === '1')) {
+					if (lsetData.learnset[move].some(learned => learned.startsWith('1'))) {
 						pool.push(move);
 					}
 				}
