@@ -1521,6 +1521,11 @@ export class TeamValidator {
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
 
+		if (eventData.japan) {
+			if (fastReturn) return true;
+			problems.push(`${name} can't use moves from Japan-only Red/Green Version, because this format simulates Yellow Version which can't trade with Red/Green.`);
+		}
+
 		if (eventData.level && (set.level || 0) < eventData.level) {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
