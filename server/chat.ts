@@ -321,6 +321,9 @@ export class PageContext extends MessageContext {
 		const parts = this.pageid.split('-');
 		parts.shift(); // first part is always `view`
 
+		if (!this.connection.openPages) this.connection.openPages = new Set();
+		this.connection.openPages.add(parts.join('-'));
+
 		let handler: PageHandler | PageTable = Chat.pages;
 		while (handler) {
 			if (typeof handler === 'function') {
