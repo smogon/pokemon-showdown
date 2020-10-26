@@ -1337,9 +1337,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	zapdosgalar: {
-		randomBattleMoves: ["bulkup", "bravebird", "closecombat", "throatchop", "uturn"],
+		randomBattleMoves: ["bravebird", "bulkup", "closecombat", "throatchop", "uturn"],
 		randomBattleLevel: 80,
-		randomDoubleBattleMoves: ["bulkup", "bravebird", "closecombat", "throatchop", "thunderouskick", "uturn"],
+		randomDoubleBattleMoves: ["bravebird", "bulkup", "closecombat", "throatchop", "thunderouskick", "uturn"],
 		randomDoubleBattleLevel: 80,
 		tier: "OU",
 		doublesTier: "DOU",
