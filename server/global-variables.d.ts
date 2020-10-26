@@ -19,16 +19,23 @@ import {Tournaments as TournamentsType} from './tournaments';
 declare global {
 	namespace NodeJS {
 		interface Global {
-			Dex: any;
-			toID: (item: any) => ID;
-			IPTools: any;
 			Config: any;
 			Chat: any;
-			Tournaments: any;
+			Dex: any;
+			IPTools: any;
+			Ladders: any;
 			LoginServer: any;
-			Punishments: any;
-			TeamValidator: any;
 			Monitor: any;
+			nodeOomHeapdump: any;
+			Punishments: any;
+			Rooms: any;
+			Sockets: any
+			TeamValidator: any;
+			TeamValidatorAsync: any;
+			Tournaments: any;
+			Users: any;
+			Verifier: any;
+			toID: (item: any) => ID;
 			__version: {head: string, origin?: string, tree?: string};
 		}
 	}
