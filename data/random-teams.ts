@@ -1138,7 +1138,7 @@ export class RandomTeams {
 				} else if (ability === 'Own Tempo') {
 					rejectAbility = !hasMove['petaldance'];
 				} else if (ability === 'Power Construct') {
-					rejectAbility = species.forme === '10%';
+					rejectAbility = (species.forme === '10%' && !isDoubles);
 				} else if (ability === 'Prankster') {
 					rejectAbility = !counter['Status'];
 				} else if (ability === 'Pressure') {
