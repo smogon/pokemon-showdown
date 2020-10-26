@@ -327,8 +327,8 @@ export const LogViewer = new class {
 			}
 			const group = !name.startsWith(' ') ? name.charAt(0) : ``;
 			return (
-        `<div class="chat"><small>[${timestamp}] ${group}</small><username>${Utils.escapeHTML(name.slice(1))}:` +
-        `</username> <q>${Chat.formatText(message)}</q></div>`
+				`<div class="chat"><small>[${timestamp}] ${group}</small><username>${Utils.escapeHTML(name.slice(1))}:` +
+				`</username> <q>${Chat.formatText(message)}</q></div>`
       );
 		}
 		case 'html': case 'raw': {
