@@ -9,7 +9,6 @@ import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
 import * as child_process from 'child_process';
 import * as util from 'util';
-import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
 import {QueryProcessManager} from "../../lib/process-manager";
 import {Repl} from '../../lib/repl';
@@ -194,7 +193,8 @@ export const LogViewer = new class {
 		}
 
 		const prevDay = LogReader.prevDay(day);
-		buf += `<p><a roomid="view-chatlog-${roomid}--${prevDay}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
+		buf += `<p><a roomid="view-chatlog-${roomid}--${prevDay}${opts ? `--${opts}` : ''}" `+
+			`class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
@@ -208,7 +208,10 @@ export const LogViewer = new class {
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
 			const nextDay = LogReader.nextDay(day);
-			buf += `<p><a roomid="view-chatlog-${roomid}--${nextDay}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
+			buf += (
+				`<p><a roomid="view-chatlog-${roomid}--${nextDay}${opts ? `--${opts}` : ''}" class="blocklink" ` +
+				`style="text-align:center">${nextDay}<br />▼</a></p>`
+			);
 		}
 
 		buf += `</div>`;
@@ -290,7 +293,7 @@ export const LogViewer = new class {
 
 	renderLine(fullLine: string, opts?: string) {
 		if (!fullLine) return ``;
-		if (opts === 'txt') return `<div class="chat">${fullLine}</div>`;
+		if (opts === 'txt') return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
@@ -307,7 +310,7 @@ export const LogViewer = new class {
 		const cmd = line.slice(0, line.indexOf('|'));
 		if (opts?.includes('onlychat')) {
 			if (cmd !== 'c') return '';
-			if (opts.includes('txt')) return `<div class="chat">${fullLine}</div>`;
+			if (opts.includes('txt')) return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
 		}
 		switch (cmd) {
 		case 'c': {
@@ -595,7 +598,7 @@ export const LogSearcher = new class {
 			}
 			const {stdout} = await execFile('rg', options, {
 				maxBuffer: MAX_MEMORY,
-				cwd: path.normalize(`${__dirname}/../../`),
+				cwd: `${__dirname}/../../`,
 			});
 			results = stdout.split(resultSep);
 		} catch (e) {
