@@ -50,6 +50,20 @@ if (!recommendations.saved) recommendations.saved = [];
 if (!recommendations.suggested) recommendations.suggested = [];
 saveRecommendations();
 
+function updateRecTags() {
+	for (const rec of recommendations.saved) {
+		if (!rec.tags.map(toID).includes(toID(rec.artist))) rec.tags.push(rec.artist);
+		if (!rec.tags.map(toID).includes(toID(rec.userData.name))) rec.tags.push(rec.userData.name);
+	}
+	for (const rec of recommendations.suggested) {
+		if (!rec.tags.map(toID).includes(toID(rec.artist))) rec.tags.push(rec.artist);
+		if (!rec.tags.map(toID).includes(toID(rec.userData.name))) rec.tags.push(rec.userData.name);
+	}
+	saveRecommendations();
+}
+
+updateRecTags();
+
 function saveLastFM() {
 	FS(LASTFM_DB).writeUpdate(() => JSON.stringify(lastfm));
 }
@@ -217,6 +231,8 @@ class RecommendationsInterface {
 		// JUST in case
 		if (!recommendations.saved) recommendations.saved = [];
 		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
+		if (!rec.tags.map(toID).includes(toID(username))) rec.tags.push(username);
+		if (!rec.tags.map(toID).includes(toID(artist))) rec.tags.push(artist);
 		if (avatar) rec.userData.avatar = avatar;
 		recommendations.saved.push(rec);
 		saveRecommendations();
@@ -255,6 +271,8 @@ class RecommendationsInterface {
 		url = url.split('&')[0];
 		this.checkTags(tags);
 		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
+		if (!rec.tags.map(toID).includes(toID(username))) rec.tags.push(username);
+		if (!rec.tags.map(toID).includes(toID(artist))) rec.tags.push(artist);
 		if (avatar) rec.userData.avatar = avatar;
 		recommendations.suggested.push(rec);
 		saveRecommendations();
@@ -294,8 +312,10 @@ class RecommendationsInterface {
 			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, "points")} | ` : ``}${videoInfo.views} views</em></small></td>`;
 		}
 		buf += Utils.html`<td style="max-width:300px"><a href="${rec.url}" style="color:#000;font-weight:bold;">${rec.artist} - ${rec.title}</a>`;
-		if (rec.tags?.length) {
-			buf += `<br /><strong>Tags:</strong> <em>${rec.tags.map(x => Utils.escapeHTML(x)).join(', ')}</em>`;
+		const tags = rec.tags.map(x => Utils.escapeHTML(x))
+			.filter(x => toID(x) !== toID(rec.userData.name) && toID(x) !== toID(rec.artist));
+		if (tags.length) {
+			buf += `<br /><strong>Tags:</strong> <em>${tags.join(', ')}</em>`;
 		}
 		if (rec.description) {
 			buf += `<br /><span style="display:inline-block;line-height:1.15em;"><strong>Description:</strong> ${Utils.escapeHTML(rec.description)}</span>`;
@@ -370,6 +390,7 @@ class RecommendationsInterface {
 	checkTags(tags: string[]) {
 		const cleansedTags = new Set<ID>();
 		for (const tag of tags) {
+			if (!toID(tag)) throw new Chat.ErrorMessage(`Empty tag detected.`);
 			if (cleansedTags.has(toID(tag))) {
 				throw new Chat.ErrorMessage(`Duplicate tag: ${tag.trim()}`);
 			}
