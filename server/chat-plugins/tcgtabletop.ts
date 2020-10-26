@@ -2,7 +2,7 @@
 * TCG & Tabletop: Yugioh wiki plugin
 * This is a command that allows users to search the yugioh wiki for cards.
 * It will display the closest match with a given query, or a separate message if there isn't anything found.
-* By Asheviere with help from ascriptmaster, codelegend and the PS development team.
+* By bumbadadabum with help from ascriptmaster, codelegend and the PS development team.
 */
 
 
@@ -46,8 +46,7 @@ export const commands: ChatCommands = {
 	ygo: 'yugioh',
 	yugioh(target, room, user) {
 		this.checkBroadcast();
-		room = this.requireRoom();
-		if (room.roomid !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
+		room = this.requireRoom('tcgtabletop' as RoomID);
 		const subdomain = 'yugioh';
 		const query = target.trim();
 		if (!query) return this.parse('/help yugioh');

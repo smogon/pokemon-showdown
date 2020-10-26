@@ -461,7 +461,12 @@ exports.startuphook = function () {};
  * storage - the way in which to store data from the server that requires persistence.
  * @type {{[k: string]: 'sqlite' | 'text'}}
  */
-exports.storage = {};
+
+/**
+ * lastfmkey - the API key to let users use the last.fm commands from The Studio's
+ * chat plugin.
+ */
+exports.lastfmkey = '';
 
 /**
  * chatlogreader - the search method used for searching chatlogs.

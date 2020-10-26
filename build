@@ -136,6 +136,8 @@ if (sucrase('./server', './.server-dist')) {
 	]);
 }
 
+sucrase('./translations', './.translations-dist');
+
 if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
 	replace('./tools/set-import/importer.js', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
@@ -156,6 +158,7 @@ if (!fs.existsSync('./.data-dist/README.md')) {
 	fs.writeFile('./.data-dist/README.md', text, function () {});
 	fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
 	fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
+	fs.writeFile('./.translations-dist/README.md', text.replace('data/', 'translations/'), function () {});
 	fs.writeFile('./.lib-dist/README.md', text.replace('data/', 'lib/'), function () {});
 }
 

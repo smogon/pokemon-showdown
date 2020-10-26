@@ -11,6 +11,7 @@
 import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
+import {Net} from '../../lib/net';
 
 export function getCommonBattles(userID1: ID, user1: User | null, userID2: ID, user2: User | null) {
 	const battles = [];
@@ -363,15 +364,14 @@ export const commands: ChatCommands = {
 	},
 	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
 
-	host(target, room, user, connection, cmd) {
+	async host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		this.checkCan('ip');
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
-			const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
-			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
-		});
+		const {dnsbl, host, hostType} = await IPTools.lookup(target);
+		const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
+		this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
 
@@ -402,7 +402,7 @@ export const commands: ChatCommands = {
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
-		} else if (ip.slice(-1) === '*') {
+		} else if (ip.endsWith('*')) {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
@@ -1357,10 +1357,10 @@ export const commands: ChatCommands = {
 				if (['band', 'scarf', 'specs'].includes(arg)) {
 					modifier = 1;
 					modSet = true;
-				} else if (arg.charAt(0) === '+') {
+				} else if (arg.startsWith('+')) {
 					modifier = parseInt(arg.charAt(1));
 					modSet = true;
-				} else if (arg.charAt(0) === '-') {
+				} else if (arg.startsWith('-')) {
 					positiveMod = false;
 					modifier = parseInt(arg.charAt(1));
 					modSet = true;
@@ -1908,8 +1908,6 @@ export const commands: ChatCommands = {
 				`- /modlog <em>username</em>: search the moderator log of the room`,
 				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
 				`- !show [image or youtube link]: display given media in chat.`,
-				`- /whitelist [user]: whitelist a non-staff user to use !show.`,
-				`- /unwhitelist [user]: removes the user from !show whitelist.`,
 			],
 			[
 				`<strong>Room moderators (@)</strong> can also use:`,
@@ -2019,6 +2017,7 @@ export const commands: ChatCommands = {
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(this.tr`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
+			if (!this.broadcasting) this.parse(`/regtime`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
 			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/ladderhelp`}">${this.tr`How the ladder works`}</a>`);
@@ -2563,10 +2562,9 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 
 		let buf;
-		if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
-			const YouTube = new YoutubeInterface();
+		const YouTube = new YoutubeInterface();
+		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
-			if (!buf) return this.errorReply('Could not get YouTube video');
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
@@ -2594,6 +2592,32 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
+
+	regdate: 'registertime',
+	regtime: 'registertime',
+	async registertime(target, room, user, connection) {
+		this.runBroadcast();
+		if (Monitor.countNetRequests(connection.ip)) {
+			return this.errorReply(`You are using this command to quickly. Wait a bit and try again.`);
+		}
+		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
+		target = toID(target);
+		if (!target) target = user.id;
+		let rawResult;
+		try {
+			rawResult = await Net(`https://${Config.routes.root}/users/${target}.json`).get();
+		} catch (e) {
+			if (e.message.includes('Not found')) throw new Chat.ErrorMessage(`User '${target}' is unregistered.`);
+			throw new Chat.ErrorMessage(e.message);
+		}
+		// not in a try-catch block because if this doesn't work, this is a problem that should be known
+		const result = JSON.parse(rawResult);
+		const date = new Date(result.registertime * 1000);
+		const regDate = Chat.toTimestamp(date, {human: true});
+		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
+		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`);
+	},
+	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],
 
 	pi(target, room, user) {
 		if (!this.runBroadcast()) return false;
@@ -2730,6 +2754,6 @@ process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
 		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
-		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml',
 	);
 });

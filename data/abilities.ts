@@ -172,6 +172,38 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 165,
 	},
+	asoneglastrier: {
+		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'As One');
+			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+		},
+		onFoeTryEatItem: false,
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-ability', source, 'Chilling Neigh');
+				this.boost({atk: length}, source, source, null, true);
+			}
+		},
+		name: "As One (Glastrier)",
+		rating: 3.5,
+		num: 266,
+	},
+	asonespectrier: {
+		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'As One');
+			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+		},
+		onFoeTryEatItem: false,
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-ability', source, 'Grim Neigh');
+				this.boost({spa: length}, source, source, null, true);
+			}
+		},
+		name: "As One (Spectrier)",
+		rating: 3.5,
+		num: 267,
+	},
 	aurabreak: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Aura Break');
@@ -328,6 +360,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 167,
 	},
+	chillingneigh: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({atk: length}, source);
+			}
+		},
+		name: "Chilling Neigh",
+		rating: 3,
+		num: 264,
+	},
 	chlorophyll: {
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
@@ -474,6 +516,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Cotton Down",
 		rating: 2,
 		num: 238,
+	},
+	curiousmedicine: {
+		onStart(pokemon) {
+			for (const ally of pokemon.side.active) {
+				if (ally !== pokemon) {
+					ally.clearBoosts();
+					this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
+				}
+			}
+		},
+		name: "Curious Medicine",
+		rating: 0,
+		num: 261,
 	},
 	cursedbody: {
 		onDamagingHit(damage, target, source, move) {
@@ -715,6 +770,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Download",
 		rating: 3.5,
 		num: 88,
+	},
+	dragonsmaw: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dragon') {
+				this.debug('Dragon\'s Maw boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dragon') {
+				this.debug('Dragon\'s Maw boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Dragon's Maw",
+		rating: 3.5,
+		num: 263,
 	},
 	drizzle: {
 		onStart(source) {
@@ -1199,6 +1273,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 229,
 	},
+	grimneigh: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({spa: length}, source);
+			}
+		},
+		name: "Grim Neigh",
+		rating: 3,
+		num: 265,
+	},
 	gulpmissile: {
 		onDamagingHit(damage, target, source, move) {
 			if (target.transformed || target.isSemiInvulnerable()) return;
@@ -1212,17 +1296,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				target.formeChange('cramorant', move);
 			}
 		},
-		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.js
-		onAnyDamage(damage, target, source, effect) {
-			if (
-				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
-				source.species.name === 'Cramorant' && !source.transformed
-			) {
-				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
-				source.formeChange(forme, effect);
-			}
-		},
-		onAnyAfterSubDamage(damage, target, source, effect) {
+		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.ts
+		onSourceTryPrimaryHit(target, source, effect) {
 			if (
 				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
 				source.species.name === 'Cramorant' && !source.transformed
@@ -2569,7 +2644,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
 			];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
@@ -2778,7 +2853,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
 			];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
@@ -3833,7 +3908,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const target = possibleTargets[rand];
 				const ability = target.getAbility();
 				const bannedAbilities = [
-					'noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+					'noability', 'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
 				];
 				if (bannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
@@ -3847,6 +3922,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Trace",
 		rating: 2.5,
 		num: 36,
+	},
+	transistor: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Transistor boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Transistor boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Transistor",
+		rating: 3.5,
+		num: 262,
 	},
 	triage: {
 		onModifyPriority(priority, pokemon, target, move) {

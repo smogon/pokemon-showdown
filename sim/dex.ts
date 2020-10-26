@@ -386,9 +386,9 @@ export class ModdedDex {
 
 		name = (name || '').trim();
 		let id = toID(name);
-		if (id === 'nidoran' && name.slice(-1) === '♀') {
+		if (id === 'nidoran' && name.endsWith('♀')) {
 			id = 'nidoranf' as ID;
-		} else if (id === 'nidoran' && name.slice(-1) === '♂') {
+		} else if (id === 'nidoran' && name.endsWith('♂')) {
 			id = 'nidoranm' as ID;
 		}
 		let species: any = this.speciesCache.get(id);
@@ -644,7 +644,7 @@ export class ModdedDex {
 			(this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).condition) ||
 			(this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).condition)
 		) {
-			effect = new Data.Condition({name: found.name || id}, found.condition!);
+			effect = new Data.Condition({name: found.name || id}, found.condition);
 		} else if (id === 'recoil') {
 			effect = new Data.Condition({id, name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
@@ -828,36 +828,6 @@ export class ModdedDex {
 		return nature;
 	}
 
-	/** Given a table of base stats and a pokemon set, return the actual stats. */
-	spreadModify(baseStats: StatsTable, set: PokemonSet): StatsTable {
-		const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
-		const tr = this.trunc;
-		let statName: keyof StatsTable;
-		for (statName in modStats) {
-			const stat = baseStats[statName];
-			modStats[statName] = tr(tr(2 * stat + set.ivs[statName] + tr(set.evs[statName] / 4)) * set.level / 100 + 5);
-		}
-		if ('hp' in baseStats) {
-			const stat = baseStats['hp'];
-			modStats['hp'] = tr(tr(2 * stat + set.ivs['hp'] + tr(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
-		}
-		return this.natureModify(modStats as StatsTable, set);
-	}
-
-	natureModify(stats: StatsTable, set: PokemonSet): StatsTable {
-		const nature = this.getNature(set.nature);
-		let stat: keyof StatsTable;
-		if (nature.plus) {
-			stat = nature.plus;
-			stats[stat] = Math.floor(stats[stat] * 1.1);
-		}
-		if (nature.minus) {
-			stat = nature.minus;
-			stats[stat] = Math.floor(stats[stat] * 0.9);
-		}
-		return stats;
-	}
-
 	getHiddenPower(ivs: AnyObject) {
 		const hpTypes = [
 			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
@@ -1039,7 +1009,7 @@ export class ModdedDex {
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
-				let limit = rule.charAt(0) === '+' ? Infinity : 0;
+				let limit = rule.startsWith('+') ? Infinity : 0;
 				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
 					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
 					buf = buf.slice(0, gtIndex);
@@ -1064,7 +1034,7 @@ export class ModdedDex {
 			if (!this.data.Formats.hasOwnProperty(id)) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
-			if (rule.charAt(0) === '!') return `!${id}`;
+			if (rule.startsWith('!')) return `!${id}`;
 			return id;
 		}
 	}
@@ -1076,7 +1046,7 @@ export class ModdedDex {
 		const matches = [];
 		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
 		for (const matchType of matchTypes) {
-			if (rule.slice(0, 1 + matchType.length) === matchType + ':') {
+			if (rule.startsWith(`${matchType}:`)) {
 				matchTypes = [matchType];
 				id = id.slice(matchType.length) as ID;
 				break;
@@ -1119,7 +1089,7 @@ export class ModdedDex {
 					}
 				}
 				matches.push(matchType + ':' + id);
-			} else if (matchType === 'pokemon' && id.slice(-4) === 'base') {
+			} else if (matchType === 'pokemon' && id.endsWith('base')) {
 				id = id.slice(0, -4) as ID;
 				if (table.hasOwnProperty(id)) {
 					matches.push('pokemon:' + id);
@@ -1212,6 +1182,10 @@ export class ModdedDex {
 	packTeam(team: PokemonSet[] | null): string {
 		if (!team) return '';
 
+		function getIv(ivs: StatsTable, s: keyof StatsTable): string {
+			return ivs[s] === 31 || ivs[s] === undefined ? '' : ivs[s].toString();
+		}
+
 		let buf = '';
 		for (const set of team) {
 			if (buf) buf += ']';
@@ -1254,9 +1228,6 @@ export class ModdedDex {
 			}
 
 			// ivs
-			const getIv = (ivs: StatsTable, s: keyof StatsTable): string => {
-				return ivs[s] === 31 || ivs[s] === undefined ? '' : ivs[s].toString();
-			};
 			let ivs = '|';
 			if (set.ivs) {
 				ivs = '|' + getIv(set.ivs, 'hp') + ',' + getIv(set.ivs, 'atk') + ',' + getIv(set.ivs, 'def') +
@@ -1290,8 +1261,8 @@ export class ModdedDex {
 			}
 
 			if (set.pokeball || set.hpType || set.gigantamax) {
-				buf += ',' + set.hpType;
-				buf += ',' + toID(set.pokeball);
+				buf += ',' + (set.hpType || '');
+				buf += ',' + toID(set.pokeball || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
 			}
 		}
@@ -1302,7 +1273,7 @@ export class ModdedDex {
 	fastUnpackTeam(buf: string): PokemonSet[] | null {
 		if (!buf) return null;
 		if (typeof buf !== 'string') return buf;
-		if (buf.charAt(0) === '[' && buf.charAt(buf.length - 1) === ']') {
+		if (buf.startsWith('[') && buf.endsWith(']')) {
 			buf = this.packTeam(JSON.parse(buf));
 		}
 
@@ -1416,8 +1387,8 @@ export class ModdedDex {
 			}
 			if (misc) {
 				set.happiness = (misc[0] ? Number(misc[0]) : 255);
-				set.hpType = misc[1];
-				set.pokeball = misc[2];
+				set.hpType = misc[1] || '';
+				set.pokeball = this.toID(misc[2] || '');
 				set.gigantamax = !!misc[3];
 			}
 			if (j < 0) break;
@@ -1435,7 +1406,7 @@ export class ModdedDex {
 		for (const [i, mon] of team.entries()) {
 			const species = Dex.getSpecies(mon.species);
 			const nickname = nicknames?.[i];
-			output += nickname && nickname !== species.name ? `${nickname} (${species.name})` : species.name;
+			output += nickname && nickname !== species.baseSpecies ? `${nickname} (${species.name})` : species.name;
 			output += mon.item ? ` @ ${Dex.getItem(mon.item).name}<br />` : `<br />`;
 			output += `Ability: ${Dex.getAbility(mon.ability).name}<br />`;
 			if (typeof mon.happiness === 'number' && mon.happiness !== 255) output += `Happiness: ${mon.happiness}<br />`;

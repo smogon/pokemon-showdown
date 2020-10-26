@@ -118,4 +118,17 @@ describe("Dynamax", function () {
 		battle.makeChoices('move 1', 'auto');
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
 	});
+
+	it.skip(`should not allow the user to select max moves with 0 base PP remaining`, function () {
+		battle = common.createBattle([[
+			{species: 'pichu', ability: 'prankster', level: 1, moves: ['grudge']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', moves: ['earthquake', 'sleeptalk']},
+		]]);
+
+		battle.makeChoices('auto', 'move earthquake dynamax');
+		battle.makeChoices();
+		assert.cantMove(() => battle.p2.chooseMove(1), 'wynaut', 'earthquake', true);
+	});
 });

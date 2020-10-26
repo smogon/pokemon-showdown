@@ -16,7 +16,7 @@ interface Question {
 export class Jeopardy extends Rooms.RoomGame {
 	playerTable: {[userid: string]: JeopardyGamePlayer};
 	host: User;
-	state: string;
+	state: 'signups' | 'selecting' | 'answering' | 'wagering' | 'buzzing' | 'checking' | 'round2';
 	gameid: ID;
 	categories: string[];
 	question: Question;
@@ -33,6 +33,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	finalAnsweringTime: number;
 	timeout: NodeJS.Timer | null;
 	roundStarted: boolean;
+	// FIXME: this type should be `JeopardyGamePlayer | null`
 	curPlayer: JeopardyGamePlayer;
 	prevPlayer: JeopardyGamePlayer;
 	order: string[];
@@ -243,7 +244,7 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	askQuestion() {
 		if (!this.question.dd) {
-			delete this.curPlayer;
+			this.curPlayer = null!;
 		}
 		this.clearBuzzes();
 		this.room.addRaw(`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);

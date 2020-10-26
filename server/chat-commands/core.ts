@@ -710,24 +710,23 @@ export const commands: ChatCommands = {
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 
-	rank(target, room, user) {
+	async rank(target, room, user) {
 		if (!target) target = user.name;
 
-		return Ladders.visualizeAll(target).then(values => {
-			let buffer = `<div class="ladder"><table>`;
-			buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
+		const values = await Ladders.visualizeAll(target);
+		let buffer = `<div class="ladder"><table>`;
+		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
-			const ratings = values.join(``);
-			if (!ratings) {
-				buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
-			} else {
-				buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
-				buffer += ratings;
-			}
-			buffer += `</table></div>`;
+		const ratings = values.join(``);
+		if (!ratings) {
+			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
+		} else {
+			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
+			buffer += ratings;
+		}
+		buffer += `</table></div>`;
 
-			this.sendReply(`|raw|${buffer}`);
-		});
+		this.sendReply(`|raw|${buffer}`);
 	},
 
 	showrank: 'hiderank',
@@ -758,17 +757,17 @@ export const commands: ChatCommands = {
 
 	language(target, room, user) {
 		if (!target) {
-			const language = Chat.languages.get(user.language || 'english');
+			const language = Chat.languages.get(user.language || 'english' as ID);
 			return this.sendReply(this.tr`Currently, you're viewing Pokémon Showdown in ${language}.`);
 		}
-		target = toID(target);
-		if (!Chat.languages.has(target)) {
+		const languageID = toID(target);
+		if (!Chat.languages.has(languageID)) {
 			const languages = [...Chat.languages.values()].join(', ');
 			return this.errorReply(this.tr`Valid languages are: ${languages}`);
 		}
-		user.language = target;
+		user.language = languageID;
 		user.update();
-		const language = Chat.languages.get(target);
+		const language = Chat.languages.get(languageID);
 		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
 	},
 	languagehelp: [
@@ -952,12 +951,15 @@ export const commands: ChatCommands = {
 				teamStrings = [indexedSet];
 			}
 		}
-		const nicknames = teamStrings.map(item => item.species !== item.name ? item.name : item.species);
+		const nicknames = teamStrings.map(set => {
+			const species = Dex.getSpecies(set.species).baseSpecies;
+			return species !== set.name ? set.name : species;
+		});
 		let resultString = Dex.stringifyTeam(teamStrings, nicknames, hideStats);
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
-		this.runBroadcast();
+		this.runBroadcast(true);
 		return this.sendReplyBox(resultString);
 	},
 	showsethelp: [
@@ -1676,6 +1678,15 @@ export const commands: ChatCommands = {
 				return this.parse(`/${target}`);
 			}
 			if (!nextNamespace) {
+				for (const g in Config.groups) {
+					const groupid = Config.groups[g].id;
+					if (new RegExp(`(global)?(un|de)?${groupid}`).test(target)) {
+						return this.parse(`/help promote`);
+					}
+					if (new RegExp(`room(un|de)?${groupid}`).test(target)) {
+						return this.parse(`/help roompromote`);
+					}
+				}
 				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 			}
 

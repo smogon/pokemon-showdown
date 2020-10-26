@@ -9,12 +9,12 @@
  */
 
 import * as child_process from 'child_process';
-import {normalize as normalizePath} from 'path';
 import * as util from 'util';
 
 import {FS} from '../lib/fs';
 import {QueryProcessManager} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
+import {checkRipgrepAvailability} from './config-loader';
 
 import {parseModlog} from '../tools/modlog/converter';
 
@@ -30,7 +30,7 @@ const GLOBAL_PUNISHMENTS = [
 const GLOBAL_PUNISHMENTS_REGEX_STRING = `\\b(${GLOBAL_PUNISHMENTS.join('|')}):.*`;
 
 const PUNISHMENTS = [
-	...GLOBAL_PUNISHMENTS, 'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE',
+	...GLOBAL_PUNISHMENTS, 'ROOMBAN', 'WEEKROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE',
 	'CRISISDEMOTE', 'UNLOCK', 'UNLOCKNAME', 'UNLOCKRANGE', 'UNLOCKIP', 'UNBAN',
 	'UNRANGEBAN', 'TRUSTUSER', 'UNTRUSTUSER', 'BLACKLIST', 'BATTLEBAN', 'UNBATTLEBAN',
 	'NAMEBLACKLIST', 'KICKBATTLE', 'UNTICKETBAN', 'HIDETEXT', 'HIDEALTSTEXT', 'REDIRECT',
@@ -110,21 +110,6 @@ class SortedLimitedLengthList {
 			this.list.pop();
 		}
 	}
-}
-
-export function checkRipgrepAvailability() {
-	if (Config.ripgrepmodlog === undefined) {
-		Config.ripgrepmodlog = (async () => {
-			try {
-				await execFile('rg', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				await execFile('tac', ['--version'], {cwd: normalizePath(`${__dirname}/../`)});
-				return true;
-			} catch (error) {
-				return false;
-			}
-		})();
-	}
-	return Config.ripgrepmodlog;
 }
 
 export class Modlog {
@@ -264,7 +249,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await execFile('rg', options, {cwd: normalizePath(`${__dirname}/../`)});
+			output = await execFile('rg', options, {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
@@ -277,7 +262,7 @@ export class Modlog {
 	async getGlobalPunishments(user: User | string, days = 30) {
 		const response = await PM.query({
 			rooms: ['global' as ModlogID],
-			regexString: `[${this.escapeRegex(toID(user))}]`,
+			regexString: this.escapeRegex(`[${toID(user)}]`),
 			maxLines: days * 10,
 			onlyPunishments: 'global',
 		});
@@ -379,8 +364,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore please be silent
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 

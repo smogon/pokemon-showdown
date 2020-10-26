@@ -319,7 +319,7 @@ export const Punishments = new class {
 	}
 
 	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {
-		if (id.charAt(0) === '#') return;
+		if (id.startsWith('#')) return;
 		const buf = Punishments.renderEntry(entry, id);
 		return FS(filename).append(buf);
 	}
@@ -500,7 +500,7 @@ export const Punishments = new class {
 		if (!lastUserId.startsWith('guest')) {
 			Punishments.userids.set(lastUserId, punishment);
 		}
-		if (user.locked && user.locked.charAt(0) !== '#') {
+		if (user.locked && !user.locked.startsWith('#')) {
 			Punishments.userids.set(user.locked, punishment);
 			userids.add(user.locked as ID);
 		}
@@ -779,10 +779,6 @@ export const Punishments = new class {
 			await Punishments.lock(user, expires, userid, false, `Autolock: ${name}: ${reason}`);
 		}
 		Monitor.log(`[${source}] ${punishment}ED: ${message}`);
-		const roomauth = Rooms.global.destroyPersonalRooms(userid);
-		if (roomauth.length) {
-			Monitor.log(`[CrisisMonitor] Autolocked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
-		}
 
 		const logEntry = {
 			action: `AUTO${punishment}`,
@@ -800,6 +796,11 @@ export const Punishments = new class {
 		if (roomObject?.battle && userObject && userObject.connections[0]) {
 			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
 		}
+
+		const roomauth = Rooms.global.destroyPersonalRooms(userid);
+		if (roomauth.length) {
+			Monitor.log(`[CrisisMonitor] Autolocked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+		}
 	}
 	unlock(name: string) {
 		const user = Users.get(name);
@@ -812,7 +813,7 @@ export const Punishments = new class {
 			user.updateIdentity();
 			success.push(user.getLastName());
 		}
-		if (id.charAt(0) !== '#') {
+		if (!id.startsWith('#')) {
 			for (const curUser of Users.users.values()) {
 				if (curUser.locked === id) {
 					curUser.locked = null;
@@ -861,7 +862,7 @@ export const Punishments = new class {
 			user.resetName();
 			success.push(user.getLastName());
 		}
-		if (id.charAt(0) !== '#') {
+		if (!id.startsWith('#')) {
 			for (const curUser of Users.users.values()) {
 				if (curUser.locked === id) {
 					curUser.locked = null;
@@ -1434,13 +1435,14 @@ export const Punishments = new class {
 				continue;
 			} else if (options?.checkIps) {
 				if (typeof user !== 'string') {
+					let longestIPPunishment;
 					for (const ip of user.ips) {
 						punishment = Punishments.roomIps.nestedGet(curRoom.roomid, ip);
-						if (punishment) {
-							punishments.push([curRoom, punishment]);
-							continue;
+						if (punishment && (!longestIPPunishment || punishment[2] > longestIPPunishment[2])) {
+							longestIPPunishment = punishment;
 						}
 					}
+					if (longestIPPunishment) punishments.push([curRoom, longestIPPunishment]);
 				}
 			}
 			if (checkMutes && curRoom.muteQueue) {
@@ -1463,7 +1465,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.charAt(0) === '#') return;
+			if (id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (entry) {
@@ -1484,7 +1486,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomUserids.get(roomid)! : Punishments.userids).forEach((punishment, userid) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.charAt(0) === '#') return;
+			if (id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (!entry) {

@@ -375,7 +375,7 @@ export const commands: ChatCommands = {
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
 				// rebuild the formats list
-				delete Rooms.global.formatList;
+				Rooms.global.formatList = '';
 				// respawn validator processes
 				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
@@ -1042,7 +1042,7 @@ export const commands: ChatCommands = {
 			cmd = target.toLowerCase();
 			target = '';
 		}
-		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
+		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 		const targets = target.split(',');
 		function getPlayer(input: string) {
 			const player = battle.playerTable[toID(input)];

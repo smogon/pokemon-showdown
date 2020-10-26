@@ -293,7 +293,7 @@ export class UNO extends Rooms.RoomGame {
 	}
 
 	onAwaitUno() {
-		return new Promise(resolve => {
+		return new Promise<void>(resolve => {
 			if (!this.awaitUno) return resolve();
 
 			this.state = "uno";
@@ -308,23 +308,22 @@ export class UNO extends Rooms.RoomGame {
 	}
 
 	nextTurn(starting?: boolean) {
-		void this.onAwaitUno()
-			.then(x => {
-				if (!starting) this.onNextPlayer();
+		void this.onAwaitUno().then(() => {
+			if (!starting) this.onNextPlayer();
 
-				if (this.timer) clearTimeout(this.timer);
-				const player = this.playerTable[this.currentPlayerid];
+			if (this.timer) clearTimeout(this.timer);
+			const player = this.playerTable[this.currentPlayerid];
 
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name}'s turn.`);
-				this.state = 'play';
-				if (player.cardLock) player.cardLock = null;
-				player.sendDisplay();
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name}'s turn.`);
+			this.state = 'play';
+			if (player.cardLock) player.cardLock = null;
+			player.sendDisplay();
 
-				this.timer = setTimeout(() => {
-					this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has been automatically disqualified.`);
-					this.eliminate(this.currentPlayerid);
-				}, this.maxTime * 1000);
-			});
+			this.timer = setTimeout(() => {
+				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has been automatically disqualified.`);
+				this.eliminate(this.currentPlayerid);
+			}, this.maxTime * 1000);
+		});
 	}
 
 	onNextPlayer() {
@@ -558,7 +557,7 @@ export class UNO extends Rooms.RoomGame {
 		for (const i in this.playerTable) {
 			this.playerTable[i].destroy();
 		}
-		delete this.room.game;
+		this.room.game = null;
 	}
 }
 
