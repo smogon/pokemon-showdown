@@ -289,7 +289,7 @@ export class Modlog {
 		if (overrideID) entry.visualRoomID = overrideID;
 
 		const entries = [entry];
-		if (!Config.nosqlitemodlog) this.writeSQL(entries);
+		if (Config.usesqlitemodlog) this.writeSQL(entries);
 		this.writeText(entries);
 	}
 

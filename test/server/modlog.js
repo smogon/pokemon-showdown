@@ -5,9 +5,12 @@
 
 'use strict';
 
+const {Config} = require('../../.server-dist/config-loader');
 const ml = require('../../.server-dist/modlog');
 const modlog = new ml.Modlog('/dev/null', ':memory:');
 const assert = require('assert').strict;
+
+Config.usesqlitemodlog = true;
 
 const DATASET_A = [
 	{action: 'ROOMBAN', userid: 'sometroll', ip: '127.0.0.1', loggedBy: 'annika', note: 'FIRST ENTRY', time: 1},
