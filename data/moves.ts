@@ -9844,37 +9844,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		selfdestruct: "ifHit",
-		sideCondition: 'lunardance',
+		slotCondition: 'lunardance',
 		condition: {
-			duration: 2,
-			onStart(side, source) {
-				this.debug('Lunar Dance started on ' + side.name);
-				this.effectData.positions = [];
-				for (const i of side.active.keys()) {
-					this.effectData.positions[i] = false;
-				}
-				this.effectData.positions[source.position] = true;
-			},
-			onRestart(side, source) {
-				this.effectData.positions[source.position] = true;
-			},
-			onSwitchInPriority: 1,
-			onSwitchIn(target) {
-				const positions: boolean[] = this.effectData.positions;
-				if (target.position !== this.effectData.sourcePosition) {
-					return;
-				}
-				if (!target.fainted) {
+			onSwap(target) {
+				if (
+					!target.fainted && (
+						target.hp < target.maxhp ||
+						target.status ||
+						target.moveSlots.some(moveSlot => moveSlot.pp < moveSlot.maxpp)
+					)
+				) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					positions[target.position] = false;
-				}
-				if (!positions.some(affected => affected === true)) {
-					target.side.removeSideCondition('lunardance');
+					target.side.removeSlotCondition(target, 'lunardance');
 				}
 			},
 		},
