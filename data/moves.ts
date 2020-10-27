@@ -4006,17 +4006,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onHit(target) {
-			if (!target.hp) return;
-			const move = target.lastMove;
-			if (!move || move.isZ || move.isMax) return;
+		secondary: {
+			chance: 100,
+			onHit(target) {
+				if (!target.hp) return;
+				const move = target.lastMove;
+				if (!move || move.isZ || move.isMax) return;
 
-			const ppDeducted = target.deductPP(move.id, 3);
-			if (!ppDeducted) return;
+				const ppDeducted = target.deductPP(move.id, 3);
+				if (!ppDeducted) return;
 
-			this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
+				this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
+			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Psychic",
 	},
