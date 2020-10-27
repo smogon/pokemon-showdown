@@ -13,6 +13,8 @@ import {Utils} from '../../lib/utils';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
+export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
+
 interface ChannelEntry {
 	name: string;
 	description: string;
@@ -148,13 +150,20 @@ export class YoutubeInterface {
 		return Promise.resolve({...this.data.channels[id]});
 	}
 	async getVideoData(id: string): Promise<VideoData | null> {
-		const raw = await Net(`${ROOT}videos`).get({
-			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
-		});
+		const cached = videoDataCache.get(id);
+		if (cached) return Promise.resolve(cached);
+		let raw;
+		try {
+			raw = await Net(`${ROOT}videos`).get({
+				query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+			});
+		} catch (e) {
+			throw new Chat.ErrorMessage(`Failed to retrieve video data: ${e.message}.`);
+		}
 		const res = JSON.parse(raw);
 		if (!res || !res.items || res.items.length < 1) return null;
 		const video = res.items[0];
-		return {
+		const data: VideoData = {
 			title: video.snippet.title,
 			id,
 			date: new Date(video.snippet.publishedAt).toString(),
@@ -166,6 +175,8 @@ export class YoutubeInterface {
 			likes: video.statistics.likeCount,
 			dislikes: video.statistics.dislikeCount,
 		};
+		videoDataCache.set(id, data);
+		return Promise.resolve(data);
 	}
 	channelSearch(search: string) {
 		let channel;
