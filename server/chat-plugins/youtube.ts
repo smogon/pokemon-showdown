@@ -288,6 +288,7 @@ export const commands: ChatCommands = {
 	youtube: {
 		async addchannel(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
+			this.checkCan('mute', null, room);
 			let [id, name] = target.split(',');
 			if (name) name = name.trim();
 			if (!id) return this.errorReply('Specify a channel ID.');
