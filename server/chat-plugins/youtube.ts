@@ -151,7 +151,7 @@ export class YoutubeInterface {
 	}
 	async getVideoData(id: string): Promise<VideoData | null> {
 		const cached = videoDataCache.get(id);
-		if (cached) return Promise.resolve(cached);
+		if (cached) return cached;
 		let raw;
 		try {
 			raw = await Net(`${ROOT}videos`).get({
@@ -176,7 +176,7 @@ export class YoutubeInterface {
 			dislikes: video.statistics.dislikeCount,
 		};
 		videoDataCache.set(id, data);
-		return Promise.resolve(data);
+		return data;
 	}
 	channelSearch(search: string) {
 		let channel;
