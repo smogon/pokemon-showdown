@@ -996,9 +996,9 @@ export const commands: ChatCommands = {
 			}
 			buffer += Object.keys(result[0]).join('</th><th>');
 			buffer += `</th></tr><tr>`;
-			buffer += result.map(item => {
-				return `<td>${Object.values(item).map(val => Utils.escapeHTML(val as string)).join('</td><td>')}</td>`;
-			}).join('</tr><tr>');
+			buffer += result.map(item => (
+				`<td>${Object.values(item).map(val => Utils.escapeHTML(val as string)).join('</td><td>')}</td>`;
+			)).join('</tr><tr>');
 			buffer += `</tr></table></div>`;
 			return buffer;
 		}
