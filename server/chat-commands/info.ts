@@ -2555,9 +2555,12 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
 
-	async show(target, room, user) {
+	async show(target, room, user, connection) {
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help show`);
+		if (Monitor.countNetRequests(connection.ip)) {
+			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
+		}
 
 		const [link, comment] = Utils.splitFirst(target, ',');
 
@@ -2598,7 +2601,7 @@ export const commands: ChatCommands = {
 	async registertime(target, room, user, connection) {
 		this.runBroadcast();
 		if (Monitor.countNetRequests(connection.ip)) {
-			return this.errorReply(`You are using this command to quickly. Wait a bit and try again.`);
+			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
 		}
 		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
 		target = toID(target);
