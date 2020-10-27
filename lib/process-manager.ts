@@ -521,7 +521,6 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 export class StreamProcessManager extends ProcessManager {
 	/* taskid: stream used only in child process */
 	activeStreams: Map<string, Streams.ObjectReadWriteStream<string>>;
-	// tslint:disable-next-line:variable-name
 	_createStream: () => Streams.ObjectReadWriteStream<string>;
 
 	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream<string>) {

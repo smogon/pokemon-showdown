@@ -714,12 +714,10 @@ export class ObjectReadStream<T> {
 	}
 
 	async pipeTo(outStream: ObjectWriteStream<T>, options: {noEnd?: boolean} = {}) {
-		/* tslint:disable */
 		let value, done;
 		while (({value, done} = await this.next(), !done)) {
 			await outStream.write(value!);
 		}
-		/* tslint:enable */
 		if (!options.noEnd) return outStream.writeEnd();
 	}
 }

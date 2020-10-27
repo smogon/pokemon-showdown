@@ -59,7 +59,6 @@ try {
 
 try {
 	require.resolve('../.sim-dist/index');
-	// tslint:disable-next-line
 	const sucraseVersion = require('sucrase').getVersion().split('.');
 	if (
 		parseInt(sucraseVersion[0]) < 3 ||

@@ -812,7 +812,6 @@ export class ModdedDex {
 
 		name = (name || '').trim();
 		const id = toID(name);
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		let nature: Nature = {} as Nature;
 		if (id && id !== 'constructor' && this.data.Natures[id]) {
 			nature = this.data.Natures[id];
@@ -1284,7 +1283,6 @@ export class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			// tslint:disable-next-line:no-object-literal-type-assertion
 			const set: PokemonSet = {} as PokemonSet;
 			team.push(set);
 
