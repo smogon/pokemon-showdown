@@ -203,12 +203,10 @@ export class LastFMInterface {
 }
 
 class RecommendationsInterface {
-	interval?: NodeJS.Timer;
-	intervalTime?: number;
+	interval!: NodeJS.Timer;
+	intervalTime = recommendations.intervalTime ? recommendations.intervalTime : 60;
 	constructor() {
-		if (recommendations.intervalTime) {
-			this.runInterval(`${recommendations.intervalTime}`);
-		}
+		this.runInterval(`${this.intervalTime}`);
 	}
 	getRandomRecommendation() {
 		const recs = recommendations.saved;
@@ -237,7 +235,7 @@ class RecommendationsInterface {
 				const room = Rooms.get('thestudio');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await this.render(this.getRandomRecommendation());
-				room.add(`|html|<div class="infobox">${res}</div>`).update();
+				room.add(`|html|${res}`).update();
 			})();
 		}, interval);
 		return this.interval;
