@@ -326,10 +326,10 @@ export const LogViewer = new class {
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
 			const group = !name.startsWith(' ') ? name.charAt(0) : ``;
-			return (
-				`<div class="chat"><small>[${timestamp}] ${group}</small><username>${Utils.escapeHTML(name.slice(1))}:` +
-				`</username> <q>${Chat.formatText(message)}</q></div>`
-			);
+			return `<div class="chat">` +
+				Utils.html`<small>[${timestamp}] ${group}</small><username>${name.slice(1)}:</username> ` +
+				`<q>${Chat.formatText(message)}</q>` +
+				`</div>`;
 		}
 		case 'html': case 'raw': {
 			const [, html] = Utils.splitFirst(line, '|', 1);
