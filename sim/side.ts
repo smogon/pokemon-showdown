@@ -638,7 +638,6 @@ export class Side {
 
 		this.choice.switchIns.add(slot);
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
@@ -683,7 +682,6 @@ export class Side {
 			}
 
 			this.choice.switchIns.add(pos);
-			// tslint:disable-next-line:no-object-literal-type-assertion
 			this.choice.actions.push({
 				choice: 'team',
 				index,
@@ -708,7 +706,6 @@ export class Side {
 		}
 		const pokemon: Pokemon = this.active[index];
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'shift',
 			pokemon,
@@ -895,7 +892,6 @@ export class Side {
 			return this.emitChoiceError(`Can't pass: Not a move or switch request`);
 		}
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'pass',
 		} as ChosenAction);

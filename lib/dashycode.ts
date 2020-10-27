@@ -148,7 +148,6 @@ export function encode(str: string, allowCaps = false) {
 			streamWrite(unsafeStream, 2, 0x0);
 		} else if (curCharCode === 32) { // space
 			streamWrite(unsafeStream, 3, 0x3);
-			// tslint:disable-next-line:no-conditional-assignment
 		} else if ((unsafeMapIndex = UNSAFE_MAP.indexOf(str.charAt(i))) >= 0) {
 			curCharCode = (unsafeMapIndex << 2) + 0x2;
 			streamWrite(unsafeStream, 7, curCharCode);

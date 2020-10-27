@@ -65,7 +65,6 @@ export class MultiRandomRunner {
 		let format: string | false;
 		let lastFormat: string | false = false;
 		let failures = 0;
-		// tslint:disable-next-line no-conditional-assignment
 		while ((format = this.getNextFormat())) {
 			if (this.all && lastFormat && format !== lastFormat) {
 				if (this.async) await Promise.all(games);
