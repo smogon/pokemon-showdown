@@ -924,6 +924,7 @@ export const commands: ChatCommands = {
 			if (result?.then) {
 				uhtmlId = `eval-${room.nextGameNumber()}`;
 				this.sendReply(`|uhtml|${uhtmlId}|${generateHTML('<', 'Promise pending')}`);
+				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
 				this.sendReply(`|uhtmlchange|${uhtmlId}|${generateHTML('<', result)}`);
 			} else {
