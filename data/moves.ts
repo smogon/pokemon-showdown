@@ -6312,7 +6312,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 							// activation text for the second Pokemon in doubles
 						}
 					}
-					return false;
 				}
 			},
 		},
