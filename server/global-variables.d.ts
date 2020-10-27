@@ -1,6 +1,5 @@
 import * as ChatType from './chat';
 import * as RoomsType from './rooms';
-import * as RoomlogsType from './roomlogs';
 import * as SocketsType from './sockets';
 import * as TeamValidatorAsyncType from './team-validator-async';
 import * as UsersType from './users';
@@ -9,12 +8,13 @@ import * as VerifierType from './verifier';
 import {ConfigType} from "../server/config-loader";
 
 import {IPTools as IPToolsType} from './ip-tools';
-import {LadderStore as LadderStoreType} from './ladders-remote';
 import {Ladders as LaddersType} from './ladders';
 import {LoginServer as LoginServerType} from './loginserver';
 import {Monitor as MonitorType} from './monitor';
 import {Punishments as PunishmentsType} from './punishments';
 import {Tournaments as TournamentsType} from './tournaments';
+
+import {Dex as DexType} from '../sim/dex';
 
 declare global {
 	namespace NodeJS {
@@ -30,7 +30,6 @@ declare global {
 			Punishments: any;
 			Rooms: any;
 			Sockets: any
-			TeamValidator: any;
 			TeamValidatorAsync: any;
 			Tournaments: any;
 			Users: any;
@@ -41,18 +40,17 @@ declare global {
 	}
 	const Config: ConfigType;
 	const Chat: typeof ChatType.Chat;
+	const Dex: typeof DexType;
 	const IPTools: typeof IPToolsType;
 	const Ladders: typeof LaddersType;
-	const LadderStoreT: typeof LadderStoreType;
 	const LoginServer: typeof LoginServerType;
 	const Monitor: typeof MonitorType;
 	const Punishments: typeof PunishmentsType;
+	const Rooms: typeof RoomsType.Rooms;
 	const Sockets: typeof SocketsType.Sockets;
 	const TeamValidatorAsync: typeof TeamValidatorAsyncType;
-	const Rooms: typeof RoomsType.Rooms;
 	const Tournaments: typeof TournamentsType;
-	const Roomlogs: typeof RoomlogsType.Roomlogs;
 	const Users: typeof UsersType.Users;
 	const Verifier: typeof VerifierType;
-	const toID: typeof Dex.toID;
+	const toID: typeof DexType.toID;
 }
