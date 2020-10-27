@@ -86,7 +86,15 @@ function needsSucrase(source, dest, path = '') {
 	if (!path.includes('.')) {
 		// probably dir
 		try {
+			const oldFiles = fs.readdirSync(dest + path);
 			const files = fs.readdirSync(source + path);
+			for (const oldFile of oldFiles) {
+				if (files.includes(oldFile)) continue; // .js ending in main
+				if (!oldFile.endsWith('.js')) continue;
+				if (!files.includes(oldFile.slice(0, -2) + 'ts')) {
+					fs.unlinkSync(dest + path + '/' + oldFile);
+				}
+			}
 			for (const file of files) {
 				if (needsSucrase(source, dest, path + '/' + file)) {
 					return true;
@@ -100,30 +108,12 @@ function needsSucrase(source, dest, path = '') {
 	return false;
 }
 
-function clearPath(path, src, isJs = false) {
-	try {
-		const stats = fs.lstatSync(path);
-		if (stats.isDirectory()) {
-			for (const file of fs.readdirSync(path)) {
-				const source = src + '/' + file;
-				clearPath(path + '/' + file, source, fs.existsSync(source));
-			}
-			return;
-		}
-		if (!isJs) src = src.replace('.js', '.ts');
-		if (!fs.existsSync(src)) {
-			fs.unlinkSync(path);
-		}
-	} catch (e) {}
-}
-
 function sucrase(src, out, opts) {
 	try {
 		if (!force && src !== './config' && !needsSucrase(src, out)) {
 			return false;
 		}
 	} catch (e) {}
-	clearPath(out, src); // empty the dir to get rid of built js files with no ts couterpart
 	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 	return true;
 }
