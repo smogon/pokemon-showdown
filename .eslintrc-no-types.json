@@ -14,8 +14,7 @@
     "tools/set-import/importer.js",
     "tools/set-import/sets",
     "tools/modlog/converter.js",
-    "server/global-variables.d.ts",
-    "sim/global-variables.d.ts"
+    "server/global-variables.d.ts"
  ],
   "env": {
     "es6": true,
