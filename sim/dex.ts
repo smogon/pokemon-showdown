@@ -95,6 +95,7 @@ interface TextTableData {
 	Items: AnyObject;
 	Moves: AnyObject;
 	Pokedex: AnyObject;
+	Default: AnyObject;
 }
 
 const Natures: {[k: string]: Nature} = {
@@ -1484,6 +1485,7 @@ export class ModdedDex {
 			Moves: this.loadTextFile('moves', 'MovesText'),
 			Abilities: this.loadTextFile('abilities', 'AbilitiesText'),
 			Items: this.loadTextFile('items', 'ItemsText'),
+			Default: this.loadTextFile('default', 'DefaultText'),
 		};
 		return dexes['base'].textCache;
 	}
