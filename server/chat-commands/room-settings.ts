@@ -1298,7 +1298,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.settings.introMessage.replace(/\n/g, '') + '</div>');
-			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
+			if (!this.broadcasting && user.can('declare', null, room, 'roomintro') && cmd !== 'topic') {
 				const code = Utils.escapeHTML(room.settings.introMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
 			}
@@ -1345,7 +1345,7 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			if (!room.settings.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
 			this.sendReply(`|raw|<div class="infobox">${room.settings.staffMessage.replace(/\n/g, ``)}</div>`);
-			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
+			if (user.can('ban', null, room, 'staffintro') && cmd !== 'stafftopic') {
 				const code = Utils.escapeHTML(room.settings.staffMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/staffintro ${code}</code></details>`);
 			}
