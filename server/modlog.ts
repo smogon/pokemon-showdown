@@ -145,6 +145,8 @@ export class Modlog {
 	constructor(flatFilePath: string, databasePath: string) {
 		this.logPath = flatFilePath;
 
+		const dbExists = FS(databasePath).existsSync();
+
 		this.database = new Database(databasePath);
 		this.database.exec("PRAGMA foreign_keys = ON;");
 
@@ -155,7 +157,9 @@ export class Modlog {
 			tokenizer = 'id_tokenizer';
 		}
 
-		this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync().replace(/%TOKENIZER%/g, tokenizer));
+		if (!dbExists) {
+			this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync().replace(/%TOKENIZER%/g, tokenizer));
+		}
 
 		this.database.function(
 			'regex',
