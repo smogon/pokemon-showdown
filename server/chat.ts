@@ -2175,10 +2175,10 @@ CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
 export interface FilterWord {
 	regex: RegExp;
 	word: string;
-	reason: string;
+	hits: number;
+	reason?: string;
 	publicReason?: string;
 	replacement?: string;
-	hits: number;
 }
 
 export type MonitorHandler = (

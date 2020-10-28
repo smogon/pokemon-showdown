@@ -62,7 +62,7 @@ function constructEvasionRegex(str: string) {
 }
 
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {
-	return `${location}\t${word.word}\t${punishment}\t${word.reason}\t${word.hits}\t${word.replacement || ''}\t${word.publicReason || ''}\r\n`;
+	return `${location}\t${word.word}\t${punishment}\t${word.reason || ''}\t${word.hits}\t${word.replacement || ''}\t${word.publicReason || ''}\r\n`;
 }
 
 function saveFilters(force = false) {
@@ -269,7 +269,11 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'ig' : 'i');
 				}
 
-				const filterWord: FilterWord = {regex, word, reason, hits: parseInt(times) || 0};
+				const filterWord: FilterWord = {regex, word, hits: parseInt(times) || 0};
+
+				// "undefined" is the result of an issue with filter storage.
+				// As far as I'm aware, nothing is actually filtered with "undefined" as the reason.
+				if (reason && reason !== "undefined") filterWord.reason = reason;
 				if (publicReason) filterWord.publicReason = publicReason;
 				if (replacement) filterWord.replacement = replacement;
 				filterWords[key].push(filterWord);
