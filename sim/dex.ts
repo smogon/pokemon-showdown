@@ -668,10 +668,11 @@ export class ModdedDex {
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
 		const customRules = customRulesString.split(',').map(rule => {
+			rule = rule.replace(/[\r\n|]*/g, '').trim();
 			const ruleSpec = this.validateRule(rule);
 			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
-			return rule.replace(/[\r\n|]*/g, '').trim();
-		}).filter(rule => rule);
+			return rule;
+		}).filter(Boolean);
 		if (!customRules.length) throw new Error(`The format already has your custom rules`);
 		const validatedFormatid = format.id + '@@@' + customRules.join(',');
 		const moddedFormat = this.getFormat(validatedFormatid, true);
@@ -1001,7 +1002,7 @@ export class ModdedDex {
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
-		rule = rule.trim();
+		if (rule !== rule.trim()) throw new Error(`Rule "${rule}" should be trimmed`);
 		switch (rule.charAt(0)) {
 		case '-':
 		case '*':
