@@ -318,8 +318,8 @@ export const Punishments = new class {
 		return entry;
 	}
 
-	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {
-		if (id.startsWith('#')) return;
+	appendPunishment(entry: PunishmentEntry, id: string, filename: string, allowNonUserIDs?: boolean) {
+		if (!allowNonUserIDs && id.startsWith('#')) return;
 		const buf = Punishments.renderEntry(entry, id);
 		return FS(filename).append(buf);
 	}
@@ -928,6 +928,24 @@ export const Punishments = new class {
 		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
 		const punishment = ['LOCK', '#rangelock', expireTime, reason] as Punishment;
 		Punishments.ips.set(range, punishment);
+
+		const ips = [];
+		const parsedRange = IPTools.stringToRange(range);
+		if (!parsedRange) throw new Error(`Invalid IP range: ${range}`);
+		const {minIP, maxIP} = parsedRange;
+
+		for (let ipNumber = minIP; ipNumber <= maxIP; ipNumber++) {
+			ips.push(IPTools.numberToIP(ipNumber));
+		}
+
+		void Punishments.appendPunishment({
+			userids: [],
+			ips,
+			punishType: 'LOCK',
+			expireTime,
+			reason,
+			rest: [],
+		}, '#rangelock', PUNISHMENT_FILE, true);
 	}
 	banRange(range: string, reason: string, expireTime?: number | null) {
 		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
