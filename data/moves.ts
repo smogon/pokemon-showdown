@@ -6305,13 +6305,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				for (const pokemon of source.side.foe.active) {
 					const move = pokemon.lastMove;
 					if (move && !move.isZ && !move.isMax) {
-						const ppDeducted = pokemon.deductPP(move.id, 4);
+						const ppDeducted = pokemon.deductPP(move.id, 2);
 						if (ppDeducted) {
 							this.add("-activate", pokemon, 'move: G-Max Depletion', move.name, ppDeducted);
-							return;
+							// Don't return here because returning early doesn't trigger
+							// activation text for the second Pokemon in doubles
 						}
 					}
-					return false;
 				}
 			},
 		},
