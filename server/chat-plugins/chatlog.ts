@@ -860,9 +860,6 @@ const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 export const pages: PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!user.trusted) {
-			return this.errorReply("Access denied.");
-		}
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
 		if (date) date = date.trim();
@@ -873,6 +870,13 @@ export const pages: PageTable = {
 
 		// permission check
 		const room = Rooms.get(roomid);
+		if (!user.trusted) {
+			if (room) {
+				this.checkCan('declare', null, room);
+			} else {
+				return this.errorReply(`Access denied.`);
+			}
+		}
 		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
 			return this.errorReply("SPL team discussions are super secret.");
 		}
