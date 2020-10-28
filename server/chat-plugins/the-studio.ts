@@ -9,7 +9,7 @@
 import {FS} from '../../lib/fs';
 import {Net} from '../../lib/net';
 import {Utils} from '../../lib/utils';
-import {YouTube} from './youtube';
+import {YouTube, VideoData} from './youtube';
 
 const LASTFM_DB = 'config/chat-plugins/lastfm.json';
 const RECOMMENDATIONS = 'config/chat-plugins/the-studio.json';
@@ -25,6 +25,7 @@ interface Recommendation {
 	artist: string;
 	title: string;
 	url: string;
+	videoInfo: VideoData | null;
 	description: string;
 	tags: string[];
 	userData: {
@@ -223,7 +224,7 @@ class RecommendationsInterface {
 		}
 	}
 
-	add(
+	async add(
 		artist: string, title: string, url: string, description: string,
 		username: string, tags: string[], avatar?: string
 	) {
@@ -237,10 +238,11 @@ class RecommendationsInterface {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
 		url = url.split('&')[0];
+		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
 		// JUST in case
 		if (!recommendations.saved) recommendations.saved = [];
-		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
+		const rec: Recommendation = {artist, title, videoInfo, url, description, tags, userData: {name: username}, likes: 0};
 		if (!rec.tags.map(toID).includes(toID(username))) rec.tags.push(username);
 		if (!rec.tags.map(toID).includes(toID(artist))) rec.tags.push(artist);
 		if (avatar) rec.userData.avatar = avatar;
@@ -262,7 +264,7 @@ class RecommendationsInterface {
 		saveRecommendations();
 	}
 
-	suggest(
+	async suggest(
 		artist: string, title: string, url: string, description: string,
 		username: string, tags: string[], avatar?: string
 	) {
@@ -279,8 +281,9 @@ class RecommendationsInterface {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
 		url = url.split('&')[0];
+		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
-		const rec: Recommendation = {artist, title, url, description, tags, userData: {name: username}, likes: 0};
+		const rec: Recommendation = {artist, title, videoInfo, url, description, tags, userData: {name: username}, likes: 0};
 		if (!rec.tags.map(toID).includes(toID(username))) rec.tags.push(username);
 		if (!rec.tags.map(toID).includes(toID(artist))) rec.tags.push(artist);
 		if (avatar) rec.userData.avatar = avatar;
@@ -313,18 +316,16 @@ class RecommendationsInterface {
 	}
 
 	async render(rec: Recommendation, suggested = false) {
-		let videoInfo = null;
-		try {
-			videoInfo = await YouTube.getVideoData(rec.url);
-		} catch (e) {
-			throw new Chat.ErrorMessage(`Error while fetching recommendation URL: ${e.message}`);
-		}
 		let buf = ``;
 		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
 		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
-		if (videoInfo) {
-			buf += `<td style="text-align:center;"><img src="${videoInfo.thumbnail}" width="120" height="67" /><br />`;
-			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, "points")} | ` : ``}${videoInfo.views} views</em></small></td>`;
+		if (rec.videoInfo === undefined) {
+			rec.videoInfo = await YouTube.getVideoData(rec.videoInfo);
+			saveRecommendations();
+		}
+		if (rec.videoInfo) {
+			buf += `<td style="text-align:center;"><img src="${rec.videoInfo.thumbnail}" width="120" height="67" /><br />`;
+			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, "points")} | ` : ``}${rec.videoInfo.views} views</em></small></td>`;
 		}
 		buf += Utils.html`<td style="max-width:300px"><a href="${rec.url}" style="color:#000;font-weight:bold;">${rec.artist} - ${rec.title}</a>`;
 		const tags = rec.tags.map(x => Utils.escapeHTML(x))
@@ -335,7 +336,7 @@ class RecommendationsInterface {
 		if (rec.description) {
 			buf += `<br /><span style="display:inline-block;line-height:1.15em;"><strong>Description:</strong> ${Utils.escapeHTML(rec.description)}</span>`;
 		}
-		if (!videoInfo && !suggested) {
+		if (!rec.videoInfo && !suggested) {
 			buf += `<br /><strong>Score:</strong> ${Chat.count(rec.likes, "points")}`;
 		}
 		if (!rec.userData.avatar) {
@@ -434,6 +435,8 @@ export const commands: ChatCommands = {
 	],
 
 	async lastfm(target, room, user) {
+		this.checkChat();
+		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
 		this.splitTarget(target, true);
 		const username = LastFM.getAccountName(target ? target : user.name);
@@ -448,7 +451,8 @@ export const commands: ChatCommands = {
 
 	async track(target, room, user) {
 		if (!target) return this.parse('/help track');
-		this.checkChat(target);
+		this.checkChat();
+		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		const [track, artist] = this.splitOne(target);
 		if (!track) return this.parse('/help track');
 		this.runBroadcast(true);
@@ -507,6 +511,7 @@ export const commands: ChatCommands = {
 			return this.parse('/help suggestrecommendation');
 		}
 		this.checkChat(target);
+		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		const [artist, title, url, description, ...tags] = target.split('|').map(x => x.trim());
 		if (!(artist && title && url && description && tags?.length)) {
 			return this.parse(`/help suggestrecommendation`);
@@ -518,7 +523,7 @@ export const commands: ChatCommands = {
 		const html = await Recs.render({
 			artist, title, url, description,
 			userData: {name: user.name, avatar: String(user.avatar)},
-			tags: cleansedTags, likes: 0,
+			tags: cleansedTags, likes: 0, videoInfo: null,
 		}, true);
 		room.sendRankedUsers(`|html|${html}`, '%');
 	},
