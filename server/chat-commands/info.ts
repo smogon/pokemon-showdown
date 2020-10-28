@@ -170,8 +170,11 @@ export const commands: ChatCommands = {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
-		if (user === targetUser ? user.can('ipself') : user.can('ip', targetUser)) {
-			const ips = targetUser.ips.map(ip => {
+		const canIPCheck = user.can('ip', targetUser);
+		if (canIPCheck || (user === targetUser && user.can('ipself'))) {
+			// The 'ipself' permission only allows users to see the IP address of their current connection.
+			// This maintains anonymity in case of account sharing.
+			const ips = (canIPCheck ? targetUser.ips : [connection.ip]).map(ip => {
 				const status = [];
 				const punishment = Punishments.ips.get(ip);
 				if (user.can('alts') && punishment) {
