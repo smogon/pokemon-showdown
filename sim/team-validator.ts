@@ -1523,7 +1523,7 @@ export class TeamValidator {
 
 		if (eventData.japan) {
 			if (fastReturn) return true;
-			problems.push(`${name} can't use moves from Japan-only Red/Green Version, because this format simulates Yellow Version which can't trade with Red/Green.`);
+			problems.push(`${name} has moves from Japan-only events, but this format simulates International Yellow/Crystal which can't trade with Japanese games.`);
 		}
 
 		if (eventData.level && (set.level || 0) < eventData.level) {
