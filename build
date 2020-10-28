@@ -53,7 +53,7 @@ function copyOverDataJSON(file) {
 	fs.readFile(source, function (err, text) {
 		if (err) throw err;
 		fs.writeFile(dest, text, function (err) {
-			if (err) throw err;
+			throw err;
 		});
 	});
 }
@@ -89,10 +89,11 @@ function needsSucrase(source, dest, path = '') {
 			const oldFiles = fs.readdirSync(dest + path);
 			const files = fs.readdirSync(source + path);
 			for (const oldFile of oldFiles) {
-				if (files.includes(oldFile)) continue; // .js ending in main
-				if (!oldFile.endsWith('.js')) continue;
+				if (!oldFile.endsWith('.js') || files.includes(oldFile)) continue;
 				if (!files.includes(oldFile.slice(0, -2) + 'ts')) {
-					fs.unlinkSync(dest + path + '/' + oldFile);
+					fs.unlink(dest + path + '/' + oldFile, function (err) {
+						if (err) throw err;
+					});
 				}
 			}
 			for (const file of files) {
