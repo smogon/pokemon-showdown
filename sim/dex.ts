@@ -1001,6 +1001,7 @@ export class ModdedDex {
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
+		rule = rule.trim();
 		switch (rule.charAt(0)) {
 		case '-':
 		case '*':
