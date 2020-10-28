@@ -53,7 +53,9 @@ function copyOverDataJSON(file) {
 	fs.readFile(source, function (err, text) {
 		if (err) throw err;
 		fs.writeFile(dest, text, function (err) {
-			throw err;
+			if (err && err.code !== 'ENOENT') {
+				throw err;
+			}
 		});
 	});
 }
