@@ -1352,7 +1352,9 @@ export class CommandContext extends MessageContext {
 		}
 		const game = room.getGame(constructor);
 		// must be a different game
-		if (!game) throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this game is ${room.game.title}).`);
+		if (!game) {
+			throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this game is ${room.game.title}).`);
+		}
 		return game;
 	}
 	commandDoesNotExist(): never {
