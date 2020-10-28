@@ -1136,14 +1136,18 @@ export const commands: ChatCommands = {
 					staffIntroButtons = `<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> `;
 					break;
 				}
-				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${reportTarget}">Global Modlog for ${reportTarget}</button> <button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
+				staffIntroButtons += `<button class="button" name="send" value="/modlog global, user='${reportTarget}'>Global Modlog for ${reportTarget}</button> <button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
 			}
 			if (ticket.type === 'Appeal') {
-				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${user.name}">Global Modlog for ${user.name}</button>`;
+				staffIntroButtons += `<button class="button" name="send" value="/modlog global, user='${user.name}'">Global Modlog for ${user.name}</button>`;
 			}
 			const introMsg = Utils.html`<h2 style="margin-top:0">${this.tr`Help Ticket`} - ${user.name}</h2>` +
 				`<p><b>${this.tr`Issue`}</b>: ${ticket.type}<br />${this.tr`A Global Staff member will be with you shortly.`}</p>`;
-			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
+			const staffMessage = [
+				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
+				`<button class="button" name="send" value="/modlog global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
+				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`,
+			].join(' ');
 			const staffHint = staffContexts[ticketType] || '';
 			let reportTargetInfo = '';
 			if (reportTargetType === 'room') {
