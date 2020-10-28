@@ -339,6 +339,7 @@ export class User extends Chat.MessageContext {
 	semilocked: ID | PunishType | null;
 	namelocked: ID | PunishType | null;
 	permalocked: ID | PunishType | null;
+	punishmentTimer: NodeJS.Timer | null;
 	previousIDs: ID[];
 
 	lastChallenge: number;
@@ -418,6 +419,7 @@ export class User extends Chat.MessageContext {
 		this.semilocked = null;
 		this.namelocked = null;
 		this.permalocked = null;
+		this.punishmentTimer = null;
 		this.previousIDs = [];
 
 		// misc state
@@ -771,6 +773,7 @@ export class User extends Chat.MessageContext {
 			this.namelocked = null;
 			this.permalocked = null;
 			this.semilocked = null;
+			this.destroyPunishmentTimer();
 		}
 
 		let user = users.get(userid);
@@ -914,6 +917,7 @@ export class User extends Chat.MessageContext {
 				.length)
 		) {
 			this.locked = null;
+			this.destroyPunishmentTimer();
 		} else if (this.locked !== this.id) {
 			this.locked = oldUser.locked;
 		}
@@ -1043,6 +1047,7 @@ export class User extends Chat.MessageContext {
 			}
 			this.locked = null;
 			this.namelocked = null;
+			this.destroyPunishmentTimer();
 		}
 		if (this.autoconfirmed && this.semilocked) {
 			if (this.semilocked.startsWith('#sharedip')) {
@@ -1468,7 +1473,14 @@ export class User extends Chat.MessageContext {
 			if (game.forfeit) game.forfeit(this);
 		}
 		this.clearChatQueue();
+		this.destroyPunishmentTimer();
 		Users.delete(this);
+	}
+	destroyPunishmentTimer() {
+		if (this.punishmentTimer) {
+			clearTimeout(this.punishmentTimer);
+			this.punishmentTimer = null;
+		}
 	}
 	toString() {
 		return this.id;
