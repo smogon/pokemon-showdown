@@ -1233,6 +1233,16 @@ export class User extends Chat.MessageContext {
 			return false;
 		}
 
+		if (room.roomid.startsWith('groupchat-') && !room.parent) {
+			const groupchatbanned = Punishments.isGroupchatBanned(this);
+			if (groupchatbanned) {
+				const expireText = Punishments.checkPunishmentExpiration(groupchatbanned);
+				connection.sendTo(roomid, `|noinit|joinfailed|You are banned from using groupchats${expireText}.`);
+				return false;
+			}
+			Punishments.monitorGroupchatJoin(room, this);
+		}
+
 		if (Rooms.aliases.get(roomid) === room.roomid) {
 			connection.send(`>${roomid}\n|deinit`);
 		}

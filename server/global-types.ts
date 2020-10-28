@@ -44,7 +44,10 @@ type RoomGame = Rooms.RoomGame;
 type RoomBattle = Rooms.RoomBattle;
 type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;
-type RoomID = "" | "lobby" | "staff" | "upperstaff" | "development" | "battle" | string & {__isRoomID: true};
+type RoomID = (
+	"" | "lobby" | "staff" | "upperstaff" | "development" |
+	"battle" | "groupchat" | string & {__isRoomID: true}
+);
 namespace Rooms {
 	export type GlobalRoomState = import('./rooms').GlobalRoomState;
 	export type ChatRoom = import('./rooms').ChatRoom;
