@@ -1532,8 +1532,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		const move = mod.getMove(moveid);
 		if (move.gen <= maxGen) {
 			if (
-				(!nationalSearch && move.isNonstandard) ||
-				(nationalSearch && move.isNonstandard && move.isNonstandard !== "Past")
+				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
 			) {
 				continue;
 			} else {
