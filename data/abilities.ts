@@ -2268,6 +2268,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// TODO Will abilities that already started start again? (Intimidate seems like a good test case)
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
+			for (const mon of this.getAllActive()) {
+				if (mon.volatiles['slowstart']) {
+					delete mon.volatiles['slowstart'];
+					this.add('-end', mon, 'Slow Start', '[silent]');
+				}
+			}
 			pokemon.abilityData.ending = false;
 		},
 		onEnd(source) {

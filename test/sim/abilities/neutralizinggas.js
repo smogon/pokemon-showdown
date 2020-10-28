@@ -148,7 +148,7 @@ describe('Neutralizing Gas', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
-	it.skip(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, function () {
+	it(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, function () {
 		battle = common.createBattle([[
 			{species: "Regigigas", ability: 'slowstart', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
