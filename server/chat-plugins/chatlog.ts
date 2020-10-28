@@ -293,7 +293,7 @@ export const LogViewer = new class {
 
 	renderLine(fullLine: string, opts?: string) {
 		if (!fullLine) return ``;
-		if (opts === 'txt') return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
+		if (opts === 'txt') return Utils.html`<div class="chat">${fullLine}</div>`;
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
