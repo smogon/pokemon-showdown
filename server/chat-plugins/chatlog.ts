@@ -193,8 +193,8 @@ export const LogViewer = new class {
 		}
 
 		const prevDay = LogReader.prevDay(day);
-		const logRoomid = `view-chatlog-${roomid}--${prevDay}${opts ? `--${opts}` : ''}`;
-		buf += `<p><a roomid="${logRoomid}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
+		const prevRoomid = `view-chatlog-${roomid}--${prevDay}${opts ? `--${opts}` : ''}`;
+		buf += `<p><a roomid="${prevRoomid}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
