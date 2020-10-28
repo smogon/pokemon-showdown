@@ -773,7 +773,7 @@ export class CommandContext extends MessageContext {
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
 	}
 	sendReplyBox(htmlContent: string) {
-		this.sendReply(`|c|${this.room ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
+		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
 	}
 	popupReply(message: string) {
 		this.connection.popup(message);
