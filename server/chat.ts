@@ -1347,7 +1347,9 @@ export class CommandContext extends MessageContext {
 	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
 	requireGame<T extends RoomGame>(constructor: new (...args: any[]) => T) {
 		const room = this.requireRoom();
-		if (!room.game) throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this room has no game).`);
+		if (!room.game) {
+			throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this room has no game).`);
+		}
 		const game = room.getGame(constructor);
 		// must be a different game
 		if (!game) throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this game is ${room.game.title}).`);
