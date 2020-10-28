@@ -123,9 +123,33 @@ export const pages: PageTable = {
 			buf += `<p>None currently.</p>`;
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
-			Punishments.sharedIpBlacklist.forEach((reason, ip) => {
+			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
+			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[1], b[1]));
+
+			for (const [reason, ip] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
-			});
+			}
+			buf += `</table></div>`;
+		}
+		buf += `</div>`;
+		return buf;
+	},
+
+	sharedips(args, user, connection) {
+		this.title = `[Shared IPs]`;
+		checkCanPerform(this, user, 'globalban');
+
+		let buf = `<div class="pad"><h2>IPs marked as shared</h2>`;
+		if (!Punishments.sharedIps.size) {
+			buf += `<p>None currently.</p>`;
+		} else {
+			buf += `<div class="ladder"><table><tr><th>IP</th><th>Location</th></tr>`;
+			const sortedSharedIPs = [...Punishments.sharedIps];
+			sortedSharedIPs.sort((a, b) => IPTools.ipSort(a[0], b[0]));
+
+			for (const [ip, location] of sortedSharedIPs) {
+				buf += `<tr><td>${ip}</td><td>${location}</td></tr>`;
+			}
 			buf += `</table></div>`;
 		}
 		buf += `</div>`;
@@ -463,6 +487,14 @@ export const commands: ChatCommands = {
 		`Note: Reasons are required.`,
 		`/nomarkshared remove [IP] - Removes an IP from the nomarkshared list. Requires &`,
 		`/nomarkshared view - Lists all IPs prevented from being marked as shared. Requires @ &`,
+	],
+
+	sharedips: 'viewsharedips',
+	viewsharedips() {
+		return this.parse('/join view-sharedips');
+	},
+	viewsharedipshelp: [
+		`/viewsharedips — Lists IP addresses marked as shared. Requires: hosts manager @ &`,
 	],
 };
 
