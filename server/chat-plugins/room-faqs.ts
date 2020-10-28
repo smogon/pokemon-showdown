@@ -156,7 +156,7 @@ export const pages: PageTable = {
 			if (aliases.length) {
 				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;
 			}
-			if (user.can('ban', null, room)) {
+			if (user.can('ban', null, room, 'addfaq')) {
 				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
 				buf += `<hr /><details><summary>Raw text</summary>`;
 				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;
