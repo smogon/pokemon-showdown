@@ -198,7 +198,7 @@ export class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	setCustomRules(rules: string[]) {
+	setCustomRules(rules: string) {
 		try {
 			this.fullFormat = Dex.validateFormat(`${this.baseFormat}@@@${rules}`);
 		} catch (e) {
@@ -1502,7 +1502,6 @@ const commands: ChatCommands = {
 			this.checkCan('tournaments', null, room);
 			const tournament = room.getGame(Tournament);
 			if (!tournament) return this.errorReply(`There is no tournament running.`);
-			const params = target.split(',').map(item => item.trim());
 			if (cmd === 'banlist') {
 				return this.errorReply('The new syntax is: /tour rules -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule');
 			}
@@ -1514,7 +1513,7 @@ const commands: ChatCommands = {
 			if (tournament.isTournamentStarted) {
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
 			}
-			if (tournament.setCustomRules(params)) {
+			if (tournament.setCustomRules(target)) {
 				room.addRaw(
 					`<div class="infobox infobox-limited">This tournament includes:<br />${tournament.getCustomRules()}</div>`
 				);
