@@ -153,7 +153,7 @@ export class Modlog {
 		// Set up tables, etc
 		let tokenizer = 'unicode61';
 		if (Config.modlogftsextension) {
-			this.database.loadExtension('native/fts_id_tokenizer.o');
+			this.database.loadExtension(`${__dirname}/../native/fts_id_tokenizer.o`);
 			tokenizer = 'id_tokenizer';
 		}
 
