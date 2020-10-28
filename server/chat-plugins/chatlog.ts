@@ -208,10 +208,8 @@ export const LogViewer = new class {
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
 			const nextDay = LogReader.nextDay(day);
-			buf += (
-				`<p><a roomid="view-chatlog-${roomid}--${nextDay}${opts ? `--${opts}` : ''}" class="blocklink" ` +
-				`style="text-align:center">${nextDay}<br />▼</a></p>`
-			);
+			const roomid = `view-chatlog-${roomid}--${nextDay}${opts ? `--${opts}` : ''}`;
+			buf += `<p><a roomid="${roomid}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
 		}
 
 		buf += `</div>`;
