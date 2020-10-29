@@ -156,8 +156,7 @@ export class LadderStore {
         let K = 50;
         let elo = p1?.mmrCache[formatId];
         const foeElo = p2?.mmrCache[formatId];
-        if(!elo || !foeElo)
-        return "unknown, please try again later";
+        if (!elo || !foeElo) return "unknown, please try again later";
 
         // dynamic K-scaling (optional)
         if (elo < 1200) {
