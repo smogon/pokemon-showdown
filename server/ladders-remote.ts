@@ -81,12 +81,12 @@ export class LadderStore {
 		let problem = false;
 
 		if (error) {
-			const newRank = this.calculateElo(p1,p2,p1score,formatid);
-            if (error.message === 'stream interrupt') {
-                room.add(`||Ladder updated, your new rank is (${newRank}).`);
-            } else {
-                room.add(`||Ladder (probably) updated, your new rank is (${newRank}).`);
-            }
+			const newRank = this.calculateElo(p1, p2, p1score, formatid);
+         if (error.message === 'stream interrupt') {
+        		room.add(`||Ladder updated, your new rank is (${newRank}).`);
+        	} else {
+        		room.add(`||Ladder (probably) updated, your new rank is (${newRank}).`);
+         }
 			problem = true;
 		} else if (!room.battle) {
 			Monitor.warn(`room expired before ladder update was received`);
