@@ -569,6 +569,10 @@ export const ItemsText = {
 		name: "Galarica Cuff",
 		desc: "Evolves Galarian Slowpoke into Galarian Slowbro when used.",
 	},
+	galaricawreath: {
+		name: "Galarica Wreath",
+		desc: "Evolves Galarian Slowpoke into Galarian Slowking when used.",
+	},
 	galladite: {
 		name: "Galladite",
 		desc: "If held by a Gallade, this item allows it to Mega Evolve in battle.",
