@@ -796,7 +796,7 @@ type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -1180,6 +1180,16 @@ interface LearnsetData {
 type ModdedLearnsetData = LearnsetData & {inherit?: true};
 
 type Species = import('./dex-data').Species;
+
+interface NatureData {
+	name: string;
+	plus?: StatNameExceptHP;
+	minus?: StatNameExceptHP;
+}
+
+type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
+
+type Nature = import('./dex-data').Nature;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all';
 type SideID = 'p1' | 'p2' | 'p3' | 'p4';
