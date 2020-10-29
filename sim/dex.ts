@@ -798,12 +798,7 @@ export class ModdedDex {
 			nature = new Data.Nature({id, name, exists: false});
 		}
 
-		if (nature.exists) {
-			if (!!nature.plus !== !!nature.minus) {
-				throw new Error(`Nature with a '${nature.plus ? 'plus' : 'minus'}' property but no '${nature.plus ? 'minus' : 'plus'}' property: ${nature.name}`);
-			}
-			this.natureCache.set(id, nature);
-		}
+		if (nature.exists) this.natureCache.set(id, nature);
 		return nature;
 	}
 
