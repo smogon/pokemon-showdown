@@ -17,7 +17,9 @@ Afterwards, you can use any of the following commands:
 Supported commands
 ------------------
 
-Note: Commands that ask for a team want the team in packed or JSON format. Teambuilder export format is not supported.
+Note: Commands that ask for a team want the team in [packed team format][packed-teams] or JSON format. Teambuilder export format is not supported.
+
+  [packed-teams]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#team-format
 
 `./pokemon-showdown start [--skip-build] [PORT]`
 

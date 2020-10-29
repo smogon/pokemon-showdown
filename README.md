@@ -28,7 +28,7 @@ Pokémon Showdown is many things:
 
 - Some **command-line tools** for simulating Pokémon battles (which can be used in non-JavaScript programs)
 
-  - https://github.com/smogon/pokemon-showdown/blob/master/sim/COMMANDLINE.md
+  - https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
 
 - A **game server** for hosting your own Pokémon Showdown community and game modes
 
