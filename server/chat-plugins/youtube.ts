@@ -14,6 +14,7 @@ const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
 export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
+export const searchDataCache: Map<string, string[]> = Chat.oldPlugins.youtube?.searchDataCache || new Map();
 
 interface ChannelEntry {
 	name: string;
@@ -27,7 +28,7 @@ interface ChannelEntry {
 	category?: string;
 }
 
-interface VideoData {
+export interface VideoData {
 	id: string;
 	title: string;
 	date: string;
@@ -240,14 +241,20 @@ export class YoutubeInterface {
 		return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
 	async searchVideo(name: string, limit?: number): Promise<string[] | undefined> {
+		const cached = searchDataCache.get(toID(name));
+		if (cached) {
+			return cached.slice(0, limit);
+		}
 		const raw = await Net(`${ROOT}search`).get({
 			query: {
 				part: 'snippet', q: name,
-				key: Config.youtubeKey, order: 'relevance', maxResults: limit || 10,
+				key: Config.youtubeKey, order: 'relevance',
 			},
 		});
 		const result = JSON.parse(raw);
-		return result.items?.map((item: AnyObject) => item?.id?.videoId).filter(Boolean);
+		const resultArray = result.items?.map((item: AnyObject) => item?.id?.videoId).filter(Boolean);
+		searchDataCache.set(toID(name), resultArray);
+		return resultArray.slice(0, limit);
 	}
 	async searchChannel(name: string, limit = 10): Promise<string[] | undefined> {
 		const raw = await Net(`${ROOT}search`).get({
