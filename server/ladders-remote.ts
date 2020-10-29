@@ -81,11 +81,12 @@ export class LadderStore {
 		let problem = false;
 
 		if (error) {
-			if (error.message === 'stream interrupt') {
-				room.add(`||Ladder updated, but score could not be retrieved.`);
-			} else {
-				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
-			}
+			const newRank = this.calculateElo(p1,p2,p1score,formatid);
+            if (error.message === 'stream interrupt') {
+                room.add(`||Ladder updated, your new rank is (${newRank}).`);
+            } else {
+                room.add(`||Ladder (probably) updated, your new rank is (${newRank}).`);
+            }
 			problem = true;
 		} else if (!room.battle) {
 			Monitor.warn(`room expired before ladder update was received`);
@@ -149,4 +150,34 @@ export class LadderStore {
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
+
+	public calculateElo (p1: User | null, p2: User | null, score: number, formatId: string ) {
+
+        let K = 50;
+        let elo = p1?.mmrCache[formatId];
+        const foeElo = p2?.mmrCache[formatId];
+        if(!elo || !foeElo)
+        return "unknown, please try again later";
+
+        // dynamic K-scaling (optional)
+        if (elo < 1200) {
+            if (score < 0.5) {
+                K = 10 + (elo - 1000) * 40 / 200;
+            } else if (score > 0.5) {
+                K = 90 - (elo - 1000) * 40 / 200;
+            }
+        } else if (elo > 1350 && elo <= 1600) {
+            K = 40;
+        } else {
+            K = 32;
+        }
+
+        // main Elo formula
+        const E = 1 / (1 + Math.pow(10, (foeElo - elo) / 400));
+        const eloGained = K * (score - E);
+        const symbol = eloGained > 0 ? '+' : '-';
+        const newElo = elo + eloGained;
+        return `${eloGained} ${symbol} = ${newElo}`;
+    }
+
 }
