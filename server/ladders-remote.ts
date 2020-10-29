@@ -151,7 +151,7 @@ export class LadderStore {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 
-	public calculateElo (p1: User | null, p2: User | null, score: number, formatId: string ) {
+	calculateElo(p1: User | null, p2: User | null, score: number, formatId: string) {
 
         let K = 50;
         let elo = p1?.mmrCache[formatId];
