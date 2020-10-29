@@ -956,14 +956,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
-				if (move.type === 'Fire') {
+				if (move.type === 'Fire' && attacker.hasAbility('flashfire')) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(atk, attacker, defender, move) {
-				if (move.type === 'Fire') {
+				if (move.type === 'Fire' && attacker.hasAbility('flashfire')) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
@@ -2268,13 +2268,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// TODO Will abilities that already started start again? (Intimidate seems like a good test case)
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
-			for (const mon of this.getAllActive()) {
-				if (mon.volatiles['slowstart']) {
-					delete mon.volatiles['slowstart'];
-					this.add('-end', mon, 'Slow Start', '[silent]');
+			pokemon.abilityData.ending = false;
+			for (const target of this.getAllActive()) {
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, pokemon, 'neutralizinggas');
+				}
+				if (target.volatiles['slowstart']) {
+					delete target.volatiles['slowstart'];
+					this.add('-end', target, 'Slow Start', '[silent]');
 				}
 			}
-			pokemon.abilityData.ending = false;
 		},
 		onEnd(source) {
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
