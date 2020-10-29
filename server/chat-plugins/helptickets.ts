@@ -342,12 +342,14 @@ export class HelpTicket extends Rooms.RoomGame {
 		// @ts-ignore
 		this.playerTable = null;
 	}
-	static ban(user: string, reason = '') {
+	static ban(user: User | ID, reason = '') {
 		const userid = toID(user);
+		const userObj = Users.get(user);
+		if (userObj) user = userObj;
 		const punishment: Punishment = ['TICKETBAN', userid, Date.now() + TICKET_BAN_DURATION, reason];
-		return Punishments.roomPunish('staff', userid, punishment);
+		return Punishments.roomPunish('staff', user, punishment);
 	}
-	static unban(user: string) {
+	static unban(user: ID | User) {
 		user = toID(user);
 		return Punishments.roomUnpunish('staff', user, 'TICKETBAN');
 	}
@@ -1289,7 +1291,7 @@ export const commands: ChatCommands = {
 				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			const affected = HelpTicket.ban(userid, target);
+			const affected = HelpTicket.ban(targetUser || userid, target);
 			this.addModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
@@ -1330,7 +1332,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`${targetUser ? targetUser.name : target} is not ticket banned.`);
 			}
 
-			const affected = HelpTicket.unban(target);
+			const affected = HelpTicket.unban(targetUser);
 			this.addModAction(`${affected} was ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", toID(target));
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
