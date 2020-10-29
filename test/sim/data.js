@@ -146,6 +146,15 @@ describe('Dex data', function () {
 		}
 	});
 
+	it('should have valid Natures entries', function () {
+		const Natures = Dex.data.Natures;
+		for (const natureid in Natures) {
+			const entry = Natures[natureid];
+			assert.equal(toID(entry.name), natureid, `Mismatched Nature key "${natureid}" of "${entry.name}"`);
+			assert.equal(!!entry.plus, !!entry.minus, `Mismatched Nature values "+${entry.plus}"/"-${entry.minus}" of "${entry.name}"`);
+		}
+	});
+
 	it('should have valid Learnsets entries', function () {
 		this.timeout(0);
 		const learnsetsArray = [Dex.mod('gen2').data.Learnsets, Dex.mod('letsgo').data.Learnsets, Dex.data.Learnsets];
