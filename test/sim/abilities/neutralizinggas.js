@@ -135,7 +135,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
 	});
 
-	it.skip(`should cause Illusion to instantly wear off when Neutralizing Gas enters the field`, function () {
+	it(`should cause Illusion to instantly wear off when Neutralizing Gas enters the field`, function () {
 		battle = common.createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
