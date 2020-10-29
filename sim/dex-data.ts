@@ -1056,6 +1056,22 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	}
 }
 
+export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
+	readonly effectType: 'Nature';
+	readonly plus?: StatNameExceptHP;
+	readonly minus?: StatNameExceptHP;
+	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+		super(data, moreData);
+		data = this;
+
+		this.fullname = `nature: ${this.name}`;
+		this.effectType = 'Nature';
+		this.gen = 3;
+		this.plus = data.plus || undefined;
+		this.minus = data.minus || undefined;
+	}
+}
+
 type TypeInfoEffectType = 'Type' | 'EffectType';
 
 export class TypeInfo implements Readonly<TypeData> {

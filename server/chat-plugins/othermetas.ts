@@ -507,9 +507,7 @@ export const commands: ChatCommands = {
 			dex = Dex.mod(format.mod);
 		}
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
-		const natureObj: {
-			name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean,
-		} = dex.getNature(nature);
+		const natureObj = dex.getNature(nature);
 		if (dex.gen < 3) return this.errorReply(`Error: Natures don't exist prior to Generation 3.`);
 		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
 		const species = Utils.deepClone(dex.getSpecies(pokemon));

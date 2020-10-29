@@ -352,7 +352,8 @@ export class TeamValidator {
 		set.item = item.name;
 		let ability = dex.getAbility(Utils.getString(set.ability));
 		set.ability = ability.name;
-		set.nature = dex.getNature(Utils.getString(set.nature)).name;
+		let nature = dex.getNature(Utils.getString(set.nature));
+		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		const maxLevel = format.maxLevel || 100;
@@ -445,12 +446,13 @@ export class TeamValidator {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
 		}
-		if (set.nature && !dex.getNature(set.nature).exists) {
+		if (nature.id && !nature.exists) {
 			if (dex.gen < 3) {
 				// gen 1-2 don't have natures, just remove them
+				nature = dex.getNature('');
 				set.nature = '';
 			} else {
-				problems.push(`${name}'s nature is invalid.`);
+				problems.push(`"${set.nature}" is an invalid nature.`);
 			}
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
@@ -537,6 +539,13 @@ export class TeamValidator {
 
 		ability = dex.getAbility(set.ability);
 		problem = this.checkAbility(set, ability, setHas);
+		if (problem) problems.push(problem);
+
+		if (!set.nature || dex.gen <= 2) {
+			set.nature = '';
+		}
+		nature = dex.getNature(set.nature);
+		problem = this.checkNature(set, nature, setHas);
 		if (problem) problems.push(problem);
 
 		if (set.moves && Array.isArray(set.moves)) {
@@ -1486,6 +1495,43 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
+		return null;
+	}
+
+	checkNature(set: PokemonSet, nature: Nature, setHas: {[k: string]: true}) {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
+		setHas['nature:' + nature.id] = true;
+
+		let banReason = ruleTable.check('nature:' + nature.id);
+		if (banReason) {
+			return `${set.name}'s nature ${nature.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		banReason = ruleTable.check('allnatures');
+		if (banReason) {
+			return `${set.name}'s nature ${nature.name} is not in the list of allowed natures.`;
+		}
+
+		// obtainability
+		if (nature.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+			if (banReason) {
+				return `${set.name}'s nature ${nature.name} is tagged ${nature.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
+				if (['Past', 'Future'].includes(nature.isNonstandard)) {
+					return `${set.name}'s nature ${nature.name} does not exist in Gen ${dex.gen}.`;
+				}
+				return `${set.name}'s nature ${nature.name} does not exist in this game.`;
+			}
+			if (banReason === '') return null;
+		}
 		return null;
 	}
 
