@@ -463,7 +463,7 @@ export const commands: ChatCommands = {
 	],
 
 	addrec: 'addrecommendation',
-	addrecommendation(target, room, user) {
+	async addrecommendation(target, room, user) {
 		room = this.requireRoom('thestudio' as RoomID);
 		this.checkCan('show', null, room);
 		const [artist, title, url, description, ...tags] = target.split('|').map(x => x.trim());
@@ -472,7 +472,7 @@ export const commands: ChatCommands = {
 		}
 
 		const cleansedTags = tags.map(x => x.trim());
-		Recs.add(artist, title, url, description, user.name, cleansedTags, String(user.avatar));
+		await Recs.add(artist, title, url, description, user.name, cleansedTags, String(user.avatar));
 
 		this.privateModAction(`${user.name} added a recommendation for '${title}' by ${artist}.`);
 		this.modlog(`RECOMMENDATION`, null, `add: '${toID(title)}' by ${toID(artist)}`);
@@ -518,7 +518,7 @@ export const commands: ChatCommands = {
 		}
 
 		const cleansedTags = tags.map(x => x.trim());
-		Recs.suggest(artist, title, url, description, user.name, cleansedTags, String(user.avatar));
+		await Recs.suggest(artist, title, url, description, user.name, cleansedTags, String(user.avatar));
 		this.sendReply(`Your suggestion for '${title}' by ${artist} has been submitted.`);
 		const html = await Recs.render({
 			artist, title, url, description,
