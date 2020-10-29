@@ -92,12 +92,13 @@ function needsSucrase(source, dest, path = '') {
 			const files = fs.readdirSync(source + path);
 			for (const oldFile of oldFiles) {
 				if (!oldFile.endsWith('.js') || files.includes(oldFile)) continue;
-				if (!files.includes(oldFile.slice(0, -2) + 'ts')) {
+				if (!files.includes(oldFile.slice(0, -2) + 'ts') || force) {
 					fs.unlink(dest + path + '/' + oldFile, function (err) {
 						if (err) throw err;
 					});
 				}
 			}
+			if (force) return true;
 			for (const file of files) {
 				if (needsSucrase(source, dest, path + '/' + file)) {
 					return true;
@@ -113,7 +114,7 @@ function needsSucrase(source, dest, path = '') {
 
 function sucrase(src, out, opts) {
 	try {
-		if (!force && src !== './config' && !needsSucrase(src, out)) {
+		if (src !== './config' && !needsSucrase(src, out)) {
 			return false;
 		}
 	} catch (e) {}
