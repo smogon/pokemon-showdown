@@ -2012,14 +2012,16 @@ export class Battle {
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
 		const tr = this.trunc;
 		const nature = this.dex.getNature(set.nature);
-		let stat: keyof StatsTable;
+		let s: StatNameExceptHP;
 		if (nature.plus) {
-			stat = nature.plus;
-			stats[stat] = tr(tr(stats[stat] * 110, 16) / 100);
+			s = nature.plus;
+			const stat = this.ruleTable.has('overflowstatmod') && this.gen > 7 ? Math.min(stats[s], 595) : stats[s];
+			stats[s] = tr(tr(stat * 110, 16) / 100);
 		}
 		if (nature.minus) {
-			stat = nature.minus;
-			stats[stat] = tr(tr(stats[stat] * 90, 16) / 100);
+			s = nature.minus;
+			const stat = this.ruleTable.has('overflowstatmod') && this.gen > 7 ? Math.min(stats[s], 728) : stats[s];
+			stats[s] = tr(tr(stat * 90, 16) / 100);
 		}
 		return stats;
 	}
