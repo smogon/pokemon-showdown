@@ -297,6 +297,19 @@ export const Formats: FormatList = [
 		banlist: ['DUber', 'Power Construct'],
 	},
 	{
+		name: "[Gen 8] Doubles OU (DLC 1)",
+
+		mod: 'gen8dlc1',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles', 'Dynamax Clause'],
+		banlist: [
+			'Eternatus', 'Jirachi', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo',
+			'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Reshiram', 'Solgaleo', 'Urshifu-Base', 'Volcarona', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Beat Up',
+		],
+	},
+	{
 		name: "[Gen 8] Doubles Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers</a>`,
