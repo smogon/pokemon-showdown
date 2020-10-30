@@ -186,7 +186,7 @@
     {
       "files": [
         "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
-        "./tools/set-import/*.ts",  "./tools/modlog/*.ts", "./translations/**/*.ts"
+        "./tools/set-import/*.ts", "./tools/modlog/*.ts", "./translations/**/*.ts"
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
