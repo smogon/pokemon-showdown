@@ -1887,13 +1887,16 @@ export const commands: ChatCommands = {
 				` Do not attempt to recreate it, or you may be punished.${reason ? ` (reason: ${reason})` : ``}`
 			);
 
-			const modlogEntry = {
-				action: 'NOTE',
-				loggedBy: user.id,
-				note: `participants in ${roomid} (creator: ${targetUser.id}): ${participants.join(', ')}`,
-			};
-			Rooms.global.modlog(modlogEntry, targetRoom.roomid);
-			targetRoom.modlog(modlogEntry);
+			if (participants) {
+				const modlogEntry = {
+					action: 'NOTE',
+					loggedBy: user.id,
+					note: `participants in ${roomid} (creator: ${targetUser.id}): ${participants.join(', ')}`,
+				};
+				Rooms.global.modlog(modlogEntry, targetRoom.roomid);
+				targetRoom.modlog(modlogEntry);
+			}
+		
 			targetRoom.destroy();
 		}
 	},
