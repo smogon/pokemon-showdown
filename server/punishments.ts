@@ -1576,7 +1576,10 @@ export const Punishments = new class {
 							longestIPPunishment = punishment;
 						}
 					}
-					if (longestIPPunishment) punishments.push([curRoom, longestIPPunishment]);
+					if (longestIPPunishment) {
+						punishments.push([curRoom, longestIPPunishment]);
+						continue;
+					}
 				}
 			}
 			if (checkMutes && curRoom.muteQueue) {
