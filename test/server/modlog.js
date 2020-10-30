@@ -38,7 +38,7 @@ function lastLine(database, roomid) {
 }
 
 describe('Modlog', () => {
-	describe('Modlog#prepareSQLSearch', () => {
+	describe.skip('Modlog#prepareSQLSearch', () => {
 		it('should respect the maxLines parameter', () => {
 			const query = modlog.prepareSQLSearch(['lobby'], 1337, false, {});
 			assert(query.statement.source.endsWith('LIMIT ?'));
