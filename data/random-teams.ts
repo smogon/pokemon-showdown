@@ -1257,7 +1257,7 @@ export class RandomTeams {
 		} else if (species.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (species.baseSpecies === 'Pikachu') {
-			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
+			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 			item = 'Light Ball';
 		} else if (species.name === 'Regieleki' && !isDoubles) {
 			item = 'Normal Gem';

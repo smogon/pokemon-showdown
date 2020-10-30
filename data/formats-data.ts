@@ -246,8 +246,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUber)",
 	},
 	pikachuworld: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "(PU)",
+		doublesTier: "(DUU)",
 	},
 	raichu: {
 		randomBattleMoves: ["encore", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
