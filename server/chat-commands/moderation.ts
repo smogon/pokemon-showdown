@@ -1896,7 +1896,7 @@ export const commands: ChatCommands = {
 				Rooms.global.modlog(modlogEntry, targetRoom.roomid);
 				targetRoom.modlog(modlogEntry);
 			}
-		
+
 			targetRoom.destroy();
 		}
 	},
