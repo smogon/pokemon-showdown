@@ -45,7 +45,7 @@ describe("Ripen", function () {
 		assert(nonRipenWynaut.hp, nonRipenWynaut.maxhp - (Math.floor(nonRipenWynaut.maxhp / 8) * 2));
 	});
 
-	it.skip('should allow resist Berries to quarter the damage done', function () {
+	it('should allow resist Berries to quarter the damage done', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: {spe: 4}, moves: ['luckychant']},
 		], [
@@ -57,7 +57,7 @@ describe("Ripen", function () {
 		assert.bounded(damage, [18, 21]); // If it was only halved, range would be 36-43
 	});
 
-	it.skip('should allow resist Berries to quarter the damage done even on a critical hit', function () {
+	it('should allow resist Berries to quarter the damage done even on a critical hit', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: {spe: 4}, moves: ['sleeptalk']},
 		], [
