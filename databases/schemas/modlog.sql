@@ -18,6 +18,6 @@ CREATE TABLE alts (
     userid TEXT NOT NULL,
     PRIMARY KEY (modlog_id, userid),
     FOREIGN KEY (modlog_id) REFERENCES modlog(modlog_id)
-);
+) WITHOUT ROWID;
 
 PRAGMA journal_mode=WAL;
