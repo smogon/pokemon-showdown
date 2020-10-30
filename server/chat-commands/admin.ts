@@ -431,7 +431,11 @@ export const commands: ChatCommands = {
 					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
 				}
 
-				Rooms.Modlog = require('../modlog').modlog;
+				const {Modlog} = require('../modlog');
+				Rooms.Modlog = new Modlog(
+					Rooms.MODLOG_PATH || 'logs/modlog',
+					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
+				);
 				this.sendReply("Modlog has been hot-patched.");
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;

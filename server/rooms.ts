@@ -1663,6 +1663,8 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
+	MODLOG_PATH,
+	MODLOG_DB_PATH,
 	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
