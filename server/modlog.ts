@@ -140,7 +140,6 @@ export class Modlog {
 	readonly renameQuery: Database.Statement<[string, string]>;
 	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
 	readonly insertionTransaction: Database.Transaction;
-	readonly altsInsertionTransaction: Database.Transaction;
 
 	constructor(flatFilePath: string, databasePath: string) {
 		this.logPath = flatFilePath;
@@ -186,12 +185,6 @@ export class Modlog {
 			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) `
 		);
 
-
-		this.altsInsertionTransaction = this.database.transaction((modlogID: number, userID: string) => {
-			this.altsInsertionQuery.run(modlogID, userID);
-			this.FTSAltsInsertionQuery.run(modlogID, userID);
-		});
-
 		this.insertionTransaction = this.database.transaction((entries: Iterable<ModlogEntry>) => {
 			for (const entry of entries) {
 				if (!entry.visualRoomID) entry.visualRoomID = undefined;
@@ -207,7 +200,8 @@ export class Modlog {
 				this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
 
 				for (const alt of entry.alts || []) {
-					this.altsInsertionTransaction(rowid, alt);
+					this.altsInsertionQuery.run(rowid, alt);
+					this.FTSAltsInsertionQuery.run(rowid, alt);
 				}
 			}
 		});
