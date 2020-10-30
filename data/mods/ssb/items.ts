@@ -35,18 +35,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Wingull with Blackbird, it can use Gaelstrom.",
 	},
 
-	// phiwings99
-	boatiumz: {
-		name: "Boatium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Ghost of 1v1 Past",
-		zMoveFrom: "Moongeist Beam",
-		itemUser: ["Froslass"],
-		gen: 8,
-		desc: "If held by a Froslass with Moongeist Beam, it can use Ghost of 1v1 Past.",
-	},
-
 	// Robb576
 	modium6z: {
 		name: "Modium-6 Z",

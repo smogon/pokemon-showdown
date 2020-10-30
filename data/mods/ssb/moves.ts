@@ -3555,8 +3555,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Imprisons and traps the target, and then transforms into them.",
-		shortDesc: "Imprison + Mean Look + Transform.",
+		desc: "Imprisons and traps the target, and then transforms into them. Faints if the target faints.",
+		shortDesc: "Imprison + Mean Look + Transform. Faints if the target faints.",
 		name: "Ghost of 1v1 Past",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3577,8 +3577,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!pokemon.transformInto(target)) {
 				return false;
 			}
+			pokemon.addVolatile('ghostof1v1past', pokemon);
+			pokemon.volatiles['ghostof1v1past'].targetPokemon = target;
 		},
-		isZ: "boatiumz",
+		condition: {
+			onAnyFaint(target) {
+				if (target === this.effectData.targetPokemon) this.effectData.source.faint();
+			},
+		},
 		secondary: null,
 		target: "normal",
 		type: "Ghost",

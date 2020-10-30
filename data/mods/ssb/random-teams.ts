@@ -535,10 +535,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 	},
 	phiwings99: {
-		species: 'Froslass', ability: 'Plausible Deniability', item: 'Boatium Z', gender: 'M',
-		moves: ['Destiny Bond', 'Ice Beam', 'Haze'],
-		signatureMove: 'Moongeist Beam',
-		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		species: 'Froslass', ability: 'Plausible Deniability', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Moongeist Beam', 'Spikes', 'Haze'],
+		signatureMove: 'Ghost of 1v1 Past',
+		evs: {hp: 252, spa: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	'piloswine gripado': {
 		species: 'Piloswine', ability: 'Forever Winter Nights', item: 'Eviolite', gender: 'M',
