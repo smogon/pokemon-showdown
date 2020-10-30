@@ -133,10 +133,7 @@ export class Modlog {
 	readonly database: Database.Database;
 
 	readonly modlogInsertionQuery: Database.Statement<ModlogEntry>;
-	readonly FTSInsertionQuery: Database.Statement<[number, string?, string?, string?, string?]>;
 	readonly altsInsertionQuery: Database.Statement<[number, string]>;
-	readonly FTSAltsInsertionQuery: Database.Statement<[number, string]>;
-
 	readonly renameQuery: Database.Statement<[string, string]>;
 	readonly insertionTransaction: Database.Transaction;
 
@@ -149,33 +146,16 @@ export class Modlog {
 		this.database.exec("PRAGMA foreign_keys = ON;");
 
 		// Set up tables, etc
-		let tokenizer = 'unicode61';
-		if (Config.modlogftsextension) {
-			this.database.loadExtension(`${__dirname}/../native/fts_id_tokenizer.o`);
-			tokenizer = 'id_tokenizer';
-		}
 
 		if (!dbExists) {
-			this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync().replace(/%TOKENIZER%/g, tokenizer));
+			this.database.exec(FS(MODLOG_SCHEMA_PATH).readIfExistsSync());
 		}
-
-		this.database.function(
-			'regex',
-			{deterministic: true},
-			(regexString: string, toMatch: string) => Number(RegExp(regexString, 'i').test(toMatch))
-		);
-
 
 		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, note)`;
 		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $note)`;
 		this.modlogInsertionQuery = this.database.prepare(insertionQuerySource);
-		this.FTSInsertionQuery = this.database.prepare(
-			`INSERT INTO modlog_fts (rowid, note, userid, autoconfirmed_userid, action_taker_userid) VALUES (?, ?, ?, ?, ?)`
-		);
 
 		this.altsInsertionQuery = this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
-		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (rowid, userid) VALUES (?, ?)`);
-
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
 
 		this.insertionTransaction = this.database.transaction((entries: Iterable<ModlogEntry>) => {
@@ -190,11 +170,8 @@ export class Modlog {
 				const result = this.modlogInsertionQuery.run(entry);
 				const rowid = result.lastInsertRowid as number;
 
-				this.FTSInsertionQuery.run(rowid, entry.note, entry.userid, entry.autoconfirmedID, entry.loggedBy);
-
 				for (const alt of entry.alts || []) {
 					this.altsInsertionQuery.run(rowid, alt);
-					this.FTSAltsInsertionQuery.run(rowid, alt);
 				}
 			}
 		});
