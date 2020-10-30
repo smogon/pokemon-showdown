@@ -356,6 +356,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8dlc1',
 		gameType: 'doubles',
+		searchShow: false,
 		forcedLevel: 50,
 		teamLength: {
 			validate: [4, 6],
@@ -393,7 +394,6 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		// rated: false,
 		teamLength: {
 			validate: [2, 2],
 			battle: 2,
@@ -1031,7 +1031,7 @@ export const Formats: FormatList = [
 			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Pure Power', 'Shadow Tag', 'Simple', 'Water Bubble',
 			'Baton Pass', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
 		],
-		restricted: ['Butterfree', 'Blaziken', 'Torkoal', 'Toxtricity'],
+		restricted: ['Blaziken', 'Butterfree', 'Torkoal', 'Toxtricity'],
 		getEvoFamily(speciesid) {
 			let species = Dex.getSpecies(speciesid);
 			while (species.prevo) {
