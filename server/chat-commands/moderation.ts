@@ -1892,9 +1892,9 @@ export const commands: ChatCommands = {
 				const modlogEntry = {
 					action: 'NOTE',
 					loggedBy: user.id,
+					isGlobal: true,
 					note: `participants in ${roomid} (creator: ${targetUser.id}): ${participants.join(', ')}`,
 				};
-				Rooms.global.modlog(modlogEntry, targetRoom.roomid);
 				targetRoom.modlog(modlogEntry);
 			}
 

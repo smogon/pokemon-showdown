@@ -345,6 +345,9 @@ export abstract class BasicRoom {
 		this.log.roomlog(message);
 		return this;
 	}
+	/**
+	 * Writes an entry to the modlog for that room, and the global modlog if entry.isGlobal is true.
+	 */
 	modlog(entry: ModlogEntry) {
 		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
 		this.log.modlog(entry, override);

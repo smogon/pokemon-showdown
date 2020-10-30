@@ -842,8 +842,11 @@ export class CommandContext extends MessageContext {
 			}
 		}
 		if (ip) entry.ip = ip;
-		this.room?.modlog(entry);
-		Rooms.global.modlog(entry, this.room?.roomid);
+		if (this.room) {
+			this.room.modlog(entry);
+		} else {
+			Rooms.global.modlog(entry);
+		}
 	}
 	modlog(
 		action: string,

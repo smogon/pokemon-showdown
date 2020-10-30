@@ -253,16 +253,20 @@ export class Modlog {
 		const buffers = new Map<ModlogID, string>();
 		for (const entry of entries) {
 			const streamID = entry.roomID as ModlogID;
-			let buf = buffers.get(streamID) || '';
-			buf += `[${new Date(entry.time!).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
-			if (entry.userid) buf += ` [${entry.userid}]`;
-			if (entry.autoconfirmedID) buf += ` ac:[${entry.autoconfirmedID}]`;
-			if (entry.alts) buf += ` alts:[${entry.alts.join('], [')}]`;
-			if (entry.ip) buf += ` [${entry.ip}]`;
-			if (entry.loggedBy) buf += ` by ${entry.loggedBy}`;
-			if (entry.note) buf += `: ${entry.note}`;
-			buf += `\n`;
-			buffers.set(streamID, buf);
+
+			let entryText = `[${new Date(entry.time!).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
+			if (entry.userid) entryText += ` [${entry.userid}]`;
+			if (entry.autoconfirmedID) entryText += ` ac:[${entry.autoconfirmedID}]`;
+			if (entry.alts) entryText += ` alts:[${entry.alts.join('], [')}]`;
+			if (entry.ip) entryText += ` [${entry.ip}]`;
+			if (entry.loggedBy) entryText += ` by ${entry.loggedBy}`;
+			if (entry.note) entryText += `: ${entry.note}`;
+			entryText += `\n`;
+
+			buffers.set(streamID, (buffers.get(streamID) || '') + entryText);
+			if (entry.isGlobal && streamID !== 'global') {
+				buffers.set('global', (buffers.get('global') || '') + entryText);
+			}
 		}
 
 		for (const [streamID, buffer] of buffers) {
