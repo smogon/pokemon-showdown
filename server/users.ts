@@ -727,7 +727,7 @@ export class User extends Chat.MessageContext {
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
 		const conflictUser = users.get(userid);
-		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
+		if (conflictUser && !conflictUser.registered && (conflictUser.latestIp !== this.latestIp || conflictUser.connected)) {
 			if (newlyRegistered && userType !== '1') {
 				if (conflictUser !== this) conflictUser.resetName();
 			} else {
