@@ -610,6 +610,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'ripsei',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
+	RavioliQueen: {
+		species: 'Mismagius', ability: 'Phantom Plane', item: 'Spell Tag', gender: '',
+		moves: ['Shadow Ball', 'Dark Pulse', 'Psychic'],
+		signatureMove: 'Witching Hour',
+		evs: {def: 4, spa: 52, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	rb220: {
 		species: 'Keldeo-Resolute', ability: 'Wave Surge', item: 'Expert Belt', gender: '',
 		moves: ['Hydro Pump', 'Secret Sword', 'Ice Beam'],

@@ -1688,6 +1688,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// RavioliQueen
+	phantomplane: {
+		shortDesc: "On switch-in, this Pokemon summons Phantom Plane.",
+		onStart(source) {
+			this.field.setTerrain('phantomplane');
+		},
+		name: "Phantom Plane",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// rb220
 	wavesurge: {
 		shortDesc: "On switch-in, this Pokemon summons Wave Terrain.",

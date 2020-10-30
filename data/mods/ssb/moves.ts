@@ -4114,6 +4114,90 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fighting",
 	},
 
+	// RavioliQueen
+	witchinghour: {
+		accuracy: 90,
+		basePower: 60,
+		category: "Special",
+		name: "Witching Hour",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sprit Shackle', target);
+			this.add('-anim', source, 'Curse', target);
+		},
+		secondary: {
+			chance: 50,
+			volatileStatus: 'partiallytrapped',
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+	pitchblack: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Pitch Black. Please read the guide for the longer description of this terrain.",
+		shortDesc: "5 turns. Terrain becomes Pitch Black. Non Ghost types take 1/16th damage; Has boosting effects on Mismagius.",
+		name: "Pitch Black",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'pitchblack',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onModifySpA(spa, pokemon) {
+				if (this.effectData.source !== pokemon) return;
+				return this.chainModify(1.5);
+			},
+			onModifySpD(atk, pokemon) {
+				if (this.effectData.source !== pokemon) return;
+				return this.chainModify(1.5);
+			},
+			onHit(target, source, move) {
+				if (!target.hp || target.species.name !== 'Mismagius') return;
+				if (move?.effectType === 'Move' && move.category !== 'Status') {
+					this.boost({spe: 1}, target);
+					this.add('-boost', target, 'atk', 1, '[from] terrain: Pitch Black');
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Phantom Plane', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Phantom Plane');
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onTerrain(pokemon) {
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					if (pokemon && !pokemon.hasType('Ghost')) {
+						this.damage(pokemon.baseMaxhp / 16, pokemon);
+					}
+				}
+			},
+			onEnd() {
+				this.add('-fieldend', 'move: Phantom Plane');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Ghost",
+	},
+
 	// rb220
 	quickhammer: {
 		accuracy: 100,
