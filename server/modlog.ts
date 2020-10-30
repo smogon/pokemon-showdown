@@ -234,14 +234,15 @@ export class Modlog {
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
 		if (!entry.roomID) entry.roomID = roomid;
 		if (!entry.time) entry.time = Date.now();
-		if (entry.isGlobal && entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) {
-			entry.roomID = `global-${entry.roomID}`;
-		}
 		if (overrideID) entry.visualRoomID = overrideID;
 
-		const entries = [entry];
-		if (Config.usesqlitemodlog) this.writeSQL(entries);
-		this.writeText(entries);
+		this.writeText([entry]);
+		if (Config.usesqlitemodlog) {
+			if (entry.isGlobal && entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) {
+				entry.roomID = `global-${entry.roomID}`;
+			}
+			this.writeSQL([entry]);
+		}
 	}
 
 	writeSQL(entries: Iterable<ModlogEntry>) {
