@@ -138,7 +138,6 @@ export class Modlog {
 	readonly FTSAltsInsertionQuery: Database.Statement<[number, string]>;
 
 	readonly renameQuery: Database.Statement<[string, string]>;
-	readonly globalPunishmentsSearchQuery: Database.Statement<[string, string, string, number, ...string[]]>;
 	readonly insertionTransaction: Database.Transaction;
 
 	constructor(flatFilePath: string, databasePath: string) {
@@ -178,12 +177,6 @@ export class Modlog {
 		this.FTSAltsInsertionQuery = this.database.prepare(`INSERT INTO alts_fts (rowid, userid) VALUES (?, ?)`);
 
 		this.renameQuery = this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
-		this.globalPunishmentsSearchQuery = this.database.prepare(
-			`SELECT * FROM modlog WHERE (roomid = 'global' OR roomid LIKE 'global-%') ` +
-			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
-			`AND timestamp > ?` +
-			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])}) `
-		);
 
 		this.insertionTransaction = this.database.transaction((entries: Iterable<ModlogEntry>) => {
 			for (const entry of entries) {
@@ -413,14 +406,6 @@ export class Modlog {
 		return response.length;
 	}
 
-	getGlobalPunishmentsSQL(userid: ID, days: number) {
-		const args: (string | number)[] = [
-			userid, userid, userid, Date.now() - (days * 24 * 60 * 60 * 1000), ...GLOBAL_PUNISHMENTS,
-		];
-		const results = this.runSQLWithResults({statement: this.globalPunishmentsSearchQuery, args});
-		return results.length;
-	}
-
 	async search(
 		roomid: ModlogID = 'global',
 		search: ModlogSearch = {},
@@ -479,98 +464,6 @@ export class Modlog {
 			maxLines: maxLines,
 			onlyPunishments: onlyPunishments,
 		};
-	}
-
-	prepareSQLSearch(
-		rooms: ModlogID[],
-		maxLines: number,
-		onlyPunishments: boolean,
-		search: ModlogSearch
-	): ModlogSQLQuery<string | number> {
-		for (const room of [...rooms]) {
-			rooms.push(`global-${room}` as ModlogID);
-		}
-
-		const args: (string | number)[] = [];
-
-		let roomChecker = `roomid IN (${this.formatArray(rooms, args)})`;
-		if (rooms.includes('global')) roomChecker = `(roomid LIKE 'global-%' OR ${roomChecker})`;
-
-		let query = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
-		query += ` LEFT JOIN modlog_fts ON modlog_fts.rowid = modlog_id`;
-		query += ` WHERE ${roomChecker}`;
-
-		if (search.anyField) {
-			query += ` AND action LIKE ? || '%'`;
-
-			query += ` OR modlog_fts.userid MATCH ?`;
-			query += ` OR modlog_fts.autoconfirmed_userid MATCH ?`;
-			query += ` OR EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = alts.rowid WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`;
-			query += ` OR modlog_fts.action_taker_userid MATCH ?`;
-
-			query += ` OR ip LIKE ? || '%'`;
-
-			args.push(...Array(6).fill(search.anyField));
-
-			query += ` OR modlog_fts.note MATCH ?`;
-			args.push(toID(search.anyField));
-		}
-
-		if (search.action) {
-			query += ` AND action LIKE ? || '%'`;
-			args.push(search.action);
-		} else if (onlyPunishments) {
-			query += ` AND action IN (${this.formatArray(PUNISHMENTS, args)})`;
-		}
-
-		if (search.user) {
-			if (search.user.isExact) {
-				query += [
-					` AND (`,
-					`modlog_fts.userid MATCH ? OR`,
-					`modlog_fts.autoconfirmed_userid MATCH ? OR`,
-					`EXISTS(SELECT * FROM alts JOIN alts_fts ON alts_fts.rowid = modlog.rowid WHERE alts.modlog_id = modlog.modlog_id AND alts_fts.userid MATCH ?)`,
-					`)`,
-				].join(' ');
-				args.push(search.user.search, search.user.search, search.user.search);
-			} else {
-				query += [
-					` AND (`,
-					`modlog.userid = ? OR`,
-					`modlog.autoconfirmed_userid = ? OR`,
-					`EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid = ?)`,
-					`)`,
-				].join(' ');
-				args.push(search.user.search, search.user.search, search.user.search);
-			}
-		}
-
-		if (search.ip) {
-			query += ` AND ip LIKE ? || '%'`;
-			args.push(search.ip);
-		}
-
-		if (search.actionTaker) {
-			query += ` AND modlog_fts.action_taker_userid MATCH ?`;
-			args.push(search.actionTaker);
-		}
-
-		if (search.note) {
-			const parts = [];
-			for (const noteSearch of search.note.searches) {
-				parts.push(`modlog_fts.note MATCH ?`);
-				args.push(toID(noteSearch));
-			}
-			query += ` AND ${parts.join(' OR ')}`;
-		}
-
-		query += ` ORDER BY timestamp DESC`;
-		if (maxLines) {
-			query += ` LIMIT ?`;
-			args.push(maxLines);
-		}
-
-		return {statement: this.database.prepare(query), args};
 	}
 
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
