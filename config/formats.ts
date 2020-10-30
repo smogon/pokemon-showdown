@@ -64,7 +64,7 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] OU', 'Blitz'],
 	},
 	{
-		name: "[Gen 8] OU (DLC 1)",
+		name: "[Gen 8 DLC 1] OU",
 
 		mod: 'gen8dlc1',
 		searchShow: false,
@@ -297,7 +297,7 @@ export const Formats: FormatList = [
 		banlist: ['DUber', 'Power Construct'],
 	},
 	{
-		name: "[Gen 8] Doubles OU (DLC 1)",
+		name: "[Gen 8 DLC 1] Doubles OU",
 
 		mod: 'gen8dlc1',
 		gameType: 'doubles',
