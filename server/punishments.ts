@@ -806,13 +806,19 @@ export const Punishments = new class {
 			ip: typeof user !== 'string' ? (user as User).latestIp : undefined,
 			userid: userid,
 			note: reason,
+			isGlobal: true,
 		};
 		if (typeof user !== 'string') logEntry.ip = (user as User).latestIp;
-		Rooms.global.modlog(logEntry);
-		Rooms.get(room)?.modlog(logEntry);
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
+
+		if (roomObject) {
+			roomObject.modlog(logEntry);
+		} else {
+			Rooms.global.modlog(logEntry);
+		}
+
 		if (roomObject?.battle && userObject && userObject.connections[0]) {
 			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
 		}
