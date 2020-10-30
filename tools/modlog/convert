@@ -42,4 +42,4 @@ if (
 }
 
 console.log(`Converting ${from === 'txt' ? `the text modlog files in ${textLogPath}` : `${databasePath}`} from ${from} to ${to}...`);
-ModlogConverter.convert(from, to, path.resolve(databasePath || ""), path.resolve(textLogPath), path.resolve(outputLogPath));
+ModlogConverter.convert(from, to, path.resolve(databasePath || ""), path.resolve(textLogPath), path.resolve(outputLogPath || ""));
