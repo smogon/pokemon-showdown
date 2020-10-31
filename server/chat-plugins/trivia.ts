@@ -695,6 +695,12 @@ export class Trivia extends Rooms.RoomGame {
 	askQuestion() {
 		if (this.isPaused) return;
 		if (!this.questions.length) {
+			if (!this.getCap()) {
+				// If there's no score cap, we declare a winner when we run out of questions,
+				// instead of ending a game with a stalemate
+				this.win(`The game of Trivia has ended because there are no more questions!`);
+				return;
+			}
 			if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
 			this.phaseTimeout = null;
 			broadcast(
