@@ -204,6 +204,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Water'] && !counter['Water']) ||
 					(movePool.includes('spore') || movePool.includes('meanlook')) ||
 					(movePool.includes('milkdrink') || movePool.includes('recover') || (movePool.includes('softboiled') && hasMove['seismictoss'])) ||
+					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam')) ||
 					(hasMove['solarbeam'] && movePool.includes('sunnyday'))
 				)) { 

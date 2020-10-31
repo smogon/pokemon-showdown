@@ -266,7 +266,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	tentacruel: {
-		randomBattleMoves: ["hydropump", "sludgebomb", "substitute", "surf", "swordsdance"],
+		randomBattleMoves: ["hydropump", "sludgebomb", "substitute", "swordsdance"],
 		tier: "UUBL",
 	},
 	geodude: {
