@@ -143,8 +143,9 @@ export const commands: ChatCommands = {
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
-		show: 'display',
-		display(target, room, user, connection) {
+		show: '',
+		display: '',
+		''(target, room, user, connection) {
 			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply(this.tr("There is no announcement running in this room."));
@@ -160,10 +161,6 @@ export const commands: ChatCommands = {
 			}
 		},
 		displayhelp: [`/announcement display - Displays the announcement`],
-
-		''(target, room, user) {
-			this.parse('/help announcement');
-		},
 	},
 	announcementhelp: [
 		`/announcement allows rooms to run their own announcements. These announcements are limited to one announcement at a time per room.`,
