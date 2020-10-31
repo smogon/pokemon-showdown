@@ -155,6 +155,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'thief':
 					if (hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
+				case 'pursuit':
+					if (hasMove['crunch'] && movePool.includes('sunnyday')) rejected = true;
+					break;
 
 				// Status and illegal move rejections
 				case 'confuseray':

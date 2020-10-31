@@ -595,7 +595,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	mew: {
-		randomBattleMoves: ["earthquake", "explosion", "shadowball", "softboiled", "submission", "swordsdance"],
+		randomBattleMoves: ["earthquake", "explosion", "psychic", "shadowball", "softboiled", "submission", "swordsdance"],
 		tier: "Uber",
 	},
 	chikorita: {
