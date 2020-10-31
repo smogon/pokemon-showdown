@@ -1208,7 +1208,8 @@ export class CommandContext extends MessageContext {
 	checkHTML(htmlContent: string | null) {
 		htmlContent = ('' + (htmlContent || '')).trim();
 		if (!htmlContent) return '';
-		if (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent)) {
+		const auth = this.room ? this.room.auth : Users.globalAuth;
+		if (auth.get(this.user.id) !== '*' && (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent))) {
 			throw new Chat.ErrorMessage('Do not use "click here"');
 		}
 
@@ -1282,7 +1283,6 @@ export class CommandContext extends MessageContext {
 						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
 						if (buttonName === 'send' && buttonValue && msgCommandRegex.test(buttonValue)) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
-							const auth = this.room ? this.room.auth : Users.globalAuth;
 							if (auth.get(toID(pmTarget)) !== '*' && toID(pmTarget) !== this.user.id) {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
 								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
