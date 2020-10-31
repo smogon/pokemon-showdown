@@ -828,7 +828,12 @@ export class CommandContext extends MessageContext {
 		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
-		const entry: ModlogEntry = {action, isGlobal: true, loggedBy: this.user.id, note: note?.replace(/\n/gm, ' ')};
+		const entry: Partial<ModlogEntry> & {action: string} = {
+			action,
+			isGlobal: true,
+			loggedBy: this.user.id,
+			note: note?.replace(/\n/gm, ' ') || '',
+		};
 		if (user) {
 			if (typeof user === 'string') {
 				entry.userid = toID(user);
@@ -854,7 +859,11 @@ export class CommandContext extends MessageContext {
 		note: string | null = null,
 		options: Partial<{noalts: any, noip: any}> = {}
 	) {
-		const entry: ModlogEntry = {action, loggedBy: this.user.id, note: note?.replace(/\n/gm, ' ')};
+		const entry: Partial<ModlogEntry> & {action: string} = {
+			action,
+			loggedBy: this.user.id,
+			note: note?.replace(/\n/gm, ' ') || '',
+		};
 		if (user) {
 			if (typeof user === 'string') {
 				entry.userid = toID(user);

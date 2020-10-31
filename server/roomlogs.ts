@@ -224,7 +224,7 @@ export class Roomlog {
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 		void this.roomlogStream.write(timestamp + message + '\n');
 	}
-	modlog(entry: ModlogEntry, overrideID?: string) {
+	modlog(entry: Partial<ModlogEntry> & {action: string}, overrideID?: string) {
 		void Rooms.Modlog.write(this.roomid, entry, overrideID);
 	}
 	async rename(newID: RoomID): Promise<true> {

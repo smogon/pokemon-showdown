@@ -348,7 +348,7 @@ export abstract class BasicRoom {
 	/**
 	 * Writes an entry to the modlog for that room, and the global modlog if entry.isGlobal is true.
 	 */
-	modlog(entry: ModlogEntry) {
+	modlog(entry: Partial<ModlogEntry> & {action: string}) {
 		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
 		this.log.modlog(entry, override);
 		return this;
@@ -1057,7 +1057,7 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(entry: ModlogEntry, overrideID?: string) {
+	modlog(entry: Partial<ModlogEntry> & {action: string}, overrideID?: string) {
 		void Rooms.Modlog.write('global', entry, overrideID);
 	}
 

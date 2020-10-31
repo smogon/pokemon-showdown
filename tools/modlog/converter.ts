@@ -343,15 +343,39 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 export function parseModlog(raw: string, nextLine?: string, isGlobal = false): ModlogEntry | undefined {
 	let line = modernizeLog(raw);
 	if (!line) return;
+	// action: string;
+	// roomID: string;
+	// visualRoomID: string;
+	// userid: ID | null;
+	// autoconfirmedID: ID | null;
+	// alts: ID[];
+	// ip: string;
+	// isGlobal: boolean;
+	// loggedBy: ID | null;
+	// note: string;
+	// /** Milliseconds since the epoch */
+	// time: number;
 
-	const log: ModlogEntry = {action: 'NULL', isGlobal};
+
 	const timestamp = parseBrackets(line, '[');
-	log.time = Math.floor(new Date(timestamp).getTime()) || Date.now();
 	line = line.slice(timestamp.length + 3);
+	const [roomID, ...bonus] = parseBrackets(line, '(').split(' ');
 
-	const [roomid, ...bonus] = parseBrackets(line, '(').split(' ');
-	log.roomID = roomid;
-	if (bonus.length) log.visualRoomID = `${roomid} ${bonus.join(' ')}`;
+	const log: ModlogEntry = {
+		action: 'NULL',
+		roomID,
+		visualRoomID: '',
+		userid: null,
+		autoconfirmedID: null,
+		alts: [],
+		ip: '',
+		isGlobal,
+		loggedBy: null,
+		note: '',
+		time: Math.floor(new Date(timestamp).getTime()) || Date.now(),
+	};
+
+	if (bonus.length) log.visualRoomID = `${log.roomID} ${bonus.join(' ')}`;
 	line = line.slice((log.visualRoomID || log.roomID).length + 3);
 	const actionColonIndex = line.indexOf(':');
 	const action = line.slice(0, actionColonIndex);
@@ -422,7 +446,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		const colonIndex = line.indexOf(': ');
 		const actionTaker = line.slice(actionTakerIndex + 3, colonIndex > actionTakerIndex ? colonIndex : undefined);
 		if (toID(actionTaker).length < 19) {
-			log.loggedBy = toID(actionTaker) || undefined;
+			log.loggedBy = toID(actionTaker) || null;
 			if (colonIndex > actionTakerIndex) line = line.slice(colonIndex);
 			line = line.replace(regex, '');
 		}
@@ -435,7 +459,7 @@ export function rawifyLog(log: ModlogEntry) {
 	let result = `[${new Date(log.time || Date.now()).toJSON()}] (${(log.visualRoomID || log.roomID || 'global').replace(/^global-/, '')}) ${log.action}`;
 	if (log.userid) result += `: [${log.userid}]`;
 	if (log.autoconfirmedID) result += ` ac: [${log.autoconfirmedID}]`;
-	if (log.alts) result += ` alts: [${log.alts.join('], [')}]`;
+	if (log.alts.length) result += ` alts: [${log.alts.join('], [')}]`;
 	if (log.ip) {
 		if (!log.userid) result += `:`;
 		result += ` [${log.ip}]`;
