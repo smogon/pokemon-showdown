@@ -146,9 +146,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'counter':
 					if (hasMove['curse']) rejected = true;
 					break;
-				case 'hiddenpowerfighting':
-					if (hasMove['seismictoss']) rejected = true;
-					break;
 				case 'thunder':
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
@@ -175,11 +172,14 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'roar': case 'whirlwind':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
+				case 'softboiled':
+					if (movePool.includes('swordsdance')) rejected = true;
+					break;
 				case 'spikes':
 					if (teamDetails['spikes'] || (hasMove['rapidspin'] && hasType['Ice'])) rejected = true;
 					break;
 				case 'substitute':
-					if (!!counter['speedsetup'] || hasMove['rest']) rejected = true;
+					if (hasMove['agility'] || hasMove['rest']) rejected = true;
 					break;
 				case 'synthesis':
 					if (hasMove['explosion']) rejected = true;
@@ -194,7 +194,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'substitute'].includes(moveid)) &&
+				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
