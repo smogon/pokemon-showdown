@@ -75,9 +75,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
 					if (counter.Physical < 1) rejected = true;
 					isSetup = true;
-					break; 
-				
-				
+					break;
+
 				// Not very useful without their supporting moves
 				case 'batonpass':
 					if (!counter.setupType && !counter['speedsetup'] && !hasMove['meanlook']) rejected = true;
@@ -165,7 +164,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['bodyslam'] || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['surf']) rejected = true;
 					break;
 				case 'lovelykiss':
-					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] ||
+					hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -207,11 +207,12 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
 					(hasType['Water'] && !counter['Water']) ||
 					(movePool.includes('spore') || movePool.includes('meanlook')) ||
-					(movePool.includes('milkdrink') || movePool.includes('recover') || (movePool.includes('softboiled') && hasMove['present'])) ||
+					(movePool.includes('milkdrink') || movePool.includes('recover')) || 
+					(movePool.includes('softboiled') && hasMove['present']) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam')) ||
 					(hasMove['solarbeam'] && movePool.includes('sunnyday'))
-				)) { 
+				)) {
 					// Reject Status, non-STAB, or low basepower moves
 					if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) {
 						rejected = true;
