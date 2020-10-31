@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
