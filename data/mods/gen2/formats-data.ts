@@ -295,7 +295,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	slowking: {
 		randomBattleMoves: ["fireblast", "psychic", "rest", "sleeptalk", "surf", "thunderwave", "toxic"],
-	tier: "UU",
+		tier: "UU",
 	},
 	magnemite: {
 		tier: "NU",
