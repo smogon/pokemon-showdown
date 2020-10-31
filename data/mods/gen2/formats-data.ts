@@ -425,7 +425,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	blissey: {
-		randomBattleMoves: ["flamethrower", "healbell", "seismictoss", "sing", "softboiled", "toxic"],
+		randomBattleMoves: ["flamethrower", "healbell", "icebeam", "present", "sing", "softboiled", "toxic"],
 		tier: "OU",
 	},
 	tangela: {

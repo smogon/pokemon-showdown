@@ -209,7 +209,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
 					(hasType['Water'] && !counter['Water']) ||
 					(movePool.includes('spore') || movePool.includes('meanlook')) ||
-					(movePool.includes('milkdrink') || movePool.includes('recover') || (movePool.includes('softboiled') && hasMove['seismictoss'])) ||
+					(movePool.includes('milkdrink') || movePool.includes('recover') || (movePool.includes('softboiled') && hasMove['present'])) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam')) ||
 					(hasMove['solarbeam'] && movePool.includes('sunnyday'))
