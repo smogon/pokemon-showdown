@@ -132,7 +132,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ninetales: {
-		randomBattleMoves: ["confuseray", "fireblast", "flamethrower", "hiddenpowergrass", "hypnosis", "sunnyday"],
+		randomBattleMoves: ["confuseray", "fireblast", "hiddenpowergrass", "hypnosis", "sunnyday"],
 		tier: "NU",
 	},
 	igglybuff: {
