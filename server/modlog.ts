@@ -87,6 +87,8 @@ export interface ModlogEntry {
 	time: number;
 }
 
+export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
+
 class SortedLimitedLengthList {
 	maxSize: number;
 	list: string[];
@@ -224,7 +226,7 @@ export class Modlog {
 	/**
 	 * Writes to the modlog
 	 */
-	write(roomid: string, entry: Partial<ModlogEntry> & {action: string}, overrideID?: string) {
+	write(roomid: string, entry: PartialModlogEntry, overrideID?: string) {
 		const insertableEntry: ModlogEntry = {
 			action: entry.action,
 			roomID: entry.roomID || roomid,
