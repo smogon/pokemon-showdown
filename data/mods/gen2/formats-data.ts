@@ -301,7 +301,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	magneton: {
-		randomBattleMoves: ["hiddenpowerice", "substitute", "thunder", "thunderbolt", "thunderwave"],
+		randomBattleMoves: ["hiddenpowerice", "substitute", "thunderbolt", "thunderwave"],
 		tier: "UU",
 	},
 	farfetchd: {
@@ -425,7 +425,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	blissey: {
-		randomBattleMoves: ["flamethrower", "healbell", "icebeam", "seismictoss", "sing", "softboiled", "thunderbolt", "toxic"],
+		randomBattleMoves: ["flamethrower", "healbell", "seismictoss", "sing", "softboiled", "toxic"],
 		tier: "OU",
 	},
 	tangela: {
@@ -829,7 +829,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	skarmory: {
-		randomBattleMoves: ["curse", "drillpeck", "rest", "sleeptalk", "thief", "toxic", "whirlwind"],
+		randomBattleMoves: ["curse", "drillpeck", "rest", "sleeptalk", "toxic"],
 		tier: "OU",
 	},
 	houndour: {
