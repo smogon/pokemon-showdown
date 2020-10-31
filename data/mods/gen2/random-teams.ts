@@ -1,16 +1,14 @@
 import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import { PRIORITY_BELOW_NORMAL } from 'constants';
 
 export class RandomGen2Teams extends RandomGen3Teams {
-
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 	}
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
-		let forme = species.name;
+		const forme = species.name;
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool: string[] = [];
@@ -29,7 +27,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			hasType[species.types[1]] = true;
 		}
 		let hasMove: {[k: string]: boolean} = {};
-		let hasAbility: {[k: string]: boolean} = {};
+		const hasAbility: {[k: string]: boolean} = {};
 		let counter;
 
 		do {
