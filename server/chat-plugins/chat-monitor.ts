@@ -375,7 +375,6 @@ export const namefilter: NameFilter = (name, user) => {
 export const loginfilter: LoginFilter = user => {
 	if (user.namelocked) return;
 
-	const forceRenamed = Monitor.forceRenames.get(user.id);
 	if (user.trackRename) {
 		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
 		Rooms.global.notifyRooms(
@@ -384,16 +383,12 @@ export const loginfilter: LoginFilter = user => {
 		);
 		user.trackRename = '';
 	}
-	if (Punishments.namefilterwhitelist.has(user.id)) return;
-	if (typeof forceRenamed === 'number') {
-		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
-		Rooms.global.notifyRooms(
-			['staff'],
-			Utils.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
-		);
-	}
 };
 export const nicknamefilter: NameFilter = (name, user) => {
+	if (Monitor.forceRenames.has(user.id) && !Punishments.namefilterwhitelist.has(user.id)) {
+		return '';
+	}
+
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
