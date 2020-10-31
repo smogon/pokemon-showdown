@@ -232,6 +232,9 @@ export class Modlog {
 	 * Writes to the modlog
 	 */
 	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
+		// Filter out duplicate alts
+		if (entry.alts) entry.alts = [...new Set(entry.alts)];
+
 		if (!entry.roomID) entry.roomID = roomid;
 		if (!entry.time) entry.time = Date.now();
 		if (overrideID) entry.visualRoomID = overrideID;
