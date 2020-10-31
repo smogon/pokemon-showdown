@@ -8,14 +8,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
-		const forme = species.name;
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool: string[] = [];
 		const moves: string[] = [];
 		let item = '';
 		const ivs = {
-			hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30
+			hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30,
 		};
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -192,7 +191,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk'].includes(moveid)) &&
+				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) &&
+				!['batonpass', 'sleeptalk'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
@@ -207,7 +207,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
 					(hasType['Water'] && !counter['Water']) ||
 					(movePool.includes('spore') || movePool.includes('meanlook')) ||
-					(movePool.includes('milkdrink') || movePool.includes('recover')) || 
+					(movePool.includes('milkdrink') || movePool.includes('recover')) ||
 					(movePool.includes('softboiled') && hasMove['present']) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam')) ||
@@ -245,7 +245,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				}
 			}
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
-		
+
 		// Adjust ivs for hiddenpower
 		for (const setMoveid of moves) {
 			if (hasMove['hiddenpower']) continue;
@@ -285,8 +285,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		} else if (hasMove['thief']) {
 			item = '';
 
-		// Medium priority
-
+			// Medium priority
 		} else if (hasMove['rest'] && !hasMove['sleeptalk']) {
 			item = 'Mint Berry';
 		} else if ((hasMove['bellydrum'] || hasMove['swordsdance']) && species.baseStats.spe >= 60 &&
@@ -316,7 +315,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		};
 		let level = levelScale[species.tier] || 90;
 		if (customScale[species.name]) level = customScale[species.name];
-		
+
 		return {
 			name: species.name,
 			species: species.name,
@@ -409,8 +408,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			// Team has
 			if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
 			if (set.moves.includes('spikes')) teamDetails['spikes'] = 1;
-			
-			
 		}
 		return pokemon;
 	}
