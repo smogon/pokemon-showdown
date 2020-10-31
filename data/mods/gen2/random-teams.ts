@@ -146,6 +146,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'counter':
 					if (hasMove['curse']) rejected = true;
 					break;
+				case 'hiddenpowerfighting':
+					if (hasMove['seismictoss']) rejected = true;
+					break;
 				case 'thunder':
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
