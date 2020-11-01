@@ -2503,18 +2503,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			const noAbilityChange = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
-			];
-			if (noAbilityChange.includes(target.ability)) return;
+			if (target.getAbility().neverChanges) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			const noAbilityChange = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
-			];
-			if (noAbilityChange.includes(target.ability)) return;
+			if (target.getAbility().neverChanges) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
@@ -4366,17 +4360,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(target, source) {
 			if (target === source || target.volatiles['dynamax']) return false;
-			const bannedTargetAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant',
-			];
-			const bannedSourceAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+
+			const additionalBannedSourceAbilities = [
+				'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace',
 			];
 			if (
-				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) ||
-				target.ability === source.ability
+				target.ability === source.ability ||
+				target.getAbility().neverChanges ||
+				source.getAbility().neverChanges || additionalBannedSourceAbilities.includes(source.ability)
 			) {
 				return false;
+			}
+			if (target.ability === 'truant') {
+				return false; // TODO how to return differently?
 			}
 		},
 		onHit(target, source) {
@@ -5897,11 +5893,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		volatileStatus: 'gastroacid',
-		onTryHit(pokemon) {
-			const bannedAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode',
-			];
-			if (bannedAbilities.includes(pokemon.ability)) {
+		onTryHit(target) {
+			if (target.getAbility().neverChanges) {
 				return false;
 			}
 		},
@@ -14256,13 +14249,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryHit(target, source) {
 			if (target.ability === source.ability) return false;
 
-			const bannedTargetAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+			const additionalBannedTargetAbilities = [
+				'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
-			const bannedSourceAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
-			];
-			if (bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability)) {
+
+			if (target.getAbility().neverChanges || additionalBannedTargetAbilities.includes(target.ability) ||
+				source.getAbility().neverChanges) {
 				return false;
 			}
 		},
@@ -15264,12 +15256,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
-		onTryHit(pokemon) {
-			const bannedAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'simple', 'stancechange', 'truant', 'zenmode',
-			];
-			if (bannedAbilities.includes(pokemon.ability)) {
+		onTryHit(target) {
+			if (target.getAbility().neverChanges || target.ability === 'simple') {
 				return false;
+			}
+			if (target.ability === 'truant') {
+				return false; // TODO how to return differently?
 			}
 		},
 		onHit(pokemon) {
@@ -15383,11 +15375,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onTryHit(target, source) {
-			const bannedAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'neutralizinggas', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode',
-			];
+			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
 			if (
-				target.volatiles['dynamax'] || bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)
+				target.volatiles['dynamax'] ||
+				target.getAbility().neverChanges || source.getAbility().neverChanges ||
+				additionalBannedAbilities.includes(target.ability) || additionalBannedAbilities.includes(source.ability)
 			) {
 				return false;
 			}
@@ -19389,12 +19381,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
-		onTryHit(pokemon) {
-			const bannedAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'insomnia', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant', 'zenmode',
-			];
-			if (bannedAbilities.includes(pokemon.ability)) {
+		onTryHit(target) {
+			if (target.getAbility().neverChanges) {
 				return false;
+			}
+			if (target.ability === 'truant' || target.ability === 'insomnia') {
+				return false; // TODO how to return differently?
 			}
 		},
 		onHit(pokemon) {

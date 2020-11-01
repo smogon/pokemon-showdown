@@ -2166,7 +2166,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	mummy: {
 		name: "Mummy",
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && source.ability !== 'mummy') {
+			if (source.getAbility().neverChanges && source.ability !== 'mummy') {
+				return;
+			}
+			if (move.flags['contact']) {
 				const oldAbility = source.setAbility('mummy', target);
 				if (oldAbility) {
 					this.add('-activate', target, 'ability: Mummy', this.dex.getAbility(oldAbility).name, '[of] ' + source);
@@ -2659,10 +2662,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
-			const bannedAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+			const additionalBannedAbilities = [
+				'noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
-			if (bannedAbilities.includes(target.ability)) return;
+			if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
 		},
@@ -2868,10 +2871,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
-			const bannedAbilities = [
-				'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+			const additionalBannedAbilities = [
+				'noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
-			if (bannedAbilities.includes(target.ability)) return;
+			if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
 		},
@@ -3924,10 +3927,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				const ability = target.getAbility();
-				const bannedAbilities = [
-					'noability', 'asoneglastrier', 'asonespectrier', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+				const additionalBannedAbilities = [
+					'noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace',
 				];
-				if (bannedAbilities.includes(target.ability)) {
+				if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
 					continue;
 				}
@@ -4100,8 +4103,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	wanderingspirit: {
 		onDamagingHit(damage, target, source, move) {
-			if (target.volatiles['dynamax']) return;
-			if (['illusion', 'neutralizinggas', 'wanderingspirit', 'wonderguard'].includes(source.ability)) return;
+			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
+			if (source.getAbility().neverChanges || additionalBannedAbilities.includes(source.ability) ||
+				target.volatiles['dynamax']
+			) {
+				return;
+			}
+
 			if (move.flags['contact']) {
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
