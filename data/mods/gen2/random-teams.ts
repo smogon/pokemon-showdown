@@ -197,7 +197,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Normal'] && !counter['Normal'] && counter.setupType === 'Physical') ||
 					(hasType['Psychic'] && hasType['Grass'] && !counter['Psychic']) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
-					(hasType['Water'] && !counter['Water']) ||||
+					(hasType['Water'] && !counter['Water']) ||
 					(hasMove['present'] && movePool.includes('softboiled')) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam') || (hasMove['solarbeam'] && movePool.includes('sunnyday'))) ||
