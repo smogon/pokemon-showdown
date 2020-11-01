@@ -183,6 +183,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({atk: length}, source, source, this.dex.getEffect('chillingneigh'), true);
 			}
 		},
+		neverChanges: true,
 		name: "As One (Glastrier)",
 		rating: 3.5,
 		num: 266,
@@ -198,6 +199,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({spa: length}, source, source, this.dex.getEffect('grimneigh'), true);
 			}
 		},
+		neverChanges: true,
 		name: "As One (Spectrier)",
 		rating: 3.5,
 		num: 267,
@@ -1307,6 +1309,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.formeChange(forme, effect);
 			}
 		},
+		neverChanges: true,
 		name: "Gulp Missile",
 		rating: 2.5,
 		num: 241,
@@ -1511,6 +1514,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
+		neverChanges: true,
 		name: "Ice Face",
 		rating: 3,
 		num: 248,
