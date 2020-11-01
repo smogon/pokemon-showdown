@@ -1117,23 +1117,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Kev
 	kingofatlantis: {
-		shortDesc: "Primordial Sea + Dry Skin.",
+		shortDesc: "Drizzle + Dry Skin; +1 turn of rain for every water type teammate.",
 		onStart(source) {
-			this.field.setWeather('primordialsea');
-		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
-		onEnd(pokemon) {
-			if (this.field.weatherData.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility(HEAVY_RAIN_ABILITIES)) {
-					this.field.weatherData.source = target;
-					return;
-				}
-			}
-			this.field.clearWeather();
+			const drizzle = this.dex.deepClone(this.dex.deepClone('raindance'));
+			for (const teammate of source.side.pokemon) if (teammate.hasType('Water') && teammate !== source) drizzle.duration++;
+			this.field.setWeather(drizzle);
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
