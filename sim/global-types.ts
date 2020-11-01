@@ -1527,8 +1527,6 @@ namespace RandomTeamsTypes {
 		nature?: string;
 		happiness?: number;
 		gigantamax?: boolean;
-		moveset?: RandomTeamsTypes.RandomSet;
-		other?: {discard: boolean, restrictMoves: {[k: string]: number}};
 	}
 	export interface RandomFactorySet {
 		name: string;
