@@ -1899,6 +1899,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Teclis
+	fieryfur: {
+		name: "Fiery Fur",
+		shortDesc: "If this Pokemon is at full HP, damage taken from attacks is halved.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hp >= target.maxhp) {
+				this.debug('Fiery Fur weaken');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+
 	// Tenshi
 	royalcoat: {
 		desc: "If Sandstorm is active, this Pokemon's Speed is doubled and its Special Defense is multiplied by 1.5. This Pokemon takes no damage from Sandstorm.",

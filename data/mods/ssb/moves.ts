@@ -4835,32 +4835,79 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Teclis
-	ten: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user restores 1/2 of its maximum HP, rounded half up. Raises the user's Special Attack by 1 stage.",
-		shortDesc: "Heals user by 50% and raises Sp. Atk 1 stage.",
-		name: "Ten",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
+	kaboom: {
+		accuracy: 100,
+		basePower: 150,
+		category: "Special",
+		name: "Kaboom",
+		pp: 5,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
-		heal: [1, 2],
-		onTryMove(target) {
+		flags: {protect: 1, mirror: 1},
+		terrain: 'lavaterrain',
+		basePowerCallback(pokemon, target, move) {
+			return 70 + 80 * Math.floor(pokemon.hp / pokemon.maxhp);
+		},
+		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Calm Mind', source);
-			this.add('-anim', source, 'Recover', source);
-		},
-		boosts: {
-			spa: 1,
+			this.add('-anim', source, 'Eruption', target);
+			this.add('-anim', source, 'Earthquake', target);
 		},
 		secondary: null,
-		target: "self",
-		type: "Psychic",
+		target: "normal",
+		type: "Fire",
+	},
+	lavaterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Lava Terrain",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		terrain: 'lavaterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					if (move.type === 'Fire') {
+						this.debug('lava terrain boost');
+						return this.chainModify(1.5);
+					} else if (move.type === 'Water') {
+						this.debug('lava terrain weaken');
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onStart(battle, source, effect) {
+				this.add('-fieldstart', 'move: Fire Pledge');
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onTerrain(pokemon) {
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					if (pokemon && !pokemon.hasType('Fire')) {
+						this.damage(pokemon.baseMaxhp / 8, pokemon);
+					} else if (pokemon) {
+						this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+					}
+				}
+			},
+			onEnd() {
+				this.add('-fieldend', 'move: Fire Pledge');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Fire",
 	},
 
 	// Tenshi
