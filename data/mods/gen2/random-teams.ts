@@ -96,7 +96,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (counter.setupType) rejected = true;
 					break;
 				case 'haze':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (counter.setupType || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'reflect': case 'lightscreen':
 					if (counter.setupType || hasMove['rest']) rejected = true;
