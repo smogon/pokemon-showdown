@@ -73,7 +73,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'curse': case 'meditate': case 'screech': case 'swordsdance':
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
-					if (counter.Physical < 1 || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
+					if (!counter['Physical'] || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
 					isSetup = true;
 					break;
 
@@ -83,9 +83,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 				case 'nightmare':
 					if (!hasMove['lovelykiss'] && !hasMove['sleeppowder']) rejected = true;
-					break;
-				case 'sleeptalk':
-					if (!hasMove['rest'] && !movePool.includes('rest')) rejected = true;
 					break;
 				case 'swagger':
 					if (!hasMove['substitute']) rejected = true;
@@ -147,7 +144,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 
 				// Status and illegal move rejections
-				case 'confuseray':
+				case 'confuseray': case 'roar': case 'whirlwind':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'encore':
@@ -155,9 +152,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 				case 'lovelykiss':
 					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					break;
-				case 'roar': case 'whirlwind':
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'softboiled':
 					if (movePool.includes('swordsdance')) rejected = true;
@@ -185,8 +179,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
-					(counter.setupType && counter[counter.setupType] < 2) ||
-					(hasType['Bug'] && movePool.includes('megahorn')) ||
 					(hasType['Electric'] && !counter['Electric']) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ground'] && !counter['Ground']) ||
@@ -195,7 +187,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Psychic'] && hasType['Grass'] && !counter['Psychic']) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
 					(hasType['Water'] && !counter['Water']) ||
-					(hasMove['present'] && movePool.includes('softboiled')) ||
+					(movePool.includes('megahorn') || hasMove['present'] && movePool.includes('softboiled')) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam') || (hasMove['solarbeam'] && movePool.includes('sunnyday'))) ||
 					(movePool.includes('spore') || movePool.includes('meanlook') || movePool.includes('milkdrink') || movePool.includes('recover'))
