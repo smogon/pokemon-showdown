@@ -115,7 +115,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'hyperbeam':
 					if (hasMove['rockslide']) rejected = true;
 					break;
-				case 'quickattack':
+				case 'quickattack': case 'selfdestruct':
 					if (hasMove['rest']) rejected = true;
 					break;
 				case 'rapidspin':
@@ -123,9 +123,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 				case 'return':
 					if (hasMove['bodyslam']) rejected = true;
-					break;
-				case 'selfdestruct':
-					if (hasMove['rest']) rejected = true;
 					break;
 				case 'surf':
 					if (hasMove['hydropump']) rejected = true;
