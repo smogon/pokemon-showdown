@@ -2166,7 +2166,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	mummy: {
 		name: "Mummy",
 		onDamagingHit(damage, target, source, move) {
-			if (source.getAbility().neverChanges && source.ability !== 'mummy') {
+			if (source.getAbility().neverChanges || source.ability === 'mummy') {
 				return;
 			}
 			if (move.flags['contact']) {
