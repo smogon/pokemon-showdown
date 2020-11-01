@@ -745,7 +745,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard', 'Dynamax Clause', 'Scalemons Mod'],
+		ruleset: ['Standard', 'Scalemons Mod', 'Overflow Stat Mod', 'Dynamax Clause'],
 		banlist: [
 			'Abra', 'Carvanha', 'Darmanitan-Galar', 'Gastly', 'Shedinja', 'Arena Trap', 'Drizzle', 'Drought', 'Huge Power',
 			'Moody', 'Shadow Tag', 'Damp Rock', 'Eviolite', 'Heat Rock', 'Light Ball', 'Thick Club', 'Baton Pass',
