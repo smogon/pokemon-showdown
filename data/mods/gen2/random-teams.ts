@@ -188,7 +188,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
 					(hasType['Water'] && !counter['Water']) ||
 					(movePool.includes('megahorn') || hasMove['present'] && movePool.includes('softboiled')) ||
-					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
+					(hasMove['rest'] && movePool.includes('sleeptalk') || (hasMove['sleeptalk'] && movePool.includes('rest'))) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam') || (hasMove['solarbeam'] && movePool.includes('sunnyday'))) ||
 					(movePool.includes('spore') || movePool.includes('meanlook') || movePool.includes('milkdrink') || movePool.includes('recover'))
 				)) {
