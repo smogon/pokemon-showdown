@@ -5,12 +5,12 @@ CREATE TABLE modlog (
     --- roomid OR global-roomid
     roomid TEXT NOT NULL,
     action TEXT NOT NULL,
-    visual_roomid TEXT,
+    visual_roomid TEXT NOT NULL,
+    note TEXT NOT NULL,
     action_taker_userid TEXT,
     userid TEXT,
     autoconfirmed_userid TEXT,
-    ip TEXT,
-    note TEXT
+    ip TEXT
 );
 
 CREATE TABLE alts (

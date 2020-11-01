@@ -41,7 +41,7 @@ import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {Modlog, ModlogEntry} from './modlog';
+import {Modlog, PartialModlogEntry} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -348,7 +348,7 @@ export abstract class BasicRoom {
 	/**
 	 * Writes an entry to the modlog for that room, and the global modlog if entry.isGlobal is true.
 	 */
-	modlog(entry: ModlogEntry) {
+	modlog(entry: PartialModlogEntry) {
 		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
 		this.log.modlog(entry, override);
 		return this;
@@ -1057,7 +1057,7 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(entry: ModlogEntry, overrideID?: string) {
+	modlog(entry: PartialModlogEntry, overrideID?: string) {
 		void Rooms.Modlog.write('global', entry, overrideID);
 	}
 

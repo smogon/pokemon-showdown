@@ -93,7 +93,7 @@ function prettifyResults(
 		if (result.userid) {
 			line += `: [${result.userid}]`;
 			if (result.autoconfirmedID) line += ` ac: [${result.autoconfirmedID}]`;
-			if (result.alts) line += ` alts: [${result.alts.join('], [')}]`;
+			if (result.alts.length) line += ` alts: [${result.alts.join('], [')}]`;
 			if (!hideIps && result.ip) line += ` [${result.ip}]`;
 		}
 
