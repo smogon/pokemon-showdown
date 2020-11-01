@@ -269,6 +269,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.multihit = 3;
 			}
 		},
+		neverChanges: true,
 		name: "Battle Bond",
 		rating: 4,
 		num: 210,
@@ -441,6 +442,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return false;
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
+		neverChanges: true,
 		isUnbreakable: true,
 		name: "Comatose",
 		rating: 4,
@@ -746,6 +748,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.getSpecies(speciesid));
 			}
 		},
+		neverChanges: true,
 		name: "Disguise",
 		rating: 3.5,
 		num: 209,
@@ -2151,6 +2154,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	multitype: {
 		// Multitype's type-changing itself is implemented in statuses.js
+		neverChanges: true,
 		name: "Multitype",
 		rating: 4,
 		num: 121,
@@ -2642,6 +2646,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
+		neverChanges: true,
 		name: "Power Construct",
 		rating: 5,
 		num: 211,
@@ -2965,6 +2970,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
+		neverChanges: true,
 		name: "RKS System",
 		rating: 4,
 		num: 225,
@@ -3109,6 +3115,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 		},
+		neverChanges: true,
 		name: "Schooling",
 		rating: 3,
 		num: 208,
@@ -3285,6 +3292,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-immune', target, '[from] ability: Shields Down');
 			return null;
 		},
+		neverChanges: true,
 		isUnbreakable: true,
 		name: "Shields Down",
 		rating: 3,
@@ -3504,6 +3512,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
+		neverChanges: true,
 		name: "Stance Change",
 		rating: 4,
 		num: 176,
@@ -4294,6 +4303,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			},
 		},
+		neverChanges: true,
 		name: "Zen Mode",
 		rating: 0,
 		num: 161,
