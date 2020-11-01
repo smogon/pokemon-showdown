@@ -536,10 +536,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
-			// In Gen 3, Shadow Tag users can prevent each other from switching out, possibly causing and endless battle or at least causing a long stall war
-			// To prevent this, we prevent more than one Wobbuffet in a single battle.
-			if (species.name === 'Wobbuffet') this.hasWobbuffet = true;
-
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
 
@@ -570,6 +566,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (set.moves.includes('spikes')) teamDetails['spikes'] = 1;
 			if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
 			if (set.moves.includes('aromatherapy') || set.moves.includes('healbell')) teamDetails['statusCure'] = 1;
+
+			// In Gen 3, Shadow Tag users can prevent each other from switching out, possibly causing and endless battle or at least causing a long stall war
+			// To prevent this, we prevent more than one Wobbuffet in a single battle.
+			if (set.ability === 'Shadow Tag') this.hasWobbuffet = true;
 		}
 		return pokemon;
 	}
