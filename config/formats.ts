@@ -97,7 +97,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['OU', 'UUBL', 'Cinderace', 'Drizzle'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 8] RU",
@@ -203,11 +203,12 @@ export const Formats: FormatList = [
 		desc: `The unofficial usage-based tier below PU.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661968/">ZU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3664800/">ZU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: ['PU', 'Combusken', 'Grapploct', 'Ludicolo', 'Lycanroc-Midnight', 'Musharna', 'Swoobat', 'Thwackey'],
+		banlist: ['PU', 'Grapploct', 'Ludicolo', 'Lycanroc-Midnight', 'Musharna', 'Thwackey'],
 	},
 	{
 		name: "[Gen 8] CAP",
