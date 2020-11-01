@@ -641,6 +641,7 @@ exports.grouplist = [
 		tournaments: true,
 		declare: true,
 		bypassafktimer: true,
+		gamemanagement: true,
 
 		ip: false,
 		globalban: false,
