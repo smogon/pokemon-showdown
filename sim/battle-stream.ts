@@ -261,9 +261,10 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
+		void this._listen();
 	}
 
-	async start() {
+	async _listen() {
 		for await (let message of this.battleStream) {
 			if (!message.endsWith('\n')) message += '\n';
 			this.push(message + '\n');

@@ -109,7 +109,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var TeamValidator = require('./.sim-dist/team-validator').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
+			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (textTeam) {
 				try {
@@ -131,8 +131,8 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			var BattleTextStream = require('./.sim-dist/battle-stream').BattleTextStream;
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
-			var stdout = new Streams.WriteStream(process.stdout);
+			var stdin = Streams.stdin();
+			var stdout = Streams.stdout();
 
 			var args = process.argv.slice(3);
 
@@ -173,7 +173,6 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 				debug: debug,
 				replay: spectate ? 'spectator' : replay,
 			});
-			battleStream.start();
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
 		}
@@ -182,7 +181,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			var Dex = require('./.sim-dist/dex').Dex;
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
+			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (packedTeam) {
 				try {
@@ -200,7 +199,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			var Dex = require('./.sim-dist/dex').Dex;
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
+			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (unpackedTeam) {
 				try {
