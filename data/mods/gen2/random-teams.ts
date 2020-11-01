@@ -22,13 +22,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		for (const setMoveid of movePool) {
 			if (setMoveid.startsWith('hiddenpower')) availableHP++;
 		}
+
 		const hasType: {[k: string]: true} = {};
 		hasType[species.types[0]] = true;
 		if (species.types[1]) {
 			hasType[species.types[1]] = true;
 		}
 		let hasMove: {[k: string]: boolean} = {};
-		const hasAbility: {[k: string]: boolean} = {};
 		let counter;
 
 		do {
@@ -60,7 +60,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				moves.push(moveid);
 			}
 
-			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
+			counter = this.queryMoves(moves, hasType, {}, movePool);
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [k, moveId] of moves.entries()) {
@@ -71,10 +71,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 				switch (moveid) {
 				// Set up once and only if we have the moves for it
-				case 'bellydrum': case 'bulkup': case 'curse': case 'dragondance': case 'meditate': case 'screech': case 'swordsdance':
+				case 'bellydrum': case 'curse': case 'meditate': case 'screech': case 'swordsdance':
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
-					if (counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
-					if (counter.Physical < 1) rejected = true;
+					if (counter.Physical < 1 || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
 					isSetup = true;
 					break;
 
@@ -86,19 +85,15 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (!hasMove['lovelykiss'] && !hasMove['sleeppowder']) rejected = true;
 					break;
 				case 'sleeptalk':
-					if (!hasMove['rest']) rejected = true;
-					if (movePool.length > 1) {
-						const rest = movePool.indexOf('rest');
-						if (rest >= 0) this.fastPop(movePool, rest);
-					}
+					if (!hasMove['rest'] && !movePool.includes('rest')) rejected = true;
 					break;
 				case 'swagger':
 					if (!hasMove['substitute']) rejected = true;
 					break;
 
 				// Bad after setup
-				case 'charm':
-					if (hasMove['curse']) rejected = true;
+				case 'charm': case 'counter':
+					if (counter.setupType) rejected = true;
 					break;
 				case 'haze':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -111,9 +106,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'doubleedge':
 					if (hasMove['bodyslam'] || hasMove['return']) rejected = true;
 					break;
-				case 'return':
-					if (hasMove['bodyslam']) rejected = true;
-					break;
 				case 'explosion':
 					if (hasMove['softboiled']) rejected = true;
 					break;
@@ -123,29 +115,29 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'hyperbeam':
 					if (hasMove['rockslide']) rejected = true;
 					break;
-				case 'rapidspin':
-					if (teamDetails['rapidSpin'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
-					break;
-				case 'selfdestruct':
+				case 'quickattack':
 					if (hasMove['rest']) rejected = true;
 					break;
-				case 'quickattack':
+				case 'rapidspin':
+					if (teamDetails['rapidSpin'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'return':
+					if (hasMove['bodyslam']) rejected = true;
+					break;
+				case 'selfdestruct':
 					if (hasMove['rest']) rejected = true;
 					break;
 				case 'surf':
 					if (hasMove['hydropump']) rejected = true;
 					break;
+				case 'thunder':
+					if (hasMove['thunderbolt']) rejected = true;
+					break;
 				case 'gigadrain':
-					if (hasMove['razorleaf'] || movePool.includes('sludgebomb') && hasMove['swordsdance']) rejected = true;
+					if (hasMove['razorleaf'] || hasMove['swordsdance'] && movePool.includes('sludgebomb')) rejected = true;
 					break;
 				case 'icebeam':
 					if (hasMove['dragonbreath']) rejected = true;
-					break;
-				case 'counter':
-					if (hasMove['curse']) rejected = true;
-					break;
-				case 'thunder':
-					if (hasMove['thunderbolt']) rejected = true;
 					break;
 				case 'destinybond':
 					if (hasMove['explosion']) rejected = true;
@@ -162,11 +154,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'encore':
-					if (hasMove['bodyslam'] || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['surf']) rejected = true;
+					if (hasMove['bodyslam'] || hasMove['surf'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'lovelykiss':
-					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] ||
-					hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -175,7 +166,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (movePool.includes('swordsdance')) rejected = true;
 					break;
 				case 'spikes':
-					if (teamDetails['spikes'] || (hasMove['rapidspin'] && hasType['Ice'])) rejected = true;
+					if (teamDetails['spikes'] || hasType['Ice'] && hasMove['rapidspin']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['agility'] || hasMove['rest']) rejected = true;
@@ -189,12 +180,11 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				}
 
 				// This move doesn't satisfy our setup requirements:
-				if (counter.setupType === 'Physical' && move.category === 'Special' && counter.Physical === 0) {
+				if (counter.setupType === 'Physical' && move.category === 'Special' && !counter.Physical) {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) &&
-				!['batonpass', 'sleeptalk'].includes(moveid)) &&
+				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
@@ -207,29 +197,15 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(hasType['Normal'] && !counter['Normal'] && counter.setupType === 'Physical') ||
 					(hasType['Psychic'] && hasType['Grass'] && !counter['Psychic']) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk > 60) ||
-					(hasType['Water'] && !counter['Water']) ||
-					(movePool.includes('spore') || movePool.includes('meanlook')) ||
-					(movePool.includes('milkdrink') || movePool.includes('recover')) ||
-					(movePool.includes('softboiled') && hasMove['present']) ||
+					(hasType['Water'] && !counter['Water']) ||||
+					(hasMove['present'] && movePool.includes('softboiled')) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk')) ||
-					(hasMove['sunnyday'] && movePool.includes('solarbeam')) ||
-					(hasMove['solarbeam'] && movePool.includes('sunnyday'))
+					(hasMove['sunnyday'] && movePool.includes('solarbeam') || (hasMove['solarbeam'] && movePool.includes('sunnyday'))) ||
+					(movePool.includes('spore') || movePool.includes('meanlook') || movePool.includes('milkdrink') || movePool.includes('recover'))
 				)) {
 					// Reject Status, non-STAB, or low basepower moves
-					if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) {
+					if (move.category === 'Status' || !hasType[move.type] || move.basePower < 40 && !move.multihit) {
 						rejected = true;
-					}
-				}
-
-				// Sleep Talk shouldn't be selected without Rest
-				if (moveid === 'rest' && rejected) {
-					const sleeptalk = movePool.indexOf('sleeptalk');
-					if (sleeptalk >= 0) {
-						if (movePool.length < 2) {
-							rejected = false;
-						} else {
-							this.fastPop(movePool, sleeptalk);
-						}
 					}
 				}
 
@@ -248,9 +224,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			}
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
 
-		// Adjust ivs for hiddenpower
+		// Adjust IVs for Hidden Power
 		for (const setMoveid of moves) {
-			if (hasMove['hiddenpower']) continue;
+			if (!setMoveid.startsWith('hiddenpower')) continue;
 			const hpType = setMoveid.substr(11, setMoveid.length);
 			switch (hpType) {
 			case 'dragon': ivs.def = 28; break;
@@ -275,7 +251,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 		// First, the high-priority items
 		if (species.name === 'Ditto') {
-			item = this.randomChance(1, 2) ? 'Metal Powder' : 'Quick Claw';
+			item = this.sample(['Metal Powder', 'Quick Claw']);
 		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Stick';
 		} else if (species.name === 'Marowak') {
@@ -290,9 +266,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			// Medium priority
 		} else if (hasMove['rest'] && !hasMove['sleeptalk']) {
 			item = 'Mint Berry';
-		} else if ((hasMove['bellydrum'] || hasMove['swordsdance']) && species.baseStats.spe >= 60 &&
-			!hasType['Ground'] && !hasMove['sleeptalk'] && !hasMove['substitute'] && this.randomChance(1, 2)
-		) {
+		} else if ((hasMove['bellydrum'] || hasMove['swordsdance']) && species.baseStats.spe >= 60 && !hasType['Ground'] && !hasMove['sleeptalk'] && !hasMove['substitute'] && this.randomChance(1, 2)) {
 			item = 'Miracle Berry';
 
 		// Default to Leftovers
@@ -300,22 +274,18 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			item = 'Leftovers';
 		}
 
-		const levelScale: {[k: string]: number} = { // adjust?
-			LC: 90, // unused
-			NFE: 84, // unused
-			NU: 80,
-			NUBL: 76,
-			UU: 74,
-			UUBL: 70,
-			OU: 68,
-			Uber: 64,
+		const levelScale: {[k: string]: number} = {
+			NU: 77,
+			NUBL: 73,
+			UU: 71,
+			UUBL: 67,
+			OU: 65,
+			Uber: 61,
 		};
 		const customScale: {[k: string]: number} = {
-			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99, // unused
-			Unown: 99, Wobbuffet: 82, Ditto: 82,
-			Snorlax: 66, Nidoqueen: 70,
+			Ditto: 83, Unown: 83, Wobbuffet: 83,
 		};
-		let level = levelScale[species.tier] || 90;
+		let level = levelScale[species.tier] || 80;
 		if (customScale[species.name]) level = customScale[species.name];
 
 		return {
@@ -330,88 +300,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			shiny: false,
 			gender: species.gender ? species.gender : 'M',
 		};
-	}
-
-	randomTeam(): RandomTeamsTypes.RandomSet[] {
-		const pokemon = [];
-
-		const pokemonPool = [];
-		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
-			if (species.gen <= this.gen && species.randomBattleMoves) {
-				pokemonPool.push(id);
-			}
-		}
-
-		const tierCount: {[k: string]: number} = {};
-		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
-		const baseFormes: {[k: string]: number} = {};
-		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-
-		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
-			if (!species.exists) continue;
-
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[species.baseSpecies]) continue;
-
-			const tier = species.tier;
-			const types = species.types;
-			const typeCombo = types.slice().sort().join();
-
-			// Limit 2 Pokemon per tier
-			if (tierCount[tier] >= 2 && this.randomChance(4, 5)) {
-				continue;
-			}
-
-			// Limit 2 of any type
-			let skip = false;
-			for (const type of species.types) {
-				if (typeCount[type] >= 2) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
-
-			// Limit 1 of any type combination
-			if (typeComboCount[typeCombo] >= 1 && this.randomChance(4, 5)) continue;
-
-			const set = this.randomSet(species, teamDetails);
-
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
-
-			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[species.baseSpecies] = 1;
-
-			// Increment tier counter
-			if (tierCount[tier]) {
-				tierCount[tier]++;
-			} else {
-				tierCount[tier] = 1;
-			}
-
-			// Increment type counters
-			for (const type of species.types) {
-				if (type in typeCount) {
-					typeCount[type]++;
-				} else {
-					typeCount[type] = 1;
-				}
-			}
-			if (typeCombo in typeComboCount) {
-				typeComboCount[typeCombo]++;
-			} else {
-				typeComboCount[typeCombo] = 1;
-			}
-
-			// Team has
-			if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
-			if (set.moves.includes('spikes')) teamDetails['spikes'] = 1;
-		}
-		return pokemon;
 	}
 }
 
