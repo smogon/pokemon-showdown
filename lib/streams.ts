@@ -253,7 +253,10 @@ export class ReadStream {
 		// This MUST NOT be awaited: we MUST synchronously clear byteCount after peeking
 		// if the buffer is written to after peek but before clearing the buffer, the write
 		// will be lost forever
-		const out = this.peek(byteCount, encoding) as string | null;
+		const out = this.peek(byteCount, encoding);
+		if (out && typeof out !== 'string') {
+			throw new Error("Race condition; you must not read before a previous read has completed");
+		}
 
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
@@ -305,9 +308,12 @@ export class ReadStream {
 	async readBuffer(byteCount: number | null = null) {
 		await this.loadIntoBuffer(byteCount, true);
 
-		// This MUST NOT be awaited: we must synchronously clear the buffer after reading
+		// This MUST NOT be awaited: we must synchronously clear the buffer after peeking
 		// (see `read`)
-		const out = this.peekBuffer(byteCount) as Buffer | null;
+		const out = this.peekBuffer(byteCount);
+		if (out && (out as Promise<unknown>).then) {
+			throw new Error("Race condition; you must not read before a previous read has completed");
+		}
 
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
