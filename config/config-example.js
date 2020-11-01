@@ -586,23 +586,6 @@ exports.grouplist = [
 		joinbattle: true,
 	},
 	{
-		symbol: '*',
-		id: "bot",
-		name: "Bot",
-		inherit: '%',
-		jurisdiction: 'u',
-
-		addhtml: true,
-		tournaments: true,
-		declare: true,
-		bypassafktimer: true,
-
-		ip: false,
-		globalban: false,
-		lock: false,
-		alts: false,
-	},
-	{
 		symbol: '@',
 		id: "mod",
 		name: "Moderator",
@@ -644,6 +627,26 @@ exports.grouplist = [
 		minigame: true,
 		modchat: true,
 		hiderank: true,
+	},
+	// Bots are ranked below Driver so that they can be kept out of modjoin % rooms.
+	// This was motivated by rhe desire to promote Global Bots whose owners do not hav Staff room access.
+	{
+		symbol: '*',
+		id: "bot",
+		name: "Bot",
+		inherit: '%',
+		jurisdiction: 'u',
+
+		addhtml: true,
+		tournaments: true,
+		declare: true,
+		bypassafktimer: true,
+
+		ip: false,
+		globalban: false,
+		lock: false,
+		forcerename: false,
+		alts: false,
 	},
 	{
 		symbol: '\u2606',
