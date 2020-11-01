@@ -628,9 +628,11 @@ exports.grouplist = [
 		modchat: true,
 		hiderank: true,
 	},
-	// Bots are ranked below Driver so that they can be kept out of modjoin % rooms.
-	// This was motivated by rhe desire to promote Global Bots whose owners do not hav Staff room access.
 	{
+		// Bots are ranked below Driver/Mod so that Global Bots can be kept out
+		// of modjoin % rooms (namely, Staff).
+		// (They were previously above Driver/Mod so they can have game management
+		// permissions drivers don't, but these permissions can be manually given.)
 		symbol: '*',
 		id: "bot",
 		name: "Bot",
