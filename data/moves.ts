@@ -4362,7 +4362,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target === source || target.volatiles['dynamax']) return false;
 
 			const additionalBannedSourceAbilities = [
-				'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace',
+				'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace',
 			];
 			if (
 				target.ability === source.ability ||
@@ -14250,7 +14250,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.ability === source.ability) return false;
 
 			const additionalBannedTargetAbilities = [
-				'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+				'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
 
 			if (target.getAbility().neverChanges || additionalBannedTargetAbilities.includes(target.ability) ||

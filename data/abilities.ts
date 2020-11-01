@@ -2663,7 +2663,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
 			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
 			if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
@@ -2872,7 +2872,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
 			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
 			if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
@@ -3928,7 +3928,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const target = possibleTargets[rand];
 				const ability = target.getAbility();
 				const additionalBannedAbilities = [
-					'noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace',
+					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace',
 				];
 				if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
