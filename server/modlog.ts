@@ -450,6 +450,26 @@ export class Modlog {
 		};
 	}
 
+	hotpatch() {
+		if (this !== Rooms.Modlog) {
+			throw new Error(`Attempt to call Modlog#hotpatch on a modlog instance other than Rooms.Modlog`);
+		}
+
+		const streams = Rooms.Modlog.streams;
+		const sharedStreams = Rooms.Modlog.sharedStreams;
+
+		const processManagers = ProcessManager.processManagers;
+		for (const manager of processManagers.slice()) {
+			if (manager.filename.startsWith(__filename)) void manager.destroy();
+		}
+
+		const modlog = require('./modlog');
+		Rooms.Modlog = new modlog.Modlog(this.logPath, this.database.name);
+
+		Rooms.Modlog.streams = streams;
+		Rooms.Modlog.sharedStreams = sharedStreams;
+	}
+
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
 		const fileStream = FS(path).createReadStream();
 		for await (const line of fileStream.byLine()) {
@@ -470,7 +490,7 @@ type ModlogResult = ModlogEntry | undefined;
 
 // the ProcessManager only accepts text queries at this time
 // SQL support is to be determined
-export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
 		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
