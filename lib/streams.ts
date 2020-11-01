@@ -249,7 +249,12 @@ export class ReadStream {
 			byteCount = null;
 		}
 		await this.loadIntoBuffer(byteCount, true);
-		const out = await this.peek(byteCount, encoding);
+
+		// This MUST NOT be awaited: we MUST synchronously clear byteCount after peeking
+		// if the buffer is written to after peek but before clearing the buffer, the write
+		// will be lost forever
+		const out = this.peek(byteCount, encoding) as string | null;
+
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
 			this.bufEnd = 0;
@@ -299,7 +304,11 @@ export class ReadStream {
 
 	async readBuffer(byteCount: number | null = null) {
 		await this.loadIntoBuffer(byteCount, true);
-		const out = await this.peekBuffer(byteCount);
+
+		// This MUST NOT be awaited: we must synchronously clear the buffer after reading
+		// (see `read`)
+		const out = this.peekBuffer(byteCount) as Buffer | null;
+
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
 			this.bufEnd = 0;
