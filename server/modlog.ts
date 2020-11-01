@@ -79,7 +79,7 @@ export interface ModlogEntry {
 	userid: ID | null;
 	autoconfirmedID: ID | null;
 	alts: ID[];
-	ip: string;
+	ip: string | null;
 	isGlobal: boolean;
 	loggedBy: ID | null;
 	note: string;
@@ -234,7 +234,7 @@ export class Modlog {
 			userid: entry.userid || null,
 			autoconfirmedID: entry.autoconfirmedID || null,
 			alts: entry.alts ? [...new Set(entry.alts)] : [],
-			ip: entry.ip || '',
+			ip: entry.ip || null,
 			isGlobal: entry.isGlobal || false,
 			loggedBy: entry.loggedBy || null,
 			note: entry.note || '',

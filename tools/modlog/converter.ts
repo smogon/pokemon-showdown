@@ -343,19 +343,6 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 export function parseModlog(raw: string, nextLine?: string, isGlobal = false): ModlogEntry | undefined {
 	let line = modernizeLog(raw);
 	if (!line) return;
-	// action: string;
-	// roomID: string;
-	// visualRoomID: string;
-	// userid: ID | null;
-	// autoconfirmedID: ID | null;
-	// alts: ID[];
-	// ip: string;
-	// isGlobal: boolean;
-	// loggedBy: ID | null;
-	// note: string;
-	// /** Milliseconds since the epoch */
-	// time: number;
-
 
 	const timestamp = parseBrackets(line, '[');
 	line = line.slice(timestamp.length + 3);
@@ -368,7 +355,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		userid: null,
 		autoconfirmedID: null,
 		alts: [],
-		ip: '',
+		ip: null,
 		isGlobal,
 		loggedBy: null,
 		note: '',

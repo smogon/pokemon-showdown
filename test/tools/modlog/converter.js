@@ -413,7 +413,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'ROOMMODERATOR', roomID: 'development', userid: 'annika',
 					isGlobal: false, loggedBy: 'heartofetheria', time: 1598212249944,
-					alts: [], autoconfirmedID: null, ip: '', note: '', visualRoomID: '',
+					alts: [], autoconfirmedID: null, ip: null, note: '', visualRoomID: '',
 				}
 			);
 
@@ -422,7 +422,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'ROOMVOICE', roomID: 'development', userid: 'annika',
 					isGlobal: false, loggedBy: 'heartofetheria', note: '(demote)', time: 1598212249944,
-					alts: [], autoconfirmedID: null, ip: '', visualRoomID: '',
+					alts: [], autoconfirmedID: null, ip: null, visualRoomID: '',
 				}
 			);
 		});
@@ -434,7 +434,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'HIDEALTSTEXT', roomID: 'development', userid: 'auser', alts: ['alt1'],
 					note: 'hnr', isGlobal: false, loggedBy: 'annika', time: 1598212249944,
-					autoconfirmedID: null, ip: '', visualRoomID: '',
+					autoconfirmedID: null, ip: null, visualRoomID: '',
 				}
 			);
 		});
@@ -481,7 +481,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'NOTE', roomID: 'development', isGlobal: false, loggedBy: 'annika',
 					note: `HELP! I'm trapped in a unit test factory...`, time: 1598212249944,
-					alts: [], autoconfirmedID: null, ip: '', userid: null, visualRoomID: '',
+					alts: [], autoconfirmedID: null, ip: null, userid: null, visualRoomID: '',
 				}
 			);
 		});
@@ -501,7 +501,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'OLD MODLOG', roomID: 'lobby', isGlobal: false, loggedBy: 'unknown',
 					note: `[punchoface] would be muted by [thecaptain] but was already muted.)`, time: 1416491160288,
-					alts: [], autoconfirmedID: null, ip: '', userid: null, visualRoomID: '',
+					alts: [], autoconfirmedID: null, ip: null, userid: null, visualRoomID: '',
 				}
 			);
 		});
@@ -511,7 +511,7 @@ describe('Modlog conversion script', () => {
 				converter.parseModlog(`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl`),
 				{
 					action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908,
-					alts: [], autoconfirmedID: null, ip: '', note: '', userid: null, visualRoomID: '',
+					alts: [], autoconfirmedID: null, ip: null, note: '', userid: null, visualRoomID: '',
 				}
 			);
 		});
