@@ -10,7 +10,7 @@ CREATE TABLE modlog (
     action_taker_userid TEXT,
     userid TEXT,
     autoconfirmed_userid TEXT,
-    ip TEXT,
+    ip TEXT
 );
 
 CREATE TABLE alts (
