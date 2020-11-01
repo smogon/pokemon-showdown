@@ -1650,6 +1650,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen3',
+		gameType: 'doubles',
 		ruleset: ['Standard', '!Sleep Clause Mod', '!Switch Priority Clause Mod'],
 		banlist: ['Uber'],
 		unbanlist: ['Deoxys-Speed', 'Wobbuffet', 'Wynaut'],
