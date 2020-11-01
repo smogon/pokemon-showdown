@@ -74,18 +74,20 @@ export interface ModlogSearch {
 
 export interface ModlogEntry {
 	action: string;
-	roomID?: string;
-	visualRoomID?: string;
-	userid?: ID;
-	autoconfirmedID?: ID;
-	alts?: ID[];
-	ip?: string;
-	isGlobal?: boolean;
-	loggedBy?: ID;
-	note?: string;
+	roomID: string;
+	visualRoomID: string;
+	userid: ID | null;
+	autoconfirmedID: ID | null;
+	alts: ID[];
+	ip: string | null;
+	isGlobal: boolean;
+	loggedBy: ID | null;
+	note: string;
 	/** Milliseconds since the epoch */
-	time?: number;
+	time: number;
 }
+
+export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
 
 class SortedLimitedLengthList {
 	maxSize: number;
@@ -160,13 +162,6 @@ export class Modlog {
 
 		this.insertionTransaction = this.database.transaction((entries: Iterable<ModlogEntry>) => {
 			for (const entry of entries) {
-				if (!entry.visualRoomID) entry.visualRoomID = undefined;
-				if (!entry.userid) entry.userid = undefined;
-				if (!entry.autoconfirmedID) entry.autoconfirmedID = undefined;
-				if (!entry.ip) entry.ip = undefined;
-				if (!entry.loggedBy) entry.loggedBy = undefined;
-				if (!entry.note) entry.note = undefined;
-
 				const result = this.modlogInsertionQuery.run(entry);
 				const rowid = result.lastInsertRowid as number;
 
@@ -231,20 +226,27 @@ export class Modlog {
 	/**
 	 * Writes to the modlog
 	 */
-	write(roomid: string, entry: ModlogEntry, overrideID?: string) {
-		// Filter out duplicate alts
-		if (entry.alts) entry.alts = [...new Set(entry.alts)];
+	write(roomid: string, entry: PartialModlogEntry, overrideID?: string) {
+		const insertableEntry: ModlogEntry = {
+			action: entry.action,
+			roomID: entry.roomID || roomid,
+			visualRoomID: overrideID || entry.visualRoomID || '',
+			userid: entry.userid || null,
+			autoconfirmedID: entry.autoconfirmedID || null,
+			alts: entry.alts ? [...new Set(entry.alts)] : [],
+			ip: entry.ip || null,
+			isGlobal: entry.isGlobal || false,
+			loggedBy: entry.loggedBy || null,
+			note: entry.note || '',
+			time: entry.time || Date.now(),
+		};
 
-		if (!entry.roomID) entry.roomID = roomid;
-		if (!entry.time) entry.time = Date.now();
-		if (overrideID) entry.visualRoomID = overrideID;
-
-		this.writeText([entry]);
+		this.writeText([insertableEntry]);
 		if (Config.usesqlitemodlog) {
-			if (entry.isGlobal && entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) {
-				entry.roomID = `global-${entry.roomID}`;
+			if (insertableEntry.isGlobal && insertableEntry.roomID !== 'global' && !insertableEntry.roomID.startsWith('global-')) {
+				insertableEntry.roomID = `global-${insertableEntry.roomID}`;
 			}
-			this.writeSQL([entry]);
+			this.writeSQL([insertableEntry]);
 		}
 	}
 
@@ -257,7 +259,7 @@ export class Modlog {
 		for (const entry of entries) {
 			const streamID = entry.roomID as ModlogID;
 
-			let entryText = `[${new Date(entry.time!).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
+			let entryText = `[${new Date(entry.time).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
 			if (entry.userid) entryText += ` [${entry.userid}]`;
 			if (entry.autoconfirmedID) entryText += ` ac:[${entry.autoconfirmedID}]`;
 			if (entry.alts) entryText += ` alts:[${entry.alts.join('], [')}]`;

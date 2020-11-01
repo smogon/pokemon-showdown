@@ -803,7 +803,7 @@ export const Punishments = new class {
 		const logEntry = {
 			action: `AUTO${punishment}`,
 			visualRoomID: typeof room !== 'string' ? (room as Room).roomid : room,
-			ip: typeof user !== 'string' ? (user as User).latestIp : undefined,
+			ip: typeof user !== 'string' ? (user as User).latestIp : null,
 			userid: userid,
 			note: reason,
 			isGlobal: true,
