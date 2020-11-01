@@ -1215,7 +1215,7 @@ export class CommandContext extends MessageContext {
 		htmlContent = ('' + (htmlContent || '')).trim();
 		if (!htmlContent) return '';
 		if (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent)) {
-			throw new Chat.ErrorMessage('Do not use "click here"');
+			throw new Chat.ErrorMessage('Do not use "click here" – See [[Design standard #2 <https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md#design-standards>]]');
 		}
 
 		// check for mismatched tags
