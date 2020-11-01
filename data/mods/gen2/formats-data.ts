@@ -396,7 +396,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	hitmonchan: {
-		randomBattleMoves: ["bodyslam", "counter", "curse", "hiddenopowerghost", "highjumpkick"],
+		randomBattleMoves: ["bodyslam", "counter", "curse", "hiddenpowerghost", "highjumpkick"],
 		tier: "NU",
 	},
 	hitmontop: {
