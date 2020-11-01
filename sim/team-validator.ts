@@ -352,7 +352,8 @@ export class TeamValidator {
 		set.item = item.name;
 		let ability = dex.getAbility(Utils.getString(set.ability));
 		set.ability = ability.name;
-		set.nature = dex.getNature(Utils.getString(set.nature)).name;
+		let nature = dex.getNature(Utils.getString(set.nature));
+		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		const maxLevel = format.maxLevel || 100;
@@ -445,12 +446,13 @@ export class TeamValidator {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
 		}
-		if (set.nature && !dex.getNature(set.nature).exists) {
+		if (nature.id && !nature.exists) {
 			if (dex.gen < 3) {
 				// gen 1-2 don't have natures, just remove them
+				nature = dex.getNature('');
 				set.nature = '';
 			} else {
-				problems.push(`${name}'s nature is invalid.`);
+				problems.push(`"${set.nature}" is an invalid nature.`);
 			}
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
@@ -465,7 +467,7 @@ export class TeamValidator {
 			}
 		}
 
-		if (ruleTable.has('obtainableformes')) {
+		if (ruleTable.has('obtainableformes') && (dex.gen <= 7 || this.format.id.includes('nationaldex'))) {
 			if (item.megaEvolves === species.name) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 				tierSpecies = dex.getSpecies(item.megaStone);
@@ -514,7 +516,7 @@ export class TeamValidator {
 
 					if (unreleasedHidden && ruleTable.has('-unreleased')) {
 						problems.push(`${name}'s Hidden Ability is unreleased.`);
-					} else if (['entei', 'suicune', 'raikou'].includes(species.id) && this.minSourceGen > 1) {
+					} else if (dex.gen === 7 && ['entei', 'suicune', 'raikou'].includes(species.id) && this.minSourceGen > 1) {
 						problems.push(`${name}'s Hidden Ability is only available from Virtual Console, which is not allowed in this format.`);
 					} else if (dex.gen === 6 && ability.name === 'Symbiosis' &&
 						(set.species.endsWith('Orange') || set.species.endsWith('White'))) {
@@ -537,6 +539,13 @@ export class TeamValidator {
 
 		ability = dex.getAbility(set.ability);
 		problem = this.checkAbility(set, ability, setHas);
+		if (problem) problems.push(problem);
+
+		if (!set.nature || dex.gen <= 2) {
+			set.nature = '';
+		}
+		nature = dex.getNature(set.nature);
+		problem = this.checkNature(set, nature, setHas);
 		if (problem) problems.push(problem);
 
 		if (set.moves && Array.isArray(set.moves)) {
@@ -664,7 +673,7 @@ export class TeamValidator {
 			// Ability Capsule allows this in Gen 6+
 			problems.push(`${name} has a Gen 4 ability and isn't evolved - it can't use moves from Gen 3.`);
 		}
-		if (setSources.maxSourceGen() < 5 && setSources.isHidden) {
+		if (setSources.maxSourceGen() < 5 && setSources.isHidden && (dex.gen <= 7 || format.mod === 'gen8dlc1')) {
 			problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
 		}
 		if (
@@ -1268,6 +1277,11 @@ export class TeamValidator {
 		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
+		// Only pokemon that can gigantamax should have the Gmax flag
+		if (!tierSpecies.canGigantamax && set.gigantamax) {
+			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
+		}
+
 		let banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {
 			return `${species.name} is ${banReason}.`;
@@ -1484,6 +1498,43 @@ export class TeamValidator {
 		return null;
 	}
 
+	checkNature(set: PokemonSet, nature: Nature, setHas: {[k: string]: true}) {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
+		setHas['nature:' + nature.id] = true;
+
+		let banReason = ruleTable.check('nature:' + nature.id);
+		if (banReason) {
+			return `${set.name}'s nature ${nature.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		banReason = ruleTable.check('allnatures');
+		if (banReason) {
+			return `${set.name}'s nature ${nature.name} is not in the list of allowed natures.`;
+		}
+
+		// obtainability
+		if (nature.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+			if (banReason) {
+				return `${set.name}'s nature ${nature.name} is tagged ${nature.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
+				if (['Past', 'Future'].includes(nature.isNonstandard)) {
+					return `${set.name}'s nature ${nature.name} does not exist in Gen ${dex.gen}.`;
+				}
+				return `${set.name}'s nature ${nature.name} does not exist in this game.`;
+			}
+			if (banReason === '') return null;
+		}
+		return null;
+	}
+
 	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species): true | undefined;
 	validateEvent(
 		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, because: string, from?: string
@@ -1514,6 +1565,11 @@ export class TeamValidator {
 		if (maxSourceGen < eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
+		}
+
+		if (eventData.japan) {
+			if (fastReturn) return true;
+			problems.push(`${name} has moves from Japan-only events, but this format simulates International Yellow/Crystal which can't trade with Japanese games.`);
 		}
 
 		if (eventData.level && (set.level || 0) < eventData.level) {
@@ -1622,7 +1678,8 @@ export class TeamValidator {
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
 
-				if (isHidden !== !!eventData.isHidden) {
+				if ((!isHidden && eventData.isHidden) ||
+					(isHidden && !eventData.isHidden && (dex.gen <= 7 || this.format.mod === 'gen8dlc1'))) {
 					if (fastReturn) return true;
 					problems.push(`${name} must ${eventData.isHidden ? 'have' : 'not have'} its Hidden Ability${etc}.`);
 				}
@@ -1683,7 +1740,7 @@ export class TeamValidator {
 				source => parseInt(source.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
-			if (!setSources.sourcesBefore && !setSources.sources.length) {
+			if (!setSources.sourcesBefore && !setSources.sources.length && (dex.gen <= 7 || this.format.mod === 'gen8dlc1')) {
 				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				return problems;
 			}
@@ -1839,7 +1896,7 @@ export class TeamValidator {
 					if (learnedGen <= moveSources.sourcesBefore) continue;
 
 					if (
-						learnedGen < 7 && setSources.isHidden &&
+						learnedGen < 7 && setSources.isHidden && (dex.gen <= 7 || format.mod === 'gen8dlc1') &&
 						!dex.mod('gen' + learnedGen).getSpecies(baseSpecies.name).abilities['H']
 					) {
 						// check if the Pokemon's hidden ability was available

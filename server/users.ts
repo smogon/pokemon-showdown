@@ -229,6 +229,7 @@ export class Connection {
 	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
+	openPages: null | Set<string>;
 	constructor(
 		id: string,
 		worker: StreamWorker,
@@ -255,6 +256,7 @@ export class Connection {
 		this.autojoins = '';
 		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
+		this.openPages = null;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
@@ -528,11 +530,11 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom): boolean;
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
-		return Auth.hasPermission(this, permission, target, room);
+	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null, cmd?: string): boolean;
+	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
+		return Auth.hasPermission(this, permission, target, room, cmd);
 	}
 	/**
 	 * Special permission check for system operators
@@ -710,7 +712,7 @@ export class User extends Chat.MessageContext {
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
 		const conflictUser = users.get(userid);
-		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
+		if (conflictUser && !conflictUser.registered && (conflictUser.latestIp !== this.latestIp || conflictUser.connected)) {
 			if (newlyRegistered && userType !== '1') {
 				if (conflictUser !== this) conflictUser.resetName();
 			} else {
@@ -1214,6 +1216,16 @@ export class User extends Chat.MessageContext {
 		if (!this.can('bypassall') && Punishments.isRoomBanned(this, room.roomid)) {
 			connection.sendTo(roomid, `|noinit|joinfailed|You are banned from the room "${roomid}".`);
 			return false;
+		}
+
+		if (room.roomid.startsWith('groupchat-') && !room.parent) {
+			const groupchatbanned = Punishments.isGroupchatBanned(this);
+			if (groupchatbanned) {
+				const expireText = Punishments.checkPunishmentExpiration(groupchatbanned);
+				connection.sendTo(roomid, `|noinit|joinfailed|You are banned from using groupchats${expireText}.`);
+				return false;
+			}
+			Punishments.monitorGroupchatJoin(room, this);
 		}
 
 		if (Rooms.aliases.get(roomid) === room.roomid) {

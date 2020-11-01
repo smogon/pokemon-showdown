@@ -316,11 +316,10 @@ export const commands: ChatCommands = {
 			buff += '</table>';
 
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
-			if (!this.broadcasting && user.can('ban', null, room) && events.length === 1) {
+			if (!this.broadcasting && user.can('ban', null, room, 'roomevents view') && events.length === 1) {
 				const event = events[0];
 				this.sendReplyBox(
-					Utils.html`<code>/roomevents add ${event.eventName} |` +
-					Utils.html`${event.date} | ${event.desc}</code>`
+					Utils.html`<code>/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code>`
 				);
 			}
 		},

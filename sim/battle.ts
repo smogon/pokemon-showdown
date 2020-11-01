@@ -190,7 +190,6 @@ export class Battle {
 		this.started = false;
 		this.ended = false;
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
 		this.effectData = {id: ''};
 
@@ -916,7 +915,6 @@ export class Battle {
 				effect: format, callback, state: this.formatData, end: null, effectHolder: this,
 			}, callbackName));
 		}
-		// tslint:disable-next-line:no-conditional-assignment
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
 				const state = (handler.target.effectType === 'Format') ? this.formatData : null;
@@ -1006,7 +1004,6 @@ export class Battle {
 			throw new TypeError(`${target.name} is a ${target.effectType} but only Format targets are supported right now`);
 		}
 
-		// tslint:disable-next-line:one-variable-per-declaration
 		let callback, priority, order, subOrder, data;
 		if (rest.length === 1) {
 			[callback] = rest;
@@ -1992,6 +1989,41 @@ export class Battle {
 		const tr = this.trunc;
 		const modifier = tr(numerator * 4096 / denominator);
 		return tr((tr(value * modifier) + 2048 - 1) / 4096);
+	}
+
+	/** Given a table of base stats and a pokemon set, return the actual stats. */
+	spreadModify(baseStats: StatsTable, set: PokemonSet): StatsTable {
+		const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const tr = this.trunc;
+		let statName: keyof StatsTable;
+		for (statName in modStats) {
+			const stat = baseStats[statName];
+			modStats[statName] = tr(tr(2 * stat + set.ivs[statName] + tr(set.evs[statName] / 4)) * set.level / 100 + 5);
+		}
+		if ('hp' in baseStats) {
+			const stat = baseStats['hp'];
+			modStats['hp'] = tr(tr(2 * stat + set.ivs['hp'] + tr(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+		}
+		return this.natureModify(modStats as StatsTable, set);
+	}
+
+	natureModify(stats: StatsTable, set: PokemonSet): StatsTable {
+		// Natures are calculated with 16-bit truncation.
+		// This only affects Eternatus-Eternamax in Pure Hackmons.
+		const tr = this.trunc;
+		const nature = this.dex.getNature(set.nature);
+		let s: StatNameExceptHP;
+		if (nature.plus) {
+			s = nature.plus;
+			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];
+			stats[s] = tr(tr(stat * 110, 16) / 100);
+		}
+		if (nature.minus) {
+			s = nature.minus;
+			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 728) : stats[s];
+			stats[s] = tr(tr(stat * 90, 16) / 100);
+		}
+		return stats;
 	}
 
 	getCategory(move: string | Move) {

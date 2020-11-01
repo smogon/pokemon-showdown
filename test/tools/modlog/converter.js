@@ -225,6 +225,26 @@ describe('Modlog conversion script', () => {
 			);
 		});
 
+		it('should correctly parse old-format blacklists', () => {
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was blacklisted from Development by Annika.'),
+				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] by annika'
+			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was blacklisted from Development by Annika. (reason)'),
+				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] by annika: reason'
+			);
+
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was nameblacklisted from Development by Annika.'),
+				'[2020-08-23T19:50:49.944Z] (development) NAMEBLACKLIST: [heartofetheria] by annika'
+			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was nameblacklisted from Development by Annika. (reason)'),
+				'[2020-08-23T19:50:49.944Z] (development) NAMEBLACKLIST: [heartofetheria] by annika: reason'
+			);
+		});
+
 		it('should correctly parse old-format mutes', () => {
 			assert.equal(
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was muted by annikafor1hour (reason)'),
@@ -269,6 +289,14 @@ describe('Modlog conversion script', () => {
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s banned alts: [annika0], [hordeprime])`
 				),
 				'[2020-08-23T19:50:49.944Z] (development) ROOMBAN: [heartofetheria] alts: [annika0], [hordeprime] by annika'
+			);
+
+			assert.equal(
+				converter.modernizeLog(
+					'[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was blacklisted from Development by Annika.',
+					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s blacklisted alts: [annika0], [hordeprime])`
+				),
+				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] alts: [annika0], [hordeprime] by annika'
 			);
 		});
 
@@ -385,6 +413,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'ROOMMODERATOR', roomID: 'development', userid: 'annika',
 					isGlobal: false, loggedBy: 'heartofetheria', time: 1598212249944,
+					alts: [], autoconfirmedID: null, ip: null, note: '', visualRoomID: '',
 				}
 			);
 
@@ -393,6 +422,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'ROOMVOICE', roomID: 'development', userid: 'annika',
 					isGlobal: false, loggedBy: 'heartofetheria', note: '(demote)', time: 1598212249944,
+					alts: [], autoconfirmedID: null, ip: null, visualRoomID: '',
 				}
 			);
 		});
@@ -404,6 +434,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'HIDEALTSTEXT', roomID: 'development', userid: 'auser', alts: ['alt1'],
 					note: 'hnr', isGlobal: false, loggedBy: 'annika', time: 1598212249944,
+					autoconfirmedID: null, ip: null, visualRoomID: '',
 				}
 			);
 		});
@@ -413,14 +444,14 @@ describe('Modlog conversion script', () => {
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] ac: [annika] alts: [annalytically], [heartofetheria] [127.0.0.1] by somemod: terrible user`),
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg', autoconfirmedID: 'annika', alts: ['annalytically', 'heartofetheria'],
-					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944,
+					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944, visualRoomID: '',
 				}
 			);
 			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] ac:[annika] alts:[annalytically], [heartofetheria] [127.0.0.1] by somemod: terrible user`),
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg', autoconfirmedID: 'annika', alts: ['annalytically', 'heartofetheria'],
-					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944,
+					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944, visualRoomID: '',
 				}
 			);
 
@@ -430,6 +461,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg', alts: ['annalytically'],
 					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944,
+					autoconfirmedID: null, visualRoomID: '',
 				}
 			);
 
@@ -438,6 +470,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'WEEKLOCK', roomID: 'development', userid: 'gejg',
 					ip: '127.0.0.1', isGlobal: false, loggedBy: 'somemod', note: 'terrible user', time: 1598212249944,
+					alts: [], autoconfirmedID: null, visualRoomID: '',
 				}
 			);
 		});
@@ -448,6 +481,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'NOTE', roomID: 'development', isGlobal: false, loggedBy: 'annika',
 					note: `HELP! I'm trapped in a unit test factory...`, time: 1598212249944,
+					alts: [], autoconfirmedID: null, ip: null, userid: null, visualRoomID: '',
 				}
 			);
 		});
@@ -458,7 +492,7 @@ describe('Modlog conversion script', () => {
 			assert.equal(withVisualID.roomID, 'battle-gen7randombattle-1');
 
 			const noVisualID = converter.parseModlog(`[time] (battle-gen7randombattle-1) SOMETHINGBORING: by annika`);
-			assert.equal(noVisualID.visualRoomID, undefined);
+			assert.equal(noVisualID.visualRoomID, '');
 		});
 
 		it('should properly handle OLD MODLOG', () => {
@@ -467,6 +501,7 @@ describe('Modlog conversion script', () => {
 				{
 					action: 'OLD MODLOG', roomID: 'lobby', isGlobal: false, loggedBy: 'unknown',
 					note: `[punchoface] would be muted by [thecaptain] but was already muted.)`, time: 1416491160288,
+					alts: [], autoconfirmedID: null, ip: null, userid: null, visualRoomID: '',
 				}
 			);
 		});
@@ -474,7 +509,10 @@ describe('Modlog conversion script', () => {
 		it('should correctly handle hangman', () => {
 			assert.deepEqual(
 				converter.parseModlog(`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl`),
-				{action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}
+				{
+					action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908,
+					alts: [], autoconfirmedID: null, ip: null, note: '', userid: null, visualRoomID: '',
+				}
 			);
 		});
 
@@ -499,14 +537,15 @@ describe('Modlog conversion script', () => {
 				converter.parseModlog(`[2020-09-30T20:02:12.456Z] (lobby) SHAREDIP: [127.0.0.1] by annika: j`),
 				{
 					action: 'SHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika',
-					note: `j`, time: 1601496132456, ip: "127.0.0.1",
+					note: `j`, time: 1601496132456, ip: "127.0.0.1", alts: [], autoconfirmedID: null,
+					userid: null, visualRoomID: '',
 				}
 			);
 			assert.deepEqual(
 				converter.parseModlog(`[2020-09-30T20:02:12.456Z] (lobby) UNSHAREDIP: [127.0.0.1] by annika`),
 				{
-					action: 'UNSHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika',
-					time: 1601496132456, ip: "127.0.0.1",
+					action: 'UNSHAREDIP', roomID: 'lobby', isGlobal: false, loggedBy: 'annika', time: 1601496132456, ip: "127.0.0.1",
+					alts: [], autoconfirmedID: null, note: '', userid: null, visualRoomID: '',
 				}
 			);
 		});
@@ -536,7 +575,7 @@ describe('Modlog conversion script', () => {
 			assert.deepEqual(
 				converter.rawifyLog({
 					action: 'OLD MODLOG', roomID: 'development', isGlobal: false, loggedBy: 'unknown',
-					note: `hello hi test`, time: 1598212249944,
+					note: `hello hi test`, time: 1598212249944, alts: [],
 				}),
 				`[2020-08-23T19:50:49.944Z] (development) OLD MODLOG: by unknown: hello hi test\n`,
 			);
@@ -544,7 +583,7 @@ describe('Modlog conversion script', () => {
 
 		it('should handle hangman', () => {
 			assert.deepEqual(
-				converter.rawifyLog({action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908}),
+				converter.rawifyLog({action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908, alts: []}),
 				`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl\n`
 			);
 		});
@@ -583,8 +622,10 @@ describe('Modlog conversion script', () => {
 
 	describe.skip('integration tests', () => {
 		it('should convert from SQLite to text', async () => {
-			const modlog = new ml.Modlog(':memory:', true);
+			const modlog = new ml.Modlog('/dev/null', ':memory:', true);
 			const mlConverter = new converter.ModlogConverterSQLite('', '', modlog.database);
+
+			modlog.initialize('development');
 
 			const entry = {
 				action: 'UNITTEST',

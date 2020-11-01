@@ -152,20 +152,21 @@ export const commands: ChatCommands = {
 					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
 				}
 			}
+
 			const battlebanned = Punishments.isBattleBanned(targetUser);
 			if (battlebanned) {
 				buf += `<br />BATTLEBANNED: ${battlebanned[1]}`;
-				const expiresIn = new Date(battlebanned[2]).getTime() - Date.now();
-				const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-				let expiresText = ``;
-				if (expiresDays >= 1) {
-					expiresText = `in around ${Chat.count(expiresDays, "days")}`;
-				} else {
-					expiresText = `soon`;
-				}
-				if (expiresIn > 1) buf += ` (expires ${expiresText})`;
+				buf += ` (expires ${Punishments.checkPunishmentExpiration(battlebanned)})`;
 				if (battlebanned[3]) buf += Utils.html` (reason: ${battlebanned[3]})`;
 			}
+
+			const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
+			if (groupchatbanned) {
+				buf += `<br />Banned from using groupchats${groupchatbanned[1] !== targetUser.id ? `: ${groupchatbanned[1]}` : ``}`;
+				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
+				if (groupchatbanned[3]) buf += Utils.html` (reason: ${groupchatbanned[3]})`;
+			}
+
 			if (targetUser.semilocked) {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
@@ -1562,6 +1563,7 @@ export const commands: ChatCommands = {
 			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
 			`<strong>weeklock</strong> - Locks a user for a week.`,
 			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
+			`<strong>groupchatban</strong> — Bans a user from creating or joining groupchats for a week or a month.`,
 			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
@@ -1908,8 +1910,6 @@ export const commands: ChatCommands = {
 				`- /modlog <em>username</em>: search the moderator log of the room`,
 				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
 				`- !show [image or youtube link]: display given media in chat.`,
-				`- /whitelist [user]: whitelist a non-staff user to use !show.`,
-				`- /unwhitelist [user]: removes the user from !show whitelist.`,
 			],
 			[
 				`<strong>Room moderators (@)</strong> can also use:`,
@@ -2040,7 +2040,7 @@ export const commands: ChatCommands = {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
 			return this.parse(`/help faq`);
 		}
-		if (showAll) {
+		if (!target || showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
 		}
 		this.sendReplyBox(buffer.join(`<br />`));
@@ -2557,15 +2557,18 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
 
-	async show(target, room, user) {
+	async show(target, room, user, connection) {
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
 		if (!toID(target).trim()) return this.parse(`/help show`);
+		if (Monitor.countNetRequests(connection.ip)) {
+			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
+		}
 
 		const [link, comment] = Utils.splitFirst(target, ',');
 
 		let buf;
-		if (YoutubeInterface.linkRegex.test(link)) {
-			const YouTube = new YoutubeInterface();
+		const YouTube = new YoutubeInterface();
+		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
 		} else {
 			try {
@@ -2600,7 +2603,7 @@ export const commands: ChatCommands = {
 	async registertime(target, room, user, connection) {
 		this.runBroadcast();
 		if (Monitor.countNetRequests(connection.ip)) {
-			return this.errorReply(`You are using this command to quickly. Wait a bit and try again.`);
+			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
 		}
 		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
 		target = toID(target);

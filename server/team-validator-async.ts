@@ -8,8 +8,7 @@
  */
 
 import {crashlogger} from '../lib/crashlogger';
-
-declare let global: any;
+import {TeamValidator} from '../sim/team-validator';
 
 export class TeamValidatorAsync {
 	format: Format;
@@ -70,16 +69,9 @@ export const PM = new QueryProcessManager<{
 	return '1' + packedTeam;
 });
 
-import {Repl} from '../lib/repl';
-import {Dex as importedDex} from '../sim/dex';
-import {TeamValidator} from '../sim/team-validator';
-import {Config} from './config-loader';
-
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = Config;
-
-	global.TeamValidator = TeamValidator;
+	global.Config = require('./config-loader');
 
 	global.Monitor = {
 		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
@@ -97,11 +89,10 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = importedDex.includeData();
-	global.toID = Dex.toID;
+	global.Dex = require('../sim/dex').Dex.includeData();
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));
+	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.validatorprocesses : 1);
 }

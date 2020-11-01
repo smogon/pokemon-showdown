@@ -26,6 +26,9 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
+const MODLOG_PATH = 'logs/modlog';
+const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
+
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {WriteStream} from '../lib/streams';
@@ -38,7 +41,7 @@ import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {modlog, ModlogEntry} from './modlog';
+import {Modlog, PartialModlogEntry} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -342,7 +345,10 @@ export abstract class BasicRoom {
 		this.log.roomlog(message);
 		return this;
 	}
-	modlog(entry: ModlogEntry) {
+	/**
+	 * Writes an entry to the modlog for that room, and the global modlog if entry.isGlobal is true.
+	 */
+	modlog(entry: PartialModlogEntry) {
 		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
 		this.log.modlog(entry, override);
 		return this;
@@ -703,6 +709,18 @@ export abstract class BasicRoom {
 	}
 
 	/**
+	 * Displays a warning popup to all users in the room.
+	 * Returns a list of all the user IDs that were warned.
+	 */
+	warnParticipants(message: string) {
+		const warned = Object.values(this.users);
+		for (const user of warned) {
+			user.popup(`|modal|${message}`);
+		}
+		return warned;
+	}
+
+	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
 	 * @param noAlias Set this param to true to not redirect aliases and the room's old name to its new name.
 	 */
@@ -1039,7 +1057,7 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(entry: ModlogEntry, overrideID?: string) {
+	modlog(entry: PartialModlogEntry, overrideID?: string) {
 		void Rooms.Modlog.write('global', entry, overrideID);
 	}
 
@@ -1660,7 +1678,9 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	Modlog: modlog,
+	MODLOG_PATH,
+	MODLOG_DB_PATH,
+	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with

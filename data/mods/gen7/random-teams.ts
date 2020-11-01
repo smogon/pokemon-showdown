@@ -260,17 +260,14 @@ export class RandomGen7Teams extends RandomTeams {
 				case 'suckerpunch':
 					if (counter.damagingMoves.length < 2 || hasMove['glare'] || !hasType['Dark'] && counter['Dark'] > 1) rejected = true;
 					break;
-				case 'dragonclaw':
-					if (hasMove['dragontail'] || hasMove['outrage']) rejected = true;
-					break;
 				case 'dracometeor':
-					if (hasMove['swordsdance'] || counter.setupType === 'Physical' && counter['Dragon'] > 1) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor'] || hasMove['outrage'] || hasMove['dragontail'] && !counter.setupType) rejected = true;
 					break;
 				case 'outrage':
-					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
+					if (hasMove['dragonclaw'] || hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
 					if (hasMove['clangingscales'] && !teamDetails.zMove) rejected = true;
 					break;
 				case 'thunderbolt':
@@ -324,7 +321,7 @@ export class RandomGen7Teams extends RandomTeams {
 					if (hasMove['bravebird'] || hasMove['airslash'] && !!counter.Status) rejected = true;
 					break;
 				case 'hex':
-					if (!hasMove['willowisp']) rejected = true;
+					if (!hasMove['thunderwave'] && !hasMove['willowisp']) rejected = true;
 					break;
 				case 'shadowball':
 					if (hasMove['darkpulse'] || hasMove['hex'] && hasMove['willowisp']) rejected = true;

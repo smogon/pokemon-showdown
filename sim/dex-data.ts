@@ -703,7 +703,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;
-	readonly randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
@@ -1053,6 +1052,22 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
+	readonly effectType: 'Nature';
+	readonly plus?: StatNameExceptHP;
+	readonly minus?: StatNameExceptHP;
+	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+		super(data, moreData);
+		data = this;
+
+		this.fullname = `nature: ${this.name}`;
+		this.effectType = 'Nature';
+		this.gen = 3;
+		this.plus = data.plus || undefined;
+		this.minus = data.minus || undefined;
 	}
 }
 

@@ -9,7 +9,6 @@ import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
 import * as child_process from 'child_process';
 import * as util from 'util';
-import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
 import {QueryProcessManager} from "../../lib/process-manager";
 import {Repl} from '../../lib/repl';
@@ -194,7 +193,8 @@ export const LogViewer = new class {
 		}
 
 		const prevDay = LogReader.prevDay(day);
-		buf += `<p><a roomid="view-chatlog-${roomid}--${prevDay}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
+		const prevRoomid = `view-chatlog-${roomid}--${prevDay}${opts ? `--${opts}` : ''}`;
+		buf += `<p><a roomid="${prevRoomid}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
@@ -208,7 +208,8 @@ export const LogViewer = new class {
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
 			const nextDay = LogReader.nextDay(day);
-			buf += `<p><a roomid="view-chatlog-${roomid}--${nextDay}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
+			const nextRoomid = `view-chatlog-${roomid}--${nextDay}${opts ? `--${opts}` : ''}`;
+			buf += `<p><a roomid="${nextRoomid}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
 		}
 
 		buf += `</div>`;
@@ -290,7 +291,7 @@ export const LogViewer = new class {
 
 	renderLine(fullLine: string, opts?: string) {
 		if (!fullLine) return ``;
-		if (opts === 'txt') return `<div class="chat">${fullLine}</div>`;
+		if (opts === 'txt') return Utils.html`<div class="chat">${fullLine}</div>`;
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
@@ -307,7 +308,7 @@ export const LogViewer = new class {
 		const cmd = line.slice(0, line.indexOf('|'));
 		if (opts?.includes('onlychat')) {
 			if (cmd !== 'c') return '';
-			if (opts.includes('txt')) return `<div class="chat">${fullLine}</div>`;
+			if (opts.includes('txt')) return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
 		}
 		switch (cmd) {
 		case 'c': {
@@ -326,8 +327,11 @@ export const LogViewer = new class {
 				if (opts !== 'all') return `<div class="notice">[uhtml box hidden]</div>`;
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
-			const group = !name.startsWith(' ') ? `<small>${name.charAt(0)}</small>` : ``;
-			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${Utils.escapeHTML(name.slice(1))}:</strong> <q>${Chat.formatText(message)}</q></div>`;
+			const group = !name.startsWith(' ') ? name.charAt(0) : ``;
+			return `<div class="chat">` +
+				Utils.html`<small>[${timestamp}] ${group}</small><username>${name.slice(1)}:</username> ` +
+				`<q>${Chat.formatText(message)}</q>` +
+				`</div>`;
 		}
 		case 'html': case 'raw': {
 			const [, html] = Utils.splitFirst(line, '|', 1);
@@ -595,7 +599,7 @@ export const LogSearcher = new class {
 			}
 			const {stdout} = await execFile('rg', options, {
 				maxBuffer: MAX_MEMORY,
-				cwd: path.normalize(`${__dirname}/../../`),
+				cwd: `${__dirname}/../../`,
 			});
 			results = stdout.split(resultSep);
 		} catch (e) {
@@ -861,9 +865,6 @@ const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 export const pages: PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!user.trusted) {
-			return this.errorReply("Access denied.");
-		}
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
 		if (date) date = date.trim();
@@ -874,6 +875,13 @@ export const pages: PageTable = {
 
 		// permission check
 		const room = Rooms.get(roomid);
+		if (!user.trusted) {
+			if (room) {
+				this.checkCan('declare', null, room);
+			} else {
+				return this.errorReply(`Access denied.`);
+			}
+		}
 		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
 			return this.errorReply("SPL team discussions are super secret.");
 		}

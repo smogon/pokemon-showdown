@@ -59,7 +59,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Dialga"],
 		num: 135,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
@@ -627,7 +626,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Burn"],
 		num: 118,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	cameruptite: {
 		name: "Cameruptite",
@@ -814,7 +812,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Chill"],
 		num: 119,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	chippedpot: {
 		name: "Chipped Pot",
@@ -1042,7 +1039,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 210,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -1206,7 +1202,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Douse"],
 		num: 116,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	dracoplate: {
 		name: "Draco Plate",
@@ -1546,7 +1541,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 208,
 		gen: 3,
-		isNonstandard: "Unobtainable",
 	},
 	eviolite: {
 		name: "Eviolite",
@@ -1960,6 +1954,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1582,
 		gen: 8,
 	},
+	galaricawreath: {
+		name: "Galarica Wreath",
+		spritenum: 740,
+		fling: {
+			basePower: 30,
+		},
+		num: 1592,
+		gen: 8,
+	},
 	galladite: {
 		name: "Galladite",
 		spritenum: 616,
@@ -2215,7 +2218,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Giratina-Origin"],
 		num: 112,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	groundgem: {
 		name: "Ground Gem",
@@ -2588,7 +2590,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	jawfossil: {
 		name: "Jaw Fossil",
@@ -3077,7 +3078,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Palkia"],
 		num: 136,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	luxuryball: {
 		name: "Luxury Ball",
@@ -3470,7 +3470,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -4686,7 +4685,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 212,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	rustedshield: {
 		name: "Rusted Shield",
@@ -4942,7 +4940,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Genesect-Shock"],
 		num: 117,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	shucaberry: {
 		name: "Shuca Berry",
@@ -5146,7 +5143,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Latios", "Latias"],
 		num: 225,
 		gen: 3,
-		isNonstandard: "Past",
 	},
 	spelltag: {
 		name: "Spell Tag",

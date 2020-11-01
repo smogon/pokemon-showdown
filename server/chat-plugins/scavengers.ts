@@ -571,9 +571,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
-	setTimer(minutes: string | number) {
-		minutes = Number(minutes);
-
+	setTimer(minutes: number) {
 		if (this.timer) {
 			clearTimeout(this.timer);
 			this.timer = null;
@@ -1483,7 +1481,12 @@ const ScavengerCommands: ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
-		const result = game.setTimer(target);
+		const minutes = parseInt(target);
+		if (isNaN(minutes) || minutes <= 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
+			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
+		}
+
+		const result = game.setTimer(minutes);
 		const message = `The scavenger timer has been ${(result === 'off' ? "turned off" : `set to ${result} minutes`)}`;
 
 		room.add(message + '.');
@@ -1865,8 +1868,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Leaderboard Commands
 	 */
 	addpoints(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const parts = target.split(',');
@@ -1883,8 +1885,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	removepoints(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const parts = target.split(',');
@@ -1901,8 +1902,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	resetladder(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('declare', null, room);
 
 		Leaderboard.reset().write();
@@ -2161,8 +2161,7 @@ const ScavengerCommands: ChatCommands = {
 	 */
 	huntcount: 'huntlogs',
 	async huntlogs(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		if (target === 'RESET') {
@@ -2207,8 +2206,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 
 	async playlogs(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		if (target === 'RESET') {
@@ -2263,8 +2261,7 @@ const ScavengerCommands: ChatCommands = {
 
 	uninfract: "infract",
 	infract(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const targetId = toID(target);

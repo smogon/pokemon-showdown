@@ -48,23 +48,27 @@ We strive to be maximally intuitive and accessible. "That's what they all say", 
 
 Some principles we try to design by:
 
-- Less text is better
+1. Less text is better
     - The fewer words you use, the less likely someone is to gloss over it, and the easier it is to find the important information. Compare "1234 battles" with "There are currently 1234 active battles being played on this server" - more words are usually only clutter that makes it hard to find the information you want.
 
-- Buttons should say what they do
+2. Buttons should say what they do
     - Buttons and links that say "Click here" or "Look at this" are bad for a number of reasons, but the most important one is probably because it violates the principle that you shouldn't need to read outside the button to know what the button does. The way people use interfaces is by looking for buttons that do what they want, not by reading every word from beginning to end.
 
-- Remove unnecessary clicks
+      In addition, blind users in particular navigate by link text, so a blind user will have a much harder time figuring out where a link goes if it only says "click here".
+
+3. Remove unnecessary clicks
     - Whenever you give a user a button to click, always think "in what situations would a user want to click this? in what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
 
-- Remove unnecessary scrolling and mouse movement
+4. Remove unnecessary scrolling and mouse movement
     - Similar to unnecessary clicks - if a user has a large screen and you show them a lot of text in a tiny scrollable region, that's incredibly user-hostile. Either the user wants to read the text or they don't: the perfect use-case for a "read more" or expand/collapse button.
 
-- Affordances are important
+5. Affordances are important
     - This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
 
-- Feedback is important
+6. Feedback is important
     - If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
+
+      There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
 
 
 Commit standards
@@ -222,3 +226,23 @@ TypeScript Features
 - **Constant Enums: NEVER** - Not supported by Sucrase, our current choice of transpiler. We prefer constant union types, anyway (like `type Category = 'Physical' | 'Special' | 'Status'`)
 
 - **Default Properties: SOMETIMES** - Bad performance when used with Sucrase. This is fine for objects that are rarely created, but prefer setting properties directly in a constructor, for objects created in inner loops.
+
+
+`package-lock.json`
+------------------------------------------------------------------------
+
+We don't use `package-lock`. This is against NPM's (and most others') official advice that we should.
+
+: First, what's `package-lock` and why is it recommended? `package-lock.json` is basically a snapshot of the `node_modules/` directory. You can think of it like `node_modules.zip`, except more human-readable, and requires an internet connection to unzip.
+
+: The main advantage of adding it to Git is that it lets you know exactly the state of `node_modules/` at the time the programmer commits it. So if a dependency breaks, it's easier to trace exactly when it broke.
+
+: It also makes sure `node_modules/` is exactly the same between different development environments, so differences don't cause bugs to appear for some developers but not others.
+
+This comes with a number of disadvantages. The biggest one is that it causes package-lock changes to appear in random commits, which can outright lead to merge conflicts. It also makes diffs in general significantly less readable. It also [introduces security vulnerabilities](https://snyk.io/blog/why-npm-lockfiles-can-be-a-security-blindspot-for-injecting-malicious-modules/).
+
+The biggest supposed advantage (ensure everyone's on the same version) isn't even an advantage! We'd specify the versions as `4.15.4` instead of `^4.15.4` if we wanted everyone on the same version, rather than the latest version. Writing `^4.15.4` is an explicit choice to opt into automatic updating.
+
+We can still have everyone on the same version if we all re-run `npm install`, which we would STILL have to do if we were using a package-lock file. The package-lock file does not improve this situation.
+
+(The last time we polled our developers, most supported not having a `package-lock` file.)
