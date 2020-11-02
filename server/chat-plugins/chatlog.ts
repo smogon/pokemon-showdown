@@ -589,7 +589,7 @@ export const LogSearcher = new class {
 			if (args) {
 				options.push(...args);
 			}
-			const stdout = await exec(['rg', ...options], {
+			const {stdout} = await exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
 				cwd: `${__dirname}/../../`,
 			});

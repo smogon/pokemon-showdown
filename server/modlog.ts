@@ -248,7 +248,7 @@ export class Modlog {
 		} catch (error) {
 			return results;
 		}
-		for (const fileName of output.split('\n').reverse()) {
+		for (const fileName of output.stdout.split('\n').reverse()) {
 			if (fileName) results.insert(fileName);
 		}
 		return results;
