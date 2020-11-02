@@ -12,7 +12,7 @@ const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
 const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
-const ALLOW_ALTS = true;
+const ALLOW_ALTS = false;
 
 Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
