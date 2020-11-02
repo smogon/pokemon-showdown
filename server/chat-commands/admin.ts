@@ -963,8 +963,8 @@ export const commands: ChatCommands = {
 	},
 
 	evalsql(target, room) {
-		if (!this.canUseConsole()) return false;
-		if (!this.runBroadcast(true)) return;
+		this.canUseConsole();
+		this.runBroadcast(true));
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
 		if (!target) return this.errorReply(`Specify a database to access and a query.`);
 		const [db, query] = Utils.splitFirst(target, ',').map(item => item.trim());
