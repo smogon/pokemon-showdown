@@ -262,7 +262,7 @@ export class Modlog {
 			let entryText = `[${new Date(entry.time).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
 			if (entry.userid) entryText += ` [${entry.userid}]`;
 			if (entry.autoconfirmedID) entryText += ` ac:[${entry.autoconfirmedID}]`;
-			if (entry.alts) entryText += ` alts:[${entry.alts.join('], [')}]`;
+			if (entry.alts.length) entryText += ` alts:[${entry.alts.join('], [')}]`;
 			if (entry.ip) entryText += ` [${entry.ip}]`;
 			if (entry.loggedBy) entryText += ` by ${entry.loggedBy}`;
 			if (entry.note) entryText += `: ${entry.note}`;
