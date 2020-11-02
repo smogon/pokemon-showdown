@@ -354,7 +354,6 @@ export class HelpTicket extends Rooms.RoomGame {
 		return Punishments.roomUnpunish('staff', user, 'TICKETBAN');
 	}
 	static checkBanned(user: User) {
-		if (Config.noipchecks) return false;
 		const staffRoom = Rooms.get('staff');
 		if (!staffRoom) return;
 		const punishment = Punishments.getRoomPunishType(staffRoom, user.id);
