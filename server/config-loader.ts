@@ -25,12 +25,13 @@ export function load(invalidate = false) {
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = {...defaults.routes, ...config.routes};
 
-	// Automatically disable SQLite modlogs if better-sqlite3 isn't installed
-	try {
-		require('better-sqlite3');
-	} catch (e) {
-		reportError(`Modlogs have been disabled because better-sqlite3 is not installed or could not be loaded.`);
-		config.usesqlitemodlog = false;
+	// Automatically stop startup if better-sqlite3 isn't installed and SQLite is enabled
+	if (config.usesqlite) {
+		try {
+			require('better-sqlite3');
+		} catch (e) {
+			throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
+		}
 	}
 
 	cacheGroupData(config);

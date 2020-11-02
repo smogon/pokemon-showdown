@@ -30,7 +30,7 @@ const garfieldCopypasta = [
 	` In some sense, even his cat Garfield is an object to him, a thing. The first ideology that comes to mind that comes to mind when thinking of objects in the tangible world... is pragmatism. slur => slur)`,
 ].join('');
 
-(Config.usesqlitemodlog ? describe : describe.skip)('Modlog conversion script', () => {
+(Config.usesqlite ? describe : describe.skip)('Modlog conversion script', () => {
 	before(() => {
 		this.converter = require('../../../tools/modlog/converter');
 		this.ml = require('../../../.server-dist/modlog');

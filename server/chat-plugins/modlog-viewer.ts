@@ -209,8 +209,8 @@ export const commands: ChatCommands = {
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		if (!Rooms.Modlog) {
-			throw new Chat.ErrorMessage("Modlogs are not enabled on this server; please set up `Config.usesqlitemodlog`.");
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage("Modlogs are not enabled on this server; please set up `Config.usesqlite`.");
 		}
 
 		let roomid: ModlogID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);

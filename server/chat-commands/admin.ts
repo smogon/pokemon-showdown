@@ -417,8 +417,8 @@ export const commands: ChatCommands = {
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target === 'modlog') {
-				if (!Config.usesqlitemodlog) {
-					return this.errorReply("Modlogs are not enabled on this server; please set up `Config.usesqlitemodlog`.");
+				if (!Config.usesqlite) {
+					return this.errorReply("Modlogs are not enabled on this server; please set up `Config.usesqlite`.");
 				}
 				patch = 'modlog';
 				if (lock['modlog']) {
