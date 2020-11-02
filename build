@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 try {
-	RegExp("\\p{Emoji}", "u");
+	// technically this was introduced in Node 11, but we'll ask for the most recent LTS with it to be safe
+	[].flatMap(x => x);
 } catch (e) {
-	console.log("We require Node.js version 10 or later; you're using " + process.version);
+	console.log("We require Node.js version 12 or later; you're using " + process.version);
 	process.exit(1);
 }
 
@@ -57,14 +58,9 @@ function copyOverDataJSON(file) {
 	});
 }
 
+// Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	var sucraseVersion = require('sucrase').getVersion().split('.');
-	if (
-		parseInt(sucraseVersion[0]) < 3 ||
-		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 15)
-	) {
-		throw new Error("Sucrase version too old");
-	}
+	require('better-sqlite3');
 } catch (e) {
 	console.log('Installing dependencies...');
 	shell('npm install --production');
@@ -112,7 +108,7 @@ function sucrase(src, out, opts) {
 if (sucrase('./config', './.config-dist')) {
 	replace('.config-dist', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-	]);	
+	]);
 }
 
 if (sucrase('./data', './.data-dist')) {
@@ -135,9 +131,17 @@ if (sucrase('./server', './.server-dist')) {
 	]);
 }
 
+sucrase('./translations', './.translations-dist');
+
 if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
 	replace('./tools/set-import/importer.js', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (sucrase('./tools/modlog', './tools/modlog')) {
+	replace('./tools/modlog/converter.js', [
+		{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
 	]);
 }
 
@@ -149,6 +153,7 @@ if (!fs.existsSync('./.data-dist/README.md')) {
 	fs.writeFile('./.data-dist/README.md', text, function () {});
 	fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
 	fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
+	fs.writeFile('./.translations-dist/README.md', text.replace('data/', 'translations/'), function () {});
 	fs.writeFile('./.lib-dist/README.md', text.replace('data/', 'lib/'), function () {});
 }
 

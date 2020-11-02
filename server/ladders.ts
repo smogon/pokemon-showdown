@@ -8,10 +8,9 @@
  * @license MIT
  */
 
-// eslint-disable-next-line no-undef
-const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder ?
-	require('./ladders-remote') :
-	require('./ladders-local')).LadderStore;
+const LadderStore: typeof import('./ladders-remote').LadderStore = (
+	typeof Config === 'object' && Config.remoteladder ? require('./ladders-remote') : require('./ladders-local')
+).LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
@@ -113,6 +112,36 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
+		let rating = 0;
+		let valResult;
+		if (isRated && !Ladders.disabled) {
+			const uid = user.id;
+			[valResult, rating] = await Promise.all([
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)}),
+				this.getRating(uid),
+			]);
+			if (uid !== user.id) {
+				// User feedback for renames handled elsewhere.
+				return null;
+			}
+			if (!rating) rating = 1;
+		} else {
+			if (Ladders.disabled) {
+				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
+				rating = 1;
+			}
+			const validator = TeamValidatorAsync.get(this.formatid);
+			valResult = await validator.validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)});
+		}
+
+		if (valResult.charAt(0) !== '1') {
+			connection.popup(
+				`Your team was rejected for the following reasons:\n\n` +
+				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
+			);
+			return null;
+		}
+
 		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
 		let unownWord = '';
@@ -143,36 +172,6 @@ class Ladder extends LadderStore {
 				);
 				return null;
 			}
-		}
-
-		let rating = 0;
-		let valResult;
-		if (isRated && !Ladders.disabled) {
-			const uid = user.id;
-			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)}),
-				this.getRating(uid),
-			]);
-			if (uid !== user.id) {
-				// User feedback for renames handled elsewhere.
-				return null;
-			}
-			if (!rating) rating = 1;
-		} else {
-			if (Ladders.disabled) {
-				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
-				rating = 1;
-			}
-			const validator = TeamValidatorAsync.get(this.formatid);
-			valResult = await validator.validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)});
-		}
-
-		if (valResult.charAt(0) !== '1') {
-			connection.popup(
-				`Your team was rejected for the following reasons:\n\n` +
-				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
-			);
-			return null;
 		}
 
 		const settings = {...user.battleSettings, team: valResult.slice(1) as string};

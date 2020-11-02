@@ -228,9 +228,9 @@ represented by a space), and the rest of the string being their username.
 > You just connected to the server, and we're giving you some information you'll need to log in.
 >
 > If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
+> `https://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
 >
-> Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
+> Otherwise, you'll need to make an HTTP POST request to `https://play.pokemonshowdown.com/action.php`
 > with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
 >
 > `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
@@ -492,8 +492,10 @@ format is implemented in `Dex.packTeam` and `Dex.fastUnpackTeam` in
 `sim/dex.js`.
 
 If you're not using JavaScript and don't want to reimplement these conversions,
-Pokémon Showdown's command-line client can convert between packed teams and
-JSON using standard IO. Run `./pokemon-showdown --help` for details.
+[Pokémon Showdown's command-line client][command-line] can convert between packed teams and
+JSON using standard IO.
+
+  [command-line]: https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
 
 If you really want to write your own converter, the format looks something like
 this:

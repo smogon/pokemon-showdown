@@ -1,6 +1,7 @@
 /**
  * Tests for the Help room auto-answerer.
- * Written by mia-pi.
+ * Written by Mia.
+ * @author mia-pi-git
  */
 
 'use strict';
@@ -17,28 +18,28 @@ describe('Help', function () {
 	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
 		Help.data.pairs.catra.push(Help.stringRegex(`Hey & Adora`));
-		assert.ok(Help.match('Hey, Adora', 'catra'));
-		assert.ok(!Help.match('Hello, Adora', 'catra'));
+		assert(Help.match('Hey, Adora', 'catra'));
+		assert(!Help.match('Hello, Adora', 'catra'));
 	});
 
 	it('should produce valid regexes', function () {
 		const regexString = Help.stringRegex(`uwu & awa`);
-		assert.strictEqual(regexString, "(?=.*?(uwu))(?=.*?(awa))");
+		assert.equal(regexString, "(?=.*?(uwu))(?=.*?(awa))");
 		const regex = new RegExp(regexString);
-		assert.ok(regex.test('uwu awa'));
+		assert(regex.test('uwu awa'));
 	});
 	it('should handle |, &, and ! correctly', function () {
 		const and = new RegExp(Help.stringRegex(`Horde & Prime`));
-		assert.ok(and.test('Horde Prime'));
-		assert.ok(!and.test('Horde'));
+		assert(and.test('Horde Prime'));
+		assert(!and.test('Horde'));
 
 		const or = new RegExp(Help.stringRegex(`she-ra|sea-ra`));
-		assert.ok(or.test('sea-ra'));
-		assert.ok(or.test(`she-ra`));
-		assert.ok(!or.test('ADVENTURE'));
+		assert(or.test('sea-ra'));
+		assert(or.test(`she-ra`));
+		assert(!or.test('ADVENTURE'));
 
 		const ignore = new RegExp(Help.stringRegex(`!Hordak`));
-		assert.ok(ignore.test(`FOR THE HONOR OF GREYSKULL`));
-		assert.ok(!ignore.test('Hordak'));
+		assert(ignore.test(`FOR THE HONOR OF GREYSKULL`));
+		assert(!ignore.test('Hordak'));
 	});
 });

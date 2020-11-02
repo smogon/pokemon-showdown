@@ -457,6 +457,11 @@ exports.forcedpublicprefixes = [];
  */
 exports.startuphook = function () {};
 
+/**
+ * lastfmkey - the API key to let users use the last.fm commands from The Studio's
+ * chat plugin.
+ */
+exports.lastfmkey = '';
 
 /**
  * chatlogreader - the search method used for searching chatlogs.
@@ -537,6 +542,7 @@ exports.grouplist = [
 		roomdriver: true,
 		forcewin: true,
 		declare: true,
+		addhtml: true,
 		rangeban: true,
 		makeroom: true,
 		editroom: true,
@@ -558,27 +564,12 @@ exports.grouplist = [
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
+		roomprizewinner: true,
 		editroom: true,
 		declare: true,
 		addhtml: true,
 		gamemanagement: true,
-	},
-	{
-		symbol: '*',
-		id: "bot",
-		name: "Bot",
-		inherit: '%',
-		jurisdiction: 'u',
-		globalGroupInPersonalRoom: '*',
-
-		addhtml: true,
-		declare: true,
-		bypassafktimer: true,
-
-		ip: false,
-		globalban: false,
-		lock: false,
-		alts: false,
+		tournaments: true,
 	},
 	{
 		symbol: '\u2605',
@@ -589,8 +580,9 @@ exports.grouplist = [
 		roomonly: true,
 
 		declare: true,
-		modchat: true,
+		modchat: 'a',
 		gamemanagement: true,
+		tournaments: true,
 		joinbattle: true,
 	},
 	{
@@ -608,7 +600,6 @@ exports.grouplist = [
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true,
 		game: true,
 	},
 	{
@@ -635,6 +626,30 @@ exports.grouplist = [
 		joinbattle: true,
 		minigame: true,
 		modchat: true,
+		hiderank: true,
+	},
+	{
+		// Bots are ranked below Driver/Mod so that Global Bots can be kept out
+		// of modjoin % rooms (namely, Staff).
+		// (They were previously above Driver/Mod so they can have game management
+		// permissions drivers don't, but these permissions can be manually given.)
+		symbol: '*',
+		id: "bot",
+		name: "Bot",
+		inherit: '%',
+		jurisdiction: 'u',
+
+		addhtml: true,
+		tournaments: true,
+		declare: true,
+		bypassafktimer: true,
+		gamemanagement: true,
+
+		ip: false,
+		globalban: false,
+		lock: false,
+		forcerename: false,
+		alts: false,
 	},
 	{
 		symbol: '\u2606',
@@ -647,7 +662,6 @@ exports.grouplist = [
 		modchat: true,
 		editprivacy: true,
 		gamemanagement: true,
-		tournaments: true,
 		joinbattle: true,
 		nooverride: true,
 	},
@@ -664,6 +678,12 @@ exports.grouplist = [
 		showmedia: true,
 		exportinputlog: true,
 		importinputlog: true,
+	},
+	{
+		symbol: '^',
+		id: "prizewinner",
+		name: "Prize Winner",
+		roomonly: true,
 	},
 	{
 		symbol: 'whitelist',

@@ -155,7 +155,13 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 			continue;
 		}
 		for (const myIp of ips) {
-			if (myIp in user.ips) {
+			if (user.ips.includes(myIp) || (
+				(myIp.includes('*') || myIp.includes('-')) &&
+				user.ips.map(IPTools.ipToNumber).some(ip => {
+					const range = IPTools.stringToRange(myIp);
+					return range && IPTools.checkPattern([range], ip);
+				})
+			)) {
 				matches.push(user);
 				break;
 			}
@@ -221,6 +227,7 @@ export class Connection {
 	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
+	openPages: null | Set<string>;
 	constructor(
 		id: string,
 		worker: StreamWorker,
@@ -247,6 +254,7 @@ export class Connection {
 		this.autojoins = '';
 		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
+		this.openPages = null;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
@@ -320,19 +328,19 @@ export class User extends Chat.MessageContext {
 	id: ID;
 	tempGroup: GroupSymbol;
 	avatar: string | number;
-	language: string | null;
+	language: ID | null;
 
 	connected: boolean;
 	connections: Connection[];
 	latestHost: string;
 	latestHostType: string;
-	ips: {[k: string]: number};
+	ips: string[];
 	latestIp: string;
 	locked: ID | PunishType | null;
 	semilocked: ID | PunishType | null;
 	namelocked: ID | PunishType | null;
 	permalocked: ID | PunishType | null;
-	prevNames: {[id: /** ID */ string]: string};
+	previousIDs: ID[];
 
 	lastChallenge: number;
 	lastPM: string;
@@ -403,17 +411,16 @@ export class User extends Chat.MessageContext {
 		this.connections = [connection];
 		this.latestHost = '';
 		this.latestHostType = '';
-		this.ips = Object.create(null);
-		this.ips[connection.ip] = 1;
+		this.ips = [connection.ip];
 		// Note: Using the user's latest IP for anything will usually be
 		//       wrong. Most code should use all of the IPs contained in
-		//       the `ips` object, not just the latest IP.
+		//       the `ips` array, not just the latest IP.
 		this.latestIp = connection.ip;
 		this.locked = null;
 		this.semilocked = null;
 		this.namelocked = null;
 		this.permalocked = null;
-		this.prevNames = Object.create(null);
+		this.previousIDs = [];
 
 		// misc state
 		this.lastChallenge = 0;
@@ -525,11 +532,11 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom): boolean;
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null): boolean {
-		return Auth.hasPermission(this, permission, target, room);
+	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null, cmd?: string): boolean;
+	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
+		return Auth.hasPermission(this, permission, target, room, cmd);
 	}
 	/**
 	 * Special permission check for system operators
@@ -645,7 +652,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (!token || token.charAt(0) === ';') {
+		if (!token || token.startsWith(';')) {
 			this.send(`|nametaken|${name}|Your authentication token was invalid.`);
 			return false;
 		}
@@ -724,7 +731,7 @@ export class User extends Chat.MessageContext {
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
 		const conflictUser = users.get(userid);
-		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
+		if (conflictUser && !conflictUser.registered && (conflictUser.latestIp !== this.latestIp || conflictUser.connected)) {
 			if (newlyRegistered && userType !== '1') {
 				if (conflictUser !== this) conflictUser.resetName();
 			} else {
@@ -753,9 +760,9 @@ export class User extends Chat.MessageContext {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
 				this.permalocked = userid;
-				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`);
+				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`, true);
 			} else if (userType === '6') {
-				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`);
+				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`, true);
 				this.disconnectAll();
 			}
 		}
@@ -781,12 +788,10 @@ export class User extends Chat.MessageContext {
 			user.merge(this);
 
 			Users.merge(user, this);
-			for (const i in this.prevNames) {
-				if (!user.prevNames[i]) {
-					user.prevNames[i] = this.prevNames[i];
-				}
+			for (const id of this.previousIDs) {
+				if (!user.previousIDs.includes(id)) user.previousIDs.push(id);
 			}
-			if (this.named) user.prevNames[this.id] = this.name;
+			if (this.named && !user.previousIDs.includes(this.id)) user.previousIDs.push(this.id);
 			this.destroy();
 
 			Punishments.checkName(user, userid, registered);
@@ -832,7 +837,7 @@ export class User extends Chat.MessageContext {
 			this.updateGroup(registered);
 		}
 
-		if (this.named && oldid !== userid) this.prevNames[oldid] = this.name;
+		if (this.named && oldid !== userid && !this.previousIDs.includes(oldid)) this.previousIDs.push(oldid);
 		this.name = name;
 
 		const joining = !this.named;
@@ -903,7 +908,15 @@ export class User extends Chat.MessageContext {
 
 		// If either user is unlocked and neither is locked by name, remove the lock.
 		// Otherwise, keep any locks that were by name.
-		if ((!oldUser.locked || !this.locked) && oldUser.locked !== oldUser.id && this.locked !== this.id) {
+		if (
+			(!oldUser.locked || !this.locked) &&
+			oldUser.locked !== oldUser.id &&
+			this.locked !== this.id &&
+			// Only unlock if no previous names are locked
+			!oldUser.previousIDs.some(id => !!Punishments.search(id)
+				.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
+				.length)
+		) {
 			this.locked = null;
 		} else if (this.locked !== this.id) {
 			this.locked = oldUser.locked;
@@ -917,9 +930,8 @@ export class User extends Chat.MessageContext {
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		if (this.statusType === 'busy' || oldUser.statusType === 'busy') {
-			this.setStatusType('busy');
-		}
+		const isBusy = this.statusType === 'busy' || oldUser.statusType === 'busy';
+		this.setStatusType(isBusy ? 'busy' : 'online');
 
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);
@@ -939,12 +951,8 @@ export class User extends Chat.MessageContext {
 		this.s3 = oldUser.s3;
 
 		// merge IPs
-		for (const ip in oldUser.ips) {
-			if (this.ips[ip]) {
-				this.ips[ip] += oldUser.ips[ip];
-			} else {
-				this.ips[ip] = oldUser.ips[ip];
-			}
+		for (const ip of oldUser.ips) {
+			if (!this.ips.includes(ip)) this.ips.push(ip);
 		}
 
 		if (oldUser.isSysop) {
@@ -952,7 +960,7 @@ export class User extends Chat.MessageContext {
 			oldUser.isSysop = false;
 		}
 
-		oldUser.ips = {};
+		oldUser.ips = [];
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
@@ -1130,7 +1138,6 @@ export class User extends Chat.MessageContext {
 				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms.get(roomid)!, connection);
 				}
-				--this.ips[connection.ip];
 				break;
 			}
 		}
@@ -1142,7 +1149,7 @@ export class User extends Chat.MessageContext {
 			}
 			// cleanup
 			this.inRooms.clear();
-			if (!this.named && !Object.keys(this.prevNames).length) {
+			if (!this.named && !this.previousIDs.length) {
 				// user never chose a name (and therefore never talked/battled)
 				// there's no need to keep track of this user, so we can
 				// immediately deallocate
@@ -1180,20 +1187,19 @@ export class User extends Chat.MessageContext {
 	 * alts (i.e. when forPunishment is true), they will always be the first element of that list.
 	 */
 	getAltUsers(includeTrusted = false, forPunishment = false) {
-		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted, forPunishment});
+		let alts = findUsers([this.getLastId()], this.ips, {includeTrusted, forPunishment});
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
 		return alts;
 	}
 	getLastName() {
 		if (this.named) return this.name;
-		const prevNames = Object.keys(this.prevNames);
-		return "[" + (prevNames.length ? prevNames[prevNames.length - 1] : this.name) + "]";
+		const lastName = this.previousIDs.length ? this.previousIDs[this.previousIDs.length - 1] : this.name;
+		return `[${lastName}]`;
 	}
 	getLastId() {
 		if (this.named) return this.id;
-		const prevNames = Object.keys(this.prevNames);
-		return (prevNames.length ? prevNames[prevNames.length - 1] : this.id) as ID;
+		return (this.previousIDs.length ? this.previousIDs[this.previousIDs.length - 1] : this.id);
 	}
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
 		roomid = roomid && (roomid as Room).roomid ? (roomid as Room).roomid : roomid as RoomID;
@@ -1229,6 +1235,16 @@ export class User extends Chat.MessageContext {
 		if (!this.can('bypassall') && Punishments.isRoomBanned(this, room.roomid)) {
 			connection.sendTo(roomid, `|noinit|joinfailed|You are banned from the room "${roomid}".`);
 			return false;
+		}
+
+		if (room.roomid.startsWith('groupchat-') && !room.parent) {
+			const groupchatbanned = Punishments.isGroupchatBanned(this);
+			if (groupchatbanned) {
+				const expireText = Punishments.checkPunishmentExpiration(groupchatbanned);
+				connection.sendTo(roomid, `|noinit|joinfailed|You are banned from using groupchats${expireText}.`);
+				return false;
+			}
+			Punishments.monitorGroupchatJoin(room, this);
 		}
 
 		if (Rooms.aliases.get(roomid) === room.roomid) {
@@ -1412,6 +1428,7 @@ export class User extends Chat.MessageContext {
 		if (type === this.statusType) return;
 		this.statusType = type;
 		this.updateIdentity();
+		this.update();
 	}
 	setUserMessage(message: string) {
 		if (message === this.userMessage) return;
@@ -1577,7 +1594,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	// from propagating out of this function.
 
 	// drop legacy JSON messages
-	if (message.charAt(0) === '{') return;
+	if (message.startsWith('{')) return;
 
 	const pipeIndex = message.indexOf('|');
 	if (pipeIndex < 0) {

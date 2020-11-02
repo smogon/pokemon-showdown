@@ -213,4 +213,18 @@ describe('Target Resolution', function () {
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'purrloin', moves: ['thunder', 'ironhead']},
+			{species: 'wynaut', moves: ['allyswitch']},
+		], [
+			{species: 'swablu', moves: ['sleeptalk']},
+			{species: 'swablu', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move ironhead -2, move allyswitch', 'auto');
+		battle.makeChoices('move allyswitch, move thunder -1', 'auto');
+		assert.fullHP(battle.p1.active[0]);
+	});
 });

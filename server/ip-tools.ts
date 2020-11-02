@@ -46,7 +46,8 @@ export const IPTools = new class {
 
 	// eslint-disable-next-line max-len
 	readonly ipRegex = /\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b/;
-
+	// eslint-disable-next-line max-len
+	readonly ipRangeRegex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]|\*)){0,2}\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]|\*)$/;
 	readonly hostRegex = /^.+\..{2,}$/;
 
 	async lookup(ip: string) {
@@ -556,6 +557,11 @@ export const IPTools = new class {
 		if (Punishments.sharedIps.has(ip)) {
 			return 'shared';
 		}
+		if (this.singleIPOpenProxies.has(ip)) {
+			// single-IP open proxies
+			return 'proxy';
+		}
+
 		if (/^he\.net(\?|)\/proxy$/.test(host)) {
 			// Known to only be VPN services
 			if (['74.82.60.', '72.52.87.', '65.49.126.'].some(range => ip.startsWith(range))) {
@@ -584,10 +590,6 @@ export const IPTools = new class {
 		}
 		if (/^ip-[0-9]+-[0-9]+-[0-9]+\.net$/.test(host) || /^ip-[0-9]+-[0-9]+-[0-9]+\.eu$/.test(host)) {
 			// OVH
-			return 'proxy';
-		}
-		if (this.singleIPOpenProxies.has(ip)) {
-			// single-IP open proxies
 			return 'proxy';
 		}
 

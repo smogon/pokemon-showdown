@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
 type Field = import('./field').Field;
 type Action = import('./battle-queue').Action;
+type MoveAction = import('./battle-queue').MoveAction;
 type ActionChoice = import('./battle-queue').ActionChoice;
 type ModdedDex = import('./dex').ModdedDex;
 type Pokemon = import('./pokemon').Pokemon;
@@ -113,6 +116,8 @@ interface EventInfo {
 	moves?: string[];
 	pokeball?: string;
 	from?: string;
+	/** Japan-only events can't be transferred to international games in Gen 1 */
+	japan?: boolean;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -182,7 +187,7 @@ interface MoveEventMethods {
 	onHit?: CommonHandlers['ResultMove'];
 	onHitField?: CommonHandlers['ResultMove'];
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
-	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
@@ -765,6 +770,7 @@ interface EventMethods {
 	onSourceInvulnerabilityPriority?: number;
 	onSourceModifyAccuracyPriority?: number;
 	onSourceModifyAtkPriority?: number;
+	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
 	onTrapPokemonPriority?: number;
@@ -791,7 +797,7 @@ type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -1158,7 +1164,6 @@ interface SpeciesFormatsData {
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomDoubleBattleLevel?: number;
-	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
@@ -1176,6 +1181,16 @@ type ModdedLearnsetData = LearnsetData & {inherit?: true};
 
 type Species = import('./dex-data').Species;
 
+interface NatureData {
+	name: string;
+	plus?: StatNameExceptHP;
+	minus?: StatNameExceptHP;
+}
+
+type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
+
+type Nature = import('./dex-data').Nature;
+
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all';
 type SideID = 'p1' | 'p2' | 'p3' | 'p4';
 
@@ -1191,7 +1206,7 @@ interface GameTimerSettings {
 	accelerate: boolean;
 }
 
-interface FormatsData extends EventMethods {
+interface FormatData extends EventMethods {
 	name: string;
 
 	banlist?: string[];
@@ -1253,9 +1268,10 @@ interface FormatsData extends EventMethods {
 	column?: number;
 }
 
-type ModdedFormatsData = FormatsData | Omit<FormatsData, 'name'> & {inherit: true};
+type FormatList = (FormatData | {section: string, column?: number})[];
+type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
 
-interface Format extends Readonly<BasicEffect & FormatsData> {
+interface Format extends Readonly<BasicEffect & FormatData> {
 	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 	readonly baseRuleset: string[];
 	readonly banlist: string[];
@@ -1385,6 +1401,7 @@ interface ModdedBattlePokemon {
 		sourceEffect: Effect | null, ignoreImmunities: boolean
 	) => boolean;
 	ignoringAbility?: (this: Pokemon) => boolean;
+	ignoringItem?: (this: Pokemon) => boolean;
 
 	// OM
 	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => string[];
@@ -1480,6 +1497,7 @@ namespace RandomTeamsTypes {
 		stickyWeb?: number;
 		rapidSpin?: number;
 		defog?: number;
+		screens?: number;
 		illusion?: number;
 		statusCure?: number;
 	}
@@ -1509,8 +1527,6 @@ namespace RandomTeamsTypes {
 		nature?: string;
 		happiness?: number;
 		gigantamax?: boolean;
-		moveset?: RandomTeamsTypes.RandomSet;
-		other?: {discard: boolean, restrictMoves: {[k: string]: number}};
 	}
 	export interface RandomFactorySet {
 		name: string;
@@ -1525,18 +1541,6 @@ namespace RandomTeamsTypes {
 		ivs: SparseStatsTable;
 		nature: string;
 		moves: string[];
-	}
-	export interface Gen2RandomSet {
-		chance: number;
-		item?: string[];
-		baseMove1?: string;
-		baseMove2?: string;
-		baseMove3?: string;
-		baseMove4?: string;
-		fillerMoves1?: string[];
-		fillerMoves2?: string[];
-		fillerMoves3?: string[];
-		fillerMoves4?: string[];
 	}
 }
 

@@ -144,7 +144,7 @@ export type ComplexTeamBan = ComplexBan;
 export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
-	// tslint:disable-next-line:ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	checkLearnset: [Function, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	minSourceGen: [number, string] | null;
@@ -246,7 +246,7 @@ export class RuleTable extends Map<string, string> {
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-export class Format extends BasicEffect implements Readonly<BasicEffect & FormatsData> {
+export class Format extends BasicEffect implements Readonly<BasicEffect & FormatData> {
 	readonly mod: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
@@ -261,7 +261,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	 * (Challenge and tournament games will never update ladder points.)
 	 * (Defaults to `true`.)
 	 */
-	readonly rated: boolean;
+	readonly rated: boolean | string;
 	/** Game type. */
 	readonly gameType: GameType;
 	/** List of rule names. */
@@ -328,7 +328,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.mod = Utils.getString(data.mod) || 'gen8';
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
 		this.debug = !!data.debug;
-		this.rated = (data.rated !== false);
+		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 		this.gameType = data.gameType || 'singles';
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
@@ -660,7 +660,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly gmaxUnreleased?: boolean;
 	/** True if a Pokemon species is incapable of dynamaxing */
 	readonly cannotDynamax?: boolean;
-	/** True if a pokemon is a forme that is only accessible in battle. */
+	/** What it transforms from, if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */
 	readonly requiredItem?: string;
@@ -703,7 +703,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;
-	readonly randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
@@ -758,6 +757,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
@@ -1052,6 +1052,22 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
+	readonly effectType: 'Nature';
+	readonly plus?: StatNameExceptHP;
+	readonly minus?: StatNameExceptHP;
+	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+		super(data, moreData);
+		data = this;
+
+		this.fullname = `nature: ${this.name}`;
+		this.effectType = 'Nature';
+		this.gen = 3;
+		this.plus = data.plus || undefined;
+		this.minus = data.minus || undefined;
 	}
 }
 
