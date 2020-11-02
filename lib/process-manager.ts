@@ -22,6 +22,33 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
+export function exec(args: string, execOptions?: child_process.ExecOptions): Promise<{stderr: string, stdout: string}>;
+export function exec(
+	args: [string, ...string[]], execOptions?: child_process.ExecFileOptions
+): Promise<{stderr: string, stdout: string}>;
+export function exec(args: string | string[], execOptions?: AnyObject) {
+	if (Array.isArray(args)) {
+		const cmd = args.shift();
+		if (!cmd) throw new Error(`You must pass a command to ProcessManager.exec.`);
+		return new Promise<{stderr: string, stdout: string}>((resolve, reject) => {
+			child_process.execFile(cmd, args, execOptions, (err, stdout, stderr) => {
+				if (err) reject(err);
+				if (typeof stdout !== 'string') stdout = stdout.toString();
+				if (typeof stderr !== 'string') stderr = stderr.toString();
+				resolve({stdout, stderr});
+			});
+		});
+	} else {
+		return new Promise<string>((resolve, reject) => {
+			child_process.exec(args, execOptions, (error, stdout, stderr) => {
+				if (error) reject(error);
+				if (typeof stdout !== 'string') stdout = stdout.toString();
+				resolve(stdout);
+			});
+		});
+	}
+}
+
 class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	process: StreamProcessWrapper;
 	taskId: number;

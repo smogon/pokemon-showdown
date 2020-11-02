@@ -7,10 +7,8 @@
 
 import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
-import * as child_process from 'child_process';
-import * as util from 'util';
 import * as Dashycode from '../../lib/dashycode';
-import {QueryProcessManager} from "../../lib/process-manager";
+import {QueryProcessManager, exec} from "../../lib/process-manager";
 import {Repl} from '../../lib/repl';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
@@ -21,7 +19,6 @@ const MAX_RESULTS = 3000;
 const MAX_MEMORY = 67108864; // 64MB
 const MAX_PROCESSES = 1;
 const MAX_TOPUSERS = 100;
-const execFile = util.promisify(child_process.execFile);
 
 interface ChatlogSearch {
 	raw?: boolean;
@@ -605,7 +602,7 @@ export const LogSearcher = new class {
 			if (args) {
 				options.push(...args);
 			}
-			const {stdout} = await execFile('rg', options, {
+			const {stdout} = await exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
 				cwd: `${__dirname}/../../`,
 			});
