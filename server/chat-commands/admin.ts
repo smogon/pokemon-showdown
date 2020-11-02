@@ -131,10 +131,13 @@ export const commands: ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
 	],
 
-	addline(target, room, user) {
+	pline(target, room, user) {
 		// Secret console admin command
 		this.canUseConsole();
-		this.add(target);
+		const message = target.length > 30 ? target.slice(0, -30) + '...' : target;
+		this.checkBroadcast(true, `!pline ${message}`);
+		this.runBroadcast(true);
+		this.sendReply(target);
 	},
 
 	pminfobox(target, room, user, connection) {
