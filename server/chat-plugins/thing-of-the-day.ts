@@ -1,5 +1,6 @@
 import {FS, FSPath} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import {YouTube} from './youtube';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
@@ -25,13 +26,27 @@ const ATHOTDS_FILE = 'config/chat-plugins/sports-athletes.tsv';
 const VGOTDS_FILE = 'config/chat-plugins/videogames-games.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
-let prenoms: {[k: string]: [string, AnyObject][]} = {};
-try {
-	prenoms = require(`../../${PRENOMS_FILE}`);
-} catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-}
-if (!prenoms || typeof prenoms !== 'object') prenoms = {};
+const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
+
+const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
+	cotw: async winner => {
+		const {channel, nominator} = winner;
+		const searchResults = await YouTube.searchChannel(channel, 1);
+		const result = searchResults?.[0];
+		if (result) {
+			if (YouTube.data.channels[result]) return;
+			void YouTube.getChannelData(`https://www.youtube.com/channel/${result}`);
+			rooms.youtube.sendMods(
+				`|c|&|/log The channel with ID ${result} was added to the YouTube channel database.`
+			);
+			rooms.youtube.modlog({
+				action: `ADDCHANNEL`,
+				note: `${result} (${toID(nominator)})`,
+				loggedBy: toID(`COTW`),
+			});
+		}
+	},
+};
 
 function savePrenoms() {
 	return FS(PRENOMS_FILE).write(JSON.stringify(prenoms));
@@ -171,7 +186,7 @@ class OtdHandler {
 		const nomObj = {
 			nomination: nomination,
 			name: user.name,
-			userids: user.previousIDs.slice(),
+			userids: user.previousIDs.concat(user.id),
 			ips: user.ips.slice(),
 		};
 
@@ -245,7 +260,7 @@ class OtdHandler {
 
 		const winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		if (!winner) return false; // Should never happen but shuts typescript up.
-		void this.appendWinner(winner.nomination, winner.name);
+		const winnerEntry = this.appendWinner(winner.nomination, winner.name);
 
 		const names = [...this.nominations.values()].map(obj => obj.name);
 
@@ -256,6 +271,10 @@ class OtdHandler {
 		}
 		const namesHTML = `<table><tr>${content}</tr></table></p></div>`;
 
+		const finishHandler = FINISH_HANDLERS[this.id];
+		if (finishHandler) {
+			void finishHandler(winnerEntry);
+		}
 		this.room.add(
 			Utils.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
 			`Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">` +
@@ -292,15 +311,16 @@ class OtdHandler {
 	}
 
 	forceWinner(winner: string, user: string) {
-		void this.appendWinner(winner, user);
+		this.appendWinner(winner, user);
 		this.finish();
 	}
 
-	appendWinner(nomination: string, user: string) {
+	appendWinner(nomination: string, user: string): AnyObject {
 		const entry: AnyObject = {time: Date.now(), nominator: user};
 		entry[this.keys[0]] = nomination;
 		this.winners.push(entry);
-		return this.saveWinners();
+		void this.saveWinners();
+		return entry;
 	}
 
 	setWinnerProperty(properties: {[k: string]: string}) {
@@ -438,7 +458,7 @@ otds.set('sotd', new OtdHandler('sotd', 'Show', rooms.jubilifetvfilms, SOTDS_FIL
 otds.set('cotw', new OtdHandler('cotw', 'Channel', rooms.youtube, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp'], true));
 otds.set('botw', new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['book', 'nominator', 'link', 'quote', 'author', 'image', 'time'], ['Book', 'Nominator', 'Link', 'Quote', 'Author', 'Image', 'Timestamp'], true));
 otds.set('motw', new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true));
-otds.set('anotd', new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
+otds.set('anotd', new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'quote', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
 otds.set('athotd', new OtdHandler('athotd', 'Athlete', rooms.sports, ATHOTDS_FILE, ['athlete', 'nominator', 'image', 'sport', 'team', 'country', 'age', 'quote', 'time'], ['Athlete', 'Nominator', 'Image', 'Sport', 'Team', 'Country', 'Age', 'Quote', 'Timestamp']));
 otds.set('vgotd', new OtdHandler('vgotd', 'Video Game', rooms.videogames, VGOTDS_FILE, ['game', 'nominator', 'link', 'tagline', 'image', 'time'], ['Video Game', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
 
@@ -496,7 +516,7 @@ export const otdCommands: ChatCommands = {
 	],
 
 	nom(target, room, user) {
-		this.checkChat();
+		this.checkChat(target);
 		if (!target) return this.parse('/help otd');
 
 		const handler = selectHandler(this.message);
@@ -683,7 +703,7 @@ export const otdCommands: ChatCommands = {
 	},
 	winnershelp: [`/-otd winners - Displays a list of previous things of the day.`],
 
-	''(target, room) {
+	async ''(target, room) {
 		this.checkChat();
 		if (!this.runBroadcast()) return false;
 
@@ -692,11 +712,9 @@ export const otdCommands: ChatCommands = {
 
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		return handler.generateWinnerDisplay().then(text => {
-			if (!text) return this.errorReply("There is no winner yet.");
-			this.sendReplyBox(text);
-			room.update();
-		});
+		const text = await handler.generateWinnerDisplay();
+		if (!text) return this.errorReply("There is no winner yet.");
+		this.sendReplyBox(text);
 	},
 };
 

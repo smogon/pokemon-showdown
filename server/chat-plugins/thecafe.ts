@@ -5,13 +5,7 @@ const FOODFIGHT_COOLDOWN = 5 * 60 * 1000;
 
 const thecafe = Rooms.get('thecafe') as ChatRoom;
 
-let dishes: {[k: string]: string[]} = {};
-try {
-	dishes = JSON.parse(FS(DISHES_FILE).readIfExistsSync() || "{}");
-} catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-}
-if (!dishes || typeof dishes !== 'object') dishes = {};
+const dishes: {[k: string]: string[]} = JSON.parse(FS(DISHES_FILE).readIfExistsSync() || "{}");
 
 function saveDishes() {
 	void FS(DISHES_FILE).write(JSON.stringify(dishes));
@@ -80,9 +74,7 @@ function generateDish(): [string, string[]] {
 
 export const commands: ChatCommands = {
 	foodfight(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
-
+		room = this.requireRoom(thecafe.roomid);
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
 
 		if (user.foodfight && user.foodfight.timestamp + FOODFIGHT_COOLDOWN > Date.now()) {
@@ -108,8 +100,7 @@ export const commands: ChatCommands = {
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${newDish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${newIngredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
 	checkfoodfight(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
+		room = this.requireRoom(thecafe.roomid);
 
 		const targetUser = this.targetUserOrSelf(target, false);
 		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
@@ -122,8 +113,7 @@ export const commands: ChatCommands = {
 	},
 	addingredients: 'adddish',
 	adddish(target, room, user, connection, cmd) {
-		room = this.requireRoom();
-		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
+		room = this.requireRoom(thecafe.roomid);
 		this.checkCan('mute', null, room);
 
 		let [dish, ...ingredients] = target.split(',');
@@ -157,8 +147,7 @@ export const commands: ChatCommands = {
 		this.sendReply(`${cmd.slice(3)} '${dish}: ${ingredients.join(', ')}' added successfully.`);
 	},
 	removedish(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
+		room = this.requireRoom(thecafe.roomid);
 		this.checkCan('mute', null, room);
 
 		const id = toID(target);
@@ -170,8 +159,7 @@ export const commands: ChatCommands = {
 		this.sendReply(`Dish '${target}' deleted successfully.`);
 	},
 	viewdishes(target, room, user, connection) {
-		room = this.requireRoom();
-		if (room.roomid !== thecafe.roomid) return this.errorReply("This command is only available in The Café.");
+		room = this.requireRoom(thecafe.roomid);
 
 		return this.parse(`/join view-foodfight`);
 	},

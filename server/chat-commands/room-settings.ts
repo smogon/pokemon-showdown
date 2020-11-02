@@ -7,7 +7,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib/utils';
-import type {RoomPermission} from '../user-groups';
+import type {EffectiveGroupSymbol, RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
@@ -222,7 +222,10 @@ export const commands: ChatCommands = {
 			return false;
 		}
 		room.saveSettings();
-		if (target === 'sync' && !room.settings.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
+		if (target === 'sync' && !room.settings.modchat) {
+			const lowestStaffGroup = Config.groupsranking.filter(group => Config.groups[group]?.mute)[0];
+			if (lowestStaffGroup) this.parse(`/modchat ${lowestStaffGroup}`);
+		}
 		if (!room.settings.isPrivate) this.parse('/hiddenroom');
 	},
 	modjoinhelp: [
@@ -295,7 +298,7 @@ export const commands: ChatCommands = {
 			if (rank === 'default') rank = '';
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
-			if (rank && rank !== 'whitelist' && !Users.Auth.isValidSymbol(rank)) {
+			if (rank && rank !== 'whitelist' && !Config.groupsranking.includes(rank as EffectiveGroupSymbol)) {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
 			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
@@ -720,12 +723,20 @@ export const commands: ChatCommands = {
 	],
 
 	subroomgroupchat: 'makegroupchat',
+	mgc: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
+
+		const groupchatbanned = Punishments.isGroupchatBanned(user);
+		if (groupchatbanned) {
+			const expireText = Punishments.checkPunishmentExpiration(groupchatbanned);
+			return this.errorReply(`You are banned from using groupchats ${expireText}.`);
+		}
+
 		if (cmd === 'subroomgroupchat') {
 			if (!user.can('mute', null, room)) {
 				return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
@@ -775,7 +786,7 @@ export const commands: ChatCommands = {
 		}
 
 		const titleMsg = Utils.html`Welcome to ${parent ? room.title : user.name}'s` +
-			`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
+			Utils.html`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
 		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
@@ -851,12 +862,13 @@ export const commands: ChatCommands = {
 
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
+	dgc: 'deleteroom',
 	deleteroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (!room.settings.isPersonal || cmd !== "deletegroupchat") {
+			if (!room.settings.isPersonal || !['deletegroupchat', 'dgc'].includes(cmd)) {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
@@ -866,7 +878,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (room.settings.isPersonal) {
+		if (room.roomid.startsWith('groupchat-')) {
 			this.checkCan('gamemanagement', null, room);
 		} else {
 			this.checkCan('makeroom');
@@ -919,7 +931,7 @@ export const commands: ChatCommands = {
 		this.errorReply("Did you mean /renameroom?");
 	},
 	renamegroupchat: 'renameroom',
-	renameroom(target, room, user, connection, cmd) {
+	async renameroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.game || room.minorActivity || room.tour) {
 			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
@@ -933,7 +945,7 @@ export const commands: ChatCommands = {
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
 		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
 		if (isGroupchat) {
-			if (!user.can('lock')) this.checkCan('editroom', null, room);
+			if (!user.can('lock')) this.checkCan('declare', null, room);
 			const existingRoom = Rooms.search(toID(target));
 			if (existingRoom && !existingRoom.settings.modjoin) {
 				return this.errorReply(`Your groupchat name is too similar to existing chat room '${existingRoom.title}'.`);
@@ -953,7 +965,9 @@ export const commands: ChatCommands = {
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
-		room.rename(target, id);
+		if (!(await room.rename(target, id))) {
+			return this.errorReply(`An error occured while renaming the room.`);
+		}
 		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
@@ -1054,14 +1068,11 @@ export const commands: ChatCommands = {
 				}
 				return this.errorReply(`This room is already ${settingName}.`);
 			}
+			room.settings.isPrivate = setting;
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (room.battle) {
-				room.makePrivate(setting);
-			} else {
-				room.settings.isPrivate = setting;
-				room.saveSettings();
-			}
+			room.settings.isPrivate = setting;
+			room.saveSettings();
 			room.privacySetter = new Set([user.id]);
 		}
 	},
@@ -1265,10 +1276,10 @@ export const commands: ChatCommands = {
 		if (normalizedTarget.includes(' welcome ')) {
 			return this.errorReply(`Error: Room description must not contain the word "welcome".`);
 		}
-		if (normalizedTarget.slice(0, 9) === ' discuss ') {
+		if (normalizedTarget.startsWith(' discuss ')) {
 			return this.errorReply(`Error: Room description must not start with the word "discuss".`);
 		}
-		if (normalizedTarget.slice(0, 12) === ' talk about ' || normalizedTarget.slice(0, 17) === ' talk here about ') {
+		if (normalizedTarget.startsWith(' talk about ') || normalizedTarget.startsWith(' talk here about ')) {
 			return this.errorReply(`Error: Room description must not start with the phrase "talk about".`);
 		}
 
@@ -1287,7 +1298,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.settings.introMessage.replace(/\n/g, '') + '</div>');
-			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
+			if (!this.broadcasting && user.can('declare', null, room, 'roomintro') && cmd !== 'topic') {
 				const code = Utils.escapeHTML(room.settings.introMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
 			}
@@ -1334,7 +1345,7 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			if (!room.settings.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
 			this.sendReply(`|raw|<div class="infobox">${room.settings.staffMessage.replace(/\n/g, ``)}</div>`);
-			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
+			if (user.can('ban', null, room, 'staffintro') && cmd !== 'stafftopic') {
 				const code = Utils.escapeHTML(room.settings.staffMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/staffintro ${code}</code></details>`);
 			}

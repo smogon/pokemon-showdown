@@ -1,6 +1,6 @@
 /*
  * Poll chat plugin
- * By Asheviere and Zarel.
+ * By bumbadadabum and Zarel.
  */
 import {Utils} from '../../lib/utils';
 
@@ -173,12 +173,12 @@ export class Poll {
 
 	getQuestionMarkup() {
 		if (this.supportHTML) return this.question;
-		return Utils.escapeHTML(this.question);
+		return Chat.formatText(this.question);
 	}
 
 	getOptionMarkup(option: Option) {
 		if (this.supportHTML) return option.name;
-		return Utils.escapeHTML(option.name);
+		return Chat.formatText(option.name);
 	}
 
 	update() {
@@ -375,7 +375,11 @@ export const commands: ChatCommands = {
 				curRoom.minorActivityQueue!.splice(slot - 1, 1);
 				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
 
-				curRoom.modlog(`DELETEQUEUE: by ${user}: ${slot}`);
+				curRoom.modlog({
+					action: 'DELETEQUEUE',
+					loggedBy: user.id,
+					note: slot.toString(),
+				});
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
 				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
@@ -440,7 +444,9 @@ export const commands: ChatCommands = {
 					return this.add(this.tr("The poll timer was turned off."));
 				}
 				const timeout = parseFloat(target);
-				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply(this.tr("Invalid time given."));
+				if (isNaN(timeout) || timeout <= 0 || timeout > Chat.MAX_TIMEOUT_DURATION) {
+					return this.errorReply(this.tr("Invalid time given."));
+				}
 				if (poll.timeout) clearTimeout(poll.timeout);
 				poll.timeoutMins = timeout;
 				poll.timeout = setTimeout(() => {

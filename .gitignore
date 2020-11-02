@@ -9,14 +9,16 @@
 /server/chat-plugins/*-private.js
 npm-debug.log
 .eslintcache
-.eslintfullcache
+.eslintcache-no-types
 package-lock.json
 /tools/set-import/sets
 databases/*.db*
-
+*.o
+*.o.dSYM
 # Typescript build artifacts
 .*-dist/
 tools/set-import/importer.js
+tools/modlog/converter.js
 
 # visual studio live share
 .vs

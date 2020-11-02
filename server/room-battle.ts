@@ -203,7 +203,7 @@ export class RoomBattleTimer {
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
-		this.settings = Object.assign({
+		this.settings = {
 			dcTimer: !isChallenge,
 			dcTimerBank: isChallenge,
 			starting: isChallenge ? STARTING_TIME_CHALLENGE : STARTING_TIME,
@@ -213,7 +213,8 @@ export class RoomBattleTimer {
 			maxFirstTurn: isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME,
 			timeoutAutoChoose: false,
 			accelerate: !timerSettings,
-		}, timerSettings);
+			...timerSettings,
+		};
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
 
 		for (const player of this.battle.players) {
@@ -848,7 +849,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// If the room's replay was hidden, disable users from joining after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
-			this.room.makePrivate('hidden');
+			this.room.settings.isPrivate = 'hidden';
 		}
 		this.room.update();
 	}
@@ -1260,24 +1261,17 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new StreamProcessManager(module, () => {
-	return new RoomBattleStream();
-});
+export const PM = new StreamProcessManager(module, () => new RoomBattleStream());
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// tslint:disable-next-line: no-var-requires
 	global.Config = require('./config-loader').Config;
-	// tslint:disable-next-line: no-var-requires
 	global.Chat = require('./chat').Chat;
-	// tslint:disable-next-line: no-var-requires
 	global.Dex = require('../sim/dex').Dex;
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
+		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 	global.__version = {head: ''};
@@ -1299,9 +1293,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A simulator process');
 		});
 		process.on('unhandledRejection', err => {
-			if (err instanceof Error) {
-				Monitor.crashlog(err, 'A simulator process Promise');
-			}
+			Monitor.crashlog(err as any || {}, 'A simulator process Promise');
 		});
 	}
 

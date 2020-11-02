@@ -114,7 +114,7 @@ describe('Dancer', function () {
 		battle.setPlayer('p1', {team: [{species: 'Oricoriopompom', ability: 'dancer', moves: ['revelationdance']}]});
 		battle.setPlayer('p2', {team: [{species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']}, {species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']}]});
 		battle.makeChoices();
-		assert.ok(!battle.log.includes('|-activate|p2: Oricorio|ability: Dancer'));
+		assert(!battle.log.includes('|-activate|p2: Oricorio|ability: Dancer'));
 	});
 
 	it('should target the user of a Dance move unless it was an ally attacking an opponent', function () {

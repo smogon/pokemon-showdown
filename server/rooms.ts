@@ -15,8 +15,6 @@
  * @license MIT
  */
 
-const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
-
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
@@ -28,17 +26,22 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
+const MODLOG_PATH = 'logs/modlog';
+const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
+
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
+import {RepeatedPhrase} from './chat-plugins/repeats';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
+import {Modlog, PartialModlogEntry} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -80,7 +83,6 @@ export interface RoomSettings {
 	auth: {[userid: string]: GroupSymbol};
 	creationTime: number;
 
-	readonly staffAutojoin?: string | boolean;
 	readonly autojoin?: boolean;
 	aliases?: string[];
 	banwords?: string[];
@@ -88,7 +90,7 @@ export interface RoomSettings {
 	modjoin?: AuthLevel | true | null;
 	modchat?: AuthLevel | null;
 	staffRoom?: boolean;
-	language?: string | false;
+	language?: ID | false;
 	slowchat?: number | false;
 	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
 	filterStretching?: boolean;
@@ -99,7 +101,6 @@ export interface RoomSettings {
 	unoDisabled?: boolean;
 	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
-	toursEnabled?: '%' | boolean;
 	tourAnnouncements?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
@@ -114,6 +115,7 @@ export interface RoomSettings {
 	requestShowEnabled?: boolean | null;
 	showEnabled?: GroupSymbol | true;
 	permissions?: {[k: string]: GroupSymbol};
+	repeats?: RepeatedPhrase[];
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -144,10 +146,13 @@ export abstract class BasicRoom {
 	 */
 	readonly log: Roomlog;
 	/**
-	 * The room's current RoomGame, if it exists. Each room can only have 0 or 1
+	 * The room's current RoomGame, if it exists. Each room can have 0 to 2
 	 * `RoomGame`s, and `this.game.room === this`.
+	 * Rooms may also have an additional game in `this.subGame`.
+	 * However, `subGame`s do not update `user.game`.
 	 */
 	game: RoomGame | null;
+	subGame: RoomGame | null;
 	/**
 	 * The room's current battle. Battles are a type of RoomGame, so in battle
 	 * rooms (which can only be `GameRoom`s), `this.battle === this.game`.
@@ -202,6 +207,7 @@ export abstract class BasicRoom {
 
 		this.battle = null;
 		this.game = null;
+		this.subGame = null;
 		this.tour = null;
 
 		this.roomid = roomid;
@@ -339,9 +345,12 @@ export abstract class BasicRoom {
 		this.log.roomlog(message);
 		return this;
 	}
-	modlog(message: string) {
+	/**
+	 * Writes an entry to the modlog for that room, and the global modlog if entry.isGlobal is true.
+	 */
+	modlog(entry: PartialModlogEntry) {
 		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
-		this.log.modlog(message, override);
+		this.log.modlog(entry, override);
 		return this;
 	}
 	uhtmlchange(name: string, message: string) {
@@ -692,11 +701,30 @@ export abstract class BasicRoom {
 		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
 
+	getReplayData() {
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		const end = this.roomid.length - 2;
+		const lastHyphen = this.roomid.lastIndexOf('-', end);
+		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen, end)};
+	}
+
+	/**
+	 * Displays a warning popup to all users in the room.
+	 * Returns a list of all the user IDs that were warned.
+	 */
+	warnParticipants(message: string) {
+		const warned = Object.values(this.users);
+		for (const user of warned) {
+			user.popup(`|modal|${message}`);
+		}
+		return warned;
+	}
+
 	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
 	 * @param noAlias Set this param to true to not redirect aliases and the room's old name to its new name.
 	 */
-	rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
+	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
 		this.validateTitle(newTitle, newID);
 		if (this.type === 'chat' && this.game) {
@@ -756,7 +784,7 @@ export abstract class BasicRoom {
 		this.settings.title = newTitle;
 		this.saveSettings();
 
-		void this.log.rename(newID);
+		return this.log.rename(newID);
 	}
 
 	onConnect(user: User, connection: Connection) {
@@ -904,7 +932,7 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 	}
 	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english', strings, ...keys);
+		return Chat.tr(this.settings.language || 'english' as ID, strings, ...keys);
 	}
 }
 
@@ -916,9 +944,9 @@ export class GlobalRoomState {
 	 */
 	readonly autojoinList: RoomID[];
 	/**
-	 * Rooms that staff autojoin upon connecting
+	 * Rooms that users autojoin upon logging in
 	 */
-	readonly staffAutojoinList: RoomID[];
+	readonly modjoinedAutojoinList: RoomID[];
 	readonly ladderIpLog: WriteStream;
 	readonly reportUserStatsInterval: NodeJS.Timeout;
 	lockdown: boolean | 'pre' | 'ddos';
@@ -948,20 +976,27 @@ export class GlobalRoomState {
 				title: 'Staff',
 				auth: {},
 				creationTime: Date.now(),
-				isPrivate: true,
-				staffRoom: true,
-				staffAutojoin: true,
+				isPrivate: 'hidden',
+				modjoin: '%',
+				autojoin: true,
 			}];
 		}
 
 		this.chatRooms = [];
 
 		this.autojoinList = [];
-		this.staffAutojoinList = [];
+		this.modjoinedAutojoinList = [];
 		for (const [i, settings] of this.settingsList.entries()) {
 			if (!settings || !settings.title) {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
+			}
+			if ((settings as any).staffAutojoin) {
+				// convert old staffAutojoin format
+				delete (settings as any).staffAutojoin;
+				(settings as any).autojoin = true;
+				if (!settings.modjoin) settings.modjoin = '%';
+				if (settings.isPrivate === true) settings.isPrivate = 'hidden';
 			}
 
 			// We're okay with assinging type `ID` to `RoomID` here
@@ -969,7 +1004,7 @@ export class GlobalRoomState {
 			// meaning, unlike in helptickets, groupchats, battles etc
 			// where they are used for shared modlogs and the like
 			const id = toID(settings.title) as RoomID;
-			Monitor.notice("NEW CHATROOM: " + id);
+			Monitor.notice("RESTORE CHATROOM: " + id);
 			const room = Rooms.createChatRoom(id, settings.title, settings);
 			if (room.settings.aliases) {
 				for (const alias of room.settings.aliases) {
@@ -978,8 +1013,13 @@ export class GlobalRoomState {
 			}
 
 			this.chatRooms.push(room);
-			if (room.settings.autojoin) this.autojoinList.push(id);
-			if (room.settings.staffAutojoin) this.staffAutojoinList.push(id);
+			if (room.settings.autojoin) {
+				if (room.settings.modjoin) {
+					this.modjoinedAutojoinList.push(id);
+				} else {
+					this.autojoinList.push(id);
+				}
+			}
 		}
 		Rooms.lobby = Rooms.rooms.get('lobby') as ChatRoom;
 
@@ -1017,8 +1057,8 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(message: string, overrideID?: string) {
-		void Rooms.Modlog.write('global', message, overrideID);
+	modlog(entry: PartialModlogEntry, overrideID?: string) {
+		void Rooms.Modlog.write('global', entry, overrideID);
 	}
 
 	writeChatRoomData() {
@@ -1287,7 +1327,7 @@ export class GlobalRoomState {
 	}
 	autojoinRooms(user: User, connection: Connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
-		// note that this restriction doesn't apply to staffAutojoin
+		// note that this restriction doesn't apply to modjoined autojoin rooms
 		let includesLobby = false;
 		for (const roomName of this.autojoinList) {
 			user.joinRoom(roomName, connection);
@@ -1297,19 +1337,14 @@ export class GlobalRoomState {
 	}
 	checkAutojoin(user: User, connection?: Connection) {
 		if (!user.named) return;
-		for (let [i, staffAutojoin] of this.staffAutojoinList.entries()) {
-			const room = Rooms.get(staffAutojoin);
+		for (let [i, roomid] of this.modjoinedAutojoinList.entries()) {
+			const room = Rooms.get(roomid);
 			if (!room) {
-				this.staffAutojoinList.splice(i, 1);
+				this.modjoinedAutojoinList.splice(i, 1);
 				i--;
 				continue;
 			}
-			if (room.settings.staffAutojoin === true && user.isStaff ||
-					typeof room.settings.staffAutojoin === 'string' && room.settings.staffAutojoin.includes(user.tempGroup) ||
-					room.auth.has(user.id)) {
-				// if staffAutojoin is true: autojoin if isStaff
-				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
-				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
+			if (room.checkModjoin(user)) {
 				user.joinRoom(room.roomid, connection);
 			}
 		}
@@ -1481,7 +1516,7 @@ export class ChatRoom extends BasicRoom {
 	battle: null;
 	active: false;
 	type: 'chat';
-	parent: ChatRoom | null;;
+	parent: ChatRoom | null;
 	constructor() {
 		super('');
 		this.battle = null;
@@ -1613,9 +1648,8 @@ export class GameRoom extends BasicRoom {
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
-		const {id, password} = this.getReplayData();
 		const [success] = await LoginServer.request('prepreplay', {
-			id: id,
+			id: this.roomid.substr(7),
 			loghash: datahash,
 			p1: battle.p1.name,
 			p2: battle.p2.name,
@@ -1632,40 +1666,9 @@ export class GameRoom extends BasicRoom {
 		}
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
-			id: id,
-			password: password,
+			id: this.roomid.substr(7),
 			silent: options === 'forpunishment' || options === 'silent',
 		}));
-	}
-
-	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
-		const end = this.roomid.length - 2;
-		const lastHyphen = this.roomid.lastIndexOf('-', end);
-		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
-	}
-
-	makePrivate(privacy: true | 'hidden' | 'voice') {
-		// This is the same password generation approach as genPassword in the client replays.lib.php
-		// but obviously will not match given mt_rand there uses a different RNG and seed.
-		let password = '';
-		for (let i = 0; i <= 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-
-		this.settings.isPrivate = privacy;
-		for (const user of Object.values(this.users)) {
-			if (!user.named) {
-				user.leaveRoom(this.roomid);
-				user.popup(`The battle <<${this.roomid}>> has been made private; you must log in to watch private battles.`);
-			}
-		}
-		if (this.roomid.endsWith('pw')) return true;
-		this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
-	}
-
-	makePublic() {
-		this.settings.isPrivate = false;
-		if (!this.roomid.endsWith('pw')) return true;
-		this.rename(this.title, this.getReplayData().id as RoomID);
 	}
 }
 
@@ -1675,7 +1678,9 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	Modlog: require('./modlog').modlog,
+	MODLOG_PATH,
+	MODLOG_DB_PATH,
+	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
@@ -1783,11 +1788,11 @@ export const Rooms = {
 
 		if (privacySetter.size) {
 			if (battle.forcePublic) {
-				room.makePublic();
+				room.settings.isPrivate = false;
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
-				room.makePrivate('hidden');
+				room.settings.isPrivate = 'hidden';
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {

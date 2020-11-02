@@ -112,7 +112,7 @@ const avatarTable = new Set([
 	'emmet',
 	'engineer-gen1', 'engineer-gen1rb', 'engineer-gen3',
 	'erika-gen1', 'erika-gen1rb', 'erika-gen2', 'erika-gen3', 'erika',
-	'ethan-gen2c', 'ethan-gen2', 'ethan',
+	'ethan-gen2c', 'ethan-gen2', 'ethan-pokeathlon', 'ethan',
 	'eusine-gen2', 'eusine',
 	'expertf-gen3',
 	'expert-gen3',
@@ -135,7 +135,7 @@ const avatarTable = new Set([
 	'glacia-gen3',
 	'greta-gen3',
 	'grimsley',
-	'guitarist-gen3', 'guitarist-gen4', 'guitarist',
+	'guitarist-gen2', 'guitarist-gen3', 'guitarist-gen4', 'guitarist',
 	'harlequin',
 	'hexmaniac-gen3jp', 'hexmaniac-gen3',
 	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
@@ -179,9 +179,9 @@ const avatarTable = new Set([
 	'lucas-gen4pt', 'lucas',
 	'lucian',
 	'lucy-gen3',
-	'lyra',
+	'lyra-pokeathlon', 'lyra',
 	'madame-gen4dp', 'madame-gen4', 'madame',
-	'maid',
+	'maid-gen4', 'maid',
 	'marley',
 	'marlon',
 	'marshal',
@@ -218,7 +218,7 @@ const avatarTable = new Set([
 	'pokefanf-gen2', 'pokefanf-gen3', 'pokefanf-gen4', 'pokefanf',
 	'pokefan-gen2', 'pokefan-gen3', 'pokefan-gen4', 'pokefan',
 	'pokekid',
-	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
+	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen2', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
 	'pokemonbreederf-gen3', 'pokemonbreederf-gen3frlg', 'pokemonbreederf-gen4', 'pokemonbreederf',
 	'pokemonbreeder-gen3', 'pokemonbreeder-gen4', 'pokemonbreeder',
 	'pokemonrangerf-gen3', 'pokemonrangerf-gen3rs', 'pokemonrangerf-gen4', 'pokemonrangerf',
@@ -370,7 +370,7 @@ export const commands: ChatCommands = {
 		if (this.cmd === 'mee' && /[A-Z-a-z0-9/]/.test(target.charAt(0))) {
 			return this.errorReply(this.tr`/mee - must not start with a letter or number`);
 		}
-		this.checkChat(`/${this.cmd} ${target || ''}`);
+		target = this.checkChat(`/${this.cmd} ${target || ''}`);
 
 		if (this.message.startsWith(`/ME`)) {
 			const uppercaseIdentity = user.getIdentity(room?.roomid).toUpperCase();
@@ -529,7 +529,6 @@ export const commands: ChatCommands = {
 	inv: 'invite',
 	invite(target, room, user) {
 		if (!target) return this.parse('/help invite');
-		this.checkChat();
 		if (room) target = this.splitTarget(target) || room.roomid;
 		let targetRoom = Rooms.search(target);
 		if (targetRoom && !targetRoom.checkModjoin(user)) {
@@ -544,11 +543,12 @@ export const commands: ChatCommands = {
 			return this.parse(`/pm ${targetUsername}, /invite ${targetRoom.roomid}`);
 		}
 
-		const targetUser = this.pmTarget!; // not room means it's a PM
+		const targetUser = this.pmTarget; // not room means it's a PM
 
 		if (!targetRoom) {
 			return this.errorReply(this.tr`The room "${target}" was not found.`);
 		}
+		if (!targetUser) return this.parse(`/help invite`);
 		if (!targetRoom.checkModjoin(targetUser)) {
 			this.room = targetRoom;
 			this.parse(`/roomvoice ${targetUser.name}`);
@@ -559,7 +559,7 @@ export const commands: ChatCommands = {
 		if (targetUser.id in targetRoom.users) {
 			return this.errorReply(this.tr`This user is already in "${targetRoom.title}".`);
 		}
-		return `/invite ${targetRoom.roomid}`;
+		return this.checkChat(`/invite ${targetRoom.roomid}`);
 	},
 	invitehelp: [
 		`/invite [username] - Invites the player [username] to join the room you sent the command to.`,
@@ -701,6 +701,7 @@ export const commands: ChatCommands = {
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
+	cs: 'clearstatus',
 	clearstatus(target, room, user) {
 		if (target) {
 			room = this.requireRoom();
@@ -712,10 +713,10 @@ export const commands: ChatCommands = {
 			this.checkCan('forcerename', targetUser);
 
 			const displayReason = reason ? `: ${reason}` : ``;
-			this.privateModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}" by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.privateGlobalModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
 			targetUser.clearStatus();
-			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
+			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
 			return;
 		}
 
@@ -750,24 +751,23 @@ export const commands: ChatCommands = {
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 
-	rank(target, room, user) {
+	async rank(target, room, user) {
 		if (!target) target = user.name;
 
-		return Ladders.visualizeAll(target).then(values => {
-			let buffer = `<div class="ladder"><table>`;
-			buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
+		const values = await Ladders.visualizeAll(target);
+		let buffer = `<div class="ladder"><table>`;
+		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
-			const ratings = values.join(``);
-			if (!ratings) {
-				buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
-			} else {
-				buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
-				buffer += ratings;
-			}
-			buffer += `</table></div>`;
+		const ratings = values.join(``);
+		if (!ratings) {
+			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
+		} else {
+			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
+			buffer += ratings;
+		}
+		buffer += `</table></div>`;
 
-			this.sendReply(`|raw|${buffer}`);
-		});
+		this.sendReply(`|raw|${buffer}`);
 	},
 
 	showrank: 'hiderank',
@@ -798,17 +798,17 @@ export const commands: ChatCommands = {
 
 	language(target, room, user) {
 		if (!target) {
-			const language = Chat.languages.get(user.language || 'english');
+			const language = Chat.languages.get(user.language || 'english' as ID);
 			return this.sendReply(this.tr`Currently, you're viewing Pokémon Showdown in ${language}.`);
 		}
-		target = toID(target);
-		if (!Chat.languages.has(target)) {
+		const languageID = toID(target);
+		if (!Chat.languages.has(languageID)) {
 			const languages = [...Chat.languages.values()].join(', ');
 			return this.errorReply(this.tr`Valid languages are: ${languages}`);
 		}
-		user.language = target;
+		user.language = languageID;
 		user.update();
-		const language = Chat.languages.get(target);
+		const language = Chat.languages.get(languageID);
 		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
 	},
 	languagehelp: [
@@ -974,13 +974,14 @@ export const commands: ChatCommands = {
 	async showset(target, room, user, connection, cmd) {
 		this.checkChat();
 		const showAll = cmd === 'showteam';
+		const hideStats = toID(target) === 'hidestats';
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
 		if (!battle) return this.errorReply(this.tr("This command can only be used in a battle."));
 		let teamStrings = await battle.getTeam(user);
 		if (!teamStrings) return this.errorReply(this.tr("Only players can extract their team."));
-		if (target) {
+		if (!showAll) {
 			const parsed = parseInt(target);
 			if (parsed > 6) return this.errorReply(this.tr`Use a number between 1-6 to view a specific set.`);
 			if (isNaN(parsed)) {
@@ -997,15 +998,20 @@ export const commands: ChatCommands = {
 				teamStrings = [indexedSet];
 			}
 		}
-		let resultString = Dex.stringifyTeam(teamStrings);
+		const nicknames = teamStrings.map(set => {
+			const species = Dex.getSpecies(set.species).baseSpecies;
+			return species !== set.name ? set.name : species;
+		});
+		let resultString = Dex.stringifyTeam(teamStrings, nicknames, hideStats);
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
-		this.runBroadcast();
+		this.runBroadcast(true);
 		return this.sendReplyBox(resultString);
 	},
 	showsethelp: [
 		`!showteam - show the team you're using in the current battle (must be used in a battle you're a player in).`,
+		`!showteam hidestats - show the team you're using in the current battle, without displaying any stat-related information.`,
 		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
 
@@ -1102,12 +1108,17 @@ export const commands: ChatCommands = {
 		room.game.forfeit(user);
 	},
 
+	guess: 'choose',
 	choose(target, room, user) {
 		room = this.requireRoom();
 		if (!room.game) return this.errorReply(this.tr("This room doesn't have an active game."));
 		if (!room.game.choose) return this.errorReply(this.tr("This game doesn't support /choose"));
+		if (room.game.checkChat) this.checkChat();
 		room.game.choose(user, target);
 	},
+	choosehelp: [
+		`/choose [text] - Make a choice for the currently active game.`,
+	],
 
 	mv: 'move',
 	attack: 'move',
@@ -1714,6 +1725,15 @@ export const commands: ChatCommands = {
 				return this.parse(`/${target}`);
 			}
 			if (!nextNamespace) {
+				for (const g in Config.groups) {
+					const groupid = Config.groups[g].id;
+					if (new RegExp(`(global)?(un|de)?${groupid}`).test(target)) {
+						return this.parse(`/help promote`);
+					}
+					if (new RegExp(`room(un|de)?${groupid}`).test(target)) {
+						return this.parse(`/help roompromote`);
+					}
+				}
 				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 			}
 

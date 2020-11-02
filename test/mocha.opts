@@ -1,5 +1,0 @@
-test/main.js test/lib/**/*.js test/server/**/*.js test/sim/**/*.js
--g "^((?!\(slow\)).)*$"
--R dot
--u bdd
---exit

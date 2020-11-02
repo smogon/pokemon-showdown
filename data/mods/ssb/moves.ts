@@ -1,6 +1,6 @@
-// Used for Asheviere and Snaquaza's moves
+// Used Snaquaza's move
 import {RandomStaffBrosTeams} from './random-teams';
-import {Pokemon, EffectState} from '../../../sim/pokemon';
+import {Pokemon} from '../../../sim/pokemon';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
@@ -688,83 +688,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
-	// Asheviere
-	wondertrade: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets. This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not Asheviere.",
-		shortDesc: "Replaces user's team with random SSBB sets.",
-		name: "Wonder Trade",
-		isNonstandard: "Custom",
-		pp: 2,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Amnesia', source);
-			this.add('-anim', source, 'Double Team', source);
-		},
-		onTryHit(target, source) {
-			if (source.name !== 'Asheviere') {
-				this.add('-fail', source);
-				this.hint("Only Asheviere can use Wonder Trade.");
-				return null;
-			}
-		},
-		onHit(target, source) {
-			// Store percent of HP left, percent of PP left, and status for each pokemon on the user's team
-			const carryOver: {hp: number, status: ID, statusData: EffectState, pp: number[]}[] = [];
-			const currentTeam = source.side.pokemon.slice();
-			for (const pokemon of currentTeam) {
-				carryOver.push({
-					hp: pokemon.hp / pokemon.maxhp,
-					status: pokemon.status,
-					statusData: pokemon.statusData,
-					pp: pokemon.moveSlots.slice().map(m => {
-						return m.pp / m.maxpp;
-					}),
-				});
-				// Handle pokemon with less than 4 moves
-				while (carryOver[carryOver.length - 1].pp.length < 4) {
-					carryOver[carryOver.length - 1].pp.push(1);
-				}
-			}
-			// Generate a new team
-			let team: Pokemon[] = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
-			// Remove Asheviere from generated teams to not allow duplicates
-			team = team.filter(pokemon => !(pokemon.name === 'Asheviere'));
-			// Overwrite un-fainted pokemon other than the user
-			for (const [i, mon] of currentTeam.entries()) {
-				if (mon.fainted || !mon.hp || mon.position === source.position) continue;
-				const set = team.shift();
-				if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
-				const oldSet = carryOver[i];
-
-				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
-				const effect = this.effect;
-				this.effect = {id: ''} as Effect;
-				const pokemon = new Pokemon(set, source.side);
-				this.effect = effect;
-
-				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
-				pokemon.status = oldSet.status;
-				if (oldSet.statusData) pokemon.statusData = oldSet.statusData;
-				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
-					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
-				}
-				pokemon.position = mon.position;
-				currentTeam[i] = pokemon;
-			}
-			source.side.pokemon = currentTeam;
-			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
-		},
-		target: "self",
-		type: "Psychic",
-	},
 	// Averardo
 	dragonsmash: {
 		accuracy: 90,
@@ -994,6 +917,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Black Hole Eclipse', target);
 		},
 		onModifyMove(move, pokemon, target) {
+			if (!target) return;
 			if (target.getStat('def', false, true) < target.getStat('spd', false, true)) move.category = 'Physical';
 		},
 		onBasePower(basePower, source, target, move) {

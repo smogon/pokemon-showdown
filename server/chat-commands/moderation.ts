@@ -15,9 +15,89 @@ import {Utils} from '../../lib/utils';
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
 
 /** Require reasons for punishment commands */
 const REQUIRE_REASONS = true;
+
+/**
+ * Promotes a user within a room. Returns a User object if a popup should be shown to the user,
+ * and null otherwise. Throws a Chat.ErrorMesage on an error.
+ *
+ * @param promoter the User object of the user who is promoting
+ * @param room the Room in which the promotion is happening
+ * @param userid the ID of the user to promote
+ * @param symbol the GroupSymbol to promote to
+ * @param username the username of the user to promote
+ * @param force whether or not to forcibly promote
+ */
+export function runPromote(
+	promoter: User,
+	room: Room,
+	userid: ID,
+	symbol: GroupSymbol,
+	username?: string,
+	force?: boolean
+) {
+	const targetUser = Users.getExact(userid);
+	username = username || userid;
+	if (!username) return;
+
+	if (userid.length > 18) {
+		throw new Chat.ErrorMessage(`User '${username}' does not exist (the username is too long).`);
+	}
+	if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
+		throw new Chat.ErrorMessage(`User '${username}' is offline and unrecognized, and so can't be promoted.`);
+	}
+	if (targetUser && !targetUser.registered) {
+		throw new Chat.ErrorMessage(`User '${username}' is unregistered, and so can't be promoted.`);
+	}
+
+	let currentSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
+	if (room.auth.has(userid) && currentSymbol === Users.Auth.defaultSymbol()) {
+		currentSymbol = 'whitelist';
+	}
+	const currentGroup = Users.Auth.getGroup(currentSymbol);
+	const currentGroupName = currentGroup.name || "regular user";
+
+	const nextGroup = Config.groups[symbol];
+
+	if (currentSymbol === symbol) {
+		throw new Chat.ErrorMessage(`User '${username}' is already a ${nextGroup.name || 'regular user'} in this room.`);
+	}
+	if (!promoter.can('makeroom')) {
+		if (currentGroup.id && !promoter.can(`room${currentGroup.id || 'voice'}` as 'roomvoice', null, room)) {
+			throw new Chat.ErrorMessage(`Access denied for promoting/demoting ${username} from ${currentGroupName}.`);
+		}
+		if (symbol !== ' ' && !promoter.can(`room${nextGroup.id || 'voice'}` as 'roomvoice', null, room)) {
+			throw new Chat.ErrorMessage(`Access denied for promoting/demoting ${username} to ${nextGroup.name}.`);
+		}
+	}
+	if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
+		throw new Chat.ErrorMessage(`${username} is locked and can't be promoted.`);
+	}
+
+	if (symbol === Users.Auth.defaultSymbol()) {
+		room.auth.delete(userid);
+	} else {
+		room.auth.set(userid, symbol);
+	}
+
+	if (targetUser) {
+		targetUser.updateIdentity(room.roomid);
+		if (room.subRooms) {
+			for (const subRoom of room.subRooms.values()) {
+				targetUser.updateIdentity(subRoom.roomid);
+			}
+		}
+	}
+
+	// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
+	if (targetUser && room.users[targetUser.id] && room.persist && room.settings.isPrivate !== true) {
+		return targetUser;
+	}
+	return null;
+}
 
 export const commands: ChatCommands = {
 
@@ -41,7 +121,13 @@ export const commands: ChatCommands = {
 		if (room.auth.getDirect(userid) === '#') return this.errorReply(`${name} is already a room owner.`);
 
 		room.auth.set(userid, '#');
-		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
+		const message = Utils.html`${name} was appointed Room Owner by ${user.name}.`;
+		if (room.settings.isPrivate === true) {
+			this.addModAction(message);
+			Rooms.get(`upperstaff`)?.addByUser(user, `<<${room.roomid}>> ${message}`).update();
+		} else {
+			this.addGlobalModAction(message);
+		}
 		this.modlog('ROOMOWNER', userid);
 		if (targetUser) {
 			targetUser.popup(`You were appointed Room Owner by ${user.name} in ${room.roomid}.`);
@@ -68,27 +154,9 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help roompromote');
 
 		const force = cmd.startsWith('force');
-		target = this.splitTarget(target, true);
-		const targetUser = this.targetUser;
-		const userid = toID(this.targetUsername);
-		let name = targetUser ? targetUser.name : this.filter(this.targetUsername);
-		if (!name) return;
-		name = name.slice(0, 18);
-
-		if (!userid) return this.parse('/help roompromote');
-		if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
-			return this.errorReply(`User '${name}' is offline and unrecognized, and so can't be promoted.`);
-		}
-		if (targetUser && !targetUser.registered) {
-			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
-		}
-
-		let currentSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
-		if (room.auth.has(userid) && currentSymbol === Users.Auth.defaultSymbol()) {
-			currentSymbol = 'whitelist';
-		}
-		const currentGroup = Users.Auth.getGroup(currentSymbol);
-		const nextSymbol = target === 'deauth' ? Users.Auth.defaultSymbol() : target as GroupSymbol;
+		const users = target.split(',').map(part => part.trim());
+		let nextSymbol = users.pop() as GroupSymbol | 'deauth';
+		if (nextSymbol === 'deauth') nextSymbol = Users.Auth.defaultSymbol();
 		const nextGroup = Users.Auth.getGroup(nextSymbol);
 
 		if (!nextSymbol) {
@@ -110,76 +178,63 @@ export const commands: ChatCommands = {
 		if (!force && (nextGroup.globalonly || (nextGroup.battleonly && !room.battle))) {
 			return this.errorReply(`Group 'room${nextGroup.id || nextSymbol}' does not exist as a room rank.`);
 		}
-
-		const currentGroupName = currentGroup.name || "regular user";
 		const nextGroupName = nextGroup.name || "regular user";
 
-		if (currentSymbol === nextSymbol) {
-			return this.errorReply(`User '${name}' is already a ${nextGroupName} in this room.`);
-		}
-		if (!user.can('makeroom')) {
-			if (currentGroup.id && !user.can(`room${currentGroup.id || 'voice'}` as 'roomvoice', null, room)) {
-				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${currentGroupName}.`);
+		for (const toPromote of users) {
+			const userid = toID(toPromote);
+			if (!userid) return this.parse('/help roompromote');
+
+			const oldSymbol = room.auth.getDirect(userid);
+			let shouldPopup;
+			try {
+				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
+			} catch (err) {
+				if (err.name?.endsWith('ErrorMessage')) this.errorReply(err.message);
+				continue;
 			}
-			if (nextSymbol !== ' ' && !user.can(`room${nextGroup.id || 'voice'}` as 'roomvoice', null, room)) {
-				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${nextGroupName}.`);
+			const targetUser = Users.getExact(userid);
+			const name = targetUser?.name || toPromote;
+
+			if (this.pmTarget && targetUser) {
+				const text = `${targetUser.name} was invited (and promoted to Room ${nextGroupName}) by ${user.name}.`;
+				room.add(`|c|${user.getIdentity(room.roomid)}|/log ${text}`).update();
+				this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
+			} else if (
+				nextSymbol in Config.groups && oldSymbol in Config.groups &&
+				nextGroup.rank < Config.groups[oldSymbol].rank
+			) {
+				if (targetUser && room.users[targetUser.id] && !nextGroup.modlog) {
+					// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
+					targetUser.send(`>${room.roomid}\n(You were demoted to Room ${nextGroupName} by ${user.name}.)`);
+				}
+				this.privateModAction(`${name} was demoted to Room ${nextGroupName} by ${user.name}.`);
+				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
+				shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
+			} else if (nextSymbol === '#') {
+				this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
+				this.modlog('ROOM OWNER', userid);
+				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
+			} else {
+				this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
+				shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			}
-		}
-		if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank > 2) {
-			return this.errorReply("Locked users can't be promoted.");
-		}
 
-		if (nextSymbol === Users.Auth.defaultSymbol()) {
-			room.auth.delete(userid);
-		} else {
-			room.auth.set(userid, nextSymbol);
-		}
-
-		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
-		const shouldPopup = (
-			targetUser && room.users[targetUser.id] && room.persist && room.settings.isPrivate !== true ?
-				targetUser : null
-		);
-
-		if (this.pmTarget && targetUser) {
-			const text = `${targetUser.name} was invited (and promoted to Room ${nextGroupName}) by ${user.name}.`;
-			room.add(`|c|${user.getIdentity(room.roomid)}|/log ${text}`).update();
-			this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
-		} else if (
-			nextSymbol in Config.groups && currentSymbol in Config.groups &&
-			nextGroup.rank < currentGroup.rank
-		) {
-			if (targetUser && room.users[targetUser.id] && !nextGroup.modlog) {
-				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
-				targetUser.send(`>${room.roomid}\n(You were demoted to Room ${nextGroupName} by ${user.name}.)`);
-			}
-			this.privateModAction(`${name} was demoted to Room ${nextGroupName} by ${user.name}.`);
-			this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
-			shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
-		} else if (nextSymbol === '#') {
-			this.addModAction(`${'' + name} was promoted to ${nextGroupName} by ${user.name}.`);
-			this.modlog('ROOM OWNER', userid);
-			shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
-		} else {
-			this.addModAction(`${'' + name} was promoted to Room ${nextGroupName} by ${user.name}.`);
-			this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
-			shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
-		}
-
-		if (targetUser) {
-			targetUser.updateIdentity(room.roomid);
-			if (room.subRooms) {
-				for (const subRoom of room.subRooms.values()) {
-					targetUser.updateIdentity(subRoom.roomid);
+			if (targetUser) {
+				targetUser.updateIdentity(room.roomid);
+				if (room.subRooms) {
+					for (const subRoom of room.subRooms.values()) {
+						targetUser.updateIdentity(subRoom.roomid);
+					}
 				}
 			}
 		}
 		room.saveSettings();
 	},
 	roompromotehelp: [
-		`/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. Requires: @ # &`,
-		`/room[group] [username] - Promotes/demotes the user to the specified room rank. Requires: @ # &`,
-		`/roomdeauth [username] - Removes all room rank from the user. Requires: @ # &`,
+		`/roompromote OR /roomdemote [comma-separated usernames], [group symbol] - Promotes/demotes the user(s) to the specified room rank. Requires: @ # &`,
+		`/room[group] [comma-separated usernames] - Promotes/demotes the user(s) to the specified room rank. Requires: @ # &`,
+		`/roomdeauth [comma-separated usernames] - Removes all room rank from the user(s). Requires: @ # &`,
 	],
 
 	auth: 'authority',
@@ -330,7 +385,7 @@ export const commands: ChatCommands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
-	autojoin(target, room, user, connection) {
+	async autojoin(target, room, user, connection) {
 		const targets = target.split(',');
 		if (targets.length > 16 || connection.inRooms.size > 1) {
 			return connection.popup("To prevent DoS attacks, you can only use /autojoin for 16 or fewer rooms, when you haven't joined any rooms yet. Please use /join for each room separately.");
@@ -346,27 +401,26 @@ export const commands: ChatCommands = {
 			})
 		);
 
-		return Promise.all(promises).then(() => {
-			connection.autojoins = autojoins.join(',');
-		});
+		await Promise.all(promises);
+		connection.autojoins = autojoins.join(',');
 	},
 
 	joim: 'join',
 	j: 'join',
-	join(target, room, user, connection) {
+	async join(target, room, user, connection) {
 		if (!target) return this.parse('/help join');
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
+		if (target.startsWith(`${Config.routes.replays}/`)) target = `battle-${target.slice(Config.routes.replays.length + 1)}`;
 		if (target.startsWith('psim.us/')) target = target.slice(8);
-		return user.tryJoinRoom(target as RoomID, connection).then(ret => {
-			if (ret === Rooms.RETRY_AFTER_LOGIN) {
-				connection.sendTo(
-					target as RoomID,
-					`|noinit|namerequired|The room '${target}' does not exist or requires a login to join.`
-				);
-			}
-		});
+		const ret = await user.tryJoinRoom(target as RoomID, connection);
+		if (ret === Rooms.RETRY_AFTER_LOGIN) {
+			connection.sendTo(
+				target as RoomID,
+				`|noinit|namerequired|The room '${target}' does not exist or requires a login to join.`
+			);
+		}
 	},
 	joinhelp: [`/join [roomname] - Attempt to join the room [roomname].`],
 
@@ -374,7 +428,11 @@ export const commands: ChatCommands = {
 	part(target, room, user, connection) {
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) {
-			if (target.startsWith('view-')) return;
+			if (target.startsWith('view-')) {
+				connection.openPages?.delete(target.slice(5));
+				if (!connection.openPages?.size) connection.openPages = null;
+				return;
+			}
 			return this.errorReply(`The room '${target}' does not exist.`);
 		}
 		user.leaveRoom(targetRoom, connection);
@@ -408,12 +466,14 @@ export const commands: ChatCommands = {
 		}
 
 		const targetUser = this.targetUser;
+		const saveReplay = globalWarn && room.battle;
 		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 			this.checkCan('warn', null, room);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(publicReason ? ` (${publicReason})` : ``)}`);
-			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${publicReason} ${privateReason}` : ``)}`);
+			this.globalModlog('WARN OFFLINE', targetUser, target ? `${publicReason} ${privateReason}` : ``);
+			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
 		if (!(targetUser.id in room.users) && !globalWarn) {
@@ -434,7 +494,7 @@ export const commands: ChatCommands = {
 
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(publicReason ? ` (${publicReason})` : ``)}`);
 		if (globalWarn) {
-			this.globalModlog('WARN', targetUser, ` by ${user.id}${(target ? `: ${publicReason} ${privateReason}` : ``)}`);
+			this.globalModlog('WARN', targetUser, target ? `${publicReason} ${privateReason}` : ``);
 		} else {
 			this.modlog('WARN', targetUser, target ? `${publicReason} ${privateReason}` : ``, {noalts: 1});
 		}
@@ -448,7 +508,7 @@ export const commands: ChatCommands = {
 		targetUser.lastWarnedAt = now;
 
 		// Automatically upload replays as evidence/reference to the punishment
-		if (globalWarn && room.battle) this.parse('/savereplay forpunishment');
+		if (saveReplay) this.parse('/savereplay forpunishment');
 	},
 	warnhelp: [
 		`/warn OR /k [username], [reason] - Warns a user showing them the site rules and [reason] in an overlay.`,
@@ -614,7 +674,7 @@ export const commands: ChatCommands = {
 		} else if (force) {
 			return this.errorReply(`Use /${week ? 'week' : 'room'}ban; ${name} is not a trusted user.`);
 		}
-		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
+		if (!target && !week && Punishments.isRoomBanned(targetUser, room.roomid)) {
 			const problem = " but was already banned";
 			return this.privateModAction(`${name} would be banned by ${user.name} ${problem}.`);
 		}
@@ -653,9 +713,9 @@ export const commands: ChatCommands = {
 		room.hideText([userid, toID(this.inputUsername)]);
 
 		if (room.settings.isPrivate !== true && room.persist) {
-			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, target);
 		} else {
-			this.modlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+			this.modlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, target);
 		}
 		return true;
 	},
@@ -676,7 +736,7 @@ export const commands: ChatCommands = {
 		if (name) {
 			this.addModAction(`${name} was unbanned from ${room.title} by ${user.name}.`);
 			if (room.settings.isPrivate !== true && room.persist) {
-				this.globalModlog("UNROOMBAN", name, ` by ${user.id}`);
+				this.globalModlog("UNROOMBAN", name);
 			}
 		} else {
 			this.errorReply(`User '${target}' is not banned from this room.`);
@@ -759,9 +819,9 @@ export const commands: ChatCommands = {
 			affected = await Punishments.lock(userid, duration, null, false, userReason);
 		}
 
-		const globalReason = (target ? `: ${userReason} ${proof}` : '');
+		const globalReason = (target ? `${userReason} ${proof}` : '');
 		this.globalModlog(
-			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, ` by ${user.id}${globalReason}`
+			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, globalReason
 		);
 
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
@@ -818,7 +878,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User ${targetUser.name} is namelocked, not locked. Use /unnamelock to unnamelock them.`);
 		}
 		let reason = '';
-		if (targetUser?.locked && targetUser.locked.charAt(0) === '#') {
+		if (targetUser?.locked && targetUser.locked.startsWith('#')) {
 			reason = ` (${targetUser.locked})`;
 		}
 
@@ -826,7 +886,7 @@ export const commands: ChatCommands = {
 
 		if (unlocked) {
 			this.addGlobalModAction(`${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`);
-			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.id}`);
+			if (!reason) this.globalModlog("UNLOCK", toID(target));
 			if (targetUser) targetUser.popup(`${user.name} has unlocked you.`);
 		} else {
 			this.errorReply(`User '${target}' is not locked.`);
@@ -854,7 +914,7 @@ export const commands: ChatCommands = {
 		}
 
 		this.addGlobalModAction(`The name '${target}' was unlocked by ${user.name}.`);
-		this.globalModlog("UNLOCKNAME", userid, ` by ${user.name}`);
+		this.globalModlog("UNLOCKNAME", userid);
 	},
 	unrangelock: 'unlockip',
 	rangeunlock: 'unlockip',
@@ -862,7 +922,7 @@ export const commands: ChatCommands = {
 		target = target.trim();
 		if (!target) return this.parse('/help unlock');
 		this.checkCan('globalban');
-		const range = target.charAt(target.length - 1) === '*';
+		const range = target.endsWith('*');
 		if (range) this.checkCan('rangeban');
 
 		if (!(range ? IPTools.ipRangeRegex : IPTools.ipRegex).test(target)) {
@@ -890,7 +950,7 @@ export const commands: ChatCommands = {
 		}
 
 		this.privateGlobalModAction(`${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
-		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
+		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, null, null, target);
 	},
 	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ &`],
 	unlocknamehelp: [`/unlockname [name] - Unlocks a punished alt, leaving the original lock intact. Requires: % @ &`],
@@ -969,8 +1029,8 @@ export const commands: ChatCommands = {
 
 		room?.hideText([userid, toID(this.inputUsername)]);
 
-		const globalReason = (target ? `: ${userReason} ${proof}` : '');
-		this.globalModlog("BAN", targetUser, ` by ${user.id}${globalReason}`);
+		const globalReason = (target ? `${userReason} ${proof}` : '');
+		this.globalModlog("BAN", targetUser, globalReason);
 		return true;
 	},
 	globalbanhelp: [
@@ -990,7 +1050,7 @@ export const commands: ChatCommands = {
 		}
 
 		this.addGlobalModAction(`${name} was globally unbanned by ${user.name}.`);
-		this.globalModlog("UNBAN", target, ` by ${user.id}`);
+		this.globalModlog("UNBAN", target);
 	},
 	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ &`],
 
@@ -1062,7 +1122,7 @@ export const commands: ChatCommands = {
 		Punishments.banRange(ip, reason);
 
 		this.addGlobalModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
-		this.modlog('RANGEBAN', null, reason);
+		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	baniphelp: [
 		`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
@@ -1081,7 +1141,7 @@ export const commands: ChatCommands = {
 		}
 		Punishments.ips.delete(target);
 
-		this.addGlobalModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
+		this.addGlobalModAction(`${user.name} unbanned the ${(target.endsWith('*') ? "IP range" : "IP")}: ${target}`);
 		this.modlog('UNRANGEBAN', null, target);
 	},
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],
@@ -1111,7 +1171,7 @@ export const commands: ChatCommands = {
 		} else {
 			this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
 		}
-		this.modlog(year ? 'YEARLOCK' : 'RANGELOCK', null, reason);
+		this.globalModlog(`${year ? 'YEAR' : 'RANGE'}LOCK`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	lockiphelp: [
 		`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
@@ -1134,8 +1194,12 @@ export const commands: ChatCommands = {
 		}
 		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
-		if (room.roomid === 'staff' || room.roomid === 'upperstaff') {
-			this.globalModlog('NOTE', null, ` by ${user.id}: ${target}`);
+		if (
+			room.roomid === 'staff' ||
+			room.roomid === 'upperstaff' ||
+			(Rooms.Modlog.getSharedID(room.roomid) && user.can('modlog'))
+		) {
+			this.globalModlog('NOTE', null, target);
 		} else {
 			this.modlog('NOTE', null, target);
 		}
@@ -1187,6 +1251,7 @@ export const commands: ChatCommands = {
 		if (!Users.Auth.hasPermission(user, 'promote', nextGroup)) {
 			this.errorReply(`/${cmd} - Access denied for promoting to ${groupName}`);
 			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`);
+			return;
 		}
 
 		if (!Users.isUsernameKnown(userid)) {
@@ -1202,7 +1267,7 @@ export const commands: ChatCommands = {
 		}
 		if (Users.Auth.getGroup(nextGroup).rank < Users.Auth.getGroup(currentGroup).rank) {
 			this.privateGlobalModAction(`${name} was demoted to ${groupName} by ${user.name}.`);
-			this.globalModlog(`GLOBAL ${groupName.toUpperCase()}`, userid, ` by ${user.id}: (demote)`);
+			this.globalModlog(`GLOBAL ${groupName.toUpperCase()}`, userid, `(demote)`);
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
 		} else {
 			this.addGlobalModAction(`${name} was promoted to ${groupName} by ${user.name}.`);
@@ -1454,14 +1519,14 @@ export const commands: ChatCommands = {
 		let forceRenameMessage;
 		if (targetUser.connected) {
 			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
-			this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-			Chat.forceRenames.set(targetUser.id, (Chat.forceRenames.get(targetUser.id) || 0) + 1);
+			this.globalModlog('FORCERENAME', targetUser, reason);
+			Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		} else {
 			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
-			this.globalModlog('FORCERENAME OFFLINE', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-			if (!Chat.forceRenames.has(targetUser.id)) Chat.forceRenames.set(targetUser.id, 0);
+			this.globalModlog('FORCERENAME OFFLINE', targetUser, reason);
+			if (!Monitor.forceRenames.has(targetUser.id)) Monitor.forceRenames.set(targetUser.id, 0);
 		}
 
 		if (room?.roomid !== 'staff') this.privateModAction(`${targetUser.name} ${forceRenameMessage}`);
@@ -1475,6 +1540,9 @@ export const commands: ChatCommands = {
 		);
 
 		targetUser.resetName(true);
+		if (Punishments.namefilterwhitelist.has(targetUser.id)) {
+			Punishments.unwhitelistName(targetUser.id);
+		}
 		return true;
 	},
 	forcerenamehelp: [
@@ -1501,7 +1569,7 @@ export const commands: ChatCommands = {
 
 		const reasonText = reason ? ` (${reason})` : `.`;
 		this.privateGlobalModAction(`${targetUser.name} was namelocked by ${user.name}${reasonText}`);
-		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
+		this.globalModlog("NAMELOCK", targetUser, reasonText);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {
@@ -1535,7 +1603,7 @@ export const commands: ChatCommands = {
 		}
 
 		this.addGlobalModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
-		if (!reason) this.globalModlog("UNNAMELOCK", toID(target), ` by ${user.id}`);
+		if (!reason) this.globalModlog("UNNAMELOCK", toID(target));
 		if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);
 	},
 	unnamelockhelp: [`/unnamelock [username] - Unnamelocks the user. Requires: % @ &`],
@@ -1697,7 +1765,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (!room.settings.isPrivate && room.persist) {
-			this.globalModlog("BLACKLIST", targetUser, ` by ${user.id}${target ? `: ${target}` : ''}`);
+			this.globalModlog("BLACKLIST", targetUser, target);
 		} else {
 			// Room modlog only
 			this.modlog("BLACKLIST", targetUser, target);
@@ -1749,7 +1817,7 @@ export const commands: ChatCommands = {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
 		}
 
-		this.globalModlog("BATTLEBAN", targetUser, ` by ${user.id}${reasonText}`);
+		this.globalModlog("BATTLEBAN", targetUser, reasonText);
 		Ladders.cancelSearches(targetUser);
 		Punishments.battleban(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
@@ -1772,13 +1840,92 @@ export const commands: ChatCommands = {
 
 		if (unbanned) {
 			this.addModAction(`${unbanned} was allowed to battle again by ${user.name}.`);
-			this.globalModlog("UNBATTLEBAN", toID(target), ` by ${user.name}`);
+			this.globalModlog("UNBATTLEBAN", toID(target));
 			if (targetUser) targetUser.popup(`${user.name} has allowed you to battle again.`);
 		} else {
 			this.errorReply(`User ${target} is not banned from battling.`);
 		}
 	},
 	unbattlebanhelp: [`/unbattleban [username] - [DEPRECATED] Allows a user to battle again. Requires: % @ &`],
+
+	monthgroupchatban: 'groupchatban',
+	monthgcban: 'groupchatban',
+	gcban: 'groupchatban',
+	groupchatban(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		if (!target) return this.parse(`/help groupchatban`);
+		this.checkCan('lock');
+
+		const reason = this.splitTarget(target);
+		const targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+		}
+
+		const isMonth = cmd.startsWith('month');
+
+		if (!isMonth && Punishments.isGroupchatBanned(targetUser)) {
+			return this.errorReply(`User '${targetUser.name}' is already banned from using groupchats.`);
+		}
+
+		const reasonText = reason ? `: ${reason}` : ``;
+		this.privateGlobalModAction(`${targetUser.name} was banned from using groupchats for a ${isMonth ? 'month' : 'week'} by ${user.name}${reasonText}.`);
+
+		if (targetUser.trusted) {
+			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from using groupchats by ${user.name}, and should probably be demoted.`);
+		}
+
+		const createdGroupchats = Punishments.groupchatBan(targetUser, (isMonth ? Date.now() + 30 * DAY : null), null, reason);
+		targetUser.popup(`|modal|${user.name} has banned you from using groupchats for a ${isMonth ? 'month' : 'week'}${reasonText}`);
+		this.globalModlog("GROUPCHATBAN", targetUser, ` by ${user.id}${reasonText}`);
+
+		for (const roomid of createdGroupchats) {
+			const targetRoom = Rooms.get(roomid);
+			if (!targetRoom) continue;
+			const participants = targetRoom.warnParticipants?.(
+				`This groupchat (${targetRoom.title}) has been deleted due to inappropriate conduct by its creator, ${targetUser.name}.` +
+				` Do not attempt to recreate it, or you may be punished.${reason ? ` (reason: ${reason})` : ``}`
+			);
+
+			if (participants) {
+				const modlogEntry = {
+					action: 'NOTE',
+					loggedBy: user.id,
+					isGlobal: true,
+					note: `participants in ${roomid} (creator: ${targetUser.id}): ${participants.join(', ')}`,
+				};
+				targetRoom.modlog(modlogEntry);
+			}
+
+			targetRoom.destroy();
+		}
+	},
+	groupchatbanhelp: [
+		`/groupchatban [user], [optional reason]`,
+		`/monthgroupchatban [user], [optional reason]`,
+		`Bans the user from joining or creating groupchats for a week (or month). Requires: % @ &`,
+	],
+
+	ungcban: 'ungroupchatban',
+	gcunban: 'ungroupchatban',
+	groucphatunban: 'ungroupchatban',
+	ungroupchatban(target, room, user) {
+		if (!target) return this.parse('/help ungroupchatban');
+		this.checkCan('lock');
+
+		const targetUser = Users.get(target);
+		const unbanned = Punishments.groupchatUnban(targetUser || toID(target));
+
+		if (unbanned) {
+			this.addGlobalModAction(`${unbanned} was ungroupchatbanned by ${user.name}.`);
+			this.globalModlog("UNGROUPCHATBAN", toID(target), ` by ${user.id}`);
+			if (targetUser) targetUser.popup(`${user.name} has allowed you to use groupchats again.`);
+		} else {
+			this.errorReply(`User ${target} is not banned from using groupchats.`);
+		}
+	},
+	ungroupchatbanhelp: [`/ungroupchatban [user] - Allows a groupchatbanned user to use groupchats again. Requires: % @ &`],
 
 	nameblacklist: 'blacklistname',
 	blacklistname(target, room, user) {
@@ -1818,7 +1965,7 @@ export const commands: ChatCommands = {
 				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 			}
 			if (!room.settings.isPrivate && room.persist) {
-				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.id}${(reason ? `: ${reason}` : '')}`);
+				this.globalModlog("NAMEBLACKLIST", userid, reason);
 			}
 		}
 
@@ -1842,7 +1989,7 @@ export const commands: ChatCommands = {
 		if (name) {
 			this.privateModAction(`${name} was unblacklisted by ${user.name}.`);
 			if (!room.settings.isPrivate && room.persist) {
-				this.globalModlog("UNBLACKLIST", name, ` by ${user.id}`);
+				this.globalModlog("UNBLACKLIST", name);
 			}
 		} else {
 			this.errorReply(`User '${target}' is not blacklisted.`);

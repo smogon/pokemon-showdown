@@ -8,10 +8,9 @@
  * @license MIT
  */
 
-// eslint-disable-next-line no-undef
-const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder ?
-	require('./ladders-remote') :
-	require('./ladders-local')).LadderStore;
+const LadderStore: typeof import('./ladders-remote').LadderStore = (
+	typeof Config === 'object' && Config.remoteladder ? require('./ladders-remote') : require('./ladders-local')
+).LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
