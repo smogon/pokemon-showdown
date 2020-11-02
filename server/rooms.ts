@@ -41,7 +41,7 @@ import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {Modlog, PartialModlogEntry} from './modlog';
+import type {PartialModlogEntry} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -1032,7 +1032,7 @@ export class GlobalRoomState {
 			this.ladderIpLog = new WriteStream({write() { return undefined; }});
 		}
 		// Create writestream for modlog
-		Rooms.Modlog.initialize('global');
+		Rooms.Modlog?.initialize('global');
 
 		this.reportUserStatsInterval = setInterval(
 			() => this.reportUserStats(),
@@ -1058,7 +1058,7 @@ export class GlobalRoomState {
 	}
 
 	modlog(entry: PartialModlogEntry, overrideID?: string) {
-		void Rooms.Modlog.write('global', entry, overrideID);
+		void Rooms.Modlog?.write('global', entry, overrideID);
 	}
 
 	writeChatRoomData() {
@@ -1680,7 +1680,7 @@ function getRoom(roomid?: string | BasicRoom) {
 export const Rooms = {
 	MODLOG_PATH,
 	MODLOG_DB_PATH,
-	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH),
+	Modlog: (Config.usesqlitemodlog ? new (require('../modlog')).Modlog(MODLOG_PATH, MODLOG_DB_PATH) : null),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with

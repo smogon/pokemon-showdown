@@ -137,6 +137,10 @@ async function getModlog(
 	connection: Connection, roomid: ModlogID = 'global', search: ModlogSearch = {},
 	searchCmd: string, maxLines = 20, onlyPunishments = false, timed = false
 ) {
+	if (!Rooms.Modlog) {
+		throw new Error("Modlogs are not enabled on this server");
+	}
+
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
 	roomid = getRoomID(roomid);
@@ -205,6 +209,10 @@ export const commands: ChatCommands = {
 	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
+		if (!Rooms.Modlog) {
+			throw new Chat.ErrorMessage("Modlogs are not enabled on this server; please set up `Config.usesqlitemodlog`.");
+		}
+
 		let roomid: ModlogID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
 		let lines;
 		const search: ModlogSearch = {};

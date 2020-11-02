@@ -417,14 +417,17 @@ export const commands: ChatCommands = {
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target === 'modlog') {
+				if (!Config.usesqlitemodlog) {
+					return this.errorReply("Modlogs are not enabled on this server; please set up `Config.usesqlitemodlog`.");
+				}
 				patch = 'modlog';
 				if (lock['modlog']) {
 					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				const streams = Rooms.Modlog.streams;
-				const sharedStreams = Rooms.Modlog.sharedStreams;
+				const streams = Rooms.Modlog?.streams;
+				const sharedStreams = Rooms.Modlog?.sharedStreams;
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
@@ -437,8 +440,9 @@ export const commands: ChatCommands = {
 					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
 				);
 				this.sendReply("Modlog has been hot-patched.");
-				Rooms.Modlog.streams = streams;
-				Rooms.Modlog.sharedStreams = sharedStreams;
+
+				if (streams) Rooms.Modlog!.streams = streams;
+				if (sharedStreams) Rooms.Modlog!.sharedStreams = sharedStreams;
 				this.sendReply("Modlog streams have been re-initialized.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");

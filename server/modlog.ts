@@ -476,8 +476,8 @@ type ModlogResult = ModlogEntry | undefined;
 export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
-		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
-		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
+		const results = await Rooms.Modlog?.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
+		return results?.map((line: string, index: number) => parseModlog(line, results[index + 1])) || [];
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
 		return [];
