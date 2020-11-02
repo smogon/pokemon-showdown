@@ -1014,7 +1014,7 @@ export const Formats: {[k: string]: FormatData} = {
 		checkLearnset(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
-				if (move.id[0] === species.id[0]) return null;
+				if (move.id.startsWith(species.id[0])) return null;
 			}
 			return this.checkLearnset(move, species, setSources, set);
 		},
