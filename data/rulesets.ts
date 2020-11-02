@@ -1007,6 +1007,18 @@ export const Formats: {[k: string]: FormatData} = {
 			return this.checkLearnset(move, species, setSources, set);
 		},
 	},
+	alphabetcupmovelegality: {
+		effectType: 'ValidatorRule',
+		name: 'Alphabet Cup Move Legality',
+		desc: "Allows Pok&eacute;mon to use any move that shares the same first letter as their name or a previous evolution's name.",
+		checkLearnset(move, species, setSources, set) {
+			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
+			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
+				if (move.id.startsWith(species.id[0])) return null;
+			}
+			return this.checkLearnset(move, species, setSources, set);
+		},
+	},
 	allowtradeback: {
 		effectType: 'ValidatorRule',
 		name: 'Allow Tradeback',
