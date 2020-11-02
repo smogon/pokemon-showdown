@@ -183,7 +183,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({atk: length}, source, source, this.dex.getEffect('chillingneigh'), true);
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "As One (Glastrier)",
 		rating: 3.5,
 		num: 266,
@@ -199,7 +199,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({spa: length}, source, source, this.dex.getEffect('grimneigh'), true);
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "As One (Spectrier)",
 		rating: 3.5,
 		num: 267,
@@ -271,7 +271,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.multihit = 3;
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Battle Bond",
 		rating: 4,
 		num: 210,
@@ -444,7 +444,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return false;
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
-		neverChanges: true,
+		isPermanent: true,
 		isUnbreakable: true,
 		name: "Comatose",
 		rating: 4,
@@ -750,7 +750,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.getSpecies(speciesid));
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Disguise",
 		rating: 3.5,
 		num: 209,
@@ -1309,7 +1309,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.formeChange(forme, effect);
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Gulp Missile",
 		rating: 2.5,
 		num: 241,
@@ -1514,7 +1514,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Ice Face",
 		rating: 3,
 		num: 248,
@@ -2158,7 +2158,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	multitype: {
 		// Multitype's type-changing itself is implemented in statuses.js
-		neverChanges: true,
+		isPermanent: true,
 		name: "Multitype",
 		rating: 4,
 		num: 121,
@@ -2166,7 +2166,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	mummy: {
 		name: "Mummy",
 		onDamagingHit(damage, target, source, move) {
-			if (source.getAbility().neverChanges || source.ability === 'mummy') {
+			if (source.getAbility().isPermanent || source.ability === 'mummy') {
 				return;
 			}
 			if (move.flags['contact']) {
@@ -2653,7 +2653,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Power Construct",
 		rating: 5,
 		num: 211,
@@ -2665,7 +2665,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const additionalBannedAbilities = [
 				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
-			if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) return;
+			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
 		},
@@ -2874,7 +2874,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const additionalBannedAbilities = [
 				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
-			if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) return;
+			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
 		},
@@ -2977,7 +2977,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
-		neverChanges: true,
+		isPermanent: true,
 		name: "RKS System",
 		rating: 4,
 		num: 225,
@@ -3122,7 +3122,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Schooling",
 		rating: 3,
 		num: 208,
@@ -3299,7 +3299,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-immune', target, '[from] ability: Shields Down');
 			return null;
 		},
-		neverChanges: true,
+		isPermanent: true,
 		isUnbreakable: true,
 		name: "Shields Down",
 		rating: 3,
@@ -3519,7 +3519,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Stance Change",
 		rating: 4,
 		num: 176,
@@ -3930,7 +3930,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const additionalBannedAbilities = [
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace',
 				];
-				if (target.getAbility().neverChanges || additionalBannedAbilities.includes(target.ability)) {
+				if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
 					continue;
 				}
@@ -4104,7 +4104,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	wanderingspirit: {
 		onDamagingHit(damage, target, source, move) {
 			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
-			if (source.getAbility().neverChanges || additionalBannedAbilities.includes(source.ability) ||
+			if (source.getAbility().isPermanent || additionalBannedAbilities.includes(source.ability) ||
 				target.volatiles['dynamax']
 			) {
 				return;
@@ -4315,7 +4315,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			},
 		},
-		neverChanges: true,
+		isPermanent: true,
 		name: "Zen Mode",
 		rating: 0,
 		num: 161,

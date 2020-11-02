@@ -2503,12 +2503,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (target.getAbility().neverChanges) return;
+			if (target.getAbility().isPermanent) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			if (target.getAbility().neverChanges) return;
+			if (target.getAbility().isPermanent) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
@@ -4366,8 +4366,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			];
 			if (
 				target.ability === source.ability ||
-				target.getAbility().neverChanges ||
-				source.getAbility().neverChanges || additionalBannedSourceAbilities.includes(source.ability)
+				target.getAbility().isPermanent ||
+				source.getAbility().isPermanent || additionalBannedSourceAbilities.includes(source.ability)
 			) {
 				return false;
 			}
@@ -5894,7 +5894,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		volatileStatus: 'gastroacid',
 		onTryHit(target) {
-			if (target.getAbility().neverChanges) {
+			if (target.getAbility().isPermanent) {
 				return false;
 			}
 		},
@@ -14253,8 +14253,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
 
-			if (target.getAbility().neverChanges || additionalBannedTargetAbilities.includes(target.ability) ||
-				source.getAbility().neverChanges) {
+			if (target.getAbility().isPermanent || additionalBannedTargetAbilities.includes(target.ability) ||
+				source.getAbility().isPermanent) {
 				return false;
 			}
 		},
@@ -15257,7 +15257,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(target) {
-			if (target.getAbility().neverChanges || target.ability === 'simple') {
+			if (target.getAbility().isPermanent || target.ability === 'simple') {
 				return false;
 			}
 			if (target.ability === 'truant') {
@@ -15378,7 +15378,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
 			if (
 				target.volatiles['dynamax'] ||
-				target.getAbility().neverChanges || source.getAbility().neverChanges ||
+				target.getAbility().isPermanent || source.getAbility().isPermanent ||
 				additionalBannedAbilities.includes(target.ability) || additionalBannedAbilities.includes(source.ability)
 			) {
 				return false;
@@ -19382,7 +19382,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(target) {
-			if (target.getAbility().neverChanges) {
+			if (target.getAbility().isPermanent) {
 				return false;
 			}
 			if (target.ability === 'truant' || target.ability === 'insomnia') {

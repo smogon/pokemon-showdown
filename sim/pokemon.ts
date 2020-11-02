@@ -725,7 +725,7 @@ export class Pokemon {
 		return !!(
 			(this.battle.gen >= 5 && !this.isActive) ||
 			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID))) &&
-			!this.getAbility().neverChanges
+			!this.getAbility().isPermanent
 			)
 		);
 	}
@@ -1626,7 +1626,7 @@ export class Pokemon {
 		if (typeof ability === 'string') ability = this.battle.dex.getAbility(ability);
 		const oldAbility = this.ability;
 		if (!isFromFormeChange) {
-			if (ability.neverChanges || this.getAbility().neverChanges) return false;
+			if (ability.isPermanent || this.getAbility().isPermanent) return false;
 		}
 		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
 		this.battle.singleEvent('End', this.battle.dex.getAbility(oldAbility), this.abilityData, this, source);

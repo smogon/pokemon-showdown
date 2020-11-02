@@ -827,7 +827,7 @@ interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
 	num?: number;
 	condition?: Partial<ConditionData>;
 	rating?: number;
-	neverChanges?: boolean;
+	isPermanent?: boolean;
 	isUnbreakable?: boolean;
 	suppressWeather?: boolean;
 }
