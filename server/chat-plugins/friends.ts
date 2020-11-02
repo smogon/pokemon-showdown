@@ -10,6 +10,7 @@ import {FS} from '../../lib/fs';
 import {QueryProcessManager} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {Chat} from '../chat';
+import {Dex} from '../../sim';
 
 /** Max friends per user */
 const MAX_FRIENDS = 100;
@@ -353,22 +354,24 @@ export const Friends = new class {
 		});
 	}
 	sendPM(message: string, to: string, from = '&') {
-		const id1 = toID(to);
-		const id2 = toID(from);
-		const user1 = (Users.get(id1) ? Users.get(id1) : id1) as User | string;
-		const toIdentity = typeof user1 === 'object' ? user1.getIdentity() : id1;
-		const user2 = (Users.get(id2) ? Users.get(id2) : id2) as User | string;
-		const fromIdentity = typeof user2 === 'object' ? user2?.getIdentity() : id2;
+		const senderID = toID(to);
+		const receiverID = toID(from);
+		const sendingUser = (Users.get(senderID) ? Users.get(senderID) : senderID) as User | null;
+		const receivingUser = (Users.get(receiverID) ? Users.get(receiverID) : receiverID) as User | null;
+		const fromIdentity = typeof sendingUser === 'object' ? sendingUser?.getIdentity() : sendingUser;
+		const toIdentity = typeof receivingUser === 'object' ? receivingUser?.getIdentity() : senderID;
 
 		if (from === '&') {
-			if (typeof user1 !== 'object') return; // don't need to continue, user doesn't exist and it's a ghost pm
-			return user1.send(`|pm|&|${toIdentity}|${message}`);
+			if (typeof sendingUser !== 'object' || !sendingUser) {
+				return; // don't need to continue, user doesn't exist and it's a ghost pm
+			}
+			return sendingUser.send(`|pm|&|${toIdentity}|${message}`);
 		}
-		if (typeof user1 === 'object') {
-			user1.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
+		if (typeof sendingUser === 'object' && sendingUser) {
+			sendingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 		}
-		if (typeof user2 === 'object') {
-			user2.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
+		if (typeof receivingUser === 'object' && receivingUser) {
+			receivingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 		}
 	}
 	notifyPending(user: User) {
@@ -378,7 +381,11 @@ export const Friends = new class {
 		this.sendPM(`/text You have ${pendingCount} friend requests pending!`, user.id);
 		this.sendPM(`/raw <button class="button" name="send" value="/j view-friends-received">View</button></div>`, user.id);
 	}
-	notifyConnection(user: User) {
+	async notifyConnection(user: User) {
+		const connected = await this.getLastLogin(user.id); // yes this works because we haven't written new login yet
+		if (connected && (Date.now() - connected) < 60 * 1000) {
+			return;
+		}
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const userid of user.friends!) {
 			const curUser = Users.get(userid);
@@ -454,7 +461,7 @@ export const Friends = new class {
 			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
 		}
 		if (!user.autoconfirmed) {
-			throw new Chat.ErrorMessage(`You must be autoconfirmed to use the friends feature.`);
+			throw new Chat.ErrorMessage(context.tr`You must be autoconfirmed to use the friends feature.`);
 		}
 		if (!Config.usesqlitefriends) {
 			throw new Chat.ErrorMessage(`The friends list feature is currently disabled.`);
@@ -515,14 +522,11 @@ export const commands: ChatCommands = {
 			return this.parse(`/friends list`);
 		},
 		request: 'add',
-		async add(target, room, user) {
+		async add(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (target.length > 18) {
 				return this.errorReply(this.tr`That name is too long - choose a valid name.`);
-			}
-			if (!user.autoconfirmed) {
-				return this.errorReply(this.tr`Only autoconfirmed users can add friends.`);
 			}
 			if (!target) return this.parse('/help friends');
 			if (!user.friends) user.friends = new Set();
@@ -530,7 +534,9 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You are already friends with ${target}.`);
 			}
 			await Friends.request(user, target);
-			this.parse(`/join view-friends-sent`);
+			if (connection.openPages?.has('friends-sent')) {
+				this.parse(`/join view-friends-sent`);
+			}
 			return this.sendReply(this.tr`You sent a friend request to '${target}'.`);
 		},
 		unfriend: 'remove',
@@ -550,9 +556,6 @@ export const commands: ChatCommands = {
 		async accept(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			if (!user.autoconfirmed) {
-				return this.errorReply(this.tr`Only autoconfirmed users can accept friend requests.`);
-			}
 			if (user.settings.blockFriendRequests) {
 				return this.errorReply(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
 			}
@@ -560,7 +563,9 @@ export const commands: ChatCommands = {
 			await Friends.approveRequest(user, target);
 			const targetUser = Users.get(target);
 			Friends.sendPM(`You accepted a friend request from "${target}".`, user.id);
-			this.parse(`/j view-friends-received`);
+			if (connection.openPages?.has('friends-received')) {
+				this.parse(`/j view-friends-received`);
+			}
 			if (targetUser) Friends.sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
 		},
 		deny: 'reject',
@@ -578,10 +583,12 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`You have not received a friend request from '${target}'.`);
 			}
 			await Friends.removeRequest(user.id, target);
-			this.parse(`/join view-friends-received`);
+			if (connection.openPages?.has('friends-received')) {
+				this.parse(`/j view-friends-received`);
+			}
 			return Friends.sendPM(this.tr`You denied a friend request from '${target}'.`, user.id);
 		},
-		toggle(target, room, user) {
+		toggle(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			const setting = user.settings.blockFriendRequests;
 			target = target.trim();
@@ -602,7 +609,9 @@ export const commands: ChatCommands = {
 					this.tr(setting ? `You are currently blocking friend requests.` : `You are not blocking friend requests.`)
 				);
 			}
-			this.parse(`/j view-friends-settings`);
+			if (connection.openPages?.has('friends-settings')) {
+				this.parse(`/j view-friends-settings`);
+			}
 			user.update();
 		},
 		requesttransfer(target, room, user) {
@@ -639,9 +648,6 @@ export const commands: ChatCommands = {
 		},
 		async approvetransfer(target, room, user, connection) {
 			Friends.checkCanUse(this);
-			if (!user.autoconfirmed) {
-				return Friends.sendPM(`/error ${this.tr`You must be autoconfirmed to use the friends feature.`}`, user.id);
-			}
 			if (!transferRequests.has(user.id)) {
 				return Friends.sendPM(this.tr`You have no pending friend transfer request.`, user.id);
 			}
@@ -662,7 +668,7 @@ export const commands: ChatCommands = {
 			transferRequests.delete(user.id);
 			return Friends.sendPM(`/error ${this.tr`Denied the friend transfer request from '${requester}'.`}`, user.id);
 		},
-		async undorequest(target, room, user) {
+		async undorequest(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			const requests = user.friendRequests;
@@ -675,7 +681,9 @@ export const commands: ChatCommands = {
 				return Friends.sendPM(`/error ${this.tr`You have not sent a request to '${target}'.`}`, user.id);
 			}
 			await Friends.removeRequest(target, user.id);
-			this.parse(`/join view-friends-sent`);
+			if (connection.openPages?.has('friends-sent')) {
+				this.parse(`/j view-friends-sent`);
+			}
 			return Friends.sendPM(this.tr`You removed your friend request to '${target}'.`, user.id);
 		},
 		hidenotifs: 'viewnotifications',
@@ -699,7 +707,9 @@ export const commands: ChatCommands = {
 					this.tr(setting ? `You are currently allowing friend notifications.` : `Your friend notifications are disabled.`)
 				);
 			}
-			this.parse(`/join view-friends-settings`);
+			if (connection.openPages?.has('friends-settings')) {
+				this.parse(`/j view-friends-settings`);
+			}
 			user.update();
 		},
 		hidelogins: 'togglelogins',
@@ -719,7 +729,9 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply(`Invalid setting.`);
 			}
-			this.parse(`/join view-friends-settings`);
+			if (connection.openPages?.has('friends-settings')) {
+				this.parse(`/j view-friends-settings`);
+			}
 			user.update();
 		},
 	},
@@ -841,7 +853,7 @@ export const loginfilter: LoginFilter = async user => {
 	Friends.notifyPending(user);
 
 	// (quietly) notify their friends (that have opted in) that they are online
-	Friends.notifyConnection(user);
+	await Friends.notifyConnection(user);
 	// write login time
 	await Friends.writeLogin(user);
 };
@@ -870,10 +882,11 @@ export const PM = new QueryProcessManager<DatabaseRequest, any>(module, query =>
 	} catch (e) {
 		Monitor.crashlog(e, 'A friends database process', query);
 	}
-	return result;
+	return result || "";
 });
 
 if (!PM.isParentProcess) {
+	global.Dex = Dex;
 	for (const k in ACTIONS) {
 		statements.set(k, Friends.database.prepare(ACTIONS[k]));
 	}
