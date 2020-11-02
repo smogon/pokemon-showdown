@@ -1014,17 +1014,7 @@ export const Formats: {[k: string]: FormatData} = {
 		checkLearnset(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
-				const dex = this.dex;
-				const letters = [species.id[0]];
-				// This part is "Prevo Clause", if it gets removed just remove this part and the while statement
-				// and change the if statement below it to species.id[0] === move.id[0]
-				let prevo = species.prevo;
-				while (prevo) {
-					const prevoSpecies = dex.getSpecies(prevo);
-					letters.push(prevoSpecies.id[0]);
-					prevo = prevoSpecies.prevo;
-				}
-				if (letters.includes(move.id[0])) return null;
+				if (move.id[0] === species.id[0]) return null;
 			}
 			return this.checkLearnset(move, species, setSources, set);
 		},
