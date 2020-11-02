@@ -1954,6 +1954,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1582,
 		gen: 8,
 	},
+	galaricawreath: {
+		name: "Galarica Wreath",
+		spritenum: 740,
+		fling: {
+			basePower: 30,
+		},
+		num: 1592,
+		gen: 8,
+	},
 	galladite: {
 		name: "Galladite",
 		spritenum: 616,

@@ -63,17 +63,19 @@ export const AbilitiesText = {
 
 		block: "  [POKEMON] is protected by an aromatic veil!",
 	},
+	asone: {
+		name: "As One",
+		shortDesc: "(Separate abilities on Glastrier and Spectrier.)",
+
+		start: "  [POKEMON] has two Abilities!",
+	},
 	asoneglastrier: {
 		name: "As One (Glastrier)",
 		shortDesc: "The combination of Unnerve and Chilling Neigh.",
-
-		start: "  [TEAM] is too nervous to eat Berries!",
 	},
 	asonespectrier: {
 		name: "As One (Spectrier)",
 		shortDesc: "The combination of Unnerve and Grim Neigh.",
-
-		start: "  [TEAM] is too nervous to eat Berries!",
 	},
 	aurabreak: {
 		name: "Aura Break",

@@ -15,6 +15,7 @@ import {Utils} from '../../lib/utils';
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
 
 /** Require reasons for punishment commands */
 const REQUIRE_REASONS = true;
@@ -427,7 +428,11 @@ export const commands: ChatCommands = {
 	part(target, room, user, connection) {
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) {
-			if (target.startsWith('view-')) return;
+			if (target.startsWith('view-')) {
+				connection.openPages?.delete(target.slice(5));
+				if (!connection.openPages?.size) connection.openPages = null;
+				return;
+			}
 			return this.errorReply(`The room '${target}' does not exist.`);
 		}
 		user.leaveRoom(targetRoom, connection);
@@ -1246,6 +1251,7 @@ export const commands: ChatCommands = {
 		if (!Users.Auth.hasPermission(user, 'promote', nextGroup)) {
 			this.errorReply(`/${cmd} - Access denied for promoting to ${groupName}`);
 			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`);
+			return;
 		}
 
 		if (!Users.isUsernameKnown(userid)) {
@@ -1841,6 +1847,85 @@ export const commands: ChatCommands = {
 		}
 	},
 	unbattlebanhelp: [`/unbattleban [username] - [DEPRECATED] Allows a user to battle again. Requires: % @ &`],
+
+	monthgroupchatban: 'groupchatban',
+	monthgcban: 'groupchatban',
+	gcban: 'groupchatban',
+	groupchatban(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		if (!target) return this.parse(`/help groupchatban`);
+		this.checkCan('lock');
+
+		const reason = this.splitTarget(target);
+		const targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+		}
+
+		const isMonth = cmd.startsWith('month');
+
+		if (!isMonth && Punishments.isGroupchatBanned(targetUser)) {
+			return this.errorReply(`User '${targetUser.name}' is already banned from using groupchats.`);
+		}
+
+		const reasonText = reason ? `: ${reason}` : ``;
+		this.privateGlobalModAction(`${targetUser.name} was banned from using groupchats for a ${isMonth ? 'month' : 'week'} by ${user.name}${reasonText}.`);
+
+		if (targetUser.trusted) {
+			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from using groupchats by ${user.name}, and should probably be demoted.`);
+		}
+
+		const createdGroupchats = Punishments.groupchatBan(targetUser, (isMonth ? Date.now() + 30 * DAY : null), null, reason);
+		targetUser.popup(`|modal|${user.name} has banned you from using groupchats for a ${isMonth ? 'month' : 'week'}${reasonText}`);
+		this.globalModlog("GROUPCHATBAN", targetUser, ` by ${user.id}${reasonText}`);
+
+		for (const roomid of createdGroupchats) {
+			const targetRoom = Rooms.get(roomid);
+			if (!targetRoom) continue;
+			const participants = targetRoom.warnParticipants?.(
+				`This groupchat (${targetRoom.title}) has been deleted due to inappropriate conduct by its creator, ${targetUser.name}.` +
+				` Do not attempt to recreate it, or you may be punished.${reason ? ` (reason: ${reason})` : ``}`
+			);
+
+			if (participants) {
+				const modlogEntry = {
+					action: 'NOTE',
+					loggedBy: user.id,
+					isGlobal: true,
+					note: `participants in ${roomid} (creator: ${targetUser.id}): ${participants.join(', ')}`,
+				};
+				targetRoom.modlog(modlogEntry);
+			}
+
+			targetRoom.destroy();
+		}
+	},
+	groupchatbanhelp: [
+		`/groupchatban [user], [optional reason]`,
+		`/monthgroupchatban [user], [optional reason]`,
+		`Bans the user from joining or creating groupchats for a week (or month). Requires: % @ &`,
+	],
+
+	ungcban: 'ungroupchatban',
+	gcunban: 'ungroupchatban',
+	groucphatunban: 'ungroupchatban',
+	ungroupchatban(target, room, user) {
+		if (!target) return this.parse('/help ungroupchatban');
+		this.checkCan('lock');
+
+		const targetUser = Users.get(target);
+		const unbanned = Punishments.groupchatUnban(targetUser || toID(target));
+
+		if (unbanned) {
+			this.addGlobalModAction(`${unbanned} was ungroupchatbanned by ${user.name}.`);
+			this.globalModlog("UNGROUPCHATBAN", toID(target), ` by ${user.id}`);
+			if (targetUser) targetUser.popup(`${user.name} has allowed you to use groupchats again.`);
+		} else {
+			this.errorReply(`User ${target} is not banned from using groupchats.`);
+		}
+	},
+	ungroupchatbanhelp: [`/ungroupchatban [user] - Allows a groupchatbanned user to use groupchats again. Requires: % @ &`],
 
 	nameblacklist: 'blacklistname',
 	blacklistname(target, room, user) {

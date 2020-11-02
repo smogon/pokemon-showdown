@@ -69,13 +69,6 @@ const DATA_FILES = {
 
 const nullEffect: Condition = new Data.Condition({name: '', exists: false});
 
-export interface Nature {
-	name: string;
-	plus?: StatNameExceptHP;
-	minus?: StatNameExceptHP;
-	[k: string]: any;
-}
-
 interface DexTableData {
 	Abilities: DexTable<Ability>;
 	Aliases: {[id: string]: string};
@@ -84,7 +77,7 @@ interface DexTableData {
 	Items: DexTable<Item>;
 	Learnsets: DexTable<LearnsetData>;
 	Moves: DexTable<Move>;
-	Natures: DexTable<Nature>;
+	Natures: DexTable<NatureData>;
 	Pokedex: DexTable<Species>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<EffectData>;
@@ -95,35 +88,9 @@ interface TextTableData {
 	Items: AnyObject;
 	Moves: AnyObject;
 	Pokedex: AnyObject;
+	Default: AnyObject;
 }
 
-const Natures: {[k: string]: Nature} = {
-	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
-	bashful: {name: "Bashful"},
-	bold: {name: "Bold", plus: 'def', minus: 'atk'},
-	brave: {name: "Brave", plus: 'atk', minus: 'spe'},
-	calm: {name: "Calm", plus: 'spd', minus: 'atk'},
-	careful: {name: "Careful", plus: 'spd', minus: 'spa'},
-	docile: {name: "Docile"},
-	gentle: {name: "Gentle", plus: 'spd', minus: 'def'},
-	hardy: {name: "Hardy"},
-	hasty: {name: "Hasty", plus: 'spe', minus: 'def'},
-	impish: {name: "Impish", plus: 'def', minus: 'spa'},
-	jolly: {name: "Jolly", plus: 'spe', minus: 'spa'},
-	lax: {name: "Lax", plus: 'def', minus: 'spd'},
-	lonely: {name: "Lonely", plus: 'atk', minus: 'def'},
-	mild: {name: "Mild", plus: 'spa', minus: 'def'},
-	modest: {name: "Modest", plus: 'spa', minus: 'atk'},
-	naive: {name: "Naive", plus: 'spe', minus: 'spd'},
-	naughty: {name: "Naughty", plus: 'atk', minus: 'spd'},
-	quiet: {name: "Quiet", plus: 'spa', minus: 'spe'},
-	quirky: {name: "Quirky"},
-	rash: {name: "Rash", plus: 'spa', minus: 'spd'},
-	relaxed: {name: "Relaxed", plus: 'def', minus: 'spe'},
-	sassy: {name: "Sassy", plus: 'spd', minus: 'spe'},
-	serious: {name: "Serious"},
-	timid: {name: "Timid", plus: 'spe', minus: 'atk'},
-};
 export const toID = Data.toID;
 
 // function for merging the two lists
@@ -198,6 +165,7 @@ export class ModdedDex {
 	readonly learnsetCache: Map<ID, LearnsetData>;
 	readonly moveCache: Map<ID, Move>;
 	readonly speciesCache: Map<ID, Species>;
+	readonly natureCache: Map<ID, Nature>;
 	readonly typeCache: Map<string, TypeInfo>;
 
 	gen: number;
@@ -226,6 +194,7 @@ export class ModdedDex {
 		this.moveCache = new Map();
 		this.learnsetCache = new Map();
 		this.speciesCache = new Map();
+		this.natureCache = new Map();
 		this.typeCache = new Map();
 
 		this.gen = 0;
@@ -667,10 +636,11 @@ export class ModdedDex {
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
 		const customRules = customRulesString.split(',').map(rule => {
+			rule = rule.replace(/[\r\n|]*/g, '').trim();
 			const ruleSpec = this.validateRule(rule);
 			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
-			return rule.replace(/[\r\n|]*/g, '').trim();
-		}).filter(rule => rule);
+			return rule;
+		}).filter(Boolean);
 		if (!customRules.length) throw new Error(`The format already has your custom rules`);
 		const validatedFormatid = format.id + '@@@' + customRules.join(',');
 		const moddedFormat = this.getFormat(validatedFormatid, true);
@@ -811,20 +781,24 @@ export class ModdedDex {
 
 		name = (name || '').trim();
 		const id = toID(name);
-		// tslint:disable-next-line:no-object-literal-type-assertion
-		let nature: Nature = {} as Nature;
-		if (id && id !== 'constructor' && this.data.Natures[id]) {
-			nature = this.data.Natures[id];
-			if (nature.cached) return nature;
-			nature.cached = true;
-			nature.exists = true;
+		let nature = this.natureCache.get(id);
+		if (nature) return nature;
+		if (this.data.Aliases.hasOwnProperty(id)) {
+			nature = this.getNature(this.data.Aliases[id]);
+			if (nature.exists) {
+				this.natureCache.set(id, nature);
+			}
+			return nature;
 		}
-		if (!nature.id) nature.id = id;
-		if (!nature.name) nature.name = name;
-		nature.toString = this.effectToString;
-		if (!nature.effectType) nature.effectType = 'Nature';
-		if (!nature.gen) nature.gen = 3;
+		if (id && this.data.Natures.hasOwnProperty(id)) {
+			const natureData = this.data.Natures[id];
+			nature = new Data.Nature(natureData);
+			if (nature.gen > this.gen) nature.isNonstandard = 'Future';
+		} else {
+			nature = new Data.Nature({id, name, exists: false});
+		}
 
+		if (nature.exists) this.natureCache.set(id, nature);
 		return nature;
 	}
 
@@ -1001,6 +975,7 @@ export class ModdedDex {
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
+		if (rule !== rule.trim()) throw new Error(`Rule "${rule}" should be trimmed`);
 		switch (rule.charAt(0)) {
 		case '-':
 		case '*':
@@ -1044,7 +1019,7 @@ export class ModdedDex {
 		if (id === 'unreleased') return 'unreleased';
 		if (id === 'nonexistent') return 'nonexistent';
 		const matches = [];
-		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
+		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'nature', 'pokemontag'];
 		for (const matchType of matchTypes) {
 			if (rule.startsWith(`${matchType}:`)) {
 				matchTypes = [matchType];
@@ -1061,6 +1036,7 @@ export class ModdedDex {
 			case 'move': table = this.data.Moves; break;
 			case 'item': table = this.data.Items; break;
 			case 'ability': table = this.data.Abilities; break;
+			case 'nature': table = this.data.Natures; break;
 			case 'pokemontag':
 				// valid pokemontags
 				const validTags = [
@@ -1073,7 +1049,7 @@ export class ModdedDex {
 					// illegal/nonstandard reasons
 					'past', 'future', 'unobtainable', 'lgpe', 'custom',
 					// all
-					'allpokemon', 'allitems', 'allmoves', 'allabilities',
+					'allpokemon', 'allitems', 'allmoves', 'allabilities', 'allnatures',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;
@@ -1142,7 +1118,7 @@ export class ModdedDex {
 				searchResults.push({
 					isInexact,
 					searchType: searchTypes[table],
-					name: res.species ? res.species : res.name,
+					name: res.name,
 				});
 			}
 		}
@@ -1283,7 +1259,6 @@ export class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			// tslint:disable-next-line:no-object-literal-type-assertion
 			const set: PokemonSet = {} as PokemonSet;
 			team.push(set);
 
@@ -1484,6 +1459,7 @@ export class ModdedDex {
 			Moves: this.loadTextFile('moves', 'MovesText'),
 			Abilities: this.loadTextFile('abilities', 'AbilitiesText'),
 			Items: this.loadTextFile('items', 'ItemsText'),
+			Default: this.loadTextFile('default', 'DefaultText'),
 		};
 		return dexes['base'].textCache;
 	}
@@ -1509,10 +1485,6 @@ export class ModdedDex {
 		}
 
 		for (const dataType of DATA_TYPES.concat('Aliases')) {
-			if (dataType === 'Natures' && this.isBase) {
-				dataCache[dataType] = Natures;
-				continue;
-			}
 			const BattleData = this.loadDataFile(basePath, dataType);
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);

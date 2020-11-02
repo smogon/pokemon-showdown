@@ -112,7 +112,7 @@ const avatarTable = new Set([
 	'emmet',
 	'engineer-gen1', 'engineer-gen1rb', 'engineer-gen3',
 	'erika-gen1', 'erika-gen1rb', 'erika-gen2', 'erika-gen3', 'erika',
-	'ethan-gen2c', 'ethan-gen2', 'ethan',
+	'ethan-gen2c', 'ethan-gen2', 'ethan-pokeathlon', 'ethan',
 	'eusine-gen2', 'eusine',
 	'expertf-gen3',
 	'expert-gen3',
@@ -135,7 +135,7 @@ const avatarTable = new Set([
 	'glacia-gen3',
 	'greta-gen3',
 	'grimsley',
-	'guitarist-gen3', 'guitarist-gen4', 'guitarist',
+	'guitarist-gen2', 'guitarist-gen3', 'guitarist-gen4', 'guitarist',
 	'harlequin',
 	'hexmaniac-gen3jp', 'hexmaniac-gen3',
 	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
@@ -179,9 +179,9 @@ const avatarTable = new Set([
 	'lucas-gen4pt', 'lucas',
 	'lucian',
 	'lucy-gen3',
-	'lyra',
+	'lyra-pokeathlon', 'lyra',
 	'madame-gen4dp', 'madame-gen4', 'madame',
-	'maid',
+	'maid-gen4', 'maid',
 	'marley',
 	'marlon',
 	'marshal',
@@ -218,7 +218,7 @@ const avatarTable = new Set([
 	'pokefanf-gen2', 'pokefanf-gen3', 'pokefanf-gen4', 'pokefanf',
 	'pokefan-gen2', 'pokefan-gen3', 'pokefan-gen4', 'pokefan',
 	'pokekid',
-	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
+	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen2', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
 	'pokemonbreederf-gen3', 'pokemonbreederf-gen3frlg', 'pokemonbreederf-gen4', 'pokemonbreederf',
 	'pokemonbreeder-gen3', 'pokemonbreeder-gen4', 'pokemonbreeder',
 	'pokemonrangerf-gen3', 'pokemonrangerf-gen3rs', 'pokemonrangerf-gen4', 'pokemonrangerf',
@@ -672,10 +672,10 @@ export const commands: ChatCommands = {
 			this.checkCan('forcerename', targetUser);
 
 			const displayReason = reason ? `: ${reason}` : ``;
-			this.privateModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${reason ? `: ${reason}` : ``}`);
+			this.privateGlobalModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
 			targetUser.clearStatus();
-			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
+			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
 			return;
 		}
 

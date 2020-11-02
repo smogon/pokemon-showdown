@@ -1037,6 +1037,12 @@ export const Formats: {[k: string]: FormatData} = {
 		desc: "Allows any Pokemon with access to Assist, Copycat, Metronome, Mimic, or Transform to gain access to almost any other move.",
 		// Implemented in sim/team-validator.ts
 	},
+	overflowstatmod: {
+		effectType: 'Rule',
+		name: 'Overflow Stat Mod',
+		desc: "Caps stats at 654 after a positive nature, or 655 after a negative nature",
+		// Implemented in sim/battle.ts
+	},
 	formeclause: {
 		effectType: 'ValidatorRule',
 		name: 'Forme Clause',

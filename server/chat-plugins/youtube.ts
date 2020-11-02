@@ -13,6 +13,9 @@ import {Utils} from '../../lib/utils';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
+export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
+export const searchDataCache: Map<string, string[]> = Chat.oldPlugins.youtube?.searchDataCache || new Map();
+
 interface ChannelEntry {
 	name: string;
 	description: string;
@@ -25,7 +28,7 @@ interface ChannelEntry {
 	category?: string;
 }
 
-interface VideoData {
+export interface VideoData {
 	id: string;
 	title: string;
 	date: string;
@@ -148,13 +151,20 @@ export class YoutubeInterface {
 		return Promise.resolve({...this.data.channels[id]});
 	}
 	async getVideoData(id: string): Promise<VideoData | null> {
-		const raw = await Net(`${ROOT}videos`).get({
-			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
-		});
+		const cached = videoDataCache.get(id);
+		if (cached) return cached;
+		let raw;
+		try {
+			raw = await Net(`${ROOT}videos`).get({
+				query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+			});
+		} catch (e) {
+			throw new Chat.ErrorMessage(`Failed to retrieve video data: ${e.message}.`);
+		}
 		const res = JSON.parse(raw);
 		if (!res || !res.items || res.items.length < 1) return null;
 		const video = res.items[0];
-		return {
+		const data: VideoData = {
 			title: video.snippet.title,
 			id,
 			date: new Date(video.snippet.publishedAt).toString(),
@@ -166,6 +176,8 @@ export class YoutubeInterface {
 			likes: video.statistics.likeCount,
 			dislikes: video.statistics.dislikeCount,
 		};
+		videoDataCache.set(id, data);
+		return data;
 	}
 	channelSearch(search: string) {
 		let channel;
@@ -229,14 +241,20 @@ export class YoutubeInterface {
 		return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(this.data));
 	}
 	async searchVideo(name: string, limit?: number): Promise<string[] | undefined> {
+		const cached = searchDataCache.get(toID(name));
+		if (cached) {
+			return cached.slice(0, limit);
+		}
 		const raw = await Net(`${ROOT}search`).get({
 			query: {
 				part: 'snippet', q: name,
-				key: Config.youtubeKey, order: 'relevance', maxResults: limit || 10,
+				key: Config.youtubeKey, order: 'relevance',
 			},
 		});
 		const result = JSON.parse(raw);
-		return result.items?.map((item: AnyObject) => item?.id?.videoId).filter(Boolean);
+		const resultArray = result.items?.map((item: AnyObject) => item?.id?.videoId).filter(Boolean);
+		searchDataCache.set(toID(name), resultArray);
+		return resultArray.slice(0, limit);
 	}
 	async searchChannel(name: string, limit = 10): Promise<string[] | undefined> {
 		const raw = await Net(`${ROOT}search`).get({
@@ -288,6 +306,7 @@ export const commands: ChatCommands = {
 	youtube: {
 		async addchannel(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
+			this.checkCan('mute', null, room);
 			let [id, name] = target.split(',');
 			if (name) name = name.trim();
 			if (!id) return this.errorReply('Specify a channel ID.');

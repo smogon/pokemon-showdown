@@ -4006,17 +4006,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onHit(target) {
-			if (!target.hp) return;
-			const move = target.lastMove;
-			if (!move || move.isZ || move.isMax) return;
+		secondary: {
+			chance: 100,
+			onHit(target) {
+				if (!target.hp) return;
+				const move = target.lastMove;
+				if (!move || move.isZ || move.isMax) return;
 
-			const ppDeducted = target.deductPP(move.id, 3);
-			if (!ppDeducted) return;
+				const ppDeducted = target.deductPP(move.id, 3);
+				if (!ppDeducted) return;
 
-			this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
+				this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
+			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Psychic",
 	},
@@ -6303,13 +6305,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				for (const pokemon of source.side.foe.active) {
 					const move = pokemon.lastMove;
 					if (move && !move.isZ && !move.isMax) {
-						const ppDeducted = pokemon.deductPP(move.id, 4);
+						const ppDeducted = pokemon.deductPP(move.id, 2);
 						if (ppDeducted) {
 							this.add("-activate", pokemon, 'move: G-Max Depletion', move.name, ppDeducted);
-							return;
+							// Don't return here because returning early doesn't trigger
+							// activation text for the second Pokemon in doubles
 						}
 					}
-					return false;
 				}
 			},
 		},
@@ -8343,7 +8345,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	holdhands: {
-		num: 615,
+		num: 607,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -9844,37 +9846,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		selfdestruct: "ifHit",
-		sideCondition: 'lunardance',
+		slotCondition: 'lunardance',
 		condition: {
-			duration: 2,
-			onStart(side, source) {
-				this.debug('Lunar Dance started on ' + side.name);
-				this.effectData.positions = [];
-				for (const i of side.active.keys()) {
-					this.effectData.positions[i] = false;
-				}
-				this.effectData.positions[source.position] = true;
-			},
-			onRestart(side, source) {
-				this.effectData.positions[source.position] = true;
-			},
-			onSwitchInPriority: 1,
-			onSwitchIn(target) {
-				const positions: boolean[] = this.effectData.positions;
-				if (target.position !== this.effectData.sourcePosition) {
-					return;
-				}
-				if (!target.fainted) {
+			onSwap(target) {
+				if (
+					!target.fainted && (
+						target.hp < target.maxhp ||
+						target.status ||
+						target.moveSlots.some(moveSlot => moveSlot.pp < moveSlot.maxpp)
+					)
+				) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					positions[target.position] = false;
-				}
-				if (!positions.some(affected => affected === true)) {
-					target.side.removeSideCondition('lunardance');
+					target.side.removeSlotCondition(target, 'lunardance');
 				}
 			},
 		},

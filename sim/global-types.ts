@@ -116,6 +116,8 @@ interface EventInfo {
 	moves?: string[];
 	pokeball?: string;
 	from?: string;
+	/** Japan-only events can't be transferred to international games in Gen 1 */
+	japan?: boolean;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -768,6 +770,7 @@ interface EventMethods {
 	onSourceInvulnerabilityPriority?: number;
 	onSourceModifyAccuracyPriority?: number;
 	onSourceModifyAtkPriority?: number;
+	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
 	onTrapPokemonPriority?: number;
@@ -794,7 +797,7 @@ type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -1161,7 +1164,6 @@ interface SpeciesFormatsData {
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomDoubleBattleLevel?: number;
-	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
@@ -1178,6 +1180,16 @@ interface LearnsetData {
 type ModdedLearnsetData = LearnsetData & {inherit?: true};
 
 type Species = import('./dex-data').Species;
+
+interface NatureData {
+	name: string;
+	plus?: StatNameExceptHP;
+	minus?: StatNameExceptHP;
+}
+
+type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
+
+type Nature = import('./dex-data').Nature;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all';
 type SideID = 'p1' | 'p2' | 'p3' | 'p4';
@@ -1515,8 +1527,6 @@ namespace RandomTeamsTypes {
 		nature?: string;
 		happiness?: number;
 		gigantamax?: boolean;
-		moveset?: RandomTeamsTypes.RandomSet;
-		other?: {discard: boolean, restrictMoves: {[k: string]: number}};
 	}
 	export interface RandomFactorySet {
 		name: string;
@@ -1531,18 +1541,6 @@ namespace RandomTeamsTypes {
 		ivs: SparseStatsTable;
 		nature: string;
 		moves: string[];
-	}
-	export interface Gen2RandomSet {
-		chance: number;
-		item?: string[];
-		baseMove1?: string;
-		baseMove2?: string;
-		baseMove3?: string;
-		baseMove4?: string;
-		fillerMoves1?: string[];
-		fillerMoves2?: string[];
-		fillerMoves3?: string[];
-		fillerMoves4?: string[];
 	}
 }
 

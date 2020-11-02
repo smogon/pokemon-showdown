@@ -3872,8 +3872,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 79.5,
 		color: "Pink",
 		prevo: "Slowpoke-Galar",
-		evoType: "trade",
-		evoItem: "King's Rock",
+		evoType: "useItem",
+		evoItem: "Galarica Wreath",
 		eggGroups: ["Monster", "Water 1"],
 	},
 	misdreavus: {

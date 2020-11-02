@@ -10,6 +10,7 @@
 
 import {QueryProcessManager} from '../../lib/process-manager';
 import {Utils} from '../../lib/utils';
+import {TeamValidator} from '../../sim/team-validator';
 
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
@@ -1531,8 +1532,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		const move = mod.getMove(moveid);
 		if (move.gen <= maxGen) {
 			if (
-				(!nationalSearch && move.isNonstandard) ||
-				(nationalSearch && move.isNonstandard && move.isNonstandard !== "Past")
+				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
 			) {
 				continue;
 			} else {
@@ -2423,7 +2424,6 @@ if (!PM.isParentProcess) {
 	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
-	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 	// @ts-ignore
 	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval

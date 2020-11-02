@@ -190,7 +190,6 @@ export class Battle {
 		this.started = false;
 		this.ended = false;
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
 		this.effectData = {id: ''};
 
@@ -916,7 +915,6 @@ export class Battle {
 				effect: format, callback, state: this.formatData, end: null, effectHolder: this,
 			}, callbackName));
 		}
-		// tslint:disable-next-line:no-conditional-assignment
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
 				const state = (handler.target.effectType === 'Format') ? this.formatData : null;
@@ -1006,7 +1004,6 @@ export class Battle {
 			throw new TypeError(`${target.name} is a ${target.effectType} but only Format targets are supported right now`);
 		}
 
-		// tslint:disable-next-line:one-variable-per-declaration
 		let callback, priority, order, subOrder, data;
 		if (rest.length === 1) {
 			[callback] = rest;
@@ -2012,17 +2009,19 @@ export class Battle {
 
 	natureModify(stats: StatsTable, set: PokemonSet): StatsTable {
 		// Natures are calculated with 16-bit truncation.
-		// This only affects Eternatus-Eternmax in Pure Hackmons.
+		// This only affects Eternatus-Eternamax in Pure Hackmons.
 		const tr = this.trunc;
 		const nature = this.dex.getNature(set.nature);
-		let stat: keyof StatsTable;
+		let s: StatNameExceptHP;
 		if (nature.plus) {
-			stat = nature.plus;
-			stats[stat] = tr(tr(stats[stat] * 110, 16) / 100);
+			s = nature.plus;
+			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];
+			stats[s] = tr(tr(stat * 110, 16) / 100);
 		}
 		if (nature.minus) {
-			stat = nature.minus;
-			stats[stat] = tr(tr(stats[stat] * 90, 16) / 100);
+			s = nature.minus;
+			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 728) : stats[s];
+			stats[s] = tr(tr(stat * 90, 16) / 100);
 		}
 		return stats;
 	}
