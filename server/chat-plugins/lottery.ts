@@ -61,8 +61,7 @@ function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const signedUp = isSignedUp(roomid, user);
-	if (!signedUp) {
+	if (!isSignedUp(roomid, user)) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
 		return true;
