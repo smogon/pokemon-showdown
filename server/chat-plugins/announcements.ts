@@ -68,7 +68,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr("There is already a poll or announcement in progress in this room."));
 			}
 
-			const source = supportHTML ? this.checkHTML(target) : Utils.escapeHTML(target);
+			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
 
 			room.minorActivity = new Announcement(room, source);
 			room.minorActivity.display();
