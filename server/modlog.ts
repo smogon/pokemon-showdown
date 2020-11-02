@@ -8,11 +8,8 @@
  * @license MIT
  */
 
-import * as child_process from 'child_process';
-import * as util from 'util';
-
 import {FS} from '../lib/fs';
-import {QueryProcessManager} from '../lib/process-manager';
+import {QueryProcessManager, exec} from '../lib/process-manager';
 import {Repl} from '../lib/repl';
 import * as Database from 'better-sqlite3';
 import {checkRipgrepAvailability} from './config-loader';
@@ -40,8 +37,6 @@ const PUNISHMENTS = [
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK',
 ];
 const PUNISHMENTS_REGEX_STRING = `\\b(${PUNISHMENTS.join('|')}):.*`;
-
-const execFile = util.promisify(child_process.execFile);
 
 export type ModlogID = RoomID | 'global';
 
@@ -369,7 +364,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await execFile('rg', options, {cwd: `${__dirname}/../`});
+			output = await exec(['rg', ...options], {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
