@@ -11,7 +11,7 @@ describe('Trace', function () {
 	});
 
 	// see research: https://www.smogon.com/forums/threads/pokemon-sun-moon-battle-mechanics-research.3586701/post-7790209
-	it.only(`should interact properly with Ability index 0 'No Ability'`, function () {
+	it(`should interact properly with Ability index 0 'No Ability'`, function () {
 		// Trace stops working if it initially finds 'No Ability'
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ralts", ability: 'trace', moves: ['sleeptalk']},
