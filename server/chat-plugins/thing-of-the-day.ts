@@ -6,6 +6,7 @@ const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary',
 	'prowrestling', 'animeandmanga', 'sports', 'videogames'];
+
 const rooms: {[k: string]: ChatRoom} = {};
 
 const otds: Map<string, OtdHandler> = new Map();
