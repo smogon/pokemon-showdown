@@ -101,24 +101,26 @@ function lastLine(database, roomid) {
 		});
 	});
 
-	(Config.usesqlitemodlog ? describe : describe.skip)("Modlog#rename", async () => {
-		const entry = {note: 'This is in a modlog that will be renamed!', action: 'UNITTEST'};
+	(Config.usesqlitemodlog ? describe : describe.skip)("Modlog#rename", () => {
+		it('should rename modlog entries', async () => {
+			const entry = {note: 'This is in a modlog that will be renamed!', action: 'UNITTEST'};
 
-		this.modlog.initialize('oldroom');
-		this.modlog.write('oldroom', entry);
-		await this.modlog.rename('oldroom', 'newroom');
-		const line = lastLine(this.modlog.database, 'newroom');
+			this.modlog.initialize('oldroom');
+			this.modlog.write('oldroom', entry);
+			await this.modlog.rename('oldroom', 'newroom');
+			const line = lastLine(this.modlog.database, 'newroom');
 
-		assert.equal(entry.action, line.action);
-		assert.equal(entry.note, line.note);
+			assert.equal(entry.action, line.action);
+			assert.equal(entry.note, line.note);
 
-		const newEntry = {note: 'This modlog has been renamed!', action: 'UNITTEST'};
-		this.modlog.write('newroom', newEntry);
+			const newEntry = {note: 'This modlog has been renamed!', action: 'UNITTEST'};
+			this.modlog.write('newroom', newEntry);
 
-		const newLine = lastLine(this.modlog.database, 'newroom');
+			const newLine = lastLine(this.modlog.database, 'newroom');
 
-		assert.equal(newEntry.action, newLine.action);
-		assert.equal(newEntry.note, newLine.note);
+			assert.equal(newEntry.action, newLine.action);
+			assert.equal(newEntry.note, newLine.note);
+		});
 	});
 
 	// Skipped until SQL searching is properly implemented

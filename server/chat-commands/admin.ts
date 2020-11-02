@@ -441,8 +441,8 @@ export const commands: ChatCommands = {
 				);
 				this.sendReply("Modlog has been hot-patched.");
 
-				if (streams) Rooms.Modlog!.streams = streams;
-				if (sharedStreams) Rooms.Modlog!.sharedStreams = sharedStreams;
+				if (streams) Rooms.Modlog.streams = streams;
+				if (sharedStreams) Rooms.Modlog.sharedStreams = sharedStreams;
 				this.sendReply("Modlog streams have been re-initialized.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");

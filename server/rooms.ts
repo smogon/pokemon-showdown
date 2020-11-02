@@ -1680,7 +1680,7 @@ function getRoom(roomid?: string | BasicRoom) {
 export const Rooms = {
 	MODLOG_PATH,
 	MODLOG_DB_PATH,
-	Modlog: (Config.usesqlitemodlog ? new (require('../modlog')).Modlog(MODLOG_PATH, MODLOG_DB_PATH) : null),
+	Modlog: (Config.usesqlitemodlog ? new (require('./modlog')).Modlog(MODLOG_PATH, MODLOG_DB_PATH) : null),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
