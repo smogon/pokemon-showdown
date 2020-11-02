@@ -31,7 +31,6 @@ export function exec(args: string | string[], execOptions?: AnyObject) {
 		return new Promise<string>((resolve, reject) => {
 			child_process.execFile(cmd, args, execOptions, (err, stdout, stderr) => {
 				if (err) reject(err);
-				if (stderr) reject(stderr);
 				if (typeof stdout !== 'string') stdout = stdout.toString();
 				resolve(stdout);
 			});
