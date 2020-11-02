@@ -2,8 +2,6 @@
  * Announcements chat plugin
  * By Spandamn
  */
-import {Utils} from '../../lib/utils';
-
 export class Announcement {
 	readonly activityId: 'announcement';
 	announcementNumber: number;
