@@ -173,12 +173,12 @@ export class Poll {
 
 	getQuestionMarkup() {
 		if (this.supportHTML) return this.question;
-		return Utils.escapeHTML(this.question);
+		return Chat.formatText(this.question);
 	}
 
 	getOptionMarkup(option: Option) {
 		if (this.supportHTML) return option.name;
-		return Utils.escapeHTML(option.name);
+		return Chat.formatText(option.name);
 	}
 
 	update() {
