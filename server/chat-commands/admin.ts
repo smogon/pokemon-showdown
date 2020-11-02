@@ -131,10 +131,11 @@ export const commands: ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
 	],
 
-	addline(target, room, user) {
-		this.checkCan('rawpacket');
+	showraw(target, room, user) {
+		this.canUseConsole();
 		// secret sysop command
-		this.add(target);
+		this.runBroadcast();
+		this.sendReply(target);
 	},
 
 	pminfobox(target, room, user, connection) {
