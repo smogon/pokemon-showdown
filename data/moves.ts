@@ -4362,7 +4362,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target === source || target.volatiles['dynamax']) return false;
 
 			const additionalBannedSourceAbilities = [
-				'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace',
+				'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'truant',
 			];
 			if (
 				target.ability === source.ability ||
@@ -4370,9 +4370,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				source.getAbility().isPermanent || additionalBannedSourceAbilities.includes(source.ability)
 			) {
 				return false;
-			}
-			if (target.ability === 'truant') {
-				return false; // TODO how to return differently?
 			}
 		},
 		onHit(target, source) {
@@ -15257,11 +15254,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(target) {
-			if (target.getAbility().isPermanent || target.ability === 'simple') {
+			if (target.getAbility().isPermanent || target.ability === 'simple' || target.ability === 'truant') {
 				return false;
-			}
-			if (target.ability === 'truant') {
-				return false; // TODO how to return differently?
 			}
 		},
 		onHit(pokemon) {
@@ -19381,12 +19375,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
+		onTryImmunity(target) {
+			// Truant and Insomnia have special treatment; they fail before
+			// checking accuracy and will double Stomping Tantrum's BP
+			if (target.ability === 'truant' || target.ability === 'insomnia') {
+				return false;
+			}
+		},
 		onTryHit(target) {
 			if (target.getAbility().isPermanent) {
 				return false;
-			}
-			if (target.ability === 'truant' || target.ability === 'insomnia') {
-				return false; // TODO how to return differently?
 			}
 		},
 		onHit(pokemon) {
