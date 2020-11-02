@@ -132,8 +132,8 @@ export const commands: ChatCommands = {
 	],
 
 	showraw(target, room, user) {
+		// Secret console admin command
 		this.canUseConsole();
-		// secret sysop command
 		this.runBroadcast();
 		this.sendReply(target);
 	},
