@@ -208,7 +208,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			if (key && cert) {
 				try {
 					// In case there are additional SSL config settings besides the key and cert...
-					this.serverSsl = https.createServer(Object.assign({}, config.ssl.options, {key, cert}));
+					this.serverSsl = https.createServer({...config.ssl.options, key, cert});
 				} catch (e) {
 					crashlogger(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${process.pid}`);
 				}
@@ -564,9 +564,7 @@ if (!PM.isParentProcess) {
 			crashlogger(err, `Socket process ${PM.workerid} (${process.pid})`);
 		});
 		process.on('unhandledRejection', err => {
-			if (err instanceof Error) {
-				crashlogger(err, `Socket process ${PM.workerid} (${process.pid}) Promise`);
-			}
+			crashlogger(err as any || {}, `Socket process ${PM.workerid} (${process.pid}) Promise`);
 		});
 	}
 

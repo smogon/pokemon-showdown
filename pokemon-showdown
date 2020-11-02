@@ -109,7 +109,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var TeamValidator = require('./.sim-dist/team-validator').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
+			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (textTeam) {
 				try {
@@ -131,16 +131,48 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			var BattleTextStream = require('./.sim-dist/battle-stream').BattleTextStream;
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
-			var stdout = new Streams.WriteStream(process.stdout);
+			var stdin = Streams.stdin();
+			var stdout = Streams.stdout();
 
-			var args = (process.argv[3] || '').split(' ');
+			var args = process.argv.slice(3);
+
+			var options = args.flatMap(function (arg) {
+				if (arg.charAt(0) !== '-') {
+					if (arg) console.error("Invalid parameter: " + arg);
+					return [];
+				} else if (arg.charAt(1) === '-') {
+					return arg.slice(2);
+				} else {
+					return Array.from(arg.slice(1));
+				}
+			});
+
+			var debug = false;
+			var replay = false;
+			var spectate = false;
+			for (var i = 0; i < options.length; i++) {
+				switch (options[i]) {
+				case 'debug': case 'D':
+					debug = true;
+					break;
+				case 'replay': case 'R':
+					replay = true;
+					break;
+				case 'spectate': case 'spectator': case 'S':
+					replay = true;
+					spectate = true;
+					break;
+				default:
+					console.error("Invalid option: " + options[i]);
+					break;
+				}
+			}
 
 			var battleStream = new BattleTextStream({
-				debug: args.includes('--debug') || args.includes('-D') || args.includes('-DR') || args.includes('-RD'),
-				replay: args.includes('--replay') || args.includes('-R') || args.includes('-DR') || args.includes('-RD')
+				noCatch: true,
+				debug: debug,
+				replay: spectate ? 'spectator' : replay,
 			});
-			battleStream.start();
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
 		}
@@ -149,7 +181,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			var Dex = require('./.sim-dist/dex').Dex;
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
+			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (packedTeam) {
 				try {
@@ -167,7 +199,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			var Dex = require('./.sim-dist/dex').Dex;
 			var Streams = require('./.lib-dist/streams');
-			var stdin = new Streams.ReadStream(process.stdin);
+			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (unpackedTeam) {
 				try {

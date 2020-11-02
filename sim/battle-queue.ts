@@ -101,6 +101,8 @@ export interface PokemonAction {
 	pokemon: Pokemon;
 	/** `runSwitch` only: the pokemon forcing this pokemon to switch in */
 	dragger?: Pokemon;
+	/** `event` only: the event to run */
+	event?: string;
 }
 
 export type Action = MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction;
@@ -353,9 +355,8 @@ export class BattleQueue {
 		this.list = [];
 	}
 
-	debug(action?: Action): string {
+	debug(action?: any): string {
 		if (action) {
-			// @ts-ignore
 			return `${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`;
 		}
 		return this.list.map(

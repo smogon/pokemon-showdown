@@ -194,7 +194,7 @@ async function importSmogonSets(
 				addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);
 				for (const battleOnlyForme of battleOnlyFormes) {
 					// Note: this is just a shallow copy which is fine because we're just modifying the ability
-					const s = Object.assign({}, set);
+					const s = {...set};
 					if (!format.id.includes('balancedhackmons')) s.ability = battleOnlyForme.abilities[0];
 					if (typeof battleOnlyForme.battleOnly !== 'string') {
 						if (!battleOnlyForme.battleOnly!.includes(pokemon)) continue;
@@ -336,20 +336,20 @@ function toPokemonSet(
 				set.hpType = type;
 				fill = 31;
 			} else if (dex.gen === 2) {
-				const dvs = Object.assign({}, dex.getType(type).HPdvs);
+				const dvs = {...dex.getType(type).HPdvs};
 				let stat: StatName;
 				for (stat in dvs) {
 					dvs[stat]! *= 2;
 				}
-				set.ivs = Object.assign({}, dvs, set.ivs);
+				set.ivs = {...dvs, ...set.ivs};
 				set.ivs.hp = expectedHP(set.ivs);
 			} else {
-				set.ivs = Object.assign({}, dex.getType(type).HPivs, set.ivs);
+				set.ivs = {...dex.getType(type).HPivs, ...set.ivs};
 			}
 		}
 	}
 
-	const copy = Object.assign({species: pokemon}, set) as PokemonSet;
+	const copy = {species: pokemon, ...set} as PokemonSet;
 	copy.ivs = fillStats(set.ivs, fill);
 	// The validator expects us to have at least 1 EV set to prove it is intentional
 	if (!set.evs && dex.gen >= 3 && format.id !== 'gen7letsgoou') set.evs = {spe: 1};
@@ -446,10 +446,7 @@ export async function getStatisticsURL(
 	format: Format
 ): Promise<{url: string, count: number} | undefined> {
 	const current = index.includes(format.id);
-	// tslint is for some reason reporting that this isn't a Promise for some reason,
-	// but breaking it out into a const seems to fix it
-	const latestPromise = smogon.Statistics.latestDate(format.id, !current);
-	const latest = await latestPromise;
+	const latest = await smogon.Statistics.latestDate(format.id, !current);
 	if (!latest) return undefined;
 	return {url: smogon.Statistics.url(latest.date, format.id, current || 1500), count: latest.count};
 }

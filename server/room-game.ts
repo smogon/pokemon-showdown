@@ -41,7 +41,7 @@ export class RoomGamePlayer {
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
-		if (user) {
+		if (user && !this.game.isSubGame) {
 			user.games.add(this.game.roomid);
 			user.updateSearch();
 		}
@@ -49,7 +49,7 @@ export class RoomGamePlayer {
 	unlinkUser() {
 		if (!this.id) return;
 		const user = Users.getExact(this.id);
-		if (user) {
+		if (user && !this.game.isSubGame) {
 			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
@@ -78,13 +78,14 @@ export class RoomGamePlayer {
 export class RoomGame {
 	readonly roomid: RoomID;
 	/**
-	 * The room this roomgame is in. Rooms can only have one RoomGame at a time,
-	 * which are available as `this.room.game === this`.
+	 * The room this roomgame is in. Rooms can have two RoomGames at a time,
+	 * which are available as `this.room.game === this` and `this.room.subGame === this`.
 	 */
 	room: Room;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
+	isSubGame: boolean;
 	/**
 	 * userid:player table.
 	 *
@@ -95,28 +96,39 @@ export class RoomGame {
 	playerCount: number;
 	playerCap: number;
 	ended: boolean;
+	/** Does `/guess` or `/choose` require the user to be able to talk? */
+	checkChat = false;
 	/**
 	 * We should really resolve this collision at _some_ point, but it will have
 	 * to be later. The /timer command is written to be resilient to this.
 	 */
 	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void} | NodeJS.Timer | null;
-	constructor(room: Room) {
+	constructor(room: Room, isSubGame = false) {
 		this.roomid = room.roomid;
 		this.room = room;
 		this.gameid = 'game' as ID;
 		this.title = 'Game';
 		this.allowRenames = false;
+		this.isSubGame = isSubGame;
 		this.playerTable = Object.create(null);
 		this.players = [];
 		this.playerCount = 0;
 		this.playerCap = 0;
 		this.ended = false;
 
-		this.room.game = this as RoomGame;
+		if (this.isSubGame) {
+			this.room.subGame = this as RoomGame;
+		} else {
+			this.room.game = this as RoomGame;
+		}
 	}
 
 	destroy() {
-		this.room.game = null;
+		if (this.isSubGame) {
+			this.room.subGame = null;
+		} else {
+			this.room.game = null;
+		}
 		// @ts-ignore
 		this.room = null;
 		for (const player of this.players) {
@@ -262,7 +274,7 @@ export class RoomGame {
 	 */
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!(user.id in this.playerTable)) {
+			if (!(user.id in this.playerTable) && !this.isSubGame) {
 				user.games.delete(this.roomid);
 				user.updateSearch();
 			}

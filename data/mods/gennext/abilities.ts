@@ -291,10 +291,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	clearbody: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			for (const i in boost) {
-				// @ts-ignore
-				if (boost[i] < 0) {
-					// @ts-ignore
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
@@ -305,10 +304,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	whitesmoke: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			for (const i in boost) {
-				// @ts-ignore
-				if (boost[i] < 0) {
-					// @ts-ignore
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
@@ -597,7 +595,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onResidualPriority: -1,
 		onResidual(pokemon) {
-			if (pokemon.activeTurns && !pokemon.volatiles.stall) {
+			if (pokemon.activeTurns && !pokemon.volatiles['stall']) {
 				this.boost({spe: 1});
 			}
 		},
@@ -607,6 +605,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
+			if (!target) return;
 			// singles, or single-target move
 			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;
@@ -677,7 +676,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
 			if (!source || !this.isAdjacent(pokemon, source)) return;
-			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
+			if (pokemon.ability !== 'shadowtag' && !source.volatiles['shadowtag']) {
 				pokemon.maybeTrapped = true;
 			}
 		},
