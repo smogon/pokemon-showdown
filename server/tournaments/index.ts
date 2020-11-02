@@ -12,7 +12,7 @@ const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
 const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
-const ALLOW_ALTS = false;
+const ALLOW_ALTS = true;
 
 Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
@@ -1804,6 +1804,15 @@ const commands: ChatCommands = {
 			const option = target ? target.toLowerCase() : 'on';
 			if (this.meansYes(option)) {
 				tournament.forceTimer = true;
+				for (const player of tournament.players) {
+					const curMatch = player.inProgressMatch;
+					if (curMatch) {
+						const battle = curMatch.room.battle;
+						if (battle) {
+							battle.timer.start();
+						}
+					}
+				}
 				room.add('Forcetimer is now on for the tournament.');
 				this.privateModAction(`The timer was turned on for the tournament by ${user.name}`);
 				this.modlog('TOUR FORCETIMER', null, 'ON');
