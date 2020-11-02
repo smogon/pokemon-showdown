@@ -363,16 +363,14 @@ export class HelpTicket extends Rooms.RoomGame {
 		// skip if the user is autoconfirmed and on a shared ip
 		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
 
-		if (!Config.noipchecks) {
-			for (const ip of user.ips) {
-				const curPunishment = Punishments.roomIps.get('staff')?.get(ip);
-				if (curPunishment && curPunishment[0] === 'TICKETBAN') {
-					const [, userid,, reason] = curPunishment;
-					return (
-						`You are banned from creating help tickets` +
-						`${userid !== user.id ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
-					);
-				}
+		for (const ip of user.ips) {
+			const curPunishment = Punishments.roomIps.get('staff')?.get(ip);
+			if (curPunishment && curPunishment[0] === 'TICKETBAN') {
+				const [, userid,, reason] = curPunishment;
+				return (
+					`You are banned from creating help tickets` +
+					`${userid !== user.id ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
+				);
 			}
 		}
 		return false;
