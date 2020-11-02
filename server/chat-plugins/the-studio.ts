@@ -20,6 +20,7 @@ const DEFAULT_IMAGES = [
 	'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png',
 	'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png',
 ];
+const ALLOW_ALTS = !!Config.noipchecks;
 
 interface Recommendation {
 	artist: string;
@@ -374,7 +375,7 @@ class RecommendationsInterface {
 		if (!rec.liked) {
 			rec.liked = {ips: [], userids: []};
 		}
-		if (rec.liked.ips.includes(liker.latestIp) || rec.liked.userids.includes(liker.id)) {
+		if ((!ALLOW_ALTS && rec.liked.ips.includes(liker.latestIp)) || rec.liked.userids.includes(liker.id)) {
 			throw new Chat.ErrorMessage(`You've already liked this recommendation.`);
 		}
 		rec.likes++;
