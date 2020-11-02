@@ -23,7 +23,7 @@ export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
 export function exec(args: string, execOptions?: child_process.ExecOptions): Promise<string>;
-export function exec(args: [string, ...string[]], execOptions?: child_process. ExecFileOptions): Promise<string>;
+export function exec(args: [string, ...string[]], execOptions?: child_process.ExecFileOptions): Promise<string>;
 export function exec(args: string | string[], execOptions?: AnyObject) {
 	if (Array.isArray(args)) {
 		const cmd = args.shift();
