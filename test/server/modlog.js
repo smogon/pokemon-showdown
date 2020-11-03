@@ -37,7 +37,7 @@ function lastLine(database, roomid) {
 	).get(roomid);
 }
 
-describe('Modlog', () => {
+(Config.usesqlite ? describe : describe.skip)('Modlog', () => {
 	describe.skip('Modlog#prepareSQLSearch', () => {
 		it('should respect the maxLines parameter', () => {
 			const query = modlog.prepareSQLSearch(['lobby'], 1337, false, {});
@@ -55,7 +55,7 @@ describe('Modlog', () => {
 		});
 	});
 
-	describe('Modlog#getSharedID', () => {
+	(Config.usesqlite ? describe : describe.skip)('Modlog#getSharedID', () => {
 		assert(modlog.getSharedID('battle-gen8randombattle-42'));
 		assert(modlog.getSharedID('groupchat-annika-shitposting'));
 		assert(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
@@ -64,7 +64,7 @@ describe('Modlog', () => {
 		assert(!modlog.getSharedID('development'));
 	});
 
-	describe('Modlog#write', () => {
+	(Config.usesqlite ? describe : describe.skip)('Modlog#write', () => {
 		it('should write messages serially to the modlog', async () => {
 			modlog.initialize('development');
 			modlog.write('development', {note: 'This message is logged first', action: 'UNITTEST'});
@@ -101,24 +101,26 @@ describe('Modlog', () => {
 		});
 	});
 
-	describe("Modlog#rename", async () => {
-		const entry = {note: 'This is in a modlog that will be renamed!', action: 'UNITTEST'};
+	(Config.usesqlite ? describe : describe.skip)("Modlog#rename", () => {
+		it('should rename modlogs', async () => {
+			const entry = {note: 'This is in a modlog that will be renamed!', action: 'UNITTEST'};
 
-		modlog.initialize('oldroom');
-		modlog.write('oldroom', entry);
-		await modlog.rename('oldroom', 'newroom');
-		const line = lastLine(modlog.database, 'newroom');
+			modlog.initialize('oldroom');
+			modlog.write('oldroom', entry);
+			await modlog.rename('oldroom', 'newroom');
+			const line = lastLine(modlog.database, 'newroom');
 
-		assert.equal(entry.action, line.action);
-		assert.equal(entry.note, line.note);
+			assert.equal(entry.action, line.action);
+			assert.equal(entry.note, line.note);
 
-		const newEntry = {note: 'This modlog has been renamed!', action: 'UNITTEST'};
-		modlog.write('newroom', newEntry);
+			const newEntry = {note: 'This modlog has been renamed!', action: 'UNITTEST'};
+			modlog.write('newroom', newEntry);
 
-		const newLine = lastLine(modlog.database, 'newroom');
+			const newLine = lastLine(modlog.database, 'newroom');
 
-		assert.equal(newEntry.action, newLine.action);
-		assert.equal(newEntry.note, newLine.note);
+			assert.equal(newEntry.action, newLine.action);
+			assert.equal(newEntry.note, newLine.note);
+		});
 	});
 
 	// Skipped until SQL searching is properly implemented
