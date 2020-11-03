@@ -188,7 +188,7 @@ export class TeamValidator {
 	readonly format: Format;
 	readonly dex: ModdedDex;
 	readonly gen: number;
-	readonly ruleTable: import('./dex-data').RuleTable;
+	readonly ruleTable: import('./dex-formats').RuleTable;
 	readonly minSourceGen: number;
 
 	readonly toID: (str: any) => ID;

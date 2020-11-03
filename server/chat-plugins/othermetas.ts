@@ -30,7 +30,7 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 				num: -1,
 				effectType: 'Item',
 				sourceEffect: '',
-			};
+			} as Item;
 		} else {
 			return null;
 		}
