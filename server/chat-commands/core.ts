@@ -668,12 +668,16 @@ export const commands: ChatCommands = {
 			const reason = this.splitTarget(target);
 			const targetUser = this.targetUser;
 			if (!targetUser) return this.errorReply(this.tr`User '${target}' not found.`);
-			if (!targetUser.settings.userMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
+			if (!targetUser.settings.statusMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
 			this.checkCan('forcerename', targetUser);
 
 			const displayReason = reason ? `: ${reason}` : ``;
-			this.privateGlobalModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
+			this.privateGlobalModAction(
+				room.tr`${targetUser.name}'s status "${targetUser.settings.statusMessage}" was cleared by ${user.name}${displayReason}.`
+			);
+			this.globalModlog(
+				'CLEARSTATUS', targetUser, ` from "${targetUser.settings.statusMessage}"${displayReason}`
+			);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
 			return;
