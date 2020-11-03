@@ -5902,7 +5902,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
 			},
 			onCopy(pokemon) {
-				if (this.dex.getAbility(pokemon.ability).isPermanent) pokemon.removeVolatile('gastroacid');
+				if (pokemon.getAbility().isPermanent) pokemon.removeVolatile('gastroacid');
 			},
 		},
 		secondary: null,
