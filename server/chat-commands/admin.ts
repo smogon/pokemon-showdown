@@ -440,7 +440,6 @@ export const commands: ChatCommands = {
 					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
 				);
 				this.sendReply("Modlog has been hot-patched.");
-
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;
 				this.sendReply("Modlog streams have been re-initialized.");
