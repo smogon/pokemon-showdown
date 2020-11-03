@@ -391,7 +391,7 @@ export class RandomGen7Teams extends RandomTeams {
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
 					break;
 				case 'quickattack':
-					if (hasType['Normal'] && (!counter.stab || counter['Normal'] > 2)) rejected = true;
+					if (!!counter['recovery'] || hasType['Normal'] && (!counter.stab || counter['Normal'] > 2)) rejected = true;
 					if (hasMove['feint'] || hasType['Rock'] && !!counter.Status) rejected = true;
 					break;
 				case 'weatherball':
@@ -479,7 +479,7 @@ export class RandomGen7Teams extends RandomTeams {
 					break;
 				case 'substitute':
 					if (hasMove['dracometeor'] || hasMove['leafstorm'] && !hasAbility['Contrary']) rejected = true;
-					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
+					if (hasMove['encore'] || hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
 					if (movePool.includes('copycat')) rejected = true;
 					break;
 				case 'powersplit':
@@ -532,12 +532,13 @@ export class RandomGen7Teams extends RandomTeams {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					((movePool.includes('recover') || movePool.includes('roost') || movePool.includes('slackoff') || movePool.includes('softboiled')) &&
 						!!counter.Status && !counter.setupType && !hasMove['healingwish'] && !hasMove['trick'] && !hasMove['trickroom']) ||
-					(movePool.includes('milkdrink') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
+					(movePool.includes('milkdrink') || movePool.includes('shoreup') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
+					(isLead && movePool.includes('stealthrock') && !!counter.Status && !counter.setupType && !counter['speedsetup'] && !hasMove['substitute']) ||
 					(species.requiredMove && movePool.includes(toID(species.requiredMove)))
 				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
-						if (move.category === 'Status' || !hasType[move.type] || move.basePower < 40 && !move.multihit) {
+						if (move.category === 'Status' || !hasType[move.type] || move.basePower && move.basePower < 40 && !move.multihit) {
 							rejected = true;
 						}
 					}
