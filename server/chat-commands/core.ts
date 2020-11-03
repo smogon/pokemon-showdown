@@ -548,6 +548,9 @@ export const commands: ChatCommands = {
 		if (!targetRoom) {
 			return this.errorReply(this.tr`The room "${target}" was not found.`);
 		}
+		if (!targetUser) {
+			return this.parse('/help invite');
+		}
 
 		const invitesBlocked = targetUser.settings.blockInvites;
 		if (invitesBlocked) {
