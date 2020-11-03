@@ -1197,7 +1197,7 @@ export const commands: ChatCommands = {
 		if (
 			room.roomid === 'staff' ||
 			room.roomid === 'upperstaff' ||
-			(Rooms.Modlog?.getSharedID(room.roomid) && user.can('modlog'))
+			(Rooms.Modlog.getSharedID(room.roomid) && user.can('modlog'))
 		) {
 			this.globalModlog('NOTE', null, target);
 		} else {

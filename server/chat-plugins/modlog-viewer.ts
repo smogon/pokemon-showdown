@@ -137,10 +137,6 @@ async function getModlog(
 	connection: Connection, roomid: ModlogID = 'global', search: ModlogSearch = {},
 	searchCmd: string, maxLines = 20, onlyPunishments = false, timed = false
 ) {
-	if (!Rooms.Modlog) {
-		throw new Error("Modlogs are not enabled on this server");
-	}
-
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
 	roomid = getRoomID(roomid);

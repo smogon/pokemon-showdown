@@ -429,8 +429,8 @@ export const commands: ChatCommands = {
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				const streams = Rooms.Modlog?.streams;
-				const sharedStreams = Rooms.Modlog?.sharedStreams;
+				const streams = Rooms.Modlog.streams;
+				const sharedStreams = Rooms.Modlog.sharedStreams;
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
@@ -444,8 +444,8 @@ export const commands: ChatCommands = {
 				);
 				this.sendReply("Modlog has been hot-patched.");
 
-				if (streams) Rooms.Modlog.streams = streams;
-				if (sharedStreams) Rooms.Modlog.sharedStreams = sharedStreams;
+				Rooms.Modlog.streams = streams;
+				Rooms.Modlog.sharedStreams = sharedStreams;
 				this.sendReply("Modlog streams have been re-initialized.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");

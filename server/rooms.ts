@@ -1032,7 +1032,7 @@ export class GlobalRoomState {
 			this.ladderIpLog = new WriteStream({write() { return undefined; }});
 		}
 		// Create writestream for modlog
-		Rooms.Modlog?.initialize('global');
+		Rooms.Modlog.initialize('global');
 
 		this.reportUserStatsInterval = setInterval(
 			() => this.reportUserStats(),
@@ -1058,7 +1058,7 @@ export class GlobalRoomState {
 	}
 
 	modlog(entry: PartialModlogEntry, overrideID?: string) {
-		void Rooms.Modlog?.write('global', entry, overrideID);
+		void Rooms.Modlog.write('global', entry, overrideID);
 	}
 
 	writeChatRoomData() {
