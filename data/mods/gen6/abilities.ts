@@ -98,4 +98,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 0.5,
 	},
+	zenmode: {
+		inherit: true,
+		isPermanent: false,
+	},
 };
