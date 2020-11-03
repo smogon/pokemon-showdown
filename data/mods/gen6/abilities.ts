@@ -89,29 +89,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onBeforeMovePriority: 11,
 	},
-	trace: {
-		inherit: true,
-		onUpdate(pokemon) {
-			if (!pokemon.isStarted || this.effectData.gaveUp) return;
-			const possibleTargets = pokemon.side.foe.active.filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
-			while (possibleTargets.length) {
-				let rand = 0;
-				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
-				const target = possibleTargets[rand];
-				const ability = target.getAbility();
-				const bannedAbilities = [
-					'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'stancechange', 'trace', 'zenmode',
-				];
-				if (bannedAbilities.includes(target.ability)) {
-					possibleTargets.splice(rand, 1);
-					continue;
-				}
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-				pokemon.setAbility(ability);
-				return;
-			}
-		},
-	},
 	weakarmor: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {

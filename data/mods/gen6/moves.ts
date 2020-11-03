@@ -71,20 +71,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	entrainment: {
-		inherit: true,
-		onTryHit(target, source) {
-			const bannedSourceAbilities = [
-				'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'stancechange', 'trace', 'zenmode',
-			];
-			const bannedTargetAbilities = ['multitype', 'stancechange', 'truant'];
-			if (target.ability === source.ability ||
-				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability)
-			) {
-				return false;
-			}
-		},
-	},
 	fellstinger: {
 		inherit: true,
 		basePower: 30,
@@ -195,20 +181,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	rockblast: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1},
-	},
-	roleplay: {
-		inherit: true,
-		onTryHit(target, source) {
-			const bannedTargetAbilities = [
-				'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'stancechange', 'trace', 'wonderguard', 'zenmode',
-			];
-			const bannedSourceAbilities = ['multitype', 'stancechange'];
-			if (target.ability === source.ability ||
-				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability)
-			) {
-				return false;
-			}
-		},
 	},
 	sheercold: {
 		inherit: true,
