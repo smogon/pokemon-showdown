@@ -56,7 +56,15 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
-		return this.has(userid) && Auth.atLeast(this.get(userid), '%');
+		if (this.has(userid)) {
+			const rank = this.get(userid);
+			// At one point bots used to be ranked above drivers, so this checks
+			// driver rank to make sure this function works on servers that
+			// did not reorder the ranks.
+			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, '%');
+		} else {
+			return false;
+		}
 	}
 	atLeast(user: User, group: AuthLevel) {
 		if (user.hasSysopAccess()) return true;
