@@ -25,7 +25,7 @@ describe('Zen Mode', function () {
 		assert.equal(darm.ability, 'zenmode');
 	});
 
-	it.only(`can be overriden in Gen 6 and earlier`, function () {
+	it(`can be overriden in Gen 6 and earlier`, function () {
 		battle = common.gen(6).createBattle([[
 			{species: "Darmanitan", ability: 'zenmode', moves: ['entrainment', 'sleeptalk']},
 		], [
@@ -37,8 +37,7 @@ describe('Zen Mode', function () {
 		assert.equal(darm.ability, 'swiftswim');
 
 		battle.makeChoices('move sleeptalk', 'move skillswap');
-		battle.makeChoices('auto', 'move entrainment');
-		console.log(battle.getDebugLog());
+		battle.makeChoices('move entrainment', 'move entrainment');
 		assert.equal(darm.ability, 'swiftswim');
 	});
 });

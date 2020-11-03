@@ -71,6 +71,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	entrainment: {
+		inherit: true,
+		onTryHit(target, source) {
+			const bannedSourceAbilities = [
+				'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'stancechange', 'trace', 'zenmode',
+			];
+			const bannedTargetAbilities = ['multitype', 'stancechange', 'truant'];
+			if (target.ability === source.ability ||
+				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability)
+			) {
+				return false;
+			}
+		},
+	},
 	fellstinger: {
 		inherit: true,
 		basePower: 30,
@@ -81,15 +95,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	flyingpress: {
 		inherit: true,
 		basePower: 80,
-	},
-	gastroacid: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['multitype', 'stancechange'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
-		},
 	},
 	leechlife: {
 		inherit: true,
@@ -191,27 +196,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {protect: 1, mirror: 1},
 	},
+	roleplay: {
+		inherit: true,
+		onTryHit(target, source) {
+			const bannedTargetAbilities = [
+				'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+			];
+			const bannedSourceAbilities = ['multitype', 'stancechange'];
+			if (target.ability === source.ability ||
+				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability)
+			) {
+				return false;
+			}
+		},
+	},
 	sheercold: {
 		inherit: true,
 		ohko: true,
-	},
-	simplebeam: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['multitype', 'simple', 'stancechange', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
-		},
-	},
-	skillswap: {
-		inherit: true,
-		onTryHit(target, source) {
-			const bannedAbilities = ['illusion', 'multitype', 'stancechange', 'wonderguard'];
-			if (bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
-				return false;
-			}
-		},
 	},
 	stockpile: {
 		inherit: true,
@@ -290,15 +291,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return null;
 			},
-		},
-	},
-	worryseed: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['insomnia', 'multitype', 'stancechange', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
 		},
 	},
 };
