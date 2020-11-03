@@ -120,12 +120,12 @@ class SortedLimitedLengthList {
 export class Modlog {
 	readonly logPath: string;
 	/**
-	 * If a stream is undefined, that means it has not yet been initialized.
-	 * If a stream is truthy, it is open and ready to be written to.
-	 * If a stream is null, it has been destroyed/disabled.
+	 * If a room ID is not in the Map, that means the room's modlog stream
+	 * has not yet been initialized, or was previously destroyed.
+	 * If a room ID is in the Map, its modlog stream is open and ready to be written to.
 	 */
-	sharedStreams: Map<ID, Streams.WriteStream | null> = new Map();
-	streams: Map<ModlogID, Streams.WriteStream | null> = new Map();
+	sharedStreams: Map<ID, Streams.WriteStream> = new Map();
+	streams: Map<ModlogID, Streams.WriteStream> = new Map();
 
 	readonly database?: Database.Database;
 
@@ -281,10 +281,9 @@ export class Modlog {
 	async destroy(roomid: ModlogID) {
 		const stream = this.streams.get(roomid);
 		if (stream && !this.getSharedID(roomid)) {
-			this.streams.set(roomid, null);
 			await stream.writeEnd();
 		}
-		this.streams.set(roomid, null);
+		this.streams.delete(roomid);
 	}
 
 	async destroyAll() {
