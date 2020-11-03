@@ -479,7 +479,7 @@ export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(modul
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
 		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
-		return results?.map((line: string, index: number) => parseModlog(line, results[index + 1])) || [];
+		return results.map((line: string, index: number) => parseModlog(line, results[index + 1])) || [];
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
 		return [];
