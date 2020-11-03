@@ -308,6 +308,7 @@ export interface UserSettings {
 	blockPMs: boolean | AuthLevel;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
+	blockInvites: AuthLevel | boolean;
 	doNotDisturb: boolean;
 }
 
@@ -367,6 +368,7 @@ export class User extends Chat.MessageContext {
 	notified: {
 		blockChallenges: boolean,
 		blockPMs: boolean,
+		blockInvites: boolean,
 		punishment: boolean,
 		lock: boolean,
 	};
@@ -431,6 +433,7 @@ export class User extends Chat.MessageContext {
 			blockPMs: false,
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
+			blockInvites: false,
 			doNotDisturb: false,
 		};
 		this.battleSettings = {
@@ -461,6 +464,7 @@ export class User extends Chat.MessageContext {
 		this.notified = {
 			blockChallenges: false,
 			blockPMs: false,
+			blockInvites: false,
 			punishment: false,
 			lock: false,
 		};
