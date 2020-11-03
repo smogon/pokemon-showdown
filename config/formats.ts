@@ -487,12 +487,13 @@ export const Formats: FormatList = [
 			// National Dex OU
 			'Blissey', 'Chansey', 'Charizard-Mega-Y', 'Cinderace', 'Clefable', 'Corviknight', 'Dragapult', 'Excadrill', 'Ferrothorn', 'Garchomp',
 			'Garchomp-Mega', 'Gliscor', 'Greninja', 'Heatran', 'Kartana', 'Kommo-o', 'Kyurem', 'Landorus-Therian', 'Lopunny-Mega', 'Magearna',
-			'Magnezone', 'Medicham-Mega', 'Melmetal', 'Pelipper', 'Regieleki', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Slowbro-Mega',
+			'Magnezone', 'Medicham-Mega', 'Melmetal', 'Pelipper', 'Regieleki', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base',
 			'Spectrier', 'Swampert-Mega', 'Tangrowth', 'Tapu Fini', 'Tapu Koko', 'Toxapex', 'Tyranitar', 'Volcarona', 'Zapdos',
 			'nduubl', // National Dex UUBL
-			'Aegislash', 'Alakazam', 'Azumarill', 'Charizard-Mega-X', 'Deoxys-Defense', 'Diggersby', 'Dragonite', 'Gallade-Mega', 'Gardevoir-Mega',
-			'Gengar', 'Gyarados', 'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega', 'Mew',
-			'Pinsir-Mega', 'Scolipede', 'Staraptor', 'Thundurus', 'Venusaur-Mega', 'Victini', 'Xurkitree', 'Drizzle', 'Drought', 'Aurora Veil',
+			'Aerodactyl-Mega', 'Aegislash', 'Alakazam', 'Azumarill', 'Blacephalon', 'Charizard-Mega-X', 'Deoxys-Defense', 'Diancie-Mega', 'Diggersby', 'Dragonite',
+			'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios',
+			'Manaphy', 'Mawile-Mega', 'Mew', 'Pinsir-Mega', 'Scolipede', 'Slowbro-Mega', 'Staraptor', 'Tapu Lele', 'Thundurus', 'Venusaur-Mega', 'Victini', 'Xurkitree',
+			'Drizzle', 'Drought', 'Aurora Veil',
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
