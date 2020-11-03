@@ -589,6 +589,10 @@ export class User extends Chat.MessageContext {
 	}
 	async validateToken(token: string, name: string, userid: ID, connection: Connection) {
 		if (!token && Config.noguestsecurity) {
+			if (Users.isTrusted(userid)) {
+				this.send(`|nametaken|${name}|You need an authentication token to be a trusted user.`);
+				return null;
+			}
 			return '1';
 		}
 
@@ -741,17 +745,28 @@ export class User extends Chat.MessageContext {
 	}
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
+		const registered = (userType !== '1');
+
 		const conflictUser = users.get(userid);
-		if (conflictUser && !conflictUser.registered && (conflictUser.latestIp !== this.latestIp || conflictUser.connected)) {
-			if (newlyRegistered && userType !== '1') {
-				if (conflictUser !== this) conflictUser.resetName();
-			} else {
-				this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}".`);
-				return false;
+		if (conflictUser) {
+			// unregistered users can only merge in limited situations
+			let canMerge = registered && conflictUser.registered;
+			if (
+				!registered && !conflictUser.registered && conflictUser.latestIp !== this.latestIp &&
+				!conflictUser.connected
+			) {
+				canMerge = true;
+			}
+			if (!canMerge) {
+				if (newlyRegistered && registered) {
+					if (conflictUser !== this) conflictUser.resetName();
+				} else {
+					this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}".`);
+					return false;
+				}
 			}
 		}
 
-		let registered = false;
 		// user types:
 		//   1: unregistered user
 		//   2: registered user
@@ -759,9 +774,7 @@ export class User extends Chat.MessageContext {
 		//   4: autoconfirmed
 		//   5: permalocked
 		//   6: permabanned
-		if (userType !== '1') {
-			registered = true;
-
+		if (registered) {
 			if (userType === '3') {
 				this.isSysop = true;
 				this.isStaff = true;

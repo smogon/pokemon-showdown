@@ -214,9 +214,7 @@ export class RoomAuth extends Auth {
 		this.room = room;
 	}
 	get(userOrID: ID | User): GroupSymbol {
-		const user = typeof userOrID === 'string' ? null : userOrID as User;
-		const id = user ? user.id : userOrID as ID;
-		if (user && !user.registered) return Auth.defaultSymbol();
+		const id = typeof userOrID === 'string' ? userOrID : (userOrID as User).id;
 
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
