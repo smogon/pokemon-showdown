@@ -775,6 +775,8 @@ export const commands: ChatCommands = {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
 					};
+					if (ability.isPermanent) details["&#10003; Not affected by Gastro Acid"] = "";
+					if (ability.isUnbreakable) details["&#10003; Not affected by Mold Breaker"] = "";
 				}
 				break;
 			default:
