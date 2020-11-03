@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Neutralizing Gas', function () {
+describe('Zen Mode', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -25,8 +25,8 @@ describe('Neutralizing Gas', function () {
 		assert.equal(darm.ability, 'zenmode');
 	});
 
-	it(`can be overriden in Gen 6 and earlier`, function () {
-		battle = common.createBattle([[
+	it.only(`can be overriden in Gen 6 and earlier`, function () {
+		battle = common.gen(6).createBattle([[
 			{species: "Darmanitan", ability: 'zenmode', moves: ['entrainment', 'sleeptalk']},
 		], [
 			{species: "Wynaut", ability: 'swiftswim', moves: ['skillswap', 'entrainment']},
@@ -38,6 +38,7 @@ describe('Neutralizing Gas', function () {
 
 		battle.makeChoices('move sleeptalk', 'move skillswap');
 		battle.makeChoices('auto', 'move entrainment');
+		console.log(battle.getDebugLog());
 		assert.equal(darm.ability, 'swiftswim');
 	});
 });
