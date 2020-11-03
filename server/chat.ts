@@ -122,6 +122,7 @@ import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 import * as Sqlite from 'better-sqlite3';
+import * as pathModule from 'path';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
