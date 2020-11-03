@@ -5,8 +5,13 @@
  * @author jetou
  */
 
-// @ts-ignore Needed for FS
-if (!global.Config) global.Config = {nofswriting: false, modlogftsextension: true, usesqlitemodlog: true};
+if (!global.Config) {
+	global.Config = {
+		nofswriting: false,
+		usesqlitemodlog: true,
+		usesqlite: true,
+	};
+}
 
 import * as Database from 'better-sqlite3';
 

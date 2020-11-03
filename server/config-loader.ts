@@ -23,6 +23,16 @@ export function load(invalidate = false) {
 	const config = ({...defaults, ...require('../config/config')}) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = {...defaults.routes, ...config.routes};
+
+	// Automatically stop startup if better-sqlite3 isn't installed and SQLite is enabled
+	if (config.usesqlite) {
+		try {
+			require('better-sqlite3');
+		} catch (e) {
+			throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
+		}
+	}
+
 	cacheGroupData(config);
 	return config;
 }

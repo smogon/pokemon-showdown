@@ -60,7 +60,13 @@ function copyOverDataJSON(file) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	require('better-sqlite3');
+	var sucraseVersion = require('sucrase').getVersion().split('.');
+	if (
+		parseInt(sucraseVersion[0]) < 3 ||
+		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 15)
+	) {
+		throw new Error("Sucrase version too old");
+	}
 } catch (e) {
 	console.log('Installing dependencies...');
 	shell('npm install --production');
