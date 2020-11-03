@@ -136,11 +136,11 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'destinybond':
 					if (hasMove['explosion']) rejected = true;
 					break;
-				case 'thief':
-					if (hasMove['rest'] || hasMove['substitute']) rejected = true;
-					break;
 				case 'pursuit':
 					if (hasMove['crunch'] && movePool.includes('sunnyday')) rejected = true;
+					break;
+				case 'thief':
+					if (hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
 
 				// Status and illegal move rejections
@@ -190,10 +190,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(movePool.includes('megahorn') || hasMove['present'] && movePool.includes('softboiled')) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk') || (hasMove['sleeptalk'] && movePool.includes('rest'))) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam') || (hasMove['solarbeam'] && movePool.includes('sunnyday'))) ||
-					(movePool.includes('spore') || movePool.includes('meanlook') || movePool.includes('milkdrink') || movePool.includes('recover'))
+					(movePool.includes('meanlook') || movePool.includes('milkdrink') || movePool.includes('recover') || movePool.includes('spore'))
 				)) {
 					// Reject Status, non-STAB, or low basepower moves
-					if (move.category === 'Status' || !hasType[move.type] || move.basePower < 40 && !move.multihit) {
+					if (move.category === 'Status' || !hasType[move.type] || move.basePower && move.basePower < 40) {
 						rejected = true;
 					}
 				}
