@@ -4,7 +4,7 @@
  * Written by Mia.
  * @author mia-pi-git
  */
-import * as Sqlite from 'better-sqlite3';
+import type {Database, Transaction, Statement} from 'better-sqlite3';
 import {Utils} from '../../lib/utils';
 import {FS} from '../../lib/fs';
 import {QueryProcessManager} from '../../lib/process-manager';
@@ -23,7 +23,7 @@ export const transferRequests: Map<string, string> = Chat.oldPlugins.friends?.tr
 
 interface DatabaseRequest {
 	statement: string;
-	type: 'all' | 'get' | 'run';
+	type: 'all' | 'get' | 'run' | 'transaction';
 	data: AnyObject | any[];
 }
 
@@ -63,19 +63,24 @@ const ACTIONS: {[k: string]: string} = {
 export const Friends = new class {
 	/** `Map<oldID, newID> */
 	renames: Map<string, string>;
-	readonly database: Sqlite.Database;
+	database?: Database;
 	constructor() {
+		this.setupDatabase();
+		this.renames = this.getRenames();
+		void this.checkExpiringRequests();
+	}
+	setupDatabase() {
+		if (!Config.usesqlite) return;
+		const Sqlite = require('better-sqlite3');
 		try {
 			this.database = new Sqlite(`${__dirname}/../../databases/friends.db`, {fileMustExist: true});
 		} catch (e) {
 			this.database = new Sqlite(`${__dirname}/../../databases/friends.db`);
-			this.database.exec(FS('databases/schemas/friends.sql').readSync());
+			this.database!.exec(FS('databases/schemas/friends.sql').readSync());
 		}
-		this.renames = this.getRenames();
-		// preparing these once is apparently faster
-		void this.checkExpiringRequests();
 	}
 	async checkExpiringRequests() {
+		if (!this.database) return;
 		// requests expire after one month. this is checked both on intialization
 		// (hotpatch, to ensure accuracy in case they both don't log in)
 		// and when the user the request is sent to / sent from logs in.
@@ -131,6 +136,7 @@ export const Friends = new class {
 		return {sent, received};
 	}
 	getRenames() {
+		if (!this.database) return new Map();
 		// this is only run once, on initialization, so it doesn't need to be in statements
 		const results = this.database.prepare(`SELECT * FROM friend_renames`).all();
 		const renames: Map<string, string> = new Map();
@@ -148,14 +154,18 @@ export const Friends = new class {
 		}
 		if (!receiverID) throw new Chat.ErrorMessage(`Invalid name.`);
 		if (receiverID === user.id) throw new Chat.ErrorMessage(`You cannot friend yourself.`);
-		const sentRequests = user.friendRequests?.sent;
+		let sentRequests = user.friendRequests?.sent;
 		if (await this.hasFriendship(user.id, receiverID)) {
 			throw new Chat.ErrorMessage(`You are already friends with '${receiverID}'.`);
 		}
-		if (sentRequests?.has(receiverID)) {
+		if (!sentRequests) {
+			sentRequests = new Set();
+		}
+
+		if (sentRequests.has(receiverID)) {
 			throw new Chat.ErrorMessage(`You have already sent a friend request to '${receiverID}'.`);
 		}
-		if (sentRequests!.size >= MAX_REQUESTS) {
+		if (sentRequests.size >= MAX_REQUESTS) {
 			throw new Chat.ErrorMessage(
 				`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
 			);
@@ -251,9 +261,11 @@ export const Friends = new class {
 				friends.offline.push(toID(friendName));
 			}
 		}
+
 		const sorted = Object.keys(friends)
 			.filter(item => friends[item].length > 0)
 			.map(item => `${STATUS_TITLES[item]} (${friends[item].length})`);
+
 		let buf = `<h3>Your friends: <small> `;
 		if (sorted.length > 0) {
 			buf += `Total (${user.friends.size}) | ${sorted.join(' | ')}`;
@@ -265,6 +277,7 @@ export const Friends = new class {
 			return buf;
 		}
 		buf += `</h3> `;
+
 		for (const key in friends) {
 			const friendArray = friends[key].sort();
 			if (friendArray.length === 0) continue;
@@ -289,10 +302,12 @@ export const Friends = new class {
 			`<span class="username"> <strong>${name}</strong></span><span><small> (${statusType})</small></span>` :
 			Utils.html`<i>${name}</i> <small>(${statusType})</small>`;
 		buf += `<br />`;
+
 		const oldName = this.renames.get(userid);
 		if (oldName) {
 			buf += Utils.html`<small>(recently renamed from ${oldName})</small><br />`;
 		}
+
 		const curUser = Users.get(userid); // might be an alt
 		if (user?.connected) {
 			if (user.userMessage) buf += Utils.html`Status: <i>${user.userMessage}</i><br />`;
@@ -328,10 +343,9 @@ export const Friends = new class {
 			receiver.friends.add(senderID);
 		}
 
-		return Promise.all([
-			PM.query({statement: 'add', data: {userid: senderID, friend: receiverID, login: Date.now()}, type: 'run'}),
-			PM.query({statement: 'add', data: {userid: receiverID, friend: senderID, login: Date.now()}, type: 'run'}),
-		]);
+		return PM.query({
+			type: 'transaction', statement: 'add', data: {to: receiverID, from: senderID},
+		});
 	}
 	removeFriend(userName: string, friendName: string) {
 		const userid = toID(userName);
@@ -419,7 +433,10 @@ export const Friends = new class {
 				throw new Chat.ErrorMessage(`The user '${newID}' could not be found, and so could not receive the friend transfer`);
 			}
 		}
-		if (oldUser.friends?.has(newUser.id)) oldUser.friends?.delete(newUser.id);
+		if (!oldUser.friends || !oldUser.friends.size) {
+			throw new Chat.ErrorMessage("You have no friends to transfer.");
+		}
+		if (oldUser.friends.has(newUser.id)) oldUser.friends?.delete(newUser.id);
 
 		for (const curUser of Users.users.values()) {
 			if (curUser.friends?.has(oldUser.id)) {
@@ -428,14 +445,12 @@ export const Friends = new class {
 			}
 		}
 		newUser.friends = oldUser.friends;
-		oldUser.friends?.clear();
+		oldUser.friends.clear();
 
 		this.renames.set(oldID, newID);
-		return Promise.all([
-			PM.query({statement: 'renameFriend', data: {oldID, newID}, type: 'run'}),
-			PM.query({statement: 'renameUserid', data: {oldID, newID}, type: 'run'}),
-			PM.query({statement: 'rename', data: [oldID, newID, Date.now()], type: 'run'}),
-		]);
+		return PM.query({
+			statement: 'rename', type: 'transaction', data: {oldID, newID},
+		});
 	}
 	writeLogin(user: User) {
 		if (user.settings.hideLogins) return;
@@ -463,7 +478,7 @@ export const Friends = new class {
 		if (!user.autoconfirmed) {
 			throw new Chat.ErrorMessage(context.tr`You must be autoconfirmed to use the friends feature.`);
 		}
-		if (!Config.usesqlitefriends) {
+		if (!Config.usesqlitefriends || !Config.usesqlite) {
 			throw new Chat.ErrorMessage(`The friends list feature is currently disabled.`);
 		}
 		if (!Users.globalAuth.atLeast(user, Config.usesqlitefriends)) {
@@ -858,7 +873,8 @@ export const loginfilter: LoginFilter = async user => {
 	await Friends.writeLogin(user);
 };
 
-const statements: Map<string, Sqlite.Statement> = new Map();
+const statements: Map<string, Statement> = new Map();
+const transactions: Map<string, Transaction> = new Map();
 
 export const PM = new QueryProcessManager<DatabaseRequest, any>(module, query => {
 	const {type, statement, data} = query;
@@ -878,6 +894,11 @@ export const PM = new QueryProcessManager<DatabaseRequest, any>(module, query =>
 		case 'run':
 			result = cached.run(data);
 			break;
+		case 'transaction':
+			const transaction = transactions.get(statement);
+			if (!transaction) return '';
+			result = transaction([data]);
+			break;
 		}
 	} catch (e) {
 		Monitor.crashlog(e, 'A friends database process', query);
@@ -885,11 +906,34 @@ export const PM = new QueryProcessManager<DatabaseRequest, any>(module, query =>
 	return result || "";
 });
 
-if (!PM.isParentProcess) {
+// if friends.database exists, Config.usesqlite is on.
+if (!PM.isParentProcess && Friends.database) {
 	global.Dex = Dex;
 	for (const k in ACTIONS) {
 		statements.set(k, Friends.database.prepare(ACTIONS[k]));
 	}
+	const addQuery = statements.get('add');
+	const renameFriendQuery = statements.get('renameFriend');
+	const renameUseridQuery = statements.get('renameUserid');
+	const renameQuery = statements.get('rename');
+
+	const renameTransaction = Friends.database.transaction(requests => {
+		for (const request of requests) {
+			const {oldID, newID} = request;
+			renameFriendQuery!.run({oldID, newID});
+			renameUseridQuery!.run({oldID, newID});
+			renameQuery!.run(oldID, newID, Date.now());
+		}
+	});
+	const addTransaction = Friends.database.transaction(requests => {
+		for (const request of requests) {
+			const {to, from} = request;
+			addQuery!.run({userid: to, friend: from, login: Date.now()});
+			addQuery!.run({userid: from, friend: to, login: Date.now()});
+		}
+	});
+	transactions.set('rename', renameTransaction);
+	transactions.set('add', addTransaction);
 	global.Monitor = {
 		crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
