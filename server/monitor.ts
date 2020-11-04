@@ -251,8 +251,10 @@ export const Monitor = new class {
 	 * message, as well as the data length in the server's response.
 	 */
 	countNetworkUse(size: number) {
-		if (!Config.emergency || typeof this.activeIp !== 'string' ||
-      Config.noipchecks || Config.nothrottle) {
+		if (
+			!Config.emergency || typeof this.activeIp !== 'string' ||
+      	Config.noipchecks || Config.nothrottle
+		) {
 			return;
 		}
 		if (this.activeIp in this.networkUse) {
