@@ -9,8 +9,7 @@ import {Utils} from '../../lib/utils';
 import {FS} from '../../lib/fs';
 import {QueryProcessManager} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
-import {Chat} from '../chat';
-import {Dex} from '../../sim';
+import {Config} from '../config-loader';
 
 /** Max friends per user */
 const MAX_FRIENDS = 100;
@@ -18,8 +17,6 @@ const MAX_FRIENDS = 100;
 const MAX_REQUESTS = 6;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
 const MAX_PROCESSES = 1;
-/** `Map<transferTo, transferFrom>` */
-export const transferRequests: Map<string, string> = Chat.oldPlugins.friends?.transferRequests || new Map();
 
 interface DatabaseRequest {
 	statement: string;
@@ -64,9 +61,13 @@ export const Friends = new class {
 	/** `Map<oldID, newID> */
 	renames: Map<string, string>;
 	database?: Database;
+	/** `Map<transferTo, transferFrom>` */
+	transferRequests: Map<string, string>;
 	constructor() {
 		this.setupDatabase();
 		this.renames = this.getRenames();
+		const existingRequests = 'Chat' in global ? Chat.oldPlugins.friends?.transferRequests : undefined;
+		this.transferRequests =  existingRequests || new Map();
 		void this.checkExpiringRequests();
 	}
 	setupDatabase() {
@@ -632,7 +633,7 @@ export const commands: ChatCommands = {
 		requesttransfer(target, room, user) {
 			target = toID(target);
 			if (!target) return this.parse(`/help friends`);
-			if (transferRequests.get(target)) {
+			if (Friends.transferRequests.get(target)) {
 				return this.errorReply(this.tr`This user already has a transfer request pending.`);
 			}
 			if (target === user.id) {
@@ -649,7 +650,7 @@ export const commands: ChatCommands = {
 			if (targetUser.settings.blockFriendRequests) {
 				return this.errorReply(this.tr`This user is blocking friend requests, and so you cannot transfer friends to them.`);
 			}
-			transferRequests.set(targetUser.id, user.id);
+			Friends.transferRequests.set(targetUser.id, user.id);
 			Friends.sendPM(`/text ${user.name} wants to transfer their friends to you!`, targetUser.id);
 			Friends.sendPM(
 				`/raw <button class="button" name="send" value="/friends approvetransfer ${user.id}">${this.tr('Approve')}</button>`,
@@ -663,7 +664,7 @@ export const commands: ChatCommands = {
 		},
 		async approvetransfer(target, room, user, connection) {
 			Friends.checkCanUse(this);
-			if (!transferRequests.has(user.id)) {
+			if (!Friends.transferRequests.has(user.id)) {
 				return Friends.sendPM(this.tr`You have no pending friend transfer request.`, user.id);
 			}
 			const targetUser = Users.getExact(toID(target));
@@ -676,11 +677,11 @@ export const commands: ChatCommands = {
 		denytransfer(target, room, user) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			const requester = transferRequests.get(user.id);
+			const requester = Friends.transferRequests.get(user.id);
 			if (!requester) {
 				return Friends.sendPM(`/error ${this.tr`You have no pending friend transfer request.`}`, user.id);
 			}
-			transferRequests.delete(user.id);
+			Friends.transferRequests.delete(user.id);
 			return Friends.sendPM(`/error ${this.tr`Denied the friend transfer request from '${requester}'.`}`, user.id);
 		},
 		async undorequest(target, room, user, connection) {
@@ -908,7 +909,6 @@ export const PM = new QueryProcessManager<DatabaseRequest, any>(module, query =>
 
 // if friends.database exists, Config.usesqlite is on.
 if (!PM.isParentProcess && Friends.database) {
-	global.Dex = Dex;
 	for (const k in ACTIONS) {
 		statements.set(k, Friends.database.prepare(ACTIONS[k]));
 	}
