@@ -724,8 +724,7 @@ export const LogSearcher = new class {
 		// don't need to check if logs exist since ripgrepSearchMonth does that
 		// eslint-disable-next-line no-useless-escape
 		const regexString = user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|`;
-		const args: string[] = [];
-		if (user) args.push('--count');
+		const args: string[] = user ? ['--count'] : [];
 		const {results: rawResults} = await this.ripgrepSearchMonth({
 			search: regexString, raw: true, date: month, room, args,
 		});
