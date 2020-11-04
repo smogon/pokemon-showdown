@@ -258,6 +258,12 @@ exports.reportbattlejoins = true;
 exports.monitorminpunishments = 3;
 
 /**
+ * Turns off all time-based throttles - rename, challenges, laddering, etc.
+ */
+
+exports.nothrottle = false;
+
+/**
  * allow punishmentmonitor to lock users with multiple roombans.
  *	 When set to `true`, this feature will automatically lock any users with three or more
  *	 active roombans, and notify the staff room.
