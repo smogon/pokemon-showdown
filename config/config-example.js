@@ -396,7 +396,7 @@ exports.autolockdown = true;
  * a login server.
  *
  * Logging in this way will make you considered an unregistered user and grant
- * no authority.
+ * no authority. You cannot log into a trusted (g+/r%) user account this way.
  */
 exports.noguestsecurity = false;
 
