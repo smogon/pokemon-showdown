@@ -3180,6 +3180,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
+			if (move.self?.chance) move.self.chance *= 2;
 		},
 		name: "Serene Grace",
 		rating: 3.5,
@@ -3233,6 +3234,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.secondaries) {
 				delete move.secondaries;
 				// Technically not a secondary effect, but it is negated
+				delete move.self;
 				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
 				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
 				move.hasSheerForce = true;
