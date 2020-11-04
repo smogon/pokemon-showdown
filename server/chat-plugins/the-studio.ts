@@ -374,7 +374,7 @@ class RecommendationsInterface {
 		if (!rec.liked) {
 			rec.liked = {ips: [], userids: []};
 		}
-		if (rec.liked.ips.includes(liker.latestIp) || rec.liked.userids.includes(liker.id)) {
+		if ((!Config.noipchecks && rec.liked.ips.includes(liker.latestIp)) || rec.liked.userids.includes(liker.id)) {
 			throw new Chat.ErrorMessage(`You've already liked this recommendation.`);
 		}
 		rec.likes++;

@@ -465,7 +465,7 @@ class Ladder extends LadderStore {
 		// users must be different
 		if (user1 === user2) return false;
 
-		if (Config.fakeladder) {
+		if (Config.noipchecks) {
 			user1.lastMatch = user2.id;
 			user2.lastMatch = user1.id;
 			return true;

@@ -263,6 +263,11 @@ exports.monitorminpunishments = 3;
 exports.nothrottle = false;
 
 /**
+ * Removes all ip-based alt checking.
+ */
+exports.noipchecks = false;
+
+/**
  * allow punishmentmonitor to lock users with multiple roombans.
  *	 When set to `true`, this feature will automatically lock any users with three or more
  *	 active roombans, and notify the staff room.
