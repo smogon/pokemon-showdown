@@ -518,7 +518,7 @@ export class Trivia extends Rooms.RoomGame {
 				const isSameUser = (
 					targetUser.previousIDs.includes(user.id) ||
 					targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
-					targetUser.ips.some(ip => user.ips.includes(ip))
+					!Config.noipchecks && targetUser.ips.some(ip => user.ips.includes(ip))
 				);
 				if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
 			}
@@ -634,7 +634,7 @@ export class Trivia extends Rooms.RoomGame {
 					const isSameUser = (
 						kickedUser.previousIDs.includes(user.id) ||
 						kickedUser.previousIDs.some(id => user.previousIDs.includes(id)) ||
-						kickedUser.ips.some(ip => user.ips.includes(ip))
+						!Config.noipchecks && kickedUser.ips.some(ip => user.ips.includes(ip))
 					);
 					if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`User ${user.name} has already been kicked from the game.`);
 				}
@@ -1265,7 +1265,7 @@ export class Mastermind extends Rooms.RoomGame {
 			const isSameUser = (
 				targetUser.previousIDs.includes(user.id) ||
 				targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
-				targetUser.ips.some(ip => user.ips.includes(ip))
+				!Config.noipchecks && targetUser.ips.some(ip => user.ips.includes(ip))
 			);
 			if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
 		}

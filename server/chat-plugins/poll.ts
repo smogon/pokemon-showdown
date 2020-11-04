@@ -243,7 +243,7 @@ export class Poll {
 		const recipient = connection || user;
 		if (user.id in this.voters) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
-		} else if (user.latestIp in this.voterIps) {
+		} else if (user.latestIp in this.voterIps && !Config.noipchecks) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(
 				false,
 				this.voterIps[user.latestIp]

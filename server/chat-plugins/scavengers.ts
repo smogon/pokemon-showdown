@@ -472,7 +472,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
 			);
 		}
-		if (user.ips.some(ip => this.joinedIps.includes(ip))) {
+		if (!Config.noipchecks && user.ips.some(ip => this.joinedIps.includes(ip))) {
 			return user.sendTo(this.room, "You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;

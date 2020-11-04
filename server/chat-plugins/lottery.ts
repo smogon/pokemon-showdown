@@ -46,12 +46,22 @@ function endLottery(roomid: RoomID, winners: string[]) {
 	Object.freeze(lottery);
 	writeLotteries();
 }
+
+function isSignedUp(roomid: RoomID, user: User) {
+	const lottery = lotteries[roomid];
+	if (!lottery) return;
+	const participants = lottery.participants;
+	const participantNames = Object.values(participants).map(toID);
+	if (participantNames.includes(user.id)) return true;
+	if (Config.noipchecks) return false;
+	return !!participants[user.latestIp];
+}
+
 function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.id);
-	if (!userSignedup) {
+	if (!isSignedUp(roomid, user)) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
 		return true;
