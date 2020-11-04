@@ -574,28 +574,19 @@ export interface EventMethods {
 	onTypePriority?: number;
 }
 
-interface ConditionEventMethods {
-	durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
-	onCopy?: (this: Battle, pokemon: Pokemon) => void;
-	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
-	onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
-	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
-}
-
-export interface ConditionData extends EffectData, ConditionEventMethods, EventMethods {
-	noCopy?: boolean;
-	affectsFainted?: boolean;
-	counterMax?: number;
-}
+export interface ConditionData extends Partial<Condition>, EventMethods {}
 
 export type ModdedConditionData = ConditionData | Partial<ConditionData> & {inherit: true};
 
-export interface Condition extends Readonly<BasicEffect & ConditionData> {
-	readonly effectType: 'Status' | 'Condition' | 'Weather';
-}
-
-export class DataCondition extends BasicEffect implements Readonly<BasicEffect & ConditionData> {
+export class Condition extends BasicEffect implements Readonly<BasicEffect & ConditionData> {
 	readonly effectType: 'Condition' | 'Weather' | 'Status';
+	readonly counterMax?: number;
+
+	readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
+	readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
+	readonly onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
+	readonly onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
+	readonly onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);

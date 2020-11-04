@@ -727,7 +727,7 @@ export const Formats: FormatList = [
 				return {
 					id: move.id,
 					name: move.name,
-					onStart(pokemon) {
+					onStart(this: Battle, pokemon: Pokemon) {
 						this.add('-activate', pokemon, 'ability: ' + move.name);
 						this.useMove(move, pokemon);
 					},

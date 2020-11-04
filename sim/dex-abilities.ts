@@ -8,30 +8,21 @@ interface AbilityEventMethods {
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
 
-export interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
+export interface AbilityData extends Partial<Ability>, AbilityEventMethods, EventMethods {
 	name: string;
-	/** internal index number */
-	num?: number;
-	condition?: Partial<ConditionData>;
-	rating?: number;
-	isPermanent?: boolean;
-	isUnbreakable?: boolean;
-	suppressWeather?: boolean;
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
 
-export interface Ability extends Readonly<BasicEffect & AbilityData> {
+export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	readonly effectType: 'Ability';
-	rating: number;
-}
 
-export class DataAbility extends BasicEffect implements Readonly<BasicEffect & AbilityData> {
-	readonly effectType: 'Ability';
-	/** Represents how useful or detrimental this ability is. */
+	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
-	/** Whether or not this ability suppresses weather. */
 	readonly suppressWeather: boolean;
+	readonly condition?: Partial<ConditionData>;
+	readonly isPermanent?: boolean;
+	readonly isUnbreakable?: boolean;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);

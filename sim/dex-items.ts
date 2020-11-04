@@ -8,40 +8,8 @@ interface FlingData {
 	effect?: CommonHandlers['ResultMove'];
 }
 
-interface ItemEventMethods {
-	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
-	onPrimal?: (this: Battle, pokemon: Pokemon) => void;
-	onStart?: (this: Battle, target: Pokemon) => void;
-	onTakeItem?: (
-		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
-	) | boolean;
-}
-
-export interface ItemData extends EffectData, ItemEventMethods, EventMethods {
+export interface ItemData extends Partial<Item>, EventMethods {
 	name: string;
-	/** just controls location on the item spritesheet */
-	num?: number;
-	condition?: Partial<ConditionData>;
-	gen: number;
-	fling?: FlingData;
-	forcedForme?: string;
-	ignoreKlutz?: boolean;
-	isBerry?: boolean;
-	isChoice?: boolean;
-	isGem?: boolean;
-	isPokeball?: boolean;
-	megaStone?: string;
-	megaEvolves?: string;
-	naturalGift?: {basePower: number, type: string};
-	onDrive?: string;
-	onMemory?: string;
-	onPlate?: string;
-	spritenum?: number;
-	zMove?: string | true;
-	zMoveFrom?: string;
-	zMoveType?: string;
-	itemUser?: string[];
-	boosts?: SparseBoostsTable | false;
 }
 
 export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
@@ -49,12 +17,12 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
 };
 
-export interface Item extends Readonly<BasicEffect & ItemData> {
+export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	readonly effectType: 'Item';
-}
 
-export class DataItem extends BasicEffect implements Readonly<BasicEffect & ItemData> {
-	readonly effectType: 'Item';
+	/** just controls location on the item spritesheet */
+	readonly num!: number;
+
 	/**
 	 * A Move-like object depicting what happens when Fling is used on
 	 * this item.
@@ -120,6 +88,17 @@ export class DataItem extends BasicEffect implements Readonly<BasicEffect & Item
 	readonly isGem: boolean;
 	/** Is this item a Pokeball? */
 	readonly isPokeball: boolean;
+
+	readonly condition?: Partial<ConditionData>;
+	readonly forcedForme?: string;
+	readonly isChoice?: boolean;
+	readonly naturalGift?: {basePower: number, type: string};
+	readonly spritenum?: number;
+	readonly boosts?: SparseBoostsTable | false;
+
+	readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
+	readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
+	readonly onStart?: (this: Battle, target: Pokemon) => void;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);

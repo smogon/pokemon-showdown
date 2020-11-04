@@ -88,16 +88,17 @@ export class BasicEffect implements EffectData {
 	 * glitches (MissingNo etc), Pokestar pokemon, etc.
 	 */
 	isNonstandard: Nonstandard | null;
-	/** The duration of the effect.  */
+	/** The duration of the condition - only for pure conditions. */
 	duration?: number;
-	/** Whether or not the effect is ignored by Baton Pass. */
+	/** Whether or not the condition is ignored by Baton Pass - only for pure conditions. */
 	noCopy: boolean;
-	/** Whether or not the effect affects fainted Pokemon. */
+	/** Whether or not the condition affects fainted Pokemon. */
 	affectsFainted: boolean;
-	/** The status that the effect may cause. */
+	/** Moves only: what status does it set? */
 	status?: ID;
-	/** The weather that the effect may cause. */
+	/** Moves only: what weather does it set? */
 	weather?: ID;
+	/** ??? */
 	sourceEffect: string;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {

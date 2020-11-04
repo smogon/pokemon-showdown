@@ -2,84 +2,12 @@ import {Utils} from '../lib/utils';
 import {toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 
-export interface FormatData extends EventMethods {
+export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
-
-	banlist?: string[];
-	battle?: ModdedBattleScriptsData;
-	pokemon?: ModdedBattlePokemon;
-	queue?: ModdedBattleQueue;
-	field?: ModdedField;
-	cannotMega?: string[];
-	challengeShow?: boolean;
-	debug?: boolean;
-	defaultLevel?: number;
-	desc?: string;
-	effectType?: string;
-	forcedLevel?: number;
-	gameType?: GameType;
-	maxForcedLevel?: number;
-	maxLevel?: number;
-	mod?: string;
-	onBasePowerPriority?: number;
-	onModifyMovePriority?: number;
-	onModifyTypePriority?: number;
-	onSwitchInPriority?: number;
-	rated?: boolean | string;
-	minSourceGen?: number;
-	restricted?: string[];
-	ruleset?: string[];
-	searchShow?: boolean;
-	team?: string;
-	teamLength?: {validate?: [number, number], battle?: number};
-	threads?: string[];
-	timer?: Partial<GameTimerSettings>;
-	tournamentShow?: boolean;
-	unbanlist?: string[];
-	checkLearnset?: (
-		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
-	) => {type: string, [any: string]: any} | null;
-	getEvoFamily?: (this: Format, speciesid: string) => ID;
-	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
-	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
-	onBegin?: (this: Battle) => void;
-	onChangeSet?: (
-		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
-	) => string[] | void;
-	onModifySpecies?: (
-		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
-	) => Species | void;
-	onStart?: (this: Battle) => void;
-	onTeamPreview?: (this: Battle) => void;
-	onValidateSet?: (
-		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
-	) => string[] | void;
-	onValidateTeam?: (this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void;
-	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
-	validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
-		removeNicknames?: boolean,
-		skipSets?: {[name: string]: {[key: string]: boolean}},
-	}) => string[] | void;
-	section?: string;
-	column?: number;
 }
 
 export type FormatList = (FormatData | {section: string, column?: number})[];
 export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
-
-export interface Format extends Readonly<BasicEffect & FormatData> {
-	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
-	readonly baseRuleset: string[];
-	readonly banlist: string[];
-	readonly customRules: string[] | null;
-	readonly defaultLevel: number;
-	readonly maxLevel: number;
-	readonly noLog: boolean;
-	readonly restricted: string[];
-	readonly ruleset: string[];
-	readonly unbanlist: string[];
-	ruleTable: RuleTable | null;
-}
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
@@ -199,7 +127,7 @@ export class RuleTable extends Map<string, string> {
 	}
 }
 
-export class DataFormat extends BasicEffect implements Readonly<BasicEffect & FormatData> {
+export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly mod: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
@@ -273,6 +201,44 @@ export class DataFormat extends BasicEffect implements Readonly<BasicEffect & Fo
 	 */
 	readonly maxForcedLevel?: number;
 	readonly noLog: boolean;
+
+	readonly battle?: ModdedBattleScriptsData;
+	readonly pokemon?: ModdedBattlePokemon;
+	readonly queue?: ModdedBattleQueue;
+	readonly field?: ModdedField;
+	readonly cannotMega?: string[];
+	readonly challengeShow?: boolean;
+	readonly searchShow?: boolean;
+	readonly threads?: string[];
+	readonly timer?: Partial<GameTimerSettings>;
+	readonly tournamentShow?: boolean;
+	readonly checkLearnset?: (
+		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
+	) => {type: string, [any: string]: any} | null;
+	readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
+	readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
+	readonly onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
+	readonly onChangeSet?: (
+		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
+	) => string[] | void;
+	readonly onModifySpecies?: (
+		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
+	) => Species | void;
+	readonly onStart?: (this: Battle) => void;
+	readonly onTeamPreview?: (this: Battle) => void;
+	readonly onValidateSet?: (
+		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
+	) => string[] | void;
+	readonly onValidateTeam?: (
+		this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject
+	) => string[] | void;
+	readonly validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
+	readonly validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
+		removeNicknames?: boolean,
+		skipSets?: {[name: string]: {[key: string]: boolean}},
+	}) => string[] | void;
+	readonly section?: string;
+	readonly column?: number;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);

@@ -32,12 +32,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
-import {DataCondition} from './dex-conditions';
+import {Condition} from './dex-conditions';
 import {DataMove} from './dex-moves';
-import {DataItem} from './dex-items';
-import {DataAbility} from './dex-abilities';
+import {Item} from './dex-items';
+import {Ability} from './dex-abilities';
 import {Species} from './dex-species';
-import {DataFormat, RuleTable, mergeFormatLists, ComplexBan, ComplexTeamBan} from './dex-formats';
+import {Format, RuleTable, mergeFormatLists, ComplexBan, ComplexTeamBan} from './dex-formats';
 import {PRNG, PRNGSeed} from './prng';
 import {Utils} from '../lib/utils';
 
@@ -73,7 +73,7 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
-const nullEffect: Condition = new DataCondition({name: '', exists: false});
+const nullEffect: Condition = new Condition({name: '', exists: false});
 
 interface DexTableData {
 	Abilities: DexTable<Ability>;
@@ -101,12 +101,12 @@ export const toID = Data.toID;
 
 export class ModdedDex {
 	readonly Data = Data;
-	readonly Condition = DataCondition;
-	readonly Ability = DataAbility;
-	readonly Item = DataItem;
+	readonly Condition = Condition;
+	readonly Ability = Ability;
+	readonly Item = Item;
 	readonly Move = DataMove;
 	readonly Species = Species;
-	readonly Format = DataFormat;
+	readonly Format = Format;
 	readonly ModdedDex = ModdedDex;
 
 	readonly name = "[ModdedDex]";
@@ -542,21 +542,21 @@ export class ModdedDex {
 
 		let found;
 		if (this.data.Formats.hasOwnProperty(id)) {
-			effect = new DataFormat({name: id}, this.data.Formats[id]);
+			effect = new Format({name: id}, this.data.Formats[id]);
 		} else if (this.data.Conditions.hasOwnProperty(id)) {
-			effect = new DataCondition({name: id}, this.data.Conditions[id]);
+			effect = new Condition({name: id}, this.data.Conditions[id]);
 		} else if (
 			(this.data.Moves.hasOwnProperty(id) && (found = this.data.Moves[id]).condition) ||
 			(this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).condition) ||
 			(this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).condition)
 		) {
-			effect = new DataCondition({name: found.name || id}, found.condition);
+			effect = new Condition({name: found.name || id}, found.condition);
 		} else if (id === 'recoil') {
-			effect = new DataCondition({id, name: 'Recoil', effectType: 'Recoil'});
+			effect = new Condition({id, name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
-			effect = new DataCondition({id, name: 'Drain', effectType: 'Drain'});
+			effect = new Condition({id, name: 'Drain', effectType: 'Drain'});
 		} else {
-			effect = new DataCondition({id, name: id, exists: false});
+			effect = new Condition({id, name: id, exists: false});
 		}
 
 		this.effectCache.set(id, effect);
@@ -617,9 +617,9 @@ export class ModdedDex {
 		}
 		let effect;
 		if (this.data.Formats.hasOwnProperty(id)) {
-			effect = new DataFormat({name}, this.data.Formats[id], supplementaryAttributes);
+			effect = new Format({name}, this.data.Formats[id], supplementaryAttributes);
 		} else {
-			effect = new DataFormat({id, name, exists: false});
+			effect = new Format({id, name, exists: false});
 		}
 		return effect;
 	}
@@ -646,7 +646,7 @@ export class ModdedDex {
 		if (id && this.data.Items.hasOwnProperty(id)) {
 			const itemData = this.data.Items[id];
 			const itemTextData = this.getDescs('Items', id, itemData);
-			item = new DataItem({name}, itemData, itemTextData);
+			item = new Item({name}, itemData, itemTextData);
 			if (item.gen > this.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
@@ -655,7 +655,7 @@ export class ModdedDex {
 				(item as any).isNonstandard = 'Past';
 			}
 		} else {
-			item = new DataItem({id, name, exists: false});
+			item = new Item({id, name, exists: false});
 		}
 
 		if (item.exists) this.itemCache.set(id, item);
@@ -678,7 +678,7 @@ export class ModdedDex {
 		if (id && this.data.Abilities.hasOwnProperty(id)) {
 			const abilityData = this.data.Abilities[id];
 			const abilityTextData = this.getDescs('Abilities', id, abilityData);
-			ability = new DataAbility({name}, abilityData, abilityTextData);
+			ability = new Ability({name}, abilityData, abilityTextData);
 			if (ability.gen > this.gen) {
 				(ability as any).isNonstandard = 'Future';
 			}
@@ -689,7 +689,7 @@ export class ModdedDex {
 				(ability as any).isNonstandard = null;
 			}
 		} else {
-			ability = new DataAbility({id, name, exists: false});
+			ability = new Ability({id, name, exists: false});
 		}
 
 		if (ability.exists) this.abilityCache.set(id, ability);

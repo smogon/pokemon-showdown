@@ -77,7 +77,7 @@ export class Battle {
 	readonly deserialized: boolean;
 	readonly strictChoices: boolean;
 	readonly format: Format;
-	readonly formatData: AnyObject;
+	readonly formatData: EffectState;
 	readonly gameType: GameType;
 	readonly field: Field;
 	readonly sides: [Side, Side] | [Side, Side, Side, Side];

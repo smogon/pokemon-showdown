@@ -7,7 +7,7 @@ interface SpeciesAbility {
 	S?: string;
 }
 
-export interface SpeciesData {
+export interface SpeciesData extends Partial<Species> {
 	name: string;
 	/** National Dex number */
 	num: number;
@@ -17,37 +17,6 @@ export interface SpeciesData {
 	baseStats: StatsTable;
 	eggGroups: string[];
 	weightkg: number;
-	color?: string;
-	heightm?: number;
-
-	canHatch?: boolean;
-	baseForme?: string;
-	baseSpecies?: string;
-	evoLevel?: number;
-	evoMove?: string;
-	evoCondition?: string;
-	evoItem?: string;
-	evos?: string[];
-	evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
-	forme?: string;
-	gender?: GenderName;
-	genderRatio?: {[k: string]: number};
-	maxHP?: number;
-	cosmeticFormes?: string[];
-	otherFormes?: string[];
-	formeOrder?: string[];
-	prevo?: string;
-	gen?: number;
-	requiredAbility?: string;
-	requiredItem?: string;
-	requiredItems?: string[];
-	requiredMove?: string;
-	battleOnly?: string | string[];
-	canGigantamax?: string;
-	cannotDynamax?: boolean;
-	changesFrom?: string;
-	maleOnlyHidden?: boolean;
-	unreleasedHidden?: boolean | 'Past';
 }
 
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
@@ -68,7 +37,7 @@ export interface SpeciesFormatsData {
 
 export type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
 
-export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesData & SpeciesFormatsData> {
+export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
 	readonly effectType: 'Pokemon';
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
