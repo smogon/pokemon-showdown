@@ -752,13 +752,14 @@ export class User extends Chat.MessageContext {
 			// unregistered users can only merge in limited situations
 			let canMerge = registered && conflictUser.registered;
 			if (
-				!registered && !conflictUser.registered && conflictUser.latestIp !== this.latestIp &&
+				!registered && !conflictUser.registered && conflictUser.latestIp === this.latestIp &&
 				!conflictUser.connected
 			) {
 				canMerge = true;
 			}
 			if (!canMerge) {
-				if (newlyRegistered && registered) {
+				if (registered && !conflictUser.registered) {
+					// user has just registered; don't merge just to be safe
 					if (conflictUser !== this) conflictUser.resetName();
 				} else {
 					this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}".`);
