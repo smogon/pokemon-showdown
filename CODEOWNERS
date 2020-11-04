@@ -1,3 +1,4 @@
+config/formats.ts @TheImmortal
 data/mods/*/random-teams.ts @TheImmortal
 data/mods/ssb/ @HoeenCoder
 data/random-teams.ts @TheImmortal
