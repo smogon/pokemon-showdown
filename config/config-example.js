@@ -260,7 +260,6 @@ exports.monitorminpunishments = 3;
 /**
  * Turns off all time-based throttles - rename, challenges, laddering, etc.
  */
-
 exports.nothrottle = false;
 
 /**
