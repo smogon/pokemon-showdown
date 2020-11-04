@@ -590,7 +590,7 @@ export class User extends Chat.MessageContext {
 	async validateToken(token: string, name: string, userid: ID, connection: Connection) {
 		if (!token && Config.noguestsecurity) {
 			if (Users.isTrusted(userid)) {
-				this.send(`|nametaken|${name}|You need an authentication token to be a trusted user.`);
+				this.send(`|nametaken|${name}|You need an authentication token to log in as a trusted user.`);
 				return null;
 			}
 			return '1';
