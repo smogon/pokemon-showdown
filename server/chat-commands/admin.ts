@@ -451,14 +451,14 @@ export const commands: ChatCommands = {
 			}
 		} catch (e) {
 			Rooms.global.notifyRooms(
-				['development', 'staff', 'upperstaff'] as RoomID[],
+				['development', 'staff'] as RoomID[],
 				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch} - but something failed while trying to hot-patch.`
 			);
 			return this.errorReply(`Something failed while trying to hot-patch ${patch}: \n${e.stack}`);
 		}
 		Monitor.hotpatchVersions[patch] = version;
 		Rooms.global.notifyRooms(
-			['development', 'staff', 'upperstaff'] as RoomID[],
+			['development', 'staff'] as RoomID[],
 			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch}`
 		);
 	},
