@@ -253,7 +253,7 @@ export const Monitor = new class {
 	countNetworkUse(size: number) {
 		if (
 			!Config.emergency || typeof this.activeIp !== 'string' ||
-      	Config.noipchecks || Config.nothrottle
+			Config.noipchecks || Config.nothrottle
 		) {
 			return;
 		}
