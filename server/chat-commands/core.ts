@@ -770,7 +770,9 @@ export const commands: ChatCommands = {
 	showrank: 'hiderank',
 	hiderank(target, room, user, connection, cmd) {
 		const userGroup = Users.Auth.getGroup(Users.globalAuth.get(user.id));
-		if (!userGroup['hiderank']) return this.errorReply(`/hiderank - Access denied.`);
+		if (!userGroup['hiderank'] || !user.registered) {
+			return this.errorReply(`/hiderank - Access denied.`);
+		}
 
 		const isShow = cmd === 'showrank';
 		const group = (isShow ? Users.globalAuth.get(user.id) : (target.trim() || Users.Auth.defaultSymbol()) as GroupSymbol);
@@ -1642,21 +1644,10 @@ export const commands: ChatCommands = {
 	trn(target, room, user, connection) {
 		if (target === user.name) return false;
 
-		let commaIndex = target.indexOf(',');
-		let targetName = target;
-		let targetRegistered = false;
-		let targetToken = '';
-		if (commaIndex >= 0) {
-			targetName = target.substr(0, commaIndex);
-			target = target.substr(commaIndex + 1);
-			commaIndex = target.indexOf(',');
-			targetRegistered = !!target;
-			if (commaIndex >= 0) {
-				targetRegistered = !!parseInt(target.substr(0, commaIndex));
-				targetToken = target.substr(commaIndex + 1);
-			}
-		}
-		return user.rename(targetName, targetToken, targetRegistered, connection);
+		const [name, registeredString, token] = Utils.splitFirst(target, ',', 2);
+		const registered = !!parseInt(registeredString);
+
+		return user.rename(name, token || '', registered, connection);
 	},
 
 	/*********************************************************

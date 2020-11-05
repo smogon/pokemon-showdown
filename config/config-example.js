@@ -401,6 +401,16 @@ exports.inactiveuserthreshold = 1000 * 60 * 60;
 exports.autolockdown = true;
 
 /**
+ * noguestsecurity - purely for development servers: allows logging in without
+ * a signed token: simply send `/trn [USERNAME]`. This allows using PS without
+ * a login server.
+ *
+ * Logging in this way will make you considered an unregistered user and grant
+ * no authority. You cannot log into a trusted (g+/r%) user account this way.
+ */
+exports.noguestsecurity = false;
+
+/**
  * Custom avatars.
  * This allows you to specify custom avatar images for users on your server.
  * Place custom avatar files under the /config/avatars/ directory.
