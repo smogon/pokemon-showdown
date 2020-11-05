@@ -1144,7 +1144,7 @@ export class CommandContext extends MessageContext {
 			const normalized = message.trim();
 			if (
 				!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
-				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)
+				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN) && !Config.nothrottle
 			) {
 				throw new Chat.ErrorMessage(this.tr("You can't send the same message again so soon."));
 			}

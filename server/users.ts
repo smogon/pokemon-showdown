@@ -711,7 +711,7 @@ export class User extends Chat.MessageContext {
 
 		if (!this.trusted && userType === '1') { // userType '1' means unregistered
 			const elapsed = Date.now() - this.lastNewNameTime;
-			if (elapsed < NAMECHANGE_THROTTLE) {
+			if (elapsed < NAMECHANGE_THROTTLE && !Config.nothrottle) {
 				if (this.newNames >= NAMES_PER_THROTTLE) {
 					this.send(
 						`|nametaken|${name}|You must wait ${Chat.toDurationString(NAMECHANGE_THROTTLE - elapsed)} more
@@ -1339,13 +1339,14 @@ export class User extends Chat.MessageContext {
 	 */
 	chat(message: string, room: Room | null, connection: Connection) {
 		const now = Date.now();
+		const noThrottle = this.hasSysopAccess() || Config.nothrottle;
 
-		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.hasSysopAccess()) {
+		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || noThrottle) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
-			if (this.hasSysopAccess()) return;
+			if (noThrottle) return;
 			return false; // but end the loop here
 		}
 
@@ -1622,7 +1623,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 	const maxLineCount = (user.isStaff || (room && room.auth.isStaff(user.id))) ?
 		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
-	if (lines.length > maxLineCount) {
+	if (lines.length > maxLineCount && !Config.nothrottle) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
 	}
