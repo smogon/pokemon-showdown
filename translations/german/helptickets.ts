@@ -151,5 +151,15 @@ export const translations: Translations = {
 		"You will now receive help ticket notifications.": "Du wirst jetzt Help-Ticket Benachrichtigungen empfangen.",
 		"${target} does not have a ticket.": "${target} besitzt kein Ticket.",
 		"You deleted ${target}'s ticket.": "Du hast ${target}'s Ticket gelöscht.",
+
+		"Hi! All global staff members are busy right now and we apologize for the delay. ": "",
+		"Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.": "",
+		'Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': "",
+		"Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.": "",
+		'Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': "",
+		"Please clearly explain why you should be unlocked and we will review it as soon as possible.": "",
+		"Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.": "",
+		"Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.": "",
+		"If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.": "",
 	},
 };

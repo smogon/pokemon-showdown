@@ -18,6 +18,7 @@ interface TicketState {
 	created: number;
 	claimed: string | null;
 	ip: string;
+	needsDelayWarning?: boolean;
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
@@ -187,6 +188,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
 			this.room.add(`|c|&Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			this.ticket.needsDelayWarning = true;
 		}
 	}
 
@@ -411,6 +413,18 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	clearTimeout(unclaimedTicketTimer[room.roomid]!);
 	unclaimedTicketTimer[room.roomid] = null;
 	timerEnds[room.roomid] = 0;
+	for (const ticket of Object.values(tickets)) {
+		if (!ticket.open) continue;
+		if (!ticket.active) continue;
+		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
+
+		if (ticket.needsDelayWarning && !ticket.claimed && delayWarnings[ticket.type]) {
+			ticketRoom.add(
+				`|c|&Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
+			).update();
+			ticket.needsDelayWarning = false;
+		}
+	}
 	for (const i in room.users) {
 		const user: User = room.users[i];
 		if (user.can('mute', null, room) && !user.settings.ignoreTickets) {
@@ -512,7 +526,18 @@ for (const room of Rooms.rooms.values()) {
 	if (game.ticket) game.ticket = tickets[game.ticket.userid];
 }
 
-const ticketTitles: {[k: string]: string} = Object.assign(Object.create(null), {
+const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
+const delayWarnings: {[k: string]: string} = {
+	'PM Harassment': `Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.`,
+	'Battle Harassment': `Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
+	'Inappropriate Username': `Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.`,
+	'Inappropriate Pokemon Nicknames': `Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
+	'Appeal': `Please clearly explain why you should be unlocked and we will review it as soon as possible.`,
+	'IP-Appeal': `Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.`,
+	'Public Room Assistance Request': `Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.`,
+	other: `If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.`,
+};
+const ticketTitles: {[k: string]: string} = {
 	pmharassment: `PM Harassment`,
 	battleharassment: `Battle Harassment`,
 	inapname: `Inappropriate Username`,
@@ -522,8 +547,8 @@ const ticketTitles: {[k: string]: string} = Object.assign(Object.create(null), {
 	appealsemi: `ISP-Appeal`,
 	roomhelp: `Public Room Assistance Request`,
 	other: `Other`,
-});
-const ticketPages: {[k: string]: string} = Object.assign(Object.create(null), {
+};
+const ticketPages: {[k: string]: string} = {
 	report: `I want to report someone`,
 	pmharassment: `Someone is harassing me in PMs`,
 	battleharassment: `Someone is harassing me in a battle`,
@@ -554,7 +579,7 @@ const ticketPages: {[k: string]: string} = Object.assign(Object.create(null), {
 	confirmappealsemi: `Appeal ISP lock`,
 	confirmroomhelp: `Call a Global Staff member to help`,
 	confirmother: `Call a Global Staff member`,
-});
+};
 
 export const pages: PageTable = {
 	help: {
