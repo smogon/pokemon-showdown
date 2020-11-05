@@ -5,7 +5,6 @@
  * @license MIT
  */
 import {Dex, toID} from './dex';
-import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
@@ -78,14 +77,14 @@ export class Battle {
 	readonly deserialized: boolean;
 	readonly strictChoices: boolean;
 	readonly format: Format;
-	readonly formatData: AnyObject;
+	readonly formatData: EffectState;
 	readonly gameType: GameType;
 	readonly field: Field;
 	readonly sides: [Side, Side] | [Side, Side, Side, Side];
 	readonly prngSeed: PRNGSeed;
 	dex: ModdedDex;
 	gen: number;
-	ruleTable: Data.RuleTable;
+	ruleTable: Dex.RuleTable;
 	prng: PRNG;
 	rated: boolean | string;
 	reportExactHP: boolean;
@@ -1474,7 +1473,7 @@ export class Battle {
 						const species = (source.illusion || source).species;
 						if (!species.abilities) continue;
 						for (const abilitySlot in species.abilities) {
-							const abilityName = species.abilities[abilitySlot as keyof SpeciesAbility];
+							const abilityName = species.abilities[abilitySlot as keyof Species['abilities']];
 							if (abilityName === source.ability) {
 								// pokemon event was already run above so we don't need
 								// to run it again.
@@ -2044,12 +2043,12 @@ export class Battle {
 
 		if (typeof move === 'number') {
 			const basePower = move;
-			move = new Data.Move({
+			move = new Dex.Move({
 				basePower,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			}) as unknown as ActiveMove;
+			}) as ActiveMove;
 			move.hit = 0;
 		}
 
@@ -3165,7 +3164,7 @@ export class Battle {
 
 	moveHit(
 		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
-		moveData?: HitEffect,
+		moveData?: Dex.HitEffect,
 		isSecondary?: boolean, isSelf?: boolean
 	): number | undefined | false {
 		throw new UnimplementedError('moveHit');
