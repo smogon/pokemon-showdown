@@ -180,7 +180,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.boost({atk: length}, source, source, this.dex.getEffect('chillingneigh'), true);
+				this.boost({atk: length}, source, source, this.dex.getAbility('chillingneigh'));
 			}
 		},
 		isPermanent: true,
@@ -196,7 +196,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.boost({spa: length}, source, source, this.dex.getEffect('grimneigh'), true);
+				this.boost({spa: length}, source, source, this.dex.getAbility('grimneigh'));
 			}
 		},
 		isPermanent: true,
