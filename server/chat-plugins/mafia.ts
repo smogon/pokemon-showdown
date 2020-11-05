@@ -1611,8 +1611,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			dead = !!player;
 		}
 
+		const staff = user.can('mute', null, this.room);
+
 		if (!player) {
-			if (this.room.auth.isStaff(user.id)) {
+			if (staff) {
 				// Uninvolved staff can talk anytime
 				return;
 			} else {
@@ -1621,18 +1623,18 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		if (player.silenced) {
-			return `You are silenced and cannot speak.${user.can('mute', null, this.room) ? " You can remove this with /mafia unsilence." : ''}`;
+			return `You are silenced and cannot speak.${staff ? " You can remove this with /mafia unsilence." : ''}`;
 		}
 
 		if (dead) {
 			if (!player.treestump) {
-				return `You are dead.${user.can('mute', null, this.room) ? " You can treestump yourself with /mafia treestump." : ''}`;
+				return `You are dead.${staff ? " You can treestump yourself with /mafia treestump." : ''}`;
 			}
 		}
 
 		if (this.phase === 'night') {
 			if (!player.nighttalk) {
-				return `You cannot talk at night.${user.can('mute', null, this.room) ? " You can bypass this using /mafia nighttalk." : ''}`;
+				return `You cannot talk at night.${staff ? " You can bypass this using /mafia nighttalk." : ''}`;
 			}
 		}
 	}
