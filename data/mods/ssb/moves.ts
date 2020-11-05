@@ -5312,7 +5312,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.m.yukiCosplayForme = this.sample(formes);
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
-				animation = 'Strength Sap';
 				this.useMove("Strength Sap", source);
 				break;
 			case 'Ninja':
