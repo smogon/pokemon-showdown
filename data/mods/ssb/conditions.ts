@@ -302,6 +302,37 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('biggie')}|it was all a dream`);
 		},
 	},
+	billo: {
+		noCopy: true,
+		onStart(source) {
+			let activeMon = source.side.foe.active[0].species.name;
+			if (!activeMon) activeMon = "Pokemon";
+			this.add(`c|${getName('Billo')}|Your ${activeMon} looks hacked.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Billo')}|Let me inspect your Pokemon, brb`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Billo')}|Yep, definitely hacked.`);
+		},
+		// Unaware innate
+		onAnyModifyBoost(boosts, pokemon) {
+			if (pokemon.illusion) return;
+			const unawareUser = this.effectData.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['def'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
+	},
 	blaz: {
 		noCopy: true,
 		onStart() {
@@ -322,9 +353,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onSwitchOut() {
 			this.add(`c|${getName('Brandon')}|${[`I need to catch my breath`, `brb getting a snack`][this.random(2)]}`);
 		},
-		onFaint(target) {
-			const foeName = target.side.foe.active[0].illusion ?
-				target.side.foe.active[0].illusion.name : target.side.foe.active[0].name;
+		onFaint(pokemon) {
+			const foeName = pokemon.side.foe.active[0].illusion ?
+				pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name;
 			this.add(`c|${getName('Brandon')}|${[`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`][this.random(3)]}`);
 		},
 	},
@@ -751,13 +782,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				}.bind(this);
 				return;
 			}
-			if (!target.set.shiny && target.species.id !== 'minior') return;
+			const dazzlingHolder = this.effectData.target;
+			if (!dazzlingHolder.set.shiny && dazzlingHolder.species.id !== 'minior') return;
 			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
 			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
 				return;
 			}
 
-			const dazzlingHolder = this.effectData.target;
 			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
 				this.add('cant', dazzlingHolder, 'ability: Minior-Shiny', move, '[of] ' + target);
@@ -826,63 +857,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	instructuser: {
 		noCopy: true,
-		onStart(pokemon) {
-			pokemon.m.quote = this.random(5);
-			switch (pokemon.m.quote) {
-			case 0:
-				this.add(`c|${getName('Instruct')}|My grandmomma had high hopes, I don't want to die bro`);
-				break;
-			case 1:
-				this.add(`c|${getName('Instruct')}|One time just a little bit, I`);
-				break;
-			case 2:
-				this.add(`c|${getName('Instruct')}|It's just me and this guitar, playing this song`);
-				break;
-			case 3:
-				this.add(`c|${getName('Instruct')}|Did I really just forget that melody?`);
-				break;
-			default:
-				this.add(`c|${getName('Instruct')}|Yeah, all you self-promoters are janky`);
-				break;
-			}
+		onStart() {
+			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
+			this.add(`c|${getName('iN⇢Struct')}|Oh no you don't`);
+			this.add(`c|${getName('iN⇢Struct')}|/me blocks PMs`);
 		},
-		onSwitchOut(pokemon) {
-			switch (pokemon.m.quote) {
-			case 0:
-				this.add(`c|${getName('Instruct')}|My demons keep me up, swear to God, I cannot get any sleep`);
-				break;
-			case 1:
-				this.add(`c|${getName('Instruct')}|I haven't been the same since I lost my bro`);
-				break;
-			case 2:
-				this.add(`c|${getName('Instruct')}|You can try stealing my heart, it's already gone`);
-				break;
-			case 3:
-				this.add(`c|${getName('Instruct')}|I shine my wrist, it go like shashasha, shashasha`);
-				break;
-			default:
-				this.add(`c|${getName('Instruct')}|No way out 'cause I'm already in it`);
-				break;
-			}
+		onSwitchOut() {
+			this.add(`c|${getName('iN⇢Struct')}|OK so ${['my UberEats order has arrived', 'I ran out of Coca-Cola', 'Bobochan wants me to play roomtours in the Chinese room', 'need to pm HoeenHero', 'comb through unicode'][this.random(5)]}`);
+			this.add(`c|${getName('iN⇢Struct')}|I will bee are bee`);
 		},
-		onFaint(pokemon) {
-			switch (pokemon.m.quote) {
-			case 0:
-				this.add(`c|${getName('Instruct')}|Don't gamble with your life like a semi-game parlay`);
-				break;
-			case 1:
-				this.add(`c|${getName('Instruct')}|I say I'm gonna change when I know I won't`);
-				break;
-			case 2:
-				this.add(`c|${getName('Instruct')}|I don't even know where to start, I'm just done`);
-				break;
-			case 3:
-				this.add(`c|${getName('Instruct')}|How I stride like that`);
-				break;
-			default:
-				this.add(`c|${getName('Instruct')}|Costa Careyes, I got her kidnapped. She ain't sorry and I ain't sorry, it's too late for sorry.`);
-				break;
-			}
+		onFaint(source) {
+			this.add(`c|${getName('iN⇢Struct')}|Hey man I didn't do shit ${source.side.name} got me into this mess in the first place`);
 		},
 		//  Innate
 		onSourceHit(target, source, move) {
@@ -890,7 +875,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (move.flags['contact']) {
-					if (!target.m.marked) this.add('-message', `${target.name} is afflicted with dread!`);
+					if (!target.m.marked) this.add('-message', `iN⇢Struct attached a bomb onto ${target.name}!`);
 					target.m.marked = true;
 				}
 			}
@@ -898,14 +883,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) return;
 			if (move.flags['contact']) {
-				if (!source.m.marked) this.add('-message', `${source.name} is afflicted with dread!`);
+				if (!source.m.marked) this.add('-message', `iN⇢Struct attached a bomb onto ${source.name}!`);
 				source.m.marked = true;
 			}
 			if (!target.hp) {
-				this.add('-activate', target, 'ability: Enterfearence');
 				for (const foe of source.side.pokemon) {
 					if (foe.fainted || !foe.hp) continue;
 					if (!foe.m.marked) continue;
+					this.add('-activate', target, 'ability: Extinction Level Event');
+					this.add('-message', `The bomb detonated!`);
 					this.directDamage(this.clampIntRange(foe.hp / 2, 1), foe);
 				}
 			}
@@ -1014,13 +1000,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	kev: {
 		noCopy: true,
 		onStart() {
-			// this.add(`c|${getName('Kev')}|`);
+			this.add(`c|${getName('Kev')}|Sorry for raining on your parade`);
 		},
 		onSwitchOut() {
-			// this.add(`c|${getName('Kev')}|`);
+			this.add(`c|${getName('Kev')}|Rain, rain, go away, come again another day`);
 		},
 		onFaint() {
-			// this.add(`c|${getName('Kev')}|`);
+			this.add(`c|${getName('Kev')}|I guess I'm all washed up...`);
 		},
 	},
 	kingbaruk: {
@@ -1148,28 +1134,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Lamp')}|no u`);
 		},
 	},
-	level51: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Level 51')}|okay one last tournament`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Level 51')}|i hate this game`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Level 51')}|pokemon peaked in gen 6`);
-		},
-		// Burnout "innate" is here for ease of Wonder Guard limitation check
-		onResidualOrder: 25,
-		onResidualSubOrder: 1,
-		onResidual(pokemon) {
-			if (pokemon.illusion) return;
-			if (pokemon.activeTurns) {
-				this.add('-message', `Level 51 is burnt out from Pokemon!`);
-				pokemon.faint();
-			}
-		},
-	},
 	lionyx: {
 		noCopy: true,
 		onStart() {
@@ -1254,24 +1218,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Mitsuki')}|THIS WORLD SHALL KNOW P A I N`);
 		},
 	},
-	morfent: {
-		noCopy: true,
-		onStart(target, source) {
-			this.add(`c|${getName('Morfent ( _̀> ̀)')}|le le 9gag army has arrived`);
-			if (source.illusion) return;
-			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
-		},
-		onFaint(source) {
-			this.add(`c|${getName('Morfent ( _̀> ̀)')}|mods pls ban ${source.side.foe.name}!!! they're hacking into ${source.side.name}'s account and making awful plays`);
-		},
-		// Prankster innate
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.category === 'Status') {
-				move.pranksterBoosted = true;
-				return priority + 1;
-			}
-		},
-	},
 	n10sit: {
 		noCopy: true,
 		onStart(source) {
@@ -1296,16 +1242,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Naziel')}|Toy xikito no puedo ;-;`);
 		},
 	},
-	nolali: {
+	nol: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Nolali')}|What's up nerds`);
+			this.add(`c|${getName('Nol')}|What's up nerds`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Nolali')}|cya nerds later`);
+			this.add(`c|${getName('Nol')}|cya nerds later`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Nolali')}|nerd`);
+			this.add(`c|${getName('Nol')}|nerd`);
 		},
 		// Innate Prankster and Eviolite
 		onModifyPriority(priority, pokemon, target, move) {
@@ -1435,10 +1381,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('phiwings99')}|Pick.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('phiwings99')}|The fact you're switching this out means you probably didn't use the Z-Move right.`);
+			this.add(`c|${getName('phiwings99')}|I'm boated.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('phiwings99')}|I'm boated.`);
+			this.add(`c|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
 		},
 	},
 	piloswinegripado: {
@@ -1722,14 +1668,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onSwitchOut(source) {
 			this.add(`c|${getName('Struchni')}|~tt endgame`);
-			if (source.m.typeEff) delete source.m.typeEff;
 		},
 		onFaint() {
 			this.add(`c|${getName('Struchni')}|**selfveto**`);
-		},
-		// Needed for Veto move
-		onHit(target, source, move) {
-			target.m.typeEff = target.getMoveHitData(move).typeMod;
 		},
 	},
 	teclis: {
@@ -1781,7 +1722,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
 		},
 	},
-	trace: {
+	traceuser: {
 		noCopy: true,
 		onStart() {
 			this.add(`c|${getName('trace')}|Daishouri!`);
@@ -1937,12 +1878,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint(pokemon) {
 			const name = pokemon.side.foe.name;
 			this.add(`c|${getName('Zodiax')}|${name}, Why would you hurt this poor little pompombirb :(`);
-		},
-		// Big Storm Coming base power reduction effect
-		onBasePower(basePower, pokemon, target, move) {
-			if (pokemon.m.bigstormcoming) {
-				return this.chainModify([0x4CC, 0x1000]);
-			}
 		},
 	},
 	zyguser: {
@@ -2212,6 +2147,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (source.volatiles['failedparry']) {
 				move.accuracy = true;
 			}
+		},
+	},
+	bigstormcomingmod: {
+		name: "Big Storm Coming Mod",
+		duration: 1,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.chainModify([0x4CC, 0x1000]);
 		},
 	},
 	tempest: {

@@ -143,6 +143,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Juggernaut Punch',
 		evs: {hp: 4, def: 252, spd: 252}, nature: 'Brave',
 	},
+	Billo: {
+		species: 'Cosmog', ability: 'Proof Policy', item: 'Eviolite', gender: 'N',
+		moves: ['Cosmic Power', 'Calm Mind', 'Stored Power'],
+		signatureMove: 'Fishing for Hacks',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+	},
 	Blaz: {
 		species: 'Carbink', ability: 'Why Worry', item: 'Leftovers', gender: 'N',
 		moves: ['Cosmic Power', 'Body Press', 'Recover'],
@@ -319,10 +325,10 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Paranoia',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	Instruct: {
+	'iN⇢Struct': {
 		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
-		signatureMove: 'Kickoff Tune',
+		signatureMove: 'You Little Beauty',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	Iyarito: {
@@ -410,12 +416,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
-	'Level 51': {
-		species: 'Togekiss', ability: 'Wonder Guard', item: 'Choice Scarf', gender: 'M',
-		moves: ['U-turn', 'Parting Shot', 'Baton Pass'],
-		signatureMove: 'Swan Song',
-		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
-	},
 	Lionyx: {
 		species: 'Gardevoir', ability: 'Tension', item: 'Blunder Policy', gender: 'F',
 		moves: [
@@ -462,12 +462,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Terraforming',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	'Morfent ( _̀> ̀)': {
-		species: 'Banette', ability: 'Normalize', item: 'Ghost Memory', gender: 'M',
-		moves: ['Skill Swap', 'Multi-Attack', 'Recover'],
-		signatureMove: 'OwO wuts dis?',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
-	},
 	n10siT: {
 		species: 'Hoopa', ability: 'Greedy Magician', item: 'Focus Sash', gender: 'N',
 		moves: ['Hyperspace Hole', 'Shadow Ball', 'Aura Sphere'],
@@ -480,7 +474,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Not-so-worthy Pirouette',
 		evs: {hp: 252, def: 200, spd: 56}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 	},
-	Nolali: {
+	Nol: {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
 		moves: ['Shadow Ball', 'Flamethrower', 'Trick Room'],
 		signatureMove: 'Mad Hacks',
@@ -814,6 +808,13 @@ export const ssbSets: SSBSets = {
 		moves: ['Quiver Dance', 'Feather Dance', 'Lunar Dance'],
 		signatureMove: 'Relic Dance',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
+	'Zarel-Pirouette': {
+		species: 'Meloetta-Pirouette', ability: 'Serene Grace', item: 'Leftovers', gender: 'N',
+		moves: ['Revelation Dance', 'Fiery Dance', 'Petal Dance'],
+		signatureMove: 'Relic Dance',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+		skip: 'Zarel',
 	},
 	Zodiax: {
 		species: 'Oricorio-Pom-Pom', ability: 'Primordial Sea', item: 'Heavy-Duty Boots', gender: 'M',

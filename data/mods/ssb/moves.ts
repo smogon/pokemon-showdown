@@ -792,6 +792,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fighting",
 	},
 
+	// Billo
+	fishingforhacks: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "Knocks off opponent's item and randomly sets Stealth Rocks, Spikes, or Toxic Spikes.",
+		shortDesc: "Knocks off opponent's item and randomly sets Stealth Rocks, Spikes, or Toxic Spikes.",
+		name: "Fishing for Hacks",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Mist Ball', target);
+		},
+		onAfterHit(target, source) {
+			if (source.hp) {
+				const item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+				}
+			}
+			const hazard = this.sample(['Stealth Rock', 'Spikes', 'Toxic Spikes']);
+			target.side.addSideCondition(hazard);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Blaz
 	bleakdecember: {
 		accuracy: 100,
@@ -2043,12 +2077,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Instruct
-	kickofftune: {
+	youlittlebeauty: {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
 		shortDesc: "First turn: Flinches the oppnent then switches out",
-		name: "Kickoff Tune",
+		name: "You Little Beauty",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -2199,9 +2233,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			if (pokemon.species.forme === 'Low-Key') {
-				changeSet(this, pokemon, ssbSets['Jho'], true);
+				changeSet(this, pokemon, ssbSets['Jho']);
 			} else {
-				changeSet(this, pokemon, ssbSets['Jho-Low-Key'], true);
+				changeSet(this, pokemon, ssbSets['Jho-Low-Key']);
 			}
 		},
 		boosts: {
@@ -2696,35 +2730,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
-	// Level 51
-	swansong: {
-		accuracy: true,
-		basePower: 0,
-		category: "Special",
-		desc: "Randomly calls Seismic Toss, Night Shade, and/or Psywave.",
-		shortDesc: "Randomly calls Seismic Toss, Night Shade, and/or Psywave.",
-		name: "Swan Song",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {},
-		onTryMove(target) {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Nasty plot', source);
-		},
-		onHit(target, source, move) {
-			const randomMove = this.sample(['Seismic Toss', 'Night Shade', 'Psywave']);
-			this.useMove(randomMove, source);
-		},
-		multihit: [2, 4],
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
-	},
-
 	// Lionyx
 	bigbang: {
 		accuracy: 100,
@@ -3089,33 +3094,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Rock",
 	},
 
-	// Morfent
-	owowutsdis: {
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		desc: "Has a 50% chance to torment the opponent.",
-		shortDesc: "Has a 50% chance to torment the opponent.",
-		name: "OwO wuts dis?",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Return', target);
-		},
-		secondary: {
-			chance: 50,
-			volatileStatus: 'torment',
-		},
-		target: "normal",
-		type: "Normal",
-	},
-
 	// n10siT
 	"unbind": {
 		accuracy: 100,
@@ -3188,7 +3166,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
-	// Nolali
+	// Nol
 	madhacks: {
 		accuracy: true,
 		basePower: 0,
@@ -4404,12 +4382,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Cosmic Power', source);
 			this.add('-anim', source, 'Psychic', target);
 		},
-		boosts: {
-			spa: 1,
-		},
 		self: {
 			onHit(source) {
-				const boost: {[k: string]: number} = {};
+				const boosts: {[k: string]: number} = {};
+				boost['spa'] = 1;
 				boost[['def', 'spd'][this.random(2)]] = 1;
 				this.boost(boost, source);
 				this.add(`c|${getName('SectoniaServant')}|Jelly baby ;w;`);
@@ -4537,7 +4513,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.boost({def: -1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
 					this.add(`c|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
 				} else {
-					if (this.randomChance(85, 100)) {
+					if (this.randomChance(85, 100) && !pokemon.volatiles['stall']) {
 						pokemon.addVolatile('parry');
 						this.boost({spe: 2}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
 						pokemon.m.parriedPower = move.basePower * 1.15;
@@ -4545,6 +4521,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					} else {
 						target.addVolatile('failedparry');
 						this.add(`c|${getName('Seso')}|Scars on the back are a swordsman's shame.`);
+						if (!pokemon.m.failures) pokemon.m.failures = 0;
+						pokemon.m.failures++;
+						const fails = pokemon.volatiles['stall'] ? 2 : this.clampIntRange(pokemon.m.failures, 0, 3);
+						const dmg = [0, 0.1, 0.25, 0.4][fails];
+						this.damage(pokemon.baseMaxhp * dmg, pokemon);
 					}
 				}
 			} else if (this.queue.willSwitch(target)) {
@@ -4571,6 +4552,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fail', source, 'move: Legendary Swordsman');
 				return null;
 			}
+		},
+		onHit(target, source) {
+			source.addVolatile('stall');
 		},
 		onPrepareHit(target, source) {
 			this.add(`c|${getName('Seso')}|FORWARD!`);
@@ -4788,20 +4772,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1},
 		onTryMove(source) {
 			this.attrLastMove('[still]');
-			if (source.name !== 'Struchni') {
-				this.add('-fail', source);
-				this.hint("Only Struchni can use Veto.");
-				return null;
-			}
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Head Smash', target);
 		},
-		onModifyType(move, pokemon) {
-			let type = pokemon.types[0];
-			if (type === "Bird") type = "???";
-			move.type = type;
-		},
+		// Veto interactions located in formats.ts
 		onModifyPriority(priority, source, target, move) {
 			if (source.m.typeEff) {
 				if (source.m.typeEff < 0) {
@@ -4831,7 +4806,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Steel",
 	},
 
 	// Teclis
@@ -5283,11 +5258,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1},
 		onTryMove(source) {
 			this.attrLastMove('[still]');
-			if (source.name !== 'yuki') {
-				this.add('-fail', source);
-				this.hint("Only yuki can use Class Change.");
-				return null;
-			}
 		},
 		onPrepareHit(foe, source, move) {
 			let animation: string;
@@ -5296,54 +5266,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
 				animation = 'Strength Sap';
+				this.useMove("Strength Sap", source);
 				break;
 			case 'Ninja':
-				animation = 'Confuse Ray';
+				this.useMove("Confuse Ray", source);
 				break;
 			case 'Dancer':
-				animation = 'Feather Dance';
+				this.useMove("Feather Dance", source);
 				break;
 			case 'Songstress':
-				animation = 'Sing';
+				this.useMove("Sing", source);
 				break;
 			case 'Jester':
-				animation = 'Charm';
+				this.useMove("Charm", source);
 				break;
 			default:
-				animation = 'Tackle';
 				break;
 			}
-			this.add('-anim', source, animation, foe);
 		},
 		onHit(target, source) {
 			if (source.baseSpecies.baseSpecies !== 'Pikachu') return;
-			let classChangeIndex = source.moveSlots.map(x => x.id).indexOf('classchange' as ID);
-			if (classChangeIndex < 0) classChangeIndex = 1;
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
-				if (target.boosts.atk === -6) return false;
-				const atk = target.getStat('atk', false, true);
-				const success = this.boost({atk: -1}, target, source, null, false, true);
 				changeSet(this, source, ssbSets['yuki-Cleric']);
 				this.add('-message', 'yuki patches up her wounds!');
 				return !!(this.heal(atk, source, target) || success);
 			case 'Ninja':
-				target.addVolatile('confusion');
 				changeSet(this, source, ssbSets['yuki-Ninja']);
 				this.add('-message', `yuki's fast movements confuse ${target.name}!`);
 				return;
 			case 'Dancer':
-				this.boost({atk: -2}, target, source, this.effect, false, true);
 				changeSet(this, source, ssbSets['yuki-Dancer']);
 				this.add('-message', `yuki dazzles ${target.name} with her moves!`);
 				return;
 			case 'Songstress':
-				target.trySetStatus('slp');
 				changeSet(this, source, ssbSets['yuki-Songstress']);
 				this.add('-message', `yuki sang an entrancing melody!`);
 				return;
 			case 'Jester':
-				this.boost({atk: -2}, target, source, this.effect, false, true);
 				changeSet(this, source, ssbSets['yuki-Jester']);
 				this.add('-message', `yuki tries her best to impress ${target.name}!`);
 				return;
@@ -5404,49 +5364,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
-			if (pokemon.species.baseSpecies === 'Meloetta') {
-				return;
-			}
-			this.add('-fail', pokemon, 'move: Relic Dance');
-			this.hint("Only a Pokemon whose form is Meloetta or Meloetta-Pirouette can use this move.");
-			return null;
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Relic Song', target);
 		},
 		onAfterMove(source) {
-			const formeMoves: {[key: string]: string[]} = {
-				meloetta: ["Quiver Dance", "Feather Dance", "Lunar Dance", "Relic Dance"],
-				meloettapirouette: ["Revelation Dance", "Fiery Dance", "Petal Dance", "Relic Dance"],
-			};
-			const forme = source.species.name === "Meloetta" ? "Meloetta-Pirouette" : "Meloetta";
-			source.formeChange(forme, this.effect, true);
-			const newMoves = formeMoves[this.toID(forme)];
-			const carryOver = source.moveSlots.slice().map(m => {
-				return m.pp / m.maxpp;
-			});
-			// Incase theres ever less than 4 moves
-			while (carryOver.length < 4) {
-				carryOver.push(1);
-			}
-			source.moveSlots = [];
-			let slot = 0;
-			for (const newMove of newMoves) {
-				const moveData = source.battle.dex.getMove(this.toID(newMove));
-				if (!moveData.id) continue;
-				source.moveSlots.push({
-					move: moveData.name,
-					id: moveData.id,
-					pp: ((moveData.noPPBoosts || moveData.isZ) ? Math.floor(moveData.pp * carryOver[slot]) : moveData.pp * 8 / 5),
-					maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
-					target: moveData.target,
-					disabled: false,
-					disabledSource: '',
-					used: false,
-				});
-				slot++;
-			}
 			this.boost({spa: 1}, source);
+			if (source.species.baseSpecies !== 'Meloetta') return;
+			if (source.species.name === "Meloetta-Pirouette") {
+				changeSet(this, source, ssbSets['Zarel']);
+			} else {
+				changeSet(this, source, ssbSets['Zarel-Pirouette']);
+			}
 		},
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.name === "Meloetta-Pirouette") move.type = "Fighting";
@@ -5475,12 +5404,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add(`c|${getName('Zodiax')}|There is a hail no storm okayyyyyy`);
 		},
 		onTry(pokemon, target) {
-			pokemon.m.bigstormcoming = true;
+			pokemon.addVolatile('bigstormcomingmod');
 			this.useMove("Hurricane", pokemon);
 			this.useMove("Thunder", pokemon);
 			this.useMove("Blizzard", pokemon);
 			this.useMove("Weather Ball", pokemon);
-			pokemon.m.bigstormcoming = false;
 		},
 		secondary: null,
 		target: "normal",

@@ -1372,7 +1372,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Super Staff Bros 4",
-		desc: "Super Staff Bros returns for another round! Battle with a random team of pokemon created by the sim staff.",
+		desc: "The fourth iteration of Super Staff Bros is here! Battle with a random team of pokemon created by the sim staff.",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/articles/super-staff-bros-brawl">Introduction &amp; Roster</a>`,
 		],
@@ -1393,7 +1393,7 @@ export const Formats: FormatList = [
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			if (this.dex.getSpecies(name).exists || this.dex.getMove(name).exists) {
+			if (this.dex.getSpecies(name).exists || this.dex.getMove(name).exists || this.dex.getAbility(name).exists) {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
@@ -1406,6 +1406,13 @@ export const Formats: FormatList = [
 			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
+		},
+		// For the veto move
+		onHit(target, source, move) {
+			target.m.typeEff = target.getMoveHitData(move).typeMod;
+		},
+		onSwitchOut(source) {
+			if (source.m.typeEff) delete source.m.typeEff;
 		},
 	},
 	{

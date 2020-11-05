@@ -100,7 +100,39 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Clears everything on both sides. Moves ignore abilities. Zygarde can become 100% form.",
 		name: "Scyphozoa",
 		onSwitchIn(source) {
+			const stats: BoostName[] = [];
+			let stat: BoostName;
+			const exclude: string[] = ['accuracy', 'evasion'];
 			this.add('-ability', source, 'Scyphozoa');
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.clearBoosts()) {
+					for (stat in source.boosts) {
+						if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = 1;
+						this.boost(boost, source, source);
+					}
+				}
+				if (pokemon.removeVolatile('substitute')) {
+					for (stat in source.boosts) {
+						if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = 1;
+						this.boost(boost, source, source);
+					}
+				}
+			}
 			const target = source.side.foe.active[0];
 
 			const removeAll = [
@@ -112,24 +144,77 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
 						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+						for (stat in source.boosts) {
+							if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+								stats.push(stat);
+							}
+						}
+						if (stats.length) {
+							const randomStat = this.sample(stats);
+							const boost: SparseBoostsTable = {};
+							boost[randomStat] = 1;
+							this.boost(boost, source, source);
+						}
 					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
 						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+						for (stat in source.boosts) {
+							if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+								stats.push(stat);
+							}
+						}
+						if (stats.length) {
+							const randomStat = this.sample(stats);
+							const boost: SparseBoostsTable = {};
+							boost[randomStat] = 1;
+							this.boost(boost, source, source);
+						}
 					}
 				}
-			}
-			this.add('-clearallboost');
-			for (const pokemon of this.getAllActive()) {
-				pokemon.clearBoosts();
 			}
 			for (const clear in this.field.pseudoWeather) {
 				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
 				this.field.removePseudoWeather(clear);
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					this.boost(boost, source, source);
+				}
 			}
-			this.field.clearWeather();
-			this.field.clearTerrain();
+			if (this.field.clearWeather()) {
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					this.boost(boost, source, source);
+				}
+			}
+			if (this.field.clearTerrain()) {
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					this.boost(boost, source, source);
+				}
+			}
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
@@ -442,6 +527,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Super Armor",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
+	// Billo
+	proofpolicy: {
+		shortDesc: "Upon contact, opposing Pokemon is made drowsy and applies Taunt + Torment.",
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
+				source.addVolatile('taunt', target);
+				source.addVolatile('yawn', target);
+				source.addVolatile('torment', target);
+			}
+		},
+		name: "Proof Policy",
 		isNonstandard: "Custom",
 		gen: 8,
 	},
@@ -1405,7 +1505,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Nolali
+	// Nol
 	burningsoul: {
 		shortDesc: "Drought + Sturdy.",
 		onStart(source) {
@@ -1453,25 +1553,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Attracts opponent. Attracted Pokemon have SpD reduced by 25%.",
 		// See conditions.ts for implementation
 		name: "Condition Override",
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
-	// Overneat
-	darkestwings: {
-		desc: "This Pokemon's contact moves have their power multiplied by 1.3. This Pokemon's Defense is doubled.",
-		shortDesc: "Contact moves are multiplied by 1.3. Defense is doubled.",
-		name: "Darkest Wings",
-		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['contact']) {
-				return this.chainModify([0x14CD, 0x1000]);
-			}
-		},
-		onModifyDefPriority: 6,
-		onModifyDef(def) {
-			return this.chainModify(2);
-		},
 		isNonstandard: "Custom",
 		gen: 8,
 	},
@@ -1856,43 +1937,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Struchni
 	overaskedclause: {
-		desc: "When switching in, become a random type that resists the last move the opponent used. If no move was used or if it's the first turn, pick a random type. If hit by a move that is not very effective, become Aggron-Mega (but keep the same type).",
-		shortDesc: "I dont even know how to shortdesc this",
+		desc: "If hit by a move that is not very effective, become Aggron-Mega (but keep the same type).",
+		shortDesc: "Hit with a resisted attack mega evolves and gives +1 atk.",
 		name: "Overasked Clause",
-		onSwitchIn(source) {
-			const target = source.side.foe.active[0];
-			if (!target || !target.lastMove) {
-				const typeList = Object.keys(this.dex.data.TypeChart);
-				const newType = this.sample(typeList);
-				source.types = [newType];
-				this.add('-start', source, 'typechange', newType);
-				return;
-			}
-			const possibleTypes = [];
-			const attackType = target.lastMove.type;
-			for (const type in this.dex.data.TypeChart) {
-				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
-				if (typeCheck === 2 || typeCheck === 3) {
-					possibleTypes.push(type);
-				}
-			}
-			if (!possibleTypes.length) {
-				return false;
-			}
-			const randomType = this.sample(possibleTypes);
-
-			if (!source.setType(randomType)) return false;
-			this.add('-start', source, 'typechange', randomType);
-		},
 		onHit(target, source, move) {
 			if (target.species.name !== 'Aggron' || target.illusion || target.transformed) return;
 			if (!target.hp) return;
 			if (target.getMoveHitData(move).typeMod < 0) {
-				const sameType = target.types;
 				this.runMegaEvo(target);
-				target.setType(sameType);
-				this.add('-start', target, 'typechange', sameType.join('/'));
+				this.boost({atk: 1}, target);
 			}
 		},
 		isNonstandard: "Custom",

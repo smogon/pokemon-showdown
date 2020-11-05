@@ -50,6 +50,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 62, atk: 88, def: 100, spa: 44, spd: 100, spe: 110},
 	},
+	// Billo
+	cosmog: {
+		inherit: true,
+		baseStats: {hp: 86, atk: 58, def: 62, spa: 87, spd: 62, spe: 74},
+	},
 	// Elgino
 	celebi: {
 		inherit: true,
@@ -111,6 +116,15 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Electric", "Water"],
 		baseStats: {hp: 70, atk: 80, def: 55, spa: 75, spd: 75, spe: 100},
 	},
+	// Jho
+	toxtricity: {
+		inherit: true,
+		abilities: {0: "Punk Rock"},
+	},
+	toxtricitylowkey: {
+		inherit: true,
+		abilities: {0: 'Venomize'},
+	},
 	// Kaiju Bunny
 	lopunnymega: {
 		inherit: true,
@@ -134,11 +148,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: 'Unaware'},
 	},
-	// Morfent
-	banette: {
-		inherit: true,
-		types: ["Ghost", "Normal"],
-	},
 	// nui
 	jigglypuff: {
 		inherit: true,
@@ -147,7 +156,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Overneat
 	absolmega: {
 		inherit: true,
-		abilities: {0: 'Darkest Wings'},
+		abilities: {0: 'Fur Coat'},
 		types: ['Dark', 'Fairy'],
 	},
 	// Psynergy
