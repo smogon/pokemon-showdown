@@ -2227,7 +2227,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	}
 	if (!formatName) {
 		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
-		format = new Dex.Data.Format(format, {mod: `gen${gen}`});
+		format = new Dex.Format(format, {mod: `gen${gen}`});
 		formatName = `Gen ${gen}`;
 		if (minSourceGen === 6) formatName += ' Pentagon';
 	}

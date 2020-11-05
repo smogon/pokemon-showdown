@@ -466,8 +466,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
 			target.setAbility(set.ability);
 
-			const format = this.format;
-			if (format.exists && format.onSwitchIn) format.onSwitchIn.call(this, target);
+			this.singleEvent('SwitchIn', this.format, this.formatData, target);
 			this.add('-message', `${oldName} was sent to the Distortion World and replaced with somebody else!`);
 			let stat: BoostName;
 			for (stat in target.boosts) {
