@@ -416,7 +416,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 		if (!ticket.active) continue;
 		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
 
-		if (ticket.needsDelayWarning && !ticket.claimed) {
+		if (ticket.needsDelayWarning && !ticket.claimed && delayWarnings[ticket.type]) {
 			ticketRoom.add(
 				`|c|&Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
 			).update();
@@ -532,7 +532,6 @@ const delayWarnings: {[k: string]: string} = {
 	'Inappropriate Pokemon Nicknames': `Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
 	'Appeal': `Please clearly explain why you should be unlocked and we will review it as soon as possible.`,
 	'IP-Appeal': `Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.`,
-	'ISP-Appeal': ``,
 	'Public Room Assistance Request': `Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.`,
 	other: `If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.`,
 };
