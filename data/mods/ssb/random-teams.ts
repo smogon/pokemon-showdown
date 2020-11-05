@@ -685,10 +685,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 251, atk: 5, def: 11, spd: 241}, nature: 'Careful',
 	},
 	Teclis: {
-		species: 'Alakazam', ability: 'Protean', item: 'Life Orb', gender: 'M',
-		moves: ['Psychic', 'Shadow Ball', 'Aura Sphere'],
-		signatureMove: 'Ten',
-		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		species: 'Typhosion', ability: 'Fiery Fur', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Earth Power', 'Seed Flare', 'Spiky Shield'],
+		signatureMove: 'Kaboom',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Tenshi: {
 		species: 'Stoutland', ability: 'Royal Coat', item: 'Leftovers', gender: 'M',

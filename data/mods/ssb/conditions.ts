@@ -1676,13 +1676,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	teclis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Teclis')}|A little magic can go a long way.`);
+			this.add(`c|${getName('Teclis')}|Fire at will!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Teclis')}|But magic can sometimes just be an illusion.`);
+			this.add(`c|${getName('Teclis')}|A spark remains...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Teclis')}|Magic never dies. It merely fades away.`);
+			this.add(`c|${getName('Teclis')}|You set my soul on fire!`);
 		},
 	},
 	tenshi: {
