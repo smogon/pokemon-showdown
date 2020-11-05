@@ -221,11 +221,12 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(user: ID | User): GroupSymbol {
+	get(userOrID: ID | User): GroupSymbol {
+		const id = typeof userOrID === 'string' ? userOrID : (userOrID as User).id;
+
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
-		const parentGroup = parentAuth ? parentAuth.get(user) : Auth.defaultSymbol();
-		const id = typeof user === 'string' ? user : (user as User).id;
+		const parentGroup = parentAuth ? parentAuth.get(userOrID) : Auth.defaultSymbol();
 
 		if (this.has(id)) {
 			// authority is whichever is higher between roomauth and global auth
