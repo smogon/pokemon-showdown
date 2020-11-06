@@ -164,9 +164,10 @@ if (require.main === module) {
 	// postpone launching until app.listen() is called.
 	let port;
 	for (const arg of process.argv) {
-		const parsed = parseInt(arg);
-		if (isNaN(parsed)) continue;
-		port = parsed;
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
 	}
 	Sockets.listen(port);
 }
