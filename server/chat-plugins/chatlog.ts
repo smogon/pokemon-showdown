@@ -1047,7 +1047,7 @@ export const commands: ChatCommands = {
 	roomstats: 'linecount',
 	linecount(target, room, user) {
 		let [roomid, month, userid] = target.split(',').map(item => item.trim());
-		const tarRoom = (roomid ? Rooms.get(toID(roomid)) : room);
+		const tarRoom = roomid ? Rooms.search(roomid) : room;
 		if (!tarRoom) return this.errorReply(`You must specify a valid room.`);
 		if (!month) month = LogReader.getMonth();
 		return this.parse(`/join view-roomstats-${tarRoom.roomid}--${month}--${toID(userid)}`);
