@@ -175,7 +175,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk'].includes(moveid)) &&
+				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'spikes'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
@@ -272,7 +272,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			Uber: 61,
 		};
 		const customScale: {[k: string]: number} = {
-			Ditto: 83, Unown: 83, Wobbuffet: 83,
+			Ditto: 83, Unown: 87, Wobbuffet: 83,
 		};
 		let level = levelScale[species.tier] || 80;
 		if (customScale[species.name]) level = customScale[species.name];
