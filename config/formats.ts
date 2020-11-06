@@ -700,6 +700,12 @@ export const Formats: FormatList = [
 				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(this.dex.toID).includes(ability.id)) {
 				return this.validateSet(set, teamHas);
 			}
+			if (ability.forceSwitch) {
+				return [
+					`Force-switching moves are banned from being used as trademarks.`,
+					`(${ability.name} is a force-switching move.)`,
+				];
+			}
 			const customRules = this.format.customRules || [];
 			if (!customRules.includes('!obtainableabilities')) customRules.push('!obtainableabilities');
 
