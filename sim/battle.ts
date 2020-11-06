@@ -433,6 +433,13 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 		}
+		if (this.log.length - this.sentLogPos > 1000) {
+			this.add('message', 'LINE LIMIT EXCEEDED');
+			this.add('message', 'PLEASE REPORT IN BUG THREAD');
+			this.add('message', 'Event: ' + eventid);
+			this.add('message', 'Parent event: ' + this.event.id);
+			throw new Error("Infinite loop");
+		}
 		// this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		let hasRelayVar = true;
 		if (relayVar === undefined) {
