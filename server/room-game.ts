@@ -76,7 +76,7 @@ export class RoomGamePlayer {
  * globally Rooms.RoomGame
  */
 export class RoomGame {
-	readonly roomid: RoomID;
+	roomid: RoomID;
 	/**
 	 * The room this roomgame is in. Rooms can have two RoomGames at a time,
 	 * which are available as `this.room.game === this` and `this.room.subGame === this`.
@@ -202,6 +202,15 @@ export class RoomGame {
 			this.playerTable[user.id].name = user.name;
 			delete this.playerTable[oldUserid];
 		}
+	}
+
+	renameRoom(roomid: RoomID) {
+		for (const player of this.players) {
+			const user = Users.get(player.id);
+			user?.games.delete(this.roomid);
+			user?.games.add(roomid);
+		}
+		this.roomid = roomid;
 	}
 
 	// Commands:
