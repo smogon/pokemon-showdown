@@ -909,6 +909,7 @@ export const commands: ChatCommands = {
 			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
 				curUser.locked = null;
 				curUser.namelocked = null;
+				curUser.destroyPunishmentTimer();
 				curUser.updateIdentity();
 			}
 		}
@@ -945,6 +946,7 @@ export const commands: ChatCommands = {
 					curUser.namelocked = null;
 					curUser.resetName();
 				}
+				curUser.destroyPunishmentTimer();
 				curUser.updateIdentity();
 			}
 		}
