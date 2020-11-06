@@ -25,7 +25,6 @@ To reload chat commands:
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
-import type {PartialModlogEntry} from './modlog';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -119,9 +118,13 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
+const MODLOG_PATH = 'logs/modlog';
+const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
+
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
+import {Modlog, PartialModlogEntry} from './modlog';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
@@ -1312,6 +1315,7 @@ export class CommandContext extends MessageContext {
 
 export const Chat = new class {
 	constructor() {
+		this.destroyHandlers.push(() => Chat.modlog.destroy());
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
@@ -1325,6 +1329,9 @@ export const Chat = new class {
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 
 	readonly multiLinePattern = new PatternTester();
+
+	readonly modlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
+	modlogStreamPersistence: {sharedStreams: Modlog["sharedStreams"], streams: Modlog["streams"]} | null = null;
 
 	/*********************************************************
 	 * Load command files

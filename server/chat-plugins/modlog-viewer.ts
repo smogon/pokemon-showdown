@@ -182,7 +182,7 @@ async function getModlog(
 		search.user.search = toID(search.user.search);
 	}
 
-	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
+	const response = await Chat.modlog.search(roomid, search, maxLines, onlyPunishments);
 
 	connection.send(
 		prettifyResults(

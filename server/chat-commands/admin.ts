@@ -376,6 +376,7 @@ export const commands: ChatCommands = {
 
 				const oldPlugins = Chat.plugins;
 				Chat.destroy();
+				const modlogStreams = Chat.modlogStreamPersistence;
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
@@ -388,6 +389,8 @@ export const commands: ChatCommands = {
 				}
 
 				global.Chat = require('../chat').Chat;
+				if (modlogStreams) Chat.modlog.restoreStreams(modlogStreams);
+
 				global.Tournaments = require('../tournaments').Tournaments;
 
 				this.sendReply("Reloading chat plugins...");
@@ -459,31 +462,7 @@ export const commands: ChatCommands = {
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
-				this.sendReply("DONE");
-			} else if (target === 'modlog') {
-				patch = 'modlog';
-				if (lock['modlog']) {
-					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
-				}
-				this.sendReply("Hotpatching modlog...");
-
-				const streams = Rooms.Modlog.streams;
-				const sharedStreams = Rooms.Modlog.sharedStreams;
-
-				const processManagers = ProcessManager.processManagers;
-				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
-				}
-
-				const {Modlog} = require('../modlog');
-				Rooms.Modlog = new Modlog(
-					Rooms.MODLOG_PATH || 'logs/modlog',
-					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
-				);
-				this.sendReply("Re-initializing modlog streams...");
-				Rooms.Modlog.streams = streams;
-				Rooms.Modlog.sharedStreams = sharedStreams;
-				this.sendReply("DONE");
+				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
 				return this.parse('/help nohotpatch');

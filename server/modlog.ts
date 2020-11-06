@@ -169,6 +169,14 @@ export class Modlog {
 		}
 	}
 
+	/**
+	 * Overwrites the modlog streams.
+	 */
+	restoreStreams(streams: {streams: Map<ModlogID, Streams.WriteStream>, sharedStreams: Map<ID, Streams.WriteStream>}) {
+		this.streams = streams.streams;
+		this.sharedStreams = streams.sharedStreams;
+	}
+
 	/******************
 	 * Helper methods *
 	 ******************/
@@ -279,7 +287,7 @@ export class Modlog {
 		}
 	}
 
-	async destroy(roomid: ModlogID) {
+	async destroyRoomModlog(roomid: ModlogID) {
 		const stream = this.streams.get(roomid);
 		if (stream && !this.getSharedID(roomid)) {
 			await stream.writeEnd();
@@ -290,7 +298,7 @@ export class Modlog {
 	async destroyAll() {
 		const promises = [];
 		for (const id in this.streams) {
-			promises.push(this.destroy(id as ModlogID));
+			promises.push(this.destroyRoomModlog(id as ModlogID));
 		}
 		return Promise.all(promises);
 	}
@@ -300,7 +308,7 @@ export class Modlog {
 
 		// rename flat-file modlogs
 		const streamExists = this.streams.has(oldID);
-		if (streamExists) await this.destroy(oldID);
+		if (streamExists) await this.destroyRoomModlog(oldID);
 		if (!this.getSharedID(oldID)) {
 			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
 		}
@@ -450,24 +458,11 @@ export class Modlog {
 		};
 	}
 
-	hotpatch() {
-		if (this !== Rooms.Modlog) {
-			throw new Error(`Attempt to call Modlog#hotpatch on a modlog instance other than Rooms.Modlog`);
+	async destroy() {
+		if (this === Chat.modlog) {
+			Chat.modlogStreamPersistence = {streams: this.streams, sharedStreams: this.sharedStreams};
+			await PM.destroy();
 		}
-
-		const streams = Rooms.Modlog.streams;
-		const sharedStreams = Rooms.Modlog.sharedStreams;
-
-		const processManagers = ProcessManager.processManagers;
-		for (const manager of processManagers.slice()) {
-			if (manager.filename.startsWith(__filename)) void manager.destroy();
-		}
-
-		const modlog = require('./modlog');
-		Rooms.Modlog = new modlog.Modlog(this.logPath, this.database.name);
-
-		Rooms.Modlog.streams = streams;
-		Rooms.Modlog.sharedStreams = sharedStreams;
 	}
 
 	private async readRoomModlog(path: string, results: SortedLimitedLengthList, regex?: RegExp) {
@@ -490,10 +485,10 @@ type ModlogResult = ModlogEntry | undefined;
 
 // the ProcessManager only accepts text queries at this time
 // SQL support is to be determined
-export const PM = new ProcessManager.QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
+export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
-		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = await Chat.modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
 		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
@@ -503,9 +498,10 @@ export const PM = new ProcessManager.QueryProcessManager<ModlogTextQuery, Modlog
 
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
-	global.toID = require('../sim/dex').Dex.toID;
+	global.Dex = require('../sim/dex').Dex;
+	global.toID = Dex.toID;
 
-	global.Rooms = require('./rooms').Rooms;
+	global.Chat = require('./chat').Chat;
 
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
