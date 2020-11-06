@@ -124,8 +124,8 @@ export class Modlog {
 	 * has not yet been initialized, or was previously destroyed.
 	 * If a room ID is in the Map, its modlog stream is open and ready to be written to.
 	 */
-	sharedStreams: Map<ID, Streams.WriteStream> = new Map();
-	streams: Map<ModlogID, Streams.WriteStream> = new Map();
+	sharedStreams = new Map<ID, Streams.WriteStream>();
+	streams = new Map<ModlogID, Streams.WriteStream>();
 
 	readonly database?: Database.Database;
 
