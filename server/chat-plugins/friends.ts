@@ -49,6 +49,7 @@ const ACTIONS: {[k: string]: string} = {
 	insertRequest: `INSERT INTO friend_requests(sender, receiver, sent_at) VALUES(?, ?, ?)`,
 	deleteRequest: `DELETE FROM friend_requests WHERE sender = ? AND receiver = ?`,
 	findFriendship: `SELECT * FROM friends WHERE (friend = $user1 AND userid = $user2) OR (userid = $user1 AND friend = $user2)`,
+	findRequest: `SELECT * FROM friend_requests WHERE (sender = $user1 AND receiver = $user2) OR (sender = $user2 AND receiver = $user1)`,
 	renameFriend: `UPDATE OR IGNORE friends SET friend = $newID WHERE friend = $oldID`,
 	renameUserid: `UPDATE OR IGNORE friends SET userid = $newID WHERE userid = $oldID`,
 	rename: `REPLACE INTO friend_renames (original_name, new_name, change_date) VALUES(?, ?, ?)`,
@@ -67,7 +68,7 @@ export const Friends = new class {
 		this.setupDatabase();
 		this.renames = this.getRenames();
 		const existingRequests = 'Chat' in global ? Chat.oldPlugins.friends?.transferRequests : undefined;
-		this.transferRequests =  existingRequests || new Map();
+		this.transferRequests = existingRequests || new Map();
 		void this.checkExpiringRequests();
 	}
 	setupDatabase() {
@@ -97,12 +98,10 @@ export const Friends = new class {
 		return removed;
 	}
 	async getFriends(user: User) {
-		if (user.friends) return; // only query once per user object
 		const results = await PM.query({
 			statement: 'get', type: 'all', data: [user.id, MAX_FRIENDS],
 		});
-		const friends = new Set(results.map((item: AnyObject) => item.friend));
-		user.friends = friends as Set<string>;
+		const friends: Set<string> = new Set(results.map((item: AnyObject) => item.friend));
 		return friends;
 	}
 	async getRequests(user: User) {
@@ -113,8 +112,7 @@ export const Friends = new class {
 			await PM.query({
 				statement: 'deleteRequest', type: 'run', data: [user.id],
 			});
-			user.friendRequests = {sent, received: null};
-			return;
+			return {sent, received: null};
 		}
 		const sentResults = await PM.query({
 			statement: 'getSent', type: 'all', data: [user.id],
@@ -133,7 +131,6 @@ export const Friends = new class {
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
-		user.friendRequests = {sent, received};
 		return {sent, received};
 	}
 	getRenames() {
@@ -149,13 +146,14 @@ export const Friends = new class {
 	}
 	async request(user: User, receiverName: string) {
 		const receiverID = toID(receiverName);
-		if (!user.friends) user.friends = new Set();
-		if (user.friends.size >= MAX_FRIENDS) {
+		const friends = await this.getFriends(user);
+		const friendRequests = await this.getRequests(user);
+		if (friends.size >= MAX_FRIENDS) {
 			throw new Chat.ErrorMessage(`You are at the maximum number of friends.`);
 		}
 		if (!receiverID) throw new Chat.ErrorMessage(`Invalid name.`);
 		if (receiverID === user.id) throw new Chat.ErrorMessage(`You cannot friend yourself.`);
-		let sentRequests = user.friendRequests?.sent;
+		let sentRequests = friendRequests.sent;
 		if (await this.hasFriendship(user.id, receiverID)) {
 			throw new Chat.ErrorMessage(`You are already friends with '${receiverID}'.`);
 		}
@@ -171,7 +169,7 @@ export const Friends = new class {
 				`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
 			);
 		}
-		if (user.friends.has(receiverID)) {
+		if (friends.has(receiverID)) {
 			throw new Chat.ErrorMessage(`You have already friended '${receiverID}'.`);
 		}
 
@@ -188,13 +186,14 @@ export const Friends = new class {
 		);
 
 		if (receiver) {
-			if (!receiver.friendRequests) {
+			const receiverRequests = await this.getRequests(receiver);
+			if (receiver.settings.blockFriendRequests) {
 				throw new Chat.ErrorMessage(`This user is blocking friend requests.`);
 			}
 			if (receiver.settings.blockPMs) {
 				throw new Chat.ErrorMessage(`This user is blocking PMs, and cannot be friended right now.`);
 			}
-			if (receiver.friendRequests.sent.has(user.id)) {
+			if (receiverRequests.sent.has(user.id)) {
 				// if the sender is trying to friend the receiver, and the receiver is trying to friend the sender
 				// it seems like they might want to be friends, so let's just approve the request and create the friendship
 				return this.approveRequest(receiver, user.id);
@@ -202,7 +201,6 @@ export const Friends = new class {
 			this.sendPM(`/text ${Utils.escapeHTML(user.name)} sent you a friend request!`, receiver.id);
 			this.sendPM(buf, receiver.id);
 			this.sendPM(disclaimer, receiver.id);
-			receiver.friendRequests.received?.add(user.id);
 		}
 		this.sendPM(`/text You sent a friend request to ${receiver?.connected ? receiver.name : receiverID}!`, user.id);
 		this.sendPM(
@@ -221,55 +219,46 @@ export const Friends = new class {
 		if (!senderID) throw new Chat.ErrorMessage(`Invalid sender username.`);
 		if (!receiverID) throw new Chat.ErrorMessage(`Invalid receiver username.`);
 
-		const sender = Users.get(senderID);
-		const receiver = Users.get(receiverID);
-
-		if (sender?.friendRequests) {
-			const {sent} = sender.friendRequests;
-			sent.delete(receiverID);
-		}
-		if (receiver?.friendRequests) {
-			const {received} = receiver.friendRequests;
-			received?.delete(senderID);
-		}
 		return PM.query({
 			statement: 'deleteRequest', data: [senderID, receiverID], type: 'run',
 		});
 	}
 	async approveRequest(receiver: User, senderName: string) {
 		const senderID = toID(senderName);
-		if (!receiver.friendRequests?.received?.has(senderID)) {
+		const receiverRequests = await this.getRequests(receiver);
+		if (!receiverRequests.received?.has(senderID)) {
 			throw new Chat.ErrorMessage(`You have not received a friend request from '${senderID}'.`);
 		}
 		await this.removeRequest(receiver.id, senderID);
 		await this.addFriend(senderID, receiver.id);
 	}
 	async visualizeList(user: User) {
-		if (!user.friends) {
+		const friends = await this.getFriends(user);
+		if (!friends.size) {
 			return `<h3>Your friends:</h3> <h4>None.</h4>`;
 		}
-		const friends: {[k: string]: string[]} = {
+		const categorized: {[k: string]: string[]} = {
 			online: [],
 			idle: [],
 			busy: [],
 			offline: [],
 		};
-		for (const friendName of [...user.friends].sort()) {
+		for (const friendName of [...friends].sort()) {
 			const friend = Users.get(friendName);
 			if (friend?.connected) {
-				friends[friend.statusType].push(friend.id);
+				categorized[friend.statusType].push(friend.id);
 			} else {
-				friends.offline.push(toID(friendName));
+				categorized.offline.push(toID(friendName));
 			}
 		}
 
-		const sorted = Object.keys(friends)
-			.filter(item => friends[item].length > 0)
-			.map(item => `${STATUS_TITLES[item]} (${friends[item].length})`);
+		const sorted = Object.keys(categorized)
+			.filter(item => categorized[item].length > 0)
+			.map(item => `${STATUS_TITLES[item]} (${categorized[item].length})`);
 
 		let buf = `<h3>Your friends: <small> `;
 		if (sorted.length > 0) {
-			buf += `Total (${user.friends.size}) | ${sorted.join(' | ')}`;
+			buf += `Total (${friends.size}) | ${sorted.join(' | ')}`;
 		} else {
 			buf += `</h3><em>you have no friends added on Showdown lol</em><br /><br /><br />`;
 			buf += `<strong>To add a friend, use </strong><code>/friend add [username]</code>.<br /><br />`;
@@ -280,7 +269,7 @@ export const Friends = new class {
 		buf += `</h3> `;
 
 		for (const key in friends) {
-			const friendArray = friends[key].sort();
+			const friendArray = categorized[key].sort();
 			if (friendArray.length === 0) continue;
 			buf += `<h4>${STATUS_TITLES[key]} (${friendArray.length})</h4>`;
 			for (const friend of friendArray) {
@@ -333,36 +322,19 @@ export const Friends = new class {
 		if (await this.hasFriendship(senderID, receiverID)) {
 			throw new Chat.ErrorMessage(`You and ${receiverID} are already friends.`);
 		}
-		const sender = Users.getExact(senderID);
-		const receiver = Users.getExact(receiverID);
-		if (sender) {
-			if (!sender.friends) sender.friends = new Set();
-			sender.friends.add(receiverID);
-		}
-		if (receiver?.friendRequests) {
-			if (!receiver.friends) receiver.friends = new Set();
-			receiver.friends.add(senderID);
-		}
-
 		return PM.query({
 			type: 'transaction', statement: 'add', data: {to: receiverID, from: senderID},
 		});
 	}
-	removeFriend(userName: string, friendName: string) {
+	async removeFriend(userName: string, friendName: string) {
 		const userid = toID(userName);
 		const friendID = toID(friendName);
 		if (!friendID || !userid) throw new Chat.ErrorMessage(`Invalid usernames supplied.`);
 
 		const user = Users.getExact(userid);
-		const friend = Users.getExact(friendID);
 		if (user) {
-			if (!user.friends) user.friends = new Set();
-			if (!user.friends.has(friendID)) throw new Chat.ErrorMessage(`You do not have '${friendID}' friended.`);
-			user.friends.delete(friendID);
-		}
-		if (friend) {
-			if (!friend.friends) friend.friends = new Set();
-			friend.friends.delete(userid);
+			const userFriends = await this.getFriends(user);
+			if (!userFriends.has(friendID)) throw new Chat.ErrorMessage(`You do not have '${friendID}' friended.`);
 		}
 		return PM.query({
 			statement: 'delete', type: 'run', data: {userid},
@@ -389,9 +361,10 @@ export const Friends = new class {
 			receivingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 		}
 	}
-	notifyPending(user: User) {
+	async notifyPending(user: User) {
 		if (user.settings.blockFriendRequests) return;
-		const pendingCount = user.friendRequests?.received?.size;
+		const friendRequests = await this.getRequests(user);
+		const pendingCount = friendRequests.received?.size;
 		if (!pendingCount || pendingCount < 1) return;
 		this.sendPM(`/text You have ${pendingCount} friend requests pending!`, user.id);
 		this.sendPM(`/raw <button class="button" name="send" value="/j view-friends-received">View</button></div>`, user.id);
@@ -401,8 +374,9 @@ export const Friends = new class {
 		if (connected && (Date.now() - connected) < 60 * 1000) {
 			return;
 		}
+		const friends = await this.getFriends(user);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
-		for (const userid of user.friends!) {
+		for (const userid of friends) {
 			const curUser = Users.get(userid);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
@@ -412,41 +386,43 @@ export const Friends = new class {
 	async hasFriendship(name1: string, name2: string) {
 		const userid1 = toID(name1);
 		const userid2 = toID(name2);
-		const user1 = Users.get(userid1);
-		const user2 = Users.get(userid2);
-		if (user1 || user2) {
-			return user1?.friends?.has(userid2) || user2?.friends?.has(userid1);
-		} // they aren't online, check the DB
-		const results = await PM.query({statement: 'findFriendship', data: {user1, user2}, type: 'all'});
+		const results = await PM.query({
+			statement: 'findFriendship', type: 'all',
+			data: {user1: userid1, user2: userid2},
+		});
 		return results.length > 0;
 	}
-	transfer(oldUser: User, newName: string) {
+	async isRequesting(name1: string, name2: string) {
+		const user1 = toID(name1);
+		const user2 = toID(name2);
+		const results = await PM.query({
+			statement: 'findRequest', type: 'all', data: {user1, user2},
+		});
+		return results.length > 0;
+	}
+	async transfer(oldUser: User, newName: string) {
 		const newID = toID(newName);
 		const oldID = oldUser.id;
 		const newUser = Users.getExact(newID);
 		if (!newUser) {
 			throw new Chat.ErrorMessage(`The user '${newID}' could not be found, and so could not receive the friend transfer`);
 		}
-		if (newUser.friendRequests) {
-			const {received, sent} = newUser.friendRequests;
-			if (!received) throw new Chat.ErrorMessage(`The user '${newID}' is currently blocking friend requests.`);
-			if (received.size > 0 || sent.size > 0) {
-				throw new Chat.ErrorMessage(`The user '${newID}' could not be found, and so could not receive the friend transfer`);
-			}
+		const oldFriends = await this.getFriends(oldUser);
+		const newRequests = await this.getRequests(newUser);
+		const {received, sent} = newRequests;
+		if (!received) throw new Chat.ErrorMessage(`The user '${newID}' is currently blocking friend requests.`);
+		if (received.size > 0 || sent.size > 0) {
+			throw new Chat.ErrorMessage(`The user '${newID}' could not be found, and so could not receive the friend transfer`);
 		}
-		if (!oldUser.friends || !oldUser.friends.size) {
+		if (!oldFriends.size) {
 			throw new Chat.ErrorMessage("You have no friends to transfer.");
 		}
-		if (oldUser.friends.has(newUser.id)) oldUser.friends?.delete(newUser.id);
-
-		for (const curUser of Users.users.values()) {
-			if (curUser.friends?.has(oldUser.id)) {
-				curUser.friends.delete(oldUser.id);
-				curUser.friends.add(newUser.id);
-			}
+		if (oldFriends.has(newUser.id)) {
+			// unfriend the two
+			await PM.query({
+				statement: 'delete', type: 'run', data: {userid: newUser.id},
+			});
 		}
-		newUser.friends = oldUser.friends;
-		oldUser.friends.clear();
 
 		this.renames.set(oldID, newID);
 		return PM.query({
@@ -545,10 +521,6 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`That name is too long - choose a valid name.`);
 			}
 			if (!target) return this.parse('/help friends');
-			if (!user.friends) user.friends = new Set();
-			if (user.friends.has(toID(target))) {
-				return this.errorReply(`You are already friends with ${target}.`);
-			}
 			await Friends.request(user, target);
 			if (connection.openPages?.has('friends-sent')) {
 				this.parse(`/join view-friends-sent`);
@@ -589,15 +561,6 @@ export const commands: ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (!target) return this.parse('/help friends');
-			if (!user.friendRequests) {
-				return this.errorReply(`You are currently blocking friend requests.`);
-			}
-			if (!user.friendRequests.received) {
-				return this.errorReply(`You are currently blocking friend requests.`);
-			}
-			if (!user.friendRequests.received.has(target)) {
-				return this.errorReply(this.tr`You have not received a friend request from '${target}'.`);
-			}
 			await Friends.removeRequest(user.id, target);
 			if (connection.openPages?.has('friends-received')) {
 				this.parse(`/j view-friends-received`);
@@ -608,16 +571,13 @@ export const commands: ChatCommands = {
 			Friends.checkCanUse(this);
 			const setting = user.settings.blockFriendRequests;
 			target = target.trim();
-			const requests = user.friendRequests;
 			if (this.meansYes(target)) {
 				if (!setting) return this.errorReply(this.tr`You already are allowing friend requests.`);
 				user.settings.blockFriendRequests = false;
-				user.friendRequests = {sent: requests?.sent || new Set(), received: new Set()};
 				this.sendReply(this.tr`You are now allowing friend requests.`);
 			} else if (this.meansNo(target)) {
 				if (setting) return this.errorReply(this.tr`You already are blocking incoming friend requests.`);
 				user.settings.blockFriendRequests = true;
-				user.friendRequests = {sent: requests?.sent || new Set(), received: null};
 				this.sendReply(this.tr`You are now blocking incoming friend requests.`);
 			} else {
 				if (target) this.errorReply(this.tr`Unrecognized setting.`);
@@ -638,9 +598,6 @@ export const commands: ChatCommands = {
 			}
 			if (target === user.id) {
 				return this.errorReply(`You cannot transfer your friends to yourself.`);
-			}
-			if (!user.friends || user.friends.size < 1) {
-				return this.errorReply(this.tr`You have no friends to transfer.`);
 			}
 			const targetUser = Users.getExact(target);
 			if (!targetUser) return this.errorReply(this.tr`User not found.`);
@@ -687,14 +644,10 @@ export const commands: ChatCommands = {
 		async undorequest(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			const requests = user.friendRequests;
-			if (!requests) {
+			if (user.settings.blockFriendRequests) {
 				return Friends.sendPM(
 					`/error ${this.tr`You are blocking friend requests, and so cannot undo requests, as you have none.`}`, user.id
 				);
-			}
-			if (!requests.sent.has(target)) {
-				return Friends.sendPM(`/error ${this.tr`You have not sent a request to '${target}'.`}`, user.id);
 			}
 			await Friends.removeRequest(target, user.id);
 			if (connection.openPages?.has('friends-sent')) {
@@ -766,11 +719,11 @@ export const pages: PageTable = {
 			this.title = `[Friends] Sent`;
 			buf += headerButtons('sent', user);
 			buf += `<hr />`;
-			if (!user.friendRequests) {
+			if (user.settings.blockFriendRequests) {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
 				return buf;
 			}
-			const sent = user.friendRequests.sent;
+			const {sent} = await Friends.getRequests(user);
 			if (sent.size < 1) {
 				buf += `<strong>You have no outgoing friend requests pending.</strong><br />`;
 				buf += `<br />To add a friend, use <code>/friend add [username]</code>.`;
@@ -790,7 +743,7 @@ export const pages: PageTable = {
 			this.title = `[Friends] Received`;
 			buf += headerButtons('received', user);
 			buf += `<hr />`;
-			const received = user.friendRequests?.received;
+			const {received} = await Friends.getRequests(user);
 			if (!received) {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
 				return buf;
@@ -862,11 +815,8 @@ export const loginfilter: LoginFilter = async user => {
 	if (!Config.usesqlitefriends || !Users.globalAuth.atLeast(user, Config.usesqlitefriends)) {
 		return;
 	}
-	// query their friends and attach to the user object
-	await Friends.getFriends(user);
-	await Friends.getRequests(user);
 	// notify users of pending requests
-	Friends.notifyPending(user);
+	await Friends.notifyPending(user);
 
 	// (quietly) notify their friends (that have opted in) that they are online
 	await Friends.notifyConnection(user);
