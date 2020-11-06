@@ -163,7 +163,11 @@ if (require.main === module) {
 	// in the case of app.js being imported as a module (e.g. unit tests),
 	// postpone launching until app.listen() is called.
 	let port;
-	if (process.argv[2]) port = parseInt(process.argv[2]);
+	for (const arg of process.argv) {
+		const parsed = parseInt(arg);
+		if (isNaN(parsed)) continue;
+		port = parsed;
+	}
 	Sockets.listen(port);
 }
 
