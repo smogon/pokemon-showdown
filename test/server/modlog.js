@@ -5,8 +5,7 @@
 
 'use strict';
 
-const ml = require('../../.server-dist/modlog');
-const modlog = new ml.Modlog('/dev/null', ':memory:');
+const modlog = Config.usesqlite ? new (require('../../.server-dist/modlog')).Modlog('/dev/null', ':memory:') : null;
 const assert = require('assert').strict;
 
 Config.usesqlitemodlog = true;
@@ -56,12 +55,14 @@ function lastLine(database, roomid) {
 	});
 
 	(Config.usesqlite ? describe : describe.skip)('Modlog#getSharedID', () => {
-		assert(modlog.getSharedID('battle-gen8randombattle-42'));
-		assert(modlog.getSharedID('groupchat-annika-shitposting'));
-		assert(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
+		it('should detect shared modlogs', () => {
+			assert(modlog.getSharedID('battle-gen8randombattle-42'));
+			assert(modlog.getSharedID('groupchat-annika-shitposting'));
+			assert(modlog.getSharedID('help-mePleaseIAmTrappedInAUnitTestFactory'));
 
-		assert(!modlog.getSharedID('1v1'));
-		assert(!modlog.getSharedID('development'));
+			assert(!modlog.getSharedID('1v1'));
+			assert(!modlog.getSharedID('development'));
+		});
 	});
 
 	(Config.usesqlite ? describe : describe.skip)('Modlog#write', () => {
