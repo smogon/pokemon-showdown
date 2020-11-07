@@ -765,7 +765,7 @@ export const Punishments = new class {
 		const affected = await Punishments.punish(user, punishment, ignoreAlts, bypassPunishmentfilter);
 
 		for (const curUser of affected) {
-			curUser.punishmentTimer = setTimeout(Punishments.automaticUnlock, expireTime - Date.now(), user, punishment[1]);
+			Punishments.setPunishmentTimer(curUser, expireTime, punishment[1]);
 			curUser.locked = punishment[1];
 			curUser.updateIdentity();
 		}
@@ -866,6 +866,13 @@ export const Punishments = new class {
 			Punishments.unlock(user.id);
 		}
 	}
+	/**
+	 * Validates the length and sets the punishment timer for a user.
+	 */
+	setPunishmentTimer(user: User, expireTime: number, punishedID: ID | PunishType) {
+		if (expireTime > Chat.MAX_TIMEOUT_DURATION) return;
+		user.punishmentTimer = setTimeout(Punishments.automaticUnlock, expireTime - Date.now(), user, punishedID);
+	}
 	async namelock(
 		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
 	) {
@@ -874,7 +881,7 @@ export const Punishments = new class {
 
 		const affected = await Punishments.punish(user, punishment, ignoreAlts);
 		for (const curUser of affected) {
-			curUser.punishmentTimer = setTimeout(Punishments.automaticUnlock, expireTime - Date.now(), user, punishment[1]);
+			Punishments.setPunishmentTimer(curUser, expireTime, punishment[1]);
 			curUser.locked = punishment[1];
 			curUser.namelocked = punishment[1];
 			curUser.resetName(true);
@@ -1402,7 +1409,7 @@ export const Punishments = new class {
 			user.locked = punishUserid;
 			user.updateIdentity();
 		}
-		user.punishmentTimer = setTimeout(Punishments.automaticUnlock, punishment[2] - Date.now(), user, punishment[1]);
+		Punishments.setPunishmentTimer(user, punishment[2], punishment[1]);
 	}
 
 	checkIp(user: User, connection: Connection) {
@@ -1423,7 +1430,7 @@ export const Punishments = new class {
 				if (punishment[0] === 'NAMELOCK') {
 					user.namelocked = punishment[1];
 				}
-				user.punishmentTimer = setTimeout(Punishments.automaticUnlock, punishment[2] - Date.now(), user, punishment[1]);
+				Punishments.setPunishmentTimer(user, punishment[2], punishment[1]);
 			}
 		}
 
