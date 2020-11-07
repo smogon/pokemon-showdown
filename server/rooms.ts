@@ -1682,7 +1682,7 @@ export class GameRoom extends BasicRoom {
 		// This is the same password generation approach as genPassword in the client replays.lib.php
 		// but obviously will not match given mt_rand there uses a different RNG and seed.
 		let password = '';
-		for (let i = 0; i <= 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+		for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
 
 		this.settings.isPrivate = privacy;
 		for (const user of Object.values(this.users)) {
