@@ -6,10 +6,16 @@
  */
 
 if (!global.Config) {
+	let hasSQLite = true;
+	try {
+		require.resolve('better-sqlite3');
+	} catch (e) {
+		hasSQLite = false;
+	}
 	global.Config = {
 		nofswriting: false,
-		usesqlitemodlog: true,
-		usesqlite: true,
+		usesqlitemodlog: hasSQLite,
+		usesqlite: hasSQLite,
 	};
 }
 
