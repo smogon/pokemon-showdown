@@ -654,7 +654,7 @@ export const LogSearcher = new class {
 			if (!month) break;
 			const output = await this.ripgrepSearchMonth({
 				room: roomid, search, date: month,
-				limit, args: [`-m`, `${limit}`, '-C', '3', '-P'], raw: !!userSearch,
+				limit, args: [`-m`, `${limit}`, '-C', '3', '--engine=auto'], raw: !!userSearch,
 			});
 			results = results.concat(output.results);
 			count += output.count;
