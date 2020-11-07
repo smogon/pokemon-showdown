@@ -637,6 +637,7 @@ export const LogSearcher = new class {
 		let results: string[] = [];
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		if (!date) date = 'all';
+		const originalSearch = search;
 		const userRegex = /user-(.[a-zA-Z0-9]*)/gi;
 		const user = userRegex.exec(search)?.[0]?.slice(5);
 		const userSearch = user ? `the user '${user}'` : null;
@@ -663,7 +664,7 @@ export const LogSearcher = new class {
 			const diff = count - MAX_RESULTS;
 			results = results.slice(0, -diff);
 		}
-		return this.renderSearchResults(results, roomid, search, limit, date, userSearch);
+		return this.renderSearchResults(results, roomid, search, limit, date, originalSearch);
 	}
 
 	renderSearchResults(
@@ -708,8 +709,10 @@ export const LogSearcher = new class {
 		buf += sorted.join('<hr />');
 		if (limit) {
 			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
-			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:${limit + 200}">View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:3000">View all<br />&#x25bc;</button></div>`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:${limit + 200}">`;
+			buf += `View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:3000">`;
+			buf += `View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
 	}
