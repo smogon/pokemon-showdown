@@ -1,48 +1,29 @@
 /** Original plugin from https://github.com/CreaturePhil/Showdown-Boilerplate/blob/master/chat-plugins/customavatar.js.
 Credits to CreaturePhil and the other listed contributors.
-Rewritten, revamped, and typescripted by mia-pi.
+Rewritten, revamped, and typescripted by Mia.
 */
 
 import {FS} from '../../lib/fs';
-import * as fs from 'fs';
+import {Net} from '../../lib/net';
 import * as path from 'path';
-import * as https from 'https';
-import * as http from 'http';
-import * as url from 'url';
-
 
 export const AvatarManager = new class {
 	dir: string;
 	constructor() {
 		this.dir = 'config/avatars/';
 	}
-	download(image_url: string, name: string): Promise<boolean> {
-		const request = (secure = true) => {
-			if (!secure) return http;
-			return https;
-		};
-		const secure = toID(url.parse(image_url).protocol) === 'https';
-		return new Promise((resolve) => {
-			try {
-				request(secure).get(image_url, (response: http.IncomingMessage) => {
-					if (response.statusCode !== 200 || response.headers['content-type']!.split('/')[0] !== 'image') {
-						return resolve(false);
-					}
-					// weird bug with FSPath that doesn't like this, so normal fs is required.
-					const stream = fs.createWriteStream(`${this.dir}${name}.png`);
-					response.pipe(stream).on('finish', () => {
-						resolve(true);
-					});
-				});
-			} catch (error) {
-				return resolve(false);
-			}
-		});
+	async download(url: string, name: string) {
+		const stream = Net(url).getStream();
+		try {
+			const result = await stream.readAll('utf-8');
+			await FS(`config/avatars/${name}.png`).write(result);
+		} catch (e) {
+			throw new Chat.ErrorMessage(`Error downloading image: ${e.message}`);
+		}
 	}
 
 	async add(image: string, user: string) {
-		const avatar = await this.download(image, user);
-		if (!avatar) return new Error(`Error in downloading image.`);
+		await this.download(image, user);
 		const ext = path.extname(image);
 		Config.customavatars[user] = user + ext;
 		return true;
@@ -77,7 +58,7 @@ export const AvatarManager = new class {
 	}
 };
 
-avatarManager.load();
+AvatarManager.load();
 
 export const commands: ChatCommands = {
 	ca: 'customavatar',
@@ -95,11 +76,7 @@ export const commands: ChatCommands = {
 			if (!ext.includes('.png')) {
 				return this.errorReply("Image url must be a .png extension.");
 			}
-			if (!(await avatarManager.add(avatarUrl, name))) {
-				return this.errorReply(
-					`There was an error in downloading the image. Please try another link.`
-				);
-			}
+			await AvatarManager.add(avatarUrl, name);
 			this.sendReply(
 				`|raw|${name}${name.endsWith('s') ? "'" : "'s"} avatar was successfully set.` +
 				`<details><summary>Avatar:</summary><img src="${avatarUrl}" width="80" height="80"></details>`
@@ -124,7 +101,7 @@ export const commands: ChatCommands = {
 
 			if (!image) return this.errorReply(target + " does not have a custom avatar.");
 
-			if (avatarManager.remove(target)) {
+			if (AvatarManager.remove(target)) {
 				if (targetUser) targetUser.popup("Upper staff have removed your custom avatar.");
 				this.sendReply(`${target}${toID(target).endsWith('s') ? "'" : "'s"} avatar has been successfully removed.`);
 				this.globalModlog('CUSTOMAVATAR REMOVE', targetUser, 'success');
