@@ -1658,35 +1658,26 @@ export const commands: ChatCommands = {
 
 		this.checkCan('mute', null, room);
 
-		// if the user hiding their own text, it would clear the "cleared" message,
-		// so we can't attribute it in that case
-		const sender = user === targetUser ? null : user;
-
 		if (targetUser && showAlts) {
-			room.sendByUser(
-				sender,
-				`${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-			);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
 			room.hideText([
 				userid,
 				...targetUser.previousIDs,
 				...targetUser.getAltUsers(true).map((curUser: User) => curUser.getLastId()),
 			] as ID[]);
+			this.addModAction(
+				`${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
+			);
 		} else {
+			let message = '';
 			if (lineCount > 0) {
-				room.sendByUser(
-					sender,
-					`${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-				);
+				message = `${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
 			} else {
-				room.sendByUser(
-					sender,
-					`${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-				);
+				message = `${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
 			room.hideText([userid], lineCount, hideRevealButton);
+			this.addModAction(message);
 		}
 	},
 	hidetexthelp: [
