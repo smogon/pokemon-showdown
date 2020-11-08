@@ -1509,14 +1509,9 @@ export const commands: ChatCommands = {
 	crq(target, room, user, connection) {
 		// In emergency mode, clamp down on data returned from crq's
 		const trustable = (!Config.emergency || (user.named && user.registered));
-		const spaceIndex = target.indexOf(' ');
-		let cmd = target;
-		if (spaceIndex > 0) {
-			cmd = target.substr(0, spaceIndex);
-			target = target.substr(spaceIndex + 1);
-		} else {
-			target = '';
-		}
+		let cmd;
+		[cmd, target] = Utils.splitFirst(target, ' ');
+
 		if (cmd === 'userdetails') {
 			if (target.length > 18) {
 				connection.send('|queryresponse|userdetails|null');

@@ -2110,8 +2110,8 @@ export const commands: ChatCommands = {
 
 			let formatName = extraFormat.name;
 			let formatId: string = extraFormat.id;
-			if (formatName.startsWith('[Gen ')) {
-				formatName = formatName.replace('[Gen ' + formatName[formatName.indexOf('[') + 5] + '] ', '');
+			if (formatName.startsWith('[Gen ') && formatName.slice(6, 8) === '] ') {
+				formatName = formatName.slice(8);
 				formatId = toID(formatName);
 			}
 			if (formatId === 'battlespotdoubles') {

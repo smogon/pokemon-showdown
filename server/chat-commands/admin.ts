@@ -969,14 +969,7 @@ export const commands: ChatCommands = {
 		}
 		const battle = room.battle;
 		let cmd;
-		const spaceIndex = target.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = target.substr(0, spaceIndex).toLowerCase();
-			target = target.substr(spaceIndex + 1);
-		} else {
-			cmd = target.toLowerCase();
-			target = '';
-		}
+		[cmd, target] = Utils.splitFirst(target, ' ');
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 		const targets = target.split(',');
 		function getPlayer(input: string) {

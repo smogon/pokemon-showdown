@@ -594,17 +594,8 @@ export class CommandContext extends MessageContext {
 		if (cmdToken === message.charAt(1)) return null;
 		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return null;
 
-		let cmd = '';
-		let target = '';
-
-		const messageSpaceIndex = message.indexOf(' ');
-		if (messageSpaceIndex > 0) {
-			cmd = message.slice(1, messageSpaceIndex).toLowerCase();
-			target = message.slice(messageSpaceIndex + 1).trim();
-		} else {
-			cmd = message.slice(1).toLowerCase();
-			target = '';
-		}
+		let [cmd, target] = Utils.splitFirst(message, ' ');
+		cmd = cmd.toLowerCase();
 
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 
@@ -625,14 +616,8 @@ export class CommandContext extends MessageContext {
 				return this.parseCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
 			}
 			if (commandHandler && typeof commandHandler === 'object') {
-				const spaceIndex = target.indexOf(' ');
-				if (spaceIndex > 0) {
-					cmd = target.substr(0, spaceIndex).toLowerCase();
-					target = target.substr(spaceIndex + 1);
-				} else {
-					cmd = target.toLowerCase();
-					target = '';
-				}
+				[cmd, target] = Utils.splitFirst(target, ' ');
+				cmd = cmd.toLowerCase();
 
 				fullCmd += ' ' + cmd;
 				curCommands = commandHandler as AnnotatedChatCommands;
