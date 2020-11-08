@@ -565,6 +565,14 @@ export class CommandContext extends MessageContext {
 		}
 	}
 
+	/**
+	 * Takes a chat message and returns data about any command it's
+	 * trying to use.
+	 *
+	 * Returning `null` means the chat message isn't trying to use
+	 * a command, and returning `{handler: null}` means it's trying
+	 * to use a command that doesn't exist.
+	 */
 	parseCommand(message = this.message, recursing = false): {
 		cmd: string, fullCmd: string, cmdToken: string, target: string, handler: AnnotatedChatHandler | null,
 	} | null {
