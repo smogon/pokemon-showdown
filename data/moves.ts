@@ -328,7 +328,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 2,
 		flags: {},
 		onTryHit(source) {
-			if (source.side.getActive().length === 1) return false;
+			if (source.side.getActive().length === 1 || this.gameType === 'multi') return false;
 			if (source.side.getActive().length === 3 && source.position === 1) return false;
 		},
 		onHit(pokemon) {
