@@ -475,7 +475,7 @@ export class CommandContext extends MessageContext {
 			if (this.handler) {
 				if (this.handler.disabled) {
 					throw new Chat.ErrorMessage(
-						`The command /${this.cmd} is disabled. Please try again later.`
+						`The command /${this.cmd} is temporarily unavailable due to technical difficulties. Please try again in a few hours.`
 					);
 				}
 				message = this.run(this.handler);
