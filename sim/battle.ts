@@ -2823,6 +2823,7 @@ export class Battle {
 		}
 
 		this.go();
+		if (this.log.length - this.sentLogPos > 500) this.sendUpdates();
 	}
 
 	undoChoice(sideid: SideID) {
