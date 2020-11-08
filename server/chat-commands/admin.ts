@@ -557,6 +557,29 @@ export const commands: ChatCommands = {
 		this.sendReply("learnsets.js saved.");
 	},
 
+	disablecommand(target, room, user) {
+		this.checkCan('makeroom');
+		target = toID(target);
+		if (!toID(target)) {
+			return this.parse(`/help disablecommand`);
+		}
+		const parsed = this.parseCommand(`/${target}`);
+		if (!parsed) {
+			return this.errorReply(`Command "/${target}" is in an invalid format.`);
+		}
+		const {handler, cmd} = parsed;
+		if (!handler) {
+			return this.errorReply(`Command "/${target}" not found.`);
+		}
+		if (handler.disabled) {
+			return this.errorReply(`Command "/${target}" is already disabled`);
+		}
+		handler.disabled = true;
+		this.addGlobalModAction(`${user.name} disabled the command /${cmd}.`);
+		this.globalModlog(`DISABLECOMMAND`, null, target);
+	},
+	disablecommandhelp: [`/disablecommand [command] - Disables the given [command]. Requires: &`],
+
 	widendatacenters: 'adddatacenters',
 	adddatacenters() {
 		this.errorReply("This command has been replaced by /datacenter add");
