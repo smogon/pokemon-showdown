@@ -84,10 +84,10 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
 	Andrew: {
-		species: 'Venomoth', ability: 'NINJA SQUAD', item: 'Heavy Duty Boots', gender: 'M',
-		moves: ['Extrasensory', 'Sludge Bomb', 'Bug Buzz'],
-		signatureMove: 'SQUAD UP',
-		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+		species: 'Spectrier', ability: 'Neutralizing Gas', item: 'Choice Specs', gender: 'M',
+		moves: ['Astral Barrage', 'Moonblast', 'Aura Sphere'],
+		signatureMove: 'Whammer Jammer',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Annika: {
 		species: 'Mewtwo', ability: 'Overprotective', item: 'Mewtwonite Y', gender: 'F',

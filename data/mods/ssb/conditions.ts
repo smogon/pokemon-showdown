@@ -176,13 +176,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	andrew: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Andrew')}|SQUAD IN`);
+			this.add(`c|${getName('Andrew')}|/me vents in`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Andrew')}|SQUAD OUT`);
+			this.add(`c|${getName('Andrew')}|purple sus`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Andrew')}|Dormammu I've come to bargain`);
+			this.add(`c|${getName('Andrew')}|EasyOnTheHills is impostor! He vented in front of me in admin! Vote him out next!`);
 		},
 	},
 	annika: {

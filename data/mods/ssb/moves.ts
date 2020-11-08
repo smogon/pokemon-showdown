@@ -420,56 +420,48 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Andrew
-	squadup: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Refer to manual",
-		shortDesc: "Refer to manual",
-		name: "SQUAD UP",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 1,
-		priority: 4,
-		flags: {},
-		stallingMove: true,
-		volatileStatus: 'protect',
-		onPrepareHit(pokemon) {
-			this.add('-anim', pokemon, 'Spotlight', pokemon);
-			this.add('-anim', pokemon, 'Double Team', pokemon);
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
-			this.heal(pokemon.maxhp);
-			if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
-			pokemon.cureStatus();
-			pokemon.volatiles['ninjasquad'].clones = 6;
-			this.add("-message", `Venomoth now has ${pokemon.volatiles['ninjasquad'].clones} ninja clones!`);
-			pokemon.m.squadup = true;
-		},
-		secondary: null,
-		target: "self",
-		type: "Poison",
-	},
-	clonemove: {
+	whammerjammer: {
 		accuracy: 100,
-		basePower: 0,
-		damageCallback(pokemon, target) {
-			return this.clampIntRange(target.maxhp / 50, 1);
-		},
-		category: "Physical",
-		desc: "Deals damage to the target equal to 2% of its max HP, rounded down, but not less than 1 HP.",
-		shortDesc: "Does damage equal to 2% of target's max HP.",
-		name: "Clone Move",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
+		basePower: 60,
+		category: "Special",
+		name: "Whammer Jammer",
+		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shadow Ball', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+			];
+			for (const targetCondition of removeAll) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+					if (source.side.removeSideCondition(targetCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(targetCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+					}
+					success = true;
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			const noRemove = ['echoedvoice', 'fairylock'];
+			for (const pW of Object.keys(this.field.pseudoWeather)) {
+				if (noRemove.includes(pW)) continue;
+				this.field.removePseudoWeather(pW);
+			}
+			return success;
+		},
+		selfSwitch: true,
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Ghost",
 	},
 
 	// Annika
@@ -4385,9 +4377,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			onHit(source) {
 				const boosts: {[k: string]: number} = {};
-				boost['spa'] = 1;
-				boost[['def', 'spd'][this.random(2)]] = 1;
-				this.boost(boost, source);
+				boosts['spa'] = 1;
+				boosts[['def', 'spd'][this.random(2)]] = 1;
+				this.boost(boosts, source);
 				this.add(`c|${getName('SectoniaServant')}|Jelly baby ;w;`);
 			},
 		},
@@ -5307,7 +5299,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(foe, source, move) {
-			let animation: string;
 			const formes = ['Cleric', 'Ninja', 'Dancer', 'Songstress', 'Jester'];
 			source.m.yukiCosplayForme = this.sample(formes);
 			switch (source.m.yukiCosplayForme) {
@@ -5336,7 +5327,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'Cleric':
 				changeSet(this, source, ssbSets['yuki-Cleric']);
 				this.add('-message', 'yuki patches up her wounds!');
-				return !!(this.heal(atk, source, target) || success);
+				return;
 			case 'Ninja':
 				changeSet(this, source, ssbSets['yuki-Ninja']);
 				this.add('-message', `yuki's fast movements confuse ${target.name}!`);
