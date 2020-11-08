@@ -870,7 +870,7 @@ export const Punishments = new class {
 	 * Validates the length and sets the punishment timer for a user.
 	 */
 	setPunishmentTimer(user: User, expireTime: number, punishedID: ID | PunishType) {
-		if (expireTime > Chat.MAX_TIMEOUT_DURATION) return;
+		if (expireTime === 0 || expireTime === Infinity || expireTime > Chat.MAX_TIMEOUT_DURATION) return;
 		user.punishmentTimer = setTimeout(Punishments.automaticUnlock, expireTime - Date.now(), user, punishedID);
 	}
 	async namelock(
