@@ -49,6 +49,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	cmd: string,
 	fullCmd: string,
 	isPrivate: boolean,
+	disabled: boolean,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -472,6 +473,11 @@ export class CommandContext extends MessageContext {
 
 		try {
 			if (this.handler) {
+				if (this.handler.disabled) {
+					throw new Chat.ErrorMessage(
+						`The command /${this.cmd} is temporarily unavailable due to technical difficulties. Please try again in a few hours.`
+					);
+				}
 				message = this.run(this.handler);
 			} else {
 				if (this.cmdToken) {
