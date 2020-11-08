@@ -837,7 +837,9 @@ export const pages: PageTable = {
 				buf += '</td></tr>';
 				count++;
 			}
-			buf += `<tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Ticket Bans`} <i class="fa fa-ban"></i></h1></th></tr>`;
+			buf += `</div></table><div class="ladder pad">`;
+			buf += `<table style="margin-left: auto; margin-right: auto"><tbody>`;
+			buf += `<tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Ticket Bans`}<i class="fa fa-ban"></i></h2></th></tr>`;
 			buf += `<tr><th>Userids</th><th>IPs</th><th>Expires</th><th>Reason</th></tr>`;
 			const ticketBans = Array.from(Punishments.getPunishments('staff'))
 				.sort((a, b) => a[1].expireTime - b[1].expireTime)
