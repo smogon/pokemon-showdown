@@ -4,7 +4,8 @@
  *
  * @license MIT license
  */
-import {RequestState} from './battle';
+import {Utils} from '../lib/utils';
+import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
 import {toID} from './dex';
@@ -758,17 +759,9 @@ export class Side {
 			);
 		}
 
-		for (let choiceString of choiceStrings) {
-			let choiceType = '';
-			let data = '';
-			choiceString = choiceString.trim();
-			const firstSpaceIndex = choiceString.indexOf(' ');
-			if (firstSpaceIndex >= 0) {
-				data = choiceString.slice(firstSpaceIndex + 1).trim();
-				choiceType = choiceString.slice(0, firstSpaceIndex);
-			} else {
-				choiceType = choiceString;
-			}
+		for (const choiceString of choiceStrings) {
+			let [choiceType, data] = Utils.splitFirst(choiceString.trim(), ' ');
+			data = data.trim();
 
 			switch (choiceType) {
 			case 'move':
