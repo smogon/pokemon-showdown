@@ -646,7 +646,7 @@ export const LogSearcher = new class {
 			const rest = search.replace(userRegex, '')
 				.split('-')
 				.filter(Boolean)
-				.map(str => `(.*)${str}(.*)`)
+				.map(str => `.*${Utils.escapeRegex(str)}`)
 				.join('');
 			search = `\\|c\\|${this.constructUserRegex(id)}\\|${rest}`;
 		}
