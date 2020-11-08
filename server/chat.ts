@@ -594,7 +594,7 @@ export class CommandContext extends MessageContext {
 		if (cmdToken === message.charAt(1)) return null;
 		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return null;
 
-		let [cmd, target] = Utils.splitFirst(message, ' ');
+		let [cmd, target] = Utils.splitFirst(message.slice(1), ' ');
 		cmd = cmd.toLowerCase();
 
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
