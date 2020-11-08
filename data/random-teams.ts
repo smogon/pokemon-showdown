@@ -23,12 +23,19 @@ export class RandomTeams {
 	factoryTier: string;
 	format: Format;
 	prng: PRNG;
+	maxLength?: number;
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-
+		if (format.teamLength) {
+			if (format.teamLength.validate && format.teamLength.validate[1]) {
+				this.maxLength = format.teamLength.validate[1];
+			} else {
+				this.maxLength = format.teamLength.battle;
+			}
+		}
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
@@ -1485,7 +1492,7 @@ export class RandomTeams {
 		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
 		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
 		for (const restrict of [true, false]) {
-			if (pokemon.length >= 6) break;
+			if (pokemon.length >= (this.maxLength || 6)) break;
 			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < 6) {
 				let species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));

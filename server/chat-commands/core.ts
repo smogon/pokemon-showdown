@@ -1,3 +1,4 @@
+// import {consoleips} from '../../config/config-example'; // commented out incase it's needed later during development
 /**
  * Core commands
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -1398,6 +1399,17 @@ export const commands: ChatCommands = {
 		if (!user.named) {
 			return this.popupReply(this.tr`You must choose a username before you challenge someone.`);
 		}
+		const sep: string[] = target?.includes(',') ? target.split(',') : [];
+		const teammate = Users.get(sep.splice(-1)[0]);
+		// let isMulti: boolean; // commented out incase it's needed later during development
+		if (Dex.getFormat(target.substring(0, target.lastIndexOf(","))).gameType === 'multi' && teammate) {
+			// isMulti = true; // commented out incase it's needed later during development
+			if (!teammate || !teammate.connected) {
+				return this.popupReply(`The user '${teammate?.name || target.substring(target.indexOf(",") + 1)}' was not found.`);
+			}
+			target = target.substring(0, target.lastIndexOf(","));
+			return Ladders(target).makeChallenge(connection, targetUser, teammate);
+		}
 		if (Config.pmmodchat && !user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
 			const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
@@ -1437,13 +1449,15 @@ export const commands: ChatCommands = {
 		Ladders.cancelChallenging(user);
 	},
 
+	acceptmulti: 'accept',
 	accept(target, room, user, connection) {
 		target = this.splitTarget(target);
-		if (target) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		const targetUser = this.targetUser || this.pmTarget;
 		const targetUsername = this.targetUsername;
 		if (!targetUser) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
-		return Ladders.acceptChallenge(connection, targetUser);
+		const teammate = Users.get(target);
+		if (!teammate) return Ladders.acceptChallenge(connection, targetUser);
+		return Ladders.acceptChallenge(connection, targetUser, teammate);
 	},
 
 	reject(target, room, user) {

@@ -606,14 +606,7 @@ export class Pokemon {
 	}
 
 	foes(): Pokemon[] {
-		let foes = this.side.foe.active;
-		if (this.battle.gameType === 'multi') {
-			const team = this.side.foe.n % 2;
-			// @ts-ignore
-			foes = this.battle.sides.flatMap(
-				(side: Side) => side.n % 2 === team ? side.active : []
-			);
-		}
+		const foes = this.side.getFoeActive();
 		return foes.filter(foe => foe && !foe.fainted);
 	}
 
@@ -838,7 +831,7 @@ export class Pokemon {
 				disabled = this.maxMoveDisabled(this.battle.dex.getMove(moveSlot.id));
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
+				this.side.getActive().length >= 2 && this.battle.targetTypeChoices(target!)
 			) {
 				disabled = true;
 			}
@@ -986,7 +979,7 @@ export class Pokemon {
 
 	isLastActive() {
 		if (!this.isActive) return false;
-		const allyActive = this.side.active;
+		const allyActive = this.side.getActive();
 		for (let i = this.position + 1; i < allyActive.length; i++) {
 			if (allyActive[i] && !allyActive[i].fainted) return false;
 		}
@@ -1848,7 +1841,7 @@ export class Pokemon {
 
 	isSkyDropped() {
 		if (this.volatiles['skydrop']) return true;
-		for (const foeActive of this.side.foe.active) {
+		for (const foeActive of this.side.getFoeActive()) {
 			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === this) {
 				return true;
 			}

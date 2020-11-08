@@ -5,8 +5,15 @@
   "main": ".sim-dist/index.js",
   "dependencies": {
     "@types/better-sqlite3": "^5.4.0",
+    "better-sqlite3": "^7.1.0",
+    "cloud-env": "^0.2.3",
+    "node-static": "^0.7.11",
+    "nodemailer": "^6.4.6",
+    "permessage-deflate": "^0.1.7",
     "probe-image-size": "^5.0.0",
     "sockjs": "0.3.20",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^3.0.6",
     "sucrase": "^3.15.0"
   },
   "optionalDependencies": {
@@ -42,7 +49,9 @@
       "pre-push": "npm run lint"
     }
   },
-  "bin": "./pokemon-showdown",
+  "bin": {
+    "pokemon-showdown": "pokemon-showdown"
+  },
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",

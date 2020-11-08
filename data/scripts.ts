@@ -1276,7 +1276,7 @@ export const Scripts: BattleScriptsData = {
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
+		for (const foeActive of side.getFoeActive()) {
 			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
 				return false;
 			}
@@ -1342,7 +1342,7 @@ export const Scripts: BattleScriptsData = {
 	isAdjacent(pokemon1, pokemon2) {
 		if (pokemon1.fainted || pokemon2.fainted) return false;
 		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
-		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.active.length) <= 1;
+		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.getActive().length) <= 1;
 	},
 
 	targetTypeChoices(targetType) {

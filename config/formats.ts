@@ -37,6 +37,20 @@ export const Formats: FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
+		name: "[Gen 8] Random Multi Battle",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656537/">Random Battle Suggestions</a>`,
+		],
+		teamLength: {
+			battle: 3,
+		},
+		mod: 'gen8',
+		gameType: 'multi',
+		team: 'random',
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
 		name: "[Gen 8] Unrated Random Battle",
 
 		mod: 'gen8',
@@ -56,6 +70,18 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 8] OU Multi",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666169/">OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666247/">OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666340/">OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'multi',
+		ruleset: ['[Gen 8] OU'],
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",

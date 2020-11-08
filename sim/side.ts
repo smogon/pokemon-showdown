@@ -48,7 +48,8 @@ export class Side {
 	name: string;
 	avatar: string;
 	maxTeamSize: number;
-	foe: Side;
+	foe: Side | Side[];
+	ally?: Side;
 	team: PokemonSet[];
 	pokemon: Pokemon[];
 	active: Pokemon[];
@@ -77,7 +78,7 @@ export class Side {
 		this.name = name;
 		this.avatar = '';
 		this.maxTeamSize = 6;
-		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
+		this.foe = battle.gameType === 'multi' ? [] : (sideNum ? this.battle.sides[0] : this.battle.sides[1]);
 
 		this.team = team;
 		this.pokemon = [];
@@ -139,6 +140,42 @@ export class Side {
 		return 'move';
 	}
 
+	getFoeActive(): Pokemon[] {
+		if (Array.isArray(this.foe)) {
+			let active: Pokemon[] = [];
+			for (const foe of this.foe) {
+				active = active.concat(foe.active);
+			}
+			return active;
+		}
+		return this.foe.active;
+	}
+
+	getActive(): Pokemon[] {
+		if (this.ally) {
+			return this.active.concat(this.ally.active);
+		}
+		return this.active;
+	}
+
+	getPokemonLeft(): number {
+		let pokemonLeft = this.pokemonLeft;
+		if (this.ally) pokemonLeft += this.ally.pokemonLeft;
+		return pokemonLeft;
+	}
+
+	getFoePokemonLeft(): number {
+		let pokemonLeft = 0;
+		if (Array.isArray(this.foe)) {
+			for (const foe of this.foe) {
+				pokemonLeft = foe.pokemonLeft;
+			}
+		} else {
+			pokemonLeft += this.foe.pokemonLeft;
+		}
+		return pokemonLeft;
+	}
+
 	getChoice() {
 		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
 			return `team ` + this.choice.actions.map(action => action.pokemon!.position + 1).join(', ');
@@ -180,7 +217,8 @@ export class Side {
 	}
 
 	randomActive() {
-		const actives = this.active.filter(active => active && !active.fainted);
+		const actives = this.battle.gameType === 'multi' ?
+			this.getActive().filter(active => active && !active.fainted) : this.active;
 		if (!actives.length) return null;
 		return this.battle.sample(actives);
 	}
