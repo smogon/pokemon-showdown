@@ -565,13 +565,16 @@ export const commands: ChatCommands = {
 		}
 		const parsed = this.parseCommand(`/${target}`);
 		if (!parsed) {
-			return this.errorReply(`/${target} - Command not found.`);
+			return this.errorReply(`Command "/${target}" is in an invalid format.`);
 		}
 		const {handler, cmd} = parsed;
-		if (handler?.disabled) {
-			return this.errorReply(`That command is already disabled`);
+		if (!handler) {
+			return this.errorReply(`Command "/${target}" not found.`);
 		}
-		handler!.disabled = true;
+		if (handler.disabled) {
+			return this.errorReply(`Command "/${target}" is already disabled`);
+		}
+		handler.disabled = true;
 		this.addGlobalModAction(`${user.name} disabled the command /${cmd}.`);
 		this.globalModlog(`DISABLECOMMAND`, null, target);
 	},
