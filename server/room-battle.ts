@@ -18,7 +18,7 @@ import * as RoomGames from "./room-game";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
-export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
+export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour' | 'multi';
 
 interface BattleRequestTracker {
 	rqid: number;
@@ -103,13 +103,11 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.wantsTie = false;
 		this.active = true;
 		this.eliminated = false;
-
 		this.secondsLeft = 1;
 		this.turnSecondsLeft = 1;
 		this.dcSecondsLeft = 1;
 
 		this.connected = true;
-
 		if (user) {
 			user.games.add(this.game.roomid);
 			user.updateSearch();
@@ -999,8 +997,17 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!message) message = ' forfeited.';
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
-		const otherids = ['p2', 'p1'];
-		void this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
+		if (Dex.getFormat(this.format).gameType === 'multi') {
+			const sides = ['p2', 'p1'];
+			if (player.num === 1 || player.num === 3) {
+				void this.stream.write(`>forcewin ${sides[0]}`);
+			} else {
+				void this.stream.write(`>forcewin ${sides[1]}`);
+			}
+		} else {
+			const otherids = ['p2', 'p1'];
+			void this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
+		}
 		return true;
 	}
 
@@ -1086,6 +1093,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
+		this.room.add(`|gametype|${this.gameType}`);
 		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
 		if (suspectTest) {
 			const format = Dex.getFormat(this.format);

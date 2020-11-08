@@ -353,6 +353,11 @@ export class User extends Chat.MessageContext {
 		team: string,
 		hidden: boolean,
 		inviteOnly: boolean,
+		teammateSettings?: {
+			team: string,
+			hidden: boolean,
+			inviteOnly: boolean,
+		},
 	};
 
 	isSysop: boolean;
