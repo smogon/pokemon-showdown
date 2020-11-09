@@ -321,6 +321,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 70,
 	},
+	furycutter: {
+		inherit: true,
+		onHit(target, source) {
+			source.addVolatile('furycutter');
+		},
+	},
 	gigadrain: {
 		inherit: true,
 		pp: 5,
