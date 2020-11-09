@@ -17,6 +17,21 @@ import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
 
+function getDisabledCommands(table: ChatCommands = Chat.commands): string[] {
+	const disabled = [];
+	for (const k in table) {
+		const handler = table[k];
+		if (Array.isArray(handler) || typeof handler === 'string') continue;
+		if (typeof handler === 'object') {
+			disabled.push(...getDisabledCommands(handler));
+		}
+		if (typeof handler === 'function' && (handler as Chat.AnnotatedChatHandler).disabled) {
+			disabled.push(k);
+		}
+	}
+	return disabled;
+}
+
 export const commands: ChatCommands = {
 
 	/*********************************************************
@@ -333,6 +348,13 @@ export const commands: ChatCommands = {
 				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
+				const disabledCommands = getDisabledCommands();
+				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
+					this.errorReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
+					this.errorReply(`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`);
+					return this.errorReply(`Currently disabled: ${disabledCommands.map(item => `/${item}`).join(', ')}`);
+				}
+
 				const oldPlugins = Chat.plugins;
 				Chat.destroy();
 
@@ -559,10 +581,10 @@ export const commands: ChatCommands = {
 
 	disablecommand(target, room, user) {
 		this.checkCan('makeroom');
-		target = toID(target);
 		if (!toID(target)) {
 			return this.parse(`/help disablecommand`);
 		}
+		if (['!', '/'].some(c => target.startsWith(c))) target = target.slice(1);
 		const parsed = this.parseCommand(`/${target}`);
 		if (!parsed) {
 			return this.errorReply(`Command "/${target}" is in an invalid format.`);
@@ -637,6 +659,12 @@ export const commands: ChatCommands = {
 	lockdown(target, room, user) {
 		this.checkCan('lockdown');
 
+		const disabledCommands = getDisabledCommands();
+		if (disabledCommands.length) {
+			this.sendReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
+			this.sendReply(`Be aware that restarting will re-enable them.`);
+			this.sendReply(`Currently disabled: ${disabledCommands.map(c => `/${c}`).join(', ')}`);
+		}
 		Rooms.global.startLockdown();
 
 		this.stafflog(`${user.name} used /lockdown`);
