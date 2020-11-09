@@ -7803,6 +7803,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 			isNonstandard: "Past",
 	},
 	altlapras: {
-		tier: "OU",
+		tier: "UU",
 	},
 };
