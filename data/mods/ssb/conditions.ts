@@ -216,16 +216,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('a random duck')}|and he waddled away... bum bum bum`);
 		},
 	},
-	archastl: {
+	archas: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('ArchasTL')}|Ready the main batteries, gentlemen! Hit ‘em hard and fast!`);
+			this.add(`c|${getName('Archas')}|Ready the main batteries, gentlemen! Hit ‘em hard and fast!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('ArchasTL')}|Helmsman, full reverse at speed!`);
+			this.add(`c|${getName('Archas')}|Helmsman, full reverse at speed!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('ArchasTL')}|They say the captain always goes down with the ship...`);
+			this.add(`c|${getName('Archas')}|They say the captain always goes down with the ship...`);
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.illusion) return;
