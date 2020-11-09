@@ -244,6 +244,13 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 
+		// HJK can be bred onto Tyrogue in Gen 2, evolved into Hitmonchan, transferred back to Gen 1, taught Body Slam via TM, and transferred back to Gen 2.
+		team = [
+			{species: 'hitmonchan', moves: ['highjumpkick', 'bodyslam']},
+		];
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
 		team = [
 			{species: 'weezing', ability: 'levitate', moves: ['painsplit', 'willowisp'], evs: {hp: 1}},
 		];
