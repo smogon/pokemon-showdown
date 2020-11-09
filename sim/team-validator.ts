@@ -1766,7 +1766,11 @@ export class TeamValidator {
 				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${baby.name}.`);
 			}
 		}
-		if (setSources.babyOnly && setSources.size()) {
+		if (setSources.babyOnly && setSources.size() && this.gen > 2) {
+			// there do theoretically exist evo/tradeback incompatibilities in
+			// gen 2, but those are very complicated to validate and should be
+			// handled separately anyway, so for now we just treat them all as
+			// wlegal (competitively relevant ones can be manually banned)
 			const baby = dex.getSpecies(setSources.babyOnly);
 			setSources.sources = setSources.sources.filter(source => {
 				if (baby.gen > parseInt(source.charAt(0)) && !source.startsWith('1ST')) return false;
