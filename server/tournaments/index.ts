@@ -253,7 +253,11 @@ export class Tournament extends Rooms.RoomGame {
 				const match = player.inProgressMatch;
 				if (match) {
 					match.room.tour = null;
-					match.room.parent = null;
+					if (match.room.parent) {
+						match.room.parent.subRooms?.delete(match.room.roomid);
+						if (!match.room.parent.subRooms?.size) match.room.parent.subRooms = null;
+						match.room.parent = null;
+					}
 					match.room.addRaw(`<div class="broadcast-red"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`);
 				}
 			}
@@ -500,7 +504,13 @@ export class Tournament extends Rooms.RoomGame {
 				Utils.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />` +
 				`You can finish playing, but this battle is no longer considered a tournament battle.</div>`
 			).update();
-			matchPlayer.inProgressMatch.room.parent = null;
+			if (matchPlayer.inProgressMatch.room.parent) {
+				matchPlayer.inProgressMatch.room.parent.subRooms?.delete(matchPlayer.inProgressMatch.room.roomid);
+				if (!matchPlayer.inProgressMatch.room.parent.subRooms?.size) {
+					matchPlayer.inProgressMatch.room.parent.subRooms = null;
+				}
+				matchPlayer.inProgressMatch.room.parent = null;
+			}
 			this.completedMatches.add(matchPlayer.inProgressMatch.room.roomid);
 			matchPlayer.inProgressMatch = null;
 		}
@@ -720,7 +730,13 @@ export class Tournament extends Rooms.RoomGame {
 		if (matchFrom) {
 			matchFrom.to.isBusy = false;
 			player.inProgressMatch = null;
-			matchFrom.room.parent = null;
+			if (matchFrom.room.parent) {
+				matchFrom.room.parent.subRooms?.delete(matchFrom.room.roomid);
+				if (!matchFrom.room.parent.subRooms?.size) {
+					matchFrom.room.parent.subRooms = null;
+				}
+				matchFrom.room.parent = null;
+			}
 			this.completedMatches.add(matchFrom.room.roomid);
 			if (matchFrom.room.battle) matchFrom.room.battle.forfeit(player.name);
 		}
