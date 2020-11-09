@@ -968,6 +968,7 @@ export class Tournament extends Rooms.RoomGame {
 			rated: !Ladders.disabled && this.isRated,
 			challengeType: ready.challengeType,
 			tour: this,
+			parentid: this.roomid,
 		});
 		if (!room || !room.battle) throw new Error(`Failed to create battle in ${room}`);
 
@@ -1025,7 +1026,11 @@ export class Tournament extends Rooms.RoomGame {
 	onBattleWin(room: GameRoom, winnerid: ID) {
 		if (this.completedMatches.has(room.roomid)) return;
 		this.completedMatches.add(room.roomid);
-		room.parent = null;
+		if (room.parent) {
+			room.parent.subRooms?.delete(room.roomid);
+			if (!room.parent.subRooms?.size) room.parent.subRooms = null;
+			room.parent = null;
+		}
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
 		if (!room.p1 || !room.p2) throw new Error("onBattleWin called with missing players");
 		const p1 = this.playerTable[room.p1.id];
