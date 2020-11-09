@@ -8,10 +8,9 @@
  * @license MIT
  */
 
-// eslint-disable-next-line no-undef
-const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder ?
-	require('./ladders-remote') :
-	require('./ladders-local')).LadderStore;
+const LadderStore: typeof import('./ladders-remote').LadderStore = (
+	typeof Config === 'object' && Config.remoteladder ? require('./ladders-remote') : require('./ladders-local')
+).LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
@@ -244,7 +243,7 @@ class Ladder extends LadderStore {
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
 		}
-		if (Date.now() < user.lastChallenge + 10 * SECONDS) {
+		if (Date.now() < user.lastChallenge + 10 * SECONDS && !Config.nothrottle) {
 			// 10 seconds ago, probable misclick
 			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
 			return false;
@@ -466,7 +465,7 @@ class Ladder extends LadderStore {
 		// users must be different
 		if (user1 === user2) return false;
 
-		if (Config.fakeladder) {
+		if (Config.noipchecks) {
 			user1.lastMatch = user2.id;
 			user2.lastMatch = user1.id;
 			return true;

@@ -22,6 +22,33 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
+export function exec(args: string, execOptions?: child_process.ExecOptions): Promise<{stderr: string, stdout: string}>;
+export function exec(
+	args: [string, ...string[]], execOptions?: child_process.ExecFileOptions
+): Promise<{stderr: string, stdout: string}>;
+export function exec(args: string | string[], execOptions?: AnyObject) {
+	if (Array.isArray(args)) {
+		const cmd = args.shift();
+		if (!cmd) throw new Error(`You must pass a command to ProcessManager.exec.`);
+		return new Promise<{stderr: string, stdout: string}>((resolve, reject) => {
+			child_process.execFile(cmd, args, execOptions, (err, stdout, stderr) => {
+				if (err) reject(err);
+				if (typeof stdout !== 'string') stdout = stdout.toString();
+				if (typeof stderr !== 'string') stderr = stderr.toString();
+				resolve({stdout, stderr});
+			});
+		});
+	} else {
+		return new Promise<string>((resolve, reject) => {
+			child_process.exec(args, execOptions, (error, stdout, stderr) => {
+				if (error) reject(error);
+				if (typeof stdout !== 'string') stdout = stdout.toString();
+				resolve(stdout);
+			});
+		});
+	}
+}
+
 class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	process: StreamProcessWrapper;
 	taskId: number;
@@ -91,19 +118,19 @@ export class QueryProcessWrapper implements ProcessWrapper {
 		this.resolveRelease = null;
 
 		this.process.on('message', (message: string) => {
-			const nlLoc = message.indexOf('\n');
-			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
-			if (message.slice(0, nlLoc) === 'THROW') {
+			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = message.slice(nlLoc + 1);
+				error.stack = message.slice(6);
 				throw error;
 			}
 
-			if (message.slice(0, nlLoc) === 'DEBUG') {
-				this.debug = message.slice(nlLoc + 1);
+			if (message.startsWith('DEBUG\n')) {
+				this.debug = message.slice(6);
 				return;
 			}
 
+			const nlLoc = message.indexOf('\n');
+			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = parseInt(message.slice(0, nlLoc));
 			const resolve = this.pendingTasks.get(taskId);
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
@@ -180,19 +207,19 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 
 		this.process.on('message', (message: string) => {
-			let nlLoc = message.indexOf('\n');
-			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
-			if (message.slice(0, nlLoc) === 'THROW') {
+			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = message.slice(nlLoc + 1);
+				error.stack = message.slice(6);
 				throw error;
 			}
 
-			if (message.slice(0, nlLoc) === 'DEBUG') {
-				this.setDebug(message.slice(nlLoc + 1));
+			if (message.startsWith('DEBUG\n')) {
+				this.setDebug(message.slice(6));
 				return;
 			}
 
+			let nlLoc = message.indexOf('\n');
+			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = parseInt(message.slice(0, nlLoc));
 			const stream = this.activeStreams.get(taskId);
 			if (!stream) return; // stream already destroyed
@@ -460,17 +487,35 @@ export abstract class ProcessManager {
 
 export class QueryProcessManager<T = string, U = string> extends ProcessManager {
 	_query: (input: T) => U | Promise<U>;
+	timeout: number;
 
-	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>) {
+	/**
+	 * @param timeout The number of milliseconds to wait before terminating a query. Defaults to 900000 ms (15 minutes).
+	 */
+	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>, timeout = 15 * 60 * 1000) {
 		super(module);
 		this._query = query;
+		this.timeout = timeout;
 
 		processManagers.push(this);
 	}
-	query(input: T) {
+	async query(input: T) {
 		const process = this.acquire() as QueryProcessWrapper;
-		if (!process) return Promise.resolve(this._query(input));
-		return process.query(input);
+
+		if (!process) return this._query(input);
+
+		const timeout = setTimeout(() => {
+			const debugInfo = process.debug || "No debug information found.";
+			process.destroy();
+			throw new Error(
+				`A query originating in ${this.basename} took too long to complete; the process has been killed.\n${debugInfo}`
+			);
+		}, this.timeout);
+
+		const result = await process.query(input);
+
+		clearTimeout(timeout);
+		return result;
 	}
 	createProcess() {
 		return new QueryProcessWrapper(this.filename);
@@ -503,7 +548,6 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 export class StreamProcessManager extends ProcessManager {
 	/* taskid: stream used only in child process */
 	activeStreams: Map<string, Streams.ObjectReadWriteStream<string>>;
-	// tslint:disable-next-line:variable-name
 	_createStream: () => Streams.ObjectReadWriteStream<string>;
 
 	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream<string>) {

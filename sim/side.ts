@@ -4,7 +4,8 @@
  *
  * @license MIT license
  */
-import {RequestState} from './battle';
+import {Utils} from '../lib/utils';
+import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
 import {toID} from './dex';
@@ -638,7 +639,6 @@ export class Side {
 
 		this.choice.switchIns.add(slot);
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
@@ -683,7 +683,6 @@ export class Side {
 			}
 
 			this.choice.switchIns.add(pos);
-			// tslint:disable-next-line:no-object-literal-type-assertion
 			this.choice.actions.push({
 				choice: 'team',
 				index,
@@ -708,7 +707,6 @@ export class Side {
 		}
 		const pokemon: Pokemon = this.active[index];
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'shift',
 			pokemon,
@@ -761,17 +759,9 @@ export class Side {
 			);
 		}
 
-		for (let choiceString of choiceStrings) {
-			let choiceType = '';
-			let data = '';
-			choiceString = choiceString.trim();
-			const firstSpaceIndex = choiceString.indexOf(' ');
-			if (firstSpaceIndex >= 0) {
-				data = choiceString.slice(firstSpaceIndex + 1).trim();
-				choiceType = choiceString.slice(0, firstSpaceIndex);
-			} else {
-				choiceType = choiceString;
-			}
+		for (const choiceString of choiceStrings) {
+			let [choiceType, data] = Utils.splitFirst(choiceString.trim(), ' ');
+			data = data.trim();
 
 			switch (choiceType) {
 			case 'move':
@@ -895,7 +885,6 @@ export class Side {
 			return this.emitChoiceError(`Can't pass: Not a move or switch request`);
 		}
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'pass',
 		} as ChosenAction);

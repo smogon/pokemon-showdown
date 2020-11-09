@@ -16,7 +16,6 @@ import {RandomPlayerAI} from '../tools/random-player-ai';
 /*********************************************************************
  * Run AI
  *********************************************************************/
-// tslint:disable:no-floating-promises
 
 const streams = getPlayerStreams(new BattleStream());
 

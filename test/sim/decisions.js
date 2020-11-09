@@ -292,7 +292,7 @@ describe('Choices', function () {
 			}
 			// Geodude's sucker punch should have processed first,
 			// while Aggron was still in slot 2.
-			assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+			assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 			// Aggron's Earthquake should process after Skarmory shifted
 			// but before Golem shifted, so it didn't hit Golem.
 			assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
@@ -322,7 +322,7 @@ describe('Choices', function () {
 			battle.makeChoices('move recover', 'move surf');
 
 			assert.equal(battle.turn, 2);
-			assert.notStrictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+			assert.notEqual(battle.p2.active[0].lastMove.id, 'struggle');
 		});
 
 		it('should not force Struggle usage on move attempt when choosing a disabled move', function () {
@@ -334,11 +334,11 @@ describe('Choices', function () {
 
 			assert.cantMove(() => battle.p1.chooseMove(1), 'Mew', 'Recover', true);
 			assert.equal(battle.turn, 1);
-			assert.notStrictEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
+			assert.notEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
 
 			assert.cantMove(() => battle.p1.chooseMove(1), 'Mew', 'Recover');
 			assert.equal(battle.turn, 1);
-			assert.notStrictEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
+			assert.notEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
 		});
 
 		it('should send meaningful feedback to players if they try to use a disabled move', function () {

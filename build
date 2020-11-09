@@ -58,6 +58,7 @@ function copyOverDataJSON(file) {
 	});
 }
 
+// Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
 	var sucraseVersion = require('sucrase').getVersion().split('.');
 	if (

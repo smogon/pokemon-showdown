@@ -131,10 +131,13 @@ export const commands: ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
 	],
 
-	addline(target, room, user) {
-		this.checkCan('rawpacket');
-		// secret sysop command
-		this.add(target);
+	pline(target, room, user) {
+		// Secret console admin command
+		this.canUseConsole();
+		const message = target.length > 30 ? target.slice(0, -30) + '...' : target;
+		this.checkBroadcast(true, `!pline ${message}`);
+		this.runBroadcast(true);
+		this.sendReply(target);
 	},
 
 	pminfobox(target, room, user, connection) {
@@ -431,7 +434,11 @@ export const commands: ChatCommands = {
 					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
 				}
 
-				Rooms.Modlog = require('../modlog').modlog;
+				const {Modlog} = require('../modlog');
+				Rooms.Modlog = new Modlog(
+					Rooms.MODLOG_PATH || 'logs/modlog',
+					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
+				);
 				this.sendReply("Modlog has been hot-patched.");
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;
@@ -444,14 +451,14 @@ export const commands: ChatCommands = {
 			}
 		} catch (e) {
 			Rooms.global.notifyRooms(
-				['development', 'staff', 'upperstaff'] as RoomID[],
+				['development', 'staff'] as RoomID[],
 				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch} - but something failed while trying to hot-patch.`
 			);
 			return this.errorReply(`Something failed while trying to hot-patch ${patch}: \n${e.stack}`);
 		}
 		Monitor.hotpatchVersions[patch] = version;
 		Rooms.global.notifyRooms(
-			['development', 'staff', 'upperstaff'] as RoomID[],
+			['development', 'staff'] as RoomID[],
 			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch}`
 		);
 	},
@@ -549,6 +556,29 @@ export const commands: ChatCommands = {
 		`};\n`);
 		this.sendReply("learnsets.js saved.");
 	},
+
+	disablecommand(target, room, user) {
+		this.checkCan('makeroom');
+		target = toID(target);
+		if (!toID(target)) {
+			return this.parse(`/help disablecommand`);
+		}
+		const parsed = this.parseCommand(`/${target}`);
+		if (!parsed) {
+			return this.errorReply(`Command "/${target}" is in an invalid format.`);
+		}
+		const {handler, cmd} = parsed;
+		if (!handler) {
+			return this.errorReply(`Command "/${target}" not found.`);
+		}
+		if (handler.disabled) {
+			return this.errorReply(`Command "/${target}" is already disabled`);
+		}
+		handler.disabled = true;
+		this.addGlobalModAction(`${user.name} disabled the command /${cmd}.`);
+		this.globalModlog(`DISABLECOMMAND`, null, target);
+	},
+	disablecommandhelp: [`/disablecommand [command] - Disables the given [command]. Requires: &`],
 
 	widendatacenters: 'adddatacenters',
 	adddatacenters() {
@@ -906,8 +936,14 @@ export const commands: ChatCommands = {
 			this.broadcasting = true;
 			this.broadcastToRoom = true;
 		}
-		this.sendReply(`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">&gt;&gt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(target)}</td></tr><table>`);
+		const generateHTML = (direction: string, contents: string) => (
+			`<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
+				Utils.escapeHTML(direction).repeat(2) +
+				`&nbsp;</td><td>${Chat.getReadmoreCodeBlock(contents)}</td></tr><table>`
+		);
+		this.sendReply(`|html|${generateHTML('>', target)}`);
 		logRoom?.roomlog(`>> ${target}`);
+		let uhtmlId = null;
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
 			const battle = room.battle;
@@ -916,15 +952,20 @@ export const commands: ChatCommands = {
 			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
 
 			if (result?.then) {
+				uhtmlId = `eval-${room.nextGameNumber()}`;
+				this.sendReply(`|uhtml|${uhtmlId}|${generateHTML('<', 'Promise pending')}`);
+				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
+				this.sendReply(`|uhtmlchange|${uhtmlId}|${generateHTML('<', result)}`);
 			} else {
 				result = Utils.visualize(result);
+				this.sendReply(`|html|${generateHTML('<', result)}`);
 			}
-			this.sendReply(`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">&lt;&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`);
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			this.sendReply(`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">&lt;&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(message)}</td></tr><table>`);
+			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
+			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
 		}
 	},
@@ -951,15 +992,8 @@ export const commands: ChatCommands = {
 		}
 		const battle = room.battle;
 		let cmd;
-		const spaceIndex = target.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = target.substr(0, spaceIndex).toLowerCase();
-			target = target.substr(spaceIndex + 1);
-		} else {
-			cmd = target.toLowerCase();
-			target = '';
-		}
-		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
+		[cmd, target] = Utils.splitFirst(target, ' ');
+		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 		const targets = target.split(',');
 		function getPlayer(input: string) {
 			const player = battle.playerTable[toID(input)];

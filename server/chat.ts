@@ -25,6 +25,7 @@ To reload chat commands:
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
+import type {PartialModlogEntry} from './modlog';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -48,6 +49,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	cmd: string,
 	fullCmd: string,
 	isPrivate: boolean,
+	disabled: boolean,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -117,19 +119,16 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-import {resolve as resolvePath} from 'path';
-
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
-import {ModlogEntry} from './modlog';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-const TRANSLATION_DIRECTORY = resolvePath(__dirname, '../.translations-dist');
+const TRANSLATION_DIRECTORY = `${__dirname}/../.translations-dist`;
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -323,6 +322,9 @@ export class PageContext extends MessageContext {
 		const parts = this.pageid.split('-');
 		parts.shift(); // first part is always `view`
 
+		if (!this.connection.openPages) this.connection.openPages = new Set();
+		this.connection.openPages.add(parts.join('-'));
+
 		let handler: PageHandler | PageTable = Chat.pages;
 		while (handler) {
 			if (typeof handler === 'function') {
@@ -471,6 +473,11 @@ export class CommandContext extends MessageContext {
 
 		try {
 			if (this.handler) {
+				if (this.handler.disabled) {
+					throw new Chat.ErrorMessage(
+						`The command /${this.cmd} is temporarily unavailable due to technical difficulties. Please try again in a few hours.`
+					);
+				}
 				message = this.run(this.handler);
 			} else {
 				if (this.cmdToken) {
@@ -491,9 +498,11 @@ export class CommandContext extends MessageContext {
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
 				this.errorReply(err.message);
+				this.update();
 				return false;
 			}
 			if (err.name.endsWith('Interruption')) {
+				this.update();
 				return;
 			}
 			Monitor.crashlog(err, 'A chat command', {
@@ -515,9 +524,11 @@ export class CommandContext extends MessageContext {
 			}).catch(err => {
 				if (err.name?.endsWith('ErrorMessage')) {
 					this.errorReply(err.message);
+					this.update();
 					return false;
 				}
 				if (err.name.endsWith('Interruption')) {
+					this.update();
 					return;
 				}
 				Monitor.crashlog(err, 'An async chat command', {
@@ -539,6 +550,16 @@ export class CommandContext extends MessageContext {
 
 	sendChatMessage(message: string) {
 		if (this.pmTarget) {
+			const blockInvites = this.pmTarget.settings.blockInvites;
+			if (blockInvites && /^<<.*>>$/.test(message.trim())) {
+				if (
+					!this.user.can('lock') && blockInvites === true ||
+					!Users.globalAuth.atLeast(this.user, blockInvites as GroupSymbol)
+				) {
+					Chat.maybeNotifyBlocked(`invite`, this.pmTarget, this.user);
+					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
+				}
+			}
 			Chat.sendPM(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
@@ -550,6 +571,14 @@ export class CommandContext extends MessageContext {
 		}
 	}
 
+	/**
+	 * Takes a chat message and returns data about any command it's
+	 * trying to use.
+	 *
+	 * Returning `null` means the chat message isn't trying to use
+	 * a command, and returning `{handler: null}` means it's trying
+	 * to use a command that doesn't exist.
+	 */
 	parseCommand(message = this.message, recursing = false): {
 		cmd: string, fullCmd: string, cmdToken: string, target: string, handler: AnnotatedChatHandler | null,
 	} | null {
@@ -571,17 +600,8 @@ export class CommandContext extends MessageContext {
 		if (cmdToken === message.charAt(1)) return null;
 		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return null;
 
-		let cmd = '';
-		let target = '';
-
-		const messageSpaceIndex = message.indexOf(' ');
-		if (messageSpaceIndex > 0) {
-			cmd = message.slice(1, messageSpaceIndex).toLowerCase();
-			target = message.slice(messageSpaceIndex + 1).trim();
-		} else {
-			cmd = message.slice(1).toLowerCase();
-			target = '';
-		}
+		let [cmd, target] = Utils.splitFirst(message.slice(1), ' ');
+		cmd = cmd.toLowerCase();
 
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 
@@ -602,14 +622,8 @@ export class CommandContext extends MessageContext {
 				return this.parseCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
 			}
 			if (commandHandler && typeof commandHandler === 'object') {
-				const spaceIndex = target.indexOf(' ');
-				if (spaceIndex > 0) {
-					cmd = target.substr(0, spaceIndex).toLowerCase();
-					target = target.substr(spaceIndex + 1);
-				} else {
-					cmd = target.toLowerCase();
-					target = '';
-				}
+				[cmd, target] = Utils.splitFirst(target, ' ');
+				cmd = cmd.toLowerCase();
 
 				fullCmd += ' ' + cmd;
 				curCommands = commandHandler as AnnotatedChatCommands;
@@ -770,7 +784,7 @@ export class CommandContext extends MessageContext {
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
 	}
 	sendReplyBox(htmlContent: string) {
-		this.sendReply(`|c|${this.room ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
+		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
 	}
 	popupReply(message: string) {
 		this.connection.popup(message);
@@ -825,7 +839,12 @@ export class CommandContext extends MessageContext {
 		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
-		const entry: ModlogEntry = {action, isGlobal: true, loggedBy: this.user.id, note: note?.replace(/\n/gm, ' ')};
+		const entry: PartialModlogEntry = {
+			action,
+			isGlobal: true,
+			loggedBy: this.user.id,
+			note: note?.replace(/\n/gm, ' ') || '',
+		};
 		if (user) {
 			if (typeof user === 'string') {
 				entry.userid = toID(user);
@@ -839,8 +858,11 @@ export class CommandContext extends MessageContext {
 			}
 		}
 		if (ip) entry.ip = ip;
-		this.room?.modlog(entry);
-		Rooms.global.modlog(entry, this.room?.roomid);
+		if (this.room) {
+			this.room.modlog(entry);
+		} else {
+			Rooms.global.modlog(entry);
+		}
 	}
 	modlog(
 		action: string,
@@ -848,7 +870,11 @@ export class CommandContext extends MessageContext {
 		note: string | null = null,
 		options: Partial<{noalts: any, noip: any}> = {}
 	) {
-		const entry: ModlogEntry = {action, loggedBy: this.user.id, note: note?.replace(/\n/gm, ' ')};
+		const entry: PartialModlogEntry = {
+			action,
+			loggedBy: this.user.id,
+			note: note?.replace(/\n/gm, ' ') || '',
+		};
 		if (user) {
 			if (typeof user === 'string') {
 				entry.userid = toID(user);
@@ -1117,7 +1143,7 @@ export class CommandContext extends MessageContext {
 			const normalized = message.trim();
 			if (
 				!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
-				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)
+				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN) && !Config.nothrottle
 			) {
 				throw new Chat.ErrorMessage(this.tr("You can't send the same message again so soon."));
 			}
@@ -1209,7 +1235,7 @@ export class CommandContext extends MessageContext {
 		htmlContent = ('' + (htmlContent || '')).trim();
 		if (!htmlContent) return '';
 		if (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent)) {
-			throw new Chat.ErrorMessage('Do not use "click here"');
+			throw new Chat.ErrorMessage('Do not use "click here" – See [[Design standard #2 <https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md#design-standards>]]');
 		}
 
 		// check for mismatched tags
@@ -1229,7 +1255,7 @@ export class CommandContext extends MessageContext {
 			const stack = [];
 			for (const tag of tags) {
 				const isClosingTag = tag.charAt(1) === '/';
-				const contentEndLoc = tag.charAt(tag.length - 1) === '/' ? -1 : undefined;
+				const contentEndLoc = tag.endsWith('/') ? -1 : undefined;
 				const tagContent = tag.slice(isClosingTag ? 2 : 1, contentEndLoc).replace(/\s+/, ' ').trim();
 				const tagNameEndIndex = tagContent.indexOf(' ');
 				const tagName = tagContent.slice(0, tagNameEndIndex >= 0 ? tagNameEndIndex : undefined).toLowerCase();
@@ -1338,11 +1364,31 @@ export class CommandContext extends MessageContext {
 		return rest;
 	}
 
-	requireRoom() {
+	requireRoom(id?: RoomID) {
 		if (!this.room) {
 			throw new Chat.ErrorMessage(`/${this.cmd} - must be used in a chat room, not a ${this.pmTarget ? "PM" : "console"}`);
 		}
+		if (id && this.room.roomid !== id) {
+			const targetRoom = Rooms.get(id);
+			if (!targetRoom) {
+				throw new Chat.ErrorMessage(`This command can only be used in the room '${id}', but that room does not exist.`);
+			}
+			throw new Chat.ErrorMessage(`This command can only be used in the ${targetRoom.title} room.`);
+		}
 		return this.room;
+	}
+	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
+	requireGame<T extends RoomGame>(constructor: new (...args: any[]) => T) {
+		const room = this.requireRoom();
+		if (!room.game) {
+			throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this room has no game).`);
+		}
+		const game = room.getGame(constructor);
+		// must be a different game
+		if (!game) {
+			throw new Chat.ErrorMessage(`This command requires a game of ${constructor.name} (this game is ${room.game.title}).`);
+		}
+		return game;
 	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
@@ -1361,6 +1407,13 @@ export const Chat = new class {
 		});
 	}
 	translationsLoaded = false;
+	/**
+	 * As per the node.js documentation at https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args,
+	 * timers with durations that are too long for a 32-bit signed integer will be invoked after 1 millisecond,
+	 * which tends to cause unexpected behavior.
+	 */
+	readonly MAX_TIMEOUT_DURATION = 2147483647;
+
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
@@ -1567,9 +1620,7 @@ export const Chat = new class {
 			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 		}
 		if (!strings.length) {
-			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
-				return Chat.tr(language, fStrings, ...fKeys);
-			});
+			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => Chat.tr(language, fStrings, ...fKeys));
 		}
 
 		const entry = Chat.translations.get(language)!.get(trString);
@@ -1852,7 +1903,7 @@ export const Chat = new class {
 	 *
 	 * options.human = true will reports hours human-readable
 	 */
-	toTimestamp(date: Date, options: {human?: any} = {}) {
+	toTimestamp(date: Date, options: {human?: boolean} = {}) {
 		const human = options.human;
 		let parts: any[] = [
 			date.getFullYear(),	date.getMonth() + 1, date.getDate(),
@@ -1872,10 +1923,12 @@ export const Chat = new class {
 	 * options.hhmmss = true will instead report the duration in 00:00:00 format
 	 *
 	 */
-	toDurationString(val: number, options: {hhmmss?: any, precision?: number} = {}) {
+	toDurationString(val: number, options: {hhmmss?: boolean, precision?: number} = {}) {
 		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 		// https://github.com/tc39/ecma402/issues/47
 		const date = new Date(+val);
+		if (isNaN(date.getTime())) return 'forever';
+
 		const parts = [
 			date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1,
 			date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(),
@@ -1883,21 +1936,30 @@ export const Chat = new class {
 		const roundingBoundaries = [6, 15, 12, 30, 30];
 		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
 		const positiveIndex = parts.findIndex(elem => elem > 0);
-		const precision = (options?.precision ? options.precision : parts.length);
+		let precision = (options?.precision ? options.precision : 3);
 		if (options?.hhmmss) {
 			const str = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
 			return str.length === 2 ? "00:" + str : str;
 		}
+
 		// round least significant displayed unit
 		if (positiveIndex + precision < parts.length && precision > 0 && positiveIndex >= 0) {
 			if (parts[positiveIndex + precision] >= roundingBoundaries[positiveIndex + precision - 1]) {
 				parts[positiveIndex + precision - 1]++;
 			}
 		}
+
+		// don't display trailing 0's if the number is exact
+		let precisionIndex = 5;
+		while (precisionIndex > positiveIndex && !parts[precisionIndex]) {
+			precisionIndex--;
+		}
+		precision = Math.min(precision, precisionIndex - positiveIndex + 1);
+
 		return parts
 			.slice(positiveIndex)
 			.reverse()
-			.map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "")
+			.map((value, index) => `${value} ${unitNames[index]}${value !== 1 ? "s" : ""}`)
 			.reverse()
 			.slice(0, precision)
 			.join(" ")
@@ -2016,7 +2078,6 @@ export const Chat = new class {
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
 	getDataMoveHTML(move: Move) {
-		if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
 		// encoding is important for the ??? type icon
@@ -2035,15 +2096,13 @@ export const Chat = new class {
 		return buf;
 	}
 	getDataAbilityHTML(ability: Ability) {
-		if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
 		buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
-	getDataItemHTML(item: string | Item) {
-		if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
+	getDataItemHTML(item: Item) {
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
 		buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
@@ -2092,7 +2151,7 @@ export const Chat = new class {
 	/**
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
-	maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
+	maybeNotifyBlocked(blocked: 'pm' | 'challenge' | 'invite', targetUser: User, user: User) {
 		const prefix = `|pm|&|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
@@ -2104,6 +2163,11 @@ export const Chat = new class {
 			if (!targetUser.notified.blockChallenges) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
 				targetUser.notified.blockChallenges = true;
+			}
+		} else if (blocked === 'invite') {
+			if (!targetUser.notified.blockInvites) {
+				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to invite you to a room but was blocked. To enable invites, use /unblockinvites.`);
+				targetUser.notified.blockInvites = true;
 			}
 		}
 	}
@@ -2152,10 +2216,10 @@ CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
 export interface FilterWord {
 	regex: RegExp;
 	word: string;
-	reason: string;
+	hits: number;
+	reason?: string;
 	publicReason?: string;
 	replacement?: string;
-	hits: number;
 }
 
 export type MonitorHandler = (

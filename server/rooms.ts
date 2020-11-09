@@ -15,6 +15,8 @@
  * @license MIT
  */
 
+const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
@@ -25,6 +27,9 @@ const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
+
+const MODLOG_PATH = 'logs/modlog';
+const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
@@ -38,7 +43,7 @@ import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {modlog, ModlogEntry} from './modlog';
+import {Modlog, PartialModlogEntry} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -342,7 +347,10 @@ export abstract class BasicRoom {
 		this.log.roomlog(message);
 		return this;
 	}
-	modlog(entry: ModlogEntry) {
+	/**
+	 * Writes an entry to the modlog for that room, and the global modlog if entry.isGlobal is true.
+	 */
+	modlog(entry: PartialModlogEntry) {
 		const override = this.tour ? `${this.roomid} tournament: ${this.tour.roomid}` : undefined;
 		this.log.modlog(entry, override);
 		return this;
@@ -695,18 +703,23 @@ export abstract class BasicRoom {
 		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
 
-	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
-		const end = this.roomid.length - 2;
-		const lastHyphen = this.roomid.lastIndexOf('-', end);
-		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen, end)};
+	/**
+	 * Displays a warning popup to all users in the room.
+	 * Returns a list of all the user IDs that were warned.
+	 */
+	warnParticipants(message: string) {
+		const warned = Object.values(this.users);
+		for (const user of warned) {
+			user.popup(`|modal|${message}`);
+		}
+		return warned;
 	}
 
 	/**
 	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
 	 * @param noAlias Set this param to true to not redirect aliases and the room's old name to its new name.
 	 */
-	async rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
+	rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
 		this.validateTitle(newTitle, newID);
 		if (this.type === 'chat' && this.game) {
@@ -745,6 +758,9 @@ export abstract class BasicRoom {
 			}
 			this.settings.aliases = undefined;
 		}
+
+		this.game?.renameRoom(newID);
+
 		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
@@ -766,7 +782,7 @@ export abstract class BasicRoom {
 		this.settings.title = newTitle;
 		this.saveSettings();
 
-		return this.log.rename(newID);
+		void this.log.rename(newID);
 	}
 
 	onConnect(user: User, connection: Connection) {
@@ -1039,7 +1055,7 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	modlog(entry: ModlogEntry, overrideID?: string) {
+	modlog(entry: PartialModlogEntry, overrideID?: string) {
 		void Rooms.Modlog.write('global', entry, overrideID);
 	}
 
@@ -1630,8 +1646,9 @@ export class GameRoom extends BasicRoom {
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
+		const {id, password} = this.getReplayData();
 		const [success] = await LoginServer.request('prepreplay', {
-			id: this.roomid.substr(7),
+			id: id,
 			loghash: datahash,
 			p1: battle.p1.name,
 			p2: battle.p2.name,
@@ -1648,9 +1665,40 @@ export class GameRoom extends BasicRoom {
 		}
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
-			id: this.roomid.substr(7),
+			id: id,
+			password: password,
 			silent: options === 'forpunishment' || options === 'silent',
 		}));
+	}
+
+	getReplayData() {
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		const end = this.roomid.length - 2;
+		const lastHyphen = this.roomid.lastIndexOf('-', end);
+		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
+	}
+
+	makePrivate(privacy: true | 'hidden' | 'voice') {
+		// This is the same password generation approach as genPassword in the client replays.lib.php
+		// but obviously will not match given mt_rand there uses a different RNG and seed.
+		let password = '';
+		for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+
+		this.settings.isPrivate = privacy;
+		for (const user of Object.values(this.users)) {
+			if (!user.named) {
+				user.leaveRoom(this.roomid);
+				user.popup(`The battle <<${this.roomid}>> has been made private; you must log in to watch private battles.`);
+			}
+		}
+		if (this.roomid.endsWith('pw')) return true;
+		this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
+	}
+
+	makePublic() {
+		this.settings.isPrivate = false;
+		if (!this.roomid.endsWith('pw')) return true;
+		this.rename(this.title, this.getReplayData().id as RoomID);
 	}
 }
 
@@ -1660,7 +1708,9 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	Modlog: modlog,
+	MODLOG_PATH,
+	MODLOG_DB_PATH,
+	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
@@ -1768,11 +1818,11 @@ export const Rooms = {
 
 		if (privacySetter.size) {
 			if (battle.forcePublic) {
-				room.settings.isPrivate = false;
+				room.makePublic();
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
-				room.settings.isPrivate = 'hidden';
+				room.makePrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {

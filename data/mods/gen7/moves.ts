@@ -11,10 +11,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	aeroblast: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	assist: {
 		inherit: true,
 		isNonstandard: null,
@@ -114,15 +110,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	coreenforcer: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	corkscrewcrash: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	crushgrip: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -163,10 +151,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	diamondstorm: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	dizzypunch: {
 		inherit: true,
 		isNonstandard: null,
@@ -176,10 +160,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "LGPE",
 	},
 	doubleslap: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	dragonascent: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -271,10 +251,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	genesissupernova: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	geomancy: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -549,10 +525,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	landswrath: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	letssnuggleforever: {
 		inherit: true,
 		isNonstandard: null,
@@ -562,10 +534,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Unobtainable",
 	},
 	lightthatburnsthesky: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	lovelykiss: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -579,15 +547,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lunardance: {
 		inherit: true,
-		isNonstandard: null,
-	},
-	lusterpurge: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	magmastorm: {
-		inherit: true,
-		isNonstandard: null,
+		condition: {
+			duration: 2,
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				if (!target.fainted) {
+					target.heal(target.maxhp);
+					target.setStatus('');
+					for (const moveSlot of target.moveSlots) {
+						moveSlot.pp = moveSlot.maxpp;
+					}
+					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
+					target.side.removeSlotCondition(target, 'lunardance');
+				}
+			},
+		},
 	},
 	magnetbomb: {
 		inherit: true,
@@ -619,10 +593,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			"After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V-create", "Wide Guard",
 		],
 	},
-	mindblown: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	miracleeye: {
 		inherit: true,
 		isNonstandard: null,
@@ -632,10 +602,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	mirrorshot: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	mistball: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -655,10 +621,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	naturesmadness: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	needlearm: {
 		inherit: true,
 		isNonstandard: null,
@@ -671,10 +633,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	oblivionwing: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	oceanicoperetta: {
 		inherit: true,
 		isNonstandard: null,
@@ -684,10 +642,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	ominouswind: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	originpulse: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -805,10 +759,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	roaroftime: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	rockclimb: {
 		inherit: true,
 		isNonstandard: null,
@@ -818,10 +768,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	rototiller: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	sacredfire: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -835,10 +781,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	searingshot: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	searingsunrazesmash: {
 		inherit: true,
 		isNonstandard: null,
@@ -848,10 +790,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	seedflare: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	shadowforce: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -908,10 +846,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	spacialrend: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	sparklyswirl: {
 		inherit: true,
 		accuracy: 100,
@@ -931,10 +865,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	spotlight: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	steameruption: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -962,10 +892,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	technoblast: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	tectonicrage: {
 		inherit: true,
 		isNonstandard: null,
@@ -979,14 +905,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		selfSwitch: false,
 		onTryHit: false,
-	},
-	thousandarrows: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	thousandwaves: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	toxicthread: {
 		inherit: true,

@@ -85,9 +85,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			source.m.swapSets = function (random: boolean) {
 				const sets = [["Shadow Ball", "Flash Cannon", "Shadow Sneak", "Reset"],
 					["Shadow Claw", "Iron Head", "Shadow Sneak", "Reset"]];
-				const pp = source.moveSlots.map(move => {
-					return move.pp / move.maxpp;
-				});
+				const pp = source.moveSlots.map(move => move.pp / move.maxpp);
 				let num = 0;
 				if (random) {
 					num = source.battle.random(2); // randomize
@@ -648,15 +646,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				},
 			];
 			pokemon.m.changeForme = (context: Battle, formeNumber: number) => {
-				const forme = Object.assign({}, pokemon.m.formes[formeNumber]);
-				forme.movepool[2] = Object.assign([], forme.movepool[2])[this.random(2)];
+				const forme = {...pokemon.m.formes[formeNumber]};
+				forme.movepool[2] = forme.movepool[2][this.random(2)];
 				pokemon.formeChange(forme.species, context.effect);
 				pokemon.m.formeNumber = formeNumber;
 				pokemon.battle.add('-message', `Alcremie changes its forme to ${forme.name}`);
 				const newMoves = forme.movepool;
-				const carryOver = pokemon.moveSlots.slice().map(m => {
-					return m.pp / m.maxpp;
-				});
+				const carryOver = pokemon.moveSlots.slice().map(m => m.pp / m.maxpp);
 				// Incase theres ever less than 4 moves
 				while (carryOver.length < 4) {
 					carryOver.push(1);
@@ -1094,9 +1090,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			const unownLetters = 'abcdefghijklmnopgrstuvwxyz'.split('');
 			const currentFormeID = this.toID(pokemon.set.species);
 			const currentLetter = currentFormeID.charAt(5) || 'a';
-			const chosenLetter = this.sample(unownLetters.filter(letter => {
-				return letter !== currentLetter;
-			}));
+			const chosenLetter = this.sample(unownLetters.filter(letter => letter !== currentLetter));
 			// Change is permanent so when you switch out you keep the letter
 			this.add(`c|${getName('Kris')}|watch this`);
 			if (chosenLetter === 'w') {
@@ -1111,9 +1105,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				pokemon.formeChange(`unownu`, this.effect, true);
 				this.add(`c|${getName('Kris')}|U? I'm already an Unown, no`);
 				this.add('-activate', pokemon, 'ability: phuck');
-				const chosenLetter2 = this.sample(unownLetters.filter(letter => {
-					return letter !== 'u' && letter !== 'w';
-				}));
+				const chosenLetter2 = this.sample(unownLetters.filter(letter => letter !== 'u' && letter !== 'w'));
 				pokemon.formeChange(`unown${chosenLetter2}`, this.effect, true);
 				this.hint(`There are no U Pokemon that work with Kris's signature move, so we're counting this as a loss`);
 			} else {
@@ -2065,7 +2057,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'perishsong') return null;
-			if (this.dex.getEffect(status.id).onDisableMove) return null;
 		},
 		onResidualOrder: 7,
 		onResidual(pokemon) {

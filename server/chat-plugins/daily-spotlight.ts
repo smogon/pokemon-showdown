@@ -219,6 +219,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(html);
 		room.update();
 	},
+	vsl: 'viewspotlights',
 	dailies: 'viewspotlights',
 	viewspotlights(target, room, user) {
 		room = this.requireRoom();

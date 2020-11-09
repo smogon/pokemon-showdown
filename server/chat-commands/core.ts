@@ -112,7 +112,7 @@ const avatarTable = new Set([
 	'emmet',
 	'engineer-gen1', 'engineer-gen1rb', 'engineer-gen3',
 	'erika-gen1', 'erika-gen1rb', 'erika-gen2', 'erika-gen3', 'erika',
-	'ethan-gen2c', 'ethan-gen2', 'ethan',
+	'ethan-gen2c', 'ethan-gen2', 'ethan-pokeathlon', 'ethan',
 	'eusine-gen2', 'eusine',
 	'expertf-gen3',
 	'expert-gen3',
@@ -135,7 +135,7 @@ const avatarTable = new Set([
 	'glacia-gen3',
 	'greta-gen3',
 	'grimsley',
-	'guitarist-gen3', 'guitarist-gen4', 'guitarist',
+	'guitarist-gen2', 'guitarist-gen3', 'guitarist-gen4', 'guitarist',
 	'harlequin',
 	'hexmaniac-gen3jp', 'hexmaniac-gen3',
 	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
@@ -179,9 +179,9 @@ const avatarTable = new Set([
 	'lucas-gen4pt', 'lucas',
 	'lucian',
 	'lucy-gen3',
-	'lyra',
+	'lyra-pokeathlon', 'lyra',
 	'madame-gen4dp', 'madame-gen4', 'madame',
-	'maid',
+	'maid-gen4', 'maid',
 	'marley',
 	'marlon',
 	'marshal',
@@ -218,7 +218,7 @@ const avatarTable = new Set([
 	'pokefanf-gen2', 'pokefanf-gen3', 'pokefanf-gen4', 'pokefanf',
 	'pokefan-gen2', 'pokefan-gen3', 'pokefan-gen4', 'pokefan',
 	'pokekid',
-	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
+	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen2', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
 	'pokemonbreederf-gen3', 'pokemonbreederf-gen3frlg', 'pokemonbreederf-gen4', 'pokemonbreederf',
 	'pokemonbreeder-gen3', 'pokemonbreeder-gen4', 'pokemonbreeder',
 	'pokemonrangerf-gen3', 'pokemonrangerf-gen3rs', 'pokemonrangerf-gen4', 'pokemonrangerf',
@@ -548,7 +548,17 @@ export const commands: ChatCommands = {
 		if (!targetRoom) {
 			return this.errorReply(this.tr`The room "${target}" was not found.`);
 		}
-		if (!targetUser) return this.parse(`/help invite`);
+		if (!targetUser) {
+			return this.parse('/help invite');
+		}
+
+		const invitesBlocked = targetUser.settings.blockInvites;
+		if (invitesBlocked) {
+			if (invitesBlocked === true ? !user.can('lock') : !Users.globalAuth.atLeast(user, invitesBlocked as GroupSymbol)) {
+				Chat.maybeNotifyBlocked('invite', targetUser, user);
+				return this.errorReply(`This user is currently blocking room invites.`);
+			}
+		}
 		if (!targetRoom.checkModjoin(targetUser)) {
 			this.room = targetRoom;
 			this.parse(`/roomvoice ${targetUser.name}`);
@@ -605,6 +615,34 @@ export const commands: ChatCommands = {
 		return this.sendReply(this.tr("You are no longer blocking private messages."));
 	},
 	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
+
+	unblockinvites: 'blockinvites',
+	blockinvites(target, room, user, connection, cmd) {
+		const unblock = cmd.includes('unblock');
+		if (unblock) {
+			if (!user.settings.blockInvites) {
+				return this.errorReply(`You are not blocking room invites! To block, use /blockinvites.`);
+			}
+			user.settings.blockInvites = false;
+			this.sendReply(`You are no longer blocking room invites.`);
+		} else {
+			if (toID(target) === 'ac') target = 'autoconfirmed';
+			if (user.settings.blockInvites === (target || true)) {
+				return this.errorReply("You are already blocking room invites - to unblock, use /unblockinvites");
+			}
+			if (target in Config.groups) {
+				user.settings.blockInvites = target as GroupSymbol;
+				this.sendReply(this.tr `You are now blocking room invites, except from staff and ${target}.`);
+			} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
+				user.settings.blockInvites = target;
+				this.sendReply(this.tr `You are now blocking room invites, except from staff and ${target} users.`);
+			} else {
+				user.settings.blockInvites = true;
+				this.sendReply(this.tr("You are now blocking room invites, except from staff."));
+			}
+		}
+		return user.update();
+	},
 
 	status(target, room, user, connection, cmd) {
 		if (user.locked || user.semilocked) {
@@ -672,10 +710,10 @@ export const commands: ChatCommands = {
 			this.checkCan('forcerename', targetUser);
 
 			const displayReason = reason ? `: ${reason}` : ``;
-			this.privateModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${reason ? `: ${reason}` : ``}`);
+			this.privateGlobalModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
 			targetUser.clearStatus();
-			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
+			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
 			return;
 		}
 
@@ -710,30 +748,31 @@ export const commands: ChatCommands = {
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 
-	rank(target, room, user) {
+	async rank(target, room, user) {
 		if (!target) target = user.name;
 
-		return Ladders.visualizeAll(target).then(values => {
-			let buffer = `<div class="ladder"><table>`;
-			buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
+		const values = await Ladders.visualizeAll(target);
+		let buffer = `<div class="ladder"><table>`;
+		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
-			const ratings = values.join(``);
-			if (!ratings) {
-				buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
-			} else {
-				buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
-				buffer += ratings;
-			}
-			buffer += `</table></div>`;
+		const ratings = values.join(``);
+		if (!ratings) {
+			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
+		} else {
+			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
+			buffer += ratings;
+		}
+		buffer += `</table></div>`;
 
-			this.sendReply(`|raw|${buffer}`);
-		});
+		this.sendReply(`|raw|${buffer}`);
 	},
 
 	showrank: 'hiderank',
 	hiderank(target, room, user, connection, cmd) {
 		const userGroup = Users.Auth.getGroup(Users.globalAuth.get(user.id));
-		if (!userGroup['hiderank']) return this.errorReply(`/hiderank - Access denied.`);
+		if (!userGroup['hiderank'] || !user.registered) {
+			return this.errorReply(`/hiderank - Access denied.`);
+		}
 
 		const isShow = cmd === 'showrank';
 		const group = (isShow ? Users.globalAuth.get(user.id) : (target.trim() || Users.Auth.defaultSymbol()) as GroupSymbol);
@@ -1470,14 +1509,9 @@ export const commands: ChatCommands = {
 	crq(target, room, user, connection) {
 		// In emergency mode, clamp down on data returned from crq's
 		const trustable = (!Config.emergency || (user.named && user.registered));
-		const spaceIndex = target.indexOf(' ');
-		let cmd = target;
-		if (spaceIndex > 0) {
-			cmd = target.substr(0, spaceIndex);
-			target = target.substr(spaceIndex + 1);
-		} else {
-			target = '';
-		}
+		let cmd;
+		[cmd, target] = Utils.splitFirst(target, ' ');
+
 		if (cmd === 'userdetails') {
 			if (target.length > 18) {
 				connection.send('|queryresponse|userdetails|null');
@@ -1605,21 +1639,10 @@ export const commands: ChatCommands = {
 	trn(target, room, user, connection) {
 		if (target === user.name) return false;
 
-		let commaIndex = target.indexOf(',');
-		let targetName = target;
-		let targetRegistered = false;
-		let targetToken = '';
-		if (commaIndex >= 0) {
-			targetName = target.substr(0, commaIndex);
-			target = target.substr(commaIndex + 1);
-			commaIndex = target.indexOf(',');
-			targetRegistered = !!target;
-			if (commaIndex >= 0) {
-				targetRegistered = !!parseInt(target.substr(0, commaIndex));
-				targetToken = target.substr(commaIndex + 1);
-			}
-		}
-		return user.rename(targetName, targetToken, targetRegistered, connection);
+		const [name, registeredString, token] = Utils.splitFirst(target, ',', 2);
+		const registered = !!parseInt(registeredString);
+
+		return user.rename(name, token || '', registered, connection);
 	},
 
 	/*********************************************************

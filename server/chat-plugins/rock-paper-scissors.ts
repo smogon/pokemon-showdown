@@ -62,9 +62,7 @@ export class RPSGame extends Rooms.RoomGame {
 		return attacker;
 	}
 	sendOptions() {
-		const button = (cmd: string, title: string) => {
-			return `<button class="button" name="send" value="/${cmd}">${title}</button>`;
-		};
+		const button = (cmd: string, title: string) => `<button class="button" name="send" value="/${cmd}">${title}</button>`;
 		let buf = `<center><strong>Make your choice, quick!</strong><br />`;
 		for (const item of ['Rock', 'Paper', 'Scissors']) {
 			buf += `${button(`choose ${item}`, `${item} ${ICONS[item]}`)}`;
@@ -259,16 +257,6 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 }
 
-function getGame(context: CommandContext) {
-	const room = context.requireRoom();
-	const game = room.getGame(RPSGame);
-	if (!game) throw new Chat.ErrorMessage(`There is no Rock Paper Scissors game going on in this room.`);
-	if (game.gameid !== 'rockpaperscissors') {
-		throw new Chat.ErrorMessage(`A game of ${game.title} is already going on.`);
-	}
-	return game;
-}
-
 function findExisting(user1: string, user2: string) {
 	return Rooms.get(`rps-${user1}-${user2}`) || Rooms.get(`rps-${user2}-${user1}`);
 }
@@ -335,7 +323,7 @@ export const commands: ChatCommands = {
 		},
 
 		end(target, room, user) {
-			const game = getGame(this);
+			const game = this.requireGame(RPSGame);
 			if (!game.playerTable[user.id]) {
 				return this.errorReply(`You are not a player, and so cannot end the game.`);
 			}
@@ -351,12 +339,12 @@ export const commands: ChatCommands = {
 		},
 
 		pause(target, room, user) {
-			const game = getGame(this);
+			const game = this.requireGame(RPSGame);
 			game.pause(user);
 		},
 
 		resume(target, room, user) {
-			const game = getGame(this);
+			const game = this.requireGame(RPSGame);
 			game.unpause(user);
 		},
 

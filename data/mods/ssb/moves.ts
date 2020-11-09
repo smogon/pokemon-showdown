@@ -863,7 +863,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
 		onModifyMove(move, source, target) {
-			if (target.getStat('def') < target.getStat('spd')) {
+			if (target && target.getStat('def') < target.getStat('spd')) {
 				move.category = "Physical";
 			}
 		},
@@ -974,7 +974,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyType(move, pokemon, target) {
 			move.type = pokemon.types[0];
 		},
-		onTryImmunityPriority: -2,
 		onTryImmunity(target, pokemon) {
 			if (pokemon.types[1]) {
 				if (!target.runImmunity(pokemon.types[1])) return false;
@@ -4613,7 +4612,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Twister', target);
 		},
 		onModifyMove(move, pokemon, target) {
-			if (['raindance', 'primordialsea', 'tempest'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'primordialsea', 'tempest'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
 		},
@@ -5877,7 +5876,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	thunder: {
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
-			switch (target.effectiveWeather()) {
+			switch (target?.effectiveWeather()) {
 			case 'raindance':
 			case 'tempest':
 			case 'primordialsea':
@@ -5893,7 +5892,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	hurricane: {
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
-			switch (target.effectiveWeather()) {
+			switch (target?.effectiveWeather()) {
 			case 'raindance':
 			case 'tempest':
 			case 'primordialsea':

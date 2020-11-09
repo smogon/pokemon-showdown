@@ -1,5 +1,4 @@
 import {SSBSet, ssbSets} from "./random-teams";
-// import {ChosenAction} from "../../../sim/side"; ????
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'turbulence'];
@@ -1639,14 +1638,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			let result = 0;
 			const pokemon = this.getAllActive();
 			for (const poke of pokemon) {
-				result += Object.values(poke.boosts).reduce((total, x) => { return total + x; });
+				result += Object.values(poke.boosts).reduce((total, x) => total + x);
 			}
 			if (result < 8) return;
 			this.add('-ability', source, 'Supernova');
-			pokemon.forEach((x) => {
+			for (const x of pokemon) {
 				this.add('-anim', x, 'Explosion', x);
 				x.faint();
-			}, this);
+			}
 		},
 		name: "Supernova",
 		isNonstandard: "Custom",

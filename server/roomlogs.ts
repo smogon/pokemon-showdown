@@ -9,7 +9,7 @@
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
-import type {ModlogEntry} from './modlog';
+import type {PartialModlogEntry} from './modlog';
 
 interface RoomlogOptions {
 	isMultichannel?: boolean;
@@ -224,23 +224,20 @@ export class Roomlog {
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 		void this.roomlogStream.write(timestamp + message + '\n');
 	}
-	modlog(entry: ModlogEntry, overrideID?: string) {
+	modlog(entry: PartialModlogEntry, overrideID?: string) {
 		void Rooms.Modlog.write(this.roomid, entry, overrideID);
 	}
 	async rename(newID: RoomID): Promise<true> {
 		const roomlogPath = `logs/chat`;
 		const roomlogStreamExisted = this.roomlogStream !== null;
 		await this.destroy(false); // don't destroy modlog, since it's renamed later
-		await Promise.all([
+		const [roomlogExists, newRoomlogExists] = await Promise.all([
 			FS(roomlogPath + `/${this.roomid}`).exists(),
 			FS(roomlogPath + `/${newID}`).exists(),
-		]).then(([roomlogExists, newRoomlogExists]) => {
-			return Promise.all([
-				roomlogExists && !newRoomlogExists ?
-					FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`) :
-					undefined,
-			]);
-		});
+		]);
+		if (roomlogExists && !newRoomlogExists) {
+			await FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`);
+		}
 		await Rooms.Modlog.rename(this.roomid, newID);
 		this.roomid = newID;
 		Roomlogs.roomlogs.set(newID, this);

@@ -14,18 +14,11 @@
     "tools/set-import/importer.js",
     "tools/set-import/sets",
     "tools/modlog/converter.js",
-    "server/global-variables.d.ts",
-    "sim/global-variables.d.ts"
+    "server/global-variables.d.ts"
  ],
   "env": {
     "es6": true,
     "node": true
-  },
-  "globals": {
-    "Config": false, "Monitor": false, "toID": false, "Dex": false, "LoginServer": false,
-    "Users": false, "Punishments": false, "Rooms": false, "Verifier": false, "Chat": false,
-    "Tournaments": false, "IPTools": false, "Sockets": false, "TeamValidator": false,
-    "TeamValidatorAsync": false, "Ladders": false
   },
   "extends": "eslint:recommended",
   "rules": {
@@ -101,7 +94,7 @@
     "no-shadow": "off",
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
-    "no-undef": ["error", {"typeof": true}],
+    "no-undef": "off",
     "no-unmodified-loop-condition": "error",
     "no-unused-expressions": "error",
     "no-unsafe-finally": "error",
@@ -123,6 +116,7 @@
 
     // syntax style (local syntactical, usually autofixable formatting decisions)
     "arrow-parens": "off",
+    "arrow-body-style": "error",
     "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
     "comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline", "imports": "always-multiline", "exports": "always-multiline", "functions": "ignore"}],
     "comma-style": ["error", "last"],
@@ -192,7 +186,7 @@
     {
       "files": [
         "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
-        "./tools/set-import/*.ts",  "./tools/modlog/*.ts", "./translations/**/*.ts"
+        "./tools/set-import/*.ts", "./tools/modlog/*.ts", "./translations/**/*.ts"
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
@@ -209,14 +203,13 @@
       ],
       "rules": {
         // TODO revisit
-        "prefer-object-spread": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/member-ordering": "off",
         // "@typescript-eslint/no-extraneous-class": "error",
         // "@typescript-eslint/no-type-alias": "error",
-        "@typescript-eslint/no-parameter-properties": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
+        // "@typescript-eslint/consistent-type-imports": "error", // TODO after no-duplicate-imports fix
 
         // test only (should never be committed, but useful when testing)
         "no-unused-vars": "off",
@@ -226,6 +219,7 @@
           // see bottom of file for source
           "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Utils\\.html|(?:this\\.)?(?:room\\.)?tr|\\$\\()?['\"`/]"
         }],
+        "prefer-const": ["warn", {"destructuring": "all"}], // typescript-eslint/recommended forces this so we need to re-override
 
         // PS code (code specific to PS)
         "@typescript-eslint/no-namespace": "off",
@@ -271,18 +265,19 @@
         "@typescript-eslint/array-type": "error",
         "@typescript-eslint/consistent-type-assertions": ["error", {"assertionStyle": "as"}],
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
-        // "@typescript-eslint/consistent-type-imports": "error", // TODO AUTOFIX
         "@typescript-eslint/explicit-member-accessibility": ["error", {"accessibility": "no-public"}],
         "@typescript-eslint/member-delimiter-style": ["error", {"overrides": {"typeLiteral": {
           "multiline": {"delimiter": "comma", "requireLast": true},
           "singleline": {"delimiter": "comma", "requireLast": false}
         }}}],
+        "@typescript-eslint/no-parameter-properties": "error",
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/prefer-as-const": "error",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-includes": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
+        "prefer-object-spread": "error",
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/unified-signatures": "error",
 
@@ -311,10 +306,7 @@
       "env": {
         "mocha": true
       },
-      "files": ["test/**/*.js"],
-      "globals": {
-        "BattleEngine": false
-      }
+      "files": ["test/**/*.js"]
     }
   ]
 }

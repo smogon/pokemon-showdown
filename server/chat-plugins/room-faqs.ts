@@ -18,7 +18,7 @@ function saveRoomFaqs() {
 export function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
 	const value = roomFaqs[roomid][key];
-	if (value && value[0] === '>') return value.substr(1);
+	if (value && value.startsWith('>')) return value.substr(1);
 	return false;
 }
 
@@ -156,7 +156,7 @@ export const pages: PageTable = {
 			if (aliases.length) {
 				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;
 			}
-			if (user.can('ban', null, room)) {
+			if (user.can('ban', null, room, 'addfaq')) {
 				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
 				buf += `<hr /><details><summary>Raw text</summary>`;
 				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;

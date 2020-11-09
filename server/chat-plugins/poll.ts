@@ -173,12 +173,12 @@ export class Poll {
 
 	getQuestionMarkup() {
 		if (this.supportHTML) return this.question;
-		return Utils.escapeHTML(this.question);
+		return Chat.formatText(this.question);
 	}
 
 	getOptionMarkup(option: Option) {
 		if (this.supportHTML) return option.name;
-		return Utils.escapeHTML(option.name);
+		return Chat.formatText(option.name);
 	}
 
 	update() {
@@ -243,7 +243,7 @@ export class Poll {
 		const recipient = connection || user;
 		if (user.id in this.voters) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
-		} else if (user.latestIp in this.voterIps) {
+		} else if (user.latestIp in this.voterIps && !Config.noipchecks) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(
 				false,
 				this.voterIps[user.latestIp]
@@ -444,7 +444,9 @@ export const commands: ChatCommands = {
 					return this.add(this.tr("The poll timer was turned off."));
 				}
 				const timeout = parseFloat(target);
-				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply(this.tr("Invalid time given."));
+				if (isNaN(timeout) || timeout <= 0 || timeout > Chat.MAX_TIMEOUT_DURATION) {
+					return this.errorReply(this.tr("Invalid time given."));
+				}
 				if (poll.timeout) clearTimeout(poll.timeout);
 				poll.timeoutMins = timeout;
 				poll.timeout = setTimeout(() => {

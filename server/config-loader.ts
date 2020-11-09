@@ -7,6 +7,7 @@
 
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
+import {exec} from '../lib/process-manager';
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
@@ -19,9 +20,19 @@ const CONFIG_PATH = require.resolve('../config/config');
 
 export function load(invalidate = false) {
 	if (invalidate) delete require.cache[CONFIG_PATH];
-	const config = Object.assign({}, defaults, require('../config/config')) as ConfigType;
+	const config = ({...defaults, ...require('../config/config')}) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
-	config.routes = Object.assign({}, defaults.routes, config.routes);
+	config.routes = {...defaults.routes, ...config.routes};
+
+	// Automatically stop startup if better-sqlite3 isn't installed and SQLite is enabled
+	if (config.usesqlite) {
+		try {
+			require('better-sqlite3');
+		} catch (e) {
+			throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
+		}
+	}
+
 	cacheGroupData(config);
 	return config;
 }
@@ -120,6 +131,22 @@ export function cacheGroupData(config: ConfigType) {
 		};
 	}
 }
+
+export function checkRipgrepAvailability() {
+	if (Config.ripgrepmodlog === undefined) {
+		Config.ripgrepmodlog = (async () => {
+			try {
+				await exec(['rg', '--version'], {cwd: `${__dirname}/../`});
+				await exec(['tac', '--version'], {cwd: `${__dirname}/../`});
+				return true;
+			} catch (error) {
+				return false;
+			}
+		})();
+	}
+	return Config.ripgrepmodlog;
+}
+
 
 function reportError(msg: string) {
 	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.

@@ -528,6 +528,32 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should properly validate Greninja-Ash', function () {
+		let team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['happyhour'], shiny: true, evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], shiny: true, evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], ivs: {atk: 0}, evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['hiddenpowergrass'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
 	it.skip('should not allow evolutions of Shiny-locked events to be Shiny', function () {
 		const team = [
 			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
@@ -537,7 +563,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it.skip('should not allow unreleased Gmax formes', function () {
+	it('should not allow unreleased Gmax formes', function () {
 		const team = [
 			{species: 'melmetal-gmax', ability: 'ironfist', moves: ['doubleironbash'], evs: {hp: 1}},
 		];
@@ -550,6 +576,31 @@ describe('Team Validator', function () {
 			{species: 'zeraora', ability: 'voltabsorb', shiny: true, moves: ['knockoff'], evs: {hp: 1}},
 		];
 		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow use of a Hidden Ability if the format has the item Ability Patch', function () {
+		let team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'entei', ability: 'innerfocus', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'dracovish', ability: 'sandrush', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'zapdos', ability: 'static', moves: ['sleeptalk'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8vgc2021').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should not allow Gen 1 JP events', function () {
+		const team = [
+			{species: 'rapidash', moves: ['payday']},
+		];
+		const illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
 	});
 
@@ -731,7 +782,7 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'charizard-mega-y', ability: 'drought', item: 'charizarditey', moves: ['wingattack'], evs: {hp: 1}},
 		];
-		const illegal = TeamValidator.get('gen8customgame@@@Standard NatDex').validateTeam(team);
+		const illegal = TeamValidator.get('gen7customgame@@@Standard').validateTeam(team);
 		assert.equal(illegal, null);
 	});
 });

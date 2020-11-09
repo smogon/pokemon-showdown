@@ -39,6 +39,6 @@ describe('Quash', function () {
 		]});
 		battle.makeChoices('move quash 2, move earthquake', 'move voltswitch 2, move extremespeed 1');
 		battle.makeChoices('', 'switch 3, pass'); // Volt Switch
-		assert.notStrictEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Extremespeed');
+		assert.notEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Extremespeed');
 	});
 });

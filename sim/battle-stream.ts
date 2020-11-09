@@ -40,31 +40,39 @@ function splitFirst(str: string, delimiter: string, limit = 1) {
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
+	noCatch: boolean;
 	replay: boolean | 'spectator';
 	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator'} = {}) {
+	constructor(options: {
+		debug?: boolean, noCatch?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator',
+	} = {}) {
 		super();
 		this.debug = !!options.debug;
+		this.noCatch = !!options.noCatch;
 		this.replay = options.replay || false;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
 	}
 
 	_write(chunk: string) {
-		try {
+		if (this.noCatch) {
 			this._writeLines(chunk);
-		} catch (err) {
-			this.pushError(err, true);
-			return;
+		} else {
+			try {
+				this._writeLines(chunk);
+			} catch (err) {
+				this.pushError(err, true);
+				return;
+			}
 		}
 		if (this.battle) this.battle.sendUpdates();
 	}
 
 	_writeLines(chunk: string) {
 		for (const line of chunk.split('\n')) {
-			if (line.charAt(0) === '>') {
+			if (line.startsWith('>')) {
 				const [type, message] = splitFirst(line.slice(1), ' ');
 				this._writeLine(type, message);
 			}
@@ -227,7 +235,7 @@ export abstract class BattlePlayer {
 
 	receiveLine(line: string) {
 		if (this.debug) console.log(line);
-		if (line.charAt(0) !== '|') return;
+		if (!line.startsWith('|')) return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
 		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
 		if (cmd === 'error') return this.receiveError(new Error(rest));
@@ -253,9 +261,10 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
+		void this._listen();
 	}
 
-	async start() {
+	async _listen() {
 		for await (let message of this.battleStream) {
 			if (!message.endsWith('\n')) message += '\n';
 			this.push(message + '\n');
