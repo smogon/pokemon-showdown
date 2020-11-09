@@ -1660,7 +1660,7 @@ export const commands: ChatCommands = {
 
 		// if the user hiding their own text, it would clear the "cleared" message,
 		// so we can't attribute it in that case
-		// and sending the message after the hideText call puts the "show lines" button in the wrong place
+		// and sending the message after `|unlink|` puts the "show lines" button in the wrong place
 		const sender = user === targetUser ? null : user;
 
 		let message = '';
