@@ -831,7 +831,7 @@ export class User extends Chat.MessageContext {
 		if (this.namelocked) {
 			Chat.loginfilter(this, null, userType);
 			return false;
-		};
+		}
 
 		// rename success
 		if (!this.forceRename(name, registered)) {
