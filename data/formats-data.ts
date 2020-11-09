@@ -1228,5 +1228,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	pokestarblackbelt: {isNonstandard: "Past", tier: "Illegal",},
 	pokestargiantpropo2: {isNonstandard: "Past", tier: "Illegal",},
 	pokestarufopropu2: {isNonstandard: "Past", tier: "Illegal",},
-	altlapras: {tier: "OU",},
+	altlapras: {
+		tier: "OU",
+	},
 };
