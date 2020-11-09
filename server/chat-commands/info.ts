@@ -27,6 +27,46 @@ export function getCommonBattles(userID1: ID, user1: User | null, userID2: ID, u
 	return battles;
 }
 
+export function findFormats(targetId: string, isOMSearch = false) {
+	let formatList: string[] = [];
+	const format = Dex.getFormat(targetId);
+	if (['Format', 'ValidatorRule', 'Rule'].includes(format.effectType)) formatList = [targetId];
+	if (!formatList.length) {
+		formatList = Object.keys(Dex.formats);
+	}
+
+	// Filter formats and group by section
+	let exactMatch = '';
+	const sections: {[k: string]: {name: string, formats: string[]}} = {};
+	let totalMatches = 0;
+	for (const mode of formatList) {
+		const subformat = Dex.getFormat(mode);
+		const sectionId = toID(subformat.section);
+		let formatId = subformat.id;
+		if (!/^gen\d+/.test(targetId)) {
+			// Skip generation prefix if it wasn't provided
+			formatId = formatId.replace(/^gen\d+/, '') as ID;
+		}
+		if (targetId && !(subformat as any)[targetId + 'Show'] && sectionId !== targetId &&
+		subformat.id === mode && !formatId.startsWith(targetId)) continue;
+		if (isOMSearch) {
+			const officialFormats = [
+				'ou', 'uu', 'ru', 'nu', 'pu', 'ubers', 'lc', 'monotype', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles',
+			];
+			if (subformat.id.startsWith('gen') && officialFormats.includes(subformat.id.slice(4))) {
+				continue;
+			}
+		}
+		totalMatches++;
+		if (!sections[sectionId]) sections[sectionId] = {name: subformat.section!, formats: []};
+		sections[sectionId].formats.push(subformat.id);
+		if (subformat.id !== targetId) continue;
+		exactMatch = sectionId;
+		break;
+	}
+	return {totalMatches, sections, exactMatch};
+}
+
 export const commands: ChatCommands = {
 	ip: 'whois',
 	rooms: 'whois',
@@ -1794,43 +1834,7 @@ export const commands: ChatCommands = {
 		let targetId = toID(target);
 		if (targetId === 'ladder') targetId = 'search' as ID;
 		if (targetId === 'all') targetId = '';
-
-		let formatList: string[] = [];
-		const format = Dex.getFormat(targetId);
-		if (['Format', 'ValidatorRule', 'Rule'].includes(format.effectType)) formatList = [targetId];
-		if (!formatList.length) {
-			formatList = Object.keys(Dex.formats);
-		}
-
-		// Filter formats and group by section
-		let exactMatch = '';
-		const sections: {[k: string]: {name: string, formats: string[]}} = {};
-		let totalMatches = 0;
-		for (const mode of formatList) {
-			const subformat = Dex.getFormat(mode);
-			const sectionId = toID(subformat.section);
-			let formatId = subformat.id;
-			if (!/^gen\d+/.test(targetId)) {
-				// Skip generation prefix if it wasn't provided
-				formatId = formatId.replace(/^gen\d+/, '') as ID;
-			 }
-			if (targetId && !(subformat as any)[targetId + 'Show'] && sectionId !== targetId &&
-			subformat.id === mode && !formatId.startsWith(targetId)) continue;
-			if (isOMSearch) {
-				const officialFormats = [
-					'ou', 'uu', 'ru', 'nu', 'pu', 'ubers', 'lc', 'monotype', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles',
-				];
-				if (subformat.id.startsWith('gen') && officialFormats.includes(subformat.id.slice(4))) {
-					continue;
-				}
-			}
-			totalMatches++;
-			if (!sections[sectionId]) sections[sectionId] = {name: subformat.section!, formats: []};
-			sections[sectionId].formats.push(subformat.id);
-			if (subformat.id !== targetId) continue;
-			exactMatch = sectionId;
-			break;
-		}
+		const {totalMatches, sections, exactMatch} = findFormats(targetId, isOMSearch);
 
 		if (!totalMatches) return this.errorReply("No matched formats found.");
 		if (!this.runBroadcast()) return;
@@ -1979,6 +1983,19 @@ export const commands: ChatCommands = {
 		}
 		if (!room) {
 			return this.errorReply(`This is not a room you can set the rules of.`);
+		}
+		const possibleRoom = Rooms.search(target);
+		if (possibleRoom) {
+			const rulesLink = possibleRoom.settings.rulesLink;
+			return this.sendReplyBox(
+				`${possibleRoom.title}'s rules:<br />` +
+				`${rulesLink ? Utils.html`- <a href="${rulesLink}">${this.tr `${possibleRoom.title} room rules`}</a><br />` : `None set.`}`
+			);
+		}
+
+		const {totalMatches: formatMatches} = findFormats(toID(target));
+		if (formatMatches > 0) {
+			return this.parse(`/tier ${target}`);
 		}
 		this.checkCan('editroom', null, room);
 		if (target.length > 150) {
