@@ -405,9 +405,17 @@ export const commands: ChatCommands = {
 			this.modlog(`AUTOFILTER IGNORE`, null, target);
 		},
 		unignore(target, room, user) {
+			let targetId;
+			[target, targetId] = Utils.splitFirst(target, '|');
+			if (targetId) {
+				const targetRoom = Rooms.search(targetId);
+				if (!targetRoom) return this.errorReply(`Invalid room.`);
+				room = targetRoom;
+				this.room = room;
+			}
 			room = this.requireRoom();
 			if (!room.responder) {
-				return this.errorReply(`This room has not configured an auto-response filter.`);
+				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
 			if (!toID(target)) {
@@ -417,6 +425,9 @@ export const commands: ChatCommands = {
 			room.responder.unignore(targets);
 			this.privateModAction(`${user.name} removed ${Chat.count(targets.length, "terms")} from the autoresponder ignore list.`);
 			this.modlog(`AUTOFILTER UNIGNORE`, null, target);
+			if (this.connection.openPages?.has(`autoresponder-${room.roomid}-ignore`)) {
+				this.parse(`/join view-autoresponder-${room.roomid}-ignore`);
+			}
 		},
 	},
 	autoresponderhelp() {
@@ -506,12 +517,24 @@ export const pages: PageTable = {
 				return buffer;
 			}).filter(Boolean).join('<hr />');
 			break;
+		case 'ignore':
+			this.title = `[${room.title} Autoresponder ignore list]`;
+			buf = `<div class="pad"><h2>${room.title} responder terms to ignore:</h2>${back}${refresh('ignore')}<hr />`;
+			if (!roomData.ignore) {
+				return this.errorReply(`No terms on ignore list.`);
+			}
+			for (const term of roomData.ignore) {
+				buf += `- ${term} <button class="button" name="send"value="/ar unignore ${term}|${room.roomid}">Remove</button><br />`;
+			}
+			buf += `</div>`;
+			break;
 		default:
 			this.title = `[${room.title} Autoresponder]`;
 			buf = `<div class="pad"><h2>Specify a filter page to view.</h2>`;
 			buf += `<hr /><strong>Options:</strong><hr />`;
 			buf += `<a roomid="view-autoresponder-${room.roomid}-stats">Stats</a><hr />`;
 			buf += `<a roomid="view-autoresponder-${room.roomid}-keys">Regex keys</a><hr/>`;
+			buf += `<a roomid="view-autoresponder-${room.roomid}-ignore">Ignore list</a><hr/>`;
 			buf += `</div>`;
 		}
 		return LogViewer.linkify(buf);
