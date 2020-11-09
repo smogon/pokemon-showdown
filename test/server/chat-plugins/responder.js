@@ -6,20 +6,16 @@
 
 'use strict';
 const assert = require('assert').strict;
-const Responder = require('../../../.server-dist/chat-plugins/help').HelpResponder;
-const Help = new Responder({
-	stats: {},
-	pairs: {},
-	disabled: false,
-	queue: [],
-});
+const Responder = require('../../../.server-dist/chat-plugins/responder').AutoResponder;
+const room = Rooms.createChatRoom('Etheria');
+const Help = new Responder(room);
 
-describe('Help', function () {
+describe('Autoresponder', function () {
 	it('should only return true on added regexes', function () {
 		Help.data.pairs.catra = [];
 		Help.data.pairs.catra.push(Help.stringRegex(`Hey & Adora`));
-		assert(Help.match('Hey, Adora', 'catra'));
-		assert(!Help.match('Hello, Adora', 'catra'));
+		assert(Help.test('Hey, Adora', 'catra'));
+		assert(!Help.test('Hello, Adora', 'catra'));
 	});
 
 	it('should produce valid regexes', function () {
