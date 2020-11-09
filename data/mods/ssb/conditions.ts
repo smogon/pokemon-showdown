@@ -1306,13 +1306,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	om: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('OM~!')}|What's up gamers?`);
+			this.add(`c|${getName('OM~!')}|What's Up Gamers`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('OM~!')}|Let me just ${['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'][this.random(3)]}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('OM~!')}|ugh, I ${['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got critfroze by ice beam asfgegkhalfewgihons'][this.random(3)]}`);
+			this.add(`c|${getName('OM~!')}|ugh, I ${['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got v-create\'d by fucking dragapult lmaoo'][this.random(3)]}`);
 		},
 	},
 	pants: {

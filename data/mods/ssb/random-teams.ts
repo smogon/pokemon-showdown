@@ -493,10 +493,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 248, def: 92, spd: 168}, nature: 'Bold', shiny: true,
 	},
 	'OM~!': {
-		species: 'Magneton', ability: 'Triage', item: 'Metronome', gender: 'N',
-		moves: ['Parabolic Charge', 'Oblivion Wing', 'Giga Drain'],
-		signatureMove: 'MechOMnism',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', shiny: true,
+		species: 'Glastrier', ability: 'Filter', item: 'Heavy Duty Boots', gender: 'M',
+		moves: ['Recover', 'Stealth Rock', 'Earthquake'],
+		signatureMove: 'OM Zoom',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
 	},
 	Overneat: {
 		species: 'Absol', ability: 'Intimidate', item: 'Absolite', gender: 'M',
