@@ -525,6 +525,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	furycutter: {
 		inherit: true,
 		basePower: 10,
+		condition: {
+			duration: 2,
+			onStart() {
+				this.effectData.multiplier = 1;
+			},
+			onRestart() {
+				if (this.effectData.multiplier < 16) {
+					this.effectData.multiplier <<= 1;
+				}
+				this.effectData.duration = 2;
+			},
+		},
 	},
 	futuresight: {
 		inherit: true,
