@@ -16945,8 +16945,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		gen: 5,
 	},
 	altlapras: {
-		num: 131,
-		name: "Lapras",
+		num: 10000,
+		name: "Alt-Lapras",
 		types: ["Water", "Ice"],
 		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
 		abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
