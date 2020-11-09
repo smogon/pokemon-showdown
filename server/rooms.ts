@@ -130,6 +130,7 @@ export interface RoomSettings {
 }
 export type Room = GameRoom | ChatRoom;
 import type {Poll} from './chat-plugins/poll';
+import type {AutoResponder} from './chat-plugins/responder';
 import type {Announcement} from './chat-plugins/announcements';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';
@@ -185,6 +186,7 @@ export abstract class BasicRoom {
 	scavLeaderboard: AnyObject;
 	giveaway?: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga?: GTSGiveaway | null;
+	responder?: AutoResponder | null;
 	privacySetter?: Set<ID> | null;
 	hideReplay: boolean;
 
