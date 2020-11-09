@@ -6444,7 +6444,4 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
-	altlapras: {
-		tier: "OU",
-	},
 };
