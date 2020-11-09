@@ -22,19 +22,6 @@ try {
 	answererData = JSON.parse(FS(PATH).readSync());
 } catch (e) {}
 
-function loadOldData() {
-	const oldDataPath = 'config/chat-plugins/help.json';
-	const oldPath = FS(oldDataPath);
-	if (oldPath.existsSync() && Config.helpFilterRoom) {
-		const newData = answererData[toID(Config.helpFilterRoom)];
-		const oldData = JSON.parse(oldPath.readSync());
-		if (newData && newData !== oldData) return;
-		answererData[toID(Config.helpFilterRoom)] = oldData;
-		// oldPath.unlinkIfExistsSync();
-	}
-}
-loadOldData();
-
 /**
  * A message caught by the filter.
  */
