@@ -1,5 +1,3 @@
-import * as Data from '../../../sim/dex-data';
-
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen8',
 	// 1 mega per pokemon
