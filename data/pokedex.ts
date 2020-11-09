@@ -2754,7 +2754,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Gyaradosite",
 	},
 	lapras: {
-		num: 131,
+		num: 10131,
 		name: "Lapras",
 		types: ["Water", "Ice"],
 		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
