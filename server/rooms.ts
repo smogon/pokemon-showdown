@@ -684,11 +684,13 @@ export abstract class BasicRoom {
 		}
 		return message ? `|raw|${message}` : ``;
 	}
-	getSubRooms(includeSecret = false) {
+	getSubRooms(opts: {includeSecret?: boolean, includeBattles?: boolean} = {}) {
 		if (!this.subRooms) return [];
-		return [...this.subRooms.values()].filter(
-			room => !room.settings.isPrivate || includeSecret
-		);
+		return [...this.subRooms.values()].filter(room => {
+			// ignore tour battles
+			if (this.game && room.tour === this.game && !opts.includeBattles) return false;
+			return !room.settings.isPrivate || opts.includeSecret;
+		});
 	}
 	validateTitle(newTitle: string, newID?: string) {
 		if (!newID) newID = toID(newTitle);
