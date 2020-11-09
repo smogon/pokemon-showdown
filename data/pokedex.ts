@@ -2754,7 +2754,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Gyaradosite",
 	},
 	lapras: {
-		num: 10131,
+		num: 131,
 		name: "Lapras",
 		types: ["Water", "Ice"],
 		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
@@ -16943,5 +16943,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		eggGroups: ["Undiscovered"],
 		gen: 5,
+	},
+	altlapras: {
+		num: 131,
+		name: "Lapras",
+		types: ["Water", "Ice"],
+		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
+		abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
+		heightm: 2.5,
+		weightkg: 220,
+		color: "Blue",
+		eggGroups: ["Monster", "Water 1"],
+		canGigantamax: "G-Max Resonance",
 	},
 };

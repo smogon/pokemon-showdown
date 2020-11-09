@@ -1401,8 +1401,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 			isNonstandard: "Past",
 	},
 	lapras: {
-		tier: "OU",
-		doublestier: "Illegal",
+		tier: "Illegal",
+		isNonstandard: "Past",
 	},
 	laprasgmax: {
 		randomBattleMoves: ["freezedry", "icebeam", "protect", "sparklingaria", "thunderbolt", "toxic"],
@@ -7801,5 +7801,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 			isNonstandard: "Past",
+	},
+	altlapras: {
+		tier: "OU",
 	},
 };
