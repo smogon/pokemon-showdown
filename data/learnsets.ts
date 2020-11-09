@@ -52,6 +52,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			echoedvoice: ["7M", "6M", "5M"],
 			endure: ["8M", "7E", "7V", "6E", "5E", "4M", "3T"],
 			energyball: ["8M", "7M", "6M", "5M", "4M"],
+			earthquake: ["8M", "7M"],
 			facade: ["8M", "8V", "7M", "6M", "5M", "4M", "3M"],
 			falseswipe: ["8M", "5S3"],
 			flash: ["7V", "6M", "5M", "4M", "3M"],
