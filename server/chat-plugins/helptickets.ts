@@ -1319,7 +1319,7 @@ export const commands: ChatCommands = {
 			}
 
 			const affected = HelpTicket.ban(targetUser || userid, target);
-			this.addModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
+			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
