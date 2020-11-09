@@ -684,11 +684,12 @@ export abstract class BasicRoom {
 		}
 		return message ? `|raw|${message}` : ``;
 	}
-	getSubRooms(includeSecret = false) {
+	getSubRooms(opts: {includeBattles?: boolean, includeSecret?: boolean} = {}) {
 		if (!this.subRooms) return [];
-		return [...this.subRooms.values()].filter(
-			room => !room.settings.isPrivate || includeSecret
-		);
+		return [...this.subRooms.values()].filter(room => {
+			if (room.battle && !opts.includeBattles) return false;
+			return !room.settings.isPrivate || opts.includeSecret;
+		});
 	}
 	validateTitle(newTitle: string, newID?: string) {
 		if (!newID) newID = toID(newTitle);
