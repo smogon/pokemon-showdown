@@ -314,7 +314,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			if (!target) {
 				return this.sendReply(
-					`The Help auto-response filter is currently set to: ${room.responder ? 'OFF' : "ON"}`
+					`The Help auto-response filter is currently set to: ${room.responder ? 'ON' : "OFF"}`
 				);
 			}
 			this.checkCan('ban', null, room);
