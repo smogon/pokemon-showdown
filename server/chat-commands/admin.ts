@@ -563,7 +563,7 @@ export const commands: ChatCommands = {
 		if (!toID(target)) {
 			return this.parse(`/help disablecommand`);
 		}
-		const parsed = this.parseCommand(`/${target}`);
+		const parsed = Chat.parseCommand(`/${target}`);
 		if (!parsed) {
 			return this.errorReply(`Command "/${target}" is in an invalid format.`);
 		}
