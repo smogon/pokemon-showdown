@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
+export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bulbasaur: {isNonstandard: "Past", tier: "Illegal",},
 	ivysaur: {isNonstandard: "Past", tier: "Illegal",},
 	venusaur: {isNonstandard: "Past", tier: "Illegal",},
