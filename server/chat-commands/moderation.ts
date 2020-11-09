@@ -1660,13 +1660,13 @@ export const commands: ChatCommands = {
 
 		// if the user hiding their own text, it would clear the "cleared" message,
 		// so we can't attribute it in that case
+		// and sending the message after `|unlink|` puts the "show lines" button in the wrong place
 		const sender = user === targetUser ? null : user;
 
+		let message = '';
 		if (targetUser && showAlts) {
-			room.sendByUser(
-				sender,
-				`${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-			);
+			message = `${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
+			room.sendByUser(sender, message);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
 			room.hideText([
 				userid,
@@ -1675,18 +1675,15 @@ export const commands: ChatCommands = {
 			] as ID[]);
 		} else {
 			if (lineCount > 0) {
-				room.sendByUser(
-					sender,
-					`${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-				);
+				message = `${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
+				room.sendByUser(sender, message);
 			} else {
-				room.sendByUser(
-					sender,
-					`${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-				);
+				message = `${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
+				room.sendByUser(sender, message);
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
 			room.hideText([userid], lineCount, hideRevealButton);
+			this.roomlog(`|c|${user.getIdentity()}|/log ${message}`);
 		}
 	},
 	hidetexthelp: [
