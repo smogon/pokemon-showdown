@@ -22,7 +22,7 @@ interface TicketState {
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
-const tickets: {[k: string]: TicketState} = {};
+export const tickets: {[k: string]: TicketState} = {};
 
 try {
 	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
