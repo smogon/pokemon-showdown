@@ -104,7 +104,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`${user.name} removed quote indexed at ${index}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
 		this.modlog(`REMOVEQUOTE`, null, collapsedQuote);
 		saveQuotes();
-		if (roomid) this.parse(`/join view-quotes-${targetRoom.roomid}`);
+		this.refreshPage(`quotes-${targetRoom.roomid}`);
 	},
 	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
 
