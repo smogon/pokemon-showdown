@@ -1658,26 +1658,32 @@ export const commands: ChatCommands = {
 
 		this.checkCan('mute', null, room);
 
+		// if the user hiding their own text, it would clear the "cleared" message,
+		// so we can't attribute it in that case
+		// and sending the message after the hideText call puts the "show lines" button in the wrong place
+		const sender = user === targetUser ? null : user;
+
+		let message = '';
 		if (targetUser && showAlts) {
+			message = `${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
+			room.sendByUser(sender, message);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
 			room.hideText([
 				userid,
 				...targetUser.previousIDs,
 				...targetUser.getAltUsers(true).map((curUser: User) => curUser.getLastId()),
 			] as ID[]);
-			this.addModAction(
-				`${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`
-			);
 		} else {
-			let message = '';
 			if (lineCount > 0) {
 				message = `${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
+				room.sendByUser(sender, message);
 			} else {
 				message = `${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
+				room.sendByUser(sender, message);
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
 			room.hideText([userid], lineCount, hideRevealButton);
-			this.addModAction(message);
+			this.roomlog(`|c|${user.getIdentity()}|/log ${message}`);
 		}
 	},
 	hidetexthelp: [
