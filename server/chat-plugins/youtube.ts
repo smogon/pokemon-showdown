@@ -385,7 +385,7 @@ export const commands: ChatCommands = {
 		},
 		addcategory(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
-			this.checkCan('ban', null, room);
+			this.checkCan('mute', null, room);
 			const categoryID = toID(target);
 			if (!categoryID) return this.parse(`/help youtube`);
 			if (YouTube.data.categories.map(toID).includes(categoryID)) {
@@ -398,7 +398,7 @@ export const commands: ChatCommands = {
 		},
 		removecategory(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
-			this.checkCan('ban', null, room);
+			this.checkCan('mute', null, room);
 			const categoryID = toID(target);
 			if (!categoryID) return this.parse(`/help youtube`);
 			const index = YouTube.data.categories.indexOf(target);
@@ -415,7 +415,7 @@ export const commands: ChatCommands = {
 		},
 		setcategory(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
-			this.checkCan('ban', null, room);
+			this.checkCan('mute', null, room);
 			target = target.trim();
 			const [category, id] = Utils.splitFirst(target, ',').map(item => item.trim());
 			if (!target || !category || !id) {
@@ -434,7 +434,7 @@ export const commands: ChatCommands = {
 		},
 		decategorize(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
-			this.checkCan('ban', null, room);
+			this.checkCan('mute', null, room);
 			target = target.trim();
 			if (!target) {
 				return this.parse('/help youtube');
