@@ -676,7 +676,8 @@ export const LogSearcher = new class {
 		let exactMatches = 0;
 		let curDate = '';
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
-		const searchRegex = new RegExp(originalSearch ? search : this.constructSearchRegex(search), "i");
+		const useOriginal = originalSearch && originalSearch !== search;
+		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
 		const sorted = results.sort((aLine, bLine) => {
 			const [aName] = aLine.split('.txt');
 			const [bName] = bLine.split('.txt');
