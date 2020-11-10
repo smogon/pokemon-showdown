@@ -1699,7 +1699,8 @@ export class GameRoom extends BasicRoom {
 	makePublic() {
 		this.settings.isPrivate = false;
 		if (!this.roomid.endsWith('pw')) return true;
-		this.rename(this.title, this.getReplayData().id as RoomID);
+		const {id} = this.getReplayData();
+		this.rename(this.title, `battle-${id}` as RoomID);
 	}
 }
 
