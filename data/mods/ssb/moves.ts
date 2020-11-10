@@ -1309,6 +1309,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// dogknees
+	bellyrubs: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Heals the user by 25% of their maximum HP. Boosts the user's Attack and Defense by 1 stage.",
+		shortDesc: "Heals 25% HP. Boosts Atk/Def by 1 stage.",
+		name: "Belly Rubs",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Belly Drum', target);
+		},
+		self: {
+			boosts: {
+				atk: 1,
+				def: 1,
+			},
+		},
+		heal: [1, 4],
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// DragonWhale
 	cloakdance: {
 		accuracy: true,

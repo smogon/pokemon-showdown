@@ -469,16 +469,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		// no quotes
 	},
-	drampasgrandpa: {
+	dogknees: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('drampa\'s grandpa')}|Where are my glasses?`);
+			this.add(`c|${getName('dogknees')}|Your opinion is wrong if you think cats are better than dogs ૮・ﻌ・ა`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('drampa\'s grandpa')}|Darn kids...`);
+			this.add(`c|${getName('dogknees')}|Yes, dogs do have knees. Stop asking me.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('drampa\'s grandpa')}|Bah humbug!`);
+			this.add(`c|${getName('dogknees')}|Nap time!`);
 		},
 	},
 	dream: {
@@ -491,6 +491,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('dream')}|perdemos`);
+		},
+	},
+	drampasgrandpa: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('drampa\'s grandpa')}|Where are my glasses?`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('drampa\'s grandpa')}|Darn kids...`);
+		},
+		onFaint() {
+			this.add(`c|${getName('drampa\'s grandpa')}|Bah humbug!`);
 		},
 	},
 	elgino: {

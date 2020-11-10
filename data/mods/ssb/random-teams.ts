@@ -203,6 +203,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Devolution Beam',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	dogknees: {
+		species: 'Furret', ability: 'Adaptability', item: ['Normalium Z', 'Ghostium Z'], gender: 'M',
+		moves: ['Extreme Speed', 'Shadow Claw', 'Explosion'],
+		signatureMove: 'Belly Rubs',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	DragonWhale: {
 		species: 'Mimikyu', ability: 'Disguise', item: 'Life Orb', gender: 'M',
 		moves: ['Play Rough', 'Spectral Thief', 'Shadow Sneak'],
