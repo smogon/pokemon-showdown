@@ -106,7 +106,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.wantsTie = false;
 		this.active = true;
 		this.eliminated = false;
-
 		this.secondsLeft = 1;
 		this.turnSecondsLeft = 1;
 		this.dcSecondsLeft = 1;

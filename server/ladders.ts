@@ -65,9 +65,11 @@ class Challenge {
 	p4?: User;
 	readonly formatid: string;
 	readonly ready: BattleReady;
-	constructor(ready: BattleReady, to: User) {
+	constructor(ready: BattleReady, to: User, p3?: User, p4?: User) {
 		this.from = ready.userid;
 		this.to = to.id;
+		this.p3 = p3;
+		this.p4 = p4;
 		this.formatid = ready.formatid;
 		this.ready = ready;
 	}
@@ -240,12 +242,11 @@ class Ladder extends LadderStore {
 	}
 	async makeChallenge(connection: Connection, targetUser: User, teammate?: User) {
 		const user = connection.user;
-		const challenge = Ladder.getChallenging(user);
 		if (targetUser === user) {
 			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
 			return false;
 		}
-		if (challenge && teammate) {
+		if (Ladder.getChallenging(user) && teammate) {
 			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
@@ -262,8 +263,7 @@ class Ladder extends LadderStore {
 		if (teammate && teammate !== connection.user) {
 			const ready = await this.prepBattle(connection, "multi", null, false, teammate);
 			if (!ready) return false;
-			Ladder.addChallenge(new Challenge(ready, targetUser));
-			challenge.p3 = teammate;
+			Ladder.addChallenge(new Challenge(ready, targetUser, teammate));
 			user.lastChallenge = Date.now();
 			return true;
 		}
@@ -303,14 +303,21 @@ class Ladder extends LadderStore {
 			return false;
 		}
 		const ladder = Ladders(chall.formatid);
+		// how do p3 and p4 accept and choose a team?
 		if (Dex.getFormat(chall.formatid).gameType === 'multi') {
-			const ready = await ladder.prepBattle(connection, 'multi', null, false, teammate);
+			/* const ready = await ladder.prepBattle(connection, 'multi', null, false, teammate);
 			chall.p4 = teammate;
 			if (!ready) return false;
+			if (!chall.p3 || !chall.p4) {
+				Monitor.crashlog(Error(
+					`User tried to accept a multi battle challenge, but ${!chall.p3 ? 'player 3' : 'player 4'} didn't exist.`
+				));
+			}
 			if (Ladder.removeChallenge(chall)) {
 				Ladder.matchMulti(chall.ready, ready, chall.p3, chall.p4, true);
 			}
-			return true;
+			return true; */
+			return false;
 		}
 		const ready = await ladder.prepBattle(connection, 'challenge');
 		if (!ready) return false;
@@ -493,6 +500,11 @@ class Ladder extends LadderStore {
 			return false;
 		}
 		if (Dex.getFormat(formatid).gameType === 'multi' && (!user3 || !user4)) {
+			if (!search3 || !search4) {
+				// This should never happen.
+				Monitor.crashlog(new Error(`Matchmaker tried to make a multi battle without 4 players`), "The matchmaker");
+				return false;
+			}
 			// This should never happen.
 			Monitor.crashlog(new Error(`Matched user ${user3 ? search4.userid : search3.userid} not found`), "The matchmaker");
 			return false;
@@ -505,21 +517,23 @@ class Ladder extends LadderStore {
 			if (users.indexOf(user) !== users.lastIndexOf(user)) return false;
 		}
 
-		/* if (Config.noipchecks) {
+		if (Config.noipchecks) {
 			user1.lastMatch = user2.id;
 			user2.lastMatch = user1.id;
 			return true;
 		}
 
 		// users must have different IPs
-		// if (user1.latestIp === user2.latestIp) return false; // disabled for multi battle
+		if (user1.latestIp === user2.latestIp) return false;
 
 		// users must not have been matched immediately previously
 		if (user1.lastMatch === user2.id || user2.lastMatch === user1.id) return false;
 
 		// search must be within range
 		let searchRange = 100;
-		const elapsed = Date.now() - Math.min(search1.time, search2.time, search3.time, search4.time);
+		const times = [search1.time, search2.time];
+		if (search3 && search4) times.push(search3.time, search4.time);
+		const elapsed = Date.now() - Math.min(...times);
 		if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
 				formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
 			searchRange = 50;
@@ -529,7 +543,6 @@ class Ladder extends LadderStore {
 		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
 		if (searchRange > 600) searchRange = 600;
 		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
-		*/
 
 		user1.lastMatch = user2.id;
 		user2.lastMatch = user1.id;
@@ -551,17 +564,20 @@ class Ladder extends LadderStore {
 			return;
 		}
 		const players = [];
+		const searchers = [];
 		// In order from longest waiting to shortest waiting
 		for (const search of formatTable.values()) {
 			if (Dex.getFormat(formatid).gameType === 'multi') {
 				const searcher = this.getSearcher(search);
 				if (!searcher || searcher === user) continue;
 				players.push(search);
+				searchers.push(searcher);
 				if (players.length === 3) {
-					const matched = this.matchmakingOK(newSearch, user, players[0], this.getSearcher(players[0]), players[1],
-						this.getSearcher(players[1]), players[2], this.getSearcher(players[2]));
+					const matched = this.matchmakingOK(newSearch, user, players[0], searchers[0], players[1],
+						searchers[1], players[2], searchers[2]);
 					if (matched) {
-						players.forEach(player => formatTable.delete(search.userid));
+						// @ts-ignore formatTable can't be undefined here. no idea why ts thinks it can.
+						players.forEach(player => formatTable.delete(player.userid));
 						Ladder.matchMulti(newSearch, players[0], players[1], players[2]);
 						return;
 					}
@@ -604,7 +620,7 @@ class Ladder extends LadderStore {
 				if (!searcher) continue;
 
 				const [longestSearch, longestSearcher] = longest;
-				const matched = matchmaker.matchmakingOK(search, longestSearch, searcher, longestSearcher);
+				const matched = matchmaker.matchmakingOK(search, searcher, longestSearch, longestSearcher);
 				if (matched) {
 					formatTable.delete(search.userid);
 					formatTable.delete(longestSearch.userid);
@@ -691,19 +707,19 @@ class Ladder extends LadderStore {
 		if (!formats.every(f => f === ready1.formatid)) throw new Error(`Format IDs don't match`);
 		const team1 = [ready1.user, ready3.user];
 		const team2 = [ready2.user, ready4.user];
-		for (const player of team1) {
-			if (!player) {
-				team1[team1.indexOf(player) ^ 1].popup(`Sorry, your teammate ${player.id} went offline before the battle could start.`);
-				team2[0].popup(`Sorry, your opponent ${player.id} went offline before the battle could start.`);
-				team2[1].popup(`Sorry, your opponent ${player.id} went offline before the battle could start.`);
+		for (let p = 0; p < 2; p++) {
+			if (!team1[p]) {
+				const offlineid = (p ? ready3 : ready1).userid;
+				team1[p ^ 1]?.popup(`Sorry, your teammate ${offlineid} went offline before the battle could start.`);
+				team2[0]?.popup(`Sorry, your opponent ${offlineid} went offline before the battle could start.`);
+				team2[1]?.popup(`Sorry, your opponent ${offlineid} went offline before the battle could start.`);
 				return false;
 			}
-		}
-		for (const player of team2) {
-			if (!player) {
-				team2[team2.indexOf(player) ^ 1].popup(`Sorry, your teammate ${player.id} went offline before the battle could start.`);
-				team1[0].popup(`Sorry, your opponent ${player.id} went offline before the battle could start.`);
-				team1[1].popup(`Sorry, your opponent ${player.id} went offline before the battle could start.`);
+			if (!team2[p]) {
+				const offlineid = (p ? ready4 : ready2).userid;
+				team2[p ^ 1]?.popup(`Sorry, your teammate ${offlineid} went offline before the battle could start.`);
+				team1[0]?.popup(`Sorry, your opponent ${offlineid} went offline before the battle could start.`);
+				team1[1]?.popup(`Sorry, your opponent ${offlineid} went offline before the battle could start.`);
 				return false;
 			}
 		}

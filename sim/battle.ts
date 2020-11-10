@@ -1623,11 +1623,11 @@ export class Battle {
 		this.started = true;
 		if (this.gameType === 'multi') {
 			this.sides[0].ally = this.sides[2];
-			this.sides[2].ally = this.sides[0];
+			this.sides[2]!.ally = this.sides[0];
 			this.sides[1].ally = this.sides[3];
-			this.sides[3].ally = this.sides[1];
-			this.sides[0].foe = this.sides[2].foe = [this.sides[1], this.sides[3]];
-			this.sides[1].foe = this.sides[3].foe = [this.sides[0], this.sides[2]];
+			this.sides[3]!.ally = this.sides[1];
+			this.sides[0].foe = this.sides[2]!.foe = [this.sides[1], this.sides[3]!];
+			this.sides[1].foe = this.sides[3]!.foe = [this.sides[0], this.sides[2]!];
 		} else if (this.gameType === 'free-for-all') {
 			this.sides.forEach(side => {
 				side.foe = side.battle.sides.filter(s => s !== side);
@@ -1712,7 +1712,7 @@ export class Battle {
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.getFoeActive().length) return false;
-		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
+		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostName;
