@@ -44,14 +44,11 @@ const STATUS_TITLES: {[k: string]: string} = {
 };
 
 export const Friends = new class {
-	/** `Map<oldID, newID> */
-	renames: Map<string, string>;
 	database?: Database;
 	/** `Map<transferTo, transferFrom>` */
 	transferRequests: Map<string, string>;
 	constructor() {
 		this.setupDatabase();
-		this.renames = this.getRenames();
 		const existingRequests = 'Chat' in global ? Chat.oldPlugins.friends?.transferRequests : undefined;
 		this.transferRequests = existingRequests || new Map();
 		this.checkExpiringRequests();
@@ -100,15 +97,12 @@ export const Friends = new class {
 			await this.query({
 				statement: 'deleteRequest', type: 'run', data: [user.id],
 			});
-			return {sent, received: null};
+			return {sent, received};
 		}
 		const sentResults = await this.query({
 			statement: 'getSent', type: 'all', data: [user.id],
 		});
 		for (const request of sentResults) {
-			if ((Date.now() - request.sent_at) > (30 * 24 * 60 * 60 * 1000)) {
-				continue; // ignore this for now, it'll be caught by the expiry function later
-			}
 			sent.add(request.receiver);
 		}
 		const receivedResults = await this.query({
@@ -137,8 +131,7 @@ export const Friends = new class {
 		}
 		return result;
 	}
-	async request(user: User, receiverName: string) {
-		const receiverID = toID(receiverName);
+	async request(user: User, receiverID: ID) {
 		const receiver = Users.get(receiverID);
 		if (receiver?.settings.blockFriendRequests) {
 			throw new Chat.ErrorMessage(`${receiver.name} is blocking friend requests.`);
@@ -171,9 +164,7 @@ export const Friends = new class {
 		this.sendPM(disclaimer, user.id);
 		return result;
 	}
-	async removeRequest(receiverName: string, senderName: string) {
-		const senderID = toID(senderName);
-		const receiverID = toID(receiverName);
+	async removeRequest(receiverID: ID, senderID: ID) {
 		if (!senderID) throw new Chat.ErrorMessage(`Invalid sender username.`);
 		if (!receiverID) throw new Chat.ErrorMessage(`Invalid receiver username.`);
 
@@ -181,9 +172,8 @@ export const Friends = new class {
 			statement: 'deleteRequest', data: [senderID, receiverID], type: 'run',
 		});
 	}
-	async approveRequest(receiver: User, senderName: string) {
-		const senderID = toID(senderName);
-		return this.query({type: 'transaction', data: [senderID, receiver.id], statement: 'accept'});
+	async approveRequest(receiverID: ID, senderID: ID) {
+		return this.query({type: 'transaction', data: [senderID, receiverID], statement: 'accept'});
 	}
 	async visualizeList(user: User) {
 		const friends = await this.getFriends(user, {includeLogin: true});
@@ -196,7 +186,7 @@ export const Friends = new class {
 			busy: [],
 			offline: [],
 		};
-		const loginTimes: {[k: string]: number} = {}
+		const loginTimes: {[k: string]: number} = {};
 		for (const {friend: friendName, login} of [...friends].sort() as AnyObject[]) {
 			const friend = Users.get(friendName as string);
 			if (friend?.connected) {
@@ -228,38 +218,43 @@ export const Friends = new class {
 			if (friendArray.length === 0) continue;
 			buf += `<h4>${STATUS_TITLES[key]} (${friendArray.length})</h4>`;
 			for (const friend of friendArray) {
+				const friendID = toID(friend);
 				buf += `<div class="pad"><div>`;
-				buf += this.displayFriend(friend, loginTimes[toID(friend)]);
+				buf += await this.displayFriend(friendID, loginTimes[friendID]);
 				buf += `</div></div>`;
 			}
 		}
 
 		return buf;
 	}
-	displayFriend(userid: string, login?: number) {
+	async getRename(userid: ID): Promise<string | null> {
+		const result = await this.query({statement: 'findRename', type: 'get', data: [userid]});
+		if (!result) return null;
+		return result.new_name;
+	}
+	async displayFriend(userid: ID, login?: number) {
 		const user = Users.getExact(userid); // we want this to be exact
-		const connected = user?.connected;
 		const name = Utils.escapeHTML(user ? user.name : userid);
-		const statusType = connected ?
-			`<strong style="color:${STATUS_COLORS[user!.statusType]}">\u25C9 ${STATUS_TITLES[user!.statusType]}</strong>` :
+		const statusType = user?.connected ?
+			`<strong style="color:${STATUS_COLORS[user.statusType]}">\u25C9 ${STATUS_TITLES[user.statusType]}</strong>` :
 			'\u25CC Offline';
-		let buf = connected ?
+		let buf = user ?
 			`<span class="username"> <strong>${name}</strong></span><span><small> (${statusType})</small></span>` :
 			Utils.html`<i>${name}</i> <small>(${statusType})</small>`;
 		buf += `<br />`;
 
-		const oldName = this.renames.get(userid);
+		const oldName = await this.getRename(userid);
 		if (oldName) {
 			buf += Utils.html`<small>(recently renamed from ${oldName})</small><br />`;
 		}
 
 		const curUser = Users.get(userid); // might be an alt
-		if (user?.connected) {
+		if (user) {
 			if (user.userMessage) buf += Utils.html`Status: <i>${user.userMessage}</i><br />`;
 		} else if (curUser?.id && curUser.id !== userid) {
 			buf += `<small>On an alternate account</small><br />`;
 		}
-		if (login && !connected) {
+		if (login && !user?.connected) {
 			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
 			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
 			buf += `Last login: ${time.split(' ').reverse().join(', on ')}`;
@@ -268,58 +263,45 @@ export const Friends = new class {
 		buf = `<div class="infobox">${buf}</div>`;
 		return toLink(buf);
 	}
-	async addFriend(senderName: User | string, receiverName: string) {
-		const receiverID = toID(receiverName);
-		const senderID = toID(senderName);
-		if (!receiverID) throw new Chat.ErrorMessage(`Invalid user.`);
-		return this.query({
-			type: 'transaction', statement: 'add', data: [receiverID, senderID],
-		});
-	}
-	async removeFriend(userName: string, friendName: string) {
-		const userid = toID(userName);
-		const friendID = toID(friendName);
+	async removeFriend(userid: ID, friendID: ID) {
 		if (!friendID || !userid) throw new Chat.ErrorMessage(`Invalid usernames supplied.`);
 
 		const result = await this.query({
 			statement: 'delete', type: 'run', data: [userid, friendID, friendID, userid],
 		});
 		if (result.changes < 2) {
-			throw new Chat.ErrorMessage(`You do not have ${friendName} friended.`);
+			throw new Chat.ErrorMessage(`You do not have ${friendID} friended.`);
 		}
 	}
 	sendPM(message: string, to: string, from = '&') {
 		const senderID = toID(to);
 		const receiverID = toID(from);
-		const sendingUser = (Users.get(senderID) ? Users.get(senderID) : senderID) as User | null;
-		const receivingUser = (Users.get(receiverID) ? Users.get(receiverID) : receiverID) as User | null;
-		const fromIdentity = typeof sendingUser === 'object' ? sendingUser?.getIdentity() : sendingUser;
-		const toIdentity = typeof receivingUser === 'object' ? receivingUser?.getIdentity() : senderID;
+		const sendingUser = Users.get(senderID);
+		const receivingUser = Users.get(receiverID);
+		const fromIdentity = sendingUser ? sendingUser.getIdentity() : ` ${senderID}`;
+		const toIdentity = receivingUser ? receivingUser.getIdentity() : ` ${receiverID}`;
 
 		if (from === '&') {
-			if (typeof sendingUser !== 'object' || !sendingUser) {
-				return; // don't need to continue, user doesn't exist and it's a ghost pm
-			}
-			return sendingUser.send(`|pm|&|${toIdentity}|${message}`);
+			return sendingUser?.send(`|pm|&|${toIdentity}|${message}`);
 		}
-		if (typeof sendingUser === 'object' && sendingUser) {
+		if (sendingUser) {
 			sendingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 		}
-		if (typeof receivingUser === 'object' && receivingUser) {
+		if (receivingUser) {
 			receivingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 		}
 	}
 	async notifyPending(user: User) {
 		if (user.settings.blockFriendRequests) return;
 		const friendRequests = await this.getRequests(user);
-		const pendingCount = friendRequests.received?.size;
-		if (!pendingCount || pendingCount < 1) return;
+		const pendingCount = friendRequests.received.size;
+		if (pendingCount < 1) return;
 		this.sendPM(`/text You have ${pendingCount} friend requests pending!`, user.id);
 		this.sendPM(`/raw <button class="button" name="send" value="/j view-friends-received">View</button></div>`, user.id);
 	}
 	async notifyConnection(user: User) {
-		const connected = await this.getLastLogin(user.id); // yes this works because we haven't written new login yet
-		if (connected && (Date.now() - connected) < 60 * 1000) {
+		const connected = await this.getLastLogin(user.id);
+		if ((Date.now() - connected) < 2 * 60 * 1000) {
 			return;
 		}
 		const friends = await this.getFriends(user);
@@ -331,8 +313,7 @@ export const Friends = new class {
 			}
 		}
 	}
-	async transfer(oldUser: User, newName: string) {
-		const newID = toID(newName);
+	async transfer(oldUser: User, newID: ID) {
 		const oldID = oldUser.id;
 		const newUser = Users.getExact(newID);
 		if (!newUser) {
@@ -341,7 +322,6 @@ export const Friends = new class {
 		const result = await this.query({
 			statement: 'rename', type: 'transaction', data: [oldID, newID],
 		});
-		this.renames.set(oldID, newID);
 		return result;
 	}
 	writeLogin(user: User) {
@@ -355,11 +335,10 @@ export const Friends = new class {
 			statement: 'deleteLogin', type: 'run', data: [user.id],
 		});
 	}
-	async getLastLogin(userid: string) {
-		userid = toID(userid);
+	async getLastLogin(userid: ID) {
 		const result = await this.query({statement: 'checkLastLogin', type: 'get', data: [userid]});
-		const num = Number(result?.['last_login']);
-		if (isNaN(num)) return;
+		const num = parseInt(result?.['last_login']);
+		if (isNaN(num)) return Date.now();
 		return num;
 	}
 	checkCanUse(context: CommandContext | PageContext) {
@@ -435,7 +414,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`That name is too long - choose a valid name.`);
 			}
 			if (!target) return this.parse('/help friends');
-			await Friends.request(user, target);
+			await Friends.request(user, toID(target));
 			if (connection.openPages?.has('friends-sent')) {
 				this.parse(`/join view-friends-sent`);
 			}
@@ -446,7 +425,7 @@ export const commands: ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (!target) return this.parse('/help friends');
-			await Friends.removeFriend(user.id, target);
+			await Friends.removeFriend(user.id, toID(target));
 			return this.sendReply(this.tr`Removed friend '${target}'.`);
 		},
 		view(target) {
@@ -462,7 +441,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
 			}
 			if (!target) return this.parse('/help friends');
-			await Friends.approveRequest(user, target);
+			await Friends.approveRequest(user.id, toID(target));
 			const targetUser = Users.get(target);
 			Friends.sendPM(`You accepted a friend request from "${target}".`, user.id);
 			if (connection.openPages?.has('friends-received')) {
@@ -475,7 +454,7 @@ export const commands: ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (!target) return this.parse('/help friends');
-			await Friends.removeRequest(user.id, target);
+			await Friends.removeRequest(user.id, toID(target));
 			if (connection.openPages?.has('friends-received')) {
 				this.parse(`/j view-friends-received`);
 			}
@@ -563,7 +542,7 @@ export const commands: ChatCommands = {
 					`/error ${this.tr`You are blocking friend requests, and so cannot undo requests, as you have none.`}`, user.id
 				);
 			}
-			await Friends.removeRequest(target, user.id);
+			await Friends.removeRequest(toID(target), user.id);
 			if (connection.openPages?.has('friends-sent')) {
 				this.parse(`/j view-friends-sent`);
 			}
@@ -659,10 +638,6 @@ export const pages: PageTable = {
 			buf += headerButtons('received', user);
 			buf += `<hr />`;
 			const {received} = await Friends.getRequests(user);
-			if (!received) {
-				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
-				return buf;
-			}
 			if (received.size < 1) {
 				buf += `<strong>You have no pending friend requests.</strong>`;
 				buf += `</div>`;
@@ -798,6 +773,7 @@ const ACTIONS = {
 		`DELETE FROM friend_requests WHERE EXISTS` +
 		`(SELECT sent_at FROM friend_requests WHERE should_expire(sent_at) = 1)`
 	),
+	findRename: `SELECT * FROM friend_renames WHERE new_name = ?`,
 };
 
 
@@ -821,16 +797,6 @@ const TRANSACTIONS: {[k: string]: (input: any) => DatabaseResult} = {
 			statements.renameFriend.run({oldID, newID});
 			statements.renameUserid.run({oldID, newID});
 			statements.rename.run(oldID, newID, Date.now());
-		}
-		return {result: []};
-	},
-	add: requests => {
-		const addQuery = statements.add;
-		for (const request of requests) {
-			const [to, from] = request;
-			const login = Date.now();
-			addQuery.run({userid: to, friend: from, login});
-			addQuery.run({userid: from, friend: to, login});
 		}
 		return {result: []};
 	},
