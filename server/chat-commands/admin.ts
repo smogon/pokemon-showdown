@@ -336,7 +336,7 @@ export const commands: ChatCommands = {
 				}
 
 				for (const hotpatch of hotpatches) {
-					this.parse(`/hotpatch ${hotpatch}`);
+					await this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
 				patch = 'chat';

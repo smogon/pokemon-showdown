@@ -371,7 +371,7 @@ export const commands: ChatCommands = {
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
 			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				this.parse(`/ar view keys`);
+				return this.parse(`/ar view keys`);
 			}
 		},
 		ignore(target, room, user) {
@@ -412,7 +412,7 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${user.name} removed ${Chat.count(targets.length, "terms")} from the autoresponder ignore list.`);
 			this.modlog(`AUTOFILTER UNIGNORE`, null, target);
 			if (this.connection.openPages?.has(`autoresponder-${room.roomid}-ignore`)) {
-				this.parse(`/join view-autoresponder-${room.roomid}-ignore`);
+				return this.parse(`/join view-autoresponder-${room.roomid}-ignore`);
 			}
 		},
 	},

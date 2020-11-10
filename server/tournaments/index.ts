@@ -1101,7 +1101,7 @@ export class Tournament extends Rooms.RoomGame {
 			if (!this.room.settings.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
 				const uploader = Users.get(winnerid);
 				if (uploader?.connections[0]) {
-					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
+					void Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
 				}
 			}
 			this.onTournamentEnd();
@@ -1163,7 +1163,7 @@ function createTournament(
 	const format = Dex.getFormat(formatId);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
-		output.parse(`/tour formats`);
+		void output.parse(`/tour formats`);
 		return;
 	}
 	if (!getGenerator(generator)) {

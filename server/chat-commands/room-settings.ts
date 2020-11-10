@@ -25,7 +25,7 @@ export const commands: ChatCommands = {
 		if (!target) {
 			room.update();
 		} else {
-			this.parse(`/${target}`);
+			void this.parse(`/${target}`);
 			uhtml = 'uhtmlchange';
 		}
 
@@ -218,15 +218,15 @@ export const commands: ChatCommands = {
 			this.modlog('MODJOIN', null, target);
 		} else {
 			this.errorReply(`Unrecognized modjoin setting.`);
-			this.parse('/help modjoin');
+			void this.parse('/help modjoin');
 			return false;
 		}
 		room.saveSettings();
 		if (target === 'sync' && !room.settings.modchat) {
 			const lowestStaffGroup = Config.groupsranking.filter(group => Config.groups[group]?.mute)[0];
-			if (lowestStaffGroup) this.parse(`/modchat ${lowestStaffGroup}`);
+			if (lowestStaffGroup) void this.parse(`/modchat ${lowestStaffGroup}`);
 		}
-		if (!room.settings.isPrivate) this.parse('/hiddenroom');
+		if (!room.settings.isPrivate) return this.parse('/hiddenroom');
 	},
 	modjoinhelp: [
 		`/modjoin [+|%|@|*|player|&|#|off] - Sets modjoin. Users lower than the specified rank can't join this room unless they have a room rank. Requires: \u2606 # &`,
@@ -342,8 +342,8 @@ export const commands: ChatCommands = {
 			this.room = Rooms.get(roomid) || null;
 			if (!this.room) return this.errorReply(`must specify roomid`);
 			this.pmTarget = null;
-			this.parse(`/permissions set ${newTarget}`);
-			this.parse(`/join view-permissions-${this.room.roomid}`);
+			void this.parse(`/permissions set ${newTarget}`);
+			return this.parse(`/join view-permissions-${this.room.roomid}`);
 		},
 
 		view(target, room, user) {
@@ -624,7 +624,7 @@ export const commands: ChatCommands = {
 
 	showmedia(target, room, user) {
 		this.errorReply(`/showmedia has been deprecated. Use /permissions instead.`);
-		this.parse(`/help permissions`);
+		return this.parse(`/help permissions`);
 	},
 
 	hightraffic(target, room, user) {

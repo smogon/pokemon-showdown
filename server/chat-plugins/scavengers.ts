@@ -1053,11 +1053,11 @@ const ScavengerCommands: ChatCommands = {
 	 * Player commands
 	 */
 	""() {
-		this.parse("/join scavengers");
+		return this.parse("/join scavengers");
 	},
 
 	guess(target, room, user) {
-		this.parse(`/choose ${target}`);
+		return this.parse(`/choose ${target}`);
 	},
 
 	join(target, room, user) {
@@ -2315,7 +2315,7 @@ const ScavengerCommands: ChatCommands = {
 			this.privateModAction(`${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.`);
 			this.modlog('SCAV MODSETTINGS IPCHECK', null, setting[target] ? 'ON' : 'OFF');
 
-			this.parse('/scav modsettings update');
+			return this.parse('/scav modsettings update');
 		},
 	},
 
@@ -2422,10 +2422,10 @@ const ScavengerCommands: ChatCommands = {
 			}
 			room.settings.scavSettings.addRecycledHuntsToQueueAutomatically =
 				!room.settings.scavSettings.addRecycledHuntsToQueueAutomatically;
+			this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 			if (params[0] === 'on') {
-				this.parse("/scav queuerecycled");
+				return this.parse("/scav queuerecycled");
 			}
-			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 		}
 	},
 

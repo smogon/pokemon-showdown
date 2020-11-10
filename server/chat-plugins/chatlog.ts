@@ -983,7 +983,7 @@ export const commands: ChatCommands = {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const roomid = targetRoom ? targetRoom.roomid : target;
-		this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
+		return this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
 	},
 
 	chatloghelp() {
