@@ -512,6 +512,7 @@ export class CommandContext extends MessageContext {
 				message: this.message,
 			});
 			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+			return;
 		}
 
 		// Output the message
@@ -538,6 +539,7 @@ export class CommandContext extends MessageContext {
 					message: this.message,
 				});
 				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+				return;
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message);
