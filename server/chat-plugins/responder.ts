@@ -269,10 +269,9 @@ const BYPASS_TERMS = ['a:', 'A:', '!', '/'];
 
 export const chatfilter: ChatFilter = function (message, user, room) {
 	if (BYPASS_TERMS.some(t => message.startsWith(t))) {
-		if (message.startsWith('a:') || message.startsWith('A:')) {
-			message = message.slice(2);
-		}
-		return message;
+		// do not return `message` or it will bypass all filters
+		// including super important filters like against `/html`
+		return;
 	}
 	if (room?.responder && room.auth.get(user.id) === ' ') {
 		const responder = room.responder;
