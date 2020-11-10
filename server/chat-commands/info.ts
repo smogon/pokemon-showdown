@@ -2585,14 +2585,10 @@ export const commands: ChatCommands = {
 
 		this.checkBroadcast();
 		if (this.broadcastMessage) {
-			const minGroup = room ? (room.settings.showEnabled || '#') : '+';
-			const auth = room?.auth || Users.globalAuth;
-			if (minGroup !== true && !auth.atLeast(user, minGroup)) {
-				this.errorReply(`You must be at least group ${minGroup} to use /show`);
-				if (auth.atLeast(user, '%')) {
-					this.errorReply(`The limit can be changed in /roomsettings`);
-				}
-				return;
+			if (room) {
+				this.checkCan('show', null, room);
+			} else {
+				this.checkCan('altsself');
 			}
 		}
 		this.runBroadcast();
