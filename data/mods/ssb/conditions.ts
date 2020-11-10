@@ -714,10 +714,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	gallantspear: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('gallant\'s pear')}|**Rejoice! The one to inherit all Rider powers, the time king who will rule over the past and the future.**`);
 		},
-		onSwitchOut(source) {
+		onSwitchOut() {
 			this.add(`c|${getName('gallant\'s pear')}|My Overlord..`);
 		},
 		onFaint() {
@@ -727,7 +727,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	gimmick: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Gimmick')}|Mama, they say I’m a TRRST`);
+			this.add(`c|${getName('Gimmick')}|Mama, they say I'm a TRRST`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Gimmick')}|Ic3peak to you later`);
@@ -738,10 +738,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	gmars: {
 		noCopy: true,
-		onStart(pokemon) {
+		onStart() {
 			this.add(`c|${getName('GMars')}|It's ya boy GEEEEEEEEMARS`);
 		},
-		onSwitchOut(source) {
+		onSwitchOut() {
 			this.add(`c|${getName('GMars')}|Who switches out a Minior in prime position?`);
 		},
 		onFaint() {
@@ -2526,6 +2526,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 			} else {
 				pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+			}
+		},
+	},
+	frz: {
+		inherit: true,
+		onHit(target, source, move) {
+			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
+				target.cureStatus();
+				if (move.id === 'randomscreaming') {
+					this.add(`c|${getName('Gimmick')}|Give me some more paaain, baaaby`);
+				}
 			}
 		},
 	},

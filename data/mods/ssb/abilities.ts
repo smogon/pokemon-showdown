@@ -879,11 +879,50 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Gimmick
-	whatagimmick: {
-		name: "What a Gimmick",
-		shortDesc: "On switch-in, this Pokemon summons Trick Room.",
-		onStart(source) {
-			this.field.addPseudoWeather('trickroom');
+	ic3peak: {
+		shortDesc: "Refrigerate + Metronome (item).",
+		name: "IC3PEAK",
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+				move.type = 'Ice';
+				move.refrigerateBoosted = true;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.refrigerateBoosted) return this.chainModify([0x1333, 0x1000]);
+		},
+		onStart(pokemon) {
+			pokemon.addVolatile('ic3peakmetronome');
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = '';
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (!pokemon.hasAbility('ic3peak')) {
+					pokemon.removeVolatile('ic3peakmetronome');
+					return;
+				}
+				if (move.id === 'echoedvoice') return;
+				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectData.numConsecutive++;
+				} else {
+					this.effectData.numConsecutive = 0;
+				}
+				this.effectData.lastMove = move.id;
+			},
+			onModifyDamage(damage, source, target, move) {
+				const dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
+				const numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
+				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
+			},
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1165,7 +1204,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Drizzle + Dry Skin; +1 turn of rain for every water type teammate.",
 		onStart(source) {
 			const drizzle = this.dex.deepClone(this.dex.deepClone('raindance'));
-			for (const teammate of source.side.pokemon) if (teammate.hasType('Water') && teammate !== source) drizzle.duration++;
+			for (const teammate of source.side.pokemon) {
+				if (teammate.hasType('Water') && teammate !== source) {
+					drizzle.duration++;
+				}
+			}
 			this.field.setWeather(drizzle);
 		},
 		onTryHit(target, source, move) {

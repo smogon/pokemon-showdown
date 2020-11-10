@@ -290,10 +290,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid',
 	},
 	Gimmick: {
-		species: 'Eelektrik', ability: 'What a Gimmick', item: 'Eviolite', gender: 'M',
-		moves: ['Bolt Beak', 'Fishious Rend', 'U-turn'],
-		signatureMove: 'Just Chillin\'',
-		evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
+		species: 'Grimmsnarl', ability: 'IC3PEAK', item: 'Throat Spray', gender: 'M',
+		moves: ['Echoed Voice', 'Disarming Voice', 'Snarl'],
+		signatureMove: 'Random Screaming',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
 	GMars: {
 		species: 'Minior-Meteor', ability: 'Capsule Armor', item: 'White Herb', gender: 'N',

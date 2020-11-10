@@ -1777,34 +1777,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Gimmick
-	justchillin: {
+	randomscreaming: {
 		accuracy: 100,
-		basePower: 85,
-		basePowerCallback(pokemon, target, move) {
-			if (target.newlySwitched || this.queue.willMove(target)) {
-				this.debug('Just Chillin\' damage boost');
-				return move.basePower * 2;
-			}
-			this.debug('Just Chillin\' NOT boosted');
-			return move.basePower;
-		},
-		category: "Physical",
-		desc: "Power doubles if the user moves before the target.",
-		shortDesc: "Power doubles if user moves before the target.",
-		name: "Just Chillin'",
+		basePower: 50,
+		category: "Special",
+		desc: "Has a 10% chance to freeze the target. If the target is frozen, this move will deal double damage and thaw the target.",
+		shortDesc: "10% frz. FRZ: 2x damage then thaw.",
+		name: "Random Screaming",
+		isNonstandard: "Custom",
+		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Icicle Spear', target);
-			this.add('-anim', source, 'Plasma Fists', target);
+			this.add('-anim', source, 'Hyper Voice', target);
+			this.add('-anim', source, 'Misty Terrain', target);
 		},
-		secondary: null,
+		onBasePower(basePower, source, target, move) {
+			if (target.status === 'frz') {
+				return this.chainModify(2);
+			}
+		},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+			onHit() {
+				this.add(`c|${getName('Gimmick')}|Show me some more paaain, baaaby`);
+			},
+		},
+		thawsTarget: true,
 		target: "normal",
-		type: "Ice",
+		type: "Fire",
 	},
 
 	// GMars
