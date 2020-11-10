@@ -1098,8 +1098,8 @@ export const commands: ChatCommands = {
 					writeTickets();
 				} else {
 					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
-					this.parse(`/join help-${ticket.userid}`);
-					return this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
+					this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
+					return this.parse(`/join help-${ticket.userid}`);
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) {
@@ -1225,7 +1225,7 @@ export const commands: ChatCommands = {
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
-			this.parse(`/join help-${user.id}`);
+			void this.parse(`/join help-${user.id}`);
 			if (!(user.id in ticketGame.playerTable)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
@@ -1246,13 +1246,13 @@ export const commands: ChatCommands = {
 
 		list(target, room, user) {
 			this.checkCan('lock');
-			this.parse('/join view-help-tickets');
+			return this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
 		stats(target, room, user) {
 			this.checkCan('lock');
-			this.parse('/join view-help-stats');
+			return this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
 
