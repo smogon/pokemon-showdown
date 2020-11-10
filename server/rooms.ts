@@ -686,7 +686,7 @@ export abstract class BasicRoom {
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
 		return [...this.subRooms.values()].filter(
-			room => !room.settings.isPrivate || includeSecret
+			room => includeSecret ? true : !room.settings.isPrivate && !room.settings.isPersonal
 		);
 	}
 	validateTitle(newTitle: string, newID?: string) {
