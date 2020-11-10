@@ -578,6 +578,9 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.timerEnd = null;
 		}
 
+		if (minutes > 24 * 60) { // 24 hours
+			throw new Chat.ErrorMessage(`Time limit must be under 24 hours (you asked for ${Chat.toDurationString(minutes * 60000)}).`);
+		}
 		if (minutes && minutes > 0) {
 			this.timer = setTimeout(() => this.onEnd(), minutes * 60000);
 			this.timerEnd = Date.now() + minutes * 60000;
