@@ -168,8 +168,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				}
 				if (typeof entry === 'function') {
 					if (!entry.hasRoomPermissions) continue;
-					if (room && entry.roomSpecific) {
-						if (room.roomid !== entry.roomSpecific) continue;
+					if (room && typeof entry.requiresRoom === 'string') {
+						if (room.roomid !== entry.requiresRoom) continue;
 					}
 					permissions.push(`/${namespace}${cmd}`);
 				}

@@ -50,7 +50,6 @@ export type AnnotatedChatHandler = ChatHandler & {
 	fullCmd: string,
 	isPrivate: boolean,
 	disabled: boolean,
-	roomSpecific?: string;
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -1721,8 +1720,7 @@ export const Chat = new class {
 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
-			entry.requiresRoom = /\bthis\.require?Room\(/.test(handlerCode);
-			entry.roomSpecific = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`).\)/.exec(handlerCode)?.[1];
+			entry.requiresRoom = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`).\)/.exec(handlerCode)?.[1] || /this\.requireRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
