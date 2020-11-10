@@ -149,7 +149,7 @@ export const commands: ChatCommands = {
 	pline(target, room, user) {
 		// Secret console admin command
 		this.canUseConsole();
-		const message = target.length > 30 ? target.slice(0, -30) + '...' : target;
+		const message = target.length > 30 ? target.slice(0, 30) + '...' : target;
 		this.checkBroadcast(true, `!pline ${message}`);
 		this.runBroadcast(true);
 		this.sendReply(target);
