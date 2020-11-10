@@ -1971,7 +1971,8 @@ export const commands: ChatCommands = {
 	},
 
 	rule: 'rules',
-	rules(target, room, user) {
+	roomrules: "rules",
+	rules(target, room, user, connection, cmd) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
@@ -1984,7 +1985,15 @@ export const commands: ChatCommands = {
 		if (!room) {
 			return this.errorReply(`This is not a room you can set the rules of.`);
 		}
-		const possibleRoom = Rooms.search(target);
+		const possibleRoom = Rooms.search(toID(target));
+		const {totalMatches: formatMatches} = findFormats(toID(target));
+		if (formatMatches && possibleRoom && cmd !== 'roomrules') {
+			this.errorReply(`'${target}' is both a room and a tier. `);
+			this.errorReply(`If you were looking for rules of that room, use /roomrules [room].`);
+			this.errorReply(`Otherwise, use /tier [tiername].`);
+			return;
+		}
+
 		if (possibleRoom) {
 			const rulesLink = possibleRoom.settings.rulesLink;
 			return this.sendReplyBox(
@@ -1993,8 +2002,7 @@ export const commands: ChatCommands = {
 			);
 		}
 
-		const {totalMatches: formatMatches} = findFormats(toID(target));
-		if (formatMatches > 0) {
+		if (formatMatches > 0 && cmd !== 'roomrules') {
 			return this.parse(`/tier ${target}`);
 		}
 		this.checkCan('editroom', null, room);
