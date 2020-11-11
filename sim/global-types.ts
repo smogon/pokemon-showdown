@@ -417,6 +417,74 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
+interface MovePlines extends Plines {
+	alreadyStarted?: string;
+	blockSelf?: string;
+	clearBoost?: string;
+	endFromItem?: string;
+	fail?: string;
+	failSelect?: string;
+	failTooHeavy?: string;
+	failWrongForme?: string;
+	megaNoItem?: string;
+	prepare?: string;
+	removeItem?: string;
+	startFromItem?: string;
+	startFromZEffect?: string;
+	switchOut?: string;
+	takeItem?: string;
+	typeChange?: string;
+	upkeep?: string;
+}
+
+interface MoveText extends TextFile, MovePlines {
+	moddedPlines?: {[k in keyof MovePlines & Plines]: ModdedTextObject};
+}
+
+interface AbilityText extends TextFile, Plines {
+	activateNoTarget?: string;
+	transformEnd?: string;
+}
+
+interface ItemText extends TextFile, Plines {}
+
+interface PokedexText extends TextFile {}
+
+type DefaultText = AnyObject;
+
+interface Plines {
+	activate?: string;
+	addItem?: string;
+	block?: string;
+	boost?: string;
+	cant?: string;
+	changeAbility?: string;
+	damage?: string;
+	end?: string;
+	heal?: string;
+	move?: string;
+	start?: string;
+	transform?: string;
+}
+
+interface TextFile {
+	name: string;
+	desc?: string;
+	shortDesc?: string;
+	moddedDescs?: ModdedTextObject;
+	moddedShortDescs?: ModdedTextObject;
+}
+
+interface ModdedTextObject {
+	gen1?: string;
+	gen2?: string;
+	gen3?: string;
+	gen4?: string;
+	gen5?: string;
+	gen6?: string;
+	gen7?: string;
+}
+
 namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
