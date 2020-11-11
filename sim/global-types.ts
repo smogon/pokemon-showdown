@@ -446,11 +446,13 @@ interface AbilityText extends TextFile, Plines {
 	transformEnd?: string;
 }
 
+/* eslint-disable @typescript-eslint/no-empty-interface */
 interface ItemText extends TextFile, Plines {}
 
 interface PokedexText extends TextFile {}
 
-type DefaultText = AnyObject;
+interface DefaultText extends AnyObject {}
+/* eslint-enable @typescript-eslint/no-empty-interface */
 
 interface Plines {
 	activate?: string;

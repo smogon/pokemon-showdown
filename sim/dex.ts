@@ -1361,7 +1361,9 @@ export class ModdedDex {
 		return {};
 	}
 
-	loadTextFile(name: string, exportName: string): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
+	loadTextFile(
+		name: string, exportName: string
+	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
 		return require(`${DATA_DIR}/text/${name}`)[exportName];
 	}
 
