@@ -606,9 +606,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (psywaveDamage <= 0) {
 				this.hint("Desync Clause activated.");
 				return false;
-			} else {
-				return psywaveDamage;
 			}
+			return psywaveDamage;
 		},
 	},
 	rage: {
