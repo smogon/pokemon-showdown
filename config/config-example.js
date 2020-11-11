@@ -478,6 +478,11 @@ exports.forcedpublicprefixes = [];
 exports.startuphook = function () {};
 
 /**
+ * storage - the way in which to store data from the server that requires persistence.
+ * @type {{[k: string]: 'sqlite' | 'text'}}
+ */
+
+/**
  * lastfmkey - the API key to let users use the last.fm commands from The Studio's
  * chat plugin.
  */

@@ -12,7 +12,7 @@ npm-debug.log
 .eslintcache-no-types
 package-lock.json
 /tools/set-import/sets
-databases/*.db*
+/databases/*.db*
 *.o
 *.o.dSYM
 # Typescript build artifacts

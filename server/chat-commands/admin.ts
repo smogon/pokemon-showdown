@@ -14,6 +14,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import * as Sqlite from 'better-sqlite3';
 
 import * as ProcessManager from '../../lib/process-manager';
 
@@ -939,6 +940,27 @@ export const commands: ChatCommands = {
 		this.sendReply(`Rebuilt.`);
 	},
 
+	reloadschemas(target, room, user) {
+		this.canUseConsole();
+		target = toID(target);
+		if (target && target !== 'all') return this.parse(`/help reloadschemas`);
+		const isAll = target === 'all';
+		const result = Chat.loadPluginDatabases(isAll);
+		if (!result) {
+			return this.errorReply(`${isAll ? 'All' : 'Chat-plugin'} schemas could not be loaded - set up Config.storage and try again.`);
+		}
+		this.sendReply(`Reloaded ${isAll ? "all" : 'chat-plugin'} database schemas.`);
+		Rooms.global.notifyRooms(
+			['development', 'staff', 'upperstaff'] as RoomID[],
+			`|c|${user.getIdentity()}|/log ${user.name} used /reloadschemas${isAll ? ' all' : ''}.`
+		);
+	},
+	reloadschemashelp: [
+		`/reloadschemas - Reloads databases schemas. `,
+		`Defaults to loading chat-plugin schemas, unless 'all' is specified, in which case all schemas are loaded.`,
+		`Requires: & console access.`,
+	],
+
 	/*********************************************************
 	 * Low-level administration commands
 	 *********************************************************/
@@ -1007,6 +1029,67 @@ export const commands: ChatCommands = {
 		}
 
 		void room.battle.stream.write(`>eval ${target.replace(/\n/g, '\f')}`);
+	},
+
+	evalsql(target, room) {
+		this.canUseConsole();
+		this.runBroadcast(true);
+		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
+		if (!target) return this.errorReply(`Specify a database to access and a query.`);
+		const [db, query] = Utils.splitFirst(target, ',').map(item => item.trim());
+		if (!FS('./databases').readdirSync().includes(`${db}.db`)) {
+			return this.errorReply(`The database file ${db}.db was not found.`);
+		}
+		if (room && this.message.startsWith('>>sql')) {
+			this.broadcasting = true;
+			this.broadcastToRoom = true;
+		}
+		this.sendReply(
+			`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">SQLite&gt; [${db}.db] &nbsp;</td>` +
+			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
+		);
+		logRoom?.roomlog(`SQLite> ${target}`);
+		const database = new Sqlite(`./databases/${db}.db`);
+		function formatResult(result: any[] | string) {
+			if (!Array.isArray(result)) {
+				return (
+					`<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
+					`SQLite&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`
+				);
+			}
+			let buffer = '<div class="ladder pad"><table><tr><th>';
+			// header
+			if (!result.length) {
+				buffer += `No data in table.</th></tr>`;
+				return buffer;
+			}
+			buffer += Object.keys(result[0]).join('</th><th>');
+			buffer += `</th></tr><tr>`;
+			buffer += result.map(item => (
+				`<td>${Object.values(item).map(val => Utils.escapeHTML(val as string)).join('</td><td>')}</td>`
+			)).join('</tr><tr>');
+			buffer += `</tr></table></div>`;
+			return buffer;
+		}
+
+		let result;
+		try {
+			// presume it's attempting to get data first
+			result = database.prepare(query).all();
+		} catch (err) {
+			// it's not getting data, but it might still be a valid statement - try to run instead
+			if (err.message?.includes(`Use run() instead`)) {
+				try {
+					result = Utils.visualize(database.prepare(query).run());
+				} catch (e) {
+					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+				}
+			} else {
+				result = ('' + err.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+			}
+		}
+		logRoom?.roomlog(`SQLite< ${result}`);
+		this.sendReply(`|html|${formatResult(result)}`);
 	},
 
 	ebat: 'editbattle',
