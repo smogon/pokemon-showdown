@@ -92,7 +92,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "While this Pokemon is active, the effects of the Dark Aura and Fairy Aura Abilities are reversed, multiplying the power of Dark- and Fairy-type moves, respectively, by 3/4 instead of 1.33.",
 		shortDesc: "While this Pokemon is active, the Dark Aura and Fairy Aura power modifier is 0.75x.",
 
-		start: "  [POKEMON] reversed all other Pokémon's auras!",
+		start: "  [POKEMON] reversed all other Pok\u00e9mon's auras!",
 	},
 	baddreams: {
 		name: "Bad Dreams",
@@ -960,7 +960,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "Making contact with this Pokemon starts the Perish Song effect for it and the attacker. This effect does not happen if this Pokemon already has a perish count.",
 		shortDesc: "Making contact with this Pokemon starts the Perish Song effect for it and the attacker.",
 
-		start: "  Both Pokémon will faint in three turns!",
+		start: "  Both Pok\u00e9mon will faint in three turns!",
 	},
 	pickpocket: {
 		name: "Pickpocket",
@@ -1541,7 +1541,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Telepathy",
 		shortDesc: "This Pokemon does not take damage from attacks made by its allies.",
 
-		block: "  [POKEMON] can't be hit by attacks from its ally Pokémon!",
+		block: "  [POKEMON] can't be hit by attacks from its ally Pok\u00e9mon!",
 	},
 	teravolt: {
 		name: "Teravolt",

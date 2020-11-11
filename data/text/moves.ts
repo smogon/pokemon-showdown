@@ -3869,7 +3869,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Each active Pokemon receives a perish count of 4 if it doesn't already have a perish count. At the end of each turn including the turn used, the perish count of all active Pokemon lowers by 1 and Pokemon faint if the number reaches 0. The perish count is removed from Pokemon that switch out. If a Pokemon uses Baton Pass while it has a perish count, the replacement will gain the perish count and continue to count down.",
 		shortDesc: "All active Pokemon will faint in 3 turns.",
 
-		start: "  All Pokémon that heard the song will faint in three turns!",
+		start: "  All Pok\u00e9mon that heard the song will faint in three turns!",
 		activate: "  [POKEMON]'s perish count fell to [NUMBER].",
 	},
 	petalblizzard: {
@@ -4017,7 +4017,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 
 		start: "  [POKEMON] is covered in powder!",
-		activate: "  When the flame touched the powder on the Pokémon, it exploded!",
+		activate: "  When the flame touched the powder on the Pok\u00e9mon, it exploded!",
 	},
 	powdersnow: {
 		name: "Powder Snow",
