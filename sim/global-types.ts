@@ -437,16 +437,14 @@ interface MovePlines extends Plines {
 	upkeep?: string;
 }
 
-interface MoveText extends TextFile, MovePlines {
-	moddedPlines?: {[k in keyof MovePlines & Plines]: ModdedTextObject};
-}
-
 interface AbilityText extends TextFile, Plines {
 	activateNoTarget?: string;
 	transformEnd?: string;
 }
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
+interface MoveText extends TextFile, MovePlines {}
+
 interface ItemText extends TextFile, Plines {}
 
 interface PokedexText extends TextFile {}
@@ -473,18 +471,18 @@ interface TextFile {
 	name: string;
 	desc?: string;
 	shortDesc?: string;
-	moddedDescs?: ModdedTextObject;
-	moddedShortDescs?: ModdedTextObject;
+	gen1?: ModdedTextObject;
+	gen2?: ModdedTextObject;
+	gen3?: ModdedTextObject;
+	gen4?: ModdedTextObject;
+	gen5?: ModdedTextObject;
+	gen6?: ModdedTextObject;
+	gen7?: ModdedTextObject;
 }
 
-interface ModdedTextObject {
-	gen1?: string;
-	gen2?: string;
-	gen3?: string;
-	gen4?: string;
-	gen5?: string;
-	gen6?: string;
-	gen7?: string;
+interface ModdedTextObject extends Plines {
+	desc?: string;
+	shortDesc?: string;
 }
 
 namespace RandomTeamsTypes {

@@ -30,9 +30,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 	aguavberry: {
 		name: "Aguav Berry",
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
-		moddedDescs: {
-			gen7: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
-			gen6: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
+		gen7: {
+			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
+		},
+		gen6: {
+			desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 		},
 	},
 	airballoon: {
@@ -109,8 +111,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	bigroot: {
 		name: "Big Root",
 		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
-		moddedDescs: {
-			gen6: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
+		gen6: {
+			desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
 		},
 	},
 	bindingband: {
@@ -120,8 +122,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	blackbelt: {
 		name: "Black Belt",
 		desc: "Holder's Fighting-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Fighting-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Fighting-type attacks have 1.1x power.",
 		},
 	},
 	blacksludge: {
@@ -133,8 +135,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	blackglasses: {
 		name: "Black Glasses",
 		desc: "Holder's Dark-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Dark-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Dark-type attacks have 1.1x power.",
 		},
 	},
 	blastoisinite: {
@@ -164,15 +166,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	brightpowder: {
 		name: "Bright Powder",
 		desc: "The accuracy of attacks against the holder is 0.9x.",
-		moddedDescs: {
-			gen2: "An attack against the holder has its accuracy out of 255 lowered by 20.",
+		gen2: {
+			desc: "An attack against the holder has its accuracy out of 255 lowered by 20.",
 		},
 	},
 	buggem: {
 		name: "Bug Gem",
 		desc: "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Bug-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use.",
 		},
 	},
 	bugmemory: {
@@ -198,8 +200,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	charcoal: {
 		name: "Charcoal",
 		desc: "Holder's Fire-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Fire-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Fire-type attacks have 1.1x power.",
 		},
 	},
 	charizarditex: {
@@ -295,8 +297,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	darkgem: {
 		name: "Dark Gem",
 		desc: "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Dark-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Dark-type attack will have 1.5x power. Single use.",
 		},
 	},
 	darkmemory: {
@@ -353,16 +355,18 @@ export const ItemsText: {[k: string]: ItemText} = {
 	dragonfang: {
 		name: "Dragon Fang",
 		desc: "Holder's Dragon-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Dragon-type attacks have 1.1x power.",
-			gen2: "No competitive use.",
+		gen3: {
+			desc: "Holder's Dragon-type attacks have 1.1x power.",
+		},
+		gen2: {
+			desc: "No competitive use.",
 		},
 	},
 	dragongem: {
 		name: "Dragon Gem",
 		desc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Dragon-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use.",
 		},
 	},
 	dragonmemory: {
@@ -372,8 +376,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	dragonscale: {
 		name: "Dragon Scale",
 		desc: "Evolves Seadra into Kingdra when traded.",
-		moddedDescs: {
-			gen2: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
+		gen2: {
+			desc: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
 		},
 	},
 	dragoniumz: {
@@ -387,8 +391,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	dreamball: {
 		name: "Dream Ball",
 		desc: "A Poke Ball that makes it easier to catch wild Pokémon while they're asleep.",
-		moddedDescs: {
-			gen7: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+		gen7: {
+			desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
 		},
 	},
 	dubiousdisc: {
@@ -433,8 +437,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	electricgem: {
 		name: "Electric Gem",
 		desc: "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Electric-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Electric-type attack will have 1.5x power. Single use.",
 		},
 	},
 	electricmemory: {
@@ -452,15 +456,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	energypowder: {
 		name: "Energy Powder",
 		desc: "Restores 60 HP to one Pokemon.",
-		moddedDescs: {
-			gen6: "Restores 50 HP to one Pokemon but lowers Happiness.",
+		gen6: {
+			desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
 		},
 	},
 	enigmaberry: {
 		name: "Enigma Berry",
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
-		moddedDescs: {
-			gen3: "No competitive use.",
+		gen3: {
+			desc: "No competitive use.",
 		},
 	},
 	eviolite: {
@@ -490,8 +494,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	fightinggem: {
 		name: "Fighting Gem",
 		desc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Fighting-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use.",
 		},
 	},
 	fightingmemory: {
@@ -505,16 +509,18 @@ export const ItemsText: {[k: string]: ItemText} = {
 	figyberry: {
 		name: "Figy Berry",
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
-		moddedDescs: {
-			gen7: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
-			gen6: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
+		gen7: {
+			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
+		},
+		gen6: {
+			desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 		},
 	},
 	firegem: {
 		name: "Fire Gem",
 		desc: "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Fire-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Fire-type attack will have 1.5x power. Single use.",
 		},
 	},
 	firememory: {
@@ -553,8 +559,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	flyinggem: {
 		name: "Flying Gem",
 		desc: "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Flying-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Flying-type attack will have 1.5x power. Single use.",
 		},
 	},
 	flyingmemory: {
@@ -568,8 +574,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	focusband: {
 		name: "Focus Band",
 		desc: "Holder has a 10% chance to survive an attack that would KO it with 1 HP.",
-		moddedDescs: {
-			gen2: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
+		gen2: {
+			desc: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
 		},
 
 		activate: "  [POKEMON] hung on using its Focus Band!",
@@ -577,8 +583,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	focussash: {
 		name: "Focus Sash",
 		desc: "If holder's HP is full, will survive an attack that would KO it with 1 HP. Single use.",
-		moddedDescs: {
-			gen4: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
+		gen4: {
+			desc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		},
 
 		end: "  [POKEMON] hung on using its Focus Sash!",
@@ -638,8 +644,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	ghostgem: {
 		name: "Ghost Gem",
 		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Ghost-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use.",
 		},
 	},
 	ghostmemory: {
@@ -661,8 +667,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	grassgem: {
 		name: "Grass Gem",
 		desc: "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Grass-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use.",
 		},
 	},
 	grassmemory: {
@@ -692,15 +698,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	griseousorb: {
 		name: "Griseous Orb",
 		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen4: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
+		gen4: {
+			desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		},
 	},
 	groundgem: {
 		name: "Ground Gem",
 		desc: "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Ground-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use.",
 		},
 	},
 	groundmemory: {
@@ -722,8 +728,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	hardstone: {
 		name: "Hard Stone",
 		desc: "Holder's Rock-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Rock-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Rock-type attacks have 1.1x power.",
 		},
 	},
 	healball: {
@@ -761,16 +767,18 @@ export const ItemsText: {[k: string]: ItemText} = {
 	iapapaberry: {
 		name: "Iapapa Berry",
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
-		moddedDescs: {
-			gen7: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
-			gen6: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
+		gen7: {
+			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
+		},
+		gen6: {
+			desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 		},
 	},
 	icegem: {
 		name: "Ice Gem",
 		desc: "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Ice-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use.",
 		},
 	},
 	icememory: {
@@ -781,8 +789,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Ice Stone",
 		desc: "Evolves Alolan Sandshrew into Alolan Sandslash, Alolan Vulpix into Alolan Ninetales, Eevee into Glaceon, and Galarian Darumaka into Galarian Darmanitan when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
-		moddedDescs: {
-			gen7: "Evolves Alolan Sandshrew into Alolan Sandslash and Alolan Vulpix into Alolan Ninetales when used.",
+		gen7: {
+			desc: "Evolves Alolan Sandshrew into Alolan Sandslash and Alolan Vulpix into Alolan Ninetales when used.",
 		},
 	},
 	icicleplate: {
@@ -808,8 +816,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	ironball: {
 		name: "Iron Ball",
 		desc: "Holder is grounded, Speed halved. If Flying type, takes neutral Ground damage.",
-		moddedDescs: {
-			gen4: "Holder's Speed is halved and it becomes grounded.",
+		gen4: {
+			desc: "Holder's Speed is halved and it becomes grounded.",
 		},
 	},
 	ironplate: {
@@ -872,16 +880,16 @@ export const ItemsText: {[k: string]: ItemText} = {
 	laxincense: {
 		name: "Lax Incense",
 		desc: "The accuracy of attacks against the holder is 0.9x.",
-		moddedDescs: {
-			gen3: "The accuracy of attacks against the holder is 0.95x.",
+		gen3: {
+			desc: "The accuracy of attacks against the holder is 0.95x.",
 		},
 	},
 	leafstone: {
 		name: "Leaf Stone",
 		desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Eevee into Leafeon, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
-		moddedDescs: {
-			gen7: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
+		gen7: {
+			desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
 		},
 	},
 	leek: {
@@ -917,15 +925,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	lightball: {
 		name: "Light Ball",
 		desc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
-		moddedDescs: {
-			gen3: "If held by a Pikachu, its Special Attack is doubled.",
+		gen3: {
+			desc: "If held by a Pikachu, its Special Attack is doubled.",
 		},
 	},
 	lightclay: {
 		name: "Light Clay",
 		desc: "Holder's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
-		moddedDescs: {
-			gen6: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
+		gen6: {
+			desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
 		},
 	},
 	lopunnite: {
@@ -947,8 +955,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	luckypunch: {
 		name: "Lucky Punch",
 		desc: "If held by a Chansey, its critical hit ratio is raised by 2 stages.",
-		moddedDescs: {
-			gen2: "If held by a Chansey, its critical hit ratio is always at stage 2. (25% crit rate)",
+		gen2: {
+			desc: "If held by a Chansey, its critical hit ratio is always at stage 2. (25% crit rate)",
 		},
 	},
 	lumberry: {
@@ -990,16 +998,18 @@ export const ItemsText: {[k: string]: ItemText} = {
 	magnet: {
 		name: "Magnet",
 		desc: "Holder's Electric-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Electric-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Electric-type attacks have 1.1x power.",
 		},
 	},
 	magoberry: {
 		name: "Mago Berry",
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
-		moddedDescs: {
-			gen7: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
-			gen6: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
+		gen7: {
+			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
+		},
+		gen6: {
+			desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 		},
 	},
 	magostberry: {
@@ -1041,8 +1051,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	mentalherb: {
 		name: "Mental Herb",
 		desc: "Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment. Single use.",
-		moddedDescs: {
-			gen4: "Holder is cured if it is infatuated. Single use.",
+		gen4: {
+			desc: "Holder is cured if it is infatuated. Single use.",
 		},
 	},
 	metagrossite: {
@@ -1053,25 +1063,23 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Metal Coat",
 		desc: "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
 		shortDesc: "Holder's Steel-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
-		},
-		moddedShortDescs: {
-			gen3: "Holder's Steel-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+			shortDesc: "Holder's Steel-type attacks have 1.1x power.",
 		},
 	},
 	metalpowder: {
 		name: "Metal Powder",
 		desc: "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
-		moddedDescs: {
-			gen2: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
+		gen2: {
+			desc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
 		},
 	},
 	metronome: {
 		name: "Metronome",
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
-		moddedDescs: {
-			gen4: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
+		gen4: {
+			desc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
 		},
 	},
 	mewniumz: {
@@ -1101,8 +1109,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	miracleseed: {
 		name: "Miracle Seed",
 		desc: "Holder's Grass-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Grass-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Grass-type attacks have 1.1x power.",
 		},
 	},
 	mistyseed: {
@@ -1125,8 +1133,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	mysticwater: {
 		name: "Mystic Water",
 		desc: "Holder's Water-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Water-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Water-type attacks have 1.1x power.",
 		},
 	},
 	nanabberry: {
@@ -1144,8 +1152,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	nevermeltice: {
 		name: "Never-Melt Ice",
 		desc: "Holder's Ice-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Ice-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Ice-type attacks have 1.1x power.",
 		},
 	},
 	nomelberry: {
@@ -1155,8 +1163,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	normalgem: {
 		name: "Normal Gem",
 		desc: "Holder's first successful Normal-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Normal-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use.",
 		},
 	},
 	normaliumz: {
@@ -1242,15 +1250,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	poisonbarb: {
 		name: "Poison Barb",
 		desc: "Holder's Poison-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Poison-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Poison-type attacks have 1.1x power.",
 		},
 	},
 	poisongem: {
 		name: "Poison Gem",
 		desc: "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Poison-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use.",
 		},
 	},
 	poisonmemory: {
@@ -1324,8 +1332,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	psychicgem: {
 		name: "Psychic Gem",
 		desc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Psychic-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use.",
 		},
 	},
 	psychicmemory: {
@@ -1351,8 +1359,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	quickclaw: {
 		name: "Quick Claw",
 		desc: "Each turn, holder has a 20% chance to move first in its priority bracket.",
-		moddedDescs: {
-			gen2: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
+		gen2: {
+			desc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
 		},
 
 		activate: "  [POKEMON] can act faster than normal, thanks to its Quick Claw!",
@@ -1420,8 +1428,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	rockgem: {
 		name: "Rock Gem",
 		desc: "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Rock-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use.",
 		},
 	},
 	rockincense: {
@@ -1515,15 +1523,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	seaincense: {
 		name: "Sea Incense",
 		desc: "Holder's Water-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Water-type attacks have 1.05x power.",
+		gen3: {
+			desc: "Holder's Water-type attacks have 1.05x power.",
 		},
 	},
 	sharpbeak: {
 		name: "Sharp Beak",
 		desc: "Holder's Flying-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Flying-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Flying-type attacks have 1.1x power.",
 		},
 	},
 	sharpedonite: {
@@ -1556,22 +1564,22 @@ export const ItemsText: {[k: string]: ItemText} = {
 	silkscarf: {
 		name: "Silk Scarf",
 		desc: "Holder's Normal-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Normal-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Normal-type attacks have 1.1x power.",
 		},
 	},
 	silverpowder: {
 		name: "Silver Powder",
 		desc: "Holder's Bug-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Bug-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Bug-type attacks have 1.1x power.",
 		},
 	},
 	sitrusberry: {
 		name: "Sitrus Berry",
 		desc: "Restores 1/4 max HP when at 1/2 max HP or less. Single use.",
-		moddedDescs: {
-			gen3: "Restores 30 HP when at 1/2 max HP or less. Single use.",
+		gen3: {
+			desc: "Restores 30 HP when at 1/2 max HP or less. Single use.",
 		},
 	},
 	skullfossil: {
@@ -1601,8 +1609,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	softsand: {
 		name: "Soft Sand",
 		desc: "Holder's Ground-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Ground-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Ground-type attacks have 1.1x power.",
 		},
 	},
 	solganiumz: {
@@ -1612,15 +1620,15 @@ export const ItemsText: {[k: string]: ItemText} = {
 	souldew: {
 		name: "Soul Dew",
 		desc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
-		moddedDescs: {
-			gen6: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
+		gen6: {
+			desc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 		},
 	},
 	spelltag: {
 		name: "Spell Tag",
 		desc: "Holder's Ghost-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Ghost-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Ghost-type attacks have 1.1x power.",
 		},
 	},
 	spelonberry: {
@@ -1654,8 +1662,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	steelgem: {
 		name: "Steel Gem",
 		desc: "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Steel-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Steel-type attack will have 1.5x power. Single use.",
 		},
 	},
 	steelmemory: {
@@ -1669,8 +1677,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	stick: {
 		name: "Stick",
 		desc: "If held by a Farfetch’d, its critical hit ratio is raised by 2 stages.",
-		moddedDescs: {
-			gen2: "If held by a Farfetch’d, its critical hit ratio is always at stage 2. (25% crit rate)",
+		gen2: {
+			desc: "If held by a Farfetch’d, its critical hit ratio is always at stage 2. (25% crit rate)",
 		},
 	},
 	stickybarb: {
@@ -1730,8 +1738,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Thunder Stone",
 		desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, Eelektrik into Eelektross, and Charjabug into Vikavolt when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
-		moddedDescs: {
-			gen7: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, and Eelektrik into Eelektross when used.",
+		gen7: {
+			desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, and Eelektrik into Eelektross when used.",
 		},
 	},
 	timerball: {
@@ -2149,8 +2157,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	twistedspoon: {
 		name: "Twisted Spoon",
 		desc: "Holder's Psychic-type attacks have 1.2x power.",
-		moddedDescs: {
-			gen3: "Holder's Psychic-type attacks have 1.1x power.",
+		gen3: {
+			desc: "Holder's Psychic-type attacks have 1.1x power.",
 		},
 	},
 	tyranitarite: {
@@ -2188,8 +2196,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	watergem: {
 		name: "Water Gem",
 		desc: "Holder's first successful Water-type attack will have 1.3x power. Single use.",
-		moddedDescs: {
-			gen5: "Holder's first successful Water-type attack will have 1.5x power. Single use.",
+		gen5: {
+			desc: "Holder's first successful Water-type attack will have 1.5x power. Single use.",
 		},
 	},
 	watermemory: {
@@ -2238,9 +2246,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 	wikiberry: {
 		name: "Wiki Berry",
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
-		moddedDescs: {
-			gen7: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
-			gen6: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
+		gen7: {
+			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
+		},
+		gen6: {
+			desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
 		},
 	},
 	wiseglasses: {
