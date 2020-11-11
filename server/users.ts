@@ -1375,7 +1375,7 @@ export class User extends Chat.MessageContext {
 		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || noThrottle) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
-			Chat.parse(message, room, this, connection);
+			void Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 			if (noThrottle) return;
 			return false; // but end the loop here
@@ -1400,7 +1400,7 @@ export class User extends Chat.MessageContext {
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
-			Chat.parse(message, room, this, connection);
+			void Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		}
 	}
@@ -1442,7 +1442,7 @@ export class User extends Chat.MessageContext {
 		const room = Rooms.get(roomid);
 		if (room || !roomid) {
 			Monitor.activeIp = connection.ip;
-			Chat.parse(message, room, this, connection);
+			void Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		} else {
 			// room no longer exists; do nothing

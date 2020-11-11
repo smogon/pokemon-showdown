@@ -821,7 +821,7 @@ export const Punishments = new class {
 		}
 
 		if (roomObject?.battle && userObject && userObject.connections[0]) {
-			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
+			await Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
 		}
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);

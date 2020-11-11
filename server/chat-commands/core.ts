@@ -414,11 +414,11 @@ export const commands: ChatCommands = {
 			return this.sendReply(this.tr("What?! How are you not more excited to battle?! Try /battle! to show me you're ready."));
 		}
 		if (!target) target = "randombattle";
-		return this.parse(`/search ${target}`);
+		return void this.parse(`/search ${target}`);
 	},
 
 	avatar(target, room, user) {
-		if (!target) return this.parse(`${this.cmdToken}avatars`);
+		if (!target) return void this.parse(`${this.cmdToken}avatars`);
 		const parts = target.split(',');
 		let avatar = parts[0].toLowerCase().replace(/[^a-z0-9-]+/g, '');
 		let avatarIsValid = true;
@@ -478,18 +478,18 @@ export const commands: ChatCommands = {
 	},
 
 	noreply(target, room, user) {
-		if (!target.startsWith('/')) return this.parse('/help noreply');
-		return this.parse(target, true);
+		if (!target.startsWith('/')) return void this.parse('/help noreply');
+		return void this.parse(target, true);
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
 	r: 'reply',
 	reply(target, room, user) {
-		if (!target) return this.parse('/help reply');
+		if (!target) return void this.parse('/help reply');
 		if (!user.lastPM) {
 			return this.errorReply(this.tr("No one has PMed you yet."));
 		}
-		return this.parse(`/msg ${user.lastPM || ''}, ${target}`);
+		return void this.parse(`/msg ${user.lastPM || ''}, ${target}`);
 	},
 	replyhelp: [`/reply OR /r [message] - Send a message to the last user you got a message from, or sent a message to.`],
 
@@ -497,10 +497,10 @@ export const commands: ChatCommands = {
 	whisper: 'msg',
 	w: 'msg',
 	msg(target, room, user, connection) {
-		if (!target) return this.parse('/help msg');
+		if (!target) return void this.parse('/help msg');
 		if (!target.includes(',')) {
 			this.errorReply(this.tr("You forgot the comma."));
-			return this.parse('/help msg');
+			return void this.parse('/help msg');
 		}
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -522,13 +522,13 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		this.parse(target);
+		void this.parse(target);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
 	inv: 'invite',
 	invite(target, room, user) {
-		if (!target) return this.parse('/help invite');
+		if (!target) return void this.parse('/help invite');
 		if (room) target = this.splitTarget(target) || room.roomid;
 		let targetRoom = Rooms.search(target);
 		if (targetRoom && !targetRoom.checkModjoin(user)) {
@@ -540,7 +540,7 @@ export const commands: ChatCommands = {
 			if (!this.targetUser) return this.errorReply(this.tr`The user "${targetUsername}" was not found.`);
 			if (!targetRoom) return this.errorReply(this.tr`The room "${target}" was not found.`);
 
-			return this.parse(`/pm ${targetUsername}, /invite ${targetRoom.roomid}`);
+			return void this.parse(`/pm ${targetUsername}, /invite ${targetRoom.roomid}`);
 		}
 
 		const targetUser = this.pmTarget; // not room means it's a PM
@@ -549,7 +549,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`The room "${target}" was not found.`);
 		}
 		if (!targetUser) {
-			return this.parse('/help invite');
+			return void this.parse('/help invite');
 		}
 
 		const invitesBlocked = targetUser.settings.blockInvites;
@@ -561,7 +561,7 @@ export const commands: ChatCommands = {
 		}
 		if (!targetRoom.checkModjoin(targetUser)) {
 			this.room = targetRoom;
-			this.parse(`/roomvoice ${targetUser.name}`);
+			void this.parse(`/roomvoice ${targetUser.name}`);
 			if (!targetRoom.checkModjoin(targetUser)) {
 				return this.errorReply(this.tr`You do not have permission to invite people into this room.`);
 			}
@@ -648,7 +648,7 @@ export const commands: ChatCommands = {
 		if (user.locked || user.semilocked) {
 			return this.errorReply(this.tr("Your status cannot be updated while you are locked or semilocked."));
 		}
-		if (!target) return this.parse('/help status');
+		if (!target) return void this.parse('/help status');
 
 		const maxLength = 32;
 		if (target.length > maxLength) {
@@ -674,8 +674,8 @@ export const commands: ChatCommands = {
 		user.setStatusType('busy');
 		const isDND = ['dnd', 'donotdisturb'].includes(cmd);
 		if (isDND) {
-			this.parse('/blockpms +');
-			this.parse('/blockchallenges');
+			void this.parse('/blockpms +');
+			void this.parse('/blockchallenges');
 			user.settings.doNotDisturb = true;
 		}
 		this.sendReply(this.tr("You are now marked as busy."));
@@ -735,8 +735,8 @@ export const commands: ChatCommands = {
 		user.setStatusType('online');
 
 		if (user.settings.doNotDisturb) {
-			this.parse('/unblockpms');
-			this.parse('/unblockchallenges');
+			void this.parse('/unblockpms');
+			void this.parse('/unblockchallenges');
 			user.settings.doNotDisturb = false;
 		}
 
@@ -823,7 +823,7 @@ export const commands: ChatCommands = {
 			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
 				this.errorReply(this.tr("/updatesettings expects JSON encoded object."));
 			}
-			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
+			if (typeof raw.language === 'string') void this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
 					if (setting === 'blockPMs' &&
@@ -955,7 +955,7 @@ export const commands: ChatCommands = {
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
 		battleRoom.auth.set(user.id, Users.HOST_SYMBOL);
-		this.parse(`/join ${battleRoom.roomid}`);
+		void this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
 			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
@@ -1084,8 +1084,8 @@ export const commands: ChatCommands = {
 	rejecttiehelp: [`/rejecttie - Rejects a tie offered by another player in a battle.`],
 
 	inputlog() {
-		this.parse(`/help exportinputlog`);
-		this.parse(`/help importinputlog`);
+		void this.parse(`/help exportinputlog`);
+		void this.parse(`/help importinputlog`);
 	},
 
 	/*********************************************************
@@ -1116,16 +1116,16 @@ export const commands: ChatCommands = {
 	mv: 'move',
 	attack: 'move',
 	move(target, room, user) {
-		this.parse(`/choose move ${target}`);
+		void this.parse(`/choose move ${target}`);
 	},
 
 	sw: 'switch',
 	switch(target, room, user) {
-		this.parse(`/choose switch ${target}`);
+		void this.parse(`/choose switch ${target}`);
 	},
 
 	team(target, room, user) {
-		this.parse(`/choose team ${target}`);
+		void this.parse(`/choose team ${target}`);
 	},
 
 	undo(target, room, user) {
@@ -1155,20 +1155,20 @@ export const commands: ChatCommands = {
 		if (room.hideReplay) return this.errorReply(this.tr`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
 		// If a replay has already been saved, /savereplay again to update the uploaded replay's hidden status
-		if (room.battle.replaySaved) this.parse('/savereplay');
+		if (room.battle.replaySaved) void this.parse('/savereplay');
 		this.addModAction(room.tr`${user.name} hid the replay of this battle.`);
 	},
 
 	addplayer(target, room, user) {
 		room = this.requireRoom();
-		if (!target) return this.parse('/help addplayer');
+		if (!target) return void this.parse('/help addplayer');
 		if (!room.battle) return this.errorReply(this.tr("You can only do this in battle rooms."));
 		if (room.rated) return this.errorReply(this.tr("You can only add a Player to unrated battles."));
 
 		target = this.splitTarget(target, true).trim();
 		if (target !== 'p1' && target !== 'p2') {
 			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${target}".`);
-			return this.parse('/help addplayer');
+			return void this.parse('/help addplayer');
 		}
 
 		const targetUser = this.targetUser;
@@ -1208,11 +1208,11 @@ export const commands: ChatCommands = {
 
 		let didSomething = false;
 		if (!room.battle.p1.id && room.battle.p1.name !== 'Player 1') {
-			this.parse(`/addplayer ${room.battle.p1.name}, p1`);
+			void this.parse(`/addplayer ${room.battle.p1.name}, p1`);
 			didSomething = true;
 		}
 		if (!room.battle.p2.id && room.battle.p2.name !== this.tr('Player 2')) {
-			this.parse(`/addplayer ${room.battle.p2.name}, p2`);
+			void this.parse(`/addplayer ${room.battle.p2.name}, p2`);
 			didSomething = true;
 		}
 
@@ -1267,8 +1267,8 @@ export const commands: ChatCommands = {
 	},
 	kickbattlehelp: [`/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ &`],
 
-	kickinactive(target, room, user) {
-		this.parse(`/timer on`);
+	async kickinactive(target, room, user) {
+		await this.parse(`/timer on`);
 	},
 
 	timer(target, room, user) {
@@ -1699,16 +1699,16 @@ export const commands: ChatCommands = {
 			if (Array.isArray(nextNamespace)) {
 				const command = cmds.slice(0, i + 1).join(' ');
 				this.sendReply(this.tr`'/${command}' is a help command.`);
-				return this.parse(`/${target}`);
+				return void this.parse(`/${target}`);
 			}
 			if (!nextNamespace) {
 				for (const g in Config.groups) {
 					const groupid = Config.groups[g].id;
 					if (new RegExp(`(global)?(un|de)?${groupid}`).test(target)) {
-						return this.parse(`/help promote`);
+						return void this.parse(`/help promote`);
 					}
 					if (new RegExp(`room(un|de)?${groupid}`).test(target)) {
-						return this.parse(`/help roompromote`);
+						return void this.parse(`/help roompromote`);
 					}
 				}
 				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
