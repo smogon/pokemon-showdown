@@ -417,6 +417,36 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
+interface TextObject {
+	desc?: string;
+	shortDesc?: string;
+}
+interface Plines {
+	activate?: string;
+	addItem?: string;
+	block?: string;
+	boost?: string;
+	cant?: string;
+	changeAbility?: string;
+	damage?: string;
+	end?: string;
+	heal?: string;
+	move?: string;
+	start?: string;
+	transform?: string;
+}
+
+interface TextFile extends TextObject {
+	name: string;
+	gen1?: ModdedTextObject;
+	gen2?: ModdedTextObject;
+	gen3?: ModdedTextObject;
+	gen4?: ModdedTextObject;
+	gen5?: ModdedTextObject;
+	gen6?: ModdedTextObject;
+	gen7?: ModdedTextObject;
+}
+
 interface MovePlines extends Plines {
 	alreadyStarted?: string;
 	blockSelf?: string;
@@ -450,40 +480,9 @@ interface ItemText extends TextFile, Plines {}
 interface PokedexText extends TextFile {}
 
 interface DefaultText extends AnyObject {}
+
+interface ModdedTextObject extends TextObject, Plines {}
 /* eslint-enable @typescript-eslint/no-empty-interface */
-
-interface Plines {
-	activate?: string;
-	addItem?: string;
-	block?: string;
-	boost?: string;
-	cant?: string;
-	changeAbility?: string;
-	damage?: string;
-	end?: string;
-	heal?: string;
-	move?: string;
-	start?: string;
-	transform?: string;
-}
-
-interface TextFile {
-	name: string;
-	desc?: string;
-	shortDesc?: string;
-	gen1?: ModdedTextObject;
-	gen2?: ModdedTextObject;
-	gen3?: ModdedTextObject;
-	gen4?: ModdedTextObject;
-	gen5?: ModdedTextObject;
-	gen6?: ModdedTextObject;
-	gen7?: ModdedTextObject;
-}
-
-interface ModdedTextObject extends Plines {
-	desc?: string;
-	shortDesc?: string;
-}
 
 namespace RandomTeamsTypes {
 	export interface TeamDetails {
