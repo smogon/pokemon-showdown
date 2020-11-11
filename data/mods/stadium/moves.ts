@@ -59,7 +59,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 1,
 		damageCallback(pokemon) {
-			return (this.random(1, (1.5 * pokemon.level)));
+			return this.random(1, this.trunc(1.5 * pokemon.level));
 		},
 	},
 	rage: {
