@@ -432,7 +432,8 @@ export class CommandContext extends MessageContext {
 		this.inputUsername = "";
 	}
 
-	parse(msg?: string, quiet?: boolean): void | boolean | Promise<void | boolean> {
+	// TODO: return should be void | boolean | Promise<void | boolean>
+	parse(msg?: string, quiet?: boolean): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext(this);
