@@ -1,7 +1,7 @@
 CREATE TABLE friends (
 	userid TEXT NOT NULL,
 	friend TEXT NOT NULL,
-	last_login INTEGER,
+	last_login INTEGER NOT NULL,
 	PRIMARY KEY (userid, friend)
 ) WITHOUT ROWID;
 

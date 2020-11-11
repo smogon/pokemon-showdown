@@ -337,9 +337,7 @@ export const Friends = new class {
 	}
 	async getLastLogin(userid: ID) {
 		const result = await this.query({statement: 'checkLastLogin', type: 'get', data: [userid]});
-		const num = parseInt(result?.['last_login']);
-		if (isNaN(num)) return Date.now();
-		return num;
+		return Number(result['last_login']);
 	}
 	checkCanUse(context: CommandContext | PageContext) {
 		const user = context.user;
@@ -777,7 +775,7 @@ const ACTIONS = {
 };
 
 
-const TRANSACTIONS: {[k: string]: (input: any) => DatabaseResult} = {
+const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	rename: requests => {
 		for (const request of requests) {
 			const [oldID, newID] = request;
@@ -827,6 +825,15 @@ const TRANSACTIONS: {[k: string]: (input: any) => DatabaseResult} = {
 		}
 		return {result: []};
 	},
+	add: requests => {
+		for (const request of requests) {
+			const [senderID, receiverID] = request;
+			const last_login = Date.now();
+			statements.add.run({userid: senderID, friend: receiverID, last_login});
+			statements.add.run({friend: senderID, userid: receiverID, last_login});
+		}
+		return {result: []};
+	},
 	accept: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
@@ -834,8 +841,8 @@ const TRANSACTIONS: {[k: string]: (input: any) => DatabaseResult} = {
 			if (!receivedRequests.includes(senderID)) {
 				throw new Chat.ErrorMessage(`You have not received a friend request from '${senderID}'.`);
 			}
-			TRANSACTIONS.removeRequest([senderID, receiverID]);
-			TRANSACTIONS.add([senderID, receiverID]);
+			TRANSACTIONS.removeRequest([request]);
+			TRANSACTIONS.add([request]);
 		}
 		return {result: []};
 	},
