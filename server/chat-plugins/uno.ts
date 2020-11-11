@@ -857,7 +857,7 @@ export const commands: ChatCommands = {
 		},
 
 		help(target, room, user) {
-			this.parse('/help uno');
+			void this.parse('/help uno');
 		},
 
 		// suppression commands

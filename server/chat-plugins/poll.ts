@@ -344,7 +344,7 @@ export const commands: ChatCommands = {
 		viewqueue(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
-			this.parse(`/join view-pollqueue-${room.roomid}`);
+			void this.parse(`/join view-pollqueue-${room.roomid}`);
 		},
 		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # &`],
 
@@ -382,7 +382,7 @@ export const commands: ChatCommands = {
 				});
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
-				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
+				if (update) void this.parse(`/j view-pollqueue-${curRoom}`);
 			}
 		},
 		deletequeuehelp: [

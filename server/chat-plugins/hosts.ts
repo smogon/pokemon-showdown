@@ -410,8 +410,7 @@ export const commands: ChatCommands = {
 		}
 		if (!note) {
 			this.errorReply(`You must specify who owns this shared IP.`);
-			this.parse(`/help markshared`);
-			return;
+			return this.parse(`/help markshared`);
 		}
 
 		Punishments.addSharedIp(ip, note);
@@ -447,13 +446,12 @@ export const commands: ChatCommands = {
 			if (!IPTools.ipRegex.test(ip)) return this.errorReply(`Please enter a valid IP address.`);
 			if (!reasonArr?.length) {
 				this.errorReply(`A reason is required.`);
-				this.parse(`/help nomarkshared`);
-				return;
+				return this.parse(`/help nomarkshared`);
 			}
 			if (Punishments.sharedIpBlacklist.has(ip)) {
 				return this.errorReply(`This IP is already blacklisted from being marked as shared.`);
 			}
-			if (Punishments.sharedIps.has(ip)) this.parse(`/unmarkshared ${ip}`);
+			if (Punishments.sharedIps.has(ip)) void this.parse(`/unmarkshared ${ip}`);
 			const reason = reasonArr.join(',');
 
 			Punishments.addBlacklistedSharedIp(ip, reason);

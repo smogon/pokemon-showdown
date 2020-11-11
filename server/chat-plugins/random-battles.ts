@@ -408,7 +408,7 @@ export const commands: ChatCommands = {
 		if (!cap1v1Set) return this.parse(`/help cap1v1`);
 		if (typeof cap1v1Set !== 'string') {
 			this.errorReply(`Error: ${cap1v1Set.e}`);
-			if (cap1v1Set.parse) this.parse(cap1v1Set.parse);
+			if (cap1v1Set.parse) void this.parse(cap1v1Set.parse);
 			return;
 		}
 		return this.sendReplyBox(cap1v1Set);

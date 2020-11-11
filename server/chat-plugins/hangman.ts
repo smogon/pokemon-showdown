@@ -246,7 +246,7 @@ export const commands: ChatCommands = {
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &"],
 
 		guess(target, room, user) {
-			this.parse(`/choose ${target}`);
+			void this.parse(`/choose ${target}`);
 		},
 		guesshelp: [
 			`/guess [letter] - Makes a guess for the letter entered.`,

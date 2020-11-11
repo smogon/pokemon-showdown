@@ -243,7 +243,7 @@ export const commands: ChatCommands = {
 
 		this.modlog('REMOVE REPEATPHRASE', null, `"${id}"`);
 		this.privateModAction(targetRoom.tr`${user.name} removed the repeated phrase "${id}".`);
-		if (roomid) this.parse(`/join view-repeats-${targetRoom.roomid}`);
+		if (roomid) void this.parse(`/join view-repeats-${targetRoom.roomid}`);
 	},
 
 	removeallrepeats(target, room, user) {
@@ -270,7 +270,7 @@ export const commands: ChatCommands = {
 	viewrepeats(target, room, user) {
 		const roomid = toID(target) || room?.roomid;
 		if (!roomid) return this.errorReply(this.tr`You must specify a room when using this command in PMs.`);
-		this.parse(`/j view-repeats-${roomid}`);
+		void this.parse(`/j view-repeats-${roomid}`);
 	},
 };
 

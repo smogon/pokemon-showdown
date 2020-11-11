@@ -63,10 +63,10 @@ export const commands: ChatCommands = {
 
 		if (target === 'all') {
 			// Display OMotM formats, with forum thread links as caption
-			this.parse(`/formathelp omofthemonth`);
+			void this.parse(`/formathelp omofthemonth`);
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
-			this.parse(`/formathelp othermetagames`);
+			void this.parse(`/formathelp othermetagames`);
 			return this.sendReply(`|raw|<center>${buffer}</center>`);
 		}
 		if (showMonthly) {

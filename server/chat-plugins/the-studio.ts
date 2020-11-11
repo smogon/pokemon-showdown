@@ -622,7 +622,7 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.search('thestudio') || room;
 		Recs.checkRoom(targetRoom);
 		this.room = targetRoom;
-		this.parse(`/j view-recommendations-${targetRoom!.roomid}`);
+		void this.parse(`/j view-recommendations-${targetRoom!.roomid}`);
 	},
 	viewrecommendationshelp: [
 		`/viewrecommendations OR /viewrecs - View all recommended songs.`,
@@ -634,7 +634,7 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.search('thestudio') || room;
 		Recs.checkRoom(targetRoom);
 		this.room = targetRoom;
-		this.parse(`/j view-suggestedrecommendations-${targetRoom!.roomid}`);
+		void this.parse(`/j view-suggestedrecommendations-${targetRoom!.roomid}`);
 	},
 	viewsuggestedrecommendationshelp: [
 		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # &`,

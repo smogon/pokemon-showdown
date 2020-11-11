@@ -70,7 +70,7 @@ export const commands: ChatCommands = {
 			targetRoom.settings.repeats?.length &&
 			targetRoom.settings.repeats.filter(x => x.faq && x.id === (getAlias(targetRoom.roomid, topic) || topic)).length
 		) {
-			this.parse(`/removerepeat ${getAlias(targetRoom.roomid, topic) || topic},${targetRoom.roomid}`);
+			void this.parse(`/removerepeat ${getAlias(targetRoom.roomid, topic) || topic},${targetRoom.roomid}`);
 		}
 		delete roomFaqs[targetRoom.roomid][topic];
 		Object.keys(roomFaqs[targetRoom.roomid]).filter(
@@ -82,7 +82,7 @@ export const commands: ChatCommands = {
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
-		if (roomid) this.parse(`/join view-roomfaqs-${targetRoom.roomid}`);
+		if (roomid) void this.parse(`/join view-roomfaqs-${targetRoom.roomid}`);
 	},
 	addalias(target, room, user) {
 		room = this.requireRoom();

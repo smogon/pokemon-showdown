@@ -837,7 +837,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (this.replaySaved || Config.autosavereplays) {
 			const uploader = Users.get(winnerid || p1id);
 			if (uploader?.connections[0]) {
-				Chat.parse('/savereplay silent', this.room, uploader, uploader.connections[0]);
+				await Chat.parse('/savereplay silent', this.room, uploader, uploader.connections[0]);
 			}
 		}
 		const parentGame = this.room.parent && this.room.parent.game;

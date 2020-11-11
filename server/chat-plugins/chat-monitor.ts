@@ -603,10 +603,10 @@ export const commands: ChatCommands = {
 		'': 'view',
 		list: 'view',
 		view(target, room, user) {
-			this.parse(`/join view-filters`);
+			void this.parse(`/join view-filters`);
 		},
 		help(target, room, user) {
-			this.parse(`/help filter`);
+			void this.parse(`/help filter`);
 		},
 	},
 	filterhelp: [

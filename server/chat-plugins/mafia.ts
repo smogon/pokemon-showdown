@@ -2067,7 +2067,7 @@ export const commands: ChatCommands = {
 				this.sendReplyBox(`<strong>Host Queue:</strong> ${hostQueue.join(', ')}`);
 				break;
 			default:
-				this.parse('/help mafia queue');
+				void this.parse('/help mafia queue');
 			}
 		},
 		queuehelp: [
@@ -2080,14 +2080,14 @@ export const commands: ChatCommands = {
 		qforceadd: 'queueadd',
 		queueforceadd: 'queueadd',
 		queueadd(target, room, user, connection, cmd) {
-			this.parse(`/mafia queue ${cmd.includes('force') ? `forceadd` : `add`}, ${target}`);
+			void this.parse(`/mafia queue ${cmd.includes('force') ? `forceadd` : `add`}, ${target}`);
 		},
 
 		qdel: 'queueremove',
 		qdelete: 'queueremove',
 		qremove: 'queueremove',
 		queueremove(target, room, user) {
-			this.parse(`/mafia queue remove, ${target}`);
+			void this.parse(`/mafia queue remove, ${target}`);
 		},
 
 		join(target, room, user) {
@@ -2368,9 +2368,9 @@ export const commands: ChatCommands = {
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id)) this.checkCan('mute', null, targetRoom);
 			if (target) {
-				this.parse(`/mafia close`);
-				this.parse(`/mafia setroles ${target}`);
-				this.parse(`/mafia ${cmd}`);
+				void this.parse(`/mafia close`);
+				void this.parse(`/mafia setroles ${target}`);
+				void this.parse(`/mafia ${cmd}`);
 				return;
 			}
 			game.start(user, cmd === 'nightstart');
@@ -2455,7 +2455,7 @@ export const commands: ChatCommands = {
 
 		nl: 'nolynch',
 		nolynch() {
-			this.parse('/mafia lynch nolynch');
+			void this.parse('/mafia lynch nolynch');
 		},
 
 		enableself: 'selflynch',
@@ -2670,7 +2670,7 @@ export const commands: ChatCommands = {
 				mod = 0;
 				break;
 			}
-			this.parse(`/mafia applyhammermodifier ${target}, ${mod}`);
+			void this.parse(`/mafia applyhammermodifier ${target}, ${mod}`);
 		},
 		doublevoter: 'mayor',
 		voteless: 'mayor',
@@ -2690,7 +2690,7 @@ export const commands: ChatCommands = {
 				mod = 1;
 				break;
 			}
-			this.parse(`/mafia applylynchmodifier ${target}, ${mod}`);
+			void this.parse(`/mafia applylynchmodifier ${target}, ${mod}`);
 		},
 
 		unsilence: 'silence',
@@ -2854,7 +2854,7 @@ export const commands: ChatCommands = {
 				game.forceLynch = false;
 				game.sendDeclare(`Forcelynching has been disabled. You can lynch normally now!`);
 			} else {
-				this.parse('/help mafia forcelynch');
+				void this.parse('/help mafia forcelynch');
 			}
 			game.logAction(user, `changed forcelynch status`);
 		},
@@ -2986,7 +2986,7 @@ export const commands: ChatCommands = {
 					game.subs.push(user.id);
 					game.nextSub();
 					// Update spectator's view
-					this.parse(`/join view-mafia-${targetRoom.roomid}`);
+					void this.parse(`/join view-mafia-${targetRoom.roomid}`);
 				}
 				break;
 			case 'out':
@@ -3004,7 +3004,7 @@ export const commands: ChatCommands = {
 					if (!game.subs.includes(user.id)) return user.sendTo(targetRoom, `|error|You are not on the sub list.`);
 					game.subs.splice(game.subs.indexOf(user.id), 1);
 					// Update spectator's view
-					this.parse(`/join view-mafia-${targetRoom.roomid}`);
+					void this.parse(`/join view-mafia-${targetRoom.roomid}`);
 				}
 				break;
 			case 'next':

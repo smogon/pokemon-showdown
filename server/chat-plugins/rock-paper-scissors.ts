@@ -331,11 +331,11 @@ export const commands: ChatCommands = {
 		},
 
 		choose(target, room, user) {
-			this.parse(`/choose ${target}`);
+			void this.parse(`/choose ${target}`);
 		},
 
 		leave(target, room, user) {
-			this.parse(`/leavegame`);
+			void this.parse(`/leavegame`);
 		},
 
 		pause(target, room, user) {
