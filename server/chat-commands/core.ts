@@ -1734,7 +1734,7 @@ export const commands: ChatCommands = {
 			this.errorReply(this.tr`Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead`);
 		}
 
-		const curHandler = this.parseCommand(`/${closestHelp}`)?.handler;
+		const curHandler = Chat.parseCommand(`/${closestHelp}`)?.handler;
 		if (curHandler?.isPrivate && !user.can('lock')) {
 			return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 		}
