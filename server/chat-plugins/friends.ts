@@ -78,16 +78,15 @@ export const Friends = new class {
 		).run();
 		return results;
 	}
-	async getFriends(user: User, opts = {includeLogin: false}): Promise<Set<unknown>> {
-		const results = await this.query({
-			statement: 'get', type: 'all', data: [user.id, MAX_FRIENDS],
-		});
-		const friendArr = results.result || [];
-		const friends = new Set(friendArr.map((item: AnyObject) => {
-			if (opts.includeLogin) return {login: item.last_login, friend: item.friend};
-			return item.friend;
-		}));
-		return friends;
+	getFriends(user: User, visual = false) {
+		const data = [user.id, MAX_FRIENDS];
+		let request: DatabaseRequest = {
+			statement: 'get', type: 'all', data,
+		};
+		if (visual) {
+			request = {statement: 'visualData', type: 'transaction', data};
+		}
+		return this.query(request);
 	}
 	async getRequests(user: User) {
 		const sent: Set<string> = new Set();
@@ -113,23 +112,12 @@ export const Friends = new class {
 		}
 		return {sent, received};
 	}
-	getRenames() {
-		if (!this.database) return new Map();
-		// this is only run once, on initialization, so it doesn't need to be in statements
-		const results = this.database.prepare(`SELECT * FROM friend_renames`).all();
-		const renames: Map<string, string> = new Map();
-		for (const result of results) {
-			const {original_name, new_name} = result;
-			renames.set(new_name, original_name);
-		}
-		return renames;
-	}
 	async query(input: DatabaseRequest) {
 		const result = await PM.query(input);
 		if (result.error) {
 			throw new Chat.ErrorMessage(result.error);
 		}
-		return result;
+		return result.result;
 	}
 	async request(user: User, receiverID: ID) {
 		const receiver = Users.get(receiverID);
@@ -176,8 +164,8 @@ export const Friends = new class {
 		return this.query({type: 'transaction', data: [senderID, receiverID], statement: 'accept'});
 	}
 	async visualizeList(user: User) {
-		const friends = await this.getFriends(user, {includeLogin: true});
-		if (!friends.size) {
+		const friends = await this.getFriends(user, true);
+		if (!friends.length) {
 			return `<h3>Your friends:</h3> <h4>None.</h4>`;
 		}
 		const categorized: {[k: string]: string[]} = {
@@ -187,13 +175,18 @@ export const Friends = new class {
 			offline: [],
 		};
 		const loginTimes: {[k: string]: number} = {};
-		for (const {friend: friendName, login} of [...friends].sort() as AnyObject[]) {
+		const renames: {[k: string]: string} = {};
+		for (const {friend: friendName, last_login, old_name} of [...friends].sort() as AnyObject[]) {
 			const friend = Users.get(friendName as string);
+			const friendID = toID(friendName);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
 			} else {
-				categorized.offline.push(toID(friendName));
-				loginTimes[toID(friendName)] = login;
+				categorized.offline.push(friendID);
+				loginTimes[friendID] = last_login;
+			}
+			if (old_name) {
+				renames[friendID] = old_name;
 			}
 		}
 
@@ -220,19 +213,14 @@ export const Friends = new class {
 			for (const friend of friendArray) {
 				const friendID = toID(friend);
 				buf += `<div class="pad"><div>`;
-				buf += await this.displayFriend(friendID, loginTimes[friendID]);
+				buf += this.displayFriend(friendID, loginTimes[friendID], renames[friendID]);
 				buf += `</div></div>`;
 			}
 		}
 
 		return buf;
 	}
-	async getRename(userid: ID): Promise<string | null> {
-		const result = await this.query({statement: 'findRename', type: 'get', data: [userid]});
-		if (!result) return null;
-		return result.new_name;
-	}
-	async displayFriend(userid: ID, login?: number) {
+	displayFriend(userid: ID, login?: number, oldName?: string) {
 		const user = Users.getExact(userid); // we want this to be exact
 		const name = Utils.escapeHTML(user ? user.name : userid);
 		const statusType = user?.connected ?
@@ -243,7 +231,6 @@ export const Friends = new class {
 			Utils.html`<i>${name}</i> <small>(${statusType})</small>`;
 		buf += `<br />`;
 
-		const oldName = await this.getRename(userid);
 		if (oldName) {
 			buf += Utils.html`<small>(recently renamed from ${oldName})</small><br />`;
 		}
@@ -254,11 +241,13 @@ export const Friends = new class {
 		} else if (curUser?.id && curUser.id !== userid) {
 			buf += `<small>On an alternate account</small><br />`;
 		}
-		if (login && !user?.connected) {
+		if (login && typeof login === 'number' && !user?.connected) {
 			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
 			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
 			buf += `Last login: ${time.split(' ').reverse().join(', on ')}`;
 			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
+		} else if (typeof login === 'string') {
+			buf += `${login}`;
 		}
 		buf = `<div class="infobox">${buf}</div>`;
 		return toLink(buf);
@@ -306,8 +295,9 @@ export const Friends = new class {
 		}
 		const friends = await this.getFriends(user);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
-		for (const userid of friends) {
-			const curUser = Users.get(userid as string);
+		for (const f of friends) {
+			const {friend} = f;
+			const curUser = Users.get(friend as string);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
 			}
@@ -330,14 +320,19 @@ export const Friends = new class {
 			statement: 'login', type: 'run', data: [Date.now(), user.id],
 		});
 	}
-	clearLoginData(user: User) {
+	hideLoginData(user: User) {
 		return this.query({
-			statement: 'deleteLogin', type: 'run', data: [user.id],
+			statement: 'hideLogin', type: 'run', data: [user.id],
+		});
+	}
+	allowLoginData(user: User) {
+		return this.query({
+			statement: 'showLogin', type: 'run', data: [user.id],
 		});
 	}
 	async getLastLogin(userid: ID) {
 		const result = await this.query({statement: 'checkLastLogin', type: 'get', data: [userid]});
-		return Number(result['last_login']);
+		return parseInt(result['last_login']);
 	}
 	checkCanUse(context: CommandContext | PageContext) {
 		const user = context.user;
@@ -580,11 +575,12 @@ export const commands: ChatCommands = {
 			if (cmd.includes('hide')) {
 				if (setting) return this.errorReply(this.tr`You are already hiding your logins from friends.`);
 				user.settings.hideLogins = true;
-				await Friends.clearLoginData(user);
+				await Friends.hideLoginData(user);
 				this.sendReply(`You are now hiding your login times from your friends.`);
 			} else if (cmd.includes('show')) {
 				if (!setting) return this.errorReply(this.tr`You are already allowing friends to see your login times.`);
 				user.settings.hideLogins = false;
+				await Friends.allowLoginData(user);
 				this.sendReply(`You are now allowing your friends to see your login times.`);
 			} else {
 				return this.errorReply(`Invalid setting.`);
@@ -743,6 +739,7 @@ export const PM = new QueryProcessManager<DatabaseRequest, DatabaseResult>(modul
 		}
 		return {error: e.message};
 	}
+	if (result.result) result = result.result;
 	return {result} || {error: 'Unknown error in database query.'};
 });
 
@@ -752,7 +749,14 @@ const ACTIONS = {
 		`REPLACE INTO friends (userid, friend, last_login) VALUES($userid, $friend, $login) ON CONFLICT (userid, friend) ` +
 		`DO UPDATE SET userid = $userid, friend = $friend`
 	),
-	get: `SELECT * FROM friends WHERE userid = ? LIMIT ?`,
+	get: (
+		`SELECT *, (SELECT new_name
+			from friend_renames
+			WHERE original_name = friend
+			ORDER BY change_date desc
+			LIMIT 1) new_name
+		FROM friends WHERE userid = ? LIMIT ?`
+	),
 	// may look duplicated, but you pass in [userid1, userid2, userid2, userid1]
 	delete: `DELETE FROM friends WHERE (userid = ? AND friend = ?) OR (userid = ? AND friend = ?)`,
 	getSent: `SELECT receiver, sender FROM friend_requests WHERE sender = ?`,
@@ -771,7 +775,9 @@ const ACTIONS = {
 		`DELETE FROM friend_requests WHERE EXISTS` +
 		`(SELECT sent_at FROM friend_requests WHERE should_expire(sent_at) = 1)`
 	),
-	findRename: `SELECT * FROM friend_renames WHERE new_name = ?`,
+	hidingLogin: `SELECT * FROM friend_settings WHERE name = ? AND send_login_data = 1`,
+	hideLogin: `REPLACE INTO friend_settings (name, send_login_data) VALUES (?, 1)`,
+	showLogin: `DELETE FROM friend_settings WHERE name = ? AND send_login_data = 1`,
 };
 
 
@@ -850,6 +856,21 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 		for (const request of requests) {
 			const [to, from] = request;
 			statements.deleteRequest.run(to, from);
+		}
+		return {result: []};
+	},
+	visualData: requests => {
+		for (const request of requests) {
+			const [userid, limit] = request;
+			let data = statements.get.all(userid, limit);
+			data = data.map(f => {
+				const results = statements.hidingLogin.get(f.friend);
+				if (results?.send_login_data) {
+					f.last_login = `Hiding login data.`;
+				}
+				return f;
+			});
+			return {result: data};
 		}
 		return {result: []};
 	},
