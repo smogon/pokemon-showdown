@@ -358,12 +358,12 @@ export const commands: ChatCommands = {
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
 			const permissions = allPermissions.filter(perm => {
-				const handler = this.parseCommand(perm)?.handler;
+				const handler = Chat.parseCommand(perm)?.handler;
 				if (handler?.isPrivate && !user.can('lock')) return false;
 				return perm.startsWith('/') && !perm.includes(' ');
 			});
 			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' ')).filter(perm => {
-				const handler = this.parseCommand(perm)?.handler;
+				const handler = Chat.parseCommand(perm)?.handler;
 				if (handler?.isPrivate && !user.can('lock')) return false;
 				return perm.startsWith('/') && perm.includes(' ');
 			});

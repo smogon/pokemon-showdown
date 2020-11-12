@@ -585,7 +585,7 @@ export const commands: ChatCommands = {
 			return this.parse(`/help disablecommand`);
 		}
 		if (['!', '/'].some(c => target.startsWith(c))) target = target.slice(1);
-		const parsed = this.parseCommand(`/${target}`);
+		const parsed = Chat.parseCommand(`/${target}`);
 		if (!parsed) {
 			return this.errorReply(`Command "/${target}" is in an invalid format.`);
 		}
