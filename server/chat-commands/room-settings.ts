@@ -1041,7 +1041,11 @@ export const commands: ChatCommands = {
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			if (room.battle) {
-				room.makePrivate(setting);
+				if (setting) {
+					room.makePrivate(setting);
+				} else {
+					room.makePublic();
+				}
 			} else {
 				room.settings.isPrivate = setting;
 				room.saveSettings();
