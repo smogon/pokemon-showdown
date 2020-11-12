@@ -5439,14 +5439,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["acidarmor", "bodypress", "doubleironbash", "protect", "thunderpunch", "thunderwave"],
 		randomDoubleBattleLevel: 76,
-		gmaxUnreleased: true,
 		tier: "OU",
 		doublesTier: "DUber",
 	},
 	melmetalgmax: {
-		// isNonstandard: "Gigantamax",
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		isNonstandard: "Gigantamax",
+		tier: "(Uber)",
+		doublesTier: "(DUber)",
 	},
 	grookey: {
 		tier: "LC",
