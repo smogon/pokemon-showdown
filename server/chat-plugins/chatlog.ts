@@ -912,7 +912,7 @@ export const pages: PageTable = {
 			return this.errorReply("WCOP team discussions are super secret.");
 		}
 		if (room) {
-			if (!user.can('lock')) {
+			if (!user.can('lock') || room.settings.isPrivate === 'hidden' && !room.checkModjoin(user)) {
 				if (!room.persist) return this.errorReply(`Access denied.`);
 				this.checkCan('mute', null, room);
 			}
