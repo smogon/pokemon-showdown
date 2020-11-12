@@ -186,7 +186,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	struggleRecoil?: boolean;
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
-	self?: HitEffect | null;
+	self?: SecondaryEffect | null;
 
 	// Hit effect modifiers
 	// --------------------
