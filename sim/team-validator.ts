@@ -430,6 +430,10 @@ export class TeamValidator {
 		if (ability.id === 'owntempo' && species.id === 'rockruff') {
 			tierSpecies = outOfBattleSpecies = dex.getSpecies('rockruffdusk');
 		}
+		if (species.id === 'melmetal' && set.gigantamax) {
+			setSources.sourcesBefore = 0;
+			setSources.sources = ['8S0 melmetal'];
+		}
 		if (!species.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
 		}
