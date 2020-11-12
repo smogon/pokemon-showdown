@@ -596,6 +596,10 @@ export class User extends Chat.MessageContext {
 				this.send(`|nametaken|${name}|You need an authentication token to log in as a trusted user.`);
 				return null;
 			}
+			if (!userid.startsWith('guest')) {
+				this.send(`|nametaken|${name}|You must use a username starting with 'Guest'.`);
+				return null;
+			}
 			return '1';
 		}
 
