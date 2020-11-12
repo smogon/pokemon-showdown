@@ -480,6 +480,20 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
+		let team = [
+			{species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'kecleon', ability: 'protean', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should reject newer Pokemon in older gens', function () {
 		const team = [
 			{species: 'pichu', ability: 'static', moves: ['thunderbolt']},
