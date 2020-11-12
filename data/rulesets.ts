@@ -866,7 +866,7 @@ export const Formats: {[k: string]: FormatData} = {
 				}
 				if (this.gen >= 7) {
 					const item = this.dex.getItem(set.item);
-					if (item.megaStone && species.name === item.megaEvolves) {
+					if (item.megaStone && species.baseSpecies === item.megaEvolves) {
 						species = this.dex.getSpecies(item.megaStone);
 						typeTable = typeTable.filter(type => species.types.includes(type));
 					}
