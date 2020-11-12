@@ -1192,7 +1192,8 @@ export const commands: ChatCommands = {
 				if (targetID !== ticket.userid) {
 					const commonBattles = getCommonBattles(
 						targetID, Users.get(reportTarget),
-						ticket.userid, Users.get(ticket.userid)
+						ticket.userid, Users.get(ticket.userid),
+						this.connection
 					);
 
 					if (!commonBattles.length) {
