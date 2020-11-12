@@ -111,8 +111,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	beedrill: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "PU",
 	},
 	beedrillmega: {
 		isNonstandard: "Past",
@@ -153,10 +152,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	spearow: {
-		tier: "LC",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	fearow: {
-		tier: "PU",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	ekans: {
 		isNonstandard: "Past",
