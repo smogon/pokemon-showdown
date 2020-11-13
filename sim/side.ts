@@ -151,6 +151,13 @@ export class Side {
 		return this.foe.active;
 	}
 
+	randomFoeActive(): Pokemon | null {
+		if (Array.isArray(this.foe)) {
+			return this.foe[0].randomActive();
+		}
+		return this.foe.randomActive();
+	}
+
 	getActive(): Pokemon[] {
 		if (this.ally) {
 			return this.active.concat(this.ally.active);
@@ -168,7 +175,7 @@ export class Side {
 		let pokemonLeft = 0;
 		if (Array.isArray(this.foe)) {
 			for (const foe of this.foe) {
-				pokemonLeft = foe.pokemonLeft;
+				pokemonLeft += foe.pokemonLeft;
 			}
 		} else {
 			pokemonLeft += this.foe.pokemonLeft;

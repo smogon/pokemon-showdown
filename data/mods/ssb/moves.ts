@@ -248,7 +248,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			let didSomething = false;
 			const side = source.side;
-			if (side.faintedLastTurn || side.foe.faintedLastTurn) {
+			if (this.sides.find((s) => s.faintedLastTurn)) {
 				this.add('-anim', source, "Wish", target);
 				side.addSlotCondition(source, 'wish', source);
 				this.add('-message', `${source.name} made a wish!`);
@@ -557,7 +557,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-message', `${pokemon.name} eases up.`);
 				return true;
 			}
-			this.add('-message', `${pokemon.side.foe.active[0].name} was caught in the ambush!`);
+			this.add('-message', `${pokemon.side.getFoeActive()[0].name} was caught in the ambush!`);
 			this.add(`c|+A Quag to The Past|GOTCHA BITCH`);
 		},
 		condition: {
@@ -1644,7 +1644,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			// Set target to the foe, this is a self targeting move so it works even if the foe has a subsitute
-			target = source.side.foe.active[0];
+			target = source.side.getFoeActive()[0];
 			this.boost({atk: 2, spa: 2, spe: 2, def: -1, spd: -1}, source);
 			if (source.species.id !== 'miniormeteor' || source.transformed) return;
 
@@ -1855,7 +1855,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!effect || effect.id === 'glitchout' || source.volatiles['glitchout']) return;
 				if (this.random(20) === 1) {
 					this.add('message', `${source.illusion ? source.illusion.name : source.name}'s move was glitched by the Scripted Terrain!`);
-					this.useMove('Glitch Out', source, source.side.foe.active[0]);
+					this.useMove('Glitch Out', source, source.side.getFoeActive()[0]);
 					return null;
 				}
 			},
@@ -2318,7 +2318,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 			this.add(`c|+Kipkluif|o7`);
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.getFoeActive()[0];
 			if (!target) return;
 			const targetBoosts: SparseBoostsTable = {};
 			const sourceBoosts: SparseBoostsTable = {};
@@ -2933,8 +2933,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 				];
 				for (const sideCondition of removeAll) {
-					if (source.side.foe.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+					for (const side of this.sides) {
+						if (side !== source.side && side.removeSideCondition(sideCondition)) {
+							this.add('-sideend', side, this.dex.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						}
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
 						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
@@ -2982,7 +2984,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 1,
 			onSwitchIn(pokemon) {
-				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('pyramidingsong'));
+				this.boost({spe: -1}, pokemon, pokemon.side.getFoeActive()[0], this.dex.getActiveMove('pyramidingsong'));
 			},
 		},
 		forceSwitch: true,

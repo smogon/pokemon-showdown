@@ -135,7 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
+		for (const foeActive of side.getFoeActive()) {
 			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
 				return false;
 			}
@@ -379,7 +379,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			];
 			// Neutralizing Spores modded into ignoringAbility
 			let sporeEffect = false;
-			for (const foeActive of this.side.foe.active) {
+			for (const foeActive of this.side.getFoeActive()) {
 				// foeActive can be null when a pokemon isn't active
 				if (foeActive?.ability.includes('neutralizingspores') && !foeActive?.volatiles['gastroacid']) sporeEffect = true;
 			}

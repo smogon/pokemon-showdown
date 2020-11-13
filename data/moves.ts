@@ -2664,44 +2664,42 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {mirror: 1},
 		onHitField(target, source) {
 			const sourceSide = source.side;
-			const foes = Array.isArray(source.side.foe) ? source.side.foe : [source.side.foe];
+			const targetSide = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
 			const sideConditions = [
 				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];
 			let success = false;
-			for (const targetSide of foes) {
-				for (const id of sideConditions) {
-					const effectName = this.dex.getEffect(id).name;
-					if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
-						[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
-							targetSide.sideConditions[id], sourceSide.sideConditions[id],
-						];
-						this.add('-sideend', sourceSide, effectName, '[silent]');
-						this.add('-sideend', targetSide, effectName, '[silent]');
-					} else if (sourceSide.sideConditions[id] && !targetSide.sideConditions[id]) {
-						targetSide.sideConditions[id] = sourceSide.sideConditions[id];
-						delete sourceSide.sideConditions[id];
-						this.add('-sideend', sourceSide, effectName, '[silent]');
-					} else if (targetSide.sideConditions[id] && !sourceSide.sideConditions[id]) {
-						sourceSide.sideConditions[id] = targetSide.sideConditions[id];
-						delete targetSide.sideConditions[id];
-						this.add('-sideend', targetSide, effectName, '[silent]');
-					} else {
-						continue;
-					}
-					let sourceLayers = sourceSide.sideConditions[id] ? (sourceSide.sideConditions[id].layers || 1) : 0;
-					let targetLayers = targetSide.sideConditions[id] ? (targetSide.sideConditions[id].layers || 1) : 0;
-					for (; sourceLayers > 0; sourceLayers--) {
-						this.add('-sidestart', sourceSide, effectName, '[silent]');
-					}
-					for (; targetLayers > 0; targetLayers--) {
-						this.add('-sidestart', targetSide, effectName, '[silent]');
-					}
-					success = true;
+			for (const id of sideConditions) {
+				const effectName = this.dex.getEffect(id).name;
+				if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
+					[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
+						targetSide.sideConditions[id], sourceSide.sideConditions[id],
+					];
+					this.add('-sideend', sourceSide, effectName, '[silent]');
+					this.add('-sideend', targetSide, effectName, '[silent]');
+				} else if (sourceSide.sideConditions[id] && !targetSide.sideConditions[id]) {
+					targetSide.sideConditions[id] = sourceSide.sideConditions[id];
+					delete sourceSide.sideConditions[id];
+					this.add('-sideend', sourceSide, effectName, '[silent]');
+				} else if (targetSide.sideConditions[id] && !sourceSide.sideConditions[id]) {
+					sourceSide.sideConditions[id] = targetSide.sideConditions[id];
+					delete targetSide.sideConditions[id];
+					this.add('-sideend', targetSide, effectName, '[silent]');
+				} else {
+					continue;
 				}
-				if (!success) return false;
-				this.add('-activate', source, 'move: Court Change');
+				let sourceLayers = sourceSide.sideConditions[id] ? (sourceSide.sideConditions[id].layers || 1) : 0;
+				let targetLayers = targetSide.sideConditions[id] ? (targetSide.sideConditions[id].layers || 1) : 0;
+				for (; sourceLayers > 0; sourceLayers--) {
+					this.add('-sidestart', sourceSide, effectName, '[silent]');
+				}
+				for (; targetLayers > 0; targetLayers--) {
+					this.add('-sidestart', targetSide, effectName, '[silent]');
+				}
+				success = true;
 			}
+			if (!success) return false;
+			this.add('-activate', source, 'move: Court Change');
 		},
 		secondary: null,
 		target: "all",
@@ -6172,10 +6170,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Blastoise",
 		self: {
 			onHit(source) {
-				const foe = Array.isArray(source.side.foe) ? source.side.foe : [source.side.foe];
-				foe.forEach(f => {
-					f.addSideCondition('gmaxcannonade');
-				});
+				// lastMoveTargetLoc should theoretically always be defined if we get here
+				this.getAtLoc(source, source.lastMoveTargetLoc!).side.addSideCondition('gmaxcannonade');
 			},
 		},
 		condition: {
@@ -6671,8 +6667,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Copperajah",
 		self: {
 			onHit(source) {
-				const foe = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
-				foe.addSideCondition('gmaxsteelsurge');
+				// lastMoveTargetLoc should theoretically always be defined if we get here
+				this.getAtLoc(source, source.lastMoveTargetLoc!).side.addSideCondition('gmaxsteelsurge');
 			},
 		},
 		condition: {
@@ -6709,8 +6705,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Drednaw",
 		self: {
 			onHit(source) {
-				const foe = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
-				foe.addSideCondition('stealthrock');
+				// lastMoveTargetLoc should theoretically always be defined if we get here
+				this.getAtLoc(source, source.lastMoveTargetLoc!).side.addSideCondition('stealthrock');
 			},
 		},
 		secondary: null,
@@ -6828,8 +6824,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Venusaur",
 		self: {
 			onHit(source) {
-				const foe = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
-				foe.addSideCondition('gmaxvinelash');
+				// lastMoveTargetLoc should theoretically always be defined if we get here
+				this.getAtLoc(source, source.lastMoveTargetLoc!).side.addSideCondition('gmaxvinelash');
 			},
 		},
 		condition: {
@@ -6869,8 +6865,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Coalossal",
 		self: {
 			onHit(source) {
-				const foe = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
-				foe.addSideCondition('gmaxvolcalith');
+				// lastMoveTargetLoc should theoretically always be defined if we get here
+				this.getAtLoc(source, source.lastMoveTargetLoc!).side.addSideCondition('gmaxvolcalith');
 			},
 		},
 		condition: {
@@ -6933,8 +6929,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Charizard",
 		self: {
 			onHit(source) {
-				const foe = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
-				foe.addSideCondition('gmaxwildfire');
+				// lastMoveTargetLoc should theoretically always be defined if we get here
+				this.getAtLoc(source, source.lastMoveTargetLoc!).side.addSideCondition('gmaxwildfire');
 			},
 		},
 		condition: {
@@ -6980,13 +6976,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				];
 				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 				for (const targetCondition of removeTarget) {
-					const foes = Array.isArray(source.side.foe) ? source.side.foe : [source.side.foe];
-					for (const foe of foes) {
-						if (foe.removeSideCondition(targetCondition)) {
-							if (!removeAll.includes(targetCondition)) continue;
-							this.add('-sideend', foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
-							success = true;
-						}
+					// lastMoveTargetLoc should theoretically always be defined if we get here
+					const foe = this.getAtLoc(source, source.lastMoveTargetLoc!).side;
+					if (foe.removeSideCondition(targetCondition)) {
+						if (!removeAll.includes(targetCondition)) continue;
+						this.add('-sideend', foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+						success = true;
 					}
 				}
 				for (const sideCondition of removeAll) {

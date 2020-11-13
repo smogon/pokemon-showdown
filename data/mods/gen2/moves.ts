@@ -349,7 +349,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onAfterMoveSelfPriority: 2,
 			onAfterMoveSelf(pokemon) {
 				if (!pokemon.hp) return;
-				const leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const leecher = pokemon.side.getFoeActive()[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					return;
 				}
@@ -446,7 +446,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.getFoeActive()[0];
 			const lastMove = target?.lastMove && target?.lastMove.id;
 			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn)) {
 				return false;

@@ -480,14 +480,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Check the status of the Pokémon whose turn is not.
 				// When a move that affects stat levels is used, if the Pokémon whose turn it is not right now is paralyzed or
 				// burned, the correspoding stat penalties will be applied again to that Pokémon.
-				if (pokemon.side.foe.active[0].status) {
+				if (pokemon.side.getFoeActive()[0].status) {
 					// If it's paralysed, quarter its speed.
-					if (pokemon.side.foe.active[0].status === 'par') {
-						pokemon.side.foe.active[0].modifyStat!('spe', 0.25);
+					if (pokemon.side.getFoeActive()[0].status === 'par') {
+						pokemon.side.getFoeActive()[0].modifyStat!('spe', 0.25);
 					}
 					// If it's burned, halve its attack.
-					if (pokemon.side.foe.active[0].status === 'brn') {
-						pokemon.side.foe.active[0].modifyStat!('atk', 0.5);
+					if (pokemon.side.getFoeActive()[0].status === 'brn') {
+						pokemon.side.getFoeActive()[0].modifyStat!('atk', 0.5);
 					}
 				}
 			}

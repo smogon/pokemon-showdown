@@ -2,8 +2,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	anticipation: {
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move and raises Speed by one stage.",
 		onStart(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					if (move.category === 'Status') continue;
@@ -181,8 +180,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	runaway: {
 		shortDesc: "This Pokemon immediately switches out if an opponent with a super effective/OHKO move switches in.",
 		onStart(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					if (move.category === 'Status') continue;
@@ -200,7 +198,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onFoeSwitchIn(pokemon) {
 			if (!pokemon || pokemon.fainted) return;
-			const me = pokemon.side.foe.active.filter(x => x.getAbility().id === 'runaway')[0];
+			const me = this.effectData.target;
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = this.dex.getMove(moveSlot.move);
 				if (move.category === 'Status') continue;

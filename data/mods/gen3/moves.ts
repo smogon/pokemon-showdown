@@ -132,7 +132,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return source.side.getFoeActive()[this.effectData.position];
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
@@ -408,7 +408,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return source.side.getFoeActive()[this.effectData.position];
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {

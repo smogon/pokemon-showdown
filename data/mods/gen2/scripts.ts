@@ -136,7 +136,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
-		if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.runEvent('AfterMoveSelf', pokemon, target, move);
+		if (!move.selfSwitch && pokemon.side.getFoeActive()[0].hp) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	tryMoveHit(target, pokemon, move) {
 		const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];

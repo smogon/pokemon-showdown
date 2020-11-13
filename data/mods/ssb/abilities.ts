@@ -98,7 +98,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isNonstandard: "Custom",
 		name: "Toxic Swap",
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.getFoeActive()[0];
 			if (!target) return;
 			const targetBoosts: SparseBoostsTable = {};
 			const pokemonBoosts: SparseBoostsTable = {};

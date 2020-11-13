@@ -1547,6 +1547,8 @@ export class Battle {
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
 		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
+		// for now, FFA doesn't support the endless battle clause
+		if (this.format.gameType === 'free-for-all') return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -2431,8 +2433,7 @@ export class Battle {
 				return foeActives[frontPosition];
 			}
 		}
-		const randomActive = Array.isArray(pokemon.side.foe) ? pokemon.side.foe[0].randomActive() :
-			pokemon.side.foe.randomActive();
+		const randomActive = pokemon.side.randomFoeActive();
 		return randomActive || pokemon.side.getFoeActive()[0];
 	}
 

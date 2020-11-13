@@ -122,7 +122,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		ignoringItem() {
 			let embargoAct = false;
-			for (const target of this.side.foe.active) {
+			for (const target of this.side.getActive()) {
 				if (target.hasAbility('embargoact')) {
 					embargoAct = true;
 					break;

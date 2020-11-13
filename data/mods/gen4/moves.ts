@@ -680,8 +680,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {authentic: 1},
 		onTryHit(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const move of pokemon.moves) {
 					if (target.moves.includes(move)) return;
 				}
@@ -1340,9 +1339,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
-					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
+					pokemon.trySetStatus('tox', pokemon.side.getFoeActive()[0]);
 				} else {
-					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+					pokemon.trySetStatus('psn', pokemon.side.getFoeActive()[0]);
 				}
 			},
 		},

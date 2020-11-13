@@ -191,7 +191,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onFaint(pokemon) {
-			const activeMon = pokemon.side.foe.active[0].species.id;
+			const activeMon = pokemon.side.getFoeActive()[0].species.id;
 			if (activeMon === 'greninja') {
 				this.add(`c|%Arcticblast|FRIENDS DON’T const FRIENDS PLAY FROGS`);
 			} else if (activeMon === 'pumpkaboosuper') {
@@ -564,30 +564,30 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
-			const activeMon = this.toID(
-				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
-			);
-			const family = [
-				'aethernum', 'ceteris', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial',
-			];
-			if (activeMon === 'hoeenhero' || activeMon === 'instruct') {
-				 this.add(`c|%fart|what song should I sing?`);
-			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
-				this.add(`c|%fart|the gang's all here!`);
-			} else if (family.includes(activeMon)) {
-				this.add(`c|%fart|what's cookin', good lookin'?`);
-			} else {
-				this.add(`c|%fart|it's fukken raw`);
+			const foes = source.foes();
+			for (const foe of foes) {
+				const activeMonID = this.toID(
+					foe.illusion ? foe.illusion.name : foe.name
+				);
+				const family = [
+					'aethernum', 'ceteris', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial',
+				];
+				if (activeMonID === 'hoeenhero' || activeMonID === 'instruct') {
+					 this.add(`c|%fart|what song should I sing?`);
+				} else if (activeMonID === 'lifeisdank' || activeMonID === 'nui' || activeMonID === 'grimauxiliatrix') {
+					this.add(`c|%fart|the gang's all here!`);
+				} else if (family.includes(activeMonID)) {
+					this.add(`c|%fart|what's cookin', good lookin'?`);
+				} else {
+					this.add(`c|%fart|it's fukken raw`);
+				}
 			}
 		},
 		onSwitchOut() {
 			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
 		onFaint(pokemon) {
-			const activeMon = this.toID(
-				pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name
-			);
-			if (activeMon === 'felucia') {
+			if (pokemon.foes().find((foe) => this.toID(foe.name) === 'felucia', this)) {
 				this.add(`c|%fart|Felucia I'm deleting your mon`);
 			} else {
 				this.add(`c|%fart|the things I do for love...`);
@@ -895,8 +895,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(pokemon) {
 			this.add(`c|+Kris|wjat poppin ;)))))`);
 			if (pokemon.illusion) return;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
@@ -1197,14 +1196,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(source) {
 			this.add(`c|&pre|let's go, in and out, 20 minute adventure`);
 			// Easter Egg
-			const activeMon = this.toID(
-				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
-			);
-			if (activeMon === 'anubis') {
-				this.add(`c|+Anubis|ohey it's pre`);
-				this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
-				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
-				this.add(`c|&pre|<3`);
+			const foes = source.foes();
+			for (const foe of foes) {
+				const activeMonID = this.toID(
+					foe.illusion ? foe.illusion.name : foe.name
+				);
+				if (activeMonID === 'anubis') {
+					this.add(`c|+Anubis|ohey it's pre`);
+					this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
+					this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
+					this.add(`c|&pre|<3`);
+				}
 			}
 		},
 		onSwitchOut() {
@@ -1458,7 +1460,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(source) {
 			this.add(`c|+Teremiare|<('o'<)`);
 			if (source.illusion) return;
-			const target = source.side.foe.active[0];
+			const target = source.side.getFoeActive()[0];
 
 			const removeAll = [
 				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
@@ -1606,7 +1608,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|@xJoelituh|h-hi, im joel, not joe, tyvm`);
 			// Terrifying Demeanor Innate
 			if (source.illusion) return;
-			const target = source.side.foe.active[0];
+			const target = source.side.getFoeActive()[0];
 			if (target.getStat('spe', true, true) > source.getStat('spe', true, true)) this.boost({spe: -1}, target, source);
 		},
 		onSwitchOut() {
@@ -2074,7 +2076,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
 			this.add('-activate', pokemon, 'move: Sticky Web');
-			this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
+			this.boost({spe: -1}, pokemon, pokemon.side.getFoeActive()[0], this.dex.getActiveMove('stickyweb'));
 		},
 	},
 	toxicspikes: {
@@ -2100,9 +2102,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			} else if (pokemon.hasType('Steel')) {
 				return;
 			} else if (this.effectData.layers >= 2) {
-				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
+				pokemon.trySetStatus('tox', pokemon.side.getFoeActive()[0]);
 			} else {
-				pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+				pokemon.trySetStatus('psn', pokemon.side.getFoeActive()[0]);
 			}
 		},
 	},

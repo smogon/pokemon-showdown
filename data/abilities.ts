@@ -175,7 +175,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	asoneglastrier: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'As One');
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve');
 		},
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
@@ -191,7 +191,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	asonespectrier: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'As One');
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve');
 		},
 		onFoeTryEatItem: false,
 		onSourceAfterFaint(length, target, source, effect) {
@@ -3159,7 +3159,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					pokemon.side.removeSideCondition(sideCondition);
 				}
 				if (Array.isArray(pokemon.side.foe)) {
-					for (const foe of pokemon.foes()) {
+					for (const foe of pokemon.side.foe) {
 						if (foe.getSideCondition(sideCondition)) {
 							if (!activated) {
 								this.add('-activate', pokemon, 'ability: Screen Cleaner');
@@ -4061,10 +4061,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	unnerve: {
 		onPreStart(pokemon) {
-			const foes = Array.isArray(pokemon.side.foe) ? pokemon.side.foe : [pokemon.side.foe];
-			for (const foe of foes) {
-				this.add('-ability', pokemon, 'Unnerve', foe);
-			}
+			this.add('-ability', pokemon, 'Unnerve');
 		},
 		onFoeTryEatItem: false,
 		name: "Unnerve",
