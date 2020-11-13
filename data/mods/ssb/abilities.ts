@@ -213,6 +213,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		isPermanent: true,
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
@@ -238,6 +239,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	setthestage: {
 		desc: "Stance Change + Adaptability, on switch in, selects physical or special set.",
 		shortDesc: "Stance Change + Adaptability, on switch in, selects physical or special set.",
+		isPermanent: true,
 		onStart(source) {
 			if (source.species.baseSpecies !== 'Aegislash') return;
 			source.m.swapSets(true);
@@ -282,6 +284,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Heavy Hailstorm. If Rain Dance is active, this Pokemon restores 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Big Root, it will restore 1/6 of its maximum HP, rounded down, at the end of the turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored. This Pokemon collects raindrops.",
 		shortDesc: "Primordial Sea + Swift Swim. Restore HP if raining. Collect raindrops.",
 		name: "Rainy Season",
+		isPermanent: true,
 		onStart(source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
@@ -737,6 +740,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "When this Pokemon switches in, it changes to two random types and gets STAB.",
 		shortDesc: "2 random types + STAB on switch-in.",
 		name: "Bipolar",
+		isPermanent: true,
 		onSwitchIn(pokemon) {
 			const typeMap: {[key: string]: string} = {
 				Normal: "Return",
@@ -793,6 +797,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Please refer to the user guide for more information.",
 		shortDesc: "Please refer to the user guide for more information.",
 		name: "Winding Song",
+		isPermanent: true,
 		onStart() {
 			this.boost({spa: 1, spd: 1});
 		},
@@ -848,6 +853,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	armortime: {
 		name: "Armor Time",
 		shortDesc: "On status or custom, this Pokemon changes type.",
+		isPermanent: true,
 		onPrepareHit(source, target, move) {
 			if (move.category !== "Status" && move.isNonstandard !== "Custom") return;
 			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
@@ -932,6 +938,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "While in Minior-Meteor forme, this Pokemon cannot be affected by major status conditions and is immune to critical hits. This ability cannot be ignored by Moongeist Beam, Sunsteel Strike, Mold Breaker, Teravolt, or Turboblaze.",
 		shortDesc: "Minior-Meteor: Immune to crits and status",
 		name: "Capsule Armor",
+		isPermanent: true,
 		isUnbreakable: true,
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
@@ -1755,9 +1762,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// RavioliQueen
 	phantomplane: {
-		shortDesc: "On switch-in, this Pokemon summons Phantom Plane.",
+		shortDesc: "On switch-in, this Pokemon summons Pitch Black.",
 		onStart(source) {
-			this.field.setTerrain('phantomplane');
+			this.field.setTerrain('pitchblack');
 		},
 		name: "Phantom Plane",
 		isNonstandard: "Custom",
@@ -1780,6 +1787,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team; Necrozma-Dusk-Mane if 3 or fewer, Necrozma-Ultra if it is the last Pokemon left on the team.",
 		shortDesc: "Changes the pokemon's form upon switch-in depending on the amount of pokemon still alive on the user's team.",
 		name: "The Numbers Game",
+		isPermanent: true,
 		onStart(target) {
 			if (target.baseSpecies.baseSpecies !== 'Necrozma' || target.transformed) return;
 			if (target.side.pokemonLeft <= 3) {
@@ -1850,7 +1858,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "on entering the battle, this mon gains a 1 stage boost to a random stat that isn't SpA and 2 random type immunities that are displayed to the opponent.",
 		shortDesc: "on Switch in, oosts Random Stat other than SpA o.",
 		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Shady Deal');
 			const stats: BoostName[] = [];
 			let stat: BoostName;
 			for (stat in pokemon.boosts) {
@@ -1924,6 +1931,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If hit by a move that is not very effective, become Aggron-Mega (but keep the same type).",
 		shortDesc: "Hit with a resisted attack mega evolves and gives +1 atk.",
 		name: "Overasked Clause",
+		isPermanent: true,
 		onHit(target, source, move) {
 			if (target.species.name !== 'Aggron' || target.illusion || target.transformed) return;
 			if (!target.hp) return;
@@ -2125,6 +2133,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	combattraining: {
 		desc: "If this Pokemon is a Cosplay Pikachu forme, the first hit it takes in battle deals 0 neutral damage. Confusion damage also breaks the immunity.",
 		shortDesc: "(Pikachu-Cosplay only) First hit deals 0 damage.",
+		isPermanent: true,
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			const cosplayFormes = [

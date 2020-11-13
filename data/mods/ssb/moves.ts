@@ -3760,10 +3760,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onModifyMove(move) {
 				if (move.secondaries && move.id === 'triplethreat') {
-					const secModif = [10, 25, 40];
 					const bpModif = [40, 60, 100];
+					const secModif = [10, 25, 40];
 					const numConsecutive = this.effectData.numConsecutive > 2 ? 2 : this.effectData.numConsecutive;
-					move.basePower = secModif[numConsecutive];
+					move.basePower = bpModif[numConsecutive];
 					for (const secondary of move.secondaries) {
 						if (secondary.chance) secondary.chance = secModif[numConsecutive];
 					}
