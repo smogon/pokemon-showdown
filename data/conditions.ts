@@ -273,10 +273,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 			let moveTarget: Pokemon | null = source;
 			if (effect.sourceEffect && this.dex.getMove(effect.id).target === 'normal') {
 				// this move was called by another move such as metronome and needs a random target to be determined now
-				// TODO: research what should happen if one or more randomly targetable positions is empty
+				// won't randomly choose an empty slot if there's at least one valid target
 				moveTarget = this.getRandomTarget(target, effect.id);
 			}
-			// (see above TODO) for now, target the user if there's no valid target right now
+			// if there are no valid targets, randomly choose one later
 			target.volatiles[effect.id].targetLoc = this.getTargetLoc(moveTarget || target, target);
 			this.attrLastMove('[still]');
 		},
