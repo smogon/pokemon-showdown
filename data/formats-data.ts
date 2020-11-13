@@ -117,16 +117,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 	},
 	pidgey: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	pidgeotto: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "NFE",
 	},
 	pidgeot: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	pidgeotmega: {
 		isNonstandard: "Past",
@@ -715,36 +712,28 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	doduo: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	dodrio: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	seel: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	dewgong: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "RU",
 	},
 	grimer: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	grimeralola: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	muk: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	mukalola: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	shellder: {
 		tier: "LC",
@@ -1452,20 +1441,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	ledyba: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	ledian: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "PU",
 	},
 	spinarak: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	ariados: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	chinchou: {
 		tier: "LC",

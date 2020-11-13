@@ -698,6 +698,31 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
+	
+	neutralweather: {
+		name: 'Neutral Weather',
+		effectType: 'Weather',
+		duration: 1,
+		durationCallback(source, effect) {
+			return 1;
+		},
+		onStart(battle, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
+				this.add('-weather', 'Neutral Weather', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Neutral Weather');
+			}
+		},
+		onResidualOrder: 1,
+		onResidual() {
+			this.add('-weather', 'Neutral Weather', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 
 	dynamax: {
 		name: 'Dynamax',
