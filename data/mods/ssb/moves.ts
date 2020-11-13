@@ -1562,7 +1562,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		noPPBoosts: true,
 	},
 	// fart
 	soupstealing7starstrikeredux: {
