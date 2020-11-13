@@ -331,7 +331,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Paranoia',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	'INStruct': {
+	INStruct: {
 		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
 		signatureMove: 'You Little Beauty',

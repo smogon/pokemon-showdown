@@ -102,7 +102,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: -5,
-		flags: {protect: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -304,7 +304,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {reflectable: 1, snatch: 1},
 		volatileStatus: 'lookingcool',
 		onTryMove(target) {
 			if (target.volatiles['lookingcool']) return false;
@@ -373,7 +373,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -477,7 +477,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 1,
 		noPPBoosts: true,
-		flags: {authentic: 1},
+		flags: {authentic: 1, reflectable: 1},
 		priority: 3,
 		onPrepareHit(target, source) {
 			this.add('-anim', target, 'Shift Gear', target);
@@ -519,7 +519,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {},
+		flags: {reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -546,7 +546,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {heal: 1},
+		flags: {heal: 1, snatch: 1},
 		heal: [1, 2],
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -578,7 +578,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -607,7 +607,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {protect: 1, snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -725,7 +725,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -835,7 +835,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1221,7 +1221,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, heal: 1},
+		flags: {contact: 1, mirror: 1, protect: 1, heal: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1297,7 +1297,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -6,
-		flags: {protect: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, sound: 1, authentic: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1355,7 +1355,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Cloak Dance",
 		pp: 5,
 		priority: 0,
-		flags: {dance: 1},
+		flags: {snatch: 1, dance: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1389,7 +1389,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1478,7 +1478,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1515,7 +1515,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -6,
-		flags: {authentic: 1, protect: 1, mirror: 1, sound: 1, refractable: 1},
+		flags: {authentic: 1, protect: 1, mirror: 1, sound: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1581,7 +1581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry() {
 			this.field.addPseudoWeather('soupstealing7starstrikeredux');
 		},
@@ -1637,7 +1637,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1676,7 +1676,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1},
 		status: 'tox',
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1906,7 +1906,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, mirror: 1},
 		onTryMove(target) {
 			this.attrLastMove('[still]');
 		},
@@ -1992,7 +1992,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2094,7 +2094,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2155,7 +2155,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2187,7 +2187,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2250,7 +2250,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {sound: 1},
+		flags: {snatch: 1, sound: 1},
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 		},
@@ -2286,7 +2286,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 5,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		priority: 0,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2316,7 +2316,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 0,
-		flags: {},
+		flags: {contact: 1, protect: 1, reflectable: 1},
 		volatileStatus: 'cozycuddle',
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2425,7 +2425,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2458,7 +2458,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2551,7 +2551,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2581,7 +2581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Kip Up",
 		pp: 10,
 		priority: 3,
-		flags: {protect: 1, mirror: 1},
+		flags: {},
 		beforeTurnCallback(pokemon) {
 			this.add('-anim', pokemon, 'Focus Energy', pokemon);
 			pokemon.addVolatile('kipup');
@@ -2821,7 +2821,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "/nexthunt",
 		pp: 10,
 		priority: -6,
-		flags: {protect: 1, mirror: 1},
+		flags: {snatch: 1},
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('nexthuntcheck');
 		},
@@ -2884,7 +2884,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Ca-LLAMA-ty",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		shortDesc: "30% chance to paralyze. Summons rain.",
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -3006,7 +3006,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Fighting",
 	},
 
@@ -3016,14 +3016,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-		desc: "Upon use, this move sets up Stealth Rock on the target's side of the field, as well as setting up Grassy Terrain.",
-		shortDesc: "Sets up Grassy Terrain and Stealth Rock.",
+		desc: "Upon use, this move sets up Stealth Rock on the target's side of the field.",
+		shortDesc: "Sets up Stealth Rock.",
 		name: "Terraforming",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3091,7 +3091,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3179,7 +3179,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3226,7 +3226,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit() {
 			this.add(`c|${getName('OM~!')}|Bang Bang`);
 		},
-		flags: {protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",
@@ -3285,7 +3285,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			sideCondition: 'wistfulthoughts',
 		},
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1},
 		selfSwitch: 'copyvolatile',
 		secondary: null,
 		target: "normal",
@@ -3383,7 +3383,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3478,7 +3478,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3543,7 +3543,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3593,7 +3593,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Clear Breath",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3721,7 +3721,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3785,7 +3785,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3814,7 +3814,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {reflectable: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3857,7 +3857,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3942,7 +3942,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3980,7 +3980,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4093,7 +4093,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4215,7 +4215,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4244,8 +4244,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 15,
-		priority: 0, // should be -6, waiting on QC
-		flags: {sound: 1, distance: 1, authentic: 1},
+		priority: -6,
+		flags: {reflectable: 1, protect: 1, sound: 1, authentic: 1},
 		forceSwitch: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -4315,7 +4315,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		isFutureMove: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -4447,7 +4447,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1},
 		ignoreImmunity: {'Ground': true},
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Flying') return -1;
@@ -4519,7 +4519,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4627,7 +4627,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4653,7 +4653,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {contact: 1, protect: 1},
 		onTryMove(source) {
 			this.attrLastMove('[still]');
 		},
@@ -4781,7 +4781,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4871,7 +4871,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onHit(target, source) {
 			let effects = 0;
 			if (this.randomChance(4, 10)) {
@@ -4963,7 +4963,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -7,
-		flags: {protect: 1, authentic: 1, reflectable: 1},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4973,6 +4973,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('healblock');
+			this.directDamage(pokemon.maxhp / 2, pokemon, pokemon);
 			pokemon.addVolatile('curse');
 		},
 		secondary: null,
@@ -5186,7 +5187,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 6,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {},
 		onTryMove(source) {
 			this.attrLastMove('[still]');
 		},
@@ -5241,7 +5242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 
@@ -5257,7 +5258,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
