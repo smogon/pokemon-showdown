@@ -2279,6 +2279,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	slushrush: {
+		inherit: true,
+		shortDesc: "If a Hail-like weather is active, this Pokemon's Speed is doubled.",
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail'])) {
+				return this.chainModify(2);
+			}
+		},
+	},
 	snowcloak: {
 		inherit: true,
 		desc: "If Heavy Hailstorm, Winter Hail, or Hail is active, this Pokemon's evasiveness is multiplied by 1.25. This Pokemon takes no damage from Heavy Hailstorm or Hail.",
