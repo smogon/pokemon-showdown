@@ -587,7 +587,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
 		onFaint(pokemon) {
-			if (pokemon.foes().find((foe) => this.toID(foe.name) === 'felucia', this)) {
+			if (pokemon.foes().find((foe) => this.toID(foe.illusion ? foe.illusion.name : foe.name) === 'felucia', this)) {
 				this.add(`c|%fart|Felucia I'm deleting your mon`);
 			} else {
 				this.add(`c|%fart|the things I do for love...`);
