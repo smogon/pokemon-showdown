@@ -1726,7 +1726,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen3',
 		ruleset: ['Standard', '3 Baton Pass Clause'],
-		banlist: ['Uber', 'Smeargle + Baton Pass'],
+		banlist: ['Uber', 'Smeargle + Baton Pass', 'Sand Veil'],
 	},
 	{
 		name: "[Gen 2] OU",
@@ -2788,7 +2788,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', 'NFE Clause'],
 		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain'],
-		unbanlist: ['Scyther'],
+		unbanlist: ['Scyther', 'Sand Veil'],
 	},
 	{
 		name: "[Gen 3] NU",
