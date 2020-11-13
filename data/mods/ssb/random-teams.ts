@@ -331,7 +331,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Paranoia',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	'iN⇢Struct': {
+	'INStruct': {
 		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
 		signatureMove: 'You Little Beauty',
@@ -571,14 +571,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
 	quadrophenic: {
-		species: 'Porygon', ability: 'Adaptability', item: 'Eviolite', gender: 'N',
-		moves: [
-			'Tri Attack', 'Flamethrower', 'Surf', 'Energy Ball', 'Bug Buzz', 'Aeroblast',
-			'Thunderbolt', 'Ice Beam', 'Dragon Pulse', 'Power Gem', 'Earth Power', 'Moonblast',
-			'Dark Pulse', 'Shadow Ball', 'Psychic', 'Aura Sphere', 'Flash Cannon', 'Sludge Bomb',
-		],
-		signatureMove: 'Extreme Ways',
-		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
+		species: 'Dodrio', ability: 'Extreme Ways', item: 'Choice Band', gender: 'N',
+		moves: ['Dragon Ascent', 'Close Combat', 'U-turn'],
+		signatureMove: 'Triple Threat',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	Rabia: {
 		species: 'Mew', ability: 'Psychic Surge', item: 'Life Orb', gender: 'M',
@@ -839,7 +835,7 @@ export const ssbSets: SSBSets = {
 export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		const team: PokemonSet[] = [];
-		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = ['INStruct', 'quadrophenic', 'HoeenHero', 'Soft Flex', 'Jho']; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const pool = debug.length ? debug : Object.keys(ssbSets);
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
@@ -899,7 +895,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			set.moves.push(ssbSet.signatureMove);
 
 			// Any set specific tweaks occur here.
-			if (set.name === 'quadrophenic') set.moves[this.random(2) + 1] = 'Conversion';
 			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
 
 			team.push(set);

@@ -169,11 +169,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Supernova'},
 		requiredMove: 'Clear Breath',
 	},
-	// quadrophenic
-	porygon: {
-		inherit: true,
-		baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
-	},
 	// Robb576
 	necrozmadawnwings: {
 		inherit: true,

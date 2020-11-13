@@ -402,6 +402,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		onTryMove() {
@@ -516,6 +517,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		onTryMove() {
@@ -655,7 +657,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreImmunity: true,
 		isFutureMove: true,
 		onTry(source, target) {
+			this.attrLastMove('[still]');
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			this.add('-anim', source, 'Calm Mind', target);
+			this.add('-anim', source, 'Teleport', target);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 2,
 				move: 'hatofwisdom',
@@ -1540,6 +1545,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Lowers the target's HP to the user's HP.",
 		name: "You Have No Hope!",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {authentic: 1, contact: 1, protect: 1, mirror: 1},
 		isNonstandard: "Custom",
@@ -2126,7 +2132,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("Kickoff Tune can only works on your first turn out.");
+				this.hint("You Little Beauty can only works on your first turn out.");
 				return null;
 			}
 		},
@@ -2248,22 +2254,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {sound: 1},
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
-			if (pokemon.species.baseSpecies === 'Toxtricity') {
-				return;
-			}
-			this.add('-fail', pokemon, 'move: Genre Change');
-			this.hint("Only a Pokemon whose form is Toxtricity or Toxtricity-Low-Key can use this move.");
-			return null;
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Screech', source);
 			// The transform animation is done via `formeChange`
 		},
 		onHit(pokemon) {
-			if (pokemon.species.forme === 'Low-Key') {
-				changeSet(this, pokemon, ssbSets['Jho']);
-			} else {
-				changeSet(this, pokemon, ssbSets['Jho-Low-Key']);
+			if (pokemon.species.baseSpecies === 'Toxtricity') {
+				if (pokemon.species.forme === 'Low-Key') {
+					changeSet(this, pokemon, ssbSets['Jho']);
+				} else {
+					changeSet(this, pokemon, ssbSets['Jho-Low-Key']);
+				}
 			}
 		},
 		boosts: {
@@ -2381,6 +2383,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		isZ: "kalalokkiumz",
@@ -3474,6 +3477,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		onTryMove() {
@@ -3707,100 +3711,67 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// quadrophenic
-	extremeways: {
+	triplethreat: {
 		accuracy: 100,
-		basePower: 75,
-		category: "Special",
-		desc: "Super effective against pokemon that are supereffective against it. 20% chance do a random effect depending on user's type.",
-		shortDesc: "20% chance to a different effect depending on type.",
-		name: "Extreme Ways",
+		basePower: 40,
+		category: "Physical",
+		desc: "chance to tox/par/psn/brn/slp opponent, chance and base power increases every hit up to 3",
+		shortDesc: "chance to tox/par/psn/brn/slp opponent, chance & bp increase every hit up to 3",
+		name: "Triple Threat",
 		isNonstandard: "Custom",
 		gen: 8,
-		pp: 10,
+		pp: 20,
 		priority: 0,
 		flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Spite', target);
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile('triplethreat');
 		},
-		onEffectiveness(typeMod, target, type) {
-			if (!target) return;
-			const source = target.side.foe.active[0];
-			for (const foeType of target.types) {
-				if (this.dex.getImmunity(foeType, source) && this.dex.getEffectiveness(foeType, source) > 0) {
-					return 1;
-				}
-			}
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Tri Attack', target);
 		},
 		secondary: {
-			chance: 20,
+			chance: 10,
 			onHit(target, source) {
-				switch (this.toID(source.types[0])) {
-				case 'normal':
-					const typeList = Object.keys(this.dex.data.TypeChart);
-					const newType = this.sample(typeList);
-					source.types = [newType];
-					this.add('-start', source, 'typechange', newType);
-					break;
-				case 'fire':
-					target.trySetStatus('brn', source);
-					break;
-				case 'water':
-					source.addVolatile('aquaring', source);
-					break;
-				case 'grass':
-					if (target.hasType('Grass')) break;
-					target.addVolatile('leechseed', source);
-					break;
-				case 'electric':
-					target.trySetStatus('par', source);
-					break;
-				case 'bug':
-					target.side.addSideCondition('stickyweb');
-					break;
-				case 'ice':
-					target.trySetStatus('frz', source);
-					break;
-				case 'poison':
-					target.trySetStatus('tox', source);
-					break;
-				case 'dark':
-					target.addVolatile('taunt', source);
-					break;
-				case 'ghost':
-					target.trySetStatus('slp', source);
-					break;
-				case 'psychic':
-					this.field.setTerrain('psychicterrain');
-					break;
-				case 'flying':
-					source.side.addSideCondition('tailwind', source);
-					break;
-				case 'dragon':
-					target.forceSwitchFlag = true;
-					break;
-				case 'steel':
-					target.side.addSideCondition('gmaxsteelsurge');
-					break;
-				case 'rock':
-					target.side.addSideCondition('stealthrock');
-					break;
-				case 'ground':
-					target.side.addSideCondition('spikes');
-					break;
-				case 'fairy':
-					this.field.setTerrain('mistyterrain');
-					break;
-				case 'fighting':
-					source.addVolatile('focusenergy', source);
-					break;
+				const hax = this.sample(['slp', 'brn', 'par', 'psn', 'tox']);
+				target.trySetStatus(hax, source);
+			},
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = 'triplethreat';
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (move.id !== 'triplethreat') {
+					pokemon.removeVolatile('triplethreat');
+					return;
+				}
+				if (this.effectData.lastMove === move.id) {
+					this.effectData.numConsecutive++;
+				} else {
+					this.effectData.numConsecutive = 0;
+				}
+				if (this.effectData.numConsecutive >= 3) this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = move.id;
+			},
+			onModifyMove(move) {
+				if (move.secondaries && move.id === 'triplethreat') {
+					const secModif = [10, 25, 40];
+					const bpModif = [40, 60, 100];
+					const numConsecutive = this.effectData.numConsecutive > 2 ? 2 : this.effectData.numConsecutive;
+					move.basePower = secModif[numConsecutive];
+					for (const secondary of move.secondaries) {
+						if (secondary.chance) secondary.chance = secModif[numConsecutive];
+					}
 				}
 			},
 		},
 		target: "normal",
-		type: "???",
+		type: "Normal",
 	},
 
 	// Rabia
@@ -4215,6 +4186,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		onTryMove() {
@@ -4541,8 +4513,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 75,
 		basePower: 75,
 		category: "Special",
-		desc: "Doesn't miss in rain/tempest, changes target's secondary typing to Flying for 2-5 turns. Secondary effects fail if the target is Ground-type or affected by Ingrain.",
-		shortDesc: "Temporarily adds Flying type to the target. Rain/Tempest: never misses.",
+		desc: "Doesn't miss in rain, changes target's secondary typing to Flying for 2-5 turns. Secondary effects fail if the target is Ground-type or affected by Ingrain.",
+		shortDesc: "Temporarily adds Flying type to the target. Rain: never misses.",
 		name: "Updraft",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4556,7 +4528,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Twister', target);
 		},
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea', 'tempest'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
 		},
@@ -4608,31 +4580,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('damprock')) {
+				if (source?.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
-			onSetStatus(status, target, source, effect) {
-				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
-					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
-						this.add('-activate', target, 'move: Tempest Terrain');
-					}
-					return false;
-				}
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
 			},
-			onTryAddVolatile(status, target) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (status.id === 'yawn') {
-					this.add('-activate', target, 'move: Tempest Terrain');
-					return null;
-				}
-			},
-			onBasePowerPriority: 6,
-			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-					this.debug('tempest terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+			onTerrain(pokemon) {
+				if (pokemon.hasType('Ground')) return;
+				if (pokemon.hasType('Electric')) {
+					this.heal(pokemon.baseMaxhp / 8, pokemon);
+				} else if (!pokemon.hasType('Electric') && (pokemon.hasType(['Flying', 'Steel']) || pokemon.hasAbility('levitate'))) {
+					this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -4640,19 +4603,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Tempest Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
 					this.add('-fieldstart', 'move: Tempest Terrain');
-				}
-			},
-			onUpdate() {
-				if (!this.field.isWeather('tempest')) {
-					this.field.clearTerrain();
-				}
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
-				this.eachEvent('Terrain');
-				if (!this.field.isWeather('tempest')) {
-					this.field.clearTerrain();
 				}
 			},
 			onEnd() {
@@ -5490,10 +5440,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				factor = 0.667;
 				break;
 			case 'raindance':
-			case 'tempest':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'heavyhailstorm':
+			case 'winterhail':
 			case 'hail':
 				factor = 0.25;
 				break;
@@ -5512,10 +5462,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				factor = 0.667;
 				break;
 			case 'raindance':
-			case 'tempest':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'heavyhailstorm':
+			case 'winterhail':
 			case 'hail':
 				factor = 0.25;
 				break;
@@ -5556,10 +5506,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				factor = 0.667;
 				break;
 			case 'raindance':
-			case 'tempest':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'heavyhailstorm':
+			case 'winterhail':
 			case 'hail':
 				factor = 0.25;
 				break;
@@ -5577,7 +5527,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.type = 'Fire';
 				break;
 			case 'raindance':
-			case 'tempest':
 			case 'primordialsea':
 				move.type = 'Water';
 				break;
@@ -5585,6 +5534,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.type = 'Rock';
 				break;
 			case 'heavyhailstorm':
+			case 'winterhail':
 			case 'hail':
 				move.type = 'Ice';
 				break;
@@ -5597,7 +5547,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.basePower *= 2;
 				break;
 			case 'raindance':
-			case 'tempest':
 			case 'primordialsea':
 				move.basePower *= 2;
 				break;
@@ -5605,6 +5554,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.basePower *= 2;
 				break;
 			case 'heavyhailstorm':
+			case 'winterhail':
 			case 'hail':
 				move.basePower *= 2;
 				break;
@@ -5753,6 +5703,48 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	// Terrain Pulse for consistency
+	terrainpulse: {
+		inherit: true,
+		onModifyType(move, pokemon) {
+			if (!pokemon.isGrounded()) return;
+			switch (this.field.terrain) {
+			case 'electricterrain':
+				move.type = 'Electric';
+				break;
+			case 'grassyterrain':
+				move.type = 'Grass';
+				break;
+			case 'mistyterrain':
+				move.type = 'Fairy';
+				break;
+			case 'psychicterrain':
+				move.type = 'Psychic';
+				break;
+			case 'baneterrain':
+				move.type = 'Ice';
+				break;
+			case 'swampyterrain':
+				move.type = 'Ground';
+				break;
+			case 'inversionterrain':
+				move.type = '???';
+				break;
+			case 'pitchblack':
+				move.type = 'Ghost';
+				break;
+			case 'waveterrain':
+				move.type = 'Water';
+				break;
+			case 'tempestterrain':
+				move.type = 'Flying';
+				break;
+			case 'lavaterrain':
+				move.type = 'Fire';
+				break;
+			}
+		},
+	},
 	// genderless infatuation for nui's Condition Override
 	attract: {
 		inherit: true,
@@ -5804,39 +5796,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Attract', '[silent]');
 			},
-		},
-	},
-	// Soft flex tempest accuracy modifier
-	thunder: {
-		inherit: true,
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'tempest':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
-		},
-	},
-	hurricane: {
-		inherit: true,
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'tempest':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
 		},
 	},
 };

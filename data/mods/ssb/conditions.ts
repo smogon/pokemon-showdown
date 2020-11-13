@@ -867,15 +867,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		onStart() {
 			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('iN⇢Struct')}|Oh no you don't`);
-			this.add(`c|${getName('iN⇢Struct')}|/me blocks PMs`);
+			this.add(`c|${getName('INStruct')}|Oh no you don't`);
+			this.add(`c|${getName('INStruct')}|/me blocks PMs`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('iN⇢Struct')}|OK so ${['my UberEats order has arrived', 'I ran out of Coca-Cola', 'Bobochan wants me to play roomtours in the Chinese room', 'need to pm HoeenHero', 'comb through unicode'][this.random(5)]}`);
-			this.add(`c|${getName('iN⇢Struct')}|I will bee are bee`);
+			this.add(`c|${getName('INStruct')}|OK so ${['my UberEats order has arrived', 'I ran out of Coca-Cola', 'Bobochan wants me to play roomtours in the Chinese room', 'I need to pm HoeenHero'][this.random(4)]}`);
+			this.add(`c|${getName('INStruct')}|I will bee are bee`);
 		},
 		onFaint(source) {
-			this.add(`c|${getName('iN⇢Struct')}|Hey man I didn't do shit ${source.side.name} got me into this mess in the first place`);
+			this.add(`c|${getName('INStruct')}|I want to get off Mr. Bones' Wild Ride!`);
 		},
 		//  Innate
 		onSourceHit(target, source, move) {
@@ -883,7 +883,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (move.flags['contact']) {
-					if (!target.m.marked) this.add('-message', `iN⇢Struct attached a bomb onto ${target.name}!`);
+					if (!target.m.marked) this.add('-message', `INStruct attached a bomb onto ${target.name}!`);
 					target.m.marked = true;
 				}
 			}
@@ -891,7 +891,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) return;
 			if (move.flags['contact']) {
-				if (!source.m.marked) this.add('-message', `iN⇢Struct attached a bomb onto ${source.name}!`);
+				if (!source.m.marked) this.add('-message', `INStruct attached a bomb onto ${source.name}!`);
 				source.m.marked = true;
 			}
 			if (!target.hp) {
@@ -2157,62 +2157,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		duration: 1,
 		onBasePower(basePower, pokemon, target, move) {
 			return this.chainModify([0x4CC, 0x1000]);
-		},
-	},
-	tempest: {
-		name: 'Tempest',
-		effectType: 'Weather',
-		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasItem('damprock')) {
-				return 8;
-			}
-			return 5;
-		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella')) return;
-			if (move.type === 'Water') {
-				this.debug('rain water boost');
-				return this.chainModify(1.5);
-			}
-			if (move.type === 'Fire') {
-				this.debug('rain fire suppress');
-				return this.chainModify(0.5);
-			}
-		},
-		onStart(battle, source, effect) {
-			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectData.duration = 0;
-				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
-			} else {
-				this.add('-weather', 'RainDance');
-			}
-		},
-		onUpdate() {
-			if (!this.field.isTerrain('tempestterrain')) {
-				this.add('-end', 'RainDance');
-			}
-		},
-		onResidualOrder: 1,
-		onResidual() {
-			if (!this.field.isTerrain('tempestterrain')) {
-				this.add('-end', 'RainDance');
-			}
-			this.add('-weather', 'RainDance', '[upkeep]');
-			this.eachEvent('Weather');
-		},
-		onWeather(target) {
-			if (target.hasType('Ground')) return;
-			if (target.hasType('Electric')) {
-				this.heal(target.baseMaxhp / 16);
-				return;
-			}
-			if (!target.hasType('Electric') && target.hasType(['Flying', 'Steel'])) {
-				this.damage(target.baseMaxhp / 8);
-			}
-		},
-		onEnd() {
-			this.add('-weather', 'none');
 		},
 	},
 

@@ -2,7 +2,6 @@ import {SSBSet, ssbSets} from "./random-teams";
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'turbulence'];
-const HEAVY_RAIN_ABILITIES = ['primordialsea', 'tropicalcyclone', 'rainyseason'];
 
 /**
  * Assigns a new set to a Pokémon
@@ -979,32 +978,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// HoeenHero
 	tropicalcyclone: {
-		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land. In addition, if Rain Dance or Heavy Rain is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
-		shortDesc: "Summons Heavy Rain that is active until this Pokemon switches out. 2x Speed while rain is active.",
+		desc: "On switch-in, the weather becomes rain. In addition, if Rain Dance or Heavy Rain is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
+		shortDesc: "Summons Rain. 2x Speed while rain is active.",
 		name: "Tropical Cyclone",
 		onStart(source) {
-			this.field.setWeather('primordialsea');
-			this.add('-message', 'A tropical cyclone covered the battlefield.');
-		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
+			this.field.setWeather('raindance');
 		},
 		onModifySpe(spe, pokemon) {
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
 			}
-		},
-		onEnd(pokemon) {
-			if (this.field.weatherData.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility(HEAVY_RAIN_ABILITIES)) {
-					this.field.weatherData.source = target;
-					return;
-				}
-			}
-			this.field.clearWeather();
-			this.add('-message', 'The tropical cyclone disipated.');
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1706,6 +1689,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// quadrophenic
+	extremeways: {
+		shortDesc: "On switch-in, Boosts a random stat by 2.",
+		onStart(source) {
+			const stats: BoostName[] = [];
+			let stat: BoostName;
+			for (stat in source.boosts) {
+				if (stat !== 'accuracy' && stat !== 'evasion' && source.boosts[stat] < 6) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				const randomStat = this.sample(stats);
+				const boost: SparseBoostsTable = {};
+				boost[randomStat] = 2;
+				this.boost(boost);
+			} else {
+				return;
+			}
+		},
+		name: "Extreme Ways",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Rach
 	burnitdown: {
 		shortDesc: "Lowerrs the foe's higher offensive stat. Status ailments ignore typing. Regenerator.",
@@ -1882,11 +1890,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Soft Flex
 	eyeofthestorm: {
 		name: "Eye of the Storm",
-		shortDesc: "For 5 turns, a tempest boosts Water and Electric moves, among many effects.",
-		desc: "Summons a Tempest weather that combines the base effects of Rain Dance and Electric Terrain(with the animations of those two moves in that order upon set-up) that overwrites existing weather and terrain.In addition, at the end of each turn that the weather is up, all Electric-type Pokémon on the field are healed by 1 / 16th and all Flying or Steel types lose 1 / 8th of their health. If a Pokémon is both Electric and either Flying or Steel, they only receive the 1 / 16th heal. If a Pokémon is Ground-type, no effect from tempest takes place regardless of combination with the aforementioned types. This weather can be extended with Damp Rock but is overwritten by any effect or switch that would set a weather or terrain (including standard rain or standard Electric Terrain).",
+		shortDesc: "Summons rain and tempest terrain",
+		desc: "Summons rain and tempest terrain",
 		onStart(source) {
-			this.field.setWeather('tempest');
-			this.field.setTerrain('tempestterrain');
+			this.field.setWeather('raindance', source);
+			this.field.setTerrain('tempestterrain', source);
 		},
 	},
 	// Spandan
@@ -2268,26 +2276,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectData.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
-			}
-		},
-	},
-	primordialsea: {
-		inherit: true,
-		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Heavy Hailstorm.",
-		shortDesc: "On switch-in, heavy rain begins until this Ability is not active in battle.",
-		onStart(source) {
-			this.field.setWeather('primordialsea');
-		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
-	},
-	slushrush: {
-		inherit: true,
-		shortDesc: "If a Hail-like weather is active, this Pokemon's Speed is doubled.",
-		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail'])) {
-				return this.chainModify(2);
 			}
 		},
 	},
