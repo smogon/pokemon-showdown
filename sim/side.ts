@@ -151,13 +151,6 @@ export class Side {
 		return this.foe.active;
 	}
 
-	randomFoeActive(): Pokemon | null {
-		if (Array.isArray(this.foe)) {
-			return this.foe[0].randomActive();
-		}
-		return this.foe.randomActive();
-	}
-
 	getActive(): Pokemon[] {
 		if (this.ally) {
 			return this.active.concat(this.ally.active);
@@ -221,13 +214,6 @@ export class Side {
 			data.pokemon.push(pokemon.getSwitchRequestData());
 		}
 		return data;
-	}
-
-	randomActive() {
-		const actives = this.battle.gameType === 'multi' ?
-			this.getActive().filter(active => active && !active.fainted) : this.active;
-		if (!actives.length) return null;
-		return this.battle.sample(actives);
 	}
 
 	addSideCondition(

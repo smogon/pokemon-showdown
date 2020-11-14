@@ -2376,7 +2376,10 @@ export class Battle {
 
 		// banning Dragon Darts from directly targeting itself is done in side.ts, but
 		// Dragon Darts can target itself if Ally Switch is used afterwards
-		if (move.smartTarget) return this.getAtLoc(pokemon, targetLoc);
+		if (move.smartTarget) {
+			const curTarget = this.getAtLoc(pokemon, targetLoc);
+			return curTarget && !curTarget.fainted ? curTarget : this.getRandomTarget(pokemon, move);
+		}
 
 		// Fails if the target is the user and the move can't target its own position
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
@@ -2385,9 +2388,16 @@ export class Battle {
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = this.getAtLoc(pokemon, targetLoc);
-			if (target?.fainted && (target.side === pokemon.side || target.side === pokemon.side.ally)) {
-				// Target is a fainted ally: attack shouldn't retarget
-				return target;
+			if (target?.fainted) {
+				if (this.gameType === 'free-for-all') {
+					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
+					// TODO: find out if this is actually right
+					return target;
+				}
+				if (target.isAllyTo(pokemon)) {
+					// Target is a fainted ally: attack shouldn't retarget
+					return target;
+				}
 			}
 			if (target && !target.fainted) {
 				// Target is unfainted: use selected target location
@@ -2436,8 +2446,7 @@ export class Battle {
 				return foeActives[frontPosition];
 			}
 		}
-		const randomActive = pokemon.side.randomFoeActive();
-		return randomActive || pokemon.side.getFoeActive()[0];
+		return pokemon.randomFoe();
 	}
 
 	checkFainted() {

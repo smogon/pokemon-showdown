@@ -619,6 +619,12 @@ export class Pokemon {
 		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
 	}
 
+	randomFoe(): Pokemon | null {
+		const foes = this.foes();
+		if (!foes.length) return null;
+		return this.battle.sample(this.foes());
+	}
+
 	getUndynamaxedHP(amount?: number) {
 		const hp = amount || this.hp;
 		if (this.volatiles['dynamax']) {
@@ -674,7 +680,7 @@ export class Pokemon {
 			break;
 		default:
 			const selectedTarget = target;
-			if (!target || (target.fainted && target.side !== this.side)) {
+			if (!target || (target.fainted && (target.side !== this.side || this.battle.gameType === 'free-for-all'))) {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.getRandomTarget(this, move);
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
