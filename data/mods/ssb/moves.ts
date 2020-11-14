@@ -207,8 +207,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
-			if (pokemon.species.baseSpecies !== 'Aegislash') return;
-			pokemon.m.swapSets();
+			if (pokemon.species.baseSpecies === 'Aegislash') {
+				if (pokemon.moves.includes('shadowball')) {
+					changeSet(this, pokemon, ssbSets['aegii']);
+				} else {
+					changeSet(this, pokemon, ssbSets['aegii-Alt']);
+				}
+				const setType = pokemon.moves.includes('shadowball') ? 'specially' : 'physically';
+				this.add('-message', `aegii currently has a ${setType} oriented set.`);
+			}
 		},
 		condition: {
 			duration: 1,
@@ -1677,7 +1684,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1},
-		status: 'tox',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1692,15 +1698,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			oppBoost[boosts[this.random(5)]] = 1;
 			this.boost(selfBoost, source);
 			this.boost(oppBoost, target);
-			const formes = ['Alcremie-Lemon-Cream', 'Alcremie-Ruby-Swirl', 'Alcremie-Mint-Cream'];
-			if (formes.includes(source.species.name)) {
-				let formenum = formes.indexOf(source.species.name) + 1;
-				if (formenum >= formes.length) formenum = 0;
-				return source.m.changeForme(this, formenum + 1);
+			target.trySetStatus('tox', source);
+			if (source.species.baseSpecies === 'Alcremie') {
+				const newSet = ['Finland', 'Finland-Tsikhe', 'Finland-Nezavisa', 'Finland-Järvilaulu'][this.random(4)];
+				changeSet(this, source, ssbSets[newSet]);
 			}
-			source.m.changeForme(this, this.random(3) + 1);
-			source.addVolatile('gastroacid', source);
-			source.volatiles.gastroacid.duration = 1;
 		},
 		secondary: null,
 		target: "normal",
@@ -2582,9 +2584,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 3,
 		flags: {},
-		beforeTurnCallback(pokemon) {
-			this.add('-anim', pokemon, 'Focus Energy', pokemon);
-			pokemon.addVolatile('kipup');
+		onTryMove(source) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Energy', source);
+		},
+		onHit(target, pokemon, move) {
+				pokemon.addVolatile('kipup');
 		},
 		condition: {
 			duration: 1,

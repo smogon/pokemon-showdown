@@ -59,6 +59,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Reset',
 		evs: {hp: 252, def: 192, spd: 64}, nature: 'Sassy',
 	},
+	'aegii-Alt': {
+		species: 'Aegislash', ability: 'Set the Stage', item: 'Life Orb', gender: 'M',
+		moves: ['Shadow Ball', 'Flash Cannon', 'Shadow Sneak'],
+		signatureMove: 'Reset',
+		evs: {hp: 252, def: 192, spd: 64}, nature: 'Sassy',
+		skip: 'aegii',
+	},
 	Aeonic: {
 		species: 'Nosepass', ability: 'Arsene', item: 'Stone Plate', gender: 'M',
 		moves: ['Diamond Storm', 'Earthquake', 'Milk Drink'],
@@ -276,6 +283,27 @@ export const ssbSets: SSBSets = {
 		moves: ['Shore Up', 'Moonblast', ['Infestation', 'Whirlwind']],
 		signatureMove: 'Cradily Chaos',
 		evs: {hp: 252, def: 64, spa: 64, spd: 64, spe: 64}, ivs: {atk: 0}, nature: 'Serious',
+	},
+	'Finland-Tsikhe': {
+		species: 'Alcremie-Lemon-Cream', ability: 'Winding Song', item: 'Leftovers', gender: 'M',
+		moves: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen']],
+		signatureMove: 'Cradily Chaos',
+		evs: {hp: 252, def: 64, spa: 64, spd: 64, spe: 64}, ivs: {atk: 0}, nature: 'Serious',
+		skip: 'Finland',
+	},
+	'Finland-Nezavisa': {
+		species: 'Alcremie-Ruby-Swirl', ability: 'Winding Song', item: 'Leftovers', gender: 'M',
+		moves: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond']],
+		signatureMove: 'Cradily Chaos',
+		evs: {hp: 252, def: 64, spa: 64, spd: 64, spe: 64}, ivs: {atk: 0}, nature: 'Serious',
+		skip: 'Finland',
+	},
+	'Finland-Järvilaulu': {
+		species: 'Alcremie-Mint-Cream', ability: 'Winding Song', item: 'Leftovers', gender: 'M',
+		moves: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria']],
+		signatureMove: 'Cradily Chaos',
+		evs: {hp: 252, def: 64, spa: 64, spd: 64, spe: 64}, ivs: {atk: 0}, nature: 'Serious',
+		skip: 'Finland',
 	},
 	'frostyicelad ❆': {
 		species: 'Lapras-Gmax', ability: 'Ice Shield', item: 'Life Orb', gender: 'M',

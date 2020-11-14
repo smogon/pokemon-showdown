@@ -43,8 +43,9 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
 	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 	pokemon.moveSlots = newMoves;
-	// @ts-ignore Necessary so Robb576 doesn't get 8 moves
+	// @ts-ignore Necessary so pokemon doesn't get 8 moves
 	pokemon.baseMoveSlots = newMoves;
+	pokemon.battle.add('message', `${pokemon.name} changed form!`);
 }
 
 /**
@@ -240,9 +241,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Stance Change + Adaptability, on switch in, selects physical or special set.",
 		shortDesc: "Stance Change + Adaptability, on switch in, selects physical or special set.",
 		isPermanent: true,
-		onStart(source) {
-			if (source.species.baseSpecies !== 'Aegislash') return;
-			source.m.swapSets(true);
+		onSwitchIn(pokemon) {
+			if (pokemon.species.baseSpecies !== 'Aegislash') return;
+			if (this.randomChance(1, 2)) {
+				changeSet(this, pokemon, ssbSets['aegii']);
+			} else {
+				changeSet(this, pokemon, ssbSets['aegii-Alt']);
+			}
+			const setType = pokemon.moves.includes('shadowball') ? 'specially' : 'physically';
+			this.add('-message', `aegii currently has a ${setType} oriented set.`);
 		},
 		onModifyMove(move) {
 			move.stab = 2;
@@ -798,29 +805,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Please refer to the user guide for more information.",
 		name: "Winding Song",
 		isPermanent: true,
-		onStart() {
-			this.boost({spa: 1, spd: 1});
+		onSwitchIn(source) {
+			this.boost({spa: 1, spd: 1}, source);
 		},
 		onResidual(pokemon) {
-			const moveData = this.dex.getMove(this.lastSuccessfulMoveThisTurn || undefined);
-			if (!moveData.exists) {
-				pokemon.m.changeForme(this, 0);
+			if (pokemon.species.baseSpecies !== 'Alcremie') return;
+			let coolMoves = [];
+			if (pokemon.species.forme === 'Lemon-Cream') {
+				coolMoves = ['Reflect', 'Light Screen'];
+			} else if (pokemon.species.forme === 'Ruby-Swirl') {
+				coolMoves = ['Refresh', 'Destiny Bond'];
+			} else if (pokemon.species.forme === 'Mint-Cream') {
+				coolMoves = ['Light of Ruin', 'Sparkling Aria'];
+			} else {
+				coolMoves = ['Infestation', 'Whirlwind'];
 			}
-			const thirdMove = this.dex.getMove(pokemon.moves[2]).name;
-			const newThirdMoveIndex = pokemon.m.formes[pokemon.m.formeNum].movepool[2].indexOf(thirdMove) ^ 1;
-			const newThirdMove = this.dex.getMove(pokemon.m.formes[pokemon.m.formeNum].movepool[newThirdMoveIndex]);
-			const carryOver = pokemon.moveSlots[2].pp / pokemon.moveSlots[2].maxpp;
-			pokemon.moveSlots[2] = {
-				move: newThirdMove.name,
-				id: newThirdMove.id,
-				pp: ((newThirdMove.noPPBoosts || newThirdMove.isZ) ? Math.floor(newThirdMove.pp * carryOver) : newThirdMove.pp * 8 / 5),
-				maxpp: ((newThirdMove.noPPBoosts || newThirdMove.isZ) ? newThirdMove.pp : newThirdMove.pp * 8 / 5),
-				target: newThirdMove.target,
+			let oldMove;
+			let move;
+			if (pokemon.moves.includes(this.toID(coolMoves[0]))) {
+				oldMove = this.toID(coolMoves[0]);
+				move = this.dex.getMove(coolMoves[1]);
+			}	else if (pokemon.moves.includes(this.toID(coolMoves[1]))) {
+				oldMove = this.toID(coolMoves[1]);
+				move = this.dex.getMove(coolMoves[0]);
+			} else {
+				return;
+			}
+			if (!oldMove || !move) return;
+			const sketchIndex = pokemon.moves.indexOf(oldMove);
+			if (sketchIndex < 0) return false;
+			const sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * (oldMove.pp / oldMove.maxpp)) : move.pp * 8 / 5),
+				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				target: move.target,
 				disabled: false,
-				disabledSource: '',
 				used: false,
 			};
-			pokemon.battle.add('-message', `Alcremie changed its move ${thirdMove} to ${newThirdMove.name}!`);
+			pokemon.moveSlots[sketchIndex] = sketchedMove;
+			pokemon.baseMoveSlots[sketchIndex] = sketchedMove;
+			this.add('-message', `Finland changed its move ${this.dex.getMove(oldMove).name} to ${move.name}!`);
 		},
 		isNonstandard: "Custom",
 		gen: 8,

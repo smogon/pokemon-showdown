@@ -80,41 +80,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	aegii: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('aegii')}|${[`stream fiesta!!! https://youtu.be/eDEFolvLn0A`, `stream more&more!!! https://youtu.be/mH0_XpSHkZo`, `stream wannabe!!! https://youtu.be/fE2h3lGlOsk`, `stream love bomb!!! https://youtu.be/-SK6cvkK4c0`][this.random(4)]}`);
-			source.m.swapSets = function (random: boolean) {
-				const sets = [["Shadow Ball", "Flash Cannon", "Shadow Sneak", "Reset"],
-					["Shadow Claw", "Iron Head", "Shadow Sneak", "Reset"]];
-				const pp = source.moveSlots.map(move => move.pp / move.maxpp);
-				let num = 0;
-				if (random) {
-					num = source.battle.random(2); // randomize
-				} else if (source.m.curSet === "Special") {
-					num = 1; // change to Physical
-				}
-				source.moveSlots = [];
-				let u = 0;
-				for (const newMove of sets[num]) {
-					const move = source.battle.dex.getMove(source.battle.toID(newMove));
-					source.moveSlots.push({
-						move: move.name,
-						id: move.id,
-						pp: Math.floor(move.pp * pp[u] * 1.6),
-						maxpp: move.pp * 1.6,
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					});
-					u++;
-				}
-				if (num) {
-					source.m.curSet = "Physical";
-				} else {
-					source.m.curSet = "Special";
-				}
-				source.battle.add('-message', `${source.side.name}'s aegii currently has a ${source.m.curSet} attacking set.`);
-			};
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('aegii')}|${[`brb, buying albums`, `brb, buying albums`, `brb, streaming mvs`, `brb, learning choreos`][this.random(4)]}`);
@@ -634,59 +601,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				message = 'poog';
 			}
 			this.add(`c|${getName('Finland')}|${message}`);
-			// to avoid writing this function everywhere, im just gonna write it here and call it from wherever i want like the move or ability
-			pokemon.m.formes = [
-				{
-					name: 'Alcremie',
-					species: 'Alcremie',
-					movepool: ['Shore Up', 'Moonblast', ['Infestation', 'Whirlwind'], 'Cradily Chaos'],
-				},
-				{
-					name: 'Alcremie-Tsikhe',
-					species: 'Alcremie-Lemon-Cream',
-					movepool: ['Shore Up', 'Spiky Shield', ['Reflect', 'Light Screen'], 'Cradily Chaos'],
-				},
-				{
-					name: 'Alcremie-Nezavisa',
-					species: 'Alcremie-Ruby-Swirl',
-					movepool: ['Lava Plume', 'Scorching Sands', ['Refresh', 'Destiny Bond'], 'Cradily Chaos'],
-				},
-				{
-					name: 'Alcremie-Järvilaulu',
-					species: 'Alcremie-Mind-Cream',
-					movepool: ['Sticky Web', 'Parting Shot', ['Light of Ruin', 'Sparkling Aria'], 'Cradily Chaos'],
-				},
-			];
-			pokemon.m.changeForme = (context: Battle, formeNumber: number) => {
-				const forme = {...pokemon.m.formes[formeNumber]};
-				forme.movepool[2] = forme.movepool[2][this.random(2)];
-				pokemon.formeChange(forme.species, context.effect);
-				pokemon.m.formeNumber = formeNumber;
-				pokemon.battle.add('-message', `Alcremie changes its forme to ${forme.name}`);
-				const newMoves = forme.movepool;
-				const carryOver = pokemon.moveSlots.slice().map(m => m.pp / m.maxpp);
-				// Incase theres ever less than 4 moves
-				while (carryOver.length < 4) {
-					carryOver.push(1);
-				}
-				pokemon.moveSlots = [];
-				let slot = 0;
-				for (const newMove of newMoves) {
-					const moveData = pokemon.battle.dex.getMove(context.toID(newMove));
-					if (!moveData.id) continue;
-					pokemon.moveSlots.push({
-						move: moveData.name,
-						id: moveData.id,
-						pp: ((moveData.noPPBoosts || moveData.isZ) ? Math.floor(moveData.pp * carryOver[slot]) : moveData.pp * 8 / 5),
-						maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
-						target: moveData.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					});
-					slot++;
-				}
-			};
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);

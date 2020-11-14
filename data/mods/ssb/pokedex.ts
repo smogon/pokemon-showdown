@@ -19,11 +19,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// aegii
 	aegislash: {
 		inherit: true,
-		abilities: {0: 'New Stage'},
+		abilities: {0: 'Set the Stage'},
 	},
 	aegislashblade: {
 		inherit: true,
-		abilities: {0: 'New Stage'},
+		abilities: {0: 'Set the Stage'},
 	},
 	// Aeonic
 	nosepass: {
