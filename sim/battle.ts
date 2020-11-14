@@ -401,6 +401,7 @@ export class Battle {
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
 		for (const side of this.sides) {
+			if (side.ally && side.n > 1) continue;
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
 				if (!active) continue;
@@ -837,6 +838,7 @@ export class Battle {
 		if (target instanceof Side) {
 			const team = this.gameType === 'multi' ? target.n % 2 : null;
 			for (const side of this.sides) {
+				if (side.ally && side.n > 1) continue;
 				if (team === null ? side === target : side.n % 2 === team) {
 					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
 				} else {
@@ -1624,8 +1626,10 @@ export class Battle {
 		if (this.gameType === 'multi') {
 			this.sides[0].ally = this.sides[2];
 			this.sides[2]!.ally = this.sides[0];
+			this.sides[2]!.sideConditions = this.sides[0].sideConditions;
 			this.sides[1].ally = this.sides[3];
 			this.sides[3]!.ally = this.sides[1];
+			this.sides[3]!.sideConditions = this.sides[1].sideConditions;
 			this.sides[0].foe = this.sides[2]!.foe = [this.sides[1], this.sides[3]!];
 			this.sides[1].foe = this.sides[3]!.foe = [this.sides[0], this.sides[2]!];
 		} else if (this.gameType === 'free-for-all') {

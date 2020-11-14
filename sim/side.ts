@@ -264,26 +264,17 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect): Effect | null {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].getSideCondition(status);
-		}
 		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
 	getSideConditionData(status: string | Effect): AnyObject {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].getSideConditionData(status);
-		}
 		status = this.battle.dex.getEffect(status) as Effect;
 		return this.sideConditions[status.id] || null;
 	}
 
 	removeSideCondition(status: string | Effect): boolean {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].removeSideCondition(status);
-		}
 		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
