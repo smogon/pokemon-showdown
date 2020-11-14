@@ -589,13 +589,18 @@ export class Pokemon {
 		});
 	}
 
+	isAllyTo(pokemon: Pokemon): boolean {
+		if (this.battle.gameType === 'multi') return this.side.n % 2 === pokemon.side.n % 2;
+		return this.side === pokemon.side;
+	}
+
 	allies(): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
-			const team = this.side.n % 2;
+			const teamNum = this.side.n % 2;
 			// @ts-ignore
 			allies = this.battle.sides.flatMap(
-				(side: Side) => side.n % 2 === team ? side.active : []
+				(side: Side) => side.n % 2 === teamNum ? side.active : []
 			);
 		}
 		return allies.filter(ally => ally && !ally.fainted);

@@ -123,7 +123,7 @@ export const Scripts: BattleScriptsData = {
 				if (this.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.add('-activate', dancer, 'ability: Dancer');
-				const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
+				const dancersTarget = !target!.isAllyTo(dancer) && pokemon.isAllyTo(dancer) ? target! : pokemon;
 				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.dex.getAbility('dancer'), undefined, true);
 			}
 		}

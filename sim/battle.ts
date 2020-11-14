@@ -2343,8 +2343,7 @@ export class Battle {
 
 	getTargetLoc(target: Pokemon, source: Pokemon) {
 		let position = target.position + 1;
-		if (target.side.n % 2 === 0) position += 1;
-		return (target.side === source.side || target.side === source.side.ally) ? -position : position;
+		return (target.isAllyTo(source)) ? -position : position;
 	}
 
 	validTarget(target: Pokemon, source: Pokemon, targetType: string) {
