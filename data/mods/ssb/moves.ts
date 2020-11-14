@@ -2591,7 +2591,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Focus Energy', source);
 		},
 		onHit(target, pokemon, move) {
-				pokemon.addVolatile('kipup');
+			pokemon.addVolatile('kipup');
 		},
 		condition: {
 			duration: 1,

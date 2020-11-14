@@ -195,19 +195,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	alcremielemoncream: {
 		inherit: true,
 		abilities: {0: 'Winding Song'},
-		baseStats: {hp: 65, atk: 60, def: 121, spa: 75, spd: 64, spe: 110},
 		types: ['Fairy', 'Rock'],
 	},
 	alcremierubyswirl: {
 		inherit: true,
 		abilities: {0: 'Winding Song'},
-		baseStats: {hp: 65, atk: 60, def: 64, spa: 110, spd: 75, spe: 121},
 		types: ['Fairy', 'Fire'],
 	},
 	alcremiemintcream: {
 		inherit: true,
 		abilities: {0: 'Winding Song'},
-		baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
 		types: ['Fairy', 'Water'],
 	},
 	// vivalospride's interaction with Coconut's move
