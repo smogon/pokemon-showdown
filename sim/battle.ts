@@ -2342,7 +2342,7 @@ export class Battle {
 	}
 
 	getTargetLoc(target: Pokemon, source: Pokemon) {
-		let position = target.position + 1;
+		const position = target.position + 1;
 		return (target.isAllyTo(source)) ? -position : position;
 	}
 
