@@ -74,7 +74,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'bellydrum': case 'curse': case 'meditate': case 'screech': case 'swordsdance':
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					if (!counter['Physical'] || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
-					if (moveid === 'curse' && hasMove['icebeam'] && hasMove['sleeptalk']) rejected = true; // this fix is jank but i want resttalk piloswine to get stabs
+					if (moveid === 'curse' && hasMove['icebeam'] && hasMove['sleeptalk']) rejected = true;
 					isSetup = true;
 					break;
 
@@ -137,8 +137,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'icebeam':
 					if (hasMove['dragonbreath']) rejected = true;
 					break;
-				case 'hiddenpowerfighting':
-					if (hasMove['sleeptalk']) rejected = true;
+				case 'seismictoss':
+					if (hasMove['rest'] || hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'destinybond':
 					if (hasMove['explosion']) rejected = true;

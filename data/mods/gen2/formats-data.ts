@@ -781,7 +781,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	heracross: {
-		randomBattleMoves: ["curse", "earthquake", "hiddenpowerfighting", "megahorn", "rest", "sleeptalk"],
+		randomBattleMoves: ["curse", "earthquake", "megahorn", "rest", "seismictoss", "sleeptalk"],
 		tier: "OU",
 	},
 	sneasel: {
