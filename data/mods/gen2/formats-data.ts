@@ -194,7 +194,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	persian: {
-		randomBattleMoves: ["bodyslam", "hypnosis", "icebeam", "irontail", "rest", "return", "thunder"],
+		randomBattleMoves: ["bodyslam", "hypnosis", "irontail", "rest", "return", "thunder"],
 		tier: "NU",
 	},
 	psyduck: {
@@ -312,7 +312,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dodrio: {
-		randomBattleMoves: ["doubleedge", "drillpeck", "hiddenpowerground", "quickattack", "substitute"],
+		randomBattleMoves: ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "substitute"],
 		tier: "UU",
 	},
 	seel: {
@@ -536,7 +536,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	umbreon: {
-		randomBattleMoves: ["batonpass", "growth", "hiddenpowerdark", "meanlook", "moonlight", "toxic"],
+		randomBattleMoves: ["batonpass", "growth", "hiddenpowerdark", "meanlook", "moonlight"],
 		tier: "OU",
 	},
 	porygon: {
@@ -781,7 +781,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	heracross: {
-		randomBattleMoves: ["curse", "earthquake", "megahorn", "rest", "seismictoss", "sleeptalk"],
+		randomBattleMoves: ["curse", "earthquake", "hiddenpowerfighting", "megahorn", "rest", "sleeptalk"],
 		tier: "OU",
 	},
 	sneasel: {
