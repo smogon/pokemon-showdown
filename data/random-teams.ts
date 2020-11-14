@@ -1089,7 +1089,7 @@ export class RandomTeams {
 				} else if (ability === 'Analytic') {
 					rejectAbility = (hasMove['rapidspin'] || species.nfe || isDoubles);
 				} else if (ability === 'Blaze') {
-					rejectAbility = (isDoubles && hasAbility['Solar Power']); // I'd rather not code this as a forced ability, so it's in the rejections section. Hope you don't mind.
+					rejectAbility = (isDoubles && hasAbility['Solar Power']);
 				} else if (ability === 'Bulletproof' || ability === 'Overcoat') {
 					rejectAbility = (counter.setupType && hasAbility['Soundproof']);
 				} else if (ability === 'Chlorophyll') {
