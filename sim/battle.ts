@@ -2382,7 +2382,8 @@ export class Battle {
 		}
 
 		// Fails if the target is the user and the move can't target its own position
-		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
+		let selfLoc = -((this.gameType === 'multi' ? pokemon.side.getActive().indexOf(pokemon) : pokemon.position) + 1);
+		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
 			return move.isFutureMove ? pokemon : null;
 		}

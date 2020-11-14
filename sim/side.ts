@@ -153,7 +153,12 @@ export class Side {
 
 	getActive(): Pokemon[] {
 		if (this.ally) {
-			return this.active.concat(this.ally.active);
+			let active: Pokemon[] = [];
+			for (const side of this.battle.sides) {
+				if (side.n % 2 !== this.n % 2) continue;
+				active = active.concat(side.active);
+			}
+			return active;
 		}
 		return this.active;
 	}
