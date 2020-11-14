@@ -401,8 +401,7 @@ export class Battle {
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
 		for (const side of this.sides) {
-			if (side.ally && side.n > 1) continue;
-			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
+			if (!side.ally || side.n < 2) handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
 				if (!active) continue;
 				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
@@ -2382,7 +2381,7 @@ export class Battle {
 		}
 
 		// Fails if the target is the user and the move can't target its own position
-		let selfLoc = -((this.gameType === 'multi' ? pokemon.side.getActive().indexOf(pokemon) : pokemon.position) + 1);
+		const selfLoc = -((this.gameType === 'multi' ? pokemon.side.getActive().indexOf(pokemon) : pokemon.position) + 1);
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
 			return move.isFutureMove ? pokemon : null;
