@@ -2641,7 +2641,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return source.side.getFoeActive()[this.effectData.position];
 			},
 			onDamagingHit(damage, target, source, move) {
-				if (source.side !== target.side && source.side !== target.side.ally && this.getCategory(move) === 'Physical') {
+				if (!source.isAllyTo(target) && this.getCategory(move) === 'Physical') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -3117,7 +3117,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.side === source.side || target.side === source.side.ally) return;
+				if (!source || !effect || target.isAllyTo(source)) return;
 				if (effect.effectType === 'Move' && !effect.isFutureMove) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
@@ -4378,7 +4378,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
 				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
-				if (target.side !== source.side && target.side !== source.side.ally) target.volatileStaleness = 'external';
+				if (!target.isAllyTo(source)) target.volatileStaleness = 'external';
 				return;
 			}
 			return false;
@@ -4850,8 +4850,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				) {
 					continue;
 				}
-				if ((action.pokemon.side === source.side || action.pokemon.side === source.side.ally) &&
-					['grasspledge', 'waterpledge'].includes(action.move.id)) {
+				if ((action.pokemon.isAllyTo(source)) && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
@@ -5301,7 +5300,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side !== source.side && target.side !== source.side.ally) {
+			if (success && !target.isAllyTo(source)) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -7071,8 +7070,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				) {
 					continue;
 				}
-				if ((action.pokemon.side === source.side || action.pokemon.side === source.side.ally) &&
-					['waterpledge', 'firepledge'].includes(action.move.id)) {
+				if ((action.pokemon.isAllyTo(source)) && ['waterpledge', 'firepledge'].includes(action.move.id)) {
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
@@ -9973,7 +9971,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
-				if (target.side === source.side || target.side === source.side.ally || move.hasBounced || !move.flags['reflectable']) {
+				if (target.isAllyTo(source) || move.hasBounced || !move.flags['reflectable']) {
 					return;
 				}
 				const newMove = this.dex.getActiveMove(move.id);
@@ -10877,7 +10875,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return source.side.getFoeActive()[this.effectData.position];
 			},
 			onDamagingHit(damage, target, source, effect) {
-				if (source.side !== target.side && source.side !== target.side.ally) {
+				if (!source.isAllyTo(target)) {
 					this.effectData.position = source.position;
 					this.effectData.damage = 1.5 * damage;
 				}
@@ -12688,12 +12686,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
 		onTryHit(target, source, move) {
-			if (source.side === target.side || source.side === target.side.ally) {
+			if (source.isAllyTo(target)) {
 				move.basePower = 0;
 			}
 		},
 		onHit(target, source) {
-			if (source.side === target.side || source.side === target.side.ally) {
+			if (source.isAllyTo(target)) {
 				this.heal(Math.floor(target.baseMaxhp * 0.5));
 			}
 		},
@@ -13168,7 +13166,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
-				if (target.isSemiInvulnerable() || target.side === source.side || target.side === source.side.ally) return;
+				if (target.isSemiInvulnerable() || target.isAllyTo(source)) return;
 				if (!target.isGrounded()) {
 					const baseMove = this.dex.getMove(effect.id);
 					if (baseMove.priority > 0) {
@@ -13853,7 +13851,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
 			source.setType(newBaseTypes);
 			source.addedType = target.addedType;
-			source.knownType = (target.side === source.side || target.side === source.side.ally) && target.knownType;
+			source.knownType = target.isAllyTo(source) && target.knownType;
 		},
 		secondary: null,
 		target: "normal",
@@ -15399,7 +15397,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			if (target.side === source.side || target.side === source.side.ally) {
+			if (target.isAllyTo(source)) {
 				this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
 			} else {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
@@ -18945,8 +18943,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				) {
 					continue;
 				}
-				if ((otherMoveUser.side === source.side || otherMoveUser.side === source.side.ally) &&
-					['firepledge', 'grasspledge'].includes(otherMove.id)) {
+				if ((otherMoveUser.isAllyTo(source)) && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, otherMoveUser);
 					return null;
