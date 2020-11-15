@@ -526,7 +526,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {reflectable: 1},
+		flags: {authentic: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -585,7 +585,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -707,7 +707,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1019,7 +1019,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1060,7 +1060,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 8,
 		priority: 1,
-		flags: {},
+		flags: {snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1333,7 +1333,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {heal: 1, snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1375,7 +1375,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.boost({atk: 2}, target);
 			} else {
 				delete source.abilityData.busted;
-				source.formeChange('Mimikyu', this.effect, true);
+				if (pokemon.species.baseSpecies === 'Mimikyu') source.formeChange('Mimikyu', this.effect, true);
 				source.switchFlag = true;
 			}
 		},
@@ -1960,7 +1960,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectData.layers++;
 			},
 			onSwitchIn(pokemon) {
-				if (pokemon.hasItem('heavydutyboots')) return;
+				// Can be used by pokemon with boots.
 				this.add("-message", `Magnetized particles mends your wounds!`);
 				this.heal(pokemon.baseMaxhp / 4);
 				this.effectData.layers--;
@@ -3230,7 +3230,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit() {
 			this.add(`c|${getName('OM~!')}|Bang Bang`);
 		},
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",
@@ -3725,7 +3725,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4573,8 +4573,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Basically Electric Terrain.",
-		shortDesc: "Basically Electric Terrain.",
+		desc: "Heals Electric types for 1/16 at the end of each turn and causes Flying/Steel types and Levitate users to lose 1/16 at the end of each turn",
+		shortDesc: "Heals electrics. Hurts Flyings and Steels.",
 		name: "Tempest Terrain",
 		pp: 10,
 		priority: 0,

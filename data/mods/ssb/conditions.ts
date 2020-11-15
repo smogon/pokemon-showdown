@@ -2398,4 +2398,39 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	// No, you're not dynamaxing.
+	dynamax: {
+		inherit: true,
+		onStart(pokemon) {
+			pokemon.removeVolatile('minimize');
+			pokemon.removeVolatile('substitute');
+			if (pokemon.volatiles['torment']) {
+				delete pokemon.volatiles['torment'];
+				this.add('-end', pokemon, 'Torment', '[silent]');
+			}
+			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id) && !pokemon.transformed) {
+				pokemon.formeChange('cramorant');
+			}
+			this.add('-start', pokemon, 'Dynamax');
+			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
+			if (pokemon.baseSpecies.name === 'Shedinja') return;
+
+			// Changes based on dynamax level, 2 is max (at LVL 10)
+			const ratio = this.format.id.startsWith('gen8doublesou') ? 1.5 : 2;
+
+			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
+			pokemon.hp = Math.floor(pokemon.hp * ratio);
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			if (pokemon.name === 'INStruct') {
+				this.add(`c|${getName('INStruct')}|Alright fine since I'm the one dynamaxing, but I'm still ashamed you dynamaxed :^(`);
+				this.add(`c|${getName('INStruct')}|haha jk get dunked on lmao`);
+			} else {
+				this.add(`c|${getName('INStruct')}|Trying to dynamax, eh? No. Too bad. You thought you were slick but I saw through your shenaningans smh`);
+			}
+			pokemon.removeVolatile('dynamax');
+			this.queue.cancelMove(pokemon);
+			// Actually its to prvent the user from using a Max Move. But this is funnier.
+			this.hint(`No, you don't get to move you CHEATER`);
+		},
+	},
 };
