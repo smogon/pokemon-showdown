@@ -2622,6 +2622,11 @@ export class Battle {
 			for (const pokemon of action.pokemon.side.pokemon) {
 				pokemon.canDynamax = false;
 			}
+			if (action.pokemon.side.ally) {
+				for (const pokemon of action.pokemon.side.ally.pokemon) {
+					pokemon.canDynamax = false;
+				}
+			}
 			break;
 		case 'beforeTurnMove': {
 			if (!action.pokemon.isActive) return false;
