@@ -2664,7 +2664,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {mirror: 1},
 		onHitField(target, source) {
 			const sourceSide = source.side;
-			const targetSide = source.side.foe;
+			const targetSide = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
 			const sideConditions = [
 				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];

@@ -3158,6 +3158,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					}
 					pokemon.side.removeSideCondition(sideCondition);
 				}
+				if (Array.isArray(pokemon.side.foe)) {
+					for (const foe of pokemon.side.foe) {
+						if (foe.getSideCondition(sideCondition)) {
+							if (!activated) {
+								this.add('-activate', pokemon, 'ability: Screen Cleaner');
+								activated = true;
+							}
+							foe.removeSideCondition(sideCondition);
+						}
+					}
+					return;
+				}
 				if (pokemon.side.foe.getSideCondition(sideCondition)) {
 					if (!activated) {
 						this.add('-activate', pokemon, 'ability: Screen Cleaner');
