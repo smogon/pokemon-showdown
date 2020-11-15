@@ -54,9 +54,12 @@ export class Side {
 	active: Pokemon[];
 
 	pokemonLeft: number;
+	zMoveUsed: boolean;
+
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
-	zMoveUsed: boolean;
+	/** only used by Gen 1 Counter */
+	lastSelectedMove: ID = '';
 
 	sideConditions: {[id: string]: EffectState};
 	slotConditions: {[id: string]: EffectState}[];
