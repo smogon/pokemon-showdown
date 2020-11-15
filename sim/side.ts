@@ -49,7 +49,7 @@ export class Side {
 	name: string;
 	avatar: string;
 	maxTeamSize: number;
-	foe: Side | Side[];
+	foe: Side;
 	ally?: Side;
 	team: PokemonSet[];
 	pokemon: Pokemon[];
@@ -79,7 +79,7 @@ export class Side {
 		this.name = name;
 		this.avatar = '';
 		this.maxTeamSize = 6;
-		this.foe = battle.gameType === 'multi' ? [] : (sideNum ? this.battle.sides[0] : this.battle.sides[1]);
+		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		this.team = team;
 		this.pokemon = [];
@@ -142,10 +142,11 @@ export class Side {
 	}
 
 	getFoeActive(): Pokemon[] {
-		if (Array.isArray(this.foe)) {
+		if (this.battle.sides.length > 2) {
 			let active: Pokemon[] = [];
-			for (const foe of this.foe) {
-				active = active.concat(foe.active);
+			for (const side of this.battle.sides) {
+				if (side.ally && side.n % 2 === this.n % 2) continue;
+				active = active.concat(side.active);
 			}
 			return active;
 		}
@@ -167,10 +168,8 @@ export class Side {
 
 	getFoePokemonLeft(): number {
 		let pokemonLeft = 0;
-		if (Array.isArray(this.foe)) {
-			for (const foe of this.foe) {
-				pokemonLeft += foe.pokemonLeft;
-			}
+		if (this.foe.ally) {
+				pokemonLeft += this.foe.pokemonLeft + this.foe.ally.pokemonLeft;
 		} else {
 			pokemonLeft += this.foe.pokemonLeft;
 		}
