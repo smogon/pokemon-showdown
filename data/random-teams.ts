@@ -983,6 +983,7 @@ export class RandomTeams {
 				case 'substitute':
 					if (hasMove['facade'] || hasMove['rest'] || hasMove['uturn']) rejected = true;
 					if (movePool.includes('bulkup') || movePool.includes('painsplit') || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
+					if (isDoubles && movePool.includes('powerwhip')) rejected = true;
 					break;
 				case 'helpinghand':
 					if (hasMove['acupressure']) rejected = true;
@@ -1088,6 +1089,8 @@ export class RandomTeams {
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Analytic') {
 					rejectAbility = (hasMove['rapidspin'] || species.nfe || isDoubles);
+				} else if (ability === 'Blaze') {
+					rejectAbility = (isDoubles && hasAbility['Solar Power']);
 				} else if (ability === 'Bulletproof' || ability === 'Overcoat') {
 					rejectAbility = (counter.setupType && hasAbility['Soundproof']);
 				} else if (ability === 'Chlorophyll') {
@@ -1332,7 +1335,7 @@ export class RandomTeams {
 		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['electroweb'] &&
 			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['uturn']
 		) {
-			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
+			item = (ability === 'Defeatist' || species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 
 		// Medium priority
 		} else if (counter.Physical >= 4 && ability !== 'Serene Grace' && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && (!hasMove['tailslap'] || hasMove['uturn']) && !isDoubles) {
