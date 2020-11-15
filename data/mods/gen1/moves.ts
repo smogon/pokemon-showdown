@@ -623,7 +623,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		damageCallback(pokemon) {
 			const psywaveDamage = (this.random(0, this.trunc(1.5 * pokemon.level)));
 			if (psywaveDamage <= 0) {
-				this.hint("Desync Clause activated.");
+				this.hint("Desync Clause Mod activated!");
 				return false;
 			}
 			return psywaveDamage;
