@@ -1345,7 +1345,7 @@ export const Scripts: BattleScriptsData = {
 		if (pokemon1.isAllyTo(pokemon2)) {
 			return Math.abs(actives.indexOf(pokemon1) - actives.indexOf(pokemon2)) === 1;
 		}
-		return Math.abs(actives.indexOf(pokemon1) + pokemon2.side.getActive().indexOf(pokemon2) + 1 - pokemon1.side.getActive().length) <= 1;
+		return Math.abs(actives.indexOf(pokemon1) + pokemon2.side.getActive().indexOf(pokemon2) + 1 - actives.length) <= 1;
 	},
 
 	targetTypeChoices(targetType) {
