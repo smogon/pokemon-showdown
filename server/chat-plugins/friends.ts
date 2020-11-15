@@ -78,15 +78,11 @@ export const Friends = new class {
 		).run();
 		return results;
 	}
-	getFriends(user: User, visual = false) {
+	getFriends(user: User) {
 		const data = [user.id, MAX_FRIENDS];
-		let request: DatabaseRequest = {
+		return this.query({
 			statement: 'get', type: 'all', data,
-		};
-		if (visual) {
-			request = {statement: 'visualData', type: 'transaction', data};
-		}
-		return this.query(request);
+		});
 	}
 	async getRequests(user: User) {
 		const sent: Set<string> = new Set();
@@ -164,7 +160,7 @@ export const Friends = new class {
 		return this.query({type: 'transaction', data: [senderID, receiverID], statement: 'accept'});
 	}
 	async visualizeList(user: User) {
-		const friends = await this.getFriends(user, true);
+		const friends = await this.getFriends(user);
 		if (!friends.length) {
 			return `<h3>Your friends:</h3> <h4>None.</h4>`;
 		}
@@ -176,14 +172,16 @@ export const Friends = new class {
 		};
 		const loginTimes: {[k: string]: number} = {};
 		const renames: {[k: string]: string} = {};
-		for (const {friend: friendName, last_login, old_name} of [...friends].sort() as AnyObject[]) {
+		for (const {friend: friendName, last_login, old_name, allowing_login} of [...friends].sort() as AnyObject[]) {
 			const friend = Users.get(friendName as string);
 			const friendID = toID(friendName);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
 			} else {
 				categorized.offline.push(friendID);
-				loginTimes[friendID] = last_login;
+				if (!allowing_login) {
+					loginTimes[friendID] = last_login;
+				}
 			}
 			if (old_name) {
 				renames[friendID] = old_name;
@@ -750,11 +748,9 @@ const ACTIONS = {
 		`DO UPDATE SET userid = $userid, friend = $friend`
 	),
 	get: (
-		`SELECT *, (SELECT new_name
-			from friend_renames
-			WHERE original_name = friend
-			ORDER BY change_date desc
-			LIMIT 1) new_name
+		`SELECT *,
+		(SELECT new_name from friend_renames WHERE original_name = friend ORDER BY change_date desc LIMIT 1) new_name,
+		(SELECT send_login_data FROM friend_settings WHERE name = friend AND send_login_data = 1) allowing_login
 		FROM friends WHERE userid = ? LIMIT ?`
 	),
 	// may look duplicated, but you pass in [userid1, userid2, userid2, userid1]
@@ -764,7 +760,11 @@ const ACTIONS = {
 	insertRequest: `INSERT INTO friend_requests(sender, receiver, sent_at) VALUES(?, ?, ?)`,
 	deleteRequest: `DELETE FROM friend_requests WHERE sender = ? AND receiver = ?`,
 	findFriendship: `SELECT * FROM friends WHERE (friend = $user1 AND userid = $user2) OR (userid = $user1 AND friend = $user2)`,
-	findRequest: `SELECT * FROM friend_requests WHERE (sender = $user1 AND receiver = $user2) OR (sender = $user2 AND receiver = $user1)`,
+	findRequest: (
+		`SELECT count(*) FROM friend_requests WHERE ` +
+		`(sender = $user1 AND receiver = $user2) OR (sender = $user2 AND receiver = $user1)`
+	),
+	countRequests: `SELECT count(*) FROM friend_requests WHERE (sender = ? OR receiver = ?)`,
 	renameFriend: `UPDATE OR IGNORE friends SET friend = $newID WHERE friend = $oldID`,
 	renameUserid: `UPDATE OR IGNORE friends SET userid = $newID WHERE userid = $oldID`,
 	rename: `REPLACE INTO friend_renames (original_name, new_name, change_date) VALUES(?, ?, ?)`,
@@ -775,29 +775,26 @@ const ACTIONS = {
 		`DELETE FROM friend_requests WHERE EXISTS` +
 		`(SELECT sent_at FROM friend_requests WHERE should_expire(sent_at) = 1)`
 	),
-	hidingLogin: `SELECT * FROM friend_settings WHERE name = ? AND send_login_data = 1`,
 	hideLogin: `REPLACE INTO friend_settings (name, send_login_data) VALUES (?, 1)`,
 	showLogin: `DELETE FROM friend_settings WHERE name = ? AND send_login_data = 1`,
+	countFriends: `SELECT count(*) FROM friends WHERE userid = ?`,
+	renameSender: `UPDATE friend_requests SET sender = $newID WHERE sender = $oldID`,
+	renameReceiver: `UPDATE friend_requests SET receiver = $newID WHERE receiver = $oldID`,
 };
-
 
 const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	rename: requests => {
 		for (const request of requests) {
 			const [oldID, newID] = request;
-			const oldFriends = statements.get.all(oldID, MAX_FRIENDS).map(item => item.friend);
-			const newRequests = statements.getReceived.all(oldID);
-			const sentRequests = statements.getSent.all(oldID);
-			if (newRequests.length || sentRequests.length) {
-				throw new Chat.ErrorMessage(`You have pending friend requests, and so cannot transfer friends.`);
-			}
+			const oldFriends = statements.countFriends.get(oldID, MAX_FRIENDS)['count(*)'];
 			if (!oldFriends.length) {
 				throw new Chat.ErrorMessage(`You have no friends to transfer.`);
 			}
-			if (oldFriends.includes(newID)) {
-				// unfriend the two
-				statements.delete.run({userid: newID});
-			}
+			statements.renameSender.run({oldID, newID});
+			statements.renameReceiver.run({oldID, newID});
+			// unfriend the two
+			statements.delete.run({userid: newID});
+
 			statements.renameFriend.run({oldID, newID});
 			statements.renameUserid.run({oldID, newID});
 			statements.rename.run(oldID, newID, Date.now());
@@ -807,19 +804,20 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	send: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
-			const sentRequests = statements.getSent.all(senderID).map(item => item.receiver);
-			const friends = statements.get.all(senderID, MAX_FRIENDS).map(item => item.friend);
-			if (friends.length >= MAX_FRIENDS) {
+			const hasSentRequest = statements.findRequest.get({user1: senderID, user2: receiverID})['count(*)'];
+			const friends = statements.countFriends.get(senderID)['count(*)'];
+			const totalRequests = statements.countRequests.get(senderID, senderID)['count(*)'];
+			if (friends >= MAX_FRIENDS) {
 				throw new Chat.ErrorMessage(`You are at the maximum number of friends.`);
 			}
 			const existingFriendship = statements.findFriendship.all({user1: senderID, user2: receiverID});
 			if (existingFriendship.length) {
 				throw new Chat.ErrorMessage(`You are already friends with '${receiverID}'.`);
 			}
-			if (sentRequests.includes(receiverID)) {
+			if (hasSentRequest) {
 				throw new Chat.ErrorMessage(`You have already sent a friend request to '${receiverID}'.`);
 			}
-			if (sentRequests.length >= MAX_REQUESTS) {
+			if (totalRequests >= MAX_REQUESTS) {
 				throw new Chat.ErrorMessage(
 					`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
 				);
@@ -843,36 +841,20 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	accept: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
-			const receivedRequests = statements.getReceived.all(receiverID).map(item => item.sender);
-			if (!receivedRequests.includes(senderID)) {
-				throw new Chat.ErrorMessage(`You have not received a friend request from '${senderID}'.`);
-			}
-			TRANSACTIONS.removeRequest([request]);
+			const results = TRANSACTIONS.removeRequest([request]);
+			if (!results) throw new Chat.ErrorMessage(`You have no request pending from ${receiverID}.`);
 			TRANSACTIONS.add([request]);
 		}
 		return {result: []};
 	},
 	removeRequest: requests => {
+		const result = [];
 		for (const request of requests) {
 			const [to, from] = request;
-			statements.deleteRequest.run(to, from);
+			const {changes} = statements.deleteRequest.run(to, from);
+			if (changes) result.push(changes);
 		}
-		return {result: []};
-	},
-	visualData: requests => {
-		for (const request of requests) {
-			const [userid, limit] = request;
-			let data = statements.get.all(userid, limit);
-			data = data.map(f => {
-				const results = statements.hidingLogin.get(f.friend);
-				if (results?.send_login_data) {
-					f.last_login = `Hiding login data.`;
-				}
-				return f;
-			});
-			return {result: data};
-		}
-		return {result: []};
+		return {result};
 	},
 };
 
