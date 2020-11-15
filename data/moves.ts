@@ -785,7 +785,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && (target.side === this.effectData.target || target.side === this.effectData.target.ally)) {
+				if (target !== source && target.side.n % 2 === this.effectData.target.n % 2) {
 					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
@@ -9633,7 +9633,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && (target.side === this.effectData.target || target.side === this.effectData.target.ally) &&
+				if (target !== source && target.side.n % 2 === this.effectData.target.n % 2 &&
 					this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
@@ -13387,7 +13387,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		beforeTurnCallback(pokemon) {
 			for (const side of this.sides) {
-				if (side === pokemon.side || side === pokemon.side.ally) continue;
+				if (side.n % 2 === pokemon.side.n % 2) continue;
 				side.addSideCondition('pursuit', pokemon);
 				const data = side.getSideConditionData('pursuit');
 				if (!data.sources) {
@@ -13806,7 +13806,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && (target.side === this.effectData.target || target.side === this.effectData.target.ally) &&
+				if (target !== source && target.side.n % 2 === this.effectData.target.n % 2 &&
 					this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
