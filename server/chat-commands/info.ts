@@ -211,7 +211,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (targetUser.semilocked) {
-				buf += `<br />Semilocked: ${targetUser.semilocked}`;
+				buf += `<br />Semilocked: ${user.can('lock') ? targetUser.semilocked : "(reason hidden)"}`;
 			}
 		}
 		if (user === targetUser ? user.can('ipself') : user.can('ip', targetUser)) {
