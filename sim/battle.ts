@@ -1602,7 +1602,7 @@ export class Battle {
 		if (losers.length === 1) {
 			const loser = losers[0];
 			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform restorative berry-cycling and thus loses.`);
-			return this.win(Array.isArray(loser.foe) ? loser.foe[0] : loser.foe);
+			return this.win(loser.foe);
 		}
 		if (losers.length === this.sides.length) {
 			this.add('-message', `Each side's team started with the rudimentary means to perform restorative berry-cycling.`);
