@@ -427,7 +427,7 @@ export const Scripts: BattleScriptsData = {
 				this.add('-immune', target);
 				hitResults[i] = false;
 			} else if (this.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
-				targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
+				!targets[i].isAllyTo(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.debug('natural prankster immunity');
 				if (!target.illusion) this.hint("Since gen 7, Dark is immune to Prankster moves.");
 				this.add('-immune', target);
@@ -515,7 +515,7 @@ export const Scripts: BattleScriptsData = {
 				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
-				if (this.gen >= 6 || target.side !== pokemon.side) {
+				if (this.gen >= 6 || !target.isAllyTo(pokemon)) {
 					for (const effectid of ['craftyshield', 'matblock', 'quickguard', 'wideguard']) {
 						if (target.side.removeSideCondition(effectid)) broke = true;
 					}
@@ -1341,8 +1341,11 @@ export const Scripts: BattleScriptsData = {
 
 	isAdjacent(pokemon1, pokemon2) {
 		if (pokemon1.fainted || pokemon2.fainted) return false;
-		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
-		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.getActive().length) <= 1;
+		const actives = pokemon1.side.getActive();
+		if (pokemon1.isAllyTo(pokemon2)) {
+			return Math.abs(actives.indexOf(pokemon1) - actives.indexOf(pokemon2)) === 1;
+		}
+		return Math.abs(actives.indexOf(pokemon1) + pokemon2.side.getActive().indexOf(pokemon2) + 1 - pokemon1.side.getActive().length) <= 1;
 	},
 
 	targetTypeChoices(targetType) {
