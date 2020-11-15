@@ -10,6 +10,7 @@ import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
 import {toID} from './dex';
 
+
 /** A single action that can be chosen. */
 export interface ChosenAction {
 	choice: 'move' | 'switch' | 'instaswitch' | 'team' | 'shift' | 'pass'; 	// action type
@@ -153,12 +154,7 @@ export class Side {
 
 	getActive(): Pokemon[] {
 		if (this.ally) {
-			let active: Pokemon[] = [];
-			for (const side of this.battle.sides) {
-				if (side.n % 2 !== this.n % 2) continue;
-				active = active.concat(side.active);
-			}
-			return active;
+			return return this.battle.sides[this.n % 2].active.concat(this.battle.sides[this.n % 2 + 2].active);;
 		}
 		return this.active;
 	}
