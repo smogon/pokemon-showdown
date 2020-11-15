@@ -314,15 +314,11 @@ export const commands: ChatCommands = {
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
+		await this.parse(`/rebuild`);
+
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
 		const version = await Monitor.version();
-		const requiresForce = (patch: string) =>
-			version && cmd !== 'forcehotpatch' &&
-			(Monitor.hotpatchVersions[patch] ?
-				Monitor.hotpatchVersions[patch] === version :
-				(global.__version && version === global.__version.tree));
-		const requiresForceMessage = `The git work tree has not changed since the last time ${target} was hotpatched (${version?.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
 
 		let patch = target;
 		try {
@@ -346,7 +342,6 @@ export const commands: ChatCommands = {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				const disabledCommands = getDisabledCommands();
 				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
@@ -378,7 +373,6 @@ export const commands: ChatCommands = {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				global.Tournaments = require('../tournaments').Tournaments;
 				Chat.loadPluginData(Tournaments, 'tournaments');
@@ -394,7 +388,6 @@ export const commands: ChatCommands = {
 				if (lock['validator']) {
 					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 				}
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
@@ -409,7 +402,6 @@ export const commands: ChatCommands = {
 
 				this.sendReply("Formats have been hot-patched.");
 			} else if (target === 'loginserver') {
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 				FS('config/custom.css').unwatch();
 				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
@@ -421,7 +413,6 @@ export const commands: ChatCommands = {
 				if (lock['formats']) {
 					return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				}
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				void TeamValidatorAsync.PM.respawn();
 				this.sendReply("The team validator has been hot-patched. Any battles started after now will have teams be validated according to the new code.");
@@ -430,13 +421,11 @@ export const commands: ChatCommands = {
 				if (lock['punishments']) {
 					return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				}
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
@@ -446,7 +435,6 @@ export const commands: ChatCommands = {
 				if (lock['modlog']) {
 					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
-				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				const streams = Rooms.Modlog.streams;
 				const sharedStreams = Rooms.Modlog.sharedStreams;
