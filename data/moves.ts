@@ -503,7 +503,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(pokemon, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			let success = false;
-			for (const ally of pokemon.side.pokemon.concat(pokemon.side.ally ? pokemon.side.ally.pokemon || [])) {
+			for (const ally of pokemon.side.pokemon.concat(pokemon.side.ally ? pokemon.side.ally.pokemon : [])) {
 				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
 						(ally.volatiles['substitute'] && !move.infiltrates))) {
 					continue;
