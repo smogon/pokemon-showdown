@@ -982,7 +982,8 @@ export class RandomTeams {
 					break;
 				case 'substitute':
 					if (hasMove['facade'] || hasMove['rest'] || hasMove['uturn']) rejected = true;
-					if (movePool.includes('bulkup') || movePool.includes('painsplit') || (isDoubles && movePool.includes('powerwhip')) || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
+					if (movePool.includes('bulkup') || movePool.includes('painsplit') || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
+					if (isDoubles && movePool.includes('powerwhip')) rejected = true;
 					break;
 				case 'helpinghand':
 					if (hasMove['acupressure']) rejected = true;
