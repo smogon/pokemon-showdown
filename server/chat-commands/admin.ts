@@ -307,7 +307,7 @@ export const commands: ChatCommands = {
 	},
 
 	forcehotpatch: 'hotpatch',
-	async hotpatch(target, room, user) {
+	async hotpatch(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help hotpatch');
 		this.canUseConsole();
 
@@ -344,7 +344,7 @@ export const commands: ChatCommands = {
 				}
 
 				const disabledCommands = getDisabledCommands();
-				if (this.cmd !== 'forcehotpatch' && disabledCommands.length) {
+				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
 					this.errorReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 					this.errorReply(`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`);
 					return this.errorReply(`Currently disabled: ${disabledCommands.map(item => `/${item}`).join(', ')}`);
