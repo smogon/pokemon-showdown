@@ -182,7 +182,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'rest', 'sleeptalk', 'spikes'].includes(moveid)) &&
+				if ((!rejected && !isSetup && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'spikes'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
