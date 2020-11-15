@@ -236,7 +236,7 @@ export class Side {
 			id: status.id,
 			target: this,
 			source,
-			sourcePosition: source.position,
+			sourcePosition: source.activePosition,
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
@@ -287,7 +287,7 @@ export class Side {
 			id: status.id,
 			target: this,
 			source,
-			sourcePosition: source.position,
+			sourcePosition: source.activePosition,
 			duration: status.duration,
 		};
 		if (status.durationCallback) {

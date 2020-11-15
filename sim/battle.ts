@@ -2312,14 +2312,9 @@ export class Battle {
 	 */
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
-		const numSlots = source.side.getActive().length;
-		let sourceLoc = -(source.position + 1);
-		if (this.gameType !== 'multi') {
-			if (Math.abs(targetLoc) > numSlots) return false;
-		} else {
-			if (Math.abs(targetLoc) > this.getAllActive().length) return;
-			sourceLoc = source.side.n > 1 ? -(source.position + 2) : sourceLoc;
-		}
+		const numSlots = source.side.getFoeActive().length;
+		let sourceLoc = -(source.activePosition + 1);
+		if (Math.abs(targetLoc) > numSlots) return false;
 		const isFoe = (targetLoc > 0);
 		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
 		const isAdjacent = (isFoe ?
@@ -2345,7 +2340,7 @@ export class Battle {
 	}
 
 	getTargetLoc(target: Pokemon, source: Pokemon) {
-		const position = target.position + 1;
+		const position = target.activePosition + 1;
 		return (target.isAllyTo(source)) ? -position : position;
 	}
 
@@ -2381,7 +2376,7 @@ export class Battle {
 		}
 
 		// Fails if the target is the user and the move can't target its own position
-		const selfLoc = -((this.gameType === 'multi' ? pokemon.side.getActive().indexOf(pokemon) : pokemon.position) + 1);
+		const selfLoc = -(pokemon.activePosition + 1);
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
 			return move.isFutureMove ? pokemon : null;
@@ -2424,7 +2419,7 @@ export class Battle {
 		move = this.dex.getMove(move);
 		if (move.target === 'adjacentAlly') {
 			const allyActives = pokemon.side.getActive();
-			let adjacentAllies = [allyActives[pokemon.position - 1], allyActives[pokemon.position + 1]];
+			let adjacentAllies = [allyActives[pokemon.activePosition - 1], allyActives[pokemon.activePosition + 1]];
 			adjacentAllies = adjacentAllies.filter(active => active && !active.fainted);
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
 		}
@@ -2438,7 +2433,7 @@ export class Battle {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your all
 				const foeActives = pokemon.side.getFoeActive();
-				const frontPosition = foeActives.length - 1 - pokemon.position;
+				const frontPosition = foeActives.length - 1 - pokemon.activePosition;
 				let adjacentFoes = foeActives.slice(frontPosition < 1 ? 0 : frontPosition - 1, frontPosition + 2);
 				adjacentFoes = adjacentFoes.filter(active => active && !active.fainted);
 				if (adjacentFoes.length) return this.sample(adjacentFoes);

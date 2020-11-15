@@ -437,9 +437,12 @@ export class Pokemon {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
+	get activePosition() {
+		return this.side.ally ? this.position + Math.floor(this.side.n / 2) * this.side.active.length : this.position;
+	}
+
 	getSlot() {
-		const positionOffset = Math.floor(this.side.n / 2) * this.side.active.length;
-		const positionLetter = 'abcdef'.charAt(this.position + positionOffset);
+		const positionLetter = 'abcdef'.charAt(this.activePosition);
 		return this.side.id + positionLetter;
 	}
 
@@ -1705,7 +1708,7 @@ export class Pokemon {
 		this.volatiles[status.id].target = this;
 		if (source) {
 			this.volatiles[status.id].source = source;
-			this.volatiles[status.id].sourcePosition = source.position;
+			this.volatiles[status.id].sourcePosition = source.activePosition;
 		}
 		if (sourceEffect) this.volatiles[status.id].sourceEffect = sourceEffect;
 		if (status.duration) this.volatiles[status.id].duration = status.duration;

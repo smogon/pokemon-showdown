@@ -770,7 +770,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onSwitchInPriority: -1,
 			onSwitchIn(target) {
-				if (target.position !== this.effectData.sourcePosition) {
+				if (target.activePosition !== this.effectData.sourcePosition) {
 					return;
 				}
 				if (target.hp > 0) {

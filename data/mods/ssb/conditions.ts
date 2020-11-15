@@ -1685,11 +1685,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		// this is a side condition
 		name: 'boostreplacement',
 		onStart(side, source) {
-			this.effectData.position = source.position;
+			this.effectData.position = source.activePosition;
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn(target) {
-			if (!target.fainted && target.position === this.effectData.position) {
+			if (!target.fainted && target.activePosition === this.effectData.position) {
 				this.boost({def: 1, spd: 1});
 				target.side.removeSideCondition('boostreplacement');
 			}

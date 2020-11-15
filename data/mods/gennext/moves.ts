@@ -641,7 +641,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					damage = target.hp - 1;
 				}
 				this.effectData.totalDamage += damage;
-				this.effectData.sourcePosition = source.position;
+				this.effectData.sourcePosition = source.activePosition;
 				this.effectData.sourceSide = source.side;
 				return damage;
 			},

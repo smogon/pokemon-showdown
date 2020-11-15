@@ -420,7 +420,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (!target.setType(type)) return false;
 				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 
-				if (target.side.active.length === 2 && target.position === 1) {
+				if (target.side.getActive().length === 2 && target.activePosition === 1) {
 					// Curse Glitch
 					const action = this.queue.willMove(target);
 					if (action && action.move.id === 'curse') {
@@ -1594,7 +1594,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			// Imposter does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			if (!this.effectData.switchingIn) return;
-			const target = pokemon.foes()[pokemon.foes().length - 1 - pokemon.position];
+			const foes = pokemon.side.getFoeActive();
+			if (this.gameType === 'free-for-all') return foes[1];
+			const target = foes[foes.length - 1 - pokemon.activePosition];
 			if (target) {
 				pokemon.transformInto(target, this.dex.getAbility('imposter'));
 			}
@@ -2039,7 +2041,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			for (const allyActive of pokemon.allies()) {
 				if (
-					allyActive && allyActive.position !== pokemon.position &&
+					allyActive && allyActive.activePosition !== pokemon.activePosition &&
 					!allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])
 				) {
 					return this.chainModify(1.5);
@@ -2587,7 +2589,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			for (const allyActive of pokemon.allies()) {
 				if (
-					allyActive && allyActive.position !== pokemon.position &&
+					allyActive && allyActive.activePosition !== pokemon.activePosition &&
 					!allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])
 				) {
 					return this.chainModify(1.5);

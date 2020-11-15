@@ -209,7 +209,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'plus') {
+				if (ally && ally.activePosition !== pokemon.activePosition && !ally.fainted && ally.ability === 'plus') {
 					return spa * 1.5;
 				}
 			}
@@ -258,12 +258,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	plus: {
 		onModifySpA(spa, pokemon) {
-			const allyActive = pokemon.side.active;
+			const allyActive = pokemon.side.getActive();
 			if (allyActive.length === 1) {
 				return;
 			}
 			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'minus') {
+				if (ally && ally.activePosition !== pokemon.activePosition && !ally.fainted && ally.ability === 'minus') {
 					return spa * 1.5;
 				}
 			}

@@ -374,7 +374,7 @@ export const State = new class {
 	toRef(obj: Referable): string {
 		// Pokemon's 'id' is not only more verbose than a position, it also isn't guaranteed
 		// to be uniquely identifying in custom games without Nickname/Species Clause.
-		const id = obj instanceof Pokemon ? `${obj.side.id}${POSITIONS[obj.position]}` : `${obj.id}`;
+		const id = obj instanceof Pokemon ? `${obj.side.id}${POSITIONS[obj.activePosition]}` : `${obj.id}`;
 		return `[${obj.constructor.name}${id ? ':' : ''}${id}]`;
 	}
 

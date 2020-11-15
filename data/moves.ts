@@ -328,13 +328,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 2,
 		flags: {},
 		onTryHit(source) {
-			if (source.side.getActive().length === 1 || this.gameType === 'multi') return false;
-			if (source.side.getActive().length === 3 && source.position === 1) return false;
+			if (source.side.active.length === 1) return false;
+			if (source.side.active.length === 3 && source.position === 1) return false;
 		},
 		onHit(pokemon) {
-			const newPosition = (pokemon.position === 0 ? pokemon.side.getActive().length - 1 : 0);
-			if (!pokemon.side.getActive()[newPosition]) return false;
-			if (pokemon.side.getActive()[newPosition].fainted) return false;
+			const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
+			if (!pokemon.side.active[newPosition]) return false;
+			if (pokemon.side.active[newPosition].fainted) return false;
 			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
 		},
 		secondary: null,
@@ -2642,7 +2642,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (!source.isAllyTo(target) && this.getCategory(move) === 'Physical') {
-					this.effectData.position = source.position;
+					this.effectData.position = source.activePosition;
 					this.effectData.damage = 2 * damage;
 				}
 			},
@@ -10876,7 +10876,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDamagingHit(damage, target, source, effect) {
 				if (!source.isAllyTo(target)) {
-					this.effectData.position = source.position;
+					this.effectData.position = source.activePosition;
 					this.effectData.damage = 1.5 * damage;
 				}
 			},
@@ -11226,7 +11226,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (source.side !== target.side && this.getCategory(move) === 'Special') {
-					this.effectData.position = source.position;
+					this.effectData.position = source.activePosition;
 					this.effectData.damage = 2 * damage;
 				}
 			},
@@ -18429,7 +18429,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!target.addType('Ghost')) return false;
 			this.add('-start', target, 'typeadd', 'Ghost', '[from] move: Trick-or-Treat');
 
-			if (target.side.getActive().length === 2 && target.position === 1) {
+			if (target.side.getActive().length === 2 && target.activePosition === 1) {
 				// Curse Glitch
 				const action = this.queue.willMove(target);
 				if (action && action.move.id === 'curse') {

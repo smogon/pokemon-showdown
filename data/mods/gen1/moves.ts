@@ -56,7 +56,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const damage = this.effectData.totalDamage;
 					this.effectData.totalDamage += damage;
 					this.effectData.lastDamage = damage;
-					this.effectData.sourcePosition = source.position;
+					this.effectData.sourcePosition = source.activePosition;
 					this.effectData.sourceSide = source.side;
 				}
 			},
@@ -68,7 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectData.totalDamage += damage;
 				this.effectData.lastDamage = damage;
-				this.effectData.sourcePosition = source.position;
+				this.effectData.sourcePosition = source.activePosition;
 				this.effectData.sourceSide = source.side;
 			},
 			onAfterSetStatus(status, pokemon) {
