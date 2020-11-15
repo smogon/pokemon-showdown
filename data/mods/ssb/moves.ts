@@ -1375,7 +1375,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.boost({atk: 2}, target);
 			} else {
 				delete source.abilityData.busted;
-				if (pokemon.species.baseSpecies === 'Mimikyu') source.formeChange('Mimikyu', this.effect, true);
+				if (source.species.baseSpecies === 'Mimikyu') source.formeChange('Mimikyu', this.effect, true);
 				source.switchFlag = true;
 			}
 		},

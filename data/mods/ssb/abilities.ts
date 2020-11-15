@@ -1346,9 +1346,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onAnyInvulnerability(target, source, move) {
 				if (move && (source === this.effectData.target || target === this.effectData.target)) return 0;
 			},
-			onSourceModifyAccuracyPriority: 9,
-			onSourceModifyAccuracy(accuracy) {
-				return true;
+			onSourceAccuracy(accuracy, target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return true;
 			},
 			onAfterMove(pokemon, source) {
 				pokemon.removeVolatile('tension');
