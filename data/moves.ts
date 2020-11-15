@@ -15526,7 +15526,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			} else {
-				if (target.volatiles['substitute'] || target.side === source.side) {
+				if (target.volatiles['substitute'] || target.isAllyTo(source)) {
 					return false;
 				}
 				if (target.getWeight() >= 2000) {
