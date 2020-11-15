@@ -1629,13 +1629,13 @@ export class Battle {
 			this.sides[1].ally = this.sides[3];
 			this.sides[3]!.ally = this.sides[1];
 			this.sides[3]!.sideConditions = this.sides[1].sideConditions;
-			this.sides[0].foe = this.sides[2]!.foe = [this.sides[1], this.sides[3]!];
-			this.sides[1].foe = this.sides[3]!.foe = [this.sides[0], this.sides[2]!];
-		} else if (this.gameType === 'free-for-all') {
+			this.sides[0].foe = this.sides[2]!.foe = this.sides[1];
+			this.sides[1].foe = this.sides[3]!.foe = this.sides[0];
+		} /*else if (this.gameType === 'free-for-all') {
 			this.sides.forEach(side => {
 				side.foe = side.battle.sides.filter(s => s !== side);
 			});
-		} else {
+		}*/ else {
 			this.sides[0].foe = this.sides[1];
 			this.sides[1].foe = this.sides[0];
 		}
