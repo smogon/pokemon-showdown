@@ -997,6 +997,9 @@ export class RandomTeams {
 				case 'wideguard':
 					if (hasMove['protect']) rejected = true;
 					break;
+				case 'allyswitch':
+					if (this.format.gameType === 'multi') rejected = true;
+					break;
 				}
 
 				// This move doesn't satisfy our setup requirements:
