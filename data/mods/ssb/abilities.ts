@@ -837,8 +837,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
-				pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * (oldMove.pp / oldMove.maxpp)) : move.pp * 8 / 5),
-				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				pp: (move.pp * 8 / 5),
+				maxpp: (move.pp * 8 / 5),
 				target: move.target,
 				disabled: false,
 				used: false,

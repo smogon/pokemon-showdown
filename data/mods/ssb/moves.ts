@@ -2616,9 +2616,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return priority + 1;
 			},
 		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
 		secondary: null,
 		target: "self",
 		type: "Fighting",
