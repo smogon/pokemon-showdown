@@ -133,12 +133,13 @@ case 'exhaustive':
 		}
 		const maxFailures = argv.maxFailures || argv.failures || (formats.length > 1 ? ExhaustiveRunner.MAX_FAILURES : 1);
 		const prng = argv.seed && argv.seed.split(',').map(s => Number(s));
+		const maxGames = argv.maxGames || argv.games;
 		(async () => {
 			let failures = 0;
 			do {
 				for (const format of formats) {
 					failures += await new ExhaustiveRunner({
-						format, cycles, prng, maxFailures, log: true, dual: argv.dual,
+						format, cycles, prng, maxFailures, log: true, dual: argv.dual, maxGames,
 					}).run();
 					process.stdout.write('\n');
 					if (failures >= maxFailures) break;

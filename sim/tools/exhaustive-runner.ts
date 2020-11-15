@@ -81,12 +81,15 @@ export class ExhaustiveRunner {
 		do {
 			this.games++;
 			try {
+				const is4P = dex.getFormat(this.format).gameType === 'multi';
 				// We run these sequentially instead of async so that the team generator
 				// and the AI can coordinate usage properly.
 				await new Runner({
 					prng: this.prng,
 					p1options: {team: generator.generate(), createAI},
 					p2options: {team: generator.generate(), createAI},
+					p3options: is4P ? {team: generator.generate(), createAI} : undefined,
+					p4options: is4P ? {team: generator.generate(), createAI} : undefined,
 					format: this.format,
 					dual: this.dual,
 					error: true,
