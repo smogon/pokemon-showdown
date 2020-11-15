@@ -1873,7 +1873,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target.side === source.side || target.side === source.side.ally || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAllyTo(source) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -3085,7 +3085,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target === this.effectData.target || target.side !== source.side || target.side !== source.side.ally) return;
+			if (target === this.effectData.target || !target.isAllyTo(source)) return;
 			if (move.type === 'Grass') {
 				this.boost({atk: 1}, this.effectData.target);
 			}
@@ -4373,7 +4373,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyTryHitSide(target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
-			if (target.side === source.side || target.side === source.side.ally || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAllyTo(source) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
