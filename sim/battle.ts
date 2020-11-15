@@ -2313,7 +2313,7 @@ export class Battle {
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
 		const numSlots = source.side.getFoeActive().length;
-		let sourceLoc = -(source.activePosition + 1);
+		const sourceLoc = -(source.activePosition + 1);
 		if (Math.abs(targetLoc) > numSlots) return false;
 		const isFoe = (targetLoc > 0);
 		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
