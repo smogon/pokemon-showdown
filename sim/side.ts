@@ -169,7 +169,7 @@ export class Side {
 	getFoePokemonLeft(): number {
 		let pokemonLeft = 0;
 		if (this.foe.ally) {
-				pokemonLeft += this.foe.pokemonLeft + this.foe.ally.pokemonLeft;
+			pokemonLeft += this.foe.pokemonLeft + this.foe.ally.pokemonLeft;
 		} else {
 			pokemonLeft += this.foe.pokemonLeft;
 		}
