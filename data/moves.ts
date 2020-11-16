@@ -20111,17 +20111,17 @@ export const Moves: {[moveid: string]: MoveData} = {
         onModifyType(move, source) {
             move.type = source.getTypes()[0];
         },
-		onHit(target, source, move) {
-			if (source.getTypes().length === 1) {
-				move.type = source.getTypes()[0];
-			} else {
-				move.type = source.getTypes()[1];
-			}
-		},
+        onHit(target, source, move) {
+            if (source.getTypes().length === 1) {
+                move.type = source.getTypes()[0];
+            } else {
+                move.type = source.getTypes()[1];
+            }
+        },
         multihit: 2,
         secondary: null,
         target: "normal",
-        type: "Normal",
+        type: "???",
         maxMove: {basePower: 130},
         contestType: "Tough",
     },
@@ -20250,8 +20250,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		status: 'brn',
-		volatileStatus: 'confusion',
+		onTryHit(pokemon) {
+			const type1 = pokemon.types[0];
+			const type2 = pokemon.types[1];
+			if (type1 === 'Fire' || type2 === 'Fire') {
+				pokemon.addVolatile('confusion');
+				return;
+			}
+			else {
+				pokemon.addVolatile('confusion');
+				pokemon.trySetStatus('brn', pokemon);
+				return;
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -20485,5 +20496,53 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
+	},
+	speedstrike: {
+		num: 888,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Speed Strike",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		useSourceSpeedAsOffensive: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	sleepbubble: {
+		num: 889,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Sleep Bubble",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		volatileStatus: 'yawn',
+		onTryHit(target) {
+			if (target.status || !target.runStatusImmunity('slp')) {
+				return false;
+			}
+		},
+		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			duration: 2,
+			onStart(target, source) {
+				this.add('-start', target, 'move: Yawn', '[of] ' + source);
+			},
+			onResidualOrder: 19,
+			onEnd(target) {
+				this.add('-end', target, 'move: Yawn', '[silent]');
+				target.trySetStatus('slp', this.effectData.source);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+		zMove: {boost: {spe: 1}},
+		contestType: "Cute",
 	},
 };

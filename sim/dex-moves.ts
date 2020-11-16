@@ -227,6 +227,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	tracksTarget?: boolean;
 	useTargetOffensive?: boolean;
 	useSourceDefensiveAsOffensive?: boolean;
+	useSourceSpeedAsOffensive?: boolean;
 	willCrit?: boolean;
 
 	// Mechanics flags
@@ -355,6 +356,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly useTargetOffensive: boolean;
 	/** Use the user's Def/SpD as the attacking stat, instead of Atk/SpA. */
 	readonly useSourceDefensiveAsOffensive: boolean;
+	/** Use the user's Speed as the attacking stat, instead of Atk/SpA. */
+	readonly useSourceSpeedAsOffensive: boolean;
 	/** Whether or not this move ignores negative attack boosts. */
 	readonly ignoreNegativeOffensive: boolean;
 	/** Whether or not this move ignores positive defense boosts. */
@@ -438,6 +441,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.defensiveCategory = data.defensiveCategory || undefined;
 		this.useTargetOffensive = !!data.useTargetOffensive;
 		this.useSourceDefensiveAsOffensive = !!data.useSourceDefensiveAsOffensive;
+		this.useSourceSpeedAsOffensive = !!data.useSourceSpeedAsOffensive;
 		this.ignoreNegativeOffensive = !!data.ignoreNegativeOffensive;
 		this.ignorePositiveDefensive = !!data.ignorePositiveDefensive;
 		this.ignoreOffensive = !!data.ignoreOffensive;
