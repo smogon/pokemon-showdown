@@ -161,7 +161,7 @@ describe('Mirror Coat', function () {
 		]]);
 		battle.makeChoices('move watergun', 'move thunderwave');
 		battle.makeChoices('move pound', 'move counter');
-		assert(battle.log.some(line => line.includes('Desync Clause')));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod')));
 
 		// seed chosen so Pound succeeds and Water Gun full paras
 		battle = common.gen(1).createBattle({seed: [1, 2, 3, 6]}, [[
@@ -171,7 +171,7 @@ describe('Mirror Coat', function () {
 		]]);
 		battle.makeChoices('move pound', 'move thunderwave');
 		battle.makeChoices('move watergun', 'move counter');
-		assert(battle.log.some(line => line.includes('Desync Clause')));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod')));
 
 		battle = common.gen(1).createBattle([[
 			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash']},
@@ -180,7 +180,7 @@ describe('Mirror Coat', function () {
 		]]);
 		battle.makeChoices('move watergun', 'move splash');
 		battle.makeChoices('move pound', 'move counter');
-		assert(!battle.log.some(line => line.includes('Desync Clause')));
+		assert(!battle.log.some(line => line.includes('Desync Clause Mod')));
 		assert.false.fullHP(battle.p1.active[0]);
 
 		battle = common.gen(1).createBattle([[
@@ -190,7 +190,7 @@ describe('Mirror Coat', function () {
 		]]);
 		battle.makeChoices('move pound', 'move splash');
 		battle.makeChoices('move watergun', 'move counter');
-		assert(!battle.log.some(line => line.includes('Desync Clause')));
+		assert(!battle.log.some(line => line.includes('Desync Clause Mod')));
 		assert.fullHP(battle.p1.active[0]);
 	});
 });
