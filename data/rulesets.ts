@@ -830,10 +830,11 @@ export const Formats: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Desync Clause Mod',
 		desc: 'In the event a move would cause a desync, the move will fail instead. This rule covers Psywave and Counter.',
-		// The effect itself is implemented in gen1/moves.ts.
 		onBegin() {
 			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
 		},
+		// Hardcoded in gen1/moves.ts
+		// Can't be disabled (no precedent for how else to handle desyncs)
 	},
 	freezeclausemod: {
 		effectType: 'Rule',
