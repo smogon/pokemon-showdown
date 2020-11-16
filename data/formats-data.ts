@@ -19,7 +19,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["earthpower", "energyball", "leechseed", "protect", "sleeppowder", "sludgebomb"],
 		randomDoubleBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	charmander: {
@@ -48,7 +48,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["airslash", "fireblast", "focusblast", "heatwave", "protect", "tailwind"],
 		randomDoubleBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	squirtle: {
@@ -75,7 +75,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["fakeout", "flipturn", "followme", "icywind", "lifedew", "muddywater", "protect"],
 		randomDoubleBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	caterpie: {
@@ -98,7 +98,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["hurricane", "pollenpuff", "protect", "quiverdance", "ragepowder", "sleeppowder", "tailwind"],
 		randomDoubleBattleLevel: 88,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	weedle: {
@@ -241,7 +241,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["extremespeed", "fakeout", "knockoff", "surf", "volttackle"],
 		randomDoubleBattleLevel: 90,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	pikachuworld: {
@@ -453,7 +453,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	meowthgmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	persian: {
@@ -567,7 +567,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	machampgmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	bellsprout: {
@@ -781,7 +781,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["focusblast", "nastyplot", "protect", "shadowball", "sludgebomb", "thunderbolt", "willowisp"],
 		randomDoubleBattleLevel: 82,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	onix: {
@@ -822,7 +822,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["knockoff", "liquidation", "protect", "superpower", "xscissor"],
 		randomDoubleBattleLevel: 86,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	voltorb: {
@@ -1154,7 +1154,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["freezedry", "helpinghand", "hydropump", "icywind", "protect", "thunderbolt"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	ditto: {
@@ -1174,7 +1174,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	eeveegmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	vaporeon: {
@@ -1309,7 +1309,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["bodyslam", "curse", "darkestlariat", "highhorsepower", "recycle"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	articuno: {
@@ -3684,7 +3684,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["drainpunch", "explosion", "gunkshot", "protect", "toxicspikes"],
 		randomDoubleBattleLevel: 88,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	zorua: {
@@ -5436,7 +5436,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	melmetalgmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	grookey: {
@@ -5458,7 +5458,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["acrobatics", "grassyglide", "highhorsepower", "knockoff", "swordsdance"],
 		randomBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	scorbunny: {
@@ -5477,7 +5477,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	cinderacegmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	sobble: {
@@ -5500,7 +5500,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["focusenergy", "hydropump", "icebeam", "muddywater"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	skwovet: {
@@ -5530,7 +5530,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	corviknightgmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	blipbug: {
@@ -5549,7 +5549,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["helpinghand", "hypnosis", "lightscreen", "psychic", "reflect", "stickyweb", "strugglebug"],
 		randomDoubleBattleLevel: 88,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	nickit: {
@@ -5598,7 +5598,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	drednawgmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	yamper: {
@@ -5628,7 +5628,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["fireblast", "incinerate", "protect", "stealthrock", "stoneedge", "willowisp"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	applin: {
@@ -5644,7 +5644,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	flapplegmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	appletun: {
@@ -5659,7 +5659,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["appleacid", "dracometeor", "leechseed", "recover"],
 		randomBattleLevel: 88,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	silicobra: {
@@ -5675,7 +5675,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["coil", "glare", "highhorsepower", "protect", "stoneedge"],
 		randomDoubleBattleLevel: 86,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	cramorant: {
@@ -5716,14 +5716,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["boomburst", "overdrive", "shiftgear", "sludgebomb", "snarl", "voltswitch"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	toxtricitylowkeygmax: {
 		randomDoubleBattleMoves: ["boomburst", "overdrive", "sludgebomb", "snarl", "voltswitch"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	sizzlipede: {
@@ -5741,7 +5741,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["coil", "firelash", "knockoff", "leechlife", "powerwhip", "protect"],
 		randomDoubleBattleLevel: 88,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	clobbopus: {
@@ -5782,7 +5782,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["dazzlinggleam", "mysticalfire", "protect", "psychic", "trickroom"],
 		randomDoubleBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	impidimp: {
@@ -5803,7 +5803,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["darkestlariat", "fakeout", "lightscreen", "reflect", "spiritbreak", "taunt", "thunderwave"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	milcery: {
@@ -5819,7 +5819,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["dazzlinggleam", "decorate", "mysticalfire", "protect", "recover"],
 		randomDoubleBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	falinks: {
@@ -5904,7 +5904,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
 		randomBattleLevel: 84,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	dracozolt: {
@@ -5949,7 +5949,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	duraludongmax: {
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	dreepy: {
@@ -6033,14 +6033,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["bulkup", "drainpunch", "substitute", "wickedblow"],
 		randomBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	urshifurapidstrikegmax: {
 		randomBattleMoves: ["bulkup", "closecombat", "surgingstrikes", "thunderpunch", "uturn"],
 		randomBattleLevel: 80,
 		isNonstandard: "Gigantamax",
-		tier: "(Uber)",
+		tier: "AG",
 		doublesTier: "(DUber)",
 	},
 	zarude: {
