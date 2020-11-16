@@ -183,6 +183,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('a random duck')}|and he waddled away... bum bum bum`);
 		},
 	},
+	arby: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Arby')}|Time to win this :)`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Arby')}|MSU need a sub`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Arby')}|Authhate is real.`);
+		},
+	},
 	archas: {
 		noCopy: true,
 		onStart() {
@@ -789,7 +801,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('INStruct')}|I will bee are bee`);
 		},
 		onFaint(source) {
-			this.add(`c|${getName('INStruct')}|I want to get off Mr. Bones' Wild Ride!`);
+			this.add(`c|${getName('INStruct')}|bs :^(`);
+			this.add(`c|${getName('INStruct')}|/log ${source.side.name} was reported by INStruct. (throwing)`);
 		},
 		//  Innate
 		onSourceHit(target, source, move) {
@@ -1457,18 +1470,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('RavioliQueen')}|This is impastable!`);
-		},
-	},
-	rb220: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('rb220')}|Time to win this :)`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('rb220')}|MSU need a sub`);
-		},
-		onFaint() {
-			this.add(`c|${getName('rb220')}|Authhate is real.`);
 		},
 	},
 	robb576: {
@@ -2413,24 +2414,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
-			if (pokemon.baseSpecies.name === 'Shedinja') return;
+			if (pokemon.baseSpecies.name !== 'Shedinja') {
+				// Changes based on dynamax level, 2 is max (at LVL 10)
+				const ratio = this.format.id.startsWith('gen8doublesou') ? 1.5 : 2;
 
-			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = this.format.id.startsWith('gen8doublesou') ? 1.5 : 2;
+				pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
+				pokemon.hp = Math.floor(pokemon.hp * ratio);
 
-			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
-			pokemon.hp = Math.floor(pokemon.hp * ratio);
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			if (pokemon.name === 'INStruct') {
-				this.add(`c|${getName('INStruct')}|Alright fine since I'm the one dynamaxing, but I'm still ashamed you dynamaxed :^(`);
-				this.add(`c|${getName('INStruct')}|haha jk get dunked on lmao`);
-			} else {
-				this.add(`c|${getName('INStruct')}|Trying to dynamax, eh? No. Too bad. You thought you were slick but I saw through your shenaningans smh`);
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
+			this.add(`raw|<strong>Dynamaxing is banned in SSB4, and neither custom challenges nor tournaments won't save you from that fact.</strong>`);
 			pokemon.removeVolatile('dynamax');
 			this.queue.cancelMove(pokemon);
-			// Actually its to prvent the user from using a Max Move. But this is funnier.
-			this.hint(`No, you don't get to move you CHEATER`);
+			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
+			this.hint(`The move was cancelled to punish cheaters like you.`);
 		},
 	},
 };

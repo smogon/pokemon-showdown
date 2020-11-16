@@ -574,6 +574,99 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// Arby
+	quickhammer: {
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		desc: "",
+		shortDesc: "+1 Prio. +2 SpA if KO, -1 Def/SpD if not.",
+		name: "Quickhammer",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Crabhammer', target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				this.boost({spa: 2}, pokemon, pokemon, move);
+			} else {
+				this.boost({def: -1, spd: -1}, pokemon, pokemon, move);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+
+	// used for Arby's ability
+	waveterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Wave Terrain. During the effect, the accuracy of Water type moves is multiplied by 1.2, even if the user is not grounded. Hazards and screens are removed and cannot be set while Wave Terrain is active. Fails if the current terrain is Inversion Terrain.",
+		shortDesc: "5 turns. Removes hazards. Water move acc 1.2x.",
+		name: "Wave Terrain",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'waveterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onModifyAccuracy(accuracy, target, source, move) {
+				if (move.type === 'Water') {
+					return this.chainModify(1.2);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Wave Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Wave Terrain');
+				}
+				this.add('-message', 'The battlefield suddenly flooded!');
+				const removeAll = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'shiftingrocks',
+					'toxicspikes', 'stealthrock', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+				];
+				for (const sideCondition of removeAll) {
+					if (source.side.foe.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+					}
+					if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+					}
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onEnd() {
+				if (!this.effectData.duration) this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Wave Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Water",
+	},
+
 	// Archas
 	broadsidebarrage: {
 		accuracy: 90,
@@ -4083,99 +4176,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Ghost",
-	},
-
-	// rb220
-	quickhammer: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Special",
-		desc: "",
-		shortDesc: "+1 Prio. +2 SpA if KO, -1 Def/SpD if not.",
-		name: "Quickhammer",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 1,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Crabhammer', target);
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) {
-				this.boost({spa: 2}, pokemon, pokemon, move);
-			} else {
-				this.boost({def: -1, spd: -1}, pokemon, pokemon, move);
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Water",
-	},
-
-	// used for rb220's ability
-	waveterrain: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "For 5 turns, the terrain becomes Wave Terrain. During the effect, the accuracy of Water type moves is multiplied by 1.2, even if the user is not grounded. Hazards and screens are removed and cannot be set while Wave Terrain is active. Fails if the current terrain is Inversion Terrain.",
-		shortDesc: "5 turns. Removes hazards. Water move acc 1.2x.",
-		name: "Wave Terrain",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {},
-		terrain: 'waveterrain',
-		condition: {
-			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onModifyAccuracy(accuracy, target, source, move) {
-				if (move.type === 'Water') {
-					return this.chainModify(1.2);
-				}
-			},
-			onStart(battle, source, effect) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Wave Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Wave Terrain');
-				}
-				this.add('-message', 'The battlefield suddenly flooded!');
-				const removeAll = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'shiftingrocks',
-					'toxicspikes', 'stealthrock', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
-				];
-				for (const sideCondition of removeAll) {
-					if (source.side.foe.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
-					}
-					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
-					}
-				}
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
-				this.eachEvent('Terrain');
-			},
-			onEnd() {
-				if (!this.effectData.duration) this.eachEvent('Terrain');
-				this.add('-fieldend', 'move: Wave Terrain');
-			},
-		},
-		secondary: null,
-		target: "all",
-		type: "Water",
 	},
 
 	// Robb576

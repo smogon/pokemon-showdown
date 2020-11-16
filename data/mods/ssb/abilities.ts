@@ -405,6 +405,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Arby
+	wavesurge: {
+		shortDesc: "On switch-in, this Pokemon summons Wave Terrain.",
+		onStart(source) {
+			this.field.setTerrain('waveterrain');
+		},
+		name: "Wave Surge",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Archas
 	indomitable: {
 		desc: "This Pokemon cures itself if it is confused or has a major status condition. Single use.",
@@ -1789,17 +1800,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.field.setTerrain('pitchblack');
 		},
 		name: "Phantom Plane",
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
-	// rb220
-	wavesurge: {
-		shortDesc: "On switch-in, this Pokemon summons Wave Terrain.",
-		onStart(source) {
-			this.field.setTerrain('waveterrain');
-		},
-		name: "Wave Surge",
 		isNonstandard: "Custom",
 		gen: 8,
 	},

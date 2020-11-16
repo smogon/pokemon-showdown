@@ -114,6 +114,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Grapes',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
+	Arby: {
+		species: 'Keldeo-Resolute', ability: 'Wave Surge', item: 'Expert Belt', gender: '',
+		moves: ['Hydro Pump', 'Secret Sword', 'Ice Beam'],
+		signatureMove: 'Quickhammer',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	Arcticblast: {
 		species: 'Tapu Fini', ability: 'Misty Surge', item: 'Misty Seed', gender: '',
 		moves: ['Heal Order', 'Sparkling Aria', ['Clear Smog', 'Moonblast']],
@@ -639,12 +645,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Shadow Ball', 'Dark Pulse', 'Psychic'],
 		signatureMove: 'Witching Hour',
 		evs: {def: 4, spa: 52, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
-	},
-	rb220: {
-		species: 'Keldeo-Resolute', ability: 'Wave Surge', item: 'Expert Belt', gender: '',
-		moves: ['Hydro Pump', 'Secret Sword', 'Ice Beam'],
-		signatureMove: 'Quickhammer',
-		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',
