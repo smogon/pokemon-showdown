@@ -84,7 +84,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Baton Pass'],
 	},
 	{
