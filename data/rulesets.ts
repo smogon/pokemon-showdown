@@ -866,7 +866,7 @@ export const Formats: {[k: string]: FormatData} = {
 				}
 				if (this.gen >= 7) {
 					const item = this.dex.getItem(set.item);
-					if (item.megaStone && species.name === item.megaEvolves) {
+					if (item.megaStone && species.baseSpecies === item.megaEvolves) {
 						species = this.dex.getSpecies(item.megaStone);
 						typeTable = typeTable.filter(type => species.types.includes(type));
 					}
@@ -907,19 +907,6 @@ export const Formats: {[k: string]: FormatData} = {
 				pokemon.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
-		},
-	},
-	dynamaxubersclause: {
-		effectType: 'Rule',
-		name: 'Dynamax Ubers Clause',
-		desc: "Prevents Pok&eacute;mon on the Ubers dynamax banlist from dynamaxing",
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (this.ruleTable.isRestrictedSpecies(pokemon.species)) {
-					pokemon.canDynamax = false;
-				}
-			}
-			this.add('html', 'Ubers Dynamax Clause: Pokémon on the <a href="https://www.smogon.com/dex/ss/formats/uber/">Ubers Dynamax Banlist</a> cannot Dynamax.');
 		},
 	},
 	arceusevlimit: {

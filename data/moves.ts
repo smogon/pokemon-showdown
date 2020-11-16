@@ -3191,13 +3191,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		secondary: {
+		self: {
 			chance: 50,
-			self: {
-				boosts: {
-					def: 2,
-				},
+			boosts: {
+				def: 2,
 			},
+		},
+		secondary: {
+			// Sheer Force negates the self even though it is not secondary
 		},
 		target: "allAdjacentFoes",
 		type: "Rock",
@@ -18965,6 +18966,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					for (const secondary of move.secondaries) {
 						if (secondary.chance) secondary.chance *= 2;
 					}
+					if (move.self?.chance) move.self.chance *= 2;
 				}
 			},
 		},

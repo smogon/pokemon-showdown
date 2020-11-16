@@ -1053,11 +1053,11 @@ const ScavengerCommands: ChatCommands = {
 	 * Player commands
 	 */
 	""() {
-		this.parse("/join scavengers");
+		return this.parse("/join scavengers");
 	},
 
 	guess(target, room, user) {
-		this.parse(`/choose ${target}`);
+		return this.parse(`/choose ${target}`);
 	},
 
 	join(target, room, user) {
@@ -1927,7 +1927,8 @@ const ScavengerCommands: ChatCommands = {
 		const ladder = await Leaderboard.visualize('points') as AnyObject[];
 		this.sendReply(
 			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				const isStaff = room!.auth.has(toID(entry.name));
+				const roomRank = room!.auth.getDirect(toID(entry.name));
+				const isStaff = Users.Auth.atLeast(roomRank, '+');
 				if (isStaff && hideStaff) return '';
 				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Utils.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Utils.escapeHTML(entry.name)}</strong>` : Utils.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>` +
@@ -2315,7 +2316,7 @@ const ScavengerCommands: ChatCommands = {
 			this.privateModAction(`${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.`);
 			this.modlog('SCAV MODSETTINGS IPCHECK', null, setting[target] ? 'ON' : 'OFF');
 
-			this.parse('/scav modsettings update');
+			return this.parse('/scav modsettings update');
 		},
 	},
 
@@ -2422,10 +2423,10 @@ const ScavengerCommands: ChatCommands = {
 			}
 			room.settings.scavSettings.addRecycledHuntsToQueueAutomatically =
 				!room.settings.scavSettings.addRecycledHuntsToQueueAutomatically;
+			this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 			if (params[0] === 'on') {
-				this.parse("/scav queuerecycled");
+				return this.parse("/scav queuerecycled");
 			}
-			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 		}
 	},
 

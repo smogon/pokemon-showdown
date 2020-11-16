@@ -686,7 +686,7 @@ export abstract class BasicRoom {
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
 		return [...this.subRooms.values()].filter(
-			room => !room.settings.isPrivate || includeSecret
+			room => includeSecret ? true : !room.settings.isPrivate && !room.settings.isPersonal
 		);
 	}
 	validateTitle(newTitle: string, newID?: string) {
@@ -1699,7 +1699,8 @@ export class GameRoom extends BasicRoom {
 	makePublic() {
 		this.settings.isPrivate = false;
 		if (!this.roomid.endsWith('pw')) return true;
-		this.rename(this.title, this.getReplayData().id as RoomID);
+		const {id} = this.getReplayData();
+		this.rename(this.title, `battle-${id}` as RoomID);
 	}
 }
 

@@ -408,6 +408,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'koffing', ability: 'levitate', moves: ['zapcannon'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should correctly validate USUM Rockruff', function () {
@@ -478,6 +484,20 @@ describe('Team Validator', function () {
 		];
 		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
 		assert.equal(illegal, null);
+	});
+
+	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
+		let team = [
+			{species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'kecleon', ability: 'protean', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should reject newer Pokemon in older gens', function () {
@@ -565,14 +585,6 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
 			{species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: {hp: 1}},
-		];
-		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert(illegal);
-	});
-
-	it('should not allow unreleased Gmax formes', function () {
-		const team = [
-			{species: 'melmetal-gmax', ability: 'ironfist', moves: ['doubleironbash'], evs: {hp: 1}},
 		];
 		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);

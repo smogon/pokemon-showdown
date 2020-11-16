@@ -63,6 +63,13 @@ function escapeHTML(str?: string) {
 		.replace(/\//g, '&#x2f;');
 }
 
+function checkCanAll(room: Room | null) {
+	if (!room) return false; // no, no good reason for using `all` in pms
+	const {isPersonal, isHelp} = room.settings;
+	// allowed if it's a groupchat
+	return !room.battle && !!isPersonal && !isHelp;
+}
+
 export const commands: ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
@@ -107,7 +114,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast()) return;
@@ -172,7 +179,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -216,7 +223,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -257,7 +264,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'movesearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast()) return;
@@ -315,7 +322,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'itemsearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast()) return;
@@ -358,7 +365,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'abilitysearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast()) return;
@@ -399,7 +406,7 @@ export const commands: ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'learn',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: cmd,
 		});
 		if (!response.error && !this.runBroadcast()) return;

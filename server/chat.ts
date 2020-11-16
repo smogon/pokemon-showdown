@@ -432,6 +432,7 @@ export class CommandContext extends MessageContext {
 		this.inputUsername = "";
 	}
 
+	// TODO: return should be void | boolean | Promise<void | boolean>
 	parse(msg?: string, quiet?: boolean): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
@@ -448,9 +449,9 @@ export class CommandContext extends MessageContext {
 			subcontext.target = '';
 			return subcontext.parse();
 		}
-		let message: any = this.message;
+		let message: string | void | boolean | Promise<string | void | boolean> = this.message;
 
-		const parsedCommand = this.parseCommand(message);
+		const parsedCommand = Chat.parseCommand(message);
 		if (parsedCommand) {
 			this.cmd = parsedCommand.cmd;
 			this.fullCmd = parsedCommand.fullCmd;
@@ -488,7 +489,7 @@ export class CommandContext extends MessageContext {
 				} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
 						VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
 					message = message.trim();
-					if (message.charAt(0) !== BROADCAST_TOKEN) {
+					if (!message.startsWith(BROADCAST_TOKEN)) {
 						message = message.charAt(0) + message;
 					}
 				}
@@ -512,15 +513,18 @@ export class CommandContext extends MessageContext {
 				message: this.message,
 			});
 			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+			return;
 		}
 
 		// Output the message
-		if (message && typeof message.then === 'function') {
-			void (message as Promise<any>).then(resolvedMessage => {
+		if (message && typeof (message as any).then === 'function') {
+			this.update();
+			return (message as Promise<string | boolean | void>).then(resolvedMessage => {
 				if (resolvedMessage && resolvedMessage !== true) {
 					this.sendChatMessage(resolvedMessage);
 				}
 				this.update();
+				if (resolvedMessage === false) return false;
 			}).catch(err => {
 				if (err.name?.endsWith('ErrorMessage')) {
 					this.errorReply(err.message);
@@ -538,14 +542,15 @@ export class CommandContext extends MessageContext {
 					message: this.message,
 				});
 				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+				return false;
 			});
 		} else if (message && message !== true) {
-			this.sendChatMessage(message);
+			this.sendChatMessage(message as string);
 		}
 
 		this.update();
 
-		return message;
+		return message as boolean;
 	}
 
 	sendChatMessage(message: string) {
@@ -569,101 +574,6 @@ export class CommandContext extends MessageContext {
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 		}
-	}
-
-	/**
-	 * Takes a chat message and returns data about any command it's
-	 * trying to use.
-	 *
-	 * Returning `null` means the chat message isn't trying to use
-	 * a command, and returning `{handler: null}` means it's trying
-	 * to use a command that doesn't exist.
-	 */
-	parseCommand(message = this.message, recursing = false): {
-		cmd: string, fullCmd: string, cmdToken: string, target: string, handler: AnnotatedChatHandler | null,
-	} | null {
-		if (!message.trim()) return null;
-
-		// hardcoded commands
-		if (message.startsWith(`>> `)) {
-			message = `/eval ${message.slice(3)}`;
-		} else if (message.startsWith(`>>> `)) {
-			message = `/evalbattle ${message.slice(4)}`;
-		} else if (message.startsWith(`/me`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-			message = `/mee ${message.slice(3)}`;
-		} else if (message.startsWith(`/ME`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-			message = `/MEE ${message.slice(3)}`;
-		}
-
-		const cmdToken = message.charAt(0);
-		if (!VALID_COMMAND_TOKENS.includes(cmdToken)) return null;
-		if (cmdToken === message.charAt(1)) return null;
-		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return null;
-
-		let [cmd, target] = Utils.splitFirst(message.slice(1), ' ');
-		cmd = cmd.toLowerCase();
-
-		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
-
-		let curCommands: AnnotatedChatCommands = Chat.commands;
-		let commandHandler;
-		let fullCmd = cmd;
-
-		do {
-			if (cmd in curCommands) {
-				commandHandler = curCommands[cmd];
-			} else {
-				commandHandler = undefined;
-			}
-			if (typeof commandHandler === 'string') {
-				// in case someone messed up, don't loop
-				commandHandler = curCommands[commandHandler];
-			} else if (Array.isArray(commandHandler) && !recursing) {
-				return this.parseCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
-			}
-			if (commandHandler && typeof commandHandler === 'object') {
-				[cmd, target] = Utils.splitFirst(target, ' ');
-				cmd = cmd.toLowerCase();
-
-				fullCmd += ' ' + cmd;
-				curCommands = commandHandler as AnnotatedChatCommands;
-			}
-		} while (commandHandler && typeof commandHandler === 'object');
-
-		if (!commandHandler && curCommands.default) {
-			commandHandler = curCommands.default;
-			if (typeof commandHandler === 'string') {
-				commandHandler = curCommands[commandHandler];
-			}
-		}
-
-		if (!commandHandler && !recursing) {
-			for (const g in Config.groups) {
-				const groupid = Config.groups[g].id;
-				if (fullCmd === groupid) {
-					return this.parseCommand(`/promote ${target}, ${g}`, true);
-				} else if (fullCmd === 'global' + groupid) {
-					return this.parseCommand(`/globalpromote ${target}, ${g}`, true);
-				} else if (fullCmd === 'de' + groupid || fullCmd === 'un' + groupid ||
-						fullCmd === 'globalde' + groupid || fullCmd === 'deglobal' + groupid) {
-					return this.parseCommand(`/demote ${target}`, true);
-				} else if (fullCmd === 'room' + groupid) {
-					return this.parseCommand(`/roompromote ${target}, ${g}`, true);
-				} else if (fullCmd === 'forceroom' + groupid) {
-					return this.parseCommand(`/forceroompromote ${target}, ${g}`, true);
-				} else if (fullCmd === 'roomde' + groupid || fullCmd === 'deroom' + groupid || fullCmd === 'roomun' + groupid) {
-					return this.parseCommand(`/roomdemote ${target}`, true);
-				}
-			}
-		}
-
-		return {
-			cmd: cmd,
-			cmdToken: cmdToken,
-			target: target,
-			fullCmd: fullCmd,
-			handler: commandHandler as AnnotatedChatHandler | null,
-		};
 	}
 	run(handler: string | AnnotatedChatHandler) {
 		if (typeof handler === 'string') handler = Chat.commands[handler] as AnnotatedChatHandler;
@@ -1824,6 +1734,101 @@ export const Chat = new class {
 		for (const handler of Chat.destroyHandlers) {
 			handler();
 		}
+	}
+
+	/**
+	 * Takes a chat message and returns data about any command it's
+	 * trying to use.
+	 *
+	 * Returning `null` means the chat message isn't trying to use
+	 * a command, and returning `{handler: null}` means it's trying
+	 * to use a command that doesn't exist.
+	 */
+	parseCommand(message: string, recursing = false): {
+		cmd: string, fullCmd: string, cmdToken: string, target: string, handler: AnnotatedChatHandler | null,
+	} | null {
+		if (!message.trim()) return null;
+
+		// hardcoded commands
+		if (message.startsWith(`>> `)) {
+			message = `/eval ${message.slice(3)}`;
+		} else if (message.startsWith(`>>> `)) {
+			message = `/evalbattle ${message.slice(4)}`;
+		} else if (message.startsWith(`/me`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = `/mee ${message.slice(3)}`;
+		} else if (message.startsWith(`/ME`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = `/MEE ${message.slice(3)}`;
+		}
+
+		const cmdToken = message.charAt(0);
+		if (!VALID_COMMAND_TOKENS.includes(cmdToken)) return null;
+		if (cmdToken === message.charAt(1)) return null;
+		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return null;
+
+		let [cmd, target] = Utils.splitFirst(message.slice(1), ' ');
+		cmd = cmd.toLowerCase();
+
+		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
+
+		let curCommands: AnnotatedChatCommands = Chat.commands;
+		let commandHandler;
+		let fullCmd = cmd;
+
+		do {
+			if (cmd in curCommands) {
+				commandHandler = curCommands[cmd];
+			} else {
+				commandHandler = undefined;
+			}
+			if (typeof commandHandler === 'string') {
+				// in case someone messed up, don't loop
+				commandHandler = curCommands[commandHandler];
+			} else if (Array.isArray(commandHandler) && !recursing) {
+				return this.parseCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
+			}
+			if (commandHandler && typeof commandHandler === 'object') {
+				[cmd, target] = Utils.splitFirst(target, ' ');
+				cmd = cmd.toLowerCase();
+
+				fullCmd += ' ' + cmd;
+				curCommands = commandHandler as AnnotatedChatCommands;
+			}
+		} while (commandHandler && typeof commandHandler === 'object');
+
+		if (!commandHandler && curCommands.default) {
+			commandHandler = curCommands.default;
+			if (typeof commandHandler === 'string') {
+				commandHandler = curCommands[commandHandler];
+			}
+		}
+
+		if (!commandHandler && !recursing) {
+			for (const g in Config.groups) {
+				const groupid = Config.groups[g].id;
+				if (fullCmd === groupid) {
+					return this.parseCommand(`/promote ${target}, ${g}`, true);
+				} else if (fullCmd === 'global' + groupid) {
+					return this.parseCommand(`/globalpromote ${target}, ${g}`, true);
+				} else if (fullCmd === 'de' + groupid || fullCmd === 'un' + groupid ||
+						fullCmd === 'globalde' + groupid || fullCmd === 'deglobal' + groupid) {
+					return this.parseCommand(`/demote ${target}`, true);
+				} else if (fullCmd === 'room' + groupid) {
+					return this.parseCommand(`/roompromote ${target}, ${g}`, true);
+				} else if (fullCmd === 'forceroom' + groupid) {
+					return this.parseCommand(`/forceroompromote ${target}, ${g}`, true);
+				} else if (fullCmd === 'roomde' + groupid || fullCmd === 'deroom' + groupid || fullCmd === 'roomun' + groupid) {
+					return this.parseCommand(`/roomdemote ${target}`, true);
+				}
+			}
+		}
+
+		return {
+			cmd: cmd,
+			cmdToken: cmdToken,
+			target: target,
+			fullCmd: fullCmd,
+			handler: commandHandler as AnnotatedChatHandler | null,
+		};
 	}
 
 	/**
