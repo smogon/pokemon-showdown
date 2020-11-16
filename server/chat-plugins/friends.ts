@@ -62,6 +62,10 @@ export const Friends = new class {
 			this.database = new Sqlite(`${__dirname}/../../databases/friends.db`);
 			this.database!.exec(FS('databases/schemas/friends.sql').readSync());
 		}
+		const startup = FS(`databases/schemas/friends-startup.sql`);
+		if (startup.existsSync()) {
+			this.database?.exec(startup.readSync());
+		}
 	}
 	checkExpiringRequests() {
 		if (!this.database) return;
@@ -171,10 +175,8 @@ export const Friends = new class {
 			offline: [],
 		};
 		const loginTimes: {[k: string]: number} = {};
-		const renames: {[k: string]: string} = {};
-		for (const {friend: friendName, last_login, old_name, allowing_login} of [...friends].sort() as AnyObject[]) {
-			const friend = Users.get(friendName as string);
-			const friendID = toID(friendName);
+		for (const {friend: friendID, last_login, allowing_login} of [...friends].sort()) {
+			const friend = Users.get(friendID);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
 			} else {
@@ -182,9 +184,6 @@ export const Friends = new class {
 				if (!allowing_login) {
 					loginTimes[friendID] = last_login;
 				}
-			}
-			if (old_name) {
-				renames[friendID] = old_name;
 			}
 		}
 
@@ -211,14 +210,14 @@ export const Friends = new class {
 			for (const friend of friendArray) {
 				const friendID = toID(friend);
 				buf += `<div class="pad"><div>`;
-				buf += this.displayFriend(friendID, loginTimes[friendID], renames[friendID]);
+				buf += this.displayFriend(friendID, loginTimes[friendID]);
 				buf += `</div></div>`;
 			}
 		}
 
 		return buf;
 	}
-	displayFriend(userid: ID, login?: number, oldName?: string) {
+	displayFriend(userid: ID, login?: number) {
 		const user = Users.getExact(userid); // we want this to be exact
 		const name = Utils.escapeHTML(user ? user.name : userid);
 		const statusType = user?.connected ?
@@ -229,14 +228,10 @@ export const Friends = new class {
 			Utils.html`<i>${name}</i> <small>(${statusType})</small>`;
 		buf += `<br />`;
 
-		if (oldName) {
-			buf += Utils.html`<small>(recently renamed from ${oldName})</small><br />`;
-		}
-
 		const curUser = Users.get(userid); // might be an alt
 		if (user) {
 			if (user.userMessage) buf += Utils.html`Status: <i>${user.userMessage}</i><br />`;
-		} else if (curUser?.id && curUser.id !== userid) {
+		} else if (curUser && curUser.id !== userid) {
 			buf += `<small>On an alternate account</small><br />`;
 		}
 		if (login && typeof login === 'number' && !user?.connected) {
@@ -294,33 +289,22 @@ export const Friends = new class {
 		const friends = await this.getFriends(user);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const f of friends) {
-			const {friend} = f;
+			const {user1, user2} = f;
+			const friend = user1 !== user.id ? user1 : user2;
 			const curUser = Users.get(friend as string);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
 			}
 		}
 	}
-	async transfer(oldUser: User, newID: ID) {
-		const oldID = oldUser.id;
-		const newUser = Users.getExact(newID);
-		if (!newUser) {
-			throw new Chat.ErrorMessage(`The user '${newID}' could not be found, and so could not receive the friend transfer`);
-		}
-		const result = await this.query({
-			statement: 'rename', type: 'transaction', data: [oldID, newID],
-		});
-		return result;
-	}
 	writeLogin(user: User) {
-		if (user.settings.hideLogins) return;
 		return this.query({
 			statement: 'login', type: 'run', data: [Date.now(), user.id],
 		});
 	}
 	hideLoginData(user: User) {
 		return this.query({
-			statement: 'hideLogin', type: 'run', data: [user.id],
+			statement: 'hideLogin', type: 'run', data: [user.id, Date.now()],
 		});
 	}
 	allowLoginData(user: User) {
@@ -473,57 +457,6 @@ export const commands: ChatCommands = {
 				this.parse(`/j view-friends-settings`);
 			}
 			user.update();
-		},
-		requesttransfer(target, room, user) {
-			target = toID(target);
-			if (!target) return this.parse(`/help friends`);
-			if (Friends.transferRequests.get(target)) {
-				return this.errorReply(this.tr`This user already has a transfer request pending.`);
-			}
-			if (target === user.id) {
-				return this.errorReply(`You cannot transfer your friends to yourself.`);
-			}
-			const targetUser = Users.getExact(target);
-			if (!targetUser) return this.errorReply(this.tr`User not found.`);
-			if (!targetUser.autoconfirmed) {
-				return this.errorReply(this.tr`You can only transfer friends to another autoconfirmed account.`);
-			}
-			if (targetUser.settings.blockFriendRequests) {
-				return this.errorReply(this.tr`This user is blocking friend requests, and so you cannot transfer friends to them.`);
-			}
-			Friends.transferRequests.set(targetUser.id, user.id);
-			Friends.sendPM(`/text ${user.name} wants to transfer their friends to you!`, targetUser.id);
-			Friends.sendPM(
-				`/raw <button class="button" name="send" value="/friends approvetransfer ${user.id}">${this.tr('Approve')}</button>`,
-				targetUser.id
-			);
-			Friends.sendPM(
-				`/raw <button class="button" name="send" value="/friends denytransfer ${user.id}">${this.tr('Deny')}</button>`,
-				targetUser.id
-			);
-			return Friends.sendPM(this.tr`You sent a friend transfer request to '${targetUser.name}'.`, user.id);
-		},
-		async approvetransfer(target, room, user, connection) {
-			Friends.checkCanUse(this);
-			if (!Friends.transferRequests.has(user.id)) {
-				return Friends.sendPM(this.tr`You have no pending friend transfer request.`, user.id);
-			}
-			const targetUser = Users.getExact(toID(target));
-			if (!targetUser) return this.errorReply(this.tr`User '${target}' not found.`);
-			await Friends.transfer(targetUser, user.id);
-
-			Friends.sendPM(`/nonotify ${user.name} ${this.tr`transferred their friends to you.`}`, targetUser.id);
-			return Friends.sendPM(this.tr`You approved ${targetUser.name}'s friend transfer request!`, user.id);
-		},
-		denytransfer(target, room, user) {
-			Friends.checkCanUse(this);
-			target = toID(target);
-			const requester = Friends.transferRequests.get(user.id);
-			if (!requester) {
-				return Friends.sendPM(`/error ${this.tr`You have no pending friend transfer request.`}`, user.id);
-			}
-			Friends.transferRequests.delete(user.id);
-			return Friends.sendPM(`/error ${this.tr`Denied the friend transfer request from '${requester}'.`}`, user.id);
 		},
 		async undorequest(target, room, user, connection) {
 			Friends.checkCanUse(this);
@@ -737,6 +670,7 @@ export const PM = new QueryProcessManager<DatabaseRequest, DatabaseResult>(modul
 		}
 		return {error: e.message};
 	}
+	if (!result) result = {};
 	if (result.result) result = result.result;
 	return {result} || {error: 'Unknown error in database query.'};
 });
@@ -744,63 +678,42 @@ export const PM = new QueryProcessManager<DatabaseRequest, DatabaseResult>(modul
 
 const ACTIONS = {
 	add: (
-		`REPLACE INTO friends (userid, friend, last_login) VALUES($userid, $friend, $login) ON CONFLICT (userid, friend) ` +
-		`DO UPDATE SET userid = $userid, friend = $friend`
+		`REPLACE INTO friends (user1, user2) VALUES($user1, $user2) ON CONFLICT (user1, user2) ` +
+		`DO UPDATE SET user1 = $user1, user2 = $user2`
 	),
 	get: (
-		`SELECT *,
-		(SELECT new_name from friend_renames WHERE original_name = friend ORDER BY change_date desc LIMIT 1) new_name,
-		(SELECT send_login_data FROM friend_settings WHERE name = friend AND send_login_data = 1) allowing_login
-		FROM friends WHERE userid = ? LIMIT ?`
+		`SELECT * ` +
+		`FROM friends_simplified LEFT JOIN friend_settings ON friend_settings.name = friends_simplified.userid ` +
+		`WHERE userid = ? LIMIT ?`
 	),
 	// may look duplicated, but you pass in [userid1, userid2, userid2, userid1]
-	delete: `DELETE FROM friends WHERE (userid = ? AND friend = ?) OR (userid = ? AND friend = ?)`,
+	delete: `DELETE FROM friends WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)`,
 	getSent: `SELECT receiver, sender FROM friend_requests WHERE sender = ?`,
 	getReceived: `SELECT receiver, sender FROM friend_requests WHERE receiver = ?`,
 	insertRequest: `INSERT INTO friend_requests(sender, receiver, sent_at) VALUES(?, ?, ?)`,
 	deleteRequest: `DELETE FROM friend_requests WHERE sender = ? AND receiver = ?`,
-	findFriendship: `SELECT * FROM friends WHERE (friend = $user1 AND userid = $user2) OR (userid = $user1 AND friend = $user2)`,
+	findFriendship: `SELECT * FROM friends WHERE (user1 = $user1 AND user2 = $user2) OR (user2 = $user1 AND user1 = $user2)`,
 	findRequest: (
 		`SELECT count(*) FROM friend_requests WHERE ` +
 		`(sender = $user1 AND receiver = $user2) OR (sender = $user2 AND receiver = $user1)`
 	),
 	countRequests: `SELECT count(*) FROM friend_requests WHERE (sender = ? OR receiver = ?)`,
-	renameFriend: `UPDATE OR IGNORE friends SET friend = $newID WHERE friend = $oldID`,
-	renameUserid: `UPDATE OR IGNORE friends SET userid = $newID WHERE userid = $oldID`,
-	rename: `REPLACE INTO friend_renames (original_name, new_name, change_date) VALUES(?, ?, ?)`,
-	login: `UPDATE friends SET last_login = ? WHERE friend = ?`,
-	checkLastLogin: `SELECT last_login FROM friends WHERE friend = ?`,
-	deleteLogin: `UPDATE friends SET last_login = null WHERE friend = ?`,
+	login: `UPDATE friend_settings SET last_login = ? WHERE name = ?`,
+	checkLastLogin: `SELECT last_login FROM friend_settings WHERE name= ?`,
+	deleteLogin: `UPDATE friend_settings SET last_login = null WHERE name = ?`,
 	expire: (
 		`DELETE FROM friend_requests WHERE EXISTS` +
 		`(SELECT sent_at FROM friend_requests WHERE should_expire(sent_at) = 1)`
 	),
-	hideLogin: `REPLACE INTO friend_settings (name, send_login_data) VALUES (?, 1)`,
+	hideLogin: (
+		`INSERT INTO friend_settings (name, send_login_data, last_login) VALUES (?, 1, ?) ` +
+		`ON CONFLICT (name) DO UPDATE SET send_login_data = 1`
+	),
 	showLogin: `DELETE FROM friend_settings WHERE name = ? AND send_login_data = 1`,
-	countFriends: `SELECT count(*) FROM friends WHERE userid = ?`,
-	renameSender: `UPDATE friend_requests SET sender = $newID WHERE sender = $oldID`,
-	renameReceiver: `UPDATE friend_requests SET receiver = $newID WHERE receiver = $oldID`,
+	countFriends: `SELECT count(*) FROM friends WHERE (user1 = ? OR user2 = ?)`,
 };
 
 const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
-	rename: requests => {
-		for (const request of requests) {
-			const [oldID, newID] = request;
-			const oldFriends = statements.countFriends.get(oldID, MAX_FRIENDS)['count(*)'];
-			if (!oldFriends.length) {
-				throw new Chat.ErrorMessage(`You have no friends to transfer.`);
-			}
-			statements.renameSender.run({oldID, newID});
-			statements.renameReceiver.run({oldID, newID});
-			// unfriend the two
-			statements.delete.run({userid: newID});
-
-			statements.renameFriend.run({oldID, newID});
-			statements.renameUserid.run({oldID, newID});
-			statements.rename.run(oldID, newID, Date.now());
-		}
-		return {result: []};
-	},
 	send: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
@@ -832,15 +745,13 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	add: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
-			const last_login = Date.now();
-			statements.add.run({userid: senderID, friend: receiverID, last_login});
-			statements.add.run({friend: senderID, userid: receiverID, last_login});
+			statements.add.run({user1: senderID, user2: receiverID});
 		}
 		return {result: []};
 	},
 	accept: requests => {
 		for (const request of requests) {
-			const [senderID, receiverID] = request;
+			const [, receiverID] = request;
 			const results = TRANSACTIONS.removeRequest([request]);
 			if (!results) throw new Chat.ErrorMessage(`You have no request pending from ${receiverID}.`);
 			TRANSACTIONS.add([request]);
@@ -861,7 +772,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 // if friends.database exists, Config.usesqlite is on.
 if (!PM.isParentProcess && Friends.database) {
 	for (const k in ACTIONS) {
-		statements[k] = Friends.database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
+		try {
+			statements[k] = Friends.database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
+		} catch (e) {
+			throw new Error(`Friends DB statement crashed: ${ACTIONS[k as keyof typeof ACTIONS]} (${e.message})`);
+		}
 	}
 	for (const k in TRANSACTIONS) {
 		transactions[k] = Friends.database.transaction(TRANSACTIONS[k]);
