@@ -31,6 +31,23 @@ export const Scripts: ModdedBattleScriptsData = {
 		return true;
 	},
 
+	// Modded for Mega Rayquaza
+	canMegaEvo(pokemon) {
+		const species = pokemon.baseSpecies;
+		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
+		const item = pokemon.getItem();
+		// Mega Rayquaza
+		if (altForme?.isMega && altForme?.requiredMove &&
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove) {
+			return altForme.name;
+		}
+		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
+		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
+			return item.megaStone;
+		}
+		return null;
+	},
+
 	// 1 Z per pokemon
 	canZMove(pokemon) {
 		if (pokemon.m.zMoveUsed ||

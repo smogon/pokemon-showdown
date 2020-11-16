@@ -446,8 +446,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	dogknees: {
 		noCopy: true,
-		onStart() {
+		onStart(source) {
 			this.add(`c|${getName('dogknees')}|Your opinion is wrong if you think cats are better than dogs ૮・ﻌ・ა`);
+			if (source.illusion) return;
+			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('dogknees')}|Yes, dogs do have knees. Stop asking me.`);

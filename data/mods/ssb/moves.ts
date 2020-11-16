@@ -1443,6 +1443,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		heal: [1, 4],
 		secondary: null,
+		// zMove: {boost: {spd: 2}}, TODO: Figure out
 		target: "self",
 		type: "Normal",
 	},

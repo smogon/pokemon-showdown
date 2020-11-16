@@ -55,6 +55,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 86, atk: 58, def: 62, spa: 87, spd: 62, spe: 74},
 	},
+	// dogknees
+	furret: {
+		inherit: true,
+		types: ['Normal', 'Ghost'],
+	},
 	// Elgino
 	celebi: {
 		inherit: true,
