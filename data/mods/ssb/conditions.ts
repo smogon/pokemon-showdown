@@ -1698,7 +1698,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Volco')}|/me controller clicking fades`);
 		},
 		onFaint(source, target, effect) {
-			if (effect.id === 'glitchexploiting') {
+			if (effect?.id === 'glitchexploiting') {
 				this.add(`c|${getName('Volco')}|Dammit, time for a reset.`);
 				return;
 			}
