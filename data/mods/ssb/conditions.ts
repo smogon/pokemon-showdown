@@ -206,10 +206,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Archas')}|They say the captain always goes down with the ship...`);
 		},
-		onSwitchIn(pokemon) {
-			if (pokemon.illusion) return;
-			if (!pokemon.m.indomitableActivated) pokemon.m.indomitableActivated = false;
-		},
 	},
 	arcticblast: {
 		noCopy: true,
@@ -2018,6 +2014,23 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifySpe(spe, pokemon) {
 			return this.chainModify(0.25);
+		},
+	},
+	// For ravioliqueen
+	haunting: {
+		name: 'Haunting',
+		onTrapPokemon(pokemon) {
+			pokemon.tryTrap();
+		},
+		onStart(target) {
+			this.add('-start', target, 'Haunting');
+		},
+		onResidualOrder: 11,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 8);
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Haunting');
 		},
 	},
 	// boost for LittEleven's move

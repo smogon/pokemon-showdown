@@ -812,8 +812,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Finland
 	windingsong: {
-		desc: "Please refer to the user guide for more information.",
-		shortDesc: "Please refer to the user guide for more information.",
+		desc: "Calm mind boost. Alternates between moves.",
+		shortDesc: "+1 Spa/Spd. Alternates between moves.",
 		name: "Winding Song",
 		isPermanent: true,
 		onSwitchIn(source) {

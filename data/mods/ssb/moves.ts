@@ -1004,6 +1004,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-fieldstart', 'move: Bane Terrain');
 				}
+				this.add('-message', 'The battlefield suddenly became grim!');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 3,
@@ -1146,12 +1147,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Please refer to the guide for details on this move.",
-		shortDesc: "Please refer to the guide for details on this move.",
+		desc: "Gains protean and some random moves. Uses a random move as well.",
+		shortDesc: "Gains protean and some random moves.",
 		name: "Pandora's Box",
 		isNonstandard: "Custom",
 		gen: 8,
-		pp: 8,
+		pp: 5,
 		priority: 1,
 		flags: {snatch: 1},
 		onTryMove() {
@@ -1215,6 +1216,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					};
 				}
 				target.setAbility('protean');
+				this.add('-ability', target, target.getAbility().name, '[from] move: Pandora\'s Box');
 			},
 			onResidual(pokemon) {
 				if (this.effectData.moveToUse) {
@@ -1769,8 +1771,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Please refer to the guide for information on this move.",
-		shortDesc: "Please refer to the guide for information on this move.",
+		desc: "Random Boost to both sides. target is forcefully toxiced, and changes form.",
+		shortDesc: "Random Boosts. Tox. Changes form.",
 		name: "Cradily Chaos",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1918,7 +1920,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Shell Smash; Then Randomly Changes Minior's Forme.",
+		desc: "Shell Smash; Then Randomly Changes Minior's Forme with a different effect for each form.",
 		shortDesc: "Shell Smash; Then Randomly Changes Minior's Forme.",
 		name: "Gacha",
 		pp: 15,
@@ -3784,6 +3786,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-fieldstart', 'move: Swampy Terrain');
 				}
+				this.add('-message', 'The battlefield became swamped!');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 3,
@@ -4011,6 +4014,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-fieldstart', 'move: Inversion Terrain');
 				}
+				this.add('-message', 'The battlefield became upside down!');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 3,
@@ -4103,6 +4107,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		desc: "50% chance to trap deal 1/8th each turn.",
+		shortDesc: "50% chance to trap deal 1/8th each turn.",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4112,7 +4118,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: {
 			chance: 50,
-			volatileStatus: 'partiallytrapped',
+			volatileStatus: 'haunting',
 		},
 		target: "normal",
 		type: "Ghost",
@@ -4121,8 +4127,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the terrain becomes Pitch Black. Please read the guide for the longer description of this terrain.",
-		shortDesc: "5 turns. Terrain becomes Pitch Black. Non Ghost types take 1/16th damage; Has boosting effects on Mismagius.",
+		desc: "For 5 turns, Non Ghost types take 1/16th damage; Has boosting effects on Mismagius.",
+		shortDesc: "5 turns. Non Ghost types take 1/16th damage; Has boosting effects on Mismagius.",
 		name: "Pitch Black",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4138,32 +4144,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 5;
 			},
-			onModifySpA(spa, pokemon) {
-				if (this.effectData.source !== pokemon) return;
-				return this.chainModify(1.5);
-			},
-			onModifySpD(atk, pokemon) {
-				if (this.effectData.source !== pokemon) return;
-				return this.chainModify(1.5);
-			},
 			onHit(target, source, move) {
 				if (!target.hp || target.species.name !== 'Mismagius') return;
 				if (move?.effectType === 'Move' && move.category !== 'Status') {
 					this.boost({spe: 1}, target);
-					this.add('-boost', target, 'atk', 1, '[from] terrain: Pitch Black');
+				}
+			},
+			onSwitchInPriority: -1,
+			onSwitchIn(target) {
+				if (target?.species.name === 'Mismagius') {
+					this.boost({spa: 1, spd: 1}, target);
 				}
 			},
 			onStart(battle, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Phantom Plane', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Pitch Black', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
-					this.add('-fieldstart', 'move: Phantom Plane');
+					this.add('-fieldstart', 'move: Pitch Black');
+				}
+				this.add('-message', 'The battlefield became dark!');
+				if (source?.species.name === 'Mismagius') {
+					this.boost({spa: 1, spd: 1}, source);
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
 			onTerrain(pokemon) {
-				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+				if (!pokemon.isSemiInvulnerable()) {
 					if (pokemon && !pokemon.hasType('Ghost')) {
 						this.damage(pokemon.baseMaxhp / 16, pokemon);
 					}
@@ -4607,6 +4617,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-fieldstart', 'move: Tempest Terrain');
 				}
+				this.add('-message', 'The battlefield became stormy!');
 			},
 			onEnd() {
 				this.add('-fieldend', 'move: Tempest Terrain');
@@ -4751,10 +4762,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onStart(battle, source, effect) {
-				this.add('-fieldstart', 'move: Fire Pledge');
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Lava Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Lava Terrain');
+				}
+				this.add('-message', 'The battlefield became hot!');
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					if (pokemon && !pokemon.hasType('Fire')) {
