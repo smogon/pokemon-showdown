@@ -829,7 +829,7 @@ export const Formats: {[k: string]: FormatData} = {
 	desyncclausemod: {
 		effectType: 'Rule',
 		name: 'Desync Clause Mod',
-		desc: 'In the event a move would cause a desync, the move will fail instead. This rule covers Psywave and Counter.',
+		desc: 'If a desync would happen, the move fails instead. This rule currently covers Psywave and Counter.',
 		onBegin() {
 			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
 		},
