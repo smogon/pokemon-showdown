@@ -720,8 +720,13 @@ export abstract class BasicRoom {
 			}
 			if (this.roomid.endsWith('pw')) return true;
 			this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
-		} else if (!privacy && 'makePublic' in this) {
-			(this as GameRoom).makePublic();
+		} else if (!privacy) {
+			this.settings.isPrivate = false;
+			if (this instanceof GameRoom) {
+				if (!this.roomid.endsWith('pw')) return true;
+				const {id} = this.getReplayData();
+				this.rename(this.title, `battle-${id}` as RoomID);
+			}
 		}
 	}
 
@@ -1699,13 +1704,6 @@ export class GameRoom extends BasicRoom {
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
 		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
 	}
-
-	makePublic() {
-		this.settings.isPrivate = false;
-		if (!this.roomid.endsWith('pw')) return true;
-		const {id} = this.getReplayData();
-		this.rename(this.title, `battle-${id}` as RoomID);
-	}
 }
 
 function getRoom(roomid?: string | BasicRoom) {
@@ -1824,7 +1822,7 @@ export const Rooms = {
 
 		if (privacySetter.size) {
 			if (battle.forcePublic) {
-				room.makePublic();
+				room.setPrivate(false);
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
