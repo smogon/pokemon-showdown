@@ -1186,10 +1186,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (this.started) this.played.push(newPlayer.id);
 		this.sendDeclare(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`);
-		this.updatePlayers();
 
 		delete this.playerTable[oldPlayer.id];
 		oldPlayer.destroy();
+		this.updatePlayers();
 
 		if (this.room.roomid === 'mafia' && this.started) {
 			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
