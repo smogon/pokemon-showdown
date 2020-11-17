@@ -2643,6 +2643,9 @@ export const commands: ChatCommands = {
 		}
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(rawResult);
+		if (!result) {
+			return this.errorReply(`There was no data found for '${target}'.`);
+		}
 		const date = new Date(result.registertime * 1000);
 		const regDate = Chat.toTimestamp(date, {human: true});
 		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
