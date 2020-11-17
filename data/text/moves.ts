@@ -96,8 +96,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	airslash: {
 		name: "Air Slash",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	alloutpummeling: {
 		name: "All-Out Pummeling",
@@ -169,10 +169,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	aromatherapy: {
 		name: "Aromatherapy",
-		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
+		desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		gen5: {
-			desc: "Every Pokemon in the user's party is cured of its major status condition.",
+			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
 
 		activate: "  A soothing aroma wafted through the area!",
@@ -209,10 +209,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	astonish: {
 		name: "Astonish",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen3: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	astralbarrage: {
@@ -335,16 +335,16 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	beatup: {
 		name: "Beat Up",
-		desc: "Hits one time for the user and one time for each unfainted Pokemon without a major status condition in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Attack; each hit is considered to come from the user.",
+		desc: "Hits one time for the user and one time for each unfainted Pokemon without a non-volatile status condition in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Attack; each hit is considered to come from the user.",
 		shortDesc: "All healthy allies aid in damaging the target.",
 		gen4: {
-			desc: "Deals typeless damage. Hits one time for the user and one time for each unfainted Pokemon without a major status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
+			desc: "Deals typeless damage. Hits one time for the user and one time for each unfainted Pokemon without a non-volatile status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
 		},
 		gen3: {
-			desc: "Deals typeless damage. Hits one time for each unfainted Pokemon without a major status condition in the user's party, or fails if no Pokemon meet the criteria. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
+			desc: "Deals typeless damage. Hits one time for each unfainted Pokemon without a non-volatile status condition in the user's party, or fails if no Pokemon meet the criteria. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
 		},
 		gen2: {
-			desc: "Deals typeless damage. Hits one time for each unfainted Pokemon without a major status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's level, its base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense. Fails if no party members can participate.",
+			desc: "Deals typeless damage. Hits one time for each unfainted Pokemon without a non-volatile status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's level, its base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense. Fails if no party members can participate.",
 		},
 
 		activate: "  [NAME]'s attack!", // past gen only
@@ -431,11 +431,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	bite: {
 		name: "Bite",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen1: {
-			desc: "Has a 10% chance to flinch the target.",
-			shortDesc: "10% chance to flinch the target.",
+			desc: "Has a 10% chance to make the target flinch.",
+			shortDesc: "10% chance to make the target flinch.",
 		},
 	},
 	blackholeeclipse: {
@@ -515,8 +515,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	boneclub: {
 		name: "Bone Club",
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
 	},
 	bonemerang: {
 		name: "Bonemerang",
@@ -1080,8 +1080,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	darkpulse: {
 		name: "Dark Pulse",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 	},
 	darkvoid: {
 		name: "Dark Void",
@@ -1305,8 +1305,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	doubleironbash: {
 		name: "Double Iron Bash",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. Has a 30% chance to flinch the target.",
-		shortDesc: "Hits twice. 30% chance to flinch.",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. Has a 30% chance to make the target flinch.",
+		shortDesc: "Hits twice. 30% chance to make the target flinch.",
 	},
 	doublekick: {
 		name: "Double Kick",
@@ -1391,10 +1391,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	dragonrush: {
 		name: "Dragon Rush",
-		desc: "Has a 20% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "20% chance to make the target flinch.",
 		gen5: {
-			desc: "Has a 20% chance to flinch the target.",
+			desc: "Has a 20% chance to make the target flinch.",
 		},
 	},
 	dragontail: {
@@ -1506,10 +1506,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	electricterrain: {
 		name: "Electric Terrain",
-		desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.3 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
+		desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.3 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Grounded Pokemon cannot become affected by Yawn or fall asleep from its effect. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
 		shortDesc: "5 turns. Grounded: +Electric power, can't sleep.",
 		gen7: {
-			desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
+			desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Grounded Pokemon cannot become affected by Yawn or fall asleep from its effect. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
 		},
 	},
 	electrify: {
@@ -1655,10 +1655,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	extrasensory: {
 		name: "Extrasensory",
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
 		gen3: {
-			desc: "Has a 10% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 10% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	extremeevoboost: {
@@ -1698,7 +1698,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fakeout: {
 		name: "Fake Out",
-		desc: "Has a 100% chance to flinch the target. Fails unless it is the user's first turn on the field.",
+		desc: "Has a 100% chance to make the target flinch. Fails unless it is the user's first turn on the field.",
 		shortDesc: "Hits first. First turn out only. 100% flinch chance.",
 	},
 	faketears: {
@@ -1757,8 +1757,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fierywrath: {
 		name: "Fiery Wrath",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the foe(s).",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the foe(s) flinch.",
 	},
 	finalgambit: {
 		name: "Final Gambit",
@@ -1776,10 +1776,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	firefang: {
 		name: "Fire Fang",
-		desc: "Has a 10% chance to burn the target and a 10% chance to flinch it.",
+		desc: "Has a 10% chance to burn the target and a 10% chance to make it flinch.",
 		shortDesc: "10% chance to burn. 10% chance to flinch.",
 		gen4: {
-			desc: "Has a 10% chance to burn the target and a 10% chance to flinch it. This move can hit Pokemon with the Wonder Guard Ability regardless of their typing.",
+			desc: "Has a 10% chance to burn the target and a 10% chance to make it flinch. This move can hit Pokemon with the Wonder Guard Ability regardless of their typing.",
 		},
 	},
 	firelash: {
@@ -1931,8 +1931,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	floatyfall: {
 		name: "Floaty Fall",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	floralhealing: {
 		name: "Floral Healing",
@@ -2591,14 +2591,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Resets the stat stages of all active Pokemon to 0.",
 		shortDesc: "Eliminates all stat changes.",
 		gen1: {
-			desc: "Resets the stat stages of both Pokemon to 0 and removes stat reductions due to burn and paralysis. Resets Toxic counters to 0 and removes the effect of confusion, Disable, Focus Energy, Leech Seed, Light Screen, Mist, and Reflect from both Pokemon. Removes the opponent's major status condition.",
+			desc: "Resets the stat stages of both Pokemon to 0 and removes stat reductions due to burn and paralysis. Resets Toxic counters to 0 and removes the effect of confusion, Disable, Focus Energy, Leech Seed, Light Screen, Mist, and Reflect from both Pokemon. Removes the opponent's non-volatile status condition.",
 			shortDesc: "Resets all stat changes. Removes foe's status.",
 		},
 	},
 	headbutt: {
 		name: "Headbutt",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	headcharge: {
 		name: "Head Charge",
@@ -2615,19 +2615,19 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	healbell: {
 		name: "Heal Bell",
-		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
+		desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		gen7: {
-			desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured.",
+			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		},
 		gen5: {
-			desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are also cured.",
+			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are also cured.",
 		},
 		gen4: {
-			desc: "Every Pokemon in the user's party is cured of its major status condition. Pokemon with the Soundproof Ability are not cured.",
+			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Pokemon with the Soundproof Ability are not cured.",
 		},
 		gen2: {
-			desc: "Every Pokemon in the user's party is cured of its major status condition.",
+			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
 
 		activate: "  A bell chimed!",
@@ -2652,14 +2652,14 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	healingwish: {
 		name: "Healing Wish",
-		desc: "The user faints and the next injured or statused Pokemon brought in has its HP fully restored along with having any major status condition cured. The healing happens before hazards take effect. Is not consumed if the Pokemon sent out is not injured or statused. Fails if the user is the last unfainted Pokemon in its party.",
+		desc: "The user faints and the next injured or statused Pokemon brought in has its HP fully restored along with having any non-volatile status condition cured. The healing happens before hazards take effect. Is not consumed if the Pokemon sent out is not injured or statused. Fails if the user is the last unfainted Pokemon in its party.",
 		shortDesc: "User faints. Next hurt Pokemon is fully healed.",
 		gen7: {
-			desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
+			desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any non-volatile status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 			shortDesc: "User faints. Replacement is fully healed.",
 		},
 		gen4: {
-			desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. The new Pokemon is sent out immediately and the healing happens after hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
+			desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any non-volatile status condition cured. The new Pokemon is sent out immediately and the healing happens after hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 		},
 
 		heal: "  The healing wish came true for [POKEMON]!",
@@ -2682,8 +2682,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	heartstamp: {
 		name: "Heart Stamp",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	heartswap: {
 		name: "Heart Swap",
@@ -2720,7 +2720,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hex: {
 		name: "Hex",
-		desc: "Power doubles if the target has a major status condition.",
+		desc: "Power doubles if the target has a non-volatile status condition.",
 		shortDesc: "Power doubles if the target has a status ailment.",
 	},
 	hiddenpower: {
@@ -2887,8 +2887,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hyperfang: {
 		name: "Hyper Fang",
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
 	},
 	hyperspacefury: {
 		name: "Hyperspace Fury",
@@ -2942,7 +2942,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	icefang: {
 		name: "Ice Fang",
-		desc: "Has a 10% chance to freeze the target and a 10% chance to flinch it.",
+		desc: "Has a 10% chance to freeze the target and a 10% chance to make it flinch.",
 		shortDesc: "10% chance to freeze. 10% chance to flinch.",
 	},
 	icehammer: {
@@ -2962,8 +2962,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	iciclecrash: {
 		name: "Icicle Crash",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	iciclespear: {
 		name: "Icicle Spear",
@@ -3077,8 +3077,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	ironhead: {
 		name: "Iron Head",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	irontail: {
 		name: "Iron Tail",
@@ -3327,8 +3327,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This move's power is 20 if the target weighs less than 10 kg, 40 if less than 25 kg, 60 if less than 50 kg, 80 if less than 100 kg, 100 if less than 200 kg, and 120 if greater than or equal to 200 kg.",
 		shortDesc: "More power the heavier the target.",
 		gen2: {
-			desc: "Has a 30% chance to flinch the target.",
-			shortDesc: "30% chance to flinch the target.",
+			desc: "Has a 30% chance to make the target flinch.",
+			shortDesc: "30% chance to make the target flinch.",
 		},
 	},
 	lowsweep: {
@@ -3346,10 +3346,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	lunardance: {
 		name: "Lunar Dance",
-		desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
+		desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any non-volatile status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 		shortDesc: "User faints. Replacement is fully healed, with PP.",
 		gen4: {
-			desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any major status condition cured. The new Pokemon is sent out immediately and the healing happens after hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
+			desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any non-volatile status condition cured. The new Pokemon is sent out immediately and the healing happens after hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 		},
 
 		heal: "  [POKEMON] became cloaked in mystical moonlight!",
@@ -3860,10 +3860,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
-		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a major status condition nor confusion. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
+		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition nor confusion. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
 		shortDesc: "5 turns. Can't status,-Dragon power vs grounded.",
 		gen6: {
-			desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a major status condition. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
+			desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
 		},
 	},
 	moonblast: {
@@ -3995,10 +3995,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	needlearm: {
 		name: "Needle Arm",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen3: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	neverendingnightmare: {
@@ -4470,7 +4470,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	psychoshift: {
 		name: "Psycho Shift",
-		desc: "The user's major status condition is transferred to the target, and the user is then cured. Fails if the user has no major status condition or if the target already has one.",
+		desc: "The user's non-volatile status condition is transferred to the target, and the user is then cured. Fails if the user has no non-volatile status condition or if the target already has one.",
 		shortDesc: "Transfers the user's status ailment to the target.",
 	},
 	psyshock: {
@@ -4506,7 +4506,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	purify: {
 		name: "Purify",
-		desc: "The target is cured if it has a major status condition. If the target was cured, the user restores 1/2 of its maximum HP, rounded half up.",
+		desc: "The target is cured if it has a non-volatile status condition. If the target was cured, the user restores 1/2 of its maximum HP, rounded half up.",
 		shortDesc: "Cures target's status; heals user 1/2 max HP if so.",
 	},
 	pursuit: {
@@ -4729,13 +4729,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	rest: {
 		name: "Rest",
-		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
+		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "User sleeps 2 turns and restores HP and status.",
 		gen2: {
-			desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process, even if it was already asleep. Fails if the user has full HP.",
+			desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process, even if it was already asleep. Fails if the user has full HP.",
 		},
 		gen1: {
-			desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process. This does not remove the user's stat penalty for burn or paralysis. Fails if the user has full HP.",
+			desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process. This does not remove the user's stat penalty for burn or paralysis. Fails if the user has full HP.",
 		},
 	},
 	retaliate: {
@@ -4827,14 +4827,14 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	rockslide: {
 		name: "Rock Slide",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the foe(s).",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the foe(s) flinch.",
 		gen1: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
 		},
 		gen2: {
-			shortDesc: "30% chance to flinch the target.",
+			shortDesc: "30% chance to make the target flinch.",
 		},
 	},
 	rocksmash: {
@@ -4880,8 +4880,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	rollingkick: {
 		name: "Rolling Kick",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	rollout: {
 		name: "Rollout",
@@ -4923,13 +4923,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	safeguard: {
 		name: "Safeguard",
-		desc: "For 5 turns, the user and its party members cannot have major status conditions or confusion inflicted on them by other Pokemon. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, protects user's party from status.",
 		gen3: {
-			desc: "For 5 turns, the user and its party members cannot have major status conditions or confusion inflicted on them by other Pokemon. Fails if the effect is already active on the user's side.",
+			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. Fails if the effect is already active on the user's side.",
 		},
 		gen2: {
-			desc: "For 5 turns, the user and its party members cannot have major status conditions or confusion inflicted on them by other Pokemon. During the effect, Outrage, Thrash, and Petal Dance do not confuse the user. Fails if the effect is already active on the user's side.",
+			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. During the effect, Outrage, Thrash, and Petal Dance do not confuse the user. Fails if the effect is already active on the user's side.",
 		},
 
 		start: "  [TEAM] cloaked itself in a mystical veil!",
@@ -5272,10 +5272,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
 		gen3: {
-			desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
+			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
 		gen2: {
 			desc: "This attack charges on the first turn and executes on the second.",
@@ -5432,7 +5432,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	snore: {
 		name: "Snore",
-		desc: "Has a 30% chance to flinch the target. Fails if the user is not asleep.",
+		desc: "Has a 30% chance to make the target flinch. Fails if the user is not asleep.",
 		shortDesc: "User must be asleep. 30% chance to flinch target.",
 	},
 	soak: {
@@ -5522,7 +5522,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sparklyswirl: {
 		name: "Sparkly Swirl",
-		desc: "Every Pokemon in the user's party is cured of its major status condition.",
+		desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		shortDesc: "Cures the user's party of all status conditions.",
 	},
 	spectralthief: {
@@ -5687,10 +5687,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	steamroller: {
 		name: "Steamroller",
-		desc: "Has a 30% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen5: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	steelbeam: {
@@ -5736,22 +5736,22 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	stomp: {
 		name: "Stomp",
-		desc: "Has a 30% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen5: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 		gen4: {
-			desc: "Has a 30% chance to flinch the target. Power doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Power doubles if the target has used Minimize while active.",
 		},
 		gen3: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 		gen2: {
-			desc: "Has a 30% chance to flinch the target. Power doubles if the target is under the effect of Minimize.",
+			desc: "Has a 30% chance to make the target flinch. Power doubles if the target is under the effect of Minimize.",
 		},
 		gen1: {
-			desc: "Has a 30% chance to flinch the target.",
+			desc: "Has a 30% chance to make the target flinch.",
 		},
 	},
 	stompingtantrum: {
@@ -6272,7 +6272,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	thunderfang: {
 		name: "Thunder Fang",
-		desc: "Has a 10% chance to paralyze the target and a 10% chance to flinch it.",
+		desc: "Has a 10% chance to paralyze the target and a 10% chance to make it flinch.",
 		shortDesc: "10% chance to paralyze. 10% chance to flinch.",
 	},
 	thunderouskick: {
@@ -6456,14 +6456,14 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	twister: {
 		name: "Twister",
-		desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
-		shortDesc: "20% chance to flinch the foe(s).",
+		desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
+		shortDesc: "20% chance to make the foe(s) flinch.",
 		gen4: {
-			desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Bounce or Fly.",
+			desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce or Fly.",
 		},
 		gen2: {
-			desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Fly.",
-			shortDesc: "20% chance to flinch the target.",
+			desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Fly.",
+			shortDesc: "20% chance to make the target flinch.",
 		},
 	},
 	uturn: {
@@ -6572,8 +6572,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	waterfall: {
 		name: "Waterfall",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 		gen3: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
@@ -6800,7 +6800,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	yawn: {
 		name: "Yawn",
-		desc: "Causes the target to fall asleep at the end of the next turn. Fails when used if the target cannot fall asleep or if it already has a major status condition. At the end of the next turn, if the target is still active, does not have a major status condition, and can fall asleep, it falls asleep. If the target becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
+		desc: "Causes the target to fall asleep at the end of the next turn. Fails when used if the target cannot fall asleep or if it already has a non-volatile status condition. At the end of the next turn, if the target is still active, does not have a non-volatile status condition, and can fall asleep, it falls asleep. If the target becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
 		shortDesc: "Puts the target to sleep after 1 turn.",
 
 		start: "  [POKEMON] grew drowsy!",
@@ -6812,13 +6812,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	zenheadbutt: {
 		name: "Zen Headbutt",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 	},
 	zingzap: {
 		name: "Zing Zap",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	zippyzap: {
 		name: "Zippy Zap",

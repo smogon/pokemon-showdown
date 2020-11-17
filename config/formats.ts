@@ -84,7 +84,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Baton Pass'],
 	},
 	{
@@ -102,7 +102,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] RU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666733/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673369/">RU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661013/">RU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3669026/">RU Viability Rankings</a>`,
 		],
@@ -162,9 +162,9 @@ export const Formats: FormatList = [
 		ruleset: ['Same Type Clause', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Blaziken', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana',
-			'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
+			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base',
-			'Moody', 'Power Construct', 'Shadow Tag', 'Damp Rock', 'Terrain Extender', 'Baton Pass',
+			'Moody', 'Power Construct', 'Shadow Tag', 'Damp Rock', 'Smooth Rock', 'Terrain Extender', 'Baton Pass',
 		],
 	},
 	{
@@ -496,10 +496,11 @@ export const Formats: FormatList = [
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
-			'Aggron-Mega', 'Altaria-Mega', 'Amoonguss', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela', 'Ditto', 'Dracozolt', 'Hatterene', 'Hippowdon',
-			'Infernape', 'Jirachi', 'Keldeo', 'Krookodile', 'Mandibuzz', 'Manectric-Mega', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Rotom-Heat',
-			'Rotom-Wash', 'Salamence', 'Scizor', 'Skarmory', 'Slowking-Base', 'Spectrier', 'Steelix-Mega', 'Stoutland', 'Swampert', 'Tapu Bulu',
-			'Tentacruel', 'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Weavile', 'Zapdos-Galar', 'Zeraora',
+			'Aegislash', 'Aggron-Mega', 'Alakazam', 'Altaria-Mega', 'Amoonguss', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela', 'Deoxys-Defense',
+			'Diggersby', 'Ditto', 'Dracozolt', 'Dragonite', 'Hatterene', 'Hawlucha', 'Hippowdon', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo',
+			'Krookodile', 'Mandibuzz', 'Manectric-Mega', 'Mew', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Rotom-Heat', 'Rotom-Wash', 'Salamence', 'Scizor',
+			'Scolipede', 'Skarmory', 'Slowking-Base', 'Spectrier', 'Staraptor', 'Steelix-Mega', 'Stoutland', 'Swampert', 'Tapu Bulu', 'Tentacruel',
+			'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar', 'Zeraora',
 		],
 	},
 	{
@@ -871,8 +872,8 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', '!Obtainable Abilities', 'Species Clause', 'Nickname Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Keldeo',
-			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
+			'Buzzwole', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana',
+			'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
 			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja', 'Solgaleo', 'Urshifu', 'Urshifu-Rapid-Strike', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero',
 			'Moody', 'Neutralizing Gas', 'Parental Bond', 'Power Construct', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
@@ -1611,7 +1612,7 @@ export const Formats: FormatList = [
 		team: 'randomCC',
 		searchShow: false,
 		challengeShow: false,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
 	},
 
 	// RoA Spotlight
@@ -2912,7 +2913,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Allow Tradeback', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Allow Tradeback', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
 		banlist: ['Uber',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
@@ -2923,7 +2924,7 @@ export const Formats: FormatList = [
 
 		mod: 'stadium',
 		searchShow: false,
-		ruleset: ['Standard', 'Team Preview', '!Sleep Clause Mod', 'Stadium Sleep Clause'],
+		ruleset: ['Standard', 'Team Preview'],
 		banlist: ['Uber',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
@@ -2942,6 +2943,6 @@ export const Formats: FormatList = [
 			validate: [1, 24],
 			battle: 24,
 		},
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
 	},
 ];
