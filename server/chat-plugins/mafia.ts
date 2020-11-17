@@ -1178,6 +1178,8 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (this.dead[p].restless && this.dead[p].lynching === oldPlayer.id) this.dead[p].lynching = newPlayer.id;
 			}
 		}
+		if(this.hasPlurality === oldPlayer.id) this.hasPlurality = newPlayer.id;
+		
 		if (newUser?.connected) {
 			for (const conn of newUser.connections) {
 				void Chat.resolvePage(`view-mafia-${this.room.roomid}`, newUser, conn);
