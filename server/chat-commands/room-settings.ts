@@ -668,10 +668,8 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.search(target);
 		if (!targetRoom) throw new Error(`Error in room creation.`);
 		if (cmd === 'makeprivatechatroom') {
-			targetRoom.settings.isPrivate = true;
 			if (!targetRoom.persist) throw new Error(`Private chat room created without settings.`);
-			targetRoom.settings.isPrivate = true;
-			room.saveSettings();
+			targetRoom.setPrivate(true);
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
 				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
@@ -1015,12 +1013,10 @@ export const commands: ChatCommands = {
 					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
 				}
 			}
-			delete room.settings.isPrivate;
 			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			delete room.settings.isPrivate;
-			room.saveSettings();
+			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
 			if (room.subRooms) {
@@ -1040,16 +1036,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (room.battle) {
-				if (setting) {
-					room.makePrivate(setting);
-				} else {
-					room.makePublic();
-				}
-			} else {
-				room.settings.isPrivate = setting;
-				room.saveSettings();
-			}
+			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
 	},

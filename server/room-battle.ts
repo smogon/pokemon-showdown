@@ -849,7 +849,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// If the room's replay was hidden, disable users from joining after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
-			this.room.makePrivate('hidden');
+			this.room.setPrivate('hidden');
 		}
 		this.room.update();
 	}
