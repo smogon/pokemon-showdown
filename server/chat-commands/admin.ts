@@ -32,6 +32,28 @@ function getDisabledCommands(table: ChatCommands = Chat.commands): string[] {
 	return disabled;
 }
 
+function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
+	context.stafflog(`$ ${command}`);
+	return new Promise(resolve => {
+		child_process.exec(command, {
+			cwd: cwd || `${__dirname}/../..`,
+		}, (error, stdout, stderr) => {
+			let log = `[o] ${stdout}[e] ${stderr}`;
+			if (error) log = `[c] ${error.code}\n${log}`;
+			context.stafflog(log);
+			resolve([error?.code || 0, stdout, stderr]);
+		});
+	});
+}
+
+async function rebuild(context: CommandContext) {
+	const [, , stderr] = await bash('node ./build', context);
+	if (stderr) {
+		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
+	}
+}
+
+
 export const commands: ChatCommands = {
 
 	/*********************************************************
@@ -314,7 +336,8 @@ export const commands: ChatCommands = {
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
-		await this.parse(`/rebuild`);
+		this.sendReply("Rebuilding...");
+		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
@@ -342,6 +365,7 @@ export const commands: ChatCommands = {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
+				this.sendReply("Hotpatching chat commands...");
 
 				const disabledCommands = getDisabledCommands();
 				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
@@ -366,17 +390,19 @@ export const commands: ChatCommands = {
 				global.Chat = require('../chat').Chat;
 				global.Tournaments = require('../tournaments').Tournaments;
 
-				this.sendReply("Chat commands have been hot-patched.");
+				this.sendReply("Reloading chat plugins...");
 				Chat.loadPlugins(oldPlugins);
-				this.sendReply("Chat plugins have been loaded.");
+				this.sendReply("DONE");
 			} else if (target === 'tournaments') {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
 
+				this.sendReply("Hotpatching tournaments...");
+
 				global.Tournaments = require('../tournaments').Tournaments;
 				Chat.loadPluginData(Tournaments, 'tournaments');
-				this.sendReply("Tournaments have been hot-patched.");
+				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
 				patch = 'formats';
 				if (lock['formats']) {
@@ -388,6 +414,7 @@ export const commands: ChatCommands = {
 				if (lock['validator']) {
 					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 				}
+				this.sendReply("Hotpatching formats...");
 
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
@@ -399,12 +426,12 @@ export const commands: ChatCommands = {
 				void Rooms.PM.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
-
-				this.sendReply("Formats have been hot-patched.");
+				this.sendReply("DONE");
 			} else if (target === 'loginserver') {
+				this.sendReply("Hotpatching loginserver...");
 				FS('config/custom.css').unwatch();
 				global.LoginServer = require('../loginserver').LoginServer;
-				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
+				this.sendReply("DONE. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				patch = 'validator';
 				if (lock['validator']) {
@@ -414,27 +441,31 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				}
 
+				this.sendReply("Hotpatching validator...");
 				void TeamValidatorAsync.PM.respawn();
-				this.sendReply("The team validator has been hot-patched. Any battles started after now will have teams be validated according to the new code.");
+				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				patch = 'punishments';
 				if (lock['punishments']) {
 					return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				}
 
+				this.sendReply("Hotpatching punishments...");
 				global.Punishments = require('../punishments').Punishments;
-				this.sendReply("Punishments have been hot-patched.");
+				this.sendReply("DONE");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
+				this.sendReply("Hotpatching ip-tools...");
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
-				this.sendReply("IPTools has been hot-patched.");
+				this.sendReply("DONE");
 			} else if (target === 'modlog') {
 				patch = 'modlog';
 				if (lock['modlog']) {
 					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
+				this.sendReply("Hotpatching modlog...");
 
 				const streams = Rooms.Modlog.streams;
 				const sharedStreams = Rooms.Modlog.sharedStreams;
@@ -449,10 +480,10 @@ export const commands: ChatCommands = {
 					Rooms.MODLOG_PATH || 'logs/modlog',
 					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
 				);
-				this.sendReply("Modlog has been hot-patched.");
+				this.sendReply("Re-initializing modlog streams...");
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;
-				this.sendReply("Modlog streams have been re-initialized.");
+				this.sendReply("DONE");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
 				return this.parse('/help nohotpatch');
@@ -821,36 +852,15 @@ export const commands: ChatCommands = {
 
 		Monitor.updateServerLock = true;
 
-		const exec = (command: string): Promise<[number, string, string]> => {
-			this.stafflog(`$ ${command}`);
-			return new Promise((resolve, reject) => {
-				child_process.exec(command, {
-					cwd: isPrivate ? Config.privatecodepath : `${__dirname}/../..`,
-				}, (error, stdout, stderr) => {
-					let log = `[o] ${stdout}[e] ${stderr}`;
-					if (error) log = `[c] ${error.code}\n${log}`;
-					this.stafflog(log);
-					resolve([error?.code || 0, stdout, stderr]);
-				});
-			});
-		};
+		const exec = (command: string) => bash(command, this);
 
-		const rebuild = async () => {
-			[code, stdout, stderr] = await exec('node ./build');
-			if (stderr) {
-				throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
-			}
-			this.sendReply(`Rebuilt.`);
-		};
-
-		this.sendReply(`Fetching newest version...`);
 		this.addGlobalModAction(`${user.name} used /updateserver${isPrivate ? ` private` : ``}`);
+		this.sendReply(`Fetching newest version...`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
 		if (!stdout && !stderr) {
 			this.sendReply(`There were no updates.`);
-			if (!isPrivate) await rebuild();
 			Monitor.updateServerLock = false;
 			return;
 		}
@@ -891,40 +901,27 @@ export const commands: ChatCommands = {
 				}
 			}
 
+			this.sendReply(`Rebuilding...`);
+			await rebuild(this);
 			this.sendReply(`SUCCESSFUL, server updated.`);
 		} catch (e) {
 			// failed while rebasing or popping the stash
 			await exec(`git reset --hard ${oldHash}`);
 			if (stashedChanges) await exec(`git stash pop`);
+			this.sendReply(`Rebuilding...`);
+			await rebuild(this);
 			this.sendReply(`FAILED, old changes restored.`);
 		}
-		if (!isPrivate) await rebuild();
 		Monitor.updateServerLock = false;
 	},
 
 	async rebuild(target, room, user, connection) {
-		const exec = (command: string): Promise<[number, string, string]> => {
-			this.stafflog(`$ ${command}`);
-			return new Promise((resolve, reject) => {
-				child_process.exec(command, {
-					cwd: __dirname,
-				}, (error, stdout, stderr) => {
-					let log = `[o] ${stdout}[e] ${stderr}`;
-					if (error) log = `[c] ${error.code}\n${log}`;
-					this.stafflog(log);
-					resolve([error?.code || 0, stdout, stderr]);
-				});
-			});
-		};
-
 		this.canUseConsole();
 		Monitor.updateServerLock = true;
-		const [, , stderr] = await exec('node ../../build');
-		if (stderr) {
-			return this.errorReply(`Crash while rebuilding: ${stderr}`);
-		}
+		this.sendReply(`Rebuilding...`);
+		await rebuild(this);
 		Monitor.updateServerLock = false;
-		this.sendReply(`Rebuilt.`);
+		this.sendReply(`DONE`);
 	},
 
 	/*********************************************************
