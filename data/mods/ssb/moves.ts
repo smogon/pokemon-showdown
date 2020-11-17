@@ -1387,35 +1387,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
-	// drampa's grandpa
-	getoffmylawn: {
-		accuracy: 100,
-		basePower: 78,
-		category: "Special",
-		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
-		shortDesc: "User switches out after damaging the target.",
-		name: "GET OFF MY LAWN!",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: -6,
-		flags: {protect: 1, sound: 1, authentic: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Boomburst', target);
-		},
-		onHit() {
-			this.add(`c|${getName('drampa\'s grandpa')}|GET OFF MY LAWN!!!`);
-		},
-		secondary: null,
-		forceSwitch: true,
-		selfSwitch: true,
-		target: "normal",
-		type: "Normal",
-	},
-
 	// dogknees
 	bellyrubs: {
 		accuracy: true,
@@ -1445,6 +1416,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		zMove: {boost: {spe: 1}},
 		target: "self",
+		type: "Normal",
+	},
+
+	// drampa's grandpa
+	getoffmylawn: {
+		accuracy: 100,
+		basePower: 78,
+		category: "Special",
+		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
+		shortDesc: "User switches out after damaging the target.",
+		name: "GET OFF MY LAWN!",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: -6,
+		flags: {protect: 1, sound: 1, authentic: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Boomburst', target);
+		},
+		onHit() {
+			this.add(`c|${getName('drampa\'s grandpa')}|GET OFF MY LAWN!!!`);
+		},
+		secondary: null,
+		forceSwitch: true,
+		selfSwitch: true,
+		target: "normal",
 		type: "Normal",
 	},
 

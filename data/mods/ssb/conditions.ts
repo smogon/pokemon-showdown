@@ -791,15 +791,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		noCopy: true,
 		onStart() {
 			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('INStruct')}|Oh no you don't`);
-			this.add(`c|${getName('INStruct')}|/me blocks PMs`);
+			this.add(`c|${getName('INStruct')}|no thx`);
+			this.add(`c|${getName('INStruct')}|anywaysies time to get myself kille— I mean fight`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('INStruct')}|OK so ${['my UberEats order has arrived', 'I ran out of Coca-Cola', 'Bobochan wants me to play roomtours in the Chinese room', 'I need to pm HoeenHero'][this.random(4)]}`);
-			this.add(`c|${getName('INStruct')}|I will bee are bee`);
+			this.add(`c|${getName('INStruct')}|OK so ${['my UberEats order has arrived', 'I ran out of Coca-Cola', 'bobochan wants me to play roomtours in the Chinese room', 'I need to pm HoeenHero'][this.random(4)]}`);
+			this.add(`c|${getName('INStruct')}|im gonna bee are bee`);
 		},
 		onFaint(source) {
-			this.add(`c|${getName('INStruct')}|bs :^(`);
+			this.add(`c|${getName('INStruct')}|bg :^(`);
 			this.add(`c|${getName('INStruct')}|/log ${source.side.name} was reported by INStruct. (throwing)`);
 		},
 		//  Innate
