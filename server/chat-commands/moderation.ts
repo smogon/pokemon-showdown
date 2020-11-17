@@ -189,8 +189,11 @@ export const commands: ChatCommands = {
 			try {
 				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
 			} catch (err) {
-				if (err.name?.endsWith('ErrorMessage')) this.errorReply(err.message);
-				continue;
+				if (err.name?.endsWith('ErrorMessage')) {
+					this.errorReply(err.message);
+					continue;
+				}
+				throw err;
 			}
 			const targetUser = Users.getExact(userid);
 			const name = targetUser?.name || toPromote;
