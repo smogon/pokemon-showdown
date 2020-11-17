@@ -1179,7 +1179,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		if(this.hasPlurality === oldPlayer.id) this.hasPlurality = newPlayer.id;
-		
+
 		if (newUser?.connected) {
 			for (const conn of newUser.connections) {
 				void Chat.resolvePage(`view-mafia-${this.room.roomid}`, newUser, conn);
@@ -1759,7 +1759,7 @@ export const pages: PageTable = {
 				if (!pick) {
 					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
 				} else {
-					buf += `<button class="button" name="send" value="/mafia ideakey ${roomid}, ${key},">clear</button>`;
+					buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${key},">clear</button>`;
 				}
 				const selectedIndex = pick ? IDEA.originalChoices.indexOf(pick) : -1;
 				for (let i = 0; i < IDEA.originalChoices.length; i++) {
