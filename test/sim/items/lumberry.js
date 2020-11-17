@@ -10,7 +10,7 @@ describe('Lum Berry', function () {
 		battle.destroy();
 	});
 
-	it('should heal a major status condition', function () {
+	it('should heal a non-volatile status condition', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Rapidash', moves: ['inferno']}]});
 		battle.setPlayer('p2', {team: [{species: 'Machamp', ability: 'noguard', item: 'lumberry', moves: ['sleeptalk']}]});

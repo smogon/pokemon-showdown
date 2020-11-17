@@ -961,7 +961,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	lumberry: {
 		name: "Lum Berry",
-		desc: "Holder cures itself if it is confused or has a major status condition. Single use.",
+		desc: "Holder cures itself if it has a non-volatile status or is confused. Single use.",
 	},
 	luminousmoss: {
 		name: "Luminous Moss",
