@@ -4114,7 +4114,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Sprit Shackle', target);
+			this.add('-anim', source, 'Spirit Shackle', target);
 			this.add('-anim', source, 'Curse', target);
 		},
 		secondary: {
@@ -4124,7 +4124,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
-	pitchblack: {
+	pitchblackterrain: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -4136,7 +4136,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		terrain: 'pitchblack',
+		terrain: 'pitchblackterrain',
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -4159,9 +4159,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onStart(battle, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Pitch Black', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Pitch Black Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
-					this.add('-fieldstart', 'move: Pitch Black');
+					this.add('-fieldstart', 'move: Pitch Black Terrain');
 				}
 				this.add('-message', 'The battlefield became dark!');
 				if (source?.species.name === 'Mismagius') {
@@ -4181,7 +4181,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onEnd() {
-				this.add('-fieldend', 'move: Phantom Plane');
+				this.add('-fieldend', 'move: Pitch Black Terrain');
 			},
 		},
 		secondary: null,

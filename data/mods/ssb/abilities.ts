@@ -1790,9 +1790,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// RavioliQueen
 	phantomplane: {
-		shortDesc: "On switch-in, this Pokemon summons Pitch Black.",
+		shortDesc: "On switch-in, this Pokemon summons Pitch Black Terrain.",
 		onStart(source) {
-			this.field.setTerrain('pitchblack');
+			this.field.setTerrain('pitchblackterrain');
 		},
 		name: "Phantom Plane",
 		isNonstandard: "Custom",
