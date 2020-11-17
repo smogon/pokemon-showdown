@@ -8,7 +8,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
-		if (species.battleOnly && typeof species.battleOnly === 'string') {
+		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
 		}

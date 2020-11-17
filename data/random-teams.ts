@@ -1451,7 +1451,7 @@ export class RandomTeams {
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
-				if (species.battleOnly && typeof species.battleOnly === 'string') {
+				if (typeof species.battleOnly === 'string') {
 					species = this.dex.getSpecies(species.battleOnly);
 					if (!species.types.includes(type)) continue;
 				}
