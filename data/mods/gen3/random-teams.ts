@@ -15,7 +15,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
-		if (species.battleOnly && typeof species.battleOnly === 'string') forme = species.battleOnly;
+		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool = [];
