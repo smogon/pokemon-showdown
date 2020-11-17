@@ -391,7 +391,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its attacking stat is multiplied by 1.5 while using a Fire-type attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
 		shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
 		gen3: {
-			desc: "This Pokemon is immune to Fire-type moves, as long as it is not frozen. The first time it is hit by a Fire-type move, damage from its Fire-type attacks will be multiplied by 1.5 as long as it remains active and has this Ability. If this Pokemon has a major status condition, is a Fire type, or has a substitute, Will-O-Wisp will not activate this Ability.",
+			desc: "This Pokemon is immune to Fire-type moves, as long as it is not frozen. The first time it is hit by a Fire-type move, damage from its Fire-type attacks will be multiplied by 1.5 as long as it remains active and has this Ability. If this Pokemon has a non-volatile status condition, is a Fire type, or has a substitute, Will-O-Wisp will not activate this Ability.",
 		},
 
 		start: "  The power of [POKEMON]'s Fire-type moves rose!",
@@ -410,7 +410,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	flowerveil: {
 		name: "Flower Veil",
-		desc: "Grass-type Pokemon on this Pokemon's side cannot have their stat stages lowered by other Pokemon or have a major status condition inflicted on them by other Pokemon.",
+		desc: "Grass-type Pokemon on this Pokemon's side cannot have their stat stages lowered by other Pokemon or have a non-volatile status condition inflicted on them by other Pokemon.",
 		shortDesc: "This side's Grass types can't have stats lowered or status inflicted by other Pokemon.",
 
 		block: "  [POKEMON] surrounded itself with a veil of petals!",
@@ -503,7 +503,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	guts: {
 		name: "Guts",
-		desc: "If this Pokemon has a major status condition, its Attack is multiplied by 1.5; burn's physical damage halving is ignored.",
+		desc: "If this Pokemon has a non-volatile status condition, its Attack is multiplied by 1.5; burn's physical damage halving is ignored.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage.",
 	},
 	harvest: {
@@ -515,7 +515,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	healer: {
 		name: "Healer",
-		desc: "There is a 30% chance of curing an adjacent ally's major status condition at the end of each turn.",
+		desc: "There is a 30% chance of curing an adjacent ally's non-volatile status condition at the end of each turn.",
 		shortDesc: "30% chance of curing an adjacent ally's status at the end of each turn.",
 	},
 	heatproof: {
@@ -546,10 +546,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	hydration: {
 		name: "Hydration",
-		desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active. If this Pokemon is holding Utility Umbrella, its major status condition will not be cured.",
+		desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain Dance is active. If this Pokemon is holding Utility Umbrella, its non-volatile status condition will not be cured.",
 		shortDesc: "This Pokemon has its status cured at the end of each turn if Rain Dance is active.",
 		gen7: {
-			desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active.",
+			desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain Dance is active.",
 		},
 	},
 	hypercutter: {
@@ -665,13 +665,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	leafguard: {
 		name: "Leaf Guard",
-		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon cannot gain a major status condition and Rest will fail for it.",
+		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon cannot gain a non-volatile status condition and Rest will fail for it.",
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		gen7: {
-			desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition and Rest will fail for it.",
+			desc: "If Sunny Day is active, this Pokemon cannot gain a non-volatile status condition and Rest will fail for it.",
 		},
 		gen4: {
-			desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition, but can use Rest normally.",
+			desc: "If Sunny Day is active, this Pokemon cannot gain a non-volatile status condition, but can use Rest normally.",
 			shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally.",
 		},
 	},
@@ -766,7 +766,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	marvelscale: {
 		name: "Marvel Scale",
-		desc: "If this Pokemon has a major status condition, its Defense is multiplied by 1.5.",
+		desc: "If this Pokemon has a non-volatile status condition, its Defense is multiplied by 1.5.",
 		shortDesc: "If this Pokemon is statused, its Defense is 1.5x.",
 	},
 	megalauncher: {
@@ -857,7 +857,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	naturalcure: {
 		name: "Natural Cure",
-		shortDesc: "This Pokemon has its major status condition cured when it switches out.",
+		shortDesc: "This Pokemon has its non-volatile status condition cured when it switches out.",
 
 		activate: "  ([POKEMON] is cured by its Natural Cure!)",
 	},
@@ -1090,7 +1090,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	quickfeet: {
 		name: "Quick Feet",
-		desc: "If this Pokemon has a major status condition, its Speed is multiplied by 1.5; the Speed drop from paralysis is ignored.",
+		desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5; the Speed drop from paralysis is ignored.",
 		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",
 	},
 	raindish: {
@@ -1247,7 +1247,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	shedskin: {
 		name: "Shed Skin",
-		desc: "This Pokemon has a 33% chance to have its major status condition cured at the end of each turn.",
+		desc: "This Pokemon has a 33% chance to have its non-volatile status condition cured at the end of each turn.",
 		shortDesc: "This Pokemon has a 33% chance to have its status cured at the end of each turn.",
 	},
 	sheerforce: {
@@ -1265,7 +1265,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	shieldsdown: {
 		name: "Shields Down",
-		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by major status conditions. Moongeist Beam, Sunsteel Strike, and the Mold Breaker, Teravolt, and Turboblaze Abilities cannot ignore this Ability.",
+		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by non-volatile status conditions. Moongeist Beam, Sunsteel Strike, and the Mold Breaker, Teravolt, and Turboblaze Abilities cannot ignore this Ability.",
 		shortDesc: "If Minior, switch-in/end of turn it changes to Core at 1/2 max HP or less, else Meteor.",
 		// n.b. this isn't a bug, the game actually says "Shields Down deactivated" on first transformation
 		// https://www.youtube.com/watch?v=SThjYBz4SEA
@@ -1482,10 +1482,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	synchronize: {
 		name: "Synchronize",
-		desc: "If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon, that Pokemon receives the same major status condition.",
+		desc: "If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon, that Pokemon receives the same non-volatile status condition.",
 		shortDesc: "If another Pokemon burns/poisons/paralyzes this Pokemon, it also gets that status.",
 		gen4: {
-			desc: "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same major status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned.",
+			desc: "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same non-volatile status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned.",
 		},
 	},
 	tangledfeet: {
