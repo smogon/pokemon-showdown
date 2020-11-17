@@ -1473,7 +1473,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	updateRoleString() {
 		this.roleString = this.roles.map(
 			r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
-		).join(',');
+		).join(', ');
 	}
 
 	sendRoom(message: string) {
