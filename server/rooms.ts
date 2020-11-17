@@ -706,26 +706,33 @@ export abstract class BasicRoom {
 	setPrivate(privacy: boolean | 'voice' | 'hidden') {
 		this.settings.isPrivate = privacy;
 		this.saveSettings();
-		if (this.battle && privacy) {
-			// This is the same password generation approach as genPassword in the client replays.lib.php
-			// but obviously will not match given mt_rand there uses a different RNG and seed.
-			let password = '';
-			for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
 
+		if (privacy) {
 			for (const user of Object.values(this.users)) {
 				if (!user.named) {
 					user.leaveRoom(this.roomid);
-					user.popup(`The battle <<${this.roomid}>> has been made private; you must log in to watch private battles.`);
+					user.popup(`The room <<${this.roomid}>> has been made private; you must log in to be in private rooms.`);
 				}
 			}
-			if (this.roomid.endsWith('pw')) return true;
-			this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
-		} else if (!privacy) {
-			this.settings.isPrivate = false;
-			if (this instanceof GameRoom) {
+		}
+
+		if (this.battle) {
+			if (privacy) {
+				if (this.roomid.endsWith('pw')) return true;
+
+				// This is the same password generation approach as genPassword in the client replays.lib.php
+				// but obviously will not match given mt_rand there uses a different RNG and seed.
+				let password = '';
+				for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+
+				this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
+			} else {
 				if (!this.roomid.endsWith('pw')) return true;
-				const {id} = this.getReplayData();
-				this.rename(this.title, `battle-${id}` as RoomID);
+
+				const lastDashIndex = this.roomid.lastIndexOf('-');
+				if (lastDashIndex < 0) throw new Error(`invalid battle ID ${this.roomid}`);
+
+				this.rename(this.title, this.roomid.slice(0, lastDashIndex) as RoomID);
 			}
 		}
 	}
