@@ -96,8 +96,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	airslash: {
 		name: "Air Slash",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	alloutpummeling: {
 		name: "All-Out Pummeling",
@@ -209,10 +209,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	astonish: {
 		name: "Astonish",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen3: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	astralbarrage: {
@@ -431,11 +431,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	bite: {
 		name: "Bite",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen1: {
-			desc: "Has a 10% chance to flinch the target.",
-			shortDesc: "10% chance to flinch the target.",
+			desc: "Has a 10% chance to make the target flinch.",
+			shortDesc: "10% chance to make the target flinch.",
 		},
 	},
 	blackholeeclipse: {
@@ -515,8 +515,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	boneclub: {
 		name: "Bone Club",
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
 	},
 	bonemerang: {
 		name: "Bonemerang",
@@ -1080,8 +1080,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	darkpulse: {
 		name: "Dark Pulse",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 	},
 	darkvoid: {
 		name: "Dark Void",
@@ -1305,8 +1305,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	doubleironbash: {
 		name: "Double Iron Bash",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. Has a 30% chance to flinch the target.",
-		shortDesc: "Hits twice. 30% chance to flinch.",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. Has a 30% chance to make the target flinch.",
+		shortDesc: "Hits twice. 30% chance to make the target flinch.",
 	},
 	doublekick: {
 		name: "Double Kick",
@@ -1391,10 +1391,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	dragonrush: {
 		name: "Dragon Rush",
-		desc: "Has a 20% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "20% chance to make the target flinch.",
 		gen5: {
-			desc: "Has a 20% chance to flinch the target.",
+			desc: "Has a 20% chance to make the target flinch.",
 		},
 	},
 	dragontail: {
@@ -1655,10 +1655,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	extrasensory: {
 		name: "Extrasensory",
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
 		gen3: {
-			desc: "Has a 10% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 10% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	extremeevoboost: {
@@ -1698,7 +1698,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fakeout: {
 		name: "Fake Out",
-		desc: "Has a 100% chance to flinch the target. Fails unless it is the user's first turn on the field.",
+		desc: "Has a 100% chance to make the target flinch. Fails unless it is the user's first turn on the field.",
 		shortDesc: "Hits first. First turn out only. 100% flinch chance.",
 	},
 	faketears: {
@@ -1757,8 +1757,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fierywrath: {
 		name: "Fiery Wrath",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the foe(s).",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the foe(s) flinch.",
 	},
 	finalgambit: {
 		name: "Final Gambit",
@@ -1776,10 +1776,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	firefang: {
 		name: "Fire Fang",
-		desc: "Has a 10% chance to burn the target and a 10% chance to flinch it.",
+		desc: "Has a 10% chance to burn the target and a 10% chance to make it flinch.",
 		shortDesc: "10% chance to burn. 10% chance to flinch.",
 		gen4: {
-			desc: "Has a 10% chance to burn the target and a 10% chance to flinch it. This move can hit Pokemon with the Wonder Guard Ability regardless of their typing.",
+			desc: "Has a 10% chance to burn the target and a 10% chance to make it flinch. This move can hit Pokemon with the Wonder Guard Ability regardless of their typing.",
 		},
 	},
 	firelash: {
@@ -1931,8 +1931,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	floatyfall: {
 		name: "Floaty Fall",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	floralhealing: {
 		name: "Floral Healing",
@@ -2597,8 +2597,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	headbutt: {
 		name: "Headbutt",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	headcharge: {
 		name: "Head Charge",
@@ -2682,8 +2682,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	heartstamp: {
 		name: "Heart Stamp",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	heartswap: {
 		name: "Heart Swap",
@@ -2887,8 +2887,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hyperfang: {
 		name: "Hyper Fang",
-		desc: "Has a 10% chance to flinch the target.",
-		shortDesc: "10% chance to flinch the target.",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
 	},
 	hyperspacefury: {
 		name: "Hyperspace Fury",
@@ -2942,7 +2942,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	icefang: {
 		name: "Ice Fang",
-		desc: "Has a 10% chance to freeze the target and a 10% chance to flinch it.",
+		desc: "Has a 10% chance to freeze the target and a 10% chance to make it flinch.",
 		shortDesc: "10% chance to freeze. 10% chance to flinch.",
 	},
 	icehammer: {
@@ -2962,8 +2962,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	iciclecrash: {
 		name: "Icicle Crash",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	iciclespear: {
 		name: "Icicle Spear",
@@ -3077,8 +3077,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	ironhead: {
 		name: "Iron Head",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	irontail: {
 		name: "Iron Tail",
@@ -3327,8 +3327,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This move's power is 20 if the target weighs less than 10 kg, 40 if less than 25 kg, 60 if less than 50 kg, 80 if less than 100 kg, 100 if less than 200 kg, and 120 if greater than or equal to 200 kg.",
 		shortDesc: "More power the heavier the target.",
 		gen2: {
-			desc: "Has a 30% chance to flinch the target.",
-			shortDesc: "30% chance to flinch the target.",
+			desc: "Has a 30% chance to make the target flinch.",
+			shortDesc: "30% chance to make the target flinch.",
 		},
 	},
 	lowsweep: {
@@ -3995,10 +3995,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	needlearm: {
 		name: "Needle Arm",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen3: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	neverendingnightmare: {
@@ -4827,14 +4827,14 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	rockslide: {
 		name: "Rock Slide",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the foe(s).",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the foe(s) flinch.",
 		gen1: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
 		},
 		gen2: {
-			shortDesc: "30% chance to flinch the target.",
+			shortDesc: "30% chance to make the target flinch.",
 		},
 	},
 	rocksmash: {
@@ -4880,8 +4880,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	rollingkick: {
 		name: "Rolling Kick",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	rollout: {
 		name: "Rollout",
@@ -5272,10 +5272,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
 		gen3: {
-			desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
+			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
 		gen2: {
 			desc: "This attack charges on the first turn and executes on the second.",
@@ -5432,7 +5432,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	snore: {
 		name: "Snore",
-		desc: "Has a 30% chance to flinch the target. Fails if the user is not asleep.",
+		desc: "Has a 30% chance to make the target flinch. Fails if the user is not asleep.",
 		shortDesc: "User must be asleep. 30% chance to flinch target.",
 	},
 	soak: {
@@ -5687,10 +5687,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	steamroller: {
 		name: "Steamroller",
-		desc: "Has a 30% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen5: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
 	steelbeam: {
@@ -5736,22 +5736,22 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	stomp: {
 		name: "Stomp",
-		desc: "Has a 30% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen5: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 		gen4: {
-			desc: "Has a 30% chance to flinch the target. Power doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Power doubles if the target has used Minimize while active.",
 		},
 		gen3: {
-			desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
+			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 		gen2: {
-			desc: "Has a 30% chance to flinch the target. Power doubles if the target is under the effect of Minimize.",
+			desc: "Has a 30% chance to make the target flinch. Power doubles if the target is under the effect of Minimize.",
 		},
 		gen1: {
-			desc: "Has a 30% chance to flinch the target.",
+			desc: "Has a 30% chance to make the target flinch.",
 		},
 	},
 	stompingtantrum: {
@@ -6272,7 +6272,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	thunderfang: {
 		name: "Thunder Fang",
-		desc: "Has a 10% chance to paralyze the target and a 10% chance to flinch it.",
+		desc: "Has a 10% chance to paralyze the target and a 10% chance to make it flinch.",
 		shortDesc: "10% chance to paralyze. 10% chance to flinch.",
 	},
 	thunderouskick: {
@@ -6456,14 +6456,14 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	twister: {
 		name: "Twister",
-		desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
-		shortDesc: "20% chance to flinch the foe(s).",
+		desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
+		shortDesc: "20% chance to make the foe(s) flinch.",
 		gen4: {
-			desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Bounce or Fly.",
+			desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce or Fly.",
 		},
 		gen2: {
-			desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Fly.",
-			shortDesc: "20% chance to flinch the target.",
+			desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Fly.",
+			shortDesc: "20% chance to make the target flinch.",
 		},
 	},
 	uturn: {
@@ -6572,8 +6572,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	waterfall: {
 		name: "Waterfall",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 		gen3: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
@@ -6812,13 +6812,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	zenheadbutt: {
 		name: "Zen Headbutt",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 	},
 	zingzap: {
 		name: "Zing Zap",
-		desc: "Has a 30% chance to flinch the target.",
-		shortDesc: "30% chance to flinch the target.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	zippyzap: {
 		name: "Zippy Zap",
