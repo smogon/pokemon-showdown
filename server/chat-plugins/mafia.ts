@@ -3247,8 +3247,9 @@ export const commands: ChatCommands = {
 			let dataType = cmd;
 
 			const cmdTypes: {[k: string]: keyof MafiaData} = {
-				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms',
+				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms', idea: 'IDEAs',
 			};
+
 			if (cmd in cmdTypes) {
 				const toSearch = MafiaData[cmdTypes[cmd]];
 				// @ts-ignore guaranteed not an alias
@@ -3285,6 +3286,11 @@ export const commands: ChatCommands = {
 						roles.push(count[role] > 1 ? `${count[role]}x ${role}` : role);
 					}
 					buf += `${roles.join(', ')}<br/>`;
+				}
+			} else if (dataType === 'idea') {
+				buf += `<details><summary class="button" style="font-weight: bold; display: inline-block">Roles:</summary>`;
+				for(const idearole of (result as MafiaDataIDEA).roles) {
+					buf += `${idearole}<br/>`;
 				}
 			} else {
 				// @ts-ignore
