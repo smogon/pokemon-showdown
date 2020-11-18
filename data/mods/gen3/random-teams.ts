@@ -483,25 +483,26 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	}
 
 	randomTeam() {
-		const pokemon = [];
+		const seed = this.prng.seed;
+		const ruleTable = this.dex.getRuleTable(this.format);
+		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
-		const pokemonPool = [];
-		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
-			if (species.gen <= this.gen && species.randomBattleMoves) {
-				pokemonPool.push(id);
-			}
-		}
+		// For Monotype
+		const isMonotype = ruleTable.has('sametypeclause');
+		const typePool = Object.keys(this.dex.data.TypeChart);
+		const type = this.sample(typePool);
 
+		const baseFormes: {[k: string]: number} = {};
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
-		const baseFormes: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
 		while (pokemonPool.length && pokemon.length < 6) {
 			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
-			if (!species.exists) continue;
+			if (!species.exists || !species.randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
@@ -513,23 +514,23 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
 
-			// Limit 2 Pokemon per tier
-			if (tierCount[tier] >= 2 && this.randomChance(4, 5)) {
-				continue;
-			}
+			if (!isMonotype) {
+				// Limit two Pokemon per tier
+				if (tierCount[tier] >= 2) continue;
 
-			// Limit 2 of any type
-			let skip = false;
-			for (const type of species.types) {
-				if (typeCount[type] >= 2) {
-					skip = true;
-					break;
+				// Limit two of any type
+				let skip = false;
+				for (const typeName of types) {
+					if (typeCount[typeName] > 1) {
+						skip = true;
+						break;
+					}
 				}
-			}
-			if (skip) continue;
+				if (skip) continue;
 
-			// Limit 1 of any type combination
-			if (typeComboCount[typeCombo] >= 1 && this.randomChance(4, 5)) continue;
+				// Limit one of any type combination
+				if (typeComboCount[typeCombo] >= 1) continue;
+			}
 
 			const set = this.randomSet(species, teamDetails);
 
@@ -547,11 +548,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 
 			// Increment type counters
-			for (const type of species.types) {
-				if (type in typeCount) {
-					typeCount[type]++;
+			for (const typeName of types) {
+				if (typeName in typeCount) {
+					typeCount[typeName]++;
 				} else {
-					typeCount[type] = 1;
+					typeCount[typeName] = 1;
 				}
 			}
 			if (typeCombo in typeComboCount) {
@@ -571,6 +572,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// To prevent this, we prevent more than one Wobbuffet in a single battle.
 			if (set.ability === 'Shadow Tag') this.hasWobbuffet = true;
 		}
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+
 		return pokemon;
 	}
 }
