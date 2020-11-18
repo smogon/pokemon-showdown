@@ -1479,12 +1479,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add(`c|${getName('Robb576')}|1, 2, 3, 4, dunno how to count no more!`);
 			}
 		},
-		onSwitchOut(pokemon) {
-			if (pokemon.side.pokemonLeft === 1) { // pls contacc
-				this.add(`c|${getName('Robb576')}|Something went wrong. Please contact HoeenHero to fix this`);
-			} else {
-				this.add(`c|${getName('Robb576')}|5, 7, 6, I will be right back into the mix!`);
-			}
+		onSwitchOut() {
+			this.add(`c|${getName('Robb576')}|5, 7, 6, I will be right back into the mix!`);
 		},
 		onFaint(pokemon) {
 			if (pokemon.species.name === "Necrozma-Ultra") {
