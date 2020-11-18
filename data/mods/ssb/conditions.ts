@@ -1208,7 +1208,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Notater517')}|nyaa~... I mean, 'tis a swell day to twirl one's mustache, isn't it?!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Notater517')}|TBD`);
+			this.add(`c|${getName('Notater517')}|/me corrupt trivia noises`);
 		},
 		onFaint() {
 			this.add(`c|${getName('Notater517')}|This is probably a good time to fix my sleep schedule`);
