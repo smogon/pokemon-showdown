@@ -1632,6 +1632,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				delete boost.atk;
 				this.add('-immune', target, '[from] ability: Inner Focus');
 			}
+			if (effect.id === 'daunt') {
+                delete boost.spa;
+                this.add('-immune', target, '[from] ability: Inner Focus');
+            }
 		},
 		name: "Inner Focus",
 		rating: 1.5,
@@ -2371,6 +2375,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				delete boost.atk;
 				this.add('-immune', target, '[from] ability: Oblivious');
 			}
+			if (effect.id === 'daunt') {
+                delete boost.spa;
+                this.add('-immune', target, '[from] ability: Oblivious');
+            }
 		},
 		name: "Oblivious",
 		rating: 1.5,
@@ -2378,7 +2386,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	overcoat: {
 		onImmunity(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+			if (type === 'sandstorm' || type === 'hail' || type === 'toxiccloud' || type === 'powder') return false;
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
@@ -2430,6 +2438,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				delete boost.atk;
 				this.add('-immune', target, '[from] ability: Own Tempo');
 			}
+			if (effect.id === 'daunt') {
+                delete boost.spa;
+                this.add('-immune', target, '[from] ability: Own Tempo');
+            }
 		},
 		name: "Own Tempo",
 		rating: 1.5,
@@ -2854,20 +2866,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 44,
 	},
 	rattled: {
-		onDamagingHit(damage, target, source, move) {
-			if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
-				this.boost({spe: 1});
-			}
-		},
-		onAfterBoost(boost, target, source, effect) {
-			if (effect && effect.id === 'intimidate') {
-				this.boost({spe: 1});
-			}
-		},
-		name: "Rattled",
-		rating: 1.5,
-		num: 155,
-	},
+        onDamagingHit(damage, target, source, move) {
+            if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
+                this.boost({spe: 1});
+            }
+        },
+        onAfterBoost(boost, target, source, effect) {
+            if (effect && effect.id === 'intimidate' || effect.id === 'daunt') {
+                this.boost({spe: 1});
+            }
+        },
+        name: "Rattled",
+        rating: 1.5,
+        num: 155,
+    },
 	receiver: {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
@@ -3142,6 +3154,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				delete boost.atk;
 				this.add('-immune', target, '[from] ability: Scrappy');
 			}
+			if (effect.id === 'daunt') {
+                delete boost.spa;
+                this.add('-immune', target, '[from] ability: Scrappy');
+            }
 		},
 		name: "Scrappy",
 		rating: 3,
@@ -3691,7 +3707,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	surgesurfer: {
 		onModifySpe(spe) {
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('psychicterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -4380,4 +4396,127 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -4,
 	},
+	timereverse: {
+        onStart(pokemon) {
+            this.useMove("lazyencore", pokemon);
+        },
+        name: "Time Reverse",
+        rating: 2,
+        num: 1000,
+    },
+	daunt: {
+        onStart(pokemon) {
+            let activated = false;
+            for (const target of pokemon.side.foe.active) {
+                if (!target || !this.isAdjacent(target, pokemon)) continue;
+                if (!activated) {
+                    this.add('-ability', pokemon, 'Daunt', 'boost');
+                    activated = true;
+                }
+                if (target.volatiles['substitute']) {
+                    this.add('-immune', target);
+                } else {
+                    this.boost({spa: -1}, target, pokemon, null, true);
+                }
+            }
+        },
+        name: "Daunt",
+        rating: 3.5,
+        num: 1001,
+    },
+	conflagrant: {
+        // upokecenter says this is implemented as an added secondary effect
+        onModifyMove(move) {
+            if (!move || !move.flags['contact'] || move.target === 'self') return;
+            if (!move.secondaries) {
+                move.secondaries = [];
+            }
+            move.secondaries.push({
+                chance: 30,
+                status: 'brn',
+                ability: this.dex.getAbility('conflagrant'),
+            });
+        },
+        name: "Conflagrant",
+        rating: 2,
+        num: 1002,
+    },
+	dynamo: {
+        // upokecenter says this is implemented as an added secondary effect
+        onModifyMove(move) {
+            if (!move || !move.flags['contact'] || move.target === 'self') return;
+            if (!move.secondaries) {
+                move.secondaries = [];
+            }
+            move.secondaries.push({
+                chance: 30,
+                status: 'par',
+                ability: this.dex.getAbility('dynamo'),
+            });
+        },
+        name: "Dynamo",
+        rating: 3,
+        num: 1003,
+    },
+	undead: {
+        onModifyMovePriority: -5,
+        onModifyMove(move) {
+            if (!move.ignoreImmunity) move.ignoreImmunity = {};
+            if (move.ignoreImmunity !== true) {
+                move.ignoreImmunity['Ghost'] = true;
+            }
+        },
+        onBoost(boost, target, source, effect) {
+            if (effect.id === 'intimidate') {
+                delete boost.atk;
+                this.add('-immune', target, '[from] ability: Undead');
+            }
+            if (effect.id === 'daunt') {
+                delete boost.spa;
+                this.add('-immune', target, '[from] ability: Undead');
+            }
+        },
+        name: "Undead",
+        rating: 4,
+        num: 1004,
+    },
+	expert: {
+        onBasePowerPriority: 21,
+        onBasePower(basePower, pokemon, target, move) {
+            if (move.id === 'crushgrip' || move.id === 'electroball' || move.id === 'eruption' || move.id === 'flail' || move.id === 'fling' || move.id === 'frustration' || move.id === 'grassknot' || move.id === 'gyroball' || move.id === 'heatcrash' || move.id === 'heavyslam' || move.id === 'lowkick' || move.id === 'magnitude' || move.id === 'naturalgift' || move.id === 'present' || move.id === 'punishement' || move.id === 'return' || move.id === 'reversal' || move.id === 'spitup' || move.id === 'storedpower' || move.id === 'trumpcard' || move.id === 'waterspout' || move.id === 'wringout') {
+                return this.chainModify(1.3);
+            }
+        },
+        name: "Expert",
+        rating: 2,
+        num: 1004,
+    },
+	bloodsucker: {
+        onModifyMove(move) {
+            if (move.flags['bite']) {
+                move.flags['heal'] = 1;
+                move.drain = [1,3];
+            }
+        },
+        name: "Blood Sucker",
+        rating: 3,
+        num: 1005,
+    },
+	snowpacking: {
+        onModifyAtkPriority: 5,
+        onModifyAtk(atk, pokemon) {
+            if (['hail'].includes(pokemon.effectiveWeather())) {
+                return this.chainModify(1.5);
+            }
+        },
+        onWeather(target, source, effect) {
+            if (target.hasItem('utilityumbrella')) return;
+            if (effect.id === 'hail') {
+                this.damage(target.baseMaxhp / 8, target, target);
+            }
+        },
+        name: "Snow Packing",
+        rating: 2,
+        num: 1006,
+    },
 };
