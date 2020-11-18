@@ -208,7 +208,7 @@ export const Scripts: BattleScriptsData = {
 
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
-		if (sourceEffect) attrs += '|[from]' + this.dex.getEffect(sourceEffect);
+		if (sourceEffect) attrs += `|[from]S{sourceEffect.fullname}`;
 		if (zMove && move.isZ === true) {
 			attrs = '|[anim]' + movename + attrs;
 			movename = 'Z-' + movename;
