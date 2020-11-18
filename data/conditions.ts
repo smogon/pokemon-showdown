@@ -168,7 +168,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (!this.randomChance(1, 3)) {
+			if (!this.randomChance(33, 100)) {
 				return;
 			}
 			this.activeTarget = pokemon;

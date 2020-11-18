@@ -612,7 +612,8 @@ export const Scripts: BattleScriptsData = {
 			// yes, it's hardcoded... meh
 			if (targetHits[0] === 2 && targetHits[1] === 5) {
 				if (this.gen >= 5) {
-					targetHits = this.sample([2, 2, 3, 3, 4, 5]);
+					// 35-35-15-15 out of 100 for 2-3-4-5 hits
+					targetHits = this.sample([2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5]);
 				} else {
 					targetHits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 				}
