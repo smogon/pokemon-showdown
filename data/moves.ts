@@ -25,8 +25,9 @@ snatch: Can be stolen from the original user and instead used by another Pokemon
 sound: Has no effect on Pokemon with the Soundproof Ability.
 kiss: Power is multiplied by 1.5 when used by a Pokemon with the Lovely Lips Ability.
 slap: Power is multiplied by 1.5 when used by a Pokemon with the Slapper Ability.
-kick: Power is multiplied by 1.3 when used by a Pokemon with the Lovely Lips Ability.
-blade: Power is multiplied by 1.3 when used by a Pokemon with the Slapper Ability.
+kick: Power is multiplied by 1.3 when used by a Pokemon with the Kicker Lips Ability.
+blade: Power is multiplied by 1.3 when used by a Pokemon with the Blade Master Ability.
+expert: Power is multiplied by 1.3 when used by a Pokemon with the Expert Ability.
 
 */
 
@@ -474,7 +475,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Aqua Tail",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slap: 1},
 		secondary: null,
 		target: "normal",
 		type: "Water",
@@ -2868,7 +2869,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Crush Grip",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -3671,7 +3672,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dragon Energy",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dragon",
@@ -3745,7 +3746,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dragon Tail",
 		pp: 10,
 		priority: -6,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slap: 1},
 		forceSwitch: true,
 		target: "normal",
 		type: "Dragon",
@@ -3759,7 +3760,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Draining Kiss",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1, kiss: 1},
 		drain: [3, 4],
 		secondary: null,
 		target: "normal",
@@ -4141,7 +4142,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
-		flags: {bullet: 1, protect: 1, mirror: 1},
+		flags: {bullet: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Electric",
@@ -4403,7 +4404,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Eruption",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fire",
@@ -5019,7 +5020,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Flail",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -5219,7 +5220,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Fling",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, mystery: 1},
+		flags: {protect: 1, mirror: 1, mystery: 1, expert: 1},
 		onPrepareHit(target, source, move) {
 			if (source.ignoringItem()) return false;
 			const item = source.getItem();
@@ -5735,7 +5736,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Frustration",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -5772,7 +5773,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Fury Cutter",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, blade: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, blade: 1, expert: 1},
 		condition: {
 			duration: 2,
 			onStart() {
@@ -7026,7 +7027,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Grass Knot",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1, expert: 1},
 		onTryHit(target, source, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
@@ -7236,6 +7237,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.add('-activate', source, 'ability: Persistent', effect);
 					return 7;
 				}
+				if (source?.hasAbility('orbital')) {
+                    this.add('-activate', source, 'ability: Orbital', effect);
+                    return 999;
+                }
 				return 5;
 			},
 			onStart() {
@@ -7484,7 +7489,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Gunk Shot",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, bullet: 1},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -7522,7 +7527,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Gyro Ball",
 		pp: 5,
 		priority: 0,
-		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
@@ -7895,7 +7900,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Heat Crash",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1, expert: 1},
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -7952,7 +7957,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Heavy Slam",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1, expert: 1},
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -8651,7 +8656,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Ice Ball",
 		pp: 20,
 		priority: 0,
-		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1, expert: 1},
 		condition: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -9091,7 +9096,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Iron Tail",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slap: 1},
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -9520,7 +9525,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target) {
-			return !target.hasType('Grass');
+			return !(target.hasType('Grass') || target.hasAbility('runaway'));
 		},
 		secondary: null,
 		target: "normal",
@@ -9731,7 +9736,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Lovely Kiss",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, kiss: 1},
 		status: 'slp',
 		secondary: null,
 		target: "normal",
@@ -9766,7 +9771,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Low Kick",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, kick: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, kick: 1, expert: 1},
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -10133,7 +10138,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Magnitude",
 		pp: 30,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, nonsky: 1},
+		flags: {protect: 1, mirror: 1, nonsky: 1, expert: 1},
 		onModifyMove(move, pokemon) {
 			const i = this.random(100);
 			if (i < 5) {
@@ -11668,7 +11673,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Natural Gift",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
 			const item = pokemon.getItem();
@@ -12641,7 +12646,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Poison Tail",
 		pp: 25,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slap: 1},
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -12944,7 +12949,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Present",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		onModifyMove(move, pokemon, target) {
 			const rand = this.random(10);
 			if (rand < 2) {
@@ -13279,7 +13284,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Psywave",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
@@ -13944,7 +13949,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Return",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -14023,7 +14028,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Reversal",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -14296,7 +14301,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Rollout",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		condition: {
 			duration: 2,
 			onLockMove: 'rollout',
@@ -15933,7 +15938,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Snipe Shot",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, bullet: 1},
 		critRatio: 2,
 		tracksTarget: true,
 		secondary: null,
@@ -16396,7 +16401,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Spit Up",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, expert: 1},
 		onTry(pokemon) {
 			if (!pokemon.volatiles['stockpile']) {
 				return false;
@@ -16821,7 +16826,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Stored Power",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
@@ -17304,7 +17309,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Sweet Kiss",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, kiss: 1},
 		volatileStatus: 'confusion',
 		secondary: null,
 		target: "normal",
@@ -17500,7 +17505,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Tail Slap",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slap: 1},
 		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
@@ -18540,7 +18545,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -19044,7 +19049,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Water Spout",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Water",
@@ -19430,7 +19435,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Wring Out",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, expert: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -20096,7 +20101,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Water Bullet",
 		pp: 20,
 		priority: 1,
-		flags: {bullet: 1, protect: 1, mirror: 1},
+		flags: {bullet: 1, protect: 1, mirror: 1, bullet: 1},
 		secondary: null,
 		target: "normal",
 		type: "Water",
