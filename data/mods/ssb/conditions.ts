@@ -2113,11 +2113,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.field.terrain) {
 				this.add(`-message`, 'The Turbulence blew away the terrain!');
 			}
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions);
 				for (const key of keys) {
 					side.removeSideCondition(key);
-					this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
+					if (!silentRemove.includes(key)) {
+						this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
+					}
 				}
 			}
 			this.field.clearTerrain();
@@ -2459,7 +2462,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	// No, you're not dynamaxing.
-	dynamax: {
+	/*dynamax: {
 		inherit: true,
 		onStart(pokemon) {
 			pokemon.removeVolatile('minimize');
@@ -2482,11 +2485,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 
 				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
-			this.add(`raw|<strong>Dynamaxing is banned in SSB4, and neither custom challenges nor tournaments won't save you from that fact.</strong>`);
+			this.add(`c|${getName('INStruct')}|Hey ${pokemon.side.name}, dynamax is banned in SSB4, and neither custom challenges nor tournaments won't save you from that fact. Get dunked on lmao.`);
 			pokemon.removeVolatile('dynamax');
 			this.queue.cancelMove(pokemon);
 			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
-			this.hint(`The move was cancelled to punish cheaters like you.`);
+			this.hint(`Your move was aborted due to dynamax. Cheater.`);
 		},
-	},
+	},*/
 };

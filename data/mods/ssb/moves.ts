@@ -443,28 +443,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Shadow Ball', target);
 		},
 		onHit(target, source, move) {
-			let success = false;
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid',
+				'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
-			for (const targetCondition of removeAll) {
-				if (target.side.removeSideCondition(targetCondition)) {
-					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
-					if (source.side.removeSideCondition(targetCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(targetCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
 					}
-					success = true;
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					}
 				}
 			}
-			this.field.clearTerrain();
 			this.field.clearWeather();
-			const noRemove = ['echoedvoice', 'fairylock'];
-			for (const pW of Object.keys(this.field.pseudoWeather)) {
-				if (noRemove.includes(pW)) continue;
-				this.field.removePseudoWeather(pW);
-			}
-			return success;
+			this.field.clearTerrain();
 		},
 		selfSwitch: true,
 		secondary: null,
@@ -643,12 +640,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'shiftingrocks',
 					'toxicspikes', 'stealthrock', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 				];
+				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+						if (!(silentRemove.includes(sideCondition))) {
+							this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						}
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+						if (!(silentRemove.includes(sideCondition))) {
+							this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						}
 					}
 				}
 			},
@@ -2066,6 +2068,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEnd(side) {
 				this.add('-sideend', side, 'move: Ferrofluid');
+				this.add('-message', `The Ferrofuild disappeared.`);
 			},
 		},
 		secondary: null,
@@ -2884,7 +2887,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			let success = false;
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid',
+				'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
