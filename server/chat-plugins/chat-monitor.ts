@@ -54,7 +54,7 @@ for (const letter in EVASION_DETECTION_SUBSTITUTIONS) {
 
 const filterWords: {[k: string]: Chat.FilterWord[]} = Chat.filterWords;
 
-function constructEvasionRegex(str: string) {
+export function constructEvasionRegex(str: string) {
 	const buf = "\\b" +
 		[...str].map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
 		"\\b";
@@ -77,8 +77,41 @@ function saveFilters(force = false) {
 	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME});
 }
 
-// Register the chat monitors used
+export function addFilter(filterWord: Partial<Chat.FilterWord> & {list: string, word: string}) {
+	if (!filterWord.hits) filterWord.hits = 0;
+	const punishment = Chat.monitors[filterWord.list].punishment;
+	if (!filterWord.regex) {
+		filterWord.regex = generateRegex(
+			filterWord.word,
+			punishment === 'EVASION',
+			punishment === 'SHORTENER',
+			!!filterWord.replacement,
+		);
+	}
 
+	if (filterWords[filterWord.list].some(val => String(val.regex) === String(filterWord.regex))) {
+		throw new Chat.ErrorMessage(`${filterWord.word} is already added to the ${filterWord.list} list.`);
+	}
+
+	filterWords[filterWord.list].push(filterWord as Chat.FilterWord);
+	saveFilters(true);
+}
+
+export function generateRegex(word: string, isEvasion = false, isShortener = false, isReplacement = false) {
+	try {
+		if (isEvasion) {
+			return constructEvasionRegex(word);
+		} else {
+			return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'ig' : 'i'));
+		}
+	} catch (e) {
+		throw new Chat.ErrorMessage(
+			e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`
+		);
+	}
+}
+
+// Register the chat monitors used
 Chat.registerMonitor('autolock', {
 	location: 'EVERYWHERE',
 	punishment: 'AUTOLOCK',
@@ -527,51 +560,29 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 			}
 
-			let word = '';
-			let replacement = '';
-			let reason = '';
-			let publicReason = '';
+			const filterWord = {list, word: ''} as Partial<FilterWord> & {list: string, word: string};
 
 			rest = rest.map(part => part.trim());
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
-				[word, replacement, reason, publicReason] = rest;
-				if (!replacement) {
+				[filterWord.word, filterWord.replacement, filterWord.reason, filterWord.publicReason] = rest;
+				if (!filterWord.replacement) {
 					return this.errorReply(
 						`Syntax for word filters: /filter add ${list} ${separator} regex ${separator} reason [${separator} optional public reason]`
 					);
 				}
 			} else {
-				[word, reason, publicReason] = rest;
+				[filterWord.word, filterWord.reason, filterWord.publicReason] = rest;
 			}
 
-			word = word.trim();
-			let regex: RegExp;
-			try {
-				if (Chat.monitors[list].punishment === 'EVASION') {
-					regex = constructEvasionRegex(word);
-				} else {
-					regex = new RegExp(
-						Chat.monitors[list].punishment === 'SHORTENER' ? `\\b${word}` : word,
-						replacement ? 'ig' : 'i'
-					);
-				}
-			} catch (e) {
-				return this.errorReply(
-					e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`
-				);
-			}
-
-			if (filterWords[list].some(val => String(val.regex) === String(regex))) {
-				return this.errorReply(`${word} is already added to the ${list} list.`);
-			}
-			filterWords[list].push({regex, word, reason, publicReason, replacement, hits: 0});
+			filterWord.word = filterWord.word.trim();
+			addFilter(filterWord);
+			const reason = filterWord.reason ? ` (${filterWord.reason})` : '';
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
-				this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${replacement}' to ${list} list${reason ? ` (${reason})` : ''}`);
+				this.globalModlog(`ADDFILTER`, null, `'${String(filterWord.regex)} => ${filterWord.replacement}' to ${list} list${reason}`);
 			} else {
-				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list${reason ? ` (${reason})` : ''}`);
+				this.globalModlog(`ADDFILTER`, null, `'${filterWord.word}' to ${list} list${reason}`);
 			}
-			saveFilters(true);
-			const output = `'${word}' was added to the ${list} list.`;
+			const output = `'${filterWord.word}' was added to the ${list} list.`;
 			Rooms.get('upperstaff')?.add(output).update();
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
