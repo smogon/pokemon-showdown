@@ -15,5 +15,6 @@ CREATE TABLE friend_settings (
 	name TEXT NOT NULL,
 	send_login_data INTEGER,
 	last_login INTEGER NOT NULL,
+	public_list INTEGER,
 	PRIMARY KEY (name)
 ) WITHOUT ROWID;

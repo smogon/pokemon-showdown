@@ -82,8 +82,8 @@ export const Friends = new class {
 		).run();
 		return results;
 	}
-	getFriends(user: User) {
-		const data = [user.id, MAX_FRIENDS];
+	getFriends(userid: ID) {
+		const data = [userid, MAX_FRIENDS];
 		return this.query({
 			statement: 'get', type: 'all', data,
 		});
@@ -163,8 +163,8 @@ export const Friends = new class {
 	async approveRequest(receiverID: ID, senderID: ID) {
 		return this.query({type: 'transaction', data: [senderID, receiverID], statement: 'accept'});
 	}
-	async visualizeList(user: User) {
-		const friends = await this.getFriends(user);
+	async visualizeList(userid: ID) {
+		const friends = await this.getFriends(userid);
 		if (!friends.length) {
 			return `<h3>Your friends:</h3> <h4>None.</h4>`;
 		}
@@ -193,7 +193,7 @@ export const Friends = new class {
 
 		let buf = `<h3>Your friends: <small> `;
 		if (sorted.length > 0) {
-			buf += `Total (${friends.size}) | ${sorted.join(' | ')}`;
+			buf += `Total (${friends.length}) | ${sorted.join(' | ')}`;
 		} else {
 			buf += `</h3><em>you have no friends added on Showdown lol</em><br /><br /><br />`;
 			buf += `<strong>To add a friend, use </strong><code>/friend add [username]</code>.<br /><br />`;
@@ -217,6 +217,19 @@ export const Friends = new class {
 
 		return buf;
 	}
+	// much more info redacted
+	async visualizePublicList(userid: ID) {
+		const friends: string[] = (await this.getFriends(userid) as any[]).map(f => f.friend);
+		let buf = `<h3>${userid}'s friends:</h3><hr />`;
+		if (!friends.length) {
+			buf += `None.`;
+			return buf;
+		}
+		for (const friend of friends) {
+			buf += `- <username>${friend}</username><br />`;
+		}
+		return buf;
+	}
 	displayFriend(userid: ID, login?: number) {
 		const user = Users.getExact(userid); // we want this to be exact
 		const name = Utils.escapeHTML(user ? user.name : userid);
@@ -224,7 +237,7 @@ export const Friends = new class {
 			`<strong style="color:${STATUS_COLORS[user.statusType]}">\u25C9 ${STATUS_TITLES[user.statusType]}</strong>` :
 			'\u25CC Offline';
 		let buf = user ?
-			`<span class="username"> <strong>${name}</strong></span><span><small> (${statusType})</small></span>` :
+			`<span class="username"> <username>${name}</username></span><span><small> (${statusType})</small></span>` :
 			Utils.html`<i>${name}</i> <small>(${statusType})</small>`;
 		buf += `<br />`;
 
@@ -286,7 +299,7 @@ export const Friends = new class {
 		if ((Date.now() - connected) < 2 * 60 * 1000) {
 			return;
 		}
-		const friends = await this.getFriends(user);
+		const friends = await this.getFriends(user.id);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const f of friends) {
 			const {user1, user2} = f;
@@ -299,7 +312,7 @@ export const Friends = new class {
 	}
 	writeLogin(user: User) {
 		return this.query({
-			statement: 'login', type: 'run', data: [Date.now(), user.id],
+			statement: 'login', type: 'run', data: [user.id, Date.now(), Date.now()],
 		});
 	}
 	hideLoginData(user: User) {
@@ -315,6 +328,14 @@ export const Friends = new class {
 	async getLastLogin(userid: ID) {
 		const result = await this.query({statement: 'checkLastLogin', type: 'get', data: [userid]});
 		return parseInt(result['last_login']);
+	}
+	getSettings(userid: ID) {
+		return this.query({statement: 'getSettings', type: 'get', data: [userid]});
+	}
+	setHideList(userid: ID, setting: boolean) {
+		const num = setting ? 1 : 0;
+		// name, send_login_data, last_login, public_list
+		return this.query({statement: 'toggleList', type: 'run', data: [userid, Date.now(), num, num]});
 	}
 	checkCanUse(context: CommandContext | PageContext) {
 		const user = context.user;
@@ -380,6 +401,13 @@ export const commands: ChatCommands = {
 	friends: {
 		''(target) {
 			return this.parse(`/friends list`);
+		},
+		viewlist(target, room, user) {
+			Friends.checkCanUse(this);
+			target = toID(target);
+			if (!target) return this.errorReply(`Specify a user.`);
+			if (target === user.id) return this.parse(`/friends list`);
+			return this.parse(`/j view-friends-viewuser-${target}`);
 		},
 		request: 'add',
 		async add(target, room, user, connection) {
@@ -521,6 +549,31 @@ export const commands: ChatCommands = {
 			}
 			user.update();
 		},
+		async listdisplay(target, room, user, connection) {
+			Friends.checkCanUse(this);
+			target = toID(target);
+			const {public_list: setting} = await Friends.getSettings(user.id);
+			if (this.meansYes(target)) {
+				if (setting) {
+					return this.errorReply(this.tr`You are already allowing other people to view your friends list.`);
+				}
+				await Friends.setHideList(user.id, true);
+				if (connection.openPages?.has('friends-settings')) {
+					this.parse(`/j view-friends-settings`);
+				}
+				return this.sendReply(this.tr`You are now allowing other people to view your friends list.`);
+			} else if (this.meansNo(target)) {
+				if (!setting) {
+					return this.errorReply(this.tr`You are already hiding your friends list.`);
+				}
+				await Friends.setHideList(user.id, false);
+				if (connection.openPages?.has('friends-settings')) {
+					this.parse(`/j view-friends-settings`);
+				}
+				return this.sendReply(this.tr`You are now hiding your friends list.`);
+			}
+			this.sendReply(`You are currently ${setting ? 'displaying' : 'hiding'} your friends list.`);
+		},
 	},
 	friendshelp() {
 		return this.parse('/join view-friends-help');
@@ -531,7 +584,7 @@ export const pages: PageTable = {
 	async friends(args, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		Friends.checkCanUse(this);
-		const [type] = args;
+		const type = args.shift();
 		let buf = '<div class="pad">';
 		switch (toID(type)) {
 		case 'outgoing': case 'sent':
@@ -577,6 +630,17 @@ export const pages: PageTable = {
 				buf += `</div>`;
 			}
 			break;
+		case 'viewuser':
+			const target = toID(args.shift());
+			if (!target) return this.errorReply(`Specify a user.`);
+			if (target === user.id) {
+				return this.errorReply(`Use /friends list to view your own list.`);
+			}
+			const {public_list: isAllowing} = await Friends.getSettings(target);
+			if (!isAllowing) return this.errorReply(`${target}'s friends list is not public or they do not have one.`);
+			this.title = `[Friends List] ${target}`;
+			buf += await Friends.visualizePublicList(target);
+			break;
 		case 'help':
 			this.title = `[Friends] Help`;
 			buf += headerButtons('help', user);
@@ -596,6 +660,8 @@ export const pages: PageTable = {
 				`<code>/friend denytransfer</code> - Denies any active friend transfer request, if it exists.`,
 				`<code>/friend hidenotifications</code> OR <code>hidenotifs</code> - Opts out of receiving friend notifications.`,
 				`<code>/friend viewnotifications</code> OR <code>viewnotifs</code> - Opts into view friend notifications.`,
+				`<code>/friend listdisplay [on/off]</code> - Opts [in/out] of letting others view your friends list.`,
+				`<code>/friend viewlist [user]</code> - View the given [user]'s friend list, if they're allowing others to see.`,
 			].join('</li><li>');
 			buf += `</li></ul>`;
 			break;
@@ -604,6 +670,7 @@ export const pages: PageTable = {
 			buf += headerButtons('settings', user);
 			buf += `<hr /><h3>Friends Settings:</h3>`;
 			const settings = user.settings;
+			const {public_list} = await Friends.getSettings(user.id);
 			buf += `<strong>Notify me when my friends come online:</strong><br />`;
 			buf += `<button class="button${settings.allowFriendNotifications ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends hidenotifs">Disable</button> `;
@@ -614,12 +681,17 @@ export const pages: PageTable = {
 			buf += `value="/friends toggle off">Disable</button> `;
 			buf += `<button class="button${settings.blockFriendRequests ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends toggle on">Enable</button> <br /><br />`;
+			buf += `<strong>Allow others to see your list:</strong><br />`;
+			buf += `<button class="button${public_list ? ` disabled` : ''}" name="send" `;
+			buf += `value="/friends listdisplay yes">Allow</button> `;
+			buf += `<button class="button${public_list ? `` : ` disabled`}" name="send" `;
+			buf += `value="/friends listdisplay no">Hide</button> <br /><br />`;
 			break;
 		default:
 			this.title = `[Friends] All Friends`;
 			buf += headerButtons('all', user);
 			buf += `<hr />`;
-			buf += await Friends.visualizeList(user);
+			buf += await Friends.visualizeList(user.id);
 		}
 		buf += `</div>`;
 		return toLink(buf);
@@ -698,7 +770,10 @@ const ACTIONS = {
 		`(sender = $user1 AND receiver = $user2) OR (sender = $user2 AND receiver = $user1)`
 	),
 	countRequests: `SELECT count(*) FROM friend_requests WHERE (sender = ? OR receiver = ?)`,
-	login: `UPDATE friend_settings SET last_login = ? WHERE name = ?`,
+	login: (
+		`INSERT INTO friend_settings (name, send_login_data, last_login, public_list) VALUES (?, null, ?, null) ` +
+		`ON CONFLICT (name) DO UPDATE SET last_login = ?`
+	),
 	checkLastLogin: `SELECT last_login FROM friend_settings WHERE name= ?`,
 	deleteLogin: `UPDATE friend_settings SET last_login = null WHERE name = ?`,
 	expire: (
@@ -706,11 +781,16 @@ const ACTIONS = {
 		`(SELECT sent_at FROM friend_requests WHERE should_expire(sent_at) = 1)`
 	),
 	hideLogin: (
-		`INSERT INTO friend_settings (name, send_login_data, last_login) VALUES (?, 1, ?) ` +
+		`INSERT INTO friend_settings (name, send_login_data, last_login, public_list) VALUES (?, 1, ?, ?) ` +
 		`ON CONFLICT (name) DO UPDATE SET send_login_data = 1`
 	),
 	showLogin: `DELETE FROM friend_settings WHERE name = ? AND send_login_data = 1`,
 	countFriends: `SELECT count(*) FROM friends WHERE (user1 = ? OR user2 = ?)`,
+	getSettings: `SELECT * FROM friend_settings WHERE name = ?`,
+	toggleList: (
+		`INSERT INTO friend_settings (name, send_login_data, last_login, public_list) VALUES (?, null, ?, ?) ` +
+		`ON CONFLICT (name) DO UPDATE SET public_list = ?`
+	),
 };
 
 const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
