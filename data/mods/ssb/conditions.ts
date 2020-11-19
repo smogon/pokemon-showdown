@@ -2462,7 +2462,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	// No, you're not dynamaxing.
-	/*dynamax: {
+	/* dynamax: {
 		inherit: true,
 		onStart(pokemon) {
 			pokemon.removeVolatile('minimize');
@@ -2491,5 +2491,5 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
 			this.hint(`Your move was aborted due to dynamax. Cheater.`);
 		},
-	},*/
+	}, */
 };
