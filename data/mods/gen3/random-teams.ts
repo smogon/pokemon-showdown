@@ -572,7 +572,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// To prevent this, we prevent more than one Wobbuffet in a single battle.
 			if (set.ability === 'Shadow Tag') this.hasWobbuffet = true;
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		if (pokemon.length < 6 && !isMonotype) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 
 		return pokemon;
 	}
