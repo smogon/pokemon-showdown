@@ -9090,7 +9090,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	irontail: {
 		num: 231,
-		accuracy: 75,
+		accuracy: 85,
 		basePower: 100,
 		category: "Physical",
 		name: "Iron Tail",
@@ -19446,7 +19446,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	xscissor: {
 		num: 404,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 85,
 		category: "Physical",
 		name: "X-Scissor",
 		pp: 15,

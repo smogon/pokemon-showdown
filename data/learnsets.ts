@@ -13421,6 +13421,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7V"],
+			aurasphere: ["8M", "7M"],
+			focusblast: ["8M", "7M"],
+			flashcannon: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 1, level: 3},
@@ -17993,6 +17996,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			magmabath: ["8M", "7M"],
 			dualstrike: ["8M", "7M"],
 			purifyingflame: ["8M", "7M"],
+			aurasphere: ["8M", "7M"],
+			searingshot: ["8M", "7M"],
+			sludgebomb: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 50, gender: "F", nature: "Modest", moves: ["flamethrower", "psychic", "hyperbeam", "solarbeam"], pokeball: "pokeball"},
@@ -19259,6 +19265,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			weatherball: ["8M"],
 			workup: ["8M", "7M", "5M"],
 			crystalwave: ["8M", "7M"],
+			dazzlinggleam: ["8M", "7M"],
+			flashcannon: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
@@ -20758,6 +20766,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			firejet: ["8M", "7M"],
 			nightmaredance: ["8M", "7M"],
 			windblast: ["8M", "7M"],
+			burningjealousy: ["8M", "7M"],
+			roost: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 8, level: 70, moves: ["fierywrath", "hurricane", "suckerpunch", "nastyplot"]},
@@ -51047,6 +51057,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["8M", "7M", "5M"],
 			featherbarrage: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
+			swordsdance: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 5, level: 22},
@@ -56111,6 +56122,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M", "5M"],
 			worryseed: ["7T", "6T", "5T"],
 			zapkick: ["8M", "7M"],
+			ironhead: ["8M", "7M"],
+			bodyslam: ["8M", "7M"],
+			zenheadbutt: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 6, level: 30},
@@ -63492,6 +63506,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T", "6T"],
 			thinkfast: ["8M", "7M"],
 			spookytricks: ["8M", "7M"],
+			recover: ["8M", "7M"],
 		},
 	},
 	meowsticf: {
@@ -63579,6 +63594,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M", "7T"],
 			workup: ["8M", "7M"],
 			zenheadbutt: ["8M", "7T"],
+			recover: ["8M", "7M"],
 		},
 	},
 	honedge: {
