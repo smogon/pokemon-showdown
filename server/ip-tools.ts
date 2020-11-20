@@ -469,7 +469,7 @@ export const IPTools = new class {
 				if (!hosts || !hosts[0]) {
 					if (ip.startsWith('50.')) {
 						resolve('comcast.net?/res');
-					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP && telstraRange.host) {
+					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP) {
 						resolve(telstraRange.host);
 					} else {
 						this.testConnection(ip, result => {
