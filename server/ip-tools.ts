@@ -603,7 +603,7 @@ export const IPTools = new class {
 	}
 };
 
-const telstraRange: AddressRange = {
+const telstraRange: AddressRange & {host: string} = {
 	minIP: IPTools.ipToNumber("101.160.0.0"),
 	maxIP: IPTools.ipToNumber("101.191.255.255"),
 	host: 'telstra.net?/res',
