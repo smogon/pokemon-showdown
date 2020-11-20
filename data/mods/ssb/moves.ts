@@ -1247,7 +1247,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Protects from physical moves. If hit by physical move, opponent is either badly poisoned, burned, or paralyzed at random and is forced out. Special attacks and status moves go through this protect.",
-		shortDesc: "Protected from physical moves. Contact: brn/par/tox.",
+		shortDesc: "Protected from physical moves. Gives brn/par/tox.",
 		name: "Status Guard",
 		isNonstandard: "Custom",
 		gen: 8,
