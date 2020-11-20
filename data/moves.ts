@@ -12684,7 +12684,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onHit(target, source) {
 			if (source.side === target.side) {
-				this.heal(Math.floor(target.baseMaxhp * 0.5));
+				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
+					this.add('-immune', target);
+				}
 			}
 		},
 		secondary: null,
