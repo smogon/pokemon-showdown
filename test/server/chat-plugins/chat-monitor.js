@@ -62,17 +62,6 @@ describe('Chat monitor', () => {
 				});
 				return context.parse();
 			};
-
-			this.delayedAssertLocked = async function () {
-				// We wait 25 milliseconds because it takes time for the
-				// unpropagated autolock promises to be executed.
-				return new Promise(resolve => {
-					setTimeout(() => {
-						assert(this.user.locked);
-						resolve();
-					}, 25);
-				});
-			};
 		});
 
 		beforeEach(() => Punishments.unlock(this.user.id));
@@ -86,7 +75,7 @@ describe('Chat monitor', () => {
 
 			await this.parse("haha autolock me pls");
 
-			await this.delayedAssertLocked();
+			assert(this.user.locked);
 			assert.notEqual(this.room.log.log.pop(), "haha autolock me pls");
 		});
 
@@ -98,7 +87,7 @@ describe('Chat monitor', () => {
 			});
 
 			await this.parse("sl ur");
-			await this.delayedAssertLocked();
+			assert(this.user.locked);
 			assert.notEqual(this.room.log.log.pop(), "sl ur");
 		});
 
