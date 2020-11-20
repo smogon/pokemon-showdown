@@ -12679,6 +12679,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryHit(target, source, move) {
 			if (source.side === target.side) {
 				move.basePower = 0;
+				move.infiltrates = true;
 			}
 		},
 		onHit(target, source) {
