@@ -23,14 +23,14 @@ export function getAlias(roomid: RoomID, key: string) {
 }
 
 export const commands: ChatCommands = {
-	addfaq(target, room, user, connection) {
+	async addfaq(target, room, user, connection) {
 		room = this.requireRoom();
 		this.checkCan('ban', null, room);
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
 
 		target = target.trim();
-		const input = this.filter(target);
+		const input = await this.filter(target);
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 

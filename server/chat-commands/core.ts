@@ -644,7 +644,7 @@ export const commands: ChatCommands = {
 		return user.update();
 	},
 
-	status(target, room, user, connection, cmd) {
+	async status(target, room, user, connection, cmd) {
 		if (user.locked || user.semilocked) {
 			return this.errorReply(this.tr("Your status cannot be updated while you are locked or semilocked."));
 		}
@@ -654,7 +654,7 @@ export const commands: ChatCommands = {
 		if (target.length > maxLength) {
 			return this.errorReply(this.tr `Your status is too long; it must be under ${maxLength} characters.`);
 		}
-		target = this.statusfilter(target);
+		target = await this.statusfilter(target);
 		if (!target) return this.errorReply(this.tr("Your status contains a banned word."));
 
 		user.setUserMessage(target);

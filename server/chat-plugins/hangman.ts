@@ -210,9 +210,9 @@ export class Hangman extends Rooms.RoomGame {
 export const commands: ChatCommands = {
 	hangman: {
 		create: 'new',
-		new(target, room, user, connection) {
+		async new(target, room, user, connection) {
 			room = this.requireRoom();
-			const text = this.filter(target);
+			const text = await this.filter(target);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in hangmans.");
 			const params = text.split(',');
 

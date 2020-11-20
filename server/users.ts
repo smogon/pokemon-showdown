@@ -701,7 +701,7 @@ export class User extends Chat.MessageContext {
 			this.send(`|nametaken||Your name must be 18 characters or shorter.`);
 			return false;
 		}
-		name = Chat.namefilter(name, this);
+		name = await Chat.namefilter(name, this);
 		if (userid !== toID(name)) {
 			if (name) {
 				name = userid;

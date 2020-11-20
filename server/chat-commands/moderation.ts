@@ -1353,11 +1353,11 @@ export const commands: ChatCommands = {
 	},
 	demotehelp: [`/demote [username], [group] - Demotes the user to the specified group. Requires: &`],
 
-	forcepromote(target, room, user, connection) {
+	async forcepromote(target, room, user, connection) {
 		// warning: never document this command in /help
 		this.checkCan('forcepromote');
 		target = this.splitTarget(target, true);
-		let name = this.filter(this.targetUsername);
+		let name = await this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 		const nextGroup = target as GroupSymbol;

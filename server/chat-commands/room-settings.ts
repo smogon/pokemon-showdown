@@ -694,7 +694,7 @@ export const commands: ChatCommands = {
 
 	subroomgroupchat: 'makegroupchat',
 	mgc: 'makegroupchat',
-	makegroupchat(target, room, user, connection, cmd) {
+	async makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
 		if (!user.autoconfirmed) {
@@ -723,7 +723,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("Title must be under 32 characters long.");
 		} else if (!title) {
 			title = (`${Math.floor(Math.random() * 100000000)}`);
-		} else if (this.filter(title) !== title) {
+		} else if ((await this.filter(title)) !== title) {
 			return this.errorReply("Invalid title.");
 		}
 		// `,` is a delimiter used by a lot of /commands
@@ -901,7 +901,7 @@ export const commands: ChatCommands = {
 		this.errorReply("Did you mean /renameroom?");
 	},
 	renamegroupchat: 'renameroom',
-	renameroom(target, room, user, connection, cmd) {
+	async renameroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.game || room.minorActivity || room.tour) {
 			return this.errorReply("Cannot rename room while a tour/poll/game is running.");
@@ -920,7 +920,7 @@ export const commands: ChatCommands = {
 			if (existingRoom && !existingRoom.settings.modjoin) {
 				return this.errorReply(`Your groupchat name is too similar to existing chat room '${existingRoom.title}'.`);
 			}
-			if (this.filter(target) !== target) {
+			if ((await this.filter(target)) !== target) {
 				return this.errorReply("Invalid title.");
 			}
 			// `,` is a delimiter used by a lot of /commands

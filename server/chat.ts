@@ -91,10 +91,10 @@ export type ChatFilter = (
 	connection: Connection,
 	targetUser: User | null,
 	originalMessage: string
-) => string | false | null | undefined;
+) => string | false | null | undefined | Promise<string | false | null | undefined>;
 
-export type NameFilter = (name: string, user: User) => string;
-export type StatusFilter = (status: string, user: User) => string;
+export type NameFilter = (name: string, user: User) => string | Promise<string>;
+export type StatusFilter = (status: string, user: User) => string | Promise<string>;
 export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void;
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
 export type HostFilter = (host: string, user: User, connection: Connection, hostType: string) => void;
@@ -1344,14 +1344,14 @@ export const Chat = new class {
 	 * Load chat filters
 	 *********************************************************/
 	readonly filters: ChatFilter[] = [];
-	filter(message: string, context: CommandContext) {
+	async filter(message: string, context: CommandContext) {
 		// Chat filters can choose to:
 		// 1. return false OR null - to not send a user's message
 		// 2. return an altered string - to alter a user's message
 		// 3. return undefined to send the original message through
 		const originalMessage = message;
 		for (const curFilter of Chat.filters) {
-			const output = curFilter.call(
+			const output = await curFilter.call(
 				context,
 				message,
 				context.user,
@@ -1369,7 +1369,7 @@ export const Chat = new class {
 	}
 
 	readonly namefilters: NameFilter[] = [];
-	namefilter(name: string, user: User) {
+	async namefilter(name: string, user: User) {
 		if (!Config.disablebasicnamefilter) {
 			// whitelist
 			// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
@@ -1417,7 +1417,7 @@ export const Chat = new class {
 
 		name = Dex.getName(name);
 		for (const curFilter of Chat.namefilters) {
-			name = curFilter(name, user);
+			name = await curFilter(name, user);
 			if (!name) return '';
 		}
 		return name;
@@ -1445,19 +1445,19 @@ export const Chat = new class {
 	}
 
 	readonly nicknamefilters: NameFilter[] = [];
-	nicknamefilter(nickname: string, user: User) {
+	async nicknamefilter(nickname: string, user: User) {
 		for (const curFilter of Chat.nicknamefilters) {
-			nickname = curFilter(nickname, user);
+			nickname = await curFilter(nickname, user);
 			if (!nickname) return '';
 		}
 		return nickname;
 	}
 
 	readonly statusfilters: StatusFilter[] = [];
-	statusfilter(status: string, user: User) {
+	async statusfilter(status: string, user: User) {
 		status = status.replace(/\|/g, '');
 		for (const curFilter of Chat.statusfilters) {
-			status = curFilter(status, user);
+			status = await curFilter(status, user);
 			if (!status) return '';
 		}
 		return status;
@@ -2235,7 +2235,7 @@ export type MonitorHandler = (
 	message: string,
 	lcMessage: string,
 	isStaff: boolean
-) => string | false | undefined;
+) => string | false | undefined | Promise<string | false | undefined>;
 export interface Monitor {
 	location: string;
 	punishment: string;

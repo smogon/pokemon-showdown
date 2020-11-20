@@ -275,14 +275,14 @@ export const commands: ChatCommands = {
 		queuehtml: 'new',
 		queuemulti: 'new',
 		htmlqueuemulti: 'new',
-		new(target, room, user, connection, cmd, message) {
+		async new(target, room, user, connection, cmd, message) {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
 			if (target.length > 1024) return this.errorReply(this.tr("Poll too long."));
 			if (room.battle) return this.errorReply(this.tr("Battles do not support polls."));
 
-			const text = this.filter(target);
+			const text = await this.filter(target);
 			if (target !== text) return this.errorReply(this.tr("You are not allowed to use filtered words in polls."));
 
 			const supportHTML = cmd.includes('html');

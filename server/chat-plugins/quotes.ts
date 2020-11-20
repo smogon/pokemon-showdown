@@ -47,7 +47,7 @@ export const commands: ChatCommands = {
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 
 	addquote: 'quote',
-	quote(target, room, user) {
+	async quote(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
@@ -60,7 +60,7 @@ export const commands: ChatCommands = {
 		if (!quotes[room.roomid]) quotes[room.roomid] = [];
 
 		const roomQuotes = quotes[room.roomid];
-		if (this.filter(target) !== target) {
+		if ((await this.filter(target)) !== target) {
 			return this.errorReply(`Invalid quote.`);
 		}
 		if (roomQuotes.filter(item => item.quote === target).length) {

@@ -2660,7 +2660,7 @@ export const commands: ChatCommands = {
 		);
 	},
 
-	code(target, room, user, connection) {
+	async code(target, room, user, connection) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
@@ -2677,7 +2677,7 @@ export const commands: ChatCommands = {
 
 		if (this.broadcasting) {
 			if (isPMOrPersonalRoom) {
-				target = this.filter(target)!;
+				target = (await this.filter(target))!;
 				if (!target) return this.errorReply(`Invalid code.`);
 			}
 			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;

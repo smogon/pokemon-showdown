@@ -419,10 +419,10 @@ export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
 export const commands: ChatCommands = {
-	registerlastfm(target, room, user) {
+	async registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
-		target = this.filter(target) || '';
+		target = await this.filter(target) || '';
 		if (!target) {
 			throw new Chat.ErrorMessage(`The provided account name has phrases that PS doesn't allow.`);
 		}

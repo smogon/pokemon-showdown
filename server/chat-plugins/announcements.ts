@@ -48,13 +48,13 @@ export const commands: ChatCommands = {
 	announcement: {
 		htmlcreate: 'new',
 		create: 'new',
-		new(target, room, user, connection, cmd, message) {
+		async new(target, room, user, connection, cmd, message) {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help announcement new');
 			target = target.trim();
 			if (room.battle) return this.errorReply(this.tr("Battles do not support announcements."));
 
-			const text = this.filter(target);
+			const text = await this.filter(target);
 			if (target !== text) return this.errorReply(this.tr("You are not allowed to use filtered words in announcements."));
 
 			const supportHTML = cmd === 'htmlcreate';

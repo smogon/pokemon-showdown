@@ -83,7 +83,7 @@ Chat.registerMonitor('autolock', {
 	location: 'EVERYWHERE',
 	punishment: 'AUTOLOCK',
 	label: 'Autolock',
-	monitor(line, room, user, message, lcMessage, isStaff) {
+	async monitor(line, room, user, message, lcMessage, isStaff) {
 		const {regex, word, reason, publicReason} = line;
 		const match = regex.exec(lcMessage);
 		if (match) {
@@ -91,7 +91,7 @@ Chat.registerMonitor('autolock', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				void Punishments.autolock(
+				await Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
 					`<<${room.roomid}>> ${user.name}: SPOILER: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
@@ -137,7 +137,7 @@ Chat.registerMonitor('evasion', {
 	location: 'EVERYWHERE',
 	punishment: 'EVASION',
 	label: 'Filter Evasion Detection',
-	monitor(line, room, user, message, lcMessage, isStaff) {
+	async monitor(line, room, user, message, lcMessage, isStaff) {
 		const {regex, word, reason, publicReason} = line;
 
 		// Many codepoints used in filter evasion detection can be decomposed
@@ -161,7 +161,7 @@ Chat.registerMonitor('evasion', {
 			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			if (room) {
-				void Punishments.autolock(
+				await Punishments.autolock(
 					user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`,
 					`<<${room.roomid}>> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
 				);
@@ -287,7 +287,7 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 
 /* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-export const chatfilter: ChatFilter = function (message, user, room) {
+export const chatfilter: ChatFilter = async function (message, user, room) {
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
 		// eslint-disable-next-line no-misleading-character-class
@@ -321,7 +321,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		}
 
 		for (const line of Chat.filterWords[list]) {
-			const ret = monitor.call(this, line, room, user, message, lcMessage, isStaff);
+			const ret = await monitor.call(this, line, room, user, message, lcMessage, isStaff);
 			if (ret !== undefined && ret !== message) {
 				line.hits++;
 				saveFilters();
@@ -339,7 +339,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 };
 /* eslint-enable @typescript-eslint/prefer-optional-chain */
 
-export const namefilter: NameFilter = (name, user) => {
+export const namefilter: NameFilter = async (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (id === toID(user.trackRename)) return '';
@@ -359,7 +359,7 @@ export const namefilter: NameFilter = (name, user) => {
 		for (const line of filterWords[list]) {
 			if (line.regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					void Punishments.autolock(
+					await Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
 						`using an inappropriate name: SPOILER: ${name} (from ${user.name})`, false, name
 					);
@@ -387,7 +387,7 @@ export const loginfilter: LoginFilter = user => {
 		user.trackRename = '';
 	}
 };
-export const nicknamefilter: NameFilter = (name, user) => {
+export const nicknamefilter: NameFilter = async (name, user) => {
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
@@ -412,12 +412,12 @@ export const nicknamefilter: NameFilter = (name, user) => {
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					void Punishments.autolock(
+					await Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
 						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
 					);
 				} else if (Chat.monitors[list].punishment === 'EVASION') {
-					void Punishments.autolock(
+					await Punishments.autolock(
 						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
 						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
 					);
@@ -431,7 +431,7 @@ export const nicknamefilter: NameFilter = (name, user) => {
 
 	return name;
 };
-export const statusfilter: StatusFilter = (status, user) => {
+export const statusfilter: StatusFilter = async (status, user) => {
 	let lcStatus = status
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
@@ -453,7 +453,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 		for (const line of filterWords[list]) {
 			if (line.regex.test(lcStatus)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					void Punishments.autolock(
+					await Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
 						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
 					);

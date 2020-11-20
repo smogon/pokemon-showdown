@@ -152,7 +152,7 @@ class Ladder extends LadderStore {
 				unownWord += speciesid.charAt(5) || 'a';
 			}
 			if (nickname) {
-				nickname = Chat.nicknamefilter(nickname, user);
+				nickname = await Chat.nicknamefilter(nickname, user);
 				if (!nickname || nickname !== match[1]) {
 					connection.popup(
 						`Your team was rejected for the following reason:\n\n` +
@@ -164,7 +164,7 @@ class Ladder extends LadderStore {
 			match = regex.exec(team);
 		}
 		if (unownWord) {
-			const filtered = Chat.nicknamefilter(unownWord, user);
+			const filtered = await Chat.nicknamefilter(unownWord, user);
 			if (!filtered || filtered !== unownWord) {
 				connection.popup(
 					`Your team was rejected for the following reason:\n\n` +
