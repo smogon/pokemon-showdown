@@ -21,7 +21,6 @@ describe('Pollen Puff', function () {
 
 		battle.makeChoices('move pollenpuff 2, move superfang 2', 'move pollenpuff -2, move substitute');
 		const lucario = battle.p2.active[1];
-		console.log(battle.getDebugLog());
 
 		// -1/2 from Super Fang, -1/4 from Sub, +1/2 from Pollen Puff, damaged Sub.
 		assert.equal(lucario.hp, lucario.maxhp - Math.floor(lucario.maxhp / 4));
