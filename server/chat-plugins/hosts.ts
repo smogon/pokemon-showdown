@@ -191,7 +191,7 @@ export const commands: ChatCommands = {
 			// should be in the format: IP, IP, name, URL
 			const widen = cmd.includes('widen');
 
-			const rangesToAdd: AddressRange[] = [];
+			const rangesToAdd: (AddressRange & {host: string})[] = [];
 			for (const row of target.split('\n')) {
 				const [type, stringRange, host] = row.split(',').map(part => part.trim());
 				if (!host || !IPTools.hostRegex.test(host)) {
@@ -203,7 +203,7 @@ export const commands: ChatCommands = {
 				const range = IPTools.stringToRange(stringRange);
 				if (!range) return this.errorReply(`Couldn't parse IP range '${stringRange}'.`);
 				range.host = `${IPTools.urlToHost(host)}?/${type}`;
-				rangesToAdd.push(range);
+				rangesToAdd.push(range as AddressRange & {host: string});
 			}
 
 			let successes = 0;
