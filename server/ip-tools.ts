@@ -456,7 +456,7 @@ export const IPTools = new class {
 
 			const ipNumber = IPTools.ipToNumber(ip);
 			for (const range of IPTools.ranges) {
-				if (ipNumber >= range.minIP && ipNumber <= range.maxIP && range.host) {
+				if (ipNumber >= range.minIP && ipNumber <= range.maxIP) {
 					resolve(range.host);
 					return;
 				}
