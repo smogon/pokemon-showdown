@@ -54,8 +54,7 @@ describe('Metronome (item)', function () {
 		assert.bounded(damage, [96, 114]);
 	});
 
-	// See research: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8470799
-	it.skip('should instantly start moves that use a charging turn at Metronome 1 boost level, then increase linearly', function () {
+	it('should instantly start moves that use a charging turn at Metronome 1 boost level, then increase linearly', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
 		], [
