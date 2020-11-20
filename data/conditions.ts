@@ -666,7 +666,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('gasdispenser')) {
+			if (source?.hasItem('poisonrock')) {
 				return 8;
 			}
 			return 5;

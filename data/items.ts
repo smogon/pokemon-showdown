@@ -7137,4 +7137,80 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "CAP",
 	},
+	poisonrock: {
+		name: "Poison Rock",
+		spritenum: 34,
+		fling: {
+			basePower: 60,
+		},
+		num: 10000,
+		gen: 4,
+	},
+	ngunishield: {
+		name: "Nguni Shield",
+		spritenum: 581,
+		fling: {
+			basePower: 80,
+		},
+		onModifyDefPriority: 1,
+		onModifyDef(def) {
+			return this.chainModify(1.5);
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (this.dex.getMove(moveSlot.move).category === 'Status') {
+					pokemon.disableMove(moveSlot.id);
+				}
+			}
+		},
+		num: 10001,
+		gen: 6,
+	},
+	shockorb: {
+		name: "Shock Orb",
+		spritenum: 252,
+		fling: {
+			basePower: 30,
+			status: 'par',
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('par', pokemon);
+		},
+		num: 10002,
+		gen: 4,
+	},
+	brassknuckles: {
+		name: "Brass Knuckles",
+		spritenum: 713,
+		fling: {
+			basePower: 30,
+		},
+		onAfterMoveSecondarySelf(target, source, move) {
+			if (move.flags['punch']) {
+				target.useItem();
+			}
+		},
+		boosts: {
+			atk: 1,
+		},
+		num: 10003,
+		gen: 8,
+	},
+	rechargeherb: {
+		name: "Recharge Herb",
+		spritenum: 535,
+		fling: {
+			basePower: 30,
+		},
+		onAfterMoveSecondarySelf(target, source, move) {
+			if (move.flags['recharge']) {
+				target.removeVolatile('mustrecharge');
+				target.useItem();
+			}
+		},
+		num: 10004,
+		gen: 8,
+	},
 };

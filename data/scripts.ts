@@ -500,6 +500,12 @@ export const Scripts: BattleScriptsData = {
 				}
 				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
 					this.boost({spe: 2}, pokemon);
+					this.boost({accuracy: 1}, pokemon);
+					//console.log("accuracy before boost: "+accuracy);
+					//accuracy *= 1.3;
+					//console.log("accuracy after boost: "+accuracy);
+					//accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					this.debug('blunderpolicy - enhancing accuracy');
 				}
 				hitResults[i] = false;
 				continue;
