@@ -157,7 +157,7 @@ class PlayerLadder extends Ladder {
 	// add the different keys to the history - async for larger leaderboards
 	// FIXME: this is not what "async" means
 	softReset() {
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			for (const u in this.data) {
 				const userData = this.data[u];
 				for (const a in userData) {
