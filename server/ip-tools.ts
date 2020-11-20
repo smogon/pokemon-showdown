@@ -456,7 +456,7 @@ export const IPTools = new class {
 
 			const ipNumber = IPTools.ipToNumber(ip);
 			for (const range of IPTools.ranges) {
-				if (ipNumber >= range.minIP && ipNumber <= range.maxIP) {
+				if (ipNumber >= range.minIP && ipNumber <= range.maxIP && range.host) {
 					resolve(range.host);
 					return;
 				}
@@ -469,7 +469,7 @@ export const IPTools = new class {
 				if (!hosts || !hosts[0]) {
 					if (ip.startsWith('50.')) {
 						resolve('comcast.net?/res');
-					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP) {
+					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP && telstraRange.host) {
 						resolve(telstraRange.host);
 					} else {
 						this.testConnection(ip, result => {
