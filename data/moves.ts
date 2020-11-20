@@ -5296,7 +5296,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 0.667)); // TODO: find out the real value
+				success = !!this.heal(this.modify(target.baseMaxhp, 0.667));
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
