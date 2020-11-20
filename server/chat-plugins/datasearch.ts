@@ -133,13 +133,13 @@ export const commands: ChatCommands = {
 	dexsearchhelp() {
 		this.sendReplyBox(
 			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
-			`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
-			`<code>resists</code> followed by a type will show Pok\u00e9mon that resist that typing (e.g. <code>resists normal</code>).<br/>` +
-			`<code>weak</code> followed by a type will show Pok\u00e9mon that are weak to that typing (e.g. <code>weak fire</code>).<br/>` +
+			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
+			`<code>weak</code> followed by a type or move will show Pok\u00e9mon that are weak to that typing or move (e.g. <code>weak fire</code>).<br/>` +
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
 			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
@@ -758,7 +758,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 8) === 'resists ') {
 				const targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in Dex.data.TypeChart) {
+				if (targetResist in Dex.data.TypeChart || toID(targetResist) in Dex.data.Moves) {
 					const invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
@@ -770,7 +770,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 5) === 'weak ') {
 				const targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
-				if (targetWeak in Dex.data.TypeChart) {
+				if (targetWeak in Dex.data.TypeChart || toID(targetWeak) in Dex.data.Moves) {
 					const invalid = validParameter("weak", targetWeak, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.weak[targetWeak] = !isNotSearch;
@@ -943,11 +943,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const type in alts.resists) {
+			for (const targetResist in alts.resists) {
 				let effectiveness = 0;
-				const notImmune = mod.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
-				if (!alts.resists[type]) {
+				const move = Dex.getMove(targetResist);
+				const attackingType = move.type || targetResist;
+				const notImmune = mod.getImmunity(attackingType, dex[mon]) || !move.exists ||
+					!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]);
+				if (notImmune) {
+					for (const defenderType of dex[mon].types) {
+						const baseMod = Dex.getEffectiveness(attackingType, defenderType);
+						const moveMod = move.onEffectiveness?.call(
+							{dex: Dex} as Battle, baseMod, null, defenderType, move as ActiveMove,
+						);
+						effectiveness += typeof moveMod === 'number' ? moveMod : baseMod;
+					}
+				}
+				if (!alts.resists[targetResist]) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
 					if (!notImmune || effectiveness < 0) matched = true;
@@ -955,11 +966,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const type in alts.weak) {
+			for (const targetWeak in alts.weak) {
 				let effectiveness = 0;
-				const notImmune = mod.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
-				if (alts.weak[type]) {
+				const move = Dex.getMove(targetWeak);
+				const attackingType = move.type || targetWeak;
+				const notImmune = mod.getImmunity(attackingType, dex[mon]) || !move.exists ||
+				!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]);
+				if (notImmune) {
+					for (const defenderType of dex[mon].types) {
+						const baseMod = Dex.getEffectiveness(attackingType, defenderType);
+						const moveMod = move.onEffectiveness?.call(
+							{dex: Dex} as Battle, baseMod, null, defenderType, move as ActiveMove,
+						);
+						effectiveness += typeof moveMod === 'number' ? moveMod : baseMod;
+					}
+				}
+				if (alts.weak[targetWeak]) {
 					if (notImmune && effectiveness >= 1) matched = true;
 				} else {
 					if (!notImmune || effectiveness < 1) matched = true;
