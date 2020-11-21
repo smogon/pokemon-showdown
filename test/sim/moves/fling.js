@@ -40,7 +40,7 @@ describe('Fling', function () {
 		assert.equal(battle.p1.active[0].item, 'ironball');
 	});
 
-	it.skip('should use its item to be flung in damage calculations', function () {
+	it('should use its item to be flung in damage calculations', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['fling']},
 		], [
