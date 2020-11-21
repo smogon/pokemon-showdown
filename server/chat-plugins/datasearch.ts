@@ -947,8 +947,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				let effectiveness = 0;
 				const move = Dex.getMove(targetResist);
 				const attackingType = move.type || targetResist;
-				const notImmune = mod.getImmunity(attackingType, dex[mon]) || !move.exists ||
-					!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]);
+				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists ||
+					!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]));
 				if (notImmune) {
 					for (const defenderType of dex[mon].types) {
 						const baseMod = Dex.getEffectiveness(attackingType, defenderType);
@@ -970,8 +970,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				let effectiveness = 0;
 				const move = Dex.getMove(targetWeak);
 				const attackingType = move.type || targetWeak;
-				const notImmune = mod.getImmunity(attackingType, dex[mon]) || !move.exists ||
-				!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]);
+				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists ||
+				!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]));
 				if (notImmune) {
 					for (const defenderType of dex[mon].types) {
 						const baseMod = Dex.getEffectiveness(attackingType, defenderType);
