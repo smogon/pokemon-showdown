@@ -4137,7 +4137,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		desc: "For 5 turns, Non Ghost types take 1/16th damage; Has boosting effects on Mismagius.",
 		shortDesc: "5 turns. Non Ghost types take 1/16th damage; Has boosting effects on Mismagius.",
-		name: "Pitch Black",
+		name: "Pitch Black Terrain",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
