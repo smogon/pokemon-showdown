@@ -5241,14 +5241,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 					move.secondaries.push({volatileStatus: item.fling.volatileStatus});
 				}
 			}
+			source.addVolatile('fling');
 		},
-		onAfterHit(target, source) {
-			const item = source.getItem();
-			source.setItem('');
-			source.lastItem = item.id;
-			source.usedItemThisTurn = true;
-			this.add('-enditem', source, item.name, '[from] move: Fling');
-			this.runEvent('AfterUseItem', source, null, null, item);
+		condition: {
+			onUpdate(pokemon) {
+				const item = pokemon.getItem();
+				pokemon.setItem('');
+				pokemon.lastItem = item.id;
+				pokemon.usedItemThisTurn = true;
+				this.add('-enditem', pokemon, item.name, '[from] move: Fling');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
+				pokemon.removeVolatile('fling');
+			},
 		},
 		secondary: null,
 		target: "normal",
