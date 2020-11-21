@@ -5241,10 +5241,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 					move.secondaries.push({volatileStatus: item.fling.volatileStatus});
 				}
 			}
+		},
+		onAfterHit(target, source) {
+			const item = source.getItem();
 			source.setItem('');
 			source.lastItem = item.id;
 			source.usedItemThisTurn = true;
-			this.add("-enditem", source, item.name, '[from] move: Fling');
+			this.add('-enditem', source, item.name, '[from] move: Fling');
 			this.runEvent('AfterUseItem', source, null, null, item);
 		},
 		secondary: null,
