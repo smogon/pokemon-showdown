@@ -14,7 +14,7 @@ describe('Fling', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'ironball', moves: ['fling']},
 		], [
-			{species: 'cleffa', moves: ['sleeptalk']},
+			{species: 'cleffa', moves: ['protect']},
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, '');
