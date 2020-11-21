@@ -3553,15 +3553,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const damage = this.getDamage(pokemon, pokemon, activeMove as ActiveMove);
 					if (typeof damage !== 'number') throw new Error("Shifting Rocks damage not dealt");
 					this.damage(damage);
+					this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
 					this.effectData.damage = 7;
 					pokemon.side.removeSideCondition(`shiftingrocks`);
 					return false;
 				}
 				this.damage(this.effectData.damage * pokemon.maxhp / 100);
 				this.effectData.damage++;
+				this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
 			},
 			onEnd(side) {
 				this.add('-sideend', side, 'move: Shifting Rocks');
+				this.add("-message", `The Shifting Rocks were removed!`);
 			},
 		},
 		secondary: null,
@@ -4999,9 +5002,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Glare', target);
 			this.add('-anim', source, 'Trick-or-Treat', source);
 		},
-		onHit(pokemon) {
+		onHit(pokemon, source) {
 			pokemon.addVolatile('healblock');
-			this.directDamage(pokemon.maxhp / 2, pokemon, pokemon);
+			this.directDamage(source.maxhp / 2, source, source);
 			pokemon.addVolatile('curse');
 		},
 		secondary: null,
