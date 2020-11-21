@@ -62,9 +62,12 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
+interface MatchesCache<T extends TournamentPlayer> {
+	challenges: Map<T, T[]>;
+	challengeBys: Map<T, T[]>;
+}
 export class Tournament extends Rooms.RoomGame {
-	readonly playerTable: {[userid: string]: TournamentPlayer};
-	readonly players: TournamentPlayer[];
+	readonly playerType = TournamentPlayer;
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
 	/** Format ID not including custom rules */
@@ -88,9 +91,7 @@ export class Tournament extends Rooms.RoomGame {
 	bracketUpdateTimer: NodeJS.Timeout | null;
 	bracketCache: AnyObject | null;
 	isAvailableMatchesInvalidated: boolean;
-	availableMatchesCache: {
-		challenges: Map<TournamentPlayer, TournamentPlayer[]>, challengeBys: Map<TournamentPlayer, TournamentPlayer[]>,
-	};
+	availableMatchesCache: MatchesCache<this['playerPrototype']>;
 	autoDisqualifyTimeout: number;
 	autoDisqualifyTimer: NodeJS.Timeout | null;
 	autoStartTimeout: number;
@@ -104,11 +105,6 @@ export class Tournament extends Rooms.RoomGame {
 		super(room);
 		this.gameid = 'tournament' as ID;
 		const formatId = toID(format);
-
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		this.playerTable = Object.create(null);
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		this.players = [];
 
 		this.title = format.name + ' tournament';
 		this.isTournament = true;
@@ -404,8 +400,7 @@ export class Tournament extends Rooms.RoomGame {
 			output.sendReply(`|tournament|error|BracketFrozen`);
 			return;
 		}
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		const player = this.addPlayer(user) as TournamentPlayer;
+		const player = this.addPlayer(user);
 		if (!player) throw new Error("Failed to add player.");
 
 		this.playerTable[user.id] = player;

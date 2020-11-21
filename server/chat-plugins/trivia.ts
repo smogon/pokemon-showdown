@@ -416,7 +416,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 }
 
 export class Trivia extends Rooms.RoomGame {
-	playerTable: {[k: string]: TriviaPlayer};
+	readonly playerType = TriviaPlayer;
 	gameid: ID;
 	minPlayers: number;
 	kickedUsers: Set<string>;
@@ -436,7 +436,6 @@ export class Trivia extends Rooms.RoomGame {
 		isRandomMode = false, isSubGame = false
 	) {
 		super(room, isSubGame);
-		this.playerTable = {};
 		this.gameid = 'trivia' as ID;
 		this.title = 'Trivia';
 		this.allowRenames = true;
@@ -527,10 +526,6 @@ export class Trivia extends Rooms.RoomGame {
 			throw new Chat.ErrorMessage(this.room.tr`This game does not allow latejoins.`);
 		}
 		this.addPlayer(user);
-	}
-
-	makePlayer(user: User): TriviaPlayer {
-		return new TriviaPlayer(user, this);
 	}
 
 	destroy() {
