@@ -18,7 +18,24 @@ describe('Protean', function () {
 		assert(battle.p1.active[0].hasType('Fighting'));
 	});
 
-	it('should not change the user\'s type using Fling with no item', function () {
+	it.skip(`should activate on both turns of a charge move`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", ability: 'protean', moves: ['bounce']},
+		], [
+			{species: "Helioptile", ability: 'noguard', moves: ['soak']},
+		]]);
+		const wynaut = battle.p1.active[0];
+
+		//Turn 1 of Bounce
+		battle.makeChoices();
+		assert.equal(wynaut.getTypes().join('/'), 'Flying');
+
+		//Turn 2 of Bounce
+		battle.makeChoices();
+		assert.equal(wynaut.getTypes().join('/'), 'Flying');
+	});
+
+	it('should not change the user\'s type when using Fling with no item', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kecleon", ability: 'protean', moves: ['fling']}]});
 		battle.setPlayer('p2', {team: [{species: "Wobbuffet", moves: ['counter']}]});
