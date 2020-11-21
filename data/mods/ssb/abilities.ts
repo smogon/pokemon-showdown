@@ -1826,10 +1826,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. If move uses by it is self targetting, it loses only half.",
 		shortDesc: "If this Pokemon is the target of a foe's move, that move loses one additional PP. If it targets itself, it loses half than it should..",
 		name: "Royal Aura",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Royal Aura');
+		},
 		onDeductPP(target, source) {
-			if (target === source) return -0.5;
 			if (target.side === source.side) return;
 			return 1;
+		},
+		onTryMove(pokemon, target, move) {
+			const moveData = pokemon.getMoveData(move.id);
+			if (!moveData) return;
+			// Lost 1 PP due to move usage, restore 0.5 PP to make it so that only 0.5 PP
+			// would be used.
+			moveData.pp = (Math.round(moveData.pp * 100) + 50) / 100;
 		},
 		isNonstandard: "Custom",
 		gen: 8,

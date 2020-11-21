@@ -406,6 +406,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		// Magic Guard Innate
 		onDamage(damage, target, source, effect) {
+			if (target.Illusion) return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -979,8 +980,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	kris: {
-		name: "phuck",
-		shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
+		// name: "phuck",
+		// shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
 		noCopy: true,
 		onStart(source) {
 			const foeName = source.side.foe.active[0].illusion ?
