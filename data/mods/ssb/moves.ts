@@ -4792,7 +4792,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onEnd() {
-				this.add('-fieldend', 'move: Fire Pledge');
+				this.add('-fieldend', 'move: Lava Terrain');
 			},
 		},
 		secondary: null,
