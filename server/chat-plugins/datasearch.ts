@@ -972,7 +972,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const move = mod.getMove(targetResist);
 				const attackingType = move.type || targetResist;
 				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists || !move.ignoreImmunity ||
-					move.isFutureMove || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && 
+					move.isFutureMove || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
 					(move.id !== 'sheercold' || maxGen < 7 || !dex[mon].types.includes('Ice'));
 				if (notImmune && !move.ohko && move.damage === undefined) {
 					for (const defenderType of dex[mon].types) {
@@ -996,7 +996,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const move = mod.getMove(targetWeak);
 				const attackingType = move.type || targetWeak;
 				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists || !move.ignoreImmunity ||
-					move.isFutureMove || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && 
+					move.isFutureMove || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
 					(move.id !== 'sheercold' || maxGen < 7 || !dex[mon].types.includes('Ice'));
 				if (notImmune && !move.ohko && move.damage === undefined) {
 					for (const defenderType of dex[mon].types) {
