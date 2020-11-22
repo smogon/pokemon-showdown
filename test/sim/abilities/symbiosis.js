@@ -30,7 +30,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, '');
 	});
 
-	it.skip('should not trigger on an ally losing their Eject Button in Generation 7 or later', function () {
+	it('should not trigger on an ally losing their Eject Button in Generation 7 or later', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectbutton', moves: ['sleeptalk']},

@@ -1400,9 +1400,11 @@ export const Items: {[itemid: string]: ItemData} = {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
+				target.switchFlag = true;
 				if (target.useItem()) {
-					target.switchFlag = true;
 					source.switchFlag = false;
+				} else {
+					target.switchFlag = false;
 				}
 			}
 		},

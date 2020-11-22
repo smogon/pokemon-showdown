@@ -3754,6 +3754,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	symbiosis: {
 		onAllyAfterUseItem(item, pokemon) {
 			const source = this.effectData.target;
+			if (pokemon.switchFlag) return;
 			const myItem = source.takeItem();
 			if (!myItem) return;
 			if (
