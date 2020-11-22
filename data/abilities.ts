@@ -78,8 +78,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 106,
 	},
 	airlock: {
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
+			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			this.add('-ability', pokemon, 'Air Lock');
+			this.effectData.switchingIn = false;
 		},
 		suppressWeather: true,
 		name: "Air Lock",
@@ -401,8 +407,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 29,
 	},
 	cloudnine: {
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
+			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			this.add('-ability', pokemon, 'Cloud Nine');
+			this.effectData.switchingIn = false;
 		},
 		suppressWeather: true,
 		name: "Cloud Nine",
