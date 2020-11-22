@@ -758,25 +758,49 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 8) === 'resists ') {
 				const targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in Dex.data.TypeChart || toID(targetResist) in Dex.data.Moves) {
+				if (targetResist in Dex.data.TypeChart) {
 					const invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
 					continue;
 				} else {
-					return {error: `'${targetResist}' is not a recognized type.`};
+					if (toID(targetResist) in Dex.data.Moves) {
+						const move = Dex.getMove(targetResist);
+						if (move.category === 'Status') {
+							return {error: `'${targetResist}' is a status move and can't be used with 'resists'.`};
+						} else {
+							const invalid = validParameter("resists", targetResist, isNotSearch, target);
+							if (invalid) return {error: invalid};
+							orGroup.resists[targetResist] = !isNotSearch;
+							continue;
+				}
+					} else {
+						return {error: `'${targetResist}' is not a recognized type or move.`};
+			}
 				}
 			}
 
 			if (target.substr(0, 5) === 'weak ') {
 				const targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
-				if (targetWeak in Dex.data.TypeChart || toID(targetWeak) in Dex.data.Moves) {
+				if (targetWeak in Dex.data.TypeChart) {
 					const invalid = validParameter("weak", targetWeak, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.weak[targetWeak] = !isNotSearch;
 					continue;
 				} else {
-					return {error: `'${targetWeak}' is not a recognized type.`};
+					if (toID(targetWeak) in Dex.data.Moves) {
+						const move = Dex.getMove(targetWeak);
+						if (move.category === 'Status') {
+							return {error: `'${targetWeak}' is a status move and can't be used with 'weak'.`};
+						} else {
+							const invalid = validParameter("weak", targetWeak, isNotSearch, target);
+							if (invalid) return {error: invalid};
+							orGroup.weak[targetWeak] = !isNotSearch;
+							continue;
+						}
+					} else {
+						return {error: `'${targetWeak}' is not a recognized type or move.`};
+					}
 				}
 			}
 
