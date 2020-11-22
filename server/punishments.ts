@@ -881,7 +881,9 @@ export const Punishments = new class {
 	 */
 	pokePunishmentTimer(user: User, punishment: Punishment) {
 		const length = Math.min(punishment[2] - Date.now(), MAX_PUNISHMENT_TIMER_LENGTH);
-		user.punishmentTimer = setTimeout(Punishments.runExpiry, length, user, punishment);
+		user.punishmentTimer = setTimeout(() => {
+			Punishments.runExpiry(user, punishment);
+		}, length);
 	}
 	async namelock(
 		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
