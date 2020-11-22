@@ -768,7 +768,7 @@ export const Punishments = new class {
 		const affected = await Punishments.punish(user, punishment, ignoreAlts, bypassPunishmentfilter);
 
 		for (const curUser of affected) {
-			Punishments.pokePunishmentTimer(curUser, punishment);
+			Punishments.checkPunishmentTime(curUser, punishment);
 			curUser.locked = punishment[1];
 			curUser.updateIdentity();
 		}
@@ -865,25 +865,21 @@ export const Punishments = new class {
 		return success;
 	}
 	/**
-	 * Checks if a punishment has expired, and unlocks it if so. Otherwise, pokes the punishment timer.
+	 * Sets the punishment timer for a user,
+	 * to either MAX_PUNISHMENT_TIMER_LENGTH or the amount of time left on the punishment.
+	 * It also expires a punishment if the time is up.
 	 */
-	runExpiry(user: User, punishment: Punishment) {
+	checkPunishmentTime(user: User, punishment: Punishment) {
 		const [, id, expireTime] = punishment;
+
 		if (expireTime < Date.now()) {
 			if (user.locked === id) Punishments.unlock(user.id);
 		} else {
-			Punishments.pokePunishmentTimer(user, punishment);
+			const length = Math.min(expireTime - Date.now(), MAX_PUNISHMENT_TIMER_LENGTH);
+			user.punishmentTimer = setTimeout(() => {
+				Punishments.checkPunishmentTime(user, punishment);
+			}, length);
 		}
-	}
-	/**
-	 * Sets the punishment timer for a user,
-	 * to either MAX_PUNISHMENT_TIMER_LENGTH or the amount of time left on the punishment.
-	 */
-	pokePunishmentTimer(user: User, punishment: Punishment) {
-		const length = Math.min(punishment[2] - Date.now(), MAX_PUNISHMENT_TIMER_LENGTH);
-		user.punishmentTimer = setTimeout(() => {
-			Punishments.runExpiry(user, punishment);
-		}, length);
 	}
 	async namelock(
 		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
@@ -893,7 +889,7 @@ export const Punishments = new class {
 
 		const affected = await Punishments.punish(user, punishment, ignoreAlts);
 		for (const curUser of affected) {
-			Punishments.pokePunishmentTimer(curUser, punishment);
+			Punishments.checkPunishmentTime(curUser, punishment);
 			curUser.locked = punishment[1];
 			curUser.namelocked = punishment[1];
 			curUser.resetName(true);
@@ -1421,7 +1417,7 @@ export const Punishments = new class {
 			user.locked = punishUserid;
 			user.updateIdentity();
 		}
-		Punishments.pokePunishmentTimer(user, punishment);
+		Punishments.checkPunishmentTime(user, punishment);
 	}
 
 	checkIp(user: User, connection: Connection) {
@@ -1442,7 +1438,7 @@ export const Punishments = new class {
 				if (punishment[0] === 'NAMELOCK') {
 					user.namelocked = punishment[1];
 				}
-				Punishments.pokePunishmentTimer(user, punishment);
+				Punishments.checkPunishmentTime(user, punishment);
 			}
 		}
 
