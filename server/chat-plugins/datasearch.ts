@@ -773,10 +773,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 							if (invalid) return {error: invalid};
 							orGroup.resists[targetResist] = !isNotSearch;
 							continue;
-				}
+						}
 					} else {
 						return {error: `'${targetResist}' is not a recognized type or move.`};
-			}
+					}
 				}
 			}
 
@@ -939,7 +939,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					!format.banlist.includes(dex[mon].name) &&
 					!format.banlist.includes(dex[mon].name + "-Base")
 				) {
-					const lsetData = Dex.getLearnsetData(dex[mon].id);
+					const lsetData = mod.getLearnsetData(dex[mon].id);
 					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
 						let validEvents = 0;
 						for (const event of lsetData.eventData) {
@@ -969,15 +969,16 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const targetResist in alts.resists) {
 				let effectiveness = 0;
-				const move = Dex.getMove(targetResist);
+				const move = mod.getMove(targetResist);
 				const attackingType = move.type || targetResist;
-				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists ||
-					!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]));
-				if (notImmune) {
+				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists || !move.ignoreImmunity ||
+					move.isFutureMove || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && 
+					(move.id !== 'sheercold' || maxGen < 7 || !dex[mon].types.includes('Ice'));
+				if (notImmune && !move.ohko && move.damage === undefined) {
 					for (const defenderType of dex[mon].types) {
-						const baseMod = Dex.getEffectiveness(attackingType, defenderType);
+						const baseMod = mod.getEffectiveness(attackingType, defenderType);
 						const moveMod = move.onEffectiveness?.call(
-							{dex: Dex} as Battle, baseMod, null, defenderType, move as ActiveMove,
+							{dex: mod} as Battle, baseMod, null, defenderType, move as ActiveMove,
 						);
 						effectiveness += typeof moveMod === 'number' ? moveMod : baseMod;
 					}
@@ -992,15 +993,16 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const targetWeak in alts.weak) {
 				let effectiveness = 0;
-				const move = Dex.getMove(targetWeak);
+				const move = mod.getMove(targetWeak);
 				const attackingType = move.type || targetWeak;
-				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists ||
-				!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]));
-				if (notImmune) {
+				const notImmune = mod.getImmunity(attackingType, dex[mon]) && (!move.exists || !move.ignoreImmunity ||
+					move.isFutureMove || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && 
+					(move.id !== 'sheercold' || maxGen < 7 || !dex[mon].types.includes('Ice'));
+				if (notImmune && !move.ohko && move.damage === undefined) {
 					for (const defenderType of dex[mon].types) {
-						const baseMod = Dex.getEffectiveness(attackingType, defenderType);
+						const baseMod = mod.getEffectiveness(attackingType, defenderType);
 						const moveMod = move.onEffectiveness?.call(
-							{dex: Dex} as Battle, baseMod, null, defenderType, move as ActiveMove,
+							{dex: mod} as Battle, baseMod, null, defenderType, move as ActiveMove,
 						);
 						effectiveness += typeof moveMod === 'number' ? moveMod : baseMod;
 					}
