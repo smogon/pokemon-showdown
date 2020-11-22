@@ -18008,6 +18008,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			aurasphere: ["8M", "7M"],
 			searingshot: ["8M", "7M"],
 			sludgebomb: ["8M", "7M"],
+			energyball: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 50, gender: "F", nature: "Modest", moves: ["flamethrower", "psychic", "hyperbeam", "solarbeam"], pokeball: "pokeball"},

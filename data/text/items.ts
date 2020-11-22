@@ -147,7 +147,7 @@ export const ItemsText = {
 	},
 	blunderpolicy: {
 		name: "Blunder Policy",
-		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
+		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages and Accuracy raised by 1 stage. Single use.",
 	},
 	bottlecap: {
 		name: "Bottle Cap",
@@ -2193,5 +2193,33 @@ export const ItemsText = {
 	crucibellite: {
 		name: "Crucibellite",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
+	},
+	ngunishield: {
+		name: "Nguni Shield",
+		desc: "Holder's Def is 1.5x, but it can only select damaging moves.",
+	},
+	bagofcaltrops: {
+		name: "Bag of Caltrops",
+		desc: "When the user holding this faints a layer of spikes is set-up on the opponent's side of the field.",
+	},
+	shockorb: {
+		name: "Shock Orb",
+		desc: "At the end of every turn, this item attempts to paralyze the holder.",
+	},
+	bikehelmet: {
+		name: "Bike Helmet",
+		desc: "Recoil-inducing moves have power x0.85 but recoil damage is negated (cancels out reckless).",
+	},
+	rechargeherb: {
+		name: "Recharge Herb",
+		desc: "Allows the user to move immediately after using a move that would normally cause it to recharge. Single use.",
+	},
+	brassknuckles: {
+		name: "Brass Knuckles",
+		desc: "Raises holder's Attack by 1 stage after it uses a punch move. Single use.",
+	},
+	poisonrock: {
+		name: "Poison Rock",
+		desc: "Holder's use of Toxic Cloud lasts 8 turns instead of 5.",
 	},
 };

@@ -19624,7 +19624,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Fire Jet",
 		pp: 30,
 		priority: 1,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
 		secondary: null,
 		target: "normal",
 		type: "Fire",

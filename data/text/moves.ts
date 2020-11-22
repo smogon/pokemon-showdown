@@ -2968,8 +2968,8 @@ export const MovesText = {
 	},
 	meditate: {
 		name: "Meditate",
-		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Raises the user's Attack by 1.",
+		desc: "Raises the user's Attack and Special Defense by 1 stage.",
+		shortDesc: "Raises the user's Attack and Special Defense by 1.",
 	},
 	mefirst: {
 		name: "Me First",
@@ -5496,5 +5496,243 @@ export const MovesText = {
 		shortDesc: "Goes first. Raises user's evasion by 1.",
 		descGen7: "Will always result in a critical hit.",
 		shortDescGen7: "Nearly always goes first. Always crits.",
+	},
+	tricktail: {
+		name: "Trick Tail",
+		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail or Z-Crystal, if neither is holding an item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, a Red Orb, a Griseous Orb, a Plate, a Drive, or a Memory to or from a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, or a Silvally, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		shortDesc: "User switches its held item with the target's.",
+	},
+	rockseal: {
+		name: "Rock Seal",
+		desc: "Prevents the target from switching for five turns (seven turns if the user is holding Grip Claw). The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+        shortDesc: "Traps the target for 5 turns.",
+	},
+	psychocrash: {
+		name: "Psycho Crash",
+		desc: "Has a 10% chance to confuse the target. If the target lost HP, the user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 33% recoil. 10% chance to confuse.",
+	},
+	sleepbubble: {
+		name: "Sleep Bubble",
+		desc: "Causes the target to fall asleep at the end of the next turn. Fails when used if the target cannot fall asleep or if it already has a major status condition. At the end of the next turn, if the target is still active, does not have a major status condition, and can fall asleep, it falls asleep. If the target becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
+		shortDesc: "Puts the target to sleep after 1 turn.",
+	},
+	speedstrike: {
+		name: "Speed Strike",
+		desc: "Damage is calculated using the user's Speed stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal.",
+		shortDesc: "Uses user's Spe stat as Atk in damage calculation.",
+	},
+	anticyclone: {
+		name: "Anticyclone",
+		desc: "This move's type changes to match current weather before removing it. Fails if there is no weather.",
+		shortDesc: "Type varies in each weather. Removes weather. Fails if no weather.",
+	},
+	revengeblast: {
+		name: "Revenge Blast",
+		desc: "Power doubles if one of the user's party members fainted last turn.",
+		shortDesc: "Power doubles if an ally fainted last turn.",
+	},
+	windblast: {
+		name: "Wind Blast",
+		desc: "Has a 10% chance to flinch the target.",
+		shortDesc: "10% chance to flinch the foe(s).",
+	},
+	purifyingflame: {
+		name: "Purifying Flame",
+		desc: "Resets the stat stages of all active Pokemon to 0.",
+		shortDesc: "Eliminates all stat changes.",
+	},
+	triplepeck: {
+		name: "Triple Peck",
+		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
+		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
+	},
+	webshield: {
+		name: "Web Shield",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Speed lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Web Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Contact: -1 Spe.",
+	},
+	crystalwave: {
+		name: "Crystal Wave",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	magicdust: {
+		name: "Magic Dust",
+		desc: "Causes the target's Ability to become Levitate. Fails if the target's Ability is As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Levitate, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Truant, or Zen Mode.",
+		shortDesc: "The target's Ability becomes Levitate.",
+	},
+	pollenhazard: {
+		name: "Pollen Hazard",
+		desc: "Burns and confuses the target.",
+		shortDesc: "Burns and confuses the target.",
+	},
+	zapkick: {
+		name: "Zap Kick",
+		desc: "Has a 10% chance to paralyze the target and a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio. 10% chance to paralyze.",
+	},
+	dirtydeed: {
+		name: "Dirty Deed",
+		desc: "Damage is calculated using the target's Special Attack stat, including stat stage changes. The user's Ability, item, and burn are used as normal.",
+		shortDesc: "Uses target's Special Attack stat in damage calculation.",
+	},
+	poisonhorn: {
+		desc: "Has a 10% chance to poison the target.",
+		shortDesc: "10% chance to poison.",
+	},
+	crushingice: {
+		name: "Crushing Ice",
+		shortDesc: "Hits adjacent Pokemon.",
+	},
+	prehistoricwisdom: {
+		name: "Prehistoric Wisdom",
+		desc: "Raises the user's Defense and Special Attack by 1 stage.",
+		shortDesc: "Raises the user's Defense and Special Attack by 1.",
+	},
+	waterbullet: {
+		name: "Water Bullet",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	dualstrike: {
+		name: "Dual Strike",
+		desc: "",
+		shortDesc: "",
+	},
+	nitricstrike: {
+		name: "Nitric Strike",
+		desc: "Has a 10% chance to poison the target. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is.",
+		shortDesc: "10% chance to poison. Super effective on Steel.",
+	},
+	featherbarrage: {
+		name: "Feather Barrage",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	limitbreaker: {
+		name: "Limit Breaker",
+		desc: "Raises the user's Special Attack by 12 stages in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Special Attack stat stage is 6.",
+		shortDesc: "User loses 50% max HP. Maximizes Special Attack.",
+	},
+	shieldbeam: {
+		name: "Shield Beam",
+		desc: "Damage is calculated using the user's Special Defense stat as its Special Attack, including stat stage changes. Other effects that modify the Special Attack stat are used as normal.",
+		shortDesc: "Uses user's Sp. Def stat as Atk in damage calculation.",
+	},
+	darkwhispers: {
+		name: "Dark Whispers",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	nightmaredance: {
+		name: "Nightmare Dance",
+		desc: "Raises the user's Special Attack and Speed by 1 stage.",
+		shortDesc: "Raises the user's Special Attack and Speed by 1.",
+	},
+	blownkiss: {
+		name: "Blown Kiss",
+		desc: "Has a 30% chance to flinch the target.",
+		shortDesc: "30% chance to flinch the foe(s).",
+	},
+	toxiclove: {
+		name: "Toxic Love",
+		desc: "Has a 30% chance to badly poison the target.",
+		shortDesc: "30% chance to badly poison the target.",
+	},
+	spectralfang: {
+		name: "Spectral Fang",
+		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "10% chance to lower the target's Speed by 1.",
+	},
+	voiceoftheforest: {
+		name: "Voice Of The Forest",
+		desc: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type attacks used by grounded Pokemon is multiplied by 1.3, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
+		shortDesc: "5 turns. Grounded: +Grass power, +1/16 max HP.",
+	},
+	phazingphantasm: {
+		name: "Phazing Phantasm",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
+	landslide: {
+		name: "Land Slide",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute.",
+		shortDesc: "Forces the target to switch to a random ally.",
+	},
+	toxiccloud: {
+		name: "Toxic Cloud",
+		desc: "For 5 turns, the weather becomes Sandstorm. The damage of Poison-type attacks is multiplied by 1.5 At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Poison or Steel type, or have the Magic Guard, Overcoat Abilities. Lasts for 8 turns if the user is holding Poison Rock. Fails if the current weather is Toxic Cloud.",
+		shortDesc: "For 5 turns, a toxic cloud powers Poison moves.",
+	},
+	magicdarts: {
+		name: "Magic Darts",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	darkmelody: {
+		name: "Dark Melody",
+		desc: "Has a 20% chance to flinch the target.",
+		shortDesc: "20% chance to flinch the foe(s)."
+	},
+	psykiss: {
+		name: "Psy Kiss",
+		desc: "Has a 30% chance to confuse the target.",
+		shortDesc: "30% chance to confuse the foe(s).",
+	},
+	magmabath: {
+		name: "Magma Bath",
+		desc: "The user has 1/16 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect.",
+		shortDesc: "User recovers 1/16 max HP per turn.",
+	},
+	diamonddust: {
+		name: "Diamond Dust",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
+	},
+	suddenzap: {
+		name: "Sudden Zap",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	focusup: {
+		name: "Focus Up",
+		desc: "Raises the user's Special Attack and Defense by 1 stage.",
+		shortDesc: "Raises the user's Special Attack and Defense by 1.",
+	},
+	freezingkiss: {
+		name: "Freezing Kiss",
+		desc: "Has a 30% chance to freeze the target.",
+		shortDesc: "30% chance to freeze the foe(s).",
+	},
+	fungalbomb: {
+		name: "Fungal Bomb",
+		desc: "Ignores the target's stat stage changes, including evasiveness.",
+		shortDesc: "Ignores the target's stat stage changes.",
+	},
+	firejet: {
+		name: "Fire Jet",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first. Thaws user.",
+	},
+	chillingwave: {
+		name: "Chilling Wave",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze the foe(s).",
+	},
+	thinkfast: {
+		name: "Think Fast",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	spiritsap: {
+		name: "Spirit Sap",
+		desc: "Raises the user's Special Attack by 3 stages if this move knocks out the target.",
+		shortDesc: "Raises user's Special Attack by 3 if this KOes the target.",
+	},
+	spookytricks: {
+		name: "Spooky Tricks",
+		desc: "Lowers the target's Defense and Special Defense by 1 stage. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if the target's Defense and Special Defense stat stages were both unchanged, or if there are no unfainted party members.",
+		shortDesc: "Lowers target's Def, Sp. Def by 1. User switches.",
 	},
 };

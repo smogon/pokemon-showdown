@@ -7213,4 +7213,32 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 10004,
 		gen: 8,
 	},
+	bikehelmet: {
+        name: "Bike Helmet",
+        spritenum: 417,
+        fling: {
+            basePower: 60,
+        },
+        onBasePowerPriority: 16,
+        onBasePower(basePower, user, target, move) {
+            if (move.recoil) return this.chainModify(0.85);
+        },
+        onDamage(damage, target, source, effect) {
+            if (effect.id === 'recoil') {
+                if (!this.activeMove) throw new Error("Battle.activeMove is null");
+                if (this.activeMove.id !== 'struggle') return null;
+            }
+        },
+        num: 10005,
+        gen: 8,
+    },
+	bagofcaltrops: {
+        name: "Bag of Caltrops",
+        spritenum: 2,
+        onFaint(pokemon, target, move) {
+            target.side.addSideCondition('spikes');
+        },
+        num: 10006,
+        gen: 8,
+    },
 };

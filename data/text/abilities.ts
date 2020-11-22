@@ -123,7 +123,7 @@ export const AbilitiesText = {
 	},
 	bigpecks: {
 		name: "Big Pecks",
-		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Defense stat stage.",
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Defense stat stage. Ignores other Pokemon Attack boosts.",
 	},
 	blaze: {
 		name: "Blaze",
@@ -202,7 +202,7 @@ export const AbilitiesText = {
 	},
 	curiousmedicine: {
 		name: "Curious Medicine",
-		shortDesc: "On switch-in, this Pokemon's allies have their stat stages reset to 0.",
+		shortDesc: "On switch-in, this Pokemon's allies and opponents have their stat stages reset to 0.",
 	},
 	cursedbody: {
 		name: "Cursed Body",
@@ -253,8 +253,8 @@ export const AbilitiesText = {
 	},
 	defeatist: {
 		name: "Defeatist",
-		desc: "While this Pokemon has 1/2 or less of its maximum HP, its Attack and Special Attack are halved.",
-		shortDesc: "While this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
+		desc: "While this Pokemon has 1/2 or less of its maximum HP, its Speed, Attack and Special Attack are halved. Boosts Attack and Special Attack 1 stage when comes on terrain.",
+		shortDesc: "While this Pokemon has 1/2 or less of its max HP, its Speed, Attack and Sp. Atk are halved. Boosts Attack and Special Attack 1 stage when comes on terrain",
 	},
 	defiant: {
 		name: "Defiant",
@@ -368,8 +368,8 @@ export const AbilitiesText = {
 	},
 	flowerveil: {
 		name: "Flower Veil",
-		desc: "Grass-type Pokemon on this Pokemon's side cannot have their stat stages lowered by other Pokemon or have a major status condition inflicted on them by other Pokemon.",
-		shortDesc: "This side's Grass types can't have stats lowered or status inflicted by other Pokemon.",
+		desc: "Pokemon on this Pokemon's side cannot have their stat stages lowered by other Pokemon or have a major status condition inflicted on them by other Pokemon.",
+		shortDesc: "This side's Pokemon can't have stats lowered or status inflicted by other Pokemon.",
 
 		block: "  [POKEMON] surrounded itself with a veil of petals!",
 	},
@@ -380,8 +380,8 @@ export const AbilitiesText = {
 	},
 	forecast: {
 		name: "Forecast",
-		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. If this Pokemon is holding Utility Umbrella and the weather condition is Sunny Day, Desolate Land, Rain Dance, or Primordial Sea, it will not change types.",
-		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
+		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. If a weather is set, boosts Castform's Speed and Special Attack 1.5. If this Pokemon is holding Utility Umbrella and the weather condition is Sunny Day, Desolate Land, Rain Dance, or Primordial Sea, it will not change types.",
+		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm. Boosts Speed and Special Attack if weather set",
 		descGen7: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
 	},
 	forewarn: {
@@ -504,7 +504,7 @@ export const AbilitiesText = {
 	},
 	hypercutter: {
 		name: "Hyper Cutter",
-		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Attack stat stage.",
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Attack stat stage. Ignores other Pokemon Defense boosts.",
 	},
 	icebody: {
 		name: "Ice Body",
@@ -605,8 +605,8 @@ export const AbilitiesText = {
 	},
 	leafguard: {
 		name: "Leaf Guard",
-		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon cannot gain a major status condition and Rest will fail for it.",
-		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
+		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon cannot gain a major status condition, reduces received damage from 30% and Rest will fail for it.",
+		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, reduces received damage from 30% and Rest will fail for it.",
 		descGen7: "If Sunny Day is active, this Pokemon cannot gain a major status condition and Rest will fail for it.",
 		descGen4: "If Sunny Day is active, this Pokemon cannot gain a major status condition, but can use Rest normally.",
 		shortDescGen4: "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally.",
@@ -835,7 +835,7 @@ export const AbilitiesText = {
 	},
 	pastelveil: {
 		name: "Pastel Veil",
-		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies.",
+		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned active and inactive allies.",
 	},
 	perishbody: {
 		name: "Perish Body",
@@ -1042,7 +1042,7 @@ export const AbilitiesText = {
 	},
 	runaway: {
 		name: "Run Away",
-		shortDesc: "No competitive use.",
+		shortDesc: "Leech seed fails on this Pokemon.",
 	},
 	sandforce: {
 		name: "Sand Force",
@@ -1149,7 +1149,7 @@ export const AbilitiesText = {
 	},
 	slowstart: {
 		name: "Slow Start",
-		shortDesc: "On switch-in, this Pokemon's Attack and Speed are halved for 5 turns.",
+		shortDesc: "On switch-in, this Pokemon's Attack and Speed are halved for 4 turns.",
 
 		start: "  [POKEMON] can't get it going!",
 		end: "  [POKEMON] finally got its act together!",
@@ -1291,7 +1291,7 @@ export const AbilitiesText = {
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
-		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
+		shortDesc: "If Electric Terrain or Psychic Terrain is active, this Pokemon's Speed is doubled.",
 	},
 	swarm: {
 		name: "Swarm",
@@ -1521,5 +1521,104 @@ export const AbilitiesText = {
 		shortDesc: "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
+	},
+	daunt: {
+		name: "Daunt",
+		desc: "On switch-in, this Pokemon lowers the Special Attack of adjacent opposing Pokemon by 1 stage. Inner Focus, Oblivious, Own Tempo, Scrappy, and Pokemon behind a substitute are immune.",
+		shortDesc: "On switch-in, this Pokemon lowers the Special Attack of adjacent opponents by 1 stage.",
+	},
+	conflagrant: {
+		name: "Conflagrant",
+		shortDesc: "This Pokemon's contact moves have a 30% chance of burning.",
+	},
+	dynamo: {
+		name: "Dynamo",
+		shortDesc: "This Pokemon's contact moves have a 30% chance of paralyzing.",
+	},
+	undead: {
+		name: "Undead",
+		desc: "This Pokemon can hit Normal and Fighting types with Ghost type moves.",
+		shortDesc: "Ghost moves hit Fighting, Normal.",
+	},
+	laststand: {
+		name: "Last Stand",
+		desc: "While this Pokemon has 1/2 or less of its maximum HP, its Speed is boosted 1 stage.",
+		shortDesc: "While this Pokemon has 1/2 or less of its max HP, its Speed is boosted 1 stage",
+	},
+	snowpacking: {
+		name: "Snow Packing",
+		desc: "If Hail is active, this Pokemon's Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Special Attack remains the same and it does not lose any HP.",
+		shortDesc: "If Hail is active, this Pokemon's Atk is 1.5x; loses 1/8 max HP per turn.",
+	},
+	gardensgift: {
+		name: "Garden's Gift",
+		shortDesc: "This Pokemon's Grass type moves have their accuracy and power multiplied by 1.3.",
+	},
+	timereverse: {
+		name: "Time Reverse",
+		shortDesc: "On switch, opponent is forced to use its last landed move.",
+	},
+	kicker: {
+		name: "Kicker",
+		desc: "This Pokemon's kick-based attacks have their power multiplied by 1.2.",
+		shortDesc: "This Pokemon's kick-based attacks have 1.2x power.",
+	},
+	blademaster: {
+		name: "Blade Master",
+		desc: "This Pokemon's blade/slash-based attacks have their power multiplied by 1.2.",
+		shortDesc: "This Pokemon's blade/slash-based attacks have 1.2x power.",
+	},
+	lovelylips: {
+		name: "Lovely Lips",
+		desc: "This Pokemon's kiss-based attacks have their power multiplied by 1.5.",
+		shortDesc: "This Pokemon's kiss-based attacks have 1.2x power.",
+	},
+	wisepower: {
+		name: "Wise Power",
+		shortDesc: "This Pokemon's Special Attack is doubled.",
+	},
+	sunbathe: {
+		name: "Sunbathe",
+		desc: "If Sunny Day is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored.",
+		shortDesc: "If Sunny Day is active, this Pokemon heals 1/16 of its max HP each turn.",
+	},
+	expert: {
+		name: "Expert",
+		desc: "This Pokemon variable power moves will always use the maximum possible base power.",
+		shortDesc: "This Pokemon variable power moves will always use the maximum possible base power.",
+	},
+	artillery: {
+		name: "Artillery",
+		desc: "This Pokemon's ballistic attacks have their power multiplied by 1.2.",
+		shortDesc: "This Pokemon's ballistic attacks have 1.2x power.",
+	},
+	orbital: {
+		name: "Orbital",
+		desc: "Applies Gravity while the bearer is in battle.",
+		shortDesc: "Applies Gravity while the bearer is in battle.",
+	},
+	bloodsucker: {
+		name: "Blood Sucker",
+		desc: "Bite moves restore 33% of dealt damage.",
+		shortDesc: "Bite moves restore 33% of dealt damage.",
+	},
+	slapper: {
+		name: "Slapper",
+		desc: "This Pokemon's tail-based attacks have their power multiplied by 1.2.",
+		shortDesc: "This Pokemon's tail-based attacks have 1.2x power.",
+	},
+	petrify: {
+		name: "Petrify",
+		desc: "On switch-in, this Pokemon lowers the Speed of adjacent opposing Pokemon by 1 stage. Inner Focus, Oblivious, Own Tempo, Scrappy, and Pokemon behind a substitute are immune.",
+		shortDesc: "On switch-in, this Pokemon lowers the Speed of adjacent opponents by 1 stage.",
+	},
+	toxicwasteland: {
+		name: "Toxic Wasteland",
+		shortDesc: "On switch-in, this Pokemon summons Toxic Cloud.",
+	},
+	toxicrush: {
+		name: "Toxic Rush",
+		desc: "If Toxic Cloud is active, this Pokemon's Speed is doubled.",
+		shortDesc: "If Toxic Cloud is active, this Pokemon's Speed is doubled;",
 	},
 };
