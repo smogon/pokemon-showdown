@@ -135,7 +135,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip(`should not request switch-out after taking poison damage and getting healed by berry`, function () {
+	it(`should not request switch-out after taking poison damage and getting healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['substitute', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", moves: ['splash']}],
 			[{species: "Gengar", moves: ['toxic', 'nightshade', 'protect']}],

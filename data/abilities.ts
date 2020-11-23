@@ -889,7 +889,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 226,
 	},
 	emergencyexit: {
-		onDamagePriority: -101,
 		onEmergencyExit(target) {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
