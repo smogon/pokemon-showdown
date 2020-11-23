@@ -749,7 +749,13 @@ export class Tournament extends Rooms.RoomGame {
 		if (matchTo) {
 			matchTo.isBusy = false;
 			const matchRoom = matchTo.inProgressMatch!.room;
-			matchRoom.parent = null;
+			if (matchRoom.parent) {
+				matchRoom.parent.subRooms?.delete(matchRoom.roomid);
+				if (!matchRoom.parent.subRooms?.size) {
+					matchRoom.parent.subRooms = null;
+				}
+				matchRoom.parent = null;
+			}
 			this.completedMatches.add(matchRoom.roomid);
 			if (matchRoom.battle) matchRoom.battle.forfeit(player.id);
 			matchTo.inProgressMatch = null;
