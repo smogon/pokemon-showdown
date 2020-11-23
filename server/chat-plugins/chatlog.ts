@@ -1051,10 +1051,10 @@ export const commands: ChatCommands = {
 	roomstats: 'linecount',
 	linecount(target, room, user) {
 		let [roomid, month, userid] = target.split(',').map(item => item.trim());
-		const tarRoom = roomid ? toID(roomid) : room?.roomid;
-		if (!tarRoom) return this.errorReply(`You must specify a room.`);
+		const tarRoom = roomid ? Rooms.search(roomid) : room;
+		if (!tarRoom) return this.errorReply(`You must specify a valid room.`);
 		if (!month) month = LogReader.getMonth();
-		return this.parse(`/join view-roomstats-${tarRoom}--${month}--${toID(userid)}`);
+		return this.parse(`/join view-roomstats-${tarRoom.roomid}--${month}--${toID(userid)}`);
 	},
 	linecounthelp: [
 		`/topusers OR /linecount [room], [month], [userid] - View room stats in the given [room].`,
