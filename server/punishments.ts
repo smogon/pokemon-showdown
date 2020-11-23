@@ -47,7 +47,7 @@ const GROUPCHAT_PARTICIPANT_OVERLAP_THRESHOLD = 5;
 /**
  * The minimum amount of time that must pass between activations of the GroupchatMonitor.
  */
-const GROUPCHAT_MONITOR_INTERVAL = 30 * 1000; // 30 seconds
+const GROUPCHAT_MONITOR_INTERVAL = 10 * 60 * 1000; // 10 minutes
 
 /**
  * A punishment is an array: [punishType, userid | #punishmenttype, expireTime, reason]
