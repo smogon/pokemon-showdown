@@ -1831,6 +1831,20 @@ export const Chat = new class {
 		};
 	}
 
+	iterateCommands(
+		callback: (fullCmd: string, handler: AnnotatedChatHandler, cmd: string) => void,
+		table = this.commands, namespace = ''
+	) {
+		for (const cmd in table) {
+			const handler = table[cmd];
+			if (typeof handler === 'function') {
+				callback(`${namespace}${cmd}`, handler, cmd);
+			} else if (typeof handler === 'object' && !Array.isArray(handler)) {
+				this.iterateCommands(callback, handler as AnnotatedChatCommands, `${namespace}${cmd} `);
+			} else continue;
+		}
+	}
+
 	/**
 	 * Strips HTML from a string.
 	 */
