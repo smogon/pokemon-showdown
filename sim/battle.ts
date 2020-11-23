@@ -1428,7 +1428,7 @@ export class Battle {
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
-				pokemon.hurtThisTurn = false;
+				pokemon.hurtThisTurn = null;
 				pokemon.statsRaisedThisTurn = false;
 				pokemon.statsLoweredThisTurn = false;
 
