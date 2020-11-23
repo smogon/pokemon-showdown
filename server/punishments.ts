@@ -872,14 +872,15 @@ export const Punishments = new class {
 	checkPunishmentTime(user: User, punishment: Punishment) {
 		const [, id, expireTime] = punishment;
 
-		if (expireTime < Date.now()) {
+		const timeLeft = expireTime - Date.now();
+		if (timeLeft <= 1) {
 			if (user.locked === id) Punishments.unlock(user.id);
-		} else {
-			const length = Math.min(expireTime - Date.now(), MAX_PUNISHMENT_TIMER_LENGTH);
-			user.punishmentTimer = setTimeout(() => {
-				Punishments.checkPunishmentTime(user, punishment);
-			}, length);
+			return;
 		}
+		const waitTime = Math.min(timeLeft, MAX_PUNISHMENT_TIMER_LENGTH);
+		user.punishmentTimer = setTimeout(() => {
+			Punishments.checkPunishmentTime(user, punishment);
+		}, waitTime);
 	}
 	async namelock(
 		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
