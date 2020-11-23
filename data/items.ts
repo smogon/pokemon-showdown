@@ -7236,7 +7236,7 @@ export const Items: {[itemid: string]: ItemData} = {
         name: "Bag of Caltrops",
         spritenum: 2,
         onFaint(pokemon, target, move) {
-            target.side.addSideCondition('spikes');
+            this.useMove("spikes",pokemon);
         },
         num: 10006,
         gen: 8,

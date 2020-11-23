@@ -4672,9 +4672,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         onSwitchOut(pokemon) {
             this.field.removePseudoWeather('gravity');
         },
+        onFaint(pokemon) {
+            this.field.removePseudoWeather('gravity');
+        },
         name: "Orbital",
         rating: 3,
-        num: 1014,
+        num: 127,
     },
 	lovelylips: {
         onBasePowerPriority: 23,

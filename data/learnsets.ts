@@ -78127,6 +78127,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			whirlpool: ["8M"],
 			workup: ["8M"],
 			zenheadbutt: ["8M"],
+			dualstrike: ["8M", "7M"],
 			psychocrash: ["8M", "7M"],
 		},
 	},

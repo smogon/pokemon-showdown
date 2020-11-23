@@ -19864,7 +19864,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Voice Of The Forest",
 		pp: 10,
 		priority: 0,
-		flags: {nonsky: 1, sound: 1},
+		flags: {nonsky: 1, sound: 1, protect: 1},
 		terrain: 'grassyterrain',
 		condition: {
 			duration: 5,
@@ -19910,7 +19910,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "normal",
 		type: "Grass",
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
