@@ -870,6 +870,11 @@ export const Punishments = new class {
 	 * It also expires a punishment if the time is up.
 	 */
 	checkPunishmentTime(user: User, punishment: Punishment) {
+		if (user.punishmentTimer) {
+			clearTimeout(user.punishmentTimer);
+			user.punishmentTimer = null;
+		}
+
 		const [, id, expireTime] = punishment;
 
 		const timeLeft = expireTime - Date.now();
