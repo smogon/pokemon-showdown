@@ -253,11 +253,7 @@ export class Tournament extends Rooms.RoomGame {
 				const match = player.inProgressMatch;
 				if (match) {
 					match.room.tour = null;
-					if (match.room.parent) {
-						match.room.parent.subRooms?.delete(match.room.roomid);
-						if (!match.room.parent.subRooms?.size) match.room.parent.subRooms = null;
-						match.room.parent = null;
-					}
+					match.room.setParent(null);
 					match.room.addRaw(`<div class="broadcast-red"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`);
 				}
 			}
@@ -504,13 +500,7 @@ export class Tournament extends Rooms.RoomGame {
 				Utils.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />` +
 				`You can finish playing, but this battle is no longer considered a tournament battle.</div>`
 			).update();
-			if (matchPlayer.inProgressMatch.room.parent) {
-				matchPlayer.inProgressMatch.room.parent.subRooms?.delete(matchPlayer.inProgressMatch.room.roomid);
-				if (!matchPlayer.inProgressMatch.room.parent.subRooms?.size) {
-					matchPlayer.inProgressMatch.room.parent.subRooms = null;
-				}
-				matchPlayer.inProgressMatch.room.parent = null;
-			}
+			matchPlayer.inProgressMatch.room.setParent(null);
 			this.completedMatches.add(matchPlayer.inProgressMatch.room.roomid);
 			matchPlayer.inProgressMatch = null;
 		}
@@ -730,13 +720,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (matchFrom) {
 			matchFrom.to.isBusy = false;
 			player.inProgressMatch = null;
-			if (matchFrom.room.parent) {
-				matchFrom.room.parent.subRooms?.delete(matchFrom.room.roomid);
-				if (!matchFrom.room.parent.subRooms?.size) {
-					matchFrom.room.parent.subRooms = null;
-				}
-				matchFrom.room.parent = null;
-			}
+			matchFrom.room.setParent(null);
 			this.completedMatches.add(matchFrom.room.roomid);
 			if (matchFrom.room.battle) matchFrom.room.battle.forfeit(player.name);
 		}
@@ -749,13 +733,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (matchTo) {
 			matchTo.isBusy = false;
 			const matchRoom = matchTo.inProgressMatch!.room;
-			if (matchRoom.parent) {
-				matchRoom.parent.subRooms?.delete(matchRoom.roomid);
-				if (!matchRoom.parent.subRooms?.size) {
-					matchRoom.parent.subRooms = null;
-				}
-				matchRoom.parent = null;
-			}
+			matchRoom.setParent(null);
 			this.completedMatches.add(matchRoom.roomid);
 			if (matchRoom.battle) matchRoom.battle.forfeit(player.id);
 			matchTo.inProgressMatch = null;
@@ -1048,11 +1026,7 @@ export class Tournament extends Rooms.RoomGame {
 	onBattleWin(room: GameRoom, winnerid: ID) {
 		if (this.completedMatches.has(room.roomid)) return;
 		this.completedMatches.add(room.roomid);
-		if (room.parent) {
-			room.parent.subRooms?.delete(room.roomid);
-			if (!room.parent.subRooms?.size) room.parent.subRooms = null;
-			room.parent = null;
-		}
+		room.setParent(null);
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
 		if (!room.p1 || !room.p2) throw new Error("onBattleWin called with missing players");
 		const p1 = this.playerTable[room.p1.id];
