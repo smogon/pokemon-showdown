@@ -1050,10 +1050,12 @@ export const Formats: FormatList = [
 			mixedSpecies.evos = [];
 			mixedSpecies.eggGroups = crossSpecies.eggGroups;
 			mixedSpecies.abilities = crossSpecies.abilities;
+			mixedSpecies.bst = 0;
 			let i: StatName;
 			for (i in species.baseStats) {
 				const statChange = crossSpecies.baseStats[i] - crossPrevoSpecies.baseStats[i];
 				mixedSpecies.baseStats[i] = this.clampIntRange(species.baseStats[i] + statChange, 1, 255);
+				mixedSpecies.bst += mixedSpecies.baseStats[i];
 			}
 			if (crossSpecies.types[0] !== crossPrevoSpecies.types[0]) mixedSpecies.types[0] = crossSpecies.types[0];
 			if (crossSpecies.types[1] !== crossPrevoSpecies.types[1]) {
@@ -1101,7 +1103,9 @@ export const Formats: FormatList = [
 			if (godSpecies.forme === 'Crowned') {
 				godSpecies = this.dex.getSpecies(godSpecies.changesFrom || godSpecies.baseSpecies);
 			}
+			newSpecies.bst -= newSpecies.baseStats[stat];
 			newSpecies.baseStats[stat] = godSpecies.baseStats[stat as StatName];
+			newSpecies.bst += newSpecies.baseStats[stat];
 			return newSpecies;
 		},
 	},
@@ -1364,12 +1368,14 @@ export const Formats: FormatList = [
 			};
 			const tier = this.toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
-			const pokemon: Species = this.dex.deepClone(species);
+			const pokemon = this.dex.deepClone(species);
+			pokemon.bst = 0;
 			const boost = boosts[tier];
 			let statName: StatName;
-			for (statName in pokemon.baseStats) {
+			for (statName in pokemon.baseStats as StatsTable) {
 				if (statName === 'hp') continue;
 				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.bst += pokemon.baseStats[statName];
 			}
 			return pokemon;
 		},
