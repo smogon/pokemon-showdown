@@ -193,8 +193,13 @@ export class Pokemon {
 	 * always be overwritten by a move action before the end of that turn.
 	 */
 	moveThisTurnResult: boolean | null | undefined;
-	/** used for Assurance check */
-	hurtThisTurn: boolean;
+	/**
+	 * The undynamaxed HP value this Pokemon was reduced to by damage this turn,
+	 * or false if it hasn't taken damage yet this turn
+	 *
+	 * Used for Assurance, Emergency Exit, and Wimp Out
+	 */
+	hurtThisTurn: number | false;
 	lastDamage: number;
 	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID}[];
 

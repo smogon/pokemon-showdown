@@ -749,7 +749,7 @@ export const Scripts: BattleScriptsData = {
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
 				const curDamage = targets.length === 1 ? move.totalDamage : d;
 				if (typeof curDamage === 'number' && targets[i].hp) {
-					if (targets[i].hp <= targets[i].maxhp / 2 && targets[i].hp + curDamage > targets[i].maxhp / 2) {
+					if (targets[i].hp <= targets[i].maxhp / 2 && +targets[i].hurtThisTurn + curDamage > targets[i].maxhp / 2) {
 						this.runEvent('EmergencyExit', targets[i], pokemon);
 					}
 				}
