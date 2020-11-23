@@ -7,6 +7,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
 	},
+	counter: {
+		inherit: true,
+		ignoreImmunity: true,
+		willCrit: false,
+		basePower: 1,
+		damageCallback(pokemon, target) {
+			// Counter mechanics in Stadium 1:
+			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
+			// - Counter succeeds if the target used a Counterable move earlier this turn
+
+			const lastMoveThisTurn = target.side.lastMove && target.side.lastMove.id === target.side.lastSelectedMove &&
+				this.dex.getMove(target.side.lastMove.id);
+			const lastMoveThisTurnIsCounterable = lastMoveThisTurn && lastMoveThisTurn.basePower > 0 &&
+				['Normal', 'Fighting'].includes(lastMoveThisTurn.type) && lastMoveThisTurn.id !== 'counter';
+
+			if (lastMoveThisTurnIsCounterable && !this.queue.willMove(target)) {
+				this.debug("Stadium 1 Counter: last move was not Counterable");
+				this.add('-fail', pokemon);
+				return false;
+			}
+			if (this.lastDamage <= 0) {
+				this.debug("Stadium 1 Counter: no previous damage exists");
+				this.add('-fail', pokemon);
+				return false;
+			}
+
+			return 2 * this.lastDamage;
+		},
+	},
 	firespin: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
@@ -53,6 +82,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) this.heal(damage, leecher, pokemon);
 			},
+		},
+	},
+	psywave: {
+		inherit: true,
+		basePower: 1,
+		damageCallback(pokemon) {
+			return this.random(1, this.trunc(1.5 * pokemon.level));
 		},
 	},
 	rage: {

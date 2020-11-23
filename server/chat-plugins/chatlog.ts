@@ -676,7 +676,8 @@ export const LogSearcher = new class {
 		let exactMatches = 0;
 		let curDate = '';
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
-		const searchRegex = new RegExp(originalSearch ? search : this.constructSearchRegex(search), "i");
+		const useOriginal = originalSearch && originalSearch !== search;
+		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
 		const sorted = results.sort((aLine, bLine) => {
 			const [aName] = aLine.split('.txt');
 			const [bName] = bLine.split('.txt');
@@ -911,7 +912,7 @@ export const pages: PageTable = {
 			return this.errorReply("WCOP team discussions are super secret.");
 		}
 		if (room) {
-			if (!user.can('lock')) {
+			if (!user.can('lock') || room.settings.isPrivate === 'hidden' && !room.checkModjoin(user)) {
 				if (!room.persist) return this.errorReply(`Access denied.`);
 				this.checkCan('mute', null, room);
 			}
@@ -982,7 +983,7 @@ export const commands: ChatCommands = {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const roomid = targetRoom ? targetRoom.roomid : target;
-		this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
+		return this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
 	},
 
 	chatloghelp() {
@@ -1050,10 +1051,10 @@ export const commands: ChatCommands = {
 	roomstats: 'linecount',
 	linecount(target, room, user) {
 		let [roomid, month, userid] = target.split(',').map(item => item.trim());
-		const tarRoom = roomid ? toID(roomid) : room?.roomid;
-		if (!tarRoom) return this.errorReply(`You must specify a room.`);
+		const tarRoom = roomid ? Rooms.search(roomid) : room;
+		if (!tarRoom) return this.errorReply(`You must specify a valid room.`);
 		if (!month) month = LogReader.getMonth();
-		return this.parse(`/join view-roomstats-${tarRoom}--${month}--${toID(userid)}`);
+		return this.parse(`/join view-roomstats-${tarRoom.roomid}--${month}--${toID(userid)}`);
 	},
 	linecounthelp: [
 		`/topusers OR /linecount [room], [month], [userid] - View room stats in the given [room].`,

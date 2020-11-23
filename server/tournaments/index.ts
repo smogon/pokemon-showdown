@@ -749,7 +749,13 @@ export class Tournament extends Rooms.RoomGame {
 		if (matchTo) {
 			matchTo.isBusy = false;
 			const matchRoom = matchTo.inProgressMatch!.room;
-			matchRoom.parent = null;
+			if (matchRoom.parent) {
+				matchRoom.parent.subRooms?.delete(matchRoom.roomid);
+				if (!matchRoom.parent.subRooms?.size) {
+					matchRoom.parent.subRooms = null;
+				}
+				matchRoom.parent = null;
+			}
 			this.completedMatches.add(matchRoom.roomid);
 			if (matchRoom.battle) matchRoom.battle.forfeit(player.id);
 			matchTo.inProgressMatch = null;
@@ -1101,7 +1107,7 @@ export class Tournament extends Rooms.RoomGame {
 			if (!this.room.settings.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
 				const uploader = Users.get(winnerid);
 				if (uploader?.connections[0]) {
-					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
+					void Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
 				}
 			}
 			this.onTournamentEnd();
@@ -1163,7 +1169,7 @@ function createTournament(
 	const format = Dex.getFormat(formatId);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
-		output.parse(`/tour formats`);
+		void output.parse(`/tour formats`);
 		return;
 	}
 	if (!getGenerator(generator)) {

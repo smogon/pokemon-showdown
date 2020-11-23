@@ -19,6 +19,7 @@ interface TicketState {
 	claimed: string | null;
 	ip: string;
 	needsDelayWarning?: boolean;
+	offline?: boolean;
 }
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
@@ -52,7 +53,7 @@ try {
 	if (e.code !== 'ENOENT') throw e;
 }
 
-function writeTickets() {
+export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
 		() => JSON.stringify(tickets)
 	);
@@ -112,6 +113,11 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (!user.isStaff || user.id === this.ticket.userid) {
 			if (this.emptyRoom) this.emptyRoom = false;
 			this.addPlayer(user);
+			if (this.ticket.offline) {
+				delete this.ticket.offline;
+				writeTickets();
+				notifyStaff();
+			}
 			return false;
 		}
 		if (!this.ticket.claimed) {
@@ -143,6 +149,9 @@ export class HelpTicket extends Rooms.RoomGame {
 		const player = this.playerTable[oldUserid || user.id];
 		if (player) {
 			this.removePlayer(player);
+			this.ticket.offline = true;
+			writeTickets();
+			notifyStaff();
 			return;
 		}
 		if (!this.ticket.open) return;
@@ -213,12 +222,12 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	getButton() {
-		const notifying = this.ticket.claimed ? `` : `notifying`;
+		const color = this.ticket.claimed ? `` : this.ticket.offline ? `notifying subtle` : `notifying`;
 		const creator = (
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
 		return (
-			`<a class="button ${notifying}" href="/help-${this.ticket.userid}"` +
+			`<a class="button ${color}" href="/help-${this.ticket.userid}"` +
 			` ${this.getPreview()}>Help ${creator}: ${this.ticket.type}</a> `
 		);
 	}
@@ -443,6 +452,9 @@ export function notifyStaff() {
 	const keys = Object.keys(tickets).sort((aKey, bKey) => {
 		const a = tickets[aKey];
 		const b = tickets[bKey];
+		if (a.offline) {
+			return (b.offline ? 1 : -1);
+		}
 		if (a.open !== b.open) {
 			return (a.open ? -1 : 1);
 		} else if (a.open && b.open) {
@@ -720,7 +732,7 @@ export const pages: PageTable = {
 					buf += `<p><Button>hasautoconfirmed</Button> <Button>lacksautoconfirmed</Button></p>`;
 					break;
 				case 'hasautoconfirmed':
-					buf += `<p>${this.tr`Login to your autoconfirmed account by using the <code>/nick</code> command in any chatroom, and the semilock will automatically be removed. Afterwords, you can use the <code>/nick</code> command to switch back to your current username without being semilocked again.`}</p>`;
+					buf += `<p>${this.tr`Login to your autoconfirmed account by using the <code>/nick</code> command in any chatroom, and the semilock will automatically be removed. Afterwards, you can use the <code>/nick</code> command to switch back to your current username without being semilocked again.`}</p>`;
 					buf += `<p>${this.tr`If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.`}</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappealsemi</Button></p>`;
@@ -1098,8 +1110,8 @@ export const commands: ChatCommands = {
 					writeTickets();
 				} else {
 					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
-					this.parse(`/join help-${ticket.userid}`);
-					return this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
+					this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
+					return this.parse(`/join help-${ticket.userid}`);
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) {
@@ -1192,7 +1204,8 @@ export const commands: ChatCommands = {
 				if (targetID !== ticket.userid) {
 					const commonBattles = getCommonBattles(
 						targetID, Users.get(reportTarget),
-						ticket.userid, Users.get(ticket.userid)
+						ticket.userid, Users.get(ticket.userid),
+						this.connection
 					);
 
 					if (!commonBattles.length) {
@@ -1225,7 +1238,7 @@ export const commands: ChatCommands = {
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
-			this.parse(`/join help-${user.id}`);
+			void this.parse(`/join help-${user.id}`);
 			if (!(user.id in ticketGame.playerTable)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
@@ -1246,13 +1259,13 @@ export const commands: ChatCommands = {
 
 		list(target, room, user) {
 			this.checkCan('lock');
-			this.parse('/join view-help-tickets');
+			return this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
 
 		stats(target, room, user) {
 			this.checkCan('lock');
-			this.parse('/join view-help-stats');
+			return this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
 
@@ -1319,7 +1332,7 @@ export const commands: ChatCommands = {
 			}
 
 			const affected = HelpTicket.ban(targetUser || userid, target);
-			this.addModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
+			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {

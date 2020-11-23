@@ -90,11 +90,11 @@ interface DexTableData {
 	TypeChart: DexTable<TypeData>;
 }
 interface TextTableData {
-	Abilities: AnyObject;
-	Items: AnyObject;
-	Moves: AnyObject;
-	Pokedex: AnyObject;
-	Default: AnyObject;
+	Abilities: DexTable<AbilityText>;
+	Items: DexTable<ItemText>;
+	Moves: DexTable<MoveText>;
+	Pokedex: DexTable<PokedexText>;
+	Default: DexTable<DefaultText>;
 }
 
 export const toID = Data.toID;
@@ -444,8 +444,8 @@ export class ModdedDex {
 			shortDesc: '',
 		};
 		for (let i = this.gen; i < dexes['base'].gen; i++) {
-			const curDesc = entry[`descGen${i}`];
-			const curShortDesc = entry[`shortDescGen${i}`];
+			const curDesc = entry[`gen${i}`]?.desc;
+			const curShortDesc = entry[`gen${i}`]?.shortDesc;
 			if (!descs.desc && curDesc) {
 				descs.desc = curDesc;
 			}
@@ -1361,7 +1361,9 @@ export class ModdedDex {
 		return {};
 	}
 
-	loadTextFile(name: string, exportName: string): AnyObject {
+	loadTextFile(
+		name: string, exportName: string
+	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
 		return require(`${DATA_DIR}/text/${name}`)[exportName];
 	}
 
@@ -1392,11 +1394,11 @@ export class ModdedDex {
 	loadTextData() {
 		if (dexes['base'].textCache) return dexes['base'].textCache;
 		dexes['base'].textCache = {
-			Pokedex: this.loadTextFile('pokedex', 'PokedexText'),
-			Moves: this.loadTextFile('moves', 'MovesText'),
-			Abilities: this.loadTextFile('abilities', 'AbilitiesText'),
-			Items: this.loadTextFile('items', 'ItemsText'),
-			Default: this.loadTextFile('default', 'DefaultText'),
+			Pokedex: this.loadTextFile('pokedex', 'PokedexText') as DexTable<PokedexText>,
+			Moves: this.loadTextFile('moves', 'MovesText') as DexTable<MoveText>,
+			Abilities: this.loadTextFile('abilities', 'AbilitiesText') as DexTable<AbilityText>,
+			Items: this.loadTextFile('items', 'ItemsText') as DexTable<ItemText>,
+			Default: this.loadTextFile('default', 'DefaultText') as DexTable<DefaultText>,
 		};
 		return dexes['base'].textCache;
 	}

@@ -78,8 +78,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 106,
 	},
 	airlock: {
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
+			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			this.add('-ability', pokemon, 'Air Lock');
+			this.effectData.switchingIn = false;
 		},
 		suppressWeather: true,
 		name: "Air Lock",
@@ -401,8 +407,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 29,
 	},
 	cloudnine: {
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
+			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			this.add('-ability', pokemon, 'Cloud Nine');
+			this.effectData.switchingIn = false;
 		},
 		suppressWeather: true,
 		name: "Cloud Nine",
@@ -2438,7 +2450,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	parentalbond: {
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
-			if (['iceball', 'rollout'].includes(move.id)) return;
+			if (['endeavor', 'fling', 'iceball', 'rollout'].includes(move.id)) return;
 			if (!move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
 				move.multihitType = 'parentalbond';
@@ -3180,6 +3192,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
+			if (move.self?.chance) move.self.chance *= 2;
 		},
 		name: "Serene Grace",
 		rating: 3.5,
@@ -3233,6 +3246,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.secondaries) {
 				delete move.secondaries;
 				// Technically not a secondary effect, but it is negated
+				delete move.self;
 				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
 				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
 				move.hasSheerForce = true;

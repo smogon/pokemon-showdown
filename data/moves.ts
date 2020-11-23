@@ -3191,13 +3191,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		secondary: {
+		self: {
 			chance: 50,
-			self: {
-				boosts: {
-					def: 2,
-				},
+			boosts: {
+				def: 2,
 			},
+		},
+		secondary: {
+			// Sheer Force negates the self even though it is not secondary
 		},
 		target: "allAdjacentFoes",
 		type: "Rock",
@@ -5240,11 +5241,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 					move.secondaries.push({volatileStatus: item.fling.volatileStatus});
 				}
 			}
-			source.setItem('');
-			source.lastItem = item.id;
-			source.usedItemThisTurn = true;
-			this.add("-enditem", source, item.name, '[from] move: Fling');
-			this.runEvent('AfterUseItem', source, null, null, item);
+			source.addVolatile('fling');
+		},
+		condition: {
+			onUpdate(pokemon) {
+				const item = pokemon.getItem();
+				pokemon.setItem('');
+				pokemon.lastItem = item.id;
+				pokemon.usedItemThisTurn = true;
+				this.add('-enditem', pokemon, item.name, '[from] move: Fling');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
+				pokemon.removeVolatile('fling');
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -5295,7 +5303,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 0.667)); // TODO: find out the real value
+				success = !!this.heal(this.modify(target.baseMaxhp, 0.667));
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
@@ -12678,11 +12686,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryHit(target, source, move) {
 			if (source.side === target.side) {
 				move.basePower = 0;
+				move.infiltrates = true;
 			}
 		},
 		onHit(target, source) {
 			if (source.side === target.side) {
-				this.heal(Math.floor(target.baseMaxhp * 0.5));
+				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
+					this.add('-immune', target);
+				}
 			}
 		},
 		secondary: null,
@@ -18965,6 +18976,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					for (const secondary of move.secondaries) {
 						if (secondary.chance) secondary.chance *= 2;
 					}
+					if (move.self?.chance) move.self.chance *= 2;
 				}
 			},
 		},

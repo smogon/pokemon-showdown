@@ -25,7 +25,7 @@ export const commands: ChatCommands = {
 		if (!target) {
 			room.update();
 		} else {
-			this.parse(`/${target}`);
+			void this.parse(`/${target}`);
 			uhtml = 'uhtmlchange';
 		}
 
@@ -218,15 +218,15 @@ export const commands: ChatCommands = {
 			this.modlog('MODJOIN', null, target);
 		} else {
 			this.errorReply(`Unrecognized modjoin setting.`);
-			this.parse('/help modjoin');
+			void this.parse('/help modjoin');
 			return false;
 		}
 		room.saveSettings();
 		if (target === 'sync' && !room.settings.modchat) {
 			const lowestStaffGroup = Config.groupsranking.filter(group => Config.groups[group]?.mute)[0];
-			if (lowestStaffGroup) this.parse(`/modchat ${lowestStaffGroup}`);
+			if (lowestStaffGroup) void this.parse(`/modchat ${lowestStaffGroup}`);
 		}
-		if (!room.settings.isPrivate) this.parse('/hiddenroom');
+		if (!room.settings.isPrivate) return this.parse('/hiddenroom');
 	},
 	modjoinhelp: [
 		`/modjoin [+|%|@|*|player|&|#|off] - Sets modjoin. Users lower than the specified rank can't join this room unless they have a room rank. Requires: \u2606 # &`,
@@ -343,7 +343,7 @@ export const commands: ChatCommands = {
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
 			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
-
+      
 		view(target, room, user) {
 			room = this.requireRoom();
 			return this.parse(`/join view-permissions-${room.roomid}`);
@@ -356,12 +356,12 @@ export const commands: ChatCommands = {
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
 			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
 			const permissions = allPermissions.filter(perm => {
-				const handler = this.parseCommand(perm)?.handler;
+				const handler = Chat.parseCommand(perm)?.handler;
 				if (handler?.isPrivate && !user.can('lock')) return false;
 				return perm.startsWith('/') && !perm.includes(' ');
 			});
 			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' ')).filter(perm => {
-				const handler = this.parseCommand(perm)?.handler;
+				const handler = Chat.parseCommand(perm)?.handler;
 				if (handler?.isPrivate && !user.can('lock')) return false;
 				return perm.startsWith('/') && perm.includes(' ');
 			});
@@ -607,7 +607,7 @@ export const commands: ChatCommands = {
 			if (room.settings.requestShowEnabled) return this.errorReply(`Approvals are already enabled.`);
 			room.settings.requestShowEnabled = true;
 			this.privateModAction(`${user.name} enabled the use of media approvals in this room.`);
-			if (!room.settings.showEnabled || room.settings.showEnabled === '@') {
+			if (!room.settings.permissions || room.settings.permissions['/show'] === '@') {
 				this.privateModAction(
 					`Note: Due to this room's settings, Drivers aren't allowed to use /show directly, ` +
 					`but will be able to request and approve each other's /requestshow`
@@ -621,36 +621,8 @@ export const commands: ChatCommands = {
 	},
 
 	showmedia(target, room, user) {
-		room = this.requireRoom();
-		this.checkCan('declare', null, room);
-		target = target.trim();
-		if (this.meansNo(target)) {
-			if (!room.settings.showEnabled) return this.errorReply(`/show is already disabled.`);
-			room.settings.showEnabled = undefined;
-			target = 'ROs only';
-		} else if (this.meansYes(target)) {
-			if (room.settings.showEnabled === true) {
-				return this.errorReply(`/show is already allowed for whitelisted users.`);
-			}
-			room.settings.showEnabled = true;
-			target = 'whitelist';
-		} else if (!Config.groups[target]) {
-			return this.errorReply(`/show must be set to on (whitelisted and up), off (ROs only), or a group symbol.`);
-		} else {
-			if (room.settings.showEnabled === target) {
-				return this.errorReply(`/show is already allowed for ${target} and above.`);
-			}
-			room.settings.showEnabled = target as GroupSymbol;
-		}
-		room.saveSettings();
-		this.modlog(`SHOWMEDIA`, null, `to ${target}`);
-		this.privateModAction(`${user.name} set /show permissions to ${target}.`);
-		if (room.settings.requestShowEnabled && (!room.settings.showEnabled || room.settings.showEnabled === '@')) {
-			this.privateModAction(
-				`Note: Due to this room's settings, Drivers aren't allowed to use /show directly,` +
-				` but will be able to request and approve each other's /requestshow`
-			);
-		}
+		this.errorReply(`/showmedia has been deprecated. Use /permissions instead.`);
+		return this.parse(`/help permissions`);
 	},
 
 	hightraffic(target, room, user) {
@@ -694,10 +666,8 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.search(target);
 		if (!targetRoom) throw new Error(`Error in room creation.`);
 		if (cmd === 'makeprivatechatroom') {
-			targetRoom.settings.isPrivate = true;
 			if (!targetRoom.persist) throw new Error(`Private chat room created without settings.`);
-			targetRoom.settings.isPrivate = true;
-			room.saveSettings();
+			targetRoom.setPrivate(true);
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
 				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
@@ -1041,12 +1011,10 @@ export const commands: ChatCommands = {
 					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
 				}
 			}
-			delete room.settings.isPrivate;
 			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			delete room.settings.isPrivate;
-			room.saveSettings();
+			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
 			if (room.subRooms) {
@@ -1066,12 +1034,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (room.battle) {
-				room.makePrivate(setting);
-			} else {
-				room.settings.isPrivate = setting;
-				room.saveSettings();
-			}
+			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
 	},
@@ -1573,17 +1536,6 @@ export const roomSettings: SettingsHandler[] = [
 		options: [
 			[`off`, !room.settings.requestShowEnabled || `showapprovals off`],
 			[`on`, room.settings.requestShowEnabled || `showapprovals on`],
-		],
-	}),
-	room => ({
-		label: "/show",
-		permission: 'declare',
-		options: [
-			[`off`, !room.settings.showEnabled || `showmedia off`],
-			[`whitelist`, room.settings.showEnabled === true || `showmedia on`],
-			[`+`, room.settings.showEnabled === '+' || `showmedia +`],
-			[`%`, room.settings.showEnabled === '%' || `showmedia %`],
-			[`@`, room.settings.showEnabled === '@' || `showmedia @`],
 		],
 	}),
 ];

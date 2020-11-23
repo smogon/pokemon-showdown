@@ -912,7 +912,7 @@ export const commands: ChatCommands = {
 		`/uno autostart [amount] - sets an auto starting timer for [amount] seconds. Requires: % @ # &`,
 		`/uno end - ends the current game of UNO. Requires: % @ # &`,
 		`/uno start - starts the current game of UNO. Requires: % @ # &`,
-		`/unso disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
+		`/uno disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
 		`/uno hand - displays your own hand.`,
 		`/uno getusers - displays the players still in the game.`,
 		`/uno [spectate|unspectate] - spectate / unspectate the current private UNO game.`,

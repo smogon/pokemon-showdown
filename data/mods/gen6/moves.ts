@@ -16,6 +16,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	diamondstorm: {
 		inherit: true,
+		self: null,
 		secondary: {
 			chance: 50,
 			self: {
