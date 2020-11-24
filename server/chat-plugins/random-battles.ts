@@ -328,16 +328,18 @@ export const commands: ChatCommands = {
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		if (!species.randomDoubleBattleMoves) {
+		let randomMoves = species.randomDoubleBattleMoves;
+		if (!randomMoves) {
 			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
 			if (!gmaxSpecies.exists || !gmaxSpecies.randomDoubleBattleMoves) {
 				return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 			}
 			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomDoubleBattleMoves;
 		}
 		const moves: string[] = [];
 		// Done because species.randomDoubleBattleMoves is readonly
-		for (const move of species.randomDoubleBattleMoves!) { // <- TypeScript bug: see above in randombattles
+		for (const move of randomMoves) {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
