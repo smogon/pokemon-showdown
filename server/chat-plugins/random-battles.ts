@@ -260,7 +260,7 @@ export const commands: ChatCommands = {
 			dex = Dex.mod(format.mod);
 			if (format.mod === 'letsgo') isLetsGo = true;
 		}
-		const species = dex.getSpecies(args[0]);
+		let species = dex.getSpecies(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
@@ -281,11 +281,15 @@ export const commands: ChatCommands = {
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
 		if (!species.randomBattleMoves) {
-			return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
+				return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			}
+			species = gmaxSpecies;
 		}
 		const moves: string[] = [];
 		// Done because species.randomBattleMoves is readonly
-		for (const move of species.randomBattleMoves) {
+		for (const move of species.randomBattleMoves!) { // <- TypeScript bug: species.randomBattleMoves can't be undefined
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
