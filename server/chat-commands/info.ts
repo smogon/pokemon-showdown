@@ -492,7 +492,7 @@ export const commands: ChatCommands = {
 			);
 		}
 		Utils.sortBy(results, name => name.startsWith('  \u25C9'));
-		if (!results.length) return this.errorReply(`No users found.`);
+		if (!results.length) results = [`No users found.`];
 		return this.sendReplyBox(
 			`Users with a name matching '${target}':<br />${results.join('; ')}`
 		);
