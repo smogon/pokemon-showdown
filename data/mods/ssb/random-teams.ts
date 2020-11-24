@@ -440,7 +440,7 @@ export const ssbSets: SSBSets = {
 	},
 	Kipkluif: {
 		species: 'Gossifleur', ability: 'Degenerator', item: 'Eviolite', gender: 'M',
-		moves: ['Leech Seed', 'Apple Acid', 'Court Change'],
+		moves: ['Strength Sap', 'Apple Acid', 'Court Change'],
 		signatureMove: 'Kip Up',
 		evs: {hp: 196, def: 116, spa: 36, spd: 116, spe: 36}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
 	},
