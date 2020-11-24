@@ -468,12 +468,36 @@ export const commands: ChatCommands = {
 			}
 		}
 		if (!results.length) {
-			if (!IPTools.ipRegex.test(ip)) return this.errorReply(`${ip} is not a valid IP or host.`);
+			if (!IPTools.ipRangeRegex.test(ip)) return this.errorReply(`${ip} is not a valid IP or host.`);
 			return this.sendReply(`No results found.`);
 		}
 		return this.sendReply(results.join('; '));
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
+
+	usersearch(target) {
+		this.checkCan('lock');
+		const results = [];
+		target = toID(target);
+		if (!target) {
+			return this.parse(`/help usersearch`);
+		}
+		if (target.length < 3) {
+			return this.errorReply(`That's too short of a term to search for.`);
+		}
+		for (const curUser of Users.users.values()) {
+			if (!curUser.id.includes(target)) continue;
+			results.push(
+				Utils.html`${curUser.connected ? ` \u25C9 ` : ` \u25CC `} ${curUser.name}`
+			);
+		}
+		Utils.sortBy(results, name => name.startsWith('  \u25C9'));
+		if (!results.length) results.push(`No users found.`);
+		return this.sendReplyBox(
+			`Users with a name matching '${target}':<br />${results.join('; ')}`
+		);
+	},
+	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: &`],
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
@@ -2600,6 +2624,7 @@ export const commands: ChatCommands = {
 		const YouTube = new YoutubeInterface();
 		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
+			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);

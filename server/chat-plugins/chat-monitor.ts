@@ -374,6 +374,9 @@ export const namefilter: NameFilter = (name, user) => {
 };
 export const loginfilter: LoginFilter = user => {
 	if (user.namelocked) return;
+	if (Monitor.forceRenames.has(user.id) && !Punishments.namefilterwhitelist.has(user.id)) {
+		return '';
+	}
 
 	if (user.trackRename) {
 		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
@@ -385,10 +388,6 @@ export const loginfilter: LoginFilter = user => {
 	}
 };
 export const nicknamefilter: NameFilter = (name, user) => {
-	if (Monitor.forceRenames.has(user.id) && !Punishments.namefilterwhitelist.has(user.id)) {
-		return '';
-	}
-
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')

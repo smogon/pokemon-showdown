@@ -906,8 +906,7 @@ export class RandomTeams {
 					if (hasMove['morningsun']) rejected = true;
 					break;
 				case 'psychic':
-					if ((hasMove['psyshock'] || hasMove['storedpower']) && counter.setupType) rejected = true;
-					if (isDoubles && hasMove['psyshock']) rejected = true;
+					if (hasMove['psyshock'] && (counter.setupType || isDoubles)) rejected = true;
 					break;
 				case 'psyshock':
 					if ((hasMove['psychic'] || hasAbility['Pixilate']) && counter.Special < 4 && !counter.setupType) rejected = true;
@@ -1258,6 +1257,8 @@ export class RandomTeams {
 			item = 'Leek';
 		} else if (species.name === 'Froslass' && !isDoubles) {
 			item = 'Wide Lens';
+		} else if (species.name === 'Latios' && counter.Special === 2 && !isDoubles) {
+			item = 'Soul Dew';
 		} else if (species.name === 'Lopunny') {
 			item = isDoubles ? 'Iron Ball' : 'Toxic Orb';
 		} else if (species.baseSpecies === 'Marowak') {
@@ -1508,10 +1509,7 @@ export class RandomTeams {
 				case 'Arceus': case 'Silvally':
 					if (this.randomChance(8, 9)) continue;
 					break;
-				case 'Castform':
-					if (this.randomChance(2, 3)) continue;
-					break;
-				case 'Aegislash': case 'Basculin': case 'Giratina': case 'Gourgeist': case 'Meloetta':
+				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
 				case 'Greninja':

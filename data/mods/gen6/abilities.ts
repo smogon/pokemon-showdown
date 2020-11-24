@@ -89,6 +89,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onBeforeMovePriority: 11,
 	},
+	symbiosis: {
+		inherit: true,
+		onAllyAfterUseItem(item, pokemon) {
+			const source = this.effectData.target;
+			const myItem = source.takeItem();
+			if (!myItem) return;
+			if (
+				!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effect, myItem) ||
+				!pokemon.setItem(myItem)
+			) {
+				source.item = myItem.id;
+				return;
+			}
+			this.add('-activate', source, 'ability: Symbiosis', myItem, '[of] ' + pokemon);
+		},
+	},
 	weakarmor: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
