@@ -214,13 +214,19 @@ export class YoutubeInterface {
 		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
-	async generateVideoDisplay(link: string) {
+	async generateVideoDisplay(link: string, fullInfo = false) {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
 		const id = this.getId(link);
 		const info = await this.getVideoData(id);
 		if (!info) throw new Chat.ErrorMessage(`Video not found.`);
+		if (!fullInfo) {
+			let buf = `<b>${info.title}</b> `;
+			buf += `(<a class="subtle" href="https://youtube.com/channel/${info.channelUrl}">${info.channelTitle}</a>)<br />`;
+			buf += `<youtube src="https://www.youtube.com/embed/${id}" />`;
+			return buf;
+		}
 		let buf = `<table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
 		buf += `<div style="padding:5px;background:#b0b0b0;border:1px solid black;margin:auto;max-width:100px;max-height:100px;">`;
@@ -341,8 +347,12 @@ export const commands: ChatCommands = {
 		channelhelp: [
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
 		],
-		video() {
-			return this.errorReply(`Use /show instead.`);
+		async video(target, room, user) {
+			room = this.requireRoom('youtube' as RoomID);
+			this.checkCan('mute', null, room);
+			const buffer = await YouTube.generateVideoDisplay(target, true);
+			this.runBroadcast();
+			this.sendReplyBox(buffer);
 		},
 
 		channels(target, room, user) {

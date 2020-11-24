@@ -2624,6 +2624,7 @@ export const commands: ChatCommands = {
 		const YouTube = new YoutubeInterface();
 		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
+			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
