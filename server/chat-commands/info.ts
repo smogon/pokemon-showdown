@@ -491,6 +491,11 @@ export const commands: ChatCommands = {
 				Utils.html`${curUser.connected ? ` \u25C9 ` : ` \u25CC `} ${curUser.name}`
 			);
 		}
+		results.sort((aName, bName) => {
+			if (aName.includes(`\u25CC`) && bName.includes(`\u25C9`)) return 1;
+			return -1;
+		});
+		if (!results.length) return this.errorReply(`No users found.`);
 		return this.sendReplyBox(
 			`Users with a name matching '${target}':<br />${results.join('; ')}`
 		);
