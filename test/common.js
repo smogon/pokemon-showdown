@@ -108,9 +108,10 @@ class TestTools {
 
 	/**
 	 * Saves the log of the given battle as a bare-bones replay file in the `test\replays` directory
-	 * To view the replay, simply drag and drop the file into a PS! client window
+	 * You can view the replay by opening the file in any browser or by dragging and dropping the
+	 * file into a PS! client window.
 	 *
-	 * @param {Sim.Battle} [battle]
+	 * @param {Sim.Battle} battle
 	 * @param {string} [fileName]
 	 */
 	saveReplay(battle, fileName) {
@@ -119,7 +120,17 @@ class TestTools {
 		const filePath = path.resolve(__dirname, `./replays/${fileName}-${Date.now()}.html`);
 		const out = fs.createWriteStream(filePath, {flags: 'a'});
 		out.on('open', () => {
-			out.write(`<script type="text/plain" class="log">${battleLog}</script>`);
+			out.write(`<!DOCTYPE html>
+			<meta charset="utf-8" />
+			<!-- version 1 -->
+			
+			<div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
+			<div class="battle"></div><div class="battle-log"></div><div class="replay-controls"></div><div class="replay-controls-2"></div>
+			<script type="text/plain" class="battle-log-data">${battleLog}</script>
+			</div>
+			<script>
+			let daily = Math.floor(Date.now()/1000/60/60/24);document.write('<script src="https://play.pokemonshowdown.com/js/replay-embed.js?version'+daily+'"></'+'script>');
+			</script>`);
 			out.end();
 		});
 	}
