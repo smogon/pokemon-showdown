@@ -43878,8 +43878,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["8M", "8L33", "7M", "6M", "5M"],
 			wildcharge: ["8M", "8L80", "7M", "7L63", "6M", "6L63", "5M", "5L63"],
 			closecombat: ["8M", "7M"],
-			headcrash: ["8M", "7M"],
 			headcharge: ["8M", "7M"],
+			heatcrash: ["8M", "7M"],
 		},
 	},
 	cranidos: {
@@ -76902,6 +76902,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			weatherball: ["8M"],
 			wideguard: ["8L48"],
 			crystalwave: ["8M", "7M"],
+			moonblast: ["8M", "7M"],
+			chillingwave: ["8M", "7M"],
 		},
 	},
 	stonjourner: {

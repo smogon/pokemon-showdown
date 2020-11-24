@@ -20723,4 +20723,50 @@ export const Moves: {[moveid: string]: MoveData} = {
         type: "Normal",
         contestType: "Cute",
     },
+	astroshift: {
+		num: 894,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Astro Shift",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		boosts: {
+			spa: 1,
+			spe: 2,
+		},
+		volatileStatus: 'astroshift',
+		condition: {
+			duration: 2,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Astro Shift');
+			},
+			onAfterEachBoost(boost, target, source, effect) {
+				if (!source || target.side === source.side) {
+					return;
+				}
+				if (target.volatiles['astroshift'].duration === 2) {
+					return;
+				}
+				let speedLowered = false;
+				let i: BoostName;
+					if (boost['spe']! < 0) {
+						speedLowered = true;
+					}
+				if (speedLowered) {
+					//this.add('-ability', target, 'Defiant');
+					this.boost({spd: 2}, target, target, null, true);
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Astro Shift');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Water",
+		zMove: {boost: {def: 1}},
+		contestType: "Beautiful",
+	},
 };

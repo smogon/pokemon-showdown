@@ -1584,8 +1584,8 @@ export const AbilitiesText = {
 	},
 	expert: {
 		name: "Expert",
-		desc: "This Pokemon variable power moves will always use the maximum possible base power.",
-		shortDesc: "This Pokemon variable power moves will always use the maximum possible base power.",
+		desc: "This Pokemon variable power have their power multiplied by 1.3.",
+		shortDesc: "This Pokemon variable power have 1.3 power.",
 	},
 	artillery: {
 		name: "Artillery",
