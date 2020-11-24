@@ -9003,7 +9003,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const lastMove = target.lastMove;
 			const moveIndex = target.moves.indexOf(lastMove.id);
 			const noInstruct = [
-				'assist', 'beakblast', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'thrash', 'transform',
+				'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'obstruct', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'struggle', 'thrash', 'transform', 'uproar',
 			];
 			if (
 				noInstruct.includes(lastMove.id) || lastMove.isZ || lastMove.isMax ||
