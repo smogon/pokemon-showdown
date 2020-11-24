@@ -280,16 +280,18 @@ export const commands: ChatCommands = {
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
-		if (!species.randomBattleMoves) {
+		let randomMoves = species.randomBattleMoves;
+		if (!randomMoves) {
 			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
 			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
 				return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 			}
 			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomBattleMoves;
 		}
 		const moves: string[] = [];
 		// Done because species.randomBattleMoves is readonly
-		for (const move of species.randomBattleMoves!) { // <- TypeScript bug: species.randomBattleMoves can't be undefined
+		for (const move of randomMoves) {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
