@@ -406,7 +406,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		// Magic Guard Innate
 		onDamage(damage, target, source, effect) {
-			if (target.Illusion) return;
+			if (target.illusion) return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
