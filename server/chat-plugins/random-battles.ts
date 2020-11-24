@@ -319,7 +319,7 @@ export const commands: ChatCommands = {
 				return this.parse(`/help randomdoublesbattle`);
 			}
 		}
-		const species = dex.getSpecies(args[0]);
+		let species = dex.getSpecies(args[0]);
 		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
 				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
@@ -327,11 +327,15 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
 		if (!species.randomDoubleBattleMoves) {
-			return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomDoubleBattleMoves) {
+				return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			}
+			species = gmaxSpecies;
 		}
 		const moves: string[] = [];
 		// Done because species.randomDoubleBattleMoves is readonly
-		for (const move of species.randomDoubleBattleMoves) {
+		for (const move of species.randomDoubleBattleMoves!) { // <- TypeScript bug: see above in randombattles
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
