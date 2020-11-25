@@ -15996,8 +15996,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		sleepUsable: true,
-		onTry(target, source) {
-			if (source.status !== 'slp' && !source.hasAbility('comatose')) return false;
+		onTry(target) {
+			if (target.status !== 'slp' && !target.hasAbility('comatose')) return false;
 		},
 		secondary: {
 			chance: 30,
