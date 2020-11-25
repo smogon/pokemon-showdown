@@ -30,7 +30,7 @@ describe('Burning Jealousy', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it.skip(`should burn a target whose stats were boosted at the start of the match`, function () {
+	it(`should burn a target whose stats were boosted at the start of the match`, function () {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['burningjealousy']},
 		], [
