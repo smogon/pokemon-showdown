@@ -904,7 +904,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		selfSwitch: false,
-		onTryHit: false,
+		onTry: false,
 	},
 	toxicthread: {
 		inherit: true,
