@@ -51,40 +51,40 @@ describe('Protean', function () {
 
 		// Fling with no item
 		battle.makeChoices('move fling', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Fling changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Fling changed the user's type when it should not have.");
 
 		// Sucker Punch into status move
 		battle.makeChoices('move suckerpunch', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Sucker Punch changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Sucker Punch changed the user's type when it should not have.");
 
 		// Steel Roller with no Terrain active
 		battle.makeChoices('move steelroller', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Steel Roller changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Steel Roller changed the user's type when it should not have.");
 
 		// Aura Wheel when user is not Morpeko
 		battle.makeChoices('move aurawheel', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Aura Wheel changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Aura Wheel changed the user's type when it should not have.");
 
 		battle.makeChoices('switch 2', 'move sleeptalk');
 		kecleon = battle.p1.active[0];
 
 		// Burn Up when user is not Fire-type
 		battle.makeChoices('move burnup', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Burn Up changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Burn Up changed the user's type when it should not have.");
 
 		// Aurora Veil when hail is not active
 		battle.makeChoices('move auroraveil', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Aurora Veil changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Aurora Veil changed the user's type when it should not have.");
 
 		// Magnet Rise when user has Ingrain; note that Kecleon becomes Grass-type from Ingrain
 		battle.makeChoices('move ingrain', 'move sleeptalk');
 		battle.makeChoices('move magnetrise', 'move sleeptalk');
-		assert(kecleon.hasType('Grass'), "Magnet Rise changed the user's type when it should not have.");
+		assert(kecleon.hasType('Grass'), "Protean + Magnet Rise changed the user's type when it should not have.");
 
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
 
-	it(`should not change the user's type when abilities that fail earlier than Protean will activate`, function () {
+	it(`should not change the user's type when abilities that activate earlier than Protean will cause the user's moves to fail`, function () {
 		battle = common.createBattle([[
 			{species: "Kecleon", ability: 'protean', moves: ['aquajet', 'mindblown']},
 		], [
@@ -98,23 +98,23 @@ describe('Protean', function () {
 
 		// Primordial Sea
 		battle.makeChoices('move mindblown', 'move sleeptalk');
-		assert(kecleon.hasType('Normal'), "Primordial Sea changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Primordial Sea changed the user's type when it should not have.");
 
 		// Desolate Land
 		battle.makeChoices('move aquajet', 'switch 2');
-		assert(kecleon.hasType('Normal'), "Desolate Land changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Desolate Land changed the user's type when it should not have.");
 
 		// Powder
 		battle.makeChoices('move mindblown', 'move powder');
-		assert(kecleon.hasType('Normal'), "Powder changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Powder changed the user's type when it should not have.");
 
 		// Dazzling
 		battle.makeChoices('move aquajet', 'switch 3');
-		assert(kecleon.hasType('Normal'), "Dazzling changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Dazzling changed the user's type when it should not have.");
 
 		// Damp
 		battle.makeChoices('move mindblown', 'switch 4');
-		assert(kecleon.hasType('Normal'), "Damp changed the user's type when it should not have.");
+		assert(kecleon.hasType('Normal'), "Protean + Damp changed the user's type when it should not have.");
 
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
