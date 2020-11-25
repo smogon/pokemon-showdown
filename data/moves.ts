@@ -2182,7 +2182,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, dance: 1},
-		onTry(pokemon, target, move) {
+		onTry(pokemon) {
 			if (pokemon.hp <= (pokemon.maxhp * 33 / 100) || pokemon.maxhp === 1) {
 				return false;
 			}
@@ -2763,7 +2763,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 3,
 		flags: {},
 		sideCondition: 'craftyshield',
-		onTry(side, source) {
+		onTry(pokemon) {
 			return !!this.queue.willAct();
 		},
 		condition: {
@@ -5499,8 +5499,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 2,
 		flags: {},
 		volatileStatus: 'followme',
-		onTry(target) {
-			if (target.side.active.length < 2) return false;
+		onTry(pokemon) {
+			if (pokemon.side.active.length < 2) return false;
 		},
 		condition: {
 			duration: 1,
@@ -10210,12 +10210,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, nonsky: 1},
 		stallingMove: true,
 		sideCondition: 'matblock',
-		onTry(side, source) {
-			if (source.activeMoveActions > 1) {
+		onTry(pokemon) {
+			if (pokemon.activeMoveActions > 1) {
 				this.hint("Mat Block only works on your first turn out.");
 				return false;
 			}
-
 			return !!this.queue.willAct();
 		},
 		condition: {
@@ -11914,7 +11913,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'noretreat',
-		onTry(target, source, move) {
+		onTry(source, target, move) {
 			if (target.volatiles['noretreat']) return false;
 			if (target.volatiles['trapped']) {
 				delete move.volatileStatus;
@@ -13510,7 +13509,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 3,
 		flags: {snatch: 1},
 		sideCondition: 'quickguard',
-		onTry(side, source) {
+		onTry(pokemon) {
 			return !!this.queue.willAct();
 		},
 		onHitSide(side, source) {
@@ -13610,8 +13609,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 2,
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
-		onTry(target) {
-			if (target.side.active.length < 2) return false;
+		onTry(pokemon) {
+			if (pokemon.side.active.length < 2) return false;
 		},
 		condition: {
 			duration: 1,
@@ -13937,8 +13936,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-fail', pokemon, 'heal');
 				return null;
 			}
-			const ability = pokemon.getAbility();
-			if (ability.id === 'vitalspirit' || ability.id === 'insomnia') {
+			if (pokemon.hasAbility(['insomnia', 'vitalspirit']))) {
 				// TODO: hook up [Pokemon] stayed awake! client message
 				this.add('-fail', pokemon);
 				return null;
@@ -15533,7 +15531,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-end', target, 'Sky Drop', '[interrupt]');
 			}
 		},
-		onTry(target, source) {
+		onTry(source, target) {
 			if (target.fainted) return false;
 		},
 		onTryHit(target, source, move) {
@@ -15996,8 +15994,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		sleepUsable: true,
-		onTry(target) {
-			if (target.status !== 'slp' && !target.hasAbility('comatose')) return false;
+		onTry(pokemon) {
+			if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return false;
 		},
 		secondary: {
 			chance: 30,
@@ -19217,7 +19215,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 3,
 		flags: {snatch: 1},
 		sideCondition: 'wideguard',
-		onTry(side, source) {
+		onTry(pokemon) {
 			return !!this.queue.willAct();
 		},
 		onHitSide(side, source) {
