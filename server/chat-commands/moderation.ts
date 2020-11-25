@@ -473,7 +473,7 @@ export const commands: ChatCommands = {
 		if (globalWarn) {
 			const watchlist = Punishments.isWatchlisted(targetUser ? targetUser.id : toID(this.targetUsername));
 			if (watchlist) {
-				const [useridOrIP, staff, reason, isIp] = watchlist;
+				const [useridOrIP,,, isIp] = watchlist;
 				Rooms.get('staff')?.add(
 					`|c|~|/log [PunishmentMonitor] Warned ${isIp ? 'IP' : 'user'} ${useridOrIP} is currently on the punishment watchlist.`
 				);
