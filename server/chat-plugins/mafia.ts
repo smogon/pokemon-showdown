@@ -3291,6 +3291,10 @@ export const commands: ChatCommands = {
 					buf += `${roles.join(', ')}<br/>`;
 				}
 			} else if (dataType === 'idea') {
+				if ((result as MafiaDataIDEA).picks && (result as MafiaDataIDEA).choices) {
+					buf += `<b>Number of Picks</b>: ${(result as MafiaDataIDEA).picks.length} (${(result as MafiaDataIDEA).picks.join(', ')})<br/>`;
+					buf += `<b>Number of Choices</b>: ${(result as MafiaDataIDEA).choices}<br/>`;
+				}
 				buf += `<details><summary class="button" style="font-weight: bold; display: inline-block">Roles:</summary>`;
 				for (const idearole of (result as MafiaDataIDEA).roles) {
 					buf += `${idearole}<br/>`;
