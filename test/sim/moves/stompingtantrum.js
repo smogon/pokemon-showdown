@@ -88,7 +88,7 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move sleeptalk');
 	});
 
-	it.only('should cause Gravity-negated moves to double in BP, even Z-moves', function () {
+	it('should cause Gravity-negated moves to double in BP, even Z-moves', function () {
 		battle = common.gen(7).createBattle([[
 			{species: "Magikarp", item: 'normaliumz', moves: ['splash', 'stompingtantrum']},
 		], [
@@ -104,7 +104,5 @@ describe('Stomping Tantrum', function () {
 
 		battle.makeChoices('move splash zmove', 'move gravity');
 		battle.makeChoices('move stomping tantrum', 'move gravity');
-
-		console.log(battle.getDebugLog());
 	});
 });
