@@ -852,7 +852,7 @@ export const commands: ChatCommands = {
 
 		Monitor.updateServerLock = true;
 
-		const exec = (command: string) => bash(command, this);
+		const exec = (command: string) => bash(command, this, isPrivate ? Config.privatecodepath : undefined);
 
 		this.addGlobalModAction(`${user.name} used /updateserver${isPrivate ? ` private` : ``}`);
 		this.sendReply(`Fetching newest version...`);
