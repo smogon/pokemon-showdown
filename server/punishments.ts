@@ -19,6 +19,7 @@ const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
 const SHAREDIPS_FILE = 'config/sharedips.tsv';
 const SHAREDIPS_BLACKLIST_FILE = 'config/sharedips-blacklist.tsv';
 const WHITELISTED_NAMES_FILE = 'config/name-whitelist.tsv';
+const WATCHLIST_FILE = 'config/user-watchlist.tsv';
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
@@ -159,6 +160,10 @@ export const Punishments = new class {
 	 * namefilterwhitelist is a whitelistedname:whitelister Map
 	 */
 	readonly namefilterwhitelist = new Map<string, string>();
+	/**
+	 * Map<userid or IP, [staff who put them on monitor, reason, boolean (is it an IP or not?)]>
+	 */
+	readonly watchlist = new Map<string, [string, string, boolean]>();
 	/**
 	 * Connection flood table. Separate table from IP bans.
 	 */
@@ -448,6 +453,32 @@ export const Punishments = new class {
 			buf += `${userid}\t${whitelister}\r\n`;
 		});
 		return FS(WHITELISTED_NAMES_FILE).write(buf);
+	}
+
+	async loadWatchlist() {
+		const data = await FS(WATCHLIST_FILE).readIfExists();
+		if (!data) return;
+		const lines = data.split('\n');
+		lines.shift();
+		for (const line of lines) {
+			const [useridOrIP, staff, reason] = line.split('\t');
+			this.watchlist.set(useridOrIP, [staff, reason, IPTools.ipRegex.test(useridOrIP)]);
+		}
+	}
+
+	appendWatchlist(nameOrIP: string, staff: User, reason = '') {
+		const isIp = IPTools.ipRegex.test(nameOrIP);
+		if (!isIp) nameOrIP = toID(nameOrIP);
+		this.watchlist.set(nameOrIP, [staff.id, reason, isIp]);
+		return this.saveWatchlist();
+	}
+
+	saveWatchlist() {
+		let buf = `Userid or IP\tWStaff\tReason\r\n`;
+		Punishments.watchlist.forEach(([staff, reason], useridOrIP) => {
+			buf += `${useridOrIP}\t${staff}\t${reason}\r\n`;
+		});
+		return FS(WATCHLIST_FILE).write(buf);
 	}
 
 	/*********************************************************
@@ -1570,6 +1601,19 @@ export const Punishments = new class {
 		if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
 
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
+	}
+
+	isWatchlisted(user: User | string): [string, string, string, boolean] | null {
+		const id = toID(user);
+		const idEntry = this.watchlist.get(id);
+		if (idEntry) return [id, ...idEntry];
+		if (typeof user === 'object') {
+			for (const ip of user.ips) {
+				const ipEntry = this.watchlist.get(ip);
+				if (ipEntry) return [ip, ...ipEntry];
+			}
+		}
+		return null;
 	}
 
 	/**

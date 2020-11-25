@@ -470,6 +470,15 @@ export const commands: ChatCommands = {
 
 		const targetUser = this.targetUser;
 		const saveReplay = globalWarn && room.battle;
+		if (globalWarn) {
+			const watchlist = Punishments.isWatchlisted(targetUser ? targetUser.id : toID(this.targetUsername));
+			if (watchlist) {
+				const [useridOrIP, staff, reason, isIp] = watchlist;
+				Rooms.get('staff')?.add(
+					`|c|~|/log [PunishmentMonitor] Warned ${isIp ? 'IP' : 'user'} ${useridOrIP} is currently on the punishment watchlist.`
+				);
+			}
+		}
 		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 			this.checkCan('warn', null, room);
@@ -1613,6 +1622,48 @@ export const commands: ChatCommands = {
 	},
 	unnamelockhelp: [`/unnamelock [username] - Unnamelocks the user. Requires: % @ &`],
 
+	watchlist: {
+		add(target, room, user) {
+			this.checkCan('globalban');
+			if (!toID(target)) return this.parse(`/help watchlist`);
+			let [targetOrIP, reason] = Utils.splitFirst(target, ',');
+			const isIp = IPTools.ipRegex.test(targetOrIP);
+			if (!isIp) targetOrIP = toID(targetOrIP);
+			if (Punishments.watchlist.has(targetOrIP)) {
+				return this.errorReply(`That userid or IP is already tracked.`);
+			}
+			void Punishments.appendWatchlist(targetOrIP, user, reason);
+			const reasonText = reason ? ` (${reason})` : '';
+			this.privateGlobalModAction(
+				`${user.name} put the ${isIp ? 'IP' : 'user'} ${targetOrIP} on the punishment watchlist${reasonText}.`
+			);
+			this.globalModlog(`WATCHLIST ADD`, targetOrIP, reason);
+		},
+		remove(target, room, user) {
+			this.checkCan('globalban');
+			if (!toID(target)) return this.parse(`/help unwatchlist`);
+			if (!Punishments.watchlist.has(target)) {
+				return this.errorReply(`The userid or IP ${target} is not on the watchlist.`);
+			}
+			this.privateGlobalModAction(`${user.name} removed ${target} from the watchlist.`);
+			this.globalModlog(`WATCHLIST REMOVE`, target);
+			Punishments.watchlist.delete(target);
+			void Punishments.saveWatchlist();
+		},
+		view(target, room, user) {
+			this.checkCan('lock');
+			return this.parse(`/join view-userwatchlist`);
+		},
+		help() {
+			this.runBroadcast();
+			return this.sendReplyBox(
+				`/watchlist add [ip or userid] [, reason] - Adds the [target] to the punishment watchlist. Requires @ &` +
+				`/watchlist remove [target] - Remove the given userid or IP from the punishment watchlist. Requires @ &` +
+				`/watchlist view - View the punishment watchlist.`
+			);
+		},
+	},
+
 	hidetextalts: 'hidetext',
 	hidealttext: 'hidetext',
 	hidealtstext: 'hidetext',
@@ -2082,4 +2133,29 @@ export const commands: ChatCommands = {
 		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # &`,
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # &`,
 	],
+};
+
+export const pages: PageTable = {
+	userwatchlist(args, user) {
+		this.checkCan('lock');
+		let buf = `<div class="pad"><h2>Punishment Watchlist</h2>`;
+		buf += `<div class="ladder pad"><table><tr><th>User / IP</th><th>Reason</th><th>Staff</th></tr>`;
+		Punishments.watchlist.forEach(([staff, reason], idOrIP) => {
+			buf += `<tr><td>${idOrIP}</td><td>${reason || 'None given.'}</td><td>${staff}</td></tr>`;
+		});
+		buf += `</div>`;
+		return buf;
+	},
+};
+
+export const punishmentfilter: Chat.PunishmentFilter = function (user) {
+	const watchlist = Punishments.isWatchlisted(user);
+	if (watchlist) {
+		const [useridOrIP, staff, reason, isIp] = watchlist;
+		const type = isIp ? `IP` : `user`;
+		const reasonText = `(watchlisted by ${staff}${reason ? ` (${reason})` : ''})`;
+		Rooms.get('staff')?.add(
+			`|c|~|/log [WatchlistMonitor] Punished ${type} ${useridOrIP} is currently on the watchlist: ${reasonText}.`
+		);
+	}
 };
