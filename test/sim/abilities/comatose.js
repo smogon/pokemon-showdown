@@ -39,7 +39,7 @@ describe('Comatose', function () {
 		assert.constant(() => comatoseMon.status, () => battle.makeChoices('move rest', 'move aquajet'));
 	});
 
-	it.only('should allow the use of Snore and Sleep Talk as if the user were asleep', function () {
+	it('should allow the use of Snore and Sleep Talk as if the user were asleep', function () {
 		battle = common.createBattle([[
 			{species: "Komala", item: 'normaliumz', ability: 'comatose', moves: ['snore', 'sleeptalk', 'brickbreak']},
 		], [
