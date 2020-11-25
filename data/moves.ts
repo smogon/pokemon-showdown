@@ -13936,7 +13936,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-fail', pokemon, 'heal');
 				return null;
 			}
-			if (pokemon.hasAbility(['insomnia', 'vitalspirit']))) {
+			if (pokemon.hasAbility(['insomnia', 'vitalspirit'])) {
 				// TODO: hook up [Pokemon] stayed awake! client message
 				this.add('-fail', pokemon);
 				return null;
