@@ -199,7 +199,7 @@ describe('Target Resolution', function () {
 		});
 	});
 
-	it.skip('should not force charge moves called by another move to target an ally after Ally Switch', function () {
+	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', ability: 'prankster', moves: ['copycat', 'sleeptalk']},
 			{species: 'wynaut', moves: ['allyswitch', 'solarbeam']},
