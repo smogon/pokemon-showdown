@@ -39,7 +39,7 @@ export const translations: Translations = {
 		"DATA COMMANDS": "COMANDI PER I DATI",
 		"DRIVER COMMANDS": "COMANDI PER I DRIVER",
 		"MODERATOR COMMANDS": "COMANDI PER I MODERATORI",
-		"ADMIN COMMANDS": "COMANDI PER I AMMINISTRATORI",
+		"ADMIN COMMANDS": "COMANDI PER GLI AMMINISTRATORI",
 
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(sostituisci / con ! per mostrare in room un comando. L'operazione richiede i seguenti rank: + % @ # &)",
 
