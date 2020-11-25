@@ -36,7 +36,7 @@ describe('Lash Out', function () {
 		assert.bounded(damage, [158, 186]); // If it wasn't doubled, range would be 79-94
 	});
 
-	it.skip(`should double in base power if the user's stats were lowered at the start of the match`, function () {
+	it(`should double in base power if the user's stats were lowered at the start of the match`, function () {
 		battle = common.createBattle([[
 			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
 		], [
