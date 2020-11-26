@@ -88,6 +88,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	stancechange: {
 		inherit: true,
 		onBeforeMovePriority: 11,
+		onBeforeMove(attacker, defender, move) {
+			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
+			if (move.category === 'Status' && move.id !== 'kingsshield') return;
+			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onModifyMove() {},
 	},
 	symbiosis: {
 		inherit: true,
