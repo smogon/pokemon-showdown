@@ -20075,7 +20075,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	nitricstrike: {
 		num: 858,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Physical",
 		name: "Nitric Strike",
 		pp: 20,
@@ -20500,7 +20500,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		secondary: null,
-		target: "all",
+		target: "normal",
 		type: "Normal",
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
@@ -20769,4 +20769,60 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
+	prismbeam: {
+        num: 895,
+        accuracy: 100,
+        basePower: 100,
+        category: "Special",
+        name: "Prism Beam",
+        pp: 10,
+        priority: 0,
+        flags: {protect: 1, mirror: 1},
+        self: {
+            boosts: {
+                spa: -1,
+            },
+        },
+        secondary: null,
+        target: "normal",
+        type: "Light",
+        contestType: "Beautiful",
+    },
+	callout: {
+        num: 896,
+        accuracy: true,
+        basePower: 0,
+        category: "Status",
+        name: "Callout",
+        pp: 20,
+        priority: 2,
+        flags: {},
+        volatileStatus: 'callout',
+        onTryHit(target) {
+            if (target.side.active.length < 2) return false;
+        },
+        condition: {
+            duration: 1,
+            onStart(target, source, effect) {
+                if (effect?.id === 'zpower') {
+                    this.add('-singleturn', target, 'move: Callout', '[zeffect]');
+                } else {
+                    this.add('-singleturn', target, 'move: Callout');
+                }
+            },
+            onFoeRedirectTargetPriority: 1,
+            onFoeRedirectTarget(target, source, source2, move) {
+                if (!this.effectData.target.isSkyDropped() && this.validTarget(this.effectData.target, source, move.target)) {
+                    if (move.smartTarget) move.smartTarget = false;
+                    this.debug("Callout redirected target of move");
+                    return this.effectData.target;
+                }
+            },
+        },
+        secondary: null,
+        target: "adjacentAlly",
+        type: "Dark",
+        zMove: {effect: 'clearnegativeboost'},
+        contestType: "Clever",
+    },
 };

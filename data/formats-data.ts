@@ -2342,8 +2342,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	castform: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "PU",
 	},
 	castformsunny: {
 		isNonstandard: "Past",
@@ -2352,6 +2351,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 	},
 	castformsnowy: {
+		isNonstandard: "Past",
+	},
+	castformtoxic: {
+		isNonstandard: "Past",
+	},
+	castformsandy: {
 		isNonstandard: "Past",
 	},
 	kecleon: {
@@ -6312,5 +6317,20 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	pokestarufopropu2: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
+	},
+	crawcomb: {
+		tier: "UU",
+	},
+	ibroxiz: {
+		tier: "LC",
+	},
+	corralloi: {
+		tier: "RU",
+	},
+	delibirdgalar: {
+		tier: "UU",
+	},
+	skulpent: {
+		tier: "OU",
 	},
 };

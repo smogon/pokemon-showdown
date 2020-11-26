@@ -1097,6 +1097,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			case 'hail':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
+			case 'toxiccloud':
+			if (pokemon.species.id !== 'castformtoxic') forme = 'Castform-Toxic';
+				break;
+			case 'sandstorm':
+			if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
+				break;
 			default:
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
@@ -4747,10 +4753,60 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	forestembrace: {
 		onStart(pokemon) {
 			if (!pokemon.setType('Grass')) return false;
-				this.add('-start', pokemon, 'typechange', 'Grass', '[from] ability: Forest Embrace');
+			this.add('-start', pokemon, 'typechange', 'Grass', '[from] ability: Forest Embrace');
 		},
 		name: "Forest Embrace",
 		rating: 0,
-		num: 16,
+		num: 1020,
 	},
+	corruptedintention: {
+		onModifyMove(move, source, target) {
+			if (move.id === 'toxicspikes') {
+				source.side.foe.addSideCondition('toxicspikes');
+			}
+		},
+		name: "Corrupted Intention",
+		rating: 0,
+		num: 1021,
+	},
+	parasite: {
+        onTryHealPriority: 1,
+        onTryHeal(damage, target, source, effect) {
+            const heals = ['drain', 'leechseed', 'ingrain', 'aquaring', 'strengthsap'];
+            if (heals.includes(effect.id)) {
+                return this.chainModify([0x14CC, 0x1000]);
+            }
+        },
+        name: "Parasite",
+        rating: 2.5,
+        num: 1022,
+    },
+	perseverance: {
+        onBasePowerPriority: 7,
+        onBasePower(basePower, pokemon, target, move) {
+            if (pokemon.side.pokemonLeft === 1) {
+                return this.chainModify(1.25);
+            }
+        },
+        onModifyDefPriority: 6,
+        onModifyDef(def) {
+            if (pokemon.side.pokemonLeft === 1) {
+                return this.chainModify(1.25);
+            }
+        },
+        onModifySpDPriority: 6,
+        onModifySpD(spd) {
+            if (pokemon.side.pokemonLeft === 1) {
+                return this.chainModify(1.25);
+            }
+        },
+        onStart(pokemon) {
+            if (pokemon.side.pokemonLeft === 1) {
+                this.add('-ability', pokemon, 'Perseverance');
+            }
+        },
+        name: "Perseverance",
+        rating: 4,
+        num: 1023,
+    },
 };

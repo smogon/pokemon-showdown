@@ -67,7 +67,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate') {
+			if (effect.id === 'intimidate' || effect.id === 'petrify' || effect.id === 'daunt') {
 				target.useItem();
 			}
 		},
@@ -7251,6 +7251,37 @@ export const Items: {[itemid: string]: ItemData} = {
 			target.side.foe.addSideCondition('spikes');
 		},
         num: 10006,
+        gen: 8,
+    },
+	firewood: {
+        name: "Fire Wood",
+        spritenum: 61,
+        fling: {
+            basePower: 30,
+        },
+        onDamagingHit(damage, target, source, move) {
+            if (move.type === 'Fire') {
+                target.useItem();
+            }
+        },
+        boosts: {
+            atk: 1,
+        },
+        num: 10007,
+        gen: 6,
+    },
+	goodnightpillow: {
+        name: "Good-Night Pillow",
+        spritenum: 456,
+        fling: {
+            basePower: 10,
+        },
+        onResidual(pokemon) {
+            if (pokemon.status === 'slp' || pokemon.ability === 'comatose') {
+                this.heal(pokemon.baseMaxhp / 10);
+            }
+        },
+        num: 10008,
         gen: 8,
     },
 };
