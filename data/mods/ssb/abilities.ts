@@ -921,7 +921,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Gimmick
 	ic3peak: {
-		shortDesc: "Refrigerate + Metronome (item).",
+		shortDesc: "Refrigerate + Echoed Voice modifier.",
 		name: "IC3PEAK",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -938,7 +938,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.refrigerateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
 		onStart(pokemon) {
-			pokemon.addVolatile('ic3peakmetronome');
+			pokemon.addVolatile('ic3peak');
 		},
 		condition: {
 			onStart(pokemon) {
@@ -948,10 +948,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
 				if (!pokemon.hasAbility('ic3peak')) {
-					pokemon.removeVolatile('ic3peakmetronome');
+					pokemon.removeVolatile('ic3peak');
 					return;
 				}
-				if (move.id === 'echoedvoice') return;
 				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectData.numConsecutive++;
 				} else {
@@ -959,10 +958,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				this.effectData.lastMove = move.id;
 			},
-			onModifyDamage(damage, source, target, move) {
-				const dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
-				const numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
-				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
+			onBasePowerPriority: 24,
+			onBasePower(basePower, pokemon, target, move) {
+				if (move.id === 'boomburst') return;
+				const dmgMod = [1, 2, 3, 4, 5];
+				const numConsecutive = this.effectData.numConsecutive > 4 ? 4 : this.effectData.numConsecutive;
+				console.log(dmgMod[numConsecutive]);
+				return this.chainModify(dmgMod[numConsecutive]);
 			},
 		},
 		isNonstandard: "Custom",

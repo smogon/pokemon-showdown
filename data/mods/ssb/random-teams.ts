@@ -325,7 +325,7 @@ export const ssbSets: SSBSets = {
 	},
 	Gimmick: {
 		species: 'Grimmsnarl', ability: 'IC3PEAK', item: 'Throat Spray', gender: 'M',
-		moves: ['Echoed Voice', 'Disarming Voice', 'Snarl'],
+		moves: ['Boomburst', 'Disarming Voice', 'Snarl'],
 		signatureMove: 'Random Screaming',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
