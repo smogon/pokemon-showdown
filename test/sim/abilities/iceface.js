@@ -24,7 +24,7 @@ describe('Ice Face', function () {
 		assert.hurts(eiscue, () => battle.makeChoices());
 	});
 
-	it.skip(`should not trigger if the Pokemon was KOed`, function () {
+	it(`should not trigger if the Pokemon was KOed`, function () {
 		battle = common.createBattle([[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [
