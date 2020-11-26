@@ -16994,7 +16994,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.1,
 		weightkg: 142,
 		color: "White",
-		prevo: "Ibroxiz",
+		evos: ["Corralloi"],
 		evoLevel: 37,
 		eggGroups: ["Field"],
 	},
@@ -17007,7 +17007,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 4.4,
 		weightkg: 68,
 		color: "White",
-		evos: ["Ibroxiz"],
+		prevo: "Ibroxiz",
 		eggGroups: ["Field"],
 	},
 	delibirdgalar: {

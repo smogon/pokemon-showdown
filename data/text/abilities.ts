@@ -1621,4 +1621,8 @@ export const AbilitiesText = {
 		desc: "If Toxic Cloud is active, this Pokemon's Speed is doubled.",
 		shortDesc: "If Toxic Cloud is active, this Pokemon's Speed is doubled;",
 	},
+	parasite: {
+        name: "Parasite",
+        shortDesc: "Holder gains 1.3x HP from draining moves/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+    },
 };

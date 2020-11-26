@@ -2222,4 +2222,12 @@ export const ItemsText = {
 		name: "Poison Rock",
 		desc: "Holder's use of Toxic Cloud lasts 8 turns instead of 5.",
 	},
+	goodnightpillow: {
+        name: "Good-Night Pillow",
+        desc: "Each turn, if holder is asleep, restores 1/10 max HP.",
+    },
+	firewood: {
+        name: "Fire Wood",
+        desc: "Raises holder's Attack by 1 if hit by an Fire-type attack. Single use.",
+    },
 };
