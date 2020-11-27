@@ -2364,7 +2364,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	desolateland: {
 		inherit: true,
 		onAnySetWeather(target, source, weather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'desolateland' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 		name: "Desolate Land",
@@ -2374,7 +2373,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	primordialsea: {
 		inherit: true,
 		onAnySetWeather(target, source, weather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 	},
