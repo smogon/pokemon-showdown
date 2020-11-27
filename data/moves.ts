@@ -774,11 +774,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'auroraveil',
-		onTry(source) {
-			if (!this.field.isWeather('hail')) {
-				this.add('-fail', source);
-				return false;
-			}
+		onTry() {
+			return this.field.isWeather('hail');
 		},
 		condition: {
 			duration: 5,
@@ -2188,7 +2185,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, sound: 1, dance: 1},
 		onTry(source) {
 			if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) {
-				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -2768,11 +2764,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 3,
 		flags: {},
 		sideCondition: 'craftyshield',
-		onTry(source) {
-			if (!!this.queue.willAct() === false) {
-				this.add('-fail', source);
-				return false;
-			}
+		onTry() {
+			return !!this.queue.willAct();
 		},
 		condition: {
 			duration: 1,
@@ -5508,10 +5501,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		volatileStatus: 'followme',
 		onTry(source) {
-			if (source.side.active.length < 2) {
-				this.add('-fail', source);
-				return false;
-			}
+			return source.side.active.length > 1;
 		},
 		condition: {
 			duration: 1,
@@ -9397,22 +9387,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry(source) {
+			if (source.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
 			let hasLastResort = false; // User must actually have Last Resort for it to succeed
-			let hasUsedAllMoves = true;
 			for (const moveSlot of source.moveSlots) {
 				if (moveSlot.id === 'lastresort') {
 					hasLastResort = true;
 					continue;
 				}
-				if (!moveSlot.used) hasUsedAllMoves = false;
+				if (!moveSlot.used) return false;
 			}
-
-			// Last Resort also fails unless the user knows at least 2 moves
-			if (source.moveSlots.length < 2 || !hasLastResort || !hasUsedAllMoves) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return false;
-			}
+			return hasLastResort;
 		},
 		secondary: null,
 		target: "normal",
@@ -10132,7 +10116,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'magnetrise',
 		onTry(source, target, move) {
 			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) {
-				this.add('-fail', source);
 				return false;
 			}
 
@@ -10236,14 +10219,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Mat Block only works on your first turn out.");
-				this.add('-fail', source);
 				return false;
 			}
-
-			if (!!this.queue.willAct() === false) {
-				this.add('-fail', source);
-				return false;
-			}
+			return !!this.queue.willAct();
 		},
 		condition: {
 			duration: 1,
@@ -11943,7 +11921,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'noretreat',
 		onTry(source, target, move) {
 			if (target.volatiles['noretreat']) {
-				this.add('-fail', source);
 				return false;
 			}
 			if (target.volatiles['trapped']) {
@@ -12753,11 +12730,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTry(source, target) {
-			if (!target.item) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return false;
-			}
+			return !!target.item;
 		},
 		onTryHit(target, source, move) {
 			this.add('-activate', target, 'move: Poltergeist', this.dex.getItem(target.item).name);
@@ -13541,10 +13514,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		sideCondition: 'quickguard',
 		onTry(source) {
-			if (!!this.queue.willAct() === false) {
-				this.add('-fail', source);
-				return false;
-			}
+			return !!this.queue.willAct();
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');
@@ -13644,10 +13614,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
 		onTry(source) {
-			if (source.side.active.length < 2) {
-				this.add('-fail', source);
-				return false;
-			}
+			return source.side.active.length > 1;
 		},
 		condition: {
 			duration: 1,
@@ -13967,7 +13934,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
 			if (source.status === 'slp' || source.hasAbility('comatose')) {
-				this.add('-fail', source);
 				return false;
 			}
 			if (source.hp === source.maxhp) {
@@ -15569,10 +15535,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onTry(source, target) {
-			if (target.fainted) {
-				this.add('-fail', source);
-				return false;
-			}
+			return !target.fainted;
 		},
 		onTryHit(target, source, move) {
 			if (source.removeVolatile(move.id)) {
@@ -15745,8 +15708,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sleepUsable: true,
 		onTry(source) {
 			if (source.status !== 'slp' && !source.hasAbility('comatose')) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -16040,8 +16001,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sleepUsable: true,
 		onTry(source) {
 			if (source.status !== 'slp' && !source.hasAbility('comatose')) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -16490,11 +16449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1},
 		onTry(source) {
-			if (!source.volatiles['stockpile']) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return false;
-			}
+			return !!source.volatiles['stockpile'];
 		},
 		onAfterMove(pokemon) {
 			pokemon.removeVolatile('stockpile');
@@ -16730,12 +16685,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTry(source) {
-			if (this.field.isTerrain('')) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return false;
-			}
+		onTry() {
+			return !this.field.isTerrain('');
 		},
 		onHit() {
 			this.field.clearTerrain();
@@ -16803,7 +16754,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		onTry(source) {
 			if (source.volatiles['stockpile'] && source.volatiles['stockpile'].layers >= 3) {
-				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -17079,7 +17029,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (item.isBerry && source.eatItem(true)) {
 				this.boost({def: 2}, source, null, null, false, true);
 			} else {
-				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -17224,9 +17173,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === 'move' ? action.move : null;
 			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
-				this.add('-fail', source);
-				this.attrLastMove('[still]');
-				return null;
+				return false;
 			}
 		},
 		secondary: null,
@@ -17395,7 +17342,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
 			if (!source.volatiles['stockpile'] || !source.volatiles['stockpile'].layers) {
-				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -19278,10 +19224,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		sideCondition: 'wideguard',
 		onTry(source) {
-			if (!!this.queue.willAct() === false) {
-				this.add('-fail', source);
-				return false;
-			}
+			return !!this.queue.willAct();
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');
