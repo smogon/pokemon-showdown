@@ -288,10 +288,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Billo')}|Yep, definitely hacked.`);
 		},
+		surName: "Unaware",
+		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		// Unaware innate
 		onAnyModifyBoost(boosts, pokemon) {
-			if (pokemon.illusion) return;
 			const unawareUser = this.effectData.target;
+			if (unawareUser.illusion) return;
 			if (unawareUser === pokemon) return;
 			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
 				boosts['def'] = 0;
@@ -346,6 +348,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	cake: {
 		noCopy: true,
+		surName: "h",
+		shortDesc: "On Switch in and at the end of every turn, it changes type randomly.",
 		onStart(target, pokemon) {
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
 			// h innate
@@ -404,6 +408,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('cant say')}|${['imagine taking pokemon seriously when you can just get haxed', '/me plays curb your enthusiasm theme', 'bad players always get lucky'][this.random(3)]}`);
 		},
+		surName: "Magic Guard",
+		shortDesc: "This Pokemon can only be damaged by direct attacks.",
 		// Magic Guard Innate
 		onDamage(damage, target, source, effect) {
 			if (target.illusion) return;
@@ -909,6 +915,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
 			this.add(`c|${getName('Kalalokki')}|(x_x)`);
 		},
+		surName: "Sturdy",
+		shortDesc: "If this Pokemon is at full HP, it survives one hit with at least 1 HP. Immune to OHKO.",
+		// Sturdy Innate
 		onTryHit(pokemon, target, move) {
 			if (move.ohko) {
 				this.add('-immune', pokemon, '[from] ability: Sturdy');
@@ -1187,6 +1196,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Nol')}|nerd`);
 		},
+		surName: "Prankster + Eviolite",
+		shortDesc: "+1 priority to status moves. 1.5x def and spd.",
 		// Innate Prankster and Eviolite
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') {
@@ -1196,12 +1207,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
+			if (pokemon.illusion) return;
 			if (pokemon.baseSpecies.nfe) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
+			if (pokemon.illusion) return;
 			if (pokemon.baseSpecies.nfe) {
 				return this.chainModify(1.5);
 			}
@@ -1383,6 +1396,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('ptoad')}|OKKKK DUUUDE`);
 		},
+		surName: "Sticky Hold",
+		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
+		// Sticky Hold Innate
 		onTakeItem(item, pokemon, source) {
 			if (this.suppressingAttackEvents(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
