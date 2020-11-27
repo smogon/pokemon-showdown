@@ -2352,6 +2352,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	deltastream: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'deltastream' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		name: "Delta Stream",
+		rating: 4,
+		num: 191,
+	},
+	desolateland: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'desolateland' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		name: "Desolate Land",
+		rating: 4.5,
+		num: 190,
+	},
+	primordialsea: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+	},
 	// Modified Unaware for Blaz's move
 	unaware: {
 		inherit: true,

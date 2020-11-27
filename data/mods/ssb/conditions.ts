@@ -1819,6 +1819,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onTryMove(attacker, defender, move) {
 			if (move.type === 'Steel' && move.category !== 'Status') {
 				this.debug('Heavy Hailstorm Steel suppress');
+				this.add('-message', 'The hail suppressed the move!');
 				this.add('-fail', attacker, move, '[from] Heavy Hailstorm');
 				this.attrLastMove('[still]');
 				return null;
@@ -1831,8 +1832,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'Hail');
+			this.add('-weather', 'Heavy Hailstorm');
 			this.effectData.source = source;
+			this.add('-message', 'The hail became extremely chilling!');
 		},
 		onModifyMove(move, pokemon, target) {
 			if (!this.field.isWeather('heavyhailstorm')) return;
@@ -1853,7 +1855,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Hail', '[upkeep]');
+			this.add('-weather', 'Heavy Hailstorm', '[upkeep]');
+			this.add('-message', 'Hail is crashing down.');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
@@ -1863,6 +1866,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onEnd() {
 			this.add('-weather', 'none');
+			this.add('-message', 'The Hail ended.');
 		},
 	},
 	// Forever Winter Hail support for piloswine gripado
@@ -1872,17 +1876,19 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		duration: 0,
 		onStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'Winter Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
-				this.add('-weather', 'Hail');
+				this.add('-weather', 'Winter Hail');
 			}
+			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.hasType('Ice')) return this.chainModify(0.5);
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Hail', '[upkeep]');
+			this.add('-weather', 'Winter Hail', '[upkeep]');
+			this.add('-message', 'Hail is crashing down.');
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
@@ -1890,7 +1896,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(target.baseMaxhp / 8);
 		},
 		onEnd() {
-			this.add('-end', 'hail');
+			this.add('-weather', 'none');
+			this.add('-message', 'The Hail ended.');
 		},
 	},
 	raindrop: {

@@ -2059,8 +2059,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onSwitchIn(pokemon) {
 				// Can be used by pokemon with boots.
-				this.add("-message", `Magnetized particles mends your wounds!`);
-				this.heal(pokemon.baseMaxhp / 4);
+				if (this.heal(pokemon.baseMaxhp / 4)) {
+					this.add("-message", `Magnetized particles mends your wounds!`);
+				} else {
+					return;
+				}
 				this.effectData.layers--;
 				if (this.effectData.layers < 1) {
 					pokemon.side.removeSideCondition(`ferrofluid`);
@@ -3552,15 +3555,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					};
 					const damage = this.getDamage(pokemon, pokemon, activeMove as ActiveMove);
 					if (typeof damage !== 'number') throw new Error("Shifting Rocks damage not dealt");
-					this.damage(damage);
-					this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
+					if (this.damage(damage)) {
+						this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
+					}
 					this.effectData.damage = 7;
 					pokemon.side.removeSideCondition(`shiftingrocks`);
 					return false;
 				}
-				this.damage(this.effectData.damage * pokemon.maxhp / 100);
+				if (this.damage(this.effectData.damage * pokemon.maxhp / 100)) {
+					this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
+				}
 				this.effectData.damage++;
-				this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
 			},
 			onEnd(side) {
 				this.add('-sideend', side, 'move: Shifting Rocks');
