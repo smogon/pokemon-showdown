@@ -7304,6 +7304,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 			},
+
 			onResidualOrder: 22,
 			onEnd() {
 				this.add('-fieldend', 'move: Gravity');
@@ -8590,7 +8591,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return null;
 			}
 			this.attrLastMove('[still]');
-			this.add('-fail', pokemon, 'move: Hyperspace Fury');
+			this.add('-fail', source, 'move: Hyperspace Fury');
 			return null;
 		},
 		self: {
