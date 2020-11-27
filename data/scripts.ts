@@ -572,11 +572,16 @@ export const Scripts: BattleScriptsData = {
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 
-		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+		let hitResult = this.singleEvent('Try', move, null, pokemon, target, move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
