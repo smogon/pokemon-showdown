@@ -730,8 +730,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.species.baseSpecies === 'Morpeko') {
 				return;
 			}
-			this.hint("Only a Pokemon whose form is Morpeko or Morpeko-Hangry can use this move.");
+			this.attrLastMove('[still]');
 			this.add('-fail', pokemon, 'move: Aura Wheel');
+			this.hint("Only a Pokemon whose form is Morpeko or Morpeko-Hangry can use this move.");
 			return null;
 		},
 		onModifyType(move, pokemon) {
@@ -773,8 +774,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'auroraveil',
-		onTry() {
-			if (!this.field.isWeather('hail')) return false;
+		onTry(pokemon) {
+			if (!this.field.isWeather('hail')) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		condition: {
 			duration: 5,
@@ -2184,6 +2188,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, sound: 1, dance: 1},
 		onTry(pokemon) {
 			if (pokemon.hp <= (pokemon.maxhp * 33 / 100) || pokemon.maxhp === 1) {
+				this.add('-fail', pokemon);
 				return false;
 			}
 		},
@@ -2764,7 +2769,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		sideCondition: 'craftyshield',
 		onTry(pokemon) {
-			return !!this.queue.willAct();
+			if (!!this.queue.willAct() === false) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		condition: {
 			duration: 1,
@@ -4584,7 +4592,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTry(pokemon, target) {
+		onTry(pokemon) {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
@@ -4940,10 +4948,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTry(pokemon, target) {
+		onTry(pokemon) {
 			if (pokemon.activeMoveActions > 1) {
-				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
 				this.hint("First Impression only works on your first turn out.");
 				return null;
 			}
@@ -5500,7 +5508,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		volatileStatus: 'followme',
 		onTry(pokemon) {
-			if (pokemon.side.active.length < 2) return false;
+			if (pokemon.side.active.length < 2) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		condition: {
 			duration: 1,
@@ -8574,9 +8585,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			this.hint("Only a Pokemon whose form is Hoopa Unbound can use this move.");
 			if (pokemon.species.name === 'Hoopa') {
+				this.attrLastMove('[still]');
 				this.add('-fail', pokemon, 'move: Hyperspace Fury', '[forme]');
 				return null;
 			}
+			this.attrLastMove('[still]');
 			this.add('-fail', pokemon, 'move: Hyperspace Fury');
 			return null;
 		},
@@ -9382,17 +9395,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTry(pokemon, target) {
-			if (pokemon.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
+		onTry(pokemon) {
 			let hasLastResort = false; // User must actually have Last Resort for it to succeed
+			let hasUsedAllMoves = true;
 			for (const moveSlot of pokemon.moveSlots) {
 				if (moveSlot.id === 'lastresort') {
 					hasLastResort = true;
 					continue;
 				}
-				if (!moveSlot.used) return false;
+				if (!moveSlot.used) hasUsedAllMoves = false;
 			}
-			return hasLastResort;
+
+			// Last Resort also fails unless the user knows at least 2 moves
+			if (pokemon.moveSlots.length < 2 || !hasLastResort || !hasUsedAllMoves) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -10111,7 +10130,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, gravity: 1},
 		volatileStatus: 'magnetrise',
 		onTry(source, target, move) {
-			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
+			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) {
+				this.add('-fail', source);
+				return false;
+			}
 
 			// Additional Gravity check for Z-move variant
 			if (this.field.getPseudoWeather('Gravity')) {
@@ -10213,9 +10235,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTry(pokemon) {
 			if (pokemon.activeMoveActions > 1) {
 				this.hint("Mat Block only works on your first turn out.");
+				this.add('-fail', pokemon);
 				return false;
 			}
-			return !!this.queue.willAct();
+			
+			if (!!this.queue.willAct() === false) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		condition: {
 			duration: 1,
@@ -11914,7 +11941,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		volatileStatus: 'noretreat',
 		onTry(source, target, move) {
-			if (target.volatiles['noretreat']) return false;
+			if (target.volatiles['noretreat']) {
+				this.add('-fail', source);
+				return false;
+			}
 			if (target.volatiles['trapped']) {
 				delete move.volatileStatus;
 			}
@@ -12721,11 +12751,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry(pokemon, target) {
+		onTry(source, target) {
 			if (!target.item) {
 				this.attrLastMove('[still]');
-				this.add('-fail', pokemon);
-				return null;
+				this.add('-fail', source);
+				return false;
 			}
 		},
 		onTryHit(target, source, move) {
@@ -13510,7 +13540,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		sideCondition: 'quickguard',
 		onTry(pokemon) {
-			return !!this.queue.willAct();
+			if (!!this.queue.willAct() === false) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');
@@ -13610,7 +13643,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
 		onTry(pokemon) {
-			if (pokemon.side.active.length < 2) return false;
+			if (pokemon.side.active.length < 2) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		condition: {
 			duration: 1,
@@ -13930,6 +13966,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onTry(pokemon) {
 			if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
+				this.add('-fail', pokemon);
 				return false;
 			}
 			if (pokemon.hp === pokemon.maxhp) {
@@ -13937,8 +13974,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return null;
 			}
 			if (pokemon.hasAbility(['insomnia', 'vitalspirit'])) {
-				// TODO: hook up [Pokemon] stayed awake! client message
-				this.add('-fail', pokemon);
+				this.add('-fail', pokemon, '[from] ability: ' + pokemon.ability, '[of] ' + pokemon);
 				return null;
 			}
 		},
@@ -14444,7 +14480,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onTry(target, source, move) {
+		onTry(source, target, move) {
 			for (const action of this.queue.list as MoveAction[]) {
 				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
 				if (action.move.id === 'round') {
@@ -15532,7 +15568,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onTry(source, target) {
-			if (target.fainted) return false;
+			if (target.fainted) {
+				this.add('-fail', source);
+				return false;
+			}
 		},
 		onTryHit(target, source, move) {
 			if (source.removeVolatile(move.id)) {
@@ -15704,7 +15743,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		sleepUsable: true,
 		onTry(pokemon) {
-			if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return false;
+			if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		onHit(pokemon) {
 			const noSleepTalk = [
@@ -15995,7 +16038,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		sleepUsable: true,
 		onTry(pokemon) {
-			if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return false;
+			if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -16443,6 +16490,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1},
 		onTry(pokemon) {
 			if (!pokemon.volatiles['stockpile']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
 				return false;
 			}
 		},
@@ -16681,7 +16730,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry() {
-			if (this.field.isTerrain('')) return false;
+			if (this.field.isTerrain('')) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		onHit() {
 			this.field.clearTerrain();
@@ -16748,7 +16801,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		onTry(pokemon) {
-			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) return false;
+			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		volatileStatus: 'stockpile',
 		condition: {
@@ -17022,6 +17078,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (item.isBerry && source.eatItem(true)) {
 				this.boost({def: 2}, source, null, null, false, true);
 			} else {
+				this.add('-fail', source);
 				return false;
 			}
 		},
@@ -17336,7 +17393,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onTry(pokemon) {
-			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
+			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
@@ -17819,6 +17879,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTry(source, target, move) {
 			// Additional Gravity check for Z-move variant
 			if (this.field.getPseudoWeather('Gravity')) {
+				this.attrLastMove('[still]');
 				this.add('cant', source, 'move: Gravity', move);
 				return null;
 			}
@@ -19216,7 +19277,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		sideCondition: 'wideguard',
 		onTry(pokemon) {
-			return !!this.queue.willAct();
+			if (!!this.queue.willAct() === false) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');
