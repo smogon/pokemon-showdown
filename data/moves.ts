@@ -7294,7 +7294,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 			},
-
 			onResidualOrder: 22,
 			onEnd() {
 				this.add('-fieldend', 'move: Gravity');
