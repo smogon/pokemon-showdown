@@ -5508,7 +5508,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		volatileStatus: 'followme',
 		onTry(source) {
-			if (pokemon.side.active.length < 2) {
+			if (source.side.active.length < 2) {
 				this.add('-fail', source);
 				return false;
 			}
