@@ -6474,7 +6474,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 			xscissor: ["8V", "7M", "7L66", "6M", "6L66", "5M", "5L66", "4M", "4L55"],
 			fungalbomb: ["8M", "7M"],
-			fungalbomb: ["8M", "7M"],
+			strengthsap: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 1, level: 13},
@@ -23121,6 +23121,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			nitricstrike: ["8M", "7M"],
 			poisonhorn: ["8M", "7M"],
 			webshield: ["8M", "7M"],
+			firstimpression: ["8M", "7M"],
+			psychicfangs: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 2, level: 7},
@@ -46925,6 +46927,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			xscissor: ["8M", "8L44", "7M", "6M", "5M", "4M"],
 			nitricstrike: ["8M", "7M"],
 			toxiccloud: ["8M", "7M"],
+			gunkshot: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 4, level: 22, pokeball: "safariball"},
@@ -51833,6 +51836,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			yawn: ["8E", "7E", "6E", "5E", "5D"],
 			zenheadbutt: ["8M", "8L20", "7T", "6T", "5T"],
 			psykiss: ["8M", "7M"],
+			teleport: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 30, gender: "F", nature: "Calm", abilities: ["healer"], moves: ["healpulse", "helpinghand", "refresh", "doubleslap"], pokeball: "cherishball"},

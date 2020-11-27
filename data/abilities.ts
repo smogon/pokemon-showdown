@@ -4809,4 +4809,82 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         rating: 4,
         num: 1023,
     },
+	fluffybond: {
+		onTryHit(pokemon, target, move) {
+			if (move.flags['pivot']) {
+				this.add('-immune', pokemon, '[from] ability: Fluffy Bond');
+				return null;
+			}
+		},
+		name: "Fluffy Bond",
+		rating: 3,
+		num: 1024,
+	},
+	visionary: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['future']) {
+				this.debug('Visionary boost');
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Visionary",
+		rating: 3,
+		num: 1025,
+	},
+	enthusiasm: {
+		// This should be applied directly to the stat as opposed to chaining with the others
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.modify(spa, 1.5);
+		},
+		onSourceModifyAccuracyPriority: 7,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (move.category === 'Special' && typeof accuracy === 'number') {
+				return accuracy * 0.8;
+			}
+		},
+		name: "Enthusiasm",
+		rating: 3.5,
+		num: 1026,
+	},
+	hybris: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({spa: length}, source);
+			}
+		},
+		name: "Hybris",
+		rating: 3,
+		num: 1027,
+	},
+	blazeroar: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+				move.type = 'Fire';
+			}
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Blaze Roar boost');
+				return this.chainModify(1.1);
+			}
+		},
+		name: "Blaze Roar",
+		rating: 1.5,
+		num: 1028,
+	},
+	strongwinds: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['wind']) {
+				this.debug('Strong Winds boost');
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Strong Winds",
+		rating: 3,
+		num: 1029,
+	},
 };

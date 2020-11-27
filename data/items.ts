@@ -7232,18 +7232,6 @@ export const Items: {[itemid: string]: ItemData} = {
         num: 10005,
         gen: 8,
     },
-	// bagofcaltrops: {
-        // name: "Bag of Caltrops",
-        // spritenum: 2,
-        // onDamagingHitOrder: 1,
-		// onDamagingHit(damage, target, source, move) {
-			// if (!target.hp) {
-				// this.useMove("spikes",target);
-			// }
-		// },
-        // num: 10006,
-        // gen: 8,
-    // },
 	bagofcaltrops: {
         name: "Bag of Caltrops",
         spritenum: 2,
@@ -7284,4 +7272,43 @@ export const Items: {[itemid: string]: ItemData} = {
         num: 10008,
         gen: 8,
     },
+	satellitescope: {
+		name: "Satellite Scope",
+		spritenum: 359,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Cosmic') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		num: 10009,
+		gen: 2,
+	},
+	lantern: {
+		name: "Lantern",
+		spritenum: 252,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Light') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		num: 10010,
+		gen: 2,
+	},
+	gravityrock: {
+		name: "Gravity Rock",
+		spritenum: 34,
+		fling: {
+			basePower: 60,
+		},
+		num: 10011,
+		gen: 4,
+	},
 };
