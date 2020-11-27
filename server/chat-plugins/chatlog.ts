@@ -20,6 +20,8 @@ const MAX_MEMORY = 67108864; // 64MB
 const MAX_PROCESSES = 1;
 const MAX_TOPUSERS = 100;
 
+const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog'];
+
 interface ChatlogSearch {
 	raw?: boolean;
 	search: string;
@@ -905,11 +907,18 @@ export const pages: PageTable = {
 				return this.errorReply(`Access denied.`);
 			}
 		}
-		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
-			return this.errorReply("SPL team discussions are super secret.");
-		}
-		if (roomid.startsWith('wcop') && !user.can('rangeban')) {
-			return this.errorReply("WCOP team discussions are super secret.");
+
+		if (!user.can('rangeban')) {
+			// Some chatlogs can only be viewed by upper staff
+			if (roomid.startsWith('spl') && roomid !== 'splatoon') {
+				return this.errorReply("SPL team discussions are super secret.");
+			}
+			if (roomid.startsWith('wcop')) {
+				return this.errorReply("WCOP team discussions are super secret.");
+			}
+			if (UPPER_STAFF_ROOMS.includes(roomid)) {
+				return this.errorReply("Upper staff rooms are super secret.");
+			}
 		}
 		if (room) {
 			if (!user.can('lock') || room.settings.isPrivate === 'hidden' && !room.checkModjoin(user)) {
