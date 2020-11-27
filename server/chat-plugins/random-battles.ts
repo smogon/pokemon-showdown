@@ -525,8 +525,8 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 	let effect = dex.getEffect(name + 'user');
 	let longDesc = ``;
 	const baseAbility = Dex.deepClone(baseDex.getAbility('noability'));
-	if (effect.exists && effect.name && (effect.desc || effect.shortDesc)) {
-		baseAbility.name = effect.name;
+	if (effect.exists && effect.surName && (effect.desc || effect.shortDesc)) {
+		baseAbility.name = effect.surName;
 		if (effect.desc) baseAbility.desc = effect.desc;
 		if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
 		buf += `<hr />${Chat.getDataAbilityHTML(baseAbility)}`;
@@ -535,8 +535,8 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 		}
 	} else {
 		effect = dex.getEffect(name);
-		if (effect.exists && effect.name && (effect.desc || effect.shortDesc)) {
-			baseAbility.name = effect.name;
+		if (effect.exists && effect.surName && (effect.desc || effect.shortDesc)) {
+			baseAbility.name = effect.surName;
 			if (effect.desc) baseAbility.desc = effect.desc;
 			if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
 			buf += `<hr />${Chat.getDataAbilityHTML(baseAbility)}`;

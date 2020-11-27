@@ -2211,12 +2211,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Instruct
-	youlittlebeauty: {
+	submein: {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
 		shortDesc: "First turn: Flinches the oppnent then switches out",
-		name: "You Little Beauty",
+		name: "Sub Me In",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -2232,7 +2232,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("You Little Beauty can only works on your first turn out.");
+				this.hint("Sub Me In can only works on your first turn out.");
 				return null;
 			}
 		},

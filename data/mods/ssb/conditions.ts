@@ -803,6 +803,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('INStruct')}|bg :^(`);
 			this.add(`c|${getName('INStruct')}|/log ${source.side.name} was reported by INStruct. (throwing)`);
 		},
+		surName: "Extinction Level Event",
+		shortDesc: "Deals 50% of their max hp to those who made contact upon death",
 		//  Innate
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
@@ -826,7 +828,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 					if (!foe.m.marked) continue;
 					this.add('-activate', target, 'ability: Extinction Level Event');
 					this.add('-message', `The bomb detonated!`);
-					this.directDamage(this.clampIntRange(foe.hp / 2, 1), foe);
+					let collateral = this.clampIntRange(foe.baseMaxhp / 2, 1);
+					if (collateral >= foe.hp) collateral = foe.hp - 1;
+					this.directDamage(collateral, foe);
 				}
 			}
 		},
@@ -980,8 +984,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	kris: {
-		// name: "phuck",
-		// shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
+		surName: "phuck",
+		shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
 		noCopy: true,
 		onStart(source) {
 			const foeName = source.side.foe.active[0].illusion ?
