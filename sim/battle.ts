@@ -1544,6 +1544,17 @@ export class Battle {
 		}
 
 		this.add('turn', this.turn);
+		if (this.gameType === 'multi') {
+			for (const side of this.sides) {
+				if (side.canDynamaxNow()) {
+					if (this.turn === 1) {
+						this.addSplit(side.id, ['canDynamax', side.id]);
+					} else {
+						this.add('canDynamax', side.id);
+					}
+				}
+			}
+		}
 
 		this.makeRequest('move');
 	}
@@ -2623,14 +2634,8 @@ export class Battle {
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
-			for (const pokemon of action.pokemon.side.pokemon) {
-				pokemon.canDynamax = false;
-			}
-			if (action.pokemon.side.ally) {
-				for (const pokemon of action.pokemon.side.ally.pokemon) {
-					pokemon.canDynamax = false;
-				}
-			}
+			action.pokemon.side.dynamaxUsed = true;
+			if (action.pokemon.side.ally) action.pokemon.side.ally.dynamaxUsed = true;
 			break;
 		case 'beforeTurnMove': {
 			if (!action.pokemon.isActive) return false;
