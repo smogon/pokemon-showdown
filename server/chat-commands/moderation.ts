@@ -121,7 +121,7 @@ export const commands: ChatCommands = {
 		if (room.auth.getDirect(userid) === '#') return this.errorReply(`${name} is already a room owner.`);
 
 		room.auth.set(userid, '#');
-		const message = Utils.html`${name} was appointed Room Owner by ${user.name}.`;
+		const message = `${name} was appointed Room Owner by ${user.name}.`;
 		if (room.settings.isPrivate === true) {
 			this.addModAction(message);
 			Rooms.get(`upperstaff`)?.addByUser(user, `<<${room.roomid}>> ${message}`).update();
@@ -189,8 +189,11 @@ export const commands: ChatCommands = {
 			try {
 				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
 			} catch (err) {
-				if (err.name?.endsWith('ErrorMessage')) this.errorReply(err.message);
-				continue;
+				if (err.name?.endsWith('ErrorMessage')) {
+					this.errorReply(err.message);
+					continue;
+				}
+				throw err;
 			}
 			const targetUser = Users.getExact(userid);
 			const name = targetUser?.name || toPromote;

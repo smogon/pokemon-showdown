@@ -1400,9 +1400,11 @@ export const Items: {[itemid: string]: ItemData} = {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
+				target.switchFlag = true;
 				if (target.useItem()) {
-					target.switchFlag = true;
 					source.switchFlag = false;
+				} else {
+					target.switchFlag = false;
 				}
 			}
 		},
@@ -3377,8 +3379,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		condition: {
 			onStart(pokemon) {
-				this.effectData.numConsecutive = 0;
 				this.effectData.lastMove = '';
+				this.effectData.numConsecutive = 0;
 			},
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
@@ -3388,6 +3390,8 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectData.numConsecutive++;
+				} else if (pokemon.volatiles['twoturnmove'] && this.effectData.lastMove !== move.id) {
+					this.effectData.numConsecutive = 1;
 				} else {
 					this.effectData.numConsecutive = 0;
 				}

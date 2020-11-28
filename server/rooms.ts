@@ -703,6 +703,39 @@ export abstract class BasicRoom {
 		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
 		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
+	setPrivate(privacy: boolean | 'voice' | 'hidden') {
+		this.settings.isPrivate = privacy;
+		this.saveSettings();
+
+		if (privacy) {
+			for (const user of Object.values(this.users)) {
+				if (!user.named) {
+					user.leaveRoom(this.roomid);
+					user.popup(`The room <<${this.roomid}>> has been made private; you must log in to be in private rooms.`);
+				}
+			}
+		}
+
+		if (this.battle) {
+			if (privacy) {
+				if (this.roomid.endsWith('pw')) return true;
+
+				// This is the same password generation approach as genPassword in the client replays.lib.php
+				// but obviously will not match given mt_rand there uses a different RNG and seed.
+				let password = '';
+				for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+
+				this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
+			} else {
+				if (!this.roomid.endsWith('pw')) return true;
+
+				const lastDashIndex = this.roomid.lastIndexOf('-');
+				if (lastDashIndex < 0) throw new Error(`invalid battle ID ${this.roomid}`);
+
+				this.rename(this.title, this.roomid.slice(0, lastDashIndex) as RoomID);
+			}
+		}
+	}
 
 	/**
 	 * Displays a warning popup to all users in the room.
@@ -1678,30 +1711,6 @@ export class GameRoom extends BasicRoom {
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
 		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
 	}
-
-	makePrivate(privacy: true | 'hidden' | 'voice') {
-		// This is the same password generation approach as genPassword in the client replays.lib.php
-		// but obviously will not match given mt_rand there uses a different RNG and seed.
-		let password = '';
-		for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-
-		this.settings.isPrivate = privacy;
-		for (const user of Object.values(this.users)) {
-			if (!user.named) {
-				user.leaveRoom(this.roomid);
-				user.popup(`The battle <<${this.roomid}>> has been made private; you must log in to watch private battles.`);
-			}
-		}
-		if (this.roomid.endsWith('pw')) return true;
-		this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
-	}
-
-	makePublic() {
-		this.settings.isPrivate = false;
-		if (!this.roomid.endsWith('pw')) return true;
-		const {id} = this.getReplayData();
-		this.rename(this.title, `battle-${id}` as RoomID);
-	}
 }
 
 function getRoom(roomid?: string | BasicRoom) {
@@ -1820,11 +1829,11 @@ export const Rooms = {
 
 		if (privacySetter.size) {
 			if (battle.forcePublic) {
-				room.makePublic();
+				room.setPrivate(false);
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
-				room.makePrivate('hidden');
+				room.setPrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {

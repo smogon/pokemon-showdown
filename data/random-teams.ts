@@ -666,7 +666,7 @@ export class RandomTeams {
 
 				switch (moveid) {
 				// Not very useful without their supporting moves
-				case 'acrobatics': case 'drainingkiss': case 'junglehealing':
+				case 'acrobatics': case 'junglehealing':
 					if (!counter.setupType && !isDoubles) rejected = true;
 					break;
 				case 'destinybond': case 'healbell':
@@ -925,8 +925,7 @@ export class RandomTeams {
 					if (hasMove['morningsun']) rejected = true;
 					break;
 				case 'psychic':
-					if ((hasMove['psyshock'] || hasMove['storedpower']) && counter.setupType) rejected = true;
-					if (isDoubles && hasMove['psyshock']) rejected = true;
+					if (hasMove['psyshock'] && (counter.setupType || isDoubles)) rejected = true;
 					break;
 				case 'psyshock':
 					if ((hasMove['psychic'] || hasAbility['Pixilate']) && counter.Special < 4 && !counter.setupType) rejected = true;
@@ -959,7 +958,6 @@ export class RandomTeams {
 					break;
 				case 'darkpulse':
 					if ((hasMove['foulplay'] || hasMove['knockoff'] || hasMove['suckerpunch'] || hasMove['defog']) && counter.setupType !== 'Special') rejected = true;
-					if (!hasType['Dark'] && !!counter.Status) rejected = true;
 					break;
 				case 'knockoff':
 					if (hasMove['darkestlariat']) rejected = true;
@@ -972,7 +970,7 @@ export class RandomTeams {
 					if (movePool.includes('extremespeed')) rejected = true;
 					break;
 				case 'dazzlinggleam':
-					if (hasMove['fleurcannon'] || hasMove['moonblast'] || counter.setupType && hasMove['drainingkiss']) rejected = true;
+					if (hasMove['fleurcannon'] || hasMove['moonblast'] || hasMove['petaldance']) rejected = true;
 					break;
 
 				// Status:
@@ -994,7 +992,7 @@ export class RandomTeams {
 					if (moveid === 'synthesis' && hasMove['gigadrain']) rejected = true;
 					break;
 				case 'roost':
-					if (hasMove['stoneedge'] || hasMove['throatchop']) rejected = true;
+					if (hasMove['throatchop'] || hasMove['stoneedge'] && !hasType['Rock']) rejected = true;
 					break;
 				case 'reflect': case 'lightscreen':
 					if (teamDetails.screens) rejected = true;
@@ -1002,6 +1000,7 @@ export class RandomTeams {
 				case 'substitute':
 					if (hasMove['facade'] || hasMove['rest'] || hasMove['uturn']) rejected = true;
 					if (movePool.includes('bulkup') || movePool.includes('painsplit') || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
+					if (isDoubles && movePool.includes('powerwhip')) rejected = true;
 					break;
 				case 'helpinghand':
 					if (hasMove['acupressure']) rejected = true;
@@ -1107,6 +1106,8 @@ export class RandomTeams {
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Analytic') {
 					rejectAbility = (hasMove['rapidspin'] || species.nfe || isDoubles);
+				} else if (ability === 'Blaze') {
+					rejectAbility = (isDoubles && hasAbility['Solar Power']);
 				} else if (ability === 'Bulletproof' || ability === 'Overcoat') {
 					rejectAbility = (counter.setupType && hasAbility['Soundproof']);
 				} else if (ability === 'Chlorophyll') {
@@ -1275,6 +1276,8 @@ export class RandomTeams {
 			item = 'Leek';
 		} else if (species.name === 'Froslass' && !isDoubles) {
 			item = 'Wide Lens';
+		} else if (species.name === 'Latios' && counter.Special === 2 && !isDoubles) {
+			item = 'Soul Dew';
 		} else if (species.name === 'Lopunny') {
 			item = isDoubles ? 'Iron Ball' : 'Toxic Orb';
 		} else if (species.baseSpecies === 'Marowak') {
@@ -1288,7 +1291,7 @@ export class RandomTeams {
 			item = (!teamDetails.defog && !teamDetails.rapidSpin && !isDoubles) ? 'Heavy-Duty Boots' : 'Focus Sash';
 		} else if (species.name === 'Shuckle' && hasMove['stickyweb']) {
 			item = 'Mental Herb';
-		} else if (species.name === 'Tangrowth' && !!counter.Status && !isDoubles) {
+		} else if (['Corsola', 'Tangrowth'].includes(species.name) && !!counter.Status && !isDoubles) {
 			item = 'Rocky Helmet';
 		} else if (species.name === 'Unfezant' || hasMove['focusenergy']) {
 			item = 'Scope Lens';
@@ -1324,7 +1327,7 @@ export class RandomTeams {
 			item = (ability === 'Grassy Surge') ? 'Grassy Seed' : '';
 		} else if (hasMove['auroraveil'] || hasMove['lightscreen'] && hasMove['reflect']) {
 			item = 'Light Clay';
-		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Pressure' && ability !== 'Shed Skin') {
+		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Shed Skin') {
 			item = 'Chesto Berry';
 		} else if (hasMove['hypnosis'] && ability === 'Beast Boost') {
 			item = 'Blunder Policy';
@@ -1351,7 +1354,7 @@ export class RandomTeams {
 		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 60 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['electroweb'] &&
 			!hasMove['fakeout'] && !hasMove['feint'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['uturn']
 		) {
-			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
+			item = (ability === 'Defeatist' || species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 
 		// Medium priority
 		} else if (counter.Physical >= 4 && ability !== 'Serene Grace' && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && (!hasMove['tailslap'] || hasMove['uturn']) && !isDoubles) {
@@ -1468,7 +1471,7 @@ export class RandomTeams {
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
-				if (species.battleOnly && typeof species.battleOnly === 'string') {
+				if (typeof species.battleOnly === 'string') {
 					species = this.dex.getSpecies(species.battleOnly);
 					if (!species.types.includes(type)) continue;
 				}
@@ -1525,10 +1528,7 @@ export class RandomTeams {
 				case 'Arceus': case 'Silvally':
 					if (this.randomChance(8, 9)) continue;
 					break;
-				case 'Castform':
-					if (this.randomChance(2, 3)) continue;
-					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Giratina': case 'Gourgeist': case 'Meloetta':
+				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
 				case 'Greninja':

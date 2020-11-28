@@ -854,7 +854,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	kingsrock: {
 		name: "King's Rock",
-		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
+		desc: "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
 	kommoniumz: {
@@ -961,7 +961,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	lumberry: {
 		name: "Lum Berry",
-		desc: "Holder cures itself if it is confused or has a major status condition. Single use.",
+		desc: "Holder cures itself if it has a non-volatile status or is confused. Single use.",
 	},
 	luminousmoss: {
 		name: "Luminous Moss",
@@ -1388,7 +1388,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	razorfang: {
 		name: "Razor Fang",
-		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Gligar into Gliscor when held and leveled up during the night.",
+		desc: "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Gligar into Gliscor when held and leveled up during the night.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
 	razzberry: {

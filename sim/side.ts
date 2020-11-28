@@ -56,9 +56,12 @@ export class Side {
 	active: Pokemon[];
 
 	pokemonLeft: number;
+	zMoveUsed: boolean;
+
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
-	zMoveUsed: boolean;
+	/** only used by Gen 1 Counter */
+	lastSelectedMove: ID = '';
 
 	sideConditions: {[id: string]: EffectState};
 	slotConditions: {[id: string]: EffectState}[];
@@ -469,12 +472,16 @@ export class Side {
 
 		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
-			const lockedMoveTarget = pokemon.lastMoveTargetLoc || 0;
+			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
+			const lockedMoveID = toID(lockedMove);
+			if (pokemon.volatiles[lockedMoveID] && pokemon.volatiles[lockedMoveID].targetLoc) {
+				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
+			}
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon,
-				targetLoc: lockedMoveTarget,
-				moveid: toID(lockedMove),
+				targetLoc: lockedMoveTargetLoc,
+				moveid: lockedMoveID,
 			});
 			return true;
 		} else if (!moves.length && !zMove) {

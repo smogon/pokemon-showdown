@@ -78,8 +78,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 106,
 	},
 	airlock: {
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
+			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			this.add('-ability', pokemon, 'Air Lock');
+			this.effectData.switchingIn = false;
 		},
 		suppressWeather: true,
 		name: "Air Lock",
@@ -401,8 +407,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 29,
 	},
 	cloudnine: {
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
+			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			this.add('-ability', pokemon, 'Cloud Nine');
+			this.effectData.switchingIn = false;
 		},
 		suppressWeather: true,
 		name: "Cloud Nine",
@@ -987,6 +999,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
+			if (!pokemon.hp) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
@@ -1508,6 +1521,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyWeatherStart() {
 			const pokemon = this.effectData.target;
+			if (!pokemon.hp) return;
 			if (this.field.isWeather('hail') && pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectData.busted = false;
@@ -2440,7 +2454,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	parentalbond: {
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
-			if (['iceball', 'rollout'].includes(move.id)) return;
+			if (['endeavor', 'fling', 'iceball', 'rollout'].includes(move.id)) return;
 			if (!move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
 				move.multihitType = 'parentalbond';
@@ -3529,8 +3543,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 192,
 	},
 	stancechange: {
-		onBeforeMovePriority: 0.5,
-		onBeforeMove(attacker, defender, move) {
+		onModifyMovePriority: 1,
+		onModifyMove(move, attacker, defender) {
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
@@ -3767,6 +3781,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	symbiosis: {
 		onAllyAfterUseItem(item, pokemon) {
+			if (pokemon.switchFlag) return;
 			const source = this.effectData.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;

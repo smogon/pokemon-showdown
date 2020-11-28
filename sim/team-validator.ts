@@ -991,7 +991,7 @@ export class TeamValidator {
 				generation: 2,
 				level: isMew ? 5 : isCelebi ? 30 : undefined,
 				perfectIVs: isMew || isCelebi ? 5 : 3,
-				isHidden: true,
+				isHidden: !!this.dex.mod('gen7').getSpecies(species.id).abilities['H'],
 				shiny: isMew ? undefined : 1,
 				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',

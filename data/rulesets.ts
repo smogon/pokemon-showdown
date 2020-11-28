@@ -826,6 +826,16 @@ export const Formats: {[k: string]: FormatData} = {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},
 	},
+	desyncclausemod: {
+		effectType: 'Rule',
+		name: 'Desync Clause Mod',
+		desc: 'If a desync would happen, the move fails instead. This rule currently covers Psywave and Counter.',
+		onBegin() {
+			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
+		},
+		// Hardcoded in gen1/moves.ts
+		// Can't be disabled (no precedent for how else to handle desyncs)
+	},
 	freezeclausemod: {
 		effectType: 'Rule',
 		name: 'Freeze Clause Mod',
@@ -907,19 +917,6 @@ export const Formats: {[k: string]: FormatData} = {
 				pokemon.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
-		},
-	},
-	dynamaxubersclause: {
-		effectType: 'Rule',
-		name: 'Dynamax Ubers Clause',
-		desc: "Prevents Pok&eacute;mon on the Ubers dynamax banlist from dynamaxing",
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (this.ruleTable.isRestrictedSpecies(pokemon.species)) {
-					pokemon.canDynamax = false;
-				}
-			}
-			this.add('html', 'Ubers Dynamax Clause: Pokémon on the <a href="https://www.smogon.com/dex/ss/formats/uber/">Ubers Dynamax Banlist</a> cannot Dynamax.');
 		},
 	},
 	arceusevlimit: {
