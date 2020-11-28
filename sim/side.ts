@@ -59,7 +59,7 @@ export class Side {
 	zMoveUsed: boolean;
 	/**
 	 * This will be true in any gen before 8 or if the player (or their battle partner) has dynamaxed once already
-	 * 
+	 *
 	 * Use Side.canDynamaxNow() to check if a side can dynamax instead of this property because only one
 	 * player per team can dynamax on any given turn of a gen 8 Multi Battle.
 	 */
