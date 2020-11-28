@@ -34,7 +34,7 @@ describe('Max Guard', function () {
 		assert.false.fainted(minun);
 	});
 
-	it.skip('should block certain moves that bypass Protect', function () {
+	it('should block certain moves that bypass Protect', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'minun', ability: 'plus', moves: ['sleeptalk']},
 			{species: 'plusle', moves: ['magneticflux']},

@@ -84,4 +84,18 @@ describe('Teatime', function () {
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, 'sitrusberry');
 	});
+
+	it('should not bypass Max Guard', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', item: 'sitrusberry', moves: ['sleeptalk']},
+			{species: 'wynaut', item: 'sitrusberry', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', evs: {spe: 252}, moves: ['teatime']},
+			{species: 'wynaut', evs: {spe: 252}, moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleeptalk dynamax, move sleeptalk', 'move teatime, move sleeptalk');
+
+		assert.equal(battle.p1.pokemon[0].item, 'sitrusberry');
+		assert.equal(battle.p1.pokemon[1].item, '');
+	});
 });

@@ -59,6 +59,23 @@ describe('Psych Up', function () {
 		battle.makeChoices('move psychup 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		assert.statStage(palkia, 'atk', -2, "A pokemon should copy the target's negative stat changes when using Psych Up.");
 	});
+
+	it('should not bypass Max Guard', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'psychup']},
+			{species: 'Smeargle', level: 1, moves: ['sleeptalk', 'swordsdance', 'featherdance']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
+			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
+		]});
+		const palkia = battle.p1.active[0];
+
+		battle.makeChoices('move sleeptalk, move swordsdance', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices('move psychup -2, move sleeptalk dynamax', 'move sleeptalk, move sleeptalk');
+		assert.statStage(palkia, 'atk', 0, "A Pokemon cannot copy a Pokemon that has used Max Guard.");
+	});
 });
 
 describe('Psych Up [Gen 5]', function () {

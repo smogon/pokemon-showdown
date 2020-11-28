@@ -29,4 +29,25 @@ describe('Gear Up', function () {
 			assert.statStage(active, 'spa', 1);
 		}
 	});
+
+	it('does not bypass Max Guard', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Minun", ability: 'minus', moves: ['sleeptalk']},
+			{species: "Klinklang", ability: 'plus', moves: ['gearup']},
+		], [
+			{species: "Plusle", ability: 'plus', moves: ['sleeptalk']},
+			{species: "Klinklang", ability: 'minus', moves: ['gearup']},
+		]]);
+
+		battle.makeChoices('move sleeptalk dynamax, move gearup', 'move sleeptalk, move gearup');
+		for (const active of battle.getAllActive()) {
+			if (active.name === 'Minun') {
+				assert.statStage(active, 'atk', 0);
+				assert.statStage(active, 'spa', 0);
+			} else {
+				assert.statStage(active, 'atk', 1);
+				assert.statStage(active, 'spa', 1);
+			}
+		}
+	});
 });
