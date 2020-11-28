@@ -588,41 +588,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ground",
 	},
-	// a random duck
-	flock: {
-		basePower: 100,
-		accuracy: 100,
-		category: "Special",
-		desc: "This move suppresses the foe's ability and has a 70% chance to boost the user's Special Attack and Speed by one stage.",
-		shortDesc: "70% SpA & Spe +1. Suppresses foe's ability.",
-		name: "Flock",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {mirror: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Cosmic Power', source);
-			this.add('-anim', source, 'Brave Bird', target);
-			this.add('-anim', source, 'Judgment', target);
-		},
-		onHit(target, source) {
-			target.addVolatile('gastroacid', source);
-		},
-		secondary: {
-			chance: 70,
-			self: {
-				boosts: {
-					spa: 1,
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Flying",
-	},
 	// Arcticblast
 	trashalanche: {
 		basePower: 80,
