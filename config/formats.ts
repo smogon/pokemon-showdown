@@ -790,10 +790,15 @@ export const Formats: FormatList = [
 			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody',
 			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
+		restricted: ['Zacian-Crowned'],
 		onValidateSet(set) {
-			if (set.species === 'Zacian-Crowned' &&
-				(this.dex.toID(set.item) !== 'rustedsword' || this.dex.toID(set.ability) !== 'intrepidsword')) {
-				return [set.species + " is banned."];
+			const ability = this.dex.getAbility(set.ability);
+			if (set.species === 'Zacian-Crowned') {
+				if (this.dex.toID(set.item) !== 'rustedsword' || ability.id !== 'intrepidsword') {
+					return [`${set.species} is banned.`];
+				}
+			} else if (ability.id === 'intrepidsword') {
+				return [`${set.name}'s ability ${ability.name} is banned.`];
 			}
 		},
 		onChangeSet(set) {
