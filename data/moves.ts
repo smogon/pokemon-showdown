@@ -13923,7 +13923,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
 			if (source.status === 'slp' || source.hasAbility('comatose')) return false;
-			
+
 			if (source.hp === source.maxhp) {
 				this.add('-fail', source, 'heal');
 				return null;
