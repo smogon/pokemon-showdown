@@ -577,10 +577,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.timer = null;
 			this.timerEnd = null;
 		}
-		
-		if (minutes == 0) { 
+
+		if (minutes === 0) {
 			return 'off';
-		}		
+		}
 		if (minutes > 24 * 60) { // 24 hours
 			throw new Chat.ErrorMessage(`Time limit must be under 24 hours (you asked for ${Chat.toDurationString(minutes * 60000)}).`);
 		}
@@ -1486,15 +1486,8 @@ const ScavengerCommands: ChatCommands = {
 		this.checkCan('mute', null, room);
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
-		
-		let minutes;
-		if (target == "off") {
-			minutes = 0;
-		}
-		else {
-			minutes = parseFloat(target);
-		}
 
+		const minutes = (toID(target) === 'off' ? 0 : parseFloat(target));
 		if (isNaN(minutes) || minutes < 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
 			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
 		}
