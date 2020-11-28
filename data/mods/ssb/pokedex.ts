@@ -45,11 +45,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 95, atk: 65, def: 85, spa: 65, spd: 85, spe: 35},
 	},
-	// a random duck
-	ducklett: {
-		inherit: true,
-		baseStats: {hp: 62, atk: 88, def: 100, spa: 44, spd: 100, spe: 110},
-	},
 	// Billo
 	cosmog: {
 		inherit: true,

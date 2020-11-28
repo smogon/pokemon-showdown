@@ -108,12 +108,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Scorching Sands',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
 	},
-	'a random duck': {
-		species: 'Ducklett', ability: 'Gale Wings v1', item: 'Heavy Duty Boots', gender: 'M',
-		moves: ['Thousand Waves', 'Liquidation', ['Brave Bird', 'Dragon Ascent']],
-		signatureMove: 'Grapes',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
-	},
 	Arby: {
 		species: 'Keldeo-Resolute', ability: 'Wave Surge', item: 'Expert Belt', gender: '',
 		moves: ['Hydro Pump', 'Secret Sword', 'Ice Beam'],

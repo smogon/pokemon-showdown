@@ -538,39 +538,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
-	// a random duck
-	grapes: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Restores 50% HP, 50% Chance to boost Attack OR Speed 1 stage",
-		shortDesc: "Restores 50% HP, 50% Chance to boost Attack OR Speed 1 stage,",
-		name: "Grapes",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {heal: 1, snatch: 1},
-		heal: [1, 2],
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Splash', source);
-			this.add('-anim', source, 'Dragon Dance', source);
-			this.add('-anim', source, 'Roost', source);
-		},
-		onHit(target, source, move) {
-			if (!this.randomChance(1, 2)) return;
-			const boostName: string[] = ['atk', 'spe'];
-			const boost: {[key: string]: number} = {};
-			boost[boostName[this.random(2)]] = 1;
-			this.boost(boost, target);
-		},
-		target: "self",
-		type: "Flying",
-	},
-
 	// Arby
 	quickhammer: {
 		accuracy: 100,

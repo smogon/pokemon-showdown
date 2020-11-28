@@ -174,15 +174,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('A Quag To The Past')}|You're gonna carry that weight.`);
 		},
 	},
-	arandomduck: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('a random duck')}|Hey! Got any grapes??`);
-		},
-		onFaint() {
-			this.add(`c|${getName('a random duck')}|and he waddled away... bum bum bum`);
-		},
-	},
 	arby: {
 		noCopy: true,
 		onStart() {

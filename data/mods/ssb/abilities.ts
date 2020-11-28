@@ -393,18 +393,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// a random duck
-	galewingsv1: {
-		desc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
-		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.type === 'Flying') return priority + 1;
-		},
-		name: "Gale Wings v1",
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
 	// Arby
 	wavesurge: {
 		shortDesc: "On switch-in, this Pokemon summons Wave Terrain.",
