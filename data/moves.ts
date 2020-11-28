@@ -2184,9 +2184,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, sound: 1, dance: 1},
 		onTry(source) {
-			if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) {
-				return false;
-			}
+			if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) return false;
 		},
 		onTryHit(pokemon, target, move) {
 			if (!this.boost(move.boosts as SparseBoostsTable)) return null;
@@ -4587,10 +4585,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
 				this.hint("Fake Out only works on your first turn out.");
-				return null;
+				return false;
 			}
 		},
 		secondary: {
@@ -4943,10 +4939,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
 				this.hint("First Impression only works on your first turn out.");
-				return null;
+				return false;
 			}
 		},
 		secondary: null,
@@ -10114,9 +10108,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, gravity: 1},
 		volatileStatus: 'magnetrise',
 		onTry(source, target, move) {
-			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) {
-				return false;
-			}
+			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 
 			// Additional Gravity check for Z-move variant
 			if (this.field.getPseudoWeather('Gravity')) {
@@ -11919,10 +11911,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		volatileStatus: 'noretreat',
 		onTry(source, target, move) {
-			if (target.volatiles['noretreat']) {
-				return false;
-			}
-			if (target.volatiles['trapped']) {
+			if (source.volatiles['noretreat']) return false;
+			if (source.volatiles['trapped']) {
 				delete move.volatileStatus;
 			}
 		},
@@ -13512,7 +13502,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 3,
 		flags: {snatch: 1},
 		sideCondition: 'quickguard',
-		onTry(source) {
+		onTry() {
 			return !!this.queue.willAct();
 		},
 		onHitSide(side, source) {
@@ -13932,9 +13922,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
-			if (source.status === 'slp' || source.hasAbility('comatose')) {
-				return false;
-			}
+			if (source.status === 'slp' || source.hasAbility('comatose')) return false;
+			
 			if (source.hp === source.maxhp) {
 				this.add('-fail', source, 'heal');
 				return null;
@@ -15706,9 +15695,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		sleepUsable: true,
 		onTry(source) {
-			if (source.status !== 'slp' && !source.hasAbility('comatose')) {
-				return false;
-			}
+			return source.status === 'slp' || source.hasAbility('comatose');
 		},
 		onHit(pokemon) {
 			const noSleepTalk = [
@@ -15999,9 +15986,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		sleepUsable: true,
 		onTry(source) {
-			if (source.status !== 'slp' && !source.hasAbility('comatose')) {
-				return false;
-			}
+			return source.status === 'slp' || source.hasAbility('comatose');
 		},
 		secondary: {
 			chance: 30,
@@ -16752,9 +16737,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		onTry(source) {
-			if (source.volatiles['stockpile'] && source.volatiles['stockpile'].layers >= 3) {
-				return false;
-			}
+			if (source.volatiles['stockpile'] && source.volatiles['stockpile'].layers >= 3) return false;
 		},
 		volatileStatus: 'stockpile',
 		condition: {
@@ -17340,9 +17323,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
-			if (!source.volatiles['stockpile'] || !source.volatiles['stockpile'].layers) {
-				return false;
-			}
+			return !!source.volatiles['stockpile'];
 		},
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
@@ -19222,7 +19203,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 3,
 		flags: {snatch: 1},
 		sideCondition: 'wideguard',
-		onTry(source) {
+		onTry() {
 			return !!this.queue.willAct();
 		},
 		onHitSide(side, source) {
