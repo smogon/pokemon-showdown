@@ -116,7 +116,7 @@ export class Side {
 		this.faintedLastTurn = null;
 		this.faintedThisTurn = null;
 		this.zMoveUsed = false;
-		this.dynamaxUsed = this.battle.gen >= 8;
+		this.dynamaxUsed = this.battle.gen < 8;
 
 		this.sideConditions = {};
 		this.slotConditions = [];
@@ -159,7 +159,7 @@ export class Side {
 		// if (this.battle.gameType === 'multitriples' && this.battle.turn % 3 !== [1, 1, 2, 2, 0, 0][this.side.n]) {
 		//		return false;
 		// }
-		return this.dynamaxUsed;
+		return !this.dynamaxUsed;
 	}
 
 	getFoeActive(): Pokemon[] {
