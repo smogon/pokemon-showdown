@@ -24,5 +24,6 @@ describe('Flower Shield', function () {
 		assert.statStage(battle.p1.active[1], 'def', 0);
 		assert.statStage(battle.p2.active[0], 'def', 0, 'A Pokemon that has used Max Guard cannot be targeted by Flower Shield');
 		assert.statStage(battle.p2.active[1], 'def', 1);
+		assert.equal(battle.log[battle.lastMoveLine + 1], '|-activate|p2a: Ferrothorn|move: Max Guard');
 	});
 });
