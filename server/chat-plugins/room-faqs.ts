@@ -82,7 +82,7 @@ export const commands: ChatCommands = {
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
-		if (roomid) this.parse(`/join view-roomfaqs-${targetRoom.roomid}`);
+		this.tryReloadPage(`view-roomfaqs-${targetRoom.roomid}`);
 	},
 	addalias(target, room, user) {
 		room = this.requireRoom();

@@ -343,7 +343,7 @@ export const commands: ChatCommands = {
 			if (!this.room) return this.errorReply(`must specify roomid`);
 			this.pmTarget = null;
 			void this.parse(`/permissions set ${newTarget}`);
-			return this.parse(`/join view-permissions-${this.room.roomid}`);
+			this.tryReloadPage(`view-permissions-${this.room.roomid}`);
 		},
 
 		view(target, room, user) {

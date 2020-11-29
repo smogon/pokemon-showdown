@@ -363,7 +363,7 @@ export const commands: ChatCommands = {
 				this.modlog('CLEARQUEUE');
 				this.sendReply(this.tr`Cleared poll queue.`);
 			} else {
-				const [slotString, roomid, update] = target.split(',');
+				const [slotString, roomid] = target.split(',');
 				const slot = parseInt(slotString);
 				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
 				if (!curRoom) return this.errorReply(this.tr`Room "${roomid}" not found.`);
@@ -382,7 +382,7 @@ export const commands: ChatCommands = {
 				});
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
-				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
+				this.tryReloadPage(`view-pollqueue-${curRoom.roomid}`);
 			}
 		},
 		deletequeuehelp: [
@@ -570,7 +570,7 @@ export const pages: PageTable = {
 			const number = i + 1; // for translation convienence
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
-				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
+				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid}">` +
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;

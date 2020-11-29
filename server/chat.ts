@@ -553,6 +553,12 @@ export class CommandContext extends MessageContext {
 		return message as boolean;
 	}
 
+	tryReloadPage(pageid: string) {
+		if (this.connection.openPages?.has(pageid)) {
+			this.parse(`/join ${pageid}`);
+		}
+	}
+
 	sendChatMessage(message: string) {
 		if (this.pmTarget) {
 			const blockInvites = this.pmTarget.settings.blockInvites;

@@ -411,9 +411,7 @@ export const commands: ChatCommands = {
 			room.responder.unignore(targets);
 			this.privateModAction(`${user.name} removed ${Chat.count(targets.length, "terms")} from the autoresponder ignore list.`);
 			this.modlog(`AUTOFILTER UNIGNORE`, null, target);
-			if (this.connection.openPages?.has(`autoresponder-${room.roomid}-ignore`)) {
-				return this.parse(`/join view-autoresponder-${room.roomid}-ignore`);
-			}
+			this.tryReloadPage(`autoresponder-${room.roomid}-ignore`);
 		},
 	},
 	autoresponderhelp() {
