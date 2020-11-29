@@ -153,6 +153,8 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "",
 		"Frequently Asked Questions": "",
 
+		"Invalid room.": "",
+
 		"pages/faq": "",
 		"pages/ladderhelp": "",
 		"pages/rng": "",
