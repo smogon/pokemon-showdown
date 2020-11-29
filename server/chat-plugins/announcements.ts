@@ -52,10 +52,10 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help announcement new');
 			target = target.trim();
-			if (room.battle) return this.errorReply(this.tr("Battles do not support announcements."));
+			if (room.battle) return this.errorReply(this.tr`Battles do not support announcements.`);
 
 			const text = this.filter(target);
-			if (target !== text) return this.errorReply(this.tr("You are not allowed to use filtered words in announcements."));
+			if (target !== text) return this.errorReply(this.tr`You are not allowed to use filtered words in announcements.`);
 
 			const supportHTML = cmd === 'htmlcreate';
 
@@ -63,7 +63,7 @@ export const commands: ChatCommands = {
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity) {
-				return this.errorReply(this.tr("There is already a poll or announcement in progress in this room."));
+				return this.errorReply(this.tr`There is already a poll or announcement in progress in this room.`);
 			}
 
 			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
@@ -80,23 +80,23 @@ export const commands: ChatCommands = {
 		timer(target, room, user) {
 			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
-				return this.errorReply(this.tr("There is no announcement running in this room."));
+				return this.errorReply(this.tr`There is no announcement running in this room.`);
 			}
 			const announcement = room.minorActivity;
 
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!announcement.timeout) return this.errorReply(this.tr("There is no timer to clear."));
+					if (!announcement.timeout) return this.errorReply(this.tr`There is no timer to clear.`);
 					clearTimeout(announcement.timeout);
 					announcement.timeout = null;
 					announcement.timeoutMins = 0;
-					return this.add(this.tr("The announcement timer was turned off."));
+					return this.add(this.tr`The announcement timer was turned off.`);
 				}
 				const timeout = parseFloat(target);
 				const timeoutMs = timeout * 60 * 1000;
 				if (isNaN(timeoutMs) || timeoutMs <= 0 || timeoutMs > Chat.MAX_TIMEOUT_DURATION) {
-					return this.errorReply(this.tr("Invalid time given."));
+					return this.errorReply(this.tr`Invalid time given.`);
 				}
 				if (announcement.timeout) clearTimeout(announcement.timeout);
 				announcement.timeoutMins = timeout;
@@ -113,7 +113,7 @@ export const commands: ChatCommands = {
 				if (announcement.timeout) {
 					return this.sendReply(`The announcement timer is on and will end in ${announcement.timeoutMins} minute${Chat.plural(announcement.timeoutMins)}.`);
 				} else {
-					return this.sendReply(this.tr("The announcement timer is off."));
+					return this.sendReply(this.tr`The announcement timer is off.`);
 				}
 			}
 		},
@@ -129,7 +129,7 @@ export const commands: ChatCommands = {
 			this.checkCan('minigame', null, room);
 			this.checkChat();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
-				return this.errorReply(this.tr("There is no announcement running in this room."));
+				return this.errorReply(this.tr`There is no announcement running in this room.`);
 			}
 			const announcement = room.minorActivity;
 			if (announcement.timeout) clearTimeout(announcement.timeout);
@@ -146,7 +146,7 @@ export const commands: ChatCommands = {
 		''(target, room, user, connection) {
 			room = this.requireRoom();
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
-				return this.errorReply(this.tr("There is no announcement running in this room."));
+				return this.errorReply(this.tr`There is no announcement running in this room.`);
 			}
 			const announcement = room.minorActivity;
 			if (!this.runBroadcast()) return;
