@@ -6333,4 +6333,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	skulpent: {
 		tier: "OU",
 	},
+	narpoon: {
+		tier: "UU",
+	},
 };
