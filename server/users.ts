@@ -997,6 +997,10 @@ export class User extends Chat.MessageContext {
 		this.userMessage = oldUser.userMessage || this.userMessage || '';
 
 		oldUser.markDisconnected();
+
+		for (const connection of this.connections) {
+			void Punishments.checkIp(this, connection);
+		}
 	}
 	mergeConnection(connection: Connection) {
 		// the connection has changed name to this user's username, and so is
