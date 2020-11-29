@@ -343,7 +343,6 @@ export const commands: ChatCommands = {
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
 			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
-      
 		view(target, room, user) {
 			room = this.requireRoom();
 			return this.parse(`/join view-permissions-${room.roomid}`);
