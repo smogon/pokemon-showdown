@@ -2,6 +2,7 @@
 !/config/formats.ts
 /logs/*
 /test/modlogs
+/test/replays/*.html
 /node_modules
 /eslint-cache
 /server/chat-plugins/private
