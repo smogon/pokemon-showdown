@@ -5330,10 +5330,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHitField(t, source, move) {
 			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.hasType('Grass')) {
+				if (
+					pokemon.hasType('Grass') &&
+					(!pokemon.volatiles['maxguard'] ||
+					  this.runEvent('TryHit', pokemon, source, move))
+				  ) {
 					// This move affects every Grass-type Pokemon in play.
 					targets.push(pokemon);
-				}
+				  }
 			}
 			let success = false;
 			for (const target of targets) {
@@ -5949,9 +5953,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHitSide(side, source, move) {
 			const targets = [];
 			for (const pokemon of side.active) {
-				if (pokemon.hasAbility(['plus', 'minus'])) {
+				if (
+					pokemon.hasAbility(['plus', 'minus']) &&
+					(!pokemon.volatiles['maxguard'] ||
+					  this.runEvent('TryHit', pokemon, source, move))
+				  ) {
 					targets.push(pokemon);
-				}
+				  }
 			}
 			if (!targets.length) return false;
 			let didSomething = false;
@@ -10081,9 +10089,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHitSide(side, source, move) {
 			const targets = [];
 			for (const pokemon of side.active) {
-				if (pokemon.hasAbility(['plus', 'minus'])) {
+				if (
+					pokemon.hasAbility(['plus', 'minus']) &&
+					(!pokemon.volatiles['maxguard'] ||
+					  this.runEvent('TryHit', pokemon, source, move))
+				  ) {
 					targets.push(pokemon);
-				}
+				  }
 			}
 			if (!targets.length) return false;
 			let didSomething = false;
@@ -17713,7 +17725,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (this.runEvent('Invulnerability', active, source, move) === false) {
 					this.add('-miss', source, active);
 					result = true;
-				} else {
+				} else if (this.runEvent('TryHit', active, source, move)) {
 					const item = active.getItem();
 					if (active.hp && item.isBerry) {
 						// bypasses Unnerve
