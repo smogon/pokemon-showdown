@@ -114,51 +114,28 @@ class Ladder extends LadderStore {
 
 		let rating = 0;
 		let valResult;
-		if (isRated && !Ladders.disabled) {
-			const uid = user.id;
-			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)}),
-				this.getRating(uid),
-			]);
-			if (uid !== user.id) {
-				// User feedback for renames handled elsewhere.
-				return null;
-			}
-			if (!rating) rating = 1;
-		} else {
-			if (Ladders.disabled) {
-				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
-				rating = 1;
-			}
-			const validator = TeamValidatorAsync.get(this.formatid);
-			valResult = await validator.validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)});
-		}
+		let removeNicknames = !!(user.locked || user.namelocked);
 
-		if (valResult.charAt(0) !== '1') {
-			connection.popup(
-				`Your team was rejected for the following reasons:\n\n` +
-				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
-			);
-			return null;
-		}
 
 		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
 		let unownWord = '';
 		while (match) {
-			let nickname = match[1];
+			const nickname = match[1];
 			const speciesid = toID(match[2] || match[1]);
 			if (speciesid.length <= 6 && speciesid.startsWith('unown')) {
 				unownWord += speciesid.charAt(5) || 'a';
 			}
 			if (nickname) {
-				nickname = Chat.nicknamefilter(nickname, user);
-				if (!nickname || nickname !== match[1]) {
+				const filtered = Chat.nicknamefilter(nickname, user);
+				if (typeof filtered === 'string' && (!filtered || filtered !== match[1])) {
 					connection.popup(
 						`Your team was rejected for the following reason:\n\n` +
 						`- Your Pokémon has a banned nickname: ${match[1]}`
 					);
 					return null;
+				} else if (filtered === false) {
+					removeNicknames = true;
 				}
 			}
 			match = regex.exec(team);
@@ -172,6 +149,34 @@ class Ladder extends LadderStore {
 				);
 				return null;
 			}
+		}
+
+		if (isRated && !Ladders.disabled) {
+			const uid = user.id;
+			[valResult, rating] = await Promise.all([
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames}),
+				this.getRating(uid),
+			]);
+			if (uid !== user.id) {
+				// User feedback for renames handled elsewhere.
+				return null;
+			}
+			if (!rating) rating = 1;
+		} else {
+			if (Ladders.disabled) {
+				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
+				rating = 1;
+			}
+			const validator = TeamValidatorAsync.get(this.formatid);
+			valResult = await validator.validateTeam(team, {removeNicknames});
+		}
+
+		if (valResult.charAt(0) !== '1') {
+			connection.popup(
+				`Your team was rejected for the following reasons:\n\n` +
+				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
+			);
+			return null;
 		}
 
 		const settings = {...user.battleSettings, team: valResult.slice(1) as string};

@@ -420,7 +420,7 @@ export const loginfilter: LoginFilter = user => {
 		user.trackRename = '';
 	}
 };
-export const nicknamefilter: NameFilter = (name, user) => {
+export const nicknamefilter: NicknameFilter = (name, user) => {
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
