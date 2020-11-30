@@ -1068,7 +1068,8 @@ export class User extends Chat.MessageContext {
 		const groupInfo = Config.groups[this.tempGroup];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
-			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
+			const rank = Rooms.get('staff')?.auth.get(this.id);
+			this.isStaff = !!(rank && rank !== '*' && rank !== Users.Auth.defaultSymbol());
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
@@ -1099,7 +1100,8 @@ export class User extends Chat.MessageContext {
 		const groupInfo = Config.groups[this.tempGroup];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
-			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
+			const rank = Rooms.get('staff')?.auth.get(this.id);
+			this.isStaff = !!(rank && rank !== '*' && rank !== Users.Auth.defaultSymbol());
 		}
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
