@@ -20913,4 +20913,397 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+	clearlight: {
+		num: 900,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Clear Light",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		onHit(pokemon, target) {
+			pokemon.cureStatus();
+		},
+		boosts: {
+			accuracy: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Light",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Tough",
+	},
+	lightspeed: {
+		num: 901,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		name: "Light Speed",
+		pp: 30,
+		priority: 1,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Cool",
+	},
+	blindingblast: {
+		num: 902,
+		accuracy: 100,
+		basePower: 110,
+		category: "Special",
+		name: "Blinding Blast",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Beautiful",
+	},
+	shadowyblast: {
+		num: 903,
+		accuracy: 100,
+		basePower: 110,
+		category: "Special",
+		name: "Shadowy Blast",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		contestType: "Beautiful",
+	},
+	lightwave: {
+		num: 904,
+		accuracy: 100,
+		basePower: 25,
+		category: "Special",
+		name: "Light Wave",
+		pp: 30,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		multihit: [2, 5],
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
+		contestType: "Beautiful",
+	},
+	photondischarge: {
+		num: 905,
+		accuracy: 90,
+		basePower: 130,
+		category: "Special",
+		name: "Photon Discharge",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Beautiful",
+	},
+	cometstorm: {
+		num: 906,
+		accuracy: 80,
+		basePower: 100,
+		category: "Physical",
+		name: "Comet Storm",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, blade: 1},
+		critRatio: 2,
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Tough",
+	},
+	forcefield: {
+		num: 907,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Force Field",
+		pp: 10,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'forcefield',
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.category === 'Special') {
+					this.boost({spd: -2}, source, target, this.dex.getActiveMove("Force Field"));
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && move.category === 'Special') {
+					this.boost({spd: -2}, source, target, this.dex.getActiveMove("Force Field"));
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Cosmic",
+	},
+	radiantpunch: {
+		num: 908,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Radiant Punch",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				evasion: -1,
+			},
+		},
+		target: "normal",
+		type: "Light",
+		contestType: "Beautiful",
+	},
+	solarorb: {
+		num: 909,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Solar Orb",
+		pp: 5,
+		priority: 0,
+		flags: {bullet: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spe: -1,
+			},
+		},
+		target: "allAdjacent",
+		type: "Light",
+		contestType: "Cool",
+	},
+	meteorshower: {
+		num: 910,
+		accuracy: 100,
+		basePower: 25,
+		category: "Special",
+		name: "Meteor Shower",
+		pp: 30,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		multihit: [2, 5],
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
+		contestType: "Beautiful",
+	},
+	flashbeam: {
+		num: 911,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		name: "Flash Beam",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'confusion',
+		},
+		target: "any",
+		type: "Light",
+		contestType: "Beautiful",
+	},
+	glowingbram: {
+		num: 912,
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		name: "Glowing Bram",
+		pp: 25,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Cute",
+	},
+	moonritual: {
+		num: 913,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Moon Ritual",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		onHit(target) {
+			if (target.hp <= target.maxhp / 4 || ( target.boosts.atk >= 6 && target.boosts.def >= 6 && target.boosts.spd >= 6 ) || target.maxhp === 1) { // Shedinja clause
+				return false;
+			}
+			this.directDamage(target.maxhp / 4);
+			this.boost({atk: 1, def: 1, spd: 1}, target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Cosmic",
+		zMove: {effect: 'heal'},
+		contestType: "Cute",
+	},
+	abduction: {
+		num: 914,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Abduction",
+		pp: 10,
+		priority: 0,
+		flags: {charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
+		onModifyMove(move, source) {
+			if (!source.volatiles['abduction']) {
+				move.accuracy = true;
+				move.flags.contact = 0;
+			}
+		},
+		onMoveFail(target, source) {
+			if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
+				source.removeVolatile('abduction');
+				source.removeVolatile('twoturnmove');
+				this.add('-end', target, 'Abduction', '[interrupt]');
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target.fainted) return false;
+			if (source.removeVolatile(move.id)) {
+				if (target !== source.volatiles['twoturnmove'].source) return false;
+			} else {
+				if (target.volatiles['substitute'] || target.side === source.side) {
+					return false;
+				}
+				if (target.getWeight() >= 2000) {
+					this.add('-fail', target, 'move: Abduction', '[heavy]');
+					return null;
+				}
+
+				this.add('-prepare', source, move.name, target);
+				source.addVolatile('twoturnmove', target);
+				return null;
+			}
+		},
+		onHit(target, source) {
+			if (target.hp) this.add('-end', target, 'Abduction');
+		},
+		condition: {
+			duration: 2,
+			onAnyDragOut(pokemon) {
+				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
+			},
+			onFoeTrapPokemonPriority: -15,
+			onFoeTrapPokemon(defender) {
+				if (defender !== this.effectData.source) return;
+				defender.trapped = true;
+			},
+			onFoeBeforeMovePriority: 12,
+			onFoeBeforeMove(attacker, defender, move) {
+				if (attacker === this.effectData.source) {
+					attacker.activeMoveActions--;
+					this.debug('Abduction nullifying.');
+					return null;
+				}
+			},
+			onRedirectTargetPriority: 99,
+			onRedirectTarget(target, source, source2) {
+				if (source !== this.effectData.target) return;
+				if (this.effectData.source.fainted) return;
+				return this.effectData.source;
+			},
+			onAnyInvulnerability(target, source, move) {
+				if (target !== this.effectData.target && target !== this.effectData.source) {
+					return;
+				}
+				if (source === this.effectData.target && target === this.effectData.source) {
+					return;
+				}
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
+					return;
+				}
+				return false;
+			},
+			onAnyBasePower(basePower, target, source, move) {
+				if (target !== this.effectData.target && target !== this.effectData.source) {
+					return;
+				}
+				if (source === this.effectData.target && target === this.effectData.source) {
+					return;
+				}
+				if (move.id === 'gust' || move.id === 'twister') {
+					return this.chainModify(2);
+				}
+			},
+			onFaint(target) {
+				if (target.volatiles['abduction'] && target.volatiles['twoturnmove'].source) {
+					this.add('-end', target.volatiles['twoturnmove'].source, 'Abduction', '[interrupt]');
+				}
+			},
+		},
+		secondary: null,
+		target: "any",
+		type: "Cosmic",
+		contestType: "Tough",
+	},
+	implosion: {
+		num: 915,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Implosion",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		recoil: [33, 100],
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Tough",
+	},
 };

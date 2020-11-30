@@ -5735,4 +5735,118 @@ export const MovesText = {
 		desc: "Lowers the target's Defense and Special Defense by 1 stage. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if the target's Defense and Special Defense stat stages were both unchanged, or if there are no unfainted party members.",
 		shortDesc: "Lowers target's Def, Sp. Def by 1. User switches.",
 	},
+	prismbeam: {
+		name: "Prism Beam",
+		desc: "Lowers the user's Special Attack by 1 stage.",
+		shortDesc: "Lowers the user's Sp. Atk by 1.",
+	},
+	toxicfortune: {
+		name: "Toxic Fortune",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits two turns after being used.",
+		descGen4: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
+		descGen2: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move is already in effect for the target's position.",
+
+		start: "  [POKEMON] foresaw an attack!",
+		activate: "  [TARGET] took the Toxic Fortune attack!",
+	},
+	frostychaw: {
+		name: "Frosty Chaw",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze.",
+	},
+	venomousrend: {
+		name: "Venomous Rend",
+		desc: "Has a 40% chance to poison the target.",
+		shortDesc: "40% chance to poison.",
+	},
+	clearlight: {
+		name: "Clear Light",
+		shortDesc: "Clears user status. Boosts the user's acc. by 1.",
+	},
+	lightspeed: {
+		name: "Light Speed",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	blindingblast: {
+		name: "Blinding Blast",
+		shortDesc: "No additional effect.",
+	},
+	shadowyblast: {
+		name: "Shadowy Blast",
+		shortDesc: "No additional effect.",
+	},
+	lightwave: {
+		name: "Light Wave",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	photondischarge: {
+		name: "Photon Discharge",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
+	},
+	cometstorm: {
+		name: "Comet Storm",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
+	forcefield: {
+		name: "Force Field",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to deal Special damage with the user have their Special Defense lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Special: -2 Sp.Def.",
+	},
+	radiantpunch: {
+		name: "Radiant Punch",
+		desc: "Has a 10% chance to lower target evasion.",
+		shortDesc: "10% chance to lower target evasion.",
+	},
+	solarorb: {
+		name: "Solar Orb",
+		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "10% chance to lower the target's Speed by 1.",
+	},
+	meteorshower: {
+		name: "meteor Shower",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	flashbeam: {
+		name: "Flash Beam",
+		desc: "Has a 20% chance to confuse the target.",
+		shortDesc: "20% chance to confuse the target.",
+	},
+	glowingbram: {
+		name: "Glowing Bram",
+		shortDesc: "No additional effect.",
+	},
+	moonritual: {
+		name: "Moon Ritual",
+		desc: "Raises the user's Attack, Defense and Special Defense by 1 stage in exchange for the user losing 1/2 of its maximum HP, rounded down.",
+		shortDesc: "User loses 25% max HP. Raises the user's Attack, Defense and Sp. Def by 1.",
+	},
+	abduction: {
+		name: "Abduction",
+		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. Pokemon weighing 200 kg or more cannot be lifted. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Phantom Force, Shadow Force, or Sky Drop.",
+		shortDesc: "User and foe fly up turn 1. Damages on turn 2.",
+		descGen5: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Shadow Force, or Sky Drop. If the effect of Gravity ends this effect before the second turn, both the user and the target return to the ground, but the target will otherwise remain under this effect until the user leaves the field or successfully executes the second turn of any two-turn move.",
+
+		prepare: "[POKEMON] took [TARGET] into the sky!",
+		end: "  [POKEMON] was freed from the Abduction!",
+		failSelect: "Sky Drop won't let [POKEMON] go!",
+		failTooHeavy: "  [POKEMON] is too heavy to be lifted!",
+	},
+	implosion: {
+		name: "Implosion",
+		desc: "If the target lost HP, the user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 33% recoil.",
+	},
+	callout: {
+		name: "Callout",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. This effect is ignored while the user is under the effect of Sky Drop.",
+		shortDesc: "The foes' moves target the target of this move on the turn used.",
+		start: "  [POKEMON] became the center of attention!",
+		startFromZEffect: "  [POKEMON] became the center of attention!",
+	},
 };
