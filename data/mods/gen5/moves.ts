@@ -655,7 +655,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	quickguard: {
 		inherit: true,
 		stallingMove: true,
-		onTryHitSide(side, source) {
+		onTry(source) {
 			return this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide(side, source) {
@@ -1021,7 +1021,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	wideguard: {
 		inherit: true,
 		stallingMove: true,
-		onTryHitSide(side, source) {
+		onTry(source) {
 			return this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide(side, source) {

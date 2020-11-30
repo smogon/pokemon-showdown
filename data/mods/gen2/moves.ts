@@ -571,7 +571,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	rest: {
 		inherit: true,
-		onTryMove(pokemon) {
+		onTry(pokemon) {
 			if (pokemon.hp < pokemon.maxhp) return;
 			this.add('-fail', pokemon);
 			return null;
