@@ -14,7 +14,7 @@ import * as path from 'path';
 import * as repl from 'repl';
 import {crashlogger} from './crashlogger';
 
-export const Repl = new class ReplSingleton {
+export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
 	 */
