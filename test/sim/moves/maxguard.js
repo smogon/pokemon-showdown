@@ -42,7 +42,7 @@ describe('Max Guard', function () {
 			{species: 'ferrothorn', item: 'sitrusberry', moves: ['flowershield', 'teatime']},
 			{species: 'sunflora', ability: 'intrepidsword', moves: ['psychup', 'sleeptalk']},
 		]]);
-		
+
 		battle.makeChoices('move sleeptalk dynamax, move magneticflux', 'move flowershield, move psychup 1');
 		const sunflora = battle.p1.active[0];
 		assert.statStage(sunflora, 'def', 0, 'should block magneticflux and flowershield');
