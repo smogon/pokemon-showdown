@@ -213,6 +213,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	nighttalk: boolean;
 	revealed: string;
 	IDEA: MafiaIDEAPlayerData | null;
+	idle: null | boolean;
 	constructor(user: User, game: MafiaTracker) {
 		super(user, game);
 		this.game = game;
@@ -227,6 +228,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		this.nighttalk = false;
 		this.revealed = '';
 		this.IDEA = null;
+		this.idle = null;
 	}
 
 	getRole(button = false) {
@@ -280,6 +282,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	closedSetup: boolean;
 	noReveal: boolean;
 	selfEnabled: boolean | 'hammer';
+	takeIdles: boolean;
 
 	originalRoles: MafiaRole[];
 	originalRoleString: string;
@@ -328,6 +331,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.closedSetup = false;
 		this.noReveal = false;
 		this.selfEnabled = false;
+		this.takeIdles = false;
 
 		this.originalRoles = [];
 		this.originalRoleString = '';
@@ -651,6 +655,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.sendDeclare(`Day ${this.dayNum}. Hammering is disabled.`);
 		} else {
 			this.sendDeclare(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`);
+		}
+		for (const p in this.playerTable) {
+			this.playerTable[p].idle = null;
 		}
 		this.sendPlayerList();
 		this.updatePlayers();
@@ -1037,7 +1044,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.id in this.playerTable ? `is` : `was`} ${revealAs}.`);
 		this.updatePlayers();
 	}
-
 
 	revive(user: User, toRevive: string, force = false) {
 		if (this.phase === 'IDEApicking') {
@@ -1819,10 +1825,47 @@ export const pages: PageTable = {
 			buf += `<span id="mafia-lynches">`;
 			buf += game.lynchBoxFor(user.id);
 			buf += `</span>`;
-		} else if (game.phase === "night" && isPlayer) {
+		} else if (game.phase === "night" && isPlayer && !game.takeIdles) {
 			buf += `<p style="font-weight:bold;">PM the host (${game.host}) the action you want to use tonight, and who you want to use it on. Or PM the host "idle".</p>`;
+		} else if (game.phase === "night" && isPlayer && game.takeIdles) {
+			buf += `<b>Night Actions:</b>`;
+			if (game.playerTable[user.id].idle === null) {
+				buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
+				buf += `<button class="button" name="send" value="/mafia action ${room.roomid}">action</button>`;
+				buf += `<button class="button" name="send" value="/mafia idle ${room.roomid}">idle</button>`;
+			} else {
+				buf += `<button class="button" name="send" value="/mafia noresponse ${room.roomid}">clear</button>`;
+				if (game.playerTable[user.id].idle === false) {
+					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">action</button>`;
+					buf += `<button class="button" name="send" value="/mafia idle ${room.roomid}">idle</button>`;
+				} else {
+					buf += `<button class="button" name="send" value="/mafia action ${room.roomid}">action</button>`;
+					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">idle</button>`;
+				}
+			}
+			buf += `<br/>`;
 		}
 		if (isHost) {
+			if (game.phase === "night" && isHost && game.takeIdles) {
+				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Night Responses</summary>`;
+				buf += `<h3>Night Responses</h3>`;
+				let actions = ``;
+				let idles = ``;
+				let nr = ``;
+				for (const p in game.playerTable) {
+					const player = game.playerTable[p];
+					if (player.idle === true) {
+						idles += `${player.safeName}<br/>`;
+					} else if (player.idle === false) {
+						actions += `${player.safeName}<br/>`;
+					} else {
+						nr += `${player.safeName}<br/>`;
+					}
+				}
+				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Idles</summary>` + idles + `</span></details></p>`;
+				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Actions</summary>` + actions + `</span></details></p>`;
+				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">No Response</summary>` + nr + `</span></details></p></p><hr/></details></p>`;
+			}
 			buf += `<h3>Host options</h3>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">General Options</summary>`;
 			buf += `<h3>General Options</h3>`;
@@ -2220,6 +2263,29 @@ export const commands: ChatCommands = {
 		},
 		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`],
 
+		takeidles(target, room, user) {
+			const args = target.split(',');
+			let targetRoom = Rooms.get(args[0]);
+			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
+				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
+				targetRoom = room;
+			} else {
+				args.shift();
+			}
+			const game = targetRoom.getGame(MafiaTracker);
+			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
+			if (game.hostid !== user.id && !game.cohosts.includes(user.id)) this.checkCan('mute', null, targetRoom);
+			const action = toID(args.join(''));
+			if (!['on', 'off'].includes(action)) return this.parse('/help mafia takeidles');
+			if ((action === 'off' && !game.takeIdles) || (action === 'on' && game.takeIdles)) {
+				return user.sendTo(targetRoom, `|error|Actions and idles are already ${game.takeIdles ? '' : 'not '}being accepted.`);
+			}
+			game.takeIdles = action === 'on';
+			game.sendDeclare(`Actions and idles are ${game.takeIdles ? 'now' : 'no longer'} being accepted.`);
+			game.updatePlayers();
+		},
+		takeidleshelp: [`/mafia takeidles [on|off] - Sets if idles are accepted by the script or not. Requires host % @ # &`],
+
 		resetroles: 'setroles',
 		forceresetroles: 'setroles',
 		forcesetroles: 'setroles',
@@ -2568,6 +2634,46 @@ export const commands: ChatCommands = {
 			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # &`,
 			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # &`,
 		],
+
+		unidle: 'idle',
+		unaction: 'idle',
+		noresponse: 'idle',
+		action: 'idle',
+		idle(target, room, user, connection, cmd) {
+			const args = target.split(',');
+			let targetRoom = Rooms.get(args[0]);
+			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
+				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
+				targetRoom = room;
+			} else {
+				args.shift();
+			}
+			const game = targetRoom.getGame(MafiaTracker);
+			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
+			const player = game.playerTable[user.id];
+			if (!player) return user.sendTo(targetRoom, `|error|You are not in the game of ${game.title}.`);
+			if (game.phase !== 'night') return this.errorReply(`You can only submit an action or idle during the night phase.`);
+			if (!game.takeIdles) {
+				return this.errorReply(`The host is not accepting idles through the script. DM the host your action or idle to the host.`);
+			}
+			switch (cmd) {
+			case 'idle':
+				player.idle = true;
+				user.sendTo(targetRoom, `You have idled.`);
+				break;
+			case 'action':
+				player.idle = false;
+				user.sendTo(targetRoom, `You have decided to use an action. DM the host your action.`);
+				break;
+			case 'noresponse': case 'unidle': case 'unaction':
+				player.idle = null;
+				user.sendTo(targetRoom, `You are no longer submitting an action or idle.`);
+				break;
+			}
+			player.updateHtmlRoom();
+		},
+		actionhelp: 'idlehelp',
+		idlehelp: [`/mafia [action|idle] - Tells the host if you are using an action or idling.`],
 
 		forceadd: 'revive',
 		add: 'revive',
@@ -3296,9 +3402,15 @@ export const commands: ChatCommands = {
 					buf += `<b>Number of Choices</b>: ${(result as MafiaDataIDEA).choices}<br/>`;
 				}
 				buf += `<details><summary class="button" style="font-weight: bold; display: inline-block">Roles:</summary>`;
-				for (const idearole of (result as MafiaDataIDEA).roles) {
-					buf += `${idearole}<br/>`;
+				const count: {[k: string]: number} = {};
+				const roles = [];
+				for (const role of (result as MafiaDataIDEA).roles) {
+					count[role] = count[role] ? count[role] + 1 : 1;
 				}
+				for (const role in count) {
+					roles.push(count[role] > 1 ? `${count[role]}x ${role}` : role);
+				}
+				buf += `${roles.join('<br/>')}`;
 			} else {
 				// @ts-ignore
 				if (result.memo) buf += `${result.memo.join('<br/>')}`;
@@ -3809,6 +3921,7 @@ export const commands: ChatCommands = {
 			`/mafia deadline - View the deadline for the current game.`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
+			`/mafia [action|idle] - Tells the host if you are using an action or idling.`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
@@ -3816,6 +3929,7 @@ export const commands: ChatCommands = {
 			`/mafia playercap [cap|none]- Limit the number of players able to join the game. Player cap cannot be more than 20 or less than 2. Requires host % @ # &`,
 			`/mafia close - Closes signups for the current game. Requires host % @ # &`,
 			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # &`,
+			`/mafia takeidles [on|off] - Sets if idles are accepted by the script or not. Requires host % @ # &`,
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`,
 			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # &`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # &`,
