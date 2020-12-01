@@ -174,6 +174,10 @@ export const Punishments = new class {
 	/** roomid:timestamp map */
 	readonly lastGroupchatMonitorTime: {[k: string]: number} = {};
 	/**
+	 * Map<userid that has been warned, reason they were warned for>
+	 */
+	readonly offlineWarns: Map<ID, string> = new Map();
+	/**
 	 * punishType is an allcaps string, for global punishments they can be
 	 * anything in the punishmentTypes map.
 	 *

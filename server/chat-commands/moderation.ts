@@ -458,6 +458,7 @@ export const commands: ChatCommands = {
 		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
 		target = this.splitTarget(target);
+		const targetID = toID(this.targetUsername);
 		let privateReason = '';
 		let publicReason = target;
 		const targetLowercase = target.toLowerCase();
@@ -476,6 +477,7 @@ export const commands: ChatCommands = {
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(publicReason ? ` (${publicReason})` : ``)}`);
 			this.globalModlog('WARN OFFLINE', targetUser, target ? `${publicReason} ${privateReason}` : ``);
+			Punishments.offlineWarns.set(targetID, target);
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
