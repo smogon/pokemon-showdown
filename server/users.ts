@@ -28,7 +28,7 @@
  * @license MIT
  */
 
-type StatusType = 'online' | 'busy' | 'idle';
+export type StatusType = 'online' | 'busy' | 'idle';
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
@@ -307,6 +307,8 @@ type ChatQueueEntry = [string, RoomID, Connection];
 export interface UserSettings {
 	blockChallenges: boolean;
 	blockPMs: boolean | AuthLevel;
+	statusType: StatusType;
+	statusMessage: string;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
 	blockInvites: AuthLevel | boolean;
@@ -387,8 +389,6 @@ export class User extends Chat.MessageContext {
 	autoconfirmed: ID;
 	trusted: ID;
 	trackRename: string;
-	statusType: StatusType;
-	userMessage: string;
 	lastWarnedAt: number;
 	constructor(connection: Connection) {
 		super(connection.user);
@@ -434,6 +434,8 @@ export class User extends Chat.MessageContext {
 		this.settings = {
 			blockChallenges: false,
 			blockPMs: false,
+			statusType: 'online',
+			statusMessage: '',
 			ignoreTickets: false,
 			hideBattlesFromTrainerCard: false,
 			blockInvites: false,
@@ -476,8 +478,6 @@ export class User extends Chat.MessageContext {
 		this.trusted = '';
 		// Used in punishments
 		this.trackRename = '';
-		this.statusType = 'online';
-		this.userMessage = '';
 		this.lastWarnedAt = 0;
 
 		// initialize
@@ -527,12 +527,13 @@ export class User extends Chat.MessageContext {
 	}
 	getIdentityWithStatus(roomid: RoomID = '') {
 		const identity = this.getIdentity(roomid);
-		const status = this.statusType === 'online' ? '' : '@!';
+		const status = this.settings.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
 	}
 	getStatus() {
-		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
-		const status = statusMessage + (this.userMessage || '');
+		const type = this.settings.statusType;
+		const statusMessage = type === 'busy' ? '!(Busy) ' : type === 'idle' ? '!(Idle) ' : '';
+		const status = statusMessage + (this.settings.statusMessage || '');
 		return status;
 	}
 	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
@@ -589,6 +590,7 @@ export class User extends Chat.MessageContext {
 		for (const inRoomID of this.inRooms) {
 			Rooms.get(inRoomID)!.onUpdateIdentity(this);
 		}
+		this.update();
 	}
 	async validateToken(token: string, name: string, userid: ID, connection: Connection) {
 		if (!token && Config.noguestsecurity) {
@@ -872,7 +874,7 @@ export class User extends Chat.MessageContext {
 		const joining = !this.named;
 		this.named = !userid.startsWith('guest') || !!this.namelocked;
 
-		if (isForceRenamed) this.userMessage = '';
+		if (isForceRenamed) this.settings.statusMessage = '';
 
 		for (const connection of this.connections) {
 			// console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -960,7 +962,7 @@ export class User extends Chat.MessageContext {
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message
 		// shows the correct idle state.
-		const isBusy = this.statusType === 'busy' || oldUser.statusType === 'busy';
+		const isBusy = this.settings.statusType === 'busy' || oldUser.settings.statusType === 'busy';
 		this.setStatusType(isBusy ? 'busy' : 'online');
 
 		for (const connection of oldUser.connections) {
@@ -994,7 +996,7 @@ export class User extends Chat.MessageContext {
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
-		this.userMessage = oldUser.userMessage || this.userMessage || '';
+		this.settings.statusMessage = oldUser.settings.statusMessage;
 
 		oldUser.markDisconnected();
 	}
@@ -1459,19 +1461,19 @@ export class User extends Chat.MessageContext {
 		}
 	}
 	setStatusType(type: StatusType) {
-		if (type === this.statusType) return;
-		this.statusType = type;
+		if (type === this.settings.statusType) return;
+		this.settings.statusType = type;
 		this.updateIdentity();
 		this.update();
 	}
 	setUserMessage(message: string) {
-		if (message === this.userMessage) return;
-		this.userMessage = message;
+		if (message === this.settings.statusMessage) return;
+		this.settings.statusMessage = message;
 		this.updateIdentity();
 	}
-	clearStatus(type: StatusType = this.statusType) {
-		this.statusType = type;
-		this.userMessage = '';
+	clearStatus(type: StatusType = this.settings.statusType) {
+		this.settings.statusType = type;
+		this.settings.statusMessage = '';
 		this.updateIdentity();
 	}
 	getAccountStatusString() {
@@ -1527,7 +1529,7 @@ export class User extends Chat.MessageContext {
 function pruneInactive(threshold: number) {
 	const now = Date.now();
 	for (const user of users.values()) {
-		if (user.statusType === 'online') {
+		if (user.settings.statusType === 'online') {
 			// check if we should set status to idle
 			const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
 			const bypass = !user.can('bypassall') && (

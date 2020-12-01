@@ -706,18 +706,22 @@ export const commands: ChatCommands = {
 			const reason = this.splitTarget(target);
 			const targetUser = this.targetUser;
 			if (!targetUser) return this.errorReply(this.tr`User '${target}' not found.`);
-			if (!targetUser.userMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
+			if (!targetUser.settings.statusMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
 			this.checkCan('forcerename', targetUser);
 
 			const displayReason = reason ? `: ${reason}` : ``;
-			this.privateGlobalModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
+			this.privateGlobalModAction(
+				room.tr`${targetUser.name}'s status "${targetUser.settings.statusMessage}" was cleared by ${user.name}${displayReason}.`
+			);
+			this.globalModlog(
+				'CLEARSTATUS', targetUser, ` from "${targetUser.settings.statusMessage}"${displayReason}`
+			);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
 			return;
 		}
 
-		if (!user.userMessage) return this.sendReply(this.tr("You don't have a status message set."));
+		if (!user.settings.statusMessage) return this.sendReply("You don't have a status message set.");
 		user.setUserMessage('');
 
 		return this.sendReply(this.tr("You have cleared your status message."));
@@ -730,8 +734,8 @@ export const commands: ChatCommands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		if (user.statusType === 'online') return this.errorReply(this.tr("You are already marked as back."));
-		const statusType = user.statusType;
+		if (user.settings.statusType === 'online') return this.errorReply("You are already marked as back.");
+		const statusType = user.settings.statusType;
 		user.setStatusType('online');
 
 		if (user.settings.doNotDisturb) {
@@ -826,10 +830,14 @@ export const commands: ChatCommands = {
 			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
-					if (setting === 'blockPMs' &&
-						Users.Auth.isAuthLevel(raw[setting])) {
+					if (
+						setting === 'blockPMs' && Users.Auth.isAuthLevel(raw[setting]) ||
+						setting === 'statusMessage' && this.statusfilter(raw[setting]) ||
+						setting === 'statusType' && ['online', 'away', 'idle', 'busy'].includes(raw[setting])
+					) {
 						settings[setting] = raw[setting];
 					} else {
+						// @ts-ignore special cases handled above
 						settings[setting as keyof UserSettings] = !!raw[setting];
 					}
 				}

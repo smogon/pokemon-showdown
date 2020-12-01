@@ -468,7 +468,7 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+		if (this.user.settings.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
 			this.user.setStatusType('online');
 		}
 
@@ -1040,7 +1040,7 @@ export class CommandContext extends MessageContext {
 		this.checkSlowchat(room, user);
 
 		if (!user.can('bypassall')) this.checkBanwords(room, user.name);
-		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.userMessage);
+		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.settings.userMessage);
 		if (room && !user.can('mute', null, room)) this.checkBanwords(room, message);
 
 		const gameFilter = this.checkGameFilter();

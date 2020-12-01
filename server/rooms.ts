@@ -1301,11 +1301,11 @@ export class GlobalRoomState {
 	}
 
 	onCreateBattleRoom(players: User[], room: GameRoom, options: AnyObject) {
-		players.forEach(player => {
-			if (player.statusType === 'idle') {
+		for (const player of players) {
+			if (player.settings.statusType === 'idle') {
 				player.setStatusType('online');
 			}
-		});
+		}
 		if (Config.reportbattles) {
 			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
