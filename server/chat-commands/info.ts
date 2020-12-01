@@ -2650,7 +2650,10 @@ export const commands: ChatCommands = {
 		this.runBroadcast();
 		this.sendReplyBox(buf);
 	},
-	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
+	showhelp: [
+		`/show [url] - shows you an image or video url in chat.`,
+		`!show [url - shows an image or video url in chat. Requires: whitelist % @ # &]`,
+	],
 
 	regdate: 'registertime',
 	regtime: 'registertime',
