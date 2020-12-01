@@ -79,7 +79,7 @@ export const translations: Translations = {
 		"This game doesn't support /undo": "Questo minigioco non supporta /undo",
 		"You can only save replays for battles.": "Puoi solamente salvare i replay delle lotte.",
 		"This battle can't have hidden replays, because the tournament is set to be forced public.": "Questa lotta non può avere replay nascosti perché il torneo è stato impostato come pubblico.",
-		"The replay for this battle is already set to hidden.": "Il replay di questa battaglia è stato impostato come nascosto.",
+		"The replay for this battle is already set to hidden.": "Il replay di questa lotta è stato impostato come nascosto.",
 		"${user.name} hid the replay of this battle.": "${user.name} ha nascosto il replay di questa lotta.",
 		"You can only do this in battle rooms.": "Puoi farlo solamente nelle room di lotta.",
 		"You can only add a Player to unrated battles.": "Puoi aggiungere un giocatore solamente nelle lotte senza punteggio.",
