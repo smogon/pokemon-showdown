@@ -640,11 +640,11 @@ export const Formats: FormatList = [
 		name: "[Gen 8] StAAAbmons",
 		desc: `Mashup of Almost Any Ability and STABmons. Pok&eacute;mon have access to almost any ability and can use any move of their typing, in addition to the moves they can normally learn.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8299984/">STAAABmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8672614/">STAAABmons</a>`,
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard', '!Obtainable Abilities', 'STABmons Move Legality', 'Dynamax Clause'],
+		ruleset: ['Standard', '!Obtainable Abilities', 'STABmons Move Legality', '2 Ability Clause', 'Dynamax Clause'],
 		banlist: [
 			'Archeops', 'Blacephalon', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chandelure', 'Darmanitan-Galar', 'Dialga', 'Dragapult',
 			'Dragonite', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Keldeo', 'Kyogre',
@@ -652,12 +652,15 @@ export const Formats: FormatList = [
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja',
 			'Silvally', 'Slaking', 'Solgaleo', 'Tapu Koko', 'Terrakion', 'Thundurus', 'Thundurus-Therian', 'Volcarona', 'Xerneas',
 			'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zeraora', 'Zygarde-Base',
-			'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales',
-			'Illusion', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean',
-			'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'Tinted Lens',
+			'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion',
+			'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Power Construct',
+			'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'Tinted Lens',
 			'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Electrify', 'Hypnosis', 'Sing', 'Sleep Powder', 'Wicked Blow',
 		],
-		restricted: ['Acupressure', 'Belly Drum', 'Bolt Beak', 'Double Iron Bash', 'Fishious Rend', 'No Retreat', 'Shell Smash', 'Shift Gear', 'Spore', 'Transform', 'V-create'],
+		restricted: [
+			'Acupressure', 'Belly Drum', 'Bolt Beak', 'Double Iron Bash', 'Extreme Speed', 'Fishious Rend', 'Geomancy',
+			'Lovely Kiss', 'No Retreat', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows', 'Transform', 'V-create',
+		],
 	},
 
 	// Other Metagames
