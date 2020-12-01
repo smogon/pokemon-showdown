@@ -1521,17 +1521,17 @@ export const commands: ChatCommands = {
 		}
 		this.checkCan('forcerename', targetUser);
 
+		Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
+
 		let forceRenameMessage;
 		if (targetUser.connected) {
 			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME', targetUser, reason);
-			Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		} else {
 			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME OFFLINE', targetUser, reason);
-			if (!Monitor.forceRenames.has(targetUser.id)) Monitor.forceRenames.set(targetUser.id, 0);
 		}
 
 		if (room?.roomid !== 'staff') this.privateModAction(`${targetUser.name} ${forceRenameMessage}`);
