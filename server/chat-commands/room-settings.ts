@@ -880,16 +880,9 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (room.subRooms) {
-			for (const subRoom of room.subRooms.values()) subRoom.parent = null;
-		}
-
 		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
-		room.update(); // |expire| needs to be its own message
-		room.add(`|expire|This room has been deleted.`);
-		this.sendReply(`The room "${title}" was deleted.`);
 		room.update();
-		if (room.roomid === 'lobby') Rooms.lobby = null;
+		room.send(`|expire|This room has been deleted.`);
 		room.destroy();
 	},
 	deleteroomhelp: [
@@ -1137,27 +1130,17 @@ export const commands: ChatCommands = {
 		if (!parent.persist) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === parent) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
-		room.parent = parent;
-		if (!parent.subRooms) parent.subRooms = new Map();
-		parent.subRooms.set(room.roomid, room);
+		const settingsList = Rooms.global.settingsList;
 
-		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === parent.title);
-		// can be asserted since we want this to crash if room is null (it should never be)
-		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room!.title);
+		const parentIndex = settingsList.findIndex(r => r.title === parent.title);
+		const index = settingsList.findIndex(r => r.title === room!.title);
 
-		// This is needed to ensure that the main room gets loaded before the subroom.
-		if (mainIdx > subIdx) {
-			const tmp = Rooms.global.settingsList[mainIdx];
-			Rooms.global.settingsList[mainIdx] = Rooms.global.settingsList[subIdx];
-			Rooms.global.settingsList[subIdx] = tmp;
+		// Ensure that the parent room gets loaded before the subroom.
+		if (parentIndex > index) {
+			[settingsList[parentIndex], settingsList[index]] = [settingsList[index], settingsList[parentIndex]];
 		}
 
-		room.settings.parentid = parent.roomid;
-		room.saveSettings();
-
-		for (const userid in room.users) {
-			room.users[userid].updateIdentity(room.roomid);
-		}
+		room.setParent(parent);
 
 		this.modlog('SUBROOM', null, `of ${parent.title}`);
 		return this.addModAction(`This room was set as a subroom of ${parent.title} by ${user.name}.`);
@@ -1172,20 +1155,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
 		}
 
-		const parent = room.parent;
-		if (parent?.subRooms) {
-			parent.subRooms.delete(room.roomid);
-			if (!parent.subRooms.size) parent.subRooms = null;
-		}
-
-		room.parent = null;
-
-		delete room.settings.parentid;
-		room.saveSettings();
-
-		for (const userid in room.users) {
-			room.users[userid].updateIdentity(room.roomid);
-		}
+		room.setParent(null);
 
 		this.modlog('UNSUBROOM');
 		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
