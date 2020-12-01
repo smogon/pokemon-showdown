@@ -43,7 +43,7 @@ export type ChatHandler = (
 	message: string
 ) => void;
 export type AnnotatedChatHandler = ChatHandler & {
-	requiresRoom: boolean,
+	requiresRoom: boolean | RoomID,
 	hasRoomPermissions: boolean,
 	broadcastable: boolean,
 	cmd: string,
@@ -1632,7 +1632,7 @@ export const Chat = new class {
 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
-			entry.requiresRoom = /\bthis\.requires?Room\(/.test(handlerCode);
+			entry.requiresRoom = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`)/.exec(handlerCode)?.[1] as RoomID || /this\.requireRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);

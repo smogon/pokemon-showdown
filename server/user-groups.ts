@@ -159,22 +159,23 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
 		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		for (const cmd in Chat.commands) {
-			const entry = Chat.commands[cmd];
-			if (typeof entry === 'string' || Array.isArray(entry)) continue;
-			if (typeof entry === 'function' && entry.hasRoomPermissions) {
-				permissions.push(`/${cmd}`);
-			}
-			if (typeof entry === 'object') {
-				permissions.push(`/${cmd}`);
-				for (const subCommand in entry) {
-					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
-					if (typeof subEntry !== 'function') continue;
-					if (subEntry.hasRoomPermissions) permissions.push(`/${cmd} ${subCommand}`);
+		function checkCmdTable(table: Chat.AnnotatedChatCommands, namespace = ''): void {
+			for (const cmd in table) {
+				const entry = table[cmd];
+				if (typeof entry === 'string' || Array.isArray(entry)) continue;
+				if (typeof entry === 'object') {
+					checkCmdTable(entry as Chat.AnnotatedChatCommands, `${namespace}${cmd} `);
 				}
-				continue;
+				if (typeof entry === 'function') {
+					if (!entry.hasRoomPermissions) continue;
+					if (room && typeof entry.requiresRoom === 'string') {
+						if (room.roomid !== entry.requiresRoom) continue;
+					}
+					permissions.push(`/${namespace}${cmd}`);
+				}
 			}
 		}
+		checkCmdTable(Chat.commands);
 		return permissions;
 	}
 	static hasJurisdiction(
