@@ -2651,8 +2651,8 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
-		`/show [url] - shows you an image or video url in chat.`,
-		`!show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`,
+		`/show [url] - Shows you an image or YouTube video.`,
+		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
 	],
 
 	regdate: 'registertime',
