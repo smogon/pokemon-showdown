@@ -1100,7 +1100,7 @@ export class User extends Chat.MessageContext {
 		const groupInfo = Config.groups[this.tempGroup];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
-			const rank = Rooms.get('staff')?.auth.get(this.id);
+			const rank = Rooms.get('staff')?.auth.getDirect(this.id);
 			this.isStaff = !!(rank && rank !== '*' && rank !== Users.Auth.defaultSymbol());
 		}
 		Rooms.global.checkAutojoin(this);
