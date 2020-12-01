@@ -482,7 +482,10 @@ export abstract class BasicRoom {
 		return null;
 	}
 	saveSettings() {
-		if (!this.persist) return null;
+		if (!this.persist) return;
+
+		if (!Rooms.global) return; // during initialization
+
 		Rooms.global.writeChatRoomData();
 	}
 	checkModjoin(user: User) {
