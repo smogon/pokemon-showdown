@@ -300,9 +300,7 @@ export class YoutubeInterface {
 		});
 		const game = new GroupWatch(gameRoom, url, videoInfo);
 		gameRoom.game = game;
-		if (!baseRoom.subRooms) baseRoom.subRooms = new Map();
-		baseRoom.subRooms.set(gameRoom.roomid, gameRoom);
-		gameRoom.parent = baseRoom as ChatRoom;
+		gameRoom.setParent(baseRoom);
 		return gameRoom;
 	}
 }
