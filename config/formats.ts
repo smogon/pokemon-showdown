@@ -501,21 +501,21 @@ export const Formats: FormatList = [
 		banlist: [
 			// National Dex OU
 			'Blissey', 'Chansey', 'Charizard-Mega-Y', 'Cinderace', 'Clefable', 'Corviknight', 'Excadrill', 'Ferrothorn', 'Garchomp',
-			'Garchomp-Mega', 'Gliscor', 'Greninja', 'Heatran', 'Kartana', 'Kommo-o', 'Kyurem', 'Landorus-Therian', 'Lopunny-Mega', 'Magearna',
-			'Magnezone', 'Medicham-Mega', 'Melmetal', 'Pelipper', 'Regieleki', 'Sableye-Mega', 'Rillaboom', 'Scizor-Mega', 'Serperior',
-			'Slowbro-Base', 'Swampert-Mega', 'Tangrowth', 'Tapu Fini', 'Tapu Koko', 'Toxapex', 'Tyranitar', 'Volcarona', 'Zapdos-Base',
+			'Garchomp-Mega', 'Gliscor', 'Greninja', 'Heatran', 'Kartana', 'Kommo-o', 'Landorus-Therian', 'Lopunny-Mega', 'Magearna',
+			'Magnezone', 'Medicham-Mega', 'Melmetal', 'Pelipper', 'Regieleki', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base',
+			'Swampert-Mega', 'Tangrowth', 'Tapu Fini', 'Tapu Koko', 'Toxapex', 'Tyranitar', 'Volcarona', 'Zapdos-Base',
 			'nduubl', // National Dex UUBL
 			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Charizard-Mega-X', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega',
-			'Gengar', 'Gyarados', 'Heracross-Mega', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega',
+			'Gengar', 'Gyarados', 'Heracross-Mega', 'Hydreigon', 'Kyurem', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega',
 			'Pinsir-Mega', 'Slowbro-Mega', 'Tapu Lele', 'Thundurus', 'Venusaur-Mega', 'Xurkitree', 'Drizzle', 'Drought',
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
 			'Aegislash', 'Aggron-Mega', 'Alakazam', 'Altaria-Mega', 'Amoonguss', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela', 'Deoxys-Defense',
 			'Diggersby', 'Ditto', 'Dracozolt', 'Dragonite', 'Hatterene', 'Hawlucha', 'Hippowdon', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo',
-			'Krookodile', 'Mandibuzz', 'Manectric-Mega', 'Mew', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Rotom-Heat', 'Rotom-Wash', 'Salamence',
-			'Scizor', 'Scolipede', 'Skarmory', 'Slowking-Base', 'Spectrier', 'Staraptor', 'Steelix-Mega', 'Stoutland', 'Swampert', 'Tapu Bulu',
-			'Tentacruel', 'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar', 'Zeraora',
+			'Krookodile', 'Mandibuzz', 'Manectric-Mega', 'Mew', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Rotom-Heat', 'Rotom-Wash', 'Sableye-Mega',
+			'Salamence', 'Scizor', 'Scolipede', 'Skarmory', 'Slowking-Base', 'Spectrier', 'Staraptor', 'Steelix-Mega', 'Stoutland', 'Swampert',
+			'Tapu Bulu', 'Tentacruel', 'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar', 'Zeraora',
 		],
 	},
 	{
