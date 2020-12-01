@@ -545,62 +545,6 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard NatDex'],
 	},
-	{
-		name: "[Gen 8] National Dex BH",
-		desc: `Balanced Hackmons with National Dex elements mixed in.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658587/">More Balanced Hackmons</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['-Nonexistent', 'Standard NatDex', 'Forme Clause', 'Sleep Clause Mod', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', '!Obtainable'],
-		banlist: [
-			'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja', 'Gengarite',
-			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody',
-			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
-			'Belly Drum', 'Bolt Beak', 'Chatter', 'Double Iron Bash', 'Electrify', 'Octolock', 'Shell Smash',
-			'Comatose + Sleep Talk',
-		],
-		onValidateSet(set) {
-			if (this.dex.toID(set.ability) === 'intrepidsword' &&
-				!this.dex.toID(set.species).startsWith('zacian') && this.dex.toID(set.item) !== 'rustedsword') {
-				return [`${set.ability} is banned.`];
-			}
-			if (set.species === 'Zacian-Crowned' &&
-				(this.dex.toID(set.item) !== 'rustedsword' || this.dex.toID(set.ability) !== 'intrepidsword')) {
-				return [set.species + " is banned."];
-			}
-		},
-		onChangeSet(set) {
-			const item = this.dex.toID(set.item);
-			if (set.species === 'Zacian' && item === 'rustedsword') {
-				set.species = 'Zacian-Crowned';
-				set.ability = 'Intrepid Sword';
-				const ironHead = set.moves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					set.moves[ironHead] = 'behemothblade';
-				}
-			}
-			if (set.species === 'Zamazenta' && item === 'rustedshield') {
-				set.species = 'Zamazenta-Crowned';
-				set.ability = 'Dauntless Shield';
-				const ironHead = set.moves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					set.moves[ironHead] = 'behemothbash';
-				}
-			}
-		},
-		onValidateTeam(team) {
-			let arceus = 0;
-			for (const set of team) {
-				const species = this.dex.getSpecies(set.species);
-				if (species.baseSpecies === "Arceus") arceus++;
-			}
-			if (arceus > 1) {
-				return [`You are limited to one Arceus forme.`, `(You have ${arceus} Arceus formes.)`];
-			}
-		},
-	},
 
 	// Pet Mods
 	///////////////////////////////////////////////////////////////////
