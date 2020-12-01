@@ -134,7 +134,6 @@ export const pages: PageTable = {
 		if (user.can("editroom", null, room)) {
 			html += `<br /><button class="button" name="send" value="/removeallrepeats ${room.roomid}">${this.tr`Remove all repeats`}</button>`;
 		}
-		html += `<br /><small>(Do your repeats look weird? Try removing and re-adding them!)</small>`;
 		html += `</div>`;
 		return html;
 	},
@@ -201,7 +200,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (Repeats.hasRepeat(room, topic as ID)) {
-			throw new Chat.ErrorMessage(`The text for the Room FAQ '${topic}' is already being repeated.`);
+			throw new Chat.ErrorMessage(this.tr`The text for the Room FAQ "${topic}" is already being repeated.`);
 		}
 
 		Repeats.addRepeat(room, {
@@ -232,7 +231,7 @@ export const commands: ChatCommands = {
 		this.room = targetRoom;
 		this.checkCan('mute', null, targetRoom);
 		if (!targetRoom.settings.repeats?.length) {
-			return this.errorReply(`This room does not have any repeats to delete.`);
+			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
 		if (!Repeats.hasRepeat(targetRoom, id)) {
@@ -242,7 +241,7 @@ export const commands: ChatCommands = {
 		Repeats.removeRepeat(targetRoom, id);
 
 		this.modlog('REMOVE REPEATPHRASE', null, `"${id}"`);
-		this.privateModAction(targetRoom.tr`${user.name} removed the repeated phrase "${id}".`);
+		this.privateModAction(targetRoom.tr`${user.name} removed the repeated phrase labeled with "${id}".`);
 		if (roomid) this.parse(`/join view-repeats-${targetRoom.roomid}`);
 	},
 
@@ -250,7 +249,7 @@ export const commands: ChatCommands = {
 		target = target.trim();
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) {
-			return this.errorReply(`Invalid room.`);
+			return this.errorReply(this.tr`Invalid room.`);
 		}
 		this.room = targetRoom;
 		this.checkCan('declare', null, targetRoom);
