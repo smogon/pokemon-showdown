@@ -94,6 +94,7 @@ export type ChatFilter = (
 ) => string | false | null | undefined;
 
 export type NameFilter = (name: string, user: User) => string;
+export type NicknameFilter = (name: string, user: User) => string | false;
 export type StatusFilter = (status: string, user: User) => string;
 export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void;
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
@@ -1444,11 +1445,12 @@ export const Chat = new class {
 		}
 	}
 
-	readonly nicknamefilters: NameFilter[] = [];
+	readonly nicknamefilters: NicknameFilter[] = [];
 	nicknamefilter(nickname: string, user: User) {
 		for (const curFilter of Chat.nicknamefilters) {
-			nickname = curFilter(nickname, user);
-			if (!nickname) return '';
+			const filtered = curFilter(nickname, user);
+			if (filtered === false) return false;
+			if (!filtered) return '';
 		}
 		return nickname;
 	}
