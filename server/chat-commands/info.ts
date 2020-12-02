@@ -2577,7 +2577,7 @@ export const commands: ChatCommands = {
 			if (Spotify.linkRegex.test(request.link)) {
 				buf = Spotify.generateSongDisplay(request.link);
 			} else {
-				buf = await YouTube.generateVideoDisplay(request.link)
+				buf = await YouTube.generateVideoDisplay(request.link);
 				if (!buf) return this.errorReply('Could not get YouTube video');
 			}
 		}
@@ -2630,7 +2630,7 @@ export const commands: ChatCommands = {
 
 		const [link, comment] = Utils.splitFirst(target, ',');
 		let buf;
-      const YouTube = new YoutubeInterface();
+		const YouTube = new YoutubeInterface();
 		const Spotify = new SpotifyInterface();
 		if (YouTube.linkRegex.test(link) || Spotify.linkRegex.test(link)) {
 			if (YouTube.linkRegex.test(link)) {
