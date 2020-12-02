@@ -2633,13 +2633,12 @@ export const commands: ChatCommands = {
 		let buf;
 		const YouTube = new YoutubeInterface();
 		const Spotify = new SpotifyInterface();
-		if (YouTube.linkRegex.test(link) || Spotify.linkRegex.test(link)) {
-			if (YouTube.linkRegex.test(link)) {
-				buf = await YouTube.generateVideoDisplay(link);
-				this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
-			} else {
-				buf = Spotify.generateSongDisplay(link);
-			}
+		if (YouTube.linkRegex.test(link)) {
+			buf = await YouTube.generateVideoDisplay(link);
+			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
+		} else if (Spotify.linkRegex.test(link)) {
+			buf = Spotify.generateSongDisplay(link);
+		}
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
