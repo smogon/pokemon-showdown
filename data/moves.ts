@@ -15969,6 +15969,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
+				const handlersToRun = {"throatchop": 1, "healblock": 1};
+				const onBeforeMoveHandlers = this.findPokemonEventHandlers(snatchUser, "onBeforeMove")
+					.filter(handler => handlersToRun.hasOwnProperty(handler.effect.id));
+				const handlerResult = onBeforeMoveHandlers.reduce((result, handler) => {
+					if (handler.callback !== undefined) {
+						return handler.callback.bind(this)(snatchUser, null, move) && result;
+					}
+					return false;
+				}, true);
+				if (handlerResult === false) return null;
 				this.useMove(move.id, snatchUser);
 				return null;
 			},

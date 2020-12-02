@@ -54,4 +54,22 @@ describe('Snatch', function () {
 		assert.equal(wynaut.status, '');
 		assert.statStage(wynaut, 'atk', 1);
 	});
+
+	it('should run throatchop and healblock checks', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'porygon2', item: 'flameorb', moves: ['sleeptalk', 'howl']},
+			{species: 'weavile', moves: ['sleeptalk', 'snatch']},
+		], [
+			{species: 'mew', item: 'powerherb', moves: ['throatchop', 'sleeptalk', 'healblock']},
+			{species: 'skitty', ability: 'intrepidsword', moves: ['throatchop', 'healbell', 'recover']},
+		]]);
+
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move throatchop 1, move throatchop 2');
+		assert.equal(battle.p1.active[0].moveSlots[1].disabled, true);
+		battle.makeChoices('move sleeptalk, move snatch', 'move sleeptalk, move healbell');
+		assert.equal(battle.p1.active[0].status, 'brn', 'should not allow Heal Bell called from Snatch');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move healblock, move throatchop 2');
+		battle.makeChoices('move sleeptalk, move snatch', 'move sleeptalk, move recover');
+		assert.atMost(battle.p1.active[0].hp / battle.p1.active[0].maxhp, 0.93, 'should not allow Snatch to bypass Heal Block');
+	});
 });
