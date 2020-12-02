@@ -1468,6 +1468,27 @@ export const Punishments = new class {
 		});
 	}
 
+	async checkConnections(user: User) {
+		for (const conn of user.connections) {
+			if (!conn.locked) {
+				const {hostType} = await IPTools.lookup(conn.ip);
+				if (hostType === 'proxy') {
+					conn.locked = '#hostfilter';
+				}
+			}
+			if (!conn.semilocked) {
+				const {dnsbl} = await IPTools.lookup(conn.ip);
+				if (dnsbl) conn.semilocked = `#dnsbl`;
+			}
+		}
+		if (user.connections.every(c => c.locked)) {
+			user.locked = '#hostfilter';
+		}
+		if (user.connections.every(c => c.semilocked)) {
+			user.semilocked = '#dnsbl';
+		}
+	}
+
 	/**
 	 * IP bans need to be checked separately since we don't even want to
 	 * make a User object if an IP is banned.

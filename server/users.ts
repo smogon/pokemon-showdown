@@ -229,6 +229,10 @@ export class Connection {
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
 	openPages: null | Set<string>;
+	/** For tracking hostfilter locks */
+	locked?: PunishType | string;
+	/** For tracking dnsbl semilocks */
+	semilocked?: PunishType | string;
 	constructor(
 		id: string,
 		worker: StreamWorker,
@@ -998,9 +1002,7 @@ export class User extends Chat.MessageContext {
 
 		oldUser.markDisconnected();
 
-		for (const connection of this.connections) {
-			void Punishments.checkIp(this, connection);
-		}
+		void Punishments.checkConnections(this);
 	}
 	mergeConnection(connection: Connection) {
 		// the connection has changed name to this user's username, and so is
