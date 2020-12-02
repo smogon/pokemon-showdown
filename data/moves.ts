@@ -15969,6 +15969,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
+				// Call select onBeforeMove handlers
 				const handlersToRun = {"throatchop": 1, "healblock": 1};
 				const onBeforeMoveHandlers = this.findPokemonEventHandlers(snatchUser, "onBeforeMove")
 					.filter(handler => handlersToRun.hasOwnProperty(handler.effect.id));
@@ -15978,6 +15979,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 					return false;
 				}, true);
+				// If an onBeforeMove handler fails, return null so the move is Snatched, but not used
 				if (handlerResult === false) return null;
 				this.useMove(move.id, snatchUser);
 				return null;
