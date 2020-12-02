@@ -2573,9 +2573,10 @@ export const commands: ChatCommands = {
 		}
 		const Spotify = new SpotifyInterface();
 		const YouTube = new YoutubeInterface();
-		if (Spotify.linkRegex.test(request.link) || YouTube.linkRegex.test(request.link)){
-			if (Spotify.linkRegex.test(request.link)) buf = Spotify.generateSongDisplay(request.link);
-			else {
+		if (Spotify.linkRegex.test(request.link) || YouTube.linkRegex.test(request.link)) {
+			if (Spotify.linkRegex.test(request.link)) {
+				buf = Spotify.generateSongDisplay(request.link);
+			} else {
 				buf = await YouTube.generateVideoDisplay(request.link)
 				if (!buf) return this.errorReply('Could not get YouTube video');
 			}
@@ -2628,16 +2629,15 @@ export const commands: ChatCommands = {
 		}
 
 		const [link, comment] = Utils.splitFirst(target, ',');
-
 		let buf;
       const YouTube = new YoutubeInterface();
 		const Spotify = new SpotifyInterface();
 		if (YouTube.linkRegex.test(link) || Spotify.linkRegex.test(link)) {
 			if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link);
-			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
+				buf = await YouTube.generateVideoDisplay(link);
+				this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 			} else {
-				buf = Spotify.generateSongDisplay(link)
+				buf = Spotify.generateSongDisplay(link);
 			}
 		} else {
 			try {
