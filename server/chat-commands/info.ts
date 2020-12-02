@@ -2575,13 +2575,12 @@ export const commands: ChatCommands = {
 		}
 		const Spotify = new SpotifyInterface();
 		const YouTube = new YoutubeInterface();
-		if (Spotify.linkRegex.test(request.link) || YouTube.linkRegex.test(request.link)) {
-			if (Spotify.linkRegex.test(request.link)) {
-				buf = Spotify.generateSongDisplay(request.link);
-			} else {
-				buf = await YouTube.generateVideoDisplay(request.link);
-				if (!buf) return this.errorReply('Could not get YouTube video');
-			}
+		if (Spotify.linkRegex.test(request.link)) {
+			buf = Spotify.generateSongDisplay(request.link);
+		} else if (YouTube.linkRegex.test(request.link)) {
+			buf = await YouTube.generateVideoDisplay(request.link);
+			if (!buf) return this.errorReply('Could not get YouTube video');
+		}
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
