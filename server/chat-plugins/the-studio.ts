@@ -221,6 +221,9 @@ export class SpotifyInterface {
 		if (link.includes('open.spotify.com/playlist') || link.includes('spotify:playlist')) {
 			throw new Chat.ErrorMessage('Invalid spotify link.');
 		}
+		if (!link.includes('https://open.spotify.com/track/') || !link.includes('spotify:track:')) {
+			throw new Chat.ErrorMessage('Invalid spotify link.');
+		}
 		if (link.includes('https://open.spotify.com/track/')) id = link.split("track/")[1];
 		if (link.includes('spotify:track:')) id = link.split('track:')[1];
 		return id;

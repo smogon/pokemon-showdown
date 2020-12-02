@@ -2522,11 +2522,13 @@ export const commands: ChatCommands = {
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
-		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link) && !/^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i.test(link)) {
-			try {
-				dimensions = await Chat.fitImage(link);
-			} catch (e) {
-				throw new Chat.ErrorMessage('Invalid link.');
+		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			if (!/^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i.test(link)) {
+				try {
+					dimensions = await Chat.fitImage(link);
+				} catch (e) {
+					throw new Chat.ErrorMessage('Invalid link.');
+				}
 			}
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
