@@ -212,29 +212,6 @@ export class LastFMInterface {
 	}
 }
 
-export class SpotifyInterface {
-	linkRegex = /^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i;
-
-	getSongId(link: string) {
-		let id = '';
-		if (!link) throw new Chat.ErrorMessage('You must provide a Spotify link.');
-		if (link.includes('open.spotify.com/playlist') || link.includes('spotify:playlist')) {
-			throw new Chat.ErrorMessage('Invalid spotify link.');
-		}
-		if (!link.includes('https://open.spotify.com/track/') || !link.includes('spotify:track:')) {
-			throw new Chat.ErrorMessage('Invalid spotify link.');
-		}
-		if (link.includes('https://open.spotify.com/track/')) id = link.split("track/")[1];
-		if (link.includes('spotify:track:')) id = link.split('track:')[1];
-		return id;
-	}
-	generateSongDisplay(link: string) {
-		const id = this.getSongId(link);
-		const out = `<spotify src="https://open.spotify.com/embed/track/${id}"></spotify>`;
-		return out;
-	}
-}
-
 class RecommendationsInterface {
 	getRandomRecommendation() {
 		const recs = recommendations.saved;
