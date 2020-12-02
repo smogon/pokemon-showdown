@@ -224,10 +224,10 @@ export class SpotifyInterface {
 		if (link.includes('https://open.spotify.com/track/')) id = link.split("track/")[1];
 		if (link.includes('spotify:track:')) id = link.split('track:')[1];
 		return id;
-	};
+	}
 	generateSongDisplay(link: string) {
 		const id = this.getSongId(link);
-		let out = `<spotify src="https://open.spotify.com/embed/track/${id}"></spotify>`;
+		const out = `<spotify src="https://open.spotify.com/embed/track/${id}"></spotify>`;
 		return out;
 	}
 }
