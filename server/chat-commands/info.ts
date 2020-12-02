@@ -2523,7 +2523,7 @@ export const commands: ChatCommands = {
 		link = encodeURI(link);
 		let dimensions;
 		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
-			if (!/^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i.test(link)){
+			if (!/^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i.test(link)) {
 				try {
 					dimensions = await Chat.fitImage(link);
 				} catch (e) {
