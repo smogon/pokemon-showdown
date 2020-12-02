@@ -1232,6 +1232,13 @@ export class CommandContext extends MessageContext {
 						}
 					}
 				}
+				if (tagName === 'youtube') {
+					if (!this.room || (this.room.settings.isPersonal && !this.user.can('lock'))) {
+						throw new Chat.ErrorMessage(
+							`This tag is not allowed: <${tagContent}>. Youtube embedding is not allowed outside of chatrooms.`
+						);
+					}
+				}
 			}
 			if (stack.length) {
 				throw new Chat.ErrorMessage(`Missing </${stack.pop()}>.`);
