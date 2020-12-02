@@ -898,7 +898,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
-		const targets = target.split(/[,\/]/).map(toID);
+		const targets = target.split(/[,/]/).map(toID);
 		const maybeMod = targets[targets.length - 1];
 		let mod = Dex;
 		let format: Format | null = null;
