@@ -12,6 +12,7 @@ import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 import {Net} from '../../lib/net';
+import {SpotifyInterface} from '../chat-plugins/the-studio';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -2624,10 +2625,14 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 
 		let buf;
-		const YouTube = new YoutubeInterface();
-		if (YouTube.linkRegex.test(link)) {
+		const Spotify = new SpotifyInterface();
+		if (YouTube.linkRegex.test(link) || Spotify.linkRegex.test(link)) {
+			if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
+			} else {
+				buf = Spotify.generateSongDisplay(link)
+			}
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
