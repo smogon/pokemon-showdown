@@ -12,7 +12,6 @@ import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 import {Net} from '../../lib/net';
-import {SpotifyInterface} from '../chat-plugins/the-studio';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -2522,13 +2521,12 @@ export const commands: ChatCommands = {
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
-		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
-			if (!/^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i.test(link)) {
-				try {
-					dimensions = await Chat.fitImage(link);
-				} catch (e) {
-					throw new Chat.ErrorMessage('Invalid link.');
-				}
+		const SpotifyRegex = /open\.spotify\.com\/track\/(.*)/;
+		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link) && !SpotifyRegex.test(link)) {
+			try {
+				dimensions = await Chat.fitImage(link);
+			} catch (e) {
+				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
@@ -2573,14 +2571,14 @@ export const commands: ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		}
-		const Spotify = new SpotifyInterface();
+		const SpotifylinkRegex = /open\.spotify\.com\/track\/(.*)/;
+		const SongId = SpotifylinkRegex.exec(request.link)?.[0];
 		const YouTube = new YoutubeInterface();
-		if (Spotify.linkRegex.test(request.link)) {
-			buf = Spotify.generateSongDisplay(request.link);
+		if (SpotifylinkRegex.test(request.link)) {
+			buf = `<spotify src="${SongId}"</spotify>`;
 		} else if (YouTube.linkRegex.test(request.link)) {
 			buf = await YouTube.generateVideoDisplay(request.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
-		}
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
@@ -2632,13 +2630,15 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 		let buf;
 		const YouTube = new YoutubeInterface();
-		const Spotify = new SpotifyInterface();
-		if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link);
-			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
-		} else if (Spotify.linkRegex.test(link)) {
-			buf = Spotify.generateSongDisplay(link);
-		}
+		const SpotifylinkRegex = /open\.spotify\.com\/track\/(.*)/;
+		const SongId = SpotifylinkRegex.exec(link)?.[0];
+		if (YouTube.linkRegex.test(link) || SpotifylinkRegex.test(link)) {
+			if (YouTube.linkRegex.test(link)) {
+				buf = await YouTube.generateVideoDisplay(link);
+				this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
+			} else {
+				buf = `<spotify src="${SongId}"></spotify>`;
+			}
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
