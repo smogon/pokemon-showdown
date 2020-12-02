@@ -251,6 +251,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	battlearmor: {
 		onCriticalHit: false,
+		onModifySecondaries(secondaries) {
+			this.debug('Battle Armor prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
 		name: "Battle Armor",
 		rating: 1,
 		num: 4,
@@ -1571,11 +1575,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 246,
 	},
-	illuminate: {
-		name: "Illuminate",
-		rating: 0,
-		num: 35,
-	},
 	illusion: {
 		onBeforeSwitchIn(pokemon) {
 			pokemon.illusion = null;
@@ -1676,6 +1675,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			if (effect.id === 'daunt') {
                 delete boost.spa;
+                this.add('-immune', target, '[from] ability: Inner Focus');
+            }
+			if (effect.id === 'petrify') {
+                delete boost.spe;
                 this.add('-immune', target, '[from] ability: Inner Focus');
             }
 		},
@@ -1897,6 +1900,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyType(move, pokemon) {
 			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
 				move.type = 'Water';
+			}
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Liquid Voice boost');
+				return this.chainModify(1.1);
 			}
 		},
 		name: "Liquid Voice",
@@ -2425,6 +2434,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			if (effect.id === 'daunt') {
                 delete boost.spa;
+                this.add('-immune', target, '[from] ability: Oblivious');
+            }
+			if (effect.id === 'petrify') {
+                delete boost.spe;
                 this.add('-immune', target, '[from] ability: Oblivious');
             }
 		},
@@ -3313,11 +3326,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	shellarmor: {
 		onCriticalHit: false,
+		onModifySecondaries(secondaries) {
+			this.debug('Shell Armor prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
 		name: "Shell Armor",
 		rating: 1,
 		num: 75,
 	},
 	shielddust: {
+		onCriticalHit: false,
 		onModifySecondaries(secondaries) {
 			this.debug('Shield Dust prevent secondary');
 			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
@@ -4789,13 +4807,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
             }
         },
         onModifyDefPriority: 6,
-        onModifyDef(def) {
+        onModifyDef(def, pokemon) {
             if (pokemon.side.pokemonLeft === 1) {
                 return this.chainModify(1.25);
             }
         },
         onModifySpDPriority: 6,
-        onModifySpD(spd) {
+        onModifySpD(spd, pokemon) {
             if (pokemon.side.pokemonLeft === 1) {
                 return this.chainModify(1.25);
             }
@@ -4848,13 +4866,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 1026,
 	},
-	hybris: {
+	hubris: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({spa: length}, source);
 			}
 		},
-		name: "Hybris",
+		name: "Hubris",
 		rating: 3,
 		num: 1027,
 	},
@@ -4886,5 +4904,103 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Strong Winds",
 		rating: 3,
 		num: 1029,
+	},
+	supernova: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Cosmic' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Supernova boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Cosmic' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Supernova boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Supernova",
+		rating: 2,
+		num: 1030,
+	},
+	sacredlight: {
+        onStart(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			target.side.foe.addSideCondition('safeguard');
+        },
+        onSwitchOut(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+            target.side.foe.removeSideCondition('safeguard');
+        },
+        onFaint(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+            target.side.foe.removeSideCondition('safeguard');
+        },
+        name: "Sacred Light",
+        rating: 3,
+        num: 1031,
+    },
+	fortitude: {
+		onAfterMoveSecondary(target, source, move) {
+			if (!source || source === target || !target.hp || !move.totalDamage) return;
+			const lastAttackedBy = target.getLastAttackedBy();
+			if (!lastAttackedBy) return;
+			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+				this.boost({def: 1, spd: 1});
+			}
+		},
+		name: "Fortitude",
+		rating: 2,
+		num: 1032,
+	},
+	sunray: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Light' && ['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
+				this.debug('Sunray boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, attacker, defender, move) {
+			if (move.type === 'Light' && ['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
+				this.debug('Sunray boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Sunray",
+		rating: 2,
+		num: 1033,
+	},
+	illuminate: {
+		onSourceModifyAccuracyPriority: 9,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('illuminate - enhancing accuracy');
+			return accuracy * 1.3;
+		},
+		name: "Illuminate",
+		rating: 3,
+		num: 1034,
+	},
+    magicalarcher: {
+		onModifyMovePriority: 22,
+		onModifyMove(move) {
+			if (move.category === "Physical" && !move.flags['contact']) {
+				move.category = "Special";
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category === "Physical" && !move.flags['contact']) {
+				this.debug('Magical Archer boost');
+				return this.chainModify(1.1);
+			}
+		},
+		name: "Magical Archer",
+		rating: 3,
+		num: 1035,
 	},
 };
