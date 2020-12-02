@@ -1083,7 +1083,7 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
-		const targets = target.split(/[,+]/);
+		const targets = target.split(/[,+/]/);
 		const sources: (string | Move)[] = [];
 		let dex = Dex;
 		if (room?.battle) {
