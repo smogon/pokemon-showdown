@@ -230,9 +230,9 @@ export class Connection {
 	lastActiveTime: number;
 	openPages: null | Set<string>;
 	/** For tracking hostfilter locks */
-	locked?: PunishType | string;
+	locked?: PunishType;
 	/** For tracking dnsbl semilocks */
-	semilocked?: PunishType | string;
+	semilocked?: PunishType;
 	constructor(
 		id: string,
 		worker: StreamWorker,
@@ -260,6 +260,10 @@ export class Connection {
 		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
 		this.openPages = null;
+		void IPTools.lookup(this.ip).then(({dnsbl, hostType}) => {
+			if (dnsbl) this.semilocked = `#dnsbl`;
+			if (hostType === 'proxy') this.locked = `#hostfilter`;
+		});
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
@@ -1002,7 +1006,13 @@ export class User extends Chat.MessageContext {
 
 		oldUser.markDisconnected();
 
-		void Punishments.checkConnections(this);
+		if (this.connections.every(c => c.locked)) {
+			this.locked = '#hostfilter';
+		}
+
+		if (this.connections.every(c => c.semilocked)) {
+			this.semilocked = `#dnsbl`;
+		}
 	}
 	mergeConnection(connection: Connection) {
 		// the connection has changed name to this user's username, and so is
