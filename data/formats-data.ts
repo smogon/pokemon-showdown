@@ -1978,7 +1978,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["closecombat", "facade", "knockoff", "obstruct", "partingshot", "taunt"],
 		randomDoubleBattleLevel: 86,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	wurmple: {
@@ -3733,7 +3733,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["focusblast", "protect", "psychic", "shadowball", "trickroom"],
 		randomDoubleBattleLevel: 84,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	ducklett: {
