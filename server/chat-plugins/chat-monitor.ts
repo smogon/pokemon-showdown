@@ -448,13 +448,15 @@ export const nicknamefilter: NicknameFilter = (name, user) => {
 				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
 			}
 
-			if (regex.test(lcName)) {
+			const match = regex.exec(lcName);
+			if (match) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
 						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
 					);
-				} else if (Chat.monitors[list].punishment === 'EVASION') {
+				} else if (Chat.monitors[list].punishment === 'EVASION' && match[0] !== lcName) {
+					// Don't autolock unless it's an evasion regex and they're evading
 					void Punishments.autolock(
 						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
 						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
