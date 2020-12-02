@@ -2522,7 +2522,7 @@ export const commands: ChatCommands = {
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
-		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link) && !/^(https?:\/\/)?(www\.)?(open\.spotify\.com)(\/|$)|(spotify:)/i.test(link)) {
 			try {
 				dimensions = await Chat.fitImage(link);
 			} catch (e) {
@@ -2570,10 +2570,15 @@ export const commands: ChatCommands = {
 			const [width, height, resized] = request.dimensions;
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
-		} else {
-			const YouTube = new YoutubeInterface();
-			buf = await YouTube.generateVideoDisplay(request.link);
-			if (!buf) return this.errorReply('Could not get YouTube video');
+		}
+		const Spotify = new SpotifyInterface();
+		const YouTube = new YoutubeInterface();
+		if (Spotify.linkRegex.test(request.link) || YouTube.linkRegex.test(request.link)){
+			if (Spotify.linkRegex.test(request.link)) buf = Spotify.generateSongDisplay(request.link);
+			else {
+				buf = await YouTube.generateVideoDisplay(request.link)
+				if (!buf) return this.errorReply('Could not get YouTube video');
+			}
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
