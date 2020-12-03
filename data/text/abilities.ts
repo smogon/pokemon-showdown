@@ -101,7 +101,7 @@ export const AbilitiesText = {
 	},
 	battlearmor: {
 		name: "Battle Armor",
-		shortDesc: "This Pokemon cannot be struck by a critical hit.",
+		shortDesc: "Cannot be crit,not affected by the secondary effect of another Pokemon's attack.",
 	},
 	battlebond: {
 		name: "Battle Bond",
@@ -520,10 +520,6 @@ export const AbilitiesText = {
 		name: "Ice Scales",
 		shortDesc: "This Pokemon receives 1/2 damage from special attacks.",
 	},
-	illuminate: {
-		name: "Illuminate",
-		shortDesc: "No competitive use.",
-	},
 	illusion: {
 		name: "Illusion",
 		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
@@ -654,7 +650,7 @@ export const AbilitiesText = {
 	liquidvoice: {
 		name: "Liquid Voice",
 		desc: "This Pokemon's sound-based moves become Water-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's sound-based moves become Water type.",
+		shortDesc: "This Pokemon's sound-based moves become Water type and are x1.1.",
 	},
 	longreach: {
 		name: "Long Reach",
@@ -1120,11 +1116,11 @@ export const AbilitiesText = {
 	},
 	shellarmor: {
 		name: "Shell Armor",
-		shortDesc: "This Pokemon cannot be struck by a critical hit.",
+		shortDesc: "Cannot be crit,not affected by the secondary effect of another Pokemon's attack.",
 	},
 	shielddust: {
 		name: "Shield Dust",
-		shortDesc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack.",
+		shortDesc: "Cannot be crit,not affected by the secondary effect of another Pokemon's attack.",
 	},
 	shieldsdown: {
 		name: "Shields Down",
@@ -1625,4 +1621,48 @@ export const AbilitiesText = {
         name: "Parasite",
         shortDesc: "Holder gains 1.3x HP from draining moves/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
     },
+	magicalarcher: {
+        name: "Magical Archer",
+        shortDesc: "Changes Physical Non-Contact moves to special.",
+    },
+	enthusiasm: {
+		name: "Enthusiasm",
+		shortDesc: "This Pokemon's Special Attack is 1.5x and accuracy of its special attacks is 0.8x.",
+	},
+	hubris: {
+		name: "Hubris",
+		shortDesc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
+	},
+	blazeroar: {
+		name: "Blaze Roar",
+		shortDesc: "This Pokemon's sound-based moves become Fire type and are x1.1.",
+	},
+	strongwinds: {
+		name: "Strong Winds",
+		shortDesc: "This Pokemon's wind-based attacks have 1.2x power.",
+	},
+	supernova: {
+		name: "Supernova",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Cosmic attacks.",
+	},
+	sacredlight: {
+		name: "Sacred Light",
+		shortDesc: "Summons Safeguard on switch in. Removed on switch-out.",
+	},
+	fortitude: {
+		name: "Fortitude",
+		shortDesc: "This Pokemon's Def, Sp. Def are raised by 1 when it reaches 1/2 or less of its max HP.",
+	},
+	sunray: {
+		name: "Sunray",
+		shortDesc: "If Sunny Day is active, this Pokemon's Light moves are 1.5x.",
+	},
+	illuminate: {
+		name: "Illuminate",
+		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
+	},
+	perseverance: {
+		name: "Perseverance",
+		shortDesc: "This Pokemon's Atk, SpAtk, Def, SpDef are x1.25 if its the last one standing.",
+	},
 };

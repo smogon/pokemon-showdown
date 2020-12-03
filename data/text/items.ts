@@ -9,7 +9,7 @@ export const ItemsText = {
 	},
 	absorbbulb: {
 		name: "Absorb Bulb",
-		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
+		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water/Light-type attack. Single use.",
 	},
 	adamantorb: {
 		name: "Adamant Orb",
@@ -17,7 +17,7 @@ export const ItemsText = {
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
-		desc: "Raises holder's Speed by 1 stage if it gets affected by Intimidate. Single use.",
+		desc: "Raises holder's Speed by 1 stage if it gets affected by Intimidate, Petrify, Daunt. Single use.",
 	},
 	aerodactylite: {
 		name: "Aerodactylite",
@@ -900,7 +900,7 @@ export const ItemsText = {
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",
-		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+		desc: "If held by a Palkia, its Cosmic- and Dragon-type attacks have 1.2x power.",
 	},
 	luxuryball: {
 		name: "Luxury Ball",
@@ -2230,4 +2230,54 @@ export const ItemsText = {
         name: "Fire Wood",
         desc: "Raises holder's Attack by 1 if hit by an Fire-type attack. Single use.",
     },
+	radiantplate: {
+		name: "Radiant Plate",
+		desc: "Holder's Light-type attacks have 1.2x power. Judgment is Light type.",
+	},
+	spatialplate: {
+		name: "Spatial Plate",
+		desc: "Holder's Cosmic-type attacks have 1.2x power. Judgment is Cosmic type.",
+	},
+	lightmemory: {
+		name: "Light Memory",
+		desc: "Holder's Multi-Attack is Light type.",
+	},
+	cosmicmemory: {
+		name: "Cosmic Memory",
+		desc: "Holder's Multi-Attack is Cosmic type.",
+	},
+	eldurrberry: {
+		name: "Eldurr Berry",
+		desc: "Halves damage taken from a supereffective Cosmic-type attack. Single use.",
+	},
+	keblacberry: {
+		name: "Keblac Berry",
+		desc: "Halves damage taken from a supereffective Light-type attack. Single use.",
+	},
+	lightiumz: {
+		name: "Buginium Z",
+		desc: "If holder has a Light move, this item allows it to use a Light Z-Move.",
+	},
+	cosmiumz: {
+		name: "Buginium Z",
+		desc: "If holder has a Cosmic move, this item allows it to use a Cosmic Z-Move.",
+	},
+	lightgem: {
+		name: "Light Gem",
+		desc: "Holder's first successful Light-type attack will have 1.3x power. Single use.",
+		descGen5: "Holder's first successful Light-type attack will have 1.5x power. Single use.",
+	},
+	cosmicgem: {
+		name: "Cosmic Gem",
+		desc: "Holder's first successful Cosmic-type attack will have 1.3x power. Single use.",
+		descGen5: "Holder's first successful Cosmic-type attack will have 1.5x power. Single use.",
+	},
+	solarpanel: {
+		name: "Solar Panel",
+		desc: "Raises holder's Speed by 1 stage if hit by a Light-type attack. Single use.",
+	},
+	flashdrive: {
+		name: "Flash Drive",
+		desc: "Holder's Techno Blast is Light type.",
+	},
 };

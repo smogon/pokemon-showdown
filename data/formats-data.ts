@@ -3144,6 +3144,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	arceuswater: {
 		isNonstandard: "Past",
 	},
+	arceuslight: {
+		isNonstandard: "Past",
+	},
+	arceuscosmic: {
+		isNonstandard: "Past",
+	},
 	victini: {
 		randomBattleMoves: ["boltstrike", "trick", "uturn", "vcreate", "zenheadbutt"],
 		randomBattleLevel: 82,
@@ -5021,6 +5027,22 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	silvallywater: {
+		randomBattleMoves: ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt", "toxic"],
+		randomBattleLevel: 86,
+		randomDoubleBattleMoves: ["icebeam", "multiattack", "partingshot", "tailwind", "thunderbolt"],
+		randomDoubleBattleLevel: 88,
+		tier: "PUBL",
+		doublesTier: "(DUU)",
+	},
+	silvallylight: {
+		randomBattleMoves: ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt", "toxic"],
+		randomBattleLevel: 86,
+		randomDoubleBattleMoves: ["icebeam", "multiattack", "partingshot", "tailwind", "thunderbolt"],
+		randomDoubleBattleLevel: 88,
+		tier: "PUBL",
+		doublesTier: "(DUU)",
+	},
+	silvallycosmic: {
 		randomBattleMoves: ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt", "toxic"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["icebeam", "multiattack", "partingshot", "tailwind", "thunderbolt"],

@@ -34,7 +34,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
+			if (move.type === 'Water' || move.type === 'Light') {
 				target.useItem();
 			}
 		},
@@ -3071,7 +3071,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.baseSpecies.name === 'Palkia' && (move.type === 'Cosmic' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -7310,5 +7310,209 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 10011,
 		gen: 4,
+	},
+	radiantplate: {
+		name: "Radiant Plate",
+		spritenum: 105,
+		onPlate: 'Light',
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Light') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Arceus-Light",
+		num: 10012,
+		gen: 4,
+		isNonstandard: "Unobtainable",
+	},
+	spatialplate: {
+		name: "Spatial Plate",
+		spritenum: 105,
+		onPlate: 'Cosmic',
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Cosmic') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Arceus-Cosmic",
+		num: 10013,
+		gen: 4,
+		isNonstandard: "Unobtainable",
+	},
+	lightmemory: {
+		name: "Light Memory",
+		spritenum: 673,
+		onMemory: 'Light',
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Light",
+		itemUser: ["Silvally-Light"],
+		num: 10014,
+		gen: 7,
+	},
+	cosmicmemory: {
+		name: "Cosmic Memory",
+		spritenum: 673,
+		onMemory: 'Cosmic',
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Cosmic",
+		itemUser: ["Silvally-Cosmic"],
+		num: 10015,
+		gen: 7,
+	},
+	eldurrberry: {
+		name: "Eldurr Berry",
+		spritenum: 71,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Cosmic",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Cosmic' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onEat() { },
+		num: 10016,
+		gen: 4,
+	},
+	keblacberry: {
+		name: "Keblac Berry",
+		spritenum: 71,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Light",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Light' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onEat() { },
+		num: 10017,
+		gen: 4,
+	},
+	lightiumz: {
+		name: "Lightium Z",
+		spritenum: 648,
+		onPlate: 'Light',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Light",
+		forcedForme: "Arceus-Light",
+		num: 10017,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	cosmiumz: {
+		name: "Cosmium Z",
+		spritenum: 648,
+		onPlate: 'Cosmic',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Cosmic",
+		forcedForme: "Arceus-Cosmic",
+		num: 10018,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	lightgem: {
+		name: "Light Gem",
+		spritenum: 611,
+		isGem: true,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if (move.type === 'Light' && source.useItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		num: 10019,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	cosmicgem: {
+		name: "Cosmic Gem",
+		spritenum: 611,
+		isGem: true,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if (move.type === 'Cosmic' && source.useItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		num: 10019,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	solarpanel: {
+		name: "Solar Panel",
+		spritenum: 2,
+		fling: {
+			basePower: 30,
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Light') {
+				target.useItem();
+			}
+		},
+		boosts: {
+			spe: 1,
+		},
+		num: 10020,
+		gen: 5,
+	},
+	flashdrive: {
+		name: "Flash Drive",
+		spritenum: 54,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
+				return false;
+			}
+			return true;
+		},
+		onDrive: 'Light',
+		forcedForme: "Genesect-Flash",
+		itemUser: ["Genesect-Flash"],
+		num: 10021,
+		gen: 5,
 	},
 };

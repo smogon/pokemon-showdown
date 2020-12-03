@@ -49274,6 +49274,12 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	arceuswater: {
 		eventOnly: true,
 	},
+	arceuslight: {
+		eventOnly: true,
+	},
+	arceuscosmic: {
+		eventOnly: true,
+	},
 	victini: {
 		learnset: {
 			batonpass: ["8M"],
@@ -57035,6 +57041,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["8M", "7M", "6M", "5M"],
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M"],
+			triattack: ["8M", "7M"],
 		},
 	},
 	galvantula: {
@@ -57105,6 +57112,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M"],
 			webshield: ["8M", "7M"],
+			triattack: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 6, level: 30},
@@ -83980,6 +83988,17 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			whirlpool: ["8M", "7M"],
 			wringout: ["8M", "7M"],
 			zapcannon: ["8M", "7M"],
+			cometstorm: ["8M", "7M"],
+			implosion: ["8M", "7M"],
+			abduction: ["8M", "7M"],
+			meteorshower: ["8M", "7M"],
+			photondischarge: ["8M", "7M"],
+			radiantpunch: ["8M", "7M"],
+			solarorb: ["8M", "7M"],
+			flashbeam: ["8M", "7M"],
+			glowingbram: ["8M", "7M"],
+			lightspeed: ["8M", "7M"],
+			lightwave: ["8M", "7M"],
 		},
 	},
 	ibroxiz: {
