@@ -1548,7 +1548,7 @@ export class Battle {
 		}
 
 		this.add('turn', this.turn);
-		if (this.gameType === 'multi') {
+		/*if (this.gameType === 'multi') {
 			for (const side of this.sides) {
 				if (side.canDynamaxNow()) {
 					if (this.turn === 1) {
@@ -1558,7 +1558,7 @@ export class Battle {
 					}
 				}
 			}
-		}
+		}*/
 
 		this.makeRequest('move');
 	}
