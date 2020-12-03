@@ -15975,9 +15975,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 					.filter(handler => handlersToRun.hasOwnProperty(handler.effect.id));
 				const handlerResult = onBeforeMoveHandlers.reduce((result, handler) => {
 					if (handler.callback !== undefined) {
-						return handler.callback.bind(this)(snatchUser, null, move) && result;
+						return result && handler.callback.bind(this)(snatchUser, null, move);
 					}
-					return false;
+					return result;
 				}, true);
 				// If an onBeforeMove handler fails, return null so the move is Snatched, but not used
 				if (handlerResult === false) return null;
