@@ -883,8 +883,8 @@ export const Punishments = new class {
 			user.punishmentTimer = null;
 		}
 
-      // Don't unlock users who have non-time-based locks such as #hostfilter
-      if (user.locked?.startsWith('#')) return;
+		// Don't unlock users who have non-time-based locks such as #hostfilter
+		if (user.locked?.startsWith('#')) return;
 
 		const [, id, expireTime] = punishment;
 
