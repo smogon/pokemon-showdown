@@ -15975,7 +15975,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					.filter(handler => handlersToRun.hasOwnProperty(handler.effect.id));
 				const handlerResult = onBeforeMoveHandlers.reduce((result, handler) => {
 					if (handler.callback !== undefined) {
-						return result && handler.callback.bind(this)(snatchUser, null, move);
+						return result && handler.callback.call(this, snatchUser, null, move);
 					}
 					return result;
 				}, true);
