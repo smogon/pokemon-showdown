@@ -375,6 +375,10 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 export const namefilter: NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
+	if (Monitor.forceRenames.has(id)) {
+		// Don't allow reuse of forcerenamed names
+		return '';
+	}
 	if (id === toID(user.trackRename)) return '';
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -407,10 +411,6 @@ export const namefilter: NameFilter = (name, user) => {
 };
 export const loginfilter: LoginFilter = user => {
 	if (user.namelocked) return;
-	if (Monitor.forceRenames.has(user.id) && !Punishments.namefilterwhitelist.has(user.id)) {
-		return '';
-	}
-
 	if (user.trackRename) {
 		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
 		Rooms.global.notifyRooms(
