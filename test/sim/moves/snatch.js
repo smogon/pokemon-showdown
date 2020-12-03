@@ -73,6 +73,6 @@ describe('Snatch', function () {
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move healblock, move throatchop 2');
 		battle.makeChoices('move sleeptalk, move snatch', 'move sleeptalk, move recover');
 		assert.atMost(battle.p1.active[1].hp / battle.p1.active[1].maxhp, 0.93, 'should not allow Snatch to bypass Heal Block');
-		assert.match(battle.log[battle.lastMoveLine + 2], /^\|cant.*move: Heal Block\|Recover$/, 'should log that Recover failed');
+		assert.match(battle.log[battle.lastMoveLine + 1], /^\|cant.*move: Heal Block\|Recover$/, 'should log that Recover failed');
 	});
 });
