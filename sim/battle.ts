@@ -1637,7 +1637,6 @@ export class Battle {
 		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides}`);
 
 		if (this.started) throw new Error(`Battle already started`);
-		this.add('gametype', this.gameType);
 
 		const format = this.format;
 		this.started = true;
