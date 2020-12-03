@@ -884,7 +884,8 @@ export const Punishments = new class {
 		}
 
 		// Don't unlock users who have non-time-based locks such as #hostfilter
-		if (user.locked?.startsWith('#')) return;
+		// Optional chaining doesn't seem to work properly in callbacks of setTimeout
+		if (user.locked && user.locked.startsWith('#')) return;
 
 		const [, id, expireTime] = punishment;
 
