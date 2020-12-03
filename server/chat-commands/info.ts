@@ -2630,14 +2630,12 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 		let buf;
 		const YouTube = new YoutubeInterface();
-		const SpotifylinkRegex = /open\.spotify\.com\/track\/(.*)/;
-		const SongId = SpotifylinkRegex.exec(link)?.[0];
-		if (YouTube.linkRegex.test(link) || SpotifylinkRegex.test(link)) {
-			if (YouTube.linkRegex.test(link)) {
-				buf = await YouTube.generateVideoDisplay(link);
-				this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
-			} else {
-				buf = `<spotify src="${SongId}"></spotify>`;
+		const songId = spotifyRegex.exec(link)?.[0];
+		if (YouTube.linkRegex.test(link)) {
+			buf = await YouTube.generateVideoDisplay(link);
+			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
+		} else if (songId) {
+				buf = `<spotify src="${songId}"></spotify>`;
 			}
 		} else {
 			try {
