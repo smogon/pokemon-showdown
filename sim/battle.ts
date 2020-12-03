@@ -1242,7 +1242,11 @@ export class Battle {
 
 		this.add('');
 		if (side) {
-			this.add('win', side.name);
+			if (side.ally) {
+				this.add('win', side.name + ' & ' + side.ally.name);
+			} else {
+				this.add('win', side.name);
+			}
 		} else {
 			this.add('tie');
 		}
