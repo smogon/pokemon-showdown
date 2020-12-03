@@ -174,6 +174,10 @@ export const Punishments = new class {
 	/** roomid:timestamp map */
 	readonly lastGroupchatMonitorTime: {[k: string]: number} = {};
 	/**
+	 * Map<userid that has been warned, reason they were warned for>
+	 */
+	readonly offlineWarns: Map<ID, string> = new Map();
+	/**
 	 * punishType is an allcaps string, for global punishments they can be
 	 * anything in the punishmentTypes map.
 	 *
@@ -878,6 +882,10 @@ export const Punishments = new class {
 			clearTimeout(user.punishmentTimer);
 			user.punishmentTimer = null;
 		}
+
+		// Don't unlock users who have non-time-based locks such as #hostfilter
+		// Optional chaining doesn't seem to work properly in callbacks of setTimeout
+		if (user.locked && user.locked.startsWith('#')) return;
 
 		const [, id, expireTime] = punishment;
 

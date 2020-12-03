@@ -43,7 +43,7 @@ export type ChatHandler = (
 	message: string
 ) => void;
 export type AnnotatedChatHandler = ChatHandler & {
-	requiresRoom: boolean,
+	requiresRoom: boolean | RoomID,
 	hasRoomPermissions: boolean,
 	broadcastable: boolean,
 	cmd: string,
@@ -94,6 +94,7 @@ export type ChatFilter = (
 ) => string | false | null | undefined;
 
 export type NameFilter = (name: string, user: User) => string;
+export type NicknameFilter = (name: string, user: User) => string | false;
 export type StatusFilter = (status: string, user: User) => string;
 export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void;
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
@@ -932,18 +933,18 @@ export class CommandContext extends MessageContext {
 		const connection = this.connection;
 
 		if (!user.named) {
-			throw new Chat.ErrorMessage(this.tr(`You must choose a name before you can talk.`));
+			throw new Chat.ErrorMessage(this.tr`You must choose a name before you can talk.`);
 		}
 		if (!user.can('bypassall')) {
-			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
+			const lockType = (user.namelocked ? this.tr`namelocked` : user.locked ? this.tr`locked` : ``);
 			const lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
 				if (lockType && !room.settings.isHelp) {
-					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr("Get help with this")}</a>`);
-					throw new Chat.ErrorMessage(this.tr `You are ${lockType} and can't talk in chat. ${lockExpiration}`);
+					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
+					throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 				}
 				if (room.isMuted(user)) {
-					throw new Chat.ErrorMessage(this.tr(`You are muted and cannot talk in this room.`));
+					throw new Chat.ErrorMessage(this.tr`You are muted and cannot talk in this room.`);
 				}
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
@@ -959,7 +960,7 @@ export class CommandContext extends MessageContext {
 					const groupName = Config.groups[room.settings.modchat] && Config.groups[room.settings.modchat].name ||
 						room.settings.modchat;
 					throw new Chat.ErrorMessage(
-						this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
+						this.tr`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
 				}
 				if (!(user.id in room.users)) {
@@ -1001,19 +1002,19 @@ export class CommandContext extends MessageContext {
 		if (typeof message !== 'string') return true;
 
 		if (!message) {
-			throw new Chat.ErrorMessage(this.tr("Your message can't be blank."));
+			throw new Chat.ErrorMessage(this.tr`Your message can't be blank.`);
 		}
 		let length = message.length;
 		length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
 		if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			throw new Chat.ErrorMessage(this.tr("Your message is too long: ") + message);
+			throw new Chat.ErrorMessage(this.tr`Your message is too long: ` + message);
 		}
 
 		// remove zalgo
 		// eslint-disable-next-line max-len
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
-			throw new Chat.ErrorMessage(this.tr("Your message contains banned characters."));
+			throw new Chat.ErrorMessage(this.tr`Your message contains banned characters.`);
 		}
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
@@ -1055,7 +1056,7 @@ export class CommandContext extends MessageContext {
 				!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
 				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN) && !Config.nothrottle
 			) {
-				throw new Chat.ErrorMessage(this.tr("You can't send the same message again so soon."));
+				throw new Chat.ErrorMessage(this.tr`You can't send the same message again so soon.`);
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
@@ -1065,7 +1066,7 @@ export class CommandContext extends MessageContext {
 			toID(message).replace(/[^a-z]+/, '').length < 2 &&
 			!user.can('show', null, room)) {
 			throw new Chat.ErrorMessage(
-				this.tr('Due to this room being a high traffic room, your message must contain at least two letters.')
+				this.tr`Due to this room being a high traffic room, your message must contain at least two letters.`
 			);
 		}
 
@@ -1444,11 +1445,12 @@ export const Chat = new class {
 		}
 	}
 
-	readonly nicknamefilters: NameFilter[] = [];
+	readonly nicknamefilters: NicknameFilter[] = [];
 	nicknamefilter(nickname: string, user: User) {
 		for (const curFilter of Chat.nicknamefilters) {
-			nickname = curFilter(nickname, user);
-			if (!nickname) return '';
+			const filtered = curFilter(nickname, user);
+			if (filtered === false) return false;
+			if (!filtered) return '';
 		}
 		return nickname;
 	}
@@ -1630,7 +1632,7 @@ export const Chat = new class {
 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
-			entry.requiresRoom = /\bthis\.requires?Room\(/.test(handlerCode);
+			entry.requiresRoom = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`)/.exec(handlerCode)?.[1] as RoomID || /this\.requireRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);

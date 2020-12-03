@@ -17,7 +17,7 @@
 
 type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
 
-export const Utils = new class Utils {
+export const Utils = new class {
 	/**
 	 * Safely converts the passed variable into a string. Unlike '' + str,
 	 * String(str), or str.toString(), Utils.getString is guaranteed not to

@@ -160,18 +160,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|+A Quag to The Past|Wait, this isn't the groupchat...`);
 		},
 	},
-	arandomduck: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+a random duck|SWANNA LOSE???`);
-		},
-		onSwitchOut() {
-			this.add(`c|+a random duck|YEET`);
-		},
-		onFaint() {
-			this.add(`c|+a random duck|I guess that was my swan song`);
-		},
-	},
 	arcticblast: {
 		noCopy: true,
 		onStart() {
