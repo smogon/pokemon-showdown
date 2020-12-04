@@ -73,6 +73,8 @@ export function findFormats(targetId: string, isOMSearch = false) {
 	return {totalMatches, sections, exactMatch};
 }
 
+const SPOTIFY_REGEX = /open\.spotify\.com\/track\/(.*)/;	
+
 export const commands: ChatCommands = {
 	ip: 'whois',
 	rooms: 'whois',
@@ -2521,8 +2523,7 @@ export const commands: ChatCommands = {
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
-		const SpotifyRegex = /open\.spotify\.com\/track\/(.*)/;
-		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link) && !SpotifyRegex.test(link)) {
+		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link) && !SPOTIFY_REGEX.test(link)) {
 			try {
 				dimensions = await Chat.fitImage(link);
 			} catch (e) {
@@ -2571,11 +2572,10 @@ export const commands: ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		}
-		const SpotifylinkRegex = /open\.spotify\.com\/track\/(.*)/;
-		const SongId = SpotifylinkRegex.exec(request.link)?.[0];
+		const SongId = SPOTIFY_REGEX.exec(request.link)?.[1];
 		const YouTube = new YoutubeInterface();
-		if (SpotifylinkRegex.test(request.link)) {
-			buf = `<spotify src="${SongId}"</spotify>`;
+		if (SongId) {
+			buf = `<spotify src="https://open.spotify.com/embed/track/${SongId}"</spotify>`;
 		} else if (YouTube.linkRegex.test(request.link)) {
 			buf = await YouTube.generateVideoDisplay(request.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
@@ -2630,12 +2630,12 @@ export const commands: ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 		let buf;
 		const YouTube = new YoutubeInterface();
-		const songId = spotifyRegex.exec(link)?.[0];
+		const songId = SPOTIFY_REGEX.exec(link)?.[1];
 		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (songId) {
-				buf = `<spotify src="${songId}"></spotify>`;
+				buf = `<spotify src="https://open.spotify.com/embed/track/${songId}"></spotify>`;
 			}
 		} else {
 			try {
