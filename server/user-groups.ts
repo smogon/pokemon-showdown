@@ -158,11 +158,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		for (const handler of Chat.allCommands()) {
-			if (handler.hasRoomPermissions) permissions.push(`/${handler.fullCmd}`);
-		}
-		return permissions;
+		return [
+				...ROOM_PERMISSIONS,
+				...Chat.allCommands().filter(c => c.hasRoomPermissions).map(c => `/${c.fullCmd}`),
+		];
 	}
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,

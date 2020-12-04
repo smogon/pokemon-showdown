@@ -1637,7 +1637,7 @@ export const Chat = new class {
 				base.aliases.push(cmd);
 				continue;
 			}
- 		if (typeof entry !== 'function') continue;
+			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`)/.exec(handlerCode)?.[1] as RoomID || /this\.requireRoom\(/.test(handlerCode);
@@ -1841,13 +1841,13 @@ export const Chat = new class {
 			handler: commandHandler as AnnotatedChatHandler | null,
 		};
 	}
-	allCommands(table: ChatCommands = Chat.commands, namespace = '') {
+	allCommands(table: ChatCommands = Chat.commands) {
 		const results: AnnotatedChatHandler[] = [];
 		for (const cmd in table) {
 			const handler = table[cmd];
 			if (Array.isArray(handler) || !handler || typeof handler === 'string') continue;
 			if (typeof handler === 'object') {
-				results.push(...this.allCommands(handler, `${namespace}${cmd} `));
+				results.push(...this.allCommands(handler));
 				continue;
 			}
 			results.push(handler as AnnotatedChatHandler);
