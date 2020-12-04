@@ -95,7 +95,6 @@ export class Poll extends MinorActivity {
 	readonly activityId: 'poll';
 	pollNumber: number;
 	question: string;
-	supportHTML: boolean;
 	multiPoll: boolean;
 	pendingVotes: {[userid: string]: number[]};
 	voters: {[k: string]: number[]};
@@ -351,6 +350,12 @@ export class Poll extends MinorActivity {
 		this.displayTo(user, connection);
 	}
 
+	onRename(user: User, oldid: ID, joining: boolean) {
+		if (user.id in this.voters) {
+			this.updateFor(user);
+		}
+	}
+
 	end() {
 		const results = Poll.generateResults(this.toJSON(), this.room, true);
 		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
@@ -496,28 +501,27 @@ export const commands: ChatCommands = {
 		deletequeue(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
-			if (!room.minorActivityQueue) {
+			if (!room.getMinorActivityQueue(Poll)) {
 				return this.errorReply(this.tr`The queue is already empty.`);
 			}
-			if (cmd === 'deletequeue' && room.minorActivityQueue.length !== 1 && !target) {
+			if (cmd === 'deletequeue' && room.minorActivityQueue?.length !== 1 && !target) {
 				return this.parse('/help deletequeue');
 			}
 			if (!target) {
-				room.minorActivityQueue = null;
+				room.clearMinorActivityQueue();
 				this.modlog('CLEARQUEUE');
 				this.sendReply(this.tr`Cleared poll queue.`);
 			} else {
 				const [slotString, roomid, update] = target.split(',');
 				const slot = parseInt(slotString);
-				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
+				const curRoom = roomid ? Rooms.search(roomid) : room;
 				if (!curRoom) return this.errorReply(this.tr`Room "${roomid}" not found.`);
 				if (isNaN(slot)) {
 					return this.errorReply(this.tr`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
 				}
-				if (!room.minorActivityQueue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
+				if (!room.minorActivityQueue?.[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
 
-				curRoom.minorActivityQueue!.splice(slot - 1, 1);
-				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
+				curRoom.clearMinorActivityQueue(slot - 1);
 
 				curRoom.modlog({
 					action: 'DELETEQUEUE',
@@ -538,11 +542,11 @@ export const commands: ChatCommands = {
 		vote: 'select',
 		select(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+			const poll = room.getMinorActivity(Poll);
+			if (!poll) {
 				return this.errorReply(this.tr`There is no poll running in this room.`);
 			}
 			if (!target) return this.parse('/help poll vote');
-			const poll = room.minorActivity;
 
 			const parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply(this.tr`To vote, specify the number of the option.`);
@@ -562,10 +566,10 @@ export const commands: ChatCommands = {
 
 		submit(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+			const poll = room.getMinorActivity(Poll);
+			if (!poll) {
 				return this.errorReply(this.tr`There is no poll running in this room.`);
 			}
-			const poll = room.minorActivity;
 
 			poll.submit(user);
 		},
@@ -573,10 +577,10 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+			const poll = room.getMinorActivity(Poll);
+			if (!poll) {
 				return this.errorReply(this.tr`There is no poll running in this room.`);
 			}
-			const poll = room.minorActivity;
 
 			if (target) {
 				this.checkCan('minigame', null, room);
@@ -608,10 +612,10 @@ export const commands: ChatCommands = {
 
 		results(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+			const poll = room.getMinorActivity(Poll);
+			if (!poll) {
 				return this.errorReply(this.tr`There is no poll running in this room.`);
 			}
-			const poll = room.minorActivity;
 
 			return poll.blankvote(user);
 		},
@@ -625,10 +629,10 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+			const poll = room.getMinorActivity(Poll);
+			if (!poll) {
 				return this.errorReply(this.tr`There is no poll running in this room.`);
 			}
-
 			this.modlog('POLL END');
 			this.privateModAction(room.tr`The poll was ended by ${user.name}.`);
 			MinorActivity.end(room);
@@ -639,10 +643,10 @@ export const commands: ChatCommands = {
 		display: '',
 		''(target, room, user, connection) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+			const poll = room.getMinorActivity(Poll);
+			if (!poll) {
 				return this.errorReply(this.tr`There is no poll running in this room.`);
 			}
-			const poll = room.minorActivity;
 			if (!this.runBroadcast()) return;
 			room.update();
 
@@ -682,11 +686,12 @@ export const pages: PageTable = {
 		let buf = `<div class="pad"><strong>${this.tr`Queued polls:`}</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button><br />`;
-		if (!room.minorActivityQueue?.length) {
+		const queue = room.getMinorActivityQueue(Poll);
+		if (!queue) {
 			buf += `<hr /><strong>${this.tr`No polls queued.`}</strong></div>`;
 			return buf;
 		}
-		for (const [i, poll] of room.minorActivityQueue.entries()) {
+		for (const [i, poll] of queue.entries()) {
 			const number = i + 1; // for translation convienence
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +

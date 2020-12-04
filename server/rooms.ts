@@ -37,6 +37,7 @@ import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
+import {MinorActivity} from './minor-activity';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
@@ -492,6 +493,34 @@ export abstract class BasicRoom {
 		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
 		return null;
 	}
+	getMinorActivity<T extends MinorActivity>(constructor: new (...args: any[]) => T): T | null {
+		if (this.minorActivity?.constructor.name === constructor.name) return this.minorActivity as T;
+		return null;
+	}
+	getMinorActivityQueue<T extends MinorActivity>(constructor: new (...args: any[]) => T): T[] | null {
+		if (!this.minorActivityQueue?.length) return null;
+		const queue = this.minorActivityQueue.filter(activity => activity.constructor.name === constructor.name);
+		if (!queue.length) return null;
+		return queue as T[];
+	}
+	queueMinorActivity(activity: MinorActivity): void {
+		if (!this.minorActivityQueue) this.minorActivityQueue = [];
+		this.minorActivityQueue.push(activity);
+	}
+	clearMinorActivityQueue(slot?: number, depth = 1) {
+		if (!this.minorActivityQueue) return;
+		if (!slot) {
+			this.minorActivityQueue = null;
+		} else {
+			this.minorActivityQueue.splice(slot, depth);
+			if (!this.minorActivityQueue.length) this.clearMinorActivityQueue();
+		}
+	}
+	setMinorActivity(activity: MinorActivity | null): void {
+		if (this.minorActivity?.timeout) clearTimeout(this.minorActivity.timeout);
+		this.minorActivity = activity;
+		if (this.minorActivity?.display) this.minorActivity.display();
+	}
 	saveSettings() {
 		if (!this.persist) return;
 
@@ -872,8 +901,8 @@ export abstract class BasicRoom {
 			connection,
 			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
 		);
-		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
-		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+		if (this.minorActivity?.onConnect) this.minorActivity.onConnect(user, connection);
+		if (this.game?.onConnect) this.game.onConnect(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
@@ -889,8 +918,8 @@ export abstract class BasicRoom {
 		this.users[user.id] = user;
 		this.userCount++;
 
-		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
-		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
+		if (this.minorActivity?.onConnect) this.minorActivity.onConnect(user, connection);
+		if (this.game?.onJoin) this.game.onJoin(user, connection);
 		return true;
 	}
 	onRename(user: User, oldid: ID, joining: boolean) {
@@ -914,9 +943,7 @@ export abstract class BasicRoom {
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + oldid, user);
 		}
-		if (this.minorActivity && 'voters' in this.minorActivity) {
-			if (user.id in this.minorActivity.voters) this.minorActivity.updateFor(user);
-		}
+		if (this.minorActivity?.onRename) this.minorActivity.onRename(user, oldid, joining);
 		return true;
 	}
 	/**
@@ -1899,6 +1926,8 @@ export const Rooms = {
 
 	RoomGame,
 	RoomGamePlayer,
+
+	MinorActivity,
 
 	RETRY_AFTER_LOGIN,
 

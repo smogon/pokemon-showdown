@@ -110,10 +110,10 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
+			const announcement = room.getMinorActivity(Announcement);
+			if (!announcement) {
 				return this.errorReply(this.tr`There is no announcement running in this room.`);
 			}
-			const announcement = room.minorActivity;
 
 			if (target) {
 				this.checkCan('minigame', null, room);
@@ -149,7 +149,8 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
+			const announcement = room.getMinorActivity(Announcement);
+			if (!announcement) {
 				return this.errorReply(this.tr`There is no announcement running in this room.`);
 			}
 			const announcement = room.minorActivity;
@@ -163,10 +164,10 @@ export const commands: ChatCommands = {
 		display: '',
 		''(target, room, user, connection) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
+			const announcement = room.getMinorActivity(Announcement);
+			if (!announcement) {
 				return this.errorReply(this.tr`There is no announcement running in this room.`);
 			}
-			const announcement = room.minorActivity;
 			if (!this.runBroadcast()) return;
 			room.update();
 
