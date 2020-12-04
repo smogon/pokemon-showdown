@@ -1635,7 +1635,7 @@ export const Chat = new class {
 				base.aliases.push(cmd);
 				continue;
 			}
- 			if (typeof entry !== 'function') continue;
+ 		if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /\bthis\.requires?Room\(/.test(handlerCode);
