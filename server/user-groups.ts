@@ -159,8 +159,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
 		return [
-				...ROOM_PERMISSIONS,
-				...Chat.allCommands().filter(c => c.hasRoomPermissions).map(c => `/${c.fullCmd}`),
+			...ROOM_PERMISSIONS,
+			...Chat.allCommands().filter(c => c.hasRoomPermissions).map(c => `/${c.fullCmd}`),
 		];
 	}
 	static hasJurisdiction(
