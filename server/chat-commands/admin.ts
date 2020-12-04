@@ -352,10 +352,7 @@ export const commands: ChatCommands = {
 				}
 				this.sendReply("Hotpatching chat commands...");
 
-				const disabledCommands: string[] = [];
-				for (const handler of Chat.allCommands()) {
-					if (handler.disabled) disabledCommands.push(`/${handler.fullCmd}`);
-				}
+				const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
 				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
 					this.errorReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 					this.errorReply(`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`);
