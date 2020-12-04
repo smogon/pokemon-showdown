@@ -110,12 +110,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Murky Ambush',
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
 			},
-			'a random duck': {
-				species: 'Swanna', ability: 'Volt Absorb', item: 'Safety Goggles', gender: 'M',
-				moves: ['Nasty Plot', 'Steam Eruption', 'Oblivion Wing'],
-				signatureMove: 'Flock',
-				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-			},
 			Arcticblast: {
 				species: 'Garbodor', ability: 'Analytic', item: 'Assault Vest', gender: 'M',
 				moves: ['Knock Off', 'Earthquake', ['Horn Leech', 'U-turn', 'Avalanche']],

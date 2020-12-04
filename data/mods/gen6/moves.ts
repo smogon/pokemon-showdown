@@ -6,7 +6,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,
-		onTryMove() {},
+		onTry() {},
 	},
 	destinybond: {
 		inherit: true,

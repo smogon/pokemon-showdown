@@ -260,7 +260,7 @@ export const commands: ChatCommands = {
 			dex = Dex.mod(format.mod);
 			if (format.mod === 'letsgo') isLetsGo = true;
 		}
-		const species = dex.getSpecies(args[0]);
+		let species = dex.getSpecies(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
@@ -280,12 +280,18 @@ export const commands: ChatCommands = {
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
-		if (!species.randomBattleMoves) {
-			return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+		let randomMoves = species.randomBattleMoves;
+		if (!randomMoves) {
+			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
+				return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			}
+			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomBattleMoves;
 		}
 		const moves: string[] = [];
 		// Done because species.randomBattleMoves is readonly
-		for (const move of species.randomBattleMoves) {
+		for (const move of randomMoves) {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
@@ -315,19 +321,25 @@ export const commands: ChatCommands = {
 				return this.parse(`/help randomdoublesbattle`);
 			}
 		}
-		const species = dex.getSpecies(args[0]);
+		let species = dex.getSpecies(args[0]);
 		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
 				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		if (!species.randomDoubleBattleMoves) {
-			return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+		let randomMoves = species.randomDoubleBattleMoves;
+		if (!randomMoves) {
+			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomDoubleBattleMoves) {
+				return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			}
+			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomDoubleBattleMoves;
 		}
 		const moves: string[] = [];
 		// Done because species.randomDoubleBattleMoves is readonly
-		for (const move of species.randomDoubleBattleMoves) {
+		for (const move of randomMoves) {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);

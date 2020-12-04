@@ -572,11 +572,16 @@ export const Scripts: BattleScriptsData = {
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 
-		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+		let hitResult = this.singleEvent('Try', move, null, pokemon, target, move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
@@ -749,7 +754,8 @@ export const Scripts: BattleScriptsData = {
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
 				const curDamage = targets.length === 1 ? move.totalDamage : d;
 				if (typeof curDamage === 'number' && targets[i].hp) {
-					if (targets[i].hp <= targets[i].maxhp / 2 && targets[i].hp + curDamage > targets[i].maxhp / 2) {
+					const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
+					if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
 						this.runEvent('EmergencyExit', targets[i], pokemon);
 					}
 				}

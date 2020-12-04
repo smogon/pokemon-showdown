@@ -87,4 +87,22 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move recharge', 'move sleeptalk');
 		battle.makeChoices('move stompingtantrum', 'move sleeptalk');
 	});
+
+	it('should cause Gravity-negated moves to double in BP, even Z-moves', function () {
+		battle = common.gen(7).createBattle([[
+			{species: "Magikarp", item: 'normaliumz', moves: ['splash', 'stompingtantrum']},
+		], [
+			{species: "Accelgor", moves: ['gravity']},
+		]]);
+
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
+		});
+
+		battle.makeChoices('move splash', 'move gravity');
+		battle.makeChoices('move stomping tantrum', 'move gravity');
+
+		battle.makeChoices('move splash zmove', 'move gravity');
+		battle.makeChoices('move stomping tantrum', 'move gravity');
+	});
 });
