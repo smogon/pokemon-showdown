@@ -34,14 +34,14 @@ export class Announcement extends MinorActivity {
 
 	displayTo(user: User, connection: Connection | null = null) {
 		const recipient = connection || user;
-		recipient.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${this.generateAnnouncement()}`);
+		recipient.sendTo(this.room, `|uhtml|announcement${this.activityNumber}|${this.generateAnnouncement()}`);
 	}
 
 	display() {
 		const announcement = this.generateAnnouncement();
 		for (const id in this.room.users) {
 			const thisUser = this.room.users[id];
-			thisUser.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${announcement}`);
+			thisUser.sendTo(this.room, `|uhtml|announcement${this.activityNumber}|${announcement}`);
 		}
 	}
 
@@ -110,10 +110,7 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			room = this.requireRoom();
-			const announcement = room.getMinorActivity(Announcement);
-			if (!announcement) {
-				return this.errorReply(this.tr`There is no announcement running in this room.`);
-			}
+			const announcement = this.requireMinorActivity(Announcement);
 
 			if (target) {
 				this.checkCan('minigame', null, room);
@@ -164,10 +161,7 @@ export const commands: ChatCommands = {
 		display: '',
 		''(target, room, user, connection) {
 			room = this.requireRoom();
-			const announcement = room.getMinorActivity(Announcement);
-			if (!announcement) {
-				return this.errorReply(this.tr`There is no announcement running in this room.`);
-			}
+			const announcement = this.requireMinorActivity(Announcement);
 			if (!this.runBroadcast()) return;
 			room.update();
 

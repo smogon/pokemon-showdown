@@ -18,21 +18,19 @@
  */
 
 // globally Rooms.MinorActivity
-export class MinorActivity {
+export abstract class MinorActivity {
+	abstract activityid: ID;
+	abstract name: string;
+	abstract activityNumber: number;
+	abstract timeout: NodeJS.Timer | null;
+	abstract timeoutMins: number;
+
 	roomid: RoomID;
 	room: Room;
-	activityid: ID;
-	name: string;
-	timeout: NodeJS.Timer | null;
-	timeoutMins: number;
 	supportHTML: boolean;
 	constructor(room: Room) {
 		this.roomid = room.roomid;
 		this.room = room;
-		this.activityid = 'minoractivity' as ID;
-		this.name = 'Minor Activity';
-		this.timeout = null;
-		this.timeoutMins = 0;
 		this.supportHTML = false;
 	}
 	display?(): void {}

@@ -273,7 +273,7 @@ export class Poll extends MinorActivity {
 						`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`
 					);
 				} else {
-					user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${blankvote}`);
+					user.sendTo(this.room, `|uhtmlchange|poll${this.activityNumber}|${blankvote}`);
 				}
 			}
 		}
@@ -289,7 +289,7 @@ export class Poll extends MinorActivity {
 				`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`
 			);
 		} else {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes(user)}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.activityNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
@@ -301,7 +301,7 @@ export class Poll extends MinorActivity {
 				`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
 			);
 		} else {
-			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes(user)}`);
+			user.sendTo(this.room, `|uhtmlchange|poll${this.activityNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
@@ -317,13 +317,13 @@ export class Poll extends MinorActivity {
 				if (selection.length) {
 					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`);
 				} else {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankvote}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${blankvote}`);
 				}
 			} else {
 				if (this.multiPoll && thisUser.id in this.pendingVotes) {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes(thisUser)}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${this.generateVotes(thisUser)}`);
 				} else {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankquestions}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${blankquestions}`);
 				}
 			}
 		}
@@ -342,7 +342,7 @@ export class Poll extends MinorActivity {
 				state, this.room, false, this.voterIps[user.latestIp]
 			)}`);
 		} else {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes(user)}`);
+			recipient.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
@@ -542,10 +542,7 @@ export const commands: ChatCommands = {
 		vote: 'select',
 		select(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			const poll = room.getMinorActivity(Poll);
-			if (!poll) {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
+			const poll = this.requireMinorActivity(Poll);
 			if (!target) return this.parse('/help poll vote');
 
 			const parsed = parseInt(target);
@@ -566,10 +563,7 @@ export const commands: ChatCommands = {
 
 		submit(target, room, user) {
 			room = this.requireRoom();
-			const poll = room.getMinorActivity(Poll);
-			if (!poll) {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
+			const poll = this.requireMinorActivity(Poll);
 
 			poll.submit(user);
 		},
@@ -577,10 +571,7 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			room = this.requireRoom();
-			const poll = room.getMinorActivity(Poll);
-			if (!poll) {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
+			const poll = this.requireMinorActivity(Poll);
 
 			if (target) {
 				this.checkCan('minigame', null, room);
@@ -612,12 +603,9 @@ export const commands: ChatCommands = {
 
 		results(target, room, user) {
 			room = this.requireRoom();
-			const poll = room.getMinorActivity(Poll);
-			if (!poll) {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
+			const poll = this.requireMinorActivity(Poll);
 
-			return poll.blankvote(user);
+			poll.blankvote(user);
 		},
 		resultshelp: [
 			`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
@@ -643,10 +631,7 @@ export const commands: ChatCommands = {
 		display: '',
 		''(target, room, user, connection) {
 			room = this.requireRoom();
-			const poll = room.getMinorActivity(Poll);
-			if (!poll) {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
+			const poll = this.requireMinorActivity(Poll);
 			if (!this.runBroadcast()) return;
 			room.update();
 
