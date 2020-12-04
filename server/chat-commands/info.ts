@@ -2635,8 +2635,7 @@ export const commands: ChatCommands = {
 			buf = await YouTube.generateVideoDisplay(link);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (songId) {
-				buf = `<spotify src="https://open.spotify.com/embed/track/${songId}"></spotify>`;
-			}
+			buf = `<spotify src="https://open.spotify.com/embed/track/${songId}"></spotify>`;
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
