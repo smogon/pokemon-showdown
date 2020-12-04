@@ -663,10 +663,7 @@ export const commands: ChatCommands = {
 	lockdown(target, room, user) {
 		this.checkCan('lockdown');
 
-		const disabledCommands: string[] = [];
-		for (const handler of Chat.allCommands()) {
-			if (handler?.disabled) disabledCommands.push(`/${handler.fullCmd}`);
-		}
+		const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
 		if (disabledCommands.length) {
 			this.sendReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 			this.sendReply(`Be aware that restarting will re-enable them.`);
