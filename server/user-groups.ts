@@ -138,7 +138,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 					// this checks sub commands and command objects, but it checks to see if a sub-command
 					// overrides (should a perm for the command object exist) first
 					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-					jurisdiction = target ? 'u' : 'a';
+					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				} else if (roomPermissions[`/${namespace}`]) {
 					// if it's for one command object
