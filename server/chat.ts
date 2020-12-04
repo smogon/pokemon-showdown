@@ -50,6 +50,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	fullCmd: string,
 	isPrivate: boolean,
 	disabled: boolean,
+	aliases: string[],
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -1627,13 +1628,21 @@ export const Chat = new class {
 			if (typeof entry === 'object') {
 				this.annotateCommands(entry, `${namespace}${cmd} `);
 			}
-			if (typeof entry !== 'function') continue;
+			if (typeof entry === 'string') {
+				const base = commandTable[entry];
+				if (!base) continue;
+				if (!base.aliases) base.aliases = [];
+				base.aliases.push(cmd);
+				continue;
+			}
+ 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /\bthis\.requires?Room\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
+			if (!entry.aliases) entry.aliases = [];
 
 			// assign properties from the base command if the current command uses CommandContext.run.
 			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
@@ -1830,19 +1839,18 @@ export const Chat = new class {
 			handler: commandHandler as AnnotatedChatHandler | null,
 		};
 	}
-
-	iterateCommands(
-		callback: (fullCmd: string, handler: AnnotatedChatHandler, cmd: string) => void,
-		table = this.commands, namespace = ''
-	) {
+	allCommands(table: ChatCommands = Chat.commands, namespace = '') {
+		const results: AnnotatedChatHandler[] = [];
 		for (const cmd in table) {
 			const handler = table[cmd];
-			if (typeof handler === 'function') {
-				callback(`${namespace}${cmd}`, handler, cmd);
-			} else if (typeof handler === 'object' && !Array.isArray(handler)) {
-				this.iterateCommands(callback, handler as AnnotatedChatCommands, `${namespace}${cmd} `);
-			} else continue;
+			if (Array.isArray(handler) || !handler || typeof handler === 'string') continue;
+			if (typeof handler === 'object') {
+				results.push(...this.allCommands(handler, `${namespace}${cmd} `));
+				continue;
+			}
+			results.push(handler as AnnotatedChatHandler);
 		}
+		return results;
 	}
 
 	/**

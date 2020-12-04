@@ -159,10 +159,9 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
 		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		Chat.iterateCommands((fullCmd, handler) => {
-			if (!handler.hasRoomPermissions) return;
-			permissions.push(`/${fullCmd}`);
-		});
+		for (const handler of Chat.allCommands()) {
+			if (handler.hasRoomPermissions) permissions.push(`/${handler.fullCmd}`);
+		}
 		return permissions;
 	}
 	static hasJurisdiction(

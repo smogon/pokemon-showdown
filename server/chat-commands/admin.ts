@@ -353,9 +353,9 @@ export const commands: ChatCommands = {
 				this.sendReply("Hotpatching chat commands...");
 
 				const disabledCommands: string[] = [];
-				Chat.iterateCommands((fullCmd, handler) => {
-					if (handler.disabled) disabledCommands.push(`/${fullCmd}`);
-				});
+				for (const handler of Chat.allCommands()) {
+					if (handler.disabled) disabledCommands.push(`/${handler.fullCmd}`);
+				}
 				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
 					this.errorReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 					this.errorReply(`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`);
@@ -667,9 +667,9 @@ export const commands: ChatCommands = {
 		this.checkCan('lockdown');
 
 		const disabledCommands: string[] = [];
-		Chat.iterateCommands((fullCmd, handler) => {
-			if (handler.disabled) disabledCommands.push(`/${fullCmd}`);
-		});
+		for (const handler of Chat.allCommands()) {
+			if (handler?.disabled) disabledCommands.push(`/${handler.fullCmd}`);
+		}
 		if (disabledCommands.length) {
 			this.sendReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 			this.sendReply(`Be aware that restarting will re-enable them.`);
