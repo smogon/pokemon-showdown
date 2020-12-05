@@ -1398,6 +1398,9 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'multi',
 		searchShow: false,
+		teamLength: {
+			battle: 3,
+		},
 		ruleset: ['[Gen 8] Doubles OU'],
 	},
 
