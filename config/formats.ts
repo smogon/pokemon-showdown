@@ -208,7 +208,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: ['PU', 'Ludicolo', 'Swoobat', 'Thwackey'],
+		banlist: ['PU', 'Drednaw', 'Swoobat'],
 	},
 	{
 		name: "[Gen 8] CAP",
