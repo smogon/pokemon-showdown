@@ -14,7 +14,7 @@ import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
 
-type ChildProcess = child_process.ChildProcess;
+export type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
 
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -94,7 +94,7 @@ class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-interface ProcessWrapper {
+export interface ProcessWrapper {
 	getLoad: () => number;
 	process: ChildProcess | Worker;
 	release: () => Promise<void>;
@@ -503,7 +503,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		return unspawned;
 	}
 	abstract listen(): void;
-	abstract createProcess(): T;
+	abstract createProcess(...args: any): T;
 	destroyProcess(process: T) {}
 	destroy() {
 		const index = processManagers.indexOf(this);
