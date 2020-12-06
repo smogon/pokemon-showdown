@@ -132,8 +132,8 @@ export interface RoomSettings {
 	isMultichannel?: boolean;
 }
 export type Room = GameRoom | ChatRoom;
-import type {Poll, PollData} from './chat-plugins/poll';
 import type {Announcement, AnnouncementData} from './chat-plugins/announcements';
+import type {Poll, PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';

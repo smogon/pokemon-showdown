@@ -2,7 +2,6 @@
  * Announcements chat plugin
  * By Spandamn
  */
-import {Utils} from '../../lib/utils';
 
 const MINUTE = 60000;
 
@@ -76,7 +75,7 @@ export class Announcement {
 	}
 	runTimeout(timeout: number) {
 		this.timeoutMins = timeout;
-		this.timerEnd = Date.now() + timeout * 60000;
+		this.timerEnd = Date.now() + timeout * MINUTE;
 		this.timeout = setTimeout(() => {
 			const room = this.room;
 			if (!room) return; // do nothing if the room doesn't exist anymore
@@ -149,13 +148,13 @@ export const commands: ChatCommands = {
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!announcement.endTimer()) return this.errorReply(this.tr("There is no timer to clear."));
-					return this.add(this.tr("The announcement timer was turned off."));
+					if (!announcement.endTimer()) return this.errorReply(this.tr`There is no timer to clear.`);
+					return this.add(this.tr`The announcement timer was turned off.`);
 				}
 				const timeout = parseFloat(target);
 				const timeoutMs = timeout * 60 * 1000;
 				if (isNaN(timeoutMs) || timeoutMs <= 0 || timeoutMs > Chat.MAX_TIMEOUT_DURATION) {
-					return this.errorReply(this.tr("Invalid time given."));
+					return this.errorReply(this.tr`Invalid time given.`);
 				}
 				announcement.endTimer();
 				announcement.runTimeout(timeout);
