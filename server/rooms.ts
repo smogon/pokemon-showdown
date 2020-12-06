@@ -1393,22 +1393,18 @@ export class GlobalRoomState {
 	}
 	async writeBattleState() {
 		const buffer: AnyObject = {};
-		const promises = [];
 		for (const [id, room] of Rooms.rooms) {
 			if (!room.battle) continue;
 			const formatid = room.battle.format;
 			if (!buffer[formatid]) buffer[formatid] = {};
-			const promise = room.battle.getLog().then((log) => {
-				if (!log) throw new Error(`Invalid battle log received while writing battle state.`);
-				buffer[formatid][id] = {
-					inputLog: log.join('\n'),
-					title: room.title,
-					roomid: room.roomid,
-				};
-			});
-			promises.push(promise);
+			const log = await room.battle.getLog();
+			if (!log) throw new Error(`Invalid battle log received while writing battle state.`);
+			buffer[formatid][id] = {
+				inputLog: log.join('\n'),
+				title: room.title,
+				roomid: room.roomid,
+			};
 		}
-		await Promise.all(promises);
 		return FS(`logs/battles.json`).writeUpdate(() => JSON.stringify(buffer));
 	}
 	loadBattleState() {
