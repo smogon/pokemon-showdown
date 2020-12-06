@@ -325,7 +325,7 @@ export class Poll {
 	}
 	runTimeout(timeout: number) {
 		this.timeoutMins = timeout;
-		this.timerEnd = Date.now() + timeout * 60000;
+		this.timerEnd = Date.now() + timeout * MINUTE;
 		this.timeout = setTimeout(() => {
 			const room = this.room;
 			if (!room) return; // do nothing if the room does not exist
@@ -343,7 +343,7 @@ export class Poll {
 					room.minorActivity.display();
 				}
 			}
-		}, timeout * 60000);
+		}, timeout * MINUTE);
 		this.save();
 		return this.timeout;
 	}
@@ -438,11 +438,11 @@ export const commands: ChatCommands = {
 
 			const questions = params.splice(1);
 			if (questions.length > 8) {
-				return this.errorReply(this.tr("Too many options for poll (maximum is 8)."));
+				return this.errorReply(this.tr`Too many options for poll (maximum is 8).`);
 			}
 
 			if (new Set(questions).size !== questions.length) {
-				return this.errorReply(this.tr("There are duplicate options in the poll."));
+				return this.errorReply(this.tr`There are duplicate options in the poll.`);
 			}
 
 			if (room.minorActivity) {
@@ -568,10 +568,12 @@ export const commands: ChatCommands = {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
 					if (!poll.endTimer()) return this.errorReply(this.tr("There is no timer to clear."));
-					return this.add(this.tr("The poll timer was turned off."));
+					return this.add(this.tr`The poll timer was turned off.`);
 				}
 				const timeout = parseFloat(target);
-				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply(this.tr("Invalid time given."));
+				if (isNaN(timeout) || timeout <= 0 || timeout > Chat.MAX_TIMEOUT_DURATION) {
+					return this.errorReply(this.tr`Invalid time given.`);
+				}
 				if (poll.timeout) poll.endTimer();
 				poll.runTimeout(timeout);
 				room.add(this.tr`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeout)}.`);
