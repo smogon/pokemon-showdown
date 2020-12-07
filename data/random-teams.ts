@@ -664,7 +664,7 @@ export class RandomTeams {
 					if (!hasType['Grass'] && movePool.includes('swordsdance')) rejected = true;
 					break;
 				case 'fly': case 'storedpower':
-					if (!counter.setupType) rejected = true;
+					if (!counter.setupType && !!counter.Status) rejected = true;
 					break;
 				case 'futuresight':
 					if (!counter.Status || !hasMove['teleport']) rejected = true;
