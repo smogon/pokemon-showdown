@@ -15953,7 +15953,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'Snatch');
 			},
-			onAnyTryMove(source, target, move) {
+			onAnyPrepareHitPriority: -1,
+			onAnyPrepareHit(source, target, move) {
 				const snatchUser = this.effectData.source;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch'] || move.sourceEffect === 'snatch') {
