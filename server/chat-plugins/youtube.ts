@@ -308,7 +308,7 @@ export class YoutubeInterface {
 export class GroupWatch extends Rooms.RoomGame {
 	url: string;
 	info: VideoData;
-	started: false | number = false;
+	started: number | null = null;
 	constructor(room: Room, url: string, videoInfo: VideoData) {
 		super(room);
 		this.url = url;
