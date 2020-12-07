@@ -14010,7 +14010,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		abilities: {0: "Neuroforce"},
 		heightm: 7.5,
 		weightkg: 230,
-		color: "Blue",
+		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Ultranecrozium Z",
 		battleOnly: ["Necrozma-Dawn-Wings", "Necrozma-Dusk-Mane"],
