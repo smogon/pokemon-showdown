@@ -727,8 +727,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.allies().length > 1) return damage * 2 / 3;
-						return damage / 2;
+						if (target.allies().length > 1) return this.chainModify(2, 3);
+						return this.chainModify(0.5);
 					}
 				}
 			},
@@ -1038,8 +1038,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.allies().length > 1) return damage * 2 / 3;
-						return damage / 2;
+						if (target.allies().length > 1) return this.chainModify(2, 3);
+						return this.chainModify(0.5);
 					}
 				}
 			},
