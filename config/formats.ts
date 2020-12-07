@@ -64,18 +64,6 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] OU', 'Blitz'],
 	},
 	{
-		name: "[Gen 8 DLC 1] OU",
-
-		mod: 'gen8dlc1',
-		searchShow: false,
-		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: [
-			'Cinderace', 'Darmanitan-Galar', 'Dracovish', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo',
-			'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Reshiram', 'Solgaleo', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
-		],
-	},
-	{
 		name: "[Gen 8] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672664/">Ubers Metagame Discussion</a>`,
@@ -312,19 +300,6 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause', 'Swagger Clause'],
 		banlist: ['DUber', 'Power Construct', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 8 DLC 1] Doubles OU",
-
-		mod: 'gen8dlc1',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Standard Doubles', 'Dynamax Clause'],
-		banlist: [
-			'Eternatus', 'Jirachi', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dusk-Mane',
-			'Necrozma-Dawn-Wings', 'Reshiram', 'Solgaleo', 'Urshifu-Base', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Beat Up',
-		],
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
