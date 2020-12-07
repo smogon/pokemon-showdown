@@ -7296,6 +7296,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 			},
+			onTryMove(pokemon, target, move) {
+				if (move.flags['gravity'] && !move.isZ) {
+					this.add('cant', pokemon, 'move: Gravity', move);
+					return false;
+				}
+			},
 			onResidualOrder: 22,
 			onEnd() {
 				this.add('-fieldend', 'move: Gravity');
@@ -7741,7 +7747,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 			},
 			onTryMove(pokemon, target, move) {
-				if (pokemon.getVolatile('willusemove') && move.flags['heal'] && !move.isZ && !move.isMax) {
+				if (move.flags['heal'] && !move.isZ && !move.isMax) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
 				}
@@ -15974,7 +15980,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return;
 				}
 				snatchUser.removeVolatile('snatch');
-				snatchUser.addVolatile('willusemove');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
 				this.useMove(move.id, snatchUser);
 				return null;
@@ -18050,7 +18055,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 			},
 			onTryMove(pokemon, target, move) {
-				if (pokemon.getVolatile('willusemove') && !move.isZ && !move.isMax && move.flags['sound']) {
+				if (!move.isZ && !move.isMax && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
