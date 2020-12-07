@@ -84217,6 +84217,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["8M", "7M"],
 			toxic: ["8M", "7M"],
 			phazingphantasm: ["8M", "7M"],
+			stoneedge: ["8M", "7M"],
 		},
 	},
 	narpoon: {
