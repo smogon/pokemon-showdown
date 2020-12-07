@@ -115,7 +115,7 @@ export class RandomTeams {
 	levelBalance(baseStats: StatsTable, ivs: StatsTable | number, evs: StatsTable | number, nature: string,
 		averageIV = 0, averageEV = 0, weakling?: string) {
 		let realStats: StatsTable = this.statCalc(baseStats, ivs, evs, 100, nature);
-		if (!weakling) weakling = this.gen >= 7 ? 'blipbug' : this.gen >= 2 ? 'sunkern' : 'weedle';
+		if (!weakling) weakling = this.gen >= 8 ? 'blipbug' : this.gen >= 2 ? 'sunkern' : 'weedle';
 		const worstStats = this.statCalc(this.dex.getSpecies(weakling).baseStats, averageIV, averageEV, 100, 'Serious');
 		const statRatios = {power: 0, bulk: 0, speed: 0};
 		let statRatioTotal = 0;
