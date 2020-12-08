@@ -64,18 +64,6 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] OU', 'Blitz'],
 	},
 	{
-		name: "[Gen 8 DLC 1] OU",
-
-		mod: 'gen8dlc1',
-		searchShow: false,
-		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: [
-			'Cinderace', 'Darmanitan-Galar', 'Dracovish', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo',
-			'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Reshiram', 'Solgaleo', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
-		],
-	},
-	{
 		name: "[Gen 8] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672664/">Ubers Metagame Discussion</a>`,
@@ -115,12 +103,13 @@ export const Formats: FormatList = [
 		name: "[Gen 8] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672672/">NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673598/">NU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3662169/">NU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] RU'],
-		banlist: ['RU', 'NUBL', 'Aurora Veil'],
+		banlist: ['RU', 'NUBL', 'Drought', 'Aurora Veil'],
 	},
 	{
 		name: "[Gen 8] PU",
@@ -131,7 +120,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] NU'],
-		banlist: ['NU', 'PUBL', 'Drizzle', 'Drought', 'Heat Rock'],
+		banlist: ['NU', 'PUBL', 'Drizzle', 'Heat Rock'],
 	},
 	{
 		name: "[Gen 8] LC",
@@ -154,8 +143,8 @@ export const Formats: FormatList = [
 		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672167/">Monotype Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658745/">Monotype Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660603">Monotype Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673391/">Monotype Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673165">Monotype Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -208,7 +197,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: ['PU', 'Ludicolo', 'Swoobat', 'Thwackey'],
+		banlist: ['PU', 'Drednaw', 'Swoobat'],
 	},
 	{
 		name: "[Gen 8] CAP",
@@ -311,19 +300,6 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause', 'Swagger Clause'],
 		banlist: ['DUber', 'Power Construct', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 8 DLC 1] Doubles OU",
-
-		mod: 'gen8dlc1',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Standard Doubles', 'Dynamax Clause'],
-		banlist: [
-			'Eternatus', 'Jirachi', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dusk-Mane',
-			'Necrozma-Dawn-Wings', 'Reshiram', 'Solgaleo', 'Urshifu-Base', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Beat Up',
-		],
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
@@ -508,14 +484,16 @@ export const Formats: FormatList = [
 			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Charizard-Mega-X', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega',
 			'Gengar', 'Gyarados', 'Heracross-Mega', 'Hydreigon', 'Kyurem', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega',
 			'Pinsir-Mega', 'Slowbro-Mega', 'Tapu Lele', 'Thundurus', 'Venusaur-Mega', 'Xurkitree', 'Drizzle', 'Drought',
+			// Slowbronite is banned so it doesn't validate on Galarian Slowbro
+			'Slowbronite',
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
-			'Aegislash', 'Aggron-Mega', 'Alakazam', 'Altaria-Mega', 'Amoonguss', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela', 'Deoxys-Defense',
-			'Diggersby', 'Ditto', 'Dracozolt', 'Dragonite', 'Hatterene', 'Hawlucha', 'Hippowdon', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo',
-			'Krookodile', 'Mandibuzz', 'Manectric-Mega', 'Mew', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Rotom-Heat', 'Rotom-Wash', 'Sableye-Mega',
-			'Salamence', 'Scizor', 'Scolipede', 'Skarmory', 'Slowking-Base', 'Spectrier', 'Staraptor', 'Steelix-Mega', 'Stoutland', 'Swampert',
-			'Tapu Bulu', 'Tentacruel', 'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar', 'Zeraora',
+			'Aegislash', 'Aggron-Mega', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela', 'Chesnaught',
+			'Dracozolt', 'Dragonite', 'Hatterene', 'Hawlucha', 'Hippowdon', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo', 'Krookodile',
+			'Mandibuzz', 'Manectric-Mega', 'Mew', 'Moltres-Base', 'Nidoking', 'Nihilego', 'Pidgeot-Mega', 'Porygon2', 'Rotom-Heat', 'Rotom-Wash',
+			'Sableye-Mega', 'Salamence', 'Scizor', 'Scolipede', 'Skarmory', 'Slowking', 'Spectrier', 'Staraptor', 'Steelix-Mega', 'Swampert',
+			'Tapu Bulu', 'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar',
 		],
 	},
 	{
@@ -640,7 +618,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] StAAAbmons",
 		desc: `Mashup of Almost Any Ability and STABmons. Pok&eacute;mon have access to almost any ability and can use any move of their typing, in addition to the moves they can normally learn.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8672614/">STAAABmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8672614/">StAAAbmons</a>`,
 		],
 
 		mod: 'gen8',
@@ -2030,17 +2008,6 @@ export const Formats: FormatList = [
 		ruleset: ['Minimal GBU', 'VGC Timer'],
 		banlist: ['Unown'],
 		minSourceGen: 7,
-		onValidateTeam(team) {
-			const legends = [
-				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
-			];
-			let n = 0;
-			for (const set of team) {
-				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
-				if (legends.includes(baseSpecies)) n++;
-				if (n > 2) return [`You can only use up to two legendary Pok\u00E9mon.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 7] VGC 2018",

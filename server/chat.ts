@@ -50,6 +50,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	fullCmd: string,
 	isPrivate: boolean,
 	disabled: boolean,
+	aliases: string[],
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
@@ -1629,6 +1630,13 @@ export const Chat = new class {
 			if (typeof entry === 'object') {
 				this.annotateCommands(entry, `${namespace}${cmd} `);
 			}
+			if (typeof entry === 'string') {
+				const base = commandTable[entry];
+				if (!base) continue;
+				if (!base.aliases) base.aliases = [];
+				base.aliases.push(cmd);
+				continue;
+			}
 			if (typeof entry !== 'function') continue;
 
 			const handlerCode = entry.toString();
@@ -1636,6 +1644,7 @@ export const Chat = new class {
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
+			if (!entry.aliases) entry.aliases = [];
 
 			// assign properties from the base command if the current command uses CommandContext.run.
 			const runsCommand = /this.run\((?:'|"|`)(.*?)(?:'|"|`)\)/.exec(handlerCode);
@@ -1831,6 +1840,19 @@ export const Chat = new class {
 			fullCmd: fullCmd,
 			handler: commandHandler as AnnotatedChatHandler | null,
 		};
+	}
+	allCommands(table: ChatCommands = Chat.commands) {
+		const results: AnnotatedChatHandler[] = [];
+		for (const cmd in table) {
+			const handler = table[cmd];
+			if (Array.isArray(handler) || !handler || typeof handler === 'string') continue;
+			if (typeof handler === 'object') {
+				results.push(...this.allCommands(handler));
+				continue;
+			}
+			results.push(handler as AnnotatedChatHandler);
+		}
+		return results;
 	}
 
 	/**
