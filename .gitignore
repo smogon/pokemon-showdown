@@ -23,6 +23,8 @@ tools/modlog/converter.js
 
 # visual studio live share
 .vs
+.vscode
+.idea
 
 # boilerplate #
 ###############
