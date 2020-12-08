@@ -4419,7 +4419,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
-		isNonstandard: "CAP",
 		name: "Mountaineer",
 		rating: 3,
 		num: -2,
@@ -5002,5 +5001,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Magical Archer",
 		rating: 3,
 		num: 1035,
+	},
+	predatoryinstinct: {
+		onBasePowerPriority: 24,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.gender && defender.gender) {
+				if (attacker.weighthg > defender.weighthg) {
+					this.debug('Predatory Instinct boost');
+					return this.chainModify(1.5);
+				} else {
+					this.debug('Predatory Instinct weaken');
+					return this.chainModify(0.75);
+				}
+			}
+		},
+		name: "Predatory Instinct",
+		rating: 0,
+		num: 1036,
 	},
 };

@@ -5846,4 +5846,14 @@ export const MovesText = {
 		start: "  [POKEMON] became the center of attention!",
 		startFromZEffect: "  [POKEMON] became the center of attention!",
 	},
+	frostburn: {
+		name: "Frost Burn",
+		desc: "This move combines Fire in its type effectiveness against the target. Has 10% chance to burn the target.",
+		shortDesc: "Combines Fire in its type effectiveness, 10% chance to burn the target.",
+	},
+	momentousmaw: {
+		name: "Momentous Maw",
+		desc: "Heals user 1/4 if this move knocks out the target.",
+		shortDesc: "Heals user 1/4 if this KOes the target.",
+	},
 };

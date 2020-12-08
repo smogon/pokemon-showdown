@@ -1665,4 +1665,9 @@ export const AbilitiesText = {
 		name: "Perseverance",
 		shortDesc: "This Pokemon's Atk, SpAtk, Def, SpDef are x1.25 if its the last one standing.",
 	},
+	predatoryinstinct: {
+		name: "Predatory Instinct",
+		desc: "This Pokemon's attacks have their power multiplied by 1.5 against lighter weight or multiplied by 0.75 against heavier weight.",
+		shortDesc: "This Pokemon's attacks do 1.5x on lighter weight targets; 0.75x on heavier weight.",
+	},
 };

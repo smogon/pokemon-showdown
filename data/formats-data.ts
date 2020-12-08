@@ -787,7 +787,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUber)",
 	},
 	voltorb: {
-		tier: "lc",
+		tier: "LC",
 	},
 	electrode: {
 		tier: "RU",
@@ -1617,6 +1617,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["fakeout", "iceshard", "knockoff", "swordsdance", "tripleaxel"],
 		randomDoubleBattleLevel: 84,
+		tier: "UUBL",
+		doublesTier: "DUU",
+	},
+	sneaselalmian: {
+		tier: "NU",
+		doublesTier: "LC Uber",
+	},
+	weavilealmian: {
 		tier: "UUBL",
 		doublesTier: "DUU",
 	},
@@ -2888,6 +2896,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["highhorsepower", "protect", "rockslide", "slackoff", "stealthrock", "whirlwind", "yawn"],
 		randomDoubleBattleLevel: 88,
+		tier: "UU",
+		doublesTier: "(DUU)",
+	},
+	hippopotasorren: {
+		tier: "LC",
+	},
+	hippowdonorren: {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
@@ -6352,5 +6367,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	narpoon: {
 		tier: "RU",
+	},
+	muuthate: {
+		tier: "RU",
+	},
+	hydrame: {
+		tier: "OU",
+	},
+	vampayar: {
+		tier: "OU",
 	},
 };
