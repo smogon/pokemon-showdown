@@ -36,33 +36,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			const species = this.dex.getSpecies(poke);
 			const lsetData = this.dex.getLearnsetData(species.id);
 
-			// Level balance: calculate directly from stats rather than using some silly lookup table.
-			const mbstmin = 1307;
-			const stats = species.baseStats;
-
-			// Modified base stat total assumes 15 DVs, 255 EVs in every stat
-			let mbst = (stats["hp"] * 2 + 30 + 63 + 100) + 10;
-			mbst += (stats["atk"] * 2 + 30 + 63 + 100) + 5;
-			mbst += (stats["def"] * 2 + 30 + 63 + 100) + 5;
-			mbst += (stats["spa"] * 2 + 30 + 63 + 100) + 5;
-			mbst += (stats["spd"] * 2 + 30 + 63 + 100) + 5;
-			mbst += (stats["spe"] * 2 + 30 + 63 + 100) + 5;
-
-			let level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
-
-			while (level < 100) {
-				mbst = Math.floor((stats["hp"] * 2 + 30 + 63 + 100) * level / 100 + 10);
-				// Since damage is roughly proportional to lvl
-				mbst += Math.floor(((stats["atk"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats["def"] * 2 + 30 + 63 + 100) * level / 100 + 5);
-				mbst += Math.floor(((stats["spa"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats["spd"] * 2 + 30 + 63 + 100) * level / 100 + 5);
-				mbst += Math.floor((stats["spe"] * 2 + 30 + 63 + 100) * level / 100 + 5);
-
-				if (mbst >= mbstmin) break;
-				level++;
-			}
-
 			// Random DVs.
 			const ivs = {
 				hp: 0,
@@ -81,6 +54,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Maxed EVs.
 			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
+
+			// Level balance--calculate directly from stats rather than using some silly lookup table
+			const level = this.levelBalance(species.baseStats, ivs, evs, 'Serious', 15, 255);
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
