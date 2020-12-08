@@ -4447,7 +4447,7 @@
 				"species": "Gligar",
 				"item": ["Eviolite"],
 				"ability": ["Immunity"],
-				"evs": {"spa": 252, "def": 156, "spd": 100},
+				"evs": {"hp": 252, "def": 156, "spd": 100},
 				"nature": "Impish",
 				"moves": [["Stealth Rock", "Defog"], ["Earthquake"], ["Toxic", "U-turn", "Knock Off"], ["Roost"]]
 			}]
