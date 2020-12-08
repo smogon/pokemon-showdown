@@ -12,6 +12,10 @@ Git :
 git remote add pokemon-showdown git@github.com:smogon/pokemon-showdown.git
 ```
 
+Don't forget to remove CAP mon and Pokemon Stars from the ends of files : 
+ - `pokemons.json`
+ - `learns.json`
+
 <br/>
 <br/>
 <br/>
