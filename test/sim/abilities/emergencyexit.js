@@ -83,15 +83,17 @@ describe(`Emergency Exit`, function () {
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});
 
-	it.skip(`should request switch-out before end-of-turn fainted Pokemon`, function () {
-		battle = common.createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', item: 'toxicorb', moves: ['substitute', 'sleeptalk', 'liquidation']}, {species: "Magikarp", moves: ['splash']}],
-			[{species: "Charizard", item: 'rockyhelmet', moves: ['bellydrum', 'sleeptalk', 'dragonclaw']}, {species: "Mew", moves: ['sleeptalk']}],
-		]);
-		battle.makeChoices('move substitute', 'move bellydrum');
-		battle.makeChoices('move sleeptalk', 'move sleeptalk');
-		battle.makeChoices('move liquidation', 'move dragonclaw');
+	it(`should request switch-out before end-of-turn fainted Pokemon`, function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['payback']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "Swoobat", ability: 'noguard', moves: ['superfang']},
+			{species: "Stufful", moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
 		assert(battle.p1.activeRequest.forceSwitch);
+		assert.fainted(battle.p2.active[0]);
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});
 
@@ -118,6 +120,22 @@ describe(`Emergency Exit`, function () {
 			{species: "stufful", ability: 'compoundeyes', moves: ['superfang']},
 		]]);
 		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it.skip('should request switch-out after taking recoil and dragging in an opponent', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['dragontail']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "Sharpedo", item: 'rockyhelmet', ability: 'noguard', moves: ['superfang']},
+			{species: "Stufful", moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		const log = battle.getDebugLog();
+		const dragIndex = log.lastIndexOf('|drag|p2a: Stufful|Stufful, M|281/281');
+		const abilityIndex = log.lastIndexOf('|-activate|p1a: Golisopod|ability: Emergency Exit');
+		assert(dragIndex < abilityIndex, 'Stufful should be dragged in before Emergency Exit activates');
 		assert.equal(battle.requestState, 'switch');
 	});
 

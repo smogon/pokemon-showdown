@@ -525,8 +525,10 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 	let effect = dex.getEffect(name + 'user');
 	let longDesc = ``;
 	const baseAbility = Dex.deepClone(baseDex.getAbility('noability'));
-	if (effect.exists && effect.name && (effect.desc || effect.shortDesc)) {
-		baseAbility.name = effect.name;
+	// @ts-ignore hack to record the name of the innate abilities without using name
+	if (effect.exists && effect.innateName && (effect.desc || effect.shortDesc)) {
+		// @ts-ignore hack
+		baseAbility.name = effect.innateName;
 		if (effect.desc) baseAbility.desc = effect.desc;
 		if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
 		buf += `<hr />${Chat.getDataAbilityHTML(baseAbility)}`;
@@ -535,8 +537,10 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 		}
 	} else {
 		effect = dex.getEffect(name);
-		if (effect.exists && effect.name && (effect.desc || effect.shortDesc)) {
-			baseAbility.name = effect.name;
+		// @ts-ignore hack
+		if (effect.exists && effect.innateName && (effect.desc || effect.shortDesc)) {
+			// @ts-ignore hack
+			baseAbility.name = effect.innateName;
 			if (effect.desc) baseAbility.desc = effect.desc;
 			if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
 			buf += `<hr />${Chat.getDataAbilityHTML(baseAbility)}`;

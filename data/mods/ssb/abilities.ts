@@ -29,7 +29,11 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.set.evs = evs;
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
+	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? pokemon.battle.randomChance(1, newSet.shiny) : !!newSet.shiny;
 	pokemon.formeChange(newSet.species, context.effect, true);
+	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+	pokemon.battle.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string);
 
 	pokemon.baseMaxhp = Math.floor(Math.floor(
@@ -1361,7 +1365,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const dazzlingHolder = this.effectData.target;
 			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Dark Royalty', move, '[of] ' + target);
+				this.add('-ability', dazzlingHolder, 'Dark Royalty');
+				this.add('cant', target, move, '[of] ' + dazzlingHolder);
 				return false;
 			}
 		},
@@ -1414,7 +1419,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			// Infinite Loop preventer
-			if (effect.id === 'speedcontrol' || effect.id === 'stubbornness') return;
+			if (effect.id.includes('stubbornness')) return;
 			if (success) {
 				if (!this.effectData.happened) {
 					this.boost({atk: 1, def: 1, spd: 1}, pokemon);
@@ -1541,9 +1546,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Unaware + Regenerator. If hit, foe is Leech Seeded. If KOed, foe is Cursed.",
 		name: 'Ghost Spores',
 		onDamagingHit(damage, target, source, move) {
-			source.addVolatile('leechseed', target);
 			if (!target.hp) {
 				source.addVolatile('curse');
+			} else {
+				source.addVolatile('leechseed', target);
 			}
 		},
 		onAnyModifyBoost(boosts, pokemon) {
@@ -1566,6 +1572,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// PartMan
+	hecatomb: {
+		desc: "This Pokemon's Speed is raised by 1 stage if it attacks and knocks out another Pokemon. If the pokemon is Chandelure and is not shiny, it changes set.",
+		shortDesc: "This Pokemon's Speed is raised by 1 stage if it attacks and KOes another Pokemon. PartMan: changes sets.",
+		name: 'Hecatomb',
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({spe: length}, source);
+				if (source.species.baseSpecies !== 'Chandelure') return;
+				if (source.set.shiny) return;
+				this.add('-message', 'THE LIGHT! IT BURNS!');
+				changeSet(this, source, ssbSets['PartMan-Shiny']);
+			}
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// peapod
 	stealthblack: {
 		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
@@ -1583,7 +1607,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Immune to Water and Grass moves, heals 1/4 HP and gains +1 Atk when hit by them.",
 		onTryHit(target, source, move) {
 			if (target !== source && ['Water', 'Grass'].includes(move.type)) {
-				if (!this.heal(target.baseMaxhp / 4) || !this.boost({atk: 1})) {
+				if (!this.heal(target.baseMaxhp / 4) && !this.boost({atk: 1})) {
 					this.add('-immune', target, '[from] ability: Soup Sipper');
 				}
 				return null;
@@ -1775,6 +1799,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Raihan Kibana
+	royalcoat: {
+		desc: "If Sandstorm is active, this Pokemon's Speed is doubled and its Special Defense is multiplied by 1.5. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "If Sandstorm, Speed x2 and SpD x1.5; immunity to Sandstorm.",
+		name: "Royal Coat",
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather('sandstorm')) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isWeather('sandstorm')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm') return false;
+		},
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// RavioliQueen
 	phantomplane: {
 		desc: "On switch-in, this Pokemon summons Pitch Black Terrain. While Pitch Black Terrain is active, all non-Ghost-type Pokemon take damage equal to 1/16 of their max HP, rounded down, at the end of each turn.",
@@ -1887,22 +1933,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boost[randomStat] = 1;
 				this.boost(boost);
 			}
-			pokemon.addVolatile('shadydeal');
+			if (this.effectData.immunities) return;
+			const typeList = Object.keys(this.dex.data.TypeChart);
+			const firstTypeIndex = this.random(typeList.length);
+			const secondType = this.sample(typeList.slice(0, firstTypeIndex).concat(typeList.slice(firstTypeIndex + 1)));
+			this.effectData.immunities = [typeList[firstTypeIndex], secondType];
+			this.add('-start', pokemon, `${this.effectData.immunities[0]} Immunity`, '[silent]');
+			this.add('-start', pokemon, `${this.effectData.immunities[1]} Immunity`, '[silent]');
+			this.add("-message", `${pokemon.name} is now immune to ${this.effectData.immunities[0]} and ${this.effectData.immunities[1]} type attacks!`);
 		},
-		condition: {
-			onStart(pokemon) {
-				const typeList = Object.keys(this.dex.data.TypeChart);
-				const firstTypeIndex = this.random(typeList.length);
-				const secondType = this.sample(typeList.slice(0, firstTypeIndex).concat(typeList.slice(firstTypeIndex + 1)));
-				this.effectData.immunities = [typeList[firstTypeIndex], secondType];
-				this.add("-message", `Shadecession is now immune to ${this.effectData.immunities[0]} and ${this.effectData.immunities[1]} types!`);
-			},
-			onTryHit(target, source, move) {
-				if (target !== source && this.effectData.immunities.includes(move.type)) {
-					this.add('-immune', target, '[from] ability: Shady Deal');
-					return null;
-				}
-			},
+		onTryHit(target, source, move) {
+			if (target !== source && this.effectData.immunities?.includes(move.type)) {
+				this.add('-immune', target, '[from] ability: Shady Deal');
+				return null;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `${this.effectData.immunities[0]} Immunity`, '[silent]');
+			this.add('-end', pokemon, `${this.effectData.immunities[1]} Immunity`, '[silent]');
+			delete this.effectData.immunities;
 		},
 		name: "Shady Deal",
 		isNonstandard: "Custom",
@@ -1970,28 +2019,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-	},
-
-	// Tenshi
-	royalcoat: {
-		desc: "If Sandstorm is active, this Pokemon's Speed is doubled and its Special Defense is multiplied by 1.5. This Pokemon takes no damage from Sandstorm.",
-		shortDesc: "If Sandstorm, Speed x2 and SpD x1.5; immunity to Sandstorm.",
-		name: "Royal Coat",
-		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather('sandstorm')) {
-				return this.chainModify(2);
-			}
-		},
-		onModifySpD(spd, pokemon) {
-			if (this.field.isWeather('sandstorm')) {
-				return this.chainModify(1.5);
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'sandstorm') return false;
-		},
-		isNonstandard: "Custom",
-		gen: 8,
 	},
 
 	// temp

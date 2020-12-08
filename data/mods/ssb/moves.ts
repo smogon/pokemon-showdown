@@ -620,6 +620,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						}
 					}
 				}
+				this.add('-message', `Hazards were removed by the terrain!`);
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 3,
@@ -654,6 +655,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', target, 'Close Combat', target);
 			this.add('-anim', target, 'Earthquake', target);
+		},
+		onHit() {
+			this.add(`c|${getName('Archas')}|Fire all guns! Fiiiiire!`);
 		},
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Steel') return 1;
@@ -1381,7 +1385,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				def: 1,
 			},
 		},
-		heal: [1, 4],
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp / 4, pokemon, pokemon, move);
+		},
 		secondary: null,
 		zMove: {boost: {spe: 1}},
 		target: "self",
@@ -1524,7 +1530,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {heal: 1},
-		heal: [1, 2],
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp / 2, pokemon, pokemon, move);
+		},
 		pseudoWeather: 'gravity',
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1907,38 +1915,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let forme: string;
 			let message = "";
 			const random = this.random(100);
-			if (random >= 0 && random < 3) {
+			if (random < 3) {
 				forme = "Minior-Violet";
 				message = "Oof, Violet. Tough break. A Violet Minior is sluggish and won't always listen to your commands. Best of luck! Rating: ★ ☆ ☆ ☆ ☆ ";
-			} else if (random >= 3 && random < 13) {
+			} else if (random < 13) {
 				forme = "Minior-Indigo";
 				message = "Uh oh, an Indigo Minior. Its inspiring color may have had some unintended effects and boosted your foe's attacking stats. Better hope you can take it down first! Rating: ★ ☆ ☆ ☆ ☆";
-			} else if (random >= 13 && random < 33) {
+			} else if (random < 33) {
 				forme = "Minior";
 				message = "Nice one, a Red Minior is hard for your opponent to ignore. They'll be goaded into attacking the first time they see this! Rating: ★ ★ ★ ☆ ☆ ";
-			} else if (random >= 33 && random < 66) {
+			} else if (random < 66) {
 				forme = "Minior-Orange";
 				message = "Solid, you pulled an Orange Minior. Nothing too fancy, but it can definitely get the job done if you use it right. Rating: ★ ★ ☆ ☆ ☆";
-			} else if (random >= 66 && random < 86) {
+			} else if (random < 86) {
 				forme = "Minior-Yellow";
 				message = "Sweet, a Yellow Minior! This thing had a lot of static energy built up that released when you cracked it open, paralyzing the foe. Rating: ★ ★ ★ ☆ ☆ ";
-			} else if (random >= 86 && random < 96) {
+			} else if (random < 96) {
 				forme = "Minior-Blue";
 				message = "Woah! You got a Blue Minior. This one's almost translucent; it looks like it'd be hard for an opponent to find a way to reduce its stats. Rating: ★ ★ ★ ★ ☆";
-			} else if (random >= 96 && random < 99) {
+			} else if (random < 99) {
 				forme = "Minior-Green";
 				message = "Nice! You cracked a Green Minior, that's definitely a rare one. This type of Minior packs an extra punch, and it's great for breaking through defensive teams without risking multiple turns of setup. Rating: ★ ★ ★ ★ ★";
-			} else if (random === 99) {
+			} else {
 				forme = "Minior";
 				target.set.shiny = true;
 				message = "YO!! I can't believe it, you cracked open a Shiny Minior! Its multicolored interior dazzles its opponents and throws off their priority moves. Big grats. Rating: ★ ★ ★ ★ ★ ★";
-			} else {
-				forme = "Minior";
 			}
 			target.formeChange(forme, move, true);
+			const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
+				(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+			this.add('replace', target, details);
 			if (message) this.add(`c|${getName('GMars')}|${message}`);
 			target.setAbility('capsulearmor');
 			target.baseAbility = target.ability;
+			if (target.set.shiny) return;
 			if (forme === 'Minior-Indigo') {
 				this.boost({atk: 1, spa: 1}, target.side.foe.active[0]);
 			} else if (forme === 'Minior') {
@@ -3357,42 +3367,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.setStatus('brn', source, null, true);
 		},
 		self: {
-			sideCondition: 'wistfulthoughts',
+			sideCondition: 'givewistfulthinking',
+		},
+		condition: {
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Wistful Thinking');
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 5,
+			onResidual(pokemon) {
+				this.heal(pokemon.baseMaxhp / 16);
+			},
 		},
 		flags: {protect: 1, reflectable: 1},
-		selfSwitch: 'copyvolatile',
+		selfSwitch: true,
 		secondary: null,
 		target: "normal",
-		type: "Ghost",
-	},
-
-	// Side condition for pants' healing
-	wistfulthoughts: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Wistful Thoughts",
-		pp: 20,
-		priority: 0,
-		flags: {snatch: 1},
-		sideCondition: 'wistfulthoughts',
-		condition: {
-			duration: 5,
-			onStart(side) {
-				this.add('-sidestart', side, 'Wistful Thoughts');
-			},
-			onResidualOrder: 21,
-			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					this.heal(pokemon.baseMaxhp / 16, pokemon);
-				}
-			},
-			onEnd(side) {
-				this.add('-sideend', side, 'Wistful Thoughts');
-			},
-		},
-		secondary: null,
-		target: "allySide",
 		type: "Ghost",
 	},
 
@@ -3444,6 +3434,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
+
+	// PartMan
+	balefulblaze: {
+		accuracy: 100,
+		basePower: 75,
+		basePowerCallback(pokemon) {
+			if (pokemon.set.shiny) {
+				return 95;
+			}
+			return 75;
+		},
+		category: "Special",
+		desc: "Raises the user's Special Attack by 1 stage if this move knocks out the target. If you are shiny, the base power becomes 95.",
+		shortDesc: "Raises user's SpA by 1 if this KOes the target. Shiny: BP=95",
+		name: "Baleful Blaze",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, defrost: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Inferno', target);
+			this.add('-anim', source, 'Hex', target);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Ghost', type);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				this.add(`c|${getName('PartMan')}|FOR SNOM!`);
+				this.boost({spa: 1}, pokemon, pokemon, move);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
 	},
 
 	// peapod
@@ -3776,7 +3806,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTerrain(pokemon) {
 				if ((pokemon.hasType('Water') || pokemon.hasType('Ground')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded and a Water or Ground type, healing through Swampy Terrain.');
-					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+					if (this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon)) {
+						this.add('-message', `${pokemon.name} was healed by the terrain!`);
+					}
 				}
 			},
 			onEnd() {
@@ -4011,6 +4043,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Raihan Kibana
+	stonykibbles: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
+		shortDesc: "For 5 turns, a sandstorm rages.",
+		name: "Stony Kibbles",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit() {
+			this.add(`c|${getName('Raihan Kibana')}|Let the winds blow! Stream forward, Sandstorm!`);
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Rock Slide', target);
+			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', source, 'Sandstorm', target);
+		},
+		weather: 'Sandstorm',
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Raj.Shoot
 	fanservice: {
 		accuracy: 100,
@@ -4127,13 +4188,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(target, source, move) {
 				if (!target.hp || target.species.name !== 'Mismagius') return;
 				if (move?.effectType === 'Move' && move.category !== 'Status') {
-					this.boost({spe: 1}, target);
+					if (this.boost({spe: 1}, target)) {
+						this.add('-message', `${target.name} got a boost by the terrain!`);
+					}
 				}
 			},
 			onSwitchInPriority: -1,
 			onSwitchIn(target) {
 				if (target?.species.name === 'Mismagius') {
-					this.boost({spa: 1, spd: 1}, target);
+					if (this.boost({spa: 1, spd: 1}, target)) {
+						this.add('-message', `${target.name} got a boost by the terrain!`);
+					}
 				}
 			},
 			onStart(battle, source, effect) {
@@ -4144,7 +4209,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became dark!');
 				if (source?.species.name === 'Mismagius') {
-					this.boost({spa: 1, spd: 1}, source);
+					if (this.boost({spa: 1, spd: 1}, source)) {
+						this.add('-message', `${source.name} got a boost by the terrain!`);
+					}
 				}
 			},
 			onResidualOrder: 5,
@@ -4155,7 +4222,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTerrain(pokemon) {
 				if (!pokemon.isSemiInvulnerable()) {
 					if (pokemon && !pokemon.hasType('Ghost')) {
-						this.damage(pokemon.baseMaxhp / 16, pokemon);
+						if (this.damage(pokemon.baseMaxhp / 16, pokemon)) {
+							this.add('-message', `${pokemon.name} was hurt by the terrain!`);
+						}
 					}
 				}
 			},
@@ -4586,9 +4655,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTerrain(pokemon) {
 				if (pokemon.hasType('Ground')) return;
 				if (pokemon.hasType('Electric')) {
-					this.heal(pokemon.baseMaxhp / 8, pokemon);
+					if (this.heal(pokemon.baseMaxhp / 8, pokemon)) {
+						this.add('-message', `${pokemon.name} was healed by the terrain!`);
+					}
 				} else if (!pokemon.hasType('Electric') && (pokemon.hasType(['Flying', 'Steel']) || pokemon.hasAbility('levitate'))) {
-					this.damage(pokemon.baseMaxhp / 8, pokemon);
+					if (this.damage(pokemon.baseMaxhp / 8, pokemon)) {
+						this.add('-message', `${pokemon.name} was hurt by the terrain!`);
+					}
 				}
 			},
 			onStart(battle, source, effect) {
@@ -4757,9 +4830,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.baseMaxhp / 8, pokemon);
+						if (this.damage(pokemon.baseMaxhp / 8, pokemon)) {
+							this.add('-message', `${pokemon.name} was hurt by the terrain!`);
+						}
 					} else if (pokemon) {
-						this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+						if (this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon)) {
+							this.add('-message', `${pokemon.name} was healed by the terrain!`);
+						}
 					}
 				}
 			},
@@ -4770,32 +4847,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Fire",
-	},
-
-	// Tenshi
-	stonykibbles: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
-		shortDesc: "For 5 turns, a sandstorm rages.",
-		name: "Stony Kibbles",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Rock Slide', target);
-			this.add('-anim', source, 'Crunch', target);
-			this.add('-anim', source, 'Sandstorm', target);
-		},
-		weather: 'Sandstorm',
-		target: "normal",
-		type: "Normal",
 	},
 
 	// temp

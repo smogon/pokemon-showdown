@@ -23,7 +23,7 @@ export function getName(name: string): string {
 	return group + name;
 }
 
-export const Conditions: {[k: string]: ModdedConditionData} = {
+export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
 	/*
 	// Example:
 	userid: {
@@ -279,7 +279,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Billo')}|Yep, definitely hacked.`);
 		},
-		// name: "Unaware",
+		innateName: "Unaware",
 		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		// Unaware innate
 		onAnyModifyBoost(boosts, pokemon) {
@@ -339,7 +339,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	cake: {
 		noCopy: true,
-		// name: "h",
+		innateName: "h",
 		shortDesc: "On Switch in and at the end of every turn, it changes type randomly.",
 		onStart(target, pokemon) {
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
@@ -399,7 +399,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('cant say')}|${['imagine taking pokemon seriously when you can just get haxed', '/me plays curb your enthusiasm theme', 'bad players always get lucky'][this.random(3)]}`);
 		},
-		// name: "Magic Guard",
+		innateName: "Magic Guard",
 		shortDesc: "This Pokemon can only be damaged by direct attacks.",
 		// Magic Guard Innate
 		onDamage(damage, target, source, effect) {
@@ -669,62 +669,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('GMars')}|Follow me on bandcamp`);
 		},
-		// Special Forme Effects
-		onBeforeMove(pokemon) {
-			if (pokemon.species.id === "miniorviolet") {
-				this.add(`${getName("GMars")} is thinking...`);
-				if (this.random(3) === 2) {
-					this.add('cant', pokemon, 'ability: Truant');
-					return false;
-				}
-			}
-		},
-		onSwitchIn(pokemon) {
-			if (pokemon.species.id === 'miniorindigo') {
-				this.boost({atk: 1, spa: 1}, pokemon.side.foe.active[0]);
-			} else if (pokemon.species.id === 'miniorgreen') {
-				this.boost({atk: 1}, pokemon);
-			}
-		},
-		onBoost(boost, target, source, effect) {
-			if (source && target === source) return;
-			if (target.species.id !== 'miniorblue') return;
-			let showMsg = false;
-			let i: BoostName;
-			for (i in boost) {
-				if (boost[i]! < 0) {
-					delete boost[i];
-					showMsg = true;
-				}
-			}
-			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Minior-Blue", "[of] " + target);
-			}
-		},
-		onFoeTryMove(target, source, move) {
-			if (move.id === 'haze' && target.species.id === 'miniorblue') {
-				move.onHitField = function (this: Battle) {
-					this.add('-clearallboost');
-					for (const pokemon of this.getAllActive()) {
-						if (pokemon.species.id === 'miniorblue') continue;
-						pokemon.clearBoosts();
-					}
-				}.bind(this);
-				return;
-			}
-			const dazzlingHolder = this.effectData.target;
-			if (!dazzlingHolder.set.shiny && dazzlingHolder.species.id !== 'minior') return;
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
-
-			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
-				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Minior-Shiny', move, '[of] ' + target);
-				return false;
-			}
-		},
 	},
 	grimauxiliatrix: {
 		noCopy: true,
@@ -788,21 +732,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('INStruct')}|no thx`);
-			this.add(`c|${getName('INStruct')}|anywaysies time to get myself kille— I mean fight`);
+			this.add(`c|${getName('INStruct')}|fuck`);
+			this.add(`c|${getName('INStruct')}|well this shouldn't take long`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('INStruct')}|OK so ${['my UberEats order has arrived', 'I ran out of Coca-Cola', 'bobochan wants me to play roomtours in the Chinese room', 'I need to pm HoeenHero'][this.random(4)]}`);
-			this.add(`c|${getName('INStruct')}|im gonna bee are bee`);
+			this.add(`c|${getName('INStruct')}|whatever ill just do it tomorrow`);
 		},
 		onFaint(source) {
-			this.add(`c|${getName('INStruct')}|bg :^(`);
-			this.add(`c|${getName('INStruct')}|/log ${source.side.name} was reported by INStruct. (throwing)`);
+			this.add(`c|${getName('INStruct')}|its ok ill just use leppacycle blissey stall next time :3`);
 		},
-		// name: "Extinction Level Event",
+		innateName: "Extinction Level Event",
 		shortDesc: "Deals 50% of their max hp to those who made contact upon death",
-		//  Innate
+		// Extinction Level Event Innate
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
 			if (!move || !target) return;
@@ -906,7 +847,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
 			this.add(`c|${getName('Kalalokki')}|(x_x)`);
 		},
-		// name: "Sturdy",
+		innateName: "Sturdy",
 		shortDesc: "If this Pokemon is at full HP, it survives one hit with at least 1 HP. Immune to OHKO.",
 		// Sturdy Innate
 		onTryHit(pokemon, target, move) {
@@ -984,7 +925,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	kris: {
-		// name: "phuck",
+		innateName: "phuck",
 		shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
 		noCopy: true,
 		onStart(source) {
@@ -1187,7 +1128,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('Nol')}|nerd`);
 		},
-		// name: "Prankster + Eviolite",
+		innateName: "Prankster + Eviolite",
 		shortDesc: "+1 priority to status moves. 1.5x def and spd.",
 		// Innate Prankster and Eviolite
 		onModifyPriority(priority, pokemon, target, move) {
@@ -1267,7 +1208,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add(`c|${getName('pants')}|neat`);
 		},
 		onSwitchOut(source) {
-			if (source.side.slotConditions) {
+			if (source.side.sideConditions.givewistfulthinking) {
 				this.add(`c|${getName('pants')}|brb contemplating things`);
 			} else {
 				this.add(`c|${getName('pants')}|brb dying a little`);
@@ -1287,6 +1228,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint(pokemon) {
 			this.add(`c|${getName('Paradise ╱╲☼')}|Paradise has been kicked, not banned, therefore you could still potentially invite them back. However, do not do this @${pokemon.side.name}, unless of course, you want to be banned too, because if you invite them back you and Paradise will both be banned.`);
+		},
+	},
+	partman: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('PartMan')}|${[`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`][this.random(2)]}`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('PartMan')}|/me flees`);
+		},
+		onFaint() {
+			this.add(`c|${getName('PartMan')}|B-booli. >.<`);
 		},
 	},
 	peapodc: {
@@ -1387,7 +1340,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFaint() {
 			this.add(`c|${getName('ptoad')}|OKKKK DUUUDE`);
 		},
-		// name: "Sticky Hold",
+		innateName: "Sticky Hold",
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		// Sticky Hold Innate
 		onTakeItem(item, pokemon, source) {
@@ -1442,6 +1395,18 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Rage')}|/me quits`);
+		},
+	},
+	raihankibana: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Raihan Kibana')}|Hi gm`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Raihan Kibana')}|Ight Imma head out`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Raihan Kibana')}|Grr bork bork :(`);
 		},
 	},
 	rajshoot: {
@@ -1608,18 +1573,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Teclis')}|You set my soul on fire!`);
-		},
-	},
-	tenshi: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Tenshi')}|Hi gm`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Tenshi')}|Ight Imma head out`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Tenshi')}|Grr bork bork :(`);
 		},
 	},
 	temp: {
@@ -2050,6 +2003,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-end', pokemon, 'Haunting');
 		},
 	},
+	// for pants' move
+	givewistfulthinking: {
+		duration: 1,
+		onSwitchInPriority: 1,
+		onSwitchIn(pokemon) {
+			pokemon.addVolatile('wistfulthinking');
+		},
+	},
 	// boost for LittEleven's move
 	nexthuntcheck: {
 		duration: 1,
@@ -2059,6 +2020,75 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onHit(pokemon, source, move) {
 			if (move.category !== 'Status') {
 				pokemon.volatiles['nexthuntcheck'].lostFocus = true;
+			}
+		},
+	},
+	// For Gmars' Effects
+	minior: {
+		noCopy: true,
+		name: 'Minior',
+		// Special Forme Effects
+		onBeforeMove(pokemon) {
+			if (pokemon.set.shiny) return;
+			if (pokemon.species.id === "miniorviolet") {
+				this.add(`${getName("GMars")} is thinking...`);
+				if (this.random(3) === 2) {
+					this.add('cant', pokemon, 'ability: Truant');
+					return false;
+				}
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.set.shiny) return;
+			if (pokemon.species.id === 'miniorindigo') {
+				this.boost({atk: 1, spa: 1}, pokemon.side.foe.active[0]);
+			} else if (pokemon.species.id === 'miniorgreen') {
+				this.boost({atk: 1}, pokemon);
+			} else if (pokemon.species.id === 'minior') {
+				pokemon.side.foe.active[0].addVolatile('taunt');
+			} else if (pokemon.species.id === 'minioryellow') {
+				pokemon.side.foe.active[0].trySetStatus('par');
+			}
+		},
+		onBoost(boost, target, source, effect) {
+			if (target.set.shiny) return;
+			if (source && target === source) return;
+			if (target.species.id !== 'miniorblue') return;
+			let showMsg = false;
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Minior-Blue", "[of] " + target);
+			}
+		},
+		onFoeTryMove(target, source, move) {
+			if (move.id === 'haze' && target.species.id === 'miniorblue' && !target.set.shiny) {
+				move.onHitField = function (this: Battle) {
+					this.add('-clearallboost');
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.species.id === 'miniorblue') continue;
+						pokemon.clearBoosts();
+					}
+				}.bind(this);
+				return;
+			}
+			const dazzlingHolder = this.effectData.target;
+			if (!dazzlingHolder.set.shiny && dazzlingHolder.species.id !== 'minior') return;
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('message', 'Minior dazzles!');
+				this.add('cant', target, move, '[of] ' + dazzlingHolder);
+				return false;
 			}
 		},
 	},
@@ -2504,7 +2534,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 
 				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
-			this.add(`c|${getName('INStruct')}|Hey ${pokemon.side.name}, dynamax is banned in SSB4, and neither custom challenges nor tournaments won't save you from that fact. Get dunked on lmao.`);
+			this.add('-message', 'Dynamax is not allowed in SSB4, and custom challenges or tournaments won\'t save you from that fact.');
 			pokemon.removeVolatile('dynamax');
 			this.queue.cancelMove(pokemon);
 			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.

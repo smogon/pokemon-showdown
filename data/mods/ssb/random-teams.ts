@@ -270,7 +270,7 @@ export const ssbSets: SSBSets = {
 		species: 'Kartana', ability: 'Bipolar', item: 'Metronome', gender: 'M',
 		moves: ['U-turn'],
 		signatureMove: 'Soup-Stealing 7-Star Strike: Redux',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: 1,
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: true,
 	},
 	Felucia: {
 		species: 'Uxie', ability: 'Regenerator', item: 'Red Card', gender: 'F',
@@ -400,7 +400,7 @@ export const ssbSets: SSBSets = {
 		species: 'Lopunny', ability: 'Second Wind', item: 'Lopunnite', gender: 'F',
 		moves: ['Return', 'Play Rough', ['Drain Punch', 'High Jump Kick']],
 		signatureMove: 'Cozy Cuddle',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: 1,
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
 	Kalalokki: {
 		species: 'Wingull', ability: 'Magic Guard', item: 'Kalalokkium Z', gender: 'M',
@@ -550,6 +550,19 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rapid Turn',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	PartMan: {
+		species: 'Chandelure', ability: 'Hecatomb', item: 'Focus Sash', gender: 'M',
+		moves: ['Nasty Plot', 'Draining Kiss', 'Dark Pulse'],
+		signatureMove: 'Baleful Blaze',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
+	'PartMan-Shiny': {
+		species: 'Chandelure', ability: 'Hecatomb', item: 'Focus Sash', gender: 'M',
+		moves: ['Nasty Plot', 'Light of Ruin', 'Fiery Wrath'],
+		signatureMove: 'Baleful Blaze',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+		skip: 'PartMan',
+	},
 	'peapod c': {
 		species: 'Dragapult', ability: 'Stealth Black', item: 'Leftovers', gender: 'M',
 		moves: ['Hex', 'Dragon Darts', 'Work Up'],
@@ -621,6 +634,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Psychic', 'Calm Mind', 'Hyper Voice'],
 		signatureMove: ':shockedlapras:',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
+	'Raihan Kibana': {
+		species: 'Stoutland', ability: 'Royal Coat', item: 'Leftovers', gender: 'M',
+		moves: ['Knock Off', 'Thousand Waves', ['Play Rough', 'Power Whip']],
+		signatureMove: 'Stony Kibbles',
+		evs: {atk: 128, spd: 252, spe: 128}, nature: 'Jolly',
 	},
 	'Raj.Shoot': {
 		species: 'Charizard', ability: 'Tough Claws', item: 'Heavy-Duty Boots', gender: 'N',
@@ -713,12 +732,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Earth Power', 'Seed Flare', 'Spiky Shield'],
 		signatureMove: 'Kaboom',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
-	},
-	Tenshi: {
-		species: 'Stoutland', ability: 'Royal Coat', item: 'Leftovers', gender: 'M',
-		moves: ['Knock Off', 'Thousand Waves', ['Play Rough', 'Power Whip']],
-		signatureMove: 'Stony Kibbles',
-		evs: {atk: 128, spd: 252, spe: 128}, nature: 'Jolly',
 	},
 	temp: {
 		species: 'Latias', ability: 'Charged Up', item: 'Dragon Fang', gender: 'F',

@@ -1424,13 +1424,17 @@ export class Battle {
 			for (const pokemon of side.active) {
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
-				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
-				pokemon.hurtThisTurn = null;
-				pokemon.statsRaisedThisTurn = false;
-				pokemon.statsLoweredThisTurn = false;
+				if (this.turn !== 1) {
+					pokemon.usedItemThisTurn = false;
+					pokemon.statsRaisedThisTurn = false;
+					pokemon.statsLoweredThisTurn = false;
+					// It shouldn't be possible in a normal battle for a Pokemon to be damaged before turn 1's move selection
+					// However, this could be potentially relevant in certain OMs
+					pokemon.hurtThisTurn = null;
+				}
 
 				pokemon.maybeDisabled = false;
 				for (const moveSlot of pokemon.moveSlots) {

@@ -458,6 +458,7 @@ export const commands: ChatCommands = {
 		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
 		target = this.splitTarget(target);
+		const targetID = toID(this.targetUsername);
 		let privateReason = '';
 		let publicReason = target;
 		const targetLowercase = target.toLowerCase();
@@ -476,6 +477,7 @@ export const commands: ChatCommands = {
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(publicReason ? ` (${publicReason})` : ``)}`);
 			this.globalModlog('WARN OFFLINE', targetUser, target ? `${publicReason} ${privateReason}` : ``);
+			Punishments.offlineWarns.set(targetID, target);
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
@@ -1521,17 +1523,17 @@ export const commands: ChatCommands = {
 		}
 		this.checkCan('forcerename', targetUser);
 
+		Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
+
 		let forceRenameMessage;
 		if (targetUser.connected) {
 			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME', targetUser, reason);
-			Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		} else {
 			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME OFFLINE', targetUser, reason);
-			if (!Monitor.forceRenames.has(targetUser.id)) Monitor.forceRenames.set(targetUser.id, 0);
 		}
 
 		if (room?.roomid !== 'staff') this.privateModAction(`${targetUser.name} ${forceRenameMessage}`);

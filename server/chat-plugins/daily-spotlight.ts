@@ -238,7 +238,8 @@ export const commands: ChatCommands = {
 			`<code>/replacedaily [name], [queue number], [image], [description]</code>: replaces the daily spotlight queued at the specified number. Requires: % @ # &<br />` +
 			`<code>/removedaily [name][, queue number]</code>: if no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # &<br />` +
 			`<code>/swapdaily [name], [queue number], [queue number]</code>: swaps the two queued spotlights at the given queue numbers. Requires: % @ # &<br />` +
-			`<code>/viewspotlights</code>: shows all current spotlights in the room. For staff, also shows queued spotlights.`
+			`<code>/viewspotlights</code>: shows all current spotlights in the room. For staff, also shows queued spotlights.` +
+			`</details>`
 		);
 	},
 };

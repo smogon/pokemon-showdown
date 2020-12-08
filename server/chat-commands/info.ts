@@ -13,6 +13,9 @@ import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Utils} from '../../lib/utils';
 import {Net} from '../../lib/net';
 
+const ONLINE_SYMBOL = ` \u25C9 `;
+const OFFLINE_SYMBOL = ` \u25CC `;
+
 export function getCommonBattles(
 	userID1: ID, user1: User | null, userID2: ID, user2: User | null, connection: Connection
 ) {
@@ -441,7 +444,7 @@ export const commands: ChatCommands = {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
-				results.push(`${curUser.connected ? ` \u25C9 ` : ` \u25CC `} ${curUser.name}`);
+				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
@@ -454,7 +457,7 @@ export const commands: ChatCommands = {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestIp.startsWith(ip)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
-				results.push(`${curUser.connected ? ` \u25C9 ` : ` \u25CC `} ${curUser.name}`);
+				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
@@ -464,7 +467,7 @@ export const commands: ChatCommands = {
 			for (const curUser of Users.users.values()) {
 				if (curUser.latestIp !== ip) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
-				results.push(`${curUser.connected ? ` \u25C9 ` : ` \u25CC `} ${curUser.name}`);
+				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 		}
 		if (!results.length) {
@@ -488,10 +491,10 @@ export const commands: ChatCommands = {
 		for (const curUser of Users.users.values()) {
 			if (!curUser.id.includes(target)) continue;
 			results.push(
-				Utils.html`${curUser.connected ? ` \u25C9 ` : ` \u25CC `} ${curUser.name}`
+				Utils.html`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`
 			);
 		}
-		Utils.sortBy(results, name => name.startsWith('  \u25C9'));
+		Utils.sortBy(results, name => name.startsWith(ONLINE_SYMBOL));
 		if (!results.length) results.push(`No users found.`);
 		return this.sendReplyBox(
 			`Users with a name matching '${target}':<br />${results.join('; ')}`
@@ -895,7 +898,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
-		const targets = target.split(',').map(toID);
+		const targets = target.split(/[,/]/).map(toID);
 		const maybeMod = targets[targets.length - 1];
 		let mod = Dex;
 		let format: Format | null = null;
@@ -1080,7 +1083,7 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
-		const targets = target.split(/[,+]/);
+		const targets = target.split(/[,+/]/);
 		const sources: (string | Move)[] = [];
 		let dex = Dex;
 		if (room?.battle) {
@@ -2003,9 +2006,9 @@ export const commands: ChatCommands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
-				`${room?.settings.rulesLink ? Utils.html`- <a href="${room.settings.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
-				`- <a href="https://${Config.routes.root}${this.tr('/rules')}">${this.tr("Global Rules")}</a>`
+				`${room ? this.tr`Please follow the rules:` + '<br />' : ``}` +
+				`${room?.settings.rulesLink ? Utils.html`- <a href="${room.settings.rulesLink}">${this.tr`${room.title} room rules`}</a><br />` : ``}` +
+				`- <a href="https://${Config.routes.root}${this.tr`/rules`}">${this.tr`Global Rules`}</a>`
 			);
 			return;
 		}
@@ -2025,7 +2028,7 @@ export const commands: ChatCommands = {
 			const rulesLink = possibleRoom.settings.rulesLink;
 			return this.sendReplyBox(
 				`${possibleRoom.title}'s rules:<br />` +
-				`${rulesLink ? Utils.html`- <a href="${rulesLink}">${this.tr `${possibleRoom.title} room rules`}</a><br />` : `None set.`}`
+				`${rulesLink ? Utils.html`- <a href="${rulesLink}">${this.tr`${possibleRoom.title} room rules`}</a><br />` : `None set.`}`
 			);
 		}
 
@@ -2647,7 +2650,10 @@ export const commands: ChatCommands = {
 		this.runBroadcast();
 		this.sendReplyBox(buf);
 	},
-	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # &`],
+	showhelp: [
+		`/show [url] - Shows you an image or YouTube video.`,
+		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
+	],
 
 	regdate: 'registertime',
 	regtime: 'registertime',
