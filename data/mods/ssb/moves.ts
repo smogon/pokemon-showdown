@@ -2216,6 +2216,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			}
 		},
+		onHit() {
+			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
+		},
 		secondary: {
 			chance: 100,
 			volatileStatus: 'flinch',
