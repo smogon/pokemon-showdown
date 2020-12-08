@@ -1532,8 +1532,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// nui
 	conditionoverride: {
-		desc: "On switch-in, this Pokemon attracts the opponents, regardless of gender. Pokemon that are attracted have their Special Defense stat reduced by 25%.",
-		shortDesc: "Attracts opponent. Attracted Pokemon have SpD reduced by 25%.",
+		desc: "This Pokemon can attract opponents regardless of gender. Pokemon that are attracted have their Special Defense stat reduced by 25%.",
+		shortDesc: "Attracts anyone. Attracted Pokemon have SpD reduced by 25%.",
 		// See conditions.ts for implementation
 		name: "Condition Override",
 		isNonstandard: "Custom",
@@ -1582,7 +1582,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.boost({spe: length}, source);
 				if (source.species.baseSpecies !== 'Chandelure') return;
 				if (source.set.shiny) return;
-				this.add('-message', 'THE LIGHT! IT BURNS!');
+				this.add(`c|${getName('PartMan')}|THE LIGHT! IT BURNS!`);
 				changeSet(this, source, ssbSets['PartMan-Shiny']);
 			}
 		},
@@ -1760,8 +1760,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Rach
 	burnitdown: {
-		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat. Status ailments afflicted by this Pokemon ignore any status immunities that come with the foe's typing. This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
-		shortDesc: "Lower the foe's higher offensive stat. Status ailments ignore typing. Regenerator.",
+		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat. This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
+		shortDesc: "Lower the foe's higher offensive stat. Regenerator.",
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},

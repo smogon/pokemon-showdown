@@ -81,7 +81,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	aegii: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('aegii')}|${[`stream fiesta!!! https://youtu.be/eDEFolvLn0A`, `stream more&more!!! https://youtu.be/mH0_XpSHkZo`, `stream wannabe!!! https://youtu.be/fE2h3lGlOsk`, `stream love bomb!!! https://youtu.be/-SK6cvkK4c0`][this.random(4)]}`);
+			this.add(`c|${getName('aegii')}|shoot! take a pano~rama~ https://youtu.be/G8GaQdW2wHc`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('aegii')}|${[`brb, buying albums`, `brb, buying albums`, `brb, streaming mvs`, `brb, learning choreos`][this.random(4)]}`);
@@ -731,15 +731,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	instructuser: {
 		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('INStruct')}|fuck`);
-			this.add(`c|${getName('INStruct')}|well this shouldn't take long`);
+		onStart(source) {
+			this.add(`c|${getName('INStruct')}|Hey ${source.side.name} no time to explain... Just believe ${[`what the walls bleed`, `what your reflection says`, `the voices in your head`, `the messages from beyond`, `what the darkness speaks`][this.random(5)]}...`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('INStruct')}|whatever ill just do it tomorrow`);
+			this.add(`c|${getName('INStruct')}|I must go back to the elder ones... those who will give salvation to all who serve...`);
 		},
-		onFaint(source) {
-			this.add(`c|${getName('INStruct')}|its ok ill just use leppacycle blissey stall next time :3`);
+		onFaint() {
+			this.add(`c|${getName('INStruct')}|Forgive me, lord of darkness... I couldn't fulfill my prophecy...`);
 		},
 		innateName: "Extinction Level Event",
 		shortDesc: "Deals 50% of their max hp to those who made contact upon death",
@@ -749,7 +748,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (move.flags['contact']) {
-					if (!target.m.marked) this.add('-message', `INStruct attached a bomb onto ${target.name}!`);
+					if (!target.m.marked) this.add('-message', `${target.name} was marked by an unknown being...`);
 					target.m.marked = true;
 				}
 			}
@@ -757,7 +756,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) return;
 			if (move.flags['contact']) {
-				if (!source.m.marked) this.add('-message', `INStruct attached a bomb onto ${source.name}!`);
+				if (!source.m.marked) this.add('-message', `${source.name} was marked by an unknown being...`);
 				source.m.marked = true;
 			}
 			if (!target.hp) {
@@ -765,8 +764,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					if (foe.fainted || !foe.hp) continue;
 					if (!foe.m.marked) continue;
 					this.add('-activate', target, 'ability: Extinction Level Event');
-					this.add('-message', `The bomb detonated!`);
 					let collateral = this.clampIntRange(foe.baseMaxhp / 2, 1);
+					this.add('-message', `${foe.name} became insane and attacked themselves!`);
 					if (collateral >= foe.hp) collateral = foe.hp - 1;
 					this.directDamage(collateral, foe);
 				}
@@ -1167,13 +1166,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	nui: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('nui')}|Poggaroo`);
+			this.add(`c|${getName('nui')}|/html <img src="https://cdn.discordapp.com/emojis/699527334730137630.png" />`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('nui')}|Pog pepe`);
+			this.add(`c|${getName('nui')}|/html <img src="https://static-cdn.jtvnw.net/emoticons/v1/301048958/1.0" />`);
 		},
 		onFaint() {
-			this.add(`c|${getName('nui')}|just a sad pepe`);
+			this.add(`c|${getName('nui')}|/html <img src="https://static-cdn.jtvnw.net/emoticons/v1/302587418/1.0" />`);
 		},
 	},
 	overneat: {
