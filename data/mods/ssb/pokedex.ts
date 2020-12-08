@@ -116,6 +116,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Electric", "Water"],
 		baseStats: {hp: 70, atk: 80, def: 55, spa: 75, spd: 75, spe: 100},
 	},
+	// Inactive
+	gyaradosmega: {
+		inherit: true,
+		abilities: {0: 'Dragon\'s Fury'},
+	},
 	// Jho
 	toxtricity: {
 		inherit: true,
