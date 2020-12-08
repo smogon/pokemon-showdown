@@ -1,3 +1,21 @@
+Fork launch : 
+========================================================================
+
+```
+npm install
+node pokemon-showdown
+node export
+```
+
+Git : 
+```
+git remote add pokemon-showdown git@github.com:smogon/pokemon-showdown.git
+```
+
+<br/>
+<br/>
+<br/>
+
 Pokémon Showdown
 ========================================================================
 
