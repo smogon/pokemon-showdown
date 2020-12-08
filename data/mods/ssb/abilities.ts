@@ -1881,7 +1881,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Segmr
 	skilldrain: {
 		desc: "While this Pokemon is active, no moves will trigger their secondary effects, and moves that cause the user to switch out will no longer do so.",
-		shortdesc: "While active: no secondary effects, moves can't switch out.",
+		shortDesc: "While active: no secondary effects, moves can't switch out.",
 		name: "Skill Drain",
 		onAnyModifyMove(move) {
 			delete move.secondaries;
