@@ -1574,8 +1574,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// PartMan
 	hecatomb: {
-		desc: "This Pokemon's Speed is raised by 1 stage if it attacks and knocks out another Pokemon. If the pokemon is Chandelure and is not shiny, it changes set.",
-		shortDesc: "This Pokemon's Speed is raised by 1 stage if it attacks and KOes another Pokemon. PartMan: changes sets.",
+		desc: "This Pokemon's Speed is raised by 1 stage if it attacks and knocks out another Pokemon. If the Pokemon is Chandelure and is not shiny, it changes its set.",
+		shortDesc: "Spe +1 on KOing foe. Chandelure: changes sets.",
 		name: 'Hecatomb',
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
