@@ -84,7 +84,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('aegii')}|shoot! take a pano~rama~ https://youtu.be/G8GaQdW2wHc`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('aegii')}|${[`brb, buying albums`, `brb, buying albums`, `brb, streaming mvs`, `brb, learning choreos`][this.random(4)]}`);
+			this.add(`c|${getName('aegii')}|${[`brb, buying albums`, `brb, downloading fancams`, `brb, streaming mvs`, `brb, learning choreos`][this.random(4)]}`);
 		},
 		onFaint() {
 			this.add(`c|${getName('aegii')}|i forgot to stan loona...`);
@@ -732,13 +732,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	instructuser: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('INStruct')}|Hey ${source.side.name} no time to explain... Just believe ${[`what the walls bleed`, `what your reflection says`, `the voices in your head`, `the messages from beyond`, `what the darkness speaks`][this.random(5)]}...`);
+			this.add(`c|${getName('INStruct')}|Hey ${source.side.name} no time to explain... Just believe ${[`what the walls bleed`, `in what you can't comprehend to see`, `the whispers in your head`, `the messages from beyond`, `what the darkness speaks`][this.random(5)]}...`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('INStruct')}|I must go back to the elder ones... those who will give salvation to all who serve...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('INStruct')}|Forgive me, lord of darkness... I couldn't fulfill my prophecy...`);
+			this.add(`c|${getName('INStruct')}|Forgive me, entity of darkness... I couldn't fulfill my prophecy...`);
 		},
 		innateName: "Extinction Level Event",
 		shortDesc: "Deals 50% of their max hp to those who made contact upon death",
