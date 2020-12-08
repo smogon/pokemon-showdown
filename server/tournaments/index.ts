@@ -1782,13 +1782,19 @@ const commands: ChatCommands = {
 			target = target.trim();
 			const option = target || 'on';
 			if (this.meansYes(option)) {
+				if (tournament.forcePublic) {
+					throw new Chat.ErrorMessage(`Tournament battles are already being forced public.`);
+				}
 				tournament.forcePublic = true;
-				room.add('Tournament battles forced public: ON');
+				room.add('Tournament battles are now forced to be public.');
 				this.privateModAction(`Tournament public battles were turned ON by ${user.name}`);
 				this.modlog('TOUR FORCEPUBLIC', null, 'ON');
 			} else if (this.meansNo(option) || option === 'stop') {
+				if (!tournament.forcePublic) {
+					throw new Chat.ErrorMessage(`Tournament battles are not being forced public.`);
+				}
 				tournament.forcePublic = false;
-				room.add('Tournament battles forced public: OFF');
+				room.add('Tournament battles are no longer being forced public.');
 				this.privateModAction(`Tournament public battles were turned OFF by ${user.name}`);
 				this.modlog('TOUR FORCEPUBLIC', null, 'OFF');
 			} else {
