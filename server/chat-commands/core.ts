@@ -431,25 +431,27 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (!avatarIsValid) {
-			const avatarsAuto = Config.customavatars || {};
-			if (avatarsAuto[user.id] === avatar) {
-				avatarIsValid = true;
+		const avatarsAuto = Config.customavatars || {};
+		const avatarsManual = Config.allowedavatars || {};
+		function customAvatarIsValid(userid: ID) {
+			if (avatarsAuto[userid] === avatar) {
+				return true;
 			}
-			if (avatarsAuto[user.id] === '#' + avatar) {
+			if (avatarsAuto[userid] === '#' + avatar) {
 				avatar = '#' + avatar;
-				avatarIsValid = true;
+				return true;
 			}
-			const avatarsManual = Config.allowedavatars || {};
 			if (Object.hasOwnProperty.call(avatarsManual, '#' + avatar)) {
 				avatar = '#' + avatar;
 			}
 			if (Object.hasOwnProperty.call(avatarsManual, avatar)) {
-				if (avatarsManual[avatar].includes(user.id)) {
-					avatarIsValid = true;
+				if (avatarsManual[avatar].includes(userid)) {
+					return true;
 				}
 			}
+			return false;
 		}
+		avatarIsValid = avatarIsValid || [user.id, ...user.previousIDs].some(customAvatarIsValid);
 
 		if (!avatarIsValid) {
 			if (parts[1]) return false;
