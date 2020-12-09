@@ -1085,15 +1085,20 @@ export class RandomGen7Teams extends RandomTeams {
 				// Adjust rate for species with multiple sets
 				switch (species.baseSpecies) {
 				case 'Arceus': case 'Silvally':
-					if (this.randomChance(8, 9)) continue;
+					if (!isMonotype && this.randomChance(8, 9)) continue;
 					break;
 				case 'Oricorio':
+					if (isMonotype && type !== 'Flying') break;
 					if (this.randomChance(3, 4)) continue;
 					break;
 				case 'Castform':
 					if (this.randomChance(2, 3)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
+				case 'Meloetta':
+					// In Monotype, Meloetta-Pirouette can only be on mono-normal teams
+					if (isMonotype && type === 'Psychic') break;
+					// falls through
+				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Gourgeist': case 'Groudon': case 'Kyogre':
 					if (this.randomChance(1, 2)) continue;
 					break;
 				case 'Greninja':
@@ -1188,7 +1193,7 @@ export class RandomGen7Teams extends RandomTeams {
 				if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
 			}
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed}) (team:${pokemon.map((mon) => mon.name)})`);
 
 		return pokemon;
 	}

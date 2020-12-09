@@ -1540,9 +1540,13 @@ export class RandomTeams {
 				// Adjust rate for species with multiple sets
 				switch (species.baseSpecies) {
 				case 'Arceus': case 'Silvally':
-					if (this.randomChance(8, 9)) continue;
+					if (!isMonotype && this.randomChance(8, 9)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta':
+				case 'Meloetta':
+					// In Monotype, Meloetta-Pirouette can only be on mono-normal teams
+					if (isMonotype && type === 'Psychic') break;
+					// falls through
+				case 'Aegislash': case 'Basculin': case 'Gourgeist':
 					if (this.randomChance(1, 2)) continue;
 					break;
 				case 'Greninja':
@@ -1551,7 +1555,10 @@ export class RandomTeams {
 				case 'Darmanitan':
 					if (species.gen === 8 && this.randomChance(1, 2)) continue;
 					break;
-				case 'Magearna': case 'Toxtricity': case 'Zacian': case 'Zamazenta':
+				case 'Zacian': case 'Zamazenta':
+					if (isMonotype && type === 'Steel') break;
+					// falls through
+				case 'Magearna': case 'Toxtricity':
 				case 'Appletun': case 'Blastoise': case 'Butterfree': case 'Copperajah': case 'Grimmsnarl': case 'Inteleon': case 'Rillaboom': case 'Snorlax': case 'Urshifu':
 					if (this.gen >= 8 && this.randomChance(1, 2)) continue;
 					break;
@@ -1644,7 +1651,7 @@ export class RandomTeams {
 				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 			}
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed}) (team:${pokemon.map((mon) => mon.name)})`);
 
 		return pokemon;
 	}

@@ -671,109 +671,120 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
-		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
+		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
+		for (const restrict of [true, false]) {
+			if (pokemon.length >= 6) break;
+			while (pokemonPool.length && pokemon.length < 6) {
+				const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+				if (!species.exists || !species.randomBattleMoves) continue;
 
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[species.baseSpecies]) continue;
+				// Limit to one of each species (Species Clause)
+				if (baseFormes[species.baseSpecies]) continue;
 
-			// Adjust rate for species with multiple sets
-			switch (species.baseSpecies) {
-			case 'Arceus':
-				if (this.randomChance(16, 17)) continue;
-				break;
-			case 'Rotom':
-				if (this.gen < 5 && this.randomChance(5, 6)) continue;
-				break;
-			case 'Castform':
-				if (this.randomChance(2, 3)) continue;
-				break;
-			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Meloetta':
-				if (this.randomChance(1, 2)) continue;
-				break;
-			}
+				// Adjust rate for species with multiple sets
+				switch (species.baseSpecies) {
+				case 'Arceus':
+					if (!isMonotype && this.randomChance(16, 17)) continue;
+					break;
+				case 'Rotom':
+					if (this.gen < 5 && this.randomChance(5, 6)) continue;
+					break;
+				case 'Castform':
+					if (this.randomChance(2, 3)) continue;
+					break;
+				case 'Meloetta':
+					// In Monotype, Meloetta-Pirouette can only be on mono-normal teams
+					if (isMonotype && type === 'Psychic') break;
+					// falls through
+				case 'Basculin': case 'Cherrim': case 'Giratina':
+					if (this.randomChance(1, 2)) continue;
+					break;
+				}
 
-			// Illusion shouldn't be in the last slot
-			if (species.name === 'Zoroark' && pokemon.length > 4) continue;
+				// Illusion shouldn't be in the last slot
+				if (species.name === 'Zoroark' && pokemon.length > 4) continue;
 
-			const tier = species.tier;
+				const tier = species.tier;
 
-			// Limit two Pokemon per tier
-			if (this.gen === 5 && tierCount[tier] > 1) continue;
+				// Limit two Pokemon per tier
+				if (this.gen === 5 && tierCount[tier] > 1) continue;
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
+				const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 
-			const types = species.types;
+				const types = species.types;
+				let typeCombo = types.slice().sort().join();
 
-			if (!isMonotype) {
-				// Limit two of any type
-				let skip = false;
-				for (const typeName of types) {
-					if (typeCount[typeName] > 1) {
-						skip = true;
-						break;
+				if (restrict) {
+					if (!isMonotype) {
+						// Limit two of any type
+						let skip = false;
+						for (const typeName of types) {
+							if (typeCount[typeName] > 1) {
+								skip = true;
+								break;
+							}
+						}
+						if (skip) continue;
+					}
+
+					// Limit one of any type combination, two in Monotype
+					if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+						// Drought, Drizzle and Sand Stream don't count towards the type combo limit
+						typeCombo = set.ability;
+						if (typeCombo in typeComboCount) continue;
+					} else {
+						if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
 					}
 				}
-				if (skip) continue;
-			}
 
-			// Limit one of any type combination, two in Monotype
-			let typeCombo = types.slice().sort().join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
-				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
-				typeCombo = set.ability;
-				if (typeCombo in typeComboCount) continue;
-			} else {
-				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
-			}
+				// Okay, the set passes, add it to our team
+				pokemon.push(set);
 
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
-
-			if (pokemon.length === 6) {
-				// Set Zoroark's level to be the same as the last Pokemon
-				const illusion = teamDetails['illusion'];
-				if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
-				break;
-			}
-
-			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[species.baseSpecies] = 1;
-
-			// Increment tier counter
-			if (tierCount[tier]) {
-				tierCount[tier]++;
-			} else {
-				tierCount[tier] = 1;
-			}
-
-			// Increment type counters
-			for (const typeName of types) {
-				if (typeName in typeCount) {
-					typeCount[typeName]++;
-				} else {
-					typeCount[typeName] = 1;
+				if (pokemon.length === 6) {
+					// Set Zoroark's level to be the same as the last Pokemon
+					const illusion = teamDetails['illusion'];
+					if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
+					break;
 				}
-			}
-			if (typeCombo in typeComboCount) {
-				typeComboCount[typeCombo]++;
-			} else {
-				typeComboCount[typeCombo] = 1;
-			}
 
-			// Team details
-			if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails['hail'] = 1;
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
-			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
-			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
-			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
-			if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
+				// Now that our Pokemon has passed all checks, we can increment our counters
+				baseFormes[species.baseSpecies] = 1;
 
-			// For setting Zoroark's level
-			if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
+				// Increment tier counter
+				if (tierCount[tier]) {
+					tierCount[tier]++;
+				} else {
+					tierCount[tier] = 1;
+				}
+
+				// Increment type counters
+				for (const typeName of types) {
+					if (typeName in typeCount) {
+						typeCount[typeName]++;
+					} else {
+						typeCount[typeName] = 1;
+					}
+				}
+				if (typeCombo in typeComboCount) {
+					typeComboCount[typeCombo]++;
+				} else {
+					typeComboCount[typeCombo] = 1;
+				}
+
+				// Team details
+				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails['hail'] = 1;
+				if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
+				if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
+				if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
+				if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
+				if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
+
+				// For setting Zoroark's level
+				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
+			}
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed}) (team:${pokemon.map((mon) => mon.name)})`);
 
 		return pokemon;
 	}
