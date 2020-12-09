@@ -700,7 +700,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			const tier = species.tier;
 
 			// Limit two Pokemon per tier
-			if (this.gen === 5 && tierCount[tier] > 1) continue;
+			if (this.gen === 5 && !isMonotype && tierCount[tier] > 1) continue;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 

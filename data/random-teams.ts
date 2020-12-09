@@ -81,6 +81,64 @@ export class RandomTeams {
 		return this.fastPop(list, index);
 	}
 
+	/**
+	 * Calculates a Pokemon's real in-game stats from its set details
+	 * Prone to rounding errors, but it should be close enough for the purposes of this class's functions
+	 */
+	statCalc(baseStats: StatsTable, ivs: StatsTable | number, evs: StatsTable | number, level: number, nature: string) {
+		if (typeof ivs === 'number') ivs = {hp: ivs, atk: ivs, def: ivs, spa: ivs, spd: ivs, spe: ivs};
+		if (typeof evs === 'number') evs = {hp: evs, atk: evs, def: evs, spa: evs, spd: evs, spe: evs};
+		const realStats: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		const evMod = this.gen > 3 ? (ev: number) => Math.floor(ev / 4) : (ev: number) => Math.floor(Math.ceil(Math.sqrt(ev)) / 4);
+		for (const statName in realStats) {
+			const stat = statName as StatName;
+			if (stat === 'hp') {
+				realStats.hp = Math.floor((baseStats.hp * 2 + ivs.hp + evMod(evs.hp)) * level / 100 + level + 10);
+			} else {
+				realStats[stat] = Math.floor((baseStats[stat] * 2 + ivs[stat] + evMod(evs[stat])) * level / 100 + 5);
+				if (stat === 'atk' || stat === 'spa') {
+					// Damage dealt is roughly proportional to level
+					realStats[stat] = Math.floor(realStats[stat] * level / 100);
+				}
+			}
+		}
+		const n = this.dex.getNature(nature);
+		if (n.plus) {
+			realStats[n.plus] = Math.floor(realStats[n.plus] * 1.1);
+		}
+		if (n.minus) {
+			realStats[n.minus] = Math.floor(realStats[n.minus] * 0.9);
+		}
+		return realStats;
+	}
+
+	levelBalance(baseStats: StatsTable, ivs: StatsTable | number, evs: StatsTable | number, nature: string,
+		averageIV = 0, averageEV = 0, weakling?: string) {
+		let realStats: StatsTable = this.statCalc(baseStats, ivs, evs, 100, nature);
+		if (!weakling) weakling = this.gen >= 8 ? 'blipbug' : this.gen >= 2 ? 'sunkern' : 'weedle';
+		const worstStats = this.statCalc(this.dex.getSpecies(weakling).baseStats, averageIV, averageEV, 100, 'Serious');
+		const statRatios = {power: 0, bulk: 0, speed: 0};
+		let statRatioTotal = 0;
+		statRatioTotal += statRatios.power = 2 * Math.log((worstStats.atk + worstStats.spa) / (realStats.atk + realStats.spa));
+		statRatioTotal += statRatios.bulk = 2 * (
+			Math.log(worstStats.hp * worstStats.def * worstStats.spd / (worstStats.def + worstStats.spd)) -
+			Math.log(realStats.hp * realStats.def * realStats.spd / (realStats.def + realStats.spd))
+		);
+		statRatioTotal += statRatios.speed = Math.log(worstStats.spe / realStats.spe);
+		let level = Math.floor(Math.pow(Math.E, statRatioTotal / 5) * 100); // Initial level guess will underestimate
+		if (level > 100) level = 100;
+		while (level < 100) {
+			realStats = this.statCalc(baseStats, ivs, evs, level, nature);
+			statRatioTotal = 0;
+			statRatioTotal += statRatios.power = 2 * Math.log((worstStats.atk + worstStats.spa) / (realStats.atk + realStats.spa));
+			statRatioTotal += statRatios.bulk = 2 * Math.log((worstStats.def + worstStats.spd) * worstStats.hp / ((realStats.def + realStats.spd) * realStats.hp));
+			statRatioTotal += statRatios.speed = Math.log(worstStats.spe / realStats.spe);
+			if (statRatioTotal <= 0) break;
+			level++;
+		}
+		return level;
+	}
+
 	// checkAbilities(selectedAbilities, defaultAbilities) {
 	// 	if (!selectedAbilities.length) return true;
 	// 	const selectedAbility = selectedAbilities.pop();
@@ -186,48 +244,38 @@ export class RandomTeams {
 			// Random EVs
 			const evs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 			const s: StatName[] = ["hp", "atk", "def", "spa", "spd", "spe"];
-			let evpool = 510;
-			do {
-				const x = this.sample(s);
-				const y = this.random(Math.min(256 - evs[x], evpool + 1));
-				evs[x] += y;
-				evpool -= y;
-			} while (evpool > 0);
+			if (this.gen > 2) {
+				let evpool = 510;
+				do {
+					const x = this.sample(s);
+					const y = this.random(Math.min(256 - evs[x], evpool + 1));
+					evs[x] += y;
+					evpool -= y;
+				} while (evpool > 0);
+			} else {
+				for (const x of s) {
+					evs[x] = this.random(256);
+				}
+			}
 
 			// Random IVs
-			const ivs = {hp: this.random(32), atk: this.random(32), def: this.random(32), spa: this.random(32), spd: this.random(32), spe: this.random(32)};
+			const ivs = {
+				hp: this.random(32),
+				atk: this.random(32),
+				def: this.random(32),
+				spa: this.random(32),
+				spd: this.random(32),
+				spe: this.random(32),
+			};
 
 			// Random nature
 			const nature = this.sample(natures);
 
 			// Level balance--calculate directly from stats rather than using some silly lookup table
-			const mbstmin = 1307; // Sunkern has the lowest modified base stat total, and that total is 807
-
 			let stats = species.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
 			if (species.baseSpecies === 'Wishiwashi') stats = Dex.getSpecies('wishiwashischool').baseStats;
-
-			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
-			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
-			mbst += (stats["atk"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["def"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["spa"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["spd"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["spe"] * 2 + 31 + 21 + 100) + 5;
-
-			let level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
-
-			while (level < 100) {
-				mbst = Math.floor((stats["hp"] * 2 + 31 + 21 + 100) * level / 100 + 10);
-				mbst += Math.floor(((stats["atk"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100); // Since damage is roughly proportional to level
-				mbst += Math.floor((stats["def"] * 2 + 31 + 21 + 100) * level / 100 + 5);
-				mbst += Math.floor(((stats["spa"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats["spd"] * 2 + 31 + 21 + 100) * level / 100 + 5);
-				mbst += Math.floor((stats["spe"] * 2 + 31 + 21 + 100) * level / 100 + 5);
-
-				if (mbst >= mbstmin) break;
-				level++;
-			}
+			const level = this.levelBalance(stats, ivs, evs, nature, 15, 85);
 
 			// Random happiness
 			const happiness = this.random(256);
@@ -365,25 +413,7 @@ export class RandomTeams {
 			const nature = this.sample(naturePool);
 
 			// Level balance
-			const mbstmin = 1307;
-			const stats = species.baseStats;
-			let mbst = (stats['hp'] * 2 + 31 + 21 + 100) + 10;
-			mbst += (stats['atk'] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats['def'] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats['spa'] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats['spd'] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats['spe'] * 2 + 31 + 21 + 100) + 5;
-			let level = Math.floor(100 * mbstmin / mbst);
-			while (level < 100) {
-				mbst = Math.floor((stats['hp'] * 2 + 31 + 21 + 100) * level / 100 + 10);
-				mbst += Math.floor(((stats['atk'] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats['def'] * 2 + 31 + 21 + 100) * level / 100 + 5);
-				mbst += Math.floor(((stats['spa'] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats['spd'] * 2 + 31 + 21 + 100) * level / 100 + 5);
-				mbst += Math.floor((stats['spe'] * 2 + 31 + 21 + 100) * level / 100 + 5);
-				if (mbst >= mbstmin) break;
-				level++;
-			}
+			const level = this.levelBalance(species.baseStats, ivs, evs, nature, 15, 127, 'wishiwashi');
 
 			// Random happiness
 			const happiness = this.random(256);
@@ -653,6 +683,9 @@ export class RandomTeams {
 				case 'destinybond': case 'healbell':
 					if (movePool.includes('protect') || movePool.includes('wish')) rejected = true;
 					break;
+				case 'dualwingbeat': case 'fly': case 'storedpower':
+					if (!hasType[move.type] && !counter.setupType && !!counter.Status) rejected = true;
+					break;
 				case 'fireblast':
 					if (hasAbility['Serene Grace'] && (!hasMove['trick'] || counter.Status > 1)) rejected = true;
 					break;
@@ -662,9 +695,6 @@ export class RandomTeams {
 				case 'flamecharge': case 'sacredsword':
 					if (counter.damagingMoves.length < 3 && !counter.setupType) rejected = true;
 					if (!hasType['Grass'] && movePool.includes('swordsdance')) rejected = true;
-					break;
-				case 'fly': case 'storedpower':
-					if (!counter.setupType && !!counter.Status) rejected = true;
 					break;
 				case 'futuresight':
 					if (!counter.Status || !hasMove['teleport']) rejected = true;
@@ -738,7 +768,7 @@ export class RandomTeams {
 					if (moveid === 'closecombat' && (hasMove['highjumpkick'] || movePool.includes('highjumpkick')) && !counter.setupType) rejected = true;
 					break;
 				case 'defog':
-					if (counter.setupType || hasMove['healbell'] || hasMove['stealthrock'] || hasMove['toxicspikes'] || teamDetails.defog) rejected = true;
+					if (counter.setupType || hasMove['healbell'] || hasMove['toxicspikes'] || teamDetails.defog) rejected = true;
 					break;
 				case 'fakeout':
 					if (counter.setupType || hasMove['protect'] || hasMove['rapidspin'] || hasMove['substitute'] || hasMove['uturn']) rejected = true;
@@ -1258,8 +1288,6 @@ export class RandomTeams {
 			item = 'Rocky Helmet';
 		} else if (species.name === 'Eternatus' && counter.Status < 2) {
 			item = 'Metronome';
-		} else if (species.name === 'Farfetch\u2019d') {
-			item = 'Leek';
 		} else if (species.name === 'Froslass' && !isDoubles) {
 			item = 'Wide Lens';
 		} else if (species.name === 'Latios' && counter.Special === 2 && !isDoubles) {

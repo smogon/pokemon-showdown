@@ -7,6 +7,8 @@ import {QueryProcessManager, exec} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {checkRipgrepAvailability} from '../config-loader';
 
+const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
+
 interface BattleOutcome {
 	lost: string;
 	won: string;
@@ -379,7 +381,7 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
-});
+}, BATTLESEARCH_PROCESS_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!
