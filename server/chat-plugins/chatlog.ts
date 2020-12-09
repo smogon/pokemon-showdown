@@ -168,6 +168,66 @@ export const LogReader = new class {
 	today() {
 		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
+	compareDates(a: string, b: string) {
+		const aDate = new Date(a).getTime();
+		const bDate = new Date(b).getTime();
+		return bDate - aDate;
+	}
+	isDate(item: string) {
+		return !isNaN(new Date(item).getTime());
+	}
+	async getBattleLog(tier: ID, number: number) {
+		// binary search!
+		const months = (await FS('logs').readdir())
+			.filter(f => this.isDate(f) && FS(`logs/${f}/${tier}`).existsSync())
+			.sort(this.compareDates);
+		if (!months.length) return;
+
+		const getBattleNum = (battleName: string) => Number(battleName.split('-')[1].slice(0, -9));
+
+		const getMonthRange = async (month: string) => {
+			const files = (await FS(`logs/${month}/${tier}/`).readdir()).sort(this.compareDates);
+			const firstDay = files[0];
+			const firstPath = FS(`logs/${month}/${tier}/${firstDay}`);
+			const firstFiles = await firstPath.readdir();
+			if (files.length === 1) {
+				const num = getBattleNum(firstFiles[0]);
+				return [num, num];
+			}
+			const lastDay = files[files.length - 1];
+
+			const secondPath = FS(`logs/${month}/${tier}/${lastDay}`);
+			const firstResult = getBattleNum(firstFiles[0]);
+			const lastFiles = await secondPath.readdir();
+			const secondResult = getBattleNum(lastFiles[lastFiles.length - 1]);
+			return [firstResult, secondResult];
+		};
+
+		while (months.length) {
+			const mIndex = Math.round(months.length / 2);
+			let middle = months[mIndex];
+			if (!middle) {
+				// one month left
+				middle = months.pop()!;
+			}
+			const [lowest, highest] = await getMonthRange(middle);
+
+			if (number < lowest) {
+				months.splice(0, mIndex);
+			} else if (number > highest) {
+				months.splice(mIndex);
+			} else { // in that month
+				const days = (await FS(`logs/${middle}/${tier}`).readdir()).filter(f => this.isDate(f));
+				for (const day of days) {
+					const dayPath = FS(`logs/${middle}/${tier}/${day}/${tier}-${number}.log.json`);
+					if (dayPath.existsSync()) {
+						const content = await dayPath.read();
+						return JSON.parse(content).log;
+					}
+				}
+			}
+		}
+	}
 };
 
 export const LogViewer = new class {
@@ -219,7 +279,7 @@ export const LogViewer = new class {
 		}
 		const roomid = `battle-${tier}-${number}` as RoomID;
 		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
-		const log = await LogSearcher.getBattleLog(tier, number);
+		const log = await LogReader.getBattleLog(toID(tier), number);
 		if (!log) return context.send(this.error("Logs not found."));
 		const {connection} = context;
 		context.close();
@@ -420,7 +480,6 @@ export abstract class Searcher {
 	abstract searchLogs(roomid: RoomID, search: string, limit?: number | null, date?: string | null): Promise<string>;
 	abstract searchLinecounts(roomid: RoomID, month: string, user?: ID): Promise<string>;
 	abstract getSharedBattles(userids: string[]): Promise<string[]>;
-	abstract getBattleLog(tier: string, num: number): Promise<string[] | void>;
 	renderLinecountResults(
 		results: {[date: string]: {[userid: string]: number}},
 		roomid: RoomID, month: string, user?: ID
@@ -723,22 +782,6 @@ export class FSLogSearcher extends Searcher {
 		}
 		return results;
 	}
-	async getBattleLog(tier: string, num: number) {
-		if (!tier || !num) throw new Chat.ErrorMessage("Invalid battle ID.");
-		const logMonths = (await FS('logs').readdir()).filter(f => {
-			if (isNaN(new Date(f).getTime())) return false;
-			return FS(`logs/${f}/${tier}`).existsSync();
-		});
-		for (const month of logMonths) {
-			const days = await FS(`logs/${month}/${tier}/`).readdir();
-			for (const day of days) {
-				const path = FS(`logs/${month}/${tier}/${day}/${tier}-${num}.log.json`);
-				if (path.existsSync()) {
-					return JSON.parse(path.readSync()).log;
-				}
-			}
-		}
-	}
 }
 
 export class RipgrepLogSearcher extends Searcher {
@@ -919,21 +962,6 @@ export class RipgrepLogSearcher extends Searcher {
 		}
 		return results.filter(Boolean);
 	}
-	async getBattleLog(tier: string, num: number) {
-		const battleId = `battle-${toID(tier)}-${num}`;
-		let log: string[] | undefined;
-		const searchString = `"roomid":"${battleId}"`;
-		const files = (await FS('logs/').readdir()).filter(f => !isNaN(new Date(f).getTime()));
-		try {
-			const {stdout} = await exec(['rg', '-e', searchString, '-i', '-tjson', ...files.map(f => `logs/${f}`)]);
-			const [, raw] = stdout.split('.json:');
-			const {log: logData} = JSON.parse(raw);
-			log = logData;
-		} catch (e) {
-			if (e.code !== 1) throw e;
-		}
-		return log;
-	}
 }
 
 export const LogSearcher: Searcher = new (Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher)();
@@ -969,14 +997,14 @@ if (!PM.isParentProcess) {
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
+	global.Dex = Dex;
+	global.toID = Dex.toID;
 	global.Chat = Chat;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
 			Monitor.crashlog(err, 'A chatlog search child process');
 		}
 	});
-	global.Dex = Dex;
-	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
 	Repl.start('chatlog', cmd => eval(cmd));
 } else {
