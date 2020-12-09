@@ -683,6 +683,9 @@ export class RandomTeams {
 				case 'destinybond': case 'healbell':
 					if (movePool.includes('protect') || movePool.includes('wish')) rejected = true;
 					break;
+				case 'dualwingbeat': case 'fly': case 'storedpower':
+					if (!hasType[move.type] && !counter.setupType && !!counter.Status) rejected = true;
+					break;
 				case 'fireblast':
 					if (hasAbility['Serene Grace'] && (!hasMove['trick'] || counter.Status > 1)) rejected = true;
 					break;
@@ -692,9 +695,6 @@ export class RandomTeams {
 				case 'flamecharge': case 'sacredsword':
 					if (counter.damagingMoves.length < 3 && !counter.setupType) rejected = true;
 					if (!hasType['Grass'] && movePool.includes('swordsdance')) rejected = true;
-					break;
-				case 'fly': case 'storedpower':
-					if (!counter.setupType && !!counter.Status) rejected = true;
 					break;
 				case 'futuresight':
 					if (!counter.Status || !hasMove['teleport']) rejected = true;
@@ -768,7 +768,7 @@ export class RandomTeams {
 					if (moveid === 'closecombat' && (hasMove['highjumpkick'] || movePool.includes('highjumpkick')) && !counter.setupType) rejected = true;
 					break;
 				case 'defog':
-					if (counter.setupType || hasMove['healbell'] || hasMove['stealthrock'] || hasMove['toxicspikes'] || teamDetails.defog) rejected = true;
+					if (counter.setupType || hasMove['healbell'] || hasMove['toxicspikes'] || teamDetails.defog) rejected = true;
 					break;
 				case 'fakeout':
 					if (counter.setupType || hasMove['protect'] || hasMove['rapidspin'] || hasMove['substitute'] || hasMove['uturn']) rejected = true;
@@ -1288,8 +1288,6 @@ export class RandomTeams {
 			item = 'Rocky Helmet';
 		} else if (species.name === 'Eternatus' && counter.Status < 2) {
 			item = 'Metronome';
-		} else if (species.name === 'Farfetch\u2019d') {
-			item = 'Leek';
 		} else if (species.name === 'Froslass' && !isDoubles) {
 			item = 'Wide Lens';
 		} else if (species.name === 'Latios' && counter.Special === 2 && !isDoubles) {
