@@ -499,7 +499,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] National Dex Monotype",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8376523/">National Dex Monotype</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3674344/">National Dex Monotype</a>`,
 		],
 
 		mod: 'gen8',
