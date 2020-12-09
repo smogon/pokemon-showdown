@@ -594,22 +594,37 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	finland: {
 		noCopy: true,
-		onStart(pokemon) {
-			const roll = this.random(20);
+		onStart(source) {
+			const roll = this.random(100);
 			let message: string;
-			if (roll >= 0 && roll < 14) {
+			if (roll < 70) {
 				message = 'pog';
-			} else if (roll >= 14 && roll < 16) {
+			} else if (roll < 80) {
 				message = 'very pog';
-			} else if (roll >= 16 && roll < 18) {
+			} else if (roll < 90) {
 				message = 'poggaroo';
-			} else if (roll === 18) {
+			} else if (roll < 95) {
 				message = 'PogU';
 			} else {
 				message = 'poog';
 			}
 			this.add(`c|${getName('Finland')}|${message}`);
+			if (source.illusion) return;
+			this.boost({spa: 1, spd: 1}, source);
 		},
+		onBeforeMovePriority: 0.5,
+		onBeforeMove(attacker, defender, move) {
+			if (attacker.illusion) return;
+			attacker.clearBoosts();
+			this.add('-clearboost', attacker);
+			if (move.category === 'Status') {
+				this.boost({def: 1, spd: 1}, attacker);
+			} else {
+				this.boost({spa: 1, spe: 1}, attacker);
+			}
+		},
+		innateName: "TBD",
+		shortDesc: "Calm Mind on switch in. Changes boosts depending on move used.",
 		onSwitchOut() {
 			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);
 		},

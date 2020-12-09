@@ -790,13 +790,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Finland
 	windingsong: {
-		desc: "On switch-in, this Pokemon's Special Attack and Special Defense are boosted by 1 stage. If this Pokemon's species is Alcremie, it alternates one of its moves between two different options at the end of each turn, depending on the forme of Alcremie.",
-		shortDesc: "Calm Mind on switch-in. Alcremie: alternates between moves each turn.",
+		desc: "If this Pokemon's species is Alcremie, it alternates one of its moves between two different options at the end of each turn, depending on the forme of Alcremie.",
+		shortDesc: "Alcremie: alternates between moves each turn.",
 		name: "Winding Song",
 		isPermanent: true,
-		onSwitchIn(source) {
-			this.boost({spa: 1, spd: 1}, source);
-		},
 		onResidual(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Alcremie') return;
 			let coolMoves = [];

@@ -202,21 +202,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: 'Winding Song'},
 	},
-	alcremielemoncream: {
-		inherit: true,
-		abilities: {0: 'Winding Song'},
-		types: ['Fairy', 'Rock'],
-	},
-	alcremierubyswirl: {
-		inherit: true,
-		abilities: {0: 'Winding Song'},
-		types: ['Fairy', 'Fire'],
-	},
-	alcremiemintcream: {
-		inherit: true,
-		abilities: {0: 'Winding Song'},
-		types: ['Fairy', 'Water'],
-	},
 	// vivalospride's interaction with Coconut's move
 	darumaka: {
 		inherit: true,
