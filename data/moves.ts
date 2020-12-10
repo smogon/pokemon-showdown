@@ -7747,8 +7747,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if ((effect?.id === 'zpower') || this.effectData.isZ) return damage;
 				return false;
 			},
-			onRestart(target) {
+			onRestart(target, source) {
 				this.add('-fail', target); // Succeeds to supress downstream messages
+				source.moveThisTurnResult = false;
 			},
 		},
 		secondary: null,

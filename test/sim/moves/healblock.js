@@ -227,6 +227,7 @@ describe('Heal Block [Gen 4]', function () {
 
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move healblock');
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move healblock');
+		assert.equal(battle.p2.active[1].moveLastTurnResult, false);
 		assert.equal(battle.log[battle.lastMoveLine + 1].startsWith('|-fail'), true);
 		assert.equal(battle.log[battle.lastMoveLine + 2].startsWith('|-fail'), true);
 		assert.notEqual(battle.log[battle.lastMoveLine + 3].startsWith('|-fail'), true);
