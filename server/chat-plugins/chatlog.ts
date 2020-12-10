@@ -210,12 +210,36 @@ export const LogReader = new class {
 		const getDayRange = async (day: string) => {
 			const month = day.slice(0, 7);
 
-			const battles = (await FS(`logs/${month}/${tier}/${day}`).readdir()).filter(
-				b => b.endsWith('.log.json')
-			);
-			Utils.sortBy(battles, getBattleNum);
+			try {
+				const battles = (await FS(`logs/${month}/${tier}/${day}`).readdir()).filter(
+					b => b.endsWith('.log.json')
+				);
+				Utils.sortBy(battles, getBattleNum);
 
-			return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
+				return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
+			} catch (err) {
+				return null;
+			}
+		};
+
+		const dayExists = (day: string) => FS(`logs/${day.slice(0, 7)}/${tier}/${day}`).exists();
+
+		const nextExistingDay = async (day: string) => {
+			for (let i = 0; i < 3650; i++) {
+				day = this.nextDay(day);
+				if (await dayExists(day)) return day;
+				if (day === lastDay) return null;
+			}
+			return null;
+		};
+
+		const prevExistingDay = async (day: string) => {
+			for (let i = 0; i < 3650; i++) {
+				day = this.prevDay(day);
+				if (await dayExists(day)) return day;
+				if (day === firstDay) return null;
+			}
+			return null;
 		};
 
 		for (let i = 0; i < 100; i++) {
@@ -223,7 +247,22 @@ export const LogReader = new class {
 				(new Date(firstDay).getTime() + new Date(lastDay).getTime()) / 2
 			).toISOString().slice(0, 10);
 
-			const [lowest, highest] = await getDayRange(middleDay);
+			let currentDay: string | null = middleDay;
+			let dayRange = await getDayRange(middleDay);
+
+			if (!dayRange) {
+				currentDay = await nextExistingDay(middleDay);
+				if (!currentDay) {
+					const lastExistingDay = await prevExistingDay(middleDay);
+					if (!lastExistingDay) throw new Error(`couldn't find existing day`);
+					lastDay = lastExistingDay;
+					continue;
+				}
+				dayRange = await getDayRange(middleDay);
+				if (!dayRange) throw new Error(`existing day was a lie`);
+			}
+
+			const [lowest, highest] = dayRange;
 
 			if (number < lowest) {
 				// before middleDay
