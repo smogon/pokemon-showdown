@@ -456,17 +456,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('dogknees')}|Nap time!`);
 		},
 	},
-	dream: {
+	dragonwhale: {
 		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('dream')}|It's Prime Time`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('dream')}|oh no please god tell me we're dreaming`);
-		},
-		onFaint() {
-			this.add(`c|${getName('dream')}|perdemos`);
-		},
+		// No quotes
 	},
 	drampasgrandpa: {
 		noCopy: true,
@@ -478,6 +470,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c|${getName('drampa\'s grandpa')}|Bah humbug!`);
+		},
+	},
+	dream: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('dream')}|It's Prime Time`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('dream')}|oh no please god tell me we're dreaming`);
+		},
+		onFaint() {
+			this.add(`c|${getName('dream')}|perdemos`);
 		},
 	},
 	elgino: {
@@ -1600,6 +1604,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c|${getName('temp')}|oh I died`);
 		},
+	},
+	theimmortal: {
+		noCopy: true,
+		// No quotes
 	},
 	tiki: {
 		noCopy: true,
