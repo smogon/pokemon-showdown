@@ -130,7 +130,7 @@ export const LogReader = new class {
 		const roomLog = await LogReader.get(roomid);
 		const stream = await roomLog!.getLog(day);
 		let buf = '';
-		let i = LogViewer.results || 0;
+		let i = (LogSearcher as FSLogSearcher).results || 0;
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
@@ -258,24 +258,24 @@ export const LogReader = new class {
 					lastDay = lastExistingDay;
 					continue;
 				}
-				dayRange = await getDayRange(middleDay);
+				dayRange = await getDayRange(currentDay);
 				if (!dayRange) throw new Error(`existing day was a lie`);
 			}
 
 			const [lowest, highest] = dayRange;
 
 			if (number < lowest) {
-				// before middleDay
-				if (firstDay === middleDay) return null;
-				lastDay = this.prevDay(middleDay);
+				// before currentDay
+				if (firstDay === currentDay) return null;
+				lastDay = this.prevDay(currentDay);
 			} else if (number > highest) {
-				// after middleDay
-				if (lastDay === middleDay) return null;
-				firstDay = this.nextDay(middleDay);
+				// after currentDay
+				if (lastDay === currentDay) return null;
+				firstDay = this.nextDay(currentDay);
 			} else {
-				// during middleDay
-				const month = middleDay.slice(0, 7);
-				const path = FS(`logs/${month}/${tier}/${middleDay}/${tier}-${number}.log.json`);
+				// during currentDay
+				const month = currentDay.slice(0, 7);
+				const path = FS(`logs/${month}/${tier}/${currentDay}/${tier}-${number}.log.json`);
 				if (await path.exists()) {
 					return JSON.parse(path.readSync()).log;
 				}
@@ -290,10 +290,6 @@ export const LogReader = new class {
 };
 
 export const LogViewer = new class {
-	results: number;
-	constructor() {
-		this.results = 0;
-	}
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
