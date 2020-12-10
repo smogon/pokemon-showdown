@@ -2046,7 +2046,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (pokemon.set.shiny) return;
 			if (pokemon.species.id === "miniorviolet") {
 				this.add(`${getName("GMars")} is thinking...`);
-				if (this.random(3) === 2) {
+				if (this.randomChance(1, 3)) {
 					this.add('cant', pokemon, 'ability: Truant');
 					return false;
 				}
@@ -2058,10 +2058,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.boost({atk: 1, spa: 1}, pokemon.side.foe.active[0]);
 			} else if (pokemon.species.id === 'miniorgreen') {
 				this.boost({atk: 1}, pokemon);
-			} else if (pokemon.species.id === 'minior') {
-				pokemon.side.foe.active[0].addVolatile('taunt');
-			} else if (pokemon.species.id === 'minioryellow') {
-				pokemon.side.foe.active[0].trySetStatus('par');
 			}
 		},
 		onBoost(boost, target, source, effect) {
