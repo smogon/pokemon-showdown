@@ -309,7 +309,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.hasItem('utilityumbrella')) return;
 			if (['raindance', 'primordialsea'].includes(effect.id)) {
 				this.heal(target.baseMaxhp / (target.hasItem('bigroot') ? 6 : 8));
-				if (!target.volatiles['raindrop']) target.addVolatile('raindrop');
+				target.addVolatile('raindrop');
 			}
 		},
 		onModifySpe(spe, pokemon) {

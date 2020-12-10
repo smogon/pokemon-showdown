@@ -1878,21 +1878,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Raindrop',
 		noCopy: true,
 		onStart(target) {
-			if (target.activeTurns < 1) return;
 			this.effectData.layers = 1;
 			this.effectData.def = 0;
 			this.effectData.spd = 0;
 			this.add('-start', target, 'Raindrop');
+			this.add('-message', `${target.name} has ${this.effectData.layers} raindrop(s)!`);
 			const [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 			this.boost({def: 1, spd: 1}, target, target);
 			if (curDef !== target.boosts.def) this.effectData.def--;
 			if (curSpD !== target.boosts.spd) this.effectData.spd--;
 		},
-		onResidual(target) {
-			if (this.effectData.def >= 6 && this.effectData.spd >= 6) return false;
-			if (target.activeTurns < 1) return;
+		onRestart(target) {
 			this.effectData.layers++;
 			this.add('-start', target, 'Raindrop');
+			this.add('-message', `${target.name} has ${this.effectData.layers} raindrop(s)!`);
 			const curDef = target.boosts.def;
 			const curSpD = target.boosts.spd;
 			this.boost({def: 1, spd: 1}, target, target);

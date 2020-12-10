@@ -2193,12 +2193,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Instruct
-	submein: {
+	addictedtoyourdistance: {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
 		shortDesc: "First turn: Flinches the oppnent then switches out",
-		name: "Sub Me In",
+		name: "Addicted To Your Distance",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -2214,12 +2214,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("Sub Me In can only works on your first turn out.");
+				this.hint("Addicted To Your Distance can only works on your first turn out.");
 				return null;
 			}
-		},
-		onHit() {
-			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
 		},
 		secondary: {
 			chance: 100,
