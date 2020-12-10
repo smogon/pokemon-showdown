@@ -168,40 +168,41 @@ export const LogReader = new class {
 	today() {
 		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
-	compareDates(a: string, b: string) {
-		const aDate = new Date(a).getTime();
-		const bDate = new Date(b).getTime();
-		return bDate - aDate;
-	}
 	isDate(item: string) {
 		return !isNaN(new Date(item).getTime());
 	}
 	async getBattleLog(tier: ID, number: number) {
 		// binary search!
-		const months = (await FS('logs').readdir())
-			.filter(f => this.isDate(f) && FS(`logs/${f}/${tier}`).existsSync())
-			.sort(this.compareDates);
+		let months = await FS('logs').readdir();
+		months = months.filter(f => this.isDate(f) && FS(`logs/${f}/${tier}`).existsSync())
+		months.sort();
 		if (!months.length) return;
 
 		const getBattleNum = (battleName: string) => Number(battleName.split('-')[1].slice(0, -9));
 
-		const getMonthRange = async (month: string) => {
-			const files = (await FS(`logs/${month}/${tier}/`).readdir()).sort(this.compareDates);
+		const getDayRange = async (day: string, month: string) => {
+			let days = await FS(`logs/${month}/${tier}/${day}`).readdir();
+			days = days.filter(f => f.endsWith('.log.json')).sort();
+			const firstNum = getBattleNum(days[0]);
+			if (days.length === 1) {
+				 return [firstNum, firstNum];
+			}
+			const lastNum = getBattleNum(days[days.length - 1]);
+			return [firstNum, lastNum];
+	  };
+
+	  const getMonthRange = async (month: string) => {
+			const files = await FS(`logs/${month}/${tier}/`).readdir();
+			files.sort();
 			const firstDay = files[0];
-			const firstPath = FS(`logs/${month}/${tier}/${firstDay}`);
-			const firstFiles = await firstPath.readdir();
+			const firstRange = await getDayRange(firstDay, month);
 			if (files.length === 1) {
-				const num = getBattleNum(firstFiles[0]);
-				return [num, num];
+				 return firstRange;
 			}
 			const lastDay = files[files.length - 1];
-
-			const secondPath = FS(`logs/${month}/${tier}/${lastDay}`);
-			const firstResult = getBattleNum(firstFiles[0]);
-			const lastFiles = await secondPath.readdir();
-			const secondResult = getBattleNum(lastFiles[lastFiles.length - 1]);
-			return [firstResult, secondResult];
-		};
+			const lastDayRange = await getDayRange(lastDay, month);
+			return [firstRange[0], lastDayRange[1]];
+	  };
 
 		while (months.length) {
 			const mIndex = Math.round(months.length / 2);
@@ -217,8 +218,8 @@ export const LogReader = new class {
 			} else if (number > highest) {
 				months.splice(mIndex);
 			} else { // in that month
-				const days = (await FS(`logs/${middle}/${tier}`).readdir()).filter(f => this.isDate(f));
-				for (const day of days) {
+				const days = await FS(`logs/${middle}/${tier}`).readdir();
+				for (const day of days.filter(f => this.isDate(f)).sort()) {
 					const dayPath = FS(`logs/${middle}/${tier}/${day}/${tier}-${number}.log.json`);
 					if (dayPath.existsSync()) {
 						const content = await dayPath.read();
