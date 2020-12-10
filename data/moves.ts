@@ -7748,7 +7748,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			},
 			onRestart(target, source) {
-				this.add('-fail', target); // Succeeds to supress downstream messages
+				this.add('-fail', target, 'move: Heal Block'); // Succeeds to supress downstream messages
 				source.moveThisTurnResult = false;
 			},
 		},
