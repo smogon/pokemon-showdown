@@ -30,11 +30,12 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.set.evs = evs;
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
+	const oldShiny = pokemon.set.shiny;
 	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? pokemon.battle.randomChance(1, newSet.shiny) : !!newSet.shiny;
 	pokemon.formeChange(newSet.species, context.effect, true);
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-	pokemon.battle.add('replace', pokemon, details);
+	if (oldShiny !== pokemon.set.shiny) pokemon.battle.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string);
 
 	pokemon.baseMaxhp = Math.floor(Math.floor(

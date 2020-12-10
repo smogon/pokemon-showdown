@@ -1915,6 +1915,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let forme: string;
 			let message = "";
 			const random = this.random(100);
+			let shiny = false;
 			if (random < 3) {
 				forme = "Minior-Violet";
 				message = "Oof, Violet. Tough break. A Violet Minior is sluggish and won't always listen to your commands. Best of luck! Rating: ★ ☆ ☆ ☆ ☆ ";
@@ -1938,13 +1939,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				message = "Nice! You cracked a Green Minior, that's definitely a rare one. This type of Minior packs an extra punch, and it's great for breaking through defensive teams without risking multiple turns of setup. Rating: ★ ★ ★ ★ ★";
 			} else {
 				forme = "Minior";
+				shiny = true;
 				target.set.shiny = true;
 				message = "YO!! I can't believe it, you cracked open a Shiny Minior! Its multicolored interior dazzles its opponents and throws off their priority moves. Big grats. Rating: ★ ★ ★ ★ ★ ★";
 			}
 			target.formeChange(forme, move, true);
 			const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
 				(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
-			this.add('replace', target, details);
+			if (shiny) this.add('replace', target, details);
 			if (message) this.add(`c|${getName('GMars')}|${message}`);
 			target.setAbility('capsulearmor');
 			target.baseAbility = target.ability;
