@@ -629,7 +629,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);
 		},
 		onFaint() {
-			if (this.random(100) < 99) {
+			if (this.randomChance(99, 100)) {
 				this.add(`c|${getName('Finland')}|FINLAND!!!`);
 			} else {
 				// personally i like young link from oot3d and mm3d - sp
