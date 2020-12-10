@@ -168,66 +168,85 @@ export const LogReader = new class {
 	today() {
 		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
-	isDate(item: string) {
-		return !isNaN(new Date(item).getTime());
+	isMonth(text: string) {
+		return /[0-9]{4}-[0-9]{2}/.test(text);
 	}
-	async getBattleLog(tier: ID, number: number) {
+	isDay(text: string) {
+		return /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(text);
+	}
+	async findBattleLog(tier: ID, number: number): Promise<string[] | null> {
 		// binary search!
-		let months = await FS('logs').readdir();
-		months = months.filter(f => this.isDate(f) && FS(`logs/${f}/${tier}`).existsSync())
-		months.sort();
-		if (!months.length) return;
+		const months = (await FS('logs').readdir()).filter(this.isMonth).sort();
+		if (!months.length) return null;
+
+		// find first day
+		let firstDay!: string;
+		while (months.length) {
+			const month = months[0];
+			try {
+				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
+				firstDay = days[0];
+				break;
+			} catch (err) {}
+			months.shift();
+		}
+		if (!firstDay) return null;
+
+		// find last day
+		let lastDay!: string;
+		while (months.length) {
+			const month = months[months.length - 1];
+			try {
+				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
+				lastDay = days[days.length - 1];
+				break;
+			} catch (err) {}
+			months.pop();
+		}
+		if (!lastDay) throw new Error(`getBattleLog month range search for ${tier}`);
 
 		const getBattleNum = (battleName: string) => Number(battleName.split('-')[1].slice(0, -9));
 
-		const getDayRange = async (day: string, month: string) => {
-			let days = await FS(`logs/${month}/${tier}/${day}`).readdir();
-			days = days.filter(f => f.endsWith('.log.json')).sort();
-			const firstNum = getBattleNum(days[0]);
-			if (days.length === 1) {
-				 return [firstNum, firstNum];
-			}
-			const lastNum = getBattleNum(days[days.length - 1]);
-			return [firstNum, lastNum];
-	  };
+		const getDayRange = async (day: string) => {
+			const month = day.slice(0, 7);
 
-	  const getMonthRange = async (month: string) => {
-			const files = await FS(`logs/${month}/${tier}/`).readdir();
-			files.sort();
-			const firstDay = files[0];
-			const firstRange = await getDayRange(firstDay, month);
-			if (files.length === 1) {
-				 return firstRange;
-			}
-			const lastDay = files[files.length - 1];
-			const lastDayRange = await getDayRange(lastDay, month);
-			return [firstRange[0], lastDayRange[1]];
-	  };
+			const battles = (await FS(`logs/${month}/${tier}/${day}`).readdir()).filter(
+				b => b.endsWith('.log.json')
+			);
+			Utils.sortBy(battles, getBattleNum);
 
-		while (months.length) {
-			const mIndex = Math.round(months.length / 2);
-			let middle = months[mIndex];
-			if (!middle) {
-				// one month left
-				middle = months.pop()!;
-			}
-			const [lowest, highest] = await getMonthRange(middle);
+			return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
+		};
+
+		for (let i = 0; i < 100; i++) {
+			const middleDay = new Date(
+				(new Date(firstDay).getTime() + new Date(lastDay).getTime()) / 2
+			).toISOString().slice(0, 10);
+
+			const [lowest, highest] = await getDayRange(middleDay);
 
 			if (number < lowest) {
-				months.splice(0, mIndex);
+				// before middleDay
+				if (firstDay === middleDay) return null;
+				lastDay = this.prevDay(middleDay);
 			} else if (number > highest) {
-				months.splice(mIndex);
-			} else { // in that month
-				const days = await FS(`logs/${middle}/${tier}`).readdir();
-				for (const day of days.filter(f => this.isDate(f)).sort()) {
-					const dayPath = FS(`logs/${middle}/${tier}/${day}/${tier}-${number}.log.json`);
-					if (dayPath.existsSync()) {
-						const content = await dayPath.read();
-						return JSON.parse(content).log;
-					}
+				// after middleDay
+				if (lastDay === middleDay) return null;
+				firstDay = this.nextDay(middleDay);
+			} else {
+				// during middleDay
+				const month = middleDay.slice(0, 7);
+				const path = FS(`logs/${month}/${tier}/${middleDay}/${tier}-${number}.log.json`);
+				if (await path.exists()) {
+					return JSON.parse(path.readSync()).log;
 				}
+				return null;
 			}
 		}
+
+		// 100 iterations is enough to search 2**100 days, which is around 1e30 days
+		// for comparison, a millennium is 365000 days
+		throw new Error(`Infinite loop looking for ${tier}-${number}`);
 	}
 };
 
@@ -280,7 +299,7 @@ export const LogViewer = new class {
 		}
 		const roomid = `battle-${tier}-${number}` as RoomID;
 		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
-		const log = await LogReader.getBattleLog(toID(tier), number);
+		const log = await LogReader.findBattleLog(toID(tier), number);
 		if (!log) return context.send(this.error("Logs not found."));
 		const {connection} = context;
 		context.close();
