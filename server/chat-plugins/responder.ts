@@ -441,7 +441,7 @@ export const pages: PageTable = {
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
 			let button = `<button class="button" name="send" value="/join view-autoresponder-${room.roomid}-${type}`;
-			button += `${extra ? `-${extra.join('-')}` : ''}" style="float: right">`;
+			button += `${extra[0] ? `-${extra.join('-')}` : ''}" style="float: right">`;
 			button += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 			return button;
 		};
