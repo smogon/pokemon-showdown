@@ -4693,10 +4693,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Struchni
 	veto: {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 80,
 		category: "Physical",
-		desc: "If the user's attack was raised on the previous turn, double power and gain +1 priority.",
-		shortDesc: "If Atk raised last turn: x2 power, +1 prio.",
+		desc: "If the user's stats was raised on the previous turn, double power and gain +1 priority.",
+		shortDesc: "If stat raised last turn: x2 power, +1 prio.",
 		name: "Veto",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4711,31 +4711,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		// Veto interactions located in formats.ts
 		onModifyPriority(priority, source, target, move) {
-			if (source.m.typeEff) {
-				if (source.m.typeEff < 0) {
-					return priority + 1;
-				} else if (source.m.typeEff >= 0) {
-					return priority - 1;
-				}
+			if (source.m.statsRaisedLastTurn) {
+				return priority + 1;
 			}
 		},
 		basePowerCallback(pokemon, target, move) {
-			if (pokemon.m.typeEff) {
-				if (pokemon.m.typeEff < 0) {
-					return move.basePower * 2;
-				} else if (pokemon.m.typeEff >= 0) {
-					return move.basePower / 2;
-				}
+			if (pokemon.m.statsRaisedLastTurn) {
+				return move.basePower * 2;
 			}
 			return move.basePower;
 		},
 		onHit(target, source) {
-			if (source.m.typeEff) {
-				if (source.m.typeEff < 0) {
-					this.add(`c|${getName('Struchni')}|**veto**`);
-				} else if (source.m.typeEff >= 0) {
-					this.add(`c|${getName('Struchni')}|** veto**`);
-				}
+			if (source.m.statsRaisedLastTurn) {
+				this.add(`c|${getName('Struchni')}|**veto**`);
 			}
 		},
 		target: "normal",

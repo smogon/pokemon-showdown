@@ -1997,11 +1997,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Overasked Clause",
 		isPermanent: true,
 		onHit(target, source, move) {
-			if (target.species.name !== 'Aggron' || target.illusion || target.transformed) return;
-			if (!target.hp) return;
 			if (target.getMoveHitData(move).typeMod < 0) {
-				this.runMegaEvo(target);
+				if (!target.hp) return;
 				this.boost({atk: 1}, target);
+				if (target.species.name !== 'Aggron' || target.illusion || target.transformed) return;
+				this.runMegaEvo(target);
 			}
 		},
 		isNonstandard: "Custom",
