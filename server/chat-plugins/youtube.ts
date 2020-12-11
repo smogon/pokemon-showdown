@@ -308,7 +308,7 @@ export class YoutubeInterface {
 export class GroupWatch extends Rooms.RoomGame {
 	url: string;
 	info: VideoData;
-	started = false;
+	started: number | null = null;
 	constructor(room: Room, url: string, videoInfo: VideoData) {
 		super(room);
 		this.url = url;
@@ -325,14 +325,19 @@ export class GroupWatch extends Rooms.RoomGame {
 		if (this.started) throw new Chat.ErrorMessage(`We've already started.`);
 		this.controls(this.getStatsDisplay());
 		this.field(this.getVideoDisplay());
-		this.started = true;
+		this.started = Date.now();
 		this.add(`|html|<h2>Group Watch!</h2>`);
 	}
 	hints() {
-		return [
+		const hints = [
 			`To watch, all you need to do is click play on the video once staff have started it!`,
 			`We are currently watching: <a href="${this.url}">${this.info.title}</a>`,
 		];
+		if (this.started) {
+			const diff = Date.now() - this.started;
+			hints.push(`Video is currently at ${Chat.toDurationString(diff)} (${diff / 1000} seconds)`);
+		}
+		return hints;
 	}
 	getStatsDisplay() {
 		let controlsHTML = `<h3>${this.info.title}</h3>`;
