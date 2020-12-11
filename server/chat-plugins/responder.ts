@@ -254,29 +254,32 @@ for (const room of Rooms.rooms.values()) {
 
 const BYPASS_TERMS = ['a:', 'A:', '!', '/'];
 
-export const chatfilter: ChatFilter = function (message, user, room) {
-	if (BYPASS_TERMS.some(t => message.startsWith(t))) {
-		// do not return `message` or it will bypass all filters
-		// including super important filters like against `/html`
-		return;
-	}
-	if (room?.responder && room.auth.get(user.id) === ' ') {
-		const responder = room.responder;
-		const reply = responder.visualize(message, false, user);
-		if (!reply) {
-			return message;
-		} else {
-			user.sendTo(room.roomid, `|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
-			const trimmedMessage = `<div class="infobox">${responder.visualize(message, true)}</div>`;
-			setTimeout(() => {
-				user.sendTo(
-					room.roomid,
-					`|c| ${user.name}|/uhtmlchange askhelp-${user}-${toID(message)}, ${trimmedMessage}`
-				);
-			}, 10 * 1000);
-			return false;
+export const chatfilter: ChatFilter = {
+	priority: 0,
+	handler(message, user, room) {
+		if (BYPASS_TERMS.some(t => message.startsWith(t))) {
+			// do not return `message` or it will bypass all filters
+			// including super important filters like against `/html`
+			return;
 		}
-	}
+		if (room?.responder && room.auth.get(user.id) === ' ') {
+			const responder = room.responder;
+			const reply = responder.visualize(message, false, user);
+			if (!reply) {
+				return message;
+			} else {
+				user.sendTo(room.roomid, `|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
+				const trimmedMessage = `<div class="infobox">${responder.visualize(message, true)}</div>`;
+				setTimeout(() => {
+					user.sendTo(
+						room.roomid,
+						`|c| ${user.name}|/uhtmlchange askhelp-${user}-${toID(message)}, ${trimmedMessage}`
+					);
+				}, 10 * 1000);
+				return false;
+			}
+		}
+	},
 };
 
 export const commands: ChatCommands = {
