@@ -435,7 +435,7 @@ export class Pokemon {
 		return this.moveSlots.map(moveSlot => moveSlot.id);
 	}
 
-	get baseMoves() {
+	get baseMoves(): readonly string[] {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
@@ -962,7 +962,7 @@ export class Pokemon {
 		return data;
 	}
 
-	getSwitchRequestData() {
+	getSwitchRequestData(forAlly?: boolean) {
 		const entry: AnyObject = {
 			ident: this.fullname,
 			details: this.details,
@@ -975,7 +975,7 @@ export class Pokemon {
 				spd: this.baseStoredStats['spd'],
 				spe: this.baseStoredStats['spe'],
 			},
-			moves: this.moves.map(move => {
+			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
 				if (move === 'hiddenpower') {
 					return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
 				}

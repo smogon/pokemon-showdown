@@ -226,14 +226,14 @@ export class Side {
 		return `${this.id}: ${this.name}`;
 	}
 
-	getRequestData() {
+	getRequestData(forAlly?: boolean) {
 		const data = {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as AnyObject[],
 		};
 		for (const pokemon of this.pokemon) {
-			data.pokemon.push(pokemon.getSwitchRequestData());
+			data.pokemon.push(pokemon.getSwitchRequestData(forAlly));
 		}
 		return data;
 	}

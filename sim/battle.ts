@@ -1159,7 +1159,7 @@ export class Battle {
 				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 				if (this.gameType === 'multi') {
-					requests[i].ally = side.ally?.getRequestData();
+					requests[i].ally = side.ally?.getRequestData(true);
 				}
 			}
 			break;
