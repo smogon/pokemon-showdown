@@ -441,7 +441,7 @@ export const pages: PageTable = {
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
 			let button = `<button class="button" name="send" value="/join view-autoresponder-${room.roomid}-${type}`;
-			button += `${extra[0] ? `-${extra.join('-')}` : ''}" style="float: right">`;
+			button += `${extra.length ? `-${extra.join('-')}` : ''}" style="float: right">`;
 			button += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 			return button;
 		};
@@ -455,7 +455,7 @@ export const pages: PageTable = {
 				return `<h2>Invalid date.</h2>`;
 			}
 			buf = `<div class="pad"><strong>Stats for the ${room.title} auto-response filter${date ? ` on ${date}` : ''}.</strong>`;
-			buf += `${back}${refresh('stats', [date])}<hr />`;
+			buf += `${back}${refresh('stats', (date ? [date] : []))}<hr />`;
 			const stats = roomData.stats;
 			if (!stats) return `<h2>No stats.</h2>`;
 			this.title = `[Autoresponder Stats] ${date ? date : ''}`;
