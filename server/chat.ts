@@ -79,23 +79,22 @@ export type SettingsHandler = (
 };
 
 /**
- * Chat filters can choose to:
+ * Chat filter handlers can choose to:
  * 1. return false OR null - to not send a user's message
  * 2. return an altered string - to alter a user's message
  * 3. return undefined to send the original message through
  */
-export type ChatFilterHandler = (
-	this: CommandContext,
-	message: string,
-	user: User,
-	room: Room | null,
-	connection: Connection,
-	targetUser: User | null,
-	originalMessage: string
-) => string | false | null | undefined;
 export interface ChatFilter {
 	priority: number;
-	handler: ChatFilterHandler;
+	handler(
+		this: CommandContext,
+		message: string,
+		user: User,
+		room: Room | null,
+		connection: Connection,
+		targetUser: User | null,
+		originalMessage: string
+	): string | false | null | undefined;
 }
 
 export type NameFilter = (name: string, user: User) => string;
