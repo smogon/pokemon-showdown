@@ -7722,8 +7722,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onStart(pokemon) {
+			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'move: Heal Block');
+				source.moveThisTurnResult = true;
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
@@ -7749,7 +7750,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onRestart(target, source) {
 				this.add('-fail', target, 'move: Heal Block'); // Succeeds to supress downstream messages
-				source.moveThisTurnResult = false;
+				if (!source.moveThisTurnResult) {
+					source.moveThisTurnResult = false;
+				}
 			},
 		},
 		secondary: null,
