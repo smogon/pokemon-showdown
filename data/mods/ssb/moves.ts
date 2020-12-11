@@ -4468,40 +4468,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Seso
 	legendaryswordsman: {
-		accuracy: 100,
-		basePower: 0,
-		basePowerCallback(source, target, move) {
-			if (source.m.parriedPower) {
-				return source.m.parriedPower;
-			}
-			return 0;
-		},
-		beforeTurnCallback(pokemon, target) {
-			const willMove = this.queue.willMove(target);
-			if (willMove) {
-				const move = this.dex.getMove(willMove.move.id);
-				if (move.category === 'Status') {
-					this.boost({def: -1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
+		accuracy: 85,
+		basePower: 95,
+		onTry(source, target) {
+			this.attrLastMove('[still]');
+			const action = this.queue.willMove(target);
+			const move = action?.choice === 'move' ? action.move : null;
+			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
+				if (move?.category === 'Status') {
 					this.add(`c|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
 				} else {
-					if (this.randomChance(85, 100) && !pokemon.volatiles['stall']) {
-						pokemon.addVolatile('parry');
-						this.boost({spe: 2}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
-						pokemon.m.parriedPower = move.basePower * 1.15;
-						this.add(`c|${getName('Seso')}|Too slow!`);
-					} else {
-						target.addVolatile('failedparry');
-						this.add(`c|${getName('Seso')}|Scars on the back are a swordsman's shame.`);
-						if (!pokemon.m.failures) pokemon.m.failures = 0;
-						pokemon.m.failures++;
-						const fails = pokemon.volatiles['stall'] ? 2 : this.clampIntRange(pokemon.m.failures, 0, 3);
-						const dmg = [0, 0.1, 0.25, 0.4][fails];
-						this.damage(pokemon.baseMaxhp * dmg, pokemon);
-					}
+					this.add(`c|${getName('Seso')}|Scars on the back are a swordsman's shame.`);
 				}
-			} else if (this.queue.willSwitch(target)) {
-				this.add(`c|${getName('Seso')}|COWARD!`);
-				this.boost({spe: 1}, pokemon, pokemon, this.dex.getActiveMove('legendaryswordsman'));
+				return false;
 			}
 		},
 		category: "Physical",
@@ -4519,26 +4498,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onTryMove(source, target, move) {
 			this.attrLastMove('[still]');
-			if (!source.volatiles['parry']) {
-				this.add('-fail', source, 'move: Legendary Swordsman');
-				return null;
-			}
-		},
-		onHit(target, source) {
-			source.addVolatile('stall');
 		},
 		onPrepareHit(target, source) {
 			this.add(`c|${getName('Seso')}|FORWARD!`);
-			if (source.volatiles['parry']) {
-				this.add('-anim', source, 'Gear Grind', target);
-				this.add('-anim', source, 'Thief', target);
-			}
+			this.add('-anim', source, 'Gear Grind', target);
+			this.add('-anim', source, 'Thief', target);
 		},
-		onAfterMove(source, target, move) {
-			delete source.volatiles['parry'];
-			delete source.m.parriedPower;
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Ground",
 	},
@@ -4621,7 +4594,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 100,
 			onHit(target) {
-				if (target.hasType(['Flying', 'Ground']) || target.volatiles['ingrain']) return false;
+				if (target.hasType(['Flying', 'Ground']) || target.volatiles['ingrain'] || target.volatiles['brilliant']) return false;
 				target.addVolatile('updraft');
 			},
 		},
@@ -4655,7 +4628,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.eachEvent('Terrain');
 			},
 			onTerrain(pokemon) {
-				if (pokemon.hasType('Ground')) return;
 				if (pokemon.hasType('Electric')) {
 					if (this.heal(pokemon.baseMaxhp / 8, pokemon)) {
 						this.add('-message', `${pokemon.name} was healed by the terrain!`);
@@ -4772,7 +4744,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		terrain: 'lavaterrain',
+		weather: 'sunnyday',
 		basePowerCallback(pokemon, target, move) {
 			return 70 + 80 * Math.floor(pokemon.hp / pokemon.maxhp);
 		},
@@ -4785,69 +4757,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Fire",
-	},
-	lavaterrain: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Lava Terrain",
-		pp: 10,
-		priority: 0,
-		flags: {nonsky: 1},
-		terrain: 'lavaterrain',
-		condition: {
-			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onBasePowerPriority: 6,
-			onBasePower(basePower, attacker, defender, move) {
-				if (attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-					if (move.type === 'Fire') {
-						this.debug('lava terrain boost');
-						return this.chainModify(1.5);
-					} else if (move.type === 'Water') {
-						this.debug('lava terrain weaken');
-						return this.chainModify(0.5);
-					}
-				}
-			},
-			onStart(battle, source, effect) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Lava Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Lava Terrain');
-				}
-				this.add('-message', 'The battlefield became hot!');
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
-				this.eachEvent('Terrain');
-			},
-			onTerrain(pokemon) {
-				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-					if (pokemon && !pokemon.hasType('Fire')) {
-						if (this.damage(pokemon.baseMaxhp / 8, pokemon)) {
-							this.add('-message', `${pokemon.name} was hurt by the terrain!`);
-						}
-					} else if (pokemon) {
-						if (this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon)) {
-							this.add('-message', `${pokemon.name} was healed by the terrain!`);
-						}
-					}
-				}
-			},
-			onEnd() {
-				this.add('-fieldend', 'move: Lava Terrain');
-			},
-		},
-		secondary: null,
-		target: "all",
 		type: "Fire",
 	},
 
@@ -5794,9 +5703,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				break;
 			case 'tempestterrain':
 				move.type = 'Flying';
-				break;
-			case 'lavaterrain':
-				move.type = 'Fire';
 				break;
 			}
 		},

@@ -627,7 +627,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.boost({spa: 1, spe: 1}, attacker);
 			}
 		},
-		innateName: "TBD",
+		innateName: "Fickle Decorator",
 		shortDesc: "Calm Mind on switch in. Changes boosts depending on move used.",
 		onSwitchOut() {
 			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);
@@ -1146,7 +1146,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c|${getName('Nol')}|nerd`);
 		},
-		innateName: "Prankster + Eviolite",
+		innateName: "RSUA",
 		shortDesc: "+1 priority to status moves. 1.5x def and spd.",
 		// Innate Prankster and Eviolite
 		onModifyPriority(priority, pokemon, target, move) {
@@ -2132,15 +2132,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
-			}
-		},
-	},
-	failedparry: {
-		name: "Failed Parry",
-		duration: 1,
-		onModifyMove(move, source, target) {
-			if (source.volatiles['failedparry']) {
-				move.accuracy = true;
 			}
 		},
 	},
