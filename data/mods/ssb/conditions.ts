@@ -340,7 +340,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	cake: {
 		noCopy: true,
 		innateName: "h",
-		shortDesc: "On Switch in and at the end of every turn, it changes type randomly.",
+		shortDesc: "On switch-in and at the end of every turn, this Pokemon changes type randomly.",
 		onStart(target, pokemon) {
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
 			// h innate
@@ -628,7 +628,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		innateName: "Fickle Decorator",
-		shortDesc: "Calm Mind on switch in. Changes boosts depending on move used.",
+		shortDesc: "Calm Mind on switch-in. Changes boosts depending on move used.",
 		onSwitchOut() {
 			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);
 		},
@@ -760,7 +760,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('INStruct')}|Forgive me, entity of darkness... I couldn't fulfill my prophecy...`);
 		},
 		innateName: "Extinction Level Event",
-		shortDesc: "Deals 50% of their max hp to those who made contact upon death",
+		desc: "Upon fainting, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
+		shortDesc: "Upon fainting, deal 50% of their max HP to all foes that this Pokemon contacted.",
 		// Extinction Level Event Innate
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
@@ -944,7 +945,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	kris: {
 		innateName: "phuck",
-		shortDesc: "Changes this Pokemon into another Unown forme at the end of every turn.",
+		desc: "If this Pokemon is an Unown forme, it is immune to indirect damage and transforms into a different Unown letter forme, aside from ! and ?, at the end of each turn.",
+		shortDesc: "Unown: Magic Guard + change letter every turn.",
 		noCopy: true,
 		onStart(source) {
 			const foeName = source.side.foe.active[0].illusion ?
@@ -1147,7 +1149,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Nol')}|nerd`);
 		},
 		innateName: "RSUA",
-		shortDesc: "+1 priority to status moves. 1.5x def and spd.",
+		shortDesc: "+1 priority to status moves. 1.5x Defense and Special Defense.",
 		// Innate Prankster and Eviolite
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') {
@@ -1158,16 +1160,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
 			if (pokemon.illusion) return;
-			if (pokemon.baseSpecies.nfe) {
-				return this.chainModify(1.5);
-			}
+			return this.chainModify(1.5);
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.illusion) return;
-			if (pokemon.baseSpecies.nfe) {
-				return this.chainModify(1.5);
-			}
+			return this.chainModify(1.5);
 		},
 	},
 	notater517: {
