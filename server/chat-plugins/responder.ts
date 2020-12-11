@@ -456,7 +456,7 @@ export const pages: PageTable = {
 				return `<h2>Invalid date.</h2>`;
 			}
 			buf = `<div class="pad"><strong>Stats for the ${room.title} auto-response filter${date ? ` on ${date}` : ''}.</strong>`;
-			buf += `${back}${refresh('stats', (date ? [date] : []))}<hr />`;
+			buf += `${back}${refresh('stats', [date])}<hr />`;
 			const stats = roomData.stats;
 			if (!stats) return `<h2>No stats.</h2>`;
 			this.title = `[Autoresponder Stats] ${date ? date : ''}`;
