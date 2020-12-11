@@ -439,6 +439,9 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 			if (details[detail] === '') return detail;
 			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
 		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		if (sigAbil.desc && sigAbil.shortDesc && sigAbil.desc !== sigAbil.shortDesc) {
+			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigAbil.desc}</details>`;
+		}
 	}
 	return buf;
 }
@@ -531,7 +534,7 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 		baseAbility.name = effect.innateName;
 		if (effect.desc) baseAbility.desc = effect.desc;
 		if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
-		buf += `<hr />${Chat.getDataAbilityHTML(baseAbility)}`;
+		buf += `<hr />Innate Ability:<br />${Chat.getDataAbilityHTML(baseAbility)}`;
 		if (effect.desc && effect.shortDesc && effect.desc !== effect.shortDesc) {
 			longDesc = effect.desc;
 		}
@@ -543,7 +546,7 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 			baseAbility.name = effect.innateName;
 			if (effect.desc) baseAbility.desc = effect.desc;
 			if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
-			buf += `<hr />${Chat.getDataAbilityHTML(baseAbility)}`;
+			buf += `<hr />Innate Ability:<br />${Chat.getDataAbilityHTML(baseAbility)}`;
 			if (effect.desc && effect.shortDesc && effect.desc !== effect.shortDesc) {
 				longDesc = effect.desc;
 			}
@@ -601,11 +604,11 @@ function SSBSets(target: string) {
 		buf += generateSSBPokemonInfo(set.species, dex, baseDex);
 		if (!Array.isArray(set.item) && item.megaStone) {
 			buf += generateSSBPokemonInfo(item.megaStone, dex, baseDex);
-		} else if (set.species === 'Rayquaza') {
-			buf += generateSSBPokemonInfo('Rayquaza-Mega', dex, baseDex);
-		// Struchni has itemless Mega Evolution
-		} else if (set.species === 'Aggron') {
-			buf += generateSSBPokemonInfo('Aggron-Mega', dex, baseDex);
+		// Psynergy, Struchni, and Raj.shoot have itemless Mega Evolutions
+		} else if (['Aggron', 'Rayquaza'].includes(set.species)) {
+			buf += generateSSBPokemonInfo(`${set.species}-Mega`, dex, baseDex);
+		} else if (set.species === 'Charizard') {
+			buf += generateSSBPokemonInfo('Charizard-Mega-X', dex, baseDex);
 		}
 		if (set.skip) buf += `</details>`;
 	}
