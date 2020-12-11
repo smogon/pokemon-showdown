@@ -1999,9 +1999,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onHit(target, source, move) {
 			if (target.getMoveHitData(move).typeMod < 0) {
 				if (!target.hp) return;
-				this.boost({atk: 1}, target);
-				if (target.species.name !== 'Aggron' || target.illusion || target.transformed) return;
-				this.runMegaEvo(target);
+				if (target.species.id.includes('aggron') && !target.illusion && !target.transformed) {
+					this.boost({atk: 1}, target);
+					if (target.species.name !== 'Aggron') return;
+					this.runMegaEvo(target);
+				}
 			}
 		},
 		isNonstandard: "Custom",
