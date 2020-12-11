@@ -918,6 +918,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 
+	/*
 	nextTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
@@ -1043,4 +1044,5 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.makeRequest('move');
 	},
+	*/
 };
