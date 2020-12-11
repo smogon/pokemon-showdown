@@ -189,7 +189,7 @@ describe(`Factory sets`, function () {
 						for (const ev of keys) {
 							assert(evKeys.includes(ev), `Invalid EV key (${ev}) on set of ${species}`);
 							totalEVs += set.evs[ev];
-							assert((set.evs[ev] / 4) === Math.floor(set.evs[ev] / 4), `EVs of ${ev} not divisible by 4 on ${species}`);
+							assert.equal(set.evs[ev] % 4, 0, `EVs of ${ev} not divisible by 4 on ${species}`);
 						}
 						const sortedKeys = Utils.sortBy([...keys], ev => evKeys.indexOf(ev));
 						assert.deepEqual(keys, sortedKeys, `EVs out of order on set of ${species}, possibly because one of them is for the wrong stat`);
