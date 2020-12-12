@@ -613,7 +613,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
 						if (!(silentRemove.includes(sideCondition))) {
-							this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+							this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 						}
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
