@@ -1851,7 +1851,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// 	SectoniaServant
+	// SectoniaServant
 	royalaura: {
 		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Moves used by this Pokemon only use 0.5 PP.",
 		shortDesc: "Pressure, and this Pokemon uses 0.5 PP per move.",
