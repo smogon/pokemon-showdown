@@ -336,7 +336,9 @@ export const LogViewer = new class {
 		}
 		const roomid = `battle-${tier}-${number}` as RoomID;
 		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
-		const log = await LogReader.findBattleLog(toID(tier), number);
+		const log = await PM.query({
+			queryType: 'battlesearch', roomid: toID(tier), search: number,
+		});
 		if (!log) return context.send(this.error("Logs not found."));
 		const {connection} = context;
 		context.close();
@@ -1033,6 +1035,8 @@ export const PM = new QueryProcessManager<AnyObject, any>(module, async data => 
 			return LogSearcher.searchLogs(roomid, search, limit, date);
 		case 'sharedsearch':
 			return LogSearcher.getSharedBattles(search);
+		case 'battlesearch':
+			return LogReader.findBattleLog(roomid, search);
 		default:
 			return LogViewer.error(`Config.chatlogreader is not configured.`);
 		}
