@@ -1650,8 +1650,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 40,
 		basePowerCallback() {
-			if (this.field.pseudoWeather.soupstealing7starstrikeredux) {
-				return 40 * this.field.pseudoWeather.soupstealing7starstrikeredux.multiplier;
+			if (this.field.getPseudoWeather('soupstealing7starstrikeredux')) {
+				return 40 * this.field.getPseudoWeather('soupstealing7starstrikeredux').multiplier;
 			}
 			return 40;
 		},
