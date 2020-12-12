@@ -1916,9 +1916,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "On switch-in, gains random +1 to non-SpA, 2 random immunities.",
 		onStart(pokemon) {
 			const stats: BoostName[] = [];
-			let stat: BoostName;
-			for (stat in pokemon.boosts) {
-				const noBoost: string[] = ['accuracy', 'evasion', 'spa'];
+			for (const stat in pokemon.boosts) {
+				const noBoost = ['accuracy', 'evasion', 'spa'];
 				if (!noBoost.includes(stat) && pokemon.boosts[stat] < 6) {
 					stats.push(stat);
 				}
