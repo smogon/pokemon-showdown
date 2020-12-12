@@ -249,11 +249,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 		onSwitchIn(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Aegislash') return;
-			if (this.randomChance(1, 2)) {
-				changeSet(this, pokemon, ssbSets['aegii']);
-			} else {
-				changeSet(this, pokemon, ssbSets['aegii-Alt']);
-			}
+			const forme = this.randomChance(1, 2) ? 'aegii-Alt' : 'aegii';
+			changeSet(this, pokemon, ssbSets[forme]);
 			const setType = pokemon.moves.includes('shadowball') ? 'specially' : 'physically';
 			this.add('-message', `aegii currently has a ${setType} oriented set.`);
 		},
