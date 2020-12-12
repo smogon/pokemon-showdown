@@ -1536,7 +1536,7 @@ export class Battle {
 		this.makeRequest('move');
 	}
 
-	private maybeTriggerEndlessBattleClause(
+	maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
 		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
