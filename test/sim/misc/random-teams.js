@@ -2,6 +2,7 @@
 
 const assert = require('./../../assert');
 const TeamValidator = require('./../../../.sim-dist/team-validator').TeamValidator;
+const Utils = require('./../../../.lib-dist/utils').Utils;
 
 const TOTAL_TEAMS = 10;
 const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
@@ -181,11 +182,17 @@ describe(`Factory sets`, function () {
 							}
 						}
 
+						assert(!!set.evs, `Set of ${species} has no EVs specified`);
+						const keys = Object.keys(set.evs);
+						const evKeys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 						let totalEVs = 0;
-						for (const ev in set.evs) {
+						for (const ev of keys) {
+							assert(evKeys.includes(ev), `Invalid EV key (${ev}) on set of ${species}`);
 							totalEVs += set.evs[ev];
-							assert((set.evs[ev] / 4) === Math.floor(set.evs[ev] / 4), `EVs of ${ev} not divisible by 4 on ${species}`);
+							assert.equal(set.evs[ev] % 4, 0, `EVs of ${ev} not divisible by 4 on ${species}`);
 						}
+						const sortedKeys = Utils.sortBy([...keys], ev => evKeys.indexOf(ev));
+						assert.deepEqual(keys, sortedKeys, `EVs out of order on set of ${species}, possibly because one of them is for the wrong stat`);
 						assert(totalEVs <= 510, `more than 510 EVs on set of ${species}`);
 					}
 				}
