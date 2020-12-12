@@ -871,7 +871,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 80,
 		category: "Special",
 		desc: "Knocks off opponent's item and randomly sets Stealth Rocks, Spikes, or Toxic Spikes.",
-		shortDesc: "Knock off opponent's item & set random hazard.",
+		shortDesc: "Knock off foe's item. Set random hazard.",
 		name: "Fishing for Hacks",
 		isNonstandard: "Custom",
 		gen: 8,
