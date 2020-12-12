@@ -2649,6 +2649,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		start: "  [POKEMON] was prevented from healing!",
 		end: "  [POKEMON]'s Heal Block wore off!",
 		cant: "[POKEMON] can't use [MOVE] because of Heal Block!",
+		fail: "  But it failed to affect [POKEMON]!",
 	},
 	healingwish: {
 		name: "Healing Wish",
