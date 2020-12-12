@@ -553,9 +553,7 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 		}
 	}
 	if (buf) {
-		const details: {[k: string]: string} = {
-			Gen: '8',
-		};
+		const details: {[k: string]: string} = {Gen: '8'};
 		buf += `<font size="1">${Object.keys(details).map(detail => {
 			if (details[detail] === '') return detail;
 			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
