@@ -2236,7 +2236,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
-		shortDesc: "No additional effect.",
+		desc: "Usually goes first.",
 		name: "Patrona Attack",
 		isNonstandard: "Custom",
 		gen: 8,

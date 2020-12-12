@@ -751,14 +751,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	instructuser: {
 		noCopy: true,
-		onStart(source) {
-			this.add(`c|${getName('INStruct')}|Hey ${source.side.name} no time to explain... Just believe ${[`what the walls bleed`, `in what you can't comprehend to see`, `the whispers in your head`, `the messages from beyond`, `what the darkness speaks`][this.random(5)]}...`);
+		onStart() {
+			this.add(`c|${getName('INStruct')}|/me shotguns a can of Coca-Cola`);
+			this.add(`c|${getName('INStruct')}|fuck this lets just get it over with`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('INStruct')}|I must go back to the elder ones... those who will give salvation to all who serve...`);
+			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
+			this.add(`c|${getName('INStruct')}|you know, why do you always flood my dms?`);
+			this.add(`c|${getName('INStruct')}|whatever im gonna get smth to eat`);
 		},
 		onFaint() {
-			this.add(`c|${getName('INStruct')}|Forgive me, entity of darkness... I couldn't fulfill my prophecy...`);
+			this.add(`c|${getName('INStruct')}|WHAT A HORRIBLE NIGHT TO BE YOU, HOLY SHIT, HAHAHAHAHAHAHA`);
 		},
 		innateName: "Extinction Level Event",
 		desc: "Upon fainting, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",

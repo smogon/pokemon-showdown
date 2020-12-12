@@ -1636,7 +1636,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Psynergy
 	supernova: {
-		shortDesc: "On switch-in, if total positive boosts - total negative boosts ≥ 8, both Pokemon faint.",
+		desc: "On switch-in, if total positive boosts - total negative boosts ≥ 8, both Pokemon faint.",
 		onStart(source) {
 			let result = 0;
 			const pokemon = this.getAllActive();
