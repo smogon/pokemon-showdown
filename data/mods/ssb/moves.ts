@@ -1570,11 +1570,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onModifyMove(move, pokemon) {
 			if (!pokemon.types.includes('Fire')) return;
-			move.secondaries = [];
-			move.secondaries.push({
+			move.secondaries = [{
 				chance: 100,
 				status: 'brn',
-			});
+			}];
 			move.recoil = [33, 100];
 		},
 		recoil: [4, 10],
