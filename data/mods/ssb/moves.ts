@@ -451,15 +451,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
+				if (silentRemove.includes(sideCondition)) continue;
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
-					}
+					this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
-					}
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
 				}
 			}
 			this.field.clearWeather();
@@ -611,15 +608,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				];
 				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
+					if (silentRemove.includes(sideCondition)) continue;
 					if (source.side.foe.removeSideCondition(sideCondition)) {
-						if (!(silentRemove.includes(sideCondition))) {
-							this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
-						}
+						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
-						if (!(silentRemove.includes(sideCondition))) {
-							this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
-						}
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 					}
 				}
 				this.add('-message', `Hazards were removed by the terrain!`);
@@ -2878,17 +2872,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
+				if (silentRemove.includes(sideCondition)) continue;
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
+					this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					success = true;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
-						success = true;
-					}
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					success = true;
 				}
 			}
 			this.field.clearTerrain();
@@ -3080,16 +3071,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		// fruit this move.
 		onHit(target, source) {
-			this.useMove('Haze', source);
-			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
-			this.useMove('Worry Seed', source);
-			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
-			this.useMove('Poison Powder', source);
-			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
-			this.useMove('Stun Spore', source);
-			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
-			this.useMove('Leech Seed', source);
-			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+			for (const move of ['Haze', 'Worry Seed', 'Poison Powder', 'Stun Spore', 'Leech Seed']) {
+				this.useMove(move, source);
+				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+			}
 			const strgl = this.dex.getActiveMove('Struggle');
 			strgl.basePower = 150;
 			this.useMove(strgl, source);
@@ -3413,8 +3398,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'U-turn', target);
 		},
 		onAfterHit(target, pokemon) {
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
-				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
+			const sideConditions = [
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
@@ -3425,8 +3411,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onAfterSubDamage(damage, target, pokemon) {
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
-				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
+			const sideConditions = [
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);

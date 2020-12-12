@@ -351,12 +351,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			const firstType = typeList[0];
 			this.prng.shuffle(typeList);
 			const secondType = typeList[0];
-			let newTypes = [];
-			if (firstType === secondType) {
-				newTypes = [firstType];
-			} else {
-				newTypes = [firstType, secondType];
-			}
+			const newTypes = [firstType];
+			if (firstType !== secondType) newTypes.push(secondType);
 			this.add('html|<b>h</b>');
 			this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[silent]');
 			pokemon.setType(newTypes);
@@ -377,12 +373,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				const firstType = typeList[0];
 				this.prng.shuffle(typeList);
 				const secondType = typeList[0];
-				let newTypes = [];
-				if (firstType === secondType) {
-					newTypes = [firstType];
-				} else {
-					newTypes = [firstType, secondType];
-				}
+				const newTypes = [firstType];
+				if (firstType !== secondType) newTypes.push(secondType);
 				this.add('html|<b>h</b>');
 				this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[silent]');
 				pokemon.setType(newTypes);
@@ -967,7 +959,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
 				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
 			} else {
-				this.add(`c|${getName('Kris')}|hi ${foeName}`);
+				this.add(`c|${getName('Kris')}|bye ${foeName}`);
 			}
 		},
 		onFaint(target) {
@@ -1931,7 +1923,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			} else {
 				this.add('-start', target, 'bounty');
 			}
-			// this.add('-start', target, 'bounty', '[silent]');
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.status === 'bounty') {

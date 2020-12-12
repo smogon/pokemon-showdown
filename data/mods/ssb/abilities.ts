@@ -121,16 +121,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
+				if (silentRemove.includes(sideCondition)) continue;
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
-					}
+					this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
 					successes++;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
-					}
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
 					successes++;
 				}
 			}
