@@ -20,6 +20,8 @@ const MAX_MEMORY = 67108864; // 64MB
 const MAX_PROCESSES = 1;
 const MAX_TOPUSERS = 100;
 
+const CHATLOG_PM_TIMEOUT = 1 * 60 * 60 * 1000; // 1 hour
+
 const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog'];
 
 interface ChatlogSearch {
@@ -1041,7 +1043,7 @@ export const PM = new QueryProcessManager<AnyObject, any>(module, async data => 
 		Monitor.crashlog(e, 'A chatlog search query', data);
 		return LogViewer.error(`Sorry! Your chatlog search crashed. We've been notified and will fix this.`);
 	}
-});
+}, CHATLOG_PM_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!
