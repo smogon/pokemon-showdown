@@ -355,7 +355,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			// time's up; time to hit! :D
 			const move = this.dex.getMove(data.move);
 			if (target.fainted || target === data.source) {
-				this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
+				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
 				return;
 			}
 
