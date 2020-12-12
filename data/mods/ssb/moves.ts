@@ -453,12 +453,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
 					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
 					}
 				}
 			}
