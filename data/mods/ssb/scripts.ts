@@ -1028,7 +1028,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			side.faintedThisTurn = null;
 		}
 
-		if (this.maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide)) return;
+		if (Object.getPrototypeOf(this).maybeTriggerEndlessBattleClause.call(trappedBySide, stalenessBySide)) return;
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
