@@ -1526,7 +1526,7 @@ export const Chat = new class {
 	tr(language: ID | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
 		if (!language) language = 'english' as ID;
 		// If strings is an array (normally the case), combine before translating.
-		const trString = Array.isArray(strings) ? strings.join('${}') : strings;
+		const trString = typeof strings === 'string' ? strings : strings.join('${}');
 
 		if (!Chat.translations.has(language)) {
 			if (!Chat.translationsLoaded) return trString;
