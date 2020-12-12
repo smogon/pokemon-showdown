@@ -46,6 +46,21 @@ describe('Future Sight', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it('should alwaystarget randomly as a submove', function () {
+		battle = common.createBattle({gameType: 'doubles', seed: [5, 2, 3, 4]}, [[
+			{species: 'alakazam', moves: ['sleeptalk', 'spore']},
+			{species: 'bronzong', moves: ['sleeptalk', 'futuresight']},
+		], [
+			{species: 'mew', moves: ['sleeptalk', 'healingwish']},
+			{species: 'jirachi', moves: ['sleeptalk']},
+			{species: 'delibird', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move spore -2, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move healingwish, move sleeptalk');
+		assert.false.fullHP(battle.p2.active[1], 'should have hit the remaining foe');
+	});
+
 	it.skip(`should not double Stomping Tantrum for exiting normally`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['futuresight', 'stompingtantrum']},
