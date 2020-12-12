@@ -13,7 +13,7 @@ for (const row of usergroupData) {
 
 	const cells = row.split(',');
 	if (cells.length !== 2) throw new Error(`Invalid entry when parsing usergroups.csv`);
-	usergroups[toID(cells[0])] = cells[1] || ' ';
+	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
 }
 
 export function getName(name: string): string {
