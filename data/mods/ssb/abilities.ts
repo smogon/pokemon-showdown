@@ -105,37 +105,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Power Construct + Mold Breaker. On switch-in, clears everything for random boosts.",
 		name: "Scyphozoa",
 		onSwitchIn(source) {
-			const stats: BoostName[] = [];
-			let stat: BoostName;
-			const exclude: string[] = ['accuracy', 'evasion'];
+			let successes = 0;
 			this.add('-ability', source, 'Scyphozoa');
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
-				for (stat in source.boosts) {
-					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-						stats.push(stat);
-					}
-				}
-				if (stats.length) {
-					const randomStat = this.sample(stats);
-					const boost: SparseBoostsTable = {};
-					boost[randomStat] = 1;
-					this.boost(boost, source, source);
-				}
-				if (pokemon.removeVolatile('substitute')) {
-					for (stat in source.boosts) {
-						if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-							stats.push(stat);
-						}
-					}
-					if (stats.length) {
-						const randomStat = this.sample(stats);
-						const boost: SparseBoostsTable = {};
-						boost[randomStat] = 1;
-						this.boost(boost, source, source);
-					}
-				}
+				successes++;
+				if (pokemon.removeVolatile('substitute')) successes++;
 			}
 			const target = source.side.foe.active[0];
 
@@ -148,65 +124,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
 						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
-						for (stat in source.boosts) {
-							if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-								stats.push(stat);
-							}
-						}
-						if (stats.length) {
-							const randomStat = this.sample(stats);
-							const boost: SparseBoostsTable = {};
-							boost[randomStat] = 1;
-							this.boost(boost, source, source);
-						}
 					}
+					successes++;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!(silentRemove.includes(sideCondition))) {
 						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
-						for (stat in source.boosts) {
-							if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-								stats.push(stat);
-							}
-						}
-						if (stats.length) {
-							const randomStat = this.sample(stats);
-							const boost: SparseBoostsTable = {};
-							boost[randomStat] = 1;
-							this.boost(boost, source, source);
-						}
 					}
+					successes++;
 				}
 			}
 			for (const clear in this.field.pseudoWeather) {
 				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
 				this.field.removePseudoWeather(clear);
-				for (stat in source.boosts) {
-					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-						stats.push(stat);
-					}
-				}
-				if (stats.length) {
-					const randomStat = this.sample(stats);
-					const boost: SparseBoostsTable = {};
-					boost[randomStat] = 1;
-					this.boost(boost, source, source);
-				}
+				successes++;
 			}
-			if (this.field.clearWeather()) {
-				for (stat in source.boosts) {
-					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-						stats.push(stat);
-					}
-				}
-				if (stats.length) {
-					const randomStat = this.sample(stats);
-					const boost: SparseBoostsTable = {};
-					boost[randomStat] = 1;
-					this.boost(boost, source, source);
-				}
-			}
-			if (this.field.clearTerrain()) {
+			if (this.field.clearWeather()) successes++;
+			if (this.field.clearTerrain()) successes++;
+			const stats: BoostName[] = [];
+			let stat: BoostName;
+			const exclude: string[] = ['accuracy', 'evasion'];
+			for (let x = 0; x < successes; x++) {
 				for (stat in source.boosts) {
 					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
 						stats.push(stat);
