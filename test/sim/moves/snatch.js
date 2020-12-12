@@ -68,12 +68,12 @@ describe('Snatch', function () {
 		battle.makeChoices('move sleeptalk, move snatch', 'move toxicthread 1, move healbell');
 		assert.equal(battle.p1.active[0].status, 'psn', 'should not allow Heal Bell called from Snatch');
 		assert.equal(battle.p2.active[1].status, 'psn', 'should not allow the Snatchee to move');
-		assert.match(battle.log[battle.lastMoveLine + 1], /^\|cant.*move: Throat Chop$/, 'should log that Heal Bell failed');
+		assert.match(battle.log[battle.lastMoveLine + 2], /^\|cant.*move: Throat Chop$/, 'should log that Heal Bell failed');
 
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move healblock, move throatchop 2');
 		const weavileHp = battle.p1.active[1].hp;
 		battle.makeChoices('move sleeptalk, move snatch', 'move sleeptalk, move recover');
 		assert.atMost(battle.p1.active[1].hp, weavileHp, 'should not allow Snatch to bypass Heal Block');
-		assert.match(battle.log[battle.lastMoveLine + 1], /^\|cant.*move: Heal Block\|Recover$/, 'should log that Recover failed');
+		assert.match(battle.log[battle.lastMoveLine + 2], /^\|cant.*move: Heal Block\|Recover$/, 'should log that Recover failed');
 	});
 });
