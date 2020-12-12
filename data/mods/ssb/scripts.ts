@@ -918,7 +918,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 
-	/*
+	// Modded to add a property to work with Struchni's move
 	nextTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
@@ -936,7 +936,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.moveThisTurnResult = undefined;
 				if (this.turn !== 1) {
 					pokemon.usedItemThisTurn = false;
-					// Modded to add a property to work with Struchni's move
+					// Used for Veto
 					pokemon.m.statsRaisedLastTurn = !!pokemon.statsRaisedThisTurn;
 					pokemon.statsRaisedThisTurn = false;
 					pokemon.statsLoweredThisTurn = false;
@@ -1044,5 +1044,4 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.makeRequest('move');
 	},
-	*/
 };

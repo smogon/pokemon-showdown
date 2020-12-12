@@ -1419,13 +1419,6 @@ export const Formats: FormatList = [
 				pokemon.addVolatile(name, pokemon);
 			}
 		},
-		// For the veto move
-		onHit(target, source, move) {
-			target.m.typeEff = target.getMoveHitData(move).typeMod;
-		},
-		onSwitchOut(source) {
-			if (source.m.typeEff) delete source.m.typeEff;
-		},
 	},
 	{
 		name: "[Gen 8] Challenge Cup 1v1",
