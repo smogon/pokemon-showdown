@@ -96,7 +96,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Sets Trick Room and has 10% chance to burn the opponent.",
-		shortDesc: "Trick Room & 10% Burn",
+		shortDesc: "Sets Trick Room. 10% chance to burn.",
 		name: "The Town Outplay",
 		isNonstandard: "Custom",
 		gen: 8,
