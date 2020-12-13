@@ -565,8 +565,8 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			this.requireGame(GroupWatch);
 			room.parent!.modlog({action: `GROUPWATCH END`, loggedBy: user.id});
-			room.destroy();
 			room.parent!.add(`|c|~|/uhtmlchange ${room.roomid},`).update();
+			room.destroy();
 		},
 		startwatch: 'beginwatch',
 		beginwatch(target, room, user) {
