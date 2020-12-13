@@ -21,6 +21,8 @@ const MAX_PROCESSES = 1;
 const LONG_QUERY_DURATION = 2000;
 
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
+export const MODLOG_PATH = 'logs/modlog';
+export const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -467,6 +469,7 @@ export class Modlog {
 // even though it's a type not a function...
 type ModlogResult = ModlogEntry | undefined;
 
+export const mainModlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
 
 // the ProcessManager only accepts text queries at this time
 // SQL support is to be determined
@@ -476,7 +479,7 @@ export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(modul
 		if (Config.debugmodlogprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(data));
 		}
-		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = await mainModlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
 		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
@@ -487,8 +490,6 @@ export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(modul
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	global.toID = require('../sim/dex').Dex.toID;
-
-	global.Rooms = require('./rooms').Rooms;
 
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
