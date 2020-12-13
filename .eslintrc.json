@@ -2,7 +2,14 @@
   "extends": "./.eslintrc-no-types.json",
   "overrides": [
     {
-      "files": ["./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
+      "files": [
+        "./config/*.ts",
+        "./data/**/*.ts",
+        "./lib/*.ts",
+        "./server/**/*.ts",
+        "./sim/**/*.ts",
+        "./tools/set-import/*.ts"
+      ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaVersion": 9,
@@ -41,13 +48,6 @@
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-regexp-exec": "error",
         "@typescript-eslint/prefer-string-starts-ends-with": "error"
-      }
-    },
-    {
-      "files": ["build"],
-      "rules": {
-        "strict": "off",
-        "no-var": "off"
       }
     }
   ]
