@@ -1772,17 +1772,17 @@ const triviaCommands: ChatCommands = {
 		if (!submissions) return this.sendReply(this.tr`No questions await review.`);
 
 		let innerBuffer = '';
-		let i = 0;
+		let total = 0;
 		for (const category in submissions) {
 			for (const [i, entry] of submissions[category].entries()) {
-				i++;
+				total++;
 				innerBuffer += `<tr><td><strong>${submissions[category].indexOf(entry)}</strong></td><td>${entry.category}</td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><td>${entry.user}</td></tr>`;
 			}
 		}
 		if (!innerBuffer) return this.sendReply(this.tr`No questions await review.`);
 
 		const buffer = `|raw|<div class="ladder"><table>` +
-			`<tr><td colspan="6"><strong>${Chat.count(i, "</strong> questions")} awaiting review:</td></tr>` +
+			`<tr><td colspan="6"><strong>${Chat.count(total, "</strong> questions")} awaiting review:</td></tr>` +
 			`<tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th><th>${this.tr`Answer(s)`}</th><th>${this.tr`Submitted By`}</th></tr>` +
 			innerBuffer +
 			`</table></div>`;
