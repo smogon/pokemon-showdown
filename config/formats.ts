@@ -1389,7 +1389,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Super Staff Bros 4",
 		desc: "The fourth iteration of Super Staff Bros is here! Battle with a random team of pokemon created by the sim staff.",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/articles/super-staff-bros-brawl">Introduction &amp; Roster</a>`,
+			`&bullet; <a href="https://www.smogon.com/articles/super-staff-bros-4">Introduction &amp; Roster</a>`,
 		],
 
 		mod: 'ssb',
