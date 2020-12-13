@@ -1706,6 +1706,23 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			for (let x = 0; x < 10; x++) str += String.fromCharCode(48 + this.random(79));
 			this.add(`c|${getName('xJoelituh')}|${str} ok`);
 		},
+		innateName: "Bone Rarifier",
+		desc: "Multiplies this Pokemon's Attack by 0.75, but multiplies its Defense and Special Defense by 1.5.",
+		shortDesc: "This Pokemon's Atk is 0.75x, and its Def and SpD are 1.5x.",
+		// Bone Rarifier Innate
+		onModifyAtkPriority: 2,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.illusion) return;
+			return this.chainModify(0.75);
+		},
+		onModifyDef(def, pokemon) {
+			if (pokemon.illusion) return;
+			return this.chainModify(1.5);
+		},
+		onModifySpD(spd, pokemon) {
+			if (pokemon.illusion) return;
+			return this.chainModify(1.5);
+		},
 	},
 	yuki: {
 		noCopy: true,

@@ -788,7 +788,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, atk: 252, spd: 4}, ivs: {atk: 0}, nature: 'Adamant',
 	},
 	xJoelituh: {
-		species: 'Marowak-Alola', ability: 'Mountaineer', item: 'Rare Bone', gender: 'M',
+		species: 'Marowak-Alola', ability: 'Mountaineer', item: 'Thick Club', gender: 'M',
 		moves: ['Poltergeist', 'Fire Punch', 'Stomping Tantrum'],
 		signatureMove: 'Burn Bone',
 		evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful', shiny: true,
