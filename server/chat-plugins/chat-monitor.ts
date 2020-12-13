@@ -58,7 +58,7 @@ export function constructEvasionRegex(str: string) {
 	const buf = "\\b" +
 		[...str].map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
 		"\\b";
-	return new RegExp(buf, 'i');
+	return new RegExp(buf, 'iu');
 }
 
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {
@@ -102,7 +102,7 @@ export function generateRegex(word: string, isEvasion = false, isShortener = fal
 		if (isEvasion) {
 			return constructEvasionRegex(word);
 		} else {
-			return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'ig' : 'i'));
+			return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'igu' : 'iu'));
 		}
 	} catch (e) {
 		throw new Chat.ErrorMessage(
@@ -299,7 +299,7 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 				if (punishment === 'EVASION') {
 					regex = constructEvasionRegex(word);
 				} else {
-					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'ig' : 'i');
+					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'igu' : 'iu');
 				}
 
 				const filterWord: FilterWord = {regex, word, hits: parseInt(times) || 0};
@@ -445,7 +445,7 @@ export const nicknamefilter: NicknameFilter = (name, user) => {
 				// Evasion banwords by default require whitespace on either side.
 				// If we didn't remove it here, it would be quite easy to evade the filter
 				// and use slurs in Pokémon nicknames.
-				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
+				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'iu');
 			}
 
 			const match = regex.exec(lcName);
