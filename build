@@ -140,7 +140,7 @@ function findFiles(options) {
 	  }
 	}
 
-	if (!(fs.existsSync(path.join(outDirPath, 'sourceMaps')))) {
+	if (sourceMaps && !(fs.existsSync(path.join(outDirPath, 'sourceMaps')))) {
 		fs.mkdirSync(path.join(outDirPath, 'sourceMaps'));
 	}
 
@@ -159,8 +159,8 @@ function sucrase(src, out, opts, excludeDirs = []) {
 		const sucraseOptionsFile = sourceMaps ? {...sucraseOptions, sourceMapOptions: {compiledFilename: file.outPath}, filePath: file.srcPath} : {...sucraseOptions};
 		const code = fs.readFileSync(file.srcPath, 'utf-8');
 		const transformed = transform(code, sucraseOptionsFile);
-		transformed.sourceMap.sourceRoot = __dirname;
 		if (sourceMaps) {
+			transformed.sourceMap.sourceRoot = __dirname;
 			transformed.code += `\n //# sourceMappingURL=sourceMaps/${path.basename(file.outPath)}.map`;
 			fs.writeFileSync(path.join(path.dirname(file.outPath), 'sourceMaps', path.basename(`${file.outPath}.map`)), JSON.stringify(transformed.sourceMap));
 		}
