@@ -159,9 +159,9 @@ function sucrase(src, out, opts, excludeDirs = []) {
 		const sucraseOptionsFile = sourceMaps ? {...sucraseOptions, sourceMapOptions: {compiledFilename: file.outPath}, filePath: file.srcPath} : {...sucraseOptions};
 		const code = fs.readFileSync(file.srcPath, 'utf-8');
 		const transformed = transform(code, sucraseOptionsFile);
-		transformed.sourceMap.rootDir = __dirname;
+		transformed.sourceMap.sourceRoot = __dirname;
 		if (sourceMaps) {
-			transformed.code += `\n //# sourceMappingURL=sourceMaps/${path.basename(file.outPath)} `;
+			transformed.code += `\n //# sourceMappingURL=sourceMaps/${path.basename(file.outPath)}.map`;
 			fs.writeFileSync(path.join(path.dirname(file.outPath), 'sourceMaps', path.basename(`${file.outPath}.map`)), JSON.stringify(transformed.sourceMap));
 		}
 		fs.writeFileSync(file.outPath, transformed.code);
