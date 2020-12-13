@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-"use strict";
 
 try {
 	// technically this was introduced in Node 11, but we'll ask for the most recent LTS with it to be safe
@@ -9,12 +8,11 @@ try {
 	process.exit(1);
 }
 
-require('dotenv').config();
-const {transform} = require('sucrase');
-const child_process = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const force = process.argv[2] === '--force';
+var {transform} = require('sucrase');
+var child_process = require('child_process');
+var fs = require('fs');
+var path = require('path');
+var force = process.argv[2] === '--force';
 
 process.chdir(__dirname);
 
@@ -30,8 +28,8 @@ function replace(file, replacements) {
 			if (!file.endsWith('.js')) return;
 			fs.readFile(file, "utf-8", function (err, text) {
 				if (err) throw err;
-				let anyMatch = false;
-				for (let i = 0; i < replacements.length; i++) {
+				var anyMatch = false;
+				for (var i = 0; i < replacements.length; i++) {
 					anyMatch = anyMatch || text.match(replacements[i].regex);
 					if (anyMatch) text = text.replace(replacements[i].regex, replacements[i].replace);
 				}
@@ -43,7 +41,7 @@ function replace(file, replacements) {
 		} else if (stats.isDirectory()) {
 			fs.readdir(file, function (err, files) {
 				if (err) throw err;
-				for (let i = 0; i < files.length; i++) {
+				for (var i = 0; i < files.length; i++) {
 					replace(path.join(file, files[i]), replacements);
 				}
 			});
@@ -51,8 +49,8 @@ function replace(file, replacements) {
 	});
 }
 function copyOverDataJSON(file) {
-	const source = './data/' + file;
-	const dest = './.data-dist/' + file;
+	var source = './data/' + file;
+	var dest = './.data-dist/' + file;
 	fs.readFile(source, function (err, text) {
 		if (err) throw err;
 		fs.writeFile(dest, text, function (err) {
@@ -63,7 +61,7 @@ function copyOverDataJSON(file) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	const sucraseVersion = require('sucrase').getVersion().split('.');
+	var sucraseVersion = require('sucrase').getVersion().split('.');
 	if (
 		parseInt(sucraseVersion[0]) < 3 ||
 		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 15)

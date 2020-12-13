@@ -42,6 +42,13 @@
         "@typescript-eslint/prefer-regexp-exec": "error",
         "@typescript-eslint/prefer-string-starts-ends-with": "error"
       }
+    },
+    {
+      "files": ["build"],
+      "rules": {
+        "strict": "off",
+        "no-var": "off"
+      }
     }
   ]
 }
