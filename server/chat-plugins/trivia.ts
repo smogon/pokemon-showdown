@@ -1774,7 +1774,7 @@ const triviaCommands: ChatCommands = {
 		let innerBuffer = '';
 		let i = 0;
 		for (const category in submissions) {
-			for (const entry of submissions[category]) {
+			for (const [i, entry] of submissions[category].entries()) {
 				i++;
 				innerBuffer += `<tr><td><strong>${submissions[category].indexOf(entry)}</strong></td><td>${entry.category}</td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><td>${entry.user}</td></tr>`;
 			}
