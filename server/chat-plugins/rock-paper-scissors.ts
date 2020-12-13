@@ -347,18 +347,17 @@ export const commands: ChatCommands = {
 			const game = this.requireGame(RPSGame);
 			game.unpause(user);
 		},
-
-		help() {
-			this.runBroadcast();
-			const strings = [
-				`/rockpaperscissors OR /rps<br />`,
-				`/rps create OR /rps challenge [user], [rounds] - Challenges a user to a game of Rock Paper Scissors with [rounds] (or 3) rounds`,				`/rps leave - Leave the game.`,
-				`/rps start - Start the Rock Paper Scissors game.`,
-				`/rps end - End the Rock Paper Scissors game`,
-				`/rps pause - Pauses the game, if it's in progress.`,
-				`/rps resume - Resumes the game, if it's paused.`,
-			];
-			return this.sendReplyBox(strings.join('<br />'));
-		},
+	},
+	help() {
+		this.runBroadcast();
+		const strings = [
+			`/rockpaperscissors OR /rps<br />`,
+			`/rps create OR /rps challenge [user], [rounds] - Challenges a user to a game of Rock Paper Scissors with [rounds] (or 3) rounds`,				`/rps leave - Leave the game.`,
+			`/rps start - Start the Rock Paper Scissors game.`,
+			`/rps end - End the Rock Paper Scissors game`,
+			`/rps pause - Pauses the game, if it's in progress.`,
+			`/rps resume - Resumes the game, if it's paused.`,
+		];
+		return this.sendReplyBox(strings.join('<br />'));
 	},
 };
