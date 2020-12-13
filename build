@@ -147,16 +147,16 @@ function findFiles(options) {
 	return outArr;
 }
 
-function sucrase(src, out, opts) {
+function sucrase(src, out, opts, excludeDirs = []) {
 	try {
 		if (!force && src !== './config' && !needsSucrase(src, out)) {
 			return false;
 		}
 	} catch (e) {}
 	const sucraseOptions = {transforms: ['typescript', 'imports'], enableLegacyTypeScriptModuleInterop: true, ...opts};
-	const files = findFiles({outDirPath: out, srcDirPath: src, sucraseOptions: sucraseOptions, excludeDirs: ['sourceMaps'], outExtension: 'js'});
+	const files = findFiles({outDirPath: out, srcDirPath: src, sucraseOptions: sucraseOptions, excludeDirs: ['sourceMaps', ...excludeDirs], outExtension: 'js'});
 	for (const file of files) {
-		const sucraseOptionsFile = sourceMaps ? {...sucraseOptions, sourceMapOptions: {compiledFilename: file.outPath}, filePath: file.srcPath} : sucraseOptions;
+		const sucraseOptionsFile = sourceMaps ? {...sucraseOptions, sourceMapOptions: {compiledFilename: file.outPath}, filePath: file.srcPath} : {...sucraseOptions};
 		const code = fs.readFileSync(file.srcPath, 'utf-8');
 		const transformed = transform(code, sucraseOptionsFile);
 		transformed.sourceMap.rootDir = __dirname;
@@ -197,7 +197,7 @@ if (sucrase('./server', './.server-dist')) {
 
 sucrase('./translations', './.translations-dist');
 
-if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
+if (sucrase('./tools/set-import', './tools/set-import', null, ['sets'])) {
 	replace('./tools/set-import/importer.js', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
 	]);
