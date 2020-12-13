@@ -74,7 +74,6 @@
     "@types/sockjs": "^0.3.32",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
-    "dotenv": "^8.2.0",
     "eslint": "^7.12.1",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.0",

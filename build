@@ -15,7 +15,6 @@ const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const force = process.argv[2] === '--force';
-const sourceMaps = process.env.NODE_ENV === 'development';
 
 process.chdir(__dirname);
 
@@ -150,7 +149,7 @@ function findFiles(options) {
 		}
 	}
 
-	if (sourceMaps && !fs.existsSync(path.join(outDirPath, 'sourceMaps'))) {
+	if (!fs.existsSync(path.join(outDirPath, 'sourceMaps'))) {
 		fs.mkdirSync(path.join(outDirPath, 'sourceMaps'));
 	}
 
@@ -166,13 +165,11 @@ function sucrase(src, out, opts, excludeDirs = []) {
 	const sucraseOptions = {transforms: ['typescript', 'imports'], enableLegacyTypeScriptModuleInterop: true, ...opts};
 	const files = findFiles({outDirPath: out, srcDirPath: src, sucraseOptions: sucraseOptions, excludeDirs: ['sourceMaps', ...excludeDirs], outExtension: 'js'});
 	for (const file of files) {
-		const sucraseOptionsFile = sourceMaps ? {...sucraseOptions, sourceMapOptions: {compiledFilename: file.outPath}, filePath: path.join(file.pathToSource, file.srcPath)} : {...sucraseOptions};
+		const sucraseOptionsFile = {...sucraseOptions, sourceMapOptions: {compiledFilename: file.outPath}, filePath: path.join(file.pathToSource, file.srcPath)};
 		const code = fs.readFileSync(file.srcPath, 'utf-8');
 		const transformed = transform(code, sucraseOptionsFile);
-		if (sourceMaps) {
-			transformed.code += `\n //# sourceMappingURL=sourceMaps/${path.basename(file.outPath)}.map`;
-			fs.writeFileSync(path.join(path.dirname(file.outPath), 'sourceMaps', path.basename(`${file.outPath}.map`)), JSON.stringify(transformed.sourceMap));
-		}
+		transformed.code += `\n //# sourceMappingURL=sourceMaps/${path.basename(file.outPath)}.map`;
+		fs.writeFileSync(path.join(path.dirname(file.outPath), 'sourceMaps', path.basename(`${file.outPath}.map`)), JSON.stringify(transformed.sourceMap));
 		fs.writeFileSync(file.outPath, transformed.code);
 	}
 	return true;
