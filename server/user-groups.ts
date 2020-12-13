@@ -158,24 +158,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		for (const cmd in Chat.commands) {
-			const entry = Chat.commands[cmd];
-			if (typeof entry === 'string' || Array.isArray(entry)) continue;
-			if (typeof entry === 'function' && entry.hasRoomPermissions) {
-				permissions.push(`/${cmd}`);
-			}
-			if (typeof entry === 'object') {
-				permissions.push(`/${cmd}`);
-				for (const subCommand in entry) {
-					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
-					if (typeof subEntry !== 'function') continue;
-					if (subEntry.hasRoomPermissions) permissions.push(`/${cmd} ${subCommand}`);
-				}
-				continue;
-			}
-		}
-		return permissions;
+		return [
+			...ROOM_PERMISSIONS,
+			...Chat.allCommands().filter(c => c.hasRoomPermissions).map(c => `/${c.fullCmd}`),
+		];
 	}
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,

@@ -681,7 +681,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Adjust rate for species with multiple sets
 			switch (species.baseSpecies) {
 			case 'Arceus':
-				if (this.randomChance(16, 17)) continue;
+				if (this.randomChance(16, 17) && !isMonotype) continue;
 				break;
 			case 'Rotom':
 				if (this.gen < 5 && this.randomChance(5, 6)) continue;
@@ -700,7 +700,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			const tier = species.tier;
 
 			// Limit two Pokemon per tier
-			if (this.gen === 5 && tierCount[tier] > 1) continue;
+			if (this.gen === 5 && !isMonotype && tierCount[tier] > 1) continue;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 

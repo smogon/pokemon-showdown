@@ -1,4 +1,9 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
+	airlock: {
+		inherit: true,
+		onSwitchIn() {},
+		onStart() {},
+	},
 	angerpoint: {
 		inherit: true,
 		onAfterSubDamage(damage, target, source, move) {
@@ -21,6 +26,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Blaze",
 		rating: 2,
 		num: 66,
+	},
+	cloudnine: {
+		inherit: true,
+		onSwitchIn() {},
+		onStart() {},
 	},
 	colorchange: {
 		inherit: true,

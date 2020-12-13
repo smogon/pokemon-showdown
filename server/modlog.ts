@@ -488,6 +488,9 @@ type ModlogResult = ModlogEntry | undefined;
 export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
+		if (Config.debugmodlogprocesses && process.send) {
+			process.send('DEBUG\n' + JSON.stringify(data));
+		}
 		const results = await Chat.modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
 		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
 	} catch (err) {
