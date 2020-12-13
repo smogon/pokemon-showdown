@@ -3052,7 +3052,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Meicoo
 	spamguess: {
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Calls the following moves in order, each with their normal respective accuracy: Haze -> Worry Seed -> Poison Powder -> Stun Spore -> Leech Seed -> Struggle (150 BP)",
