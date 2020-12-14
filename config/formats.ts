@@ -228,36 +228,6 @@ export const Formats: FormatList = [
 		minSourceGen: 8,
 	},
 	{
-		name: "[Gen 8] Dragon King Cup",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3673851/">Dragon King Cup</a>`,
-		],
-
-		mod: 'gen8',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'VGC Timer', 'Cancel Mod'],
-		banlist: ['Celebi', 'Diancie', 'Genesect', 'Jirachi', 'Keldeo', 'Magearna', 'Marshadow', 'Melmetal', 'Meltan', 'Mew', 'Victini', 'Volcanion', 'Zarude', 'Zeraora'],
-		minSourceGen: 8,
-		onValidateTeam(team) {
-			const RESTRICTED_LEGENDS = [
-				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem',
-				'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
-			];
-			let restrictedCount = 0;
-			for (const set of team) {
-				const species = this.dex.getSpecies(set.species);
-				if (RESTRICTED_LEGENDS.includes(species.baseSpecies)) restrictedCount++;
-			}
-			if (restrictedCount > 1) {
-				return [`You are limited to one restricted legend.`, `(You have ${restrictedCount} restricted legends.)`];
-			}
-		},
-	},
-	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
