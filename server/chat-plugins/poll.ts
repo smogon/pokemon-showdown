@@ -549,9 +549,10 @@ export const commands: ChatCommands = {
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
 		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
-		`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
-		`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
-		`/poll viewqueue - view the queue of polls in the room. Requires: % @ # &`,
+		`/poll queue [question], [option1], [option2], [...] - Add a poll in queue. Requires: % @ # &`,
+		`/poll deletequeue [number] - Deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
+		`/poll clearqueue - Deletes the queue of polls. Requires: % @ # &`,
+		`/poll viewqueue - View the queue of polls in the room. Requires: % @ # &`,
 	],
 };
 
