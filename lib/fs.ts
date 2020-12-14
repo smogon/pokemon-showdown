@@ -138,12 +138,6 @@ export class FSPath {
 		FS(this.path + '.NEW').renameSync(this.path);
 	}
 
-	waitUntil(time: number): Promise<void> {
-		return new Promise(resolve => {
-			setTimeout(() => resolve(), time - Date.now());
-		});
-	}
-
 	/**
 	 * Safest way to update a file with in-memory state. Pass a callback
 	 * that fetches the data to be written. It will write an update,
