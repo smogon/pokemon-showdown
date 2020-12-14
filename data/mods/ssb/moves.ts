@@ -3703,9 +3703,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Dragon Breath', target);
 			this.add('-anim', source, 'Haze', target);
 		},
-		onEffectiveness(typeMod, target, type) {
-			return 0;
-		},
 		secondary: null,
 		target: "normal",
 		type: "Flying",
