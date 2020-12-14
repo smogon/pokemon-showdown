@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict";
 
 try {
 	// technically this was introduced in Node 11, but we'll ask for the most recent LTS with it to be safe
@@ -12,6 +13,7 @@ var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 var force = process.argv[2] === '--force';
+var sucrase = require('./lib/build-utils').sucrase(force);
 
 process.chdir(__dirname);
 
@@ -26,17 +28,17 @@ function replace(file, replacements) {
 		if (stats.isFile()) {
 			if (!file.endsWith('.js')) return;
 			fs.readFile(file, "utf-8", function (err, text) {
+				if (err) throw err;
+				var anyMatch = false;
+				for (var i = 0; i < replacements.length; i++) {
+					anyMatch = anyMatch || text.match(replacements[i].regex);
+					if (anyMatch) text = text.replace(replacements[i].regex, replacements[i].replace);
+				}
+				if (!anyMatch) return;
+				fs.writeFile(file, text, function (err) {
 					if (err) throw err;
-					var anyMatch = false;
-					for (var i = 0; i < replacements.length; i++) {
-						anyMatch = anyMatch || text.match(replacements[i].regex);
-						if (anyMatch) text = text.replace(replacements[i].regex, replacements[i].replace);
-					}
-					if (!anyMatch) return;
-					fs.writeFile(file, text, function (err) {
-						if (err) throw err;
-					});
 				});
+			});
 		} else if (stats.isDirectory()) {
 			fs.readdir(file, function (err, files) {
 				if (err) throw err;
@@ -72,45 +74,6 @@ try {
 	shell('npm install --production');
 }
 
-function needsSucrase(source, dest, path = '') {
-	if (path.endsWith('.ts')) {
-		if (path.endsWith('.d.ts')) return false;
-		const sourceStat = fs.lstatSync(source + path);
-		try {
-			const destStat = fs.lstatSync(dest + path.slice(0, -2) + 'js');
-			return (sourceStat.ctimeMs > destStat.ctimeMs);
-		} catch (e) {
-			// dest doesn't exist
-			return true;
-		}
-	}
-	if (!path.includes('.')) {
-		// probably dir
-		try {
-			const files = fs.readdirSync(source + path);
-			for (const file of files) {
-				if (needsSucrase(source, dest, path + '/' + file)) {
-					return true;
-				}
-			}
-		} catch (e) {
-			// not dir
-		}
-		return false;
-	}
-	return false;
-}
-
-function sucrase(src, out, opts) {
-	try {
-		if (!force && src !== './config' && !needsSucrase(src, out)) {
-			return false;
-		}
-	} catch (e) {}
-	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
-	return true;
-}
-
 if (sucrase('./config', './.config-dist')) {
 	replace('.config-dist', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
@@ -139,7 +102,7 @@ if (sucrase('./server', './.server-dist')) {
 
 sucrase('./translations', './.translations-dist');
 
-if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
+if (sucrase('./tools/set-import', './tools/set-import', null, ['sets'])) {
 	replace('./tools/set-import/importer.js', [
 		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
 	]);
