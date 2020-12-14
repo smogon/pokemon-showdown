@@ -1007,10 +1007,10 @@ export class RipgrepLogSearcher extends Searcher {
 		return this.renderLinecountResults(results, room, month, user);
 	}
 	async getSharedBattles(userids: string[]) {
-		const regexString = userids.map(id => `(.*("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
+		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		const results: string[] = [];
 		try {
-			const {stdout} = await exec(['rg', '-e', regexString, '-i', '-tjson', 'logs/']);
+			const {stdout} = await exec(['rg', '-e', regexString, '-i', '-tjson', 'logs/', '-P']);
 			for (const line of stdout.split('\n')) {
 				const [name] = line.split(':');
 				const battleName = name.split('/').pop()!;
