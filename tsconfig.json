@@ -7,7 +7,8 @@
         "moduleResolution": "node",
         "strict": true,
         "allowJs": true,
-        "checkJs": true
+        "checkJs": true,
+        "incremental": true
     },
     "types": ["node"],
     "exclude": [

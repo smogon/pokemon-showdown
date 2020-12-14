@@ -20,6 +20,7 @@ databases/*.db*
 .*-dist/
 tools/set-import/importer.js
 tools/modlog/converter.js
+*.tsbuildinfo
 **/sourceMaps
 
 # visual studio live share
