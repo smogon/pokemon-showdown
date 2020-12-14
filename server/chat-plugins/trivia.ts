@@ -2216,7 +2216,7 @@ const triviaCommands: ChatCommands = {
 
 		const userid = toID(target);
 		if (!userid) return this.parse('/help trivia removeleaderboardentry');
-		if (hasLeaderboardEntry(userid)) {
+		if (!hasLeaderboardEntry(userid)) {
 			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
 		}
 
