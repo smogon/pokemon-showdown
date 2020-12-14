@@ -302,4 +302,10 @@ export const Utils = new class {
 		// Step 7
 		return d[n][m];
 	}
+
+	waitUntil(time: number): Promise<void> {
+		return new Promise(resolve => {
+			setTimeout(() => resolve(), time - Date.now());
+		});
+	}
 };
