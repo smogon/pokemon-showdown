@@ -61,6 +61,10 @@ export function constructEvasionRegex(str: string) {
 	return new RegExp(buf, 'iu');
 }
 
+export function stripWordBoundaries(regex: RegExp) {
+	return new RegExp(regex.toString().replace('/\\b', '').replace('\\b/iu', ''), 'iu');
+}
+
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {
 	return `${location}\t${word.word}\t${punishment}\t${word.reason || ''}\t${word.hits}\t${word.replacement || ''}\t${word.publicReason || ''}\r\n`;
 }
@@ -393,8 +397,10 @@ export const namefilter: NameFilter = (name, user) => {
 
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
+		const punishment = Chat.monitors[list].punishment;
 		for (const line of filterWords[list]) {
-			if (line.regex.test(lcName)) {
+			const regex = (punishment === 'EVASION' ? stripWordBoundaries(line.regex) : line.regex);
+			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
@@ -445,7 +451,7 @@ export const nicknamefilter: NicknameFilter = (name, user) => {
 				// Evasion banwords by default require whitespace on either side.
 				// If we didn't remove it here, it would be quite easy to evade the filter
 				// and use slurs in Pokémon nicknames.
-				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'iu');
+				regex = stripWordBoundaries(regex);
 			}
 
 			const match = regex.exec(lcName);
@@ -489,10 +495,14 @@ export const statusfilter: StatusFilter = (status, user) => {
 	if (!user.can('lock') && impersonationRegex.test(lcStatus)) return '';
 
 	for (const list in filterWords) {
-		if (Chat.monitors[list].location === 'BATTLES') continue;
+		const punishment = Chat.monitors[list].punishment;
 		for (const line of filterWords[list]) {
-			if (line.regex.test(lcStatus)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+			const regex = (punishment === 'EVASION' ? stripWordBoundaries(line.regex) : line.regex);
+			if (regex.test(lcStatus)) {
+				if (punishment === 'AUTOLOCK') {
+					// I'm only locking for true autolock phrases, not evasion of slurs
+					// because someone might understandably expect a popular slur to be
+					// already registered and therefore try to make the name different from the original slur.
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
 						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
