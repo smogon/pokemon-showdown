@@ -311,7 +311,6 @@
     {
       "files": ["build"],
       "rules": {
-        "strict": "off",
         "no-var": "off"
       }
     }
