@@ -866,6 +866,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		shortDesc: "If this Pokemon is at full HP, it survives one hit with at least 1 HP. Immune to OHKO.",
 		// Sturdy Innate
 		onTryHit(pokemon, target, move) {
+			if (target.illusion) return;
 			if (move.ohko) {
 				this.add('-immune', pokemon, '[from] ability: Sturdy');
 				return null;
@@ -873,6 +874,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onDamagePriority: -100,
 		onDamage(damage, target, source, effect) {
+			if (target.illusion) return;
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add('-ability', target, 'Sturdy');
 				return target.hp - 1;
