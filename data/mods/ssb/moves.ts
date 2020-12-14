@@ -1386,7 +1386,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				def: 1,
 			},
 		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onHit(pokemon, target, move) {
 			this.heal(pokemon.maxhp / 4, pokemon, pokemon, move);
 		},
 		secondary: null,
@@ -1531,7 +1531,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {heal: 1},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onHit(pokemon, target, move) {
 			this.heal(pokemon.maxhp / 2, pokemon, pokemon, move);
 		},
 		pseudoWeather: 'gravity',
