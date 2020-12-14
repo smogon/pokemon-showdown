@@ -62,7 +62,7 @@ export function constructEvasionRegex(str: string) {
 }
 
 export function stripWordBoundaries(regex: RegExp) {
-	return new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'iu');
+	return new RegExp(regex.toString().replace('/\\b', '').replace('\\b/iu', ''), 'iu');
 }
 
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {

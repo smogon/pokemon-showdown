@@ -23,8 +23,8 @@ describe('Chat monitor', () => {
 		});
 
 		it('should correctly strip word boundaries', () => {
-			const regex = /\btest\b/i;
-			assert.deepEqual(chatMonitor.stripWordBoundaries(regex), /test/i);
+			const regex = /\btest\b/iu;
+			assert.deepEqual(chatMonitor.stripWordBoundaries(regex), /test/iu);
 		});
 
 		describe('evasion regexes', () => {
