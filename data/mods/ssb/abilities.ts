@@ -742,7 +742,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.moves.includes(this.toID(coolMoves[0]))) {
 				oldMove = this.toID(coolMoves[0]);
 				move = this.dex.getMove(coolMoves[1]);
-			}	else if (pokemon.moves.includes(this.toID(coolMoves[1]))) {
+			} else if (pokemon.moves.includes(this.toID(coolMoves[1]))) {
 				oldMove = this.toID(coolMoves[1]);
 				move = this.dex.getMove(coolMoves[0]);
 			} else {
