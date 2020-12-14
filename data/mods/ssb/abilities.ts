@@ -139,9 +139,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (this.field.clearWeather()) successes++;
 			if (this.field.clearTerrain()) successes++;
 			const stats: BoostName[] = [];
-			let stat: BoostName;
 			const exclude: string[] = ['accuracy', 'evasion'];
 			for (let x = 0; x < successes; x++) {
+				let stat: BoostName;
 				for (stat in source.boosts) {
 					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
 						stats.push(stat);
@@ -871,7 +871,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (move.refrigerateBoosted) return;
 				const dmgMod = [1, 2, 3, 4, 5];
 				const numConsecutive = this.effectData.numConsecutive > 4 ? 4 : this.effectData.numConsecutive;
-				console.log(dmgMod[numConsecutive]);
 				return this.chainModify(dmgMod[numConsecutive]);
 			},
 		},

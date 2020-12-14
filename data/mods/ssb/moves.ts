@@ -461,6 +461,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.field.clearWeather();
 			this.field.clearTerrain();
+			for (const clear in this.field.pseudoWeather) {
+				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
+				this.field.removePseudoWeather(clear);
+			}
 		},
 		selfSwitch: true,
 		secondary: null,
