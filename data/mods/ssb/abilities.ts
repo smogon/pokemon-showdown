@@ -189,10 +189,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const setType = pokemon.moves.includes('shadowball') ? 'specially' : 'physically';
 			this.add('-message', `aegii currently has a ${setType} oriented set.`);
 		},
-		onModifyMove(move) {
-			move.stab = 2;
-		},
 		onModifyMove(move, attacker, defender) {
+			move.stab = 2;
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield' && move.id !== 'reset') return;
 			const targetForme = (move.id === 'kingsshield' || move.id === 'reset' ? 'Aegislash' : 'Aegislash-Blade');
