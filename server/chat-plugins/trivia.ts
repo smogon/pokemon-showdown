@@ -116,8 +116,9 @@ interface TriviaGame {
 type TriviaLadder = TriviaRank[][];
 
 interface TriviaData {
-	questions?: TriviaQuestion[];
-	submissions?: TriviaQuestion[];
+	/** category:questions */
+	questions?: {[k: string]: TriviaQuestion[]};
+	submissions?: {[k: string]: TriviaQuestion[]};
 	leaderboard?: TriviaLeaderboard;
 	altLeaderboard?: TriviaLeaderboard;
 	ladder?: TriviaLadder;
@@ -143,11 +144,29 @@ try {
 if (!triviaData || typeof triviaData !== 'object') triviaData = {};
 if (typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
 if (typeof triviaData.altLeaderboard !== 'object') triviaData.altLeaderboard = {};
-if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
-if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
-if (triviaData.questions.some(q => !('type' in q))) {
-	triviaData.questions = triviaData.questions.map(q => Object.assign(Object.create(null), q, {type: 'trivia'}));
+if (typeof triviaData.questions !== 'object') triviaData.questions = {};
+if (typeof triviaData.submissions !== 'object') triviaData.submissions = {};
+
+// Handle legacy question formats
+if (Array.isArray(triviaData.submissions)) {
+	const oldSubmissions = triviaData.submissions as TriviaQuestion[];
+	triviaData.submissions = {};
+
+	for (const question of oldSubmissions) {
+		if (!(question.category in triviaData.submissions)) triviaData.submissions[question.category] = [];
+		triviaData.submissions[question.category].push(question);
+	}
 }
+if (Array.isArray(triviaData.questions)) {
+	const oldSubmissions = triviaData.questions as TriviaQuestion[];
+	triviaData.questions = {};
+
+	for (const question of oldSubmissions) {
+		if (!(question.category in triviaData.questions)) triviaData.questions[question.category] = [];
+		triviaData.questions[question.category].push(question);
+	}
+}
+
 
 /** from:to Map */
 export const pendingAltMerges = new Map<ID, ID>();
@@ -187,52 +206,10 @@ export function writeTriviaData() {
 }
 
 /**
- * Binary search for the index at which to splice in new questions in a category,
- * or the index at which to slice up to for a category's questions
- * TODO: why isn't this a map? Storing questions/submissions sorted by
- * category is pretty stupid when maps exist for that purpose.
+ * @deprecated use triviaData.questions instead
  */
-function findEndOfCategory(category: string, inSubmissions = false) {
-	const questions = inSubmissions ? triviaData.submissions! : triviaData.questions!;
-	let left = 0;
-	let right = questions.length;
-	let i = 0;
-	let curCategory;
-	while (left < right) {
-		i = Math.floor((left + right) / 2);
-		curCategory = questions[i].category;
-		if (curCategory < category) {
-			left = i + 1;
-		} else if (curCategory > category) {
-			right = i;
-		} else {
-			while (++i < questions.length) {
-				if (questions[i].category !== category) break;
-			}
-			return i;
-		}
-	}
-
-	return left;
-}
-
 function sliceCategory(category: string): TriviaQuestion[] {
-	const questions = triviaData.questions;
-	if (!questions?.length) return [];
-
-	const sliceUpTo = findEndOfCategory(category, false);
-	if (!sliceUpTo) return [];
-
-	const categories = Object.keys(ALL_CATEGORIES);
-	const categoryIdx = categories.indexOf(category);
-	if (!categoryIdx) return questions.slice(0, sliceUpTo);
-
-	// findEndOfCategory for the category prior to the specified one in
-	// alphabetical order returns the index of the first question in it
-	const sliceFrom = findEndOfCategory(categories[categoryIdx - 1], false);
-	if (sliceFrom === sliceUpTo) return [];
-
-	return questions.slice(sliceFrom, sliceUpTo);
+	return triviaData.questions![category] || [];
 }
 
 /**
@@ -256,9 +233,9 @@ function getQuestions(category: ID): TriviaQuestion[] {
 		const randCategory = categories[Math.floor(Math.random() * categories.length)];
 		return sliceCategory(randCategory);
 	} else if (isAll) {
-		let questions = triviaData.questions!.slice();
-		for (const categoryStr in SPECIAL_CATEGORIES) {
-			questions = questions.filter(q => q.category !== categoryStr);
+		const questions: TriviaQuestion[] = [];
+		for (const categoryStr in MAIN_CATEGORIES) {
+			questions.push(...(triviaData.questions![categoryStr] || []));
 		}
 		return questions;
 	} else if (ALL_CATEGORIES[category]) {
@@ -1741,8 +1718,8 @@ const triviaCommands: ChatCommands = {
 				);
 				continue;
 			}
-			const subs = triviaData.submissions;
-			if (subs?.some(s => s.question === question) || subs?.some(q => q.question === question)) {
+			const subs = triviaData.submissions!;
+			if (subs[category].some(q => q.question === question)) {
 				this.errorReply(this.tr`Question "${question}" is already in the trivia database.`);
 				continue;
 			}
@@ -1771,12 +1748,12 @@ const triviaCommands: ChatCommands = {
 			};
 
 			if (cmd === 'add') {
-				triviaData.questions!.splice(findEndOfCategory(category, false), 0, entry);
+				triviaData.questions![category].push(entry);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `added '${param[1]}'`);
 				this.privateModAction(`Question '${param[1]}' was added to the question database by ${user.name}.`);
 			} else {
-				triviaData.submissions!.splice(findEndOfCategory(category, true), 0, entry);
+				triviaData.submissions![category].push(entry);
 				writeTriviaData();
 				if (!user.can('mute', null, room)) this.sendReply(`Question '${param[1]}' was submitted for review.`);
 				this.modlog('TRIVIAQUESTION', null, `submitted '${param[1]}'`);
@@ -1793,19 +1770,22 @@ const triviaCommands: ChatCommands = {
 
 		const submissions = triviaData.submissions;
 		if (!submissions) return this.sendReply(this.tr`No questions await review.`);
-		const submissionsLen = submissions.length;
-		if (!submissionsLen) return this.sendReply(this.tr`No questions await review.`);
 
-		let buffer = `|raw|<div class="ladder"><table>` +
-			`<tr><td colspan="6"><strong>${Chat.count(submissionsLen, "</strong> questions")} awaiting review:</td></tr>` +
-			`<tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th><th>${this.tr`Answer(s)`}</th><th>${this.tr`Submitted By`}</th></tr>`;
-
-		let i = 0;
-		while (i < submissionsLen) {
-			const entry = submissions[i];
-			buffer += `<tr><td><strong>${(++i)}</strong></td><td>${entry.category}</td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><td>${entry.user}</td></tr>`;
+		let innerBuffer = '';
+		let total = 0;
+		for (const category in submissions) {
+			for (const [i, entry] of submissions[category].entries()) {
+				total++;
+				innerBuffer += `<tr><td><strong>${i}</strong></td><td>${entry.category}</td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><td>${entry.user}</td></tr>`;
+			}
 		}
-		buffer += "</table></div>";
+		if (!innerBuffer) return this.sendReply(this.tr`No questions await review.`);
+
+		const buffer = `|raw|<div class="ladder"><table>` +
+			`<tr><td colspan="6"><strong>${Chat.count(total, "</strong> questions")} awaiting review:</td></tr>` +
+			`<tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th><th>${this.tr`Answer(s)`}</th><th>${this.tr`Submitted By`}</th></tr>` +
+			innerBuffer +
+			`</table></div>`;
 
 		this.sendReply(buffer);
 	},
@@ -1826,26 +1806,30 @@ const triviaCommands: ChatCommands = {
 
 		if (toID(target) === 'all') {
 			if (isAccepting) {
-				for (const submission of submissions) {
-					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
+				for (const category in submissions) {
+					questions[category].push(...submissions[category]);
 				}
 			}
 
-			triviaData.submissions = [];
+			triviaData.submissions = {};
 			writeTriviaData();
 			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
 			return this.privateModAction(`${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.`);
 		}
 
-		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
+		if (/\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
 			let indices = target.split(',');
+			const category = toID(indices.shift());
+			if (!submissions[category]) {
+				throw new Chat.ErrorMessage(`There are no submissions to the ${category} category.`);
+			}
 
 			// Parse number ranges and add them to the list of indices,
 			// then remove them in addition to entries that aren't valid index numbers
 			for (let i = indices.length; i--;) {
 				if (!indices[i].includes('-')) {
 					const index = Number(indices[i]);
-					if (Number.isInteger(index) && index > 0 && index <= submissions.length) {
+					if (Number.isInteger(index) && index > 0 && index <= submissions[category].length) {
 						indices[i] = String(index);
 					} else {
 						indices.splice(i, 1);
@@ -1857,7 +1841,7 @@ const triviaCommands: ChatCommands = {
 				const left = Number(range[0]);
 				let right = Number(range[1]);
 				if (!Number.isInteger(left) || !Number.isInteger(right) ||
-					left < 1 || right > submissions.length || left === right) {
+					left < 1 || right > submissions[category].length || left === right) {
 					indices.splice(i, 1);
 					continue;
 				}
@@ -1882,12 +1866,12 @@ const triviaCommands: ChatCommands = {
 
 			if (isAccepting) {
 				for (let i = indicesLen; i--;) {
-					const submission = submissions.splice(Number(indices[i]) - 1, 1)[0];
-					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
+					const submission = submissions[category].splice(Number(indices[i]) - 1, 1)[0];
+					questions[category].push(submission);
 				}
 			} else {
 				for (let i = indicesLen; i--;) {
-					submissions.splice(Number(indices[i]) - 1, 1);
+					submissions[category].splice(Number(indices[i]) - 1, 1);
 				}
 			}
 
@@ -1898,8 +1882,8 @@ const triviaCommands: ChatCommands = {
 
 		this.errorReply(this.tr`'${target}' is an invalid argument. View /trivia help questions for more information.`);
 	},
-	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`],
-	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`],
+	accepthelp: [`/trivia accept [category], [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`],
+	rejecthelp: [`/trivia reject [category], [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`],
 
 	delete(target, room, user) {
 		room = this.requireRoom('questionworkshop' as RoomID);
@@ -1914,14 +1898,15 @@ const triviaCommands: ChatCommands = {
 			return this.errorReply(this.tr`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 		}
 
-		const questions = triviaData.questions!;
 		const questionID = toID(question);
-		for (const [i, questionObj] of questions.entries()) {
-			if (toID(questionObj.question) === questionID) {
-				questions.splice(i, 1);
-				writeTriviaData();
-				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
-				return this.privateModAction(room.tr`${user.name} removed question '${target}' from the question database.`);
+		for (const category in triviaData.questions!) {
+			for (const [i, questionObj] of triviaData.questions[category].entries()) {
+				if (toID(questionObj.question) === questionID) {
+					triviaData.questions[category].splice(i, 1);
+					writeTriviaData();
+					this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
+					return this.privateModAction(room.tr`${user.name} removed question '${target}' from the question database.`);
+				}
 			}
 		}
 
@@ -1957,17 +1942,14 @@ const triviaCommands: ChatCommands = {
 				continue;
 			}
 
-			const questions = triviaData.questions!;
+			for (const cat in triviaData.questions!) {
+				const index = triviaData.questions[cat].findIndex(q => toID(q.question) === questionID);
+				if (index !== -1 && cat !== categoryID) {
+					const question = triviaData.questions[cat][index];
+					question.category = categoryID;
+					triviaData.questions[categoryID].push(question);
+					triviaData.questions[cat].splice(index, 1);
 
-			for (const [i, question] of questions.entries()) {
-				if (toID(question.question) === questionID) {
-					if (question.category === category) {
-						this.errorReply(this.tr`'${param[1].trim()}' is already in the category '${param[0].trim()}'.`);
-						break;
-					}
-					questions.splice(i, 1);
-					question.category = category;
-					questions.splice(findEndOfCategory(category, false), 0, question);
 					writeTriviaData();
 					this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' to '${param[0]}'`);
 					return this.privateModAction(
@@ -1990,18 +1972,17 @@ const triviaCommands: ChatCommands = {
 			if (!this.runBroadcast()) return false;
 
 			const questions = triviaData.questions!;
-			const questionsLen = questions.length;
-			if (!questionsLen) return this.sendReplyBox(this.tr`No questions have been submitted yet.`);
+			const totalQuestions = Object.values(questions).map(qs => qs.length).reduce((total, length) => total + length);
 
-			let lastCategoryIdx = 0;
+			if (!totalQuestions) return this.sendReplyBox(this.tr`No questions have been submitted yet.`);
+
 			buffer += `<tr><th>Category</th><th>${this.tr`Question Count`}</th></tr>`;
 			for (const category in ALL_CATEGORIES) {
 				if (category === 'random') continue;
-				const tally = findEndOfCategory(category, false) - lastCategoryIdx;
-				lastCategoryIdx += tally;
-				buffer += `<tr><td>${ALL_CATEGORIES[category]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
+				const tally = questions[category]?.length || 0;
+				buffer += `<tr><td>${ALL_CATEGORIES[category]}</td><td>${tally} (${((tally * 100) / totalQuestions).toFixed(2)}%)</td></tr>`;
 			}
-			buffer += `<tr><td><strong>${this.tr`Total`}</strong></td><td><strong>${questionsLen}</strong></td></table></div>`;
+			buffer += `<tr><td><strong>${this.tr`Total`}</strong></td><td><strong>${totalQuestions}</strong></td></table></div>`;
 
 			return this.sendReply(buffer);
 		}
@@ -2072,9 +2053,13 @@ const triviaCommands: ChatCommands = {
 			queryString = queryString.toLowerCase();
 			transformQuestion = (question: string) => question.toLowerCase();
 		}
-		const results = triviaData[type as 'questions' | 'submissions']!.filter(
-			q => transformQuestion(q.question).includes(queryString) && !SPECIAL_CATEGORIES[q.category]
-		);
+		const results: TriviaQuestion[] = [];
+		const data = triviaData[type as 'questions' | 'submissions'];
+		for (const category in data) {
+			results.push(...data[category].filter(
+				q => transformQuestion(q.question).includes(queryString) && !SPECIAL_CATEGORIES[q.category]
+			));
+		}
 		if (!results.length) return this.sendReply(this.tr`No results found under the ${type} list.`);
 
 		let buffer = `|raw|<div class="ladder"><table><tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th></tr>` +
@@ -2160,7 +2145,7 @@ const triviaCommands: ChatCommands = {
 		const category = CATEGORY_ALIASES[target] || target;
 		if (ALL_CATEGORIES[category]) {
 			if (SPECIAL_CATEGORIES[category]) {
-				triviaData.questions = triviaData.questions!.filter(q => q.category !== category);
+				triviaData.questions![category] = [];
 				writeTriviaData();
 				return this.privateModAction(room.tr`${user.name} removed all questions of category '${category}'.`);
 			} else {
@@ -2316,8 +2301,8 @@ const triviaCommands: ChatCommands = {
 				`<details><summary><strong>Question-modifying commands</strong></summary><ul>` +
 				`<li><code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # &</li>` +
 				`<li><code>/trivia review</code> - View the list of submitted questions. Requires: @ # &</li>` +
-				`<li><code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &</li>` +
-				`<li><code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &</li>` +
+				`<li><code>/trivia accept [category], [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &</li>` +
+				`<li><code>/trivia reject [category], [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &</li>` +
 				`<li><code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # &</li>` +
 				`<li><code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &</li>` +
 				`<li><code>/trivia move [category] | [question]</code> - Change the category of question in the trivia database. Requires: % @ # &</li>` +
