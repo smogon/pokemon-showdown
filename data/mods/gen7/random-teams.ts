@@ -1085,15 +1085,15 @@ export class RandomGen7Teams extends RandomTeams {
 				// Adjust rate for species with multiple sets
 				switch (species.baseSpecies) {
 				case 'Arceus': case 'Silvally':
-					if (this.randomChance(8, 9)) continue;
+					if (this.randomChance(8, 9) && !isMonotype) continue;
 					break;
 				case 'Oricorio':
 					if (this.randomChance(3, 4)) continue;
 					break;
-				case 'Castform':
+				case 'Castform': case 'Floette':
 					if (this.randomChance(2, 3)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
+				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
 				case 'Greninja':

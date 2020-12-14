@@ -64,9 +64,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		// These moves can be used even if we aren't setting up to use them:
 		const SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'suckerpunch', 'superpower', 'dracometeor'];
 
-		const counterAbilities = ['Adaptability', 'Contrary', 'Iron Fist', 'Skill Link', 'Strong Jaw'];
-		const ateAbilities = ['Aerilate', 'Pixilate', 'Refrigerate'];
-
 		let hasMove: {[k: string]: boolean} = {};
 		let counter;
 
@@ -591,10 +588,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				rejectAbility = false;
 				if (['Flare Boost', 'Gluttony', 'Moody'].includes(ability)) {
 					rejectAbility = true;
-				} else if (counterAbilities.includes(ability)) {
-					// Adaptability, Contrary, Iron Fist, Skill Link, Strong Jaw
+				} else if (['Adaptability', 'Contrary', 'Iron Fist', 'Skill Link', 'Strong Jaw'].includes(ability)) {
 					rejectAbility = !counter[toID(ability)];
-				} else if (ateAbilities.includes(ability)) {
+				} else if (['Aerilate', 'Pixilate', 'Refrigerate'].includes(ability)) {
 					rejectAbility = !counter['Normal'];
 				} else if (ability === 'Battle Armor' || ability === 'Sturdy') {
 					rejectAbility = (!!counter['recoil'] && !counter['recovery']);

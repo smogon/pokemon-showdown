@@ -307,6 +307,12 @@
         "mocha": true
       },
       "files": ["test/**/*.js"]
+    },
+    {
+      "files": ["build"],
+      "rules": {
+        "no-var": "off"
+      }
     }
   ]
 }
