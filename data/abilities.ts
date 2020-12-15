@@ -4080,8 +4080,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 260,
 	},
 	victorystar: {
-		onAllyModifyAccuracyPriority: -1,
-		onAllyModifyAccuracy(accuracy) {
+		onFoeModifyAccuracyPriority: -1,
+		onFoeModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			return this.chainModify([0x119A, 0x1000]);
 		},

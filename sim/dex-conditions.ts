@@ -527,7 +527,6 @@ export interface EventMethods {
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAllyBasePowerPriority?: number;
-	onAllyModifyAccuracyPriority?: number;
 	onAllyModifyAtkPriority?: number;
 	onAllyModifySpAPriority?: number;
 	onAllyModifySpDPriority?: number;
@@ -541,6 +540,7 @@ export interface EventMethods {
 	onEffectivenessPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
+	onFoeModifyAccuracyPriority?: number;
 	onFoeModifyDefPriority?: number;
 	onFoeRedirectTargetPriority?: number;
 	onFoeTrapPokemonPriority?: number;
