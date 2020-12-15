@@ -45,7 +45,7 @@ describe("Accuracy", function () {
 		battle.makeChoices();
 	});
 
-	it.only(`should chain modifiers in order of the Pokemon's raw speed`, function () {
+	it(`should chain modifiers in order of the Pokemon's raw speed`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Mewtwo', ability: 'victorystar', moves: ['gravity', 'sleeptalk', 'sandattack']},
 			{species: 'Charizard', ability: 'compoundeyes', moves: ['sleeptalk', 'fireblast']},
