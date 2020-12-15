@@ -984,7 +984,7 @@ export class CommandContext extends MessageContext {
 				}
 				if (targetUser.settings.blockPMs &&
 					(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockPMs)) &&
-					!user.can('lock') && targetUser.id != user.id) {
+					!user.can('lock') && targetUser.id !== user.id) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						throw new Chat.ErrorMessage(this.tr`This user is blocking private messages right now.`);
@@ -994,8 +994,8 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock')
-					&& targetUser.id != user.id) {
+					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock') &&
+					targetUser.id !== user.id) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
 			}
