@@ -28,7 +28,7 @@ describe("Accuracy", function () {
 		]);
 
 		battle.onEvent('Accuracy', battle.format, function (accuracy) {
-			assert.equal(accuracy, 94, 'Victory Star Fire Blast should be 93% accurate');
+			assert.equal(accuracy, 94, 'Victory Star Fire Blast should be 94% accurate');
 		});
 
 		battle.makeChoices();
@@ -39,7 +39,7 @@ describe("Accuracy", function () {
 		]);
 
 		battle.onEvent('Accuracy', battle.format, function (accuracy) {
-			assert.equal(accuracy, 93, 'Wide Lens Fire Blast should be 94% accurate');
+			assert.equal(accuracy, 93, 'Wide Lens Fire Blast should be 93% accurate');
 		});
 
 		battle.makeChoices();
