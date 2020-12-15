@@ -12,7 +12,7 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Even
 	name: string;
 }
 
-export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true, gen?: number};
+export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	readonly effectType: 'Ability';
