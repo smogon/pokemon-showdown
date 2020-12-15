@@ -933,7 +933,7 @@ export class FirstModeTrivia extends Trivia {
 		}
 
 		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
-		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
+		this.setAskTimeout();
 	}
 
 	calculatePoints() {
