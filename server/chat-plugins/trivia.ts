@@ -1718,9 +1718,12 @@ const triviaCommands: ChatCommands = {
 				);
 				continue;
 			}
-			const subs = triviaData.submissions!;
-			if (subs[category].some(q => q.question === question)) {
-				this.errorReply(this.tr`Question "${question}" is already in the trivia database.`);
+
+			if (
+				triviaData.questions![category]?.some(q => q.question === question) ||
+				triviaData.submissions![category]?.some(q => q.question === question)
+			) {
+				this.errorReply(this.tr`Question "${question}" is already awaiting review.`);
 				continue;
 			}
 
@@ -1748,11 +1751,13 @@ const triviaCommands: ChatCommands = {
 			};
 
 			if (cmd === 'add') {
+				if (!triviaData.questions![category]) triviaData.questions![category] = [];
 				triviaData.questions![category].push(entry);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `added '${param[1]}'`);
 				this.privateModAction(`Question '${param[1]}' was added to the question database by ${user.name}.`);
 			} else {
+				if (!triviaData.submissions![category]) triviaData.submissions![category] = [];
 				triviaData.submissions![category].push(entry);
 				writeTriviaData();
 				if (!user.can('mute', null, room)) this.sendReply(`Question '${param[1]}' was submitted for review.`);
