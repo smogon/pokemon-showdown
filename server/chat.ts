@@ -995,7 +995,7 @@ export class CommandContext extends MessageContext {
 				}
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
 					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock')
-					&& targetUser.id != user.id)) {
+					&& targetUser.id != user.id) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
 			}
