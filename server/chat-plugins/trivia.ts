@@ -1781,7 +1781,7 @@ const triviaCommands: ChatCommands = {
 		for (const category in submissions) {
 			for (const [i, entry] of submissions[category].entries()) {
 				total++;
-				innerBuffer += `<tr><td><strong>${i}</strong></td><td>${entry.category}</td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><td>${entry.user}</td></tr>`;
+				innerBuffer += `<tr><td><strong>${i + 1}</strong></td><td>${entry.category}</td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><td>${entry.user}</td></tr>`;
 			}
 		}
 		if (!innerBuffer) return this.sendReply(this.tr`No questions await review.`);
