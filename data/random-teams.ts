@@ -1236,6 +1236,7 @@ export class RandomTeams {
 				if (hasAbility['Gluttony'] && hasMove['recycle']) ability = 'Gluttony';
 				if (hasAbility['Guts']) ability = 'Guts';
 				if (hasAbility['Harvest']) ability = 'Harvest';
+				if (hasAbility['Healer'] && hasAbility['Natural Cure']) ability = 'Healer';
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
 				if (hasAbility['Klutz'] && ability === 'Limber') ability = 'Klutz';
 				if (hasAbility['Magic Guard'] && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';

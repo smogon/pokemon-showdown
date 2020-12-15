@@ -74,7 +74,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'bellydrum': case 'curse': case 'meditate': case 'screech': case 'swordsdance':
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					if (!counter['Physical'] || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
-					if (moveid === 'curse' && hasMove['icebeam'] && hasMove['sleeptalk']) rejected = true;
 					isSetup = true;
 					break;
 
@@ -117,7 +116,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['rockslide']) rejected = true;
 					break;
 				case 'quickattack': case 'selfdestruct':
-					if (hasMove['rest'] || hasMove['sleeptalk']) rejected = true;
+					if (hasMove['rest']) rejected = true;
 					break;
 				case 'rapidspin':
 					if (teamDetails['rapidSpin'] || hasMove['sleeptalk']) rejected = true;
@@ -144,10 +143,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['explosion']) rejected = true;
 					break;
 				case 'pursuit':
-					if (hasMove['crunch'] && movePool.includes('sunnyday')) rejected = true;
+					if (hasMove['crunch'] && hasMove['solarbeam']) rejected = true;
 					break;
 				case 'thief':
 					if (hasMove['rest'] || hasMove['substitute']) rejected = true;
+					break;
+				case 'irontail':
+					if (hasType['Ground'] && movePool.includes('earthquake')) rejected = true;
 					break;
 
 				// Status and illegal move rejections
@@ -159,6 +161,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 				case 'lovelykiss':
 					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'sleeptalk':
+					if (hasMove['curse'] && counter.stab >= 2) rejected = true;
 					break;
 				case 'softboiled':
 					if (movePool.includes('swordsdance')) rejected = true;
@@ -182,7 +187,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'spikes'].includes(moveid)) &&
+				if ((!rejected && !isSetup && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'spikes', 'sunnyday'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
