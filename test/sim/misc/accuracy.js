@@ -45,7 +45,7 @@ describe("Accuracy", function () {
 		battle.makeChoices();
 	});
 
-	it(`should chain modifiers in order of the Pokemon's raw speed`, function () {
+	it.only(`should chain modifiers in order of the Pokemon's raw speed`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Mewtwo', ability: 'victorystar', moves: ['gravity', 'sleeptalk', 'sandattack']},
 			{species: 'Charizard', ability: 'compoundeyes', moves: ['sleeptalk', 'fireblast']},
@@ -59,7 +59,26 @@ describe("Accuracy", function () {
 
 		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
 			if (move.id !== 'fireblast') return;
-			assert.equal(accuracy, 52);
+			assert.equal(accuracy, 51);
+		});
+
+		battle.makeChoices('move gravity, move fire blast 1', 'move sleeptalk, move sleeptalk');
+
+		// Changing the Pokemon's Speeds around changes the chaining order, which affects the result
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Bonsly', ability: 'victorystar', moves: ['gravity', 'sleeptalk', 'sandattack']},
+			{species: 'Charizard', ability: 'compoundeyes', moves: ['sleeptalk', 'fireblast']},
+		], [
+			{species: 'Mewtwo', ability: 'tangledfeet', moves: ['doubleteam', 'sleeptalk']},
+			{species: 'Pyukumuku', ability: 'noguard', moves: ['confuseray', 'sandattack', 'sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
+		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
+
+		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+			if (move.id !== 'fireblast') return;
+			assert.equal(accuracy, 50);
 		});
 
 		battle.makeChoices('move gravity, move fire blast 1', 'move sleeptalk, move sleeptalk');
