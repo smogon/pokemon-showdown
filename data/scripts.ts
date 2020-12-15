@@ -464,9 +464,9 @@ export const Scripts: BattleScriptsData = {
 						boost = this.clampIntRange(boost - boosts['evasion'], -6, 6);
 					}
 					if (boost > 0) {
-						accuracy = this.trunc(accuracy * (boost + 3) / 3);
+						accuracy = this.trunc(accuracy * (3 + boost) / 3);
 					} else if (boost < 0) {
-						accuracy = this.trunc(accuracy * 3 / (boost + 3));
+						accuracy = this.trunc(accuracy * 3 / (3 - boost));
 					}
 				}
 			}
