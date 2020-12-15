@@ -527,6 +527,7 @@ export interface EventMethods {
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAllyBasePowerPriority?: number;
+	onAllyModifyAccuracyPriority?: number;
 	onAllyModifyAtkPriority?: number;
 	onAllyModifySpAPriority?: number;
 	onAllyModifySpDPriority?: number;
