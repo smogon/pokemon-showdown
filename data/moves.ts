@@ -7296,6 +7296,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 			},
+			onModifyMove(move, pokemon, target) {
+				if (move.flags['gravity'] && !move.isZ) {
+					this.add('cant', pokemon, 'move: Gravity', move);
+					return false;
+				}
+			},
 			onResidualOrder: 22,
 			onEnd() {
 				this.add('-fieldend', 'move: Gravity');
@@ -7735,6 +7741,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
+				if (move.flags['heal'] && !move.isZ && !move.isMax) {
+					this.add('cant', pokemon, 'move: Heal Block', move);
+					return false;
+				}
+			},
+			onModifyMove(move, pokemon, target) {
 				if (move.flags['heal'] && !move.isZ && !move.isMax) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
@@ -18037,6 +18049,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
+				if (!move.isZ && !move.isMax && move.flags['sound']) {
+					this.add('cant', pokemon, 'move: Throat Chop');
+					return false;
+				}
+			},
+			onModifyMove(move, pokemon, target) {
 				if (!move.isZ && !move.isMax && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
