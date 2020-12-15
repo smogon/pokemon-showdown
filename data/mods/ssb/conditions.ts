@@ -750,7 +750,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSwitchOut() {
 			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
 			this.add(`c|${getName('INStruct')}|you know, why do you always flood my dms?`);
-			this.add(`c|${getName('INStruct')}|whatever im gonna get smth to eat`);
+			this.add(`c|${getName('INStruct')}|whatever im gonna get smth to drink`);
 		},
 		onFaint() {
 			this.add(`c|${getName('INStruct')}|WHAT A HORRIBLE NIGHT TO BE YOU, HOLY SHIT, HAHAHAHAHAHAHA`);
