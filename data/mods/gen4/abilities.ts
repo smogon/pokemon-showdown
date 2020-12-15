@@ -44,6 +44,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onAfterMoveSecondary() {},
 	},
+	compoundeyes: {
+		onSourceModifyAccuracyPriority: 9,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('compoundeyes - enhancing accuracy');
+			return accuracy * 1.3;
+		},
+		inherit: true,
+	},
 	cutecharm: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -145,6 +154,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!warnMoves.length) return;
 			const warnMove = this.sample(warnMoves);
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
+		},
+	},
+	hustle: {
+		inherit: true,
+		onSourceModifyAccuracyPriority: 7,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (move.category === 'Physical' && typeof accuracy === 'number') {
+				return accuracy * 0.8;
+			}
 		},
 	},
 	insomnia: {
@@ -313,6 +331,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	sandveil: {
+		inherit: true,
+		onModifyAccuracyPriority: 8,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isWeather('sandstorm')) {
+				this.debug('Sand Veil - decreasing accuracy');
+				return accuracy * 0.8;
+			}
+		},
+	},
 	serenegrace: {
 		inherit: true,
 		onModifyMove(move) {
@@ -335,8 +364,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 86,
 	},
-	soundproof: {
+	snowcloak: {
 		inherit: true,
+		onModifyAccuracyPriority: 8,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isWeather('hail')) {
+				this.debug('Snow Cloak - decreasing accuracy');
+				return accuracy * 0.8;
+			}
+		},
 	},
 	static: {
 		inherit: true,
@@ -394,6 +431,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
 			source.trySetStatus(id, target);
+		},
+	},
+	tangledfeet: {
+		inherit: true,
+		onModifyAccuracyPriority: 6,
+		onModifyAccuracy(accuracy, target) {
+			if (typeof accuracy !== 'number') return;
+			if (target?.volatiles['confusion']) {
+				this.debug('Tangled Feet - decreasing accuracy');
+				return accuracy * 0.5;
+			}
 		},
 	},
 	thickfat: {

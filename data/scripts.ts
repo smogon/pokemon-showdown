@@ -452,31 +452,23 @@ export const Scripts: BattleScriptsData = {
 					}
 				}
 			} else {
-				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
-
-				let boosts;
-				let boost!: number;
+				accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 				if (accuracy !== true) {
+					let boost = 0;
 					if (!move.ignoreAccuracy) {
-						boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 						boost = this.clampIntRange(boosts['accuracy'], -6, 6);
-						if (boost > 0) {
-							accuracy *= boostTable[boost];
-						} else {
-							accuracy /= boostTable[-boost];
-						}
 					}
 					if (!move.ignoreEvasion) {
-						boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
-						boost = this.clampIntRange(boosts['evasion'], -6, 6);
-						if (boost > 0) {
-							accuracy /= boostTable[boost];
-						} else if (boost < 0) {
-							accuracy *= boostTable[-boost];
-						}
+						const boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+						boost = this.clampIntRange(boost - boosts['evasion'], -6, 6);
+					}
+					if (boost > 0) {
+						accuracy = this.trunc(accuracy * (3 + boost) / 3);
+					} else if (boost < 0) {
+						accuracy = this.trunc(accuracy * 3 / (3 - boost));
 					}
 				}
-				accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 			}
 			if (move.alwaysHit || (move.id === 'toxic' && this.gen >= 6 && pokemon.hasType('Poison'))) {
 				accuracy = true; // bypasses ohko accuracy modifiers
