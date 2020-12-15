@@ -524,6 +524,7 @@ export interface EventMethods {
 	onAfterMoveSelfPriority?: number;
 	onAnyBasePowerPriority?: number;
 	onAnyInvulnerabilityPriority?: number;
+	onAnyModifyAccuracyPriority?: number;
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAllyBasePowerPriority?: number;
