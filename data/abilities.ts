@@ -4080,10 +4080,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 260,
 	},
 	victorystar: {
-		onFoeModifyAccuracyPriority: -1,
-		onFoeModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			return this.chainModify([0x119A, 0x1000]);
+		onAnyModifyAccuracyPriority: -1,
+		onAnyModifyAccuracy(accuracy, target, source) {
+			if (source.side === this.effectData.target.side && typeof accuracy === 'number') {
+				return this.chainModify([0x119A, 0x1000]);
+			}
 		},
 		name: "Victory Star",
 		rating: 2,

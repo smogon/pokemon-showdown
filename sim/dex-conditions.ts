@@ -524,6 +524,7 @@ export interface EventMethods {
 	onAfterMoveSelfPriority?: number;
 	onAnyBasePowerPriority?: number;
 	onAnyInvulnerabilityPriority?: number;
+	onAnyModifyAccuracyPriority?: number;
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAllyBasePowerPriority?: number;
@@ -540,7 +541,6 @@ export interface EventMethods {
 	onEffectivenessPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
-	onFoeModifyAccuracyPriority?: number;
 	onFoeModifyDefPriority?: number;
 	onFoeRedirectTargetPriority?: number;
 	onFoeTrapPokemonPriority?: number;
