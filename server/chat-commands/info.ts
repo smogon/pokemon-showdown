@@ -1689,6 +1689,8 @@ export const commands: ChatCommands = {
 		);
 	},
 
+	suggest: 'suggestions',
+	suggestion: 'suggestions',
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
