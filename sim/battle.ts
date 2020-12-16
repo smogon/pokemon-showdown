@@ -1325,6 +1325,8 @@ export class Battle {
 		if (isDrag && this.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
 			this.runSwitch(pokemon);
+		} else if (pokemon.getAbility().setsWeather) {
+			this.queue.insertChoice({choice: 'runSwitch', pokemon}, false, true);
 		} else {
 			this.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}

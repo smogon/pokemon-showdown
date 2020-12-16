@@ -816,6 +816,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Drizzle",
 		rating: 4,
 		num: 2,
+		setsWeather: true,
 	},
 	drought: {
 		onStart(source) {
@@ -828,6 +829,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Drought",
 		rating: 4,
 		num: 70,
+		setsWeather: true,
 	},
 	dryskin: {
 		onTryHit(target, source, move) {
@@ -887,6 +889,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Electric Surge",
 		rating: 4,
 		num: 226,
+		setsWeather: true,
 	},
 	emergencyexit: {
 		onEmergencyExit(target) {
@@ -1288,6 +1291,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Grassy Surge",
 		rating: 4,
 		num: 229,
+		setsWeather: true,
 	},
 	grimneigh: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -2091,6 +2095,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Misty Surge",
 		rating: 3.5,
 		num: 228,
+		setsWeather: true,
 	},
 	moldbreaker: {
 		onStart(pokemon) {
@@ -2788,6 +2793,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Psychic Surge",
 		rating: 4,
 		num: 227,
+		setsWeather: true,
 	},
 	punkrock: {
 		onBasePowerPriority: 7,
@@ -3071,6 +3077,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sand Stream",
 		rating: 4,
 		num: 45,
+		setsWeather: true,
 	},
 	sandveil: {
 		onImmunity(type, pokemon) {
@@ -3419,6 +3426,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Snow Warning",
 		rating: 4,
 		num: 117,
+		setsWeather: true,
 	},
 	solarpower: {
 		onModifySpAPriority: 5,
