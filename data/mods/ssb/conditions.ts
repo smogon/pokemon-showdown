@@ -749,13 +749,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('INStruct')}|you know, why do you always flood my dms?`);
-			this.add(`c|${getName('INStruct')}|whatever im gonna get smth to drink`);
+			this.add(`c|${getName('INStruct')}|ya know, why __do__ you always flood my dms?`);
+			this.add(`c|${getName('INStruct')}|whatever im just gonna go get smth to drink`);
 		},
 		onFaint() {
 			this.add(`c|${getName('INStruct')}|WHAT A HORRIBLE NIGHT TO BE YOU, HOLY SHIT, HAHAHAHAHAHAHA`);
 		},
-		innateName: "Extinction Level Event",
+		innateName: "Last Laugh",
 		desc: "Upon fainting, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
 		shortDesc: "Upon fainting, deal 50% of their max HP to all foes that this Pokemon contacted.",
 		// Extinction Level Event Innate
@@ -779,7 +779,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				for (const foe of source.side.pokemon) {
 					if (foe.fainted || !foe.hp) continue;
 					if (!foe.m.marked) continue;
-					this.add('-activate', target, 'ability: Extinction Level Event');
+					this.add('-activate', target, 'ability: Last Laugh');
 					let collateral = this.clampIntRange(foe.baseMaxhp / 2, 1);
 					this.add('-message', `${foe.name} became insane and attacked themselves!`);
 					if (collateral >= foe.hp) collateral = foe.hp - 1;

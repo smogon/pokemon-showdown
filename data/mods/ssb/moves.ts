@@ -2194,13 +2194,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Instruct
-	addictedtoyourdistance: {
+	cokebreak: {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
 		desc: "Has a 100% chance to make the target flinch. Causes the user to switch out. Fails unless it is the user's first turn on the field.",
 		shortDesc: "First turn: Flinches the target then switches out.",
-		name: "Addicted To Your Distance",
+		name: "Coke Break",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -2210,13 +2210,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Fake Out', target);
+			this.add('-anim', source, 'Milk Drink', source);
+			this.add('-anim', source, 'Fling', target);
+			this.add('-anim', source, 'U-turn', target);
 		},
 		onTry(pokemon, target) {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("Addicted To Your Distance can only works on your first turn out.");
+				this.hint("Coke Break can only works on your first turn out.");
 				return null;
 			}
 		},
