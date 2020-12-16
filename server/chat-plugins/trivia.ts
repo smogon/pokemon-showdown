@@ -1442,8 +1442,13 @@ export class MastermindRound extends FirstModeTrivia {
 		return;
 	}
 	start(): string | undefined {
-		const player = Utils.escapeHTML(this.players[0]?.name || '');
-		broadcast(this.room, this.room.tr`A Mastermind round in the ${this.game.category} category for ${player} is starting!`);
+		const player = Object.values(this.playerTable)[0];
+		const name = Utils.escapeHTML(player.name);
+		broadcast(this.room, this.room.tr`A Mastermind round in the ${this.game.category} category for ${name} is starting!`);
+		player.sendRoom(
+			`|tempnotify|mastermind|Your Mastermind round is starting|Your round of Mastermind is starting in the Trivia room.`
+		);
+
 		this.phase = INTERMISSION_PHASE;
 		// Use the regular start timeout since there are many players
 		this.setPhaseTimeout(() => this.askQuestion(), MASTERMIND_FINALS_START_TIMEOUT);
