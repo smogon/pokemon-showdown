@@ -412,6 +412,10 @@ export const commands: ChatCommands = {
 	j: 'join',
 	async join(target, room, user, connection) {
 		if (!target) return this.parse('/help join');
+		const curRooms = [...Rooms.rooms.values()].filter(r => user.id in r.users);
+		if (!user.can('altsself') && curRooms.length >= 50) {
+			return this.errorReply(`You can only join 50 rooms at a time.`);
+		}
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
