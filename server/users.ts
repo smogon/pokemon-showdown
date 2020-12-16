@@ -316,11 +316,6 @@ export interface UserSettings {
 // User
 export class User extends Chat.MessageContext {
 	readonly user: User;
-	readonly inRooms: Set<RoomID>;
-	/**
-	 * Set of room IDs
-	 */
-	readonly games: Set<RoomID>;
 	mmrCache: {[format: string]: number};
 	guestNum: number;
 	name: string;
@@ -393,8 +388,6 @@ export class User extends Chat.MessageContext {
 	constructor(connection: Connection) {
 		super(connection.user);
 		this.user = this;
-		this.inRooms = new Set();
-		this.games = new Set();
 		this.mmrCache = Object.create(null);
 		this.guestNum = -1;
 		this.name = "";
@@ -586,7 +579,7 @@ export class User extends Chat.MessageContext {
 		if (roomid) {
 			return Rooms.get(roomid)!.onUpdateIdentity(this);
 		}
-		for (const inRoomID of this.inRooms) {
+		for (const inRoomID of this.getRooms()) {
 			Rooms.get(inRoomID)!.onUpdateIdentity(this);
 		}
 	}
@@ -675,13 +668,8 @@ export class User extends Chat.MessageContext {
 	async rename(name: string, token: string, newlyRegistered: boolean, connection: Connection) {
 		let userid = toID(name);
 		if (userid !== this.id) {
-			for (const roomid of this.games) {
-				const room = Rooms.get(roomid);
-				if (!room || !room.game || room.game.ended) {
-					this.games.delete(roomid);
-					console.log(`desynced roomgame ${roomid} renaming ${this.id} -> ${userid}`);
-					continue;
-				}
+			for (const room of Rooms.rooms.values()) {
+				if (!room || !room.game || room.game.ended) continue;
 				if (room.game.allowRenames || !this.named) continue;
 				this.popup(`You can't change your name right now because you're in ${room.game.title}, which doesn't allow renaming.`);
 				return false;
@@ -878,22 +866,10 @@ export class User extends Chat.MessageContext {
 			// console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
 			connection.send(this.getUpdateuserText());
 		}
-		for (const roomid of this.games) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				Monitor.warn(`while renaming, room ${roomid} expired for user ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
-				this.games.delete(roomid);
-				continue;
-			}
-			if (!room.game) {
-				Monitor.warn(`game desync for user ${this.id} in room ${room.roomid}`);
-				this.games.delete(roomid);
-				continue;
-			}
+		for (const room of Rooms.rooms.values()) {
+			room.onRename(this, oldid, joining);
+			if (!room.game || !room.game.playerTable[this.id]) continue;
 			room.game.onRename(this, oldid, joining, isForceRenamed);
-		}
-		for (const roomid of this.inRooms) {
-			Rooms.get(roomid)!.onRename(this, oldid, joining);
 		}
 		if (isForceRenamed) this.trackRename = oldname;
 		return true;
@@ -926,8 +902,10 @@ export class User extends Chat.MessageContext {
 	 */
 	merge(oldUser: User) {
 		oldUser.cancelReady();
-		for (const roomid of oldUser.inRooms) {
-			Rooms.get(roomid)!.onLeave(oldUser);
+		for (const room of Rooms.rooms.values()) {
+			if (oldUser.id in room.users) {
+				room.onLeave(oldUser);
+			}
 		}
 
 		const oldLocked = this.locked;
@@ -966,7 +944,6 @@ export class User extends Chat.MessageContext {
 		for (const connection of oldUser.connections) {
 			this.mergeConnection(connection);
 		}
-		oldUser.inRooms.clear();
 		oldUser.connections = [];
 
 		if (oldUser.chatQueue) {
@@ -1015,7 +992,7 @@ export class User extends Chat.MessageContext {
 		connection.user = this;
 		for (const roomid of connection.inRooms) {
 			const room = Rooms.get(roomid)!;
-			if (!this.inRooms.has(roomid)) {
+			if (!(this.id in room.users)) {
 				if (Punishments.checkNameInRoom(this, room.roomid)) {
 					// the connection was in a room that this user is banned from
 					connection.sendTo(room.roomid, `|deinit`);
@@ -1023,7 +1000,6 @@ export class User extends Chat.MessageContext {
 					continue;
 				}
 				room.onJoin(this, connection);
-				this.inRooms.add(roomid);
 			}
 			if (room.game && room.game.onUpdateConnection) {
 				// Yes, this is intentionally supposed to call onConnect twice
@@ -1033,6 +1009,15 @@ export class User extends Chat.MessageContext {
 			}
 		}
 		this.updateReady(connection);
+	}
+	getRooms() {
+		const rooms = new Set<RoomID>();
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.users[this.id]) {
+				rooms.add(curRoom.roomid);
+			}
+		}
+		return rooms;
 	}
 	debugData() {
 		let str = `${this.tempGroup}${this.name} (${this.id})`;
@@ -1175,13 +1160,13 @@ export class User extends Chat.MessageContext {
 			}
 		}
 		if (!this.connections.length) {
-			for (const roomid of this.inRooms) {
-				// should never happen.
-				Monitor.debug(`!! room miscount: ${roomid} not left`);
-				Rooms.get(roomid)!.onLeave(this);
+			for (const room of Rooms.rooms.values()) {
+				if (this.id in room.users) {
+					// should never happen.
+					Monitor.debug(`!! room miscount: ${room.roomid} not left`);
+					room.onLeave(this);
+				}
 			}
-			// cleanup
-			this.inRooms.clear();
 			if (!this.named && !this.previousIDs.length) {
 				// user never chose a name (and therefore never talked/battled)
 				// there's no need to keep track of this user, so we can
@@ -1209,11 +1194,11 @@ export class User extends Chat.MessageContext {
 			// should never happen
 			throw new Error(`Failed to drop all connections for ${this.id}`);
 		}
-		for (const roomid of this.inRooms) {
-			// should never happen.
-			throw new Error(`Room miscount: ${roomid} not left for ${this.id}`);
+		for (const room of Rooms.rooms.values()) {
+			if (this.id in room.users) {
+				throw new Error(`Room miscount: ${room.roomid} not left for ${this.id}`);
+			}
 		}
-		this.inRooms.clear();
 	}
 	/**
 	 * If this user is included in the returned list of
@@ -1297,8 +1282,7 @@ export class User extends Chat.MessageContext {
 			return;
 		}
 		if (!connection.inRooms.has(room.roomid)) {
-			if (!this.inRooms.has(room.roomid)) {
-				this.inRooms.add(room.roomid);
+			if (!(this.id in room.users)) {
 				room.onJoin(this, connection);
 			}
 			connection.joinRoom(room);
@@ -1307,7 +1291,7 @@ export class User extends Chat.MessageContext {
 	}
 	leaveRoom(room: Room | string, connection: Connection | null = null) {
 		room = Rooms.get(room)!;
-		if (!this.inRooms.has(room.roomid)) {
+		if (!(this.id in room.users)) {
 			return false;
 		}
 		for (const curConnection of this.connections) {
@@ -1326,7 +1310,6 @@ export class User extends Chat.MessageContext {
 		}
 		if (!stillInRoom) {
 			room.onLeave(this);
-			this.inRooms.delete(room.roomid);
 		}
 	}
 
@@ -1339,8 +1322,7 @@ export class User extends Chat.MessageContext {
 		}
 		// cancel tour challenges
 		// no need for a popup because users can't change their name while in a tournament anyway
-		for (const roomid of this.games) {
-			const room = Rooms.get(roomid);
+		for (const room of Rooms.rooms.values()) {
 			// @ts-ignore Tournaments aren't TS'd yet
 			if (room.game && room.game.cancelChallenge) room.game.cancelChallenge(this);
 		}
@@ -1357,8 +1339,6 @@ export class User extends Chat.MessageContext {
 	 * This function's main use case is for when a room is renamed.
 	 */
 	moveConnections(oldRoomID: RoomID, newRoomID: RoomID) {
-		this.inRooms.delete(oldRoomID);
-		this.inRooms.add(newRoomID);
 		for (const connection of this.connections) {
 			connection.inRooms.delete(oldRoomID);
 			connection.inRooms.add(newRoomID);
@@ -1489,20 +1469,9 @@ export class User extends Chat.MessageContext {
 	}
 	destroy() {
 		// deallocate user
-		for (const roomid of this.games) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				Monitor.warn(`while deallocating, room ${roomid} did not exist for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
-				this.games.delete(roomid);
-				continue;
-			}
+		for (const room of Rooms.rooms.values()) {
 			const game = room.game;
-			if (!game) {
-				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
-				this.games.delete(roomid);
-				continue;
-			}
-			if (game.ended) continue;
+			if (!game || game.ended) continue;
 			if (game.forfeit) game.forfeit(this);
 		}
 		this.clearChatQueue();
@@ -1532,7 +1501,7 @@ function pruneInactive(threshold: number) {
 			const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
 			const bypass = !user.can('bypassall') && (
 				user.can('bypassafktimer') ||
-				Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, Rooms.get(room)!))
+				[...Rooms.rooms.values()].some(room => user.can('bypassafktimer', null, room))
 			);
 			if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 				user.setStatusType('idle');

@@ -1177,7 +1177,8 @@ export const commands: ChatCommands = {
 		const name = this.targetUsername;
 
 		if (!targetUser) return this.errorReply(this.tr`User ${name} not found.`);
-		if (!targetUser.inRooms.has(room.roomid)) {
+		const targetRooms = targetUser.getRooms();
+		if (!targetRooms.has(room.roomid)) {
 			return this.errorReply(this.tr`User ${name} must be in the battle room already.`);
 		}
 		this.checkCan('joinbattle', null, room);
@@ -1532,12 +1533,12 @@ export const commands: ChatCommands = {
 			}
 			interface RoomData {p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice'}
 			let roomList: {[roomid: string]: RoomData} | false = {};
-			for (const roomid of targetUser.inRooms) {
-				const targetRoom = Rooms.get(roomid);
-				if (!targetRoom) continue; // shouldn't happen
+			const targetRooms = [...Rooms.rooms.values()].filter(cur => targetUser.id in cur.users);
+			for (const targetRoom of targetRooms) {
+				const roomid = targetRoom.roomid;
 				const roomData: RoomData = {};
 				if (targetRoom.settings.isPrivate) {
-					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
+					if (!(user.id in targetRoom.users) && !(targetRoom.game && targetRoom.game.playerTable[user.id])) continue;
 					roomData.isPrivate = true;
 				}
 				if (targetRoom.battle) {
@@ -1593,7 +1594,8 @@ export const commands: ChatCommands = {
 
 			const targetRoom = Rooms.get(target);
 			if (!targetRoom || (
-				targetRoom.settings.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
+				targetRoom.settings.isPrivate && !(user.id in targetRoom.users) &&
+				!(targetRoom.game && !targetRoom.game.playerTable[user.id])
 			)) {
 				const roominfo = {id: target, error: 'not found or access denied'};
 				connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);

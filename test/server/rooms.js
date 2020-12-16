@@ -149,8 +149,6 @@ describe('Rooms features', function () {
 				const user = makeUser();
 				user.joinRoom(room);
 				await room.rename("Test2");
-				assert.equal(user.inRooms.has("test"), false);
-				assert.equal(user.inRooms.has("test2"), true);
 				assert.equal(user.connections[0].inRooms.has("test"), false);
 				assert.equal(user.connections[0].inRooms.has("test2"), true);
 			});

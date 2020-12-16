@@ -555,10 +555,10 @@ export const commands: ChatCommands = {
 		if (targetRoom.settings.isPrivate || targetRoom.settings.isPersonal) {
 			return this.errorReply(`The room "${target}" is not public.`);
 		}
-		if (targetUser.inRooms.has(targetRoom.roomid)) {
+		if (targetUser.id in targetRoom.users) {
 			return this.errorReply(`User ${targetUser.name} is already in the room ${targetRoom.title}!`);
 		}
-		if (!targetUser.inRooms.has(room.roomid)) {
+		if (!(targetUser.id in room.users)) {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.roomid}.`);
 		}
 		targetUser.leaveRoom(room.roomid);

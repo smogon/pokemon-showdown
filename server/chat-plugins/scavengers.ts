@@ -1030,7 +1030,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	destroy() {
 		const user = Users.getExact(this.id);
 		if (user) {
-			user.games.delete(this.game.roomid);
+			delete this.game.playerTable[user.id];
 			user.updateSearch();
 		}
 	}

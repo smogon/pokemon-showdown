@@ -114,7 +114,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.connected = true;
 
 		if (user) {
-			user.games.add(this.game.roomid);
 			user.updateSearch();
 			for (const connection of user.connections) {
 				if (connection.inRooms.has(game.roomid)) {
@@ -132,7 +131,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 			for (const connection of user.connections) {
 				Sockets.channelMove(connection.worker, this.game.roomid, 0, connection.socketid);
 			}
-			user.games.delete(this.game.roomid);
+			delete this.game.playerTable[this.id];
 			user.updateSearch();
 		}
 		this.id = '';
@@ -683,7 +682,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 			this.missingBattleStartMessage = false;
 		}
-		if (user.inRooms.has(this.roomid)) this.onConnect(user);
+		if (user.id in this.room.users) this.onConnect(user);
 		this.room.update();
 		return true;
 	}
@@ -918,7 +917,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (user.id === oldUserid) return;
 		if (!this.playerTable) {
 			// !! should never happen but somehow still does
-			user.games.delete(this.roomid);
 			return;
 		}
 		if (!(oldUserid in this.playerTable)) {
@@ -934,9 +932,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			if (player) {
 				const message = isForceRenamed ? " lost by having an inappropriate name." : " forfeited by changing their name.";
 				this.forfeitPlayer(player, message);
-			}
-			if (!(user.id in this.playerTable)) {
-				user.games.delete(this.roomid);
 			}
 			return;
 		}
@@ -1034,7 +1029,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 				this.forcePublic = user.battlesForcedPublic();
 			}
 		}
-		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
+		if (user && user.id in this.room.users) this.onConnect(user);
 		return player;
 	}
 

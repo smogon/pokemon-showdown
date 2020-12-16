@@ -208,7 +208,6 @@ export class UNO extends Rooms.RoomGame {
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!(oldUserid in this.playerTable) || user.id === oldUserid) return false;
 		if (!user.named && !isForceRenamed) {
-			user.games.delete(this.roomid);
 			user.updateSearch();
 			return; // dont set users to their guest accounts.
 		}
