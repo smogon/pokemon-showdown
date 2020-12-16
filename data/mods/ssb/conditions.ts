@@ -1460,6 +1460,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c|${getName('RavioliQueen')}|This is impastable!`);
 		},
+		innateName: "Pitch Black Witch",
+		desc: "When this Pokemon sets or switches into Pitch Black errain, its Special Attack and Special Defense are boosted by 1 stage. If this Pokemon gets hit while Pitch Black Terrain is up, it gets +1 speed",
+		shortDesc: "Pitch Black Terrain: Calm Mind on switch-in, +1 Spe when attacked.",
+		// Coded in the terrain itself
 	},
 	robb576: {
 		noCopy: true,

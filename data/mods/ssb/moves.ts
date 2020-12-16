@@ -3319,8 +3319,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 115,
 		category: "Physical",
-		desc: "Heals the target by 50% of their maximum HP and eliminates any status problem, but lowers the target's Defense and Special Defense stat by 1 stage. The move then deals damage.",
-		shortDesc: "Foe: heal 50%HP & status, -1 Def/SpD. Then atk.",
+		desc: "Heals the target by 50% of their maximum HP and eliminates any status problem before dealing damage, and lowers the target's Defense and Special Defense stat by 1 stage after dealing damage.",
+		shortDesc: "Foe: heal 50%HP & status, dmg, then -1 Def/SpD.",
 		name: "Healing you?",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3333,11 +3333,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Heal Pulse', target);
 			this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			target.cureStatus();
-			this.boost({def: -1, spd: -1}, target);
 			this.add('-anim', source, 'Close Combat', target);
 		},
 		flags: {contact: 1, mirror: 1, protect: 1},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
+		},
 		target: "normal",
 		type: "Dark",
 	},

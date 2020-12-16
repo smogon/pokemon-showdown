@@ -161,7 +161,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Overneat
 	absolmega: {
 		inherit: true,
-		abilities: {0: 'Fur Coat'},
+		abilities: {0: 'Fluffy'},
 		types: ['Dark', 'Fairy'],
 	},
 	// PartMan

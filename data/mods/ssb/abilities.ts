@@ -1519,11 +1519,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// peapod
 	stealthblack: {
-		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+		desc: "No competitive use.",
 		name: 'Stealth Black',
-		onStart(pokemon) {
-			this.boost({spe: 1}, pokemon);
-		},
 		isNonstandard: "Custom",
 		gen: 8,
 	},
@@ -1702,10 +1699,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
+				this.add('-ability', pokemon, 'BURN IT DOWN!');
 				if (totalatk && totalatk >= totalspa) {
-					this.boost({atk: -1}, target, pokemon, this.dex.getAbility('burnitdown'));
+					this.boost({atk: -1}, target, pokemon, null, true);
 				} else if (totalspa) {
-					this.boost({spa: -1}, target, pokemon, this.dex.getAbility('burnitdown'));
+					this.boost({spa: -1}, target, pokemon, null, true);
 				}
 			}
 		},
