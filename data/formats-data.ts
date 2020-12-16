@@ -3826,7 +3826,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "LC",
 	},
 	ferrothorn: {
-		randomBattleMoves: ["leechseed", "gyroball", "powerwhip", "protect", "spikes", "stealthrock"],
+		randomBattleMoves: ["gyroball", "leechseed", "powerwhip", "protect", "spikes", "stealthrock"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["bodypress", "gyroball", "knockoff", "leechseed", "powerwhip", "protect", "toxic"],
 		randomDoubleBattleLevel: 80,
@@ -4938,7 +4938,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	comfey: {
-		randomBattleMoves: ["dazzlinggleam", "leechseed", "synthesis", "taunt", "uturn"],
+		randomBattleMoves: ["calmmind", "drainingkiss", "gigadrain", "storedpower", "trick", "uturn"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["defog", "drainingkiss", "gigadrain", "helpinghand", "pollenpuff", "protect"],
 		randomDoubleBattleLevel: 88,

@@ -1064,7 +1064,6 @@ export class RandomTeams {
 			}
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
 
-		// const baseSpecies: Species = species.battleOnly && !species.requiredAbility ? this.dex.getSpecies(species.battleOnly as string) : species;
 		const abilities: string[] = Object.values(species.abilities);
 		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
 		let ability0 = this.dex.getAbility(abilities[0]);
@@ -1187,7 +1186,7 @@ export class RandomTeams {
 				} else if (ability === 'Swift Swim') {
 					rejectAbility = (!hasMove['raindance'] && (hasAbility['Intimidate'] || (hasAbility['Lightning Rod'] && !counter.setupType) || hasAbility['Rock Head'] || hasAbility['Slush Rush'] || hasAbility['Water Absorb']));
 				} else if (ability === 'Synchronize') {
-					rejectAbility = (counter.setupType || counter.Status < 2);
+					rejectAbility = counter.Status < 3;
 				} else if (ability === 'Technician') {
 					rejectAbility = (!counter['technician'] || hasMove['tailslap'] || hasAbility['Punk Rock'] || movePool.includes('snarl'));
 				} else if (ability === 'Tinted Lens') {
@@ -1196,8 +1195,6 @@ export class RandomTeams {
 					rejectAbility = (hasMove['focusenergy'] || hasMove['hypervoice']);
 				} else if (ability === 'Tough Claws') {
 					rejectAbility = (hasType['Steel'] && !hasMove['fakeout']);
-				} else if (ability === 'Triage') {
-					rejectAbility = !counter['drain'];
 				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
@@ -1244,7 +1241,6 @@ export class RandomTeams {
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
 				if (hasAbility['Storm Drain']) ability = 'Storm Drain';
 				if (hasAbility['Telepathy'] && (ability === 'Pressure' || hasAbility['Analytic'])) ability = 'Telepathy';
-				if (hasAbility['Triage']) ability = 'Triage';
 			}
 		} else {
 			ability = ability0.name;
@@ -1285,7 +1281,7 @@ export class RandomTeams {
 		} else if (ability === 'Gorilla Tactics' || ability === 'Imposter' || (ability === 'Magnet Pull' && hasMove['bodypress'] && !isDoubles)) {
 			item = 'Choice Scarf';
 		} else if (hasMove['trick'] || hasMove['switcheroo'] && !isDoubles) {
-			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority']) {
+			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && ability !== 'Triage') {
 				item = 'Choice Scarf';
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
