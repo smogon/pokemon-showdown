@@ -1359,11 +1359,20 @@ export class Mastermind extends Rooms.RoomGame {
 		}, timeout * 1000);
 	}
 
+	/**
+	 * NOT guaranteed to return an array of length n.
+	 *
+	 * See the Trivia auth discord: https://discord.com/channels/280211330307194880/444675649731428352/788204647402831913
+	 */
 	getTopPlayers(n: number) {
-		return [...this.leaderboard]
+		if (n < 0) return [];
+
+		const sortedPlayerIDs = [...this.leaderboard]
 			.sort((a, b) => b[1] - a[1]) // sort by number of points
-			.map(entry => entry[0]) // convert to an array of IDs
-			.slice(0, n); // get the top n players
+			.map(entry => entry[0]); // convert to an array of IDs
+
+		const cutoff = this.leaderboard.get(sortedPlayerIDs[n - 1])!; // The number of points required to be in the top n
+		return sortedPlayerIDs.filter(id => this.leaderboard.get(id)! >= cutoff);
 	}
 
 	end(user: User) {
