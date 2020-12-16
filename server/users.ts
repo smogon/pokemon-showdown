@@ -867,6 +867,7 @@ export class User extends Chat.MessageContext {
 			connection.send(this.getUpdateuserText());
 		}
 		for (const room of Rooms.rooms.values()) {
+			if (!(oldid in room.users)) continue;
 			room.onRename(this, oldid, joining);
 			if (!room.game || !room.game.playerTable[this.id]) continue;
 			room.game.onRename(this, oldid, joining, isForceRenamed);
