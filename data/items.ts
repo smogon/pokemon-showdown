@@ -510,7 +510,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 41,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon}, false, true);
 			}
 		},
 		onPrimal(pokemon) {
@@ -4470,7 +4470,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 390,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon}, false, true);
 			}
 		},
 		onPrimal(pokemon) {
