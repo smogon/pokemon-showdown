@@ -1450,8 +1450,7 @@ export class MastermindRound extends FirstModeTrivia {
 		);
 
 		this.phase = INTERMISSION_PHASE;
-		// Use the regular start timeout since there are many players
-		this.setPhaseTimeout(() => this.askQuestion(), MASTERMIND_FINALS_START_TIMEOUT);
+		this.setPhaseTimeout(() => this.askQuestion(), MASTERMIND_INTERMISSION_INTERVAL);
 		return;
 	}
 
