@@ -540,21 +540,21 @@ export const commands: ChatCommands = {
 	pollhelp() {
 		this.sendReply(
 			`|html|<details class="readmore"><summary>Poll help:</summary>` +
-			`<p>/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.<br />` +
-			`<p>Polls can be used as quiz questions. To do this, prepend all correct answers with a +.<br />` +
-			`<p>Accepts the following commands:<br />` +
-			`<p><code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # &<br />` +
-			`<p><code>/poll createmulti [question], [option1], [option2], [...]</code> - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &<br />` +
-			`<p><code>/poll htmlcreate(multi) [question], [option1], [option2], [...]</code> - Creates a poll, with HTML allowed in the question and options. Requires: # &<br />` +
-			`<p><code>/poll vote [number]</code> - Votes for option [number].<br />` +
-			`<p><code>/poll timer [minutes]</code> - Sets the poll to automatically end after [minutes]. Requires: % @ # &.<br />` +
-			`<p><code>/poll results</code> - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.<br />` +
-			`<p><code>/poll display</code> - Displays the poll.<br />` +
-			`<p><code>/poll end</code> - Ends a poll and displays the results. Requires: % @ # &.<br />` +
-			`<p><code>/poll queue [question], [option1], [option2], [...]</code> - Add a poll in queue. Requires: % @ # &<br />` +
-			`<p><code>/poll deletequeue [number]</code> - Deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).<br />` +
-			`<p><code>/poll clearqueue</code> - Deletes the queue of polls. Requires: % @ # &.<br />` +
-			`<p><code>/poll viewqueue</code> - View the queue of polls in the room. Requires: % @ # &<br />` +
+			`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.<br />` +
+			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.<br />` +
+			`Accepts the following commands:<br />` +
+			`<code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # &<br />` +
+			`<code>/poll createmulti [question], [option1], [option2], [...]</code> - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &<br />` +
+			`<code>/poll htmlcreate(multi) [question], [option1], [option2], [...]</code> - Creates a poll, with HTML allowed in the question and options. Requires: # &<br />` +
+			`<code>/poll vote [number]</code> - Votes for option [number].<br />` +
+			`<code>/poll timer [minutes]</code> - Sets the poll to automatically end after [minutes]. Requires: % @ # &.<br />` +
+			`<code>/poll results</code> - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.<br />` +
+			`<code>/poll display</code> - Displays the poll.<br />` +
+			`<code>/poll end</code> - Ends a poll and displays the results. Requires: % @ # &.<br />` +
+			`<code>/poll queue [question], [option1], [option2], [...]</code> - Add a poll in queue. Requires: % @ # &<br />` +
+			`<code>/poll deletequeue [number]</code> - Deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).<br />` +
+			`<code>/poll clearqueue</code> - Deletes the queue of polls. Requires: % @ # &.<br />` +
+			`<code>/poll viewqueue</code> - View the queue of polls in the room. Requires: % @ # &<br />` +
 			`</details>`
 		);
 	},
