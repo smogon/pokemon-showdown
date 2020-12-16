@@ -334,7 +334,7 @@ export class BattleQueue {
 	 * would have happened (sorting by priority/speed), without
 	 * re-sorting the existing actions.
 	 */
-	insertChoice(choices: ActionChoice | ActionChoice[], midTurn = false) {
+	insertChoice(choices: ActionChoice | ActionChoice[], midTurn = false, rng = false) {
 		if (Array.isArray(choices)) {
 			for (const choice of choices) {
 				this.insertChoice(choice);
@@ -348,8 +348,18 @@ export class BattleQueue {
 		}
 		const actions = this.resolveAction(choice, midTurn);
 		for (const [i, curAction] of this.list.entries()) {
-			if (BattleQueue.comparePriority(actions[0], curAction) < 0) {
+			const delta = BattleQueue.comparePriority(actions[0], curAction);
+			if (delta < 0) {
 				this.list.splice(i, 0, ...actions);
+				return;
+			} else if (delta === 0 && rng) {
+				const same_priority_idx = i;
+				let j = i + 1;
+				while (j < this.list.length && BattleQueue.comparePriority(actions[0], this.list[j])) {
+					j++;
+				}
+				const insert_idx = this.battle.prng.next(same_priority_idx, j + 1);
+				this.list.splice(insert_idx, 0, ...actions);
 				return;
 			}
 		}
