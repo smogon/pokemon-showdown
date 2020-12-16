@@ -245,7 +245,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		let naturalImmunity = false;
 		let accPass = true;
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move) &&
+			this.runEvent('PrepareHit', pokemon, target, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
@@ -253,7 +254,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		}
-		this.runEvent('PrepareHit', pokemon, target, move);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return false;
