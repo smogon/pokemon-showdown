@@ -13441,6 +13441,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
+				if (pokemon.switchFlag === 'batonpass') return;
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
 				pokemon.removeVolatile('destinybond');

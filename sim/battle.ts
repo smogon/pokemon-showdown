@@ -2725,6 +2725,10 @@ export class Battle {
 					pokemon.switchFlag = false;
 				}
 				switches[i] = false;
+			} else if (switches[i]) {
+				for (const pokemon of this.sides[i].active) {
+					this.runEvent('BeforeSwitchOut', pokemon);
+				}
 			}
 		}
 
