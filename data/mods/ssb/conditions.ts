@@ -744,16 +744,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('INStruct')}|/me shotguns a can of Coca-Cola`);
-			this.add(`c|${getName('INStruct')}|fuck this lets just get it over with`);
+			this.add(`c|${getName('INStruct')}|lets drink to a great time!`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
 			this.add(`c|${getName('INStruct')}|ya know, why __do__ you always flood my dms?`);
-			this.add(`c|${getName('INStruct')}|whatever im just gonna go get smth to drink`);
+			this.add(`c|${getName('INStruct')}|whatever im just gonna go get some more coke`);
 		},
 		onFaint() {
-			this.add(`c|${getName('INStruct')}|WHAT A HORRIBLE NIGHT TO BE YOU, HOLY SHIT, HAHAHAHAHAHAHA`);
+			this.add(`c|${getName('INStruct')}|wait did we run out of coca-cola?`);
+			this.add(`c|${getName('INStruct')}|laaaaaaaaaaame`);
+			this.add(`c|${getName('INStruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
 		desc: "Upon fainting, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
