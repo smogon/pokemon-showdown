@@ -459,11 +459,11 @@ export const Formats: FormatList = [
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
-			'Aegislash', 'Aggron-Mega', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela', 'Chesnaught',
-			'Dracozolt', 'Dragonite', 'Hatterene', 'Hawlucha', 'Hippowdon', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo', 'Krookodile',
-			'Mandibuzz', 'Manectric-Mega', 'Mew', 'Moltres-Base', 'Nidoking', 'Nihilego', 'Pidgeot-Mega', 'Porygon2', 'Rotom-Heat', 'Rotom-Wash',
-			'Sableye-Mega', 'Salamence', 'Scizor', 'Scolipede', 'Skarmory', 'Slowking', 'Spectrier', 'Staraptor', 'Steelix-Mega', 'Swampert',
-			'Tapu Bulu', 'Terrakion', 'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar',
+			'Aegislash', 'Absol-Mega', 'Aggron-Mega', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela',
+			'Chesnaught', 'Crobat', 'Dragonite', 'Grimmsnarl', 'Hippowdon', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo', 'Krookodile',
+			'Mandibuzz', 'Manectric-Mega', 'Melmetal', 'Mew', 'Mienshao', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Regieleki', 'Rotom-Heat',
+			'Rotom-Wash', 'Ribombee', 'Sableye-Mega', 'Scizor', 'Sharpedo-Mega', 'Skarmory', 'Slowking', 'Slowking-Galar', 'Staraptor', 'Swampert',
+			'Umbreon', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zapdos-Galar',
 		],
 	},
 	{
