@@ -1257,15 +1257,17 @@ export class Battle {
 		const unfaintedActive = oldActive?.hp ? oldActive : null;
 		if (unfaintedActive) {
 			oldActive.beingCalledBack = true;
+			let switchCopyFlag = false;
 			if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
-				oldActive.switchCopyFlag = true;
+				switchCopyFlag = true;
 			}
-			if (!oldActive.switchCopyFlag && !isDrag) {
+			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
 				this.runEvent('BeforeSwitchOut', oldActive);
 				if (this.gen >= 5) {
 					this.eachEvent('Update');
 				}
 			}
+			oldActive.skipBeforeSwitchOutEventFlag = false;
 			if (!this.runEvent('SwitchOut', oldActive)) {
 				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
@@ -1292,8 +1294,7 @@ export class Battle {
 			if (this.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
 			}
-			if (oldActive.switchCopyFlag) {
-				oldActive.switchCopyFlag = false;
+			if (switchCopyFlag) {
 				pokemon.copyVolatileFrom(oldActive);
 			}
 			if (newMove) pokemon.lastMove = newMove;
@@ -2727,7 +2728,8 @@ export class Battle {
 				switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					this.runEvent('BeforeSwitchOut', pokemon);
+					if (!pokemon.skipBeforeSwitchOutEventFlag) this.runEvent('BeforeSwitchOut', pokemon);
+					pokemon.skipBeforeSwitchOutEventFlag = true;
 				}
 			}
 		}
