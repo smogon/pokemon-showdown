@@ -180,7 +180,7 @@ export const IPTools = new class {
 			const aPart = parseInt(aParts[i]);
 			const bPart = parseInt(bParts[i]);
 			if (isNaN(aPart) || isNaN(bPart)) throw new Error("Invalid IP passed to IPTools.ipSort.");
-			diff = (aPart || 0) - (bPart || 0);
+			diff = aPart - bPart;
 			i++;
 		}
 		return diff;
