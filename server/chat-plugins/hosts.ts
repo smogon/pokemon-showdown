@@ -135,7 +135,7 @@ export const pages: PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
 			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
-			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[1], b[1]));
+			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[0], b[0]));
 
 			for (const [reason, ip] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
