@@ -214,13 +214,6 @@ export function writeTriviaData() {
 }
 
 /**
- * @deprecated use triviaData.questions instead
- */
-function sliceCategory(category: string): TriviaQuestion[] {
-	return triviaData.questions![category] || [];
-}
-
-/**
  * Generates and broadcasts the HTML for a generic announcement containing
  * a title and an optional message.
  */
@@ -239,7 +232,7 @@ function getQuestions(category: ID): TriviaQuestion[] {
 		const lastCategoryID = toID(triviaData.history?.slice(-1)[0].category).replace("random", "");
 		const categories = Object.keys(MAIN_CATEGORIES).filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID);
 		const randCategory = categories[Math.floor(Math.random() * categories.length)];
-		return sliceCategory(randCategory);
+		return [...triviaData.questions![randCategory]];
 	} else if (isAll) {
 		const questions: TriviaQuestion[] = [];
 		for (const categoryStr in MAIN_CATEGORIES) {
@@ -247,7 +240,7 @@ function getQuestions(category: ID): TriviaQuestion[] {
 		}
 		return questions;
 	} else if (ALL_CATEGORIES[category]) {
-		return sliceCategory(category);
+		return [...triviaData.questions![category]];
 	} else {
 		throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
 	}
@@ -2040,7 +2033,7 @@ const triviaCommands: ChatCommands = {
 			return this.errorReply(this.tr`'${target}' is not a valid category. View /help trivia for more information.`);
 		}
 
-		const list = sliceCategory(category);
+		const list = triviaData.questions![category];
 		if (!list.length) {
 			buffer += `<tr><td>${this.tr`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
 			return this.sendReply(buffer);
