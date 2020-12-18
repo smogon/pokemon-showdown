@@ -6,7 +6,7 @@
  */
 
 import {Utils} from '../../lib/utils';
-import {FriendsDatabase, MAX_REQUESTS, sendPM} from '../friends';
+import {MAX_REQUESTS, sendPM} from '../friends';
 
 const STATUS_COLORS: {[k: string]: string} = {
 	idle: '#ff7000',
@@ -22,24 +22,20 @@ const STATUS_TITLES: {[k: string]: string} = {
 };
 
 export const Friends = new class {
-	database: FriendsDatabase;
-	constructor() {
-		this.database = new FriendsDatabase();
-	}
 	async notifyPending(user: User) {
 		if (user.settings.blockFriendRequests) return;
-		const friendRequests = await this.database.getRequests(user);
+		const friendRequests = await Chat.Friends.getRequests(user);
 		const pendingCount = friendRequests.received.size;
 		if (pendingCount < 1) return;
 		sendPM(`/nonotify You have ${pendingCount} friend requests pending!`, user.id);
 		sendPM(`/raw <button class="button" name="send" value="/j view-friends-received">View</button></div>`, user.id);
 	}
 	async notifyConnection(user: User) {
-		const connected = await this.database.getLastLogin(user.id);
+		const connected = await Chat.Friends.getLastLogin(user.id);
 		if ((Date.now() - connected) < 2 * 60 * 1000) {
 			return;
 		}
-		const friends = await this.database.getFriends(user.id);
+		const friends = await Chat.Friends.getFriends(user.id);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const f of friends) {
 			const {user1, user2} = f;
@@ -51,16 +47,16 @@ export const Friends = new class {
 		}
 	}
 	writeLogin(user: User) {
-		return this.database.writeLogin(user.id);
+		return Chat.Friends.writeLogin(user.id);
 	}
 	hideLoginData(user: User) {
-		return this.database.hideLoginData(user.id);
+		return Chat.Friends.hideLoginData(user.id);
 	}
 	allowLoginData(user: User) {
-		return this.database.allowLoginData(user.id);
+		return Chat.Friends.allowLoginData(user.id);
 	}
 	async visualizeList(userid: ID) {
-		const friends = await this.database.getFriends(userid);
+		const friends = await Chat.Friends.getFriends(userid);
 		if (!friends.length) {
 			return `<h3>Your friends:</h3> <h4>None.</h4>`;
 		}
@@ -113,7 +109,7 @@ export const Friends = new class {
 	}
 	// much more info redacted
 	async visualizePublicList(userid: ID) {
-		const friends: string[] = (await this.database.getFriends(userid) as any[]).map(f => f.friend);
+		const friends: string[] = (await Chat.Friends.getFriends(userid) as any[]).map(f => f.friend);
 		let buf = `<h3>${userid}'s friends:</h3><hr />`;
 		if (!friends.length) {
 			buf += `None.`;
@@ -168,16 +164,16 @@ export const Friends = new class {
 		}
 	}
 	request(user: User, receiver: ID) {
-		return this.database.request(user, receiver);
+		return Chat.Friends.request(user, receiver);
 	}
 	removeFriend(userid: ID, friendID: ID) {
-		return this.database.removeFriend(userid, friendID);
+		return Chat.Friends.removeFriend(userid, friendID);
 	}
 	approveRequest(receiverID: ID, senderID: ID) {
-		return this.database.approveRequest(receiverID, senderID);
+		return Chat.Friends.approveRequest(receiverID, senderID);
 	}
 	removeRequest(receiverID: ID, senderID: ID) {
-		return this.database.removeRequest(receiverID, senderID);
+		return Chat.Friends.removeRequest(receiverID, senderID);
 	}
 };
 
@@ -255,6 +251,7 @@ export const commands: ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (!target) return this.parse('/help friends');
+
 			await Friends.removeFriend(user.id, target as ID);
 			return this.sendReply(this.tr`Removed friend '${target}'.`);
 		},
@@ -271,6 +268,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
 			}
 			if (!target) return this.parse('/help friends');
+			void Chat.Friends.cache.update(user.id);
 			await Friends.approveRequest(user.id, target as ID);
 			const targetUser = Users.get(target);
 			sendPM(`You accepted a friend request from "${target}".`, user.id);
@@ -379,12 +377,12 @@ export const commands: ChatCommands = {
 		async listdisplay(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			const {public_list: setting} = await Friends.database.getSettings(user.id);
+			const {public_list: setting} = await Chat.Friends.getSettings(user.id);
 			if (this.meansYes(target)) {
 				if (setting) {
 					return this.errorReply(this.tr`You are already allowing other people to view your friends list.`);
 				}
-				await Friends.database.setHideList(user.id, true);
+				await Chat.Friends.setHideList(user.id, true);
 				if (connection.openPages?.has('friends-settings')) {
 					this.parse(`/j view-friends-settings`);
 				}
@@ -393,13 +391,24 @@ export const commands: ChatCommands = {
 				if (!setting) {
 					return this.errorReply(this.tr`You are already hiding your friends list.`);
 				}
-				await Friends.database.setHideList(user.id, false);
+				await Chat.Friends.setHideList(user.id, false);
 				if (connection.openPages?.has('friends-settings')) {
 					this.parse(`/j view-friends-settings`);
 				}
 				return this.sendReply(this.tr`You are now hiding your friends list.`);
 			}
 			this.sendReply(`You are currently ${setting ? 'displaying' : 'hiding'} your friends list.`);
+		},
+		invalidatecache(target, room, user) {
+			this.canUseConsole();
+			for (const k in Chat.Friends.cache) {
+				void Chat.Friends.cache.update(k);
+			}
+			Rooms.global.notifyRooms(
+				['staff', 'development'],
+				`|c|${user.getIdentity()}|/log ${user.name} used /friends invalidatecache`,
+			);
+			this.sendReply(`You invalidated each entry in the friends database cache.`);
 		},
 	},
 	friendshelp() {
@@ -422,7 +431,7 @@ export const pages: PageTable = {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
 				return buf;
 			}
-			const {sent} = await Friends.database.getRequests(user);
+			const {sent} = await Chat.Friends.getRequests(user);
 			if (sent.size < 1) {
 				buf += `<strong>You have no outgoing friend requests pending.</strong><br />`;
 				buf += `<br />To add a friend, use <code>/friend add [username]</code>.`;
@@ -442,7 +451,7 @@ export const pages: PageTable = {
 			this.title = `[Friends] Received`;
 			buf += headerButtons('received', user);
 			buf += `<hr />`;
-			const {received} = await Friends.database.getRequests(user);
+			const {received} = await Chat.Friends.getRequests(user);
 			if (received.size < 1) {
 				buf += `<strong>You have no pending friend requests.</strong>`;
 				buf += `</div>`;
@@ -463,7 +472,7 @@ export const pages: PageTable = {
 			if (target === user.id) {
 				return this.errorReply(`Use /friends list to view your own list.`);
 			}
-			const {public_list: isAllowing} = await Friends.database.getSettings(target);
+			const {public_list: isAllowing} = await Chat.Friends.getSettings(target);
 			if (!isAllowing) return this.errorReply(`${target}'s friends list is not public or they do not have one.`);
 			this.title = `[Friends List] ${target}`;
 			buf += await Friends.visualizePublicList(target);
@@ -492,7 +501,7 @@ export const pages: PageTable = {
 			buf += headerButtons('settings', user);
 			buf += `<hr /><h3>Friends Settings:</h3>`;
 			const settings = user.settings;
-			const {public_list} = await Friends.database.getSettings(user.id);
+			const {public_list} = await Chat.Friends.getSettings(user.id);
 			buf += `<strong>Notify me when my friends come online:</strong><br />`;
 			buf += `<button class="button${settings.allowFriendNotifications ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends hidenotifs">Disable</button> `;
@@ -531,4 +540,6 @@ export const loginfilter: LoginFilter = async user => {
 	await Friends.notifyConnection(user);
 	// write login time
 	await Friends.writeLogin(user);
+
+	await Chat.Friends.cache.update(user.id);
 };

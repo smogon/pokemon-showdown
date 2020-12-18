@@ -709,7 +709,11 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			user.settings.blockPMs = target;
 			target = this.tr(target);
-			this.sendReply(this.tr`You are now blocking private messages, except from staff and ${target} users.`);
+			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target} users.`);
+		} else if (target === 'friends') {
+			user.settings.blockPMs = target;
+			target = this.tr(target);
+			this.sendReply(this.tr `You are now blocking private messages, except from staff and friended users.`);
 		} else {
 			user.settings.blockPMs = true;
 			this.sendReply(this.tr`You are now blocking private messages, except from staff.`);

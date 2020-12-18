@@ -16,6 +16,7 @@ export const MAX_FRIENDS = 100;
 export const MAX_REQUESTS = 6;
 export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
+const CACHE_EXPIRY_TIME = 5 * 60 * 1000;
 
 export interface DatabaseRequest {
 	statement: string;
@@ -51,11 +52,16 @@ export function sendPM(message: string, to: string, from = '&') {
 export class FriendsDatabase {
 	file: string;
 	process: FriendsProcess;
+	cache: DatabaseCache<Set<string>>;
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
 		this.process = PM.createProcess(this.file);
+		this.cache = new DatabaseCache(async user => {
+			const data = await this.getFriends(user as ID);
+			return new Set(data.map(f => f.friend));
+		});
 	}
-	getFriends(userid: ID) {
+	getFriends(userid: ID): Promise<AnyObject[]> {
 		const data = [userid, MAX_FRIENDS];
 		return this.query({
 			statement: 'get', type: 'all', data,
@@ -175,6 +181,44 @@ export class FriendsDatabase {
 	}
 }
 
+export class DatabaseCache<T> {
+	readonly cache: {[k: string]: {data: T, lastCache: number}};
+	expiryTime: number;
+	dataFetcher: (key: string) => T | Promise<T>;
+	constructor(fetcher: (key: string) => T | Promise<T>, invalidateTime = CACHE_EXPIRY_TIME) {
+		this.cache = {};
+		this.expiryTime = invalidateTime;
+		this.dataFetcher = fetcher;
+	}
+	get(key: string) {
+		const data = this.cache[key];
+		if (!data || Date.now() - data.lastCache > this.expiryTime) {
+			void this.update(key);
+		}
+		if (!this.cache[key]) {
+			/* this.cache[key] = {
+				data: Utils.deepClone(this.default), lastCache: Date.now(),
+			}; */
+			// for now, only usecase should always exist, throw exception
+			throw new Error(`Missing entry for database cache key ${key}`);
+		}
+		// return default or last state
+		return this.cache[key].data;
+	}
+	async update(key: string) {
+		const data = await this.dataFetcher(key);
+		this.cache[key] = {lastCache: Date.now(), data};
+		return this.cache[key];
+	}
+	set(key: string, data: T) {
+		this.cache[key] = {data, lastCache: Date.now()};
+	}
+	delete(key: string) {
+		const data = this.cache[key]?.data;
+		delete this.cache[key];
+		return data as T | undefined;
+	}
+}
 
 const statements: {[k: string]: Database.Statement} = {};
 const transactions: {[k: string]: Database.Transaction} = {};
@@ -224,7 +268,7 @@ class FriendsProcess implements ProcessWrapper {
 	}
 }
 
-class FriendsProcessManager extends ProcessManager {
+export class FriendsProcessManager extends ProcessManager {
 	processes: FriendsProcess[];
 	constructor() {
 		super(module);
@@ -357,8 +401,8 @@ let database: Database.Database;
 if (process.send) {
 	global.Config = (require as any)('./config-loader').Config;
 	if (Config.usesqlite) {
-		const file = process.env.filename as string;
-		const exists = FS(process.env.filename as string).existsSync() || file === ':memory:';
+		const file = process.env.filename as string || DEFAULT_FILE;
+		const exists = FS(file).existsSync() || file === ':memory:';
 		database = new Database(file);
 		if (!exists) {
 			database.exec(FS('databases/schemas/friends.sql').readSync());
@@ -409,13 +453,15 @@ if (process.send) {
 		}
 	});
 
+	const send = (task: string, res: any) => process.send!(`${task}\n${JSON.stringify(res)}`);
+
 	process.on('message', (message: string) => {
 		const [task, raw] = message.split('\n');
+		if (!raw.startsWith('{')) return;
 		const query = JSON.parse(raw);
 		const {type, statement, data} = query;
 		let result: any = '';
 		const cached = statements[statement];
-		const send = (res: any) => process.send!(`${task}\n${JSON.stringify(res)}`);
 		try {
 			switch (type) {
 			case 'all':
@@ -435,13 +481,13 @@ if (process.send) {
 		} catch (e) {
 			if (!e.name.endsWith('ErrorMessage')) {
 				Monitor.crashlog(e, 'A friends database process', query);
-				return send({error: `Sorry! The database crashed. We've been notified and will fix this.`});
+				return send(task, {error: `Sorry! The database crashed. We've been notified and will fix this.`});
 			}
-			return send({error: e.message});
+			return send(task, {error: e.message});
 		}
 		if (!result) result = {};
 		if (result.result) result = result.result;
-		return send({result} || {error: 'Unknown error in database query.'});
+		return send(task, {result} || {error: 'Unknown error in database query.'});
 	});
 }
 
