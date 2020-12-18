@@ -500,7 +500,7 @@ export const commands: ChatCommands = {
 			`Users with a name matching '${target}':<br />${results.join('; ')}`
 		);
 	},
-	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: &`],
+	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`],
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
