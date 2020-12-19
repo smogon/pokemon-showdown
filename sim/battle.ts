@@ -2728,12 +2728,14 @@ export class Battle {
 				switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (!pokemon.skipBeforeSwitchOutEventFlag) this.runEvent('BeforeSwitchOut', pokemon);
-					pokemon.skipBeforeSwitchOutEventFlag = true;
-					this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
-					if (pokemon.fainted) {
-						pokemon.switchFlag = false;
-						switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
+					if (pokemon.switchFlag && !pokemon.skipBeforeSwitchOutEventFlag) {
+						this.runEvent('BeforeSwitchOut', pokemon);
+						pokemon.skipBeforeSwitchOutEventFlag = true;
+						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						if (this.ended) return true;
+						if (pokemon.fainted) {
+							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
+						}
 					}
 				}
 			}
