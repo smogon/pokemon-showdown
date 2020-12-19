@@ -86,5 +86,6 @@ describe(`Pursuit`, function () {
 		battle.choose('p2', 'switch 2');
 		assert.fullHP(battle.p2.pokemon[1], 'should not hit Pokemon that has used Baton Pass');
 		assert.equal(battle.p2.pokemon[0].name, "Emolga");
+		battle.makeChoices('move Pursuit', 'move voltswitch');
 	});
 });
