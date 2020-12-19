@@ -684,12 +684,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				if (this.randomChance(16, 17) && !isMonotype) continue;
 				break;
 			case 'Rotom':
-				if (this.gen < 5 && this.randomChance(5, 6)) continue;
+				if (this.gen < 5 && this.randomChance(5, 6) && !isMonotype) continue;
 				break;
-			case 'Castform':
-				if (this.randomChance(2, 3)) continue;
-				break;
-			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Meloetta':
+			case 'Basculin': case 'Castform': case 'Cherrim': case 'Meloetta':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}
