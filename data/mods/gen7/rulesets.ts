@@ -15,6 +15,12 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 			// Leaf Blade: Gen 6+ Nuzleaf level-up
 			// Sucker Punch: Gen 4 Shiftry tutor
 			'Shiftry + Leaf Blade + Sucker Punch',
+
+			// Aura Break Zygarde can't be changed to 10% forme in gen 7
+			// making moves only obtainable from gen 6 illegal
+			'Zygarde-10% + Aura Break + Rock Smash',
+			'Zygarde-10% + Aura Break + Secret Power',
+			'Zygarde-10% + Aura Break + Strength',
 		],
 	},
 	gravitysleepclause: {
