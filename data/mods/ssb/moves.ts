@@ -2194,13 +2194,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Instruct
-	cokebreak: {
+	sodabreak: {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
 		desc: "Has a 100% chance to make the target flinch. Causes the user to switch out. Fails unless it is the user's first turn on the field.",
 		shortDesc: "First turn: Flinches the target then switches out.",
-		name: "Coke Break",
+		name: "Soda Break",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 10,
@@ -2218,7 +2218,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("Coke Break can only works on your first turn out.");
+				this.hint("Soda Break can only works on your first turn out.");
 				return null;
 			}
 		},
