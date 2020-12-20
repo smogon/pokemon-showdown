@@ -63,5 +63,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return this.chainModify(1.5);
 		},
 		desc: "1.5x to Attack, Defense, and Special Defense.",
+		// Instruct note: We have a superfluous shortDesc so it is easier to
+		// access the item's description.
+		// But changing desc in mods for items shouldnt be an issue.
+		shortDesc: "1.5x to Attack, Defense, and Special Defense.",
 	},
 };
