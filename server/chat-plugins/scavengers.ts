@@ -521,7 +521,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		}
 
 		const message = this.getCreationMessage(true);
-		this.room.add(message).update();
+		this.room.addImmediate(message);
 	}
 
 	// returns whether or not the next action should be stopped
@@ -849,7 +849,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				const game = room.getGame(ScavengerHunt);
 				if (game) {
 					game.setTimer(duration); // auto timer for queue'd games.
-					room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
+					room.addImmediate(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`); // highlight the users with "hunt by"
 				}
 
 				// update the saved queue.
@@ -871,7 +871,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	announce(msg: string) {
-		this.room.add(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`).update();
+		this.room.addImmediate(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`);
 	}
 
 	validatePlayer(player: ScavengerHuntPlayer) {

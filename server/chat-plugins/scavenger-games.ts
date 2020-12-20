@@ -421,7 +421,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				// post leaderboard
 				const room = this.room;
 				const html = await game.leaderboard.htmlLadder() as string;
-				room.add(`|raw|${html}`).update();
+				room.addImmediate(`|raw|${html}`);
 			},
 		},
 		round: 0,
@@ -477,7 +477,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				this.jumpstartTimers[this.jumpstartTimers.length] = setTimeout(() => {
 					this.answerLock = false;
 					const message = this.getCreationMessage(true);
-					this.room.add(message).update();
+					this.room.addImmediate(message);
 					this.announce('You may start guessing!');
 					this.startTime = Date.now();
 				}, 1000 * (maxTime + 5));
@@ -740,7 +740,7 @@ export class ScavengerGameTemplate {
 	}
 
 	announce(msg: string) {
-		this.room.add(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`).update();
+		this.room.addImmediate(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`);
 	}
 }
 

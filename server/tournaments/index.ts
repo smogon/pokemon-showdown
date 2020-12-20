@@ -978,7 +978,7 @@ export class Tournament extends Rooms.RoomGame {
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
 
 		challenge.from.inProgressMatch = {to: player, room};
-		this.room.add(`|tournament|battlestart|${from.name}|${user.name}|${room.roomid}`).update();
+		this.room.addImmediate(`|tournament|battlestart|${from.name}|${user.name}|${room.roomid}`);
 
 		this.isBracketInvalidated = true;
 		if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
@@ -1072,7 +1072,7 @@ export class Tournament extends Rooms.RoomGame {
 			const error = this.generator.setMatchResult([p1, p2], result as 'win' | 'loss', score);
 			if (error) {
 				// Should never happen
-				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`).update();
+				return this.room.addImmediate(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`);
 			}
 		}
 		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.roomid}`);

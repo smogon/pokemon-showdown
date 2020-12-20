@@ -82,16 +82,16 @@ export const commands: ChatCommands = {
 
 			if (err instanceof SyntaxError || err.message === 'Malformed data') {
 				if (!this.broadcasting) return this.sendReply(`Error: Something went wrong in the request: ${err.message}`);
-				return room.add(`Error: Something went wrong in the request: ${err.message}`).update();
+				return room.addImmediate(`Error: Something went wrong in the request: ${err.message}`);
 			} else if (err.message === 'Not found') {
 				if (!this.broadcasting) return this.sendReply('|raw|<div class="infobox">No results found.</div>');
 				return room.addRaw('<div class="infobox">No results found.</div>').update();
 			} else if (err.code === "ENOTFOUND") {
 				if (!this.broadcasting) return this.sendReply("Error connecting to the yugioh wiki.");
-				return room.add("Error connecting to the yugioh wiki.").update();
+				return room.addImmediate("Error connecting to the yugioh wiki.");
 			}
 			if (!this.broadcasting) return this.sendReply(`Error: ${err.message}`);
-			return room.add(`Error: ${err.message}`).update();
+			return room.addImmediate(`Error: ${err.message}`);
 		});
 	},
 	yugiohhelp: [`/yugioh [query] - Search the Yugioh wiki.`],

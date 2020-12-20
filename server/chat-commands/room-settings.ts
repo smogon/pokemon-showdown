@@ -672,17 +672,17 @@ export const commands: ChatCommands = {
 			targetRoom.setPrivate(true);
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
+				upperStaffRoom.addImmediate(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`);
 			}
 			this.sendReply(`The private chat room '${target}' was created.`);
 		} else {
 			const staffRoom = Rooms.get('staff');
 			if (staffRoom) {
-				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
+				staffRoom.addImmediate(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`);
 			}
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
+				upperStaffRoom.addImmediate(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`);
 			}
 			this.sendReply(`The chat room '${target}' was created.`);
 		}
@@ -812,14 +812,14 @@ export const commands: ChatCommands = {
 			target = Utils.escapeHTML(target);
 			if (isPrivate) {
 				if (upperStaffRoom) {
-					upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
+					upperStaffRoom.addImmediate(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`);
 				}
 			} else {
 				if (staffRoom) {
-					staffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`).update();
+					staffRoom.addImmediate(`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`);
 				}
 				if (upperStaffRoom) {
-					upperStaffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
+					upperStaffRoom.addImmediate(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.id}: <b>${target}</b></div>`);
 				}
 			}
 			return;
@@ -868,7 +868,7 @@ export const commands: ChatCommands = {
 			} else {
 				const staffRoom = Rooms.get('staff');
 				if (staffRoom) {
-					staffRoom.add(Utils.html`|raw|<div class="broadcast-red">Public chat room deleted: <b>${title}</b></div>`).update();
+					staffRoom.addImmediate(Utils.html`|raw|<div class="broadcast-red">Public chat room deleted: <b>${title}</b></div>`);
 				}
 				const upperStaffRoom = Rooms.get('upperstaff');
 				if (upperStaffRoom) {
@@ -939,7 +939,7 @@ export const commands: ChatCommands = {
 				Utils.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`
 		  );
 		}
-		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
+		room.addImmediate(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`);
 	},
 	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
 

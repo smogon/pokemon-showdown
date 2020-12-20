@@ -261,7 +261,7 @@ export class Poll {
 		const results = this.generateResults(true);
 
 		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
-		this.room.add(`|html|${results}`).update();
+		this.room.addImmediate(`|html|${results}`);
 	}
 }
 

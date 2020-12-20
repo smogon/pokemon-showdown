@@ -325,7 +325,7 @@ export const commands: ChatCommands = {
 		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
-		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
+		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'iptools', 'modlog'];
 		const version = await Monitor.version();
 
 		let patch = target;
@@ -439,8 +439,8 @@ export const commands: ChatCommands = {
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("DONE");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
-				patch = 'dnsbl';
-				this.sendReply("Hotpatching ip-tools...");
+				patch = 'iptools';
+				this.sendReply("Hotpatching IP tools...");
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();

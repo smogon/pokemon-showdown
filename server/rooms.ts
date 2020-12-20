@@ -378,6 +378,13 @@ export abstract class BasicRoom {
 		return this.add('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
 	}
 	/**
+	 * Adds text into the room log and immediately updates the room,
+	 * sending the text to the users in the room.
+	 */
+	addImmediate(text: string) {
+		return this.addImmediate(text);
+	}
+	/**
 	 * Like addByUser, but without logging
 	 */
 	sendByUser(user: User | null, text: string) {
@@ -605,7 +612,7 @@ export abstract class BasicRoom {
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
 		const canTalk = this.auth.atLeast(user, this.settings.modchat ?? 'unlocked') && !this.isMuted(user);
 		if (this.reportJoins && (canTalk || this.auth.has(user.id))) {
-			this.add(`|${type}|${entry}`).update();
+			this.addImmediate(`|${type}|${entry}`);
 			return;
 		}
 		let ucType = '';
@@ -1503,7 +1510,7 @@ export class GlobalRoomState {
 		if (!rooms || !message) return;
 		for (const roomid of rooms) {
 			const curRoom = Rooms.get(roomid);
-			if (curRoom) curRoom.add(message).update();
+			if (curRoom) curRoom.addImmediate(message);
 		}
 	}
 	reportCrash(err: Error, crasher = "The server") {
@@ -1539,13 +1546,13 @@ export class GlobalRoomState {
 		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
-			devRoom.add(crashMessage).update();
+			devRoom.addImmediate(crashMessage);
 		} else {
-			Rooms.lobby?.add(crashMessage).update();
-			Rooms.get('staff')?.add(crashMessage).update();
+			Rooms.lobby?.addImmediate(crashMessage);
+			Rooms.get('staff')?.addImmediate(crashMessage);
 		}
 		if (privateCrashMessage) {
-			upperStaffRoom!.add(privateCrashMessage).update();
+			upperStaffRoom!.addImmediate(privateCrashMessage);
 		}
 	}
 	/**
