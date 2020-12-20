@@ -881,7 +881,6 @@ export const commands: ChatCommands = {
 		}
 
 		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
-		room.update();
 		room.send(`|expire|This room has been deleted.`);
 		room.destroy();
 	},

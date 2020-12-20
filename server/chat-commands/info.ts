@@ -2580,7 +2580,7 @@ export const commands: ChatCommands = {
 		} else {
 			buf += `</small></div>`;
 		}
-		room.add(`|c| ${request.name}|/raw ${buf}`);
+		room.addQueue(`|c| ${request.name}|/raw ${buf}`);
 		this.privateModAction(`${user.name} approved showing media from ${request.name}.`);
 	},
 	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],

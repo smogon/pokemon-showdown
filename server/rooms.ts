@@ -1862,14 +1862,14 @@ export const Rooms = {
 			if (battle.forcePublic) {
 				room.setPrivate(false);
 				room.settings.modjoin = null;
-				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
+				room.addRawQueue(`<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
 			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
 				room.setPrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {
 					room.settings.modjoin = '%';
-					room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+					room.addRawQueue(`<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
 				}
 			}
 		}

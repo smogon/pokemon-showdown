@@ -740,7 +740,7 @@ export class ScavengerGameTemplate {
 	}
 
 	announce(msg: string) {
-		this.room.add(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`);
+		this.room.addRaw(`<div class="broadcast-blue"><strong>${msg}</strong></div>`);
 	}
 }
 

@@ -871,7 +871,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	announce(msg: string) {
-		this.room.add(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`);
+		this.room.addRaw(`<div class="broadcast-blue"><strong>${msg}</strong></div>`);
 	}
 
 	validatePlayer(player: ScavengerHuntPlayer) {
@@ -1495,7 +1495,7 @@ const ScavengerCommands: ChatCommands = {
 		const result = game.setTimer(minutes);
 		const message = `The scavenger timer has been ${(result === 'off' ? "turned off" : `set to ${result} minutes`)}`;
 
-		room.add(message + '.');
+		room.addQueue(message + '.');
 		this.privateModAction(`${message} by ${user.name}.`);
 		this.modlog('SCAV TIMER', null, (result === 'off' ? 'OFF' : `${result} minutes`));
 	},

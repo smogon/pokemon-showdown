@@ -1494,10 +1494,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.room.add(`|uhtml|mafia|${message}`);
 	}
 	sendDeclare(message: string) {
-		this.room.add(`|raw|<div class="broadcast-blue">${message}</div>`);
+		this.room.addRaw(`<div class="broadcast-blue">${message}</div>`);
 	}
 	sendStrong(message: string) {
-		this.room.add(`|raw|<strong>${message}</strong>`);
+		this.room.addRaw(`<strong>${message}</strong>`);
 	}
 	sendTimestamp(message: string) {
 		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|${message}`);

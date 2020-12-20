@@ -180,7 +180,7 @@ export class Hangman extends Rooms.RoomGame {
 
 	display(user: User, broadcast = false) {
 		if (broadcast) {
-			this.room.add(`|uhtml|hangman${this.gameNumber}|${this.generateWindow()}`);
+			this.room.addQueue(`|uhtml|hangman${this.gameNumber}|${this.generateWindow()}`);
 		} else {
 			user.sendTo(this.room, `|uhtml|hangman${this.gameNumber}|${this.generateWindow()}`);
 		}
@@ -196,13 +196,13 @@ export class Hangman extends Rooms.RoomGame {
 
 	end() {
 		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman was ended.)</div>');
-		this.room.add("The game of hangman was ended.");
+		this.room.addQueue("The game of hangman was ended.");
 		this.room.game = null;
 	}
 
 	finish() {
 		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
-		this.room.add(`|html|${this.generateWindow()}`);
+		this.room.addQueue(`|html|${this.generateWindow()}`);
 		this.room.game = null;
 	}
 }

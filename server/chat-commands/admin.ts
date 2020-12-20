@@ -440,7 +440,7 @@ export const commands: ChatCommands = {
 				this.sendReply("DONE");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
-				this.sendReply("Hotpatching IP tools...");
+				this.sendReply("Hotpatching ip-tools...");
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();

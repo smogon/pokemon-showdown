@@ -186,8 +186,8 @@ export class HelpTicket extends Rooms.RoomGame {
 			'help', 'yes',
 		];
 		if ((!user.isStaff || this.ticket.userid === user.id) && blockedMessages.includes(toID(message))) {
-			this.room.add(`|c|&Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
-			this.room.add(`|c|&Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
+			this.room.addQueue(`|c|&Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
+			this.room.addQueue(`|c|&Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
 			this.room.update();
 			return false;
 		}
@@ -216,7 +216,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (user) {
 			this.room.addByUser(user, text);
 		} else {
-			this.room.add(text);
+			this.room.addQueue(text);
 		}
 		this.room.update();
 	}
@@ -1245,11 +1245,9 @@ export const commands: ChatCommands = {
 			}
 			if (contexts[ticket.type]) {
 				helpRoom.add(`|c|&Staff|${this.tr(contexts[ticket.type])}`);
-				helpRoom.update();
 			}
 			if (pmRequestButton) {
 				helpRoom.add(pmRequestButton);
-				helpRoom.update();
 			}
 			tickets[user.id] = ticket;
 			writeTickets();

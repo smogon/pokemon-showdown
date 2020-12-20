@@ -298,9 +298,8 @@ export class LadderStore {
 			room.update();
 		} catch (e) {
 			if (!room.battle) return [p1score, null, null];
-			room.addRaw(`There was an error calculating rating changes:`);
+			room.addRawQueue(`There was an error calculating rating changes:`);
 			room.add(e.stack);
-			room.update();
 		}
 
 		return [p1score, p1newElo, p2newElo];

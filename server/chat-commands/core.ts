@@ -960,7 +960,7 @@ export const commands: ChatCommands = {
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
-			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
+			battleRoom.addQueue(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 		}, 500);
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],

@@ -152,7 +152,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	nextPlayer() {
-		this.room.addRaw(`${this.curPlayer.name} you're up!`);
+		this.room.addRawQueue(`${this.curPlayer.name} you're up!`);
 	}
 
 	getGrid() {
@@ -181,16 +181,16 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	display() {
-		this.room.add(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+		this.room.addQueue(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 	}
 
 	update(dontMove = false) {
 		if (dontMove) {
-			this.room.add(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.addQueue(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		} else {
-			this.room.add(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|`);
+			this.room.addQueue(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|`);
 			this.numUpdates++;
-			this.room.add(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.addQueue(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		}
 	}
 
@@ -220,7 +220,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		if (question.answered) return "That question has already been answered.";
 		this.question = question;
 		if (question.dd) {
-			this.room.add(`That was a daily double! ${this.curPlayer.name}, how much would you like to wager?`);
+			this.room.addQueue(`That was a daily double! ${this.curPlayer.name}, how much would you like to wager?`);
 			this.clearWagers();
 			this.state = 'wagering';
 			this.timeout = setTimeout(() => this.dailyDouble(), 30 * 1000);
@@ -247,7 +247,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			this.curPlayer = null!;
 		}
 		this.clearBuzzes();
-		this.room.addRaw(`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);
+		this.room.addRawQueue(`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);
 		if (!this.finals) {
 			this.canBuzz = false;
 			this.update(true);
@@ -268,7 +268,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	revealAnswer() {
-		this.room.addRaw(`<div class="broadcast-blue">The answer was: ${Utils.escapeHTML(this.question.answer)}</div>`);
+		this.room.addRawQueue(`<div class="broadcast-blue">The answer was: ${Utils.escapeHTML(this.question.answer)}</div>`);
 		this.question.answered = true;
 	}
 
@@ -286,7 +286,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		}
 		this.curPlayer = player;
 		this.curPlayer.buzzed = true;
-		this.room.add(`${user.name} has buzzed in!`);
+		this.room.addQueue(`${user.name} has buzzed in!`);
 		this.state = "answering";
 		this.timeout = setTimeout(() => this.check(false), this.answeringTime * 1000);
 	}
@@ -302,7 +302,7 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	startFinals() {
 		this.update();
-		this.room.add("Time to begin finals! The category is: " + this.finalCategory + "! Please wager your amounts now.");
+		this.room.addQueue("Time to begin finals! The category is: " + this.finalCategory + "! Please wager your amounts now.");
 		this.finals = true;
 		this.state = "wagering";
 		this.clearWagers();
@@ -369,7 +369,7 @@ export class Jeopardy extends Rooms.RoomGame {
 					highest.push(player.name);
 				}
 			}
-			this.room.add(`|raw|<div class=broadcast-green>Congratulations to ${highest.map(n => Utils.escapeHTML(n)).join(", ")} for winning the game of Jeopardy with ${maxpoints} points!`);
+			this.room.addQueue(`|raw|<div class=broadcast-green>Congratulations to ${highest.map(n => Utils.escapeHTML(n)).join(", ")} for winning the game of Jeopardy with ${maxpoints} points!`);
 			this.destroy();
 			return;
 		} else {
@@ -377,11 +377,11 @@ export class Jeopardy extends Rooms.RoomGame {
 			this.curPlayer = this.playerTable[index];
 			const answer = this.curPlayer.finalAnswer;
 			if (answer) {
-				this.room.add(`${this.curPlayer.name} has answered ${Utils.escapeHTML(answer)}!`);
+				this.room.addQueue(`${this.curPlayer.name} has answered ${Utils.escapeHTML(answer)}!`);
 				this.state = "checking";
 			} else {
 				const wager = this.curPlayer.wager;
-				this.room.add(`${this.curPlayer.name} did not answer the final Jeopardy and loses ${wager} points`);
+				this.room.addQueue(`${this.curPlayer.name} did not answer the final Jeopardy and loses ${wager} points`);
 				let points = this.curPlayer.points;
 				points -= wager;
 				this.curPlayer.points = points;
@@ -402,7 +402,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			if (this.timeout) clearTimeout(this.timeout);
 			if (!this.curPlayer || this.curPlayer.id !== user.id) return "It is not your turn to answer.";
 			this.state = "checking";
-			this.room.add(`${user.name} has answered ${Utils.escapeHTML(target)}!`);
+			this.room.addQueue(`${user.name} has answered ${Utils.escapeHTML(target)}!`);
 		}
 	}
 
@@ -417,7 +417,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			let points = this.curPlayer.points;
 			points += gainpoints;
 			this.curPlayer.points = points;
-			this.room.add(`${this.curPlayer.name} has answered the question correctly and gained ${gainpoints} points!`);
+			this.room.addQueue(`${this.curPlayer.name} has answered the question correctly and gained ${gainpoints} points!`);
 			if (!this.finals) {
 				this.revealAnswer();
 			}
@@ -439,7 +439,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			}
 		} else {
 			const losspoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
-			this.room.add(`${this.curPlayer.name} answered incorrectly and loses ${losspoints} points!`);
+			this.room.addQueue(`${this.curPlayer.name} answered incorrectly and loses ${losspoints} points!`);
 			let points = this.curPlayer.points;
 			points -= losspoints;
 			this.curPlayer.points = points;

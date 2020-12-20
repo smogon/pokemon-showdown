@@ -721,7 +721,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			}
 		}
 		if (!this.ended) {
-			this.room.add(`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`);
+			this.room.addQueue(`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`);
 			if (!disconnected) Monitor.crashlog(new Error(`Sim stream interrupted`), `A sim stream`);
 			this.started = true;
 			this.ended = true;
@@ -743,9 +743,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 				if (line.startsWith('|turn|')) {
 					this.turn = parseInt(line.slice(6));
 				}
-				this.room.add(line);
-				if (line.startsWith(`|bigerror|You will auto-tie if `)) {
-					if (Config.allowrequestingties) this.room.add(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
+				this.room.addQueue(line);
+				if (Config.allowrequestingties && line.startsWith(`|bigerror|You will auto-tie if `)) {
+					this.room.addQueue(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
 				}
 			}
 			this.room.update();
@@ -959,7 +959,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (player && !player.active) {
 			player.active = true;
 			this.timer.checkActivity();
-			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
+			this.room.addQueue(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
 	onLeave(user: User, oldUserid?: ID) {
@@ -968,7 +968,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			player.sendRoom(`|request|null`);
 			player.active = false;
 			this.timer.checkActivity();
-			this.room.add(`|player|${player.slot}|`);
+			this.room.addQueue(`|player|${player.slot}|`);
 		}
 	}
 
@@ -999,7 +999,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (this.ended || !this.started) return false;
 
 		if (!message) message = ' forfeited.';
-		this.room.add(`|-message|${player.name}${message}`);
+		this.room.addQueue(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
 		const otherids = ['p2', 'p1'];
 		void this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
@@ -1053,14 +1053,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 			};
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
-			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
+			this.room.addQueue(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
 			const options = {
 				name: '',
 			};
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
-			this.room.add(`|player|${slot}|`);
+			this.room.addQueue(`|player|${slot}|`);
 		}
 	}
 

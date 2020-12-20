@@ -87,7 +87,6 @@ export const Repeats = new class {
 			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[room.roomid][repeat.id], true) :
 				repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
 			room.add(`|html|<div class="infobox">${formattedText}</div>`);
-			room.update();
 		}, interval)));
 	}
 

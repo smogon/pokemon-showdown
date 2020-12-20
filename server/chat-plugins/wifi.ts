@@ -65,7 +65,6 @@ class Giveaway {
 
 	send(content: string) {
 		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${content}</div>`);
-		this.room.update();
 	}
 
 	changeUhtml(content: string) {
@@ -527,7 +526,6 @@ export class GTSGiveaway {
 
 	send(content: string) {
 		this.room.add(`|uhtml|gtsga${this.gtsNumber}|<div class="broadcast-blue">${content}</div>`);
-		this.room.update();
 	}
 
 	changeUhtml(content: string) {

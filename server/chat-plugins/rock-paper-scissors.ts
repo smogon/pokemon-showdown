@@ -38,8 +38,8 @@ export class RPSGame extends Rooms.RoomGame {
 		this.wins = [];
 
 		this.room.update();
-		this.room.add(`|controlshtml|<center>Waiting for another player to join....</center>`);
-		this.room.add(`|fieldhtml|<center><h2>Waiting to start the game...</h2></center>`);
+		this.room.addQueue(`|controlshtml|<center>Waiting for another player to join....</center>`);
+		this.room.addQueue(`|fieldhtml|<center><h2>Waiting to start the game...</h2></center>`);
 	}
 	onJoin(user: User) {
 		if (user.id in this.playerTable) return;
@@ -222,7 +222,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.room.pokeExpireTimer();
 		this.addControls(`The game has ended.`);
 		this.ended = true;
-		this.room.add(`The game has been ended.`); // for the benefit of those in the room
+		this.room.addQueue(`The game has been ended.`); // for the benefit of those in the room
 		this.room.log.log = [];
 		for (const id in this.playerTable) {
 			this.playerTable[id].unlinkUser();

@@ -248,7 +248,7 @@ class OtdHandler {
 		if (update) {
 			this.room.uhtmlchange('otd', this.generateNomWindow());
 		} else {
-			this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
+			this.room.addQueue(`|uhtml|otd|${this.generateNomWindow()}`);
 		}
 	}
 

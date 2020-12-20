@@ -462,7 +462,7 @@ export const commands: ChatCommands = {
 						if (!room.minorActivityQueue.length) room.minorActivityQueue = null;
 					}
 				}, timeout * 60000);
-				room.add(this.tr`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
+				room.addQueue(this.tr`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
 				return this.privateModAction(room.tr`The poll timer was set to ${timeout} minute(s) by ${user.name}.`);
 			} else {
