@@ -1142,7 +1142,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	return {reply: resultsStr};
 }
 
-function runMovesearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
 	const allCategories = ['physical', 'special', 'status'];
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
@@ -1841,6 +1841,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	} else {
 		resultsStr += "No moves found.";
 	}
+	if (isTest) {
+		return {results, reply: resultsStr};
+	}
 	return {reply: resultsStr};
 }
 
@@ -2483,3 +2486,7 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
+
+export const testables = {
+	runMovesearch: runMovesearch,
+};
