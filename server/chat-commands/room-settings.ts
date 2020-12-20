@@ -904,7 +904,7 @@ export const commands: ChatCommands = {
 		}
 		const oldTitle = room.title;
 		const isGroupchat = cmd === 'renamegroupchat';
-		if (!toID(target)) return this.errorReply("Rooms need a title.");
+		if (!toID(target)) return this.parse("/help renameroom");
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
 		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
 		if (isGroupchat) {
@@ -941,7 +941,7 @@ export const commands: ChatCommands = {
 		}
 		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
-	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
+	renameroomhelp: [`/renameroom [new title] - Renames the current room to [new title]. Case-sensitive. Requires &`],
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
