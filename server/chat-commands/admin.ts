@@ -627,7 +627,7 @@ export const commands: ChatCommands = {
 
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type === 'battle') curRoom.rated = 0;
-			curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+			curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`);
 		}
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
@@ -650,7 +650,7 @@ export const commands: ChatCommands = {
 		);
 
 		for (const curRoom of Rooms.rooms.values()) {
-			curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+			curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`);
 		}
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
@@ -730,7 +730,7 @@ export const commands: ChatCommands = {
 			`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
 		if (Rooms.global.lockdown === true) {
 			for (const curRoom of Rooms.rooms.values()) {
-				curRoom.addRaw(message).update();
+				curRoom.addRaw(message);
 			}
 			for (const curUser of Users.users.values()) {
 				curUser.send(`|pm|&|${curUser.tempGroup}${curUser.name}|/raw ${message}`);
@@ -755,7 +755,7 @@ export const commands: ChatCommands = {
 		}
 		Config.emergency = true;
 		for (const curRoom of Rooms.rooms.values()) {
-			curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
+			curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`);
 		}
 
 		this.stafflog(`${user.name} used /emergency.`);
@@ -769,7 +769,7 @@ export const commands: ChatCommands = {
 		}
 		Config.emergency = false;
 		for (const curRoom of Rooms.rooms.values()) {
-			curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
+			curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`);
 		}
 
 		this.stafflog(`${user.name} used /endemergency.`);

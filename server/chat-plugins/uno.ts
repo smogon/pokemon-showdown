@@ -260,7 +260,7 @@ export class UNO extends Rooms.RoomGame {
 
 	sendToRoom(msg: string, overrideSuppress = false) {
 		if (!this.suppressMessages || overrideSuppress) {
-			this.room.addImmediate(msg);
+			this.room.add(msg);
 		} else {
 			// send to the players first
 			for (const i in this.playerTable) {
@@ -713,7 +713,7 @@ export const commands: ChatCommands = {
 				throw new Chat.ErrorMessage("There is no UNO game going on in this room.");
 			}
 			room.game.destroy();
-			room.addImmediate("The game of UNO was forcibly ended.");
+			room.add("The game of UNO was forcibly ended.");
 			this.privateModAction(`The game of UNO was ended by ${user.name}.`);
 			this.modlog('UNO END');
 		},
@@ -768,7 +768,7 @@ export const commands: ChatCommands = {
 			if (disqualified === false) throw new Chat.ErrorMessage(`Unable to disqualify ${target}.`);
 			this.privateModAction(`${user.name} has disqualified ${disqualified} from the UNO game.`);
 			this.modlog('UNO DQ', toID(target));
-			room.addImmediate(`${disqualified} has been disqualified from the UNO game.`);
+			room.add(`${disqualified} has been disqualified from the UNO game.`);
 		},
 
 		// player/user commands

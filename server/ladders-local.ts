@@ -214,7 +214,7 @@ export class LadderStore {
 	 */
 	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
 		if (Ladders.disabled) {
-			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			room.addRaw(`Ratings not updated. The ladders are currently disabled.`);
 			return [p1score, null, null];
 		}
 

@@ -63,7 +63,7 @@ export class LadderStore {
 	 */
 	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
 		if (Ladders.disabled) {
-			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			room.addRaw(`Ratings not updated. The ladders are currently disabled.`);
 			return [p1score, null, null];
 		}
 
@@ -82,9 +82,9 @@ export class LadderStore {
 
 		if (error) {
 			if (error.message === 'stream interrupt') {
-				room.add(`||Ladder updated, but score could not be retrieved.`);
+				room.addToLog(`||Ladder updated, but score could not be retrieved.`);
 			} else {
-				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
+				room.addToLog(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
 			}
 			problem = true;
 		} else if (!room.battle) {

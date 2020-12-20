@@ -65,16 +65,16 @@ export const commands: ChatCommands = {
 						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Utils.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
 					}
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
-					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
+					room.addRaw(`<div class="infobox">${htmlReply}</div>`);
 				}, () => {
 					if (!room) return; // do nothing if the room doesn't exist anymore
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
-					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
+					room.addRaw(`<div class="infobox">${htmlReply}</div>`);
 				});
 			} else {
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
-				room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
+				room.addRaw(`<div class="infobox">${htmlReply}</div>`);
 			}
 		}, (err: Error & {code: string}) => {
 			if (!this.runBroadcast()) return;
@@ -82,16 +82,16 @@ export const commands: ChatCommands = {
 
 			if (err instanceof SyntaxError || err.message === 'Malformed data') {
 				if (!this.broadcasting) return this.sendReply(`Error: Something went wrong in the request: ${err.message}`);
-				return room.addImmediate(`Error: Something went wrong in the request: ${err.message}`);
+				return room.add(`Error: Something went wrong in the request: ${err.message}`);
 			} else if (err.message === 'Not found') {
 				if (!this.broadcasting) return this.sendReply('|raw|<div class="infobox">No results found.</div>');
-				return room.addRaw('<div class="infobox">No results found.</div>').update();
+				return room.addRaw('<div class="infobox">No results found.</div>');
 			} else if (err.code === "ENOTFOUND") {
 				if (!this.broadcasting) return this.sendReply("Error connecting to the yugioh wiki.");
-				return room.addImmediate("Error connecting to the yugioh wiki.");
+				return room.add("Error connecting to the yugioh wiki.");
 			}
 			if (!this.broadcasting) return this.sendReply(`Error: ${err.message}`);
-			return room.addImmediate(`Error: ${err.message}`);
+			return room.add(`Error: ${err.message}`);
 		});
 	},
 	yugiohhelp: [`/yugioh [query] - Search the Yugioh wiki.`],

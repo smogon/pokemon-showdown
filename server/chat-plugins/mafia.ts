@@ -604,7 +604,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.day(null, true);
 		}
 		if (this.IDEA.data && !this.IDEA.discardsHidden) {
-			this.room.addImmediate(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHTML}</details></div>`);
+			this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHTML}</details></div>`);
 		}
 	}
 
@@ -1446,7 +1446,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	sendPlayerList() {
-		this.room.addImmediate(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).join(', ')}`);
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).join(', ')}`);
 	}
 
 	updatePlayers() {
@@ -1488,19 +1488,19 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	sendRoom(message: string) {
-		this.room.addImmediate(message);
+		this.room.add(message);
 	}
 	sendHTML(message: string) {
-		this.room.addImmediate(`|uhtml|mafia|${message}`);
+		this.room.add(`|uhtml|mafia|${message}`);
 	}
 	sendDeclare(message: string) {
-		this.room.addImmediate(`|raw|<div class="broadcast-blue">${message}</div>`);
+		this.room.add(`|raw|<div class="broadcast-blue">${message}</div>`);
 	}
 	sendStrong(message: string) {
-		this.room.addImmediate(`|raw|<strong>${message}</strong>`);
+		this.room.add(`|raw|<strong>${message}</strong>`);
 	}
 	sendTimestamp(message: string) {
-		this.room.addImmediate(`|c:|${(Math.floor(Date.now() / 1000))}|~|${message}`);
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|${message}`);
 	}
 	logAction(user: User, message: string) {
 		if (user.id === this.hostid || this.cohosts.includes(user.id)) return;
@@ -2072,7 +2072,7 @@ export const commands: ChatCommands = {
 			if (room.roomid === 'mafia') {
 				const queueIndex = hostQueue.indexOf(targetUser.id);
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
-				room.addImmediate(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`);
+				room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`);
 			}
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
@@ -2104,7 +2104,7 @@ export const commands: ChatCommands = {
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
 				if (isHostBanned(targetUserID)) return this.errorReply(`User ${targetUserID} is banned from hosting games.`);
 				hostQueue.push(targetUserID);
-				room.addImmediate(`User ${targetUserID} has been added to the host queue by ${user.name}.`);
+				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`);
 				break;
 			case 'del':
 			case 'delete':
@@ -2114,7 +2114,7 @@ export const commands: ChatCommands = {
 				const index = hostQueue.indexOf(targetUserID);
 				if (index === -1) return this.errorReply(`User ${targetUserID} is not on the host queue.`);
 				hostQueue.splice(index, 1);
-				room.addImmediate(`User ${targetUserID} has been removed from the host queue by ${user.name}.`);
+				room.add(`User ${targetUserID} has been removed from the host queue by ${user.name}.`);
 				break;
 			case '':
 			case 'show':
@@ -3475,7 +3475,7 @@ export const commands: ChatCommands = {
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeFile(LOGS_FILE, logs);
 			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(toGiveTo)}`);
-			room.addImmediate(buf);
+			room.add(buf);
 		},
 		winhelp: [
 			`/mafia win (points), [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
@@ -3512,7 +3512,7 @@ export const commands: ChatCommands = {
 			if (!gavePoints) return this.parse('/help mafia mvp');
 			writeFile(LOGS_FILE, logs);
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 10 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(args)}`);
-			room.addImmediate(`MVP and 10 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(args)}`);
+			room.add(`MVP and 10 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(args)}`);
 		},
 		mvphelp: [
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 10 leaderboard points to the users specified.`,
@@ -3574,7 +3574,7 @@ export const commands: ChatCommands = {
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			}
 			writeFile(BANS_FILE, hostBans);
-			room.addImmediate(`${targetUser} was ${isUnban ? 'un' : ''}banned from hosting games${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`);
+			room.add(`${targetUser} was ${isUnban ? 'un' : ''}banned from hosting games${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`);
 		},
 		hostbanhelp: [
 			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # &`,

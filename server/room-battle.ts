@@ -227,7 +227,7 @@ export class RoomBattleTimer {
 		const userid = requester ? requester.id : 'staff' as ID;
 		if (this.timerRequesters.has(userid)) return false;
 		if (this.timer) {
-			this.battle.room.addImmediate(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`);
+			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`);
 			this.timerRequesters.add(userid);
 			return false;
 		}
@@ -242,7 +242,7 @@ export class RoomBattleTimer {
 		}
 		this.timerRequesters.add(userid);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
-		this.battle.room.addImmediate(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`);
+		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`);
 
 		this.nextRequest();
 		return true;
@@ -257,11 +257,11 @@ export class RoomBattleTimer {
 			this.timerRequesters.clear();
 		}
 		if (this.timerRequesters.size) {
-			this.battle.room.addImmediate(`|inactive|${requester!.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`);
+			this.battle.room.add(`|inactive|${requester!.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`);
 			return false;
 		}
 		if (this.end()) {
-			this.battle.room.addImmediate(`|inactiveoff|Battle timer is now OFF.`);
+			this.battle.room.add(`|inactiveoff|Battle timer is now OFF.`);
 			return true;
 		}
 		return false;
@@ -413,7 +413,7 @@ export class RoomBattleTimer {
 							msg = ` and has no disconnection time left!`;
 						}
 					}
-					this.battle.room.addImmediate(`|inactive|${player.name} disconnected${msg}`);
+					this.battle.room.add(`|inactive|${player.name} disconnected${msg}`);
 				}
 			} else {
 				// player has reconnected
@@ -423,7 +423,7 @@ export class RoomBattleTimer {
 					if (!player.request.isWait) {
 						timeLeft = ` and has ${player.turnSecondsLeft} seconds left`;
 					}
-					this.battle.room.addImmediate(`|inactive|${player.name} reconnected${timeLeft}.`);
+					this.battle.room.add(`|inactive|${player.name} reconnected${timeLeft}.`);
 				}
 			}
 		}
@@ -432,7 +432,7 @@ export class RoomBattleTimer {
 		const players = this.battle.players;
 		if (players.every(player => player.turnSecondsLeft <= 0)) {
 			if (!this.settings.timeoutAutoChoose || players.every(player => player.secondsLeft <= 0)) {
-				this.battle.room.addImmediate(`|-message|All players are inactive.`);
+				this.battle.room.add(`|-message|All players are inactive.`);
 				this.battle.tie();
 				return true;
 			}

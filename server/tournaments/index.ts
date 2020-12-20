@@ -499,7 +499,7 @@ export class Tournament extends Rooms.RoomGame {
 			matchPlayer.inProgressMatch.room.addRaw(
 				Utils.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />` +
 				`You can finish playing, but this battle is no longer considered a tournament battle.</div>`
-			).update();
+			);
 			matchPlayer.inProgressMatch.room.setParent(null);
 			this.completedMatches.add(matchPlayer.inProgressMatch.room.roomid);
 			matchPlayer.inProgressMatch = null;
@@ -978,7 +978,7 @@ export class Tournament extends Rooms.RoomGame {
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
 
 		challenge.from.inProgressMatch = {to: player, room};
-		this.room.addImmediate(`|tournament|battlestart|${from.name}|${user.name}|${room.roomid}`);
+		this.room.add(`|tournament|battlestart|${from.name}|${user.name}|${room.roomid}`);
 
 		this.isBracketInvalidated = true;
 		if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
@@ -1072,7 +1072,7 @@ export class Tournament extends Rooms.RoomGame {
 			const error = this.generator.setMatchResult([p1, p2], result as 'win' | 'loss', score);
 			if (error) {
 				// Should never happen
-				return this.room.addImmediate(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`);
+				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`);
 			}
 		}
 		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.roomid}`);
@@ -1242,7 +1242,7 @@ const commands: ChatCommands = {
 							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
 							`<strong>${Dex.getFormat(tour.name).name}</strong> tournament created in` +
 							` <strong>${room.title}</strong>.</a></div>`
-						).update();
+						);
 					}
 				}
 			}

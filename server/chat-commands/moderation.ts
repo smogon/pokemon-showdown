@@ -200,7 +200,7 @@ export const commands: ChatCommands = {
 
 			if (this.pmTarget && targetUser) {
 				const text = `${targetUser.name} was invited (and promoted to Room ${nextGroupName}) by ${user.name}.`;
-				room.addImmediate(`|c|${user.getIdentity(room.roomid)}|/log ${text}`);
+				room.add(`|c|${user.getIdentity(room.roomid)}|/log ${text}`);
 				this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
 			} else if (
 				nextSymbol in Config.groups && oldSymbol in Config.groups &&
@@ -1451,7 +1451,7 @@ export const commands: ChatCommands = {
 
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type !== 'battle') {
-				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`);
 			}
 		}
 		this.globalModlog(`CHATDECLARE`, null, target);

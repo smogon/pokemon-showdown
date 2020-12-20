@@ -569,7 +569,7 @@ export class CommandContext extends MessageContext {
 			}
 			Chat.sendPM(message, this.user, this.pmTarget);
 		} else if (this.room) {
-			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
+			this.room.addQueue(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
 			if (this.room.game && this.room.game.onLogMessage) {
 				this.room.game.onLogMessage(message, this.user);
 			}
@@ -703,7 +703,7 @@ export class CommandContext extends MessageContext {
 	}
 	add(data: string) {
 		if (this.room) {
-			this.room.add(data);
+			this.room.addQueue(data);
 		} else {
 			this.send(data);
 		}

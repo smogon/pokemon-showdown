@@ -334,7 +334,7 @@ export abstract class BasicRoom {
 	 * for everyone, and appears in the scrollback for new users who
 	 * join.
 	 */
-	add(message: string) {
+	addQueue(message: string) {
 		this.log.add(message);
 		return this;
 	}
@@ -366,8 +366,8 @@ export abstract class BasicRoom {
 	/**
 	 * Inserts (sanitized) HTML into the room log.
 	 */
-	addRaw(message: string) {
-		return this.add('|raw|' + message);
+	addRawQueue(message: string) {
+		return this.addQueue('|raw|' + message);
 	}
 	/**
 	 * Inserts some text into the room log, attributed to user. The
@@ -375,14 +375,18 @@ export abstract class BasicRoom {
 	 * highlight the user.
 	 */
 	addByUser(user: User, text: string): this {
-		return this.add('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
+		return this.addQueue('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
 	}
 	/**
 	 * Adds text into the room log and immediately updates the room,
 	 * sending the text to the users in the room.
 	 */
-	addImmediate(text: string) {
-		return this.add(text).update();
+	add(text: string) {
+		return this.addQueue(text).update();
+	}
+
+	addRaw(text: string) {
+		return this.addRawQueue(text).update();
 	}
 	/**
 	 * Like addByUser, but without logging
@@ -612,7 +616,7 @@ export abstract class BasicRoom {
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
 		const canTalk = this.auth.atLeast(user, this.settings.modchat ?? 'unlocked') && !this.isMuted(user);
 		if (this.reportJoins && (canTalk || this.auth.has(user.id))) {
-			this.addImmediate(`|${type}|${entry}`);
+			this.add(`|${type}|${entry}`);
 			return;
 		}
 		let ucType = '';
@@ -1348,9 +1352,7 @@ export class GlobalRoomState {
 			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
 				const reportPlayers = players.map(p => p.getIdentity()).join('|');
-				reportRoom
-					.add(`|b|${room.roomid}|${reportPlayers}`)
-					.update();
+				reportRoom.add(`|b|${room.roomid}|${reportPlayers}`);
 			}
 		}
 		if (Config.logladderip && options.rated) {
@@ -1447,10 +1449,10 @@ export class GlobalRoomState {
 					curRoom.addRaw(`<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>`);
 					curRoom.update();
 				} else {
-					curRoom.addRaw(`<div class="broadcast-red"><b>The server needs to restart because of a crash.</b><br />No new battles can be started until the server is done restarting.</div>`).update();
+					curRoom.addRaw(`<div class="broadcast-red"><b>The server needs to restart because of a crash.</b><br />No new battles can be started until the server is done restarting.</div>`);
 				}
 			} else {
-				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
+				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
 			}
 			const game = curRoom.game;
 			// @ts-ignore TODO: revisit when game.timer is standardized
@@ -1459,7 +1461,7 @@ export class GlobalRoomState {
 				game.timer.start();
 				if (curRoom.settings.modchat !== '+') {
 					curRoom.settings.modchat = '+';
-					curRoom.addRaw(`<div class="broadcast-red"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>`).update();
+					curRoom.addRaw(`<div class="broadcast-red"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>`);
 				}
 			}
 		}
@@ -1510,7 +1512,7 @@ export class GlobalRoomState {
 		if (!rooms || !message) return;
 		for (const roomid of rooms) {
 			const curRoom = Rooms.get(roomid);
-			if (curRoom) curRoom.addImmediate(message);
+			if (curRoom) curRoom.add(message);
 		}
 	}
 	reportCrash(err: Error, crasher = "The server") {
@@ -1546,13 +1548,13 @@ export class GlobalRoomState {
 		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
-			devRoom.addImmediate(crashMessage);
+			devRoom.add(crashMessage);
 		} else {
-			Rooms.lobby?.addImmediate(crashMessage);
-			Rooms.get('staff')?.addImmediate(crashMessage);
+			Rooms.lobby?.add(crashMessage);
+			Rooms.get('staff')?.add(crashMessage);
 		}
 		if (privateCrashMessage) {
-			upperStaffRoom!.addImmediate(privateCrashMessage);
+			upperStaffRoom!.add(privateCrashMessage);
 		}
 	}
 	/**

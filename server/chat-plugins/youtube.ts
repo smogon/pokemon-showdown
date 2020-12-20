@@ -284,7 +284,7 @@ export class YoutubeInterface {
 				const room = Rooms.get('youtube');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await YouTube.randChannel();
-				room.addImmediate(`|html|<div class="infobox">${res}</div>`);
+				room.add(`|html|<div class="infobox">${res}</div>`);
 			})();
 		}, interval);
 		return this.interval;
@@ -366,7 +366,7 @@ export class GroupWatch extends Rooms.RoomGame {
 		this.add(`|fieldhtml|${html}`);
 	}
 	add(buf: string) {
-		this.room.addImmediate(buf);
+		this.room.add(buf);
 	}
 	destroy() {
 		this.controls(`<b>The group watch has ended.</b>`);
@@ -565,7 +565,7 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			this.requireGame(GroupWatch);
 			room.parent!.modlog({action: `GROUPWATCH END`, loggedBy: user.id});
-			room.parent!.addImmediate(`|c|~|/uhtmlchange ${room.roomid},`);
+			room.parent!.add(`|c|~|/uhtmlchange ${room.roomid},`);
 			room.destroy();
 		},
 		startwatch: 'beginwatch',

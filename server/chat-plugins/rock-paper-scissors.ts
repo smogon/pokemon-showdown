@@ -80,7 +80,7 @@ export class RPSGame extends Rooms.RoomGame {
 			const {name, choice} = entry;
 			buf += Utils.html`<div class="broadcast-green">${name} won round ${i + 1} with ${choice}!</div>`;
 		}
-		this.room.addImmediate(buf);
+		this.room.add(buf);
 	}
 	resetOptions(user: User) {
 		const player = this.getPlayer(user);
@@ -117,7 +117,7 @@ export class RPSGame extends Rooms.RoomGame {
 		return buf;
 	}
 	sendScrollback() {
-		this.room.addImmediate(this.getScrollback());
+		this.room.add(this.getScrollback());
 	}
 	end() {
 		const [p1, p2] = Object.keys(this.playerTable).map(item => this.playerTable[item]);
@@ -144,7 +144,7 @@ export class RPSGame extends Rooms.RoomGame {
 		return Object.keys(this.playerTable).map(item => this.playerTable[item]);
 	}
 	addField(message: string) {
-		return this.room.addImmediate(`${this.getScrollback()}<br /><div class="broadcast-green">${message}</div>`);
+		return this.room.add(`${this.getScrollback()}<br /><div class="broadcast-green">${message}</div>`);
 	}
 	runMatch() {
 		const [p1, p2] = this.players;
@@ -169,7 +169,7 @@ export class RPSGame extends Rooms.RoomGame {
 		return this.startNextRound();
 	}
 	add(message: string) {
-		return this.room.addImmediate(`|html|${message}`);
+		return this.room.add(`|html|${message}`);
 	}
 	start() {
 		if (this.players.length < 2) {
@@ -188,7 +188,7 @@ export class RPSGame extends Rooms.RoomGame {
 	pause(user: User) {
 		const player = this.getPlayer(user);
 		if (!this.roundTimer) throw new Chat.ErrorMessage(`The game is not running, and cannot be paused.`);
-		this.room.addImmediate(Utils.html`|html|<h2>The game has been paused by ${player.name}.</h2>`);
+		this.room.add(Utils.html`|html|<h2>The game has been paused by ${player.name}.</h2>`);
 		clearTimeout(this.roundTimer);
 		this.addControls(`The game is paused.`);
 		this.add(`The game is paused.`);
@@ -196,7 +196,7 @@ export class RPSGame extends Rooms.RoomGame {
 	unpause(user: User) {
 		const player = this.getPlayer(user);
 		if (this.roundTimer) throw new Chat.ErrorMessage(`The game is not paused.`);
-		this.room.addImmediate(Utils.html`|html|${player.name} unpaused the game.`);
+		this.room.add(Utils.html`|html|${player.name} unpaused the game.`);
 		this.startNextRound();
 	}
 	startNextRound() {
@@ -211,7 +211,7 @@ export class RPSGame extends Rooms.RoomGame {
 			// forcefully end if no one's progressed in 20 turns
 			return this.end();
 		}
-		this.room.addImmediate(`|html|<h2>Round ${this.currentRound}</h2>`);
+		this.room.add(`|html|<h2>Round ${this.currentRound}</h2>`);
 		this.sendOptions();
 		this.roundTimer = setTimeout(() => {
 			this.runMatch();
@@ -308,7 +308,7 @@ export const commands: ChatCommands = {
 			gameRoom.add(
 				`|raw|<h2>Rock Paper Scissors: ${user.name} vs ${targetUser.name}!</h2>` +
 				`Use /rps start to start the game, once both players have joined!`
-			).update();
+			);
 			user.joinRoom(gameRoom.roomid);
 			targetUser.joinRoom(gameRoom.roomid);
 			(gameRoom.game as RPSGame).start();

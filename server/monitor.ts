@@ -99,7 +99,7 @@ export const Monitor = new class {
 		this.notice(text);
 		const staffRoom = Rooms.get('staff');
 		if (staffRoom) {
-			staffRoom.addImmediate(`|c|~|${text}`);
+			staffRoom.add(`|c|~|${text}`);
 		}
 	}
 
@@ -107,7 +107,7 @@ export const Monitor = new class {
 		this.notice(text);
 		const upperstaffRoom = Rooms.get('upperstaff');
 		if (upperstaffRoom) {
-			upperstaffRoom.addImmediate(`|c|~|${text}`);
+			upperstaffRoom.add(`|c|~|${text}`);
 		}
 	}
 
@@ -115,12 +115,12 @@ export const Monitor = new class {
 		this.notice(text);
 		const staffRoom = Rooms.get('staff');
 		if (staffRoom) {
-			staffRoom.addImmediate(`|html|${text}`);
+			staffRoom.add(`|html|${text}`);
 		}
 	}
 
 	error(text: string) {
-		(Rooms.get('development') || Rooms.get('staff') || Rooms.get('lobby'))?.addImmediate(`|error|${text}`);
+		(Rooms.get('development') || Rooms.get('staff') || Rooms.get('lobby'))?.add(`|error|${text}`);
 		if (Config.loglevel <= 3) console.error(text);
 	}
 

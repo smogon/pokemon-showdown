@@ -256,7 +256,7 @@ Chat.registerMonitor('battlefilter', {
 				const text = `[BattleMonitor] <<${room.roomid}>> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`;
 				const adminlog = Rooms.get('adminlog');
 				if (adminlog) {
-					adminlog.addImmediate(`|c|~|${text}`);
+					adminlog.add(`|c|~|${text}`);
 				} else {
 					Monitor.log(text);
 				}
@@ -600,7 +600,7 @@ export const commands: ChatCommands = {
 				this.globalModlog(`ADDFILTER`, null, `'${filterWord.word}' to ${list} list${reason}`);
 			}
 			const output = `'${filterWord.word}' was added to the ${list} list.`;
-			Rooms.get('upperstaff')?.addImmediate(output);
+			Rooms.get('upperstaff')?.add(output);
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		remove(target, room, user) {
@@ -624,7 +624,7 @@ export const commands: ChatCommands = {
 			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list`);
 			saveFilters(true);
 			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
-			Rooms.get('upperstaff')?.addImmediate(output);
+			Rooms.get('upperstaff')?.add(output);
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},
 		'': 'view',

@@ -222,7 +222,7 @@ function broadcast(room: BasicRoom, title: string, message?: string) {
 	if (message) buffer += `<br />${message}`;
 	buffer += '</div>';
 
-	return room.addRaw(buffer).update();
+	return room.addRaw(buffer);
 }
 
 function getQuestions(category: ID): TriviaQuestion[] {
