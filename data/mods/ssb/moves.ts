@@ -2218,7 +2218,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.hint("Soda Break can only works on your first turn out.");
+				this.hint("Soda Break only works on your first turn out.");
 				return null;
 			}
 		},
