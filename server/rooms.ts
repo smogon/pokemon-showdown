@@ -382,7 +382,7 @@ export abstract class BasicRoom {
 	 * sending the text to the users in the room.
 	 */
 	addImmediate(text: string) {
-		return this.addImmediate(text);
+		return this.add(text).update();
 	}
 	/**
 	 * Like addByUser, but without logging
