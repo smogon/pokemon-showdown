@@ -9,7 +9,7 @@ interface SuspectTest {
 	url: string;
 }
 
-const suspectTests: {[format: string]: SuspectTest} = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
+export const suspectTests: {[format: string]: SuspectTest} = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
 
 function saveSuspectTests() {
 	FS(SUSPECTS_FILE).writeUpdate(() => JSON.stringify(suspectTests));
@@ -26,8 +26,9 @@ export const commands: ChatCommands = {
 
 			let buffer = '<strong>Suspect tests currently running:</strong>';
 			for (const i of Object.keys(suspectTests)) {
+				const test = suspectTests[i];
 				buffer += '<br />';
-				buffer += `${suspectTests[i].tier}: <a href="${suspectTests[i].url}">${suspectTests[i].suspect}</a> (${suspectTests[i].date})`;
+				buffer += `${test.tier}: <a href="${test.url}">${test.suspect}</a> (${test.date})`;
 			}
 			return this.sendReplyBox(buffer);
 		},
@@ -73,10 +74,11 @@ export const commands: ChatCommands = {
 			this.checkCan('gdeclare');
 
 			const format = toID(target);
-			if (!suspectTests[format]) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
+			const test = suspectTests[format];
+			if (!test) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
 
-			this.privateGlobalModAction(`${user.name} removed the ${suspectTests[format].tier} suspect test.`);
-			this.globalModlog('SUSPECTTEST', null, `removed ${suspectTests[format].tier}`);
+			this.privateGlobalModAction(`${user.name} removed the ${test.tier} suspect test.`);
+			this.globalModlog('SUSPECTTEST', null, `removed ${test.tier}`);
 
 			delete suspectTests[format];
 			saveSuspectTests();
