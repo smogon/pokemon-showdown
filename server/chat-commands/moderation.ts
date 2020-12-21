@@ -413,12 +413,14 @@ export const commands: ChatCommands = {
 	async join(target, room, user, connection) {
 		if (!target) return this.parse('/help join');
 		const curRooms = [...Rooms.rooms.values()].filter(r => user.id in r.users);
+		target = target.trim();
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
 		if (target.startsWith(`${Config.routes.replays}/`)) target = `battle-${target.slice(Config.routes.replays.length + 1)}`;
 		if (target.startsWith('psim.us/')) target = target.slice(8);
-		if (!user.can('altsself') && curRooms.length >= 50) {
+		// isn't in tryJoinRoom so you can still join your own battles / gameRooms etc
+		if (!user.can('altsself') && !target.startsWith('view-') && curRooms.length >= 50) {
 			return connection.sendTo(target as RoomID, `|noinit||You can only join 50 rooms at a time.`);
 		}
 		const ret = await user.tryJoinRoom(target as RoomID, connection);
