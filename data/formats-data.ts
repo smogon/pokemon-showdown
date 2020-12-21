@@ -1531,6 +1531,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	honchkrow: {
 		tier: "RU",
 	},
+	murkrowdelorean: {
+		tier: "LC",
+	},
+	honchkrowdelorean: {
+		tier: "RU",
+	},
 	misdreavus: {
 		tier: "LC",
 	},
@@ -2101,6 +2107,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
+	aronquantum: {
+		tier: "LC",
+	},
+	laironquantum: {
+		tier: "NFE",
+	},
+	aggronquantum: {
+		tier: "RU",
+		doublesTier: "(DUU)",
+	},
 	meditite: {
 		tier: "LC",
 	},
@@ -2398,8 +2414,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	tropius: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "RU",
+	},
+	tropiusorren: {
+		tier: "RU",
 	},
 	chingling: {
 		isNonstandard: "Past",
@@ -2704,28 +2722,26 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	cranidos: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	rampardos: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
+	},
+	rampardosalmian: {
+		tier: "UU",
 	},
 	shieldon: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "LC",
 	},
 	bastiodon: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	burmy: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	wormadam: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "UU",
 	},
 	wormadamsandy: {
 		isNonstandard: "Past",
@@ -3753,6 +3769,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["geargrind", "protect", "shiftgear", "thunderwave", "wildcharge"],
 		randomDoubleBattleLevel: 88,
 		tier: "PU",
+		doublesTier: "(DUU)",
+	},
+	klinklanglympeian: {
+		tier: "UU",
 		doublesTier: "(DUU)",
 	},
 	tynamo: {

@@ -411,11 +411,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 29,
 	},
+	// cloudnine: {
+		// onStart(pokemon) {
+			// this.add('-ability', pokemon, 'Cloud Nine');
+		// },
+		// suppressWeather: true,
+		// name: "Cloud Nine",
+		// rating: 2,
+		// num: 13,
+	// },
 	cloudnine: {
-		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Cloud Nine');
+		onStart(source) {
+			this.field.setWeather('neutralweather');
 		},
-		suppressWeather: true,
 		name: "Cloud Nine",
 		rating: 2,
 		num: 13,
@@ -4780,6 +4788,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyMove(move, source, target) {
 			if (move.id === 'toxicspikes') {
 				source.side.foe.addSideCondition('toxicspikes');
+				//this.useMove("toxicspikes", source);
 			}
 		},
 		name: "Corrupted Intention",
