@@ -88,6 +88,22 @@ For equally specific rules, the last rule wins:
 `+ Pikachu, - Pikachu, + Pikachu, - Pikachu` - ban Pikachu
 
 
+Restrictions
+------------
+
+Some metagames have a premise where the use of e.g. moves and/or abilities that aren't normally legal are allowed under certain conditions such as only one illegal move per Pokémon. This poses a problem for moves or abilities that are simply too powerful. Rather than banning the move or ability outright, these metagames often prefer to allow you to continue to use them on Pokémon that naturally obtain them. Alternatively, they can decide that it's the Pokémon that's a little too powerful to have access to the premise of the metagame, so that only its natural use is permitted. Exactly which restrictions apply depends on the specific metagame.
+
+Restriction rules can be used adjust the behaviour of such a metagame. The syntax is identical to bans, just replace `-` with `*`, like:
+
+`* Blaziken` - restrict a Pokémon
+
+`* Uber` - restrict a group of Pokémon
+
+`* Baton Pass` - restrict a move
+
+An unban will remove a restriction.
+
+
 Whitelisting
 ------------
 
