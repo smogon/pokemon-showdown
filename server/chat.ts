@@ -79,23 +79,20 @@ export type SettingsHandler = (
 };
 
 /**
- * Chat filter handlers can choose to:
+ * Chat filters can choose to:
  * 1. return false OR null - to not send a user's message
  * 2. return an altered string - to alter a user's message
  * 3. return undefined to send the original message through
  */
-export interface ChatFilter {
-	priority: number;
-	handler(
-		this: CommandContext,
-		message: string,
-		user: User,
-		room: Room | null,
-		connection: Connection,
-		targetUser: User | null,
-		originalMessage: string
-	): string | false | null | undefined;
-}
+export type ChatFilter = ((
+	this: CommandContext,
+	message: string,
+	user: User,
+	room: Room | null,
+	connection: Connection,
+	targetUser: User | null,
+	originalMessage: string
+) => string | false | null | undefined) & {priority?: number};
 
 export type NameFilter = (name: string, user: User) => string;
 export type NicknameFilter = (name: string, user: User) => string | false;
@@ -1356,7 +1353,7 @@ export const Chat = new class {
 		// 3. return undefined to send the original message through
 		const originalMessage = message;
 		for (const curFilter of Chat.filters) {
-			const output = curFilter.handler.call(
+			const output = curFilter.call(
 				context,
 				message,
 				context.user,
@@ -1680,17 +1677,7 @@ export const Chat = new class {
 			if (!Array.isArray(plugin.roomSettings)) plugin.roomSettings = [plugin.roomSettings];
 			Chat.roomSettings = Chat.roomSettings.concat(plugin.roomSettings);
 		}
-		if (plugin.chatfilter) {
-			if (typeof plugin.chatfilter === 'function') {
-				// Legacy chatfilter format without a priority
-				Chat.filters.push({
-					priority: 0,
-					handler: plugin.chatfilter,
-				});
-			} else {
-				Chat.filters.push(plugin.chatfilter);
-			}
-		}
+		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
@@ -1753,7 +1740,7 @@ export const Chat = new class {
 			this.loadPlugin(`chat-plugins/${file}`);
 		}
 		Chat.oldPlugins = {};
-		Utils.sortBy(Chat.filters, filter => filter.priority);
+		Utils.sortBy(Chat.filters, filter => filter.priority || 0);
 	}
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {

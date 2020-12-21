@@ -320,58 +320,55 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 
 /* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-export const chatfilter: ChatFilter = {
-	priority: 0,
-	handler(message, user, room) {
-		let lcMessage = message
-			.replace(/\u039d/g, 'N').toLowerCase()
-			// eslint-disable-next-line no-misleading-character-class
-			.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
-			.replace(/\u03bf/g, 'o')
-			.replace(/\u043e/g, 'o')
-			.replace(/\u0430/g, 'a')
-			.replace(/\u0435/g, 'e')
-			.replace(/\u039d/g, 'e');
-		lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
+export const chatfilter: ChatFilter = function (message, user, room) {
+	let lcMessage = message
+		.replace(/\u039d/g, 'N').toLowerCase()
+		// eslint-disable-next-line no-misleading-character-class
+		.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
+		.replace(/\u03bf/g, 'o')
+		.replace(/\u043e/g, 'o')
+		.replace(/\u0430/g, 'a')
+		.replace(/\u0435/g, 'e')
+		.replace(/\u039d/g, 'e');
+	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-		const isStaffRoom = room && (
-			(room.persist && room.roomid.endsWith('staff')
-			) || room.roomid.startsWith('help-'));
-		const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
+	const isStaffRoom = room && (
+		(room.persist && room.roomid.endsWith('staff')
+		) || room.roomid.startsWith('help-'));
+	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
-		for (const list in Chat.monitors) {
-			const {location, condition, monitor} = Chat.monitors[list];
-			if (!monitor) continue;
-			// Ignore challenge games, which are unrated and not part of roomtours.
-			if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
-			if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
+	for (const list in Chat.monitors) {
+		const {location, condition, monitor} = Chat.monitors[list];
+		if (!monitor) continue;
+		// Ignore challenge games, which are unrated and not part of roomtours.
+		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
+		if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
 
-			switch (condition) {
-			case 'notTrusted':
-				if (user.trusted && !isStaffRoom) continue;
-				break;
-			case 'notStaff':
-				if (isStaffRoom) continue;
-				break;
-			}
-
-			for (const line of Chat.filterWords[list]) {
-				const ret = monitor.call(this, line, room, user, message, lcMessage, isStaff);
-				if (ret !== undefined && ret !== message) {
-					line.hits++;
-					saveFilters();
-				}
-				if (typeof ret === 'string') {
-					message = ret;
-				} else if (ret === false) {
-					return false;
-				}
-			}
+		switch (condition) {
+		case 'notTrusted':
+			if (user.trusted && !isStaffRoom) continue;
+			break;
+		case 'notStaff':
+			if (isStaffRoom) continue;
+			break;
 		}
 
+		for (const line of Chat.filterWords[list]) {
+			const ret = monitor.call(this, line, room, user, message, lcMessage, isStaff);
+			if (ret !== undefined && ret !== message) {
+				line.hits++;
+				saveFilters();
+			}
+			if (typeof ret === 'string') {
+				message = ret;
+			} else if (ret === false) {
+				return false;
+			}
+		}
+	}
 
-		return message;
-	},
+
+	return message;
 };
 /* eslint-enable @typescript-eslint/prefer-optional-chain */
 
