@@ -537,22 +537,27 @@ export const commands: ChatCommands = {
 		},
 		displayhelp: [`/poll display - Displays the poll`],
 	},
-	pollhelp: [
-		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
-		`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
-		`Accepts the following commands:`,
-		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
-		`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
-		`/poll htmlcreate(multi) [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # &`,
-		`/poll vote [number] - Votes for option [number].`,
-		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # &`,
-		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
-		`/poll display - Displays the poll`,
-		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
-		`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).`,
-		`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
-		`/poll viewqueue - view the queue of polls in the room. Requires: % @ # &`,
-	],
+	pollhelp() {
+		this.sendReply(
+			`|html|<details class="readmore"><summary>Poll help:</summary>` +
+			`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.<br />` +
+			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.<br />` +
+			`Accepts the following commands:<br />` +
+			`<code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # &<br />` +
+			`<code>/poll createmulti [question], [option1], [option2], [...]</code> - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &<br />` +
+			`<code>/poll htmlcreate(multi) [question], [option1], [option2], [...]</code> - Creates a poll, with HTML allowed in the question and options. Requires: # &<br />` +
+			`<code>/poll vote [number]</code> - Votes for option [number].<br />` +
+			`<code>/poll timer [minutes]</code> - Sets the poll to automatically end after [minutes]. Requires: % @ # &.<br />` +
+			`<code>/poll results</code> - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.<br />` +
+			`<code>/poll display</code> - Displays the poll.<br />` +
+			`<code>/poll end</code> - Ends a poll and displays the results. Requires: % @ # &.<br />` +
+			`<code>/poll queue [question], [option1], [option2], [...]</code> - Add a poll in queue. Requires: % @ # &<br />` +
+			`<code>/poll deletequeue [number]</code> - Deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).<br />` +
+			`<code>/poll clearqueue</code> - Deletes the queue of polls. Requires: % @ # &.<br />` +
+			`<code>/poll viewqueue</code> - View the queue of polls in the room. Requires: % @ # &<br />` +
+			`</details>`
+		);
+	},
 };
 
 export const pages: PageTable = {
