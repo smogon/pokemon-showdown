@@ -84,7 +84,7 @@ export type SettingsHandler = (
  * 2. return an altered string - to alter a user's message
  * 3. return undefined to send the original message through
  */
-export type ChatFilter = (
+export type ChatFilter = ((
 	this: CommandContext,
 	message: string,
 	user: User,
@@ -92,7 +92,7 @@ export type ChatFilter = (
 	connection: Connection,
 	targetUser: User | null,
 	originalMessage: string
-) => string | false | null | undefined;
+) => string | false | null | undefined) & {priority?: number};
 
 export type NameFilter = (name: string, user: User) => string;
 export type NicknameFilter = (name: string, user: User) => string | false;
@@ -1740,6 +1740,7 @@ export const Chat = new class {
 			this.loadPlugin(`chat-plugins/${file}`);
 		}
 		Chat.oldPlugins = {};
+		Utils.sortBy(Chat.filters, filter => filter.priority || 0);
 	}
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {
