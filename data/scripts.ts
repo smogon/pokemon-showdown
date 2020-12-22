@@ -367,7 +367,7 @@ export const Scripts: BattleScriptsData = {
 		return moveResult;
 	},
 	hitStepInvulnerabilityEvent(targets, pokemon, move) {
-		if (move.id === 'helpinghand' || (this.gen >= 6 && move.id === 'toxic' && pokemon.hasType('Poison'))) {
+		if (move.id === 'helpinghand' || (this.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison'))) {
 			return new Array(targets.length).fill(true);
 		}
 		const hitResults = this.runEvent('Invulnerability', targets, pokemon, move);
@@ -470,7 +470,7 @@ export const Scripts: BattleScriptsData = {
 					}
 				}
 			}
-			if (move.alwaysHit || (move.id === 'toxic' && this.gen >= 6 && pokemon.hasType('Poison'))) {
+			if (move.alwaysHit || (move.id === 'toxic' && this.gen >= 8 && pokemon.hasType('Poison'))) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
 				accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
