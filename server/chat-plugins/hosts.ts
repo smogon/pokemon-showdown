@@ -282,19 +282,18 @@ export const commands: ChatCommands = {
 	},
 
 	iprangeshelp() {
-		this.sendReply(
-			`|html|<details class="readmore"><summary><code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ & <br />` +
-			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ & <br />` +
-			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &</br></summary>` +
-			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager & <br />` +
-			`For example: <code>/ipranges add proxy, 5.152.192.0-5.152.223.255, redstation.com</code>. <br />` +
-			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum. <br />` +
-			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager & <br />` +
-			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>. <br />` +
-			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`
-		);
+		const help = [
+			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ &`,
+			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &</summary><code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
+			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
+			`For example: <code>/ipranges add proxy, 5.152.192.0-5.152.223.255, redstation.com</code>.`,
+			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
+			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager &`,
+			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
+			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
+		];
+		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
 	},
-
 	viewhosts(target, room, user) {
 		checkCanPerform(this, user, 'globalban');
 		const types = ['all', 'residential', 'mobile', 'ranges'];
