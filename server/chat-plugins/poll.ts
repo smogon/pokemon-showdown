@@ -539,11 +539,9 @@ export const commands: ChatCommands = {
 	},
 	pollhelp() {
 		this.sendReply(
-			`|html|<details class="readmore"><summary>Poll help:</summary>` +
-			`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.<br />` +
-			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.<br />` +
-			`Accepts the following commands:<br />` +
-			`<code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # &<br />` +
+			`|html|<details class="readmore"><summary>/poll allows rooms to run their own polls (limit 1 at a time).<br />` +
+			`Polls can be used as quiz questions, by putting <code>+</code> before correct answers.<br />` +
+			`<code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # &</summary>` +
 			`<code>/poll createmulti [question], [option1], [option2], [...]</code> - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &<br />` +
 			`<code>/poll htmlcreate(multi) [question], [option1], [option2], [...]</code> - Creates a poll, with HTML allowed in the question and options. Requires: # &<br />` +
 			`<code>/poll vote [number]</code> - Votes for option [number].<br />` +
