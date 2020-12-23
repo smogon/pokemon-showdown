@@ -1480,7 +1480,7 @@ export const Chat = new class {
 		Chat.languages.set('english' as ID, 'English');
 		for (const dirname of directories) {
 			// translation dirs shouldn't have caps, but things like sourceMaps and the README will
-			if (/[A-Z]/.test(dirname)) continue;
+			if (/[^a-z0-9]/.test(dirname)) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
 
 			// For some reason, toID() isn't available as a global when this executes.
