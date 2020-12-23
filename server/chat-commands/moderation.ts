@@ -411,9 +411,8 @@ export const commands: ChatCommands = {
 	joim: 'join',
 	j: 'join',
 	async join(target, room, user, connection) {
-		if (!target) return this.parse('/help join');
-		const curRooms = [...Rooms.rooms.values()].filter(r => user.id in r.users);
 		target = target.trim();
+ 		if (!target) return this.parse('/help join');
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
