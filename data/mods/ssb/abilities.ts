@@ -579,26 +579,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const side = pokemon.side;
 			const sideConditions = Object.keys(side.sideConditions);
 			const activeCount = sideConditions.length;
-			if (activeCount > 0) {
-				const stats: BoostName[] = [];
-				let i = 0;
-				while (i <= activeCount) {
-					let stat: BoostName;
-					for (stat in pokemon.boosts) {
-						if (stat === 'evasion' || stat === 'accuracy' || stats.includes(stat)) continue;
-						if (pokemon.boosts[stat] < 6) {
-							stats.push(stat);
-							i++;
-						}
+			const stats: BoostName[] = [];
+			const exclude: string[] = ['accuracy', 'evasion'];
+			for (let x = 0; x < activeCount; x++) {
+				let stat: BoostName;
+				for (stat in pokemon.boosts) {
+					if (pokemon.boosts[stat] < 6 && !exclude.includes(stat)) {
+						stats.push(stat);
 					}
 				}
 				if (stats.length) {
 					const randomStat = this.sample(stats);
-					const boost: {[k: string]: number} = {};
+					const boost: SparseBoostsTable = {};
 					boost[randomStat] = 1;
-					this.boost(boost, pokemon);
-				} else {
-					return false;
+					this.boost(boost, pokemon, pokemon);
 				}
 			}
 		},
