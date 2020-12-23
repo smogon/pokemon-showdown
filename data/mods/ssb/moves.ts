@@ -3480,7 +3480,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
-	// peapod
+	// peapod c
 	submartingale: {
 		accuracy: 100,
 		basePower: 0,
