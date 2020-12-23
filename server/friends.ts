@@ -56,7 +56,7 @@ export class FriendsDatabase {
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
 		this.process = PM.createProcess(this.file);
-		this.cache = new DatabaseCache(async user => {
+		this.cache = new DatabaseCache<Set<string>>(async user => {
 			const data = await this.getFriends(user as ID);
 			return new Set(data.map(f => f.friend));
 		});
@@ -190,17 +190,14 @@ export class DatabaseCache<T> {
 		this.expiryTime = invalidateTime;
 		this.dataFetcher = fetcher;
 	}
+	// todo make this only return T
 	get(key: string) {
 		const data = this.cache[key];
 		if (!data || Date.now() - data.lastCache > this.expiryTime) {
 			void this.update(key);
 		}
 		if (!this.cache[key]) {
-			/* this.cache[key] = {
-				data: Utils.deepClone(this.default), lastCache: Date.now(),
-			}; */
-			// for now, only usecase should always exist, throw exception
-			throw new Error(`Missing entry for database cache key ${key}`);
+			return;
 		}
 		// return default or last state
 		return this.cache[key].data;
