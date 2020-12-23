@@ -1249,8 +1249,7 @@ const commands: ChatCommands = {
 			const [format, generator, cap, mod, name] = target.split(',').map(item => item.trim());
 			if (!target || !format || !generator) {
 				if (room.game) {
-					this.errorReply(`You cannot have a tournament until the current room activity is over: ${room.game.title}`);
-					return;
+					throw new Chat.ErrorMessage(`You cannot start a tournament until the current room activity (${room.game.title}) ends.`);
 				}
 
 				const generatorOptions = {elimination: 'Elimination', roundrobin: 'Round Robin'};
