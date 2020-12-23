@@ -73,6 +73,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 		const moveSlot = {
 			move: move.name,
 			id: move.id,
+			// eslint-disable-next-line max-len
 			pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * carryOver[slot]) : Math.floor((move.pp * (8 / 5)) * carryOver[slot])),
 			maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 			target: move.target,
@@ -1762,7 +1763,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Robb576
 	thenumbersgame: {
-		// eslint-disable-next-line max-len
 		desc: "If this Pokemon is a forme of Necrozma, its forme changes on switch-in depending on the number of unfainted Pokemon on the user's team: Necrozma-Dusk-Mane if 3 or fewer Pokemon and Necrozma-Dawn-Wings was sent out already; Necrozma-Ultra if it is the last Pokemon left on the team and Necrozma-Dusk-Mane was sent out already.",
 		shortDesc: "Changes forme on switch-in depending on # of remaining Pokemon on user's team.",
 		name: "The Numbers Game",
