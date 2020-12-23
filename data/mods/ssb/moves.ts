@@ -144,8 +144,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
-				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
+			const sideConditions = [
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
@@ -159,8 +160,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
-				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
+			const sideConditions = [
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
@@ -208,12 +210,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 			if (pokemon.species.baseSpecies === 'Aegislash') {
-				if (pokemon.moves.includes('shadowball')) {
-					changeSet(this, pokemon, ssbSets['aegii']);
-				} else {
-					changeSet(this, pokemon, ssbSets['aegii-Alt']);
-				}
-				const setType = pokemon.moves.includes('shadowball') ? 'specially' : 'physically';
+				const specialSet = pokemon.moves.includes('shadowball');
+				changeSet(this, pokemon, ssbSets[specialSet ? 'aegii' : 'aegii-Alt']);
+				const setType = specialSet ? 'specially' : 'physically';
 				this.add('-message', `aegii currently has a ${setType} oriented set.`);
 			}
 		},
@@ -281,7 +280,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const stats: BoostName[] = [];
 					let stat: BoostName;
 					for (stat in pokemon.boosts) {
-						if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
+						if (!['accuracy', 'evasion'].includes(stat) && pokemon.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
@@ -404,7 +403,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "The weather becomes an extremely heavy hailstorm lasting for 3 turns that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
-		shortDesc: "3 Turns. Heavy Hailstorm. Steel fail. 1.5x Ice.",
+		shortDesc: "3 turns. Heavy Hailstorm. Steel fail. 1.5x Ice.",
 		name: "Blistering Ice Age",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -446,8 +445,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid',
-				'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid', 'safeguard', 'mist',
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
@@ -2261,7 +2260,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePowerCallback(pokemon, target, move) {
 			// You can't get here unless the pursuit effect succeeds
 			if (target.beingCalledBack) {
-				this.debug('Thehuntison damage boost');
+				this.debug('The Hunt is On! damage boost');
 				return move.basePower * 2;
 			}
 			return move.basePower;
@@ -2520,15 +2519,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Pyro Ball', target);
 			this.add('-anim', source, 'Blaze Kick', target);
 		},
-		secondaries: [
-			{
-				chance: 20,
-				status: 'brn',
-			}, {
-				chance: 10,
-				volatileStatus: 'flinch',
-			},
-		],
+		secondaries: [{
+			chance: 20,
+			status: 'brn',
+		}, {
+			chance: 10,
+			volatileStatus: 'flinch',
+		}],
 		target: "normal",
 		type: "Fire",
 	},
@@ -2609,7 +2606,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
 					this.boost({atk: 1, def: 1, spa: 1, spd: 1}, target);
-					target.setStatus('');
+					target.clearStatus();
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
@@ -2873,8 +2870,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			let success = false;
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid',
-				'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid', 'safeguard', 'mist',
+				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
@@ -3302,7 +3299,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Icicle Spear', target);
-			this.add('-anim', source, 'U-Turn', target);
+			this.add('-anim', source, 'U-turn', target);
 		},
 		onHit() {
 			this.add(`c|${getName('OM~!')}|Bang Bang`);
