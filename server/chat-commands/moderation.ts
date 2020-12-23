@@ -419,7 +419,8 @@ export const commands: ChatCommands = {
 		if (target.startsWith(`${Config.routes.replays}/`)) target = `battle-${target.slice(Config.routes.replays.length + 1)}`;
 		if (target.startsWith('psim.us/')) target = target.slice(8);
 		// isn't in tryJoinRoom so you can still join your own battles / gameRooms etc
-		if (!user.can('altsself') && !target.startsWith('view-') && curRooms.length >= 50) {
+		const numRooms = [...Rooms.rooms.values()].filter(r => user.id in r.users).length;
+		if (!user.can('altsself') && !target.startsWith('view-') && numRooms >= 50) {
 			return connection.sendTo(target as RoomID, `|noinit||You can only join 50 rooms at a time.`);
 		}
 		const ret = await user.tryJoinRoom(target as RoomID, connection);
