@@ -2170,7 +2170,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.field.terrain) {
 				this.add(`-message`, 'The Turbulence blew away the terrain!');
 			}
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions);
 				for (const key of keys) {

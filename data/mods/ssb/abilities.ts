@@ -119,15 +119,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'gmaxsteelsurge', 'ferrofluid',
 				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
 			for (const sideCondition of removeAll) {
-				if (silentRemove.includes(sideCondition)) continue;
 				if (target.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+					if (!silentRemove.includes(sideCondition)) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+					}
 					successes++;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+					if (!silentRemove.includes(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+					}
 					successes++;
 				}
 			}
@@ -1760,7 +1763,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Robb576
 	thenumbersgame: {
-		desc: "Changes the pokemon's forme upon switch-in depending on the number of unfainted Pokemon on the user's team: Necrozma-Dusk-Mane if 3 or fewer, Necrozma-Ultra if it is the last Pokemon left on the team.",
+		desc: "If this Pokemon is a forme of Necrozma, its forme changes on switch-in depending on the number of unfainted Pokemon on the user's team: Necrozma-Dusk-Mane if 3 or fewer Pokemon and Necrozma-Dawn-Wings was sent out already; Necrozma-Ultra if it is the last Pokemon left on the team and Necrozma-Dusk-Mane was sent out already.",
 		shortDesc: "Changes forme on switch-in depending on # of remaining Pokemon on user's team.",
 		name: "The Numbers Game",
 		isPermanent: true,

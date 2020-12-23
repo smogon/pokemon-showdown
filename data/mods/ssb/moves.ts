@@ -210,8 +210,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 			if (pokemon.species.baseSpecies === 'Aegislash') {
-				const specialSet = pokemon.moves.includes('shadowball');
+				let specialSet = pokemon.moves.includes('shadowball');
 				changeSet(this, pokemon, ssbSets[specialSet ? 'aegii' : 'aegii-Alt']);
+				specialSet = pokemon.moves.includes('shadowball');
 				const setType = specialSet ? 'specially' : 'physically';
 				this.add('-message', `aegii currently has a ${setType} oriented set.`);
 			}
@@ -448,14 +449,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid', 'safeguard', 'mist',
 				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
 			for (const sideCondition of removeAll) {
-				if (silentRemove.includes(sideCondition)) continue;
 				if (target.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+					if (!silentRemove.includes(sideCondition)) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+					if (!silentRemove.includes(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+					}
 				}
 			}
 			this.field.clearWeather();
@@ -609,14 +613,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'shiftingrocks',
 					'toxicspikes', 'stealthrock', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
 				];
-				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
 				for (const sideCondition of removeAll) {
-					if (silentRemove.includes(sideCondition)) continue;
 					if (source.side.foe.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+						if (!silentRemove.includes(sideCondition)) {
+							this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+						}
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+						if (!silentRemove.includes(sideCondition)) {
+							this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+						}
 					}
 				}
 				this.add('-message', `Hazards were removed by the terrain!`);
@@ -2873,15 +2880,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid', 'safeguard', 'mist',
 				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
 			for (const sideCondition of removeAll) {
-				if (silentRemove.includes(sideCondition)) continue;
 				if (target.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					if (!silentRemove.includes(sideCondition)) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					}
 					success = true;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					if (!silentRemove.includes(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+					}
 					success = true;
 				}
 			}
