@@ -2754,7 +2754,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					if (!species.id.startsWith(unownLetter.trim().toLowerCase())) return false;
 					return true;
 				});
-				source.formeChange(this.sample(monList), this.effect, true);
+				source.formeChange(this.sample(monList), this.effect);
 				source.setAbility('Protean');
 				source.moveSlots = source.moveSlots.map(slot => {
 					const newMoves: {[k: string]: string} = {
