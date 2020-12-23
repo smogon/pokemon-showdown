@@ -31,7 +31,7 @@ describe('Fury Cutter', function () {
 		assert.bounded(damage, [49, 58]); // 160 BP
 	});
 
-	it.skip('should double in power with each successful hit (Gen 3)', function () {
+	it('should double in power with each successful hit (Gen 3)', function () {
 		battle = common.gen(3).createBattle([[
 			{species: 'kangaskhan', moves: ['luckychant']},
 		], [
