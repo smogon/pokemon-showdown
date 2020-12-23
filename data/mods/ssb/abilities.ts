@@ -10,7 +10,6 @@ const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyh
  * @param newSet the SSBSet to assign
  */
 export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, changeAbility = false) {
-	// For some reason EVs and IVs in an SSBSet can be undefined...
 	const evs: StatsTable = {
 		hp: newSet.evs?.hp || 0,
 		atk: newSet.evs?.atk || 0,
@@ -45,7 +44,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
 	pokemon.maxhp = newMaxHP;
 	let item = newSet.item;
-	if (typeof item !== 'string') item = item[Math.floor(Math.random() * item.length)];
+	if (typeof item !== 'string') item = item[pokemon.battle.random(item.length)];
 	if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
 	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 	pokemon.moveSlots = newMoves;
@@ -447,7 +446,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "This Pokemon takes 3/4 damage from supereffective moves. Not hurt by poison.",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
-				this.debug('Solid Rock neutralize');
+				this.debug('Why Worry neutralize');
 				return this.chainModify(0.75);
 			}
 		},
@@ -656,7 +655,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.field.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
-					this.debug('Sand Force boost');
+					this.debug('Sands of Time boost');
 					return this.chainModify([0x14CD, 0x1000]);
 				}
 			}
