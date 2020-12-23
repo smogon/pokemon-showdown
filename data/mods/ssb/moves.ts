@@ -110,9 +110,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Trick Room', target);
 		},
 		onHit(target, source, move) {
-			const foe = source.side.foe.active[0];
-			if (foe && this.randomChance(1, 10)) {
-				foe.trySetStatus('brn', source);
+			if (this.randomChance(1, 10)) {
+				for (const foe of source.side.foe.active) {
+					if (!foe || foe.fainted) continue;
+					foe.trySetStatus('brn', source);
+				}
 			}
 		},
 		pseudoWeather: 'trickroom',
@@ -1145,24 +1147,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				const typeMovePair: {[key: string]: string} = {
-					'Normal': 'Body Slam',
-					'Fighting': 'Drain Punch',
-					'Flying': 'Floaty Fall',
-					'Poison': 'Baneful Banker',
-					'Ground': 'Shore Up',
-					'Rock': 'Stealth Rock',
-					'Bug': 'Sticky Web',
-					'Ghost': 'Shadow Sneak',
-					'Steel': 'Iron Defense',
-					'Fire': 'Fire Fang',
-					'Water': 'Life Dew',
-					'Grass': 'Synthesis',
-					'Electric': 'Thunder Fang',
-					'Psychic': 'Psychic Fangs',
-					'Ice': 'Icicle Crash',
-					'Dragon': 'Dragon Darts',
-					'Dark': 'Taunt',
-					'Fairy': 'Play Rough',
+					Normal: 'Body Slam',
+					Fighting: 'Drain Punch',
+					Flying: 'Floaty Fall',
+					Poison: 'Baneful Banker',
+					Ground: 'Shore Up',
+					Rock: 'Stealth Rock',
+					Bug: 'Sticky Web',
+					Ghost: 'Shadow Sneak',
+					Steel: 'Iron Defense',
+					Fire: 'Fire Fang',
+					Water: 'Life Dew',
+					Grass: 'Synthesis',
+					Electric: 'Thunder Fang',
+					Psychic: 'Psychic Fangs',
+					Ice: 'Icicle Crash',
+					Dragon: 'Dragon Darts',
+					Dark: 'Taunt',
+					Fairy: 'Play Rough',
 				};
 				const foe = target.side.foe;
 				const types = [foe.pokemon[this.random(foe.pokemon.length)].types[0]];
@@ -2153,19 +2155,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Origin Pulse', target);
 			this.add('-anim', source, 'Charge Beam', target);
 		},
-		secondaries: [
-			{
-				chance: 70,
-				self: {
-					boosts: {
-						spa: 1,
-					},
+		secondaries: [{
+			chance: 70,
+			self: {
+				boosts: {
+					spa: 1,
 				},
-			}, {
-				chance: 50,
-				status: 'par',
 			},
-		],
+		}, {
+			chance: 50,
+			status: 'par',
+		}],
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Water', type);
 		},
