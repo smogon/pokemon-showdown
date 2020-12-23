@@ -74,7 +74,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 		const moveSlot = {
 			move: move.name,
 			id: move.id,
-			pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * carryOver[slot]) : move.pp * 8 / 5),
+			pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * carryOver[slot]) : Math.floor((move.pp * (8 / 5)) * carryOver[slot])),
 			maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 			target: move.target,
 			disabled: false,
