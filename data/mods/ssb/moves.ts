@@ -680,7 +680,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 180,
 		category: "Special",
-		desc: "User gains Brilliant if not Brilliant without attacking. User attacks and loses Brilliant if Brilliant. Being Brilliant multiplies all stats by 1.5 and grants Ingrain, Perish Song immunity, and move restriction immunity.",
+		desc: "User gains Brilliant if not Brilliant without attacking. User attacks and loses Brilliant if Brilliant. Being Brilliant multiplies all stats by 1.5 and grants Perish Song immunity and Ingrain.",
 		shortDesc: "Gain or lose Brilliant. Attack if Brilliant.",
 		name: "Radiant Burst",
 		isNonstandard: "Custom",

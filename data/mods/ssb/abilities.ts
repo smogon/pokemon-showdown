@@ -41,7 +41,8 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		2 * pokemon.species.baseStats.hp + pokemon.set.ivs.hp + Math.floor(pokemon.set.evs.hp / 4) + 100
 	) * pokemon.level / 100 + 10);
 	const newMaxHP = pokemon.baseMaxhp;
-	pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+	const percent = (pokemon.hp / pokemon.maxhp);
+	pokemon.hp = Math.round(newMaxHP * percent);
 	pokemon.maxhp = newMaxHP;
 	let item = newSet.item;
 	if (typeof item !== 'string') item = item[pokemon.battle.random(item.length)];
