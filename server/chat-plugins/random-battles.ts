@@ -585,7 +585,7 @@ function SSBSets(target: string) {
 		if (!set.skip) {
 			buf += Utils.html`<h1><psicon pokemon="${mutatedSpecies.id}">${displayName === 'yuki' ? name : displayName}</h1>`;
 		} else {
-			buf += `<details><summary><psicon pokemon="${set.species}"><strong>${name.split('-')[1] + ' forme'}</strong></summary>`;
+			buf += `<details><summary><psicon pokemon="${set.species}"><strong>${name.split('-').slice(1).join('-') + ' forme'}</strong></summary>`;
 		}
 		buf += generateSSBSet(set, dex, baseDex);
 		const item = dex.getItem(set.item as string);

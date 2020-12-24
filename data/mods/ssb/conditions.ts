@@ -1093,7 +1093,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart() {
 			this.add(`c|${getName('Meicoo')}|cool quiz`);
 		},
-		onSwitchOut(source) {
+		onSwitchOut() {
 			this.add(`c|${getName('Meicoo')}|/leavehunt`);
 		},
 		onFaint() {
@@ -1114,7 +1114,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	n10sit: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('n10siT')}|Heheheh... were you surprised?`);
 		},
 		onSwitchOut() {
@@ -1491,10 +1491,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart() {
 			this.add(`c|${getName('SectoniaServant')}|I love one (1) queen bee`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c|${getName('SectoniaServant')}|My search for my lost queen continues....`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c|${getName('SectoniaServant')}|NOOOOOO NOT THE JELLY BABY`);
 		},
 	},
@@ -1702,7 +1702,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	xjoelituh: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|${getName('xJoelituh')}|Hey, how can I help you?`);
 		},
 		onSwitchOut() {
@@ -1745,10 +1745,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart() {
 			this.add(`c|${getName('Zalm')}|<(:O)000>`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c|${getName('Zalm')}|Run for the hills!`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c|${getName('Zalm')}|Woah`);
 		},
 	},
@@ -1951,25 +1951,25 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'Brilliant');
 		},
-		onModifyAtk(atk, pokemon) {
+		onModifyAtk() {
 			return this.chainModify(1.5);
 		},
-		onModifyDef(def, pokemon) {
+		onModifyDef() {
 			return this.chainModify(1.5);
 		},
-		onModifySpA(spa, pokemon) {
+		onModifySpA() {
 			return this.chainModify(1.5);
 		},
-		onModifySpD(spd, pokemon) {
+		onModifySpD() {
 			return this.chainModify(1.5);
 		},
-		onModifySpe(spe, pokemon) {
+		onModifySpe() {
 			return this.chainModify(1.5);
 		},
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['perishsong']) pokemon.removeVolatile('perishsong');
 		},
-		onTryAddVolatile(status, pokemon) {
+		onTryAddVolatile(status) {
 			if (status.id === 'perishsong') return null;
 		},
 		onResidualOrder: 7,
@@ -2003,7 +2003,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-sideend', targetSide, 'Storm Surge');
 			this.add('-message', 'The Storm Surge receded.');
 		},
-		onModifySpe(spe, pokemon) {
+		onModifySpe() {
 			return this.chainModify(0.25);
 		},
 	},
@@ -2138,7 +2138,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	bigstormcomingmod: {
 		name: "Big Storm Coming Mod",
 		duration: 1,
-		onBasePower(basePower, pokemon, target, move) {
+		onBasePower() {
 			return this.chainModify([0x4CC, 0x1000]);
 		},
 	},
@@ -2191,7 +2191,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'RainDance',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
+		durationCallback(source) {
 			let newDuration = 5;
 			let boostNum = 0;
 			if (source?.hasItem('damprock')) {
@@ -2238,7 +2238,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	auroraveil: {
 		name: "Aurora Veil",
 		duration: 5,
-		durationCallback(target, source, effect) {
+		durationCallback(target, source) {
 			if (source?.hasItem('lightclay')) {
 				return 8;
 			}
@@ -2273,7 +2273,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	lightscreen: {
 		name: "Light Screen",
 		duration: 5,
-		durationCallback(target, source, effect) {
+		durationCallback(target, source) {
 			if (source?.hasItem('lightclay')) {
 				return 8;
 			}
@@ -2336,7 +2336,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	reflect: {
 		name: "Reflect",
 		duration: 5,
-		durationCallback(target, source, effect) {
+		durationCallback(target, source) {
 			if (source?.hasItem('lightclay')) {
 				return 8;
 			}

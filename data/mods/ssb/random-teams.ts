@@ -383,7 +383,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genre Change',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
-	'Jho-Low Key': {
+	'Jho-Low-Key': {
 		species: 'Toxtricity-Low-Key', ability: 'Venomize', item: 'Throat Spray', gender: 'M',
 		moves: ['Aura Sphere', 'Boomburst', 'Volt Switch'],
 		signatureMove: 'Genre Change',

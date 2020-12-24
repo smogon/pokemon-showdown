@@ -49,7 +49,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 
 	// xJoelituh
 	rarebone: {
-		inherit: true,
 		onModifyAtkPriority: 2,
 		onModifyAtk() {
 			return this.chainModify(1.5);
@@ -62,10 +61,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifySpD() {
 			return this.chainModify(1.5);
 		},
+		gen: 4,
+		name: "Rare Bone",
 		desc: "1.5x to Attack, Defense, and Special Defense.",
-		// Instruct note: We have a superfluous shortDesc so it is easier to
-		// access the item's description.
-		// But changing desc in mods for items shouldnt be an issue.
 		shortDesc: "1.5x to Attack, Defense, and Special Defense.",
 	},
 };
