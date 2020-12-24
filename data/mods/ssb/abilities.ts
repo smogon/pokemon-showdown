@@ -30,28 +30,31 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
 	const oldShiny = pokemon.set.shiny;
-	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? pokemon.battle.randomChance(1, newSet.shiny) : !!newSet.shiny;
+	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? context.randomChance(1, newSet.shiny) : !!newSet.shiny;
+	let percent = (pokemon.hp / pokemon.baseMaxhp);
+	if (newSet.species === 'Shedinja') percent = 1;
 	pokemon.formeChange(newSet.species, context.effect, true);
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-	if (oldShiny !== pokemon.set.shiny) pokemon.battle.add('replace', pokemon, details);
+	if (oldShiny !== pokemon.set.shiny) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string);
 
-	pokemon.baseMaxhp = Math.floor(Math.floor(
+	pokemon.baseMaxhp = pokemon.species.name === 'Shedinja' ? 1 : Math.floor(Math.floor(
 		2 * pokemon.species.baseStats.hp + pokemon.set.ivs.hp + Math.floor(pokemon.set.evs.hp / 4) + 100
 	) * pokemon.level / 100 + 10);
 	const newMaxHP = pokemon.baseMaxhp;
-	const percent = (pokemon.hp / pokemon.maxhp);
 	pokemon.hp = Math.round(newMaxHP * percent);
 	pokemon.maxhp = newMaxHP;
+	context.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 	let item = newSet.item;
-	if (typeof item !== 'string') item = item[pokemon.battle.random(item.length)];
+	if (typeof item !== 'string') item = item[context.random(item.length)];
 	if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
 	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 	pokemon.moveSlots = newMoves;
 	// @ts-ignore Necessary so pokemon doesn't get 8 moves
 	pokemon.baseMoveSlots = newMoves;
-	pokemon.battle.add('message', `${pokemon.name} changed form!`);
+	context.add('-ability', pokemon, `${pokemon.getAbility().name}`);
+	context.add('message', `${pokemon.name} changed form!`);
 }
 
 /**
@@ -69,7 +72,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 	let slot = 0;
 	for (const newMove of newMoves) {
 		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
-		const move = pokemon.battle.dex.getMove(context.toID(moveName));
+		const move = context.dex.getMove(context.toID(moveName));
 		if (!move.id) continue;
 		const moveSlot = {
 			move: move.name,
@@ -507,10 +510,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Rage Quit",
 		onAfterMove(pokemon, target, move) {
 			if (pokemon.moveThisTurnResult === false) {
-				this.add('-ability', pokemon, 'Rage Quit', 'boost');
+				this.add('-ability', pokemon, 'Rage Quit');
 				pokemon.faint();
 				if (pokemon.side.foe.active[0]) {
-					this.boost({atk: -2, spa: -2}, pokemon.side.foe.active[0], pokemon);
+					this.boost({atk: -2, spa: -2}, pokemon.side.foe.active[0], pokemon, null, true);
 				}
 			}
 		},
