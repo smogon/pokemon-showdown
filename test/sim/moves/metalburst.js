@@ -35,9 +35,11 @@ describe('Metal Burst', function () {
 			{species: 'tauros', moves: ['sleeptalk']},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: 'breloom', moves: ['swift']},
+			{species: 'breloom', moves: ['uturn']},
 			{species: 'venusaur', moves: ['swift']},
+			{species: 'gallade', moves: ['sleeptalk']},
 		]});
+		battle.makeChoices('move metalburst, move sleeptalk', 'move uturn 1, move swift');
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
 		assert.fullHP(battle.p2.active[1]);

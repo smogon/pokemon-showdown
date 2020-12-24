@@ -201,7 +201,7 @@ export class Pokemon {
 	 */
 	hurtThisTurn: number | null;
 	lastDamage: number;
-	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID}[];
+	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID, position: number}[];
 
 	isActive: boolean;
 	activeTurns: number;
@@ -777,6 +777,7 @@ export class Pokemon {
 			damage,
 			move: move.id,
 			thisTurn: true,
+			position: source.position,
 		});
 	}
 
