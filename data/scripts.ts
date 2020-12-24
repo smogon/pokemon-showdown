@@ -173,7 +173,6 @@ export const Scripts: BattleScriptsData = {
 			move.priority = this.activeMove.priority;
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
 		}
-
 		const baseTarget = move.target;
 		let targetRelayVar = {target};
 		targetRelayVar = this.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
@@ -823,19 +822,16 @@ export const Scripts: BattleScriptsData = {
 		}
 
 		const damagedTargets: Pokemon[] = [];
-		const damagedDamage: number[] = [];
+		const damagedDamage = [];
 		for (const [i, t] of targets.entries()) {
 			if (typeof damage[i] === 'number' && t) {
 				damagedTargets.push(t);
-				damagedDamage.push(damage[i] as number);
+				damagedDamage.push(damage[i]);
 			}
 		}
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
 			this.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
-			for (const damagedTarget of damagedTargets) {
-				damagedTarget.lastDamageTaken = damagedDamage[damagedDamage.length - 1];
-			}
 			if (moveData.onAfterHit) {
 				for (const t of damagedTargets) {
 					this.singleEvent('AfterHit', moveData, {}, t, pokemon, move);

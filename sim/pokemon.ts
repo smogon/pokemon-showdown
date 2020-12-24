@@ -202,7 +202,6 @@ export class Pokemon {
 	hurtThisTurn: number | null;
 	lastDamage: number;
 	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID}[];
-	lastDamageTaken: number;
 
 	isActive: boolean;
 	activeTurns: number;
@@ -401,7 +400,6 @@ export class Pokemon {
 		this.hurtThisTurn = null;
 		this.lastDamage = 0;
 		this.attackedBy = [];
-		this.lastDamageTaken = 0;
 
 		this.isActive = false;
 		this.activeTurns = 0;
@@ -785,6 +783,12 @@ export class Pokemon {
 	getLastAttackedBy() {
 		if (this.attackedBy.length === 0) return undefined;
 		return this.attackedBy[this.attackedBy.length - 1];
+	}
+
+	getLastDamagedBy() {
+		const damagedBy = this.attackedBy.filter(attacked => attacked.damage);
+		if (damagedBy.length === 0) return undefined;
+		return damagedBy[damagedBy.length - 1];
 	}
 
 	/**
@@ -1297,8 +1301,7 @@ export class Pokemon {
 
 		this.lastDamage = 0;
 		this.attackedBy = [];
-		this.hurtThisTurn = 0;
-		this.lastDamageTaken = 0;
+		this.hurtThisTurn = null;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 

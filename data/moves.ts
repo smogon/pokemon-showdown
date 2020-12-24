@@ -10884,7 +10884,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			return (pokemon.lastDamageTaken * 1.5) || 1;
+			const lastDamagedBy = pokemon.getLastDamagedBy();
+			if (lastDamagedBy) {
+				return (lastDamagedBy.damage * 1.5) || 1;
+			}
+			return 0;
 		},
 		category: "Physical",
 		name: "Metal Burst",
@@ -10892,12 +10896,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryHit(target, source, move) {
-			if (!source.lastDamageTaken) return false;
+			const lastDamagedBy = source.getLastDamagedBy();
+			if (!lastDamagedBy) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
-			const lastAttackedBy = source.getLastAttackedBy();
-			if (lastAttackedBy !== undefined) {
-				targetRelayVar.target = lastAttackedBy.source;
+			const lastDamagedBy = source.getLastDamagedBy();
+			if (lastDamagedBy !== undefined) {
+				targetRelayVar.target = lastDamagedBy.source;
 			}
 		},
 		secondary: null,
