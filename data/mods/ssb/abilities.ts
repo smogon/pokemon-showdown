@@ -521,6 +521,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Celestial
+	speedcontrol: {
+		onStart(pokemon) {
+			this.boost({spe: 1}, pokemon);
+		},
+		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+		name: "Speed Control",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Celine
 	guardianarmor: {
 		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 2 stages.",
