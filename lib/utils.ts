@@ -90,6 +90,22 @@ export const Utils = new class {
 		} else {
 			constructor = 'null';
 		}
+
+		// if it has a toString, check that to see if it tells us if there's a base class, else look at the constructor name
+		let baseName = value?.toString ? /\[object (.*)\]/.exec(value.toString())?.[1] : null;
+		if (!baseName) baseName = constructor;
+
+		switch (baseName) {
+		// other constructor cases can be handled here!
+		case 'Map':
+			const mapped = [...value.entries()].map(
+				val => `${this.visualize(val[0], depth + 1)} => ${this.visualize(val[1], depth + 1)}`
+			);
+			return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
+		case 'Set':
+			return `${constructor} (${value.size}) { ${[...value].map(v => this.visualize(v), depth + 1).join(', ')} }`;
+		}
+
 		if (value.toString) {
 			try {
 				const stringValue = value.toString();
