@@ -1129,7 +1129,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Gains Protean and some random moves. Uses a random move as well.",
+		desc: "Gains Protean and replaces Swords Dance and Pandora's Box with two moves from two random types.",
 		shortDesc: "Gains Protean and some random moves.",
 		name: "Pandora's Box",
 		isNonstandard: "Custom",
@@ -1150,7 +1150,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					Normal: 'Body Slam',
 					Fighting: 'Drain Punch',
 					Flying: 'Floaty Fall',
-					Poison: 'Baneful Banker',
+					Poison: 'Baneful Bunker',
 					Ground: 'Shore Up',
 					Rock: 'Stealth Rock',
 					Bug: 'Sticky Web',
@@ -1166,17 +1166,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					Dark: 'Taunt',
 					Fairy: 'Play Rough',
 				};
-				const foe = target.side.foe;
-				const types = [foe.pokemon[this.random(foe.pokemon.length)].types[0]];
-				for (const pokemon of foe.pokemon) {
-					if (!types.includes(pokemon.types[0])) {
-						types.push(pokemon.types[0]);
-						break;
-					}
-				}
-				const moves = [typeMovePair[types[0]], typeMovePair[types[1]]];
-				target.m.replacedMoves = [typeMovePair[types[0]], typeMovePair[types[1]]];
-				this.effectData.moveToUse = moves[this.random(2)];
+				const newMoveTypes = Object.keys(typeMovePair);
+				this.prng.shuffle(newMoveTypes);
+				const moves = [typeMovePair[newMoveTypes[0]], typeMovePair[newMoveTypes[1]]];
+				target.m.replacedMoves = moves;
 				for (const moveSlot of target.moveSlots) {
 					if (!(moveSlot.id === 'swordsdance' || moveSlot.id === 'pandorasbox')) continue;
 					if (!target.m.backupMoves) {
@@ -1199,12 +1192,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				target.setAbility('protean');
 				this.add('-ability', target, target.getAbility().name, '[from] move: Pandora\'s Box');
-			},
-			onResidual(pokemon) {
-				if (this.effectData.moveToUse) {
-					this.useMove(this.effectData.moveToUse, pokemon);
-					delete this.effectData.moveToUse;
-				}
+				this.add('-message', `${target.name} learned new moves!`);
 			},
 			onEnd(pokemon) {
 				if (!pokemon.m.backupMoves) return;
