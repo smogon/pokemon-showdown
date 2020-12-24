@@ -96,7 +96,7 @@ sucrase('./lib', './.lib-dist');
 
 if (sucrase('./server', './.server-dist')) {
 	replace('.server-dist', [
-		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+		{regex: /(require\(.*?)(data|lib|sim)/g, replace: `$1.$2-dist`},
 	]);
 }
 

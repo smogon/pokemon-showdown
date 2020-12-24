@@ -1,6 +1,6 @@
 config/formats.ts @TheImmortal
 data/mods/*/random-teams.ts @TheImmortal
-data/mods/ssb/ @HoeenCoder
+data/mods/ssb/ @HoeenCoder @xInstruct
 data/random-teams.ts @TheImmortal
 data/text/ @Marty-D
 databases/ @monsanto

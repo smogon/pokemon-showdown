@@ -6,186 +6,254 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
-	// ACakeWearingAHat
-	dunsparce: {
+	// Abdelrahman
+	cameruptmega: {
 		inherit: true,
-		types: ['Normal', 'Ghost'],
+		abilities: {0: "Water Absorb"},
 	},
-	// Akiamara
-	croagunk: {
+	// Aelita
+	zygardecomplete: {
 		inherit: true,
-		baseStats: {hp: 83, atk: 106, def: 65, spa: 86, spd: 65, spe: 85},
+		abilities: {0: "Scyphozoa"},
 	},
-	// Arrested
-	blastoisemega: {
+	// aegii
+	aegislash: {
 		inherit: true,
-		abilities: {0: "Shell Shocker"},
+		abilities: {0: "Set the Stage"},
 	},
-	// Birdy
-	oricorio: {
+	aegislashblade: {
 		inherit: true,
-		abilities: {0: "Arabesque"},
+		abilities: {0: "Set the Stage"},
 	},
-	oricoriopau: {
+	// Aeonic
+	nosepass: {
 		inherit: true,
-		abilities: {0: "Arabesque"},
+		baseStats: {hp: 70, atk: 85, def: 135, spa: 45, spd: 90, spe: 70},
 	},
-	oricoriopompom: {
+	// Aethernum
+	lotad: {
 		inherit: true,
-		abilities: {0: "Arabesque"},
+		baseStats: {hp: 40, atk: 70, def: 70, spa: 80, spd: 90, spe: 70},
 	},
-	oricoriosensu: {
+	// Annika
+	mewtwomegay: {
 		inherit: true,
-		abilities: {0: "Arabesque"},
+		abilities: {0: "Overprotective"},
 	},
-	// E4 Flint
-	steelixmega: {
+	// A Quag To The Past
+	quagsire: {
 		inherit: true,
-		abilities: {0: 'Stark Mountain'},
-		types: ['Steel', 'Ground', 'Fire'],
+		baseStats: {hp: 95, atk: 65, def: 85, spa: 65, spd: 85, spe: 35},
 	},
-	// Eien
-	mew: {
+	// Billo
+	cosmog: {
 		inherit: true,
-		abilities: {0: 'Psychic Surge'},
+		baseStats: {hp: 86, atk: 58, def: 62, spa: 87, spd: 62, spe: 74},
+	},
+	// dogknees
+	furret: {
+		inherit: true,
+		types: ["Normal", "Ghost"],
 	},
 	// Elgino
-	mimikyubusted: {
+	celebi: {
 		inherit: true,
-		abilities: {0: 'Gib love pls'},
+		types: ["Grass", "Fairy"],
 	},
-	// eternally
-	ducklett: {
+	// EpicNikolai
+	garchompmega: {
 		inherit: true,
-		// Doubled def, spa, spd and spe
-		baseStats: {hp: 62, atk: 44, def: 100, spa: 88, spd: 100, spe: 110},
+		abilities: {0: "Dragon Heart"},
+		types: ["Dragon", "Fire"],
 	},
-	// fart
-	kartana: {
+	// Felucia
+	uxie: {
 		inherit: true,
-		types: ['Fairy', 'Steel'],
+		types: ["Psychic", "Normal"],
+	},
+	// frostyicelad
+	laprasgmax: {
+		inherit: true,
+		heightm: 2.5,
+		weightkg: 220,
 	},
 	// GMars
 	minior: {
 		inherit: true,
-		abilities: {0: 'mysteryshell'},
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorviolet: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorindigo: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorblue: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniorgreen: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	minioryellow: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
+	},
+	miniororange: {
+		inherit: true,
+		abilities: {0: "Capsule Armor"},
 	},
 	miniormeteor: {
 		inherit: true,
-		abilities: {0: 'mysteryshell'},
+		abilities: {0: "Capsule Armor"},
 	},
-	// grimAuxiliatrix
-	aggronmega: {
+	// Hydro
+	pichu: {
 		inherit: true,
-		abilities: {0: 'Intimidate'},
+		types: ["Electric", "Water"],
+		baseStats: {hp: 70, atk: 80, def: 55, spa: 75, spd: 75, spe: 100},
 	},
-	// guishark
-	sharpedomega: {
+	// Inactive
+	gyaradosmega: {
 		inherit: true,
-		abilities: {0: 'gz guishark'},
+		abilities: {0: "Dragon's Fury"},
+	},
+	// Jho
+	toxtricity: {
+		inherit: true,
+		abilities: {0: "Punk Rock"},
+	},
+	toxtricitylowkey: {
+		inherit: true,
+		abilities: {0: "Venomize"},
 	},
 	// Kaiju Bunny
-	gliscor: {
+	lopunnymega: {
 		inherit: true,
-		abilities: {0: 'Poison Heal'}, 	// Ability change is permanent
+		abilities: {0: "Second Wind"},
+		types: ["Normal", "Fairy"],
 	},
 	// Kris
-	rotomfan: {
+	unown: {
 		inherit: true,
-		abilities: {0: "Adaptability"},
-		baseStats: {hp: 50, atk: 65, def: 127, spa: 145, spd: 127, spe: 106},
+		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+		// For reverting back to an Unown forme
+		abilities: {0: "Protean"},
 	},
-	rotomfrost: {
+	// Lamp
+	lampent: {
 		inherit: true,
-		abilities: {0: "Adaptability"},
-		baseStats: {hp: 50, atk: 65, def: 127, spa: 145, spd: 127, spe: 106},
+		baseStats: {hp: 60, atk: 80, def: 100, spa: 135, spd: 100, spe: 95},
 	},
-	rotomheat: {
+	// Meicoo
+	venusaurmega: {
 		inherit: true,
-		abilities: {0: "Adaptability"},
-		baseStats: {hp: 50, atk: 65, def: 127, spa: 145, spd: 127, spe: 106},
+		abilities: {0: "Unaware"},
 	},
-	rotommow: {
+	// nui
+	jigglypuff: {
 		inherit: true,
-		abilities: {0: "Adaptability"},
-		baseStats: {hp: 50, atk: 65, def: 127, spa: 145, spd: 127, spe: 106},
-	},
-	rotomwash: {
-		inherit: true,
-		abilities: {0: "Adaptability"},
-		baseStats: {hp: 50, atk: 65, def: 127, spa: 145, spd: 127, spe: 106},
-	},
-	// Level 51
-	porygon2: {
-		inherit: true,
-		abilities: {0: 'Stamina'},
-	},
-	// MacChaeger
-	mantyke: {
-		inherit: true,
-		baseStats: {hp: 90, atk: 40, def: 100, spa: 120, spd: 240, spe: 100},
-	},
-	// martha
-	dianciemega: {
-		inherit: true,
-		abilities: {0: 'Pixilate'},
-	},
-	// Morfent
-	banettemega: {
-		inherit: true,
-		abilities: {0: 'Comatose'},
-	},
-	// OM
-	flareon: {
-		inherit: true,
-		types: ['Fire', 'Fairy'],
+		baseStats: {hp: 115, atk: 128, def: 62, spa: 128, spd: 78, spe: 62},
 	},
 	// Overneat
 	absolmega: {
 		inherit: true,
-		abilities: {0: 'Filter'},
-		types: ['Dark', 'Fairy'],
+		abilities: {0: "Fluffy"},
+		types: ["Dark", "Fairy"],
 	},
-	// Pirate Princess
-	gulpin: {
+	// PartMan
+	chandelure: {
 		inherit: true,
-		baseStats: {hp: 70, atk: 43, def: 53, spa: 86, spd: 53, spe: 40},
-	},
-	// pre
-	deoxys: {
-		inherit: true,
-		abilities: {0: 'Optimize'},
-	},
-	deoxysattack: {
-		inherit: true,
-		abilities: {0: 'Optimize'},
-	},
-	deoxysdefense: {
-		inherit: true,
-		abilities: {0: 'Optimize'},
-	},
-	deoxysspeed: {
-		inherit: true,
-		abilities: {0: 'Optimize'},
+		abilities: {0: "Hecatomb"},
 	},
 	// Psynergy
-	blazikenmega: {
+	rayquaza: {
 		inherit: true,
-		abilities: {0: 'Wrath'},
+		abilities: {0: "Supernova"},
 	},
-	// Rach
+	rayquazamega: {
+		inherit: true,
+		abilities: {0: "Supernova"},
+		requiredMove: "Clear Breath",
+	},
+	// Robb576
+	necrozmadawnwings: {
+		inherit: true,
+		abilities: {0: "The Numbers Game"},
+	},
+	necrozmaduskmane: {
+		inherit: true,
+		abilities: {0: "The Numbers Game"},
+	},
+	necrozmaultra: {
+		inherit: true,
+		abilities: {0: "The Numbers Game"},
+	},
+	// Strucni
+	aggronmega: {
+		inherit: true,
+		abilities: {0: "Overasked Clause"},
+	},
+	// Finland
+	alcremie: {
+		inherit: true,
+		abilities: {0: "Winding Song"},
+	},
+	// vivalospride's interaction with Coconut's move
+	darumaka: {
+		inherit: true,
+		evos: ["Darmanitan", "Darmanitan-Zen"],
+	},
+	darmanitanzen: {
+		inherit: true,
+		prevo: "Darumaka",
+	},
+	// yuki
+	pikachucosplay: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		abilities: {0: "Combat Training"},
+	},
+	pikachuphd: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		abilities: {0: "Triage"},
+	},
 	pikachulibre: {
 		inherit: true,
-		types: ['Electric', 'Fighting'],
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		abilities: {0: "White Smoke"},
 	},
-	// Sunny
-	sceptilemega: {
+	pikachupopstar: {
 		inherit: true,
-		abilities: {0: 'Contrary'},
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		abilities: {0: "Dancer"},
+	},
+	pikachurockstar: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		abilities: {0: "Punk Rock"},
+	},
+	pikachubelle: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		abilities: {0: "Tangled Feet"},
 	},
 	// Zalm
 	weedle: {
 		inherit: true,
-		baseStats: {hp: 85, atk: 100, def: 90, spa: 20, spd: 90, spe: 90},
+		baseStats: {hp: 100, atk: 35, def: 100, spa: 90, spd: 90, spe: 100},
+	},
+	// Zarel
+	meloetta: {
+		inherit: true,
+		abilities: {0: "Dancer"},
+	},
+	meloettapirouette: {
+		inherit: true,
+		abilities: {0: "Serene Grace"},
 	},
 };
