@@ -202,7 +202,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Winding Song"},
 	},
-	// vivalospride"s interaction with Coconut"s move
+	// vivalospride's interaction with Coconut's move
 	darumaka: {
 		inherit: true,
 		evos: ["Darmanitan", "Darmanitan-Zen"],
