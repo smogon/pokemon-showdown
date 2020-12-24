@@ -240,7 +240,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: string;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {inherit: true};
+export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {inherit: true, gen?: number};
 
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';
