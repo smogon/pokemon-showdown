@@ -5187,14 +5187,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onAfterHit(target, source) {
-			if (source.hp) {
-				const item = target.takeItem();
-				if (item) {
-					this.add('-enditem', target, item.name, '[from] stealeat', '[move] Ingredient Foraging', '[of] ' + source);
-					this.heal(source.maxhp / 2, source);
-					this.add(`c|${getName('Zalm')}|Yum`);
-					source.ateBerry = true;
-				}
+			if (source.hp && target.takeItem(source)) {
+				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Ingredient Foraging', '[of] ' + source);
+				this.heal(source.maxhp / 2, source);
+				this.add(`c|${getName('Zalm')}|Yum`);
+				source.ateBerry = true;
 			}
 		},
 		secondary: null,
