@@ -11,14 +11,19 @@ describe('Metal Burst', function () {
 	});
 
 	it('should run conditions for submove', function () {
-		battle = common.createBattle({seed: [1, 2, 3, 4]}); // Snorlax needs to sleep for more than 1 turn
-		battle.setPlayer('p1', {team: [{species: 'snorlax', moves: ['sleeptalk', 'metalburst']}]});
-		battle.setPlayer('p2', {team: [{species: 'breloom', moves: ['spore', 'sonicboom']}]});
-		battle.makeChoices('move metalburst', 'move sonicboom');
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'snorlax', moves: ['sleeptalk', 'metalburst']},
+			{species: 'tauros', moves: ['sleeptalk']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'breloom', moves: ['sleeptalk', 'sonicboom']},
+			{species: 'venusaur', moves: ['sleeptalk', 'spore']},
+		]});
+		battle.makeChoices('move metalburst, move sleeptalk', 'move sonicboom 1, move sleeptalk');
 		const breloomHpTurn1 = battle.p2.active[0].hp;
 		assert.equal(breloomHpTurn1, battle.p2.active[0].maxhp - battle.dex.getMove('sonicboom').damage * 1.5);
-		battle.makeChoices('move sleeptalk', 'move spore');
-		battle.makeChoices('move sleeptalk', 'move sonicboom');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sonicboom 1, move spore 1');
 		assert.equal(battle.p2.active[0].hp, breloomHpTurn1 - battle.dex.getMove('sonicboom').damage * 1.5);
 	});
 
