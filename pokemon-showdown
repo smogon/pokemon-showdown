@@ -86,8 +86,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'start':
 		{
 			process.argv.splice(2, 1);
-			if (process.argv[2] === '--skip-build') {
-				process.argv.splice(2, 1);
+			if (process.argv.includes('--skip-build')) {
 				built = true;
 			}
 			if (!built) build();
