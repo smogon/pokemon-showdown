@@ -1480,8 +1480,9 @@ export const Chat = new class {
 		// ensure that english is the first entry when we iterate over Chat.languages
 		Chat.languages.set('english' as ID, 'English');
 		for (const dirname of directories) {
+			// translation dirs shouldn't have caps, but things like sourceMaps and the README will
+			if (/[^a-z0-9]/.test(dirname)) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
-			if (!dir.isDirectorySync()) continue;
 
 			// For some reason, toID() isn't available as a global when this executes.
 			const languageID = Dex.toID(dirname);
