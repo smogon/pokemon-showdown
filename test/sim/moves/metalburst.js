@@ -11,7 +11,7 @@ describe('Metal Burst', function () {
 	});
 
 	it('should run conditions for submove', function () {
-		battle = common.createBattle();
+		battle = common.createBattle({seed: [1, 2, 3, 4]}); // Snorlax needs to sleep for more than 1 turn
 		battle.setPlayer('p1', {team: [{species: 'snorlax', moves: ['sleeptalk', 'metalburst']}]});
 		battle.setPlayer('p2', {team: [{species: 'breloom', moves: ['spore', 'sonicboom']}]});
 		battle.makeChoices('move metalburst', 'move sonicboom');
@@ -23,7 +23,8 @@ describe('Metal Burst', function () {
 	});
 
 	it('should target the opposing Pokemon that hit the user with an attack most recently that turn', function () {
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4].map(i => i + 1111111)});
+		// The seed should select venusaur if the test would otherwise fail
+		battle = common.createBattle({gameType: 'doubles', seed: [3, 4, 5, 6]});
 		battle.setPlayer('p1', {team: [
 			{species: 'snorlax', moves: ['metalburst']},
 			{species: 'tauros', moves: ['sleeptalk']},
