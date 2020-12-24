@@ -21,4 +21,19 @@ describe('Metal Burst', function () {
 		battle.makeChoices('move sleeptalk', 'move sonicboom');
 		assert.equal(battle.p2.active[0].hp, breloomHpTurn1 - battle.dex.getMove('sonicboom').damage * 1.5);
 	});
+
+	it('should target the opposing Pokemon that hit the user with an attack most recently that turn', function () {
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4].map(i => i + 1111111)});
+		battle.setPlayer('p1', {team: [
+			{species: 'snorlax', moves: ['metalburst']},
+			{species: 'tauros', moves: ['sleeptalk']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'breloom', moves: ['swift']},
+			{species: 'venusaur', moves: ['swift']},
+		]});
+		battle.makeChoices();
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
 });

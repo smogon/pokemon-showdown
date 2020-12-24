@@ -173,7 +173,11 @@ export const Scripts: BattleScriptsData = {
 			move.priority = this.activeMove.priority;
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
 		}
+
 		const baseTarget = move.target;
+		let targetRelayVar = {target};
+		targetRelayVar = this.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
+		if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 		if (target === undefined) target = this.getRandomTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;

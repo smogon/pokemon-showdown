@@ -10894,8 +10894,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryHit(target, source, move) {
 			if (!source.lastDamageTaken) return false;
 		},
-		onRedirectTarget(target, source) {
-			return source.getLastAttackedBy();
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastAttackedBy = source.getLastAttackedBy();
+			if (lastAttackedBy !== undefined) {
+				targetRelayVar.target = lastAttackedBy.source;
+			}
 		},
 		secondary: null,
 		target: "scripted",
