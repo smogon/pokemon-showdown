@@ -33,6 +33,7 @@ export const Aliases: {[alias: string]: string} = {
 	bf: "[Gen 7] Battle Factory",
 	bssf: "[Gen 7] BSS Factory",
 	ssb: "[Gen 8] Super Staff Bros 4",
+	ssb4: "[Gen 8] Super Staff Bros 4",
 	lgrandom: "[Gen 7] Let's Go Random Battle",
 	gen6bf: "[Gen 6] Battle Factory",
 	gen7mono: "[Gen 7] Monotype",
