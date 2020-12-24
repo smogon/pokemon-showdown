@@ -2105,9 +2105,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit(target, source) {
-			// No animation
-		},
 		onHit(target) {
 			let success = false;
 			let i: BoostName;
@@ -2375,7 +2372,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Sunsteel Strike', target);
 		},
-		type: "Flying",
 		self: {
 			boosts: {
 				spe: 1,
@@ -2383,6 +2379,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "normal",
+		type: "Flying",
 	},
 
 	// Kaiju Bunny
@@ -3066,9 +3063,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			// No Animation
 		},
 		// fruit this move.
 		onHit(target, source) {
@@ -5144,8 +5138,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'Jester':
 				this.useMove("Charm", source);
 				break;
-			default:
-				break;
 			}
 		},
 		onHit(target, source) {
@@ -5170,8 +5162,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'Jester':
 				changeSet(this, source, ssbSets['yuki-Jester']);
 				this.add('-message', `yuki tries her best to impress ${target.name}!`);
-				return;
-			default:
 				return;
 			}
 		},
