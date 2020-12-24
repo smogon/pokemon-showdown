@@ -119,7 +119,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Inactive
 	gyaradosmega: {
 		inherit: true,
-		abilities: {0: "Dragon\'s Fury"},
+		abilities: {0: "Dragon's Fury"},
 	},
 	// Jho
 	toxtricity: {
