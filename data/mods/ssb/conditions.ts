@@ -1610,7 +1610,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		onStart(source) {
 			const foe = source.side.foe.active[0];
-			const foeName = this.toID(foe.illusion ? foe.illusion.name : foe.name);
+			const foeName = foe.illusion ? foe.illusion.name : foe.name;
 			this.add(`c|${getName('The Immortal')}|${!foe || foe.fainted || foe.hp <= 0 ? 'hi' : foeName}`);
 		},
 		onSwitchOut() {
