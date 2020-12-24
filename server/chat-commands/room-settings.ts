@@ -693,6 +693,7 @@ export const commands: ChatCommands = {
 	],
 
 	subroomgroupchat: 'makegroupchat',
+	srgc: 'makegroupchat',
 	mgc: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
@@ -707,14 +708,14 @@ export const commands: ChatCommands = {
 			return this.errorReply(`You are banned from using groupchats ${expireText}.`);
 		}
 
-		if (cmd === 'subroomgroupchat') {
+		if (cmd === 'subroomgroupchat' || cmd === 'srgc') {
 			if (!user.can('mute', null, room)) {
 				return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
 			}
 			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
 			if (room.settings.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
 		}
-		const parent = cmd === 'subroomgroupchat' ? room.roomid : null;
+		const parent = cmd === 'subroomgroupchat' || cmd === 'srgc' ? room.roomid : null;
 		// this.checkCan('makegroupchat');
 
 		// Title defaults to a random 8-digit number.
