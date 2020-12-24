@@ -10885,7 +10885,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		damageCallback(pokemon) {
 			const lastDamagedBy = pokemon.getLastDamagedBy();
-			if (lastDamagedBy) {
+			if (lastDamagedBy !== undefined) {
 				return (lastDamagedBy.damage * 1.5) || 1;
 			}
 			return 0;
@@ -10897,7 +10897,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onTryHit(target, source, move) {
 			const lastDamagedBy = source.getLastDamagedBy();
-			if (!lastDamagedBy) return false;
+			if (lastDamagedBy === undefined) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const lastDamagedBy = source.getLastDamagedBy();
