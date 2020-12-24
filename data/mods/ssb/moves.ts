@@ -216,7 +216,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				changeSet(this, pokemon, ssbSets[specialSet ? 'aegii' : 'aegii-Alt']);
 				specialSet = pokemon.moves.includes('shadowball');
 				const setType = specialSet ? 'specially' : 'physically';
-				this.add('-message', `aegii currently has a ${setType} oriented set.`);
+				this.add('-message', `aegii now has a ${setType} oriented set.`);
 			}
 		},
 		condition: {
