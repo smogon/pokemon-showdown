@@ -830,8 +830,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 150,
 		category: "Physical",
-		desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move.",
-		shortDesc: "Fails if the user takes damage before it hits.",
+		desc: "The user loses its focus and does nothing if it is hit by a damaging attack equal to 20% of the user's maxmimum HP this turn before it can execute the move.",
+		shortDesc: "Fails if the user takes 20% before it hits.",
 		name: "Juggernaut Punch",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -5187,6 +5187,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onAfterHit(target, source) {
+			const item = target.getItem();
 			if (source.hp && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Ingredient Foraging', '[of] ' + source);
 				this.heal(source.maxhp / 2, source);
