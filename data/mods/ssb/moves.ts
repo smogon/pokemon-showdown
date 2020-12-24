@@ -2341,7 +2341,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.species.forme === 'Low-Key') {
 					changeSet(this, pokemon, ssbSets['Jho']);
 				} else {
-					changeSet(this, pokemon, ssbSets['Jho-Low Key']);
+					changeSet(this, pokemon, ssbSets['Jho-Low-Key']);
 				}
 			}
 		},
