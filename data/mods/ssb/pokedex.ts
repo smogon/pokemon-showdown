@@ -9,21 +9,21 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Abdelrahman
 	cameruptmega: {
 		inherit: true,
-		abilities: {0: 'Water Absorb'},
+		abilities: {0: "Water Absorb"},
 	},
 	// Aelita
 	zygardecomplete: {
 		inherit: true,
-		abilities: {0: 'Scyphozoa'},
+		abilities: {0: "Scyphozoa"},
 	},
 	// aegii
 	aegislash: {
 		inherit: true,
-		abilities: {0: 'Set the Stage'},
+		abilities: {0: "Set the Stage"},
 	},
 	aegislashblade: {
 		inherit: true,
-		abilities: {0: 'Set the Stage'},
+		abilities: {0: "Set the Stage"},
 	},
 	// Aeonic
 	nosepass: {
@@ -53,18 +53,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// dogknees
 	furret: {
 		inherit: true,
-		types: ['Normal', 'Ghost'],
+		types: ["Normal", "Ghost"],
 	},
 	// Elgino
 	celebi: {
 		inherit: true,
-		types: ['Grass', 'Fairy'],
+		types: ["Grass", "Fairy"],
 	},
 	// EpicNikolai
 	garchompmega: {
 		inherit: true,
 		abilities: {0: "Dragon Heart"},
-		types: ['Dragon', 'Fire'],
+		types: ["Dragon", "Fire"],
 	},
 	// Felucia
 	uxie: {
@@ -119,7 +119,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Inactive
 	gyaradosmega: {
 		inherit: true,
-		abilities: {0: 'Dragon\'s Fury'},
+		abilities: {0: "Dragon\'s Fury"},
 	},
 	// Jho
 	toxtricity: {
@@ -128,20 +128,20 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	toxtricitylowkey: {
 		inherit: true,
-		abilities: {0: 'Venomize'},
+		abilities: {0: "Venomize"},
 	},
 	// Kaiju Bunny
 	lopunnymega: {
 		inherit: true,
-		abilities: {0: 'Second Wind'},
-		types: ['Normal', 'Fairy'],
+		abilities: {0: "Second Wind"},
+		types: ["Normal", "Fairy"],
 	},
 	// Kris
 	unown: {
 		inherit: true,
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		// For reverting back to an Unown forme
-		abilities: {0: 'Protean'},
+		abilities: {0: "Protean"},
 	},
 	// Lamp
 	lampent: {
@@ -151,7 +151,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Meicoo
 	venusaurmega: {
 		inherit: true,
-		abilities: {0: 'Unaware'},
+		abilities: {0: "Unaware"},
 	},
 	// nui
 	jigglypuff: {
@@ -161,23 +161,23 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Overneat
 	absolmega: {
 		inherit: true,
-		abilities: {0: 'Fluffy'},
-		types: ['Dark', 'Fairy'],
+		abilities: {0: "Fluffy"},
+		types: ["Dark", "Fairy"],
 	},
 	// PartMan
 	chandelure: {
 		inherit: true,
-		abilities: {0: 'Hecatomb'},
+		abilities: {0: "Hecatomb"},
 	},
 	// Psynergy
 	rayquaza: {
 		inherit: true,
-		abilities: {0: 'Supernova'},
+		abilities: {0: "Supernova"},
 	},
 	rayquazamega: {
 		inherit: true,
-		abilities: {0: 'Supernova'},
-		requiredMove: 'Clear Breath',
+		abilities: {0: "Supernova"},
+		requiredMove: "Clear Breath",
 	},
 	// Robb576
 	necrozmadawnwings: {
@@ -200,16 +200,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Finland
 	alcremie: {
 		inherit: true,
-		abilities: {0: 'Winding Song'},
+		abilities: {0: "Winding Song"},
 	},
-	// vivalospride's interaction with Coconut's move
+	// vivalospride"s interaction with Coconut"s move
 	darumaka: {
 		inherit: true,
-		evos: ['Darmanitan', 'Darmanitan-Zen'],
+		evos: ["Darmanitan", "Darmanitan-Zen"],
 	},
 	darmanitanzen: {
 		inherit: true,
-		prevo: 'Darumaka',
+		prevo: "Darumaka",
 	},
 	// yuki
 	pikachucosplay: {
