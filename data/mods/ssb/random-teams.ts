@@ -894,7 +894,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 					}
 				}
 				if (ssbSet.ability === 'Wonder Guard') {
-					if (typePool['wonderguard'] === undefined) {
+					if (!typePool['wonderguard']) {
 						typePool['wonderguard'] = 1;
 					} else {
 						rejected = true;
