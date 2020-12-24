@@ -5186,6 +5186,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Thief', target);
+		},
 		onAfterHit(target, source) {
 			const item = target.getItem();
 			if (source.hp && target.takeItem(source)) {
