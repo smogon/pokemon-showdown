@@ -350,27 +350,33 @@ export const commands: ChatCommands = {
 
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
-			room = this.requireRoom();
-			this.checkCan('mute', null, room);
-			if (!room.minorActivityQueue) {
+			target = target.trim();
+			const [slotString, roomid] = target.split(',');
+			const Room = roomid ? Rooms.search(roomid) : room;
+			if (!Room) return this.errorReply(`Invalid room.`);
+			if (!Room.persist) {
+				return this.errorReply("This command is unavailable in temporary rooms.");
+			}
+			this.room = Room;
+			this.checkCan('mute', null, Room);
+			if (!Room.minorActivityQueue) {
 				return this.errorReply(this.tr`The queue is already empty.`);
 			}
-			if (cmd === 'deletequeue' && room.minorActivityQueue.length !== 1 && !target) {
+			if (cmd === 'deletequeue' && Room.minorActivityQueue.length !== 1 && !target) {
 				return this.parse('/help deletequeue');
 			}
 			if (!target) {
-				room.minorActivityQueue = null;
+				Room.minorActivityQueue = null;
 				this.modlog('CLEARQUEUE');
 				this.sendReply(this.tr`Cleared poll queue.`);
 			} else {
-				const [slotString, roomid, update] = target.split(',');
 				const slot = parseInt(slotString);
 				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
 				if (!curRoom) return this.errorReply(this.tr`Room "${roomid}" not found.`);
 				if (isNaN(slot)) {
 					return this.errorReply(this.tr`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
 				}
-				if (!room.minorActivityQueue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
+				if (!Room.minorActivityQueue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
 
 				curRoom.minorActivityQueue!.splice(slot - 1, 1);
 				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
@@ -382,7 +388,7 @@ export const commands: ChatCommands = {
 				});
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
-				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
+				if (roomid) this.parse(`/j view-pollqueue-${Room.roomid}`);
 			}
 		},
 		deletequeuehelp: [
@@ -561,7 +567,6 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	pollqueue(args, user) {
 		const room = this.requireRoom();
-
 		let buf = `<div class="pad"><strong>${this.tr`Queued polls:`}</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button><br />`;
@@ -573,7 +578,7 @@ export const pages: PageTable = {
 			const number = i + 1; // for translation convienence
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
-				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
+				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid}">` +
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
