@@ -1608,7 +1608,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	theimmortal: {
 		noCopy: true,
-		// No quotes
+		onStart(source) {
+			const foe = source.side.foe.active[0];
+			const foeName = this.toID(foe.illusion ? foe.illusion.name : foe.name);
+			this.add(`c|${getName('The Immortal')}|${!foe || foe.fainted || foe.hp <= 0 ? 'hi' : foeName}`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('The Immortal')}|ok`);
+		},
+		onFaint() {
+			this.add(`c|${getName('The Immortal')}|ban stall`);
+		},
 	},
 	tiki: {
 		noCopy: true,
