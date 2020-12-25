@@ -201,7 +201,13 @@ export class Pokemon {
 	 */
 	hurtThisTurn: number | null;
 	lastDamage: number;
-	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID, position: number}[];
+	attackedBy: {
+		source: Pokemon,
+		damage: number,
+		thisTurn: boolean,
+		move?: ID, position: number,
+		damageValue: (number | boolean | undefined),
+	}[];
 
 	isActive: boolean;
 	activeTurns: number;
@@ -770,14 +776,15 @@ export class Pokemon {
 	}
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
-		if (!damage) damage = 0;
+		const damageNumber = (typeof damage === 'number') ? damage : 0;
 		move = this.battle.dex.getMove(move);
 		this.attackedBy.push({
 			source,
-			damage,
+			damage: damageNumber,
 			move: move.id,
 			thisTurn: true,
 			position: source.position,
+			damageValue: damage,
 		});
 	}
 
@@ -787,7 +794,7 @@ export class Pokemon {
 	}
 
 	getLastDamagedBy() {
-		const damagedBy = this.attackedBy.filter(attacked => attacked.damage);
+		const damagedBy = this.attackedBy.filter(attacked => typeof attacked.damageValue === 'number');
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];
 	}

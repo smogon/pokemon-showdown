@@ -607,7 +607,7 @@ export const Scripts: BattleScriptsData = {
 		}
 		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
-		let moveDamage: (number | boolean | undefined)[];
+		let moveDamage: (number | boolean | undefined)[] = [];
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
 
@@ -715,7 +715,7 @@ export const Scripts: BattleScriptsData = {
 
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
-				target.gotAttacked(move, damage[i] as number | false | undefined, pokemon);
+				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 			}
 		}
 

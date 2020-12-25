@@ -10886,7 +10886,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		damageCallback(pokemon) {
 			const lastDamagedBy = pokemon.getLastDamagedBy();
 			if (lastDamagedBy !== undefined) {
-				return (lastDamagedBy.damage * 1.5);
+				return (lastDamagedBy.damage * 1.5) || 1;
 			}
 			return 0;
 		},

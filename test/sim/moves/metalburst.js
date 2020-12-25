@@ -44,4 +44,14 @@ describe('Metal Burst', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 		assert.fullHP(battle.p2.active[1]);
 	});
+
+	it('should deal 1 damage if hit, but didn\'t take damage', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'snorlax', ability: 'sturdy', moves: ['sleeptalk', 'metalburst']}]});
+		battle.setPlayer('p2', {team: [{species: 'breloom', moves: ['closecombat', 'falseswipe']}]});
+
+		battle.makeChoices('move sleeptalk', 'move closecombat');
+		battle.makeChoices('move metalburst', 'move falseswipe');
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp - 1);
+	});
 });
