@@ -3439,7 +3439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick", target);
 		},
 		onHit(target, source, effect) {
-			let item = target.takeItem();
+			const item = target.takeItem();
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
 				const items: ItemData[] = [];
