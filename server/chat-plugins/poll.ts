@@ -388,7 +388,6 @@ export const commands: ChatCommands = {
 				});
 				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
 				curRoom.update();
-				if (roomid) this.parse(`/j view-pollqueue-${curRoom}`);
 				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
 			}
 		},
