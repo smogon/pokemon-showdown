@@ -205,8 +205,9 @@ export class Pokemon {
 		source: Pokemon,
 		damage: number,
 		thisTurn: boolean,
-		move?: ID, position: number,
-		damageValue: (number | boolean | undefined),
+		move?: ID,
+		position?: number,
+		damageValue?: (number | boolean | undefined),
 	}[];
 
 	isActive: boolean;
