@@ -1,4 +1,5 @@
 import {getName} from './conditions';
+import {Items} from './items';
 import {changeSet, changeMoves} from "./abilities";
 import {ssbSets} from "./random-teams";
 
@@ -147,7 +148,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
 			const sideConditions = [
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
@@ -163,7 +164,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Skystriker', '[of] ' + pokemon);
 			}
 			const sideConditions = [
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
@@ -448,10 +449,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid', 'safeguard', 'mist',
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
@@ -612,10 +613,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield suddenly flooded!');
 				const removeAll = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'shiftingrocks',
-					'toxicspikes', 'stealthrock', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes',
+					'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 				];
-				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
+				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
 						if (!silentRemove.includes(sideCondition)) {
@@ -1971,89 +1972,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// grimAuxiliatrix
-	fuelleak: {
-		accuracy: true,
-		basePower: 50,
-		category: "Special",
-		desc: "Summons ferrofluid to the user's side, which is a positive entry hazard that heals Pokemon by 25% of their maximum HP when they switch in.",
-		shortDesc: "Sets Ferrofluid on user's side.",
-		name: "Fuel Leak",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove(target) {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Steel Beam', target);
-		},
-		onAfterMoveSecondarySelf(source, target) {
-			source.side.addSideCondition('ferrofluid');
-		},
-		secondary: null,
-		target: "normal",
-		type: "Steel",
-	},
-
-	// for grimAuxiliatrix's move
-	ferrofluid: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Positive entry hazard that heals Pokemon by 25% of their maximum HP when they switch in.",
-		shortDesc: "Heals 25% on switch in.",
-		name: "Ferrofluid",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 15,
-		priority: 0,
-		flags: {reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Acid Downpour', target);
-		},
-		sideCondition: 'ferrofluid',
-		condition: {
-			// this is a side condition
-			onStart(side) {
-				if (this.field.isTerrain('waveterrain')) {
-					this.add('-message', `Wave Terrain prevented Ferrofluid from starting!`);
-					return null;
-				}
-				this.add('-sidestart', side, 'Ferrofluid');
-				this.add("-message", `Ferrofluid was spilled!`);
-				this.effectData.layers = 1;
-			},
-			onRestart(side) {
-				if (this.effectData.layers >= 3) return false;
-				this.add('-sidestart', side, 'Ferrofluid');
-				this.effectData.layers++;
-			},
-			onSwitchIn(pokemon) {
-				// Can be used by pokemon with boots.
-				if (this.heal(pokemon.baseMaxhp / 4)) {
-					this.add("-message", `Magnetized particles mend your wounds!`);
-				} else {
-					return;
-				}
-				this.effectData.layers--;
-				if (this.effectData.layers < 1) {
-					pokemon.side.removeSideCondition(`ferrofluid`);
-				}
-			},
-			onEnd(side) {
-				this.add('-sideend', side, 'move: Ferrofluid');
-				this.add('-message', `The Ferrofuild disappeared.`);
-			},
-		},
-		secondary: null,
-		target: "foeSide",
-		type: "Steel",
-	},
 
 	// HoeenHero
 	landfall: {
@@ -2862,10 +2780,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			let success = false;
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'ferrofluid', 'safeguard', 'mist',
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
@@ -3399,7 +3317,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterHit(target, pokemon) {
 			const sideConditions = [
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
@@ -3412,7 +3330,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterSubDamage(damage, target, pokemon) {
 			const sideConditions = [
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
@@ -3502,69 +3420,47 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Perish Song
-	shiftingrocks: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Entry Hazard. The damage is static for all types, (doesn't factor type effectiveness of rock) and is equal to (7+n)%, n being the number of times a Pokemon takes damage from the hazard. Starts at 0 and caps at 10. After 10 turns, (when the damage reaches 17%) Shifting Rocks explode (disappear) and deal 80-Base Power Rock-type damage to the foe.",
-		shortDesc: "Hazard: ramps up damage then explodes.",
-		name: "Shifting Rocks",
+	trickery: {
+		accuracy: 85,
+		basePower: 100,
+		category: "Physical",
+		desc: "Changes the target's item to something random.",
+		shortDesc: "Changes the target's item to something random.",
+		name: "Trickery",
 		isNonstandard: "Custom",
-		gen: 8,
-		pp: 15,
+		pp: 10,
 		priority: 0,
-		flags: {reflectable: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Stealth Rock', target);
-			this.add('-anim', source, 'Stealth Rock', target);
+			this.add('-anim', source, "Amnesia", source);
+			this.add('-anim', source, "Trick", target);
 		},
-		sideCondition: 'shiftingrocks',
-		condition: {
-			// this is a side condition
-			onStart(side) {
-				if (this.field.isTerrain('waveterrain')) {
-					this.add('-message', `Wave Terrain prevented Shifting Rocks from starting!`);
-					return null;
+		onHit(target, source, effect) {
+			let item = target.takeItem();
+			if (!target.item) {
+				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
+				const items: ItemData[] = [];
+				for (const id in Items) {
+					items.push(Items[id].name);
 				}
-				this.add('-sidestart', side, 'Shifting Rocks');
-				this.add("-message", `Shifting Rocks were set!`);
-				this.effectData.damage = 7;
-			},
-			onSwitchIn(pokemon) {
-				if (pokemon.hasItem('heavydutyboots')) return;
-				if (this.effectData.damage >= 17) {
-					const activeMove = {
-						id: 'rocks' as ID,
-						basePower: 80,
-						type: 'Rock',
-						category: 'Physical',
-						willCrit: false,
-					};
-					const damage = this.getDamage(pokemon, pokemon, activeMove as ActiveMove);
-					if (typeof damage !== 'number') throw new Error("Shifting Rocks damage not dealt");
-					if (this.damage(damage)) {
-						this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
-					}
-					this.effectData.damage = 7;
-					pokemon.side.removeSideCondition(`shiftingrocks`);
-					return false;
+				let randomItem = '';
+				if (items.length) {
+					items.sort((a, b) => a.num! - b.num!);
+					randomItem = this.sample(items);
 				}
-				if (this.damage(this.effectData.damage * pokemon.maxhp / 100)) {
-					this.add('-message', `${pokemon.name} was hurt by the shifting rocks!`);
+				if (!randomItem) {
+					return;
 				}
-				this.effectData.damage++;
-			},
-			onEnd(side) {
-				this.add('-sideend', side, 'move: Shifting Rocks');
-				this.add("-message", `The Shifting Rocks were removed!`);
-			},
+				target.setItem(randomItem);
+				this.add('-message', `${target.name} obtained a(n) ${randomItem}.`);
+			}
 		},
 		secondary: null,
-		target: "foeSide",
-		type: "Rock",
+		target: "normal",
+		type: "Ground",
 	},
 
 	// phiwings99
@@ -5494,139 +5390,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	futuresight: {
 		inherit: true,
 		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Doom Desire, or Disconnect is already in effect for the target's position.",
-	},
-	// For shifting rocks compatibility
-	defog: {
-		inherit: true,
-		onHit(target, source, move) {
-			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
-			const removeTarget = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
-			];
-			const removeAll = [
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
-			];
-			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
-					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
-					success = true;
-				}
-			}
-			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
-					success = true;
-				}
-			}
-			this.field.clearTerrain();
-			return success;
-		},
-	},
-	rapidspin: {
-		inherit: true,
-		onAfterHit(target, pokemon) {
-			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
-			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
-				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
-			for (const condition of sideConditions) {
-				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
-				}
-			}
-			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-				pokemon.removeVolatile('partiallytrapped');
-			}
-		},
-		onAfterSubDamage(damage, target, pokemon) {
-			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
-			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock',
-				'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge'];
-			for (const condition of sideConditions) {
-				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
-				}
-			}
-			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-				pokemon.removeVolatile('partiallytrapped');
-			}
-		},
-	},
-	courtchange: {
-		inherit: true,
-		onHitField(target, source) {
-			const sourceSide = source.side;
-			const targetSide = source.side.foe;
-			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'ferrofluid', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
-			];
-			let success = false;
-			for (const id of sideConditions) {
-				const effectName = this.dex.getEffect(id).name;
-				if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
-					[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
-						targetSide.sideConditions[id], sourceSide.sideConditions[id],
-					];
-					this.add('-sideend', sourceSide, effectName, '[silent]');
-					this.add('-sideend', targetSide, effectName, '[silent]');
-				} else if (sourceSide.sideConditions[id] && !targetSide.sideConditions[id]) {
-					targetSide.sideConditions[id] = sourceSide.sideConditions[id];
-					delete sourceSide.sideConditions[id];
-					this.add('-sideend', sourceSide, effectName, '[silent]');
-				} else if (targetSide.sideConditions[id] && !sourceSide.sideConditions[id]) {
-					sourceSide.sideConditions[id] = targetSide.sideConditions[id];
-					delete targetSide.sideConditions[id];
-					this.add('-sideend', targetSide, effectName, '[silent]');
-				} else {
-					continue;
-				}
-				let sourceLayers = sourceSide.sideConditions[id] ? (sourceSide.sideConditions[id].layers || 1) : 0;
-				let targetLayers = targetSide.sideConditions[id] ? (targetSide.sideConditions[id].layers || 1) : 0;
-				for (; sourceLayers > 0; sourceLayers--) {
-					this.add('-sidestart', sourceSide, effectName, '[silent]');
-				}
-				for (; targetLayers > 0; targetLayers--) {
-					this.add('-sidestart', targetSide, effectName, '[silent]');
-				}
-				success = true;
-			}
-			if (!success) return false;
-			this.add('-activate', source, 'move: Court Change');
-		},
-	},
-	gmaxwindrage: {
-		inherit: true,
-		self: {
-			onHit(source) {
-				let success = false;
-				const removeTarget = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
-				];
-				const removeAll = [
-					'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb', 'ferrofluid', 'gmaxsteelsurge',
-				];
-				for (const targetCondition of removeTarget) {
-					if (source.side.foe.removeSideCondition(targetCondition)) {
-						if (!removeAll.includes(targetCondition)) continue;
-						this.add('-sideend', source.side.foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
-						success = true;
-					}
-				}
-				for (const sideCondition of removeAll) {
-					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
-						success = true;
-					}
-				}
-				this.field.clearTerrain();
-				return success;
-			},
-		},
 	},
 	// Terrain Pulse for consistency
 	terrainpulse: {

@@ -571,8 +571,8 @@ export const ssbSets: SSBSets = {
 	},
 	'Perish Song': {
 		species: 'Rhydon', ability: 'Soup Sipper', item: 'Rocky Helmet', gender: 'M',
-		moves: ['Swords Dance', 'Rock Blast', 'Earthquake'],
-		signatureMove: 'Shifting Rocks',
+		moves: ['Swords Dance', 'Stealth Rock', 'Rock Blast'],
+		signatureMove: 'Trickery',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 	},
 	phiwings99: {

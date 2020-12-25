@@ -121,10 +121,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = source.side.foe.active[0];
 
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'gmaxsteelsurge', 'ferrofluid',
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
