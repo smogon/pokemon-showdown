@@ -809,7 +809,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon uses a status move or a custom move, it changes its typing and boosts one of its stats by 1 stage randomly between four options: Bug/Fire type with a Special Attack boost, Bug/Steel type with a Defense boost, Bug/Rock type with a Special Defense boost, and Bug/Electric type with a Speed boost.",
 		shortDesc: "On use of status or custom, this Pokemon changes type and gets a boost.",
 		isPermanent: true,
-		onPrepareHit(source, target, move) {
+		onBeforeMove(source, target, move) {
 			if (move.category !== "Status" && move.isNonstandard !== "Custom") return;
 			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
 			const type = ['Bug', this.sample(types)];
