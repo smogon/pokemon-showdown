@@ -915,10 +915,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// grimAuxiliatrix
-	biosteel: {
-		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages.",
-		shortDesc: "Regenerator + Clear Body.",
-		name: "Bio-steel",
+	aluminumalloy: {
+		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages. -1 Speed, +1 Def/Sp.Def when hit with a Water-type attacking move or switching into rain.",
+		shortDesc: "Regenerator+Clear Body.+1 def/spd,-1 spe in rain/hit by water",
+		name: "Aluminum Alloy",
+		onSwitchIn(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
+				this.add('-message', `grimAuxiliatrix is rusting...`);
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Water') {
+				this.boost({def: 1, spd: 1, spe: -1}, target, target);
+				this.add('-message', `grimAuxiliatrix is rusting...`);
+			}
+		},
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
@@ -933,7 +945,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Bio-steel", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Aluminum Alloy", "[of] " + target);
 			}
 		},
 		isNonstandard: "Custom",
@@ -1622,16 +1634,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			const moves = Object.values(pokemon.getMoves()).map(move => move.id);
-			const types: string[] = [];
-			for (const move of moves) {
-				types.push(this.dex.getMove(move).type);
-			}
-			let type = this.sample(types);
-			while (!pokemon.setType(type)) {
+			const types = pokemon.moveSlots.map(slot => this.dex.getMove(slot.id).type);
+			let type = '???';
+			if (types.length) {
 				type = this.sample(types);
 			}
-			this.add('-start', pokemon, 'typechange', type);
+			if (pokemon.setType(type)) {
+				this.add('-ability', pokemon, 'Wild Magic Surge');
+				this.add('-start', pokemon, 'typechange', type);
+			}
 		},
 		isNonstandard: "Custom",
 		gen: 8,

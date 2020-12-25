@@ -330,9 +330,9 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adamant',
 	},
 	grimAuxiliatrix: {
-		species: 'Duraludon', ability: 'Bio-steel', item: 'Assault Vest', gender: '',
-		moves: [['Core Enforcer', 'Draco Meteor'], 'Flash Cannon', ['Thunderbolt', 'Fire Blast']],
-		signatureMove: 'Fuel Leak',
+		species: 'Duraludon', ability: 'Aluminum Alloy', item: 'Assault Vest', gender: '',
+		moves: [['Core Enforcer', 'Draco Meteor'], 'Fire Blast', ['Thunderbolt', 'Earth Power']],
+		signatureMove: 'Skyscraper Suplex',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	HoeenHero: {

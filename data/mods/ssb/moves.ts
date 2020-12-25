@@ -1972,6 +1972,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// grimAuxiliatrix
+	skyscrapersuplex: {
+		accuracy: 100,
+		basePower: 75,
+		onBasePower(basePower, pokemon, target) {
+			if (target?.statsRaisedThisTurn) {
+				return this.chainModify(2);
+			}
+		},
+		category: "Special",
+		desc: "Power doubles if the target had a stat stage raised this turn.",
+		shortDesc: "2x power if the target that had a stat rise this turn.",
+		name: "Skyscraper Suplex",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Steel Beam', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
 
 	// HoeenHero
 	landfall: {
@@ -3442,20 +3469,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const item = target.takeItem();
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
-				const items: ItemData[] = [];
+				const items: ModdedItemData[] = [];
 				for (const id in Items) {
-					items.push(Items[id].name);
+					const itemName = Items[id];
+					items.push(itemName);
 				}
 				let randomItem = '';
 				if (items.length) {
-					items.sort((a, b) => a.num! - b.num!);
-					randomItem = this.sample(items);
+					// @ts-ignore
+					randomItem = this.sample(items).name;
 				}
 				if (!randomItem) {
 					return;
 				}
-				target.setItem(randomItem);
-				this.add('-message', `${target.name} obtained a(n) ${randomItem}.`);
+				if (target.setItem(randomItem)) {
+					this.add('-item', target, randomItem, '[from] move: Trickery', '[of] ' + source);
+				}
 			}
 		},
 		secondary: null,
