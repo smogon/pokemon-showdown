@@ -650,7 +650,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 30,
 		category: "Physical",
-		desc: "Hits 4 times. If one hit braks the target's substitute, it will take damage for the remaining hits. This move is super effective against Steel-type Pokemon.",
+		desc: "Hits 4 times. If one hit breaks the target's substitute, it will take damage for the remaining hits. This move is super effective against Steel-type Pokemon.",
 		shortDesc: "Hits 4 times. Super effective on Steel.",
 		name: "Broadside Barrage",
 		isNonstandard: "Custom",
