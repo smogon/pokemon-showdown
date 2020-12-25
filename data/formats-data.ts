@@ -1379,7 +1379,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	croconaw: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	feraligatr: {
 		tier: "RU",
