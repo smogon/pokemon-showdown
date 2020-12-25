@@ -80,12 +80,12 @@ async function updateserver(context: CommandContext, codePath: string) {
 			}
 		}
 
-		context.sendReply(`SUCCESSFUL, server updated.`);
+		return true;
 	} catch (e) {
 		// failed while rebasing or popping the stash
 		await exec(`git reset --hard ${oldHash}`);
 		if (stashedChanges) await exec(`git stash pop`);
-		context.sendReply(`FAILED, old changes restored.`);
+		return false;
 	}
 }
 
