@@ -4730,7 +4730,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "25% chance of setting up a layer of spikes. 25% chance of using Heal Bell. 25% chance of using Leech Seed. 25% chance of using Tailwind. 25% chance of using Octolock.",
+		desc: "40% chance of setting up a layer of spikes. 40% chance of using Heal Bell. 40% chance of using Leech Seed. 40% chance of using Tailwind. 40% chance of using Octolock.",
 		shortDesc: "5 independent chances of rolling different effects.",
 		name: "Right. On. Cue!",
 		isNonstandard: "Custom",
