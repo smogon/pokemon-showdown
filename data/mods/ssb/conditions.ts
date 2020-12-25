@@ -1947,7 +1947,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onFaint(target, source, effect) {
-			if (effect.effectType !== 'Move') return;
+			if (effect?.effectType !== 'Move') return;
 			if (source) {
 				this.add('-activate', target, 'ability: Bounty');
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
@@ -2105,7 +2105,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return;
 			}
 			const dazzlingHolder = this.effectData.target;
-			if (!dazzlingHolder.set.shiny && dazzlingHolder.species.id !== 'minior') return;
+			if (!dazzlingHolder.set.shiny) return;
+			if (dazzlingHolder.species.id !== 'minior') return;
 			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
 			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
 				return;
