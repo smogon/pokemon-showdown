@@ -904,7 +904,7 @@ export const commands: ChatCommands = {
 
 		this.sendReply(`Rebuilding...`);
 		await rebuild(this);
-		this.sendReply(`DONE: code is up to date and rebuilt!`);
+		this.sendReply(`DONE`);
 
 		Monitor.updateServerLock = false;
 	},
