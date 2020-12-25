@@ -113,8 +113,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', source, 'Scyphozoa');
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
+				let boostTotal = Object.values(pokemon.boosts).reduce((num, add) => num + add);
+				if (boostTotal !== 0) successes++;
 				pokemon.clearBoosts();
-				successes++;
 				if (pokemon.removeVolatile('substitute')) successes++;
 			}
 			const target = source.side.foe.active[0];
