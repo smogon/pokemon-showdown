@@ -342,7 +342,7 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Hubriz: {
-		species: 'Roserade', ability: 'Stakeout', item: 'Rose Incense', gender: 'F',
+		species: 'Roserade', ability: 'Run Away', item: 'Rose Incense', gender: 'F',
 		moves: [['Toxic Spikes', 'Spikes'], 'Leaf Storm', 'Sludge Bomb'],
 		signatureMove: 'Steroid Anaphylaxia',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
@@ -657,7 +657,7 @@ export const ssbSets: SSBSets = {
 		species: 'Mismagius', ability: 'Phantom Plane', item: 'Spell Tag', gender: '',
 		moves: ['Shadow Ball', 'Dark Pulse', 'Psychic'],
 		signatureMove: 'Witching Hour',
-		evs: {def: 4, spa: 52, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',

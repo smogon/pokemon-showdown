@@ -1358,7 +1358,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			// Infinite Loop preventer
-			if (effect.id.includes('stubbornness')) return;
+			if (effect && ['stubbornness'].includes(effect.id)) return;
 			if (success) {
 				if (!this.effectData.happened) {
 					this.boost({atk: 1, def: 1, spd: 1}, pokemon);
@@ -1886,6 +1886,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
+			if (!this.effectData.immunities) return;
 			this.add('-end', pokemon, `${this.effectData.immunities[0]} Immunity`, '[silent]');
 			this.add('-end', pokemon, `${this.effectData.immunities[1]} Immunity`, '[silent]');
 			delete this.effectData.immunities;
