@@ -31,6 +31,9 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
+/**
+ * @returns {boolean} Whether or not the rebase failed
+ */
 async function updateserver(context: CommandContext, codePath: string) {
 	const exec = (command: string) => bash(command, context, codePath);
 
@@ -41,7 +44,7 @@ async function updateserver(context: CommandContext, codePath: string) {
 	if (!stdout && !stderr) {
 		context.sendReply(`There were no updates.`);
 		Monitor.updateServerLock = false;
-		return;
+		return true;
 	}
 
 	[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
@@ -890,21 +893,23 @@ export const commands: ChatCommands = {
 		target = toID(target);
 		Monitor.updateServerLock = true;
 
+
+		let success = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
 				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
 			}
-			await updateserver(this, Config.privatecodepath);
+			success = await updateserver(this, Config.privatecodepath);
 			this.addGlobalModAction(`${user.name} used /updateserver private`);
 		} else {
-			if (validPrivateCodePath) await updateserver(this, Config.privatecodepath);
-			await updateserver(this, path.resolve(`${__dirname}/../..`));
+			if (validPrivateCodePath) success = await updateserver(this, Config.privatecodepath);
+			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
 			this.addGlobalModAction(`${user.name} used /updateserver`);
 		}
 
 		this.sendReply(`Rebuilding...`);
 		await rebuild(this);
-		this.sendReply(`DONE`);
+		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
 
 		Monitor.updateServerLock = false;
 	},
