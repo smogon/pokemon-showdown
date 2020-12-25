@@ -10901,7 +10901,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const lastDamagedBy = source.getLastDamagedBy();
-			if (lastDamagedBy !== undefined) {
+			if (lastDamagedBy?.position !== undefined) {
 				targetRelayVar.target = source.side.foe.active[lastDamagedBy.position];
 			}
 		},
