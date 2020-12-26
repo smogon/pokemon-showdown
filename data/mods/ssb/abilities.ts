@@ -1636,10 +1636,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
 			const types = pokemon.moveSlots.map(slot => this.dex.getMove(slot.id).type);
-			let type = '???';
-			if (types.length) {
-				type = this.sample(types);
-			}
+			const type = types.length ? this.sample(types) : '???';
 			if (pokemon.setType(type)) {
 				this.add('-ability', pokemon, 'Wild Magic Surge');
 				this.add('-start', pokemon, 'typechange', type);
