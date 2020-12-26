@@ -863,7 +863,7 @@ export const ssbSets: SSBSets = {
 		species: 'Azelf', ability: 'Magic Bounce', item: ['Life Orb', 'Expert Belt'], gender: 'M',
 		moves: ['Photon Geyser', 'Knock Off', ['U-turn', 'Play Rough', 'Close Combat']],
 		signatureMove: 'Luck of the Draw',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Timid',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 };
 
