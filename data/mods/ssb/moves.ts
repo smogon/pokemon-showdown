@@ -3467,7 +3467,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick", target);
 		},
 		onHit(target, source, effect) {
-			const item = target.takeItem();
+			const item = target.takeItem(source);
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
 				const items = Object.keys(this.dex.data.Items).map(obj => this.dex.getItem(obj).name);
