@@ -71,6 +71,88 @@ Some principles we try to design by:
       There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
 
 
+Comment standards
+------------------------------------------------------------------------
+
+### Don't teach JavaScript
+
+The first rule of comments is that they should not document obvious language features.
+
+A common mistake when starting out is to write something like this:
+
+```ts
+// Increase counter by 1.
+counter++;
+```
+
+But this is a lot of visual clutter for someone who already knows JavaScript! Since nearly all of our developers already know JavaScript, this sort of commenting can slow down and distract developers, increasing the number of bugs.
+
+### Document in names if possible
+
+By far the best way to document things is in variable and function names.
+
+BAD:
+
+```ts
+/** move name */
+let value = "Stealth Rock";
+```
+
+GOOD:
+
+```ts
+let moveName = "Stealth Rock";
+```
+
+Good variable and function names can massively increase readability, by much more than comments. Often, this means simply creating a variable so you can give it a name:
+
+BAD:
+
+```ts
+// if ten seconds have passed and the user is staff
+if (now > then + 10_000 && '&@%'.includes(user.tempGroup)) {
+```
+
+GOOD:
+
+```ts
+const tenSecondsPassed = now > then + 10_000;
+const userIsStaff = '&@%'.includes(user.tempGroup);
+if (tenSecondsPassed && userIsStaff) {
+```
+
+### Doc comments
+
+Sometimes, you have information about a variable/function (such as how and when to use it) that doesn't fit in its name. The best place to put this is in a doc comment, like this:
+
+```ts
+/** null = not accepting connections */
+let numConnections: number | null = null;
+```
+
+Doc comments start with `/**` and end with `*/`. In VS Code, doc comments will show up when you hover your mouse over the variable/function name, anywhere it's used. If your information would be useful there, please put it in a doc comment.
+
+### Other comments
+
+The main remaining use of comments is to document confusing code. If the code is doing something that requires understanding more than just JavaScript, it can be a good time for a comment:
+
+```ts
+// for some reason, Chrome won't update unless you do this
+elem.innerHTML = elem.innerHTML;
+```
+
+Remember, the line isn't about whether something is "too obvious" for a comment. "Increase counter by 1" isn't bad because it's "too obvious", it's bad because it's trying to teach JavaScript rather than explain the code.
+
+### Jokes
+
+We allow jokes in comments. You're always allowed to have fun!
+
+```ts
+// GET IT? BECAUSE WE DON'T KNOW WHAT SPECIES IT IS???
+if (!species) species = 'Unown';
+```
+
+
 Commit standards
 ------------------------------------------------------------------------
 
