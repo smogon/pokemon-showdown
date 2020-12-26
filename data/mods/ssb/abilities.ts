@@ -682,6 +682,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Bipolar",
 		isPermanent: true,
 		onSwitchIn(pokemon) {
+			if (pokemon.species.baseSpecies !== 'Kartana') return;
 			const typeMap: {[key: string]: string} = {
 				Normal: "Return",
 				Fighting: "Sacred Sword",
