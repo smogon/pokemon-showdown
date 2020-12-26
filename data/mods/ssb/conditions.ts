@@ -1627,7 +1627,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('tiki')}|`);
-			this.add(`raw|<img src="https://www.smogon.com/forums/attachments/cat-custom-png.254830/" />`);
+			this.add(`raw|<img src="https://i.imgur.com/0ZRGwvv.png" />`);
 		},
 		onFaint() {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
