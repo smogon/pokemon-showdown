@@ -62,4 +62,26 @@ describe('G-Max Volcalith', function () {
 		const expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 6);
 		assert.equal(battle.p2.active[0].hp, expectedHP);
 	});
+
+	it.skip(`should damage Pokemon in order of Speed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
+			{species: 'Mewtwo', moves: ['sleeptalk', 'trickroom']},
+		]]);
+
+		battle.makeChoices('move rockthrow 1 dynamax, move sleeptalk', 'move rockthrow 1 dynamax, move sleeptalk');
+		battle.makeChoices('auto', 'move sleeptalk, move trickroom');
+
+		const log = battle.getDebugLog();
+		const mewtwoDamagedIndex = log.indexOf('|-damage|p1b: Wynaut');
+		const wynautDamagedIndex = log.indexOf('|-damage|p2b: Mewtwo');
+		assert(wynautDamagedIndex < mewtwoDamagedIndex, 'Mewtwo should be damaged before Wynaut in normal circumstances.');
+
+		const mewtwoDamagedTRIndex = log.lastIndexOf('|-damage|p1b: Wynaut');
+		const wynautDamagedTRIndex = log.lastIndexOf('|-damage|p2b: Mewtwo');
+		assert(mewtwoDamagedTRIndex < wynautDamagedTRIndex, 'Wynaut should be damaged before Mewtwo in Trick Room.');
+	});
 });
