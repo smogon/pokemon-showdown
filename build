@@ -28,14 +28,14 @@ try {
 	) {
 		throw new Error("Sucrase version too old");
 	}
-	require('./lib/build-utils').transpile(force);
+	require('./tools/build-utils').transpile(force);
 } catch (e) {
 	console.log('Installing dependencies...');
 	shell('npm install --production');
 	// for some reason, sucrase won't be requirable until a tick has passed
 	// see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 	setImmediate(() => {
-		require('./lib/build-utils').transpile(true);
+		require('./tools/build-utils').transpile(true);
 	});
 }
 
