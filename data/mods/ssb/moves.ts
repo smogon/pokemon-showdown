@@ -2610,6 +2610,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Focus Energy', source);
 		},
 		onHit(target, pokemon, move) {
+			if (pokemon.volatiles['kipup']) return false;
 			pokemon.addVolatile('kipup');
 		},
 		condition: {
@@ -2618,6 +2619,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-message', 'This Pokémon prepares itself to be knocked down!');
 			},
 			onHit(pokemon, source, move) {
+				if (!pokemon.hp) return;
 				if (this.effectData.gotHit) return;
 				if (pokemon.side !== source.side && move.category !== 'Status') {
 					this.effectData.gotHit = true;

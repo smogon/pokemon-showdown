@@ -1240,7 +1240,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				for (const source of this.effectData.sources) {
 					if (!source.hp || source.volatiles['gastroacid']) continue;
 					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'ability: Degenerator');
+						const foe = pokemon.side.foe.active[0];
+						if (foe) this.add('-activate', foe, 'ability: Degenerator');
 						alreadyAdded = true;
 					}
 					this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
