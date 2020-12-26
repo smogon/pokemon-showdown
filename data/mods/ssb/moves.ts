@@ -2647,7 +2647,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 		category: "Special",
 		desc: "The user changes into a random Pokemon with a first name letter that matches the forme Unown is currently in (A -> Alakazam, etc) that has base stats that would benefit from Unown's EV/IV/Nature spread and moves. Using it while in a forme that is not Unown will make it revert back to the Unown forme it transformed in (If an Unown transforms into Alakazam, it'll transform back to Unown-A when used again). Light of Ruin becomes Strange Steam, Psystrike becomes Psyshock, Secret Sword becomes Aura Sphere, Mind Blown becomes Flamethrower, and Seed Flare becomes Apple Acid while in a non-Unown forme. This move's type varies based on the user's primary type.",
-		shortDesc: "Transform into Unown/mon. Type = users type.",
+		shortDesc: "Transform into Unown/mon. Type=user 1st type.",
 		name: "Alphabet Soup",
 		isNonstandard: "Custom",
 		gen: 8,
