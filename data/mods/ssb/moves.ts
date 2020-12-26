@@ -4390,7 +4390,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		category: "Physical",
 		desc: "If the move hits, the user gains +1 Speed. This move deals not very effective damage to Flying-type Pokemon. This move fails if the target does not intend to attack.",
-		shortDesc: "+1 Spe on hit. Fails if target doesnt attack.",
+		shortDesc: "+1 Spe on hit. Fails if target doesn't attack.",
 		name: "Legendary Swordsman",
 		isNonstandard: "Custom",
 		gen: 8,
