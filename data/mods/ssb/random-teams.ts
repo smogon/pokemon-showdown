@@ -330,9 +330,9 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adamant',
 	},
 	grimAuxiliatrix: {
-		species: 'Duraludon', ability: 'Bio-steel', item: 'Assault Vest', gender: '',
-		moves: [['Core Enforcer', 'Draco Meteor'], 'Flash Cannon', ['Thunderbolt', 'Fire Blast']],
-		signatureMove: 'Fuel Leak',
+		species: 'Duraludon', ability: 'Aluminum Alloy', item: 'Assault Vest', gender: '',
+		moves: [['Core Enforcer', 'Draco Meteor'], 'Fire Blast', ['Thunderbolt', 'Earth Power']],
+		signatureMove: 'Skyscraper Suplex',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	HoeenHero: {
@@ -342,7 +342,7 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Hubriz: {
-		species: 'Roserade', ability: 'Run Away', item: 'Rose Incense', gender: 'F',
+		species: 'Roserade', ability: 'Stakeout', item: 'Rose Incense', gender: 'F',
 		moves: [['Toxic Spikes', 'Spikes'], 'Leaf Storm', 'Sludge Bomb'],
 		signatureMove: 'Steroid Anaphylaxia',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
@@ -571,8 +571,8 @@ export const ssbSets: SSBSets = {
 	},
 	'Perish Song': {
 		species: 'Rhydon', ability: 'Soup Sipper', item: 'Rocky Helmet', gender: 'M',
-		moves: ['Swords Dance', 'Rock Blast', 'Earthquake'],
-		signatureMove: 'Shifting Rocks',
+		moves: ['Swords Dance', 'Stealth Rock', 'Rock Blast'],
+		signatureMove: 'Trickery',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 	},
 	phiwings99: {
@@ -863,7 +863,7 @@ export const ssbSets: SSBSets = {
 		species: 'Azelf', ability: 'Magic Bounce', item: ['Life Orb', 'Expert Belt'], gender: 'M',
 		moves: ['Photon Geyser', 'Knock Off', ['U-turn', 'Play Rough', 'Close Combat']],
 		signatureMove: 'Luck of the Draw',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Timid',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 };
 
