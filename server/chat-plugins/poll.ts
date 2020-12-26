@@ -357,16 +357,17 @@ export const commands: ChatCommands = {
 				return this.errorReply("This command is unavailable in temporary rooms.");
 			}
 			this.room = targetRoom;
+			room = targetRoom;
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
-			if (!targetRoom.minorActivityQueue) {
+			if (!room.minorActivityQueue) {
 				return this.errorReply(this.tr`The queue is already empty.`);
 			}
-			if (cmd === 'deletequeue' && targetRoom.minorActivityQueue.length !== 1 && !target) {
+			if (cmd === 'deletequeue' && room.minorActivityQueue.length !== 1 && !target) {
 				return this.parse('/help deletequeue');
 			}
 			if (!target) {
-				targetRoom.minorActivityQueue = null;
+				room.minorActivityQueue = null;
 				this.modlog('CLEARQUEUE');
 				this.sendReply(this.tr`Cleared poll queue.`);
 			} else {
@@ -376,7 +377,7 @@ export const commands: ChatCommands = {
 				if (isNaN(slot)) {
 					return this.errorReply(this.tr`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
 				}
-				if (!targetRoom.minorActivityQueue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
+				if (!room.minorActivityQueue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
 
 				curRoom.minorActivityQueue!.splice(slot - 1, 1);
 				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
