@@ -3301,7 +3301,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Parting Shot', target);
 		},
 		onHit(target, source) {
-			target.setStatus('brn', source, null, true);
+			target.trySetStatus('brn', source);
 		},
 		self: {
 			sideCondition: 'givewistfulthinking',
