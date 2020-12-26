@@ -1,5 +1,4 @@
 import {getName} from './conditions';
-import {Items} from './items';
 import {changeSet, changeMoves} from "./abilities";
 import {ssbSets} from "./random-teams";
 
