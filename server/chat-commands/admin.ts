@@ -906,7 +906,7 @@ export const commands: ChatCommands = {
 				success = await updateserver(this, Config.privatecodepath);
 			}
 			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
-			this.addGlobalModAction(`${user.name} used /updateserver`);
+			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
 		this.sendReply(`Rebuilding...`);
