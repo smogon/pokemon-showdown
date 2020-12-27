@@ -90,6 +90,23 @@ export const Utils = new class {
 		} else {
 			constructor = 'null';
 		}
+
+		// If it has a toString, try to grab the base class from there
+		// (This is for Map/Set subclasses like user.auth)
+		const baseClass = (value?.toString && /\[object (.*)\]/.exec(value.toString())?.[1]) || constructor;
+
+		switch (baseClass) {
+		case 'Map':
+			if (depth > 2) return `Map`;
+			const mapped = [...value.entries()].map(
+				val => `${this.visualize(val[0], depth + 1)} => ${this.visualize(val[1], depth + 1)}`
+			);
+			return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
+		case 'Set':
+			if (depth > 2) return `Set`;
+			return `${constructor} (${value.size}) { ${[...value].map(v => this.visualize(v), depth + 1).join(', ')} }`;
+		}
+
 		if (value.toString) {
 			try {
 				const stringValue = value.toString();
