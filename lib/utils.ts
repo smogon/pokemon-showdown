@@ -93,10 +93,9 @@ export const Utils = new class {
 
 		// if it has a toString, check that to see if it tells us if there's a base class, else look at the constructor name
 		// (this is to pull the base class so it works for subclasses)
-		let baseName = value?.toString ? /\[object (.*)\]/.exec(value.toString())?.[1] : null;
-		if (!baseName) baseName = constructor;
+		const baseClass = (value?.toString && /\[object (.*)\]/.exec(value.toString())?.[1]) || constructor;
 
-		switch (baseName) {
+		switch (baseClass) {
 		case 'Map':
 			if (depth > 2) return `Map`;
 			const mapped = [...value.entries()].map(
