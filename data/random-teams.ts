@@ -1512,7 +1512,7 @@ export class RandomTeams {
 			case 'Darmanitan':
 				if (species.gen === 8 && this.randomChance(1, 2)) continue;
 				break;
-			case 'Magearna': case 'Toxtricity': case 'Zacian': case 'Zamazenta':
+			case 'Magearna': case 'Toxtricity': case 'Zacian': case 'Zamazenta': case 'Zarude':
 			case 'Appletun': case 'Blastoise': case 'Butterfree': case 'Copperajah': case 'Grimmsnarl': case 'Inteleon': case 'Rillaboom': case 'Snorlax': case 'Urshifu':
 				if (this.gen >= 8 && this.randomChance(1, 2)) continue;
 				break;
