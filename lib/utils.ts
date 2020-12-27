@@ -97,7 +97,6 @@ export const Utils = new class {
 		if (!baseName) baseName = constructor;
 
 		switch (baseName) {
-		// other constructor cases can be handled here!
 		case 'Map':
 			if (depth > 2) return `Map`;
 			const mapped = [...value.entries()].map(
