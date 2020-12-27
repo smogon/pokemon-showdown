@@ -45,6 +45,7 @@ interface MoveOrGroup {
 	targets: {[k: string]: boolean};
 	recoil: boolean;
 	skip: boolean;
+	pivot: boolean;
 }
 
 type Direction = 'less' | 'greater' | 'equal';
@@ -133,7 +134,7 @@ export const commands: ChatCommands = {
 	dexsearchhelp() {
 		this.sendReplyBox(
 			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
-			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group.<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
@@ -291,7 +292,7 @@ export const commands: ChatCommands = {
 			`Inequality ranges use the characters <code>></code> and <code><</code>.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water-type moves.<br/>` +
 			`<code>asc</code> or <code>desc</code> following a move property will arrange the names in ascending or descending order of that property, respectively; e.g., <code>basepower asc</code> will arrange moves in ascending order of their base powers.<br/>` +
-			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, and zmove.<br/>` +
+			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove and pivot.<br/>` +
 			`A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`<code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`<code>max</code> or <code>gmax</code> as parameters will search for Max Moves and G-Max moves respectively.<br/>` +
@@ -426,7 +427,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-function runDexsearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
@@ -804,6 +805,33 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				}
 			}
 
+			if (target === 'pivot') {
+				let includeBatonPass = false;
+				if (parameters.length > 1) {
+					if (parameters[1].trim().toLowerCase() === 'batonpass') {
+						includeBatonPass = true;
+					} else {
+						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
+					}
+				}
+				for (const move in Dex.data.Moves) {
+					const moveData = Dex.getMove(move);
+					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+						const invalid = validParameter("moves", move, isNotSearch, target);
+						if (invalid) return {error: invalid};
+						if (isNotSearch) {
+							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
+							bufferObj.moves[move] = false;
+							searches.push(bufferObj as DexOrGroup);
+						} else {
+							orGroup.moves[move] = true;
+						}
+					}
+				}
+				if (isNotSearch) orGroup.skip = true;
+				break;
+			}
+
 			const inequality = target.search(/>|<|=/);
 			let inequalityString;
 			if (inequality >= 0) {
@@ -1139,10 +1167,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
+	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
 
-function runMovesearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
 	const allCategories = ['physical', 'special', 'status'];
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
@@ -1185,7 +1214,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
 			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
-			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false,
+			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false, pivot: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
@@ -1348,6 +1377,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					orGroup.recovery["zrecovery"] = !isNotSearch;
 				} else if ((orGroup.recovery['zrecovery'] && isNotSearch) || (!orGroup.recovery['zrecovery'] && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include z-recovery moves.'};
+				}
+				continue;
+			}
+
+			if (target === 'pivot') {
+				if (!orGroup.pivot) {
+					orGroup.pivot = true;
+				} else if ((orGroup.pivot && isNotSearch) || (!orGroup.pivot && !isNotSearch)) {
+					return {error: 'A search cannot both exclude and include pivot moves.'};
 				}
 				continue;
 			}
@@ -1791,6 +1829,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 			}
 			if (matched) continue;
+			if (alts.pivot) {
+				if (move.selfSwitch && move.id !== 'batonpass') matched = true;
+			}
+			if (matched) continue;
 
 			delete dex[moveid];
 		}
@@ -1841,6 +1883,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	} else {
 		resultsStr += "No moves found.";
 	}
+	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
 
@@ -2437,10 +2480,10 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, q
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
-			return runDexsearch(query.target, query.cmd, query.canAll, query.message);
+			return runDexsearch(query.target, query.cmd, query.canAll, query.message, false);
 		case 'randmove':
 		case 'movesearch':
-			return runMovesearch(query.target, query.cmd, query.canAll, query.message);
+			return runMovesearch(query.target, query.cmd, query.canAll, query.message, false);
 		case 'itemsearch':
 			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
 		case 'abilitysearch':
@@ -2483,3 +2526,10 @@ if (!PM.isParentProcess) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
+
+export const testables = {
+	runDexsearch: (target: string, cmd: string, canAll: boolean, message: string) =>
+		runDexsearch(target, cmd, canAll, message, true),
+	runMovesearch: (target: string, cmd: string, canAll: boolean, message: string) =>
+		runMovesearch(target, cmd, canAll, message, true),
+};
