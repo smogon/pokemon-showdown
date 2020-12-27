@@ -19,6 +19,7 @@ import {parseModlog} from '../tools/modlog/converter';
 const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
+const MODLOG_PM_TIMEOUT = 30 * 60 * 60 * 1000; // 30 minutes
 
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 export const MODLOG_PATH = 'logs/modlog';
@@ -485,7 +486,7 @@ export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(modul
 		Monitor.crashlog(err, 'A modlog query', data);
 		return [];
 	}
-});
+}, MODLOG_PM_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
