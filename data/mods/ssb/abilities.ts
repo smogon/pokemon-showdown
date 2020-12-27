@@ -1602,8 +1602,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// piloswine gripado
 	foreverwinternights: {
-		desc: "On switch-in, this Pokemon summons Winter Hail. Winter Hail is hail that also lowers the Speed of non-Ice-type Pokemon by 75%. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
-		shortDesc: "Sets permahail until this Pokemon switches out. Non-Ice: 1/4 Speed",
+		desc: "On switch-in, this Pokemon summons Winter Hail. Winter Hail is hail that also lowers the Speed of non-Ice-type Pokemon by 50%. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
+		shortDesc: "Sets permahail until this Pokemon switches out. Non-Ice: 1/2 Speed",
 		onStart(source) {
 			this.field.setWeather('winterhail');
 		},

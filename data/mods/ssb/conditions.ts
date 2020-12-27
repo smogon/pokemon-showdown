@@ -1876,7 +1876,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasType('Ice')) return this.chainModify(0.25);
+			if (!pokemon.hasType('Ice')) return this.chainModify(0.5);
 		},
 		onResidualOrder: 1,
 		onResidual() {
