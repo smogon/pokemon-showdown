@@ -191,6 +191,7 @@ export class DatabaseCache<T> {
 		this.dataFetcher = fetcher;
 	}
 	// todo make this only return T
+	// very <T>roubling it doesn't, since that was the original intent, but for now this will do
 	get(key: string) {
 		const data = this.cache[key];
 		if (!data || Date.now() - data.lastCache > this.expiryTime) {
@@ -236,8 +237,10 @@ class FriendsProcess implements ProcessWrapper {
 			}
 			const [task, raw] = message.split('\n');
 			const result = JSON.parse(raw);
-			const resolve = this.requests.get(parseInt(task));
+			const taskId = parseInt(task);
+			const resolve = this.requests.get(taskId);
 			if (resolve) {
+				this.requests.delete(taskId);
 				return resolve(result);
 			}
 			throw new Error(`Missing result resolver for task ${task}`);
