@@ -91,8 +91,8 @@ export const Utils = new class {
 			constructor = 'null';
 		}
 
-		// if it has a toString, check that to see if it tells us if there's a base class, else look at the constructor name
-		// (this is to pull the base class so it works for subclasses)
+		// If it has a toString, try to grab the base class from there
+		// (This is for Map/Set subclasses like user.auth)
 		const baseClass = (value?.toString && /\[object (.*)\]/.exec(value.toString())?.[1]) || constructor;
 
 		switch (baseClass) {
