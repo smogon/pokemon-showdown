@@ -8,6 +8,7 @@ import {FS} from '../lib/fs';
 import {ProcessManager, ProcessWrapper, ChildProcess} from '../lib/process-manager';
 import * as child_process from 'child_process';
 import {Config} from './config-loader';
+import {Cache} from '../lib/cache';
 import * as path from 'path';
 
 /** Max friends per user */
@@ -16,7 +17,6 @@ export const MAX_FRIENDS = 100;
 export const MAX_REQUESTS = 6;
 export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
-const CACHE_EXPIRY_TIME = 5 * 60 * 1000;
 
 export interface DatabaseRequest {
 	statement: string;
@@ -52,11 +52,11 @@ export function sendPM(message: string, to: string, from = '&') {
 export class FriendsDatabase {
 	file: string;
 	process: FriendsProcess;
-	cache: DatabaseCache<Set<string>>;
+	cache: Cache<Set<string>>;
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
 		this.process = PM.createProcess(this.file);
-		this.cache = new DatabaseCache<Set<string>>(async user => {
+		this.cache = new Cache<Set<string>>(async user => {
 			const data = await this.getFriends(user as ID);
 			return new Set(data.map(f => f.friend));
 		});
@@ -178,43 +178,6 @@ export class FriendsDatabase {
 		const num = setting ? 1 : 0;
 		// name, send_login_data, last_login, public_list
 		return this.query({statement: 'toggleList', type: 'run', data: [userid, num, num]});
-	}
-}
-
-export class DatabaseCache<T> {
-	readonly cache: {[k: string]: {data: T, lastCache: number}};
-	expiryTime: number;
-	dataFetcher: (key: string) => T | Promise<T>;
-	constructor(fetcher: (key: string) => T | Promise<T>, invalidateTime = CACHE_EXPIRY_TIME) {
-		this.cache = {};
-		this.expiryTime = invalidateTime;
-		this.dataFetcher = fetcher;
-	}
-	// todo make this only return T
-	// very <T>roubling it doesn't, since that was the original intent, but for now this will do
-	get(key: string) {
-		const data = this.cache[key];
-		if (!data || Date.now() - data.lastCache > this.expiryTime) {
-			void this.update(key);
-		}
-		if (!this.cache[key]) {
-			return;
-		}
-		// return default or last state
-		return this.cache[key].data;
-	}
-	async update(key: string) {
-		const data = await this.dataFetcher(key);
-		this.cache[key] = {lastCache: Date.now(), data};
-		return this.cache[key];
-	}
-	set(key: string, data: T) {
-		this.cache[key] = {data, lastCache: Date.now()};
-	}
-	delete(key: string) {
-		const data = this.cache[key]?.data;
-		delete this.cache[key];
-		return data as T | undefined;
 	}
 }
 
