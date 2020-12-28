@@ -3386,8 +3386,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 75;
 		},
 		category: "Special",
-		desc: "Raises the user's Special Attack by 1 stage if this move knocks out the target. If the user is shiny, the move's Base Power becomes 95.",
-		shortDesc: "+1 SpA if this KOes the target. Shiny: BP=95.",
+		desc: "This move combines Ghost in its type effectiveness against the target. Raises the user's Special Attack by 1 stage if this move knocks out the target. If the user is shiny, the move's Base Power becomes 95.",
+		shortDesc: "+Ghost. +1 SpA if KOes target. Shiny: BP=95.",
 		name: "Baleful Blaze",
 		isNonstandard: "Custom",
 		gen: 8,
