@@ -31,6 +31,67 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
+/**
+ * @returns {boolean} Whether or not the rebase failed
+ */
+async function updateserver(context: CommandContext, codePath: string) {
+	const exec = (command: string) => bash(command, context, codePath);
+
+	context.sendReply(`Fetching newest version of code in the repository ${codePath}...`);
+
+	let [code, stdout, stderr] = await exec(`git fetch`);
+	if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
+	if (!stdout && !stderr) {
+		context.sendReply(`There were no updates.`);
+		Monitor.updateServerLock = false;
+		return true;
+	}
+
+	[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
+	if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
+	const oldHash = String(stdout).trim();
+
+	[code, stdout, stderr] = await exec(`git stash save "PS /updateserver autostash"`);
+	let stashedChanges = true;
+	if (code) throw new Error(`updateserver: Crash while stashing`);
+	if ((stdout + stderr).includes("No local changes")) {
+		stashedChanges = false;
+	} else if (stderr) {
+		throw new Error(`updateserver: Crash while stashing`);
+	} else {
+		context.sendReply(`Saving changes...`);
+	}
+
+	// errors can occur while rebasing or popping the stash; make sure to recover
+	try {
+		context.sendReply(`Rebasing...`);
+		[code] = await exec(`git rebase --no-autostash FETCH_HEAD`);
+		if (code) {
+			// conflict while rebasing
+			await exec(`git rebase --abort`);
+			throw new Error(`restore`);
+		}
+
+		if (stashedChanges) {
+			context.sendReply(`Restoring saved changes...`);
+			[code] = await exec(`git stash pop`);
+			if (code) {
+				// conflict while popping stash
+				await exec(`git reset HEAD .`);
+				await exec(`git checkout .`);
+				throw new Error(`restore`);
+			}
+		}
+
+		return true;
+	} catch (e) {
+		// failed while rebasing or popping the stash
+		await exec(`git reset --hard ${oldHash}`);
+		if (stashedChanges) await exec(`git stash pop`);
+		return false;
+	}
+}
+
 async function rebuild(context: CommandContext) {
 	const [, , stderr] = await bash('node ./build', context);
 	if (stderr) {
@@ -824,78 +885,40 @@ export const commands: ChatCommands = {
 
 	async updateserver(target, room, user, connection) {
 		this.canUseConsole();
-		const isPrivate = toID(target) === 'private';
 		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
-		if (isPrivate && (!Config.privatecodepath || !path.isAbsolute(Config.privatecodepath))) {
-			return this.errorReply("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
-		}
 
+		const validPrivateCodePath = Config.privatecodepath && path.isAbsolute(Config.privatecodepath);
+		target = toID(target);
 		Monitor.updateServerLock = true;
 
-		const exec = (command: string) => bash(command, this, isPrivate ? Config.privatecodepath : undefined);
 
-		this.addGlobalModAction(`${user.name} used /updateserver${isPrivate ? ` private` : ``}`);
-		this.sendReply(`Fetching newest version...`);
-
-		let [code, stdout, stderr] = await exec(`git fetch`);
-		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
-		if (!stdout && !stderr) {
-			this.sendReply(`There were no updates.`);
-			Monitor.updateServerLock = false;
-			return;
-		}
-
-		[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
-		if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
-		const oldHash = String(stdout).trim();
-
-		[code, stdout, stderr] = await exec(`git stash save "PS /updateserver autostash"`);
-		let stashedChanges = true;
-		if (code) throw new Error(`updateserver: Crash while stashing`);
-		if ((stdout + stderr).includes("No local changes")) {
-			stashedChanges = false;
-		} else if (stderr) {
-			throw new Error(`updateserver: Crash while stashing`);
+		let success = true;
+		if (target === 'private') {
+			if (!validPrivateCodePath) {
+				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
+			}
+			success = await updateserver(this, Config.privatecodepath);
+			this.addGlobalModAction(`${user.name} used /updateserver private`);
 		} else {
-			this.sendReply(`Saving changes...`);
+			if (target !== 'public' && validPrivateCodePath) {
+				success = await updateserver(this, Config.privatecodepath);
+			}
+			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
+			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
-		// errors can occur while rebasing or popping the stash; make sure to recover
-		try {
-			this.sendReply(`Rebasing...`);
-			[code] = await exec(`git rebase --no-autostash FETCH_HEAD`);
-			if (code) {
-				// conflict while rebasing
-				await exec(`git rebase --abort`);
-				throw new Error(`restore`);
-			}
+		this.sendReply(`Rebuilding...`);
+		await rebuild(this);
+		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
 
-			if (stashedChanges) {
-				this.sendReply(`Restoring saved changes...`);
-				[code] = await exec(`git stash pop`);
-				if (code) {
-					// conflict while popping stash
-					await exec(`git reset HEAD .`);
-					await exec(`git checkout .`);
-					throw new Error(`restore`);
-				}
-			}
-
-			this.sendReply(`Rebuilding...`);
-			await rebuild(this);
-			this.sendReply(`SUCCESSFUL, server updated.`);
-		} catch (e) {
-			// failed while rebasing or popping the stash
-			await exec(`git reset --hard ${oldHash}`);
-			if (stashedChanges) await exec(`git stash pop`);
-			this.sendReply(`Rebuilding...`);
-			await rebuild(this);
-			this.sendReply(`FAILED, old changes restored.`);
-		}
 		Monitor.updateServerLock = false;
 	},
+	updateserverhelp: [
+		`/updateserver - Updates the server's code from its Git repository, including private code if present. Requires: console access`,
+		`/updateserver private - Updates only the server's private code. Requires: console access`,
+	],
 
 	async rebuild(target, room, user, connection) {
 		this.canUseConsole();

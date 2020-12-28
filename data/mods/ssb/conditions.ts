@@ -1627,7 +1627,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('tiki')}|`);
-			this.add(`raw|<img src="https://www.smogon.com/forums/attachments/cat-custom-png.254830/" />`);
+			this.add(`raw|<img src="https://i.imgur.com/0ZRGwvv.png" />`);
 		},
 		onFaint() {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
@@ -1876,7 +1876,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasType('Ice')) return this.chainModify(0.25);
+			if (!pokemon.hasType('Ice')) return this.chainModify(0.5);
 		},
 		onResidualOrder: 1,
 		onResidual() {
@@ -2181,7 +2181,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.field.terrain) {
 				this.add(`-message`, 'The Turbulence blew away the terrain!');
 			}
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions);
 				for (const key of keys) {

@@ -113,6 +113,8 @@ export interface RoomSettings {
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
 	permissions?: {[k: string]: GroupSymbol};
+	minorActivity?: PollData | AnnouncementData;
+	minorActivityQueue?: (PollData | AnnouncementData)[];
 	repeats?: RepeatedPhrase[];
 
 	scavSettings?: AnyObject;
@@ -130,9 +132,9 @@ export interface RoomSettings {
 export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
 
-import type {Poll} from './chat-plugins/poll';
+import type {Announcement, AnnouncementData} from './chat-plugins/announcements';
+import type {Poll, PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
-import type {Announcement} from './chat-plugins/announcements';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';
 
@@ -199,7 +201,7 @@ export abstract class BasicRoom {
 	reportJoinsInterval: NodeJS.Timer | null;
 
 	minorActivity: Poll | Announcement | null;
-	minorActivityQueue: Poll[] | null;
+	minorActivityQueue: PollData[] | null;
 	banwordRegex: RegExp | true | null;
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
