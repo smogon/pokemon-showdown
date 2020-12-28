@@ -690,7 +690,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (fullyEvolvedSearch === isNotSearch) return {error: "A search cannot include and exclude 'fully evolved'."};
 				fullyEvolvedSearch = !isNotSearch;
 				orGroup.skip = true;
-				continue;
+				break;
 			}
 
 			if (target === 'recovery') {
