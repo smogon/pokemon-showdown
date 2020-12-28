@@ -7,6 +7,8 @@ import {QueryProcessManager, exec} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {checkRipgrepAvailability} from '../config-loader';
 
+const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
+
 interface BattleOutcome {
 	lost: string;
 	won: string;
@@ -43,10 +45,10 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
 		// in a user's name so the userid can case-insensitively be matched to the name.
-		const regexString = userids.map(id => `(.*("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
+		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await exec(['rg', '-i', regexString, '--no-line-number', '-tjson', ...files]);
+			output = await exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
 		} catch (error) {
 			return results;
 		}
@@ -379,7 +381,7 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
-});
+}, BATTLESEARCH_PROCESS_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!

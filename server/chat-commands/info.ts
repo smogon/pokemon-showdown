@@ -500,7 +500,7 @@ export const commands: ChatCommands = {
 			`Users with a name matching '${target}':<br />${results.join('; ')}`
 		);
 	},
-	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: &`],
+	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`],
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
@@ -1689,6 +1689,8 @@ export const commands: ChatCommands = {
 		);
 	},
 
+	suggest: 'suggestions',
+	suggestion: 'suggestions',
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
@@ -2727,7 +2729,7 @@ export const pages: PageTable = {
 		const rules = Object.values(Dex.data.Formats).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
 		this.title = "Custom Rules";
-		let rulesHTML = `<div clas="pad"><h1>Custom Rules in challenges and tournaments</h1>`;
+		let rulesHTML = `<div class="pad"><h1>Custom Rules in challenges and tournaments</h1>`;
 		const basics = [
 			`<p>Pok&eacute;mon Showdown! supports custom rules in three ways:</p>`,
 			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,

@@ -7279,7 +7279,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onModifyAccuracy(accuracy) {
 				if (typeof accuracy !== 'number') return;
-				return accuracy * 5 / 3;
+				return this.chainModify([0x1AB8, 0x1000]);
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
@@ -7291,6 +7291,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
+				if (move.flags['gravity'] && !move.isZ) {
+					this.add('cant', pokemon, 'move: Gravity', move);
+					return false;
+				}
+			},
+			onModifyMove(move, pokemon, target) {
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
@@ -7722,8 +7728,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onStart(pokemon) {
+			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'move: Heal Block');
+				source.moveThisTurnResult = true;
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
@@ -7739,6 +7746,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 			},
+			onModifyMove(move, pokemon, target) {
+				if (move.flags['heal'] && !move.isZ && !move.isMax) {
+					this.add('cant', pokemon, 'move: Heal Block', move);
+					return false;
+				}
+			},
 			onResidualOrder: 17,
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Heal Block');
@@ -7746,6 +7759,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHeal(damage, target, source, effect) {
 				if ((effect?.id === 'zpower') || this.effectData.isZ) return damage;
 				return false;
+			},
+			onRestart(target, source) {
+				this.add('-fail', target, 'move: Heal Block'); // Succeeds to supress downstream messages
+				if (!source.moveThisTurnResult) {
+					source.moveThisTurnResult = false;
+				}
 			},
 		},
 		secondary: null,
@@ -15953,7 +15972,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'Snatch');
 			},
-			onAnyTryMove(source, target, move) {
+			onAnyPrepareHitPriority: -1,
+			onAnyPrepareHit(source, target, move) {
 				const snatchUser = this.effectData.source;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch'] || move.sourceEffect === 'snatch') {
@@ -18029,6 +18049,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
+				if (!move.isZ && !move.isMax && move.flags['sound']) {
+					this.add('cant', pokemon, 'move: Throat Chop');
+					return false;
+				}
+			},
+			onModifyMove(move, pokemon, target) {
 				if (!move.isZ && !move.isMax && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;

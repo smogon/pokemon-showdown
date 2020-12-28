@@ -1088,6 +1088,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
+		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
+		if (suspectTest) {
+			const format = Dex.getFormat(this.format);
+			this.room.add(
+				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
+				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
+			).update();
+		}
 	}
 
 	clearPlayers() {
