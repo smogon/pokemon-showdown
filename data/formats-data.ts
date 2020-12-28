@@ -6349,6 +6349,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
+	miasmite: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
 	miasmaw: {
 		isNonstandard: "CAP",
 		tier: "CAP",
