@@ -896,7 +896,8 @@ export const Punishments = new class {
 		}
 		const waitTime = Math.min(timeLeft, MAX_PUNISHMENT_TIMER_LENGTH);
 		user.punishmentTimer = setTimeout(() => {
-			Punishments.checkPunishmentTime(user, punishment);
+			// make sure we're not referencing a pre-hotpatch Punishments instance
+			global.Punishments.checkPunishmentTime(user, punishment);
 		}, waitTime);
 	}
 	async namelock(
