@@ -1799,14 +1799,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Boomburst', target);
 			this.add('-anim', source, 'Frost Breath', target);
 		},
-		secondary: {
-			chance: 20,
-			self: {
-				boosts: {
-					spa: 1,
-				},
-			},
-		},
+		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ice",
 	},
