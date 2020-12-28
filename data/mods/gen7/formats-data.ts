@@ -1988,7 +1988,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	solrock: {
-		randomBattleMoves: ["earthquake", "explosion", "morningsun", "rockslide", "stealthrock", "willowisp"],
+		randomBattleMoves: ["earthquake", "morningsun", "rockslide", "stealthrock", "willowisp"],
 		randomDoubleBattleMoves: ["helpinghand", "protect", "rockslide", "stealthrock", "stoneedge", "willowisp", "zenheadbutt"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -2294,7 +2294,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	jirachi: {
-		randomBattleMoves: ["bodyslam", "firepunch", "icepunch", "ironhead", "stealthrock", "substitute", "toxic", "uturn", "wish"],
+		randomBattleMoves: ["bodyslam", "firepunch", "ironhead", "stealthrock", "substitute", "toxic", "uturn", "wish"],
 		randomDoubleBattleMoves: ["bodyslam", "followme", "helpinghand", "icywind", "ironhead", "protect", "thunderwave", "uturn"],
 		tier: "OU",
 		doublesTier: "DUber",
@@ -3021,7 +3021,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	conkeldurr: {
-		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "knockoff", "machpunch"],
+		randomBattleMoves: ["bulkup", "drainpunch", "facade", "knockoff", "machpunch"],
 		randomDoubleBattleMoves: ["drainpunch", "facade", "knockoff", "machpunch", "protect"],
 		tier: "UUBL",
 		doublesTier: "(DUU)",
@@ -3186,7 +3186,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	garbodor: {
-		randomBattleMoves: ["drainpunch", "gunkshot", "haze", "painsplit", "spikes", "toxic", "toxicspikes"],
+		randomBattleMoves: ["gunkshot", "haze", "painsplit", "spikes", "stompingtantrum", "toxic", "toxicspikes"],
 		randomDoubleBattleMoves: ["drainpunch", "gunkshot", "painsplit", "protect", "toxicspikes"],
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -4415,7 +4415,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	silvallyrock: {
-		randomBattleMoves: ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
+		randomBattleMoves: ["flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"],
 		randomDoubleBattleMoves: ["flamethrower", "icebeam", "partingshot", "protect", "rockslide", "uturn"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
