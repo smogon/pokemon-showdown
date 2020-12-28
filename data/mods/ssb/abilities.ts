@@ -1150,7 +1150,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
+				this.add('-start', source, 'typechange', type, '[from] ability: False Nine');
 			}
 		},
 		onModifyCritRatio(critRatio) {
