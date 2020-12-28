@@ -157,13 +157,13 @@ export class Blackjack extends Rooms.RoomGame {
 	}
 	leaveGame(user: User) {
 		if (this.state === 'started') return this.errorMessage(user, `You cannot leave this game; it has already started.`);
-		if (!this.playerTable[user.id]) return this.errorMessage(user, "You are not in this game to leave.");
+		if (!user.inGame(this.room)) return this.errorMessage(user, "You are not in this game to leave.");
 		this.removePlayer(user);
 		this.sendInvite();
 	}
 	spectate(user: User) {
 		if (this.spectators[user.id]) return this.errorMessage(user, `You are already spectating this game.`);
-		if (this.playerTable[user.id]) {
+		if (user.inGame(this.room)) {
 			return this.errorMessage(user, `You don't need to spectate the game; you're playing the game.`);
 		}
 		this.spectators[user.id] = user.id;
@@ -439,7 +439,7 @@ export class Blackjack extends Rooms.RoomGame {
 	 */
 	hit(user: User) {
 		if (this.state !== 'started') return this.errorMessage(user, `Blackjack hasn't started yet.`);
-		if (!this.playerTable[user.id]) return this.errorMessage(user, `You aren't a player in this game.`);
+		if (!user.inGame(this.room)) return this.errorMessage(user, `You aren't a player in this game.`);
 		if (this.curUsername !== user.id) return this.errorMessage(user, `It's not your turn.`);
 		this.playerTable[user.id].selfUhtml = 'change';
 		this.playerTable[user.id].resetTimerTicks();

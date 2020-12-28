@@ -230,7 +230,7 @@ export class RoomBattleTimer {
 			this.timerRequesters.add(userid);
 			return false;
 		}
-		if (requester && this.battle.playerTable[requester.id] && this.lastDisabledByUser === requester.id) {
+		if (requester && requester.inGame(this.battle.room) && this.lastDisabledByUser === requester.id) {
 			const remainingCooldownMs = (this.lastDisabledTime || 0) + TIMER_COOLDOWN - Date.now();
 			if (remainingCooldownMs > 0) {
 				this.battle.playerTable[requester.id].sendRoom(
@@ -645,7 +645,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			return false;
 		}
 
-		if (user.id in this.playerTable) {
+		if (user.inGame(this.room)) {
 			user.popup(`You have already joined this battle.`);
 			return false;
 		}
@@ -682,7 +682,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 			this.missingBattleStartMessage = false;
 		}
-		if (user.id in this.room.users) this.onConnect(user);
+		if (user.inRoom(this.room)) this.onConnect(user);
 		this.room.update();
 		return true;
 	}
@@ -920,7 +920,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			return;
 		}
 		if (!(oldUserid in this.playerTable)) {
-			if (user.id in this.playerTable) {
+			if (user.inGame(this.room)) {
 				// this handles a user renaming themselves into a user in the
 				// battle (e.g. by using /nick)
 				this.onConnect(user);
@@ -939,7 +939,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.onLeave(user, oldUserid);
 			return;
 		}
-		if (user.id in this.playerTable) return;
+		if (user.inGame(this.room)) return;
 		const player = this.playerTable[oldUserid];
 		if (player) {
 			this.updatePlayer(player, user);
@@ -1029,7 +1029,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 				this.forcePublic = user.battlesForcedPublic();
 			}
 		}
-		if (user && user.id in this.room.users) this.onConnect(user);
+		if (user?.inRoom(this.room)) this.onConnect(user);
 		return player;
 	}
 

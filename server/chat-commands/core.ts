@@ -568,7 +568,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`You do not have permission to invite people into this room.`);
 			}
 		}
-		if (targetUser.id in targetRoom.users) {
+		if (targetUser.inRoom(targetRoom)) {
 			return this.errorReply(this.tr`This user is already in "${targetRoom.title}".`);
 		}
 		return this.checkChat(`/invite ${targetRoom.roomid}`);
@@ -857,7 +857,7 @@ export const commands: ChatCommands = {
 		if (!targetUser) {
 			return this.errorReply(this.tr`User ${target} not found.`);
 		}
-		if (!battle.playerTable[user.id]) {
+		if (!user.inGame(room)) {
 			return this.errorReply(this.tr`Must be a player in this battle.`);
 		}
 		if (!battle.allowExtraction[targetUser.id]) {
@@ -1177,15 +1177,14 @@ export const commands: ChatCommands = {
 		const name = this.targetUsername;
 
 		if (!targetUser) return this.errorReply(this.tr`User ${name} not found.`);
-		const targetRooms = targetUser.getRooms();
-		if (!targetRooms.has(room.roomid)) {
+		if (!targetUser.inRoom(room)) {
 			return this.errorReply(this.tr`User ${name} must be in the battle room already.`);
 		}
 		this.checkCan('joinbattle', null, room);
 		if (room.battle[target].id) {
 			return this.errorReply(this.tr`This room already has a player in slot ${target}.`);
 		}
-		if (targetUser.id in room.battle.playerTable) {
+		if (targetUser.inGame(room)) {
 			return this.errorReply(this.tr`${targetUser.name} is already a player in this battle.`);
 		}
 
@@ -1292,7 +1291,7 @@ export const commands: ChatCommands = {
 			return this.sendReply(this.tr`The game timer is ON (requested by ${requester})`);
 		}
 		const force = user.can('timer', null, room);
-		if (!force && !room.game.playerTable[user.id]) {
+		if (!force && !user.inGame(room)) {
 			return this.errorReply(this.tr`Access denied.`);
 		}
 		if (this.meansNo(target) || target === 'stop') {
@@ -1533,12 +1532,11 @@ export const commands: ChatCommands = {
 			}
 			interface RoomData {p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice'}
 			let roomList: {[roomid: string]: RoomData} | false = {};
-			const targetRooms = [...Rooms.rooms.values()].filter(cur => targetUser.id in cur.users);
-			for (const targetRoom of targetRooms) {
+			for (const targetRoom of targetUser.getRooms()) {
 				const roomid = targetRoom.roomid;
 				const roomData: RoomData = {};
 				if (targetRoom.settings.isPrivate) {
-					if (!(user.id in targetRoom.users) && !(targetRoom.game && targetRoom.game.playerTable[user.id])) continue;
+					if (!user.inRoom(targetRoom) && !targetUser.inGame(targetRoom)) continue;
 					roomData.isPrivate = true;
 				}
 				if (targetRoom.battle) {
@@ -1594,8 +1592,8 @@ export const commands: ChatCommands = {
 
 			const targetRoom = Rooms.get(target);
 			if (!targetRoom || (
-				targetRoom.settings.isPrivate && !(user.id in targetRoom.users) &&
-				!(targetRoom.game && !targetRoom.game.playerTable[user.id])
+				targetRoom.settings.isPrivate && !user.inRoom(targetRoom) &&
+				!(targetRoom.game && !user.inGame(targetRoom))
 			)) {
 				const roominfo = {id: target, error: 'not found or access denied'};
 				connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);

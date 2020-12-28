@@ -87,12 +87,11 @@ describe('Matchmaker', function () {
 	});
 
 	it('should create a new battle room after matchmaking', function () {
-		const getGames = player => [...Rooms.rooms.values()].filter(r => r.game && r.game.playerTable[player.id]);
-		const beforeGames = getGames(this.p1);
+		const beforeGames = this.p1.getGames();
 		addSearch(this.p1);
 		addSearch(this.p2);
-		assert.equal(getGames(this.p1).length, beforeGames.length + 1);
-		for (const room of getGames(this.p1).filter(r => !beforeGames.includes(r))) {
+		assert.equal(this.p1.getGames().length, beforeGames.length + 1);
+		for (const room of this.p1.getGames().filter(r => !beforeGames.includes(r))) {
 			assert(room.battle);
 		}
 	});

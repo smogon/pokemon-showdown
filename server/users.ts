@@ -869,7 +869,7 @@ export class User extends Chat.MessageContext {
 		for (const room of Rooms.rooms.values()) {
 			if (!(oldid in room.users)) continue;
 			room.onRename(this, oldid, joining);
-			if (!room.game || !room.game.playerTable[this.id]) continue;
+			if (!room.game || !this.inGame(room)) continue;
 			room.game.onRename(this, oldid, joining, isForceRenamed);
 		}
 		if (isForceRenamed) this.trackRename = oldname;
@@ -903,10 +903,8 @@ export class User extends Chat.MessageContext {
 	 */
 	merge(oldUser: User) {
 		oldUser.cancelReady();
-		for (const room of Rooms.rooms.values()) {
-			if (oldUser.id in room.users) {
-				room.onLeave(oldUser);
-			}
+		for (const room of oldUser.getRooms()) {
+			room.onLeave(oldUser);
 		}
 
 		const oldLocked = this.locked;
@@ -993,7 +991,7 @@ export class User extends Chat.MessageContext {
 		connection.user = this;
 		for (const roomid of connection.inRooms) {
 			const room = Rooms.get(roomid)!;
-			if (!(this.id in room.users)) {
+			if (!this.inRoom(room)) {
 				if (Punishments.checkNameInRoom(this, room.roomid)) {
 					// the connection was in a room that this user is banned from
 					connection.sendTo(room.roomid, `|deinit`);
@@ -1012,13 +1010,30 @@ export class User extends Chat.MessageContext {
 		this.updateReady(connection);
 	}
 	getRooms() {
-		const rooms = new Set<RoomID>();
+		const rooms = [];
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.users[this.id]) {
-				rooms.add(curRoom.roomid);
-			}
+			if (this.inRoom(curRoom)) rooms.push(curRoom);
 		}
 		return rooms;
+	}
+	inRoom(roomid: RoomID | Room | BasicRoom) {
+		const room = Rooms.get(roomid);
+		if (!room) return false;
+		return this.id in room.users;
+	}
+	getGames() {
+		const games: RoomGame[] = [];
+		for (const curRoom of Rooms.rooms.values()) {
+			if (this.inGame(curRoom)) {
+				games.push(curRoom.game!);
+			}
+		}
+		return games;
+	}
+	inGame(roomid: RoomID | Room) {
+		const room = Rooms.get(roomid);
+		if (!room || !room.game) return false;
+		return !!room.game.playerTable[this.id];
 	}
 	debugData() {
 		let str = `${this.tempGroup}${this.name} (${this.id})`;
@@ -1283,7 +1298,7 @@ export class User extends Chat.MessageContext {
 			return;
 		}
 		if (!connection.inRooms.has(room.roomid)) {
-			if (!(this.id in room.users)) {
+			if (!this.inRoom(room)) {
 				room.onJoin(this, connection);
 			}
 			connection.joinRoom(room);
@@ -1292,7 +1307,7 @@ export class User extends Chat.MessageContext {
 	}
 	leaveRoom(room: Room | string, connection: Connection | null = null) {
 		room = Rooms.get(room)!;
-		if (!(this.id in room.users)) {
+		if (!this.inRoom(room)) {
 			return false;
 		}
 		for (const curConnection of this.connections) {
@@ -1502,7 +1517,7 @@ function pruneInactive(threshold: number) {
 			const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
 			const bypass = !user.can('bypassall') && (
 				user.can('bypassafktimer') ||
-				[...Rooms.rooms.values()].some(room => user.can('bypassafktimer', null, room))
+				user.getRooms().some(room => user.can('bypassafktimer', null, room))
 			);
 			if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 				user.setStatusType('idle');

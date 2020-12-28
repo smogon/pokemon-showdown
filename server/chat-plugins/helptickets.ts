@@ -202,7 +202,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	forfeit(user: User) {
-		if (!(user.id in this.playerTable)) return;
+		if (!user.inGame(this.room)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;
 		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
@@ -1240,7 +1240,7 @@ export const commands: ChatCommands = {
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);
-			if (!(user.id in ticketGame.playerTable)) {
+			if (!user.inGame(ticketGame.room)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
 			}

@@ -142,7 +142,7 @@ export class RoomGame {
 
 	addPlayer(user: User | string | null = null, ...rest: any[]) {
 		if (typeof user !== 'string' && user) {
-			if (user.id in this.playerTable) return null;
+			if (user.inGame(this.room)) return null;
 		}
 		if (this.playerCap > 0 && this.playerCount >= this.playerCap) return null;
 		const player = this.makePlayer(user, ...rest);
@@ -278,7 +278,7 @@ export class RoomGame {
 	 */
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!(user.id in this.playerTable) && !this.isSubGame) {
+			if (!user.inGame(this.room) && !this.isSubGame) {
 				user.updateSearch();
 			}
 			return;
