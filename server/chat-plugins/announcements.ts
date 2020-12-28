@@ -3,7 +3,7 @@
  * By Spandamn
  */
 
-const MINUTE = 60000;
+import {MinorActivity} from './poll';
 
 export interface AnnouncementOptions {
 	announcementNumber?: number;
@@ -16,21 +16,16 @@ export interface AnnouncementData extends AnnouncementOptions {
 	readonly activityId: 'announcement';
 }
 
-export class Announcement {
+export class Announcement extends MinorActivity {
 	readonly activityId: 'announcement';
 	announcementNumber: number;
-	room: Room;
 	source: string;
-	timeout: NodeJS.Timer | null;
-	timeoutMins: number;
-	timerEnd?: number;
 	constructor(room: Room, options: AnnouncementOptions) {
+		super(room);
 		this.activityId = 'announcement';
 		this.announcementNumber = options.announcementNumber || room.nextGameNumber();
-		this.room = room;
 		this.source = options.source;
-		this.timeoutMins = options.timeoutMins || 0;
-		this.timeout = options.timerEnd ? this.runTimeout((options.timerEnd - Date.now()) / MINUTE) : null;
+		this.setTimer(options);
 	}
 
 	generateAnnouncement() {
@@ -74,34 +69,8 @@ export class Announcement {
 		this.room.settings.minorActivity = this.toJSON();
 		this.room.saveSettings();
 	}
-	runTimeout(timeout: number) {
-		this.timeoutMins = timeout;
-		this.timerEnd = Date.now() + timeout * MINUTE;
-		this.timeout = setTimeout(() => {
-			const room = this.room;
-			if (!room) return; // do nothing if the room doesn't exist anymore
-			if (room.minorActivity) room.minorActivity.end();
-		}, timeout * MINUTE);
-		this.save();
-		return this.timeout;
-	}
-	endTimer() {
-		if (!this.timeout) return;
-		clearTimeout(this.timeout);
-		this.timeoutMins = 0;
-		delete this.timerEnd;
-		return this;
-	}
 	destroy() {
 		this.endTimer();
-	}
-}
-
-// should handle restarts and also hotpatches
-for (const room of Rooms.rooms.values()) {
-	if (room.settings.minorActivity?.activityId === 'announcement') {
-		room.minorActivity?.endTimer();
-		room.minorActivity = new Announcement(room, room.settings.minorActivity);
 	}
 }
 
@@ -152,16 +121,14 @@ export const commands: ChatCommands = {
 					if (!announcement.endTimer()) return this.errorReply(this.tr`There is no timer to clear.`);
 					return this.add(this.tr`The announcement timer was turned off.`);
 				}
-				const timeout = parseFloat(target);
-				const timeoutMs = timeout * 60 * 1000;
-				if (isNaN(timeoutMs) || timeoutMs <= 0 || timeoutMs > Chat.MAX_TIMEOUT_DURATION) {
-					return this.errorReply(this.tr`Invalid time given.`);
+				const timeoutMins = parseFloat(target);
+				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
+					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
 				}
-				announcement.endTimer();
-				announcement.runTimeout(timeout);
-				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute${Chat.plural(timeout)}.`);
-				this.modlog('ANNOUNCEMENT TIMER', null, `${timeout} minutes`);
-				return this.privateModAction(`The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.`);
+				announcement.setTimer({timeoutMins});
+				room.add(`The announcement timer was turned on: the announcement will end in ${timeoutMins} minute${Chat.plural(timeoutMins)}.`);
+				this.modlog('ANNOUNCEMENT TIMER', null, `${timeoutMins} minutes`);
+				return this.privateModAction(`The announcement timer was set to ${timeoutMins} minute${Chat.plural(timeoutMins)} by ${user.name}.`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (announcement.timeout) {
@@ -225,3 +192,11 @@ export const commands: ChatCommands = {
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate) ');
 });
+
+// should handle restarts and also hotpatches
+for (const room of Rooms.rooms.values()) {
+	if (room.settings.minorActivity?.activityId === 'announcement') {
+		room.minorActivity?.destroy();
+		room.minorActivity = new Announcement(room, room.settings.minorActivity);
+	}
+}
