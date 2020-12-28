@@ -128,7 +128,10 @@ export interface RoomSettings {
 	noAutoTruncate?: boolean;
 	isMultichannel?: boolean;
 }
+
+export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
+
 import type {Announcement, AnnouncementData} from './chat-plugins/announcements';
 import type {Poll, PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
@@ -204,6 +207,13 @@ export abstract class BasicRoom {
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
 	pendingApprovals: Map<string, ShowRequest> | null;
+
+	messagesSent: number;
+	/**
+	 * These handlers will be invoked every n messages.
+	 * handler:number-of-messages map
+	 */
+	nthMessageHandlers: Map<MessageHandler, number>;
 
 	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		this.users = Object.create(null);
@@ -289,6 +299,8 @@ export abstract class BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.pendingApprovals = null;
+		this.messagesSent = 0;
+		this.nthMessageHandlers = new Map();
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
