@@ -688,14 +688,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (['fully evolved', 'fullyevolved', 'fe'].includes(target)) {
 				if (fullyEvolvedSearch === isNotSearch) return {error: "A search cannot include and exclude 'fully evolved'."};
-				if (parameters.length > 1) return {error: "The parameter 'fully evolved' cannot have alternative parameters"};
 				fullyEvolvedSearch = !isNotSearch;
 				orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'recovery') {
-				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink",
 					"slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew",
@@ -711,12 +709,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[move] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'zrecovery') {
-				if (parameters.length > 1) return {error: "The parameter 'zrecovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
 					"psychup", "refresh", "spite", "stockpile", "teleport", "transform",
@@ -732,12 +728,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[moveid] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'priority') {
-				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
 				for (const move in Dex.data.Moves) {
 					const moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
@@ -753,8 +747,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target.substr(0, 8) === 'resists ') {
@@ -806,17 +799,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'pivot') {
-				let includeBatonPass = false;
-				if (parameters.length > 1) {
-					if (parameters[1].trim().toLowerCase() === 'batonpass') {
-						includeBatonPass = true;
-					} else {
-						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
-					}
-				}
 				for (const move in Dex.data.Moves) {
 					const moveData = Dex.getMove(move);
-					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+					if (moveData.selfSwitch && moveData.id !== 'batonpass') {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
@@ -828,8 +813,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			const inequality = target.search(/>|<|=/);
