@@ -1034,6 +1034,7 @@ export class GlobalRoomState {
 	maxUsers: number;
 	maxUsersDate: number;
 	formatList: string;
+	writingData?: boolean;
 
 	constructor() {
 		this.settingsList = [];
@@ -1139,11 +1140,16 @@ export class GlobalRoomState {
 	}
 
 	writeChatRoomData() {
-		FS('config/chatrooms.json').writeUpdate(() => (
-			JSON.stringify(this.settingsList)
-				.replace(/\{"title":/g, '\n{"title":')
-				.replace(/\]$/, '\n]')
-		));
+		if (this.writingData) return;
+		this.writingData = true;
+		setTimeout(() => {
+			FS('config/chatrooms.json').writeUpdate(() => (
+				JSON.stringify(this.settingsList)
+					.replace(/\{"title":/g, '\n{"title":')
+					.replace(/\]$/, '\n]')
+			));
+			this.writingData = false;
+		}, 5 * 1000);
 	}
 
 	writeNumRooms() {
