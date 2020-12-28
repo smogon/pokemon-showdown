@@ -573,25 +573,27 @@ export const commands: ChatCommands = {
 			game.start();
 		},
 	},
-	youtubehelp: [
-		`YouTube commands:`,
-		`/randchannel [optional category]- View data of a random channel from the YouTube database.` +
-			` If a category is given, the random channel will be in the  given category.`,
-		`/youtube addchannel [channel] - Add channel data to the YouTube database. Requires: % @ #`,
-		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ #`,
-		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,
-		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
-		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ #`,
-		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # &`,
-		`/youtube addcategory [name] - Adds the [category] to the channel category list. Requires: @ # &`,
-		`/youtube removecategory [name] - Removes the [category] from the channel category list. Requires: @ # &`,
-		`/youtube setcategory [category], [channel name] - Sets the category for [channel] to [category]. Requires: @ # &`,
-		`/youtube decategorize [channel name] - Removes the category for the [channel], if there is one. Requires: @ # &`,
-		`/youtube categores - View all channels sorted by category.`,
-		`/youtube groupwatch [link], [title] - Creates a group watch of the [url] with the given [title]. Requires % @ & #`,
-		`/youtube startwatch - Starts the group watch in the current room, if there is one. Requires % @ & #`,
-		`/youtube stopwatch - Ends the current group watch, if there is one in the current room. Requires % @ & #`,
-	],
+	youtubehelp() {
+		const help = [
+			`<code>/randchannel [optional category]</code> - View data of a random channel from the YouTube database.` +
+				` If a category is given, the random channel will be in the  given category.`,
+			`<code>/youtube addchannel [channel]</code> - Add channel data to the YouTube database. Requires: % @ #`,
+			`<code>/youtube removechannel [channel]</code>- Delete channel data from the YouTube database. Requires: % @ #</summary>` +
+			`<code>/youtube channel [channel]</code> - View the data of a specified channel. Can be either channel ID or channel name.`,
+			`<code>/youtube video [video]</code> - View data of a specified video. Can be either channel ID or channel name.`,
+			`<code>/youtube update [channel], [name]</code> - sets a channel's PS username to [name]. Requires: % @ #`,
+			`<code>/youtube repeat [time]</code> - Sets an interval for [time] minutes, showing a random channel each time. Requires: # &`,
+			`<code>/youtube addcategory [name]</code> - Adds the [category] to the channel category list. Requires: @ # &`,
+			`<code>/youtube removecategory [name]</code> - Removes the [category] from the channel category list. Requires: @ # &`,
+			`<code>/youtube setcategory [category], [channel name]</code> - Sets the category for [channel] to [category]. Requires: @ # &`,
+			`<code>/youtube decategorize [channel name]</code> - Removes the category for the [channel], if there is one. Requires: @ # &`,
+			`<code>/youtube categores</code> - View all channels sorted by category.`,
+			`<code>/youtube groupwatch [link], [title]</code> - Creates a group watch of the [url] with the given [title]. Requires % @ & #`,
+			`<code>/youtube startwatch</code> - Starts the group watch in the current room, if there is one. Requires % @ & #`,
+			`<code>/youtube stopwatch</code> - Ends the current group watch, if there is one in the current room. Requires % @ & #`,
+		];
+		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
+	},
 };
 
 export const pages: PageTable = {
