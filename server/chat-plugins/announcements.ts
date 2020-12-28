@@ -61,17 +61,18 @@ export class Announcement {
 		this.room.minorActivity = null;
 		this.room.saveSettings();
 	}
-	save() {
-		const entry: AnnouncementData = {
+	toJSON(): AnnouncementData {
+		return {
 			source: this.source,
 			announcementNumber: this.announcementNumber,
 			timeoutMins: this.timeoutMins,
 			timerEnd: this.timerEnd,
 			activityId: 'announcement',
 		};
-		this.room.settings.minorActivity = entry;
+	}
+	save() {
+		this.room.settings.minorActivity = this.toJSON();
 		this.room.saveSettings();
-		return entry;
 	}
 	runTimeout(timeout: number) {
 		this.timeoutMins = timeout;

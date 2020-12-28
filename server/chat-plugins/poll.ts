@@ -300,7 +300,7 @@ export class Poll {
 		delete this.room.settings.minorActivity;
 		this.room.saveSettings();
 	}
-	toJSON() {
+	toJSON(): PollData {
 		return {
 			activityId: 'poll',
 			pollNumber: this.pollNumber,
@@ -315,13 +315,11 @@ export class Poll {
 			timerEnd: this.timerEnd,
 			isQuiz: this.isQuiz,
 			questions: [...this.options.values()],
-		} as PollData;
+		};
 	}
 	save() {
-		const entry = this.toJSON();
-		this.room.settings.minorActivity = entry;
+		this.room.settings.minorActivity = this.toJSON();
 		this.room.saveSettings();
-		return entry;
 	}
 	runTimeout(timeout: number) {
 		this.timeoutMins = timeout;
