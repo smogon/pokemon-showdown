@@ -21428,7 +21428,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Neutral Weather",
-		pp: 10,
 		priority: 0,
 		flags: {},
 		weather: 'Neutral Weather',
@@ -21438,4 +21437,45 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
+	trackertrap: {
+        num: 919,
+        accuracy: 100,
+        basePower: 0,
+        category: "Status",
+        name: "Tracker Trap",
+        pp: 15,
+        priority: 0,
+        flags: {protect: 1, mirror: 1},
+        volatileStatus: 'trackertrap',
+        condition: {
+            duration: 2,
+            onStart(pokemon, source) {
+                this.add('-activate', pokemon, 'Tracker Trap');
+				pokemon.addVolatile('partiallytrapped');
+            },
+            onResidualOrder: 11,
+            onResidual(pokemon) {
+                const source = this.effectData.source;
+                // G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
+                if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
+                    delete pokemon.volatiles['singletrap'];
+                    this.add('-end', pokemon, this.effectData.sourceEffect, '[trackertrap]', '[silent]');
+                    return;
+                }
+            },
+            onEnd(pokemon) {
+                this.add('-end', pokemon, this.effectData.sourceEffect, '[trackertrap]');
+				pokemon.removeVolatile('partiallytrapped');
+            },
+            // onTrapPokemon(target, source) {
+                // if (this.effectData.source?.isActive) {
+					// target.tryTrap();
+				// }
+            // },
+        },
+        secondary: null,
+        target: "normal",
+        type: "Rock",
+        contestType: "Clever",
+    },
 };

@@ -3913,6 +3913,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
+	bisharpalmian: {
+		tier: "UU",
+		doublesTier: "(DUU)",
+	},
 	bouffalant: {
 		randomBattleMoves: ["closecombat", "earthquake", "headcharge", "megahorn", "swordsdance"],
 		randomBattleLevel: 88,
@@ -6395,6 +6399,24 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	vampayar: {
+		tier: "OU",
+	},
+	flamake: {
+		tier: "LC",
+	},
+	debikku: {
+		tier: "NFE",
+	},
+	ribbostuma: {
+		tier: "OU",
+	},
+	vektument: {
+		tier: "OU",
+	},
+	lustreon: {
+		tier: "OU",
+	},
+	durantsinnoh: {
 		tier: "OU",
 	},
 };

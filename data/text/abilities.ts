@@ -1567,7 +1567,7 @@ export const AbilitiesText = {
 	lovelylips: {
 		name: "Lovely Lips",
 		desc: "This Pokemon's kiss-based attacks have their power multiplied by 1.5.",
-		shortDesc: "This Pokemon's kiss-based attacks have 1.2x power.",
+		shortDesc: "This Pokemon's kiss-based attacks have 1.5x power.",
 	},
 	wisepower: {
 		name: "Wise Power",
@@ -1669,5 +1669,12 @@ export const AbilitiesText = {
 		name: "Predatory Instinct",
 		desc: "This Pokemon's attacks have their power multiplied by 1.5 against lighter weight or multiplied by 0.75 against heavier weight.",
 		shortDesc: "This Pokemon's attacks do 1.5x on lighter weight targets; 0.75x on heavier weight.",
+	},
+	radiance: {
+		name: "Radiance",
+		desc: "This Pokemon's Normal-type moves become Light-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Light type and have 1.2x power.",
+		descGen6: "This Pokemon's Normal-type moves become Light-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDescGen6: "This Pokemon's Normal-type moves become Light type and have 1.3x power.",
 	},
 };
