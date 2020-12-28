@@ -356,7 +356,7 @@ export class Poll {
 	}
 	static next(room: Room) {
 		const pollData = room.minorActivityQueue?.shift();
-		if (!pollData) return;
+		if (!pollData || pollData.activityId !== 'poll') return;
 		const poll = new Poll(room, pollData);
 		room.settings.minorActivityQueue!.shift();
 		if (!room.minorActivityQueue?.length) room.minorActivityQueue = null;
