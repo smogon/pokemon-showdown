@@ -734,7 +734,7 @@
         "species": "Salamence",
         "item": ["Life Orb"],
         "ability": ["Intimidate"],
-        "evs": {"atk": 252, "spd": 4, "spe": 252},
+        "evs": {"spa": 252, "spd": 4, "spe": 252},
         "nature": "Timid",
         "moves": [["Hurricane"], ["Draco Meteor"], ["Fire Blast"], ["Hydro Pump"]]
       }
