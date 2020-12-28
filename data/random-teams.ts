@@ -1701,7 +1701,7 @@ export class RandomTeams {
 			species: isGmax ? species.baseSpecies : setData.set.species,
 			gigantamax: isGmax,
 			gender: setData.set.gender || species.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
-			item: (Array.isArray(setData.set.item) ? this.sample(setData.set.item) : setData.set.itemy) || '',
+			item: (Array.isArray(setData.set.item) ? this.sample(setData.set.item) : setData.set.item) || '',
 			ability: (Array.isArray(setData.set.ability) ? this.sample(setData.set.ability) : setData.set.ability) || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 50,
@@ -1791,7 +1791,7 @@ export class RandomTeams {
 			if (typeCombo in teamData.typeComboCount) continue;
 
 			const itemData = this.dex.getItem(set.item);
-			if (teamData.has[itemData.id]) continue;
+			if (teamData.has[itemData.id]) continue; // Item Clause
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

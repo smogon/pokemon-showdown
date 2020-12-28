@@ -37,6 +37,7 @@
         "ability": ["Static"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},
         "nature": "Timid",
+        "ivs": {"atk": 0},
         "moves": [["Hurricane"], ["Thunderbolt"], ["Heat Wave"], ["Roost", "Steel Wing"]]
       },
       {
@@ -706,6 +707,7 @@
         "item": ["Custap Berry", "Weakness Policy"],
         "ability": ["Sturdy"],
         "evs": {"hp": 252, "def": 4, "spa": 252},
+        "ivs": {"atk": 0},
         "nature": "Modest",
         "moves": [["Thunderbolt"], ["Flash Cannon"], ["Volt Switch"], ["Steel Beam", "Mirror Coat"]]
       },
@@ -714,6 +716,7 @@
         "item": ["Assault Vest", "Choice Specs"],
         "ability": ["Analytic"],
         "evs": {"hp": 252, "def": 4, "spa": 252},
+        "ivs": {"atk": 0},
         "nature": "Modest",
         "moves": [["Thunderbolt"], ["Flash Cannon"], ["Volt Switch"], ["Body Press"]]
       }
@@ -736,6 +739,7 @@
         "ability": ["Intimidate"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},
         "nature": "Timid",
+        "ivs": {"atk": 0},
         "moves": [["Hurricane"], ["Draco Meteor"], ["Fire Blast"], ["Hydro Pump"]]
       }
     ]
@@ -749,7 +753,6 @@
         "ability": ["Speed Boost"],
         "evs": {"atk": 252, "spd": 4, "spe": 252},
         "nature": "Jolly",
-        "ivs": {"atk": 0},
         "moves": [["Flare Blitz"], ["Close Combat"], ["Thunder Punch"], ["Swords Dance", "Earthquake", "Protect"]]
       },
       {
@@ -982,6 +985,7 @@
         "ability": ["Electric Surge"],
         "evs": {"hp": 4, "spa": 252, "spe": 252},
         "nature": "Timid",
+        "ivs": {"atk": 0},
         "moves": [["Thunderbolt"], ["Dazzling Gleam"], ["Grass Knot"], ["Volt Switch"]]
       },
       {
@@ -990,6 +994,7 @@
         "ability": ["Electric Surge"],
         "evs": {"hp": 252, "spa": 4, "spe": 252},
         "nature": "Timid",
+        "ivs": {"atk": 0},
         "moves": [["Reflect"], ["Light Screen"], ["Thunderbolt"], ["Taunt"]]
       },
       {
@@ -1548,10 +1553,7 @@
         "ability": ["Stance Change"],
         "evs": {"hp": 252, "atk": 252, "spd": 4},
         "nature": "Adamant",
-        "moves": [["Shadow Sneak"], ["Iron Head", "Sacred Sword"], ["Swords Dance"], ["King's Shield",
-            "Shadow Claw"
-          ]
-        ]
+        "moves": [["Shadow Sneak"], ["Iron Head", "Sacred Sword"], ["Swords Dance"], ["King's Shield", "Shadow Claw"]]
       },
       {
         "species": "Aegislash",
@@ -2032,9 +2034,7 @@
     "sets": [
       {
         "species": "Cloyster",
-        "item": ["Focus Sash",
-          "King's Rock"
-        ],
+        "item": ["Focus Sash", "King's Rock"],
         "ability": ["Skill Link"],
         "evs": {"atk": 252, "def": 4, "spe": 252},
         "nature": "Jolly",
