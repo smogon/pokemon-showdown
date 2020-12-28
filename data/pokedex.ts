@@ -17335,7 +17335,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10010,
 		name: "Ribbostuma",
 		types: ["Fire", "Fairy"],
-		baseStats: {hp: 85, atk: 60, def: 50, spa: 115, spd: 105, spe: 125},
+		baseStats: {hp: 105, atk: 80, def: 95, spa: 60, spd: 125 , spe: 65},
 		abilities: {0: "Blaze", 1: "Shed Skin", H: "Cloud Nine"},
 		heightm: 4.4,
 		weightkg: 68,
