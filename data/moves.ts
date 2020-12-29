@@ -6559,7 +6559,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onHit(source) {
 				if (this.random(2) === 0) return;
 				for (const pokemon of source.side.active) {
-					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
+					if (!pokemon.hp || pokemon.item) continue;
+
+					if (pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
 						const item = pokemon.lastItem;
 						pokemon.lastItem = '';
 						this.add('-item', pokemon, this.dex.getItem(item), '[from] move: G-Max Replenish');
