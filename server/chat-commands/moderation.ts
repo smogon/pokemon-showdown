@@ -1629,6 +1629,7 @@ export const commands: ChatCommands = {
 	hidelines: 'hidetext',
 	hlines: 'hidetext',
 	cleartext: 'hidetext',
+	ctext: 'hidetext',
 	clearaltstext: 'hidetext',
 	clearlines: 'hidetext',
 	forcecleartext: 'hidetext',
@@ -1636,7 +1637,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse(`/help hidetext`);
 		room = this.requireRoom();
 		const hasLineCount = cmd.includes('lines');
-		const hideRevealButton = cmd.includes('clear');
+		const hideRevealButton = cmd.includes('clear') || cmd.includes('c');
 		target = this.splitTarget(target);
 		let lineCount = 0;
 		if (/^[0-9]+\s*(,|$)/.test(target)) {
