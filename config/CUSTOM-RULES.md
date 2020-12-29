@@ -91,9 +91,14 @@ For equally specific rules, the last rule wins:
 Restrictions
 ------------
 
-Some metagames have a premise where the use of e.g. moves and/or abilities that aren't normally legal are allowed under certain conditions such as only one illegal move per Pokémon. This poses a problem for moves or abilities that are simply too powerful. Rather than banning the move or ability outright, these metagames often prefer to allow you to continue to use them on Pokémon that naturally obtain them. Alternatively, they can decide that it's the Pokémon that's a little too powerful to have access to the premise of the metagame, so that only its natural use is permitted. Exactly which restrictions apply depends on the specific metagame.
+What restrictions achieve depends on the rule or metagame being played. Examples include:
 
-Restriction rules can be used adjust the behaviour of such a metagame. The syntax is identical to bans, just replace `-` with `*`, like:
+- Cross Evolution: Restricting a species prevents it from being the target of a cross evolution. (Ban a species to prevent it from being the base of a cross evolution.)
+- Mix and Mega: Restricting a species prevents that Pokémon from holding a mega stone. (Ban a stone to prevent all Pokémon from holding it.)
+- Inheritance: Restricting a species prevents it from being inherited from. (Ban a species to prevent it from inheriting from another species.)
+- Trademarked: Restricting a move prevents it from being used as a trademark, but the move can still appear in a moveset.
+
+Restriction rules are used to adjust the behaviour of the above metagames. The syntax is identical to bans, just replace `-` with `*`, like:
 
 `* Blaziken` - restrict a Pokémon
 
