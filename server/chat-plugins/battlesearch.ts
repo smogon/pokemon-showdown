@@ -360,7 +360,7 @@ export const commands: ChatCommands = {
 	},
 	battlesearchhelp: [
 		'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.',
-		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assuemd to be userids. Requires &`,
+		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`,
 	],
 };
 
