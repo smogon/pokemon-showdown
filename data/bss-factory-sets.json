@@ -3,7 +3,8 @@
     "usage": 10,
     "sets": [
       {
-        "species": "Cinderace-Gmax",
+        "species": "Cinderace",
+        "gigantamax": true,
         "item": ["Focus Sash"],
         "ability": ["Libero"],
         "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -11,7 +12,8 @@
         "moves": [["Pyro Ball"], ["High Jump Kick", "Counter"], ["Bounce", "Sucker Punch"], ["Iron Head", "Gunk Shot", "Zen Headbutt"]]
       },
       {
-        "species": "Cinderace-Gmax",
+        "species": "Cinderace",
+        "gigantamax": true,
         "item": ["Choice Scarf"],
         "ability": ["Libero"],
         "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -19,7 +21,8 @@
         "moves": [["Pyro Ball"], ["High Jump Kick"], ["Bounce"], ["Iron Head"]]
       },
       {
-        "species": "Cinderace-Gmax",
+        "species": "Cinderace",
+        "gigantamax": true,
         "item": ["Scope Lens"],
         "ability": ["Libero"],
         "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -167,7 +170,8 @@
     "usage": 8,
     "sets": [
       {
-        "species": "Rillaboom-Gmax",
+        "species": "Rillaboom",
+        "gigantamax": true,
         "item": ["Choice Band"],
         "ability": ["Grassy Surge"],
         "evs": {"hp": 252, "atk": 252, "def": 4},
@@ -175,7 +179,8 @@
         "moves": [["Grassy Glide"], ["Superpower"], ["Knock Off"], ["High Horsepower", "U-turn", "Wood Hammer"]]
       },
       {
-        "species": "Rillaboom-Gmax",
+        "species": "Rillaboom",
+        "gigantamax": true,
         "item": ["Grassy Seed"],
         "ability": ["Grassy Surge"],
         "evs": {"atk": 252, "def": 4, "spe": 252},
@@ -308,7 +313,8 @@
         "moves": [["Surging Strikes"], ["Close Combat"], ["Thunder Punch"], ["U-turn"]]
       },
       {
-        "species": "Urshifu-Gmax",
+        "species": "Urshifu",
+        "gigantamax": true,
         "item": ["Focus Sash"],
         "ability": ["Unseen Fist"],
         "evs": {"hp": 4, "atk": 252, "spe": 252},
@@ -316,7 +322,8 @@
         "moves": [["Wicked Blow"], ["Close Combat"], ["Counter"], ["Sucker Punch"]]
       },
       {
-        "species": "Urshifu-Gmax",
+        "species": "Urshifu",
+        "gigantamax": true,
         "item": ["Choice Band"],
         "ability": ["Unseen Fist"],
         "evs": {"hp": 4, "atk": 252, "spe": 252},
@@ -959,7 +966,8 @@
         "moves": [["Light Screen"], ["Reflect"], ["Spirit Break"], ["Taunt", "Thunder Wave"]]
       },
       {
-        "species": "Grimmsnarl-Gmax",
+        "species": "Grimmsnarl",
+        "gigantamax": true,
         "item": ["Lagging Tail"],
         "ability": ["Prankster"],
         "evs": {"hp": 252, "atk": 252, "spd": 4},
@@ -967,7 +975,8 @@
         "moves": [["Trick"], ["Spirit Break"], ["Sucker Punch"], ["Substitute", "Light Screen", "Reflect"]]
       },
       {
-        "species": "Grimmsnarl-Gmax",
+        "species": "Grimmsnarl",
+        "gigantamax": true,
         "item": ["Sitrus Berry", "Leftovers"],
         "ability": ["Prankster"],
         "evs": {"hp": 252, "atk": 4, "spd": 252},
@@ -1040,7 +1049,8 @@
     "usage": 6,
     "sets": [
       {
-        "species": "Lapras-Gmax",
+        "species": "Lapras",
+        "gigantamax": true,
         "item": ["Weakness Policy"],
         "ability": ["Shell Armor"],
         "evs": {"hp": 252, "def": 4, "spa": 252},
@@ -1048,7 +1058,8 @@
         "moves": [["Freeze-Dry"], ["Ice Shard"], ["Thunder", "Thunderbolt"], ["Sparkling Aria", "Hydro Pump"]]
       },
       {
-        "species": "Lapras-Gmax",
+        "species": "Lapras",
+        "gigantamax": true,
         "item": ["Light Clay", "Assault Vest"],
         "ability": ["Water Absorb"],
         "evs": {"hp": 252, "def": 4, "spa": 252},
@@ -1419,7 +1430,8 @@
     "usage": 6,
     "sets": [
       {
-        "species": "Snorlax-Gmax",
+        "species": "Snorlax",
+        "gigantamax": true,
         "item": ["Figy Berry", "Custap Berry"],
         "ability": ["Gluttony"],
         "evs": {"atk": 252, "def": 252, "spd": 4},
@@ -1427,7 +1439,8 @@
         "moves": [["Facade", "Body Slam", "Self-Destruct"], ["Earthquake"], ["Darkest Lariat", "Heavy Slam", "Heat Crash"], ["Curse", "Belly Drum"]]
       },
       {
-        "species": "Snorlax-Gmax",
+        "species": "Snorlax",
+        "gigantamax": true,
         "item": ["Figy Berry"],
         "ability": ["Gluttony"],
         "evs": {"atk": 252, "def": 252, "spd": 4},
@@ -1673,7 +1686,8 @@
     "usage": 2,
     "sets": [
       {
-        "species": "Charizard-Gmax",
+        "species": "Charizard",
+        "gigantamax": true,
         "item": ["Life Orb", "Heavy-Duty Boots"],
         "ability": ["Blaze"],
         "evs": {"spa": 252, "def": 4, "spe": 252},
@@ -1725,7 +1739,8 @@
     "usage": 1,
     "sets": [
       {
-        "species": "Gengar-Gmax",
+        "species": "Gengar",
+        "gigantamax": true,
         "item": ["Focus Sash", "Wide Lens"],
         "ability": ["Cursed Body"],
         "evs": {"spa": 252, "def": 4, "spe": 252},
@@ -1951,7 +1966,8 @@
     "usage": 1,
     "sets": [
       {
-        "species": "Hatterene-Gmax",
+        "species": "Hatterene",
+        "gigantamax": true,
         "item": ["Focus Sash", "Life Orb"],
         "ability": ["Magic Bounce"],
         "evs": {"hp": 252, "def": 4, "spa": 252},
@@ -1960,7 +1976,8 @@
         "moves": [["Trick Room"], ["Psychic"], ["Dazzling Gleam", "Misty Explosion"], ["Mystical Fire"]]
       },
       {
-        "species": "Hatterene-Gmax",
+        "species": "Hatterene",
+        "gigantamax": true,
         "item": ["Big Root"],
         "ability": ["Magic Bounce"],
         "evs": {"hp": 252, "def": 252, "spa": 4},
@@ -1974,7 +1991,8 @@
     "usage": 1,
     "sets": [
       {
-        "species": "Inteleon-Gmax",
+        "species": "Inteleon",
+        "gigantamax": true,
         "item": ["Scope Lens"],
         "ability": ["Sniper"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},
@@ -1983,7 +2001,8 @@
         "moves": [["Hydro Pump", "Scald", "Snipe Shot", "Hydro Cannon"], ["Ice Beam"], ["Air Slash"], ["Focus Energy"]]
       },
       {
-        "species": "Inteleon-Gmax",
+        "species": "Inteleon",
+        "gigantamax": true,
         "item": ["Focus Sash", "Petaya Berry"],
         "ability": ["Torrent"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},
@@ -2598,7 +2617,8 @@
         "moves": [["Overdrive"], ["Nuzzle"], ["Boomburst"], ["Hex"]]
       },
       {
-        "species": "Toxtricity-Gmax",
+        "species": "Toxtricity",
+        "gigantamax": true,
         "item": ["Throat Spray"],
         "ability": ["Punk Rock"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},

@@ -1694,12 +1694,10 @@ export class RandomTeams {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
-		const isGmax: boolean = setData.set.species.includes("-Gmax");
-
 		return {
 			name: setData.set.nickname || setData.set.name || species.baseSpecies,
-			species: isGmax ? species.baseSpecies : setData.set.species,
-			gigantamax: isGmax,
+			species: setData.set.species,
+			gigantamax: setData.set.gigantamax,
 			gender: setData.set.gender || species.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
 			item: (Array.isArray(setData.set.item) ? this.sample(setData.set.item) : setData.set.item) || '',
 			ability: (Array.isArray(setData.set.ability) ? this.sample(setData.set.ability) : setData.set.ability) || species.abilities['0'],
