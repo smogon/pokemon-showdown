@@ -93,8 +93,8 @@ export const Repeats = new class {
 				this.clearRepeats(targetRoom);
 				return;
 			}
-			const phrase = repeat.faq ? roomFaqs[targetRoom.roomid][repeat.id] : repeat.phrase;
-			const formattedText = repeat.isHTML ? repeat.phrase : Chat.formatText(phrase, true);
+			const repeatedPhrase = repeat.faq ? roomFaqs[targetRoom.roomid][repeat.id] : phrase;
+			const formattedText = repeat.isHTML ? phrase : Chat.formatText(repeatedPhrase, true);
 			targetRoom.add(`|html|<div class="infobox">${formattedText}</div>`);
 			targetRoom.update();
 		};
