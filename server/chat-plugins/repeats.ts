@@ -94,7 +94,7 @@ export const Repeats = new class {
 				return;
 			}
 			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[targetRoom.roomid][repeat.id], true) :
-				repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
+				repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, true);
 			targetRoom.add(`|html|<div class="infobox">${formattedText}</div>`);
 			targetRoom.update();
 		};
@@ -137,7 +137,7 @@ export const pages: PageTable = {
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
 			if (!repeat.faq) {
-				const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
+				const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, true);
 				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeat.phrase)}</td><td>${repeat.isHTML ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
 				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 			} else {
