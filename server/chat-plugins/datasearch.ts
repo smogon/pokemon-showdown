@@ -688,6 +688,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (['fully evolved', 'fullyevolved', 'fe'].includes(target)) {
 				if (fullyEvolvedSearch === isNotSearch) return {error: "A search cannot include and exclude 'fully evolved'."};
+				if (parameters.length > 1) return {error: "The parameter 'fully evolved' cannot have alternative parameters"};
 				fullyEvolvedSearch = !isNotSearch;
 				orGroup.skip = true;
 				break;
