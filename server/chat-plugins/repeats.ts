@@ -136,9 +136,9 @@ export const pages: PageTable = {
 		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Raw text`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
-			const faqOrNot = repeat.faq ? roomFaqs[room.roomid][repeat.id] : repeat.phrase;
-			const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(faqOrNot, true);
-			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(faqOrNot)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
+			const repeatText = repeat.faq ? roomFaqs[room.roomid][repeat.id] : repeat.phrase;
+			const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
+			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
 			html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
 		}
 		html += `</table>`;
