@@ -212,7 +212,7 @@ export class YoutubeInterface {
 		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
-	async generateVideoDisplay(link: string, fullInfo = false) {
+	async generateVideoDisplay(link: string, fullInfo = true) {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
@@ -291,6 +291,11 @@ export class YoutubeInterface {
 		const id = this.getId(url);
 		const videoInfo = await this.getVideoData(id);
 		if (!videoInfo) throw new Chat.ErrorMessage(`Video not found.`);
+		if ([...Rooms.rooms.values()].some(r => r.roomid.startsWith('video-watch-'))) {
+			throw new Chat.ErrorMessage(
+				`A groupwatch is already going on. Please wait until it is done before creating another.`
+			);
+		}
 		const num = baseRoom.nextGameNumber();
 		baseRoom.saveSettings();
 		const gameRoom = Rooms.createGameRoom(`video-watch-${num}` as RoomID, Utils.html`[Group Watch] ${title}`, {
@@ -434,7 +439,7 @@ export const commands: ChatCommands = {
 		async video(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
 			this.checkCan('mute', null, room);
-			const buffer = await YouTube.generateVideoDisplay(target, true);
+			const buffer = await YouTube.generateVideoDisplay(target);
 			this.runBroadcast();
 			this.sendReplyBox(buffer);
 		},
