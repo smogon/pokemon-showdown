@@ -88,6 +88,27 @@ For equally specific rules, the last rule wins:
 `+ Pikachu, - Pikachu, + Pikachu, - Pikachu` - ban Pikachu
 
 
+Restrictions
+------------
+
+What restrictions achieve depends on the rule or metagame being played. Examples include:
+
+- Cross Evolution: Restricting a species prevents it from being the target of a cross evolution. (Ban a species to prevent it from being the base of a cross evolution.)
+- Mix and Mega: Restricting a species prevents that Pokémon from holding a mega stone. (Ban a stone to prevent all Pokémon from holding it.)
+- Inheritance: Restricting a species prevents it from being inherited from. (Ban a species to prevent it from inheriting from another species.)
+- Trademarked: Restricting a move prevents it from being used as a trademark, but the move can still appear in a moveset.
+
+Restriction rules are used to adjust the behaviour of the above metagames. The syntax is identical to bans, just replace `-` with `*`, like:
+
+`* Blaziken` - restrict a Pokémon
+
+`* Uber` - restrict a group of Pokémon
+
+`* Baton Pass` - restrict a move
+
+An unban will remove a restriction.
+
+
 Whitelisting
 ------------
 
