@@ -73,7 +73,7 @@ describe(`Pursuit`, function () {
 
 	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, function () {
 		battle = common.createBattle([[
-			{species: 'tyranitar', moves: ['pursuit']},
+			{species: 'parasect', moves: ['pursuit']},
 		], [
 			{species: 'emolga', moves: ['voltswitch']},
 			{species: 'zapdos', moves: ['batonpass']},
