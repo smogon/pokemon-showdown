@@ -863,7 +863,9 @@ export class Pokemon {
 			}
 			let disabled = moveSlot.disabled;
 			if (this.volatiles['dynamax']) {
-				disabled = this.maxMoveDisabled(this.battle.dex.getMove(moveSlot.id));
+				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
+				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
+				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
 				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
@@ -889,8 +891,11 @@ export class Pokemon {
 		return hasValidMove ? moves : [];
 	}
 
-	maxMoveDisabled(move: Move) {
-		return !!(move.category === 'Status' && (this.hasItem('assaultvest') || this.volatiles['taunt']));
+	/** This should be passed the base move and not the corresponding max move so we can check how much PP is left. */
+	maxMoveDisabled(baseMove: Move | string) {
+		baseMove = this.battle.dex.getMove(baseMove);
+		if (!this.getMoveData(baseMove.id)?.pp) return true;
+		return !!(baseMove.category === 'Status' && (this.hasItem('assaultvest') || this.volatiles['taunt']));
 	}
 
 	getDynamaxRequest(skipChecks?: boolean) {
@@ -912,7 +917,7 @@ export class Pokemon {
 			const move = this.battle.dex.getMove(moveSlot.id);
 			const maxMove = this.battle.getMaxMove(move, this);
 			if (maxMove) {
-				if (this.maxMoveDisabled(maxMove)) {
+				if (this.maxMoveDisabled(move)) {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
 				} else {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
@@ -968,7 +973,7 @@ export class Pokemon {
 			if (this.trapped) data.trapped = true;
 		}
 
-		if (!lockedMove) {
+		if (!lockedMove || lockedMove === 'struggle') {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
@@ -1400,7 +1405,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = (isHidden || true);
-				moveSlot.disabledSource = (sourceEffect ? sourceEffect.fullname : '');
+				moveSlot.disabledSource = (sourceEffect?.fullname || moveSlot.move);
 			}
 		}
 	}
