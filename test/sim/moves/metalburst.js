@@ -54,4 +54,20 @@ describe('Metal Burst', function () {
 		battle.makeChoices('move metalburst', 'move falseswipe');
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp - 1);
 	});
+
+	it('should be subject to redirection', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'shuckle', moves: ['metalburst']},
+			{species: 'chansey', ability: 'moldbreaker', moves: ['electrify', 'sleeptalk']},
+		], [
+			{species: 'blissey', moves: ['dragonrage']},
+			{species: 'manectric', ability: 'lightningrod', moves: ['sleeptalk', 'followme']},
+		]]);
+		battle.makeChoices('move metalburst, move electrify -1', 'move dragonrage 1, move sleeptalk');
+		assert.fullHP(battle.p2.active[0]);
+		assert.equal(battle.p2.active[1].boosts.spa, 1);
+		battle.makeChoices('move metalburst, move sleeptalk', 'move dragonrage 1, move followme');
+		assert.fullHP(battle.p2.active[0]);
+		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp - 60);
+	});
 });
