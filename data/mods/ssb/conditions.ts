@@ -2014,7 +2014,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', 'The Storm Surge receded.');
 		},
 		onModifySpe() {
-			return this.chainModify(0.25);
+			return this.chainModify(0.5);
 		},
 	},
 	// For ravioliqueen
