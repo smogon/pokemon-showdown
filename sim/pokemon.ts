@@ -21,6 +21,15 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
+interface Attacker {
+	source: Pokemon;
+	damage: number;
+	thisTurn: boolean;
+	move?: ID;
+	position?: number;
+	damageValue?: (number | boolean | undefined);
+}
+
 export interface EffectState {
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
@@ -202,7 +211,7 @@ export class Pokemon {
 	 */
 	hurtThisTurn: number | null;
 	lastDamage: number;
-	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID}[];
+	attackedBy: Attacker[];
 
 	isActive: boolean;
 	activeTurns: number;
@@ -772,19 +781,31 @@ export class Pokemon {
 	}
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
-		if (!damage) damage = 0;
+		const damageNumber = (typeof damage === 'number') ? damage : 0;
 		move = this.battle.dex.getMove(move);
 		this.attackedBy.push({
 			source,
-			damage,
+			damage: damageNumber,
 			move: move.id,
 			thisTurn: true,
+			position: source.position,
+			damageValue: damage,
 		});
 	}
 
 	getLastAttackedBy() {
 		if (this.attackedBy.length === 0) return undefined;
 		return this.attackedBy[this.attackedBy.length - 1];
+	}
+
+	getLastDamagedBy(filterOutSameSide: boolean) {
+		const damagedBy: Attacker[] = this.attackedBy.filter(
+			(attacker) =>
+			  typeof attacker.damageValue === 'number' &&
+			  (filterOutSameSide === undefined || this.side !== attacker.source.side)
+		  );
+		if (damagedBy.length === 0) return undefined;
+		return damagedBy[damagedBy.length - 1];
 	}
 
 	/**

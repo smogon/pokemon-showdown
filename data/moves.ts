@@ -10891,39 +10891,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			if (!pokemon.volatiles['metalburst']) return 0;
-			return pokemon.volatiles['metalburst'].damage || 1;
+			const lastDamagedBy = pokemon.getLastDamagedBy(true);
+			if (lastDamagedBy !== undefined) {
+				return (lastDamagedBy.damage * 1.5) || 1;
+			}
+			return 0;
 		},
 		category: "Physical",
 		name: "Metal Burst",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('metalburst');
-		},
 		onTryHit(target, source, move) {
-			if (!source.volatiles['metalburst']) return false;
-			if (source.volatiles['metalburst'].position === null) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectData.position = null;
-				this.effectData.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
-			},
-			onDamagingHit(damage, target, source, effect) {
-				if (source.side !== target.side) {
-					this.effectData.position = source.position;
-					this.effectData.damage = 1.5 * damage;
-				}
-			},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy?.position !== undefined) {
+				targetRelayVar.target = source.side.foe.active[lastDamagedBy.position];
+			}
 		},
 		secondary: null,
 		target: "scripted",

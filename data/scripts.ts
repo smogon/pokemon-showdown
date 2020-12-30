@@ -175,6 +175,9 @@ export const Scripts: BattleScriptsData = {
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
 		}
 		const baseTarget = move.target;
+		let targetRelayVar = {target};
+		targetRelayVar = this.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
+		if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 		if (target === undefined) target = this.getRandomTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
@@ -605,7 +608,7 @@ export const Scripts: BattleScriptsData = {
 		}
 		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
-		let moveDamage: (number | boolean | undefined)[];
+		let moveDamage: (number | boolean | undefined)[] = [];
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
 
@@ -713,7 +716,7 @@ export const Scripts: BattleScriptsData = {
 
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
-				target.gotAttacked(move, damage[i] as number | false | undefined, pokemon);
+				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 			}
 		}
 
