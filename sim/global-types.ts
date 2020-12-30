@@ -504,7 +504,7 @@ namespace RandomTeamsTypes {
 		statusCure?: number;
 	}
 	export interface FactoryTeamDetails {
-		megaCount: number;
+		megaCount?: number;
 		zCount?: number;
 		forceResult: boolean;
 		weather?: string;
@@ -514,6 +514,7 @@ namespace RandomTeamsTypes {
 		has: {[k: string]: number};
 		weaknesses: {[k: string]: number};
 		resistances: {[k: string]: number};
+		gigantamax?: boolean;
 	}
 	export interface RandomSet {
 		name: string;
@@ -543,5 +544,6 @@ namespace RandomTeamsTypes {
 		ivs: SparseStatsTable;
 		nature: string;
 		moves: string[];
+		gigantamax?: boolean;
 	}
 }
