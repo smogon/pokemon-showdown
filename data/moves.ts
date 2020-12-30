@@ -10884,7 +10884,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			const lastDamagedBy = pokemon.getLastDamagedBy();
+			const lastDamagedBy = pokemon.getLastDamagedBy(pokemon.side);
 			if (lastDamagedBy !== undefined) {
 				return (lastDamagedBy.damage * 1.5) || 1;
 			}
@@ -10896,11 +10896,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryHit(target, source, move) {
-			const lastDamagedBy = source.getLastDamagedBy();
+			const lastDamagedBy = source.getLastDamagedBy(source.side);
 			if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
-			const lastDamagedBy = source.getLastDamagedBy();
+			const lastDamagedBy = source.getLastDamagedBy(source.side);
 			if (lastDamagedBy?.position !== undefined) {
 				targetRelayVar.target = source.side.foe.active[lastDamagedBy.position];
 			}

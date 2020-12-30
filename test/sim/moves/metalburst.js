@@ -14,13 +14,13 @@ describe('Metal Burst', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'snorlax', moves: ['sleeptalk', 'metalburst']},
-			{species: 'tauros', moves: ['sleeptalk']},
+			{species: 'golem', moves: ['sleeptalk', 'tackle']},
 		]});
 		battle.setPlayer('p2', {team: [
 			{species: 'breloom', moves: ['sleeptalk', 'sonicboom']},
 			{species: 'venusaur', moves: ['sleeptalk', 'spore']},
 		]});
-		battle.makeChoices('move metalburst, move sleeptalk', 'move sonicboom 1, move sleeptalk');
+		battle.makeChoices('move metalburst, move tackle -1', 'move sonicboom 1, move sleeptalk');
 		const breloomHpTurn1 = battle.p2.active[0].hp;
 		assert.equal(breloomHpTurn1, battle.p2.active[0].maxhp - battle.dex.getMove('sonicboom').damage * 1.5);
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sonicboom 1, move spore 1');

@@ -21,6 +21,15 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
+interface Attacker {
+	source: Pokemon;
+	damage: number;
+	thisTurn: boolean;
+	move?: ID;
+	position?: number;
+	damageValue?: (number | boolean | undefined);
+}
+
 export interface EffectState {
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
@@ -201,14 +210,7 @@ export class Pokemon {
 	 */
 	hurtThisTurn: number | null;
 	lastDamage: number;
-	attackedBy: {
-		source: Pokemon,
-		damage: number,
-		thisTurn: boolean,
-		move?: ID,
-		position?: number,
-		damageValue?: (number | boolean | undefined),
-	}[];
+	attackedBy: Attacker[];
 
 	isActive: boolean;
 	activeTurns: number;
@@ -793,9 +795,13 @@ export class Pokemon {
 		if (this.attackedBy.length === 0) return undefined;
 		return this.attackedBy[this.attackedBy.length - 1];
 	}
-
-	getLastDamagedBy() {
-		const damagedBy = this.attackedBy.filter(attacked => typeof attacked.damageValue === 'number');
+	/** attackedSide will filter out Attackers of the same side */
+	getLastDamagedBy(attackedSide?: Side) {
+		const damagedBy: Attacker[] = this.attackedBy.filter(
+			(attacker) =>
+			  typeof attacker.damageValue === 'number' &&
+			  (attackedSide === undefined || attackedSide !== attacker.source.side)
+		  );
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];
 	}
