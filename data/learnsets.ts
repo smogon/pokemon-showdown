@@ -77771,7 +77771,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			painsplit: ["8L45", "7L45", "6T", "5L40"],
 			payback: ["7M", "5M"],
 			poisonfang: ["8L1", "7L1", "5L1"],
-			poltergeist: ["8T"],
 			powerwhip: ["8M", "8L56", "7L56", "5L60"],
 			protect: ["8M", "7M", "5M"],
 			psychic: ["8M", "7M", "5M"],
