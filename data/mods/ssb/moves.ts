@@ -497,6 +497,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fail', pokemon);
 				this.hint("Data Corruption only works on your first turn out.");
 				return null;
+			}
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', target, 'Shift Gear', target);
