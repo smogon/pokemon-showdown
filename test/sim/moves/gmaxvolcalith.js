@@ -84,4 +84,18 @@ describe('G-Max Volcalith', function () {
 		const wynautDamagedTRIndex = log.lastIndexOf('|-damage|p2b: Mewtwo');
 		assert(mewtwoDamagedTRIndex < wynautDamagedTRIndex, 'Wynaut should be damaged before Mewtwo in Trick Room.');
 	});
+
+	it.skip(`should deal damage before Black Sludge recovery/damage`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Toxicroak', item: 'blacksludge', moves: ['sleeptalk']},
+			{species: 'Boldore', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		const toxicroak = battle.p2.active[0];
+		assert.equal(toxicroak.hp, toxicroak.maxhp - Math.floor(toxicroak.maxhp / 6) + Math.floor(toxicroak.maxhp / 16));
+	});
 });
