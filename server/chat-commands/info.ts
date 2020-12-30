@@ -2715,7 +2715,7 @@ export const commands: ChatCommands = {
 			}
 			return `/raw <div class="infobox"><div class="infobox-limited">${Chat.getReadmoreCodeBlock(target)}</div></div>`;
 		} else {
-			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
+			this.sendReplyBox(`<div class="infobox-limited">${Chat.getReadmoreCodeBlock(target)}</div>`);
 		}
 	},
 	codehelp: [
