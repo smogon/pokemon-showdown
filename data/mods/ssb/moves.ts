@@ -3102,7 +3102,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "50% chance to OHKO the target; otherwise, it OHKOes itself. On successive uses, this move has a 1/X chance of OHKOing the target, where X starts at 2 and doubles each time this move OHKOes the target. X resets to 1 if this move is not used in a turn.",
+		desc: "50% chance to OHKO the target; otherwise, it OHKOes itself. On successive uses, this move has a 1/X chance of OHKOing the target, where X starts at 2 and doubles each time this move OHKOes the target. X resets to 2 if this move is not used in a turn.",
 		shortDesc: "50/50 to KO target/self. Worse used repeatedly.",
 		name: "Not-so-worthy Pirouette",
 		isNonstandard: "Custom",
