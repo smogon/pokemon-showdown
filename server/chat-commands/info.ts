@@ -2713,7 +2713,7 @@ export const commands: ChatCommands = {
 				target = this.filter(target)!;
 				if (!target) return this.errorReply(`Invalid code.`);
 			}
-			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
+			return `/raw <div class="infobox"><div class="infobox-limited">${Chat.getReadmoreCodeBlock(target)}</div></div>`;
 		} else {
 			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
 		}
