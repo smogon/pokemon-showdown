@@ -70,8 +70,6 @@ describe("White Herb", function () {
 		// After a double KO
 		battle.makeChoices('move sleeptalk, move finalgambit -1', 'move recycle, move sleeptalk');
 		battle.makeChoices('switch 3, switch 4');
-
-		console.log(battle.getDebugLog());
 		assert.false.holdsItem(wynaut);
 		assert.statStage(wynaut, 'atk', 0);
 	});
