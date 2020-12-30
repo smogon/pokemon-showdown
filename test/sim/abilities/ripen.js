@@ -33,7 +33,7 @@ describe("Ripen", function () {
 		assert.statStage(ripenWynaut, 'atk', 2);
 	});
 
-	it('should double damage done from Jaboca / Rowap Berries', function () {
+	it.skip('should double damage done from Jaboca / Rowap Berries', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'jabocaberry', moves: ['sleeptalk']},
 		], [
