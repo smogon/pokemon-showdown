@@ -3102,7 +3102,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "50% chance to OHKO the target; otherwise, it OHKOes itself. On successive uses, this move has a 1/2X chance of OHKOing the target, where X starts at 1 and doubles each time this move OHKOes the target. X resets to 1 if this move is not used in a turn.",
+		desc: "50% chance to OHKO the target; otherwise, it OHKOes itself. On successive uses, this move has a 1/X chance of OHKOing the target, where X starts at 2 and doubles each time this move OHKOes the target. X resets to 1 if this move is not used in a turn.",
 		shortDesc: "50/50 to KO target/self. Worse used repeatedly.",
 		name: "Not-so-worthy Pirouette",
 		isNonstandard: "Custom",
@@ -3117,10 +3117,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source) {
 			source.addVolatile('notsoworthypirouette');
-			let chance = 2;
-			if (source.volatiles['notsoworthypirouette']?.counter) {
-				chance = Math.floor(chance * source.volatiles['notsoworthypirouette'].counter);
-			}
+			const chance = source.volatiles['notsoworthypirouette']?.counter ? source.volatiles['notsoworthypirouette'].counter : 2;
 			if (this.randomChance(1, chance)) {
 				target.faint();
 			} else {
@@ -3130,10 +3127,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onStart() {
-				this.effectData.counter = 1;
+				this.effectData.counter = 2;
 			},
 			onRestart() {
-				this.effectData.counter++;
+				this.effectData.counter *= 2;
 				this.effectData.duration = 2;
 			},
 		},
