@@ -795,12 +795,12 @@ export class Pokemon {
 		if (this.attackedBy.length === 0) return undefined;
 		return this.attackedBy[this.attackedBy.length - 1];
 	}
-	/** attackedSide will filter out Attackers of the same side */
-	getLastDamagedBy(attackedSide?: Side) {
+
+	getLastDamagedBy(filterOutSameSide: boolean) {
 		const damagedBy: Attacker[] = this.attackedBy.filter(
 			(attacker) =>
 			  typeof attacker.damageValue === 'number' &&
-			  (attackedSide === undefined || attackedSide !== attacker.source.side)
+			  (filterOutSameSide === undefined || this.side !== attacker.source.side)
 		  );
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];
