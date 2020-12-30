@@ -1214,8 +1214,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	let maxGen = 0;
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
-			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
-			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false, pivot: false,
+			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {}, targets: {},
+			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, recoil: false, skip: false, pivot: false, multihit: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
