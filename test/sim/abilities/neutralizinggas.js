@@ -206,7 +206,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(wynaut, 'atk', 1);
 	});
 
-	it.only(`should cause entrance Abilities to reactivate in order of Speed`, function () {
+	it.skip(`should cause entrance Abilities to reactivate in order of Speed`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Pincurchin", ability: 'electricsurge', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
