@@ -106,16 +106,6 @@ describe('Pressure', function () {
 		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('darkpulse')).pp, 22);
 	});
 
-	it.skip(`should deduct additional PP from Max Moves`, function () {
-		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['darkpulse']},
-		], [
-			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
-		]]);
-		battle.makeChoices('move darkpulse dynamax', 'auto');
-		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('darkpulse')).pp, 22);
-	});
-
 	it.skip(`should deduct additional PP from submoves that target Pressure`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['assist']},
