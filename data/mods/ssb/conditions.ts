@@ -2187,9 +2187,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				for (const key of keys) {
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
-						this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
-					} else {
-						this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence', '[silent]');
+						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
 					}
 				}
 			}
