@@ -151,6 +151,7 @@ export const Scripts: BattleScriptsData = {
 		if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
 		let move = this.dex.getActiveMove(moveOrMoveName);
+		pokemon.lastMoveUsed = move;
 		if (move.id === 'weatherball' && zMove) {
 			// Z-Weather Ball only changes types if it's used directly,
 			// not if it's called by Z-Sleep Talk or something.

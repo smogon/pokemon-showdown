@@ -2445,11 +2445,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {authentic: 1},
 		onHit(target, source) {
-			if (!target.lastMove) {
+			if (!target.lastMoveUsed) {
 				return false;
 			}
 			const possibleTypes = [];
-			const attackType = target.lastMove.type;
+			const attackType = target.lastMoveUsed.type;
 			for (const type in this.dex.data.TypeChart) {
 				if (source.hasType(type)) continue;
 				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
