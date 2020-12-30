@@ -3116,16 +3116,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "High Jump Kick", target);
 		},
 		onHit(target, source) {
-			source.addVolatile('stall');
+			source.addVolatile('notsoworthypirouette');
 			let chance = 2;
-			if (source.volatiles['stall']) {
-				chance = Math.floor(chance * (source.volatiles['stall'].counter / 3));
+			if (source.volatiles['notsoworthypirouette']?.counter) {
+				chance = Math.floor(chance * source.volatiles['notsoworthypirouette'].counter);
 			}
 			if (this.randomChance(1, chance)) {
 				target.faint();
 			} else {
 				source.faint();
 			}
+		},
+		condition: {
+			duration: 2,
+			onStart() {
+				this.effectData.counter = 1;
+			},
+			onRestart() {
+				this.effectData.counter++;
+				this.effectData.duration = 2;
+			},
 		},
 		secondary: null,
 		target: "normal",
