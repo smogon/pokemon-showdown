@@ -205,4 +205,18 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('auto', 'move simplebeam');
 		assert.statStage(wynaut, 'atk', 1);
 	});
+
+	it.only(`should cause entrance Abilities to reactivate in order of Speed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Pincurchin", ability: 'electricsurge', moves: ['sleeptalk']},
+			{species: "Eternatus", moves: ['sleeptalk']},
+		], [
+			{species: "Rillaboom", ability: 'grassysurge', moves: ['sleeptalk']},
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('auto', 'move sleeptalk, switch 3');
+		assert(battle.field.isTerrain('electricterrain'));
+	});
 });
