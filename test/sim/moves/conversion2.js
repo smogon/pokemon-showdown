@@ -23,4 +23,15 @@ describe('Conversion2', function () {
 		battle.makeChoices('move conversion2', 'move sleeptalk');
 		assert(['Electric', 'Grass', 'Ground', 'Dragon'].includes(battle.p1.active[0].getTypes()[0]), 'should change type based on submove');
 	});
+
+	it('should respect the determined type of the last move', function () {
+		battle = common.createBattle([
+			[{species: 'porygon2', moves: ['electrify', 'conversion2']}],
+			[{species: 'shuckle', moves: ['tackle']}],
+		]);
+
+		battle.makeChoices('move electrify', 'move tackle');
+		battle.makeChoices('move conversion2', 'move tackle');
+		assert(['Electric', 'Grass', 'Ground', 'Dragon'].includes(battle.p1.active[0].getTypes()[0]), 'Tackle should be considered Electric');
+	});
 });
