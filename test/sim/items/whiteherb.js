@@ -50,7 +50,7 @@ describe("White Herb", function () {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it.skip('should activate after two Intimidate switch in on leads', function () {
+	it.skip('should activate after two Intimidate switch in at the same time', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'litten', ability: 'intimidate', moves: ['sleeptalk']},
 			{species: 'torracat', ability: 'intimidate', moves: ['sleeptalk', 'finalgambit']},
