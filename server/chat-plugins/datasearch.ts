@@ -134,7 +134,7 @@ export const commands: ChatCommands = {
 	dexsearchhelp() {
 		this.sendReplyBox(
 			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
-			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot, multi-hit.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
@@ -1178,7 +1178,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
 		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
-		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
+		'multihit', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
@@ -1288,6 +1288,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
+			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -1386,6 +1387,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					orGroup.pivot = true;
 				} else if ((orGroup.pivot && isNotSearch) || (!orGroup.pivot && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include pivot moves.'};
+				}
+				continue;
+			}
+
+			if (target === 'multihit') {
+				if (!orGroup.multihit) {
+					orGroup.multihit = true;
+				} else if ((orGroup.multihit && isNotSearch) || (!orGroup.multihit && !isNotSearch)) {
+					return {error: 'A search cannot both exclude and include multi-hit moves.'};
 				}
 				continue;
 			}
@@ -1675,6 +1685,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				} else if (flag === 'highcrit') {
 					const crit = move.willCrit || (move.critRatio && move.critRatio > 1);
 					if (!crit === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'multihit') {
+					if (!move.multihit === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
