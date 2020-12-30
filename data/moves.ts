@@ -1004,6 +1004,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
 		selfSwitch: 'copyvolatile',
 		secondary: null,
 		target: "self",
