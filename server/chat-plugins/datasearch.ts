@@ -46,6 +46,7 @@ interface MoveOrGroup {
 	recoil: boolean;
 	skip: boolean;
 	pivot: boolean;
+	multihit: boolean;
 }
 
 type Direction = 'less' | 'greater' | 'equal';
@@ -134,7 +135,7 @@ export const commands: ChatCommands = {
 	dexsearchhelp() {
 		this.sendReplyBox(
 			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
-			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot, multi-hit.<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
@@ -292,7 +293,7 @@ export const commands: ChatCommands = {
 			`Inequality ranges use the characters <code>></code> and <code><</code>.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water-type moves.<br/>` +
 			`<code>asc</code> or <code>desc</code> following a move property will arrange the names in ascending or descending order of that property, respectively; e.g., <code>basepower asc</code> will arrange moves in ascending order of their base powers.<br/>` +
-			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove and pivot.<br/>` +
+			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove, pivot, and multi-hit.<br/>` +
 			`A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`<code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`<code>max</code> or <code>gmax</code> as parameters will search for Max Moves and G-Max moves respectively.<br/>` +
