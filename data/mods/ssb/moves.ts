@@ -3101,8 +3101,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "55% chance to OHKO the target; otherwise, it OHKOs itself.",
-		shortDesc: "55% chance to OHKO target. 45% to OHKO user.",
+		desc: "50% chance to OHKO the target; otherwise, it OHKOes itself. On successive uses, this move has a 1/2X chance of OHKOing the target, where X starts at 1 and doubles each time this move OHKOes the target. X resets to 1 if this move is not used in a turn.",
+		shortDesc: "50/50 to KO target/self. Worse used repeatedly.",
 		name: "Not-so-worthy Pirouette",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3115,7 +3115,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "High Jump Kick", target);
 		},
 		onHit(target, source) {
-			if (this.randomChance(1, 2)) {
+			source.addVolatile('stall');
+			let chance = 2;
+			if (source.volatiles['stall']) {
+				chance = Math.floor(chance * (source.volatiles['stall'].counter / 3));
+			}
+			if (this.randomChance(1, chance)) {
 				target.faint();
 			} else {
 				source.faint();
