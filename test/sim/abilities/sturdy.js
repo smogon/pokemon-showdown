@@ -77,7 +77,7 @@ describe('Sturdy', function () {
 
 		battle.makeChoices();
 		const sturdyIndex = battle.getDebugLog().indexOf('|-ability|p2a: Stufful|Sturdy');
-		assert(sturdyIndex, -1, 'Sturdy should not activate.');
+		assert.equal(sturdyIndex, -1, 'Sturdy should not activate.');
 	});
 
 	it(`should not trigger when the user is damaged to 1 HP from False Swipe`, function () {
@@ -89,6 +89,6 @@ describe('Sturdy', function () {
 
 		battle.makeChoices();
 		const sturdyIndex = battle.getDebugLog().indexOf('|-ability|p2a: Stufful|Sturdy');
-		assert(sturdyIndex, -1, 'Sturdy should not activate.');
+		assert.equal(sturdyIndex, -1, 'Sturdy should not activate.');
 	});
 });
