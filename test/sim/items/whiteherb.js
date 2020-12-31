@@ -37,19 +37,6 @@ describe("White Herb", function () {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it.skip('should activate after Abilities that boost stats on KOs', function () {
-		battle = common.createBattle([[
-			{species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk']},
-			{species: 'torracat', moves: ['partingshot']},
-		], [
-			{species: 'wynaut', item: 'whiteherb', ability: 'grimneigh', moves: ['dracometeor']},
-		]]);
-		battle.makeChoices();
-		const wynaut = battle.p2.active[0];
-		assert.false.holdsItem(wynaut);
-		assert.statStage(wynaut, 'spa', 0);
-	});
-
 	it.skip('should activate after two Intimidate switch in at the same time', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'litten', ability: 'intimidate', moves: ['sleeptalk']},
