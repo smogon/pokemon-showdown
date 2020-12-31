@@ -3,27 +3,26 @@
  * By Spandamn
  */
 
-import {MinorActivity} from './poll';
-
 export interface AnnouncementOptions {
-	announcementNumber?: number;
+	activityNumber?: number;
 	source: string;
 	timeoutMins?: number;
 	timerEnd?: number;
 }
 
 export interface AnnouncementData extends AnnouncementOptions {
-	readonly activityId: 'announcement';
+	readonly activityid: 'announcement';
 }
 
-export class Announcement extends MinorActivity {
-	readonly activityId: 'announcement';
-	announcementNumber: number;
+export class Announcement extends Rooms.MinorActivity {
+	readonly activityid = 'announcement' as ID;
+	name = 'Announcement';
+	onRename = undefined;
+	activityNumber: number;
 	source: string;
 	constructor(room: Room, options: AnnouncementOptions) {
 		super(room);
-		this.activityId = 'announcement';
-		this.announcementNumber = options.announcementNumber || room.nextGameNumber();
+		this.activityNumber = options.activityNumber || room.nextGameNumber();
 		this.source = options.source;
 		this.setTimer(options);
 	}
@@ -49,28 +48,24 @@ export class Announcement extends MinorActivity {
 		this.displayTo(user, connection);
 	}
 
-	end() {
-		this.endTimer();
-		this.room.send(`|uhtmlchange|announcement${this.announcementNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
-		delete this.room.settings.minorActivity;
-		this.room.minorActivity = null;
-		this.room.saveSettings();
+	endActivity() {
+		this.room.send(`|uhtmlchange|announcement${this.activityNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
+		this.room.setMinorActivity(null);
 	}
+
 	toJSON(): AnnouncementData {
 		return {
 			source: this.source,
-			announcementNumber: this.announcementNumber,
+			activityNumber: this.activityNumber,
 			timeoutMins: this.timeoutMins,
 			timerEnd: this.timerEnd,
-			activityId: 'announcement',
+			activityid: 'announcement',
 		};
 	}
+
 	save() {
 		this.room.settings.minorActivity = this.toJSON();
 		this.room.saveSettings();
-	}
-	destroy() {
-		this.endTimer();
 	}
 }
 
@@ -98,9 +93,7 @@ export const commands: ChatCommands = {
 
 			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
 
-			room.minorActivity = new Announcement(room, {source});
-			room.minorActivity.display();
-			room.minorActivity.save();
+			room.setMinorActivity(new Announcement(room, {source}));
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
@@ -146,14 +139,10 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			const announcement = room.getMinorActivity(Announcement);
-			if (!announcement) {
-				return this.errorReply(this.tr`There is no announcement running in this room.`);
-			}
-			const announcement = room.minorActivity;
-			announcement.end();
+			const announcement = this.requireMinorActivity(Announcement);
+			announcement.end(room);
 			this.modlog('ANNOUNCEMENT END');
-			return this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
+			this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
@@ -190,8 +179,7 @@ process.nextTick(() => {
 
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
-	if (room.settings.minorActivity?.activityId === 'announcement') {
-		room.minorActivity?.destroy();
-		room.minorActivity = new Announcement(room, room.settings.minorActivity);
+	if (room.settings.minorActivity?.activityid === 'announcement') {
+		room.setMinorActivity(new Announcement(room, room.settings.minorActivity));
 	}
 }

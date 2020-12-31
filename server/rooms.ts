@@ -115,7 +115,7 @@ export interface RoomSettings {
 	requestShowEnabled?: boolean | null;
 	permissions?: {[k: string]: GroupSymbol};
 	minorActivity?: PollData | AnnouncementData;
-	minorActivityQueue?: (PollData | AnnouncementData)[];
+	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
 
 	scavSettings?: AnyObject;
@@ -133,7 +133,7 @@ export interface RoomSettings {
 export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
 
-import type {Announcement, AnnouncementData} from './chat-plugins/announcements';
+import type {AnnouncementData} from './chat-plugins/announcements';
 import type {Poll, PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
@@ -201,8 +201,8 @@ export abstract class BasicRoom {
 	batchJoins: number;
 	reportJoinsInterval: NodeJS.Timer | null;
 
-	minorActivity: Poll | Announcement | null;
-	minorActivityQueue: PollData[] | null;
+	minorActivity: MinorActivity | null;
+	minorActivityQueue: MinorActivityData[] | null;
 	banwordRegex: RegExp | true | null;
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
@@ -497,29 +497,39 @@ export abstract class BasicRoom {
 		if (this.minorActivity?.constructor.name === constructor.name) return this.minorActivity as T;
 		return null;
 	}
-	getMinorActivityQueue<T extends MinorActivity>(constructor: new (...args: any[]) => T): T[] | null {
-		if (!this.minorActivityQueue?.length) return null;
-		const queue = this.minorActivityQueue.filter(activity => activity.constructor.name === constructor.name);
-		if (!queue.length) return null;
-		return queue as T[];
+	getMinorActivityQueue(settings = false): MinorActivityData[] | null {
+		const usedQueue = settings ? this.settings.minorActivityQueue : this.minorActivityQueue;
+		if (!usedQueue?.length) return null;
+		return usedQueue;
 	}
-	queueMinorActivity(activity: MinorActivity): void {
+	queueMinorActivity(activity: MinorActivityData): void {
 		if (!this.minorActivityQueue) this.minorActivityQueue = [];
 		this.minorActivityQueue.push(activity);
+		this.settings.minorActivityQueue = this.minorActivityQueue;
 	}
 	clearMinorActivityQueue(slot?: number, depth = 1) {
 		if (!this.minorActivityQueue) return;
 		if (!slot) {
 			this.minorActivityQueue = null;
+			delete this.settings.minorActivityQueue;
+			this.saveSettings();
 		} else {
 			this.minorActivityQueue.splice(slot, depth);
+			this.settings.minorActivityQueue = this.minorActivityQueue;
+			this.saveSettings();
 			if (!this.minorActivityQueue.length) this.clearMinorActivityQueue();
 		}
 	}
 	setMinorActivity(activity: MinorActivity | null): void {
-		if (this.minorActivity?.timeout) clearTimeout(this.minorActivity.timeout);
+		this.minorActivity?.endTimer();
 		this.minorActivity = activity;
-		if (this.minorActivity?.display) this.minorActivity.display();
+		if (this.minorActivity) {
+			this.minorActivity.save()
+			this.minorActivity.display();
+		} else {
+			delete this.settings.minorActivity;
+			this.saveSettings();
+		}
 	}
 	saveSettings() {
 		if (!this.persist) return;

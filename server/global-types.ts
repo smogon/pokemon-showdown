@@ -44,6 +44,7 @@ type GameRoom = Rooms.GameRoom;
 type BasicRoom = Rooms.BasicRoom;
 type RoomGame = Rooms.RoomGame;
 type MinorActivity = Rooms.MinorActivity;
+type MinorActivityData = Rooms.MinorActivityData;
 type RoomBattle = Rooms.RoomBattle;
 type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;
@@ -58,6 +59,7 @@ namespace Rooms {
 	export type BasicRoom = import('./rooms').BasicRoom;
 	export type RoomGame = import('./room-game').RoomGame;
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
+	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
