@@ -216,8 +216,8 @@ export const Utils = new class {
 	}
 
 	/**
-	* Template string tag function for escaping HTML
-	*/
+	 * Template string tag function for escaping HTML
+	 */
 	html(strings: TemplateStringsArray, ...args: any) {
 		let buf = strings[0];
 		let i = 0;
@@ -226,6 +226,26 @@ export const Utils = new class {
 			buf += strings[++i];
 		}
 		return buf;
+	}
+
+	/**
+	 * HTML doesn't support `word-wrap: break-word` in tables, but sometimes it
+	 * would be really nice if it did. This emulates `word-wrap: break-word` by
+	 * manually inserting U+200B (zero-width space, the force-wrap cahracter) in long words.
+	 */
+	forceWrap(text: string) {
+		return text.replace(/[^\s]{30,}/g, word => {
+			let lastBreak = 0;
+			let brokenWord = '';
+			for (let i = 1; i < word.length; i++) {
+				if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
+					brokenWord += word.slice(lastBreak, i) + '\u200B';
+					lastBreak = i;
+				}
+			}
+			brokenWord += word.slice(lastBreak);
+			return brokenWord;
+		});
 	}
 
 	shuffle<T>(arr: T[]): T[] {
