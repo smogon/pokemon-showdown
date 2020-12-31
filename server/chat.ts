@@ -1480,8 +1480,9 @@ export const Chat = new class {
 		// ensure that english is the first entry when we iterate over Chat.languages
 		Chat.languages.set('english' as ID, 'English');
 		for (const dirname of directories) {
+			// translation dirs shouldn't have caps, but things like sourceMaps and the README will
+			if (/[^a-z0-9]/.test(dirname)) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
-			if (!dir.isDirectorySync()) continue;
 
 			// For some reason, toID() isn't available as a global when this executes.
 			const languageID = Dex.toID(dirname);
@@ -1598,9 +1599,19 @@ export const Chat = new class {
 	 */
 	parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
 		Chat.loadPlugins();
-		const context = new CommandContext({message, room, user, connection});
 
-		return context.parse();
+		const initialRoomlogLength = room?.log.log.length;
+		const context = new CommandContext({message, room, user, connection});
+		const result = context.parse();
+
+		if (room && room.log.log.length !== initialRoomlogLength) {
+			room.messagesSent++;
+			for (const [handler, numMessages] of room.nthMessageHandlers) {
+				if (room.messagesSent % numMessages === 0) handler(room, message);
+			}
+		}
+
+		return result;
 	}
 	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -2040,11 +2051,11 @@ export const Chat = new class {
 		const output = [];
 		for (const param of params) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
-			output.push(Utils.escapeHTML(param));
+			output.push(Utils.escapeHTML(isCode ? Utils.forceWrap(param) : param));
 		}
 
 		if (output.length > cutoff) {
-			return `<details class="readmore${isCode ? ` code` : ``}" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
+			return `<details class="readmore${isCode ? ` code" style="white-space: pre-wrap; display: table; tab-size: 3` : ``}"><summary>${
 				output.slice(0, cutoff).join('<br />')
 			}</summary>${
 				output.slice(cutoff).join('<br />')

@@ -1922,7 +1922,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["closecombat", "flareblitz", "knockoff", "protect", "swordsdance"],
 		randomDoubleBattleLevel: 78,
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
 	blazikenmega: {
@@ -6052,8 +6052,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	zarudedada: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		randomBattleMoves: ["bulkup", "closecombat", "darkestlariat", "junglehealing", "powerwhip", "uturn"],
+		randomBattleLevel: 82,
+		randomDoubleBattleMoves: ["closecombat", "darkestlariat", "junglehealing", "powerwhip", "protect", "rockslide"],
+		randomDoubleBattleLevel: 80,
 	},
 	regieleki: {
 		randomBattleMoves: ["explosion", "substitute", "thunderbolt", "voltswitch"],
@@ -6346,6 +6348,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	astrolotl: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	miasmite: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	miasmaw: {
 		isNonstandard: "CAP",

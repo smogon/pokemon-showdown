@@ -187,7 +187,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Celestial: {
-		species: 'Dragonite', ability: 'Speed Boost', item: 'Metal Coat', gender: '',
+		species: 'Dragonite', ability: 'Speed Control', item: 'Metal Coat', gender: '',
 		moves: ['Swords Dance', 'Thousand Arrows', 'Double Iron Bash'],
 		signatureMove: 'Pandora\'s Box',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: 2,
@@ -330,9 +330,9 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adamant',
 	},
 	grimAuxiliatrix: {
-		species: 'Duraludon', ability: 'Bio-steel', item: 'Assault Vest', gender: '',
-		moves: [['Core Enforcer', 'Draco Meteor'], 'Flash Cannon', ['Thunderbolt', 'Fire Blast']],
-		signatureMove: 'Fuel Leak',
+		species: 'Duraludon', ability: 'Aluminum Alloy', item: 'Assault Vest', gender: '',
+		moves: [['Core Enforcer', 'Draco Meteor'], 'Fire Blast', ['Thunderbolt', 'Earth Power']],
+		signatureMove: 'Skyscraper Suplex',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	HoeenHero: {
@@ -512,7 +512,7 @@ export const ssbSets: SSBSets = {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
 		moves: ['Shadow Ball', 'Flamethrower', 'Trick Room'],
 		signatureMove: 'Mad Hacks',
-		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', shiny: true,
 	},
 	Notater517: {
 		species: 'Jellicent', ability: 'Last-Minute Lag', item: 'Leftovers', gender: 'M',
@@ -571,8 +571,8 @@ export const ssbSets: SSBSets = {
 	},
 	'Perish Song': {
 		species: 'Rhydon', ability: 'Soup Sipper', item: 'Rocky Helmet', gender: 'M',
-		moves: ['Swords Dance', 'Rock Blast', 'Earthquake'],
-		signatureMove: 'Shifting Rocks',
+		moves: ['Swords Dance', 'Stealth Rock', 'Rock Blast'],
+		signatureMove: 'Trickery',
 		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 	},
 	phiwings99: {
@@ -657,7 +657,7 @@ export const ssbSets: SSBSets = {
 		species: 'Mismagius', ability: 'Phantom Plane', item: 'Spell Tag', gender: '',
 		moves: ['Shadow Ball', 'Dark Pulse', 'Psychic'],
 		signatureMove: 'Witching Hour',
-		evs: {def: 4, spa: 52, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Robb576: {
 		species: 'Necrozma-Dawn-Wings', ability: 'The Numbers Game', item: 'Metronome', gender: 'M',
@@ -863,7 +863,7 @@ export const ssbSets: SSBSets = {
 		species: 'Azelf', ability: 'Magic Bounce', item: ['Life Orb', 'Expert Belt'], gender: 'M',
 		moves: ['Photon Geyser', 'Knock Off', ['U-turn', 'Play Rough', 'Close Combat']],
 		signatureMove: 'Luck of the Draw',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Timid',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 };
 

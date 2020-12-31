@@ -113,17 +113,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', source, 'Scyphozoa');
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
+				const boostTotal = Object.values(pokemon.boosts).reduce((num, add) => num + add);
+				if (boostTotal !== 0) successes++;
 				pokemon.clearBoosts();
-				successes++;
 				if (pokemon.removeVolatile('substitute')) successes++;
 			}
 			const target = source.side.foe.active[0];
 
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'gmaxsteelsurge', 'ferrofluid',
-				'spikes', 'toxicspikes', 'stealthrock', 'shiftingrocks', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 			];
-			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'shiftingrocks', 'ferrofluid'];
+			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
@@ -521,6 +522,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Celestial
+	speedcontrol: {
+		onStart(pokemon) {
+			this.boost({spe: 1}, pokemon);
+		},
+		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+		name: "Speed Control",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Celine
 	guardianarmor: {
 		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 2 stages.",
@@ -670,6 +682,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Bipolar",
 		isPermanent: true,
 		onSwitchIn(pokemon) {
+			if (pokemon.species.baseSpecies !== 'Kartana') return;
 			const typeMap: {[key: string]: string} = {
 				Normal: "Return",
 				Fighting: "Sacred Sword",
@@ -798,7 +811,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon uses a status move or a custom move, it changes its typing and boosts one of its stats by 1 stage randomly between four options: Bug/Fire type with a Special Attack boost, Bug/Steel type with a Defense boost, Bug/Rock type with a Special Defense boost, and Bug/Electric type with a Speed boost.",
 		shortDesc: "On use of status or custom, this Pokemon changes type and gets a boost.",
 		isPermanent: true,
-		onPrepareHit(source, target, move) {
+		onBeforeMove(source, target, move) {
 			if (move.category !== "Status" && move.isNonstandard !== "Custom") return;
 			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
 			const type = ['Bug', this.sample(types)];
@@ -903,10 +916,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// grimAuxiliatrix
-	biosteel: {
-		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages.",
-		shortDesc: "Regenerator + Clear Body.",
-		name: "Bio-steel",
+	aluminumalloy: {
+		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages. -1 Speed, +1 Def/Sp.Def when hit with a Water-type attacking move or switching into rain.",
+		shortDesc: "Regenerator+Clear Body.+1 def/spd,-1 spe in rain/hit by water",
+		name: "Aluminum Alloy",
+		onSwitchIn(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
+				this.add('-message', `grimAuxiliatrix is rusting...`);
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Water') {
+				this.boost({def: 1, spd: 1, spe: -1}, target, target);
+				this.add('-message', `grimAuxiliatrix is rusting...`);
+			}
+		},
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
@@ -921,7 +946,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Bio-steel", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Aluminum Alloy", "[of] " + target);
 			}
 		},
 		isNonstandard: "Custom",
@@ -1216,7 +1241,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				for (const source of this.effectData.sources) {
 					if (!source.hp || source.volatiles['gastroacid']) continue;
 					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'ability: Degenerator');
+						const foe = pokemon.side.foe.active[0];
+						if (foe) this.add('-activate', foe, 'ability: Degenerator');
 						alreadyAdded = true;
 					}
 					this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
@@ -1347,7 +1373,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			// Infinite Loop preventer
-			if (effect.id.includes('stubbornness')) return;
+			if (effect && ['stubbornness'].includes(effect.id)) return;
 			if (success) {
 				if (!this.effectData.happened) {
 					this.boost({atk: 1, def: 1, spd: 1}, pokemon);
@@ -1576,8 +1602,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// piloswine gripado
 	foreverwinternights: {
-		desc: "On switch-in, this Pokemon summons Winter Hail. Winter Hail is hail that also lowers the Speed of non-Ice-type Pokemon by 75%. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
-		shortDesc: "Sets permahail until this Pokemon switches out. Non-Ice: 1/4 Speed",
+		desc: "On switch-in, this Pokemon summons Winter Hail. Winter Hail is hail that also lowers the Speed of non-Ice-type Pokemon by 50%. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
+		shortDesc: "Sets permahail until this Pokemon switches out. Non-Ice: 1/2 Speed",
 		onStart(source) {
 			this.field.setWeather('winterhail');
 		},
@@ -1610,16 +1636,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			const moves = Object.values(pokemon.getMoves()).map(move => move.id);
-			const types: string[] = [];
-			for (const move of moves) {
-				types.push(this.dex.getMove(move).type);
+			const types = pokemon.moveSlots.map(slot => this.dex.getMove(slot.id).type);
+			const type = types.length ? this.sample(types) : '???';
+			if (pokemon.setType(type)) {
+				this.add('-ability', pokemon, 'Wild Magic Surge');
+				this.add('-start', pokemon, 'typechange', type);
 			}
-			let type = this.sample(types);
-			while (!pokemon.setType(type)) {
-				type = this.sample(types);
-			}
-			this.add('-start', pokemon, 'typechange', type);
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1875,6 +1897,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
+			if (!this.effectData.immunities) return;
 			this.add('-end', pokemon, `${this.effectData.immunities[0]} Immunity`, '[silent]');
 			this.add('-end', pokemon, `${this.effectData.immunities[1]} Immunity`, '[silent]');
 			delete this.effectData.immunities;
@@ -2313,6 +2336,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts['spa'] = 0;
 				boosts['spd'] = 0;
 				boosts['accuracy'] = 0;
+			}
+		},
+	},
+	// Modified Stakeout for Hubriz to have a failsafe
+	stakeout: {
+		inherit: true,
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender) {
+			if (!defender?.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender) {
+			if (!defender?.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
 			}
 		},
 	},
