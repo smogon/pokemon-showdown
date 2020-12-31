@@ -15,6 +15,10 @@ export type ConfigType = typeof defaults & {
 	greatergroupscache: {[combo: string]: GroupSymbol},
 	[k: string]: any,
 };
+/** Map<process flag, config settings for it to turn on> */
+const FLAG_PRESETS = new Map([
+	['--no-security', ['nothrottle', 'noguestsecurity', 'noipchecks']],
+]);
 
 const CONFIG_PATH = require.resolve('../config/config');
 
@@ -30,6 +34,12 @@ export function load(invalidate = false) {
 			require('better-sqlite3');
 		} catch (e) {
 			throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
+		}
+	}
+
+	for (const [preset, values] of FLAG_PRESETS) {
+		if (process.argv.includes(preset)) {
+			for (const value of values) config[value] = true;
 		}
 	}
 

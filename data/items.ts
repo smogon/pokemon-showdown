@@ -3015,6 +3015,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 80,
 			type: "Flying",
 		},
+		onAfterSetStatusPriority: -1,
 		onAfterSetStatus(status, pokemon) {
 			pokemon.eatItem();
 		},
