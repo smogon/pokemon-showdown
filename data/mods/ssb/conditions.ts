@@ -757,8 +757,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('INStruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
-		desc: "Upon fainting, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
-		shortDesc: "Upon fainting, deal 50% of their max HP to all foes that this Pokemon contacted.",
+		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
+		shortDesc: "Upon foe KO, deal 50% of their max HP to all foes that this Pokemon contacted.",
 		// Extinction Level Event Innate
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
