@@ -48,7 +48,7 @@ export class Announcement extends Rooms.MinorActivity {
 		this.displayTo(user, connection);
 	}
 
-	endActivity() {
+	destroy() {
 		this.room.send(`|uhtmlchange|announcement${this.activityNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
 		this.room.setMinorActivity(null);
 	}

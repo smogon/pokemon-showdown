@@ -17,8 +17,6 @@
  * @license MIT
  */
 
-import {Poll} from "./chat-plugins/poll";
-
 export interface MinorActivityData {
 	readonly activityid: 'announcement' | 'poll';
 	activityNumber?: number;
@@ -77,8 +75,8 @@ export abstract class MinorActivity {
 		this.save();
 	}
 
-	end(room: Room) {
-		room.minorActivity?.endActivity?.();
+	end(room: Room, MinorActivityClass?: new (...args: any[]) => any) {
+		room.minorActivity?.destroy();
 		if (room.minorActivityQueue?.length) {
 			const pollData = room.minorActivityQueue.shift()!;
 			room.settings.minorActivityQueue!.shift();
@@ -96,7 +94,11 @@ export abstract class MinorActivity {
 				note: '(queued)',
 			});
 
-			room.setMinorActivity(new Poll(room, pollData));
+			if (!MinorActivityClass) {
+				if (pollData.activityid === 'poll') throw new Error('No minorActivity class provided');
+			} else {
+				room.setMinorActivity(new MinorActivityClass(room, pollData));
+			}
 		}
 	}
 
@@ -108,9 +110,10 @@ export abstract class MinorActivity {
 		return true;
 	}
 
+	abstract destroy(): void;
 	abstract display(): void;
-	abstract endActivity?(): void;
 	abstract onConnect?(user: User, connection: Connection | null): void;
 	abstract onRename?(user: User, oldid: ID, joining: boolean): void;
+	abstract toJSON(): AnyObject;
 	abstract save(): void;
 }

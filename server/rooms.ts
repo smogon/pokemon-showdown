@@ -134,7 +134,7 @@ export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
 
 import type {AnnouncementData} from './chat-plugins/announcements';
-import type {Poll, PollData} from './chat-plugins/poll';
+import type {PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
 import type {Tournament} from './tournaments/index';
@@ -524,7 +524,7 @@ export abstract class BasicRoom {
 		this.minorActivity?.endTimer();
 		this.minorActivity = activity;
 		if (this.minorActivity) {
-			this.minorActivity.save()
+			this.minorActivity.save();
 			this.minorActivity.display();
 		} else {
 			delete this.settings.minorActivity;
@@ -911,8 +911,8 @@ export abstract class BasicRoom {
 			connection,
 			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
 		);
-		if (this.minorActivity?.onConnect) this.minorActivity.onConnect(user, connection);
-		if (this.game?.onConnect) this.game.onConnect(user, connection);
+		this.minorActivity?.onConnect?.(user, connection);
+		this.game?.onConnect?.(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
@@ -928,8 +928,8 @@ export abstract class BasicRoom {
 		this.users[user.id] = user;
 		this.userCount++;
 
-		if (this.minorActivity?.onConnect) this.minorActivity.onConnect(user, connection);
-		if (this.game?.onJoin) this.game.onJoin(user, connection);
+		this.minorActivity?.onConnect?.(user, connection);
+		this.game?.onJoin?.(user, connection);
 		return true;
 	}
 	onRename(user: User, oldid: ID, joining: boolean) {
@@ -953,7 +953,7 @@ export abstract class BasicRoom {
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + oldid, user);
 		}
-		if (this.minorActivity?.onRename) this.minorActivity.onRename(user, oldid, joining);
+		this.minorActivity?.onRename?.(user, oldid, joining);
 		return true;
 	}
 	/**

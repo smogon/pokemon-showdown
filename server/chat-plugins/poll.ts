@@ -160,7 +160,10 @@ export class Poll extends Rooms.MinorActivity {
 		return output;
 	}
 
-	static generateResults(options: PollData | MinorActivityData, room: Room, ended = false, choice: number[] | null = null) {
+	static generateResults(
+		options: MinorActivityData, room: Room,
+		ended = false, choice: number[] | null = null
+	) {
 		const iconText = options.isQuiz ?
 			`<i class="fa fa-question"></i> ${room.tr`Quiz`}` :
 			`<i class="fa fa-bar-chart"></i> ${room.tr`Poll`}`;
@@ -254,7 +257,8 @@ export class Poll extends Rooms.MinorActivity {
 			const selection = this.voters[thisUser.id] || this.voterIps[thisUser.latestIp];
 			if (selection) {
 				if (selection.length) {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, selection)}`);
+					thisUser.sendTo(this.room,
+						`|uhtml|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, selection)}`);
 				} else {
 					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${blankvote}`);
 				}
@@ -295,7 +299,7 @@ export class Poll extends Rooms.MinorActivity {
 		}
 	}
 
-	endActivity() {
+	destroy() {
 		const results = Poll.generateResults(this.toJSON(), this.room, true);
 		this.room.send(`|uhtmlchange|poll${this.activityNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
 		this.room.add(`|html|${results}`).update();
@@ -553,7 +557,7 @@ export const commands: ChatCommands = {
 			const poll = this.requireMinorActivity(Poll);
 			this.modlog('POLL END');
 			this.privateModAction(room.tr`The poll was ended by ${user.name}.`);
-			poll.end(room);
+			poll.end(room, Poll);
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
 
@@ -627,6 +631,38 @@ process.nextTick(() => {
 
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
+	if (room.getMinorActivityQueue(true)) {
+		for (const poll of room.getMinorActivityQueue(true)!) {
+			if (!poll.activityid) {
+				// @ts-ignore
+				poll.activityid = poll.activityId;
+				// @ts-ignore
+				delete poll.activityId;
+			}
+			if (!poll.activityNumber) {
+				// @ts-ignore
+				poll.activityNumber = poll.pollNumber;
+				// @ts-ignore
+				delete poll.pollNumber;
+			}
+			room.saveSettings();
+		}
+	}
+	if (room.settings.minorActivity) {
+		if (!room.settings.minorActivity.activityid) {
+			// @ts-ignore
+			room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
+			// @ts-ignore
+			delete room.settings.minorActivity.activityId;
+		}
+		if (typeof room.settings.minorActivity.activityNumber !== 'number') {
+			// @ts-ignore
+			room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
+				// @ts-ignore
+				room.settings.minorActivity.announcementNumber;
+		}
+		room.saveSettings();
+	}
 	if (room.settings.minorActivity?.activityid === 'poll') {
 		room.setMinorActivity(new Poll(room, room.settings.minorActivity));
 	}
