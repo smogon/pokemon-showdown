@@ -206,17 +206,74 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(wynaut, 'atk', 1);
 	});
 
-	it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
+	it(`should not re-trigger Unnerve if the ability was already triggered before`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Pincurchin", ability: 'electricsurge', moves: ['sleeptalk']},
-			{species: "Eternatus", moves: ['sleeptalk']},
+			{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
+			{species: "Eternatus", ability: 'pressure', moves: ['sleeptalk']},
 		], [
-			{species: "Rillaboom", ability: 'grassysurge', moves: ['sleeptalk']},
-			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Rookidee", ability: 'unnerve', moves: ['sleeptalk']},
 			{species: "Diglett", moves: ['sleeptalk']},
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
 		]]);
 
+		// Unnerve activates properly on lead
 		battle.makeChoices('auto', 'move sleeptalk, switch 3');
-		assert(battle.field.isTerrain('electricterrain'));
+		battle.makeChoices('auto', 'move sleeptalk, switch 3');
+
+		// It will become active again after a Neutralizing Gas cycle, but without the Ability message
+		battle.makeChoices('auto', 'move sleeptalk, switch 3');
+
+		const log = battle.getDebugLog();
+		const firstUnnerveIndex = log.indexOf('|-ability|p2a: Rookidee|Unnerve');
+		const secondUnnerveIndex = log.lastIndexOf('|-ability|p2a: Rookidee|Unnerve');
+		assert.equal(firstUnnerveIndex, secondUnnerveIndex, 'Unnerve should have only activated once.');
+	});
+
+	describe(`Ability reactivation order`, function () {
+		it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: "Pincurchin", ability: 'electricsurge', moves: ['sleeptalk']},
+				{species: "Eternatus", moves: ['sleeptalk']},
+			], [
+				{species: "Rillaboom", ability: 'grassysurge', moves: ['sleeptalk']},
+				{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+				{species: "Diglett", moves: ['sleeptalk']},
+			]]);
+
+			battle.makeChoices('auto', 'move sleeptalk, switch 3');
+			assert(battle.field.isTerrain('electricterrain'));
+		});
+
+		it(`should cause non-entrance abilities to be active immediately`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
+				{species: "Eternatus", moves: ['sleeptalk']},
+			], [
+				{species: "Salamence", ability: 'intimidate', moves: ['sleeptalk']},
+				{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+				{species: "Diglett", moves: ['sleeptalk']},
+			]]);
+
+			battle.makeChoices('auto', 'move sleeptalk, switch 3');
+			assert.statStage(battle.p1.active[0], 'atk', 1);
+		});
+
+		it.skip(`should not give Unnerve priority in activation`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
+				{species: "Eternatus", ability: 'pressure', moves: ['sleeptalk']},
+			], [
+				{species: "Rookidee", ability: 'unnerve', moves: ['sleeptalk']},
+				{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+				{species: "Diglett", moves: ['sleeptalk']},
+			]]);
+
+			battle.makeChoices('auto', 'move sleeptalk, switch 3');
+
+			const log = battle.getDebugLog();
+			const pressureIndex = log.indexOf('|-ability|p1b: Eternatus|Pressure');
+			const unnerveIndex = log.indexOf('|-ability|p2a: Rookidee|Unnerve');
+			assert(pressureIndex < unnerveIndex, 'Faster Pressure should activate before slower Unnerve');
+		});
 	});
 });
