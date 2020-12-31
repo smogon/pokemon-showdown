@@ -10,7 +10,7 @@ describe('Synchronize', function () {
 		battle.destroy();
 	});
 
-	it.only(`should complete before Lum Berry can trigger`, function () {
+	it.skip(`should complete before Lum Berry can trigger`, function () {
 		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[ // Currently determined by RNG; it should not
 			{species: 'alakazam', ability: 'synchronize', item: 'lumberry', moves: ['sleeptalk']},
 		], [
