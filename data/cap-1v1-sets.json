@@ -1,11 +1,5 @@
 {
 	"Arghonaut": [{
-		"item": "Wacan Berry",
-		"ability": "Unaware",
-		"evs": {"hp": 252, "atk": 4, "spd": 252},
-		"nature": "Careful",
-		"moves": ["Focus Punch", "Waterfall", "Yawn", "Protect"]
-	}, {
 		"item": "Choice Band",
 		"ability": "Technician",
 		"evs": {"hp": 252, "atk": 204, "spd": 52},
@@ -19,24 +13,24 @@
 		"moves": ["Mach Punch", "Aqua Jet", "Earthquake", "Knock Off"]
 	}],
 	"Astrolotl": [{
-		"item": "Life Orb",
-		"ability": "Vital Spirit",
-		"evs": {"hp": 32, "atk": 252, "spe": 224},
-		"nature": "Jolly",
-		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Taunt"]
-	}, {
-		"item": "Life Orb",
-		"ability": "Vital Spirit",
-		"evs": {"hp": 32, "spa": 252, "spe": 224},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Fire Blast", "Draco Meteor", "Dazzling Gleam", "Taunt"]
-	}, {
-		"item": "Shuca Berry",
+		"item": "Air Balloon",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 252, "spd": 32, "spe": 224},
 		"nature": "Jolly",
 		"moves": ["Fire Lash", "Yawn", "Wish", "Protect"]
+	}, {
+		"item": "Choice Band",
+		"ability": "Vital Spirit",
+		"evs": {"hp": 32, "atk": 252, "spe": 224},
+		"nature": "Jolly",
+		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Trick"]
+	}, {
+		"item": "Choice Specs",
+		"ability": "Vital Spirit",
+		"evs": {"hp": 32, "spa": 252, "spe": 224},
+		"nature": "Timid",
+		"ivs": {"atk": 0},
+		"moves": ["Draco Meteor", "Overheat", "Dazzling Gleam", "Trick"]
 	}],
 	"Aurumoth": [{
 		"item": "Choice Scarf",
@@ -44,87 +38,48 @@
 		"evs": {"hp": 40, "spa": 252, "spe": 216},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": [["Psyshock", "Psychic"], "Thunder", ["Focus Blast", "Overheat"], "Bug Buzz"]
+		"moves": ["Psyshock", "Thunder", "Focus Blast", ["Overheat", "Bug Buzz"]]
 	}, {
 		"item": "Choice Specs",
 		"ability": "No Guard",
-		"evs": {"hp": 72, "spa": 252, "spe": 184},
-		"nature": "Timid",
+		"evs": {"hp": 228, "def": 132, "spa": 152},
+		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": ["Thunder", "Blizzard", "Bug Buzz", "Psychic"]
+		"moves": ["Psyshock", "Thunder", "Blizzard", "Overheat"]
 	}],
 	"Caribolt": [{
-		"item": "Magnet",
+		"item": ["Choice Band", "Choice Scarf"],
 		"ability": "Galvanize",
-		"evs": {"atk": 252, "def": 4, "spe": 252},
+		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Swords Dance", "Double-Edge", "Quick Attack", ["Power Whip", "Horn Leech"]]
+		"moves": ["Giga Impact", "Power Whip", "Knock Off", "Brick Break"]
 	}, {
 		"item": "Life Orb",
 		"ability": "Galvanize",
-		"evs": {"hp": 96, "atk": 252, "spe": 160},
+		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Giga Impact", "Horn Leech", "Swords Dance", "Rapid Spin"]
-	}, {
-		"item": "Choice Specs",
-		"ability": "Galvanize",
-		"evs": {"spa": 252, "spd": 4, "spe": 252},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Flash Cannon", "Thunderbolt", "Boomburst", "Energy Ball"]
+		"moves": ["Giga Impact", "Power Whip", "Knock Off", "Swords Dance"]
 	}],
 	"Cawmodore": [{
 		"item": "Sitrus Berry",
 		"ability": "Volt Absorb",
 		"evs": {"hp": 28, "atk": 252, "spe": 228},
 		"nature": "Jolly",
-		"moves": ["Belly Drum", "Bullet Punch", "Drain Punch", "Acrobatics"]
-	}, {
-		"item": "Petaya Berry",
-		"ability": "Volt Absorb",
-		"evs": {"atk": 28, "spa": 252, "spe": 228},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Substitute", "Belch", "Metal Sound", "Flash Cannon"]
-	}, {
-		"item": "Choice Specs",
-		"ability": "Volt Absorb",
-		"evs": {"def": 28, "spa": 252, "spe": 228},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Surf", "Hurricane", "Steel Beam", "Hyper Beam"]
-	}, {
-		"item": "Choice Band",
-		"ability": "Volt Absorb",
-		"evs": {"hp": 28, "atk": 252, "spe": 228},
-		"nature": "Jolly",
-		"moves": ["Drill Peck", "Iron Head", "Knock Off", "Bullet Punch"]
+		"moves": ["Belly Drum", "Acrobatics", ["Bullet Punch", "Iron Head"], "Drain Punch"]
 	}],
 	"Colossoil": [{
 		"item": "Flame Orb",
 		"ability": "Guts",
-		"evs": {"hp": 252, "atk": 252, "spe": 4},
-		"nature": "Adamant",
-		"moves": ["Rock Tomb", "Crunch", "Earthquake", "Taunt"]
-	}, {
-		"item": "Flame Orb",
-		"ability": "Guts",
 		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Fake Out", ["Facade", "Aqua Tail"], "Earthquake", "Knock Off"]
+		"moves": ["Fake Out", "Earthquake", "Knock Off", ["Encore", "Facade"]]
 	}],
 	"Crucibelle": [{
 		"item": "Chesto Berry",
 		"ability": "Liquid Ooze",
 		"evs": {"hp": 252, "def": 4, "spd": 252},
-		"nature": "Jolly",
+		"nature": "Careful",
 		"moves": ["Coil", "Stone Edge", "Gunk Shot", "Rest"]
-	}, {
-		"item": "Choice Scarf",
-		"ability": "Liquid Ooze",
-		"evs": {"hp": 252, "def": 176, "spd": 80},
-		"nature": "Impish",
-		"moves": ["Trick", "Torment", "Toxic", "Rest"]
 	}, {
 		"item": "Shuca Berry",
 		"ability": "Liquid Ooze",
@@ -134,23 +89,16 @@
 		"moves": ["Torment", "Protect", "Substitute", "Draining Kiss"]
 	}],
 	"Cyclohm": [{
-		"item": "Kee Berry",
-		"ability": "Shield Dust",
-		"evs": {"hp": 252, "spd": 252, "spe": 4},
-		"nature": "Calm",
-		"ivs": {"atk": 0},
-		"moves": ["Charge", "Slack Off", "Thunderbolt", "Draco Meteor"]
-	}, {
 		"item": "Choice Scarf",
 		"ability": "Shield Dust",
-		"evs": {"hp": 216, "spa": 100, "spd": 40, "spe": 152},
+		"evs": {"hp": 216, "spa": 116, "spe": 176},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
 		"moves": ["Thunderbolt", "Draco Meteor", "Flamethrower", "Surf"]
 	}],
 	"Equilibra": [{
 		"item": "Choice Scarf",
-		"ability": "Levitate",
+		"ability": ["Bulletproof", "Levitate"],
 		"evs": {"hp": 24, "spa": 252, "spd": 4, "spe": 228},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
@@ -176,70 +124,51 @@
 		"evs": {"hp": 252, "def": 4, "spe": 252},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Encore", "Disable", ["Sludge Wave", "Earth Power"], "Protect"]
-	}, {
-		"item": "Choice Specs",
-		"ability": "Frisk",
-		"evs": {"spa": 252, "spd": 4, "spe": 252},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Earth Power", "Sludge Wave", "Shadow Ball", "Hyper Beam"]
-	}, {
-		"item": "Choice Band",
-		"ability": "Frisk",
-		"evs": {"hp": 252, "atk": 252, "def": 4},
-		"nature": "Adamant",
-		"moves": ["Earthquake", "Giga Impact", "Gunk Shot", "Stone Edge"]
+		"moves": ["Encore", "Disable", ["Sludge Wave", "Earth Power", "Icy Wind"], "Protect"]
 	}],
 	"Jumbao": [{
 		"item": "Choice Scarf",
-		"ability": "Drought",
-		"evs": {"hp": 216, "def": 92, "spa": 32, "spe": 168},
-		"nature": "Timid",
+		"ability": "Trace",
+		"evs": {"hp": 4, "spa": 252, "spe": 252},
+		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": ["Moonblast", "Solar Beam", "Shadow Ball", "Focus Blast"]
+		"moves": ["Leaf Storm", "Moonblast", "Focus Blast", "Shadow Ball"]
 	}, {
-		"item": "Life Orb",
-		"ability": "Drought",
-		"evs": {"hp": 88, "spa": 252, "spe": 168},
-		"nature": "Timid",
+		"item": "Leftovers",
+		"ability": "Trace",
+		"evs": {"hp": 248, "def": 128, "spa": 96, "spd": 36},
+		"nature": "Bold",
 		"ivs": {"atk": 0},
-		"moves": ["Substitute", "Synthesis", "Moonblast", "Leaf Storm"]
+		"moves": ["Moonblast", "Worry Seed", "Toxic", ["Substitute", "Shore Up"]]
 	}],
 	"Kerfluffle": [{
-		"item": "Petaya Berry",
-		"ability": "Aroma Veil",
-		"evs": {"hp": 200, "spd": 88, "spe": 220},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Yawn", "Protect", "Moonblast", "Dream Eater"]
-	}, {
-		"item": "Choice Specs",
-		"ability": "Aroma Veil",
-		"evs": {"spa": 252, "spd": 4, "spe": 252},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Focus Blast", "Moonblast", "Sludge Wave", "Flash Cannon"]
-	}, {
 		"item": "Babiri Berry",
 		"ability": "Aroma Veil",
 		"evs": {"hp": 248, "def": 8, "spd": 252},
 		"nature": "Calm",
 		"ivs": {"atk": 0},
 		"moves": ["Torment", "Wish", "Protect", "Moonblast"]
+	}, {
+		"item": "Choice Specs",
+		"ability": "Aroma Veil",
+		"evs": {"spa": 252, "spd": 4, "spe": 252},
+		"nature": "Timid",
+		"ivs": {"atk": 0},
+		"moves": ["Aura Sphere", "Moonblast", "Sludge Wave", "Energy Ball"]
+	}, {
+		"item": "Petaya Berry",
+		"ability": "Aroma Veil",
+		"evs": {"hp": 200, "spd": 88, "spe": 220},
+		"nature": "Timid",
+		"ivs": {"atk": 0},
+		"moves": ["Yawn", "Protect", "Moonblast", "Dream Eater"]
 	}],
 	"Kitsunoh": [{
 		"item": "Choice Band",
 		"ability": "Iron Fist",
 		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Trick", "Shadow Strike", "Meteor Mash", "Earthquake"]
-	}, {
-		"item": "Life Orb",
-		"ability": "Iron Fist",
-		"evs": {"atk": 252, "spd": 4, "spe": 252},
-		"nature": "Jolly",
-		"moves": ["Ice Punch", "Meteor Mash", "Thunder Punch", "Shadow Sneak"]
+		"moves": ["Shadow Strike", "Meteor Mash", "Earthquake", ["Trick", "Ice Punch"]]
 	}, {
 		"item": "Shuca Berry",
 		"ability": "Frisk",
@@ -248,203 +177,155 @@
 		"moves": ["Torment", "Wish", "Protect", "Shadow Strike"]
 	}],
 	"Krilowatt": [{
-		"item": "Sitrus Berry",
-		"ability": "Minus",
-		"evs": {"hp": 252, "def": 32, "spe": 224},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Magnetic Flux", "Rest", "Whirlpool", "Imprison"]
-	}, {
-		"item": "Sitrus Berry",
+		"item": "Shuca Berry",
 		"ability": "Magic Guard",
-		"evs": {"hp": 252, "def": 4, "spd": 252},
-		"nature": "Calm",
+		"evs": {"hp": 252, "def": 252, "spd": 4},
+		"nature": "Bold",
 		"ivs": {"atk": 0},
 		"moves": ["Counter", "Mirror Coat", "Toxic", "Protect"]
-	}, {
-		"item": "Life Orb",
-		"ability": "Magic Guard",
-		"evs": {"spa": 252, "spd": 4, "spe": 252},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Surf", "Thunderbolt", "Ice Beam", "Earth Power"]
 	}],
 	"Malaconda": [{
-		"item": "Chesto Berry",
-		"ability": "Harvest",
-		"evs": {"hp": 244, "def": 12, "spd": 252},
-		"nature": "Calm",
-		"ivs": {"atk": 0},
-		"moves": ["Substitute", "Toxic", "Spiky Shield", "Rest"]
-	}, {
 		"item": "Choice Scarf",
 		"ability": "Drought",
 		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Solar Blade", "Iron Tail", "Wild Charge", "Crunch"]
+		"moves": ["Solar Blade", "Knock Off", "Iron Tail", "Wild Charge"]
+	}],
+	"Miasmaw": [{
+		"item": "Choice Band",
+		"ability": "Neutralizing Gas",
+		"evs": {"hp": 4, "atk": 252, "spe": 252},
+		"nature": "Adamant",
+		"moves": ["Outrage", "Earthquake", "Firt Impression", "Close Combat"]
 	}, {
-		"item": "Sitrus Berry",
-		"ability": "Harvest",
-		"evs": {"hp": 244, "def": 92, "spe": 172},
-		"nature": "Careful",
-		"moves": ["Glare", "Substitute", "Taunt", "Knock Off"]
+		"item": "Choice Scarf",
+		"ability": "Neutralizing Gas",
+		"evs": {"hp": 4, "atk": 252, "spe": 252},
+		"nature": "Adamant",
+		"moves": ["Outrage", "Earthquake", "Iron Head", "Megahorn"]
+	}, {
+		"item": "Expert Belt",
+		"ability": "Neutralizing Gas",
+		"evs": {"hp": 104, "atk": 252, "spe": 152},
+		"nature": "Adamant",
+		"moves": ["Taunt", "Swords Dance", "Outrage", "Earthquake"]
 	}],
 	"Mollux": [{
-		"item": "Choice Scarf",
-		"ability": "Dry Skin",
-		"evs": {"hp": 92, "def": 164, "spe": 252},
-		"nature": "Modest",
-		"ivs": {"atk": 0},
-		"moves": ["Eruption", "Sludge Bomb", "Thunderbolt", "Trick"]
-	}, {
-		"item": "Power Herb",
-		"ability": "Dry Skin",
-		"evs": {"hp": 252, "spa": 8, "spd": 136, "spe": 112},
-		"nature": "Modest",
-		"ivs": {"atk": 0},
-		"moves": ["Solar Beam", "Overheat", "Sludge Wave", "Thunder"]
-	}, {
 		"item": "Air Balloon",
 		"ability": "Dry Skin",
 		"evs": {"hp": 252, "def": 148, "spd": 108},
 		"nature": "Bold",
 		"ivs": {"atk": 0},
 		"moves": ["Acid Armor", "Calm Mind", "Recover", "Lava Plume"]
+	}, {
+		"item": "Choice Scarf",
+		"ability": "Dry Skin",
+		"evs": {"hp": 92, "def": 164, "spe": 252},
+		"nature": "Modest",
+		"ivs": {"atk": 0},
+		"moves": ["Eruption", "Sludge Bomb", "Thunderbolt", "Trick"]
 	}],
 	"Naviathan": [{
-		"item": "Leftovers",
+		"item": "Air Balloon",
 		"ability": "Heatproof",
-		"evs": {"hp": 248, "def": 12, "spe": 248},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Iron Defense", "Calm Mind", "Slack Off", "Flash Cannon"]
-	}, {
-		"item": "Flame Orb",
-		"ability": "Guts",
-		"evs": {"atk": 220, "spd": 152, "spe": 136},
-		"nature": "Careful",
-		"moves": ["Dragon Dance", "Iron Defense", "Slack Off", "Iron Head"]
-	}, {
-		"item": "Choice Specs",
-		"ability": "Heatproof",
-		"evs": {"spa": 252, "spd": 8, "spe": 248},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Hurricane", "Hydro Pump", "Steel Beam", "Ice Beam"]
+		"evs": {"hp": 248, "atk": 108, "spd": 16, "spe": 136},
+		"nature": "Adamant",
+		"moves": ["Dragon Dance", "Waterfall", "Heavy Slam", "Giga Impact"]
 	}],
 	"Necturna": [{
-		"item": "Life Orb",
-		"ability": "Forewarn",
-		"evs": {"hp": 232, "atk": 36, "spd": 56, "spe": 184},
-		"nature": "Adamant",
-		"moves": ["Shadow Claw", "Shell Smash", "Power Whip", "Substitute"]
-	}, {
-		"item": "Leftovers",
-		"ability": "Forewarn",
-		"evs": {"hp": 248, "def": 160, "spd": 100},
-		"nature": "Calm",
-		"ivs": {"atk": 0},
-		"moves": ["Spore", "Leech Seed", "Hex", "Substitute"]
-	}, {
 		"item": "Choice Band",
 		"ability": "Forewarn",
 		"evs": {"hp": 248, "atk": 92, "def": 156, "spd": 12},
 		"nature": "Adamant",
 		"moves": ["Power Whip", "Shadow Sneak", "Stone Edge", "Brave Bird"]
+	}, {
+		"item": "Life Orb",
+		"ability": "Forewarn",
+		"evs": {"hp": 248, "atk": 48, "def": 88, "spd": 52, "spe": 72},
+		"nature": "Jolly",
+		"moves": ["Shell Smash", "Leaf Blade", "Shadow Claw", "Stone Edge"]
 	}],
 	"Pajantom": [{
-		"item": "Assault Vest",
-		"ability": "Comatose",
-		"evs": {"atk": 252, "spd": 4, "spe": 252},
-		"nature": "Jolly",
-		"moves": ["Brave Bird", "Outrage", "Leech Life", "Spirit Shackle"]
-	}, {
-		"item": "Sitrus Berry",
-		"ability": "Comatose",
-		"evs": {"hp": 240, "atk": 176, "spd": 92},
-		"nature": "Adamant",
-		"moves": ["Imprison", "Shadow Claw", "Earthquake", "Draco Meteor"]
-	}, {
 		"item": "Choice Band",
 		"ability": "Comatose",
 		"evs": {"hp": 32, "atk": 252, "spe": 224},
 		"nature": "Jolly",
 		"moves": ["Outrage", "Spirit Shackle", "Earthquake", "Brave Bird"]
+	}, {
+		"item": "Choice Scarf",
+		"ability": "Comatose",
+		"evs": {"hp": 32, "atk": 252, "spe": 224},
+		"nature": "Adamant",
+		"moves": ["Outrage", "Spirit Shackle", "Earthquake", "Brave Bird"]
 	}],
 	"Plasmanta": [{
-		"item": "Life Orb",
-		"ability": "Storm Drain",
-		"evs": {"hp": 24, "spa": 252, "spe": 232},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Magnet Rise", "Aura Sphere", "Psychic", "Sludge Wave"]
-	}, {
 		"item": "Choice Specs",
 		"ability": "Storm Drain",
 		"evs": {"hp": 24, "spa": 252, "spe": 232},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Thunderbolt", "Sludge Wave", "Hyper Beam", "Psychic"]
+		"moves": ["Thunderbolt", "Sludge Wave", "Aura Sphere", "Psychic"]
+	}, {
+		"item": "Life Orb",
+		"ability": "Storm Drain",
+		"evs": {"hp": 24, "spa": 252, "spe": 232},
+		"nature": "Timid",
+		"ivs": {"atk": 0},
+		"moves": ["Magnet Rise", "Thunderbolt", "Sludge Wave", "Aura Sphere"]
 	}],
 	"Pyroak": [{
-		"item": "Sitrus Berry",
-		"ability": "Battle Armor",
-		"evs": {"hp": 248, "def": 8, "spd": 252},
-		"nature": "Calm",
-		"ivs": {"atk": 0},
-		"moves": ["Amnesia", "Acid Armor", "Lava Plume", ["Synthesis", "Leech Seed", "Rest"]]
-	}, {
 		"item": "Choice Specs",
 		"ability": "White Smoke",
 		"evs": {"hp": 248, "spa": 124, "spd": 132},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
 		"moves": ["Overheat", "Giga Drain", "Earth Power", "Fire Blast"]
+	}, {
+		"item": "Sitrus Berry",
+		"ability": "Battle Armor",
+		"evs": {"hp": 248, "def": 8, "spd": 252},
+		"nature": "Calm",
+		"ivs": {"atk": 0},
+		"moves": ["Amnesia", "Acid Armor", "Lava Plume", ["Synthesis", "Rest"]]
 	}],
 	"Revenankh": [{
 		"item": "Choice Band",
 		"ability": "Triage",
-		"evs": {"hp": 252, "atk": 152, "def": 28, "spd": 76},
+		"evs": {"hp": 248, "atk": 152, "def": 28, "spd": 80},
 		"nature": "Adamant",
 		"moves": ["Drain Punch", "Earthquake", "Shadow Claw", "Trick"]
 	}, {
-		"item": "Life Orb",
+		"item": "Sitrus Berry",
 		"ability": "Triage",
-		"evs": {"hp": 100, "atk": 252, "spe": 156},
-		"nature": "Adamant",
-		"moves": ["Rock Slide", "Glare", "Drain Punch", "Knock Off"]
+		"evs": {"hp": 252, "def": 148, "spe": 108},
+		"nature": "Impish",
+		"moves": ["Curse", "Moonlight", "Drain Punch", "Protect"]
 	}],
 	"Smokomodo": [{
+		"item": "Choice Band",
+		"ability": "Blaze",
+		"evs": {"atk": 252, "spd": 4, "spe": 252},
+		"nature": "Jolly",
+		"moves": ["Flare Blitz", "Earthquake", "Gunk Shot", "Superpower"]
+	}, {
+		"item": "Choice Scarf",
+		"ability": "Technician",
+		"evs": {"atk": 252, "spd": 20, "spe": 236},
+		"nature": "Adamant",
+		"moves": ["Earthquake", "Flare Blitz", "Storm Throw", "Gunk Shot"]
+	}, {
 		"item": "Life Orb",
 		"ability": "Blaze",
-		"evs": {"hp": 12, "atk": 244, "spe": 252},
+		"evs": {"hp": 16, "atk": 240, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Flare Blitz", "Earthquake", "Taunt", "Superpower"]
-	}, {
-		"item": "Choice Band",
-		"ability": "Technician",
-		"evs": {"hp": 8, "atk": 252, "spe": 248},
-		"nature": "Jolly",
-		"moves": ["Flare Blitz", "Bulldoze", "Gunk Shot", "Storm Throw"]
-	}, {
-		"item": "Life Orb",
-		"ability": "Technician",
-		"evs": {"atk": 252, "spd": 4, "spe": 252},
-		"nature": "Adamant",
-		"moves": ["Bulldoze", "Earthquake", "Flare Blitz", "Taunt"]
+		"moves": ["Taunt", "Earthquake", "Flare Blitz", "Superpower"]
 	}],
 	"Snaelstrom": [{
 		"item": "Toxic Orb",
 		"ability": "Poison Heal",
-		"evs": {"hp": 248, "def": 8, "spd": 252},
-		"nature": "Careful",
-		"moves": ["Swords Dance", "Acid Armor", "Spiky Shield", "Leech Life"]
-	}, {
-		"item": "Toxic Orb",
-		"ability": "Poison Heal",
-		"evs": {"hp": 252, "spa": 4, "spd": 252},
-		"nature": "Calm",
-		"moves": ["Acid Armor", "Confide", "Rest", "Infestation"]
+		"evs": {"hp": 248, "def": 40, "spd": 220},
+		"nature": "Bold",
+		"moves": ["Spiky Shield", "Substitute", "Rapid Spin", ["Water Pulse", "Confide"]]
 	}],
 	"Stratagem": [{
 		"item": "Choice Specs",
@@ -452,100 +333,65 @@
 		"evs": {"spa": 252, "spd": 4, "spe": 252},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Earth Power", "Fire Blast", "Paleo Wave", ["Trick", "Dazzling Gleam"]]
+		"moves": ["Earth Power", "Fire Blast", "Paleo Wave", "Trick"]
 	}, {
-		"item": ["Passho Berry", "Sitrus Berry"],
+		"item": "Chople Berry",
 		"ability": "Levitate ",
-		"evs": {"spa": 252, "spd": 4, "spe": 252},
+		"evs": {"def": 132, "spa": 120, "spe": 252},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": [["Substitute", "Protect"], "Disable", "Paleo Wave", ["Fire Blast", "Dazzling Gleam"]]
+		"moves": ["Substitute", "Disable", "Paleo Wave", ["Earth Power", "Dazzling Gleam"]]
 	}],
 	"Syclant": [{
+		"item": "Choice Band",
+		"ability": "Compound Eyes",
+		"evs": {"hp": 16, "atk": 252, "spe": 240},
+		"nature": "Jolly",
+		"moves": ["Icicle Crash", "Leech Life", "Stone Edge", "Earthquake"]
+	}, {
 		"item": "Choice Specs",
 		"ability": "Compound Eyes",
 		"evs": {"hp": 16, "spa": 252, "spe": 240},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
 		"moves": ["Blizzard", "Focus Blast", "Bug Buzz", "Earth Power"]
-	}, {
-		"item": "Life Orb",
-		"ability": "Compound Eyes",
-		"evs": {"hp": 16, "spa": 252, "spe": 240},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Blizzard", "Focus Blast", "Bug Buzz", "Taunt"]
-	}, {
-		"item": "Choice Band",
-		"ability": "Compound Eyes",
-		"evs": {"hp": 16, "atk": 252, "spe": 240},
-		"nature": "Adamant",
-		"moves": ["Icicle Crash", "Leech Life", "Stone Edge", "Earthquake"]
 	}],
 	"Tomohawk": [{
+		"item": "Choice Specs",
+		"ability": "Intimidate",
+		"evs": {"hp": 252, "spa": 252, "spd": 4},
+		"nature": "Modest",
+		"ivs": {"atk": 0},
+		"moves": ["Hurricane", "Aura Sphere", "Heat Wave", "Hyper Beam"]
+	}, {
 		"item": "Leftovers",
 		"ability": "Prankster",
 		"evs": {"hp": 252, "def": 48, "spd": 208},
 		"nature": "Bold",
 		"ivs": {"atk": 0},
 		"moves": ["Toxic", "Substitute", "Protect", "Taunt"]
-	}, {
-		"item": "Roseli Berry",
-		"ability": "Prankster",
-		"evs": {"spa": 252, "spd": 4, "spe": 252},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Yawn", "Protect", "Hurricane", "Heat Wave"]
-	}, {
-		"item": "Choice Specs",
-		"ability": "Intimidate",
-		"evs": {"hp": 252, "spa": 252, "spd": 4},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Hurricane", "Aura Sphere", "Heat Wave", "Hyper Beam"]
 	}],
 	"Volkraken": [{
 		"item": "Choice Scarf",
-		"ability": ["Infiltrator", "Analytic"],
-		"evs": {"hp": 248, "spa": 56, "spe": 204},
+		"ability": "Infiltrator",
+		"evs": {"hp": 116, "spa": 240, "spe": 152},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": [["Overheat", "Fire Blast"], "Hydro Pump", "Surf", "Power Gem"]
+		"moves": ["Overheat", "Surf", "Power Gem", "Flamethrower"]
 	}, {
 		"item": "Choice Specs",
 		"ability": "Analytic",
-		"evs": {"hp": 252, "def": 4, "spa": 252},
+		"evs": {"hp": 248, "def": 56, "spa": 192, "spd": 12},
 		"nature": "Quiet",
 		"ivs": {"atk": 0, "spe": 0},
-		"moves": ["Overheat", "Hydro Pump", "Hyper Beam", "Power Gem"]
-	}, {
-		"item": "Air Balloon",
-		"ability": "Analytic",
-		"evs": {"hp": 248, "def": 8, "spd": 252},
-		"nature": "Calm",
-		"ivs": {"atk": 0},
-		"moves": ["Scald", "Flamethrower", "Will-O-Wisp", "Reflect Type"]
+		"moves": [["Flamethrower", "Overheat"], "Surf", "Power Gem", "Hyper Beam"]
 	}],
 	"Voodoom": [{
-		"item": "Chople Berry",
-		"ability": "Lightning Rod",
-		"evs": {"hp": 32, "spa": 252, "spe": 224},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Charge", "Thunderbolt", "Dark Pulse", "Focus Blast"]
-	}, {
 		"item": "Choice Specs",
 		"ability": "Lightning Rod",
 		"evs": {"spa": 252, "spd": 4, "spe": 252},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
 		"moves": ["Dark Pulse", "Focus Blast", "Aura Sphere", "Thunderbolt"]
-	}, {
-		"item": "Lum Berry",
-		"ability": "Volt Absorb",
-		"evs": {"hp": 248, "spa": 36, "spe": 224},
-		"nature": "Timid",
-		"ivs": {"atk": 0},
-		"moves": ["Pain Split", "Dark Pulse", "Taunt", "Acupressure"]
 	}]
 }
