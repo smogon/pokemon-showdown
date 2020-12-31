@@ -657,21 +657,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
-	forceWrap(answer: string) {
-		return Utils.escapeHTML(answer.replace(/[^\s]{30,}/g, word => {
-			let lastBreak = 0;
-			let brokenWord = '';
-			for (let i = 1; i < word.length; i++) {
-				if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
-					brokenWord += word.slice(lastBreak, i) + '\u200B';
-					lastBreak = i;
-				}
-			}
-			brokenWord += word.slice(lastBreak);
-			return brokenWord;
-		})).replace(/\u200B/g, '<wbr />');
-	}
-
 	onViewHunt(user: User) {
 		if (this.runEvent('ViewHunt', user)) return;
 
@@ -700,7 +685,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						this.forceWrap(q.answer.join(' ; '))
+						Utils.escapeHTML(Utils.forceWrap(q.answer.join(' ; ')))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
