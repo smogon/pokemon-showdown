@@ -190,7 +190,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp * 0.33));
 	});
 
-	it.skip(`should not trigger twice if negated then replaced`, function () {
+	it(`should not trigger twice if negated then replaced`, function () {
 		battle = common.createBattle([[
 			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
 		], [
@@ -204,5 +204,19 @@ describe('Neutralizing Gas', function () {
 		// We already negated NGas, so it shouldn't run other abilities again
 		battle.makeChoices('auto', 'move simplebeam');
 		assert.statStage(wynaut, 'atk', 1);
+	});
+
+	it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Pincurchin", ability: 'electricsurge', moves: ['sleeptalk']},
+			{species: "Eternatus", moves: ['sleeptalk']},
+		], [
+			{species: "Rillaboom", ability: 'grassysurge', moves: ['sleeptalk']},
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('auto', 'move sleeptalk, switch 3');
+		assert(battle.field.isTerrain('electricterrain'));
 	});
 });
