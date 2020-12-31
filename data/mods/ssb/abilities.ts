@@ -1558,7 +1558,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Immune to Water and Grass moves, heals 1/4 HP and gains +1 Atk when hit by them.",
 		onTryHit(target, source, move) {
 			if (target !== source && ['Water', 'Grass'].includes(move.type)) {
-				if (!this.heal(target.baseMaxhp / 4) && !this.boost({atk: 1})) {
+				let success = false;
+				if (this.heal(target.baseMaxhp / 4)) success = true;
+				if (this.boost({atk: 1})) success = true;
+				if (!success) {
 					this.add('-immune', target, '[from] ability: Soup Sipper');
 				}
 				return null;
