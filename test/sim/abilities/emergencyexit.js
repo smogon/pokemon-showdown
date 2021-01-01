@@ -306,4 +306,19 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'move');
 	});
+
+	it.skip(`should request switchout between hazards`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
+			{species: 'volcarona', ability: 'emergencyexit', evs: {hp: 4}, moves: ['sleeptalk']},
+		], [
+			{species: 'landorus', moves: ['stealthrock', 'spikes']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move uturn', 'move spikes');
+		battle.makeChoices('switch 2');
+		const volcarona = battle.p1.active[0];
+		assert.equal(volcarona.hp, Math.floor(volcarona.maxhp / 2), 'Emergency Exit should trigger before Spikes damage.');
+		assert.equal(battle.requestState, 'switch');
+	});
 });
