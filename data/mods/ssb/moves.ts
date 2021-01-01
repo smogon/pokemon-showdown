@@ -499,6 +499,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			}
 		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', target, 'Shift Gear', target);
 			this.add('-anim', source, 'Plasma Fists', target);
