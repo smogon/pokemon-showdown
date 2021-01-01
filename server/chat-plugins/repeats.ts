@@ -236,8 +236,8 @@ export const commands: ChatCommands = {
 		this.modlog('REPEATPHRASE', null, `every ${interval} ${isByMessages ? 'chat message' : 'minute'}${Chat.plural(interval)}: the Room FAQ for "${topic}"`);
 		this.privateModAction(
 			isByMessages ?
-				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).` :
-				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).`
+				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).` :
+				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).`
 		);
 	},
 
