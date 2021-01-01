@@ -357,8 +357,7 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	join(user: User) {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
-		const canJoin = this.canJoin(user, true);
-		if (canJoin) return user.sendTo(this.room, `|error|${canJoin}`);
+		this.canJoin(user, true);
 		if (this.playerCount >= this.playerCap) return user.sendTo(this.room, `|error|The game of ${this.title} is full.`);
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		if (this.subs.includes(user.id)) this.subs.splice(this.subs.indexOf(user.id), 1);
@@ -1086,11 +1085,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			const targetUser = Users.get(toRevive);
 			if (!targetUser) return;
-			const canJoin = this.canJoin(targetUser, false, force);
-			if (canJoin) {
-				user.sendTo(this.room, `|error|${canJoin}`);
-				return;
-			}
+			this.canJoin(targetUser, false, force);
 			const player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -1528,24 +1523,23 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...user.previousIDs]) {
 			if (this.playerTable[id] || this.dead[id]) {
-				return `${targetString} already in the game.`;
+				throw new Chat.ErrorMessage(`${targetString} already in the game.`);
 			} else if (!force && this.played.includes(id)) {
-				return `${self ? `You were` : `${user.id} was`} already in the game.`;
+				throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
 			}
-			if (this.hostid === id) return `${targetString} the host.`;
-			if (this.cohosts.includes(id)) return `${targetString} a cohost.`;
+			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
+			if (this.cohosts.includes(id)) throw new Chat.ErrorMessage(`${targetString} a cohost.`);
 		}
 		if (!force) {
 			for (const alt of user.getAltUsers(true)) {
 				if (this.playerTable[alt.id] || this.played.includes(alt.id)) {
-					return `${self ? `You already have` : `${user.id} already has`} an alt in the game.`;
+					throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
 				}
 				if (this.hostid === alt.id || this.cohosts.includes(alt.id)) {
-					return `${self ? `You have` : `${user.id} has`} an alt as a game host.`;
+					throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
 				}
 			}
 		}
-		return false;
 	}
 
 	sendUser(user: User | string | null, message: string) {
@@ -3077,8 +3071,7 @@ export const commands: ChatCommands = {
 					this.checkChat(null, targetRoom);
 					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
 					if (game.played.includes(user.id)) return this.errorReply(`You cannot sub back into the game.`);
-					const canJoin = game.canJoin(user, true);
-					if (canJoin) return this.errorReply(`${canJoin}`);
+					game.canJoin(user, true);
 					game.subs.push(user.id);
 					game.nextSub();
 					// Update spectator's view
@@ -3157,8 +3150,7 @@ export const commands: ChatCommands = {
 
 				const targetUser = Users.get(toSubIn);
 				if (!targetUser) return this.errorReply(`The user "${toSubIn}" was not found.`);
-				const canJoin = game.canJoin(targetUser, false, cmd === 'forcesub');
-				if (canJoin) return this.errorReply(`${canJoin}`);
+				game.canJoin(targetUser, false, cmd === 'forcesub');
 				if (game.subs.includes(targetUser.id)) {
 					game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 				}
