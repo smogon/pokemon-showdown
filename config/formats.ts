@@ -574,6 +574,7 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['[Gen 8] OU', 'Overflow Stat Mod'],
 		banlist: ['Damp Rock', 'Eviolite', 'Heat Rock'],
+		unbanlist: ['Zamazenta-Crowned'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: {[tier: string]: number} = {
@@ -588,8 +589,13 @@ export const Formats: FormatList = [
 				lcuber: 40,
 				lc: 40,
 			};
-			const tier = this.toID(species.tier) || 'ou';
+			let tier = this.toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
+			if (target) {
+				if (target.set.ability === 'drizzle') tier = 'nubl';
+				if (target.set.ability === 'drought') tier = 'nubl';
+				if (target.set.moves.includes('auroraveil')) tier = 'nubl';
+			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = 0;
 			const boost = boosts[tier];
@@ -613,7 +619,7 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
 			'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
 			'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Toxapex', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
 			'Arena Trap', 'Contrary', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Electric Surge ++ Surge Surfer',
