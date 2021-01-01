@@ -1150,7 +1150,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
+				this.add('-start', source, 'typechange', type, '[from] ability: False Nine');
 			}
 		},
 		onModifyCritRatio(critRatio) {
@@ -1433,7 +1433,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					target.item = yourItem.id;
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Greedy Magician', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] ability: Greedy Magician', '[of] ' + source);
 			}
 		},
 		isNonstandard: "Custom",
@@ -1558,7 +1558,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Immune to Water and Grass moves, heals 1/4 HP and gains +1 Atk when hit by them.",
 		onTryHit(target, source, move) {
 			if (target !== source && ['Water', 'Grass'].includes(move.type)) {
-				if (!this.heal(target.baseMaxhp / 4) && !this.boost({atk: 1})) {
+				let success = false;
+				if (this.heal(target.baseMaxhp / 4)) success = true;
+				if (this.boost({atk: 1})) success = true;
+				if (!success) {
 					this.add('-immune', target, '[from] ability: Soup Sipper');
 				}
 				return null;

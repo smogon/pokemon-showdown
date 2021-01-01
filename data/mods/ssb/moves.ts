@@ -448,8 +448,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			const removeAll = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist',
-				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes',
+				'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
@@ -482,8 +482,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Replaces the target's moveset with four vaguely competitively viable moves. 100% chance to cause the target to flinch.",
-		shortDesc: "Gives foe 4 new moves; flinches. +3 priority.",
+		desc: "Replaces the target's moveset with four vaguely competitively viable moves. 100% chance to cause the target to flinch. Fails unless it is the user's first turn on the field.",
+		shortDesc: "First Turn: Gives foe 4 new moves; flinches.",
 		name: "Data Corruption",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -491,6 +491,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		flags: {authentic: 1, reflectable: 1},
 		priority: 3,
+		onTry(pokemon, target) {
+			if (pokemon.activeMoveActions > 1) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				this.hint("Data Corruption only works on your first turn out.");
+				return null;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', target, 'Shift Gear', target);
 			this.add('-anim', source, 'Plasma Fists', target);
@@ -1039,8 +1050,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 100,
 		category: "Physical",
-		desc: "This move combines the user's current typing in its type effectiveness against the target.",
-		shortDesc: "Combines current types in its type effectiveness.",
+		desc: "This move combines the user's current typing in its type effectiveness against the target. If the target lost HP, the user takes recoil damage equal to 1/8 of the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "This move is the user's type combo. 1/8 recoil.",
 		name: "Kevin",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1799,14 +1810,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Boomburst', target);
 			this.add('-anim', source, 'Frost Breath', target);
 		},
-		secondary: {
-			chance: 20,
-			self: {
-				boosts: {
-					spa: 1,
-				},
-			},
-		},
+		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ice",
 	},
@@ -2009,8 +2013,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			move.basePower = windSpeeds[this.random(0, 10)];
 			return move.basePower;
 		},
-		desc: "The foe is hit with a hurricane with a Base Power that varies based on the strength (category) of the hurricane. Category 1 is 65, category 2 is 85, category 3 is 95, category 4 is 115, and category 5 is 140. In addition, the target's side of the field is covered in a storm surge. Storm surge applies a 1/4 Speed multiplier to pokemon on that side of the field. Storm surge will last for as many turns as the hurricane's category (not including the turn Landfall was used).",
-		shortDesc: "Higher category = +dmg, foe side speed 1/4.",
+		desc: "The foe is hit with a hurricane with a Base Power that varies based on the strength (category) of the hurricane. Category 1 is 65, category 2 is 85, category 3 is 95, category 4 is 115, and category 5 is 140. In addition, the target's side of the field is covered in a storm surge. Storm surge applies a 1/2 Speed multiplier to pokemon on that side of the field. Storm surge will last for as many turns as the hurricane's category (not including the turn Landfall was used).",
+		shortDesc: "Higher category = +dmg, foe side speed 1/2.",
 		name: "Landfall",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -2968,8 +2972,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Heals the user by 50% of its max HP. Forces the target to switch to a random ally. User switches out after.",
-		shortDesc: "50% heal. Force out target, then switch.",
+		desc: "Heals the user by 33% of its max HP. Forces the target to switch to a random ally. User switches out after.",
+		shortDesc: "33% heal. Force out target, then switch.",
 		name: "RAWWWR",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -2985,7 +2989,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Roar', target);
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			this.heal(pokemon.maxhp / 2, pokemon, pokemon, move);
+			this.heal(pokemon.maxhp / 3, pokemon, pokemon, move);
 		},
 		forceSwitch: true,
 		selfSwitch: true,
@@ -3101,8 +3105,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "55% chance to OHKO the target; otherwise, it OHKOs itself.",
-		shortDesc: "55% chance to OHKO target. 45% to OHKO user.",
+		desc: "50% chance to OHKO the target; otherwise, it OHKOes itself. On successive uses, this move has a 1/X chance of OHKOing the target, where X starts at 2 and doubles each time this move OHKOes the target. X resets to 2 if this move is not used in a turn.",
+		shortDesc: "50/50 to KO target/self. Worse used repeatedly.",
 		name: "Not-so-worthy Pirouette",
 		isNonstandard: "Custom",
 		pp: 5,
@@ -3115,11 +3119,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "High Jump Kick", target);
 		},
 		onHit(target, source) {
-			if (this.randomChance(11, 20)) {
+			source.addVolatile('notsoworthypirouette');
+			const chance = source.volatiles['notsoworthypirouette']?.counter ? source.volatiles['notsoworthypirouette'].counter : 2;
+			if (this.randomChance(1, chance)) {
 				target.faint();
 			} else {
 				source.faint();
 			}
+		},
+		condition: {
+			duration: 2,
+			onStart() {
+				this.effectData.counter = 2;
+			},
+			onRestart() {
+				this.effectData.counter *= 2;
+				this.effectData.duration = 2;
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -3386,8 +3402,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 75;
 		},
 		category: "Special",
-		desc: "Raises the user's Special Attack by 1 stage if this move knocks out the target. If the user is shiny, the move's Base Power becomes 95.",
-		shortDesc: "+1 SpA if this KOes the target. Shiny: BP=95.",
+		desc: "This move combines Ghost in its type effectiveness against the target. Raises the user's Special Attack by 1 stage if this move knocks out the target. If the user is shiny, the move's Base Power becomes 95.",
+		shortDesc: "+Ghost. +1 SpA if KOes target. Shiny: BP=95.",
 		name: "Baleful Blaze",
 		isNonstandard: "Custom",
 		gen: 8,
