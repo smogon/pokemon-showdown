@@ -741,6 +741,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			);
 		}
 		player.lastLynch = Date.now();
+		this.hasPlurality = null;
 		if (this.getHammerValue(target) <= lynch.trueCount) {
 			// HAMMER
 			this.sendDeclare(`Hammer! ${target === 'nolynch' ? 'Nobody' : Utils.escapeHTML(name)} was lynched!`);
@@ -749,7 +750,6 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.night(true);
 			return;
 		}
-		this.hasPlurality = null;
 		this.updatePlayersLynches();
 	}
 
