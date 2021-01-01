@@ -66,9 +66,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672664/">Ubers Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658364/">Ubers Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3668107/">Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675589/">Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
