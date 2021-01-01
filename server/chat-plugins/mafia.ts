@@ -1854,7 +1854,6 @@ export const pages: PageTable = {
 		}
 		if (isHost) {
 			if (game.phase === "night" && isHost && game.takeIdles) {
-				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Night Responses</summary>`;
 				buf += `<h3>Night Responses</h3>`;
 				let actions = ``;
 				let idles = ``;
@@ -1871,7 +1870,7 @@ export const pages: PageTable = {
 				}
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Idles</summary>${idles}</span></details></p>`;
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Actions</summary>${actions}</span></details></p>`;
-				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">No Response</summary>${noResponses}</span></details></p></p><hr/></details></p>`;
+				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">No Response</summary>${noResponses}</span></details></p>`;
 			}
 			buf += `<h3>Host options</h3>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">General Options</summary>`;
