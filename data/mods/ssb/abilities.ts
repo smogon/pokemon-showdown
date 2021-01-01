@@ -1433,7 +1433,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					target.item = yourItem.id;
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Greedy Magician', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] ability: Greedy Magician', '[of] ' + source);
 			}
 		},
 		isNonstandard: "Custom",
