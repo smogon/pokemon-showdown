@@ -2312,11 +2312,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// (If your tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityData.ending) {
-				return;
-			} else {
-				source.abilityData.ending = true;
-			}
+			if (source.abilityData.ending) return;
+			source.abilityData.ending = true;
 			const sortedActive = this.getAllActive();
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
