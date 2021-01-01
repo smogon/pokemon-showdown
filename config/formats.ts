@@ -591,7 +591,8 @@ export const Formats: FormatList = [
 			};
 			let tier = this.toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
-			if (target) {
+			// Non-Pokemon bans in lower tiers
+			if (target && boosts[tier] > 20) {
 				if (target.set.ability === 'drizzle') tier = 'nubl';
 				if (target.set.ability === 'drought') tier = 'nubl';
 				if (target.set.moves.includes('auroraveil')) tier = 'nubl';
