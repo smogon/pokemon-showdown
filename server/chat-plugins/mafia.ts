@@ -1448,7 +1448,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	sendPlayerList() {
-		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).join(', ')}`).update();
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).sort().join(', ')}`).update();
 	}
 
 	updatePlayers() {
@@ -3016,7 +3016,7 @@ export const commands: ChatCommands = {
 			if (this.broadcasting) {
 				game.sendPlayerList();
 			} else {
-				this.sendReplyBox(`Players (${game.playerCount}): ${Object.keys(game.playerTable).map(p => game.playerTable[p].safeName).join(', ')}`);
+				this.sendReplyBox(`Players (${game.playerCount}): ${Object.keys(game.playerTable).map(p => game.playerTable[p].safeName).sort().join(', ')}`);
 			}
 		},
 
