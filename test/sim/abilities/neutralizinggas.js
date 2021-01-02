@@ -258,7 +258,7 @@ describe('Neutralizing Gas', function () {
 			assert.statStage(battle.p1.active[0], 'atk', 1);
 		});
 
-		it.skip(`should not give Unnerve priority in activation`, function () {
+		it(`should not give Unnerve priority in activation`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
 				{species: "Eternatus", ability: 'pressure', moves: ['sleeptalk']},
