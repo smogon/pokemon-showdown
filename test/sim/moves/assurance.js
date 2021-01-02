@@ -22,7 +22,7 @@ describe('Assurance', function () {
 		assert.bounded(regi.hp, [regi.maxhp - recoilRange[1] - assuRange[1], regi.maxhp - recoilRange[0] - assuRange[0]]);
 	});
 
-	it(`should double the power against Pokemon, not slots`, function () {
+	it(`should double the power against damaged Pokemon, not damaged slots`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'bulbasaur', level: 1, moves: ['sleeptalk']},
 			{species: 'landorus', moves: ['sleeptalk']},
