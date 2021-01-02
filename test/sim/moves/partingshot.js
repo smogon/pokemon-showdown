@@ -10,7 +10,7 @@ describe(`Parting Shot`, function () {
 		battle.destroy();
 	});
 
-	it.only(`should not switch the user out if the target's stats are not changed`, function () {
+	it(`should not switch the user out if the target's stats are not changed`, function () {
 		battle = common.createBattle([[
 			{species: 'Silvally', ability: 'prankster', moves: ['partingshot', 'splash']},
 			{species: 'Type: Null', ability: 'battlearmor', moves: ['return']},
