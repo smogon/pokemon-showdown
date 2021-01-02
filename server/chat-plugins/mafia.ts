@@ -2585,13 +2585,19 @@ export const commands: ChatCommands = {
 			const game = targetRoom.getGame(MafiaTracker);
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, targetRoom);
-			const player = game.playerTable[toID(args.join(''))];
-			if (!player) return user.sendTo(targetRoom, `|error|"${args.join(',')}" is not a living player.`);
 			if (game.phase === 'IDEApicking') {
 				return this.errorReply(`You cannot add or remove players while IDEA roles are being picked.`); // needs to be here since eliminate doesn't pass the user
 			}
-			game.eliminate(player, cmd);
-			game.logAction(user, `killed ${player.name}`);
+			if (!args[0]) return this.parse('/help mafia kill');
+			for (const targetUsername of args) {
+				let player = game.playerTable[toID(targetUsername)];
+				if (player) {
+					game.eliminate(player, cmd);
+					game.logAction(user, `killed ${player.name}`);
+				} else {
+					user.sendTo(this.room, `|error|${targetUsername} is not a living player.`);
+				}
+			}
 		},
 		killhelp: [
 			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # &`,
