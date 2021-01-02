@@ -2669,7 +2669,11 @@ export const commands: ChatCommands = {
 				break;
 			case 'action':
 				player.idle = false;
-				user.sendTo(targetRoom, `You have decided to use an action. DM the host your action.`);
+				if (args[0]) {
+					this.errorReply(`'/mafia action' should be sent alone, not followed by your action or target. Please PM your exact action to the host.`);
+				} else {
+					user.sendTo(targetRoom, `You have decided to use an action. DM the host your action.`);
+				}
 				break;
 			case 'noresponse': case 'unidle': case 'unaction':
 				player.idle = null;
