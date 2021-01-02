@@ -692,6 +692,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	dodrio: {
 		tier: "RU",
 	},
+	doduojohto: {
+		tier: "LC",
+	},
+	dodriojohto: {
+		tier: "UU",
+	},
 	seel: {
 		tier: "LC",
 	},
@@ -2032,6 +2038,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleLevel: 88,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
+	},
+	shedinjagalar: {
+		tier: "PU",
+		doublesTier: "DUU",
 	},
 	whismur: {
 		tier: "LC",
@@ -6417,6 +6427,21 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	durantsinnoh: {
+		tier: "OU",
+	},
+	refleki: {
+		tier: "LC",
+	},
+	serprism: {
+		tier: "OU",
+	},
+	combolgaur: {
+		tier: "OU",
+	},
+	colburnire: {
+		tier: "OU",
+	},
+	froschaiser: {
 		tier: "OU",
 	},
 };

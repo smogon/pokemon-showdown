@@ -5078,4 +5078,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 1037,
 	},
+	divineguard: {
+		onTryHit(target, source, move) {
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
+			this.debug('Divine Guard immunity: ' + move.id);
+			if (target.runEffectiveness(move) > 0) {
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-immune', target, '[from] ability: Wonder Guard');
+				}
+				return null;
+			}
+		},
+		name: "Divine Guard",
+		rating: 5,
+		num: 1038,
+	},
 };

@@ -5856,4 +5856,13 @@ export const MovesText = {
 		desc: "Heals user 1/4 if this move knocks out the target.",
 		shortDesc: "Heals user 1/4 if this KOes the target.",
 	},
+	draconicfangs: {
+		name: "Draconic Fangs",
+		shortDesc: "No additional effect.",
+	},
+	blindingflash: {
+		name: "Blinding Flash",
+		desc: "Has a 30% chance to flinch the target.",
+		shortDesc: "30% chance to flinch the target.",
+	},
 };
