@@ -175,6 +175,8 @@ describe("Dynamax", function () {
 		battle.makeChoices('move ironhead dynamax', 'switch 2');
 		battle.makeChoices('switch 2'); // Eject Pack to Audino
 		battle.makeChoices('switch 2'); // Eject Pack back to Wynaut, to Dynamax
-		assert(battle.p1.active[0].volatiles['dynamax'], 'Wynaut should be currently Dynamaxed.');
+		const wynaut = battle.p1.active[0];
+		assert.statStage(wynaut, 'def', 0, 'Wynaut should not have used Max Steelspike this turn.');
+		assert(wynaut.volatiles['dynamax'], 'Wynaut should be currently Dynamaxed.');
 	});
 });
