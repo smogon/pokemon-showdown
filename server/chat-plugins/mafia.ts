@@ -2590,7 +2590,7 @@ export const commands: ChatCommands = {
 			}
 			if (!args[0]) return this.parse('/help mafia kill');
 			for (const targetUsername of args) {
-				let player = game.playerTable[toID(targetUsername)];
+				const player = game.playerTable[toID(targetUsername)];
 				if (player) {
 					game.eliminate(player, cmd);
 					game.logAction(user, `killed ${player.name}`);
@@ -3054,7 +3054,9 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			const game = room.getGame(MafiaTracker);
 			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
-			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) return this.errorReply(`Only the host can view roles.`);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) {
+				return this.errorReply(`Only the host can view roles.`);
+			}
 			if (!game.started) return this.errorReply(`The game has not started.`);
 			const players = [...Object.values(game.playerTable), ...Object.values(game.dead)];
 			this.sendReplyBox(players.map(
