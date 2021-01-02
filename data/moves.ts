@@ -13403,7 +13403,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
 			// You can't get here unless the pursuit succeeds
-			if (target.beingCalledBack) {
+			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Pursuit damage boost');
 				return move.basePower * 2;
 			}
@@ -13427,7 +13427,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack) move.accuracy = true;
+			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
 		},
 		onTryHit(target, pokemon) {
 			target.side.removeSideCondition('pursuit');
