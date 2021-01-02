@@ -15435,13 +15435,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			this.singleEvent('End', sourceAbility, source.abilityData, source);
 			this.singleEvent('End', targetAbility, target.abilityData, target);
-			if (targetAbility.id !== sourceAbility.id) {
-				source.ability = targetAbility.id;
-				target.ability = sourceAbility.id;
-				source.abilityData = {id: this.toID(source.ability), target: source};
-				target.abilityData = {id: this.toID(target.ability), target: target};
-				if (target.side !== source.side) target.volatileStaleness = 'external';
-			}
+			source.ability = targetAbility.id;
+			target.ability = sourceAbility.id;
+			source.abilityData = {id: this.toID(source.ability), target: source};
+			target.abilityData = {id: this.toID(target.ability), target: target};
+			if (target.side !== source.side) target.volatileStaleness = 'external';
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
 		},
