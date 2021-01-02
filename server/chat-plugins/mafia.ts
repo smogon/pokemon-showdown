@@ -2237,6 +2237,7 @@ export const commands: ChatCommands = {
 				return user.sendTo(targetRoom, `|error|Closed setup is already ${game.closedSetup ? 'enabled' : 'disabled'}.`);
 			}
 			game.closedSetup = action === 'on';
+			game.sendDeclare(`The game is ${action === 'on' ? 'now' : 'no longer'} a closed setup.`);
 			game.updateHost();
 			game.logAction(user, `${game.closedSetup ? 'enabled' : 'disabled'} closed setup`);
 		},
