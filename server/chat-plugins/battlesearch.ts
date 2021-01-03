@@ -1,9 +1,8 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import {FS, Utils, ProcessManager, Repl} from '../../lib';
-
-import {checkRipgrepAvailability} from '../config-loader';
+import {FS, Utils, ProcessManager, Repl, PostgresDatabase} from '../../lib';
+import {checkRipgrepAvailability, Config} from '../config-loader';
 
 const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
 
@@ -24,58 +23,109 @@ interface BattleSearchResults {
 }
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
-export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
-	const useRipgrep = await checkRipgrepAvailability();
-	const pathString = `logs/${month}/${tierid}/`;
-	const results: {[k: string]: BattleSearchResults} = {};
-	let files = [];
-	try {
-		files = await FS(pathString).readdir();
-	} catch (err) {
-		if (err.code === 'ENOENT') {
-			return results;
+
+export abstract class BattleSearchHandler {
+	usePM?: boolean;
+	abstract runSearch(
+		userids: ID[], month: string, tierid: ID, turnLimit?: number
+	): Promise<{[k: string]: BattleSearchResults}>;
+	abstract listMonths(): Promise<string[]>;
+	abstract listTiers(month: string): Promise<string[]>;
+	buildResults(
+		data: {[k: string]: BattleSearchResults}, userids: ID[],
+		month: string, tierid: ID, turnLimit?: number
+	) {
+		let buf = `>view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm\n|init|html\n|title|[Battle Search][${userids.join('-')}][${tierid}][${month}]\n`;
+		buf += `|pagehtml|<div class="pad ladder"><p>`;
+		buf += `${tierid} battles on ${month} where `;
+		buf += userids.length > 1 ? `the users ${userids.join(', ')} were players` : `the user ${userids[0]} was a player`;
+		buf += turnLimit ? ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}` : '';
+		buf += `:</p><li style="display: inline; list-style: none"><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace">`;
+		buf += `<button class="button">Back</button></a></li><br />`;
+		if (userids.length > 1) {
+			const outcomes: BattleOutcome[] = [];
+			for (const day in data) {
+				const curOutcomes = data[day].totalOutcomes;
+				if (curOutcomes) outcomes.push(...curOutcomes);
+			}
+			buf += `<table><tbody><tr><h3 style="margin: 5px auto">Full summary</h3></tr>`;
+			buf += `<tr><th>Won</th><th>Lost</th><th>Turns</th></tr>`;
+			for (const battle of outcomes) {
+				const {won, lost, turns} = battle;
+				buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td></tr>`;
+			}
 		}
-		throw err;
+		buf += `</tbody></table><br />`;
+		for (const day in data) {
+			const dayStats = data[day];
+			buf += `<p style="text-align:left">`;
+			const {totalWins, totalLosses} = dayStats;
+			buf += `<table style=""><tbody><tr><th colspan="2"><h3 style="margin: 5px auto">${day}</h3>`;
+			buf += `</th></tr><tr><th>Category</th><th>Number</th></tr>`;
+			buf += `<tr><td>Total Battles</td><td>${dayStats.totalBattles}</td></tr>`;
+			for (const id in totalWins) {
+				// hide userids if we're only searching for 1
+				buf += `<tr><td>Total Wins${userids.length > 1 ? ` (${id}) ` : ''}</td><td>${totalWins[id]}</td></tr>`;
+			}
+			for (const id in totalLosses) {
+				buf += `<tr><td>Total Losses${userids.length > 1 ? ` (${id}) ` : ''}</td><td>${totalLosses[id]}</td></tr>`;
+			}
+			if (userids.length < 2) {
+				buf += `<tr><th>Opponent</th><th>Times Battled</th></tr>`;
+				const [userid] = userids;
+				for (const foe in dayStats.timesBattled) {
+					buf += `<tr><td>`;
+					buf += `<a href="/view-battlesearch-${userid}-${foe}--${turnLimit}--${month}--${tierid}" target="replace">${foe}</a>`;
+					buf += `</td><td>${dayStats.timesBattled[foe]}</td></tr>`;
+				}
+			}
+			buf += `</p><br />`;
+		}
+		buf += `</tbody></table></div>`;
+		return buf;
 	}
-	const [userid] = userids;
-	files = files.filter(item => item.startsWith(month)).map(item => `logs/${month}/${tierid}/${item}`);
+	async search(
+		connection: Connection, usernames: string[], month: string,
+		tierid: ID, turnLimit?: number
+	) {
+		const userids = usernames.map(toID);
+		const user = connection.user;
+		if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
-	if (useRipgrep) {
-		// Matches non-word (including _ which counts as a word) characters between letters/numbers
-		// in a user's name so the userid can case-insensitively be matched to the name.
-		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
-		let output;
-		try {
-			output = await ProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
-		} catch (error) {
-			return results;
+		// if set to use pm, send search to pm, else do in main process - postgres can handle that
+		const response = await (
+			this.usePM ?
+				PM.query({userids, month, tierid, turnLimit}) :
+				this.runSearch(userids, month, tierid, turnLimit)
+		);
+		connection.send(this.buildResults(response, userids, month, tierid, turnLimit));
+	}
+}
+
+export class PostgresBattleSearcher extends BattleSearchHandler {
+	database = new PostgresDatabase();
+	async runSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
+		const SQL = require('sql-template-strings');
+		const query = SQL`SELECT * FROM battle_logs `;
+		if (userids.length === 1) {
+			query.append(SQL`WHERE (p1id = ${userids[0]} OR p2id = ${userids[0]})`);
+		} else {
+			const [id1, id2] = userids;
+			query.append(SQL`WHERE (p1id = ${id1} OR p2id = ${id1}) AND (p1id = ${id2} OR p2id = ${id2})`);
 		}
-		for (const line of output.stdout.split('\n').reverse()) {
-			const [file, raw] = Utils.splitFirst(line, ':');
-			if (!raw || !line) continue;
-			const data = JSON.parse(raw);
-			const day = file.split('/')[3];
-			if (!results[day]) {
-				results[day] = {
-					totalBattles: 0,
-					totalWins: {},
-					totalOutcomes: userids.length > 1 ? [] : null,
-					totalLosses: {},
-					totalTies: 0,
-					timesBattled: {},
-				};
-			}
-			const p1id = toID(data.p1);
-			const p2id = toID(data.p2);
+		query.append(SQL` AND format = ${tierid}`);
+		if (turnLimit) {
+			query.append(SQL` AND turns < ${turnLimit}`);
+		}
+		const results: {[k: string]: BattleSearchResults} = {};
+		// format
+		const rows = await this.database.query(query);
+		if (!rows) throw new Error(`Null database response`);
 
-			if (userids.length > 1) {
-				// looking for specific userids, only register ones where those users are players
-				if (userids.filter(item => [p1id, p2id].includes(item)).length < userids.length) continue;
-			} else {
-				if (!(p1id === userid || p2id === userid)) continue;
-			}
-
-			if (turnLimit && data.turns > turnLimit) continue;
+		for (const row of rows) {
+			if (turnLimit && row.turns > turnLimit) continue;
+			const [day] = toDate(row.date).split(' ');
+			if (!day.includes(month)) continue;
 			if (!results[day]) {
 				results[day] = {
 					totalBattles: 0,
@@ -87,12 +137,12 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 				};
 			}
 			results[day].totalBattles++;
-			const winnerid = toID(data.winner);
+			const {p1id, p2id, winner: winnerid} = row;
 			const loser = winnerid === p1id ? p2id : p1id;
 			if (userids.includes(winnerid)) {
 				if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
 				results[day].totalWins[winnerid]++;
-			} else if (data.winner) {
+			} else if (winnerid) {
 				if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
 				results[day].totalLosses[loser]++;
 			} else {
@@ -106,10 +156,10 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 
 			const outcomes = results[day].totalOutcomes;
 			if (outcomes) {
-				outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+				outcomes.push({won: winnerid, lost: loser, turns: row.turns});
 			}
 			// we only want foe data for single-userid searches
-			const foe = userids.length > 1 ? null : userid === toID(data.p1) ? toID(data.p2) : toID(data.p1);
+			const foe = userids.length > 1 ? null : userids[0] === p1id ? p2id : p1id;
 			if (foe) {
 				if (!results[day].timesBattled[foe]) results[day].timesBattled[foe] = 0;
 				results[day].timesBattled[foe]++;
@@ -117,129 +167,202 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		}
 		return results;
 	}
-	for (const file of files) {
-		const subFiles = FS(`${file}`).readdirSync();
-		const day = file.split('/')[3];
-		for (const dayFile of subFiles) {
-			const json = FS(`${file}/${dayFile}`).readIfExistsSync();
-			const data = JSON.parse(json);
-			const p1id = toID(data.p1);
-			const p2id = toID(data.p2);
-			if (userids.length > 1) {
-				// looking for specific userids, only register ones where those users are players
-				if (userids.filter(item => item === p1id || item === p2id).length < userids.length) continue;
-			} else {
-				if (!(p1id === userid || p2id === userid)) continue;
-			}
-			if (turnLimit && data.turns > turnLimit) continue;
-			if (!results[day]) {
-				results[day] = {
-					totalBattles: 0,
-					totalWins: {},
-					totalOutcomes: [],
-					totalLosses: {},
-					totalTies: 0,
-					timesBattled: {},
-				};
-			}
-			results[day].totalBattles++;
-			const winnerid = toID(data.winner);
-			const loser = winnerid === p1id ? p2id : p1id;
-			if (userids.includes(winnerid)) {
-				if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
-				results[day].totalWins[winnerid]++;
-			} else if (data.winner) {
-				if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
-				results[day].totalLosses[loser]++;
-			} else {
-				results[day].totalTies++;
-			}
-			// explicitly state 0 of stats if none
-			for (const id of userids) {
-				if (!results[day].totalLosses[id]) results[day].totalLosses[id] = 0;
-				if (!results[day].totalWins[id]) results[day].totalWins[id] = 0;
-			}
-
-			const outcomes = results[day].totalOutcomes;
-			if (outcomes) {
-				outcomes.push({won: winnerid, lost: loser, turns: data.turns});
-			}
-
-			// we don't want foe data if we're searching for 2 userids
-			const foe = userids.length > 1 ? null : userid === p1id ? p2id : p1id;
-			if (foe) {
-				if (!results[day].timesBattled[foe]) results[day].timesBattled[foe] = 0;
-				results[day].timesBattled[foe]++;
-			}
+	async listMonths() {
+		const rows = await this.database.query(
+			`SELECT date FROM battle_logs`
+		);
+		if (!rows) throw new Error(`Null response from db`);
+		const months: string[] = [];
+		for (const {date} of rows) {
+			const [day] = toDate(date).split(' ');
+			const month = day.slice(0, -3);
+			if (!months.includes(month)) months.push(month);
 		}
+		return months;
 	}
-	return results;
+	async listTiers(month: string) {
+		const results: string[] = [];
+		const rows = await this.database.query(`SELECT format, date FROM battle_logs`);
+		if (!rows) throw new Error(`Null response from DB`);
+		for (const {date, format} of rows) {
+			const [day] = toDate(date).split(' ');
+			if (!day.includes(month) || results.includes(format)) continue;
+			results.push(format);
+		}
+		return results;
+	}
 }
 
-function buildResults(
-	data: {[k: string]: BattleSearchResults}, userids: ID[],
-	month: string, tierid: ID, turnLimit?: number
-) {
-	let buf = `>view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm\n|init|html\n|title|[Battle Search][${userids.join('-')}][${tierid}][${month}]\n`;
-	buf += `|pagehtml|<div class="pad ladder"><p>`;
-	buf += `${tierid} battles on ${month} where `;
-	buf += userids.length > 1 ? `the users ${userids.join(', ')} were players` : `the user ${userids[0]} was a player`;
-	buf += turnLimit ? ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}` : '';
-	buf += `:</p><li style="display: inline; list-style: none"><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace">`;
-	buf += `<button class="button">Back</button></a></li><br />`;
-	if (userids.length > 1) {
-		const outcomes: BattleOutcome[] = [];
-		for (const day in data) {
-			const curOutcomes = data[day].totalOutcomes;
-			if (curOutcomes) outcomes.push(...curOutcomes);
+export class TextBattleSearcher extends BattleSearchHandler {
+	usePM = true;
+	async runSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
+		const useRipgrep = await checkRipgrepAvailability();
+		const pathString = `logs/${month}/${tierid}/`;
+		const results: {[k: string]: BattleSearchResults} = {};
+		let files = [];
+		try {
+			files = await FS(pathString).readdir();
+		} catch (err) {
+			if (err.code === 'ENOENT') {
+				return results;
+			}
+			throw err;
 		}
-		buf += `<table><tbody><tr><h3 style="margin: 5px auto">Full summary</h3></tr>`;
-		buf += `<tr><th>Won</th><th>Lost</th><th>Turns</th></tr>`;
-		for (const battle of outcomes) {
-			const {won, lost, turns} = battle;
-			buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td></tr>`;
+		const [userid] = userids;
+		files = files.filter(item => item.startsWith(month)).map(item => `logs/${month}/${tierid}/${item}`);
+
+		if (useRipgrep) {
+			// Matches non-word (including _ which counts as a word) characters between letters/numbers
+			// in a user's name so the userid can case-insensitively be matched to the name.
+			const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
+			let output;
+			try {
+				output = await ProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
+			} catch (error) {
+				return results;
+			}
+			for (const line of output.stdout.split('\n').reverse()) {
+				const [file, raw] = Utils.splitFirst(line, ':');
+				if (!raw || !line) continue;
+				const data = JSON.parse(raw);
+				const day = file.split('/')[3];
+				if (!results[day]) {
+					results[day] = {
+						totalBattles: 0,
+						totalWins: {},
+						totalOutcomes: userids.length > 1 ? [] : null,
+						totalLosses: {},
+						totalTies: 0,
+						timesBattled: {},
+					};
+				}
+				const p1id = toID(data.p1);
+				const p2id = toID(data.p2);
+
+				if (userids.length > 1) {
+					// looking for specific userids, only register ones where those users are players
+					if (userids.filter(item => [p1id, p2id].includes(item)).length < userids.length) continue;
+				} else {
+					if (!(p1id === userid || p2id === userid)) continue;
+				}
+
+				if (turnLimit && data.turns > turnLimit) continue;
+				if (!results[day]) {
+					results[day] = {
+						totalBattles: 0,
+						totalWins: {},
+						totalOutcomes: userids.length > 1 ? [] : null,
+						totalLosses: {},
+						totalTies: 0,
+						timesBattled: {},
+					};
+				}
+				results[day].totalBattles++;
+				const winnerid = toID(data.winner);
+				const loser = winnerid === p1id ? p2id : p1id;
+				if (userids.includes(winnerid)) {
+					if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
+					results[day].totalWins[winnerid]++;
+				} else if (data.winner) {
+					if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
+					results[day].totalLosses[loser]++;
+				} else {
+					results[day].totalTies++;
+				}
+				// explicitly state 0 of stats if none
+				for (const id of userids) {
+					if (!results[day].totalLosses[id]) results[day].totalLosses[id] = 0;
+					if (!results[day].totalWins[id]) results[day].totalWins[id] = 0;
+				}
+
+				const outcomes = results[day].totalOutcomes;
+				if (outcomes) {
+					outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+				}
+				// we only want foe data for single-userid searches
+				const foe = userids.length > 1 ? null : userid === toID(data.p1) ? toID(data.p2) : toID(data.p1);
+				if (foe) {
+					if (!results[day].timesBattled[foe]) results[day].timesBattled[foe] = 0;
+					results[day].timesBattled[foe]++;
+				}
+			}
+			return results;
 		}
-	}
-	buf += `</tbody></table><br />`;
-	for (const day in data) {
-		const dayStats = data[day];
-		buf += `<p style="text-align:left">`;
-		const {totalWins, totalLosses} = dayStats;
-		buf += `<table style=""><tbody><tr><th colspan="2"><h3 style="margin: 5px auto">${day}</h3>`;
-		buf += `</th></tr><tr><th>Category</th><th>Number</th></tr>`;
-		buf += `<tr><td>Total Battles</td><td>${dayStats.totalBattles}</td></tr>`;
-		for (const id in totalWins) {
-			// hide userids if we're only searching for 1
-			buf += `<tr><td>Total Wins${userids.length > 1 ? ` (${id}) ` : ''}</td><td>${totalWins[id]}</td></tr>`;
-		}
-		for (const id in totalLosses) {
-			buf += `<tr><td>Total Losses${userids.length > 1 ? ` (${id}) ` : ''}</td><td>${totalLosses[id]}</td></tr>`;
-		}
-		if (userids.length < 2) {
-			buf += `<tr><th>Opponent</th><th>Times Battled</th></tr>`;
-			const [userid] = userids;
-			for (const foe in dayStats.timesBattled) {
-				buf += `<tr><td>`;
-				buf += `<a href="/view-battlesearch-${userid}-${foe}--${turnLimit}--${month}--${tierid}" target="replace">${foe}</a>`;
-				buf += `</td><td>${dayStats.timesBattled[foe]}</td></tr>`;
+		for (const file of files) {
+			const subFiles = FS(`${file}`).readdirSync();
+			const day = file.split('/')[3];
+			for (const dayFile of subFiles) {
+				const json = FS(`${file}/${dayFile}`).readIfExistsSync();
+				const data = JSON.parse(json);
+				const p1id = toID(data.p1);
+				const p2id = toID(data.p2);
+				if (userids.length > 1) {
+					// looking for specific userids, only register ones where those users are players
+					if (userids.filter(item => item === p1id || item === p2id).length < userids.length) continue;
+				} else {
+					if (!(p1id === userid || p2id === userid)) continue;
+				}
+				if (turnLimit && data.turns > turnLimit) continue;
+				if (!results[day]) {
+					results[day] = {
+						totalBattles: 0,
+						totalWins: {},
+						totalOutcomes: [],
+						totalLosses: {},
+						totalTies: 0,
+						timesBattled: {},
+					};
+				}
+				results[day].totalBattles++;
+				const winnerid = toID(data.winner);
+				const loser = winnerid === p1id ? p2id : p1id;
+				if (userids.includes(winnerid)) {
+					if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
+					results[day].totalWins[winnerid]++;
+				} else if (data.winner) {
+					if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
+					results[day].totalLosses[loser]++;
+				} else {
+					results[day].totalTies++;
+				}
+				// explicitly state 0 of stats if none
+				for (const id of userids) {
+					if (!results[day].totalLosses[id]) results[day].totalLosses[id] = 0;
+					if (!results[day].totalWins[id]) results[day].totalWins[id] = 0;
+				}
+
+				const outcomes = results[day].totalOutcomes;
+				if (outcomes) {
+					outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+				}
+
+				// we don't want foe data if we're searching for 2 userids
+				const foe = userids.length > 1 ? null : userid === p1id ? p2id : p1id;
+				if (foe) {
+					if (!results[day].timesBattled[foe]) results[day].timesBattled[foe] = 0;
+					results[day].timesBattled[foe]++;
+				}
 			}
 		}
-		buf += `</p><br />`;
+		return results;
 	}
-	buf += `</tbody></table></div>`;
-	return buf;
+	async listMonths() {
+		return (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-'));
+	}
+	listTiers(month: string) {
+		return FS(`logs/${month}/`).readdir();
+	}
 }
 
-async function getBattleSearch(
-	connection: Connection, userids: string[], month: string,
-	tierid: ID, turnLimit?: number
-) {
-	userids = userids.map(toID);
-	const user = connection.user;
-	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
+function monthSort(aKey: string, bKey: string) {
+	const a = aKey.split('-').map(n => parseInt(n));
+	const b = bKey.split('-').map(n => parseInt(n));
+	if (a[0] !== b[0]) return b[0] - a[0];
+	return b[1] - a[1];
+}
 
-	const response = await PM.query({userids, turnLimit, month, tierid});
-	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
+function toDate(str: string) {
+	return Chat.toTimestamp(new Date(Number(str)));
 }
 
 export const pages: PageTable = {
@@ -261,12 +384,8 @@ export const pages: PageTable = {
 		}
 		buf += `</p>`;
 
-		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
-			const a = aKey.split('-').map(n => parseInt(n));
-			const b = bKey.split('-').map(n => parseInt(n));
-			if (a[0] !== b[0]) return b[0] - a[0];
-			return b[1] - a[1];
-		});
+		const months = await BattleSearcher.listMonths();
+		months.sort(monthSort);
 		if (!month) {
 			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const i of months) {
@@ -281,7 +400,7 @@ export const pages: PageTable = {
 		}
 
 		const tierid = toID(formatid);
-		const tiers = (await FS(`logs/${month}/`).readdir()).sort((a, b) => {
+		const tiers = (await BattleSearcher.listTiers(month)).sort((a, b) => {
 			// First sort by gen with the latest being first
 			let aGen = 6;
 			let bGen = 6;
@@ -330,7 +449,7 @@ export const pages: PageTable = {
 		}
 
 		// Run search
-		void getBattleSearch(connection, userids, month, tierid, turnLimit);
+		void BattleSearcher.search(connection, userids, month, tierid, turnLimit);
 		return (
 			`<div class="pad ladder"><h2>Battle Search</h2><p>` +
 			`Searching for ${tierid} battles on ${month} where the ` +
@@ -340,6 +459,10 @@ export const pages: PageTable = {
 		);
 	},
 };
+
+export const BattleSearcher: BattleSearchHandler = (
+	Config.usepostgres ? new PostgresBattleSearcher() : new TextBattleSearcher()
+);
 
 export const commands: ChatCommands = {
 	battlesearch(target, room, user, connection) {
@@ -371,12 +494,16 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 	const {userids, turnLimit, month, tierid} = data;
 	const start = Date.now();
 	try {
+<<<<<<< HEAD
 		const result = await runBattleSearch(userids, month, tierid, turnLimit);
 		const elapsedTime = Date.now() - start;
 		if (elapsedTime > 10 * 60 * 1000) {
 			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
 		}
 		return result;
+=======
+		return await BattleSearcher.runSearch(userids, month, tierid, turnLimit);
+>>>>>>> Support logging battle logs to a Postgres database
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,

@@ -1,0 +1,23 @@
+CREATE TABLE battle_logs (
+   roomid INTEGER NOT NULL,
+   winner TEXT NOT NULL,
+ 	loser TEXT NOT NULL,
+	p1id TEXT NOT NULL,
+	p2id TEXT NOT NULL,
+	p1 TEXT NOT NULL,
+	p2 TEXT NOT NULL,
+	p1team JSONB[] NOT NULL,
+	p2team JSONB[] NOT NULL,
+   log TEXT[] NOT NULL,
+   inputLog TEXT[] NOT NULL,
+   turns SMALLINT NOT NULL,
+   endType TEXT NOT NULL,
+   date BIGINT NOT NULL,
+   format TEXT NOT NULL,
+	ladderError BOOLEAN NOT NULL,
+	seed BIGINT[] NOT NULL,
+	score TEXT NOT NULL,
+	p1rating INTEGER,
+	p2rating INTEGER,
+   PRIMARY KEY(roomid)
+);

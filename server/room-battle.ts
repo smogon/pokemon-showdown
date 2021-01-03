@@ -16,6 +16,7 @@ import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 import type {Tournament} from './tournaments/index';
+import {PostgresDatabase} from "../lib/postgres";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
@@ -928,6 +929,32 @@ export class RoomBattle extends RoomGames.RoomGame {
 		await FS(logpath).mkdirp();
 		await FS(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
+		await this.logPostgres(logData);
+	}
+	static logDatabase = new PostgresDatabase();
+	async logPostgres(logData: AnyObject) {
+		const roomid = Number(this.room.roomid.split('-')[2]);
+		const winner = toID(logData.winner);
+		const {p1, p2} = logData;
+		const p1id = toID(p1);
+		const p2id = toID(p2);
+		const loser = p1id === winner ? p2id : p1id;
+
+		const SQL = require('sql-template-strings');
+
+		const query = SQL`INSERT INTO battle_logs `;
+		query.append(
+			`(roomid, winner, loser, p1id, p2id, p1, p2, p1team, p2team, log, inputLog, ` +
+			`turns, endType, date, format, ladderError, seed, score, p1rating, p2rating) `
+		);
+		query.append(`VALUES (`);
+		query.append(SQL`${roomid}, ${winner}, ${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team}, `);
+		query.append(SQL`${logData.p2team}, ${logData.log}, ${logData.inputLog}, `);
+		query.append(SQL`${logData.turns}, ${this.endType}, ${Date.now()}, ${Dex.getFormat(this.format).id}, `);
+		query.append(SQL`${logData.ladderError}, ${logData.seed}, ${logData.score}, ${logData.p1rating}, ${logData.p2rating}`);
+		query.append(`)`);
+
+		await Rooms.RoomBattle.logDatabase.query(query);
 	}
 	onConnect(user: User, connection: Connection | null = null) {
 		// this handles joining a battle in which a user is a participant,
