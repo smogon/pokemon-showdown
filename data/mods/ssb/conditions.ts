@@ -1620,6 +1620,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('The Immortal')}|ban stall`);
 		},
 	},
+	thewaffleman: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('thewaffleman')}|Whats Good Youtube its your boy thewaffleman`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('thewaffleman')}|Never Gonna Give You Up`);
+		},
+		onFaint() {
+			this.add(`c|${getName('thewaffleman')}|coyg`);
+		},
+	},
 	tiki: {
 		noCopy: true,
 		onStart() {
@@ -1708,20 +1720,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c|${getName('vooper')}|I guess Kung Fu isn't for everyone...`);
-		},
-	},
-	xjoelituh: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('xJoelituh')}|Hey, how can I help you?`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('xJoelituh')}|Hold on, I need a second opinion.`);
-		},
-		onFaint() {
-			let str = '';
-			for (let x = 0; x < 10; x++) str += String.fromCharCode(48 + this.random(79));
-			this.add(`c|${getName('xJoelituh')}|${str} ok`);
 		},
 	},
 	yuki: {

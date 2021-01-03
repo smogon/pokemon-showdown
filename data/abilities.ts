@@ -2517,7 +2517,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (!move.flags['contact']) return;
+			if (!move.flags['contact'] || source.hasItem('protectivepads')) return;
 
 			let announced = false;
 			for (const pokemon of [target, source]) {
@@ -4068,6 +4068,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	unnerve: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.effectData.unnerved = true;
+		},
+		onStart(pokemon) {
+			if (this.effectData.unnerved) return;
+			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.effectData.unnerved = true;
 		},
 		onFoeTryEatItem: false,
 		name: "Unnerve",
