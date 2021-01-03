@@ -63,4 +63,15 @@ describe('Protective Pads', function () {
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1, "Attack should be lowered");
 	});
+
+	it(`should not start Perish Body on either Pokemon`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'protectivepads', moves: ['dragonascent']},
+		], [
+			{species: 'cursola', ability: 'perishbody', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.false(battle.p1.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Wynaut due to Protective Pads.');
+		assert.false(battle.p2.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Cursola due to Protective Pads.');
+	});
 });

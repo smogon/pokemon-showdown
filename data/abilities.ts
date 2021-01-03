@@ -2517,7 +2517,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (!move.flags['contact']) return;
+			if (!move.flags['contact'] || source.hasItem('protectivepads')) return;
 
 			let announced = false;
 			for (const pokemon of [target, source]) {
