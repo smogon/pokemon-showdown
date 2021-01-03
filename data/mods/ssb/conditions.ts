@@ -1710,20 +1710,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('vooper')}|I guess Kung Fu isn't for everyone...`);
 		},
 	},
-	xjoelituh: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('xJoelituh')}|Hey, how can I help you?`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('xJoelituh')}|Hold on, I need a second opinion.`);
-		},
-		onFaint() {
-			let str = '';
-			for (let x = 0; x < 10; x++) str += String.fromCharCode(48 + this.random(79));
-			this.add(`c|${getName('xJoelituh')}|${str} ok`);
-		},
-	},
 	yuki: {
 		noCopy: true,
 		onStart(target, pokemon) {
