@@ -908,18 +908,18 @@ export const Formats: FormatList = [
 				];
 			}
 		},
-		checkLearnset(move, species, lsetData, set) {
+		checkCanLearn(move, species, lsetData, set) {
 			// @ts-ignore
 			if (!set.sp || !set.sp.exists || !set.crossSpecies || !set.crossSpecies.exists) {
-				return this.checkLearnset(move, species, lsetData, set);
+				return this.checkCanLearn(move, species, lsetData, set);
 			}
 			// @ts-ignore
-			const problem = this.checkLearnset(move, set.sp);
+			const problem = this.checkCanLearn(move, set.sp);
 			if (!problem) return null;
 			// @ts-ignore
 			if (!set.crossMovesLeft) return problem;
 			// @ts-ignore
-			if (this.checkLearnset(move, set.crossSpecies)) return problem;
+			if (this.checkCanLearn(move, set.crossSpecies)) return problem;
 			// @ts-ignore
 			set.crossMovesLeft--;
 			return null;
