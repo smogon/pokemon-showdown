@@ -5005,38 +5005,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
-	// xJoelituh
-	burnbone: {
-		accuracy: 90,
-		basePower: 0,
-		category: "Status",
-		desc: "Burns the target, and the user heals 33% of their maximum HP, rounded down, if the move successfully burns.",
-		shortDesc: "Applies burn. Heals 33% HP if this move burns.",
-		name: "Burn Bone",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 10,
-		priority: 1,
-		flags: {protect: 1, reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Will-O-Wisp', target);
-			this.add('-anim', source, 'Shadow Bone', target);
-		},
-		onHit(target, source, move) {
-			if (target.trySetStatus('brn', source, move)) {
-				this.heal(source.baseMaxhp * 0.33, source);
-				return;
-			}
-			return false;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Fire",
-	},
-
 	// yuki
 	classchange: {
 		accuracy: true,
