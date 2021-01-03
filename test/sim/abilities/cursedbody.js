@@ -10,13 +10,15 @@ describe(`Cursed Body`, function () {
 		battle.destroy();
 	});
 
-	it.skip(`should be able to trigger on Z-moves`, function () {
+	it.skip(`should be able to disable Z-moves (not the base of Z-moves)`, function () {
 		battle = common.createBattle({seed: [1, 2, 3, 98]}, [[ // hardcoded seed to force Cursed Body
 			{species: 'gengar', ability: 'cursedbody', item: 'focussash', moves: ['sleeptalk']},
 		], [
 			{species: 'kommoo', item: 'kommoniumz', moves: ['clangingscales', 'sleeptalk']},
 		]]);
 		battle.makeChoices('move sleeptalk', 'move clangingscales zmove');
-		assert.cantMove(() => battle.makeChoices('auto', 'move clangingscales'), 'Kommo-o', 'Clanging Scales');
+		const log = battle.getDebugLog();
+		const cursedBodyIndex = log.indexOf('|Clangorous Soulblaze|[from] ability: Cursed Body|[of] p1a: Gengar');
+		assert.false.equal(cursedBodyIndex, -1, 'Cursed Body should be able to disable Z-moves.');
 	});
 });
