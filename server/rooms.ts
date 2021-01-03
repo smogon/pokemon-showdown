@@ -1034,7 +1034,7 @@ export class GlobalRoomState {
 	maxUsers: number;
 	maxUsersDate: number;
 	formatList: string;
-	writingData?: boolean;
+	pendingDataWrite: NodeJS.Timer | null = null;
 
 	constructor() {
 		this.settingsList = [];
