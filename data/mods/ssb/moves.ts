@@ -4735,6 +4735,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// thewaffleman
+	icepress: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Damage is calculated using the user's Defense stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal. This move has a 10% chance to freeze the target and is super effective against Fire-types.",
+		shortDesc: "Body Press. 10% Frz. SE vs Fire.",
+		name: "Ice Press",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Body Press', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Fire') return 1;
+		},
+		useSourceDefensiveAsOffensive: true,
+		secondary: {
+			chance: 10,
+			status: "frz",
+		},
+		target: "normal",
+		type: "Ice",
+	},
+
 	// tiki
 	rightoncue: {
 		accuracy: true,

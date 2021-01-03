@@ -745,6 +745,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Watt Up',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	thewaffleman: {
+		species: 'Mr. Rime', ability: 'Prankster', item: 'Kasib Berry', gender: 'M',
+		moves: ['Iron Defense', 'Slack Off', 'Focus Blast'],
+		signatureMove: 'Ice Press',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+	},
 	tiki: {
 		species: 'Snom', ability: 'True Grit', item: 'Eviolite', gender: 'M',
 		moves: ['Toxic', 'Strength Sap', 'U-turn'],
