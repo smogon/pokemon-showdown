@@ -569,7 +569,24 @@ export class CommandContext extends MessageContext {
 			}
 			Chat.sendPM(message, this.user, this.pmTarget);
 		} else if (this.room) {
-			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
+			let emoticons = Chat.parseEmoticons(message);
+			if (emoticons && !this.room.disableEmoticons) {
+				for (let u in this.room.users) {
+					let curUser = Users.get(u);
+					if (!curUser || !curUser.connected) continue;
+					if (Users.ignoreEmotes[curUser.id]) {
+						curUser.sendTo(this.room, (this.room.type === 'chat' ? '|c:|' + (~~(Date.now() / 1000)) + '|' : '|c|') + this.user.getIdentity(this.room.roomid) + '|' + message);
+						continue;
+					}
+					curUser.sendTo(this.room, (this.room.type === 'chat' ? '|c:|' + (~~(Date.now() / 1000)) + '|' : '|c|') + this.user.getIdentity(this.room.roomid) + '|/html ' + emoticons);
+				}
+				this.room.log.log.push((this.room.type === 'chat' ? (this.room.type === 'chat' ? '|c:|' + (~~(Date.now() / 1000)) + '|' : '|c|') : '|c|') + this.user.getIdentity(this.room.roomid) + '|' + message);
+				this.room.lastUpdate = this.room.log.length;
+				this.room.messageCount++;
+			} else {
+				this.room.add((this.room.type === 'chat' ? (this.room.type === 'chat' ? '|c:|' + (~~(Date.now() / 1000)) + '|' : '|c|') : '|c|') + this.user.getIdentity(this.room.roomid) + '|' + message);
+				this.room.messageCount++;
+			}
 			if (this.room.game && this.room.game.onLogMessage) {
 				this.room.game.onLogMessage(message, this.user);
 			}
