@@ -31,7 +31,7 @@ function isValidSet(gen, set) {
 function validLearnset(move, set, tier) {
 	const validator = TeamValidator.get(`gen7${tier}`);
 	const species = validator.dex.getSpecies(set.species || set.name);
-	return !validator.checkLearnset(move, species);
+	return !validator.checkCanLearn(move, species);
 }
 
 describe(`Random Team generator (slow)`, function () {

@@ -1095,7 +1095,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
-				if (move.gen <= maxGen && !validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (move.gen <= maxGen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
@@ -2367,7 +2367,6 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		return {error: "You must specify at least one move."};
 	}
 
-	let lsetProblem: string | null = null;
 	const moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
@@ -2382,22 +2381,21 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		lsetProblem = validator.checkLearnset(move, species, setSources, set);
 	}
-	const lsetProblems = validator.reconcileLearnset(
-		species, setSources, lsetProblem, species.name
-	);
-	const problems: string[] = [];
-	if (lsetProblems) problems.push(...lsetProblems);
-	let sources: string[] = setSources.sources.map(source => {
-		if (source.charAt(1) !== 'E') return source;
-		const fathers = validator.findEggMoveFathers(source, species, setSources, true);
-		if (!fathers) return '';
-		return source + ':' + fathers.join(',');
-	}).filter(Boolean);
-	if (setSources.sources.length && !sources.length) {
-		problems.push(`${species.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves!.join(', ')})`);
+
+	const problems = validator.validateMoves(species, moveNames, setSources, set);
+	if (setSources.sources.length) {
+		setSources.sources = setSources.sources.map(source => {
+			if (source.charAt(1) !== 'E') return source;
+			const fathers = validator.findEggMoveFathers(source, species, setSources, true);
+			if (!fathers) return '';
+			return source + ':' + fathers.join(',');
+		}).filter(Boolean);
+		if (!setSources.size()) {
+			problems.push(`${species.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves!.join(', ')})`);
+		}
 	}
+
 	let buffer = `In ${formatName}, `;
 	if (setSources.isHidden) {
 		buffer += `${species.abilities['H'] || 'HA'} `;
@@ -2408,6 +2406,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			'7V': "virtual console transfer from gen 1-2", '8V': "Pok&eacute;mon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
 		};
 		const sourcesBefore = setSources.sourcesBefore;
+		let sources = setSources.sources;
 		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
 		buffer += " from:<ul class=\"message-learn-list\">";
 		if (sources.length) {
