@@ -2350,7 +2350,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		return {error: "You must specify at least one move."};
 	}
 
-	let lsetProblem: {type: string, moveName: string, [k: string]: any} | null = null;
+	let lsetProblem: string | null = null;
 	const moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
@@ -2365,18 +2365,10 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		const checkLsetProblem = validator.checkLearnset(move, species, setSources, set);
-		if (checkLsetProblem !== null && Object.keys(checkLsetProblem).length) {
-			lsetProblem = Object.create(null);
-			for (const i in checkLsetProblem) {
-				lsetProblem![i] = checkLsetProblem[i];
-			}
-			lsetProblem!.moveName = move.name;
-			break;
-		}
+		lsetProblem = validator.checkLearnset(move, species, setSources, set);
 	}
 	const lsetProblems = validator.reconcileLearnset(
-		species, setSources, lsetProblem ? lsetProblem : null, species.name
+		species, setSources, lsetProblem, species.name
 	);
 	const problems: string[] = [];
 	if (lsetProblems) problems.push(...lsetProblems);
@@ -2456,10 +2448,13 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			buffer += `<li>must be obtained as ` + Dex.getSpecies(setSources.babyOnly).name;
 		}
 		buffer += "</ul>";
-	} else if (targets.length > 1 || problems.length > 1) {
-		buffer += ` because:<ul class="message-learn-list">`;
-		buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
-		buffer += `</ul>`;
+	} else if (problems.length >= 1) {
+		const expectedError = `${species.name} can't learn ${moveNames[0]}.`;
+		if (problems.length > 1 || moveNames.length > 1 || problems[0] !== expectedError) {
+			buffer += ` because:<ul class="message-learn-list">`;
+			buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
+			buffer += `</ul>`;
+		}
 	}
 	return {reply: buffer};
 }
