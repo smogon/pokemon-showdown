@@ -27,8 +27,7 @@ export type ComplexTeamBan = ComplexBan;
 export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	checkLearnset: [Function, string] | null;
+	checkLearnset: [TeamValidator['checkLearnset'], string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	minSourceGen: [number, string] | null;
 
@@ -214,7 +213,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly tournamentShow?: boolean;
 	readonly checkLearnset?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
-	) => {type: string, [any: string]: any} | null;
+	) => string | null;
 	readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
 	readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	readonly onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
