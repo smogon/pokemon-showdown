@@ -745,6 +745,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Watt Up',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	thewaffleman: {
+		species: 'Mr. Rime', ability: 'Prankster', item: 'Kasib Berry', gender: 'M',
+		moves: ['Iron Defense', 'Slack Off', 'Focus Blast'],
+		signatureMove: 'Ice Press',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+	},
 	tiki: {
 		species: 'Snom', ability: 'True Grit', item: 'Eviolite', gender: 'M',
 		moves: ['Toxic', 'Strength Sap', 'U-turn'],
@@ -786,12 +792,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Drain Punch', 'Knock Off', 'Swords Dance'],
 		signatureMove: 'Panda Express',
 		evs: {hp: 252, atk: 252, spd: 4}, ivs: {atk: 0}, nature: 'Adamant',
-	},
-	xJoelituh: {
-		species: 'Marowak-Alola', ability: 'Mountaineer', item: 'Rare Bone', gender: 'M',
-		moves: ['Poltergeist', 'Fire Punch', 'Stomping Tantrum'],
-		signatureMove: 'Burn Bone',
-		evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful', shiny: true,
 	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',

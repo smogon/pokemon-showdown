@@ -64,7 +64,7 @@ describe('Protective Pads', function () {
 		assert.statStage(battle.p1.active[0], 'atk', -1, "Attack should be lowered");
 	});
 
-	it.skip(`should not start Perish Body on either Pokemon`, function () {
+	it(`should not start Perish Body on either Pokemon`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['dragonascent']},
 		], [

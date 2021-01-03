@@ -191,7 +191,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] ZU",
 		desc: `The unofficial usage-based tier below PU.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672675/">ZU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675570/">ZU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3664800/">ZU Viability Rankings</a>`,
 		],
 
@@ -451,9 +451,9 @@ export const Formats: FormatList = [
 			'Medicham-Mega', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Spectrier', 'Swampert-Mega', 'Tangrowth',
 			'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Tyranitar', 'Volcarona', 'Zapdos-Base',
 			'nduubl', // National Dex UUBL
-			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Heracross-Mega',
-			'Hydreigon', 'Kyurem', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega', 'Pinsir-Mega', 'Slowbro-Mega', 'Thundurus',
-			'Venusaur-Mega', 'Xurkitree', 'Drizzle', 'Drought',
+			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Hawlucha',
+			'Heracross-Mega', 'Hydreigon', 'Kyurem', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Mawile-Mega', 'Pinsir-Mega', 'Slowbro-Mega',
+			'Thundurus', 'Venusaur-Mega', 'Xurkitree', 'Drizzle', 'Drought',
 			// Slowbronite is banned so it doesn't validate on Galarian Slowbro
 			'Slowbronite',
 		],
@@ -621,12 +621,12 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin',
-			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
-			'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Shedinja',
-			'Solgaleo', 'Toxapex', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
+			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Toxapex',
+			'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
 			'Arena Trap', 'Contrary', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Electric Surge ++ Surge Surfer',
 			'Flare Boost', 'Fur Coat', 'Guts', 'Harvest', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Magic Bounce',
-			'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Power Construct', 'Regenerator ++ Emergency Exit',
+			'Magic Guard', 'Magnet Pull', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Power Construct', 'Regenerator ++ Emergency Exit',
 			'Regenerator ++ Wimp Out', 'Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Slush Rush', 'Snow Cloak',
 			'Speed Boost', 'Stakeout', 'Steelworker ++ Steely Spirit', 'Tinted Lens', 'Unaware', 'Unburden', 'Water Bubble',
 			'Leppa Berry', 'Baton Pass',
