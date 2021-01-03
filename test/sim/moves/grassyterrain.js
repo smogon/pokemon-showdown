@@ -91,7 +91,6 @@ describe('Grassy Terrain', function () {
 		const zamGrassyIndex = log.indexOf('|-heal|p2a: Alakazam|166/251|[from] Grassy Terrain');
 		const rillaGrassyIndex = log.indexOf('|-heal|p1a: Rillaboom|283/341|[from] Grassy Terrain');
 		const rillaLeftoversIndex = log.indexOf('|-heal|p1a: Rillaboom|262/341|[from] item: Leftovers');
-		console.log(log);
 		assert(zamGrassyIndex < rillaGrassyIndex, 'Alakazam should heal from Grassy Terrain before Rillaboom');
 		assert(rillaGrassyIndex < rillaLeftoversIndex, 'Rillaboom should heal from Grassy Terrain before Leftovers');
 	});
