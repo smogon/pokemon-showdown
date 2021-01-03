@@ -116,6 +116,19 @@ describe('Pressure', function () {
 		battle.makeChoices('move assist', 'auto');
 		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('assist')).pp, 30);
 	});
+
+	it.skip(`Sticky Web should not deduct PP from Pressure (only entry hazard to do so)`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['stickyweb', 'stealthrock']},
+		], [
+			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move stickyweb', 'auto');
+		battle.makeChoices('move stealthrock', 'auto');
+		const wynaut = battle.p1.active[0];
+		assert.equal(wynaut.getMoveData(Dex.getMove('stickyweb')).pp, 31);
+		assert.equal(wynaut.getMoveData(Dex.getMove('stealthrock')).pp, 30);
+	});
 });
 
 describe('Pressure [Gen 4]', function () {
