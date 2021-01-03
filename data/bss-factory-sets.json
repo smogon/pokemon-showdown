@@ -87,7 +87,7 @@
         "ability": ["Disguise"],
         "evs": {"hp": 252, "atk": 252, "def": 4},
         "nature": "Adamant",
-        "moves": [["Play Rough"], ["Shadow Sneak"], ["Drain Punch"], ["Swords Dance"]]
+        "moves": [["Play Rough"], ["Shadow Sneak"], ["Trick Room"], ["Curse"]]
       },
       {
         "species": "Mimikyu",
@@ -229,7 +229,8 @@
         "ability": ["Strong Jaw"],
         "evs": {"atk": 252, "def": 4, "spe": 252},
         "nature": "Jolly",
-        "moves": [["Fishious Rend"], ["Outrage"], ["Sleep Talk"]]},
+        "moves": [["Fishious Rend"], ["Outrage"], ["Sleep Talk"]]
+      },
       {
         "species": "Dracovish",
         "item": ["Life Orb"],
@@ -623,11 +624,19 @@
     "sets": [
       {
         "species": "Glastrier",
-        "item": ["Weakness Policy", "Lum Berry", "Assault Vest"],
+        "item": ["Weakness Policy", "Lum Berry"],
         "ability": ["Chilling Neigh"],
         "evs": {"hp": 252, "atk": 252, "spd": 4},
         "nature": "Adamant",
         "moves": [["Icicle Spear"], ["High Horsepower"], ["Close Combat"], ["Heavy Slam", "Swords Dance"]]
+      },
+      {
+        "species": "Glastrier",
+        "item": ["Assault Vest"],
+        "ability": ["Chilling Neigh"],
+        "evs": {"hp": 252, "atk": 252, "spd": 4},
+        "nature": "Adamant",
+        "moves": [["Icicle Spear"], ["High Horsepower"], ["Close Combat"], ["Heavy Slam", "Smart Strike"]]
       },
       {
         "species": "Glastrier",
@@ -2216,7 +2225,7 @@
         "species": "Chandelure",
         "item": ["Choice Scarf"],
         "ability": ["Infiltrator"],
-        "evs": {"hp": 252, "spa": 252, "spd": 4},
+        "evs": {"spa": 252, "spd": 4, "spe": 252},
         "nature": "Timid",
         "ivs": {"atk": 0},
         "moves": [["Flamethrower", "Overheat"], ["Shadow Ball"], ["Energy Ball"], ["Trick"]]
@@ -2280,7 +2289,7 @@
         "ability": ["Regenerator"],
         "evs": {"def": 4, "spa": 252, "spe": 252},
         "nature": "Timid",
-        "ivs": {"spe": 0},
+        "ivs": {"atk": 0},
         "moves": [["Hurricane"], ["Heat Wave"], ["Icy Wind"], ["Nasty Plot"]]
       }
     ]
