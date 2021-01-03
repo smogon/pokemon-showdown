@@ -387,9 +387,7 @@ export const commands: ChatCommands = {
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
-		const version = await Monitor.version();
 
-		let patch = target;
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
@@ -404,7 +402,6 @@ export const commands: ChatCommands = {
 					await this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
-				patch = 'chat';
 				if (lock['chat']) {
 					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
 				}
@@ -450,7 +447,6 @@ export const commands: ChatCommands = {
 				Chat.loadPluginData(Tournaments, 'tournaments');
 				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
-				patch = 'formats';
 				if (lock['formats']) {
 					return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				}
@@ -479,7 +475,6 @@ export const commands: ChatCommands = {
 				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("DONE. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
-				patch = 'validator';
 				if (lock['validator']) {
 					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 				}
@@ -491,7 +486,6 @@ export const commands: ChatCommands = {
 				void TeamValidatorAsync.PM.respawn();
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
-				patch = 'punishments';
 				if (lock['punishments']) {
 					return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				}
@@ -500,14 +494,12 @@ export const commands: ChatCommands = {
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("DONE");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
-				patch = 'dnsbl';
 				this.sendReply("Hotpatching ip-tools...");
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("DONE");
 			} else if (target === 'modlog') {
-				patch = 'modlog';
 				if (lock['modlog']) {
 					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
@@ -536,14 +528,13 @@ export const commands: ChatCommands = {
 		} catch (e) {
 			Rooms.global.notifyRooms(
 				['development', 'staff'] as RoomID[],
-				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch} - but something failed while trying to hot-patch.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
 			);
-			return this.errorReply(`Something failed while trying to hot-patch ${patch}: \n${e.stack}`);
+			return this.errorReply(`Something failed while trying to hot-patch ${target}: \n${e.stack}`);
 		}
-		Monitor.hotpatchVersions[patch] = version;
 		Rooms.global.notifyRooms(
 			['development', 'staff'] as RoomID[],
-			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch}`
+			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`
 		);
 	},
 	hotpatchhelp: [
