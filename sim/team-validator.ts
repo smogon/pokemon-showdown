@@ -86,11 +86,6 @@ export class PokemonSources {
 	sketchMove?: string;
 	hm?: string;
 	restrictiveMoves?: string[];
-	/**
-	 * Only used if this turns out to be the empty set pre-merge, to explain
-	 * why a pokemon can't learn a move.
-	 */
-	cantLearnReasons?: string[];
 	/** Obscure learn methods */
 	restrictedMove?: ID;
 
