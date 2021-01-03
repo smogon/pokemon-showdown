@@ -1848,7 +1848,7 @@ export class TeamValidator {
 					// The logic behind this comes from the idea that a Pokemon that learns Sketch
 					// should be able to Sketch any move before transferring into Generation 8.
 					if (move.noSketch || move.isZ || move.isMax || (move.gen > 7 && !this.format.id.includes('nationaldex'))) {
-						cantLearnReason = ` can't be Sketched.`;
+						cantLearnReason = `can't be Sketched.`;
 						break;
 					}
 					lset = lsetData.learnset['sketch'];
@@ -1877,11 +1877,11 @@ export class TeamValidator {
 
 					const learnedGen = parseInt(learned.charAt(0));
 					if (learnedGen < this.minSourceGen) {
-						cantLearnReason = ` can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
+						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
 						continue;
 					}
 					if (noFutureGen && learnedGen > dex.gen) {
-						cantLearnReason = ` can't be transferred from Gen ${learnedGen} to ${dex.gen}.`;
+						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${dex.gen}.`;
 						continue;
 					}
 
@@ -1892,7 +1892,7 @@ export class TeamValidator {
 						learnedGen < 7 && setSources.isHidden && (dex.gen <= 7 || format.mod === 'gen8dlc1') &&
 						!dex.mod('gen' + learnedGen).getSpecies(baseSpecies.name).abilities['H']
 					) {
-						cantLearnReason = ` can only be learned in gens without Hidden Abilities.`;
+						cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
 						continue;
 					}
 					if (!species.isNonstandard) {
@@ -1900,13 +1900,13 @@ export class TeamValidator {
 						if (dex.gen >= 4 && learnedGen <= 3 && [
 							'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
 						].includes(moveid)) {
-							cantLearnReason = ` can't be transferred from Gen 3 to 4 because it's an HM move.`;
+							cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
 							continue;
 						}
 						if (dex.gen >= 5 && learnedGen <= 4 && [
 							'cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb',
 						].includes(moveid)) {
-							cantLearnReason = ` can't be transferred from Gen 3 to 4 because it's an HM move.`;
+							cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
 							continue;
 						}
 						// Defog and Whirlpool can't be transferred together
@@ -1927,7 +1927,7 @@ export class TeamValidator {
 							// falls through to E check below
 						} else {
 							// this move is unavailable, skip it
-							cantLearnReason = ` is learned at level ${parseInt(learned.substr(2))}.`;
+							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 							continue;
 						}
 					}
