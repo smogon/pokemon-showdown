@@ -17,7 +17,6 @@ export interface AnnouncementData extends AnnouncementOptions {
 export class Announcement extends Rooms.MinorActivity {
 	readonly activityid = 'announcement' as ID;
 	name = 'Announcement';
-	onRename = undefined;
 	activityNumber: number;
 	source: string;
 	constructor(room: Room, options: AnnouncementOptions) {

@@ -112,8 +112,8 @@ export abstract class MinorActivity {
 
 	abstract destroy(): void;
 	abstract display(): void;
-	abstract onConnect?(user: User, connection: Connection | null): void;
-	abstract onRename?(user: User, oldid: ID, joining: boolean): void;
+	onConnect?(user: User, connection: Connection | null): void;
+	onRename?(user: User, oldid: ID, joining: boolean): void;
 	abstract toJSON(): AnyObject;
 	abstract save(): void;
 }
