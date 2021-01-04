@@ -1212,6 +1212,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	let nationalSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
+	let PivotExclamation = false;
+	let RecoilExclamation = false;
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
 			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
@@ -1362,6 +1364,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'recoil') {
 				if (!orGroup.recoil) {
 					orGroup.recoil = true;
+					if (isNotSearch === true){
+						RecoilExclamation = true;
+					}
 				} else if ((orGroup.recoil && isNotSearch) || (!orGroup.recoil && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include recoil moves.'};
 				}
@@ -1383,10 +1388,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 				continue;
 			}
-
 			if (target === 'pivot') {
 				if (!orGroup.pivot) {
 					orGroup.pivot = true;
+					if (isNotSearch === true){
+						PivotExclamation = true;
+					}
 				} else if ((orGroup.pivot && isNotSearch) || (!orGroup.pivot && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include pivot moves.'};
 				}
@@ -1742,8 +1749,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (alts.recoil) {
-				if (move.recoil || move.hasCrashDamage) matched = true;
-			}
+				if (RecoilExclamation === true) {
+				  if (!move.recoil || move.hasCrashDamage) 
+				  matched = true;
+				  
+				  } else {
+					   if (move.recoil || move.hasCrashDamage) 
+					   matched = true;
+				  }
+			  }
 			if (matched) continue;
 			for (const prop in alts.property) {
 				if (typeof alts.property[prop].less === "number") {
@@ -1847,8 +1861,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (alts.pivot) {
-				if (move.selfSwitch && move.id !== 'batonpass') matched = true;
-			}
+				if (PivotExclamation === true) {
+				  if (!move.selfSwitch && move.id !== 'batonpass')
+				  matched = true;
+		
+				} else {
+				   if (move.selfSwitch && move.id !== 'batonpass')
+				   matched = true;
+				}
+			  }
 			if (matched) continue;
 
 			delete dex[moveid];
