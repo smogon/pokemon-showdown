@@ -1856,22 +1856,22 @@ export class TeamValidator {
 				}
 			}
 
-			if (lsetData.learnset[moveid] || lsetData.learnset['sketch']) {
-				let lset = lsetData.learnset[moveid];
-				if (!lset) {
-					// The logic behind this comes from the idea that a Pokemon that learns Sketch
-					// should be able to Sketch any move before transferring into Generation 8.
-					if (move.noSketch || move.isZ || move.isMax || (move.gen > 7 && !this.format.id.includes('nationaldex'))) {
-						cantLearnReason = `can't be Sketched.`;
-						break;
-					}
-					lset = lsetData.learnset['sketch'];
-					sketch = true;
-				} else if (moveid === 'sketch') {
-					sketch = true;
+			let lset = lsetData.learnset[moveid];
+			if (moveid === 'sketch') {
+				sketch = true;
+			} else if (lsetData.learnset['sketch']) {
+				if (move.noSketch || move.isZ || move.isMax) {
+					cantLearnReason = `can't be Sketched.`;
+				} else if (move.gen > 7 && !this.format.id.includes('nationaldex')) {
+					cantLearnReason = `can't be Sketched because it's a Gen 8 move and Sketch isn't available in Gen 8.`;
+				} else {
+					if (!lset) sketch = true;
+					lset = lsetData.learnset['sketch'].concat(lset || []);
 				}
-				if (typeof lset === 'string') lset = [lset];
+			}
 
+			if (typeof lset === 'string') lset = [lset];
+			if (lset) {
 				for (let learned of lset) {
 					// Every `learned` represents a single way a pokemon might
 					// learn a move. This can be handled one of several ways:

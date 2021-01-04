@@ -15400,6 +15400,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
+		noSketch: true,
 		secondary: null,
 		target: "normal",
 		type: "Normal",
