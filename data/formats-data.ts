@@ -3065,7 +3065,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	shaymin: {
-		tier: "Illegal",
+		tier: "OU",
 	},
 	shayminsky: {
 		tier: "Uber",
