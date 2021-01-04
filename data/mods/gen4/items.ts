@@ -1,4 +1,4 @@
-export const BattleItems: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -96,7 +96,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 				target.addVolatile('focussash');
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
@@ -152,7 +152,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		onModifyDamagePhase2(damage, source, target, move) {
 			return damage * 1.3;
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
@@ -203,7 +203,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 			},
 		},
 		onUpdate(pokemon) {
-			if (pokemon.volatiles.attract && pokemon.useItem()) {
+			if (pokemon.volatiles['attract'] && pokemon.useItem()) {
 				pokemon.removeVolatile('attract');
 				this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 			}
@@ -212,7 +212,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	metronome: {
 		inherit: true,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.effectData.numConsecutive = 0;
 				this.effectData.lastMove = '';

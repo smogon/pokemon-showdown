@@ -5201,11 +5201,8 @@ export const MovesText = {
 	},
 	twister: {
 		name: "Twister",
-		desc: "Has a 20% chance to flinch the target. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
-		shortDesc: "20% chance to flinch the foe(s).",
-		descGen4: "Has a 20% chance to flinch the target. Power doubles if the target is using Bounce or Fly.",
-		descGen2: "Has a 20% chance to flinch the target. Power doubles if the target is using Fly.",
-		shortDescGen2: "20% chance to flinch the target.",
+		desc: "Has a 20% chance to flinch the target. Power doubles if the weather is raindance.",
+		shortDesc: "Power doubles if raindance.",
 	},
 	uturn: {
 		name: "U-turn",
@@ -5814,8 +5811,8 @@ export const MovesText = {
 		desc: "Has a 20% chance to confuse the target.",
 		shortDesc: "20% chance to confuse the target.",
 	},
-	glowingbram: {
-		name: "Glowing Bram",
+	glowingbeam: {
+		name: "Glowing Beam",
 		shortDesc: "No additional effect.",
 	},
 	moonritual: {

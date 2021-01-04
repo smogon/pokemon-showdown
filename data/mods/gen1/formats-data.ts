@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bulbasaur: {
 		randomBattleMoves: ["sleeppowder", "bodyslam"],
 		essentialMove: "razorleaf",
@@ -68,7 +68,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	kakuna: {
-		randomBattleMoves: ["poisonsting", "stringshot", "harden"],
+		randomBattleMoves: ["poisonsting", "stringshot"],
 		tier: "NFE",
 	},
 	beedrill: {
@@ -653,7 +653,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	magikarp: {
-		randomBattleMoves: ["tackle", "dragonrage"],
+		randomBattleMoves: ["splash", "tackle"],
 		tier: "LC",
 	},
 	gyarados: {

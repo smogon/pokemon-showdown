@@ -1,7 +1,6 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	anticipation: {
 		inherit: true,
-		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
 		onStart(pokemon) {
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
@@ -20,7 +19,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	frisk: {
 		inherit: true,
-		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart(pokemon) {
 			const target = pokemon.side.foe.randomActive();
 			if (target?.item) {
@@ -30,20 +28,14 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	infiltrator: {
 		inherit: true,
-		desc: "This Pokemon's moves ignore the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
-		shortDesc: "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist.",
 		rating: 1.5,
 	},
 	keeneye: {
 		inherit: true,
-		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
-		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
 		onModifyMove() {},
 	},
 	oblivious: {
 		inherit: true,
-		desc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
-		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
@@ -60,7 +52,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	overcoat: {
 		inherit: true,
-		shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
 		onTryHit() {},
 		rating: 0.5,
 	},
@@ -81,7 +72,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	soundproof: {
 		inherit: true,
-		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
 		onAllyTryHitSide() {},
 	},
 };

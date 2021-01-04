@@ -1,8 +1,8 @@
-// Used for Asheviere and Snaquaza's moves
+// Used Snaquaza's move
 import {RandomStaffBrosTeams} from './random-teams';
-import {Pokemon, EffectState} from '../../../sim/pokemon';
+import {Pokemon} from '../../../sim/pokemon';
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
 	"moveid": {
@@ -318,7 +318,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -361,7 +361,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		terrain: 'lavaterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -466,8 +466,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
 			target.setAbility(set.ability);
 
-			const format = this.format;
-			if (format.exists && format.onSwitchIn) format.onSwitchIn.call(this, target);
+			this.singleEvent('SwitchIn', this.format, this.formatData, target);
 			this.add('-message', `${oldName} was sent to the Distortion World and replaced with somebody else!`);
 			let stat: BoostName;
 			for (stat in target.boosts) {
@@ -502,7 +501,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', target, 'Dark Void', target);
 		},
 		pseudoWeather: 'distortionworld',
-		effect: {
+		condition: {
 			duration: 5,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Ghost') {
@@ -561,7 +560,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-message', `${pokemon.side.foe.active[0].name} was caught in the ambush!`);
 			this.add(`c|+A Quag to The Past|GOTCHA BITCH`);
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Murky Ambush');
@@ -687,102 +686,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-	},
-	// Asheviere
-	wondertrade: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets. This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not Asheviere.",
-		shortDesc: "Replaces user's team with random SSBB sets.",
-		name: "Wonder Trade",
-		isNonstandard: "Custom",
-		pp: 2,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Amnesia', source);
-			this.add('-anim', source, 'Double Team', source);
-		},
-		onTryHit(target, source) {
-			if (source.name !== 'Asheviere') {
-				this.add('-fail', source);
-				this.hint("Only Asheviere can use Wonder Trade.");
-				return null;
-			}
-		},
-		onHit(target, source) {
-			// Store percent of HP left, percent of PP left, and status for each pokemon on the user's team
-			const carryOver: {hp: number, status: ID, statusData: EffectState, pp: number[]}[] = [];
-			const currentTeam = source.side.pokemon.slice();
-			for (const pokemon of currentTeam) {
-				carryOver.push({
-					hp: pokemon.hp / pokemon.maxhp,
-					status: pokemon.status,
-					statusData: pokemon.statusData,
-					pp: pokemon.moveSlots.slice().map(m => {
-						return m.pp / m.maxpp;
-					}),
-				});
-				// Handle pokemon with less than 4 moves
-				while (carryOver[carryOver.length - 1].pp.length < 4) {
-					carryOver[carryOver.length - 1].pp.push(1);
-				}
-			}
-			// Generate a new team
-			let team: Pokemon[] = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
-			// Remove Asheviere from generated teams to not allow duplicates
-			team = team.filter(pokemon => !(pokemon.name === 'Asheviere'));
-			// Overwrite un-fainted pokemon other than the user
-			for (const [i, mon] of currentTeam.entries()) {
-				if (mon.fainted || !mon.hp || mon.position === source.position) continue;
-				let set = team.shift();
-				if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
-				const oldSet = carryOver[i];
-
-				if (set.name === 'Flare' && currentTeam.filter(p => !p.fainted && p.hp).length <= 2) {
-					// Don't select Super Illusion when there are only 2 unfainted pokemon
-					set = team.shift();
-					if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
-				}
-
-				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
-				const effect = this.effect;
-				this.effect = {id: ''} as Effect;
-				const pokemon = new Pokemon(set, source.side);
-				this.effect = effect;
-
-				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
-				pokemon.status = oldSet.status;
-				if (oldSet.statusData) pokemon.statusData = oldSet.statusData;
-				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
-					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
-				}
-				pokemon.position = mon.position;
-				currentTeam[i] = pokemon;
-			}
-			// Move flare to the front of the team if Super Illusion would not activate
-			const newTeam = currentTeam.slice().map(p => (!p.fainted && p.hp) ? p.name : null);
-			if (newTeam.filter(n => n).pop() === 'Flare') {
-				// Don't swap with the current pokemon or client will softlock
-				const newIdx = source.position === 0 ? 1 : 0;
-				const idx = newTeam.indexOf('Flare');
-				const original = currentTeam[newIdx];
-				currentTeam[newIdx] = currentTeam[idx];
-				currentTeam[idx] = original;
-				// Update pokemon.position flags to prevent errors
-				currentTeam[newIdx].position = newIdx;
-				currentTeam[idx].position = idx;
-			}
-			source.side.pokemon = currentTeam;
-			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
-		},
-		target: "self",
-		type: "Psychic",
 	},
 	// Averardo
 	dragonsmash: {
@@ -915,7 +818,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		volatileStatus: 'thousandcircuitoverload',
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Thousand Circuit Overload');
@@ -1013,6 +916,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Black Hole Eclipse', target);
 		},
 		onModifyMove(move, pokemon, target) {
+			if (!target) return;
 			if (target.getStat('def', false, true) < target.getStat('spd', false, true)) move.category = 'Physical';
 		},
 		onBasePower(basePower, source, target, move) {
@@ -1614,48 +1518,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Bug",
 	},
-	// Flare
-	distortionblast: {
-		accuracy: 100,
-		basePower: 100,
-		category: "Special",
-		desc: "Until they switch out, Pokemon hit by this move will have all status effects and secondary move effects target themselves.",
-		shortDesc: "Hit Pokemon have status/secondaries self-target.",
-		name: "Distortion Blast",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Night Daze', target);
-			this.add('-anim', source, 'Magic Room', source);
-		},
-		volatileStatus: "distortionblast",
-		effect: {
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Distortion Blast');
-				this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was distorted!`);
-			},
-			onModifyMove(move, pokemon) {
-				if (move.status) {
-					if (!move.secondaries) move.secondaries = [];
-					move.secondaries.push({chance: 100, status: move.status});
-					delete move.status;
-				}
-				if (move.secondaries) {
-					move.secondaries = move.secondaries.map(secondary => {
-						return secondary.self || {self: secondary};
-					});
-				}
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Dark",
-	},
 	// FOMG
 	rickrollout: {
 		accuracy: true,
@@ -1974,7 +1836,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Geomancy', source);
 		},
 		terrain: 'scriptedterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -2018,7 +1880,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					const moves = [];
-					const pool = Object.keys(this.dex.data.Movedex);
+					const pool = Object.keys(this.dex.data.Moves);
 					this.prng.shuffle(pool);
 					const metronome = this.dex.getMove('metronome');
 					for (const id of pool) {
@@ -2031,7 +1893,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 						if (moves.length >= 3) break;
 					}
 					moves.push('glitchout');
-					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) {
+					if (this.toID(pokemon.ability).includes('illusion') && pokemon.illusion) {
 						this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
 					}
 					pokemon.formeChange('missingno');
@@ -2086,8 +1948,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in this.dex.data.Movedex) {
-				const move = this.dex.data.Movedex[id];
+			for (const id in this.dex.data.Moves) {
+				const move = this.dex.data.Moves[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome && effect.noMetronome.includes(move.name)) continue;
@@ -2275,7 +2137,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Dark Void', target);
 			this.add('-anim', source, 'Surf', target);
 		},
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(target, source) {
 				if (source.hasItem('gripclaw')) {
@@ -2693,7 +2555,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.field.removePseudoWeather('naptime');
 		},
 		pseudoWeather: 'naptime',
-		effect: {
+		condition: {
 			duration: 1,
 		},
 		target: "self",
@@ -3046,7 +2908,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		terrain: 'prismaticterrain',
-		effect: {
+		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -3117,7 +2979,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				source.forceSwitchFlag = true;
 			}
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onSwitchIn(pokemon) {
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('pyramidingsong'));
@@ -3249,7 +3111,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Toxic", target);
 		},
-		// Innate corrosive implemented in BattleScripts#setStatus
+		// Innate corrosive implemented in Scripts#setStatus
 		status: 'tox',
 		secondary: null,
 		target: "normal",
@@ -3432,7 +3294,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Protect');
@@ -3513,7 +3375,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Genesis Supernova", source);
 		},
 		pseudoWeather: 'literallycheating',
-		effect: {
+		condition: {
 			duration: 7,
 			onBoost(boost, target, source, effect) {
 				let positiveBoost = false;
@@ -3896,7 +3758,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick Room", source);
 		},
 		pseudoWeather: 'alienwave',
-		effect: {
+		condition: {
 			duration: 5,
 			onStart(target, source) {
 				this.add('-fieldstart', 'move: Alien Wave');
@@ -4102,7 +3964,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		pseudoWeather: 'nightmarefield',
-		effect: {
+		condition: {
 			duration: 4,
 			onStart(battle, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
@@ -4174,7 +4036,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Celebrate", target);
 		},
 		sideCondition: "rotate",
-		effect: {
+		condition: {
 			duration: 2,
 			onStart(source) {
 				this.add('-message', `${source.active[0].name}'s replacement is going to switch out next turn!`);
@@ -4506,21 +4368,17 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[id];
+			for (const id in this.dex.data.Moves) {
+				const move = this.dex.getMove(id);
 				if (move.realMove || move.id === 'glitzerpopping') continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
-				if (this.dex.getMove(id).gen > this.gen) continue;
-				moves.push(move);
+				if (move.gen > this.gen) continue;
+				moves.push(move.name);
 			}
-			let randomMove: string;
-			if (moves.length) {
-				randomMove = this.sample(moves).name;
-			} else {
-				return false;
-			}
+			if (!moves.length) return false;
+			const randomMove = this.sample(moves);
 			this.useMove(randomMove, target);
 		},
 		multihit: [2, 5],
@@ -4611,7 +4469,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			target.addVolatile('confusion');
 			target.addVolatile('cutietrap');
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Cutie Escape');
@@ -4697,7 +4555,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 			this.hint("Zarel still has the Serene Grace ability.");
 		},
-		effect: {
+		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(pokemon, target, move) {
 				if (pokemon.species.id === 'meloettapirouette') {

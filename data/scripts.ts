@@ -1,6 +1,8 @@
+import type {Dex} from '../sim/dex';
+
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
-export const BattleScripts: BattleScriptsData = {
+export const Scripts: BattleScriptsData = {
 	gen: 8,
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,
@@ -86,7 +88,7 @@ export const BattleScripts: BattleScriptsData = {
 
 		// Dancer Petal Dance hack
 		// TODO: implement properly
-		const noLock = externalMove && !pokemon.volatiles.lockedmove;
+		const noLock = externalMove && !pokemon.volatiles['lockedmove'];
 
 		if (zMove) {
 			if (pokemon.illusion) {
@@ -96,6 +98,7 @@ export const BattleScripts: BattleScriptsData = {
 			pokemon.side.zMoveUsed = true;
 		}
 		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+		this.lastSuccessfulMoveThisTurn = moveDidSomething ? this.activeMove && this.activeMove.id : null;
 		if (this.activeMove) move = this.activeMove;
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
@@ -120,13 +123,11 @@ export const BattleScripts: BattleScriptsData = {
 				if (this.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.add('-activate', dancer, 'ability: Dancer');
-				// @ts-ignore - the Dancer ability can't trigger on a move where target is null because it does not copy failed moves.
-				const dancersTarget = target.side !== dancer.side && pokemon.side === dancer.side ? target : pokemon;
-				// @ts-ignore
+				const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
 				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.dex.getAbility('dancer'), undefined, true);
 			}
 		}
-		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
+		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 	},
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
@@ -286,7 +287,7 @@ export const BattleScripts: BattleScriptsData = {
 			const originalHp = pokemon.hp;
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			if (pokemon && pokemon !== target && move && move.category !== 'Status') {
+			if (pokemon && pokemon !== target && move.category !== 'Status') {
 				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
 					this.runEvent('EmergencyExit', pokemon, pokemon);
 				}
@@ -336,7 +337,16 @@ export const BattleScripts: BattleScriptsData = {
 
 		this.setActiveMove(move, pokemon, targets[0]);
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
+		let hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
+			return false;
+		}
+
+		hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
@@ -346,21 +356,10 @@ export const BattleScripts: BattleScriptsData = {
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
 
-		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
-		if (!hitResult) {
-			if (hitResult === false) {
-				this.add('-fail', pokemon);
-				this.attrLastMove('[still]');
-			}
-			return false;
-		}
-
 		let atLeastOneFailure!: boolean;
 		for (const step of moveSteps) {
-			// @ts-ignore
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
-			// @ts-ignore
 			targets = targets.filter((val, i) => hitResults[i] || hitResults[i] === 0);
 			atLeastOneFailure = atLeastOneFailure || hitResults.some(val => val === false);
 			if (!targets.length) {
@@ -467,7 +466,7 @@ export const BattleScripts: BattleScriptsData = {
 				let boost!: number;
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
-						boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+						boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 						boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
@@ -476,7 +475,7 @@ export const BattleScripts: BattleScriptsData = {
 						}
 					}
 					if (!move.ignoreEvasion) {
-						boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+						boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
 						boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
@@ -501,6 +500,12 @@ export const BattleScripts: BattleScriptsData = {
 				}
 				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
 					this.boost({spe: 2}, pokemon);
+					this.boost({accuracy: 1}, pokemon);
+					//console.log("accuracy before boost: "+accuracy);
+					//accuracy *= 1.3;
+					//console.log("accuracy after boost: "+accuracy);
+					//accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					this.debug('blunderpolicy - enhancing accuracy');
 				}
 				hitResults[i] = false;
 				continue;
@@ -573,6 +578,10 @@ export const BattleScripts: BattleScriptsData = {
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return false;
+		}
+
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
@@ -582,10 +591,6 @@ export const BattleScripts: BattleScriptsData = {
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
-
-		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
-			return false;
-		}
 
 		if (move.target === 'all') {
 			hitResult = this.runEvent('TryHitField', target, pokemon, move);
@@ -654,7 +659,7 @@ export const BattleScripts: BattleScriptsData = {
 				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
-						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 						const boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
@@ -663,7 +668,7 @@ export const BattleScripts: BattleScriptsData = {
 						}
 					}
 					if (!move.ignoreEvasion) {
-						const boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+						const boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
 						const boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
@@ -693,8 +698,7 @@ export const BattleScripts: BattleScriptsData = {
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage[i] = md === true || !md ? 0 : md;
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
-				// @ts-ignore
-				move.totalDamage += damage[i];
+				move.totalDamage += damage[i] as number;
 			}
 			if (move.mindBlownRecoil) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
@@ -724,7 +728,7 @@ export const BattleScripts: BattleScriptsData = {
 			} else {
 				recoilDamage = this.trunc(pokemon.maxhp / 4);
 			}
-			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as PureEffect);
+			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -814,10 +818,7 @@ export const BattleScripts: BattleScriptsData = {
 		damage = this.spreadDamage(damage, targets, pokemon, move);
 
 		for (const i of targets.keys()) {
-			if (!damage && damage !== 0) {
-				this.debug('damage interrupted');
-				targets[i] = false;
-			}
+			if (damage[i] === false) targets[i] = false;
 		}
 
 		// 3. onHit event happens here
@@ -906,8 +907,7 @@ export const BattleScripts: BattleScriptsData = {
 				this.faint(pokemon, pokemon, move);
 			}
 			if ((damage[i] || damage[i] === 0) && !target.fainted) {
-				// @ts-ignore
-				if (move.noFaint && damage[i] >= target.hp) {
+				if (move.noFaint && damage[i]! >= target.hp) {
 					damage[i] = target.hp - 1;
 				}
 			}
@@ -1056,7 +1056,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (!moveData.secondaries) return;
 		for (const target of targets) {
 			if (target === false) continue;
-			const secondaries: SecondaryEffect[] =
+			const secondaries: Dex.SecondaryEffect[] =
 				this.runEvent('ModifySecondaries', target, pokemon, moveData, moveData.secondaries.slice());
 			for (const secondary of secondaries) {
 				const secondaryRoll = this.random(100);
@@ -1087,8 +1087,7 @@ export const BattleScripts: BattleScriptsData = {
 	},
 
 	calcRecoilDamage(damageDealt, move) {
-		// @ts-ignore
-		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+		return this.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	},
 
 	zMoveTable: {
@@ -1140,8 +1139,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (pokemon) {
 			const item = pokemon.getItem();
 			if (move.name === item.zMoveFrom) {
-				// @ts-ignore
-				const zMove = this.dex.getActiveMove(item.zMove);
+				const zMove = this.dex.getActiveMove(item.zMove as string);
 				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
@@ -1200,8 +1198,9 @@ export const BattleScripts: BattleScriptsData = {
 		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if (altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+		if ((this.gen <= 7 || this.ruleTable.has('standardnatdex')) &&
+			altForme?.isMega && altForme?.requiredMove &&
+			pokemon.baseMoves.includes(this.toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
@@ -1244,9 +1243,8 @@ export const BattleScripts: BattleScriptsData = {
 	getMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
 		if (move.name === 'Struggle') return move;
-		if (pokemon.canGigantamax && move.category !== 'Status') {
-			const gMaxSpecies = this.dex.getSpecies(pokemon.canGigantamax);
-			const gMaxMove = this.dex.getMove(gMaxSpecies.isGigantamax);
+		if (pokemon.gigantamax && pokemon.canGigantamax && move.category !== 'Status') {
+			const gMaxMove = this.dex.getMove(pokemon.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
 		const maxMove = this.dex.getMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
@@ -1258,14 +1256,14 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
 		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
 		if (move.category !== 'Status') {
-			if (pokemon.canGigantamax) {
-				const gMaxSpecies = this.dex.getSpecies(pokemon.canGigantamax);
-				const gMaxMove = this.dex.getActiveMove(gMaxSpecies.isGigantamax ? gMaxSpecies.isGigantamax : '');
+			if (pokemon.gigantamax && pokemon.canGigantamax) {
+				const gMaxMove = this.dex.getActiveMove(pokemon.canGigantamax);
 				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
-			maxMove.basePower = move.maxMove.basePower;
-			if (['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) maxMove.basePower = 160;
+			if (!['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) {
+				maxMove.basePower = move.maxMove.basePower;
+			}
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;

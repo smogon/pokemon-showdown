@@ -1,6 +1,7 @@
 /* eslint max-len: ["error", 240] */
 
 import RandomGen6Teams from '../gen6/random-teams';
+import {toID} from '../../../sim/dex';
 
 export class RandomGen5Teams extends RandomGen6Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {
@@ -57,7 +58,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// These moves can be used even if we aren't setting up to use them:
 		const SetupException = ['closecombat', 'dracometeor', 'extremespeed', 'suckerpunch', 'superpower'];
 
-		const counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
+		const counterAbilities = ['Adaptability', 'Contrary', 'Iron Fist', 'Skill Link'];
 
 		let hasMove: {[k: string]: boolean} = {};
 		let counter;
@@ -410,7 +411,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			do {
 				rejectAbility = false;
 				if (counterAbilities.includes(ability)) {
-					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
+					// Adaptability, Contrary, Iron Fist, Skill Link
 					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Anger Point' || ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
@@ -420,8 +421,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = !counter['inaccurate'];
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = (!counter['Physical'] && !hasMove['batonpass']);
+				} else if (ability === 'Flash Fire') {
+					rejectAbility = abilities.includes('Drought');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
+				} else if (ability === 'Hustle') {
+					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Immunity') {
@@ -454,8 +459,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = (!!counter['recoil'] && !counter['recovery']);
 				} else if (ability === 'Swarm') {
 					rejectAbility = !counter['Bug'];
-				} else if (ability === 'Swift Swim') {
-					rejectAbility = (!hasMove['raindance'] && !teamDetails['rain']);
 				} else if (ability === 'Technician') {
 					rejectAbility = (!counter['technician'] || abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
 				} else if (ability === 'Tinted Lens') {
@@ -465,7 +468,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Unburden') {
 					rejectAbility = species.baseStats.spe > 100;
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = abilities.includes('Volt Absorb');
+					rejectAbility = (abilities.includes('Drizzle') || abilities.includes('Volt Absorb'));
 				}
 
 				if (rejectAbility) {

@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen4',
 	gen: 3,
 	init() {
@@ -7,14 +7,96 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
 		let newCategory = '';
-		for (const i in this.data.Movedex) {
-			if (!this.data.Movedex[i]) console.log(i);
-			if (this.data.Movedex[i].category === 'Status') continue;
-			newCategory = specialTypes.includes(this.data.Movedex[i].type) ? 'Special' : 'Physical';
-			if (newCategory !== this.data.Movedex[i].category) {
-				this.modData('Movedex', i).category = newCategory;
+		for (const i in this.data.Moves) {
+			if (!this.data.Moves[i]) console.log(i);
+			if (this.data.Moves[i].category === 'Status') continue;
+			newCategory = specialTypes.includes(this.data.Moves[i].type) ? 'Special' : 'Physical';
+			if (newCategory !== this.data.Moves[i].category) {
+				this.modData('Moves', i).category = newCategory;
 			}
 		}
+	},
+	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
+		// RSE divides modifiers into several mathematically important stages
+		// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
+
+		if (!move.type) move.type = '???';
+		const type = move.type;
+
+		// Burn
+		if (pokemon.status === 'brn' && baseDamage && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+			baseDamage = this.modify(baseDamage, 0.5);
+		}
+
+		// Other modifiers (Reflect/Light Screen/etc)
+		baseDamage = this.runEvent('ModifyDamagePhase1', pokemon, target, move, baseDamage);
+
+		// Double battle multi-hit
+		// In Generation 3, the spread move modifier is 0.5x instead of 0.75x. Moves that hit both foes
+		// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
+		if (move.spreadHit && move.target === 'allAdjacentFoes') {
+			const spreadModifier = move.spreadModifier || 0.5;
+			this.debug('Spread modifier: ' + spreadModifier);
+			baseDamage = this.modify(baseDamage, spreadModifier);
+		}
+
+		// Weather
+		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+
+		if (move.category === 'Physical' && !Math.floor(baseDamage)) {
+			baseDamage = 1;
+		}
+
+		baseDamage += 2;
+
+		const isCrit = target.getMoveHitData(move).crit;
+		if (isCrit) {
+			baseDamage = this.modify(baseDamage, move.critModifier || 2);
+		}
+
+		// Mod 2 (Damage is floored after all multipliers are in)
+		baseDamage = Math.floor(this.runEvent('ModifyDamagePhase2', pokemon, target, move, baseDamage));
+
+		// this is not a modifier
+		baseDamage = this.randomizer(baseDamage);
+
+		// STAB
+		if (move.forceSTAB || type !== '???' && pokemon.hasType(type)) {
+			// The "???" type never gets STAB
+			// Not even if you Roost in Gen 4 and somehow manage to use
+			// Struggle in the same turn.
+			// (On second thought, it might be easier to get a MissingNo.)
+			baseDamage = this.modify(baseDamage, move.stab || 1.5);
+		}
+		// types
+		let typeMod = target.runEffectiveness(move);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
+		target.getMoveHitData(move).typeMod = typeMod;
+		if (typeMod > 0) {
+			if (!suppressMessages) this.add('-supereffective', target);
+
+			for (let i = 0; i < typeMod; i++) {
+				baseDamage *= 2;
+			}
+		}
+		if (typeMod < 0) {
+			if (!suppressMessages) this.add('-resisted', target);
+
+			for (let i = 0; i > typeMod; i--) {
+				baseDamage = Math.floor(baseDamage / 2);
+			}
+		}
+
+		if (isCrit && !suppressMessages) this.add('-crit', target);
+
+		// Final modifier.
+		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+
+		if (!Math.floor(baseDamage)) {
+			return 1;
+		}
+
+		return Math.floor(baseDamage);
 	},
 	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
@@ -224,7 +306,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		let boost: number;
 		if (accuracy !== true) {
 			if (!move.ignoreAccuracy) {
-				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+				boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 				boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 				if (boost > 0) {
 					accuracy *= boostTable[boost];
@@ -233,7 +315,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (!move.ignoreEvasion) {
-				boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+				boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
 				boost = this.clampIntRange(boosts['evasion'], -6, 6);
 				if (boost > 0) {
 					accuracy /= boostTable[boost];
@@ -313,7 +395,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 					accuracy = move.accuracy;
 					if (accuracy !== true) {
 						if (!move.ignoreAccuracy) {
-							boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+							boosts = this.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
 							boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 							if (boost > 0) {
 								accuracy *= boostTable[boost];
@@ -322,7 +404,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+							boosts = this.runEvent('ModifyBoost', target, null, null, {...target.boosts});
 							boost = this.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];

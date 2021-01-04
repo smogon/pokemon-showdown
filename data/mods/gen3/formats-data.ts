@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -783,7 +783,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	shuckle: {
-		randomBattleMoves: ["encore", "protect", "rest", "sleeptalk", "toxic", "wrap"],
+		randomBattleMoves: ["encore", "protect", "rest", "toxic", "wrap"],
 		tier: "NU",
 	},
 	heracross: {
