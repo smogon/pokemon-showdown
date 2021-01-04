@@ -10,7 +10,7 @@ describe('Spite', function () {
 		battle.destroy();
 	});
 
-	it.only(`should fail on Z-moves`, function () {
+	it(`should fail on Z-moves`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'Gengar', item: 'ghostiumz', moves: ['shadowball']},
 		], [
