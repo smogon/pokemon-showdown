@@ -2182,7 +2182,7 @@ for (const room of Rooms.rooms.values()) {
 	// @ts-ignore
 	delete room.settings.tourAnnouncements;
 	if (!announcements) {
-		room.saveSettings()
+		room.saveSettings();
 		continue;
 	}
 	if (!room.settings.tournaments) room.settings.tournaments = {};
