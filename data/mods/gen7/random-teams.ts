@@ -525,7 +525,7 @@ export class RandomGen7Teams extends RandomTeams {
 					(hasType['Psychic'] && !counter['Psychic'] && (hasAbility['Psychic Surge'] || movePool.includes('psychicfangs') || !hasType['Flying'] && !hasAbility['Pixilate'] && counter.stab < species.types.length)) ||
 					(hasType['Rock'] && !counter['Rock'] && !hasType['Fairy'] && (counter.setupType === 'Physical' || species.baseStats.atk >= 105 || hasAbility['Rock Head'])) ||
 					(hasType['Steel'] && !counter['Steel'] && (species.baseStats.atk >= 100 || hasAbility['Steelworker'])) ||
-					(hasType['Water'] && (!counter['Water'] || !counter.stab) && !hasAbility['Protean']) ||
+					(hasType['Water'] && ((!counter['Water'] && !hasAbility['Protean']) || !counter.stab || movePool.includes('crabhammer'))) ||
 					(hasAbility['Adaptability'] && !counter.setupType && species.types.length > 1 && (!counter[species.types[0]] || !counter[species.types[1]])) ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || (hasAbility['Refrigerate'] && !hasMove['blizzard'])) && !counter['Normal']) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && species.name !== 'Shuckle') ||
@@ -755,7 +755,7 @@ export class RandomGen7Teams extends RandomTeams {
 			forme = 'Genesect-Douse';
 		} else if (species.name === 'Kommo-o' && !teamDetails.zMove) {
 			item = hasMove['clangingscales'] ? 'Kommonium Z' : 'Dragonium Z';
-		} else if (species.name === 'Lycanroc' && hasMove['stoneedge'] && counter.setupType && !teamDetails.zMove) {
+		} else if (species.baseSpecies === 'Lycanroc' && hasMove['stoneedge'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Lycanium Z';
 		} else if (species.baseSpecies === 'Marowak') {
 			item = 'Thick Club';

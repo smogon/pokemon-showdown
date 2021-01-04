@@ -2190,7 +2190,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	rayquazamega: {
-		randomBattleMoves: ["dragonascent", "dragonclaw", "dragondance", "earthquake", "extremespeed", "swordsdance", "vcreate"],
 		randomDoubleBattleMoves: ["dragonascent", "dragonclaw", "dragondance", "earthquake", "extremespeed", "protect", "swordsdance", "vcreate"],
 		tier: "AG",
 		doublesTier: "DUber",
