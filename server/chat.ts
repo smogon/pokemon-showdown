@@ -278,6 +278,19 @@ export class PageContext extends MessageContext {
 		return true;
 	}
 
+	privatelyCheckCan(permission: RoomPermission, target: User | null, room: Room): boolean;
+	privatelyCheckCan(permission: GlobalPermission, target?: User | null): boolean;
+	privatelyCheckCan(permission: string, target: User | null = null, room: Room | null = null) {
+		if (!this.user.can(permission as any, target, room as any)) {
+			this.pageDoesNotExist();
+		}
+		return true;
+	}
+
+	pageDoesNotExist(): never {
+		throw new Chat.ErrorMessage(`Page "${this.pageid}" not found`);
+	}
+
 	requireRoom(pageid?: string) {
 		const room = this.extractRoom(pageid);
 		if (!room) {
@@ -334,15 +347,12 @@ export class PageContext extends MessageContext {
 			}
 			handler = handler[parts.shift() || 'default'];
 		}
-		if (typeof handler !== 'function') {
-			this.errorReply(`Page "${this.pageid}" not found`);
-			return;
-		}
 
 		this.args = parts;
 
 		let res;
 		try {
+			if (typeof handler !== 'function') this.pageDoesNotExist();
 			res = await handler.call(this, parts, this.user, this.connection);
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
