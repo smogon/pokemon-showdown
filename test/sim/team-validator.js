@@ -231,6 +231,16 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should validate Sketch', function () {
+		// Spore is a Gen 5 event move
+		// Sketch itself should still be valid
+		const team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['bellydrum', 'spore', 'sketch'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should reject illegal egg move combinations', function () {
 		let team = [
 			{species: 'azumarill', ability: 'hugepower', moves: ['bellydrum', 'aquajet'], evs: {hp: 1}},
