@@ -64,8 +64,8 @@ describe('Eject Pack', function () {
 		]]);
 		battle.makeChoices('move leer, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices();
-		assert.equal(battle.p2.active[0].species, "Morelull");
-		assert.equal(battle.p2.active[1].species, "Wynaut");
+		assert.species(battle.p2.active[0], "Morelull");
+		assert.species(battle.p2.active[1], "Wynaut");
 	});
 
 	it("should cause Pokemon to switch out during the semi-invulernable state", function () {

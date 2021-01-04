@@ -305,6 +305,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Color Change"},
 	},
+	feebas: {
+		inherit: true,
+		abilities: {0: "Swift Swim", H: "Adaptability"},
+	},
 	milotic: {
 		inherit: true,
 		abilities: {0: "Marvel Scale", H: "Cute Charm"},

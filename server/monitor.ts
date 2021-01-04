@@ -63,7 +63,6 @@ export const Monitor = new class {
 	networkUse: {[k: string]: number} = {};
 	networkCount: {[k: string]: number} = {};
 	hotpatchLock: {[k: string]: {by: string, reason: string}} = {};
-	hotpatchVersions: {[k: string]: string | undefined} = {};
 
 	TimedCounter = TimedCounter;
 

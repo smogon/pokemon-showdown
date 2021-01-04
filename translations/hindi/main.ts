@@ -82,7 +82,7 @@ export const translations: Translations = {
 		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>username</em>: room moderador/driver हटाए",
 		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>username</em>: उपयोगकर्ता को room के सभी पदों से हटाए",
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>सन्देश</em>: room में एक बड़ा नीला ऐलान करे",
-		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: room में HTML code के एक डब्बे को प्रसारित करे",
+		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML code</em>: room में HTML code के एक डब्बे को प्रसारित करे",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: room में एक चित्र प्रदर्शित करे",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: room के विविध सेटिंग बदले, जैसे की  modchat, capsfilter आदि",
 

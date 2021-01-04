@@ -22,7 +22,7 @@ describe('Protean', function () {
 		assert(cinder.hasType('Fighting'));
 	});
 
-	it.skip(`should activate on both turns of a charge move`, function () {
+	it(`should activate on both turns of a charge move`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'protean', moves: ['bounce']},
 		], [

@@ -135,7 +135,7 @@ export const pages: PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
 			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
-			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[1], b[1]));
+			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[0], b[0]));
 
 			for (const [reason, ip] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
@@ -283,9 +283,8 @@ export const commands: ChatCommands = {
 
 	iprangeshelp() {
 		const help = [
-			`<code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
 			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ &`,
-			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &`,
+			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &</summary><code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
 			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
 			`For example: <code>/ipranges add proxy, 5.152.192.0-5.152.223.255, redstation.com</code>.`,
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
@@ -293,9 +292,8 @@ export const commands: ChatCommands = {
 			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
 			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
 		];
-		return this.sendReply(`|html|<details class="readmore"><summary>IP range management commands:</summary>${help.join('<br />')}`);
+		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
 	},
-
 	viewhosts(target, room, user) {
 		checkCanPerform(this, user, 'globalban');
 		const types = ['all', 'residential', 'mobile', 'ranges'];

@@ -22,6 +22,11 @@ describe('Chat monitor', () => {
 			assert(String(regex).startsWith('/\\b'));
 		});
 
+		it('should correctly strip word boundaries', () => {
+			const regex = /\btest\b/iu;
+			assert.deepEqual(chatMonitor.stripWordBoundaries(regex), /test/iu);
+		});
+
 		describe('evasion regexes', () => {
 			before(() => {
 				this.evasionRegex = chatMonitor.generateRegex('slur', true);
@@ -115,6 +120,22 @@ describe('Chat monitor', () => {
 
 			await this.parse("mild slur");
 			assert.notEqual(this.room.log.log.pop(), "mild slur");
+		});
+
+		it('should prevent banwords and evasion banwords from being used in usernames', () => {
+			chatMonitor.addFilter({
+				word: 'nameslur',
+				list: 'warn',
+			});
+
+			chatMonitor.addFilter({
+				word: 'strongnameslur',
+				list: 'evasion',
+			});
+
+			assert.equal(Chat.namefilter('anameslurtest', this.user), '');
+			assert.equal(Chat.namefilter('strongnameslur', this.user), '');
+			assert.equal(Chat.namefilter('stroñgñameslur', this.user), '');
 		});
 	});
 });

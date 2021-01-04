@@ -56,10 +56,29 @@ export const Formats: {[k: string]: FormatData} = {
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
 			'Magearna', 'Marshadow', 'Zeraora',
+			'Zarude',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
+			}
+		},
+		onValidateTeam(team) {
+			const legends = [
+				'Mewtwo',
+				'Lugia', 'Ho-Oh',
+				'Kyogre', 'Groudon', 'Rayquaza',
+				'Dialga', 'Palkia', 'Giratina',
+				'Reshiram', 'Zekrom', 'Kyurem',
+				'Xerneas', 'Yveltal', 'Zygarde',
+				'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
+				'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
+			];
+			let n = 0;
+			for (const set of team) {
+				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) n++;
+				if (n > 2) return [`You can only use up to two restricted legendary Pok\u00E9mon.`];
 			}
 		},
 	},
@@ -968,7 +987,7 @@ export const Formats: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'STABmons Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
-		checkLearnset(move, species, setSources, set) {
+		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const dex = this.dex;
@@ -1001,14 +1020,14 @@ export const Formats: {[k: string]: FormatData} = {
 				}
 				if (types.includes(move.type)) return null;
 			}
-			return this.checkLearnset(move, species, setSources, set);
+			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},
 	alphabetcupmovelegality: {
 		effectType: 'ValidatorRule',
 		name: 'Alphabet Cup Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that shares the same first letter as their name or a previous evolution's name.",
-		checkLearnset(move, species, setSources, set) {
+		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const letters = [species.id[0]];
@@ -1020,7 +1039,7 @@ export const Formats: {[k: string]: FormatData} = {
 				}
 				if (letters.includes(move.id[0])) return null;
 			}
-			return this.checkLearnset(move, species, setSources, set);
+			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},
 	allowtradeback: {
