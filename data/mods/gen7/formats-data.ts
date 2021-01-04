@@ -54,7 +54,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	blastoisemega: {
-		randomBattleMoves: ["aurasphere", "darkpulse", "icebeam", "rapidspin", "toxic", "waterpulse"],
+		randomBattleMoves: ["aurasphere", "darkpulse", "icebeam", "rapidspin", "waterpulse"],
 		randomDoubleBattleMoves: ["aurasphere", "darkpulse", "fakeout", "icebeam", "muddywater", "protect", "waterpulse"],
 		tier: "RU",
 		doublesTier: "(DUU)",
