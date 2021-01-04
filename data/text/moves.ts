@@ -1641,7 +1641,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-			shortDesc: "Deals double damage. The user faints.",
+			shortDesc: "Target's Def halved during damage. User faints.",
 		},
 		gen3: {
 			desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
@@ -5073,7 +5073,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-			shortDesc: "Deals double damage. The user faints.",
+			shortDesc: "Target's Def halved during damage. User faints.",
 		},
 		gen3: {
 			desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
