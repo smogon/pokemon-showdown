@@ -26,8 +26,9 @@ import * as pathModule from 'path';
 import {ReadStream, WriteStream} from './streams';
 
 const ROOT_PATH = pathModule.resolve(__dirname, '..');
+const DEFAULT_THROTTLE = 5 * 1000; // 5 seconds
 
-interface PendingUpdate {
+export interface PendingUpdate {
 	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle
 	pendingDataFetcher: (() => string | Buffer) | null;
 	pendingOptions: AnyObject | null;
@@ -35,7 +36,11 @@ interface PendingUpdate {
 	throttleTimer: NodeJS.Timer | null;
 }
 
-const pendingUpdates = new Map<string, PendingUpdate>();
+if (!global.__fsState) {
+	global.__fsState = {
+		pendingUpdates: new Map<string, PendingUpdate>(),
+	};
+}
 
 export class FSPath {
 	path: string;
@@ -145,17 +150,18 @@ export class FSPath {
 	 * called, if `writeUpdate` is called many times in a short period.
 	 *
 	 * `options.throttle`, if it exists, will make sure updates are not
-	 * written more than once every `options.throttle` milliseconds.
+	 * written more than once every `options.throttle` milliseconds, else the default is 5 seconds.
+	 *
+	 * `options.writeNow`, if it exists, will force it to write *right* now. (Pun is absolutely intended)
 	 *
 	 * No synchronous version because there's no risk of race conditions
 	 * with synchronous code; just use `safeWriteSync`.
 	 */
 	writeUpdate(dataFetcher: () => string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return;
-		const pendingUpdate: PendingUpdate | undefined = pendingUpdates.get(this.path);
+		const pendingUpdate: PendingUpdate | undefined = __fsState.pendingUpdates.get(this.path);
 
-		// @ts-ignore
-		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
+		const throttleTime = Date.now() + (options.throttle ? options.throttle : DEFAULT_THROTTLE);
 
 		if (pendingUpdate) {
 			pendingUpdate.pendingDataFetcher = dataFetcher;
@@ -168,12 +174,24 @@ export class FSPath {
 			return;
 		}
 
-		this.writeUpdateNow(dataFetcher, options);
+		if (options.writeNow) {
+			this.writeUpdateNow(dataFetcher, options);
+			return;
+		}
+
+		const update: PendingUpdate = {
+			isWriting: false,
+			pendingDataFetcher: dataFetcher,
+			pendingOptions: options,
+			throttleTime,
+			throttleTimer: setTimeout(() => this.checkNextUpdate(), throttleTime - Date.now()),
+		}
+		__fsState.pendingUpdates.set(this.path, update);
 	}
 
 	writeUpdateNow(dataFetcher: () => string | Buffer, options: AnyObject) {
 		// @ts-ignore
-		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
+		const throttleTime = Date.now() + (options.throttle ? options.throttle : DEFAULT_THROTTLE);
 		const update = {
 			isWriting: true,
 			pendingDataFetcher: null,
@@ -181,25 +199,25 @@ export class FSPath {
 			throttleTime,
 			throttleTimer: null,
 		};
-		pendingUpdates.set(this.path, update);
+		__fsState.pendingUpdates.set(this.path, update);
 		void this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
-		const pendingUpdate = pendingUpdates.get(this.path);
+		const pendingUpdate = __fsState.pendingUpdates.get(this.path);
 		if (!pendingUpdate) throw new Error(`FS: Pending update not found`);
 		if (pendingUpdate.isWriting) throw new Error(`FS: Conflicting update`);
 
 		const {pendingDataFetcher: dataFetcher, pendingOptions: options} = pendingUpdate;
 		if (!dataFetcher || !options) {
 			// no pending update
-			pendingUpdates.delete(this.path);
+			__fsState.pendingUpdates.delete(this.path);
 			return;
 		}
 
 		this.writeUpdateNow(dataFetcher, options);
 	}
 	finishUpdate() {
-		const pendingUpdate = pendingUpdates.get(this.path);
+		const pendingUpdate = __fsState.pendingUpdates.get(this.path);
 		if (!pendingUpdate) throw new Error(`FS: Pending update not found`);
 		if (!pendingUpdate.isWriting) throw new Error(`FS: Conflicting update`);
 

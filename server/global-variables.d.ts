@@ -16,6 +16,8 @@ import {Tournaments as TournamentsType} from './tournaments';
 
 import {Dex as DexType} from '../sim/dex';
 
+import type {PendingUpdate} from '../lib/fs';
+
 declare global {
 	namespace NodeJS {
 		interface Global {
@@ -36,6 +38,7 @@ declare global {
 			Verifier: any;
 			toID: (item: any) => ID;
 			__version: {head: string, origin?: string, tree?: string};
+			__fsState: {pendingUpdates: Map<string, PendingUpdate>};
 		}
 	}
 	const Config: ConfigType;
@@ -53,4 +56,5 @@ declare global {
 	const Users: typeof UsersType.Users;
 	const Verifier: typeof VerifierType;
 	const toID: typeof DexType.toID;
+	const __fsState: {pendingUpdates: Map<string, PendingUpdate>};
 }
