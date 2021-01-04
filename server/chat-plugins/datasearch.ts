@@ -46,6 +46,7 @@ interface MoveOrGroup {
 	recoil: boolean;
 	skip: boolean;
 	pivot: boolean;
+	multihit: boolean;
 }
 
 type Direction = 'less' | 'greater' | 'equal';
@@ -292,7 +293,7 @@ export const commands: ChatCommands = {
 			`Inequality ranges use the characters <code>></code> and <code><</code>.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water-type moves.<br/>` +
 			`<code>asc</code> or <code>desc</code> following a move property will arrange the names in ascending or descending order of that property, respectively; e.g., <code>basepower asc</code> will arrange moves in ascending order of their base powers.<br/>` +
-			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove and pivot.<br/>` +
+			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove, pivot, and multi-hit.<br/>` +
 			`A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`<code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`<code>max</code> or <code>gmax</code> as parameters will search for Max Moves and G-Max moves respectively.<br/>` +
@@ -1094,7 +1095,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
-				if (move.gen <= maxGen && !validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (move.gen <= maxGen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
@@ -1178,7 +1179,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
 		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
-		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
+		'multihit', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
@@ -1214,7 +1215,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
 			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
-			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false, pivot: false,
+			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false,
+			pivot: false, multihit: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
@@ -1288,6 +1290,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
+			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -1386,6 +1389,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					orGroup.pivot = true;
 				} else if ((orGroup.pivot && isNotSearch) || (!orGroup.pivot && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include pivot moves.'};
+				}
+				continue;
+			}
+
+			if (target === 'multihit') {
+				if (!orGroup.multihit) {
+					orGroup.multihit = true;
+				} else if ((orGroup.multihit && isNotSearch) || (!orGroup.multihit && !isNotSearch)) {
+					return {error: 'A search cannot both exclude and include multi-hit moves.'};
 				}
 				continue;
 			}
@@ -1675,6 +1687,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				} else if (flag === 'highcrit') {
 					const crit = move.willCrit || (move.critRatio && move.critRatio > 1);
 					if (!crit === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'multihit') {
+					if (!move.multihit === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
@@ -2350,7 +2367,6 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		return {error: "You must specify at least one move."};
 	}
 
-	let lsetProblem: {type: string, moveName: string, [k: string]: any} | null = null;
 	const moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
@@ -2365,30 +2381,21 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		const checkLsetProblem = validator.checkLearnset(move, species, setSources, set);
-		if (checkLsetProblem !== null && Object.keys(checkLsetProblem).length) {
-			lsetProblem = Object.create(null);
-			for (const i in checkLsetProblem) {
-				lsetProblem![i] = checkLsetProblem[i];
-			}
-			lsetProblem!.moveName = move.name;
-			break;
+	}
+
+	const problems = validator.validateMoves(species, moveNames, setSources, set);
+	if (setSources.sources.length) {
+		setSources.sources = setSources.sources.map(source => {
+			if (source.charAt(1) !== 'E') return source;
+			const fathers = validator.findEggMoveFathers(source, species, setSources, true);
+			if (!fathers) return '';
+			return source + ':' + fathers.join(',');
+		}).filter(Boolean);
+		if (!setSources.size()) {
+			problems.push(`${species.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves!.join(', ')})`);
 		}
 	}
-	const lsetProblems = validator.reconcileLearnset(
-		species, setSources, lsetProblem ? lsetProblem : null, species.name
-	);
-	const problems: string[] = [];
-	if (lsetProblems) problems.push(...lsetProblems);
-	let sources: string[] = setSources.sources.map(source => {
-		if (source.charAt(1) !== 'E') return source;
-		const fathers = validator.findEggMoveFathers(source, species, setSources, true);
-		if (!fathers) return '';
-		return source + ':' + fathers.join(',');
-	}).filter(Boolean);
-	if (setSources.sources.length && !sources.length) {
-		problems.push(`${species.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves!.join(', ')})`);
-	}
+
 	let buffer = `In ${formatName}, `;
 	if (setSources.isHidden) {
 		buffer += `${species.abilities['H'] || 'HA'} `;
@@ -2399,6 +2406,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			'7V': "virtual console transfer from gen 1-2", '8V': "Pok&eacute;mon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
 		};
 		const sourcesBefore = setSources.sourcesBefore;
+		let sources = setSources.sources;
 		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
 		buffer += " from:<ul class=\"message-learn-list\">";
 		if (sources.length) {
@@ -2456,10 +2464,13 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			buffer += `<li>must be obtained as ` + Dex.getSpecies(setSources.babyOnly).name;
 		}
 		buffer += "</ul>";
-	} else if (targets.length > 1 || problems.length > 1) {
-		buffer += ` because:<ul class="message-learn-list">`;
-		buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
-		buffer += `</ul>`;
+	} else if (problems.length >= 1) {
+		const expectedError = `${species.name} can't learn ${moveNames[0]}.`;
+		if (problems.length > 1 || moveNames.length > 1 || problems[0] !== expectedError) {
+			buffer += ` because:<ul class="message-learn-list">`;
+			buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
+			buffer += `</ul>`;
+		}
 	}
 	return {reply: buffer};
 }

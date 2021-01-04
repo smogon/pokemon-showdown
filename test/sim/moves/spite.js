@@ -22,8 +22,8 @@ describe('Spite', function () {
 		assert.equal(gengar.getMoveData(Dex.getMove('shadowball')).pp, 23);
 	});
 
-	// Eerie Impulse and G-Max Depletion should also behave this way
-	it.skip(`should succeed on Max Moves, and announce the base move that PP was deducted from`, function () {
+	// Eerie Spell and G-Max Depletion should also behave this way
+	it(`should succeed on Max Moves, and announce the base move that PP was deducted from`, function () {
 		battle = common.createBattle([[
 			{species: 'Gengar', moves: ['shadowball']},
 		], [
@@ -32,7 +32,7 @@ describe('Spite', function () {
 
 		battle.makeChoices('move shadowball dynamax', 'move spite');
 		const gengar = battle.p1.active[0];
-		assert.equal(gengar.getMoveData(Dex.getMove('shadowball')).pp, 20);
+		assert.equal(gengar.getMoveData(Dex.getMove('shadowball')).pp, 19);
 
 		const log = battle.getDebugLog();
 		const shadowBallIndex = log.indexOf('Shadow Ball');
