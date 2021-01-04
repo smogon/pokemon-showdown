@@ -248,8 +248,8 @@ export const commands: ChatCommands = {
 			buf += `<br />Secret rooms: ${privaterooms}`;
 		}
 
-		const gameRooms = targetUser.getRooms().filter(curRoom => {
-			const inPlayerTable = targetUser.inGame(curRoom) && !targetUser.inRoom(curRoom);
+		const gameRooms = [...Rooms.rooms.values()].filter(curRoom => {
+			const inPlayerTable = targetUser.inGame(curRoom);
 			const hasPlayerSymbol = curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL;
 			const canSeeRoom = canViewAlts || user === targetUser || !curRoom.settings.isPrivate;
 			return (inPlayerTable || hasPlayerSymbol) && canSeeRoom;

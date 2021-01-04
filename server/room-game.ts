@@ -42,7 +42,6 @@ export class RoomGamePlayer {
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
 		if (user && !this.game.isSubGame) {
-			this.game.playerTable[user.id] = this;
 			user.updateSearch();
 		}
 	}
