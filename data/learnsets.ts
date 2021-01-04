@@ -86059,7 +86059,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			lightwave: ["8M", "7M"],
 			photondischarge: ["8M", "7M"],
-			energyball: ["8M", "7M"],	
+			energyball: ["8M", "7M"],
+			prismbeam: ["8M", "7M"],	
 		},
 	},
 	combolgaur: {
