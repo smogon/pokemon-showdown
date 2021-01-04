@@ -2177,10 +2177,8 @@ export const Tournaments = {
 };
 
 for (const room of Rooms.rooms.values()) {
-	// @ts-ignore
-	const announcements = room.settings.tourAnnouncements;
-	// @ts-ignore
-	delete room.settings.tourAnnouncements;
+	const announcements = (room.settings as any).tourAnnouncements;
+	delete (room.settings as any).tourAnnouncements;
 	if (!announcements) {
 		room.saveSettings();
 		continue;
