@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},
@@ -154,14 +154,5 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	tapufini: {
 		inherit: true,
 		abilities: {0: "Misty Surge"},
-	},
-	justyke: {
-		inherit: true,
-		abilities: {0: "Levitate", 1: "Bulletproof", H: "Justified"},
-	},
-	equilibra: {
-		inherit: true,
-		baseStats: {hp: 102, atk: 50, def: 96, spa: 133, spd: 118, spe: 60},
-		abilities: {0: "Levitate", 1: "Bulletproof", H: "Justified"},
 	},
 };

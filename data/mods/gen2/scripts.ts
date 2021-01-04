@@ -2,7 +2,7 @@
  * Gen 2 scripts.
  */
 
-export const Scripts: ModdedBattleScriptsData = {
+export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 2,
 	// BattlePokemon scripts.

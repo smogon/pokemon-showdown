@@ -1,7 +1,7 @@
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.
  */
-export const Scripts: ModdedBattleScriptsData = {
+export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen1',
 	gen: 1,
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
@@ -55,7 +55,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (delta) changed = true;
 			}
-			this.recalculateStats!();
+			// @ts-ignore
+			this.recalculateStats();
 			return changed;
 		},
 	},
@@ -334,7 +335,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (moveData.status) {
 				if (!target.status) {
 					target.setStatus(moveData.status, pokemon, move);
-					target.recalculateStats!();
+					// @ts-ignore
+					target.recalculateStats();
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
 						this.add('-fail', target, target.status);
@@ -346,7 +348,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-					target.recalculateStats!();
+					// @ts-ignore
+					target.recalculateStats();
 					didSomething = true;
 				}
 			}

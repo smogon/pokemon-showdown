@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	litten: {
 		inherit: true,
 		unreleasedHidden: true,

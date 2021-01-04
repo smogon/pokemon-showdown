@@ -4,7 +4,7 @@
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 
-export const Scripts: ModdedBattleScriptsData = {
+export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
 	init() {
@@ -480,7 +480,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Check the status of the Pokémon whose turn is not.
 				// When a move that affects stat levels is used, if the Pokémon whose turn it is not right now is paralyzed or
 				// burned, the correspoding stat penalties will be applied again to that Pokémon.
-				if (pokemon.side.foe.active[0].status) {
+				if (pokemon.side.foe.active[0] && pokemon.side.foe.active[0].status) {
 					// If it's paralysed, quarter its speed.
 					if (pokemon.side.foe.active[0].status === 'par') {
 						pokemon.side.foe.active[0].modifyStat!('spe', 0.25);
@@ -531,8 +531,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-					if (moveData.forceStatus === 'brn') target.modifyStat!('atk', 0.5);
-					if (moveData.forceStatus === 'par') target.modifyStat!('spe', 0.25);
+					// @ts-ignore
+					if (moveData.forceStatus === 'brn') target.modifyStat('atk', 0.5);
+					// @ts-ignore
+					if (moveData.forceStatus === 'par') target.modifyStat('spe', 0.25);
 					didSomething = true;
 				}
 			}
@@ -605,7 +607,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.getEffect(effect);
 		if (!target || !target.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let i: BoostName;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
@@ -615,7 +617,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				let msg = '-boost';
 				if (boost[i]! < 0) {
 					msg = '-unboost';
-					boost[i] = -boost[i]!;
+					// @ts-ignore
+					boost[i] = -boost[i];
 					// Re-add attack and speed drops if not present
 					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
 						target.addVolatile('brnattackdrop');
@@ -633,8 +636,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (!effect || effect.effectType === 'Move') {
+					// @ts-ignore
 					this.add(msg, target, i, boost[i]);
 				} else {
+					// @ts-ignore
 					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
@@ -859,3 +864,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		return Math.floor(damage);
 	},
 };
+
+exports.BattleScripts = BattleScripts;

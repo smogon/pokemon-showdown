@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const BattleItems: {[k: string]: ModdedItemData} = {
 	aguavberry: {
 		inherit: true,
 		onUpdate() {},
@@ -34,6 +34,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	blackbelt: {
 		inherit: true,
+		desc: "Holder's Fighting-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return basePower * 1.1;
@@ -42,6 +43,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	blackglasses: {
 		inherit: true,
+		desc: "Holder's Dark-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return basePower * 1.1;
@@ -50,6 +52,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	charcoal: {
 		inherit: true,
+		desc: "Holder's Fire-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return basePower * 1.1;
@@ -58,6 +61,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	dragonfang: {
 		inherit: true,
+		desc: "Holder's Dragon-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return basePower * 1.1;
@@ -66,6 +70,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	enigmaberry: {
 		name: "Enigma Berry",
+		desc: "No competitive use.",
 		spritenum: 124,
 		isBerry: true,
 		num: 208,
@@ -94,6 +99,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	hardstone: {
 		inherit: true,
+		desc: "Holder's Rock-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return basePower * 1.1;
@@ -137,6 +143,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	laxincense: {
 		inherit: true,
+		desc: "The accuracy of attacks against the holder is 0.95x.",
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
@@ -155,10 +162,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
+		desc: "If held by a Pikachu, its Special Attack is doubled.",
 		onModifyAtk() {},
 	},
 	magnet: {
 		inherit: true,
+		desc: "Holder's Electric-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return basePower * 1.1;
@@ -177,6 +186,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	metalcoat: {
 		inherit: true,
+		desc: "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+		shortDesc: "Holder's Steel-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return basePower * 1.1;
@@ -185,6 +196,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	miracleseed: {
 		inherit: true,
+		desc: "Holder's Grass-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return basePower * 1.1;
@@ -193,6 +205,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	mysticwater: {
 		inherit: true,
+		desc: "Holder's Water-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return basePower * 1.1;
@@ -201,6 +214,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	nevermeltice: {
 		inherit: true,
+		desc: "Holder's Ice-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return basePower * 1.1;
@@ -229,6 +243,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	poisonbarb: {
 		inherit: true,
+		desc: "Holder's Poison-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return basePower * 1.1;
@@ -255,6 +270,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	seaincense: {
 		inherit: true,
+		desc: "Holder's Water-type attacks have 1.05x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Water') {
 				return basePower * 1.05;
@@ -263,6 +279,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	sharpbeak: {
 		inherit: true,
+		desc: "Holder's Flying-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Flying') {
 				return basePower * 1.1;
@@ -271,6 +288,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	silkscarf: {
 		inherit: true,
+		desc: "Holder's Normal-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
@@ -279,6 +297,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	silverpowder: {
 		inherit: true,
+		desc: "Holder's Bug-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return basePower * 1.1;
@@ -287,6 +306,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	sitrusberry: {
 		inherit: true,
+		desc: "Restores 30 HP when at 1/2 max HP or less. Single use.",
 		onUpdate() {},
 		onResidualOrder: 5,
 		onResidual(pokemon) {
@@ -300,6 +320,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	softsand: {
 		inherit: true,
+		desc: "Holder's Ground-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ground') {
 				return basePower * 1.1;
@@ -308,6 +329,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	spelltag: {
 		inherit: true,
+		desc: "Holder's Ghost-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return basePower * 1.1;
@@ -326,6 +348,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	twistedspoon: {
 		inherit: true,
+		desc: "Holder's Psychic-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return basePower * 1.1;

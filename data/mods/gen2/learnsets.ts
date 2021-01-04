@@ -1,4 +1,4 @@
-export const Learnsets: {[k: string]: ModdedLearnsetData} = {
+export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 	missingno: {
 		learnset: {
 			blizzard: ["1M"],
@@ -998,7 +998,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["1M"],
 		},
 		eventData: [
-			{generation: 1, level: 20, moves: ["growl", "leer", "furyattack", "payday"], japan: true},
+			{generation: 1, level: 20, moves: ["growl", "leer", "furyattack", "payday"]},
 		],
 	},
 	ekans: {
@@ -1201,7 +1201,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 		eventData: [
 			{generation: 1, level: 5, moves: ["surf"]},
-			{generation: 1, level: 5, moves: ["fly"], japan: true},
+			{generation: 1, level: 5, moves: ["fly"]},
 			{generation: 1, level: 5, moves: ["thundershock", "growl", "surf"]},
 		],
 	},
@@ -4206,7 +4206,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["2M", "1M"],
 		},
 		eventData: [
-			{generation: 1, level: 40, moves: ["ember", "firespin", "stomp", "payday"], japan: true},
+			{generation: 1, level: 40, moves: ["ember", "firespin", "stomp", "payday"]},
 		],
 	},
 	slowpoke: {
@@ -7230,7 +7230,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["2L15", "1L15"],
 		},
 		eventData: [
-			{generation: 1, level: 5, moves: ["dragonrage"], japan: true},
+			{generation: 1, level: 5, moves: ["dragonrage"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["splash", "bubble"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["splash", "reversal"]},
 		],
@@ -7649,6 +7649,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			blizzard: ["2M", "1M"],
 			conversion: ["2L1", "2S0", "1L1"],
 			curse: ["2M"],
+			defensecurl: ["2M", "2L24"],
 			doubleedge: ["1M"],
 			doubleteam: ["2M", "1M"],
 			dreameater: ["2M"],

@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	bulbasaur: {
 		inherit: true,
 		maleOnlyHidden: true,

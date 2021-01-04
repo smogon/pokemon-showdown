@@ -1,4 +1,4 @@
-export const Scripts: ModdedBattleScriptsData = {
+export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
 		this.modData('Abilities', 'noability').isNonstandard = null;
@@ -20,7 +20,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + 100) * set.level / 100 + 10);
 		}
-		return this.natureModify(modStats, set);
+		return this.dex.natureModify(modStats, set);
 	},
 
 	/**
@@ -39,7 +39,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (stat !== 'hp') {
 				stats[stat] = Math.floor(stats[stat] * friendshipValue / 100);
 			}
-			stats[stat] += set.evs[stat];
+			// @ts-ignore
+			stats[stat] += this.getAwakeningValues(set, stat);
 		}
 		return stats;
 	},
@@ -53,3 +54,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 };
+
+exports.BattleScripts = BattleScripts;

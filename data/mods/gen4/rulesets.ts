@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatData} = {
+export const BattleFormats: {[k: string]: ModdedFormatsData} = {
 	standard: {
 		inherit: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],

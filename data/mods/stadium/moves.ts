@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	bind: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
@@ -38,7 +38,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	leechseed: {
 		inherit: true,
 		onHit() {},
-		condition: {
+		effect: {
 			onStart(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
@@ -60,7 +60,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'rage',
 		},
-		condition: {
+		effect: {
 			// Rage lock
 			duration: 255,
 			onStart(target, source, effect) {
@@ -114,7 +114,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	substitute: {
 		inherit: true,
-		condition: {
+		effect: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
@@ -176,10 +176,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-	},
-	struggle: {
-		inherit: true,
-		ignoreImmunity: {'Normal': true},
 	},
 	wrap: {
 		inherit: true,

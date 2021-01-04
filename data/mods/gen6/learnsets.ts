@@ -1,4 +1,4 @@
-export const Learnsets: {[k: string]: ModdedLearnsetData} = {
+export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 	tomohawk: {
 		inherit: true,
 		learnset: {

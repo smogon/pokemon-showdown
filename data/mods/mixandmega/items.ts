@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const BattleItems: {[k: string]: ModdedItemData} = {
 	abomasite: {
 		inherit: true,
 		isNonstandard: null,

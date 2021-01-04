@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatData} = {
+export const BattleFormats: {[k: string]: ModdedFormatsData} = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',

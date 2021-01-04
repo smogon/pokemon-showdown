@@ -1,4 +1,4 @@
-export const Learnsets: {[k: string]: ModdedLearnsetData} = {
+export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 	missingno: {inherit: true, learnset: {
 		blizzard: ["5L1"],
 		bubblebeam: ["5L1"],

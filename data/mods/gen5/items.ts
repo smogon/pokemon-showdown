@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const BattleItems: {[k: string]: ModdedItemData} = {
 	aguavberry: {
 		inherit: true,
 		naturalGift: {
