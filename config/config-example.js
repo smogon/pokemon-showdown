@@ -572,6 +572,7 @@ exports.grouplist = [
 		gdeclare: true,
 		gamemanagement: true,
 		exportinputlog: true,
+		tournaments: true,
 	},
 	{
 		symbol: '#',
