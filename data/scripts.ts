@@ -883,11 +883,6 @@ export const Scripts: BattleScriptsData = {
 			if (move.selfdestruct === 'ifHit') {
 				this.faint(pokemon, pokemon, move);
 			}
-			if ((damage[i] || damage[i] === 0) && !target.fainted) {
-				if (move.noFaint && damage[i]! >= target.hp) {
-					damage[i] = target.hp - 1;
-				}
-			}
 		}
 		return damage;
 	},
