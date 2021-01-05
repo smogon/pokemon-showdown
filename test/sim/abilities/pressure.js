@@ -86,7 +86,7 @@ describe('Pressure', function () {
 		assert.equal(battle.p2.active[1].getMoveData(Dex.getMove('imprison')).pp, 12);
 	});
 
-	it.skip(`should deduct additional PP from Max Moves`, function () {
+	it(`should deduct additional PP from Max Moves`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['darkpulse']},
 		], [
@@ -96,7 +96,7 @@ describe('Pressure', function () {
 		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('darkpulse')).pp, 22);
 	});
 
-	it.skip(`should deduct additional PP from Z-Moves`, function () {
+	it(`should deduct additional PP from Z-Moves`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'wynaut', item: 'darkiniumz', moves: ['darkpulse']},
 		], [

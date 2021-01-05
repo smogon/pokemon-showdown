@@ -237,7 +237,7 @@ export const Scripts: BattleScriptsData = {
 				}
 			}
 			if (extraPP > 0) {
-				pokemon.deductPP(move, extraPP);
+				pokemon.deductPP(moveOrMoveName, extraPP);
 			}
 		}
 
