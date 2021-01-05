@@ -22,6 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
 
 		"<strong>Room ranks</strong>": "<strong>房權限</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>信任用戶</strong> - 可以使用!廣播指令，比如!groups，並可以在限制發言期間發言",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>見習管理</strong> - 同上，並可以禁止用戶發言或警告用",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>管理員</strong> - 同上，並可以將用戶從房間封禁",

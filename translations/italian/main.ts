@@ -22,6 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio e promuovere globalmente gli utenti",
 
 		"<strong>Room ranks</strong>": "<strong>Ruoli della Room</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Non hanno alcun poter eccezion fatta per un simbolo",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Possono utilizzare i comandi con !, come !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Come i Voice, e possono mutare gli utenti",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Come i Driver, e possono bannare gli utenti dalla room",
