@@ -231,7 +231,7 @@ export const Utils = new class {
 	/**
 	 * HTML doesn't support `word-wrap: break-word` in tables, but sometimes it
 	 * would be really nice if it did. This emulates `word-wrap: break-word` by
-	 * manually inserting U+200B (zero-width space, the force-wrap cahracter) in long words.
+	 * manually inserting U+200B (zero-width space, the force-wrap character) in long words.
 	 */
 	forceWrap(text: string) {
 		return text.replace(/[^\s]{30,}/g, word => {
