@@ -22,6 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "",
 
 		"<strong>Room ranks</strong>": "",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "",
