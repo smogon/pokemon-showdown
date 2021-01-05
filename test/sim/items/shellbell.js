@@ -10,7 +10,7 @@ describe('Shell Bell', function () {
 		battle.destroy();
 	});
 
-	it.skip(`should heal from the damage against all targets of the move`, function () {
+	it(`should heal from the damage against all targets of the move`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'tornadus', ability: 'compoundeyes', moves: ['superfang']},
 			{species: 'landorus', item: 'shellbell', moves: ['earthquake']},
