@@ -85,6 +85,50 @@ describe('Pressure', function () {
 		assert.equal(battle.p2.active[0].getMoveData(Dex.getMove('snatch')).pp, 12);
 		assert.equal(battle.p2.active[1].getMoveData(Dex.getMove('imprison')).pp, 12);
 	});
+
+	it.skip(`should deduct additional PP from Max Moves`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['darkpulse']},
+		], [
+			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move darkpulse dynamax', 'auto');
+		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('darkpulse')).pp, 22);
+	});
+
+	it.skip(`should deduct additional PP from Z-Moves`, function () {
+		battle = common.gen(7).createBattle([[
+			{species: 'wynaut', item: 'darkiniumz', moves: ['darkpulse']},
+		], [
+			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move darkpulse zmove', 'auto');
+		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('darkpulse')).pp, 22);
+	});
+
+	it.skip(`should deduct additional PP from submoves that target Pressure`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['assist']},
+			{species: 'yveltal', moves: ['darkpulse']},
+		], [
+			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move assist', 'auto');
+		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('assist')).pp, 30);
+	});
+
+	it.skip(`Sticky Web should not deduct PP from Pressure (only entry hazard to do so)`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['stickyweb', 'stealthrock']},
+		], [
+			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move stickyweb', 'auto');
+		battle.makeChoices('move stealthrock', 'auto');
+		const wynaut = battle.p1.active[0];
+		assert.equal(wynaut.getMoveData(Dex.getMove('stickyweb')).pp, 31);
+		assert.equal(wynaut.getMoveData(Dex.getMove('stealthrock')).pp, 30);
+	});
 });
 
 describe('Pressure [Gen 4]', function () {

@@ -95,4 +95,14 @@ describe('Electric Terrain', function () {
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.equal(resultMove, 'thunderbolt');
 	});
+
+	it.skip(`should block Sleep before the move would have missed`, function () {
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[ // Seed ensures Sleep Powder would miss normally
+			{species: 'tapukoko', ability: 'wonderskin', moves: ['electricterrain']},
+		], [
+			{species: 'venusaur', moves: ['sleeppowder']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('|-activate|p1a: Tapu Koko|move: Electric Terrain')));
+	});
 });
