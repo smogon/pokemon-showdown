@@ -1637,7 +1637,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse(`/help hidetext`);
 		room = this.requireRoom();
 		const hasLineCount = cmd.includes('lines');
-		const hideRevealButton = cmd.includes('clear') || cmd.includes('c');
+		const hideRevealButton = cmd.includes('clear') || cmd === 'ctext';
 		target = this.splitTarget(target);
 		let lineCount = 0;
 		if (/^[0-9]+\s*(,|$)/.test(target)) {
