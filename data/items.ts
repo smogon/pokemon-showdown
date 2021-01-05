@@ -1869,6 +1869,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
 			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
@@ -1884,6 +1885,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				if (target.useItem()) {

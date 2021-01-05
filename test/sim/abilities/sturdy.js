@@ -57,7 +57,7 @@ describe('Sturdy', function () {
 		assert.fainted(battle.p1.active[0]);
 	});
 
-	it.skip(`should trigger before Focus Sash`, function () {
+	it(`should trigger before Focus Sash`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['tackle']},
 		], [
