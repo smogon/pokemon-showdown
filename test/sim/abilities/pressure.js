@@ -117,7 +117,7 @@ describe('Pressure', function () {
 		assert.equal(battle.p1.active[0].getMoveData(Dex.getMove('assist')).pp, 30);
 	});
 
-	it.skip(`Sticky Web should not deduct PP from Pressure (only entry hazard to do so)`, function () {
+	it(`should not deduct additional PP from Sticky Web (only entry hazard to do so)`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['stickyweb', 'stealthrock']},
 		], [
