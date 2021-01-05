@@ -58,8 +58,8 @@ describe(`[Hackmons] Arceus`, function () {
 		assert(arceus.hasType('Fire'), 'Arceus should not change type.');
 	});
 
-	it.skip(`should use Arceus's real type for Revelation Dance`, function () {
-		battle = common.createBattle([[
+	it(`should use Arceus's real type for Revelation Dance`, function () {
+		battle = common.gen(7).createBattle([[
 			{species: 'arceusfire', ability: 'sandrush', moves: ['revelationdance']},
 		], [
 			{species: 'aggron', ability: 'colorchange', moves: ['sleeptalk']},
