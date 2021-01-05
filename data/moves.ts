@@ -3287,19 +3287,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 						if (!moveSlot.pp) {
 							this.debug('Move out of PP');
 							return false;
-						} else {
-							if (effect.id === 'cursedbody') {
-								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', '[of] ' + source);
-							} else {
-								this.add('-start', pokemon, 'Disable', moveSlot.move);
-							}
-							this.effectData.move = pokemon.lastMove.id;
-							return;
 						}
 					}
 				}
-				// this can happen if Disable works on a Z-move
-				return false;
+				if (effect.effectType === 'Ability') {
+					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
+				} else {
+					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
+				}
+				this.effectData.move = pokemon.lastMove.id;
 			},
 			onResidualOrder: 14,
 			onEnd(pokemon) {
