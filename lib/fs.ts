@@ -185,7 +185,7 @@ export class FSPath {
 			pendingOptions: options,
 			throttleTime,
 			throttleTimer: setTimeout(() => this.checkNextUpdate(), throttleTime - Date.now()),
-		}
+		};
 		__fsState.pendingUpdates.set(this.path, update);
 	}
 
