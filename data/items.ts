@@ -4918,8 +4918,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.category !== 'Status') {
-				this.heal(pokemon.lastDamage / 8, pokemon);
+			if (move.totalDamage) {
+				this.heal(move.totalDamage / 8, pokemon);
 			}
 		},
 		num: 253,
