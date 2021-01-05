@@ -36,9 +36,11 @@ export interface PendingUpdate {
 	throttleTimer: NodeJS.Timer | null;
 }
 
+declare const __fsState: {pendingUpdates: Map<string, PendingUpdate>};
+declare const global: {__fsState: typeof __fsState};
 if (!global.__fsState) {
 	global.__fsState = {
-		pendingUpdates: new Map<string, PendingUpdate>(),
+		pendingUpdates: new Map(),
 	};
 }
 

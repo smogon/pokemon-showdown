@@ -38,7 +38,6 @@ declare global {
 			Verifier: any;
 			toID: (item: any) => ID;
 			__version: {head: string, origin?: string, tree?: string};
-			__fsState: {pendingUpdates: Map<string, PendingUpdate>};
 		}
 	}
 	const Config: ConfigType;
@@ -56,5 +55,4 @@ declare global {
 	const Users: typeof UsersType.Users;
 	const Verifier: typeof VerifierType;
 	const toID: typeof DexType.toID;
-	const __fsState: {pendingUpdates: Map<string, PendingUpdate>};
 }
