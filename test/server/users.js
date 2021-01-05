@@ -160,15 +160,15 @@ describe('Users features', function () {
 				it(`should allow 'u' permissions on lower ranked users`, function () {
 					const user = new User();
 					user.forceRename("Moderator");
-					user.setGroup('@');
+					user.tempGroup = '@';
 					assert.equal(user.can('globalban', user), false, 'targeting self');
 
 					const target = new User();
-					target.setGroup(' ');
+					target.tempGroup = ' ';
 					assert.equal(user.can('globalban', target), true, 'targeting lower rank');
-					target.setGroup('@');
+					target.tempGroup = '@';
 					assert.equal(user.can('globalban', target), false, 'targeting same rank');
-					target.setGroup('&');
+					target.tempGroup = '&';
 					assert.equal(user.can('globalban', target), false, 'targeting higher rank');
 				});
 				it(`should not allow users to demote themselves`, function () {
