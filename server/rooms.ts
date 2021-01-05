@@ -100,7 +100,6 @@ export interface RoomSettings {
 	unoDisabled?: boolean;
 	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
-	tourAnnouncements?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
 	isOfficial?: boolean;
@@ -116,6 +115,7 @@ export interface RoomSettings {
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: (PollData | AnnouncementData)[];
 	repeats?: RepeatedPhrase[];
+	tournaments?: TournamentRoomSettings;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -136,7 +136,7 @@ import type {Announcement, AnnouncementData} from './chat-plugins/announcements'
 import type {Poll, PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
-import type {Tournament} from './tournaments/index';
+import type {Tournament, TournamentRoomSettings} from './tournaments/index';
 
 export abstract class BasicRoom {
 	/** to rename use room.rename */
@@ -1868,7 +1868,7 @@ export const Rooms = {
 				room.setPrivate(false);
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
-			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
+			} else if (!options.tour || (room.tour?.allowModjoin)) {
 				room.setPrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
