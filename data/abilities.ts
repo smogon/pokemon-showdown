@@ -1644,7 +1644,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Inner Focus');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
 			}
 		},
 		name: "Inner Focus",
@@ -2386,7 +2386,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Oblivious');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
 			}
 		},
 		name: "Oblivious",
@@ -2445,7 +2445,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Own Tempo');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
 			}
 		},
 		name: "Own Tempo",
@@ -3157,7 +3157,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Scrappy');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
 		name: "Scrappy",
