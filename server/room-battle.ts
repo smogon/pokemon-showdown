@@ -203,7 +203,7 @@ export class RoomBattleTimer {
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
-		this.settings = Object.assign({
+		this.settings = {
 			dcTimer: !isChallenge,
 			dcTimerBank: isChallenge,
 			starting: isChallenge ? STARTING_TIME_CHALLENGE : STARTING_TIME,
@@ -213,7 +213,8 @@ export class RoomBattleTimer {
 			maxFirstTurn: isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME,
 			timeoutAutoChoose: false,
 			accelerate: !timerSettings,
-		}, timerSettings);
+			...timerSettings,
+		};
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
 
 		for (const player of this.battle.players) {
@@ -848,7 +849,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// If the room's replay was hidden, disable users from joining after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
-			this.room.settings.isPrivate = 'hidden';
+			this.room.setPrivate('hidden');
 		}
 		this.room.update();
 	}
@@ -1087,6 +1088,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
+		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
+		if (suspectTest) {
+			const format = Dex.getFormat(this.format);
+			this.room.add(
+				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
+				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
+			).update();
+		}
 	}
 
 	clearPlayers() {
@@ -1260,9 +1269,7 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new StreamProcessManager(module, () => {
-	return new RoomBattleStream();
-});
+export const PM = new StreamProcessManager(module, () => new RoomBattleStream());
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -1272,8 +1279,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 	global.__version = {head: ''};

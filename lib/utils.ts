@@ -17,7 +17,7 @@
 
 type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
 
-export const Utils = new class Utils {
+export const Utils = new class {
 	/**
 	 * Safely converts the passed variable into a string. Unlike '' + str,
 	 * String(str), or str.toString(), Utils.getString is guaranteed not to
@@ -90,6 +90,23 @@ export const Utils = new class Utils {
 		} else {
 			constructor = 'null';
 		}
+
+		// If it has a toString, try to grab the base class from there
+		// (This is for Map/Set subclasses like user.auth)
+		const baseClass = (value?.toString && /\[object (.*)\]/.exec(value.toString())?.[1]) || constructor;
+
+		switch (baseClass) {
+		case 'Map':
+			if (depth > 2) return `Map`;
+			const mapped = [...value.entries()].map(
+				val => `${this.visualize(val[0], depth + 1)} => ${this.visualize(val[1], depth + 1)}`
+			);
+			return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
+		case 'Set':
+			if (depth > 2) return `Set`;
+			return `${constructor} (${value.size}) { ${[...value].map(v => this.visualize(v), depth + 1).join(', ')} }`;
+		}
+
 		if (value.toString) {
 			try {
 				const stringValue = value.toString();
@@ -199,8 +216,8 @@ export const Utils = new class Utils {
 	}
 
 	/**
-	* Template string tag function for escaping HTML
-	*/
+	 * Template string tag function for escaping HTML
+	 */
 	html(strings: TemplateStringsArray, ...args: any) {
 		let buf = strings[0];
 		let i = 0;
@@ -209,6 +226,26 @@ export const Utils = new class Utils {
 			buf += strings[++i];
 		}
 		return buf;
+	}
+
+	/**
+	 * HTML doesn't support `word-wrap: break-word` in tables, but sometimes it
+	 * would be really nice if it did. This emulates `word-wrap: break-word` by
+	 * manually inserting U+200B (zero-width space, the force-wrap cahracter) in long words.
+	 */
+	forceWrap(text: string) {
+		return text.replace(/[^\s]{30,}/g, word => {
+			let lastBreak = 0;
+			let brokenWord = '';
+			for (let i = 1; i < word.length; i++) {
+				if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
+					brokenWord += word.slice(lastBreak, i) + '\u200B';
+					lastBreak = i;
+				}
+			}
+			brokenWord += word.slice(lastBreak);
+			return brokenWord;
+		});
 	}
 
 	shuffle<T>(arr: T[]): T[] {
@@ -301,5 +338,11 @@ export const Utils = new class Utils {
 
 		// Step 7
 		return d[n][m];
+	}
+
+	waitUntil(time: number): Promise<void> {
+		return new Promise(resolve => {
+			setTimeout(() => resolve(), time - Date.now());
+		});
 	}
 };

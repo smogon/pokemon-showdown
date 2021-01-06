@@ -46,12 +46,22 @@ function endLottery(roomid: RoomID, winners: string[]) {
 	Object.freeze(lottery);
 	writeLotteries();
 }
+
+function isSignedUp(roomid: RoomID, user: User) {
+	const lottery = lotteries[roomid];
+	if (!lottery) return;
+	const participants = lottery.participants;
+	const participantNames = Object.values(participants).map(toID);
+	if (participantNames.includes(user.id)) return true;
+	if (Config.noipchecks) return false;
+	return !!participants[user.latestIp];
+}
+
 function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.id);
-	if (!userSignedup) {
+	if (!isSignedUp(roomid, user)) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
 		return true;
@@ -238,9 +248,9 @@ export const commands: ChatCommands = {
 				return this.errorReply('This room does not have a lottery running.');
 			}
 			const canSeeIps = user.can('ip');
-			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
-				return `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
-			});
+			const participants = Object.entries(lottery.participants).map(
+				([ip, participant]) => `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`
+			);
 			let buf = '';
 			if (user.can('declare', null, room)) {
 				buf += `<details class="readmore"><summary><strong>List of participants (${participants.length}):</strong></summary>${participants.join('<br>')}</details>`;

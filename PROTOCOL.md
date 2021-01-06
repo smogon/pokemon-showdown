@@ -492,8 +492,10 @@ format is implemented in `Dex.packTeam` and `Dex.fastUnpackTeam` in
 `sim/dex.js`.
 
 If you're not using JavaScript and don't want to reimplement these conversions,
-Pokémon Showdown's command-line client can convert between packed teams and
-JSON using standard IO. Run `./pokemon-showdown --help` for details.
+[Pokémon Showdown's command-line client][command-line] can convert between packed teams and
+JSON using standard IO.
+
+  [command-line]: https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
 
 If you really want to write your own converter, the format looks something like
 this:

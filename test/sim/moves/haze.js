@@ -35,7 +35,7 @@ describe('Haze - RBY', function () {
 		assert.equal(battle.p2.active[0].status, 'par');
 
 		battle.makeChoices('move haze', 'move splash');
-		assert.notStrictEqual(battle.p2.active[0].status, 'par');
+		assert.notEqual(battle.p2.active[0].status, 'par');
 	});
 
 	it('should not remove user\'s status', function () {
@@ -58,7 +58,7 @@ describe('Haze - RBY', function () {
 		]);
 
 		battle.makeChoices('move splash', 'move focusenergy');
-		assert.ok(battle.p2.active[0].volatiles['focusenergy']);
+		assert(battle.p2.active[0].volatiles['focusenergy']);
 
 		battle.makeChoices('move splash', 'move haze');
 		assert.equal(typeof battle.p2.active[0].volatiles['focusenergy'], 'undefined');
@@ -71,10 +71,10 @@ describe('Haze - RBY', function () {
 		]);
 
 		battle.makeChoices('move reflect', 'move splash');
-		assert.ok(battle.p1.active[0].volatiles['reflect']);
+		assert(battle.p1.active[0].volatiles['reflect']);
 
 		battle.makeChoices('move lightscreen', 'move splash');
-		assert.ok(battle.p1.active[0].volatiles['lightscreen']);
+		assert(battle.p1.active[0].volatiles['lightscreen']);
 
 		battle.makeChoices('move haze', 'move splash');
 		assert.equal(typeof battle.p1.active[0].volatiles['reflect'], 'undefined');

@@ -28,6 +28,17 @@ export function visualizeRangeList(ranges: AddressRange[]) {
 	return html;
 }
 
+function formatRange(range: AddressRange, includeModlogBrackets?: boolean) {
+	const startBracket = includeModlogBrackets ? '[' : '';
+	const endBracket = includeModlogBrackets ? ']' : '';
+
+	let result = `${startBracket}${IPTools.numberToIP(range.minIP)}${endBracket}`;
+	result += `-${startBracket}${IPTools.numberToIP(range.maxIP)}${endBracket}`;
+	if (range.host) result += ` (${range.host})`;
+
+	return result;
+}
+
 export const pages: PageTable = {
 	proxies(query, user) {
 		this.title = "[Proxies]";
@@ -123,9 +134,33 @@ export const pages: PageTable = {
 			buf += `<p>None currently.</p>`;
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
-			Punishments.sharedIpBlacklist.forEach((reason, ip) => {
+			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
+			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[0], b[0]));
+
+			for (const [reason, ip] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
-			});
+			}
+			buf += `</table></div>`;
+		}
+		buf += `</div>`;
+		return buf;
+	},
+
+	sharedips(args, user, connection) {
+		this.title = `[Shared IPs]`;
+		checkCanPerform(this, user, 'globalban');
+
+		let buf = `<div class="pad"><h2>IPs marked as shared</h2>`;
+		if (!Punishments.sharedIps.size) {
+			buf += `<p>None currently.</p>`;
+		} else {
+			buf += `<div class="ladder"><table><tr><th>IP</th><th>Location</th></tr>`;
+			const sortedSharedIPs = [...Punishments.sharedIps];
+			sortedSharedIPs.sort((a, b) => IPTools.ipSort(a[0], b[0]));
+
+			for (const [ip, location] of sortedSharedIPs) {
+				buf += `<tr><td>${ip}</td><td>${location}</td></tr>`;
+			}
 			buf += `</table></div>`;
 		}
 		buf += `</div>`;
@@ -167,44 +202,36 @@ export const commands: ChatCommands = {
 			// should be in the format: IP, IP, name, URL
 			const widen = cmd.includes('widen');
 
-			const rangesToAdd: AddressRange[] = [];
-			for (const row of target.split('\n')) {
-				const [type, stringRange, host] = row.split(',').map(part => part.trim());
-				if (!host || !IPTools.hostRegex.test(host)) {
-					return this.errorReply(`Invalid data: ${row}`);
-				}
-				if (!HOST_SUFFIXES.includes(type)) {
-					return this.errorReply(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
-				}
-				const range = IPTools.stringToRange(stringRange);
-				if (!range) return this.errorReply(`Couldn't parse IP range '${stringRange}'.`);
-				range.host = `${IPTools.urlToHost(host)}?/${type}`;
-				rangesToAdd.push(range);
+			const [type, stringRange, host] = target.split(',').map(part => part.trim());
+			if (!host || !IPTools.hostRegex.test(host)) {
+				return this.errorReply(`Invalid data: ${target}`);
 			}
-
-			let successes = 0;
-			for (const range of rangesToAdd) {
-				IPTools.sortRanges();
-				let result;
-				try {
-					result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
-				} catch (e) {
-					return this.errorReply(e.message);
-				}
-				if (typeof result === 'number') {
-					// Remove the range that is being widened
-					IPTools.removeRange(IPTools.ranges[result].minIP, IPTools.ranges[result].maxIP);
-				}
-				successes++;
-				IPTools.addRange(range);
+			if (!HOST_SUFFIXES.includes(type)) {
+				return this.errorReply(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
 			}
+			const range = IPTools.stringToRange(stringRange);
+			if (!range) return this.errorReply(`Couldn't parse IP range '${stringRange}'.`);
+			range.host = `${IPTools.urlToHost(host)}?/${type}`;
 
-			this.globalModlog('IPRANGE ADD', null, `added ${successes} IP ranges`);
-			return this.sendReply(`Successfully added ${successes} IP ranges!`);
+			IPTools.sortRanges();
+			let result;
+			try {
+				result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
+			} catch (e) {
+				return this.errorReply(e.message);
+			}
+			if (typeof result === 'number') {
+				// Remove the range that is being widened
+				IPTools.removeRange(IPTools.ranges[result].minIP, IPTools.ranges[result].maxIP);
+			}
+			IPTools.addRange(range as AddressRange & {host: string});
+
+			this.privateGlobalModAction(`${user.name} added the IP range ${formatRange(range)} to the list of ${type} ranges.`);
+			this.globalModlog('IPRANGE ADD', null, formatRange(range, true));
 		},
 		addhelp: [
-			`/ipranges add [type], [low]-[high], [host] - Add IP ranges (can be multiline). Requires: hosts manager &`,
-			`/ipranges widen [type], [low]-[high], [host] - Add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
+			`/ipranges add [type], [low]-[high], [host] - Adds an IP range. Requires: hosts manager &`,
+			`/ipranges widen [type], [low]-[high], [host] - Adds an IP range, allowing a new range to completely cover an old range. Requires: hosts manager &`,
 			`For example: /ipranges add proxy, 5.152.192.0 - 5.152.223.255, redstation.com`,
 			`Get datacenter info from whois; [low], [high] are the range in the last inetnum; [type] is one of res, proxy, or mobile.`,
 		],
@@ -212,20 +239,18 @@ export const commands: ChatCommands = {
 		remove(target, room, user) {
 			checkCanPerform(this, user);
 			if (!target) return this.parse('/help ipranges remove');
-			let removed = 0;
-			for (const row of target.split('\n')) {
-				const range = IPTools.stringToRange(row);
-				if (!range) return this.errorReply(`Couldn't parse the IP range '${row}'.`);
-				if (!IPTools.getRange(range.minIP, range.maxIP)) return this.errorReply(`No IP range found at '${row}'.`);
 
-				void IPTools.removeRange(range.minIP, range.maxIP);
-				removed++;
-			}
-			this.globalModlog('IPRANGE REMOVE', null, `${removed} IP ranges`);
-			return this.sendReply(`Removed ${removed} IP ranges!`);
+			const range = IPTools.stringToRange(target);
+			if (!range) return this.errorReply(`Couldn't parse the IP range '${target}'.`);
+			if (!IPTools.getRange(range.minIP, range.maxIP)) return this.errorReply(`No IP range found at '${target}'.`);
+
+			void IPTools.removeRange(range.minIP, range.maxIP);
+
+			this.privateGlobalModAction(`${user.name} removed the IP range ${formatRange(range)}.`);
+			this.globalModlog('IPRANGE REMOVE', null, formatRange(range, true));
 		},
 		removehelp: [
-			`/ipranges remove [low IP]-[high IP] - Remove IP range(s). Can be multiline. Requires: hosts manager &`,
+			`/ipranges remove [low IP]-[high IP] - Removes an IP range. Requires: hosts manager &`,
 			`Example: /ipranges remove 5.152.192.0-5.152.223.255`,
 		],
 
@@ -247,9 +272,9 @@ export const commands: ChatCommands = {
 				host: `${IPTools.urlToHost(url)}?/${type}`,
 			};
 			void IPTools.addRange(range);
-			const renameInfo = `IP range at '${rangeString}' to ${range.host}`;
-			this.globalModlog('DATACENTER RENAME', null, renameInfo);
-			return this.sendReply(`Renamed the ${renameInfo}.`);
+
+			this.privateGlobalModAction(`${user.name} renamed the IP range ${formatRange(toRename)} to ${range.host}.`);
+			this.globalModlog('IPRANGE RENAME', null, `IP range ${formatRange(toRename, true)} to ${range.host}`);
 		},
 		renamehelp: [
 			`/ipranges rename [type], [low IP]-[high IP], [host] - Changes the host an IP range resolves to.  Requires: hosts manager &`,
@@ -258,9 +283,8 @@ export const commands: ChatCommands = {
 
 	iprangeshelp() {
 		const help = [
-			`<code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
 			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ &`,
-			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &`,
+			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &</summary><code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
 			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
 			`For example: <code>/ipranges add proxy, 5.152.192.0-5.152.223.255, redstation.com</code>.`,
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
@@ -268,9 +292,8 @@ export const commands: ChatCommands = {
 			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
 			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
 		];
-		return this.sendReply(`|html|<details class="readmore"><summary>IP range management commands:</summary>${help.join('<br />')}`);
+		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
 	},
-
 	viewhosts(target, room, user) {
 		checkCanPerform(this, user, 'globalban');
 		const types = ['all', 'residential', 'mobile', 'ranges'];
@@ -353,12 +376,10 @@ export const commands: ChatCommands = {
 		default:
 			return this.errorReply(`'${type}' isn't one of 'openproxy', 'proxy', 'residential', or 'mobile'.`);
 		}
-		this.globalModlog(
-			removing ? 'REMOVEHOSTS' : 'ADDHOSTS',
-			null,
-			`${hosts.length} hosts to category '${type}'`
+		this.privateGlobalModAction(
+			`${user.name} ${removing ? 'removed' : 'added'} ${hosts.length} hosts (${hosts.join(', ')}) to the ${type} category!`
 		);
-		return this.sendReply(`${removing ? 'Removed' : 'Added'} ${hosts.length} hosts!`);
+		this.globalModlog(removing ? 'REMOVEHOSTS' : 'ADDHOSTS', null, `${type}: ${hosts.join(', ')}`);
 	},
 	addhostshelp: [
 		`/addhosts [category], host1, host2, ... - Adds hosts to the given category. Requires: hosts manager &`,
@@ -464,8 +485,12 @@ export const commands: ChatCommands = {
 		`/nomarkshared remove [IP] - Removes an IP from the nomarkshared list. Requires &`,
 		`/nomarkshared view - Lists all IPs prevented from being marked as shared. Requires @ &`,
 	],
-};
 
-process.nextTick(() => {
-	Chat.multiLinePattern.register('/(datacenters|datacenter|dc|iprange|ipranges) (add|widen|remove)');
-});
+	sharedips: 'viewsharedips',
+	viewsharedips() {
+		return this.parse('/join view-sharedips');
+	},
+	viewsharedipshelp: [
+		`/viewsharedips — Lists IP addresses marked as shared. Requires: hosts manager @ &`,
+	],
+};

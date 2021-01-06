@@ -197,13 +197,13 @@ export class Hangman extends Rooms.RoomGame {
 	end() {
 		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman was ended.)</div>');
 		this.room.add("The game of hangman was ended.");
-		delete this.room.game;
+		this.room.game = null;
 	}
 
 	finish() {
 		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
 		this.room.add(`|html|${this.generateWindow()}`);
-		delete this.room.game;
+		this.room.game = null;
 	}
 }
 
@@ -258,9 +258,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			const game = room.getGame(Hangman);
-			if (!game) return this.errorReply("There is no game of hangman running in this room.");
-
+			const game = this.requireGame(Hangman);
 			game.end();
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`The game of hangman was ended by ${user.name}.`);
@@ -291,8 +289,7 @@ export const commands: ChatCommands = {
 
 		display(target, room, user) {
 			room = this.requireRoom();
-			const game = room.getGame(Hangman);
-			if (!game) return this.errorReply("There is no game of hangman running in this room.");
+			const game = this.requireGame(Hangman);
 			if (!this.runBroadcast()) return;
 			room.update();
 

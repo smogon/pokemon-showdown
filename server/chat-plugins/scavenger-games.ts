@@ -68,10 +68,10 @@ class Leaderboard {
 						lowestScore = bit[sortBy];
 						lastPlacement = i + 1;
 					}
-					return Object.assign(
-						{rank: lastPlacement},
-						bit
-					);
+					return {
+						rank: lastPlacement,
+						...bit,
+					};
 				}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
@@ -728,7 +728,7 @@ export class ScavengerGameTemplate {
 		if (this.timer) clearTimeout(this.timer);
 		const game = this.room.getGame(ScavengerHunt);
 		if (force && game) game.onEnd(false);
-		delete this.room.scavgame;
+		this.room.scavgame = null;
 	}
 
 	eliminate(userid: string) {

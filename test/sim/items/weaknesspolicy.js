@@ -93,4 +93,16 @@ describe('Weakness Policy', function () {
 		assert.statStage(holder, 'atk', 0);
 		assert.statStage(holder, 'spa', 0);
 	});
+
+	it(`should trigger before forced switching moves`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'compoundeyes', moves: ['dragontail']},
+		], [
+			{species: 'zygarde', item: 'weaknesspolicy', moves: ['sleeptalk']},
+			{species: 'aron', moves: ['sleeptalk']},
+		]]);
+		const zygarde = battle.p2.active[0];
+		battle.makeChoices();
+		assert.false.holdsItem(zygarde);
+	});
 });

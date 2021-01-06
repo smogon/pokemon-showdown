@@ -168,7 +168,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (!this.randomChance(1, 3)) {
+			if (!this.randomChance(33, 100)) {
 				return;
 			}
 			this.activeTarget = pokemon;
@@ -269,8 +269,18 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 2,
 		onStart(target, source, effect) {
 			this.effectData.move = effect.id;
-			target.addVolatile(effect.id, source);
+			target.addVolatile(effect.id);
+			let moveTarget: Pokemon | null = source;
+			if (effect.sourceEffect && this.dex.getMove(effect.id).target === 'normal') {
+				// this move was called by another move such as metronome and needs a random target to be determined now
+				// won't randomly choose an empty slot if there's at least one valid target
+				moveTarget = this.getRandomTarget(target, effect.id);
+			}
+			// if there are no valid targets, randomly choose one later
+			target.volatiles[effect.id].targetLoc = this.getTargetLoc(moveTarget || target, target);
 			this.attrLastMove('[still]');
+			// Run side-effects normally associated with hitting (e.g., Protean, Libero)
+			this.runEvent('PrepareHit', target, source, effect);
 		},
 		onEnd(target) {
 			target.removeVolatile(this.effectData.move);
@@ -287,7 +297,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		noCopy: true,
 		onStart(pokemon) {
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (!this.activeMove.id || this.activeMove.hasBounced) return false;
+			if (!this.activeMove.id || this.activeMove.hasBounced || this.activeMove.sourceEffect === 'snatch') return false;
 			this.effectData.move = this.activeMove.id;
 		},
 		onBeforeMove(pokemon, target, move) {
@@ -347,7 +357,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			// time's up; time to hit! :D
 			const move = this.dex.getMove(data.move);
 			if (target.fainted || target === data.source) {
-				this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
+				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
 				return;
 			}
 
@@ -364,7 +374,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
 				data.moveData.stab = 2;
 			}
-			const hitMove = new this.dex.Data.Move(data.moveData) as Move as ActiveMove;
+			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.trySpreadMoveHit([target], data.source, hitMove);
 		},

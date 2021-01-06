@@ -655,7 +655,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	quickguard: {
 		inherit: true,
 		stallingMove: true,
-		onTryHitSide(side, source) {
+		onTry(source) {
 			return this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide(side, source) {
@@ -961,6 +961,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 95,
 	},
+	toxic: {
+		inherit: true,
+		onPrepareHit() {},
+	},
 	uproar: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, sound: 1},
@@ -1021,7 +1025,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	wideguard: {
 		inherit: true,
 		stallingMove: true,
-		onTryHitSide(side, source) {
+		onTry(source) {
 			return this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide(side, source) {

@@ -8,7 +8,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
-		if (species.battleOnly && species.battleOnly === 'string') forme = species.battleOnly;
+		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
 		if (species.cosmeticFormes) {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
@@ -640,6 +640,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			UUBL: 77,
 			OU: 75,
 			Uber: 71,
+			AG: 71,
 		};
 		const customScale: {[k: string]: number} = {
 			Delibird: 99, Ditto: 99, 'Farfetch\u2019d': 99, Unown: 99,

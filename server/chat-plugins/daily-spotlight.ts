@@ -43,7 +43,7 @@ async function renderSpotlight(description: string, image?: string) {
 		} catch (err) {}
 	}
 
-	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
+	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true)}</td>${imgHTML}</tr></table>`;
 }
 
 export const destroy = () => {
@@ -219,6 +219,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(html);
 		room.update();
 	},
+	vsl: 'viewspotlights',
 	dailies: 'viewspotlights',
 	viewspotlights(target, room, user) {
 		room = this.requireRoom();
@@ -228,16 +229,16 @@ export const commands: ChatCommands = {
 
 	dailyhelp() {
 		this.sendReply(
-			`|html|<details class="readmore"><summary>Daily spotlights plugin:</summary>` +
-			`<code>/daily [name]</code>: shows the daily spotlight.<br />` +
+			`|html|<details class="readmore"><summary><code>/daily [name]</code>: shows the daily spotlight.<br />` +
 			`<code>!daily [name]</code>: shows the daily spotlight to everyone. Requires: + % @ # &<br />` +
-			`<code>/setdaily [name], [image], [description]</code>: sets the daily spotlight. Image can be left out. Requires: % @ # &<br />` +
+			`<code>/setdaily [name], [image], [description]</code>: sets the daily spotlight. Image can be left out. Requires: % @ # &</summary>` +
 			`<code>/queuedaily [name], [image], [description]</code>: queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # &<br />` +
 			`<code>/queuedailyat [name], [queue number], [image], [description]</code>: inserts a daily spotlight into the queue at the specified number (starting from 1). Requires: % @ # &<br />` +
 			`<code>/replacedaily [name], [queue number], [image], [description]</code>: replaces the daily spotlight queued at the specified number. Requires: % @ # &<br />` +
 			`<code>/removedaily [name][, queue number]</code>: if no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # &<br />` +
 			`<code>/swapdaily [name], [queue number], [queue number]</code>: swaps the two queued spotlights at the given queue numbers. Requires: % @ # &<br />` +
-			`<code>/viewspotlights</code>: shows all current spotlights in the room. For staff, also shows queued spotlights.`
+			`<code>/viewspotlights</code>: shows all current spotlights in the room. For staff, also shows queued spotlights.` +
+			`</details>`
 		);
 	},
 };

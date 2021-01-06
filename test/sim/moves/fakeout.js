@@ -29,7 +29,7 @@ describe('Fake Out', function () {
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		battle.makeChoices('move fakeout', 'move swift');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should flinch after switching out and back in to refresh the move', function () {
@@ -55,6 +55,6 @@ describe('Fake Out', function () {
 		]]);
 		battle.makeChoices('switch 2', 'move quiverdance');
 		battle.makeChoices('move fakeout', 'move swift');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 });

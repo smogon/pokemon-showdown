@@ -96,7 +96,7 @@ describe('Sockets', function () {
 					process.send(!socket);`;
 				Sockets.socketDisconnect(worker, sid);
 			}).then(chain(worker => data => {
-				assert.ok(data);
+				assert(data);
 			}, querySocket));
 		});
 
@@ -140,7 +140,7 @@ describe('Sockets', function () {
 					process.send(room && room.has(${sid}));`;
 				Sockets.roomAdd(worker, cid, sid);
 			}).then(chain(worker => data => {
-				assert.ok(data);
+				assert(data);
 			}, queryChannel));
 		});
 
@@ -154,7 +154,7 @@ describe('Sockets', function () {
 				Sockets.roomAdd(worker, cid, sid);
 				Sockets.roomRemove(worker, cid, sid);
 			}).then(chain(worker => data => {
-				assert.ok(data);
+				assert(data);
 			}, queryChannel));
 		});
 
@@ -181,7 +181,7 @@ describe('Sockets', function () {
 					process.send(!!channel && (channel.get(${sid}) === ${scid}));`;
 				Sockets.channelMove(worker, cid, scid, sid);
 			}).then(chain(worker => data => {
-				assert.ok(data);
+				assert(data);
 			}, queryChannel));
 		});
 
@@ -197,7 +197,7 @@ describe('Sockets', function () {
 				Sockets.channelMove(worker, cid, scid, sid);
 				Sockets.roomRemove(worker, cid, sid);
 			}).then(chain(worker => data => {
-				assert.ok(data);
+				assert(data);
 			}, queryChannel));
 		});
 

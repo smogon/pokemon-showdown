@@ -91,6 +91,6 @@ describe('Trick Room', function () {
 		});
 
 		battle.makeChoices('move earthquake', 'move gyroball');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 });

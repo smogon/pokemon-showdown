@@ -4,12 +4,12 @@ const assert = require('assert').strict;
 const Dashycode = require('./../../.lib-dist/dashycode');
 
 describe('Dashycode', function () {
-	const ascii = Array.from({length: 0x80}, (v, k) => k);
-	const iso88591 = Array.from({length: 0x80}, (v, k) => k + 0x80);
-	const utf16 = Array.from({length: 0xFF00}, (v, k) => k + 0x100);
+	const ascii = Array.from({length: 0x80}, (v, i) => i);
+	const iso88591 = Array.from({length: 0x80}, (v, i) => i + 0x80);
+	const utf16 = Array.from({length: 0xFF00}, (v, i) => i + 0x100);
 
-	const latinL = Array.from({length: 26}, (v, k) => k + 0x60);
-	const latinU = Array.from({length: 26}, (v, k) => k + 0x41);
+	const latinL = Array.from({length: 26}, (v, i) => i + 0x60);
+	const latinU = Array.from({length: 26}, (v, i) => i + 0x41);
 
 	const encoded = new Map();
 
@@ -33,22 +33,9 @@ describe('Dashycode', function () {
 	const transcodeWithSets = (set1, set2) => function () {
 		for (let bitmask = 0; bitmask <= 0xFFFF; bitmask++) {
 			let plaintext = '';
-			plaintext += (bitmask & 0x0001) ? set1[0] : set2[0];
-			plaintext += (bitmask & 0x0002) ? set1[1] : set2[1];
-			plaintext += (bitmask & 0x0004) ? set1[2] : set2[2];
-			plaintext += (bitmask & 0x0008) ? set1[3] : set2[3];
-			plaintext += (bitmask & 0x0010) ? set1[4] : set2[4];
-			plaintext += (bitmask & 0x0020) ? set1[5] : set2[5];
-			plaintext += (bitmask & 0x0040) ? set1[6] : set2[6];
-			plaintext += (bitmask & 0x0080) ? set1[7] : set2[7];
-			plaintext += (bitmask & 0x0100) ? set1[8] : set2[8];
-			plaintext += (bitmask & 0x0200) ? set1[9] : set2[9];
-			plaintext += (bitmask & 0x0400) ? set1[10] : set2[10];
-			plaintext += (bitmask & 0x0800) ? set1[11] : set2[11];
-			plaintext += (bitmask & 0x1000) ? set1[12] : set2[12];
-			plaintext += (bitmask & 0x2000) ? set1[13] : set2[13];
-			plaintext += (bitmask & 0x4000) ? set1[14] : set2[14];
-			plaintext += (bitmask & 0x8000) ? set1[15] : set2[15];
+			for (let i = 0; i < 16; i++) {
+				plaintext += (bitmask & 1 << i) ? set1[i] : set2[i];
+			}
 
 			const ciphertext = Dashycode.encode(plaintext);
 			assert.equal(Dashycode.decode(ciphertext), plaintext);
@@ -56,15 +43,15 @@ describe('Dashycode', function () {
 	};
 
 	it('should encode all codepoints uniquely', function () {
-		return [...ascii, ...iso88591, ...utf16].reduce((p, codepoint) => (
-			p.then(v => encode(codepoint))
-		), Promise.resolve());
+		for (const codepoint of [...ascii, ...iso88591, ...utf16]) {
+			encode(codepoint);
+		}
 	});
 
 	it('should decode all codepoints accurately', function () {
-		return [...encoded.keys()].reduce((p, dashycode) => (
-			p.then(v => decode(dashycode))
-		), Promise.resolve());
+		for (const dashycode of encoded.keys()) {
+			decode(dashycode);
+		}
 	});
 
 	it('should transcode multiple spaces in a row', transcode('ayy  lmao'));

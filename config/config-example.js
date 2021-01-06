@@ -258,6 +258,16 @@ exports.reportbattlejoins = true;
 exports.monitorminpunishments = 3;
 
 /**
+ * Turns off all time-based throttles - rename, challenges, laddering, etc.
+ */
+exports.nothrottle = false;
+
+/**
+ * Removes all ip-based alt checking.
+ */
+exports.noipchecks = false;
+
+/**
  * allow punishmentmonitor to lock users with multiple roombans.
  *	 When set to `true`, this feature will automatically lock any users with three or more
  *	 active roombans, and notify the staff room.
@@ -391,6 +401,16 @@ exports.inactiveuserthreshold = 1000 * 60 * 60;
 exports.autolockdown = true;
 
 /**
+ * noguestsecurity - purely for development servers: allows logging in without
+ * a signed token: simply send `/trn [USERNAME]`. This allows using PS without
+ * a login server.
+ *
+ * Logging in this way will make you considered an unregistered user and grant
+ * no authority. You cannot log into a trusted (g+/r%) user account this way.
+ */
+exports.noguestsecurity = false;
+
+/**
  * Custom avatars.
  * This allows you to specify custom avatar images for users on your server.
  * Place custom avatar files under the /config/avatars/ directory.
@@ -457,6 +477,11 @@ exports.forcedpublicprefixes = [];
  */
 exports.startuphook = function () {};
 
+/**
+ * lastfmkey - the API key to let users use the last.fm commands from The Studio's
+ * chat plugin.
+ */
+exports.lastfmkey = '';
 
 /**
  * chatlogreader - the search method used for searching chatlogs.
@@ -581,23 +606,6 @@ exports.grouplist = [
 		joinbattle: true,
 	},
 	{
-		symbol: '*',
-		id: "bot",
-		name: "Bot",
-		inherit: '%',
-		jurisdiction: 'u',
-
-		addhtml: true,
-		tournaments: true,
-		declare: true,
-		bypassafktimer: true,
-
-		ip: false,
-		globalban: false,
-		lock: false,
-		alts: false,
-	},
-	{
 		symbol: '@',
 		id: "mod",
 		name: "Moderator",
@@ -639,6 +647,29 @@ exports.grouplist = [
 		minigame: true,
 		modchat: true,
 		hiderank: true,
+	},
+	{
+		// Bots are ranked below Driver/Mod so that Global Bots can be kept out
+		// of modjoin % rooms (namely, Staff).
+		// (They were previously above Driver/Mod so they can have game management
+		// permissions drivers don't, but these permissions can be manually given.)
+		symbol: '*',
+		id: "bot",
+		name: "Bot",
+		inherit: '%',
+		jurisdiction: 'u',
+
+		addhtml: true,
+		tournaments: true,
+		declare: true,
+		bypassafktimer: true,
+		gamemanagement: true,
+
+		ip: false,
+		globalban: false,
+		lock: false,
+		forcerename: false,
+		alts: false,
 	},
 	{
 		symbol: '\u2606',

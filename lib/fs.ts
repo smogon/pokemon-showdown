@@ -63,7 +63,7 @@ export class FSPath {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return fs.readFileSync(this.path, options) as string;
+		return fs.readFileSync(this.path, options as {encoding: 'utf8'});
 	}
 
 	readBuffer(options: AnyObject | string = {}): Promise<Buffer> {
@@ -75,7 +75,7 @@ export class FSPath {
 	}
 
 	readBufferSync(options: AnyObject | string = {}) {
-		return fs.readFileSync(this.path, options) as Buffer;
+		return fs.readFileSync(this.path, options as {encoding: null});
 	}
 
 	exists(): Promise<boolean> {
@@ -110,7 +110,7 @@ export class FSPath {
 
 	write(data: string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.writeFile(this.path, data, options, err => {
 				err ? reject(err) : resolve();
 			});
@@ -136,12 +136,6 @@ export class FSPath {
 	safeWriteSync(data: string | Buffer, options: AnyObject = {}) {
 		FS(this.path + '.NEW').writeSync(data, options);
 		FS(this.path + '.NEW').renameSync(this.path);
-	}
-
-	waitUntil(time: number): Promise<void> {
-		return new Promise(resolve => {
-			setTimeout(() => resolve(), time - Date.now());
-		});
 	}
 
 	/**
@@ -221,7 +215,7 @@ export class FSPath {
 
 	append(data: string | Buffer, options: AnyObject = {}) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.appendFile(this.path, data, options, err => {
 				err ? reject(err) : resolve();
 			});
@@ -235,7 +229,7 @@ export class FSPath {
 
 	symlinkTo(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.symlink(target, this.path, err => {
 				err ? reject(err) : resolve();
 			});
@@ -249,7 +243,7 @@ export class FSPath {
 
 	copyFile(dest: string) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.copyFile(this.path, dest, err => {
 				err ? reject(err) : resolve();
 			});
@@ -258,7 +252,7 @@ export class FSPath {
 
 	rename(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.rename(this.path, target, err => {
 				err ? reject(err) : resolve();
 			});
@@ -308,7 +302,7 @@ export class FSPath {
 
 	unlinkIfExists() {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.unlink(this.path, err => {
 				if (err && err.code === 'ENOENT') return resolve();
 				err ? reject(err) : resolve();
@@ -327,7 +321,7 @@ export class FSPath {
 
 	async rmdir(recursive?: boolean) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.rmdir(this.path, {recursive}, err => {
 				err ? reject(err) : resolve();
 			});
@@ -341,7 +335,7 @@ export class FSPath {
 
 	mkdir(mode: string | number = 0o755) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.mkdir(this.path, mode, err => {
 				err ? reject(err) : resolve();
 			});
@@ -355,7 +349,7 @@ export class FSPath {
 
 	mkdirIfNonexistent(mode: string | number = 0o755) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			fs.mkdir(this.path, mode, err => {
 				if (err && err.code === 'EEXIST') return resolve();
 				err ? reject(err) : resolve();

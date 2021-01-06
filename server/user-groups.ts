@@ -13,7 +13,7 @@ export const ROOM_PERMISSIONS = [
 
 export const GLOBAL_PERMISSIONS = [
 	// administrative
-	'bypassall', 'console', 'disableladder', 'lockdown', 'potd', 'rawpacket',
+	'bypassall', 'console', 'disableladder', 'lockdown', 'potd',
 	// other
 	'addhtml', 'alts', 'altsself', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'hiderank', 'ignorelimits', 'importinputlog', 'ip', 'ipself', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
 ] as const;
@@ -56,7 +56,15 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
-		return this.has(userid) && Auth.atLeast(this.get(userid), '%');
+		if (this.has(userid)) {
+			const rank = this.get(userid);
+			// At one point bots used to be ranked above drivers, so this checks
+			// driver rank to make sure this function works on servers that
+			// did not reorder the ranks.
+			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, '%');
+		} else {
+			return false;
+		}
 	}
 	atLeast(user: User, group: AuthLevel) {
 		if (user.hasSysopAccess()) return true;
@@ -83,11 +91,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (fallback !== undefined) return fallback;
 
 		// unidentified groups are treated as voice
-		return Object.assign({}, Config.groups['+'] || {}, {
+		return {
+			...(Config.groups['+'] || {}),
 			symbol,
 			id: 'voice',
 			name: symbol,
-		});
+		};
 	}
 	getEffectiveSymbol(user: User): EffectiveGroupSymbol {
 		const group = this.get(user);
@@ -149,24 +158,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		for (const cmd in Chat.commands) {
-			const entry = Chat.commands[cmd];
-			if (typeof entry === 'string' || Array.isArray(entry)) continue;
-			if (typeof entry === 'function' && entry.hasRoomPermissions) {
-				permissions.push(`/${cmd}`);
-			}
-			if (typeof entry === 'object') {
-				permissions.push(`/${cmd}`);
-				for (const subCommand in entry) {
-					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
-					if (typeof subEntry !== 'function') continue;
-					if (subEntry.hasRoomPermissions) permissions.push(`/${cmd} ${subCommand}`);
-				}
-				continue;
-			}
-		}
-		return permissions;
+		return [
+			...ROOM_PERMISSIONS,
+			...Chat.allCommands().filter(c => c.hasRoomPermissions).map(c => `/${c.fullCmd}`),
+		];
 	}
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,
@@ -212,11 +207,12 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(user: ID | User): GroupSymbol {
+	get(userOrID: ID | User): GroupSymbol {
+		const id = typeof userOrID === 'string' ? userOrID : (userOrID as User).id;
+
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
-		const parentGroup = parentAuth ? parentAuth.get(user) : Auth.defaultSymbol();
-		const id = typeof user === 'string' ? user : (user as User).id;
+		const parentGroup = parentAuth ? parentAuth.get(userOrID) : Auth.defaultSymbol();
 
 		if (this.has(id)) {
 			// authority is whichever is higher between roomauth and global auth
@@ -318,6 +314,7 @@ export class GlobalAuth extends Auth {
 			user.tempGroup = group;
 			user.updateIdentity();
 			username = user.name;
+			Rooms.global.checkAutojoin(user);
 		}
 		this.usernames.set(id, username);
 		super.set(id, group);

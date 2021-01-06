@@ -15,7 +15,7 @@ describe('Normalize', function () {
 		battle.setPlayer('p1', {team: [{species: "Delcatty", ability: 'normalize', moves: ['grassknot']}]});
 		battle.setPlayer('p2', {team: [{species: "Latias", ability: 'colorchange', moves: ['endure']}]});
 		battle.makeChoices('move grassknot', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Normal'));
+		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
 	it('should not change Hidden Power to Normal-type', function () {
@@ -23,7 +23,7 @@ describe('Normalize', function () {
 		battle.setPlayer('p1', {team: [{species: "Delcatty", ability: 'normalize', moves: ['hiddenpowerfighting']}]});
 		battle.setPlayer('p2', {team: [{species: "Latias", ability: 'colorchange', moves: ['endure']}]});
 		battle.makeChoices('move hiddenpowerfighting', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Fighting'));
+		assert(battle.p2.active[0].hasType('Fighting'));
 	});
 
 	it('should not change Techno Blast to Normal-type if the user is holding a Drive', function () {
@@ -31,7 +31,7 @@ describe('Normalize', function () {
 		battle.setPlayer('p1', {team: [{species: "Delcatty", ability: 'normalize', item: 'dousedrive', moves: ['technoblast']}]});
 		battle.setPlayer('p2', {team: [{species: "Latias", ability: 'colorchange', moves: ['endure']}]});
 		battle.makeChoices('move technoblast', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Water'));
+		assert(battle.p2.active[0].hasType('Water'));
 	});
 
 	it('should not change Judgment to Normal-type if the user is holding a Plate', function () {
@@ -39,7 +39,7 @@ describe('Normalize', function () {
 		battle.setPlayer('p1', {team: [{species: "Delcatty", ability: 'normalize', item: 'zapplate', moves: ['judgment']}]});
 		battle.setPlayer('p2', {team: [{species: "Latias", ability: 'colorchange', moves: ['endure']}]});
 		battle.makeChoices('move judgment', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Electric'));
+		assert(battle.p2.active[0].hasType('Electric'));
 	});
 
 	it('should not change Weather Ball to Normal-type if sun, rain, or hail is an active weather', function () {
@@ -47,7 +47,7 @@ describe('Normalize', function () {
 		battle.setPlayer('p1', {team: [{species: "Delcatty", ability: 'normalize', item: 'laggingtail', moves: ['weatherball']}]});
 		battle.setPlayer('p2', {team: [{species: "Latias", ability: 'colorchange', moves: ['sunnyday']}]});
 		battle.makeChoices('move weatherball', 'move sunnyday');
-		assert.ok(battle.p2.active[0].hasType('Fire'));
+		assert(battle.p2.active[0].hasType('Fire'));
 	});
 
 	it('should not change Natural Gift to Normal-type if the user is holding a Berry', function () {
@@ -55,7 +55,7 @@ describe('Normalize', function () {
 		battle.setPlayer('p1', {team: [{species: "Delcatty", ability: 'normalize', item: 'chopleberry', moves: ['naturalgift']}]});
 		battle.setPlayer('p2', {team: [{species: "Latias", ability: 'colorchange', moves: ['endure']}]});
 		battle.makeChoices('move naturalgift', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Fighting'));
+		assert(battle.p2.active[0].hasType('Fighting'));
 	});
 });
 
@@ -70,7 +70,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
 		]);
 		battle.makeChoices('move grassknot', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Normal'));
+		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
 	it('should change Hidden Power to Normal-type', function () {
@@ -79,7 +79,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
 		]);
 		battle.makeChoices('move hiddenpowerfire', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Normal'));
+		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
 	it('should change Judgment to Normal-type even if the user is holding a Plate', function () {
@@ -88,7 +88,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
 		]);
 		battle.makeChoices('move judgment', 'move endure');
-		assert.ok(battle.p2.active[0].hasType('Normal'));
+		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
 	it('should change Weather Ball to Normal-type even if sun, rain, or hail is an active weather', function () {
@@ -97,6 +97,6 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Latias", ability: 'colorchange', moves: ['sunnyday']}],
 		]);
 		battle.makeChoices('move weatherball', 'move sunnyday');
-		assert.ok(battle.p2.active[0].hasType('Normal'));
+		assert(battle.p2.active[0].hasType('Normal'));
 	});
 });

@@ -88,6 +88,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	stancechange: {
 		inherit: true,
 		onBeforeMovePriority: 11,
+		onBeforeMove(attacker, defender, move) {
+			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
+			if (move.category === 'Status' && move.id !== 'kingsshield') return;
+			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onModifyMove() {},
+	},
+	symbiosis: {
+		inherit: true,
+		onAllyAfterUseItem(item, pokemon) {
+			const source = this.effectData.target;
+			const myItem = source.takeItem();
+			if (!myItem) return;
+			if (
+				!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effect, myItem) ||
+				!pokemon.setItem(myItem)
+			) {
+				source.item = myItem.id;
+				return;
+			}
+			this.add('-activate', source, 'ability: Symbiosis', myItem, '[of] ' + pokemon);
+		},
 	},
 	weakarmor: {
 		inherit: true,
@@ -97,5 +120,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		rating: 0.5,
+	},
+	zenmode: {
+		inherit: true,
+		isPermanent: false,
 	},
 };

@@ -605,7 +605,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.getEffect(effect);
 		if (!target || !target.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
+		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let i: BoostName;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};

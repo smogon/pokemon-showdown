@@ -45,10 +45,10 @@ describe('Matchmaker', function () {
 
 	it('should add a search', function () {
 		const s1 = addSearch(this.p1);
-		assert.ok(Ladders.searches.has(FORMATID));
+		assert(Ladders.searches.has(FORMATID));
 
 		const formatSearches = Ladders.searches.get(FORMATID);
-		assert.ok(formatSearches instanceof Map);
+		assert(formatSearches instanceof Map);
 		assert.equal(formatSearches.size, 1);
 		assert.equal(s1.userid, this.p1.id);
 		assert.equal(s1.team, this.p1.battleSettings.team);
@@ -90,7 +90,7 @@ describe('Matchmaker', function () {
 		addSearch(this.p2);
 		assert.equal(this.p1.games.size, 1);
 		for (const roomid of this.p1.games) {
-			assert.ok(Rooms.get(roomid).battle);
+			assert(Rooms.get(roomid).battle);
 		}
 	});
 

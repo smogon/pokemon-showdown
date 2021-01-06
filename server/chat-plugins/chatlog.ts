@@ -7,11 +7,8 @@
 
 import {FS} from "../../lib/fs";
 import {Utils} from '../../lib/utils';
-import * as child_process from 'child_process';
-import * as util from 'util';
-import * as path from 'path';
 import * as Dashycode from '../../lib/dashycode';
-import {QueryProcessManager} from "../../lib/process-manager";
+import {QueryProcessManager, exec} from "../../lib/process-manager";
 import {Repl} from '../../lib/repl';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
@@ -21,7 +18,20 @@ const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
 const MAX_MEMORY = 67108864; // 64MB
 const MAX_PROCESSES = 1;
-const execFile = util.promisify(child_process.execFile);
+const MAX_TOPUSERS = 100;
+
+const CHATLOG_PM_TIMEOUT = 1 * 60 * 60 * 1000; // 1 hour
+
+const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog'];
+
+interface ChatlogSearch {
+	raw?: boolean;
+	search: string;
+	room: RoomID;
+	date: string;
+	limit?: number | null;
+	args?: string[];
+}
 
 export class LogReaderRoom {
 	roomid: RoomID;
@@ -41,7 +51,7 @@ export class LogReaderRoom {
 	async listDays(month: string) {
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
-			return listing.filter(file => /\.txt$/.test(file)).map(file => file.slice(0, -4));
+			return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
 		} catch (err) {
 			return [];
 		}
@@ -55,7 +65,7 @@ export class LogReaderRoom {
 	}
 }
 
-const LogReader = new class {
+export const LogReader = new class {
 	async get(roomid: RoomID) {
 		if (!await FS(`logs/chat/${roomid}`).exists()) return null;
 		return new LogReaderRoom(roomid);
@@ -122,7 +132,7 @@ const LogReader = new class {
 		const roomLog = await LogReader.get(roomid);
 		const stream = await roomLog!.getLog(day);
 		let buf = '';
-		let i = LogViewer.results || 0;
+		let i = (LogSearcher as FSLogSearcher).results || 0;
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
@@ -137,8 +147,8 @@ const LogReader = new class {
 		}
 		return buf;
 	}
-
-	getMonth(day: string) {
+	getMonth(day?: string) {
+		if (!day) day = Chat.toTimestamp(new Date()).split(' ')[0];
 		return day.slice(0, 7);
 	}
 	nextDay(day: string) {
@@ -157,17 +167,131 @@ const LogReader = new class {
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - 30 * DAY);
 		return prevMonth.toISOString().slice(0, 7);
 	}
-
 	today() {
 		return Chat.toTimestamp(new Date()).slice(0, 10);
+	}
+	isMonth(text: string) {
+		return /[0-9]{4}-[0-9]{2}/.test(text);
+	}
+	isDay(text: string) {
+		return /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(text);
+	}
+	async findBattleLog(tier: ID, number: number): Promise<string[] | null> {
+		// binary search!
+		const months = (await FS('logs').readdir()).filter(this.isMonth).sort();
+		if (!months.length) return null;
+
+		// find first day
+		let firstDay!: string;
+		while (months.length) {
+			const month = months[0];
+			try {
+				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
+				firstDay = days[0];
+				break;
+			} catch (err) {}
+			months.shift();
+		}
+		if (!firstDay) return null;
+
+		// find last day
+		let lastDay!: string;
+		while (months.length) {
+			const month = months[months.length - 1];
+			try {
+				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
+				lastDay = days[days.length - 1];
+				break;
+			} catch (err) {}
+			months.pop();
+		}
+		if (!lastDay) throw new Error(`getBattleLog month range search for ${tier}`);
+
+		const getBattleNum = (battleName: string) => Number(battleName.split('-')[1].slice(0, -9));
+
+		const getDayRange = async (day: string) => {
+			const month = day.slice(0, 7);
+
+			try {
+				const battles = (await FS(`logs/${month}/${tier}/${day}`).readdir()).filter(
+					b => b.endsWith('.log.json')
+				);
+				Utils.sortBy(battles, getBattleNum);
+
+				return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
+			} catch (err) {
+				return null;
+			}
+		};
+
+		const dayExists = (day: string) => FS(`logs/${day.slice(0, 7)}/${tier}/${day}`).exists();
+
+		const nextExistingDay = async (day: string) => {
+			for (let i = 0; i < 3650; i++) {
+				day = this.nextDay(day);
+				if (await dayExists(day)) return day;
+				if (day === lastDay) return null;
+			}
+			return null;
+		};
+
+		const prevExistingDay = async (day: string) => {
+			for (let i = 0; i < 3650; i++) {
+				day = this.prevDay(day);
+				if (await dayExists(day)) return day;
+				if (day === firstDay) return null;
+			}
+			return null;
+		};
+
+		for (let i = 0; i < 100; i++) {
+			const middleDay = new Date(
+				(new Date(firstDay).getTime() + new Date(lastDay).getTime()) / 2
+			).toISOString().slice(0, 10);
+
+			let currentDay: string | null = middleDay;
+			let dayRange = await getDayRange(middleDay);
+
+			if (!dayRange) {
+				currentDay = await nextExistingDay(middleDay);
+				if (!currentDay) {
+					const lastExistingDay = await prevExistingDay(middleDay);
+					if (!lastExistingDay) throw new Error(`couldn't find existing day`);
+					lastDay = lastExistingDay;
+					continue;
+				}
+				dayRange = await getDayRange(currentDay);
+				if (!dayRange) throw new Error(`existing day was a lie`);
+			}
+
+			const [lowest, highest] = dayRange;
+
+			if (number < lowest) {
+				// before currentDay
+				if (firstDay === currentDay) return null;
+				lastDay = this.prevDay(currentDay);
+			} else if (number > highest) {
+				// after currentDay
+				if (lastDay === currentDay) return null;
+				firstDay = this.nextDay(currentDay);
+			} else {
+				// during currentDay
+				const month = currentDay.slice(0, 7);
+				const path = FS(`logs/${month}/${tier}/${currentDay}/${tier}-${number}.log.json`);
+				if (await path.exists()) {
+					return JSON.parse(path.readSync()).log;
+				}
+				return null;
+			}
+		}
+
+		// 100 iterations is enough to search 2**100 days, which is around 1e30 days
+		// for comparison, a millennium is 365000 days
+		throw new Error(`Infinite loop looking for ${tier}-${number}`);
 	}
 };
 
 export const LogViewer = new class {
-	results: number;
-	constructor() {
-		this.results = 0;
-	}
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -183,7 +307,8 @@ export const LogViewer = new class {
 		}
 
 		const prevDay = LogReader.prevDay(day);
-		buf += `<p><a roomid="view-chatlog-${roomid}--${prevDay}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
+		const prevRoomid = `view-chatlog-${roomid}--${prevDay}${opts ? `--${opts}` : ''}`;
+		buf += `<p><a roomid="${prevRoomid}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
@@ -197,89 +322,35 @@ export const LogViewer = new class {
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
 			const nextDay = LogReader.nextDay(day);
-			buf += `<p><a roomid="view-chatlog-${roomid}--${nextDay}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
+			const nextRoomid = `view-chatlog-${roomid}--${nextDay}${opts ? `--${opts}` : ''}`;
+			buf += `<p><a roomid="${nextRoomid}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
 		}
 
 		buf += `</div>`;
 		return this.linkify(buf);
 	}
 
-	renderDayResults(results: {[day: string]: SearchMatch[]}, roomid: RoomID) {
-		const renderResult = (match: SearchMatch) => {
-			this.results++;
-			return (
-				this.renderLine(match[0]) +
-				this.renderLine(match[1]) +
-				`<div class="chat chatmessage highlighted">${this.renderLine(match[2])}</div>` +
-				this.renderLine(match[3]) +
-				this.renderLine(match[4])
-			);
-		};
-
-		let buf = ``;
-		for (const day in results) {
-			const dayResults = results[day];
-			const plural = dayResults.length !== 1 ? "es" : "";
-			buf += `<details><summary>${dayResults.length} match${plural} on `;
-			buf += `<a href="view-chatlog-${roomid}--${day}">${day}</a></summary><br /><hr />`;
-			buf += `<p>${dayResults.filter(Boolean).map(result => renderResult(result)).join(`<hr />`)}</p>`;
-			buf += `</details><hr />`;
+	async battle(tier: string, number: number, context: PageContext) {
+		if (number > Rooms.global.lastBattle) {
+			throw new Chat.ErrorMessage(`That battle cannot exist, as the number has not been used.`);
 		}
-		return buf;
-	}
-
-	async searchMonth(roomid: RoomID, month: string, search: string, limit: number, year = false) {
-		const {results, total} = await LogSearcher.fsSearchMonth(roomid, month, search, limit);
-		if (!total) {
-			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
-		}
-
-		let buf = (
-			`<br /><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr />`
+		const roomid = `battle-${tier}-${number}` as RoomID;
+		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
+		const log = await PM.query({
+			queryType: 'battlesearch', roomid: toID(tier), search: number,
+		});
+		if (!log) return context.send(this.error("Logs not found."));
+		const {connection} = context;
+		context.close();
+		connection.sendTo(
+			roomid, `|init|battle\n|title|[Battle Log] ${tier}-${number}\n${log.join('\n')}`
 		);
-		buf += this.renderDayResults(results, roomid);
-		if (total > limit) {
-			// cap is met & is not being used in a year read
-			buf += `<br /><strong>Max results reached, capped at ${limit}</strong>`;
-			buf += `<br /><div style="text-align:center">`;
-			if (total < MAX_RESULTS) {
-				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:3000">View all<br />&#x25bc;</button></div>`;
-			}
-		}
-		buf += `</div>`;
-		this.results = 0;
-		return buf;
-	}
-
-	async searchYear(roomid: RoomID, year: string | null, search: string, limit: number) {
-		const {results, total} = await LogSearcher.fsSearchYear(roomid, year, search, limit);
-		if (!total) {
-			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
-		}
-		let buf = '';
-		if (year) {
-			buf += `<div class="pad"><strong><br />Searching year: ${year}: </strong><hr />`;
-		}	else {
-			buf += `<div class="pad"><strong><br />Searching all logs: </strong><hr />`;
-		}
-		buf += this.renderDayResults(results, roomid);
-		if (total > limit) {
-			// cap is met
-			buf += `<br /><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
-			buf += `<br /><div style="text-align:center">`;
-			if (total < MAX_RESULTS) {
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
-			}
-		}
-		this.results = 0;
-		return buf;
+		connection.sendTo(roomid, `|expire|This is a battle log.`);
 	}
 
 	renderLine(fullLine: string, opts?: string) {
 		if (!fullLine) return ``;
-		if (opts === 'txt') return `<div class="chat">${fullLine}</div>`;
+		if (opts === 'txt') return Utils.html`<div class="chat">${fullLine}</div>`;
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
@@ -296,7 +367,7 @@ export const LogViewer = new class {
 		const cmd = line.slice(0, line.indexOf('|'));
 		if (opts?.includes('onlychat')) {
 			if (cmd !== 'c') return '';
-			if (opts.includes('txt')) return `<div class="chat">${fullLine}</div>`;
+			if (opts.includes('txt')) return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
 		}
 		switch (cmd) {
 		case 'c': {
@@ -315,8 +386,11 @@ export const LogViewer = new class {
 				if (opts !== 'all') return `<div class="notice">[uhtml box hidden]</div>`;
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
-			const group = name.charAt(0) !== ' ' ? `<small>${name.charAt(0)}</small>` : ``;
-			return `<div class="chat"><small>[${timestamp}] </small><strong>${group}${Utils.escapeHTML(name.slice(1))}:</strong> <q>${Chat.formatText(message)}</q></div>`;
+			const group = !name.startsWith(' ') ? name.charAt(0) : ``;
+			return `<div class="chat">` +
+				Utils.html`<small>[${timestamp}] ${group}</small><username>${name.slice(1)}:</username> ` +
+				`<q>${Chat.formatText(message)}</q>` +
+				`</div>`;
 		}
 		case 'html': case 'raw': {
 			const [, html] = Utils.splitFirst(line, '|', 1);
@@ -447,7 +521,71 @@ export const LogViewer = new class {
 /** Match with two lines of context in either direction */
 type SearchMatch = readonly [string, string, string, string, string];
 
-export const LogSearcher = new class {
+export abstract class Searcher {
+	constructUserRegex(user: string) {
+		const id = toID(user);
+		return `.${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*`;
+	}
+	constructSearchRegex(str: string) {
+		// modified regex replace
+		str = str.replace(/[\\^$.*?()[\]{}|]/g, '\\$&');
+		const searches = str.split('+');
+		if (searches.length <= 1) {
+			if (str.length <= 3) return `\b${str}`;
+			return str;
+		}
+		return `^` + searches.filter(Boolean).map(term => `(?=.*${term})`).join('');
+	}
+	abstract searchLogs(roomid: RoomID, search: string, limit?: number | null, date?: string | null): Promise<string>;
+	abstract searchLinecounts(roomid: RoomID, month: string, user?: ID): Promise<string>;
+	abstract getSharedBattles(userids: string[]): Promise<string[]>;
+	renderLinecountResults(
+		results: {[date: string]: {[userid: string]: number}},
+		roomid: RoomID, month: string, user?: ID
+	) {
+		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
+		buf += `${roomid}${user ? ` for the user ${user}` : ` (top ${MAX_TOPUSERS})`}</h2>`;
+		buf += `<strong>Month: ${month}:</strong><br />`;
+		const nextMonth = LogReader.nextMonth(month);
+		const prevMonth = LogReader.prevMonth(month);
+		if (FS(`logs/chat/${roomid}/${prevMonth}`).existsSync()) {
+			buf += `<small><a roomid="view-roomstats-${roomid}--${prevMonth}${user ? `--${user}` : ''}">Previous month</a></small>`;
+		}
+		if (FS(`logs/chat/${roomid}/${nextMonth}`).existsSync()) {
+			buf += ` <small><a roomid="view-roomstats-${roomid}--${nextMonth}${user ? `--${user}` : ''}">Next month</a></small>`;
+		}
+		buf += `<hr /><ol>`;
+		if (user) {
+			const sortedDays = Object.keys(results).sort((a, b) => (
+				new Date(b).getTime() - new Date(a).getTime()
+			));
+			for (const day of sortedDays) {
+				const dayResults = results[day][user];
+				if (isNaN(dayResults)) continue;
+				buf += `<li>[<a roomid="view-chatlog-${roomid}--${day}">${day}</a>]: `;
+				buf += `${Chat.count(dayResults, 'lines')}</li>`;
+			}
+		} else {
+			// squish the results together
+			const totalResults: {[k: string]: number} = {};
+			for (const date in results) {
+				for (const userid in results[date]) {
+					if (!totalResults[userid]) totalResults[userid] = 0;
+					totalResults[userid] += results[date][userid];
+				}
+			}
+			const resultKeys = Object.keys(totalResults);
+			const sortedResults = resultKeys.sort((a, b) => (
+				totalResults[b] - totalResults[a]
+			)).slice(0, MAX_TOPUSERS);
+			for (const userid of sortedResults) {
+				buf += `<li><span class="username"><username>${userid}</username></span>: `;
+				buf += `${Chat.count(totalResults[userid], 'lines')}</li>`;
+			}
+		}
+		buf += `</div>`;
+		return LogViewer.linkify(buf);
+	}
 	async runSearch(
 		context: PageContext, search: string, roomid: RoomID, date: string | null, limit: number | null
 	) {
@@ -460,36 +598,77 @@ export const LogSearcher = new class {
 			(date ? date !== 'all' ? `, on the date "${date}"` : ', on all dates' : '') +
 			`.</h2></div>`
 		);
-		const response = await PM.query({search, roomid, date, limit});
+		const response = await PM.query({search, roomid, date, limit, queryType: 'search'});
 		return context.send(response);
 	}
-	constructRegex(str: string) {
-		// modified regex replace
-		str = str.replace(/[\\^$.*?()[\]{}|]/g, '\\$&');
-		const searches = str.split('+');
-		if (searches.length <= 1) {
-			if (str.length <= 3) return `\b${str}`;
-			return str;
-		}
-
-		return `^` + searches.map(term => `(?=.*${term})`).join('');
+	async runLinecountSearch(context: PageContext, roomid: RoomID, month: string, user?: ID) {
+		context.send(
+			`<div class="pad"><h2>Searching linecounts on room ${roomid}${user ? ` for the user ${user}` : ''}.</h2></div>`
+		);
+		const results = await PM.query({roomid, date: month, search: user, queryType: 'linecount'});
+		context.send(results);
 	}
+	async sharedBattles(userids: string[]) {
+		let buf = `Logged shared battles between the users ${userids.join(', ')}`;
+		const results: string[] = await PM.query({
+			queryType: 'sharedsearch', search: userids,
+		});
+		if (!results.length) {
+			buf += `:<br />None found.`;
+			return buf;
+		}
+		buf += ` (${results.length}):<br />`;
+		buf += results.map(id => `<a href="view-battlelog-${id}">${id}</a>`).join(', ');
+		return buf;
+	}
+}
 
-	fsSearch(roomid: RoomID, search: string, date: string, limit: number | null) {
+export class FSLogSearcher extends Searcher {
+	results: number;
+	constructor() {
+		super();
+		this.results = 0;
+	}
+	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
+		const directory = FS(`logs/chat/${roomid}/${month}`);
+		if (!directory.existsSync()) {
+			throw new Chat.ErrorMessage(`Logs for month '${month}' do not exist on room ${roomid}.`);
+		}
+		const files = await directory.readdir();
+		const results: {[date: string]: {[userid: string]: number}} = {};
+		for (const file of files) {
+			const day = file.slice(0, -4);
+			const stream = FS(`logs/chat/${roomid}/${month}/${file}`).createReadStream();
+			for await (const line of stream.byLine()) {
+				const parts = line.split('|').map(toID);
+				const id = parts[2];
+				if (!id) continue;
+				if (parts[1] === 'c') {
+					if (user && id !== user) continue;
+					if (!results[day]) results[day] = {};
+					if (!results[day][id]) results[day][id] = 0;
+					results[day][id]++;
+				}
+			}
+		}
+		return this.renderLinecountResults(results, roomid, month, user);
+	}
+	searchLogs(roomid: RoomID, search: string, limit?: number | null, date?: string | null) {
+		if (!date) date = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const isAll = (date === 'all');
 		const isYear = (date.length === 4);
 		const isMonth = (date.length === 7);
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		if (isAll) {
-			return LogViewer.searchYear(roomid, null, search, limit);
+			return this.runYearSearch(roomid, null, search, limit);
 		} else if (isYear) {
 			date = date.substr(0, 4);
-			return LogViewer.searchYear(roomid, date, search, limit);
+			return this.runYearSearch(roomid, date, search, limit);
 		} else if (isMonth) {
 			date = date.substr(0, 7);
-			return LogViewer.searchMonth(roomid, date, search, limit);
+			return this.runMonthSearch(roomid, date, search, limit);
 		} else {
-			return LogViewer.error("Invalid date.");
+			return Promise.resolve(LogViewer.error("Invalid date."));
 		}
 	}
 
@@ -500,8 +679,16 @@ export const LogSearcher = new class {
 		const lines = text.split('\n');
 		const matches: SearchMatch[] = [];
 
-		const searchTerms = search.split('+');
-		const searchTermRegexes = searchTerms.map(term => new RegExp(term, 'i'));
+		const searchTerms = search.split('+').filter(Boolean);
+		const searchTermRegexes: RegExp[] = [];
+		for (const searchTerm of searchTerms) {
+			if (searchTerm.startsWith('user-')) {
+				const id = toID(searchTerm.slice(5));
+				searchTermRegexes.push(new RegExp(`\\|c\\|${this.constructUserRegex(id)}\\|`, 'i'));
+				continue;
+			}
+			searchTermRegexes.push(new RegExp(searchTerm, 'i'));
+		}
 		function matchLine(line: string) {
 			return searchTermRegexes.every(term => term.test(line));
 		}
@@ -521,7 +708,32 @@ export const LogSearcher = new class {
 		return matches;
 	}
 
-	async fsSearchMonth(roomid: RoomID, month: string, search: string, limit: number) {
+	renderDayResults(results: {[day: string]: SearchMatch[]}, roomid: RoomID) {
+		const renderResult = (match: SearchMatch) => {
+			this.results++;
+			return (
+				LogViewer.renderLine(match[0]) +
+				LogViewer.renderLine(match[1]) +
+				`<div class="chat chatmessage highlighted">${LogViewer.renderLine(match[2])}</div>` +
+				LogViewer.renderLine(match[3]) +
+				LogViewer.renderLine(match[4])
+			);
+		};
+
+		let buf = ``;
+		for (const day in results) {
+			const dayResults = results[day];
+			const plural = dayResults.length !== 1 ? "es" : "";
+			buf += `<details><summary>${dayResults.length} match${plural} on `;
+			buf += `<a href="view-chatlog-${roomid}--${day}">${day}</a></summary><br /><hr />`;
+			buf += `<p>${dayResults.filter(Boolean).map(result => renderResult(result)).join(`<hr />`)}</p>`;
+			buf += `</details><hr />`;
+		}
+		return buf;
+	}
+
+	async fsSearchMonth(opts: ChatlogSearch) {
+		let {limit, room: roomid, date: month, search} = opts;
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const log = await LogReader.get(roomid);
 		if (!log) return {results: {}, total: 0};
@@ -551,7 +763,7 @@ export const LogSearcher = new class {
 
 		for (const month of months) {
 			if (year && !month.includes(year)) continue;
-			const monthSearch = await this.fsSearchMonth(roomid, month, search, limit);
+			const monthSearch = await this.fsSearchMonth({room: roomid, date: month, search, limit});
 			const {results: monthResults, total: monthTotal} = monthSearch;
 			if (!monthTotal) continue;
 			total += monthTotal;
@@ -560,28 +772,106 @@ export const LogSearcher = new class {
 		}
 		return {results, total};
 	}
-	async ripgrepSearchMonth(roomid: RoomID, search: string, limit: number, month: string) {
-		let results;
-		let count = 0;
-		try {
-			const {stdout} = await execFile('rg', [
-				'-e', this.constructRegex(search),
-				`logs/chat/${roomid}/${month}`,
-				'-C', '3',
-				'-m', `${limit}`,
-				'-P',
-			], {
-				maxBuffer: MAX_MEMORY,
-				cwd: path.normalize(`${__dirname}/../../`),
-			});
-			results = stdout.split('--');
-		} catch (e) {
-			if (e.message.includes('No such file or directory')) {
-				throw new Chat.ErrorMessage(`Logs for date '${month}' do not exist.`);
+	async runYearSearch(roomid: RoomID, year: string | null, search: string, limit: number) {
+		const {results, total} = await this.fsSearchYear(roomid, year, search, limit);
+		if (!total) {
+			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
+		}
+		let buf = '';
+		if (year) {
+			buf += `<div class="pad"><strong><br />Searching year: ${year}: </strong><hr />`;
+		}	else {
+			buf += `<div class="pad"><strong><br />Searching all logs: </strong><hr />`;
+		}
+		buf += this.renderDayResults(results, roomid);
+		if (total > limit) {
+			// cap is met
+			buf += `<br /><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br /><div style="text-align:center">`;
+			if (total < MAX_RESULTS) {
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
 			}
-			if (e.code !== 1 && !e.message.includes('stdout maxBuffer')) throw e; // 2 means an error in ripgrep
+		}
+		this.results = 0;
+		return buf;
+	}
+	async runMonthSearch(roomid: RoomID, month: string, search: string, limit: number, year = false) {
+		const {results, total} = await this.fsSearchMonth({room: roomid, date: month, search, limit});
+		if (!total) {
+			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
+		}
+
+		let buf = (
+			`<br /><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr />`
+		);
+		buf += this.renderDayResults(results, roomid);
+		if (total > limit) {
+			// cap is met & is not being used in a year read
+			buf += `<br /><strong>Max results reached, capped at ${limit}</strong>`;
+			buf += `<br /><div style="text-align:center">`;
+			if (total < MAX_RESULTS) {
+				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:${limit + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:3000">View all<br />&#x25bc;</button></div>`;
+			}
+		}
+		buf += `</div>`;
+		this.results = 0;
+		return buf;
+	}
+	async getSharedBattles(userids: string[]) {
+		const months = FS("logs/").readdirSync().filter(f => !isNaN(new Date(f).getTime()));
+		const results: string[] = [];
+		for (const month of months) {
+			const tiers = await FS(`logs/${month}`).readdir();
+			for (const tier of tiers) {
+				const days = await FS(`logs/${month}/${tier}/`).readdir();
+				for (const day of days) {
+					const battles = await FS(`logs/${month}/${tier}/${day}`).readdir();
+					for (const battle of battles) {
+						const content = JSON.parse(FS(`logs/${month}/${tier}/${day}/${battle}`).readSync());
+						const players = [content.p1, content.p2].map(toID);
+						if (players.every(p => userids.includes(p))) {
+							const battleName = battle.slice(0, -9);
+							results.push(battleName);
+						}
+					}
+				}
+			}
+		}
+		return results;
+	}
+}
+
+export class RipgrepLogSearcher extends Searcher {
+	async ripgrepSearchMonth(opts: ChatlogSearch) {
+		let {raw, search, room: roomid, date: month, args} = opts;
+		let results: string[];
+		let count = 0;
+		if (!raw) {
+			search = this.constructSearchRegex(search);
+		}
+		const resultSep = args?.includes('-m') ? '--' : '\n';
+		try {
+			const options = [
+				'-e', search,
+				`logs/chat/${roomid}/${month}`,
+				'-i',
+			];
+			if (args) {
+				options.push(...args);
+			}
+			const {stdout} = await exec(['rg', ...options], {
+				maxBuffer: MAX_MEMORY,
+				cwd: `${__dirname}/../../`,
+			});
+			results = stdout.split(resultSep);
+		} catch (e) {
+			if (e.code !== 1 && !e.message.includes('stdout maxBuffer') && !e.message.includes('No such file or directory')) {
+				throw e; // 2 means an error in ripgrep
+			}
 			if (e.stdout) {
-				results = e.stdout.split('--');
+				results = e.stdout.split(resultSep);
 			} else {
 				results = [];
 			}
@@ -589,7 +879,7 @@ export const LogSearcher = new class {
 		count += results.length;
 		return {results, count};
 	}
-	async ripgrepSearch(
+	async searchLogs(
 		roomid: RoomID,
 		search: string,
 		limit?: number | null,
@@ -606,10 +896,26 @@ export const LogSearcher = new class {
 		let results: string[] = [];
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		if (!date) date = 'all';
+		const originalSearch = search;
+		const userRegex = /user-(.[a-zA-Z0-9]*)/gi;
+		const user = userRegex.exec(search)?.[0]?.slice(5);
+		const userSearch = user ? `the user '${user}'` : null;
+		if (userSearch) {
+			const id = toID(user);
+			const rest = search.replace(userRegex, '')
+				.split('-')
+				.filter(Boolean)
+				.map(str => `.*${Utils.escapeRegex(str)}`)
+				.join('');
+			search = `\\|c\\|${this.constructUserRegex(id)}\\|${rest}`;
+		}
 		while (count < MAX_RESULTS) {
 			const month = months.shift();
 			if (!month) break;
-			const output = await this.ripgrepSearchMonth(roomid, search, limit, month);
+			const output = await this.ripgrepSearchMonth({
+				room: roomid, search, date: month,
+				limit, args: [`-m`, `${limit}`, '-C', '3', '--engine=auto'], raw: !!userSearch,
+			});
 			results = results.concat(output.results);
 			count += output.count;
 		}
@@ -617,66 +923,120 @@ export const LogSearcher = new class {
 			const diff = count - MAX_RESULTS;
 			results = results.slice(0, -diff);
 		}
-		return this.renderResults(results, roomid, search, limit, date);
+		return this.renderSearchResults(results, roomid, search, limit, date, originalSearch);
 	}
 
-	renderResults(results: string[], roomid: RoomID, search: string, limit: number, month?: string | null) {
+	renderSearchResults(
+		results: string[], roomid: RoomID, search: string, limit: number,
+		month?: string | null, originalSearch?: string | null
+	) {
 		results = results.filter(Boolean);
 		if (results.length < 1) return LogViewer.error('No results found.');
 		let exactMatches = 0;
 		let curDate = '';
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
-		const searchRegex = new RegExp(this.constructRegex(search), "i");
+		const useOriginal = originalSearch && originalSearch !== search;
+		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
 		const sorted = results.sort((aLine, bLine) => {
 			const [aName] = aLine.split('.txt');
 			const [bName] = bLine.split('.txt');
 			const aDate = new Date(aName.split('/').pop()!);
 			const bDate = new Date(bName.split('/').pop()!);
 			return bDate.getTime() - aDate.getTime();
-		}).map(chunk => {
-			return chunk.split('\n').map(line => {
-				if (exactMatches > limit || !toID(line)) return null; // return early so we don't keep sorting
-				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
-				const [name, text] = line.split(sep);
-				line = LogViewer.renderLine(text, 'all');
-				if (!line || name.includes('today')) return null;
+		}).map(chunk => chunk.split('\n').map(rawLine => {
+			if (exactMatches > limit || !toID(rawLine)) return null; // return early so we don't keep sorting
+			const sep = rawLine.includes('.txt-') ? '.txt-' : '.txt:';
+			const [name, text] = rawLine.split(sep);
+			let line = LogViewer.renderLine(text, 'all');
+			if (!line || name.includes('today')) return null;
 				 // gets rid of some edge cases / duplicates
-				let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
-				if (searchRegex.test(line)) {
-					if (++exactMatches > limit) return null;
-					line = `<div class="chat chatmessage highlighted">${line}</div>`;
-				}
-				if (curDate !== date) {
-					curDate = date;
-					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-				} else {
-					date = '';
-				}
-				return `${date} ${line}`;
-			}).filter(Boolean).join(' ');
-		}).filter(Boolean);
-		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
+			let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
+			if (searchRegex.test(rawLine)) {
+				if (++exactMatches > limit) return null;
+				line = `<div class="chat chatmessage highlighted">${line}</div>`;
+			}
+			if (curDate !== date) {
+				curDate = date;
+				date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
+			} else {
+				date = '';
+			}
+			return `${date} ${line}`;
+		}).filter(Boolean).join(' ')).filter(Boolean);
+		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${originalSearch ? originalSearch : search}:</strong>`;
 		buf += limit ? ` ${exactMatches} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;
 		buf += sorted.join('<hr />');
 		if (limit) {
 			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
-			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:${limit + 200}">View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},limit:3000">View all<br />&#x25bc;</button></div>`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:${limit + 200}">`;
+			buf += `View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:3000">`;
+			buf += `View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
 	}
-};
+	async searchLinecounts(room: RoomID, month: string, user?: ID) {
+		// don't need to check if logs exist since ripgrepSearchMonth does that
+		// eslint-disable-next-line no-useless-escape
+		const regexString = user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|`;
+		const args: string[] = user ? ['--count'] : [];
+		const {results: rawResults} = await this.ripgrepSearchMonth({
+			search: regexString, raw: true, date: month, room, args,
+		});
+		if (!rawResults.length) return LogViewer.error(`No results found.`);
+		const results: {[k: string]: {[userid: string]: number}} = {};
+		for (const fullLine of rawResults) {
+			const [data, line] = fullLine.split('.txt:');
+			const date = data.split('/').pop()!;
+			if (!results[date]) results[date] = {};
+			if (!toID(date)) continue;
+			if (user) {
+				if (!results[date][user]) results[date][user] = 0;
+				const parsed = parseInt(line);
+				results[date][user] += isNaN(parsed) ? 0 : parsed;
+			} else {
+				const parts = line?.split('|').map(toID);
+				if (!parts || parts[1] !== 'c') continue;
+				const id = parts[2];
+				if (!id) continue;
+				if (!results[date][id]) results[date][id] = 0;
+				results[date][id]++;
+			}
+		}
+		return this.renderLinecountResults(results, room, month, user);
+	}
+	async getSharedBattles(userids: string[]) {
+		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
+		const results: string[] = [];
+		try {
+			const {stdout} = await exec(['rg', '-e', regexString, '-i', '-tjson', 'logs/', '-P']);
+			for (const line of stdout.split('\n')) {
+				const [name] = line.split(':');
+				const battleName = name.split('/').pop()!;
+				results.push(battleName.slice(0, -9));
+			}
+		} catch (e) {
+			if (e.code !== 1) throw e;
+		}
+		return results.filter(Boolean);
+	}
+}
 
+export const LogSearcher: Searcher = new (Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher)();
 
-export const PM = new QueryProcessManager<AnyObject, string | undefined>(module, async data => {
+export const PM = new QueryProcessManager<AnyObject, any>(module, async data => {
 	try {
-		const {date, search, roomid, limit} = data;
-		switch (Config.chatlogreader) {
-		case 'fs':
-			return await LogSearcher.fsSearch(roomid, search, date, limit);
-		case 'ripgrep':
-			return await LogSearcher.ripgrepSearch(roomid, search, limit, date);
+		const {date, search, roomid, limit, queryType} = data;
+		switch (queryType) {
+		case 'linecount':
+			return LogSearcher.searchLinecounts(roomid, date, search);
+		case 'search':
+			return LogSearcher.searchLogs(roomid, search, limit, date);
+		case 'sharedsearch':
+			return LogSearcher.getSharedBattles(search);
+		case 'battlesearch':
+			return LogReader.findBattleLog(roomid, search);
 		default:
 			return LogViewer.error(`Config.chatlogreader is not configured.`);
 		}
@@ -687,7 +1047,7 @@ export const PM = new QueryProcessManager<AnyObject, string | undefined>(module,
 		Monitor.crashlog(e, 'A chatlog search query', data);
 		return LogViewer.error(`Sorry! Your chatlog search crashed. We've been notified and will fix this.`);
 	}
-});
+}, CHATLOG_PM_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -698,14 +1058,14 @@ if (!PM.isParentProcess) {
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
+	global.Dex = Dex;
+	global.toID = Dex.toID;
 	global.Chat = Chat;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
 			Monitor.crashlog(err, 'A chatlog search child process');
 		}
 	});
-	global.Dex = Dex;
-	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
 	Repl.start('chatlog', cmd => eval(cmd));
 } else {
@@ -717,9 +1077,6 @@ const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 export const pages: PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!user.trusted) {
-			return this.errorReply("Access denied.");
-		}
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
 		if (date) date = date.trim();
@@ -730,14 +1087,28 @@ export const pages: PageTable = {
 
 		// permission check
 		const room = Rooms.get(roomid);
-		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
-			return this.errorReply("SPL team discussions are super secret.");
+		if (!user.trusted) {
+			if (room) {
+				this.checkCan('declare', null, room);
+			} else {
+				return this.errorReply(`Access denied.`);
+			}
 		}
-		if (roomid.startsWith('wcop') && !user.can('rangeban')) {
-			return this.errorReply("WCOP team discussions are super secret.");
+
+		if (!user.can('rangeban')) {
+			// Some chatlogs can only be viewed by upper staff
+			if (roomid.startsWith('spl') && roomid !== 'splatoon') {
+				return this.errorReply("SPL team discussions are super secret.");
+			}
+			if (roomid.startsWith('wcop')) {
+				return this.errorReply("WCOP team discussions are super secret.");
+			}
+			if (UPPER_STAFF_ROOMS.includes(roomid)) {
+				return this.errorReply("Upper staff rooms are super secret.");
+			}
 		}
 		if (room) {
-			if (!user.can('lock')) {
+			if (!user.can('lock') || room.settings.isPrivate === 'hidden' && !room.checkModjoin(user)) {
 				if (!room.persist) return this.errorReply(`Access denied.`);
 				this.checkCan('mute', null, room);
 			}
@@ -785,6 +1156,66 @@ export const pages: PageTable = {
 			return LogViewer.room(roomid);
 		}
 	},
+	roomstats(args, user) {
+		const room = this.extractRoom();
+		if (room) {
+			this.checkCan('mute', null, room);
+		} else {
+			if (!user.can('bypassall')) {
+				return this.errorReply(`You cannot view logs for rooms that no longer exist.`);
+			}
+		}
+		const [, date, target] = Utils.splitFirst(args.join('-'), '--', 3).map(item => item.trim());
+		if (isNaN(new Date(date).getTime())) {
+			return this.errorReply(`Invalid date.`);
+		}
+		this.title = `[Log Stats] ${date}`;
+		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[2] as RoomID, date, toID(target));
+	},
+	battlelog(args, user) {
+		const [tierName, battleNum] = args;
+		const tier = toID(tierName);
+		const num = parseInt(battleNum);
+		if (isNaN(num)) return this.errorReply(`Invalid battle number.`);
+		void accessLog.writeLine(`${user.id}: battle-${tier}-${num}`);
+		return LogViewer.battle(tier, num, this);
+	},
+	async logsaccess(query) {
+		this.checkCan('rangeban');
+		const type = toID(query.shift());
+		if (type && !['chat', 'battle', 'all', 'battles'].includes(type)) {
+			return this.errorReply(`Invalid log type.`);
+		}
+		let title = '';
+		switch (type) {
+		case 'battle': case 'battles':
+			title = 'Battlelog access log';
+			break;
+		case 'chat':
+			title = 'Chatlog access log';
+			break;
+		default:
+			title = 'Logs access log';
+			break;
+		}
+		const userid = toID(query.shift());
+		let buf = `<div class="pad"><h2>${title}`;
+		if (userid) buf += ` for ${userid}`;
+		buf += `</h2><hr /><ol>`;
+		const accessStream = FS(`logs/chatlog-access.txt`).createReadStream();
+		for await (const line of accessStream.byLine()) {
+			const [id, rest] = Utils.splitFirst(line, ': ');
+			if (userid && id !== userid) continue;
+			if (type === 'battle' && !line.includes('battle-')) continue;
+			if (userid) {
+				buf += `<li>${rest}</li>`;
+			} else {
+				buf += `<li><username>${id}</username>: ${rest}</li>`;
+			}
+		}
+		buf += `</ol>`;
+		return buf;
+	},
 };
 
 export const commands: ChatCommands = {
@@ -792,7 +1223,7 @@ export const commands: ChatCommands = {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const roomid = targetRoom ? targetRoom.roomid : target;
-		this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
+		return this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
 	},
 
 	chatloghelp() {
@@ -830,6 +1261,8 @@ export const commands: ChatCommands = {
 				limit = arg.slice(6);
 			} else if (arg.startsWith('date:')) {
 				date = arg.slice(5);
+			} else if (arg.startsWith('user:')) {
+				args.push(`user-${toID(arg.slice(5))}`);
 			} else {
 				searches.push(arg);
 			}
@@ -838,7 +1271,8 @@ export const commands: ChatCommands = {
 			return this.parse(`/help searchlogs`);
 		}
 		return this.parse(
-			`/join view-chatlog-${room.roomid}--${date}--search-${Dashycode.encode(searches.join('+'))}--limit-${limit}`
+			`/join view-chatlog-${room.roomid}--${date}--search-` +
+			`${Dashycode.encode(searches.join('+'))}--limit-${limit}`
 		);
 	},
 	searchlogshelp() {
@@ -847,9 +1281,56 @@ export const commands: ChatCommands = {
 			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
 			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
 			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
+			`If you provide a user argument in the form <code>user:username</code>, it will search for messages (that match the other arguments) only from that user` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # &</div>";
 		return this.sendReplyBox(buffer);
+	},
+	topusers: 'linecount',
+	roomstats: 'linecount',
+	linecount(target, room, user) {
+		let [roomid, month, userid] = target.split(',').map(item => item.trim());
+		const tarRoom = roomid ? Rooms.search(roomid) : room;
+		if (!tarRoom) return this.errorReply(`You must specify a valid room.`);
+		if (!month) month = LogReader.getMonth();
+		return this.parse(`/join view-roomstats-${tarRoom.roomid}--${month}--${toID(userid)}`);
+	},
+	linecounthelp: [
+		`/topusers OR /linecount [room], [month], [userid] - View room stats in the given [room].`,
+		`If a user is provided, searches only for that user, else the top 100 users are shown.`,
+		`Requires: % @ # &`,
+	],
+	slb: 'sharedloggedbattles',
+	async sharedloggedbattles(target, room, user) {
+		this.checkCan('lock');
+		const targets = target.split(',').map(toID).filter(Boolean);
+		if (targets.length < 2 || targets.length > 2) {
+			return this.errorReply(`Specify two users.`);
+		}
+		const results = await LogSearcher.sharedBattles(targets);
+		if (room?.settings.staffRoom || this.pmTarget?.isStaff) {
+			this.runBroadcast();
+		}
+		return this.sendReplyBox(results);
+	},
+	sharedloggedbattleshelp: [
+		`/sharedloggedbattles OR /slb [user1, user2] - View shared battle logs between user1 and user2`,
+	],
+	battlelog(target, room, user) {
+		this.checkCan('lock');
+		target = target.trim();
+		if (!target) return this.errorReply(`Specify a battle.`);
+		if (target.startsWith('http://')) target = target.slice(7);
+		if (target.startsWith('https://')) target = target.slice(8);
+		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
+		if (target.startsWith(`${Config.routes.replays}/`)) target = `battle-${target.slice(Config.routes.replays.length + 1)}`;
+		if (target.startsWith('psim.us/')) target = target.slice(8);
+		return this.parse(`/join view-battlelog-${target}`);
+	},
+	logsaccess(target, room, user) {
+		this.checkCan('rangeban');
+		const [type, userid] = target.split(',').map(toID);
+		return this.parse(`/j view-logsaccess-${type || 'all'}${userid ? `-${userid}` : ''}`);
 	},
 };

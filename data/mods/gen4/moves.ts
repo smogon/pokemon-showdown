@@ -254,7 +254,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				delete move.onHit;
 				move.self = {boosts: {atk: 1, def: 1, spe: -1}};
 				move.target = move.nonGhostTarget as MoveTarget;
-			} else if (target.volatiles['substitute']) {
+			} else if (target?.volatiles['substitute']) {
 				delete move.volatileStatus;
 				delete move.onHit;
 			}
@@ -525,6 +525,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	furycutter: {
 		inherit: true,
 		basePower: 10,
+		condition: {
+			duration: 2,
+			onStart() {
+				this.effectData.multiplier = 1;
+			},
+			onRestart() {
+				if (this.effectData.multiplier < 16) {
+					this.effectData.multiplier <<= 1;
+				}
+				this.effectData.duration = 2;
+			},
+		},
 	},
 	futuresight: {
 		inherit: true,
@@ -715,7 +727,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.allies().length > 1) return this.chainModify(2, 3);
 						return this.chainModify(0.5);
 					}
 				}
@@ -1026,7 +1038,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.allies().length > 1) return this.chainModify(2, 3);
 						return this.chainModify(0.5);
 					}
 				}

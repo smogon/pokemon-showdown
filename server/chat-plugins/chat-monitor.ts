@@ -1,5 +1,6 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
+import type {FilterWord} from '../chat';
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
@@ -53,15 +54,19 @@ for (const letter in EVASION_DETECTION_SUBSTITUTIONS) {
 
 const filterWords: {[k: string]: Chat.FilterWord[]} = Chat.filterWords;
 
-function constructEvasionRegex(str: string) {
+export function constructEvasionRegex(str: string) {
 	const buf = "\\b" +
 		[...str].map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
 		"\\b";
-	return new RegExp(buf, 'i');
+	return new RegExp(buf, 'iu');
+}
+
+export function stripWordBoundaries(regex: RegExp) {
+	return new RegExp(regex.toString().replace('/\\b', '').replace('\\b/iu', ''), 'iu');
 }
 
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {
-	return `${location}\t${word.word}\t${punishment}\t${word.reason}\t${word.hits}${word.publicReason ? `\t${word.publicReason}` : ''}${word.replacement ? `\t${word.replacement}` : ''}\r\n`;
+	return `${location}\t${word.word}\t${punishment}\t${word.reason || ''}\t${word.hits}\t${word.replacement || ''}\t${word.publicReason || ''}\r\n`;
 }
 
 function saveFilters(force = false) {
@@ -76,8 +81,41 @@ function saveFilters(force = false) {
 	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME});
 }
 
-// Register the chat monitors used
+export function addFilter(filterWord: Partial<Chat.FilterWord> & {list: string, word: string}) {
+	if (!filterWord.hits) filterWord.hits = 0;
+	const punishment = Chat.monitors[filterWord.list].punishment;
+	if (!filterWord.regex) {
+		filterWord.regex = generateRegex(
+			filterWord.word,
+			punishment === 'EVASION',
+			punishment === 'SHORTENER',
+			!!filterWord.replacement,
+		);
+	}
 
+	if (filterWords[filterWord.list].some(val => String(val.regex) === String(filterWord.regex))) {
+		throw new Chat.ErrorMessage(`${filterWord.word} is already added to the ${filterWord.list} list.`);
+	}
+
+	filterWords[filterWord.list].push(filterWord as Chat.FilterWord);
+	saveFilters(true);
+}
+
+export function generateRegex(word: string, isEvasion = false, isShortener = false, isReplacement = false) {
+	try {
+		if (isEvasion) {
+			return constructEvasionRegex(word);
+		} else {
+			return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'igu' : 'iu'));
+		}
+	} catch (e) {
+		throw new Chat.ErrorMessage(
+			e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`
+		);
+	}
+}
+
+// Register the chat monitors used
 Chat.registerMonitor('autolock', {
 	location: 'EVERYWHERE',
 	punishment: 'AUTOLOCK',
@@ -183,8 +221,8 @@ Chat.registerMonitor('wordfilter', {
 		while (match) {
 			let filtered = replacement || '';
 			if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
-			if (match[0][0] === match[0][0].toUpperCase()) {
-				filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+			if (match[0].startsWith(match[0].charAt(0).toUpperCase())) {
+				filtered = `${filtered ? filtered.charAt(0).toUpperCase() : ''}${filtered.slice(1)}`;
 			}
 			message = message.replace(match[0], filtered);
 			match = regex.exec(message);
@@ -260,13 +298,22 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 		for (const key in Chat.monitors) {
 			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
 				const replacement = rest[0];
+				const publicReason = rest[1];
 				let regex: RegExp;
 				if (punishment === 'EVASION') {
 					regex = constructEvasionRegex(word);
 				} else {
-					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'ig' : 'i');
+					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'igu' : 'iu');
 				}
-				filterWords[key].push({regex, word, reason, replacement, hits: parseInt(times) || 0});
+
+				const filterWord: FilterWord = {regex, word, hits: parseInt(times) || 0};
+
+				// "undefined" is the result of an issue with filter storage.
+				// As far as I'm aware, nothing is actually filtered with "undefined" as the reason.
+				if (reason && reason !== "undefined") filterWord.reason = reason;
+				if (publicReason) filterWord.publicReason = publicReason;
+				if (replacement) filterWord.replacement = replacement;
+				filterWords[key].push(filterWord);
 
 				continue loop;
 			}
@@ -332,6 +379,10 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 export const namefilter: NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
+	if (Monitor.forceRenames.has(id)) {
+		// Don't allow reuse of forcerenamed names
+		return '';
+	}
 	if (id === toID(user.trackRename)) return '';
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -346,8 +397,10 @@ export const namefilter: NameFilter = (name, user) => {
 
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
+		const punishment = Chat.monitors[list].punishment;
 		for (const line of filterWords[list]) {
-			if (line.regex.test(lcName)) {
+			const regex = (punishment === 'EVASION' ? stripWordBoundaries(line.regex) : line.regex);
+			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
@@ -364,8 +417,6 @@ export const namefilter: NameFilter = (name, user) => {
 };
 export const loginfilter: LoginFilter = user => {
 	if (user.namelocked) return;
-
-	const forceRenamed = Monitor.forceRenames.get(user.id);
 	if (user.trackRename) {
 		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
 		Rooms.global.notifyRooms(
@@ -374,16 +425,13 @@ export const loginfilter: LoginFilter = user => {
 		);
 		user.trackRename = '';
 	}
-	if (Punishments.namefilterwhitelist.has(user.id)) return;
-	if (typeof forceRenamed === 'number') {
-		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
-		Rooms.global.notifyRooms(
-			['staff'],
-			Utils.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
-		);
+	const offlineWarn = Punishments.offlineWarns.get(user.id);
+	if (offlineWarn) {
+		user.send(`|c|~|/warn You were warned while offline: ${offlineWarn}`);
+		Punishments.offlineWarns.delete(user.id);
 	}
 };
-export const nicknamefilter: NameFilter = (name, user) => {
+export const nicknamefilter: NicknameFilter = (name, user) => {
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
@@ -403,16 +451,18 @@ export const nicknamefilter: NameFilter = (name, user) => {
 				// Evasion banwords by default require whitespace on either side.
 				// If we didn't remove it here, it would be quite easy to evade the filter
 				// and use slurs in Pokémon nicknames.
-				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
+				regex = stripWordBoundaries(regex);
 			}
 
-			if (regex.test(lcName)) {
+			const match = regex.exec(lcName);
+			if (match) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
 						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
 					);
-				} else if (Chat.monitors[list].punishment === 'EVASION') {
+				} else if (Chat.monitors[list].punishment === 'EVASION' && match[0] !== lcName) {
+					// Don't autolock unless it's an evasion regex and they're evading
 					void Punishments.autolock(
 						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
 						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
@@ -445,10 +495,14 @@ export const statusfilter: StatusFilter = (status, user) => {
 	if (!user.can('lock') && impersonationRegex.test(lcStatus)) return '';
 
 	for (const list in filterWords) {
-		if (Chat.monitors[list].location === 'BATTLES') continue;
+		const punishment = Chat.monitors[list].punishment;
 		for (const line of filterWords[list]) {
-			if (line.regex.test(lcStatus)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+			const regex = (punishment === 'EVASION' ? stripWordBoundaries(line.regex) : line.regex);
+			if (regex.test(lcStatus)) {
+				if (punishment === 'AUTOLOCK') {
+					// I'm only locking for true autolock phrases, not evasion of slurs
+					// because someone might understandably expect a popular slur to be
+					// already registered and therefore try to make the name different from the original slur.
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
 						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
@@ -523,51 +577,29 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 			}
 
-			let word = '';
-			let replacement = '';
-			let reason = '';
-			let publicReason = '';
+			const filterWord = {list, word: ''} as Partial<FilterWord> & {list: string, word: string};
 
 			rest = rest.map(part => part.trim());
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
-				[word, replacement, reason, publicReason] = rest;
-				if (!replacement) {
+				[filterWord.word, filterWord.replacement, filterWord.reason, filterWord.publicReason] = rest;
+				if (!filterWord.replacement) {
 					return this.errorReply(
 						`Syntax for word filters: /filter add ${list} ${separator} regex ${separator} reason [${separator} optional public reason]`
 					);
 				}
 			} else {
-				[word, reason, publicReason] = rest;
+				[filterWord.word, filterWord.reason, filterWord.publicReason] = rest;
 			}
 
-			word = word.trim();
-			let regex: RegExp;
-			try {
-				if (Chat.monitors[list].punishment === 'EVASION') {
-					regex = constructEvasionRegex(word);
-				} else {
-					regex = new RegExp(
-						Chat.monitors[list].punishment === 'SHORTENER' ? `\\b${word}` : word,
-						replacement ? 'ig' : 'i'
-					);
-				}
-			} catch (e) {
-				return this.errorReply(
-					e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`
-				);
-			}
-
-			if (filterWords[list].some(val => String(val.regex) === String(regex))) {
-				return this.errorReply(`${word} is already added to the ${list} list.`);
-			}
-			filterWords[list].push({regex, word, reason, publicReason, replacement, hits: 0});
+			filterWord.word = filterWord.word.trim();
+			addFilter(filterWord);
+			const reason = filterWord.reason ? ` (${filterWord.reason})` : '';
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
-				this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${replacement}' to ${list} list${reason ? ` (${reason})` : ''}`);
+				this.globalModlog(`ADDFILTER`, null, `'${String(filterWord.regex)} => ${filterWord.replacement}' to ${list} list${reason}`);
 			} else {
-				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list${reason ? ` (${reason})` : ''}`);
+				this.globalModlog(`ADDFILTER`, null, `'${filterWord.word}' to ${list} list${reason}`);
 			}
-			saveFilters(true);
-			const output = `'${word}' was added to the ${list} list.`;
+			const output = `'${filterWord.word}' was added to the ${list} list.`;
 			Rooms.get('upperstaff')?.add(output).update();
 			if (room?.roomid !== 'upperstaff') this.sendReply(output);
 		},

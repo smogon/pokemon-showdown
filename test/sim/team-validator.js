@@ -231,6 +231,16 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should validate Sketch', function () {
+		// Spore is a Gen 5 event move
+		// Sketch itself should still be valid
+		const team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['bellydrum', 'spore', 'sketch'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should reject illegal egg move combinations', function () {
 		let team = [
 			{species: 'azumarill', ability: 'hugepower', moves: ['bellydrum', 'aquajet'], evs: {hp: 1}},
@@ -243,6 +253,13 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
+
+		// HJK can be bred onto Tyrogue in Gen 2, evolved into Hitmonchan, transferred back to Gen 1, taught Body Slam via TM, and transferred back to Gen 2.
+		team = [
+			{species: 'hitmonchan', moves: ['highjumpkick', 'bodyslam']},
+		];
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
 
 		team = [
 			{species: 'weezing', ability: 'levitate', moves: ['painsplit', 'willowisp'], evs: {hp: 1}},
@@ -401,6 +418,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'koffing', ability: 'levitate', moves: ['zapcannon'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should correctly validate USUM Rockruff', function () {
@@ -473,6 +496,20 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
+		let team = [
+			{species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'kecleon', ability: 'protean', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should reject newer Pokemon in older gens', function () {
 		const team = [
 			{species: 'pichu', ability: 'static', moves: ['thunderbolt']},
@@ -528,18 +565,36 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should properly validate Greninja-Ash', function () {
+		let team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['happyhour'], shiny: true, evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], shiny: true, evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], ivs: {atk: 0}, evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja-ash', ability: 'battlebond', moves: ['hiddenpowergrass'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
 	it.skip('should not allow evolutions of Shiny-locked events to be Shiny', function () {
 		const team = [
 			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
 			{species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: {hp: 1}},
-		];
-		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert(illegal);
-	});
-
-	it.skip('should not allow unreleased Gmax formes', function () {
-		const team = [
-			{species: 'melmetal-gmax', ability: 'ironfist', moves: ['doubleironbash'], evs: {hp: 1}},
 		];
 		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);
@@ -550,6 +605,31 @@ describe('Team Validator', function () {
 			{species: 'zeraora', ability: 'voltabsorb', shiny: true, moves: ['knockoff'], evs: {hp: 1}},
 		];
 		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow use of a Hidden Ability if the format has the item Ability Patch', function () {
+		let team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'entei', ability: 'innerfocus', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'dracovish', ability: 'sandrush', moves: ['sleeptalk'], evs: {hp: 1}},
+			{species: 'zapdos', ability: 'static', moves: ['sleeptalk'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8vgc2021').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should not allow Gen 1 JP events', function () {
+		const team = [
+			{species: 'rapidash', moves: ['payday']},
+		];
+		const illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
 	});
 
@@ -731,7 +811,7 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'charizard-mega-y', ability: 'drought', item: 'charizarditey', moves: ['wingattack'], evs: {hp: 1}},
 		];
-		const illegal = TeamValidator.get('gen8customgame@@@Standard NatDex').validateTeam(team);
+		const illegal = TeamValidator.get('gen7customgame@@@Standard').validateTeam(team);
 		assert.equal(illegal, null);
 	});
 });

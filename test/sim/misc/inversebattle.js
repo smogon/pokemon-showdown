@@ -13,7 +13,7 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'guts', moves: ['vitalthrow']}]});
 		battle.setPlayer('p2', {team: [{species: "Scyther", ability: 'swarm', moves: ['roost']}]});
 		battle.makeChoices('move vitalthrow', 'move roost');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it('should change natural weaknesses into resistances', function () {
@@ -21,7 +21,7 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p2', {team: [{species: "Absol", ability: 'pressure', moves: ['leer']}]});
 		battle.makeChoices('move vitalthrow', 'move leer');
 		battle.makeChoices('move vitalthrow', 'move leer');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 	});
 
 	it('should negate natural immunities and make them weaknesses', function () {
@@ -29,8 +29,8 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p2', {team: [{species: "Dusknoir", ability: 'frisk', moves: ['rest']}]});
 		battle.makeChoices('move vitalthrow', 'move rest');
 		battle.makeChoices('move vitalthrow', 'move rest');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should affect Stealth Rock damage', function () {
@@ -59,7 +59,7 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p2', {team: [{species: "Rayquaza-Mega", ability: 'deltastream', moves: ['hiddenpowerbug']}]});
 		battle.makeChoices('move hiddenpower', 'move hiddenpower');
 		battle.makeChoices('move hiddenpower', 'move hiddenpower');
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it('should make Ghost/Grass types take neutral damage from Flying Press', function () {
@@ -67,7 +67,7 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p2', {team: [{species: "Gourgeist", ability: 'insomnia', moves: ['shadowsneak']}]});
 		battle.makeChoices('move flyingpress', 'move shadowsneak');
 		battle.makeChoices('move flyingpress', 'move shadowsneak');
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it('should not affect ability-based immunities', function () {
@@ -75,7 +75,7 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p2', {team: [{species: "Mismagius", ability: 'levitate', moves: ['shadowsneak']}]});
 		battle.makeChoices('move earthquake', 'move shadowsneak');
 		battle.makeChoices('move earthquake', 'move shadowsneak');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -84,7 +84,7 @@ describe('Inverse Battle', function () {
 		battle.setPlayer('p2', {team: [{species: "Floatzel", ability: 'waterveil', moves: ['aquajet']}]});
 		battle.makeChoices('move freezedry', 'move aquajet');
 		battle.makeChoices('move freezedry', 'move aquajet');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it('should not affect the "ungrounded" state of Flying-type Pokemon', function () {

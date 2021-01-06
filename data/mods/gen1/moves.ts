@@ -220,21 +220,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ignoreImmunity: true,
 		willCrit: false,
+		basePower: 1,
 		damageCallback(pokemon, target) {
-			// Counter mechanics on gen 1 might be hard to understand.
-			// It will fail if the last move selected by the opponent has base power 0 or is not Normal or Fighting Type.
-			// If both are true, counter will deal twice the last damage dealt in battle, no matter what was the move.
-			// That means that, if opponent switches, counter will use last counter damage * 2.
-			const lastUsedMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
-			if (
-				lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) &&
-				this.lastDamage > 0 && !this.queue.willMove(target)
-			) {
-				return 2 * this.lastDamage;
+			// Counter mechanics in gen 1:
+			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
+			// - if Counter is used by the player, it will succeed if the opponent's last used move is Counterable
+			// - if Counter is used by the opponent, it will succeed if the player's last selected move is Counterable
+			// - (Counter will thus desync if the target's last used move is not as counterable as the target's last selected move)
+			// - if Counter succeeds it will deal twice the last move damage dealt in battle (even if it's from a different pokemon because of a switch)
+
+			const lastMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
+			const lastMoveIsCounterable = lastMove && lastMove.basePower > 0 &&
+				['Normal', 'Fighting'].includes(lastMove.type) && lastMove.id !== 'counter';
+
+			const lastSelectedMove = target.side.lastSelectedMove && this.dex.getMove(target.side.lastSelectedMove);
+			const lastSelectedMoveIsCounterable = lastSelectedMove && lastSelectedMove.basePower > 0 &&
+				['Normal', 'Fighting'].includes(lastSelectedMove.type) && lastSelectedMove.id !== 'counter';
+
+			if (!lastMoveIsCounterable && !lastSelectedMoveIsCounterable) {
+				this.debug("Gen 1 Counter: last move was not Counterable");
+				this.add('-fail', pokemon);
+				return false;
 			}
-			this.debug("Gen 1 Counter failed due to conditions not met");
-			this.add('-fail', pokemon);
-			return false;
+			if (this.lastDamage <= 0) {
+				this.debug("Gen 1 Counter: no previous damage exists");
+				this.add('-fail', pokemon);
+				return false;
+			}
+			if (!lastMoveIsCounterable || !lastSelectedMoveIsCounterable) {
+				this.hint("Desync Clause Mod activated!");
+				this.add('-fail', pokemon);
+				return false;
+			}
+
+			return 2 * this.lastDamage;
 		},
 	},
 	crabhammer: {
@@ -601,6 +620,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	psywave: {
 		inherit: true,
 		basePower: 1,
+		damageCallback(pokemon) {
+			const psywaveDamage = (this.random(0, this.trunc(1.5 * pokemon.level)));
+			if (psywaveDamage <= 0) {
+				this.hint("Desync Clause Mod activated!");
+				return false;
+			}
+			return psywaveDamage;
+		},
 	},
 	rage: {
 		inherit: true,
@@ -674,7 +701,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	rest: {
 		inherit: true,
-		onTryMove() {},
+		onTry() {},
 		onHit(target, source, move) {
 			if (target.hp === target.maxhp) return false;
 			// Fail when health is 255 or 511 less than max

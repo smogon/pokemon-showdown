@@ -16,7 +16,7 @@ describe('Color Change', function () {
 		battle.setPlayer('p2', {team: [{species: "Paras", ability: 'damp', moves: ['absorb']}]});
 		const ccMon = battle.p1.active[0];
 		battle.makeChoices('move Recover', 'move Absorb');
-		assert.ok(ccMon.hasType('Grass'));
+		assert(ccMon.hasType('Grass'));
 	});
 
 	it('should not change the user\'s type if it had a Substitute when hit', function () {

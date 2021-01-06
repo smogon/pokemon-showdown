@@ -19,7 +19,7 @@ describe('Protective Pads', function () {
 		assert.equal(attacker.ability, 'thickfat');
 		const mummyActivationMessages = battle.log.filter(logStr => logStr.startsWith('|-activate|') && logStr.includes('Mummy'));
 		assert.equal(mummyActivationMessages.length, 1, "Mummy should activate only once");
-		assert.ok(mummyActivationMessages[0].includes('Cofagrigus'), "Source of Mummy activation should be included");
+		assert(mummyActivationMessages[0].includes('Cofagrigus'), "Source of Mummy activation should be included");
 		assert.false(mummyActivationMessages[0].includes('Thick Fat'), "Attacker's ability should not be revealed");
 	});
 
@@ -62,5 +62,16 @@ describe('Protective Pads', function () {
 		battle.setPlayer('p2', {team: [{species: "Galvantula", ability: 'swarm', moves: ['lunge']}]});
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1, "Attack should be lowered");
+	});
+
+	it(`should not start Perish Body on either Pokemon`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'protectivepads', moves: ['dragonascent']},
+		], [
+			{species: 'cursola', ability: 'perishbody', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.false(battle.p1.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Wynaut due to Protective Pads.');
+		assert.false(battle.p2.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Cursola due to Protective Pads.');
 	});
 });

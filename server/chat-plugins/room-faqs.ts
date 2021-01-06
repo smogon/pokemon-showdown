@@ -15,10 +15,10 @@ function saveRoomFaqs() {
  * This is done to allow easy checking whether a key is associated with
  * a value or alias as well as preserve backwards compatibility.
  */
-function getAlias(roomid: RoomID, key: string) {
+export function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
 	const value = roomFaqs[roomid][key];
-	if (value && value[0] === '>') return value.substr(1);
+	if (value && value.startsWith('>')) return value.substr(1);
 	return false;
 }
 
@@ -66,6 +66,12 @@ export const commands: ChatCommands = {
 		if (!topic) return this.parse('/help roomfaq');
 
 		if (!(roomFaqs[targetRoom.roomid] && roomFaqs[targetRoom.roomid][topic])) return this.errorReply("Invalid topic.");
+		if (
+			targetRoom.settings.repeats?.length &&
+			targetRoom.settings.repeats.filter(x => x.faq && x.id === (getAlias(targetRoom.roomid, topic) || topic)).length
+		) {
+			this.parse(`/removerepeat ${getAlias(targetRoom.roomid, topic) || topic},${targetRoom.roomid}`);
+		}
 		delete roomFaqs[targetRoom.roomid][topic];
 		Object.keys(roomFaqs[targetRoom.roomid]).filter(
 			val => getAlias(targetRoom.roomid, val) === topic
@@ -145,12 +151,12 @@ export const pages: PageTable = {
 			buf += `<div class="infobox">`;
 			buf += `<h3>${key}</h3>`;
 			buf += `<hr />`;
-			buf += Chat.formatText(topic, true).replace(/\n/g, '<br />');
+			buf += Chat.formatText(topic, true);
 			const aliases = keys.filter(val => getAlias(room.roomid, val) === key);
 			if (aliases.length) {
 				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;
 			}
-			if (user.can('ban', null, room)) {
+			if (user.can('ban', null, room, 'addfaq')) {
 				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
 				buf += `<hr /><details><summary>Raw text</summary>`;
 				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;

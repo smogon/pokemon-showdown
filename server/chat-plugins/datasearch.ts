@@ -10,6 +10,7 @@
 
 import {QueryProcessManager} from '../../lib/process-manager';
 import {Utils} from '../../lib/utils';
+import {TeamValidator} from '../../sim/team-validator';
 
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
@@ -44,6 +45,8 @@ interface MoveOrGroup {
 	targets: {[k: string]: boolean};
 	recoil: boolean;
 	skip: boolean;
+	pivot: boolean;
+	multihit: boolean;
 }
 
 type Direction = 'less' | 'greater' | 'equal';
@@ -62,6 +65,13 @@ function escapeHTML(str?: string) {
 		.replace(/\//g, '&#x2f;');
 }
 
+function checkCanAll(room: Room | null) {
+	if (!room) return false; // no, no good reason for using `all` in pms
+	const {isPersonal, isHelp} = room.settings;
+	// allowed if it's a groupchat
+	return !room.battle && !!isPersonal && !isHelp;
+}
+
 export const commands: ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
@@ -74,9 +84,10 @@ export const commands: ChatCommands = {
 	ds8: 'dexsearch',
 	dsearch: 'dexsearch',
 	nds: 'dexsearch',
-	dexsearch(target, room, user, connection, cmd, message) {
+	async dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (targetGen && targetGen === 5) {
@@ -102,37 +113,35 @@ export const commands: ChatCommands = {
 			target = targArray.join(',');
 		}
 		if (cmd === 'nds') target += ', natdex';
-		return runSearch({
-			tar: target,
+		const response = await runSearch({
+			target,
 			cmd: 'dexsearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				if (targetGen) response.dt += `, gen${targetGen}`;
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			if (targetGen) response.dt += `, gen${targetGen}`;
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 
 	dexsearchhelp() {
 		this.sendReplyBox(
 			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
-			`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
-			`<code>resists</code> followed by a type will show Pok\u00e9mon that resist that typing (e.g. <code>resists normal</code>).<br/>` +
-			`<code>weak</code> followed by a type will show Pok\u00e9mon that are weak to that typing (e.g. <code>weak fire</code>).<br/>` +
+			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
+			`<code>weak</code> followed by a type or move will show Pok\u00e9mon that are weak to that typing or move (e.g. <code>weak fire</code>).<br/>` +
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
 			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
@@ -149,8 +158,9 @@ export const commands: ChatCommands = {
 
 	rollmove: 'randommove',
 	randmove: 'randommove',
-	randommove(target, room, user, connection, cmd, message) {
+	async randommove(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
+		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -158,9 +168,9 @@ export const commands: ChatCommands = {
 			if (!arg) continue;
 			const num = Number(arg);
 			if (Number.isInteger(num)) {
-				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon Moves once.");
+				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
+				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -168,24 +178,22 @@ export const commands: ChatCommands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 
-		return runSearch({
-			tar: targetsBuffer.join(","),
+		const response = await runSearch({
+			target: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast(true)) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast(true)) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	randommovehelp: [
 		`/randommove - Generates random Pok\u00e9mon Moves based on given search conditions.`,
@@ -194,8 +202,9 @@ export const commands: ChatCommands = {
 	],
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
-	randompokemon(target, room, user, connection, cmd, message) {
+	async randompokemon(target, room, user, connection, cmd, message) {
 		this.checkBroadcast(true);
+		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
 		let qty;
@@ -203,9 +212,9 @@ export const commands: ChatCommands = {
 			if (!arg) continue;
 			const num = Number(arg);
 			if (Number.isInteger(num)) {
-				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon once.");
+				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon must be between 1 and 15.");
+				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon must be between 1 and 15.");
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -213,24 +222,22 @@ export const commands: ChatCommands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 
-		return runSearch({
-			tar: targetsBuffer.join(","),
+		const response = await runSearch({
+			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast(true)) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast(true)) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	randompokemonhelp: [
 		`/randompokemon - Generates random Pok\u00e9mon based on given search conditions.`,
@@ -249,30 +256,29 @@ export const commands: ChatCommands = {
 	ms8: 'movesearch',
 	msearch: 'movesearch',
 	nms: 'movesearch',
-	movesearch(target, room, user, connection, cmd, message) {
+	async movesearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help movesearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (cmd === 'nms') target += ', natdex';
-		return runSearch({
-			tar: target,
+		const response = await runSearch({
+			target,
 			cmd: 'movesearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	movesearchhelp() {
 		this.sendReplyBox(
@@ -287,7 +293,7 @@ export const commands: ChatCommands = {
 			`Inequality ranges use the characters <code>></code> and <code><</code>.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water-type moves.<br/>` +
 			`<code>asc</code> or <code>desc</code> following a move property will arrange the names in ascending or descending order of that property, respectively; e.g., <code>basepower asc</code> will arrange moves in ascending order of their base powers.<br/>` +
-			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, and zmove.<br/>` +
+			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove, pivot, and multi-hit.<br/>` +
 			`A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`<code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`<code>max</code> or <code>gmax</code> as parameters will search for Max Moves and G-Max moves respectively.<br/>` +
@@ -308,30 +314,29 @@ export const commands: ChatCommands = {
 	is6: 'itemsearch',
 	is7: 'itemsearch',
 	is8: 'itemsearch',
-	itemsearch(target, room, user, connection, cmd, message) {
+	async itemsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help itemsearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
-		return runSearch({
-			tar: target,
+		const response = await runSearch({
+			target,
 			cmd: 'itemsearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	itemsearchhelp() {
 		this.sendReplyBox(
@@ -352,30 +357,29 @@ export const commands: ChatCommands = {
 	as6: 'abilitysearch',
 	as7: 'abilitysearch',
 	as8: 'abilitysearch',
-	abilitysearch(target, room, user, connection, cmd, message) {
+	async abilitysearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help abilitysearch');
+		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += ` maxgen${targetGen}`;
 
-		return runSearch({
-			tar: target,
+		const response = await runSearch({
+			target,
 			cmd: 'abilitysearch',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			} else if (response.dt) {
-				(Chat.commands.data as Chat.ChatHandler).call(
-					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
-				);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
 	},
 	abilitysearchhelp() {
 		this.sendReplyBox(
@@ -396,24 +400,23 @@ export const commands: ChatCommands = {
 	bw2learn: 'learn',
 	oraslearn: 'learn',
 	usumlearn: 'learn',
-	learn(target, room, user, connection, cmd, message) {
+	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
+		target = target.slice(0, 300);
 		this.checkBroadcast();
 
-		return runSearch({
-			tar: target,
+		const response = await runSearch({
+			target,
 			cmd: 'learn',
-			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
+			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: cmd,
-		}).then(response => {
-			if (!response.error && !this.runBroadcast()) return;
-			if (response.error) {
-				this.errorReply(response.error);
-			} else if (response.reply) {
-				this.sendReplyBox(response.reply);
-			}
-			this.update();
 		});
+		if (!response.error && !this.runBroadcast()) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		}
 	},
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,
@@ -425,9 +428,10 @@ export const commands: ChatCommands = {
 	],
 };
 
-function runDexsearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
+		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
@@ -515,7 +519,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		for (const parameter of parameters) {
 			let isNotSearch = false;
 			target = parameter.trim().toLowerCase();
-			if (target.charAt(0) === '!') {
+			if (target.startsWith('!')) {
 				isNotSearch = true;
 				target = target.substr(1);
 			}
@@ -694,8 +698,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (target === 'recovery') {
 				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
-					"recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink",
-					"slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew",
+					"healorder", "junglehealing", "lifedew", "milkdrink", "moonlight", "morningsun", "recover",
+					"roost", "shoreup", "slackoff", "softboiled", "strengthsap", "synthesis", "wish",
 				];
 				for (const move of recoveryMoves) {
 					const invalid = validParameter("moves", move, isNotSearch, target);
@@ -762,7 +766,19 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					orGroup.resists[targetResist] = !isNotSearch;
 					continue;
 				} else {
-					return {error: `'${targetResist}' is not a recognized type.`};
+					if (toID(targetResist) in Dex.data.Moves) {
+						const move = Dex.getMove(targetResist);
+						if (move.category === 'Status') {
+							return {error: `'${targetResist}' is a status move and can't be used with 'resists'.`};
+						} else {
+							const invalid = validParameter("resists", targetResist, isNotSearch, target);
+							if (invalid) return {error: invalid};
+							orGroup.resists[targetResist] = !isNotSearch;
+							continue;
+						}
+					} else {
+						return {error: `'${targetResist}' is not a recognized type or move.`};
+					}
 				}
 			}
 
@@ -774,8 +790,47 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					orGroup.weak[targetWeak] = !isNotSearch;
 					continue;
 				} else {
-					return {error: `'${targetWeak}' is not a recognized type.`};
+					if (toID(targetWeak) in Dex.data.Moves) {
+						const move = Dex.getMove(targetWeak);
+						if (move.category === 'Status') {
+							return {error: `'${targetWeak}' is a status move and can't be used with 'weak'.`};
+						} else {
+							const invalid = validParameter("weak", targetWeak, isNotSearch, target);
+							if (invalid) return {error: invalid};
+							orGroup.weak[targetWeak] = !isNotSearch;
+							continue;
+						}
+					} else {
+						return {error: `'${targetWeak}' is not a recognized type or move.`};
+					}
 				}
+			}
+
+			if (target === 'pivot') {
+				let includeBatonPass = false;
+				if (parameters.length > 1) {
+					if (parameters[1].trim().toLowerCase() === 'batonpass') {
+						includeBatonPass = true;
+					} else {
+						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
+					}
+				}
+				for (const move in Dex.data.Moves) {
+					const moveData = Dex.getMove(move);
+					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+						const invalid = validParameter("moves", move, isNotSearch, target);
+						if (invalid) return {error: invalid};
+						if (isNotSearch) {
+							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
+							bufferObj.moves[move] = false;
+							searches.push(bufferObj as DexOrGroup);
+						} else {
+							orGroup.moves[move] = true;
+						}
+					}
+				}
+				if (isNotSearch) orGroup.skip = true;
+				break;
 			}
 
 			const inequality = target.search(/>|<|=/);
@@ -795,18 +850,18 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					// e.g. 100 < spe
 					num = parseFloat(targetParts[0]);
 					stat = targetParts[1];
-					if (inequalityString[0] === '>') directions.push('less');
-					if (inequalityString[0] === '<') directions.push('greater');
+					if (inequalityString.startsWith('>')) directions.push('less');
+					if (inequalityString.startsWith('<')) directions.push('greater');
 				} else if (!isNaN(parseFloat(targetParts[1]))) {
 					// e.g. spe > 100
 					num = parseFloat(targetParts[1]);
 					stat = targetParts[0];
-					if (inequalityString[0] === '<') directions.push('less');
-					if (inequalityString[0] === '>') directions.push('greater');
+					if (inequalityString.startsWith('<')) directions.push('less');
+					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
 					return {error: `No value given to compare with '${escapeHTML(target)}'.`};
 				}
-				if (inequalityString.slice(-1) === '=') directions.push('equal');
+				if (inequalityString.endsWith('=')) directions.push('equal');
 				if (stat in allStatAliases) stat = allStatAliases[stat];
 				if (!allStats.includes(stat)) return {error: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = Object.create(null);
@@ -898,7 +953,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
-				if (tier[0] === '(' && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1) as TierTypes.Singles;
+				if (tier.startsWith('(') && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1) as TierTypes.Singles;
 				// if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
@@ -913,7 +968,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					!format.banlist.includes(dex[mon].name) &&
 					!format.banlist.includes(dex[mon].name + "-Base")
 				) {
-					const lsetData = Dex.getLearnsetData(dex[mon].id);
+					const lsetData = mod.getLearnsetData(dex[mon].id);
 					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
 						let validEvents = 0;
 						for (const event of lsetData.eventData) {
@@ -928,7 +983,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
 				let tier = dex[mon].doublesTier;
-				if (tier && tier[0] === '(' && tier !== '(DUU)') tier = tier.slice(1, -1) as TierTypes.Doubles;
+				if (tier && tier.startsWith('(') && tier !== '(DUU)') tier = tier.slice(1, -1) as TierTypes.Doubles;
 				if (alts.doublesTiers[tier]) continue;
 				if (Object.values(alts.doublesTiers).includes(false) && alts.doublesTiers[tier] !== false) continue;
 			}
@@ -941,11 +996,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const type in alts.resists) {
+			for (const targetResist in alts.resists) {
 				let effectiveness = 0;
-				const notImmune = mod.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
-				if (!alts.resists[type]) {
+				const move = mod.getMove(targetResist);
+				const attackingType = move.type || targetResist;
+				const notImmune = (move.id === 'thousandarrows' || mod.getImmunity(attackingType, dex[mon])) &&
+					!(move.id === 'sheercold' && maxGen >= 7 && dex[mon].types.includes('Ice'));
+				if (notImmune && !move.ohko && move.damage === undefined) {
+					for (const defenderType of dex[mon].types) {
+						const baseMod = mod.getEffectiveness(attackingType, defenderType);
+						const moveMod = move.onEffectiveness?.call(
+							{dex: mod} as Battle, baseMod, null, defenderType, move as ActiveMove,
+						);
+						effectiveness += typeof moveMod === 'number' ? moveMod : baseMod;
+					}
+				}
+				if (!alts.resists[targetResist]) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
 					if (!notImmune || effectiveness < 0) matched = true;
@@ -953,11 +1019,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const type in alts.weak) {
+			for (const targetWeak in alts.weak) {
 				let effectiveness = 0;
-				const notImmune = mod.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
-				if (alts.weak[type]) {
+				const move = mod.getMove(targetWeak);
+				const attackingType = move.type || targetWeak;
+				const notImmune = (move.id === 'thousandarrows' || mod.getImmunity(attackingType, dex[mon])) &&
+					!(move.id === 'sheercold' && maxGen >= 7 && dex[mon].types.includes('Ice'));
+				if (notImmune && !move.ohko && move.damage === undefined) {
+					for (const defenderType of dex[mon].types) {
+						const baseMod = mod.getEffectiveness(attackingType, defenderType);
+						const moveMod = move.onEffectiveness?.call(
+							{dex: mod} as Battle, baseMod, null, defenderType, move as ActiveMove,
+						);
+						effectiveness += typeof moveMod === 'number' ? moveMod : baseMod;
+					}
+				}
+				if (alts.weak[targetWeak]) {
 					if (notImmune && effectiveness >= 1) matched = true;
 				} else {
 					if (!notImmune || effectiveness < 1) matched = true;
@@ -1018,7 +1095,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
-				if (move.gen <= maxGen && !validator.checkLearnset(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (move.gen <= maxGen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
@@ -1032,10 +1109,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
 		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
-		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
+		const isRegionalForm = (dex[mon].forme === "Galar" || dex[mon].forme === "Alola") && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
-		if (dex[mon].name.endsWith('-Gmax') && !allowGmax) continue;
+		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
+		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
 
@@ -1091,17 +1168,18 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
+	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
 
-function runMovesearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
 	const allCategories = ['physical', 'special', 'status'];
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
 		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
-		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
+		'multihit', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
@@ -1138,13 +1216,14 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		const orGroup: MoveOrGroup = {
 			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
 			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false,
+			pivot: false, multihit: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
 		for (const parameter of parameters) {
 			let isNotSearch = false;
 			target = parameter.toLowerCase().trim();
-			if (target.charAt(0) === '!') {
+			if (target.startsWith('!')) {
 				isNotSearch = true;
 				target = target.substr(1);
 			}
@@ -1211,6 +1290,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
+			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -1229,7 +1309,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			if (0 < targetInt && targetInt < 9) {
 				if ((orGroup.gens[targetInt] && isNotSearch) || (orGroup.flags[targetInt] === false && !isNotSearch)) {
-					return {error: 'A search cannot both exclude and include \'' + target + '\'.'};
+					return {error: `A search cannot both exclude and include '${target}'.`};
 				}
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
@@ -1304,7 +1384,25 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				continue;
 			}
 
-			const species = Dex.getSpecies(target);
+			if (target === 'pivot') {
+				if (!orGroup.pivot) {
+					orGroup.pivot = true;
+				} else if ((orGroup.pivot && isNotSearch) || (!orGroup.pivot && !isNotSearch)) {
+					return {error: 'A search cannot both exclude and include pivot moves.'};
+				}
+				continue;
+			}
+
+			if (target === 'multihit') {
+				if (!orGroup.multihit) {
+					orGroup.multihit = true;
+				} else if ((orGroup.multihit && isNotSearch) || (!orGroup.multihit && !isNotSearch)) {
+					return {error: 'A search cannot both exclude and include multi-hit moves.'};
+				}
+				continue;
+			}
+
+			const species = Dex.mod(`gen${maxGen || 8}`).getSpecies(target);
 			if (species.exists) {
 				if (parameters.length > 1) return {error: "A Pok\u00e9mon learnset cannot have alternative parameters."};
 				if (targetMons.some(mon => mon.name === species.name && isNotSearch !== mon.shouldBeExcluded)) {
@@ -1440,7 +1538,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			const oldTarget = target;
-			if (target.charAt(target.length - 1) === 's') target = target.substr(0, target.length - 1);
+			if (target.endsWith('s')) target = target.slice(0, -1);
 			switch (target) {
 			case 'toxic': target = 'tox'; break;
 			case 'poison': target = 'psn'; break;
@@ -1489,7 +1587,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
 		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(Dex.getLearnsetData(usedSpecies.id));
+		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.getLearnsetData(usedSpecies.id));
 		if (!usedSpeciesLearnset.learnset) {
 			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
 			usedSpeciesLearnset.learnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
@@ -1510,7 +1608,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
 	const validMoves = new Set(Object.keys(Dex.data.Moves));
-	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const species = mod.getSpecies(mon.name);
 		const lsetData = getFullLearnsetOfPokemon(species);
@@ -1538,8 +1635,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		const move = mod.getMove(moveid);
 		if (move.gen <= maxGen) {
 			if (
-				(!nationalSearch && move.isNonstandard) ||
-				(nationalSearch && move.isNonstandard && move.isNonstandard !== "Past")
+				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
 			) {
 				continue;
 			} else {
@@ -1590,6 +1687,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				} else if (flag === 'highcrit') {
 					const crit = move.willCrit || (move.critRatio && move.critRatio > 1);
 					if (!crit === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'multihit') {
+					if (!move.multihit === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
@@ -1744,6 +1846,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 			}
 			if (matched) continue;
+			if (alts.pivot) {
+				if (move.selfSwitch && move.id !== 'batonpass') matched = true;
+			}
+			if (matched) continue;
 
 			delete dex[moveid];
 		}
@@ -1794,6 +1900,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	} else {
 		resultsStr += "No moves found.";
 	}
+	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
 
@@ -2233,7 +2340,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	}
 	if (!formatName) {
 		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
-		format = new Dex.Data.Format(format, {mod: `gen${gen}`});
+		format = new Dex.Format(format, {mod: `gen${gen}`});
 		formatName = `Gen ${gen}`;
 		if (minSourceGen === 6) formatName += ' Pentagon';
 	}
@@ -2260,7 +2367,6 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		return {error: "You must specify at least one move."};
 	}
 
-	let lsetProblem: {type: string, moveName: string, [k: string]: any} | null = null;
 	const moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
@@ -2269,36 +2375,27 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		}
 		const move = validator.dex.getMove(arg);
 		moveNames.push(move.name);
-		if (!move.exists || move.id === 'magikarpsrevenge') {
+		if (!move.exists) {
 			return {error: `Move '${move.id}' not found.`};
 		}
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		const checkLsetProblem = validator.checkLearnset(move, species, setSources, set);
-		if (checkLsetProblem !== null && Object.keys(checkLsetProblem).length) {
-			lsetProblem = Object.create(null);
-			for (const i in checkLsetProblem) {
-				lsetProblem![i] = checkLsetProblem[i];
-			}
-			lsetProblem!.moveName = move.name;
-			break;
+	}
+
+	const problems = validator.validateMoves(species, moveNames, setSources, set);
+	if (setSources.sources.length) {
+		setSources.sources = setSources.sources.map(source => {
+			if (source.charAt(1) !== 'E') return source;
+			const fathers = validator.findEggMoveFathers(source, species, setSources, true);
+			if (!fathers) return '';
+			return source + ':' + fathers.join(',');
+		}).filter(Boolean);
+		if (!setSources.size()) {
+			problems.push(`${species.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves!.join(', ')})`);
 		}
 	}
-	const lsetProblems = validator.reconcileLearnset(
-		species, setSources, lsetProblem ? lsetProblem : null, species.name
-	);
-	const problems: string[] = [];
-	if (lsetProblems) problems.push(...lsetProblems);
-	let sources: string[] = setSources.sources.map(source => {
-		if (source.charAt(1) !== 'E') return source;
-		const fathers = validator.findEggMoveFathers(source, species, setSources, true);
-		if (!fathers) return '';
-		return source + ':' + fathers.join(',');
-	}).filter(Boolean);
-	if (setSources.sources.length && !sources.length) {
-		problems.push(`${species.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves!.join(', ')})`);
-	}
+
 	let buffer = `In ${formatName}, `;
 	if (setSources.isHidden) {
 		buffer += `${species.abilities['H'] || 'HA'} `;
@@ -2309,14 +2406,15 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			'7V': "virtual console transfer from gen 1-2", '8V': "Pok&eacute;mon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
 		};
 		const sourcesBefore = setSources.sourcesBefore;
+		let sources = setSources.sources;
 		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
 		buffer += " from:<ul class=\"message-learn-list\">";
 		if (sources.length) {
 			sources = sources.map(source => {
-				if (source.slice(0, 3) === '1ET') {
+				if (source.startsWith('1ET')) {
 					return '2X' + source.slice(3);
 				}
-				if (source.slice(0, 3) === '1ST') {
+				if (source.startsWith('1ST')) {
 					return '2Y' + source.slice(3);
 				}
 				return source;
@@ -2340,7 +2438,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 					}
 				}
 
-				if (source.slice(0, 2) === '5E' && species.maleOnlyHidden) {
+				if (source.startsWith('5E') && species.maleOnlyHidden) {
 					buffer += " (no hidden ability)";
 				}
 			}
@@ -2366,15 +2464,18 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			buffer += `<li>must be obtained as ` + Dex.getSpecies(setSources.babyOnly).name;
 		}
 		buffer += "</ul>";
-	} else if (targets.length > 1 || problems.length > 1) {
-		buffer += ` because:<ul class="message-learn-list">`;
-		buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
-		buffer += `</ul>`;
+	} else if (problems.length >= 1) {
+		const expectedError = `${species.name} can't learn ${moveNames[0]}.`;
+		if (problems.length > 1 || moveNames.length > 1 || problems[0] !== expectedError) {
+			buffer += ` because:<ul class="message-learn-list">`;
+			buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
+			buffer += `</ul>`;
+		}
 	}
 	return {reply: buffer};
 }
 
-function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: string}) {
+function runSearch(query: {target: string, cmd: string, canAll: boolean, message: string}) {
 	return PM.query(query);
 }
 
@@ -2390,16 +2491,16 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, q
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
-			return runDexsearch(query.tar, query.cmd, query.canAll, query.message);
+			return runDexsearch(query.target, query.cmd, query.canAll, query.message, false);
 		case 'randmove':
 		case 'movesearch':
-			return runMovesearch(query.tar, query.cmd, query.canAll, query.message);
+			return runMovesearch(query.target, query.cmd, query.canAll, query.message, false);
 		case 'itemsearch':
-			return runItemsearch(query.tar, query.cmd, query.canAll, query.message);
+			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
 		case 'abilitysearch':
-			return runAbilitysearch(query.tar, query.cmd, query.canAll, query.message);
+			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
 		case 'learn':
-			return runLearn(query.tar, query.message, query.canAll, query.message);
+			return runLearn(query.target, query.message, query.canAll, query.message);
 		default:
 			return null;
 		}
@@ -2417,8 +2518,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 	if (Config.crashguard) {
@@ -2431,10 +2531,16 @@ if (!PM.isParentProcess) {
 	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
-	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 	// @ts-ignore
 	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
+
+export const testables = {
+	runDexsearch: (target: string, cmd: string, canAll: boolean, message: string) =>
+		runDexsearch(target, cmd, canAll, message, true),
+	runMovesearch: (target: string, cmd: string, canAll: boolean, message: string) =>
+		runMovesearch(target, cmd, canAll, message, true),
+};

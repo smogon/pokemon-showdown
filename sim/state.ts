@@ -6,7 +6,7 @@
  */
 
 import {Battle} from './battle';
-import * as Data from './dex-data';
+import {Dex} from './dex';
 import {Field} from './field';
 import {Pokemon} from './pokemon';
 import {PRNG} from './prng';
@@ -33,10 +33,9 @@ type Referable = Battle | Field | Side | Pokemon | Condition | Ability | Item | 
 // need special treatment from these sets are then handled manually.
 
 const BATTLE = new Set([
-	'dex', 'gen', 'ruleTable', 'id', 'log', 'inherit', 'format',
-	'zMoveTable', 'teamGenerator', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL',
-	'field', 'sides', 'prng', 'hints', 'deserialized', 'maxMoveTable',
-	'queue',
+	'dex', 'gen', 'ruleTable', 'id', 'log', 'inherit', 'format', 'zMoveTable', 'teamGenerator',
+	'HIT_SUBSTITUTE', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL', 'field', 'sides', 'prng', 'hints',
+	'deserialized', 'maxMoveTable', 'queue',
 ]);
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
@@ -365,8 +364,8 @@ export const State = new class {
 		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
-				Battle, Field, Side, Pokemon, Data.Condition,
-				Data.Ability, Data.Item, Data.Move, Data.Species,
+				Battle, Field, Side, Pokemon, Dex.Condition,
+				Dex.Ability, Dex.Item, Dex.Move, Dex.Species,
 			]);
 		}
 		return this.REFERABLE.has(obj.constructor);
@@ -386,7 +385,7 @@ export const State = new class {
 		// class types to be decode, so we're probably OK. We could make the reference
 		// markers more esoteric with additional sigils etc to avoid collisions, but
 		// we're making a conscious decision to favor readability over robustness.
-		if (ref.charAt(0) !== '[' && ref.slice(-1) !== ']') return undefined;
+		if (!ref.startsWith('[') && !ref.endsWith(']')) return undefined;
 
 		ref = ref.substring(1, ref.length - 1);
 		// There's only one instance of these thus they don't need an id to differentiate.

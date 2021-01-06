@@ -8,7 +8,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
-		if (species.battleOnly && typeof species.battleOnly === 'string') {
+		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
 		}
@@ -655,15 +655,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 	randomTeam() {
 		const seed = this.prng.seed;
-		const pokemon = [];
+		const ruleTable = this.dex.getRuleTable(this.format);
+		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
-		const pokemonPool = [];
-		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
-			if (!species.isNonstandard && species.randomBattleMoves) {
-				pokemonPool.push(id);
-			}
-		}
+		// For Monotype
+		const isMonotype = ruleTable.has('sametypeclause');
+		const typePool = Object.keys(this.dex.data.TypeChart);
+		const type = this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};
 		const tierCount: {[k: string]: number} = {};
@@ -671,9 +669,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const typeComboCount: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+
 		while (pokemonPool.length && pokemon.length < 6) {
 			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
-			if (!species.exists) continue;
+			if (!species.exists || !species.randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
@@ -681,51 +681,48 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Adjust rate for species with multiple sets
 			switch (species.baseSpecies) {
 			case 'Arceus':
-				if (this.randomChance(16, 17)) continue;
+				if (this.randomChance(16, 17) && !isMonotype) continue;
 				break;
 			case 'Rotom':
-				if (this.gen < 5 && this.randomChance(5, 6)) continue;
+				if (this.gen < 5 && this.randomChance(5, 6) && !isMonotype) continue;
 				break;
-			case 'Castform':
-				if (this.randomChance(2, 3)) continue;
-				break;
-			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Meloetta':
+			case 'Basculin': case 'Castform': case 'Cherrim': case 'Meloetta':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}
 
+			// Illusion shouldn't be in the last slot
+			if (species.name === 'Zoroark' && pokemon.length > 4) continue;
+
 			const tier = species.tier;
 
 			// Limit two Pokemon per tier
-			if (tierCount[tier] > 1 && this.gen === 5) {
-				continue;
-			}
-
-			const types = species.types;
-
-			// Limit 2 of any type
-			let skip = false;
-			for (const type of species.types) {
-				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
+			if (this.gen === 5 && !isMonotype && tierCount[tier] > 1) continue;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 
-			// Illusion shouldn't be the last Pokemon of the team
-			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
+			const types = species.types;
 
-			// Limit 1 of any type combination
-			let typeCombo = species.types.slice().sort().join();
+			if (!isMonotype) {
+				// Limit two of any type
+				let skip = false;
+				for (const typeName of types) {
+					if (typeCount[typeName] > 1) {
+						skip = true;
+						break;
+					}
+				}
+				if (skip) continue;
+			}
+
+			// Limit one of any type combination, two in Monotype
+			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
 				if (typeCombo in typeComboCount) continue;
 			} else {
-				if (typeComboCount[typeCombo] >= 1) continue;
+				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -749,11 +746,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			}
 
 			// Increment type counters
-			for (const type of types) {
-				if (type in typeCount) {
-					typeCount[type]++;
+			for (const typeName of types) {
+				if (typeName in typeCount) {
+					typeCount[typeName]++;
 				} else {
-					typeCount[type] = 1;
+					typeCount[typeName] = 1;
 				}
 			}
 			if (typeCombo in typeComboCount) {

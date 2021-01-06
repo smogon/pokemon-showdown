@@ -59,7 +59,6 @@ try {
 
 try {
 	require.resolve('../.sim-dist/index');
-	// tslint:disable-next-line
 	const sucraseVersion = require('sucrase').getVersion().split('.');
 	if (
 		parseInt(sucraseVersion[0]) < 3 ||
@@ -76,9 +75,6 @@ import {FS} from '../lib/fs';
 /*********************************************************
  * Load configuration
  *********************************************************/
-
-// global becomes much easier to use if declared as an object
-declare const global: any;
 
 import * as ConfigLoader from './config-loader';
 global.Config = ConfigLoader.Config;
@@ -167,7 +163,12 @@ if (require.main === module) {
 	// in the case of app.js being imported as a module (e.g. unit tests),
 	// postpone launching until app.listen() is called.
 	let port;
-	if (process.argv[2]) port = parseInt(process.argv[2]);
+	for (const arg of process.argv) {
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
+	}
 	Sockets.listen(port);
 }
 
