@@ -1430,6 +1430,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyWeight(weighthg) {
 			return weighthg * 2;
 		},
+		onModifyDefPriority: 5,
+		onModifyDef(def, attacker, defender, move) {
+			this.debug('Light Metal boost');
+			return this.chainModify(1.25);
+		},
+		onModifySpDPriority: 5,
+		onModifySpD(spd, attacker, defender, move) {
+			this.debug('Light Metal boost');
+			return this.chainModify(1.25);
+		},
+		onModifySpePriority: 5,
+		onModifySpe(spe, attacker, defender, move) {
+			this.debug('Light Metal weaken');
+			return this.chainModify(0.5);
+		},
 		name: "Heavy Metal",
 		rating: 0,
 		num: 134,
@@ -1843,6 +1858,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	lightmetal: {
 		onModifyWeight(weighthg) {
 			return this.trunc(weighthg / 2);
+		},
+		onModifyDefPriority: 5,
+		onModifyDef(def, attacker, defender, move) {
+			this.debug('Light Metal weaken');
+			return this.chainModify(0.75);
+		},
+		onModifySpDPriority: 5,
+		onModifySpD(spd, attacker, defender, move) {
+			this.debug('Light Metal weaken');
+			return this.chainModify(0.75);
+		},
+		onModifySpePriority: 5,
+		onModifySpe(spe, attacker, defender, move) {
+			this.debug('Light Metal boost');
+			return this.chainModify(1.25);
 		},
 		name: "Light Metal",
 		rating: 1,

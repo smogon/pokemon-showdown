@@ -11594,33 +11594,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {nonsky: 1},
-		pseudoWeather: 'mudsport',
+		volatileStatus: 'mudsport',
 		condition: {
 			duration: 5,
-			onStart(side, source) {
-				this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
+			onStart(target) {
+				this.add('-start', target, 'Mud Sport');
 			},
-			onTryHitPriority: 1,
-			onTryHit(target, source, move) {
-				if (move.type === 'Electric') {
-					this.debug('mud sport fire immunity');
-					return false;
-				}
+			onImmunity(type) {
+				if (type === 'Electric') return false;
 			},
-			// onBasePowerPriority: 1,
-			// onBasePower(basePower, attacker, defender, move) {
-				// if (move.type === 'Electric') {
-					// this.debug('mud sport weaken');
-					// return this.chainModify([0x548, 0x1000]);
-				// }
-			// },
-			onResidualOrder: 21,
-			onEnd() {
-				this.add('-fieldend', 'move: Mud Sport');
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'Mud Sport');
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Ground",
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
@@ -12477,7 +12466,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
-		type: "Psychic",
+		type: "Light",
 		contestType: "Cool",
 	},
 	pikapapow: {
@@ -16845,7 +16834,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Stone Edge",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, blade: 1},
+		flags: {protect: 1, mirror: 1},
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
@@ -19050,33 +19039,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {nonsky: 1},
-		pseudoWeather: 'watersport',
+		volatileStatus: 'watersport',
 		condition: {
 			duration: 5,
-			onStart(side, source) {
-				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
+			onStart(target) {
+				this.add('-start', target, 'Water Sport');
 			},
-			onTryHitPriority: 1,
-			onTryHit(target, source, move) {
-				if (move.type === 'Fire') {
-					this.debug('water sport fire immunity');
-					return false;
-				}
+			onImmunity(type) {
+				if (type === 'Fire') return false;
 			},
-			// onBasePowerPriority: 1,
-			// onBasePower(basePower, attacker, defender, move) {
-				// if (move.type === 'Fire') {
-					// this.debug('water sport weaken');
-					// return this.chainModify([0x548, 0x1000]);
-				// }
-			// },
-			onResidualOrder: 21,
-			onEnd() {
-				this.add('-fieldend', 'move: Water Sport');
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'Water Sport');
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Water",
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
@@ -20484,22 +20462,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 	purifyingflame: {
 		num: 884,
 		accuracy: true,
-		basePower: 60,
+		basePower: 50,
 		category: "Special",
-		name: "Purifying Flame",
-		pp: 30,
+		name: "Clear Smog",
+		pp: 15,
 		priority: 0,
-		flags: {authentic: 1},
-		onHitField() {
-			this.add('-clearallboost');
-			for (const pokemon of this.getAllActive()) {
-				pokemon.clearBoosts();
-			}
+		flags: {protect: 1, mirror: 1},
+		onHit(target) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
 		},
 		secondary: null,
-		target: "all",
+		target: "normal",
 		type: "Fire",
-		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
 	windblast: {
@@ -21508,5 +21483,179 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "any",
 		type: "Light",
 		contestType: "Cool",
+	},
+	starpierce: {
+		num: 922,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		name: "Star Pierce",
+		pp: 35,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Tough",
+	},
+	solarflare: {
+		num: 923,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		name: "Solar Flare",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, distance: 1},
+		onModifyMove(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.basePower *= 2;
+				break;
+			}
+		},
+		target: "any",
+		type: "Light",
+		contestType: "Tough",
+	},
+	dazzlingshock: {
+		num: 924,
+		accuracy: 90,
+		basePower: 120,
+		category: "Physical",
+		name: "Dazzling Shock",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			this.boost({atk: 1}, attacker, attacker, move);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Tough",
+	},
+	vacuumray: {
+		num: 925,
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		name: "Vacuum Ray",
+		pp: 25,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Cute",
+	},
+	asteroidbelt: {
+		num: 926,
+		accuracy: 100,
+		basePower: 20,
+		category: "Physical",
+		name: "Asteroid Belt",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		volatileStatus: 'partiallytrapped',
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Beautiful",
+	},
+	sunhammer: {
+		num: 927,
+		accuracy: 90,
+		basePower: 150,
+		category: "Physical",
+		name: "Sun Hammer",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		recoil: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Tough",
+	},
+	brightslap: {
+		num: 928,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Bright Slap",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, slap: 1},
+		secondary: {
+			chance: 10,
+			self: {
+				boosts: {
+					accuracy: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Light",
+		contestType: "Cool",
+	},
+	wormhole: {
+		num: 929,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Worm Hole",
+		pp: 20,
+		priority: -6,
+		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1, mystery: 1},
+		forceSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		zMove: {boost: {def: 1}},
+		contestType: "Cool",
+	},
+	voidrend: {
+		num: 930,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Void Rend",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1, bite: 1},
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Clever",
+	},
+	gammaray: {
+		num: 931,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Gamma Ray",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, pulse: 1},
+		secondary: {
+			chance: 10,
+			status: 'psn',
+		},
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Clever",
 	},
 };

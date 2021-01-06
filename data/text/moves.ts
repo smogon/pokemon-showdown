@@ -5862,4 +5862,52 @@ export const MovesText = {
 		desc: "Has a 30% chance to flinch the target.",
 		shortDesc: "30% chance to flinch the target.",
 	},
+	starpierce: {
+		name: "Star Pierce",
+		shortDesc: "No additional effect.",
+	},
+	solarflare: {
+		name: "Solar Flare",
+		desc: "Has a 10% chance to burn the target. Power doubles if the weather is sunnyday.",
+		shortDesc: "Power doubles if sunnyday. 10% chance to burn the target.",
+	},
+	dazzlingshock: {
+		name: "Dazzling Shock",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Attack by 1 on turn 1. Hits turn 2.",
+	},
+	vacuumray: {
+		name: "Vacuum Ray",
+		shortDesc: "No additional effect.",
+	},
+	asteroidbelt: {
+		name: "Asteroid Belt",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
+	},
+	sunhammer: {
+		name: "Sun Hammer",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/2 recoil.",
+	},
+	brightslap: {
+		name: "Bright Slap",
+		desc: "Has a 10% chance to raise the user's Accuracy by 1 stage.",
+		shortDesc: "10% chance to raise the user's Accuracy by 1.",
+	},
+	wormhole: {
+		name: "Worm Hole",
+		desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, or if the target used Ingrain previously or has the Suction Cups Ability.",
+		shortDesc: "Forces the target to switch to a random ally.",
+	},
+	voidrend: {
+		name: "Void Rend",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Bite move.",
+		shortDesc: "User recovers 50% of the damage dealt.",
+	},
+	gammaray: {
+		name: "Gamma Ray",
+		desc: "Has a 10% chance to poison the target. Boosted by Mega Launcher.",
+		shortDesc: "10% chance to poison the target.",
+	},
 };

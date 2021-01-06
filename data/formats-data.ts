@@ -37,11 +37,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	charizardmegax: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	charizardmegay: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	charizardgmax: {
@@ -1347,11 +1347,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	mewtwomegax: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	mewtwomegay: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	mew: {
@@ -3674,6 +3674,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleLevel: 88,
 		tier: "PU",
 		doublesTier: "(DUU)",
+	},
+	klinklympeian: {
+		tier: "LC",
+	},
+	klanglympeian: {
+		tier: "NFE",
 	},
 	klinklanglympeian: {
 		tier: "RU",
