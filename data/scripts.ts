@@ -237,7 +237,7 @@ export const Scripts: BattleScriptsData = {
 				}
 			}
 			if (extraPP > 0) {
-				pokemon.deductPP(move, extraPP);
+				pokemon.deductPP(moveOrMoveName, extraPP);
 			}
 		}
 
@@ -882,11 +882,6 @@ export const Scripts: BattleScriptsData = {
 			damage[i] = curDamage;
 			if (move.selfdestruct === 'ifHit') {
 				this.faint(pokemon, pokemon, move);
-			}
-			if ((damage[i] || damage[i] === 0) && !target.fainted) {
-				if (move.noFaint && damage[i]! >= target.hp) {
-					damage[i] = target.hp - 1;
-				}
 			}
 		}
 		return damage;
