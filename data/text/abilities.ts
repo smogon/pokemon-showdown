@@ -677,7 +677,8 @@ export const AbilitiesText = {
 	},
 	magmaarmor: {
 		name: "Magma Armor",
-		shortDesc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
+		shortDesc: "This Pokemon cannot be frozen. Water/Grass-type moves are halved.",
+		shortDesc: "Fire/Ice-type moves against this Pokemon deal damage with a halved attacking stat.",
 	},
 	magnetpull: {
 		name: "Magnet Pull",
@@ -787,10 +788,8 @@ export const AbilitiesText = {
 	},
 	normalize: {
 		name: "Normalize",
-		desc: "This Pokemon's moves are changed to be Normal type and have their power multiplied by 1.2. This effect comes before other effects that change a move's type.",
-		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
-		descGen6: "This Pokemon's moves are changed to be Normal type. This effect comes before other effects that change a move's type.",
-		shortDescGen6: "This Pokemon's moves are changed to be Normal type.",
+		desc: "This Pokemon's moves are changed to be Normal type and have their power multiplied by 1.5. This effect comes before other effects that change a move's type.",
+		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.5x power.",
 	},
 	oblivious: {
 		name: "Oblivious",

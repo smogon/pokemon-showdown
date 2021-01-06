@@ -5581,8 +5581,8 @@ export const MovesText = {
 	},
 	prehistoricwisdom: {
 		name: "Prehistoric Wisdom",
-		desc: "Raises the user's Defense and Special Attack by 1 stage.",
-		shortDesc: "Raises the user's Defense and Special Attack by 1.",
+		desc: "Raises the user's Attack, Defense and Special Attack by 1 stage.",
+		shortDesc: "Raises the user's Attack, Defense and Special Attack by 1.",
 	},
 	waterbullet: {
 		name: "Water Bullet",
@@ -5666,8 +5666,8 @@ export const MovesText = {
 	},
 	darkmelody: {
 		name: "Dark Melody",
-		desc: "Has a 20% chance to flinch the target.",
-		shortDesc: "20% chance to flinch the foe(s)."
+		desc: "Has a 10% chance to cause the target to sleep.",
+		shortDesc: "10% chance to cause the foe(s) to sleep."
 	},
 	psykiss: {
 		name: "Psy Kiss",
@@ -5696,8 +5696,8 @@ export const MovesText = {
 	},
 	freezingkiss: {
 		name: "Freezing Kiss",
-		desc: "Has a 30% chance to freeze the target.",
-		shortDesc: "30% chance to freeze the foe(s).",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze the foe(s).",
 	},
 	fungalbomb: {
 		name: "Fungal Bomb",

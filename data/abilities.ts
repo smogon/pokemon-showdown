@@ -2026,6 +2026,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onImmunity(type, pokemon) {
 			if (type === 'frz') return false;
 		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Grass') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Grass') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		name: "Magma Armor",
 		rating: 1,
 		num: 40,
@@ -2437,7 +2451,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.normalizeBoosted) return this.chainModify([0x1333, 0x1000]);
+			if (move.normalizeBoosted) return this.chainModify(1.5);
 		},
 		name: "Normalize",
 		rating: 0,

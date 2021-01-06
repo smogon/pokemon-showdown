@@ -4019,6 +4019,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 	},
 	meloettapirouette: {
+		tier: "RU",
 	},
 	genesect: {
 		randomBattleMoves: ["blazekick", "extremespeed", "flamethrower", "ironhead", "shiftgear", "thunderbolt", "uturn"],
