@@ -20464,7 +20464,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 50,
 		category: "Special",
-		name: "Clear Smog",
+		name: "Purifying Flame",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
