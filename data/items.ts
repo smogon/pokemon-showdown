@@ -1869,6 +1869,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
 			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
@@ -1884,6 +1885,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				if (target.useItem()) {
@@ -4916,8 +4918,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.category !== 'Status') {
-				this.heal(pokemon.lastDamage / 8, pokemon);
+			if (move.totalDamage) {
+				this.heal(move.totalDamage / 8, pokemon);
 			}
 		},
 		num: 253,

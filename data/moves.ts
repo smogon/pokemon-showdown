@@ -3287,19 +3287,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 						if (!moveSlot.pp) {
 							this.debug('Move out of PP');
 							return false;
-						} else {
-							if (effect.id === 'cursedbody') {
-								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', '[of] ' + source);
-							} else {
-								this.add('-start', pokemon, 'Disable', moveSlot.move);
-							}
-							this.effectData.move = pokemon.lastMove.id;
-							return;
 						}
 					}
 				}
-				// this can happen if Disable works on a Z-move
-				return false;
+				if (effect.effectType === 'Ability') {
+					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
+				} else {
+					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
+				}
+				this.effectData.move = pokemon.lastMove.id;
 			},
 			onResidualOrder: 14,
 			onEnd(pokemon) {
@@ -4642,7 +4638,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		noFaint: true,
+		onDamagePriority: -20,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) return target.hp - 1;
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -8372,7 +8371,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		noFaint: true,
+		onDamagePriority: -20,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) return target.hp - 1;
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -14022,7 +14024,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
 		onModifyType(move, pokemon) {
-			let type = pokemon.types[0];
+			let type = pokemon.getTypes()[0];
 			if (type === "Bird") type = "???";
 			move.type = type;
 		},
@@ -16748,6 +16750,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
+		pressureTarget: "self",
 		target: "foeSide",
 		type: "Bug",
 		zMove: {boost: {spe: 1}},

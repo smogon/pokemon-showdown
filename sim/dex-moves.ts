@@ -95,6 +95,10 @@ export interface MoveEventMethods {
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
 	onAfterMove?: CommonHandlers['VoidSourceMove'];
+	onDamagePriority?: number;
+	onDamage?: (
+		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
+	) => number | boolean | null | void;
 
 	/* Invoked by the global BasePower event (onEffect = true) */
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
@@ -212,8 +216,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: string;
 	noDamageVariance?: boolean;
-	/** False Swipe */
-	noFaint?: boolean;
 	nonGhostTarget?: string;
 	pressureTarget?: string;
 	spreadModifier?: number;

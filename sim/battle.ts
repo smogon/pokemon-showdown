@@ -618,6 +618,18 @@ export class Battle {
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
 		const handlers = this.findEventHandlers(target, eventid, effectSource);
+		if (onEffect) {
+			if (!sourceEffect) throw new Error("onEffect passed without an effect");
+			// @ts-ignore - dynamic lookup
+			const callback = sourceEffect[`on${eventid}`];
+			if (callback !== undefined) {
+				if (Array.isArray(target)) throw new Error("");
+				handlers.unshift(this.resolvePriority({
+					effect: sourceEffect, callback, state: {}, end: null, effectHolder: target,
+				}, `on${eventid}`));
+			}
+		}
+
 		if (eventid === 'Invulnerability' || eventid === 'TryHit' || eventid === 'DamagingHit') {
 			handlers.sort(Battle.compareLeftToRightOrder);
 		} else if (fastExit) {
@@ -638,18 +650,6 @@ export class Battle {
 		const parentEvent = this.event;
 		this.event = {id: eventid, target, source, effect: sourceEffect, modifier: 1};
 		this.eventDepth++;
-
-		if (onEffect) {
-			if (!sourceEffect) throw new Error("onEffect passed without an effect");
-			// @ts-ignore - dynamic lookup
-			const callback = sourceEffect[`on${eventid}`];
-			if (callback !== undefined) {
-				if (Array.isArray(target)) throw new Error("");
-				handlers.unshift(this.resolvePriority({
-					effect: sourceEffect, callback, state: {}, end: null, effectHolder: target,
-				}, `on${eventid}`));
-			}
-		}
 
 		let targetRelayVars = [];
 		if (Array.isArray(target)) {
@@ -1766,7 +1766,7 @@ export class Battle {
 					retVals[i] = 0;
 					continue;
 				}
-				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
+				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage, true);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
 					retVals[i] = curDamage === true ? undefined : targetDamage;

@@ -328,9 +328,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage = this.getDamage(pokemon, target, moveData);
 
 			if ((damage || damage === 0) && !target.fainted) {
-				if (move.noFaint && damage >= target.hp) {
-					damage = target.hp - 1;
-				}
 				damage = this.damage(damage, target, pokemon, move);
 				if (!(damage || damage === 0)) {
 					this.debug('damage interrupted');
