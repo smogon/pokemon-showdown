@@ -46,7 +46,7 @@ describe('Future Sight', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it.skip(`should not double Stomping Tantrum for exiting normally`, function () {
+	it(`should not double Stomping Tantrum for exiting normally`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['futuresight', 'stompingtantrum']},
 		], [

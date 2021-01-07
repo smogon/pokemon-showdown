@@ -345,6 +345,7 @@ export const Scripts: BattleScriptsData = {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
 			}
+			if (move.isFutureMove) return true;
 			return false;
 		}
 
