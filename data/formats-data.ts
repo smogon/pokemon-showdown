@@ -1093,6 +1093,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
+	taurosgalar: {
+		tier: "OU",
+	},
 	magikarp: {
 		tier: "LC",
 	},
@@ -1584,6 +1587,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	gliscor: {
 		tier: "OU",
+	},
+	gligarfioren: {
+		tier: "PU",
+	},
+	gliscorfioren: {
+		tier: "RU",
 	},
 	snubbull: {
 		tier: "LC",
@@ -2662,6 +2671,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	staraptor: {
 		tier: "UU",
+	},
+	staraptorunova: {
+		tier: "OU",
 	},
 	bidoof: {
 		tier: "LC",
@@ -6219,13 +6231,19 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	serprism: {
 		tier: "OU",
 	},
-	combolgaur: {
+	combolguar: {
 		tier: "OU",
 	},
 	colburnire: {
 		tier: "OU",
 	},
 	froschaiser: {
+		tier: "OU",
+	},
+	corchi: {
+		tier: "OU",
+	},
+	caravagon: {
 		tier: "OU",
 	},
 };

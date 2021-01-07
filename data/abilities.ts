@@ -4614,7 +4614,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         onModifyMove(move) {
             if (move.flags['bite']) {
                 move.flags['heal'] = 1;
-                move.drain = [1,3];
+				if (move.drain) {
+					const dividend = move.drain[0] * 3 + move.drain[1];
+					const divisor = move.drain[1] * 3;
+					move.drain = [dividend,divisor];
+				}
+				else {
+					move.drain = [1,3];
+				}
             }
         },
         name: "Blood Sucker",

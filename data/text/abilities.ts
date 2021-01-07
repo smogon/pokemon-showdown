@@ -678,7 +678,7 @@ export const AbilitiesText = {
 	magmaarmor: {
 		name: "Magma Armor",
 		shortDesc: "This Pokemon cannot be frozen. Water/Grass-type moves are halved.",
-		shortDesc: "Fire/Ice-type moves against this Pokemon deal damage with a halved attacking stat.",
+		shortDesc: "Water/Grass-type moves against this Pokemon deal damage with a halved attacking stat.",
 	},
 	magnetpull: {
 		name: "Magnet Pull",
