@@ -486,6 +486,13 @@ export class Tournament extends Rooms.RoomGame {
 				}
 			}
 		}
+		if (!(replacementUser.id in this.room.users)) {
+			output.errorReply(`${replacementUser.name} is not in this room (${this.room.title}).`);
+			return;
+		}
+		if (this.playerTable[user.id].pendingChallenge) {
+			this.cancelChallenge(user, output);
+		}
 
 		// Replace the player
 		this.renamePlayer(replacementUser, user.id);
