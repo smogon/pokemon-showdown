@@ -74,7 +74,7 @@ describe('Future Sight', function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip(`should be able to set Future Sight against an empty target slot`, function () {
+	it(`should be able to set Future Sight against an empty target slot`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['futuresight']},
 		], [
@@ -82,6 +82,7 @@ describe('Future Sight', function () {
 			{species: "Roggenrola", moves: ['sleeptalk']},
 		]]);
 
+		battle.makeChoices();
 		battle.makeChoices();
 		battle.makeChoices();
 		battle.makeChoices();
