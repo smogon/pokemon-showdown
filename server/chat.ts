@@ -1610,11 +1610,11 @@ export const Chat = new class {
 	parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
 		Chat.loadPlugins();
 
-		const initialRoomlogLength = room?.log.log.length;
+		const initialRoomlogLength = room?.log.getLinecount();
 		const context = new CommandContext({message, room, user, connection});
 		const result = context.parse();
 
-		if (room && room.log.log.length !== initialRoomlogLength) {
+		if (room && room.log.getLinecount() !== initialRoomlogLength) {
 			room.messagesSent++;
 			for (const [handler, numMessages] of room.nthMessageHandlers) {
 				if (room.messagesSent % numMessages === 0) handler(room, message);
