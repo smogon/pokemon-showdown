@@ -345,8 +345,7 @@ export const Scripts: BattleScriptsData = {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
 			}
-			if (hitResult === this.NOT_FAIL) return true;
-			return false;
+			return hitResult === this.NOT_FAIL;
 		}
 
 		let atLeastOneFailure!: boolean;
