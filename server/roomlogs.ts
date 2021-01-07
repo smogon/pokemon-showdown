@@ -277,7 +277,7 @@ export class Roomlog {
 	/**
 	 * Returns the total number of lines in the roomlog, including truncated lines.
 	 */
-	getLinecount() {
+	getLineCount() {
 		return this.log.length + this.numTruncatedLines;
 	}
 
