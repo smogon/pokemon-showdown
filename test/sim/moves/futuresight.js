@@ -90,7 +90,7 @@ describe('Future Sight', function () {
 		assert.false.fullHP(roggenrola);
 	});
 
-	it.skip(`its damaging hit should not count as copyable for Copycat`, function () {
+	it(`its damaging hit should not count as copyable for Copycat`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
 		], [
