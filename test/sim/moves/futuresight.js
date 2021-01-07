@@ -60,7 +60,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [19, 23]); // If it were doubled, would be 38-45
 	});
 
-	it.skip(`should not trigger Eject Button`, function () {
+	it(`should not trigger Eject Button`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['futuresight']},
 		], [
