@@ -83,7 +83,7 @@ describe('Future Sight', function () {
 		]]);
 
 		battle.makeChoices();
-		battle.makeChoices();
+		battle.makeChoices('', 'switch 2');
 		battle.makeChoices();
 		battle.makeChoices();
 		const roggenrola = battle.p2.active[0];
