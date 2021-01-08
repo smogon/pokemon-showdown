@@ -65,11 +65,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	raticatemega: {
-		
-	},	
-	*/
 	raticatealola: {
 		randomBattleMoves: ["swordsdance", "return", "suckerpunch", "knockoff", "doubleedge"],
 		randomDoubleBattleMoves: ["doubleedge", "suckerpunch", "protect", "knockoff", "uturn"],
@@ -80,33 +75,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	raticatealolamega: {
-		
-	},	
-	*/
 	fearow: {
 		randomBattleMoves: ["return", "drillpeck", "doubleedge", "uturn", "pursuit", "drillrun"],
 		randomDoubleBattleMoves: ["return", "drillpeck", "doubleedge", "uturn", "quickattack", "drillrun", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	fearowmega: {
-		
-	},	
-	*/
 	arbok: {
 		randomBattleMoves: ["coil", "gunkshot", "suckerpunch", "aquatail", "earthquake", "rest"],
 		randomDoubleBattleMoves: ["gunkshot", "suckerpunch", "aquatail", "stompingtantrum", "coil", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	arbokmega: {
-		
-	},	
-	*/
 	pikachu: {
 		randomBattleMoves: ["volttackle", "voltswitch", "grassknot", "hiddenpowerice", "knockoff", "irontail"],
 		randomDoubleBattleMoves: ["fakeout", "volttackle", "voltswitch", "grassknot", "hiddenpowerice", "encore", "knockoff", "protect"],
@@ -130,31 +110,17 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	/*
-	raichualolamega: {
-		
-	},	
-	*/
 	sandslash: {
 		randomBattleMoves: ["earthquake", "swordsdance", "rapidspin", "toxic", "stealthrock", "knockoff"],
 		randomDoubleBattleMoves: ["earthquake", "stoneedge", "swordsdance", "knockoff", "protect", "stealthrock"],
 	
 	},
-	
 	sandslashalola: {
 		randomBattleMoves: ["honeclaws", "tripleaxel", "ironhead", "earthquake", "rapidspin", "stealthrock", "knockoff"],
 		randomDoubleBattleMoves: ["protect", "swordsdance", "iciclecrash", "ironhead", "drillrun"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	sandslashmega: {
-		
-	},	
-	sandslashalolamega: {
-		
-	},
-	*/
 	nidoqueen: {
 		randomBattleMoves: ["toxicspikes", "stealthrock", "fireblast", "icebeam", "earthpower", "sludgewave"],
 		randomDoubleBattleMoves: ["protect", "icebeam", "earthpower", "sludgebomb", "stealthrock"],
@@ -197,66 +163,30 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DUU",
 	},
-	/*
-	ninetalesalola: {
-		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire", "freezedry", "auroraveil"],
-		randomDoubleBattleMoves: ["blizzard", "moonblast", "protect", "hiddenpowerfire", "freezedry", "auroraveil", "encore"],
-		tier: "UUBL",
-		doublesTier: "DOU",
-	},
-	
-	/*
-	ninetalesmega: {
-		
-	},	
-	ninetalesalolamega: {
-		
-	},
-	*/
 	wigglytuff: {
 		randomBattleMoves: ["reflect", "lightscreen", "healbell", "stealthrock", "fireblast", "dazzlinggleam"],
 		randomDoubleBattleMoves: ["thunderwave", "stealthrock", "protect", "dazzlinggleam", "fireblast", "hypervoice"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	wigglytuffmega: {
-		
-	},	
-	*/
 	crobat: {
 		randomBattleMoves: ["bravebird", "roost", "toxic", "taunt", "defog", "uturn", "superfang"],
 		randomDoubleBattleMoves: ["bravebird", "taunt", "tailwind", "uturn", "protect", "superfang"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	crobatmega: {
-		
-	},	
-	*/
 	vileplume: {
 		randomBattleMoves: ["gigadrain", "sludgebomb", "sleeppowder", "hiddenpowerfire", "aromatherapy", "strengthsap"],
 		randomDoubleBattleMoves: ["energyball", "sludgebomb", "sleeppowder", "strengthsap", "protect", "hiddenpowerfire"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	vileplumemega: {
-		
-	},	
-	*/
 	bellossom: {
 		randomBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerrock", "quiverdance", "moonblast"],
 		randomDoubleBattleMoves: ["energyball", "quiverdance", "sleeppowder", "strengthsap", "moonblast"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	bellossommega: {
-		
-	},	
-	*/
 	parasect: {
 		randomBattleMoves: ["spore", "substitute", "leechlife", "seedbomb", "leechseed", "knockoff"],
 		randomDoubleBattleMoves: ["spore", "leechlife", "seedbomb", "ragepowder", "leechseed", "protect", "knockoff", "wideguard"],
@@ -275,11 +205,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	venomothmega: {
-		
-	},	
-	*/
 	dugtrio: {
 		randomBattleMoves: ["earthquake", "stoneedge", "stealthrock", "suckerpunch", "reversal", "substitute", "memento"],
 		randomDoubleBattleMoves: ["earthquake", "rockslide", "protect", "suckerpunch", "stoneedge"],
@@ -292,14 +217,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dugtriomega: {
-		
-	},	
-	dugtrioalolamega: {
-		
-	},
-	*/
 	persian: {
 		randomBattleMoves: ["fakeout", "uturn", "taunt", "return", "knockoff"],
 		randomDoubleBattleMoves: ["fakeout", "uturn", "knockoff", "taunt", "return", "hypnosis", "protect"],
@@ -312,72 +229,36 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	persianmega: {
-		
-	},	
-	persianalolamega: {
-		
-	},
-	perrserkermega: {
-		
-	},
-	*/
 	golduck: {
 		randomBattleMoves: ["hydropump", "scald", "icebeam", "psyshock", "encore", "calmmind", "substitute"],
 		randomDoubleBattleMoves: ["hydropump", "scald", "icebeam", "focusblast", "encore", "calmmind", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	golduckmega: {
-		
-	},	
-	*/
 	primeape: {
 		randomBattleMoves: ["closecombat", "uturn", "icepunch", "stoneedge", "encore", "earthquake", "gunkshot"],
 		randomDoubleBattleMoves: ["closecombat", "uturn", "icepunch", "rockslide", "stompingtantrum", "poisonjab", "protect", "taunt", "stoneedge"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	primeapemega: {
-		
-	},	
-	*/
 	arcanine: {
 		randomBattleMoves: ["flareblitz", "wildcharge", "extremespeed", "closecombat", "morningsun", "willowisp", "toxic", "crunch", "roar"],
 		randomDoubleBattleMoves: ["flareblitz", "wildcharge", "closecombat", "willowisp", "snarl", "protect", "extremespeed"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
-	/*
-	arcaninemega: {
-		
-	},	
-	*/
 	poliwrath: {
 		randomBattleMoves: ["hydropump", "focusblast", "icepunch", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
 		randomDoubleBattleMoves: ["encore", "scald", "protect", "icywind", "circlethrow", "toxic", "superpower"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	poliwrathmega: {
-		
-	},	
-	*/
 	politoed: {
 		randomBattleMoves: ["scald", "toxic", "encore", "perishsong", "protect", "hypnosis", "rest"],
 		randomDoubleBattleMoves: ["scald", "hypnosis", "icywind", "encore", "helpinghand", "protect"],
 		tier: "(PU)",
 		doublesTier: "DOU",
 	},
-	/*
-	politoedmega: {
-		
-	},	
-	*/
 	alakazam: {
 		randomBattleMoves: ["psyshock", "psychic", "focusblast", "shadowball", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["protect", "psychic", "focusblast", "shadowball", "encore", "dazzlinggleam"],
@@ -396,33 +277,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	machampmega: {
-		
-	},	
-	*/
 	victreebel: {
 		randomBattleMoves: ["sleeppowder", "sludgebomb", "gigadrain", "hiddenpowerfire", "suckerpunch", "swordsdance", "powerwhip", "knockoff"],
 		randomDoubleBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "sludgebomb", "weatherball", "suckerpunch", "powerwhip", "knockoff", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	victreebelmega: {
-		
-	},	
-	*/
 	tentacruel: {
 		randomBattleMoves: ["toxicspikes", "rapidspin", "scald", "sludgebomb", "acidspray", "knockoff"],
 		randomDoubleBattleMoves: ["muddywater", "scald", "sludgebomb", "acidspray", "knockoff", "protect", "rapidspin"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	tentacruelmega: {
-		
-	},	
-	*/
 	golem: {
 		randomBattleMoves: ["stealthrock", "earthquake", "explosion", "suckerpunch", "toxic", "rockblast"],
 		randomDoubleBattleMoves: ["rockslide", "earthquake", "stoneedge", "suckerpunch", "protect", "stealthrock"],
@@ -435,28 +301,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	golemmega: {
-		
-	},	
-	golemalolamega: {
-		
-	},
-	*/
 	rapidash: {
 		randomBattleMoves: ["flareblitz", "wildcharge", "morningsun", "highhorsepower", "willowisp"],
 		randomDoubleBattleMoves: ["flareblitz", "wildcharge", "protect", "hypnosis", "highhorsepower", "willowisp"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	rapidashmega: {
-		
-	},	
-	rapidashgalarmega: {
-		
-	},
-	*/
 	slowbro: {
 		randomBattleMoves: ["scald", "toxic", "thunderwave", "psyshock", "fireblast", "icebeam", "slackoff"],
 		randomDoubleBattleMoves: ["scald", "psychic", "thunderwave", "slackoff", "protect", "psyshock", "toxic"],
@@ -469,11 +319,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	slowbrogalarmega: {
-		
-	},	
-	*/
 	slowking: {
 		randomBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "grassknot", "thunderwave", "toxic", "slackoff", "trickroom", "nastyplot", "dragontail", "psyshock"],
 		randomDoubleBattleMoves: ["scald", "fireblast", "psychic", "trickroom", "protect", "psyshock"],
@@ -486,58 +331,30 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	slowkinggalarmega: {
-		
-	},	
-	*/
 	magnezone: {
 		randomBattleMoves: ["thunderbolt", "substitute", "flashcannon", "hiddenpowerfire", "voltswitch"],
 		randomDoubleBattleMoves: ["thunderbolt", "flashcannon", "voltswitch", "protect", "electroweb", "hiddenpowerfire"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	magnezonemega: {
-		
-	},	
-	*/
 	farfetchd: {
 		randomBattleMoves: ["bravebird", "swordsdance", "return", "leafblade", "roost", "knockoff"],
 		randomDoubleBattleMoves: ["bravebird", "swordsdance", "return", "leafblade", "protect", "knockoff"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	farfetchdmega: {
-		
-	},	
-	sirfetchdmega: {
-		
-	},
-	*/
 	dodrio: {
 		randomBattleMoves: ["bravebird", "return", "swordsdance", "roost", "quickattack", "knockoff", "jumpkick"],
 		randomDoubleBattleMoves: ["bravebird", "return", "swordsdance", "quickattack", "knockoff", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dodriomega: {
-		
-	},	
-	*/
 	dewgong: {
 		randomBattleMoves: ["surf", "icebeam", "perishsong", "encore", "toxic", "protect"],
 		randomDoubleBattleMoves: ["liquidation", "icebeam", "protect", "helpinghand", "fakeout", "encore", "icywind", "toxic"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dewgongmega: {
-		
-	},	
-	*/
 	muk: {
 		randomBattleMoves: ["curse", "gunkshot", "poisonjab", "shadowsneak", "icepunch", "firepunch", "memento"],
 		randomDoubleBattleMoves: ["gunkshot", "poisonjab", "shadowsneak", "protect", "icepunch", "firepunch"],
@@ -550,25 +367,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "DUU",
 	},
-	/*
-	mukmega: {
-		
-	},
-	mukalolamega: {
-		
-	},
-	*/
 	cloyster: {
 		randomBattleMoves: ["shellsmash", "iciclespear", "hydropump", "rockblast", "iceshard", "spikes", "rapidspin"],
 		randomDoubleBattleMoves: ["shellsmash", "hydropump", "rockblast", "iciclespear", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	cloystermega: {
-		
-	},	
-	*/
 	gengar: {
 		randomBattleMoves: ["shadowball", "sludgewave", "focusblast", "substitute", "disable", "painsplit", "willowisp"],
 		randomDoubleBattleMoves: ["shadowball", "sludgebomb", "focusblast", "taunt", "willowisp", "protect"],
@@ -599,33 +403,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	hypnomega: {
-		
-	},	
-	*/
 	kingler: {
 		randomBattleMoves: ["liquidation", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
 		randomDoubleBattleMoves: ["agility", "liquidation", "xscissor", "rockslide", "knockoff", "protect", "wideguard"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	kinglermega: {
-		
-	},	
-	*/
 	electrode: {
 		randomBattleMoves: ["voltswitch", "thunderbolt", "taunt", "foulplay", "hiddenpowergrass", "signalbeam"],
 		randomDoubleBattleMoves: ["voltswitch", "thunderbolt", "taunt", "foulplay", "protect", "thunderwave"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	electrodemega: {
-		
-	},	
-	*/
 	exeggutor: {
 		randomBattleMoves: ["substitute", "leechseed", "gigadrain", "psychic", "sleeppowder", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["substitute", "leechseed", "energyball", "psychic", "sleeppowder", "hiddenpowerfire", "protect", "trickroom"],
@@ -638,14 +427,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	exeggutormega: {
-		
-	},	
-	exeggutoralolamega: {
-		
-	},
-	*/
 	marowak: {
 		randomBattleMoves: ["bonemerang", "earthquake", "knockoff", "doubleedge", "stoneedge", "stealthrock", "substitute"],
 		randomDoubleBattleMoves: ["bonemerang", "doubleedge", "rockslide", "firepunch", "protect", "swordsdance", "stealthrock"],
@@ -662,105 +443,54 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DUU",
 	},
-	/*
-	marowakmega: {
-		
-	},	
-	marowakalolamega: {
-		
-	},
-	*/
 	hitmonlee: {
 		randomBattleMoves: ["highjumpkick", "knockoff", "stoneedge", "rapidspin", "machpunch", "poisonjab", "fakeout"],
 		randomDoubleBattleMoves: ["knockoff", "rockslide", "machpunch", "fakeout", "closecombat", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	hitmonleemega: {
-		
-	},	
-	*/
 	hitmonchan: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "firepunch", "machpunch", "rapidspin"],
 		randomDoubleBattleMoves: ["fakeout", "drainpunch", "icepunch", "firepunch", "machpunch", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	hitmonchanmega: {
-		
-	},	
-	*/
 	hitmontop: {
 		randomBattleMoves: ["suckerpunch", "stoneedge", "rapidspin", "closecombat", "toxic"],
 		randomDoubleBattleMoves: ["fakeout", "feint", "suckerpunch", "closecombat", "helpinghand", "machpunch", "wideguard", "rapidspin"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
-	/*
-	hitmontopmega: {
-		
-	},	
-	*/
 	lickilicky: {
 		randomBattleMoves: ["wish", "protect", "bodyslam", "knockoff", "dragontail", "healbell", "swordsdance", "explosion", "earthquake", "powerwhip"],
 		randomDoubleBattleMoves: ["protect", "dragontail", "knockoff", "bodyslam", "powerwhip", "stompingtantrum", "explosion"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	lickilickymega: {
-		
-	},	
-	*/
 	weezing: {
 		randomBattleMoves: ["painsplit", "sludgebomb", "willowisp", "fireblast", "protect", "toxicspikes"],
 		randomDoubleBattleMoves: ["protect", "sludgebomb", "willowisp", "fireblast", "toxicspikes", "painsplit"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	weezingmega: {
-		
-	},	
-	weezinggalarmega: {
-		
-	},
-	*/
 	rhyperior: {
 		randomBattleMoves: ["stoneedge", "earthquake", "icepunch", "megahorn", "stealthrock", "rockblast", "rockpolish", "dragontail"],
 		randomDoubleBattleMoves: ["stoneedge", "earthquake", "megahorn", "stealthrock", "rockslide", "icepunch", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	rhyperiormega: {
-		
-	},	
-	*/
 	blissey: {
 		randomBattleMoves: ["toxic", "flamethrower", "seismictoss", "softboiled", "healbell", "protect", "thunderwave", "stealthrock"],
 		randomDoubleBattleMoves: ["softboiled", "protect", "toxic", "seismictoss", "helpinghand", "thunderwave"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	blisseymega: {
-		
-	},	
-	*/
 	tangrowth: {
 		randomBattleMoves: ["gigadrain", "leafstorm", "knockoff", "earthquake", "hiddenpowerfire", "rockslide", "sleeppowder", "synthesis"],
 		randomDoubleBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerice", "leechseed", "knockoff", "ragepowder", "focusblast", "protect", "powerwhip", "earthquake"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	tangrowthmega: {
-		
-	},	
-	*/
 	kangaskhan: {
 		randomBattleMoves: ["return", "suckerpunch", "earthquake", "drainpunch", "crunch", "fakeout"],
 		randomDoubleBattleMoves: ["fakeout", "return", "suckerpunch", "earthquake", "doubleedge", "drainpunch", "crunch", "protect"],
@@ -779,22 +509,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NUBL",
 		doublesTier: "DOU",
 	},
-	/*
-	kingdramega: {
-		
-	},	
-	*/
 	seaking: {
 		randomBattleMoves: ["waterfall", "megahorn", "knockoff", "drillrun", "scald", "icebeam"],
 		randomDoubleBattleMoves: ["waterfall", "megahorn", "knockoff", "drillrun", "icywind", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	seakingmega: {
-		
-	},	
-	*/
 	starmie: {
 		randomBattleMoves: ["thunderbolt", "icebeam", "rapidspin", "recover", "psyshock", "scald", "hydropump"],
 		randomDoubleBattleMoves: ["thunderbolt", "icebeam", "protect", "psychic", "psyshock", "scald", "hydropump"],
@@ -813,14 +533,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	mrmimemega: {
-		
-	},	
-	mrrimemega: {
-		
-	},
-	*/
 	scizor: {
 		randomBattleMoves: ["swordsdance", "bulletpunch", "bugbite", "superpower", "uturn", "pursuit", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "bulletpunch", "bugbite", "superpower", "uturn", "protect", "feint", "knockoff"],
@@ -839,33 +551,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	jynxmega: {
-		
-	},	
-	*/
 	electivire: {
 		randomBattleMoves: ["wildcharge", "crosschop", "icepunch", "flamethrower", "earthquake", "voltswitch"],
 		randomDoubleBattleMoves: ["wildcharge", "crosschop", "icepunch", "flamethrower", "stompingtantrum", "protect", "followme"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	electiviremega: {
-		
-	},	
-	*/
 	magmortar: {
 		randomBattleMoves: ["fireblast", "focusblast", "hiddenpowergrass", "thunderbolt", "earthquake", "substitute"],
 		randomDoubleBattleMoves: ["fireblast", "taunt", "hiddenpowergrass", "thunderbolt", "heatwave", "willowisp", "protect", "followme"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	magmortarmega: {
-		
-	},	
-	*/
 	pinsir: {
 		randomBattleMoves: ["earthquake", "xscissor", "closecombat", "stoneedge", "stealthrock", "knockoff"],
 		randomDoubleBattleMoves: ["protect", "feint", "xscissor", "closecombat", "rockslide", "knockoff"],
@@ -884,11 +581,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	taurosmega: {
-		
-	},	
-	*/
 	gyarados: {
 		randomBattleMoves: ["dragondance", "waterfall", "earthquake", "bounce", "dragontail", "stoneedge", "substitute"],
 		randomDoubleBattleMoves: ["dragondance", "waterfall", "bounce", "protect", "thunderwave", "stoneedge"],
@@ -907,21 +599,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	laprasmega: {
-		
-	},	
-	*/
 	ditto: {
 		randomBattleMoves: ["transform"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dittomega: {
-		
-	},	
-	*/
 	vaporeon: {
 		randomBattleMoves: ["wish", "protect", "scald", "roar", "icebeam", "healbell", "flipturn"],
 		randomDoubleBattleMoves: ["helpinghand", "protect", "scald", "muddywater", "icywind", "toxic"],
@@ -964,80 +646,42 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	espeonmega: {
-		
-	},	
-	*/
 	umbreon: {
 		randomBattleMoves: ["wish", "protect", "healbell", "toxic", "foulplay"],
 		randomDoubleBattleMoves: ["moonlight", "protect", "snarl", "foulplay", "helpinghand"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	umbreonmega: {
-		
-	},	
-	*/
 	leafeon: {
 		randomBattleMoves: ["swordsdance", "leafblade", "healbell", "xscissor", "synthesis", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "leafblade", "xscissor", "protect", "helpinghand", "knockoff"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	leafeonmega: {
-		
-	},	
-	*/
 	glaceon: {
 		randomBattleMoves: ["icebeam", "hiddenpowerground", "shadowball", "healbell", "wish", "protect", "toxic"],
 		randomDoubleBattleMoves: ["icebeam", "hiddenpowerground", "protect", "helpinghand", "toxic"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	glaceonmega: {
-		
-	},	
-	sylveonmega: {
-		
-	},
-	*/
 	porygonz: {
 		randomBattleMoves: ["triattack", "shadowball", "icebeam", "thunderbolt", "trick", "nastyplot"],
 		randomDoubleBattleMoves: ["protect", "triattack", "darkpulse", "icebeam", "thunderbolt", "trick", "nastyplot"],
 		tier: "UUBL",
 		doublesTier: "DUU",
 	},
-	/*
-	porygonzmega: {
-		
-	},	
-	*/
 	omastar: {
 		randomBattleMoves: ["shellsmash", "scald", "icebeam", "earthpower", "spikes", "stealthrock", "hydropump"],
 		randomDoubleBattleMoves: ["shellsmash", "muddywater", "icebeam", "earthpower", "hiddenpowerelectric", "protect", "hydropump"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	omastarmega: {
-		
-	},	
-	*/
 	kabutops: {
 		randomBattleMoves: ["aquajet", "stoneedge", "rapidspin", "swordsdance", "liquidation", "knockoff"],
 		randomDoubleBattleMoves: ["aquajet", "stoneedge", "protect", "rockslide", "swordsdance", "liquidation", "knockoff"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	kabutopsmega: {
-		
-	},	
-	*/
 	aerodactyl: {
 		randomBattleMoves: ["stealthrock", "taunt", "honeclaws", "roost", "stoneedge", "earthquake", "dualwingbeat", "pursuit"],
 		randomDoubleBattleMoves: ["wideguard", "stoneedge", "rockslide", "earthquake", "protect", "skydrop", "tailwind"],
@@ -1056,53 +700,24 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DUber",
 	},
-	/*
-	snorlaxmega: {
-		
-	},	
-	*/
 	articuno: {
 		randomBattleMoves: ["icebeam", "roost", "freezedry", "toxic", "substitute", "hurricane"],
 		randomDoubleBattleMoves: ["freezedry", "roost", "protect", "hurricane", "tailwind"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	articunomega: {
-		
-	},	
-	articunogalarmega: {
-		
-	},
-	*/
 	zapdos: {
 		randomBattleMoves: ["thunderbolt", "heatwave", "hiddenpowerice", "roost", "toxic", "uturn", "defog"],
 		randomDoubleBattleMoves: ["thunderbolt", "heatwave", "roost", "hiddenpowerice", "tailwind", "protect"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	zapdosmega: {
-		
-	},	
-	zapdosgalarmega: {
-		
-	},
-	*/
 	moltres: {
 		randomBattleMoves: ["fireblast", "roost", "substitute", "toxic", "willowisp", "hurricane"],
 		randomDoubleBattleMoves: ["fireblast", "airslash", "protect", "uturn", "willowisp", "hurricane", "heatwave", "tailwind"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	moltresmega: {
-		
-	},	
-	moltresgalarmega: {
-		
-	},
-	*/
 	dragonite: {
 		randomBattleMoves: ["dragondance", "outrage", "dualwingbeat", "firepunch", "extremespeed", "earthquake", "roost"],
 		randomDoubleBattleMoves: ["dragondance", "firepunch", "extremespeed", "dragonclaw", "roost", "superpower", "protect", "fly"],
@@ -1139,11 +754,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "DOU",
 	},
-	/*
-	mewmega: {
-		
-	},	
-	*/
 	meganium: {
 		randomBattleMoves: ["reflect", "lightscreen", "aromatherapy", "leechseed", "toxic", "gigadrain", "synthesis", "dragontail"],
 		randomDoubleBattleMoves: ["leechseed", "leafstorm", "energyball", "dragontail", "healpulse", "toxic", "protect"],
@@ -1186,33 +796,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	furretmega: {
-		
-	},	
-	*/
 	noctowl: {
 		randomBattleMoves: ["roost", "whirlwind", "nightshade", "toxic", "defog", "hurricane", "heatwave"],
 		randomDoubleBattleMoves: ["roost", "tailwind", "airslash", "hypervoice", "heatwave", "protect", "hypnosis"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	noctowlmega: {
-		
-	},	
-	*/
 	ledian: {
 		randomBattleMoves: ["roost", "lightscreen", "encore", "reflect", "knockoff", "toxic", "uturn"],
 		randomDoubleBattleMoves: ["protect", "lightscreen", "encore", "reflect", "knockoff", "bugbuzz", "uturn", "tailwind"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	ledianmega: {
-		
-	},	
-	*/
 	ariados: {
 		randomBattleMoves: ["megahorn", "toxicspikes", "poisonjab", "suckerpunch", "stickyweb"],
 		randomDoubleBattleMoves: ["protect", "megahorn", "toxicthread", "poisonjab", "stickyweb", "ragepowder"],
@@ -1231,33 +826,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	lanturnmega: {
-		
-	},	
-	*/
 	togekiss: {
 		randomBattleMoves: ["roost", "thunderwave", "nastyplot", "airslash", "aurasphere", "healbell", "defog"],
 		randomDoubleBattleMoves: ["roost", "thunderwave", "nastyplot", "airslash", "followme", "dazzlinggleam", "tailwind", "protect"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
-	/*
-	togekissmega: {
-		
-	},	
-	*/
 	xatu: {
 		randomBattleMoves: ["thunderwave", "toxic", "roost", "psychic", "uturn", "reflect", "calmmind", "heatwave"],
 		randomDoubleBattleMoves: ["thunderwave", "tailwind", "roost", "psychic", "uturn", "heatwave", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	xatumega: {
-		
-	},	
-	*/
 	ampharos: {
 		randomBattleMoves: ["voltswitch", "reflect", "lightscreen", "focusblast", "thunderbolt", "toxic", "healbell", "hiddenpowerice"],
 		randomDoubleBattleMoves: ["focusblast", "hiddenpowerice", "thunderbolt", "protect", "thunderwave"],
@@ -1276,76 +856,41 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	/*
-	azumarillmega: {
-		
-	},	
-	*/
 	sudowoodo: {
 		randomBattleMoves: ["headsmash", "earthquake", "suckerpunch", "woodhammer", "toxic", "stealthrock"],
 		randomDoubleBattleMoves: ["headsmash", "stompingtantrum", "suckerpunch", "woodhammer", "stealthrock", "helpinghand", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	sudowoodomega: {
-		
-	},	
-	*/
 	jumpluff: {
 		randomBattleMoves: ["swordsdance", "sleeppowder", "uturn", "encore", "toxic", "acrobatics", "leechseed", "seedbomb", "substitute", "strengthsap"],
 		randomDoubleBattleMoves: ["encore", "sleeppowder", "uturn", "helpinghand", "leechseed", "energyball", "ragepowder", "protect", "strengthsap"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	jumpluffmega: {
-		
-	},	
-	*/
 	ambipom: {
 		randomBattleMoves: ["fakeout", "return", "knockoff", "uturn", "switcheroo", "seedbomb", "lowkick"],
 		randomDoubleBattleMoves: ["fakeout", "return", "knockoff", "uturn", "icepunch", "lowkick", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	ambipommega: {
-		
-	},	
-	*/
 	sunflora: {
 		randomBattleMoves: ["sunnyday", "gigadrain", "solarbeam", "hiddenpowerfire", "earthpower"],
 		randomDoubleBattleMoves: ["sunnyday", "energyball", "solarbeam", "hiddenpowerfire", "earthpower", "protect", "helpinghand", "encore"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	sunfloramega: {
-		
-	},	
-	*/
 	yanmega: {
 		randomBattleMoves: ["bugbuzz", "airslash", "uturn", "protect", "gigadrain"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	yanmegamega: {
-		
-	},	
-	*/
 	quagsire: {
 		randomBattleMoves: ["recover", "earthquake", "scald", "toxic", "encore", "icebeam"],
 		randomDoubleBattleMoves: ["icywind", "earthquake", "scald", "recover", "toxic", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	quagsiremega: {
-		
-	},	
-	*/
 	murkrow: {
 		randomBattleMoves: ["haze", "roost", "partingshot", "taunt", "foulplay"],
 		tier: "(PU)",
@@ -1383,99 +928,54 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	unownmega: {
-		
-	},	
-	*/
 	wobbuffet: {
 		randomBattleMoves: ["counter", "mirrorcoat", "encore", "destinybond", "safeguard"],
 		randomDoubleBattleMoves: ["counter", "mirrorcoat", "encore", "charm"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	wobbuffetmega: {
-		
-	},	
-	*/
 	girafarig: {
 		randomBattleMoves: ["psychic", "psyshock", "thunderbolt", "nastyplot", "substitute", "hypervoice"],
 		randomDoubleBattleMoves: ["psychic", "psyshock", "thunderbolt", "nastyplot", "protect", "hypervoice"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	girafarigmega: {
-		
-	},	
-	*/
 	forretress: {
 		randomBattleMoves: ["rapidspin", "toxic", "spikes", "voltswitch", "stealthrock", "gyroball"],
 		randomDoubleBattleMoves: ["toxic", "voltswitch", "stealthrock", "gyroball", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	forretressmega: {
-		
-	},	
-	*/
 	dunsparce: {
 		randomBattleMoves: ["bodyslam", "rockslide", "bite", "coil", "glare", "headbutt", "roost"],
 		randomDoubleBattleMoves: ["coil", "rockslide", "bite", "headbutt", "glare", "bodyslam", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dunsparcemega: {
-		
-	},	
-	*/
 	gliscor: {
 		randomBattleMoves: ["roost", "taunt", "earthquake", "protect", "toxic", "stealthrock", "knockoff", "uturn"],
 		randomDoubleBattleMoves: ["tailwind", "taunt", "earthquake", "protect", "facade", "knockoff"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	gliscormega: {
-		
-	},	
-	*/
 	granbull: {
 		randomBattleMoves: ["thunderwave", "playrough", "crunch", "earthquake", "healbell"],
 		randomDoubleBattleMoves: ["thunderwave", "playrough", "stompingtantrum", "snarl", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	granbullmega: {
-		
-	},	
-	*/
 	qwilfish: {
 		randomBattleMoves: ["toxicspikes", "liquidation", "spikes", "painsplit", "thunderwave", "taunt", "destinybond"],
 		randomDoubleBattleMoves: ["poisonjab", "liquidation", "swordsdance", "protect", "thunderwave", "taunt", "destinybond"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	qwilfishmega: {
-		
-	},	
-	*/
 	shuckle: {
 		randomBattleMoves: ["toxic", "encore", "stealthrock", "knockoff", "stickyweb", "infestation"],
 		randomDoubleBattleMoves: ["encore", "stealthrock", "knockoff", "stickyweb", "guardsplit", "toxic", "helpinghand"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	shucklemega: {
-		
-	},	
-	*/
 	heracross: {
 		randomBattleMoves: ["closecombat", "megahorn", "stoneedge", "swordsdance", "knockoff", "earthquake"],
 		randomDoubleBattleMoves: ["closecombat", "megahorn", "facade", "swordsdance", "knockoff", "protect"],
@@ -1494,22 +994,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UUBL",
 		doublesTier: "DUU",
 	},
-	/*
-	weavilemega: {
-		
-	},	
-	*/
 	ursaring: {
 		randomBattleMoves: ["swordsdance", "facade", "closecombat", "crunch", "protect"],
 		randomDoubleBattleMoves: ["swordsdance", "facade", "closecombat", "crunch", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	ursaringmega: {
-		
-	},	
-	*/
 	magcargo: {
 		randomBattleMoves: ["recover", "lavaplume", "toxic", "hiddenpowergrass", "stealthrock", "fireblast", "earthpower", "shellsmash", "ancientpower"],
 		randomDoubleBattleMoves: ["protect", "heatwave", "willowisp", "stealthrock", "fireblast", "incinerate", "earthpower"],
@@ -1528,36 +1018,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "DUU",
 	},
-	/*
-	mamoswinemega: {
-		
-	},	
-	*/
 	corsola: {
 		randomBattleMoves: ["recover", "toxic", "powergem", "scald", "stealthrock"],
 		randomDoubleBattleMoves: ["protect", "icywind", "powergem", "scald", "stealthrock", "toxic"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	corsolamega: {
-		
-	},	
-	cursolamega: {
-		
-	},
-	*/
 	octillery: {
 		randomBattleMoves: ["hydropump", "fireblast", "icebeam", "energyball", "rockblast", "gunkshot", "scald"],
 		randomDoubleBattleMoves: ["hydropump", "fireblast", "icebeam", "energyball", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	octillerymega: {
-		
-	},	
-	*/
 	delibird: {
 		randomBattleMoves: ["spikes", "rapidspin", "icywind", "freezedry", "destinybond"],
 		randomDoubleBattleMoves: ["fakeout", "iceshard", "icepunch", "aerialace", "brickbreak", "protect"],
@@ -1582,22 +1054,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	mantinemega: {
-		
-	},	
-	*/
 	skarmory: {
 		randomBattleMoves: ["whirlwind", "bravebird", "roost", "spikes", "stealthrock", "defog"],
 		randomDoubleBattleMoves: ["skydrop", "bravebird", "tailwind", "taunt", "feint", "protect", "ironhead", "stealthrock"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	skarmorymega: {
-		
-	},	
-	*/
 	houndoom: {
 		randomBattleMoves: ["nastyplot", "darkpulse", "suckerpunch", "fireblast", "hiddenpowergrass"],
 		randomDoubleBattleMoves: ["nastyplot", "darkpulse", "suckerpunch", "heatwave", "protect"],
@@ -1616,77 +1078,42 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	donphanmega: {
-		
-	},	
-	*/
 	stantler: {
 		randomBattleMoves: ["doubleedge", "megahorn", "jumpkick", "earthquake", "suckerpunch"],
 		randomDoubleBattleMoves: ["return", "megahorn", "jumpkick", "earthquake", "suckerpunch", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	stantlermega: {
-		
-	},	
-	*/
 	smeargle: {
 		randomBattleMoves: ["spore", "stealthrock", "destinybond", "whirlwind", "stickyweb"],
 		randomDoubleBattleMoves: ["spore", "fakeout", "wideguard", "helpinghand", "followme", "tailwind", "kingsshield", "transform", "stickyweb"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	smearglemega: {
-		
-	},	
-	*/
 	miltank: {
 		randomBattleMoves: ["milkdrink", "stealthrock", "bodyslam", "healbell", "curse", "earthquake", "toxic"],
 		randomDoubleBattleMoves: ["protect", "helpinghand", "bodyslam", "milkdrink", "curse", "stompingtantrum", "thunderwave"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	miltankmega: {
-		
-	},	
-	*/
 	raikou: {
 		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "aurasphere", "calmmind", "substitute", "voltswitch", "extrasensory"],
 		randomDoubleBattleMoves: ["thunderbolt", "hiddenpowerice", "calmmind", "snarl", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	raikoumega: {
-		
-	},	
-	*/
 	entei: {
 		randomBattleMoves: ["extremespeed", "flareblitz", "stompingtantrum", "stoneedge", "sacredfire"],
 		randomDoubleBattleMoves: ["extremespeed", "flareblitz", "stoneedge", "sacredfire", "protect", "stompingtantrum"],
 		tier: "RUBL",
 		doublesTier: "DUU",
 	},
-	/*
-	enteimega: {
-		
-	},	
-	*/
 	suicune: {
 		randomBattleMoves: ["hydropump", "icebeam", "scald", "hiddenpowergrass", "rest", "sleeptalk", "calmmind"],
 		randomDoubleBattleMoves: ["icebeam", "scald", "snarl", "tailwind", "toxic"],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
-	/*
-	suicunemega: {
-		
-	},	
-	*/
 	tyranitar: {
 		randomBattleMoves: ["crunch", "stoneedge", "pursuit", "earthquake", "fireblast", "icebeam", "stealthrock"],
 		randomDoubleBattleMoves: ["crunch", "stoneedge", "rockslide", "stompingtantrum", "fireblast", "icebeam", "stealthrock", "protect"],
@@ -1705,35 +1132,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	/*
-	lugiamega: {
-		tier: "Uber",
-		doublesTier: "DUber", 
-	},	
-	*/
 	hooh: {
 		randomBattleMoves: ["bravebird", "defog", "earthquake", "roost", "sacredfire", "substitute", "toxic"],
 		randomDoubleBattleMoves: ["sacredfire", "bravebird", "earthpower", "roost", "toxic", "tailwind", "skydrop", "protect"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	/*
-	hoohmega: {
-		tier: "Uber",
-		doublesTier: "DUber",
-	},	
-	*/
 	celebi: {
 		randomBattleMoves: ["nastyplot", "psychic", "gigadrain", "recover", "earthpower", "hiddenpowerfire", "leafstorm", "uturn", "thunderwave"],
 		randomDoubleBattleMoves: ["protect", "psychic", "energyball", "recover", "earthpower", "nastyplot", "uturn", "thunderwave"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	celebimega: {
-		
-	},	
-	*/
 	sceptile: {
 		randomBattleMoves: ["gigadrain", "leafstorm", "hiddenpowerice", "focusblast"],
 		randomDoubleBattleMoves: ["energyball", "focusblast", "hiddenpowerfire", "protect"],
@@ -1774,88 +1184,48 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	mightyenamega: {
-		
-	},	
-	*/
 	linoone: {
 		randomBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "shadowclaw"],
 		randomDoubleBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "protect", "shadowclaw"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	linoonemega: {
-		
-	},	
-	*/
 	beautifly: {
 		randomBattleMoves: ["quiverdance", "bugbuzz", "psychic", "energyball", "hiddenpowerfighting"],
 		randomDoubleBattleMoves: ["quiverdance", "bugbuzz", "aircutter", "tailwind", "stringshot", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	beautiflymega: {
-		
-	},	
-	*/
 	dustox: {
 		randomBattleMoves: ["roost", "defog", "bugbuzz", "sludgebomb", "quiverdance", "uturn"],
 		randomDoubleBattleMoves: ["tailwind", "stringshot", "strugglebug", "bugbuzz", "protect", "sludgebomb"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dustoxmega: {
-		
-	},	
-	*/
 	ludicolo: {
 		randomBattleMoves: ["raindance", "hydropump", "scald", "gigadrain", "icebeam", "focusblast"],
 		randomDoubleBattleMoves: ["raindance", "hydropump", "gigadrain", "icebeam", "fakeout", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	ludicolomega: {
-		
-	},	
-	*/
 	shiftry: {
 		randomBattleMoves: ["leafstorm", "swordsdance", "leafblade", "suckerpunch", "defog", "lowkick", "knockoff"],
 		randomDoubleBattleMoves: ["leafstorm", "swordsdance", "leafblade", "suckerpunch", "knockoff", "fakeout", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	shiftrymega: {
-		
-	},	
-	*/
 	swellow: {
 		randomBattleMoves: ["protect", "facade", "bravebird", "uturn", "quickattack"],
 		randomDoubleBattleMoves: ["bravebird", "facade", "quickattack", "uturn", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	swellowmega: {
-		
-	},	
-	*/
 	pelipper: {
 		randomBattleMoves: ["scald", "hurricane", "hydropump", "uturn", "roost", "defog", "knockoff"],
 		randomDoubleBattleMoves: ["scald", "hurricane", "wideguard", "protect", "tailwind", "uturn"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	pelippermega: {
-		
-	},	
-	*/
 	gardevoir: {
 		randomBattleMoves: ["psychic", "thunderbolt", "focusblast", "shadowball", "moonblast", "calmmind", "substitute", "willowisp"],
 		randomDoubleBattleMoves: ["psyshock", "focusblast", "moonblast", "helpinghand", "protect", "dazzlinggleam"],
@@ -1886,99 +1256,54 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	masquerainmega: {
-		
-	},	
-	*/
 	breloom: {
 		randomBattleMoves: ["spore", "machpunch", "bulletseed", "rocktomb", "swordsdance"],
 		randomDoubleBattleMoves: ["spore", "machpunch", "bulletseed", "rocktomb", "protect"],
 		tier: "UUBL",
 		doublesTier: "DUU",
 	},
-	/*
-	breloommega: {
-		
-	},	
-	*/
 	slaking: {
 		randomBattleMoves: ["earthquake", "pursuit", "nightslash", "retaliate", "gigaimpact", "firepunch"],
 		randomDoubleBattleMoves: ["earthquake", "nightslash", "doubleedge", "retaliate", "hammerarm", "rockslide"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	slakingmega: {
-		
-	},	
-	*/
 	ninjask: {
 		randomBattleMoves: ["swordsdance", "aerialace", "nightslash", "dig", "leechlife", "uturn"],
 		randomDoubleBattleMoves: ["swordsdance", "protect", "leechlife", "aerialace", "dig"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	ninjaskmega: {
-		
-	},	
-	*/
 	shedinja: {
 		randomBattleMoves: ["swordsdance", "willowisp", "xscissor", "shadowsneak", "shadowclaw"],
 		randomDoubleBattleMoves: ["swordsdance", "willowisp", "xscissor", "shadowsneak", "allyswitch", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	shedinjamega: {
-		
-	},	
-	*/
 	exploud: {
 		randomBattleMoves: ["boomburst", "fireblast", "icebeam", "surf", "focusblast"],
 		randomDoubleBattleMoves: ["boomburst", "fireblast", "icebeam", "focusblast", "protect", "hypervoice"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	exploudmega: {
-		
-	},	
-	*/
 	hariyama: {
 		randomBattleMoves: ["bulletpunch", "closecombat", "icepunch", "stoneedge", "bulkup", "knockoff"],
 		randomDoubleBattleMoves: ["bulletpunch", "closecombat", "facade", "fakeout", "knockoff", "helpinghand", "wideguard", "protect"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
-	/*
-	hariyamamega: {
-		
-	},	
-	*/
 	probopass: {
 		randomBattleMoves: ["stealthrock", "thunderwave", "toxic", "flashcannon", "voltswitch", "earthpower"],
 		randomDoubleBattleMoves: ["stealthrock", "thunderwave", "helpinghand", "powergem", "wideguard", "protect", "flashcannon"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	probopassmega: {
-		
-	},	
-	*/
 	delcatty: {
 		randomBattleMoves: ["doubleedge", "suckerpunch", "wildcharge", "fakeout", "thunderwave", "healbell"],
 		randomDoubleBattleMoves: ["doubleedge", "suckerpunch", "fakeout", "thunderwave", "protect", "helpinghand"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	delcattymega: {
-		
-	},	
-	*/
 	sableye: {
 		randomBattleMoves: ["recover", "willowisp", "taunt", "toxic", "knockoff", "foulplay"],
 		randomDoubleBattleMoves: ["recover", "willowisp", "taunt", "fakeout", "foulplay", "helpinghand", "snarl", "protect"],
@@ -2045,66 +1370,36 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	pluslemega: {
-		
-	},	
-	*/
 	minun: {
 		randomBattleMoves: ["nastyplot", "thunderbolt", "substitute", "hiddenpowerice", "encore"],
 		randomDoubleBattleMoves: ["nastyplot", "thunderbolt", "protect", "hiddenpowerice", "encore", "helpinghand"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	minunmega: {
-		
-	},	
-	*/
 	volbeat: {
 		randomBattleMoves: ["uturn", "roost", "thunderwave", "encore", "tailwind", "defog"],
 		randomDoubleBattleMoves: ["stringshot", "strugglebug", "helpinghand", "thunderwave", "encore", "tailwind", "protect", "uturn"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	volbeatmega: {
-		
-	},	
-	*/
 	illumise: {
 		randomBattleMoves: ["uturn", "roost", "bugbuzz", "thunderwave", "encore", "wish", "defog"],
 		randomDoubleBattleMoves: ["protect", "helpinghand", "bugbuzz", "encore", "thunderwave", "tailwind"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	illumisemega: {
-		
-	},	
-	*/
 	roserade: {
 		randomBattleMoves: ["sludgebomb", "gigadrain", "sleeppowder", "leafstorm", "spikes", "toxicspikes", "synthesis", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["sludgebomb", "gigadrain", "sleeppowder", "leafstorm", "protect", "hiddenpowerfire"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	roserademega: {
-		
-	},	
-	*/
 	swalot: {
 		randomBattleMoves: ["sludgebomb", "icebeam", "toxic", "yawn", "encore", "painsplit", "earthquake"],
 		randomDoubleBattleMoves: ["sludgebomb", "icebeam", "protect", "yawn", "encore", "poisongas"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	swalotmega: {
-		
-	},	
-	*/
 	sharpedo: {
 		randomBattleMoves: ["protect", "icebeam", "crunch", "earthquake", "waterfall"],
 		randomDoubleBattleMoves: ["protect", "icebeam", "crunch", "liquidation", "psychicfangs"],
@@ -2123,11 +1418,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	wailordmega: {
-		
-	},	
-	*/
 	camerupt: {
 		randomBattleMoves: ["rockpolish", "fireblast", "earthpower", "lavaplume", "stealthrock", "hiddenpowergrass", "roar", "stoneedge"],
 		randomDoubleBattleMoves: ["fireblast", "earthpower", "heatwave", "incinerate", "protect", "stealthrock"],
@@ -2146,33 +1436,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "DUU",
 	},
-	/*
-	torkoalmega: {
-		
-	},	
-	*/
 	grumpig: {
 		randomBattleMoves: ["psychic", "thunderwave", "healbell", "whirlwind", "toxic", "focusblast", "reflect", "lightscreen"],
 		randomDoubleBattleMoves: ["psychic", "thunderwave", "taunt", "protect", "focusblast", "reflect", "lightscreen"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	grumpigmega: {
-		
-	},	
-	*/
 	spinda: {
 		randomBattleMoves: ["return", "superpower", "rockslide", "encore"],
 		randomDoubleBattleMoves: ["return", "superpower", "suckerpunch", "trickroom", "fakeout", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	spindamega: {
-		
-	},	
-	*/
 	flygon: {
 		randomBattleMoves: ["earthquake", "outrage", "uturn", "roost", "defog", "firepunch", "dragondance"],
 		randomDoubleBattleMoves: ["earthquake", "protect", "dragonclaw", "uturn", "fireblast", "tailwind", "dragondance"],
@@ -2191,11 +1466,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	cacturnemega: {
-		
-	},	
-	*/
 	altaria: {
 		randomBattleMoves: ["dracometeor", "fireblast", "earthquake", "roost", "toxic", "defog"],
 		randomDoubleBattleMoves: ["dracometeor", "protect", "dragonclaw", "fireblast", "tailwind"],
@@ -2214,119 +1484,64 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	zangoosemega: {
-		
-	},	
-	*/
 	seviper: {
 		randomBattleMoves: ["flamethrower", "sludgewave", "gigadrain", "darkpulse", "switcheroo", "swordsdance", "earthquake", "poisonjab", "suckerpunch"],
 		randomDoubleBattleMoves: ["flamethrower", "gigadrain", "earthquake", "suckerpunch", "aquatail", "protect", "glare", "poisonjab", "sludgebomb"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	sevipermega: {
-		
-	},	
-	*/
 	lunatone: {
 		randomBattleMoves: ["psychic", "earthpower", "stealthrock", "rockpolish", "calmmind", "icebeam", "powergem", "moonlight", "toxic"],
 		randomDoubleBattleMoves: ["psychic", "earthpower", "helpinghand", "powergem", "protect", "trickroom"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	lunatonemega: {
-		
-	},	
-	*/
 	solrock: {
 		randomBattleMoves: ["stealthrock", "explosion", "rockslide", "reflect", "lightscreen", "willowisp", "morningsun"],
 		randomDoubleBattleMoves: ["protect", "helpinghand", "stoneedge", "zenheadbutt", "willowisp", "stealthrock", "rockslide"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	solrockmega: {
-		
-	},	
-	*/
 	whiscash: {
 		randomBattleMoves: ["dragondance", "waterfall", "earthquake", "stoneedge", "zenheadbutt"],
 		randomDoubleBattleMoves: ["dragondance", "waterfall", "earthquake", "stoneedge", "zenheadbutt", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	whiscashmega: {
-		
-	},	
-	*/
 	crawdaunt: {
 		randomBattleMoves: ["dragondance", "crabhammer", "superpower", "swordsdance", "knockoff", "aquajet"],
 		randomDoubleBattleMoves: ["dragondance", "crabhammer", "superpower", "swordsdance", "knockoff", "aquajet", "protect"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
-	/*
-	crawdauntmega: {
-		
-	},	
-	*/
 	claydol: {
 		randomBattleMoves: ["stealthrock", "toxic", "psychic", "icebeam", "earthquake", "rapidspin"],
 		randomDoubleBattleMoves: ["allyswitch", "earthpower", "stealthrock", "rapidspin", "toxic", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	claydolmega: {
-		
-	},	
-	*/
 	cradily: {
 		randomBattleMoves: ["stealthrock", "recover", "gigadrain", "toxic", "seedbomb", "rockslide", "curse"],
 		randomDoubleBattleMoves: ["protect", "recover", "gigadrain", "rockslide", "stealthrock", "toxic", "stringshot"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	cradilymega: {
-		
-	},	
-	*/
 	armaldo: {
 		randomBattleMoves: ["stealthrock", "stoneedge", "toxic", "xscissor", "knockoff", "rapidspin", "earthquake"],
 		randomDoubleBattleMoves: ["rockslide", "stoneedge", "stringshot", "xscissor", "swordsdance", "knockoff", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	armaldomega: {
-		
-	},	
-	*/
 	milotic: {
 		randomBattleMoves: ["recover", "scald", "toxic", "icebeam", "dragontail", "rest", "sleeptalk"],
 		randomDoubleBattleMoves: ["hypnosis", "scald", "icywind", "recover", "protect"],
 		tier: "RU",
 		doublesTier: "DOU",
 	},
-	/*
-	miloticmega: {
-		
-	},	
-	*/
 	castform: {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	castformmega: {
-		
-	},	
-	*/
 	castformsunny: {
 		randomBattleMoves: ["sunnyday", "fireblast", "solarbeam", "icebeam"],
 	},
@@ -2342,11 +1557,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	kecleonmega: {
-		
-	},	
-	*/
 	banette: {
 		randomBattleMoves: ["destinybond", "taunt", "shadowclaw", "suckerpunch", "willowisp", "shadowsneak", "knockoff"],
 		randomDoubleBattleMoves: ["shadowclaw", "willowisp", "shadowsneak", "knockoff", "protect"],
@@ -2365,33 +1575,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dusknoirmega: {
-		
-	},	
-	*/
 	tropius: {
 		randomBattleMoves: ["leechseed", "substitute", "airslash", "gigadrain", "toxic", "protect"],
 		randomDoubleBattleMoves: ["leechseed", "protect", "airslash", "gigadrain", "tailwind", "roost"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	tropiusmega: {
-		
-	},	
-	*/
 	chimecho: {
 		randomBattleMoves: ["psychic", "yawn", "recover", "calmmind", "shadowball", "healingwish", "healbell", "taunt"],
 		randomDoubleBattleMoves: ["protect", "psychic", "thunderwave", "recover", "trickroom", "helpinghand", "taunt"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	chimechomega: {
-		
-	},	
-	*/
 	absol: {
 		randomBattleMoves: ["swordsdance", "suckerpunch", "knockoff", "superpower", "pursuit", "playrough"],
 		randomDoubleBattleMoves: ["swordsdance", "suckerpunch", "knockoff", "superpower", "protect", "playrough"],
@@ -2440,44 +1635,24 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	huntailmega: {
-		
-	},	
-	*/
 	gorebyss: {
 		randomBattleMoves: ["shellsmash", "hydropump", "icebeam", "hiddenpowergrass", "substitute"],
 		randomDoubleBattleMoves: ["shellsmash", "hydropump", "icebeam", "hiddenpowergrass", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	gorebyssmega: {
-		
-	},	
-	*/
 	relicanth: {
 		randomBattleMoves: ["headsmash", "waterfall", "earthquake", "doubleedge", "stealthrock", "toxic"],
 		randomDoubleBattleMoves: ["headsmash", "waterfall", "earthquake", "doubleedge", "rockslide", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	relicanthmega: {
-		
-	},	
-	*/
 	luvdisc: {
 		randomBattleMoves: ["icebeam", "toxic", "sweetkiss", "protect", "scald"],
 		randomDoubleBattleMoves: ["icebeam", "toxic", "sweetkiss", "protect", "scald", "icywind", "healpulse"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	luvdiscmega: {
-		
-	},	
-	*/
 	salamence: {
 		randomBattleMoves: ["outrage", "fireblast", "earthquake", "dracometeor", "dragondance", "fly", "roost"],
 		randomDoubleBattleMoves: ["protect", "fireblast", "earthquake", "dracometeor", "tailwind", "dragondance", "dragonclaw", "fly"],
@@ -2589,7 +1764,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	rayquazamega: {
-		//randomBattleMoves: ["vcreate", "extremespeed", "swordsdance", "earthquake", "dragonascent", "dragonclaw", "dragondance"],
+		// randomBattleMoves: ["vcreate", "extremespeed", "swordsdance", "earthquake", "dragonascent", "dragonclaw", "dragondance"],
 		randomDoubleBattleMoves: ["vcreate", "extremespeed", "swordsdance", "earthquake", "dragonascent", "dragonclaw", "dragondance", "protect"],
 		tier: "AG",
 		doublesTier: "DUber",
@@ -2600,22 +1775,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUber",
 	},
-	/*
-	jirachimega: {
-		
-	},	
-	*/
 	deoxys: {
 		randomBattleMoves: ["psychoboost", "stealthrock", "spikes", "firepunch", "superpower", "extremespeed", "knockoff", "taunt"],
 		randomDoubleBattleMoves: ["psychoboost", "superpower", "extremespeed", "icebeam", "firepunch", "protect", "knockoff"],
 		tier: "Uber",
 		doublesTier: "(DUU)",
 	},
-	/*
-	deoxysmega: {
-		
-	},	
-	*/
 	deoxysattack: {
 		randomBattleMoves: ["psychoboost", "superpower", "icebeam", "knockoff", "extremespeed", "firepunch", "stealthrock"],
 		randomDoubleBattleMoves: ["psychoboost", "superpower", "extremespeed", "icebeam", "firepunch", "protect", "knockoff"],
@@ -2640,33 +1805,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	torterramega: {
-		
-	},	
-	*/
 	infernape: {
 		randomBattleMoves: ["stealthrock", "uturn", "closecombat", "flareblitz", "stoneedge", "machpunch", "nastyplot", "fireblast", "focusblast", "vacuumwave", "grassknot"],
 		randomDoubleBattleMoves: ["fakeout", "heatwave", "closecombat", "uturn", "grassknot", "stoneedge", "feint", "taunt", "flareblitz", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	infernapemega: {
-		
-	},	
-	*/
 	empoleon: {
 		randomBattleMoves: ["hydropump", "flashcannon", "grassknot", "defog", "icebeam", "scald", "toxic", "roar", "stealthrock"],
 		randomDoubleBattleMoves: ["icywind", "scald", "protect", "grassknot", "flashcannon", "defog"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	empoleonmega: {
-		
-	},	
-	*/
 	staraptor: {
 		randomBattleMoves: ["bravebird", "closecombat", "uturn", "quickattack", "doubleedge"],
 		randomDoubleBattleMoves: ["bravebird", "closecombat", "uturn", "quickattack", "doubleedge", "tailwind", "protect"],
@@ -2721,11 +1871,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	rampardosmega: {
-		
-	},	
-	*/
 	bastiodon: {
 		randomBattleMoves: ["stealthrock", "rockblast", "metalburst", "protect", "toxic", "roar"],
 		randomDoubleBattleMoves: ["stealthrock", "stoneedge", "metalburst", "protect", "wideguard", "guardsplit"],
@@ -2744,77 +1889,42 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	wormadammega: {
-		
-	},	
-	*/
 	wormadamsandy: {
 		randomBattleMoves: ["earthquake", "toxic", "protect", "stealthrock"],
 		randomDoubleBattleMoves: ["earthquake", "suckerpunch", "rockblast", "protect", "stringshot"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	wormadamsandymega: {
-		
-	},	
-	*/
 	wormadamtrash: {
 		randomBattleMoves: ["stealthrock", "toxic", "gyroball", "protect"],
 		randomDoubleBattleMoves: ["strugglebug", "stringshot", "bugbuzz", "flashcannon", "suckerpunch", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	wormadamtrashmega: {
-		
-	},	
-	*/
 	mothim: {
 		randomBattleMoves: ["quiverdance", "bugbuzz", "airslash", "energyball", "uturn"],
 		randomDoubleBattleMoves: ["quiverdance", "bugbuzz", "airslash", "energyball", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	mothimmega: {
-		
-	},	
-	*/
 	vespiquen: {
 		randomBattleMoves: ["toxic", "protect", "roost", "infestation", "uturn"],
 		randomDoubleBattleMoves: ["tailwind", "healorder", "stringshot", "attackorder", "strugglebug", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	vespiquenmega: {
-		
-	},	
-	*/
 	pachirisu: {
 		randomBattleMoves: ["nuzzle", "thunderbolt", "superfang", "toxic", "uturn"],
 		randomDoubleBattleMoves: ["nuzzle", "thunderbolt", "superfang", "followme", "uturn", "helpinghand", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	pachirisumega: {
-		
-	},	
-	*/
 	floatzel: {
 		randomBattleMoves: ["bulkup", "liquidation", "icepunch", "substitute", "taunt", "aquajet", "brickbreak"],
 		randomDoubleBattleMoves: ["liquidation", "aquajet", "switcheroo", "protect", "icepunch", "taunt"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	floatzelmega: {
-		
-	},	
-	*/
 	cherrim: {
 		randomBattleMoves: ["energyball", "dazzlinggleam", "hiddenpowerfire", "synthesis", "healingwish"],
 		tier: "(PU)",
@@ -2824,33 +1934,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["sunnyday", "solarbeam", "gigadrain", "weatherball", "hiddenpowerice"],
 		randomDoubleBattleMoves: ["sunnyday", "solarbeam", "gigadrain", "weatherball", "helpinghand"],
 	},
-	/*
-	cherrimmega: {
-		
-	},	
-	*/
 	gastrodon: {
 		randomBattleMoves: ["earthquake", "icebeam", "scald", "toxic", "recover", "clearsmog"],
 		randomDoubleBattleMoves: ["earthpower", "scald", "muddywater", "recover", "icywind", "protect"],
 		tier: "PU",
 		doublesTier: "DOU",
 	},
-	/*
-	gastrodonmega: {
-		
-	},	
-	*/
 	drifblim: {
 		randomBattleMoves: ["acrobatics", "willowisp", "substitute", "destinybond", "shadowball", "hex"],
 		randomDoubleBattleMoves: ["acrobatics", "shadowball", "hypnosis", "thunderbolt", "destinybond", "willowisp", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	drifblimmega: {
-		
-	},	
-	*/
 	lopunny: {
 		randomBattleMoves: ["return", "switcheroo", "highjumpkick", "icepunch", "healingwish"],
 		randomDoubleBattleMoves: ["return", "switcheroo", "firepunch", "helpinghand", "fakeout", "protect", "encore", "thunderwave"],
@@ -2869,44 +1964,24 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	puruglymega: {
-		
-	},	
-	*/
 	skuntank: {
 		randomBattleMoves: ["pursuit", "suckerpunch", "crunch", "fireblast", "taunt", "poisonjab", "defog"],
 		randomDoubleBattleMoves: ["protect", "suckerpunch", "crunch", "fireblast", "taunt", "poisonjab", "snarl"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	skuntankmega: {
-		
-	},	
-	*/
 	bronzong: {
 		randomBattleMoves: ["stealthrock", "earthquake", "toxic", "reflect", "lightscreen", "trickroom", "explosion", "gyroball"],
 		randomDoubleBattleMoves: ["earthquake", "protect", "reflect", "lightscreen", "trickroom", "explosion", "gyroball"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
-	/*
-	bronzongmega: {
-		
-	},	
-	*/
 	chatot: {
 		randomBattleMoves: ["nastyplot", "boomburst", "heatwave", "hiddenpowerground", "substitute", "chatter", "uturn"],
 		randomDoubleBattleMoves: ["nastyplot", "heatwave", "encore", "chatter", "uturn", "protect", "hypervoice", "boomburst"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	chatotmega: {
-		
-	},	
-	*/
 	spiritomb: {
 		randomBattleMoves: ["willowisp", "pursuit", "shadowsneak", "calmmind", "darkpulse", "rest", "sleeptalk", "psychic"],
 		randomDoubleBattleMoves: ["shadowsneak", "icywind", "willowisp", "snarl", "protect", "foulplay"],
@@ -2949,11 +2024,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	hippowdonmega: {
-		
-	},	
-	*/
 	drapion: {
 		randomBattleMoves: ["knockoff", "taunt", "toxicspikes", "poisonjab", "whirlwind", "swordsdance", "aquatail", "earthquake"],
 		randomDoubleBattleMoves: ["snarl", "taunt", "protect", "aquatail", "swordsdance", "poisonjab", "knockoff"],
@@ -2972,33 +2042,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	toxicroakmega: {
-		
-	},	
-	*/
 	carnivine: {
 		randomBattleMoves: ["swordsdance", "powerwhip", "return", "sleeppowder", "substitute", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "powerwhip", "return", "sleeppowder", "knockoff", "ragepowder", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	carnivinemega: {
-		
-	},	
-	*/
 	lumineon: {
 		randomBattleMoves: ["scald", "icebeam", "uturn", "toxic", "defog"],
 		randomDoubleBattleMoves: ["uturn", "icebeam", "toxic", "tailwind", "scald", "protect", "defog"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	lumineonmega: {
-		
-	},	
-	*/
 	abomasnow: {
 		randomBattleMoves: ["woodhammer", "iceshard", "blizzard", "gigadrain", "leechseed", "substitute", "focuspunch", "earthquake"],
 		randomDoubleBattleMoves: ["blizzard", "iceshard", "gigadrain", "protect", "woodhammer", "earthquake"],
@@ -3017,11 +2072,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	rotommega: {
-		
-	},	
-	*/
 	rotomheat: {
 		randomBattleMoves: ["overheat", "thunderbolt", "voltswitch", "hiddenpowerice", "painsplit", "willowisp"],
 		randomDoubleBattleMoves: ["overheat", "thunderbolt", "voltswitch", "willowisp", "electroweb", "protect"],
@@ -3058,88 +2108,48 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	uxiemega: {
-		
-	},	
-	*/
 	mesprit: {
 		randomBattleMoves: ["calmmind", "psychic", "psyshock", "energyball", "signalbeam", "hiddenpowerfire", "icebeam", "healingwish", "stealthrock", "uturn"],
 		randomDoubleBattleMoves: ["calmmind", "psychic", "thunderbolt", "icebeam", "uturn", "trick", "protect", "knockoff", "helpinghand"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	mespritmega: {
-		
-	},	
-	*/
 	azelf: {
 		randomBattleMoves: ["nastyplot", "psyshock", "fireblast", "dazzlinggleam", "stealthrock", "knockoff", "taunt", "explosion"],
 		randomDoubleBattleMoves: ["nastyplot", "psychic", "fireblast", "thunderbolt", "knockoff", "uturn", "taunt", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	azelfmega: {
-		
-	},	
-	*/
 	dialga: {
 		randomBattleMoves: ["stealthrock", "toxic", "dracometeor", "fireblast", "flashcannon", "roar", "thunderbolt"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "protect", "thunderbolt", "flashcannon", "earthpower", "fireblast"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	/*
-	dialgamega: {
-		
-	},	
-	*/
 	palkia: {
 		randomBattleMoves: ["spacialrend", "dracometeor", "hydropump", "thunderwave", "dragontail", "fireblast"],
 		randomDoubleBattleMoves: ["spacialrend", "dracometeor", "hydropump", "thunderbolt", "fireblast", "protect"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	/*
-	palkiamega: {
-		
-	},	
-	*/
 	heatran: {
 		randomBattleMoves: ["magmastorm", "lavaplume", "stealthrock", "earthpower", "flashcannon", "protect", "toxic", "roar"],
 		randomDoubleBattleMoves: ["heatwave", "earthpower", "protect", "flashcannon", "willowisp"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	heatranmega: {
-		
-	},	
-	*/
 	regigigas: {
 		randomBattleMoves: ["thunderwave", "confuseray", "substitute", "return", "knockoff", "drainpunch"],
 		randomDoubleBattleMoves: ["thunderwave", "substitute", "return", "icywind", "knockoff", "wideguard"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	regigigasmega: {
-		
-	},	
-	*/
 	giratina: {
 		randomBattleMoves: ["rest", "sleeptalk", "dragontail", "roar", "willowisp", "shadowball", "dragonpulse"],
 		randomDoubleBattleMoves: ["tailwind", "protect", "dragontail", "willowisp", "calmmind", "dragonpulse", "shadowball"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	/*
-	giratinamega: {
-		
-	},	
-	*/
 	giratinaorigin: {
 		randomBattleMoves: ["dracometeor", "shadowsneak", "dragontail", "willowisp", "defog", "toxic", "shadowball", "earthquake"],
 		randomDoubleBattleMoves: ["dracometeor", "shadowsneak", "tailwind", "willowisp", "dragonpulse", "shadowball", "protect"],
@@ -3150,77 +2160,42 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DOU",
 	},
-	/*
-	cresseliamega: {
-		
-	},	
-	*/
 	phione: {
 		randomBattleMoves: ["scald", "knockoff", "uturn", "icebeam", "toxic", "healbell"],
 		randomDoubleBattleMoves: ["scald", "uturn", "helpinghand", "icywind", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	phionemega: {
-		
-	},	
-	*/
 	manaphy: {
 		randomBattleMoves: ["tailglow", "surf", "icebeam", "energyball", "psychic"],
 		randomDoubleBattleMoves: ["tailglow", "surf", "icebeam", "energyball", "protect", "scald", "helpinghand"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	manaphymega: {
-		
-	},	
-	*/
 	darkrai: {
 		randomBattleMoves: ["hypnosis", "darkpulse", "focusblast", "nastyplot", "substitute", "sludgebomb"],
 		randomDoubleBattleMoves: ["darkpulse", "focusblast", "nastyplot", "snarl", "sludgebomb", "protect"],
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
-	/*
-	darkraimega: {
-		
-	},	
-	*/
 	shaymin: {
 		randomBattleMoves: ["seedflare", "earthpower", "airslash", "psychic", "rest", "substitute", "leechseed"],
 		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "rest", "substitute", "leechseed", "tailwind", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	shayminmega: {
-		
-	},	
-	*/
 	shayminsky: {
 		randomBattleMoves: ["seedflare", "airslash", "earthpower", "hiddenpowerice", "substitute", "leechseed"],
 		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "rest", "tailwind", "protect", "hiddenpowerice"],
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
-	/*
-	shayminskymega: {
-		
-	},	
-	*/
 	arceus: {
 		randomBattleMoves: ["swordsdance", "extremespeed", "shadowclaw", "earthquake", "recover"],
 		randomDoubleBattleMoves: ["swordsdance", "extremespeed", "shadowclaw", "earthquake", "recover", "protect"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	/*
-	arceusmega: {
-		
-	},	
-	*/
 	arceusbug: {
 		randomBattleMoves: ["swordsdance", "xscissor", "stoneedge", "recover", "earthquake", "ironhead"],
 		randomDoubleBattleMoves: ["swordsdance", "xscissor", "stoneedge", "recover", "earthquake", "ironhead", "protect"],
@@ -3295,33 +2270,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	victinimega: {
-		
-	},	
-	*/
 	serperior: {
 		randomBattleMoves: ["leafstorm", "dragonpulse", "hiddenpowerfire", "substitute", "leechseed", "glare"],
 		randomDoubleBattleMoves: ["leafstorm", "hiddenpowerfire", "taunt", "dragonpulse", "protect"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	serperiormega: {
-		
-	},	
-	*/
 	emboar: {
 		randomBattleMoves: ["flareblitz", "superpower", "wildcharge", "headsmash", "fireblast", "grassknot", "suckerpunch"],
 		randomDoubleBattleMoves: ["flareblitz", "superpower", "wildcharge", "headsmash", "protect", "heatwave", "rockslide"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	emboarmega: {
-		
-	},	
-	*/
 	samurott: {
 		randomBattleMoves: ["swordsdance", "liquidation", "aquajet", "megahorn", "sacredsword", "hydropump", "icebeam", "grassknot"],
 		randomDoubleBattleMoves: ["hydropump", "aquajet", "icebeam", "scald", "hiddenpowergrass", "taunt", "helpinghand", "protect"],
@@ -3340,99 +2300,54 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	watchogmega: {
-		
-	},	
-	*/
 	stoutland: {
 		randomBattleMoves: ["return", "crunch", "wildcharge", "superpower", "icefang"],
 		randomDoubleBattleMoves: ["return", "wildcharge", "superpower", "crunch", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	stoutlandmega: {
-		
-	},	
-	*/
 	liepard: {
 		randomBattleMoves: ["knockoff", "playrough", "uturn", "copycat", "encore", "thunderwave", "nastyplot", "darkpulse", "substitute"],
 		randomDoubleBattleMoves: ["encore", "thunderwave", "knockoff", "playrough", "uturn", "suckerpunch", "fakeout", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	liepardmega: {
-		
-	},	
-	*/
 	simisage: {
 		randomBattleMoves: ["nastyplot", "gigadrain", "focusblast", "hiddenpowerice", "substitute", "leafstorm", "knockoff", "superpower"],
 		randomDoubleBattleMoves: ["nastyplot", "leafstorm", "hiddenpowerice", "gigadrain", "focusblast", "taunt", "helpinghand", "spikyshield"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	simisagemega: {
-		
-	},	
-	*/
 	simisear: {
 		randomBattleMoves: ["substitute", "nastyplot", "fireblast", "focusblast", "grassknot", "hiddenpowerrock"],
 		randomDoubleBattleMoves: ["nastyplot", "fireblast", "focusblast", "grassknot", "heatwave", "taunt", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	simisearmega: {
-		
-	},	
-	*/
 	simipour: {
 		randomBattleMoves: ["substitute", "nastyplot", "hydropump", "icebeam", "focusblast"],
 		randomDoubleBattleMoves: ["nastyplot", "hydropump", "icebeam", "taunt", "helpinghand", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	simipourmega: {
-		
-	},	
-	*/
 	musharna: {
 		randomBattleMoves: ["calmmind", "psychic", "psyshock", "signalbeam", "moonlight", "healbell", "thunderwave"],
 		randomDoubleBattleMoves: ["trickroom", "thunderwave", "moonlight", "psychic", "helpinghand", "hypnosis", "signalbeam", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	musharnamega: {
-		
-	},	
-	*/
 	unfezant: {
 		randomBattleMoves: ["return", "pluck", "hypnosis", "tailwind", "uturn", "roost", "nightslash"],
 		randomDoubleBattleMoves: ["pluck", "uturn", "return", "protect", "tailwind", "taunt", "roost", "nightslash"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	unfezantmega: {
-		
-	},	
-	*/
 	zebstrika: {
 		randomBattleMoves: ["voltswitch", "hiddenpowergrass", "overheat", "wildcharge", "thunderbolt"],
 		randomDoubleBattleMoves: ["voltswitch", "hiddenpowergrass", "overheat", "wildcharge", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	zebstrikamega: {
-		
-	},	
-	*/
 	gigalith: {
 		randomBattleMoves: ["stealthrock", "rockblast", "earthquake", "explosion", "stoneedge", "superpower"],
 		randomDoubleBattleMoves: ["stealthrock", "rockslide", "stompingtantrum", "stoneedge", "superpower", "wideguard", "protect"],
@@ -3451,22 +2366,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	swoobatmega: {
-		
-	},	
-	*/
 	excadrill: {
 		randomBattleMoves: ["swordsdance", "earthquake", "ironhead", "rockslide", "rapidspin"],
 		randomDoubleBattleMoves: ["swordsdance", "drillrun", "earthquake", "rockslide", "ironhead", "protect"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	excadrillmega: {
-		
-	},	
-	*/
 	audino: {
 		randomBattleMoves: ["wish", "protect", "healbell", "toxic", "thunderwave", "reflect", "lightscreen", "doubleedge"],
 		randomDoubleBattleMoves: ["healpulse", "protect", "trickroom", "thunderwave", "helpinghand", "hypervoice"],
@@ -3497,33 +2402,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	seismitoadmega: {
-		
-	},	
-	*/
 	throh: {
 		randomBattleMoves: ["bulkup", "circlethrow", "icepunch", "stormthrow", "rest", "sleeptalk", "knockoff"],
 		randomDoubleBattleMoves: ["helpinghand", "circlethrow", "icepunch", "stormthrow", "knockoff", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	throhmega: {
-		
-	},	
-	*/
 	sawk: {
 		randomBattleMoves: ["closecombat", "earthquake", "icepunch", "poisonjab", "bulkup", "knockoff"],
 		randomDoubleBattleMoves: ["closecombat", "knockoff", "icepunch", "rockslide", "protect"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	sawkmega: {
-		
-	},	
-	*/
 	leavanny: {
 		randomBattleMoves: ["stickyweb", "swordsdance", "leafblade", "lunge", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "leafblade", "lunge", "protect", "stickyweb"],
@@ -3542,33 +2432,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	scolipedemega: {
-		
-	},	
-	*/
 	whimsicott: {
 		randomBattleMoves: ["encore", "taunt", "leechseed", "uturn", "toxic", "stunspore", "memento", "tailwind", "moonblast", "defog"],
 		randomDoubleBattleMoves: ["encore", "taunt", "substitute", "leechseed", "uturn", "helpinghand", "stunspore", "moonblast", "tailwind", "dazzlinggleam", "gigadrain", "protect", "defog"],
 		tier: "NU",
 		doublesTier: "DOU",
 	},
-	/*
-	whimsicottmega: {
-		
-	},	
-	*/
 	lilligant: {
 		randomBattleMoves: ["sleeppowder", "quiverdance", "petaldance", "gigadrain", "hiddenpowerrock"],
 		randomDoubleBattleMoves: ["quiverdance", "gigadrain", "sleeppowder", "hiddenpowerice", "hiddenpowerrock", "petaldance", "helpinghand", "protect"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	lilligantmega: {
-		
-	},	
-	*/
 	basculin: {
 		randomBattleMoves: ["liquidation", "aquajet", "superpower", "crunch", "headsmash"],
 		randomDoubleBattleMoves: ["liquidation", "aquajet", "superpower", "muddywater", "icebeam", "protect"],
@@ -3581,105 +2456,54 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	basculinmega: {
-		
-	},	
-	*/
 	krookodile: {
 		randomBattleMoves: ["earthquake", "stoneedge", "pursuit", "knockoff", "stealthrock", "superpower"],
 		randomDoubleBattleMoves: ["earthquake", "stoneedge", "protect", "knockoff", "superpower"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
-	/*
-	krookodilemega: {
-		
-	},	
-	*/
 	darmanitan: {
 		randomBattleMoves: ["uturn", "flareblitz", "rockslide", "earthquake", "superpower"],
 		randomDoubleBattleMoves: ["uturn", "flareblitz", "rockslide", "earthquake", "superpower", "protect"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	darmanitanmega: {
-		
-	},	
-	darmanitangalarmega: {
-		
-	},
-	*/
 	maractus: {
 		randomBattleMoves: ["spikes", "gigadrain", "leechseed", "hiddenpowerfire", "toxic", "suckerpunch", "spikyshield"],
 		randomDoubleBattleMoves: ["energyball", "leechseed", "hiddenpowerfire", "helpinghand", "suckerpunch", "spikyshield"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	maractusmega: {
-		
-	},	
-	*/
 	crustle: {
 		randomBattleMoves: ["stealthrock", "spikes", "shellsmash", "earthquake", "rockblast", "xscissor", "stoneedge"],
 		randomDoubleBattleMoves: ["protect", "shellsmash", "earthquake", "rockslide", "xscissor", "stoneedge"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	crustlemega: {
-		
-	},	
-	*/
 	scrafty: {
 		randomBattleMoves: ["dragondance", "icepunch", "highjumpkick", "drainpunch", "rest", "bulkup", "knockoff"],
 		randomDoubleBattleMoves: ["fakeout", "drainpunch", "knockoff", "icepunch", "superfang", "protect"],
 		tier: "NU",
 		doublesTier: "DOU",
 	},
-	/*
-	scraftymega: {
-		
-	},	
-	*/
 	sigilyph: {
 		randomBattleMoves: ["calmmind", "psychic", "psyshock", "heatwave", "roost", "airslash", "icebeam"],
 		randomDoubleBattleMoves: ["psyshock", "heatwave", "airslash", "tailwind", "calmmind", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	sigilyphmega: {
-		
-	},	
-	*/
 	cofagrigus: {
 		randomBattleMoves: ["nastyplot", "trickroom", "shadowball", "hiddenpowerfighting", "willowisp", "haze", "painsplit", "toxicspikes"],
 		randomDoubleBattleMoves: ["nastyplot", "trickroom", "shadowball", "hiddenpowerfighting", "willowisp", "protect"],
 		tier: "NUBL",
 		doublesTier: "DUU",
 	},
-	/*
-	cofagrigusmega: {
-		
-	},	
-	runerigusmega: {
-		
-	},
-	*/
 	carracosta: {
 		randomBattleMoves: ["shellsmash", "aquajet", "liquidation", "stoneedge", "earthquake"],
 		randomDoubleBattleMoves: ["shellsmash", "aquajet", "liquidation", "stoneedge", "earthquake", "protect", "wideguard", "rockslide"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	carracostamega: {
-		
-	},	
-	*/
 	archeops: {
 		randomBattleMoves: ["headsmash", "acrobatics", "stoneedge", "earthquake", "aquatail", "uturn", "endeavor"],
 		randomDoubleBattleMoves: ["stoneedge", "rockslide", "earthpower", "uturn", "acrobatics", "tailwind", "taunt", "protect"],
@@ -3710,22 +2534,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	zoroarkmega: {
-		
-	},	
-	*/
 	cinccino: {
 		randomBattleMoves: ["tailslap", "bulletseed", "rockblast", "knockoff", "uturn"],
 		randomDoubleBattleMoves: ["tailslap", "uturn", "knockoff", "bulletseed", "rockblast", "protect"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	cinccinomega: {
-		
-	},	
-	*/
 	gothitelle: {
 		randomBattleMoves: ["confide", "charm", "taunt", "rest"],
 		randomDoubleBattleMoves: ["psychic", "thunderbolt", "shadowball", "trickroom", "taunt", "healpulse", "protect", "charm"],
@@ -3756,11 +2570,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	swannamega: {
-		
-	},	
-	*/
 	vanilluxe: {
 		randomBattleMoves: ["blizzard", "explosion", "hiddenpowerground", "flashcannon", "autotomize", "freezedry"],
 		randomDoubleBattleMoves: ["blizzard", "taunt", "hiddenpowerground", "flashcannon", "autotomize", "protect", "freezedry"],
@@ -3809,77 +2618,42 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	emolgamega: {
-		
-	},	
-	*/
 	escavalier: {
 		randomBattleMoves: ["megahorn", "pursuit", "ironhead", "knockoff", "swordsdance", "drillrun"],
 		randomDoubleBattleMoves: ["megahorn", "protect", "ironhead", "knockoff", "swordsdance", "drillrun"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	escavaliermega: {
-		
-	},	
-	*/
 	amoonguss: {
 		randomBattleMoves: ["spore", "stunspore", "gigadrain", "clearsmog", "hiddenpowerfire", "synthesis", "sludgebomb", "foulplay"],
 		randomDoubleBattleMoves: ["spore", "stunspore", "gigadrain", "ragepowder", "hiddenpowerfire", "sludgebomb", "protect"],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
-	/*
-	amoongussmega: {
-		
-	},	
-	*/
 	jellicent: {
 		randomBattleMoves: ["scald", "willowisp", "strengthsap", "toxic", "hex", "icebeam", "taunt"],
 		randomDoubleBattleMoves: ["scald", "willowisp", "recover", "trickroom", "shadowball", "icywind", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	jellicentmega: {
-		
-	},	
-	*/
 	alomomola: {
 		randomBattleMoves: ["wish", "protect", "knockoff", "toxic", "scald"],
 		randomDoubleBattleMoves: ["protect", "knockoff", "icywind", "scald", "helpinghand", "wideguard"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	alomomolamega: {
-		
-	},	
-	*/
 	galvantula: {
 		randomBattleMoves: ["thunder", "hiddenpowerice", "gigadrain", "bugbuzz", "voltswitch", "stickyweb"],
 		randomDoubleBattleMoves: ["thunder", "hiddenpowerice", "energyball", "bugbuzz", "voltswitch", "stickyweb", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	galvantulamega: {
-		
-	},	
-	*/
 	ferrothorn: {
 		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "powerwhip", "protect", "knockoff", "gyroball"],
 		randomDoubleBattleMoves: ["gyroball", "stealthrock", "leechseed", "powerwhip", "knockoff", "protect"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	ferrothornmega: {
-		
-	},	
-	*/
 	klinklang: {
 		randomBattleMoves: ["shiftgear", "return", "geargrind", "wildcharge", "substitute"],
 		randomDoubleBattleMoves: ["shiftgear", "return", "geargrind", "wildcharge", "protect"],
@@ -3910,11 +2684,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	beheeyemmega: {
-		
-	},	
-	*/
 	chandelure: {
 		randomBattleMoves: ["calmmind", "shadowball", "energyball", "fireblast", "hiddenpowerground", "trick", "substitute", "painsplit"],
 		randomDoubleBattleMoves: ["shadowball", "energyball", "overheat", "heatwave", "trick", "protect"],
@@ -3933,88 +2702,48 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	haxorusmega: {
-		
-	},	
-	*/
 	beartic: {
 		randomBattleMoves: ["iciclecrash", "superpower", "nightslash", "stoneedge", "swordsdance", "aquajet"],
 		randomDoubleBattleMoves: ["iciclecrash", "superpower", "stoneedge", "swordsdance", "aquajet", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	bearticmega: {
-		
-	},	
-	*/
 	cryogonal: {
 		randomBattleMoves: ["icebeam", "recover", "toxic", "rapidspin", "haze", "freezedry", "hiddenpowerground"],
 		randomDoubleBattleMoves: ["icebeam", "recover", "icywind", "protect", "freezedry", "hiddenpowerground"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	cryogonalmega: {
-		
-	},	
-	*/
 	accelgor: {
 		randomBattleMoves: ["spikes", "yawn", "bugbuzz", "focusblast", "energyball", "hiddenpowerrock", "encore", "toxicspikes"],
 		randomDoubleBattleMoves: ["protect", "yawn", "bugbuzz", "focusblast", "energyball", "hiddenpowerrock", "encore", "sludgebomb"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	accelgormega: {
-		
-	},	
-	*/
 	stunfisk: {
 		randomBattleMoves: ["discharge", "earthpower", "scald", "toxic", "rest", "sleeptalk", "stealthrock"],
 		randomDoubleBattleMoves: ["discharge", "earthpower", "scald", "electroweb", "protect", "stealthrock"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	stunfiskmega: {
-		
-	},	
-	*/
 	mienshao: {
 		randomBattleMoves: ["uturn", "fakeout", "highjumpkick", "stoneedge", "poisonjab", "swordsdance", "knockoff"],
 		randomDoubleBattleMoves: ["uturn", "fakeout", "highjumpkick", "stoneedge", "drainpunch", "swordsdance", "knockoff", "feint", "protect"],
 		tier: "RUBL",
 		doublesTier: "DUU",
 	},
-	/*
-	mienshaomega: {
-		
-	},	
-	*/
 	druddigon: {
 		randomBattleMoves: ["outrage", "earthquake", "suckerpunch", "dragontail", "taunt", "glare", "stealthrock", "gunkshot", "firepunch"],
 		randomDoubleBattleMoves: ["superpower", "earthquake", "suckerpunch", "dragonclaw", "glare", "protect", "firepunch", "thunderpunch"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	druddigonmega: {
-		
-	},	
-	*/
 	golurk: {
 		randomBattleMoves: ["earthquake", "shadowpunch", "dynamicpunch", "icepunch", "stealthrock", "rockpolish"],
 		randomDoubleBattleMoves: ["earthquake", "shadowpunch", "dynamicpunch", "icepunch", "stoneedge", "protect", "rockpolish"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	golurkmega: {
-		
-	},	
-	*/
 	bisharp: {
 		randomBattleMoves: ["swordsdance", "knockoff", "ironhead", "suckerpunch", "lowkick"],
 		randomDoubleBattleMoves: ["swordsdance", "suckerpunch", "ironhead", "knockoff", "protect"],
@@ -4033,55 +2762,30 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	bouffalantmega: {
-		
-	},	
-	*/
 	braviary: {
 		randomBattleMoves: ["bravebird", "superpower", "return", "uturn", "substitute", "bulkup", "roost"],
 		randomDoubleBattleMoves: ["bravebird", "superpower", "return", "uturn", "tailwind", "skydrop", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	braviarymega: {
-		
-	},	
-	*/
 	mandibuzz: {
 		randomBattleMoves: ["foulplay", "bravebird", "roost", "taunt", "toxic", "uturn", "defog"],
 		randomDoubleBattleMoves: ["knockoff", "roost", "taunt", "tailwind", "snarl", "uturn", "bravebird", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	mandibuzzmega: {
-		
-	},	
-	*/
 	heatmor: {
 		randomBattleMoves: ["fireblast", "suckerpunch", "focusblast", "gigadrain", "knockoff"],
 		randomDoubleBattleMoves: ["firelash", "suckerpunch", "superpower", "gigadrain", "incinerate", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	heatmormega: {
-		
-	},	
-	*/
 	durant: {
 		randomBattleMoves: ["honeclaws", "ironhead", "xscissor", "rockslide", "superpower"],
 		randomDoubleBattleMoves: ["honeclaws", "ironhead", "xscissor", "rockslide", "protect", "superpower"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	durantmega: {
-		
-	},	
-	*/
 	hydreigon: {
 		randomBattleMoves: ["uturn", "dracometeor", "dragonpulse", "earthpower", "fireblast", "darkpulse", "roost", "flashcannon", "superpower"],
 		randomDoubleBattleMoves: ["uturn", "dracometeor", "fireblast", "darkpulse", "flashcannon", "tailwind", "protect"],
@@ -4100,44 +2804,24 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	/*
-	volcaronamega: {
-		
-	},	
-	*/
 	cobalion: {
 		randomBattleMoves: ["closecombat", "ironhead", "swordsdance", "substitute", "stoneedge", "voltswitch", "hiddenpowerice", "taunt", "stealthrock"],
 		randomDoubleBattleMoves: ["closecombat", "ironhead", "swordsdance", "stoneedge", "thunderwave", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	cobalionmega: {
-		
-	},	
-	*/
 	terrakion: {
 		randomBattleMoves: ["swordsdance", "closecombat", "stoneedge", "earthquake", "stealthrock", "quickattack"],
 		randomDoubleBattleMoves: ["stoneedge", "closecombat", "rockslide", "stompingtantrum", "taunt", "protect"],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
-	/*
-	terrakionmega: {
-		
-	},	
-	*/
 	virizion: {
 		randomBattleMoves: ["swordsdance", "closecombat", "leafblade", "stoneedge", "calmmind", "focusblast", "gigadrain", "hiddenpowerice", "substitute"],
 		randomDoubleBattleMoves: ["taunt", "closecombat", "stoneedge", "leafblade", "swordsdance", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	virizionmega: {
-		
-	},	
-	*/
 	tornadus: {
 		randomBattleMoves: ["hurricane", "heatwave", "superpower", "grassknot", "uturn", "defog", "tailwind"],
 		randomDoubleBattleMoves: ["hurricane", "uturn", "superpower", "taunt", "heatwave", "tailwind", "protect", "skydrop"],
@@ -4252,33 +2936,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	chesnaughtmega: {
-		
-	},	
-	*/
 	delphox: {
 		randomBattleMoves: ["calmmind", "fireblast", "psyshock", "grassknot", "switcheroo", "shadowball"],
 		randomDoubleBattleMoves: ["calmmind", "fireblast", "psyshock", "grassknot", "switcheroo", "heatwave", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	delphoxmega: {
-		
-	},	
-	*/
 	greninja: {
 		randomBattleMoves: ["hydropump", "icebeam", "gunkshot", "uturn", "spikes", "toxicspikes", "taunt"],
 		randomDoubleBattleMoves: ["hydropump", "uturn", "gunkshot", "icebeam", "matblock", "taunt", "darkpulse", "protect"],
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	/*
-	greninjamega: {
-		
-	},	
-	*/
 	greninjaash: {
 		randomBattleMoves: ["hydropump", "icebeam", "darkpulse", "watershuriken", "uturn"],
 		tier: "OU",
@@ -4290,11 +2959,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	diggersbymega: {
-		
-	},	
-	*/
 	talonflame: {
 		randomBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "overheat"],
 		randomDoubleBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "tailwind", "taunt", "protect"],
@@ -4321,22 +2985,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	vivillonmega: {
-		
-	},	
-	*/
 	pyroar: {
 		randomBattleMoves: ["sunnyday", "fireblast", "hypervoice", "solarbeam", "willowisp", "darkpulse"],
 		randomDoubleBattleMoves: ["hypervoice", "fireblast", "willowisp", "protect", "sunnyday", "solarbeam"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	pyroarmega: {
-		
-	},	
-	*/
 	floetteeternal: {
 		randomBattleMoves: ["lightofruin", "psychic", "hiddenpowerground", "moonblast"],
 		randomDoubleBattleMoves: ["lightofruin", "dazzlinggleam", "psychic", "protect", "hiddenpowerfire", "calmmind"],
@@ -4349,44 +3003,24 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	florgesmega: {
-		
-	},	
-	*/
 	gogoat: {
 		randomBattleMoves: ["bulkup", "hornleech", "earthquake", "rockslide", "substitute", "leechseed", "milkdrink"],
 		randomDoubleBattleMoves: ["hornleech", "earthquake", "brickbreak", "bulkup", "leechseed", "milkdrink", "rockslide", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	gogoatmega: {
-		
-	},	
-	*/
 	pangoro: {
 		randomBattleMoves: ["knockoff", "superpower", "gunkshot", "icepunch", "partingshot", "drainpunch"],
 		randomDoubleBattleMoves: ["partingshot", "hammerarm", "knockoff", "icepunch", "gunkshot", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	pangoromega: {
-		
-	},	
-	*/
 	furfrou: {
 		randomBattleMoves: ["return", "cottonguard", "thunderwave", "substitute", "toxic", "suckerpunch", "uturn", "rest"],
 		randomDoubleBattleMoves: ["return", "cottonguard", "uturn", "thunderwave", "snarl", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	furfroumega: {
-		
-	},	
-	*/
 	meowstic: {
 		randomBattleMoves: ["toxic", "yawn", "thunderwave", "psychic", "reflect", "lightscreen", "healbell", "knockoff", "partingshot"],
 		randomDoubleBattleMoves: ["fakeout", "thunderwave", "psychic", "reflect", "lightscreen", "knockoff", "partingshot", "protect"],
@@ -4421,55 +3055,30 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"],
 		randomDoubleBattleMoves: ["ironhead", "kingsshield", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"],
 	},
-	/*
-	aegislashmega: {
-		
-	},	
-	*/
 	aromatisse: {
 		randomBattleMoves: ["wish", "protect", "moonblast", "aromatherapy", "reflect", "lightscreen"],
 		randomDoubleBattleMoves: ["moonblast", "trickroom", "thunderbolt", "protect", "healpulse"],
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	aromatissemega: {
-		
-	},	
-	*/
 	slurpuff: {
 		randomBattleMoves: ["bellydrum", "playrough", "return", "drainpunch"],
 		randomDoubleBattleMoves: ["bellydrum", "playrough", "return", "drainpunch", "protect"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	slurpuffmega: {
-		
-	},	
-	*/
 	malamar: {
 		randomBattleMoves: ["superpower", "knockoff", "psychocut", "rest", "sleeptalk", "happyhour"],
 		randomDoubleBattleMoves: ["superpower", "psychocut", "rockslide", "trickroom", "knockoff", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	malamarmega: {
-		
-	},	
-	*/
 	barbaracle: {
 		randomBattleMoves: ["shellsmash", "stoneedge", "liquidation", "earthquake", "crosschop", "stealthrock"],
 		randomDoubleBattleMoves: ["shellsmash", "liquidation", "crosschop", "rockslide", "protect"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
-	/*
-	barbaraclemega: {
-		
-	},	
-	*/
 	dragalge: {
 		randomBattleMoves: ["dracometeor", "sludgewave", "focusblast", "scald", "hiddenpowerfire", "toxicspikes", "dragonpulse", "flipturn"],
 		randomDoubleBattleMoves: ["dracometeor", "sludgebomb", "focusblast", "scald", "hiddenpowerfire", "protect", "dragonpulse"],
@@ -4488,22 +3097,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	clawitzermega: {
-		
-	},	
-	*/
 	heliolisk: {
 		randomBattleMoves: ["raindance", "hypervoice", "surf", "darkpulse", "hiddenpowerice", "voltswitch", "thunderbolt"],
 		randomDoubleBattleMoves: ["grassknot", "voltswitch", "darkpulse", "thunderbolt", "hypervoice", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	helioliskmega: {
-		
-	},	
-	*/
 	tyrantrum: {
 		randomBattleMoves: ["stealthrock", "dragondance", "dragonclaw", "earthquake", "superpower", "outrage", "headsmash"],
 		randomDoubleBattleMoves: ["rockslide", "dragondance", "headsmash", "dragonclaw", "earthquake", "protect"],
@@ -4534,22 +3133,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
-	/*
-	hawluchamega: {
-		
-	},	
-	*/
 	dedenne: {
 		randomBattleMoves: ["substitute", "recycle", "thunderbolt", "nuzzle", "grassknot", "hiddenpowerice", "toxic"],
 		randomDoubleBattleMoves: ["eerieimpulse", "helpinghand", "nuzzle", "recycle", "superfang", "thunderbolt"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
-	/*
-	dedennemega: {
-		
-	},	
-	*/
 	carbink: {
 		randomBattleMoves: ["stealthrock", "lightscreen", "reflect", "explosion", "powergem", "moonblast"],
 		randomDoubleBattleMoves: ["trickroom", "lightscreen", "reflect", "explosion", "stealthrock", "moonblast", "protect"],
