@@ -4031,7 +4031,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 	},
 	meloettapirouette: {
-		tier: "RU",
+		tier: "OU",
 	},
 	genesect: {
 		randomBattleMoves: ["blazekick", "extremespeed", "flamethrower", "ironhead", "shiftgear", "thunderbolt", "uturn"],
@@ -4583,7 +4583,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 	},
 	oricoriopau: {
-		tier: "Illegal",
+		tier: "PU",
 	},
 	oricoriosensu: {
 		tier: "PU",

@@ -17571,7 +17571,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Caravagon",
 		types: ["Normal", "Dragon"],
 		baseStats: {hp: 90, atk: 110, def: 65, spa: 105, spd: 65, spe: 100},
-		abilities: {0: "Overcoat", 1: "Steadfast", H: "Sturdy"},
+		abilities: {0: "Overcoat", 1: "Steadfast", H: "Frisk"},
 		heightm: 1.2,
 		weightkg: 24.9,
 		color: "Brown",
