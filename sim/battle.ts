@@ -3254,7 +3254,7 @@ export class Battle {
 		throw new UnimplementedError('tryPrimaryHitEvent');
 	}
 
-	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean {
+	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove, notActive?: boolean): boolean {
 		throw new UnimplementedError('trySpreadMoveHit');
 	}
 

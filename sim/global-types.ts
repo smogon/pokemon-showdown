@@ -290,7 +290,9 @@ interface BattleScriptsData {
 		this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
 	) => SpreadMoveDamage;
-	trySpreadMoveHit?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean;
+	trySpreadMoveHit?: (
+		this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove, notActive?: boolean
+	) => boolean;
 	useMove?: (
 		this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null,
 		sourceEffect?: Effect | null, zMove?: string, maxMove?: string
