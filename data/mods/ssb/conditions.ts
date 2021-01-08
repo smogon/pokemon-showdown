@@ -1403,7 +1403,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	rageuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Rage')}|Hello there`);
+			this.add(`c|${getName('Rage')}|/html <img src="https://media1.tenor.com/images/2eada1bbeb4ed4182079cf00070324a2/tenor.gif" />`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Rage')}|im off, cya lads`);
@@ -1638,8 +1638,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('tiki')}|just tiki.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('tiki')}|`);
-			this.add(`raw|<img src="https://i.imgur.com/0ZRGwvv.png" />`);
+			this.add(`c|${getName('tiki')}|/html <img src="https://i.imgur.com/0ZRGwvv.png" />`);
 		},
 		onFaint() {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
