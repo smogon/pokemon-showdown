@@ -666,7 +666,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					}
 				} else if (r < 7) {
 					this.add('-ability', source, 'Alchemist');
-					let randStat1 = this.random(5);
+					const randStat1 = this.random(5);
 					let randStat2 = this.random(4);
 					if (randStat2 === randStat1) {
 						randStat2 = 4;
@@ -697,7 +697,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.boost(alchemistBoost, target, source, null, true);
 				} else if (r < 8) {
 					this.add('-ability', source, 'Alchemist');
-					let randStat1 = this.random(5);
+					const randStat1 = this.random(5);
 					let randStat2 = this.random(4);
 					if (randStat2 === randStat1) {
 						randStat2 = 4;
@@ -728,7 +728,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.boost(alchemistBoost, target, source, null, true);
 				} else if (r < 9) {
 					this.add('-ability', source, 'Alchemist');
-					let randStat1 = this.random(5);
+					const randStat1 = this.random(5);
 					let randStat2 = this.random(4);
 					if (randStat2 === randStat1) {
 						randStat2 = 4;
@@ -828,7 +828,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "If this Pokémon's target is Mega Honchkrow, it survives every hit with at least 1 HP.",
 		onDamagePriority: -100,
 		onAnyDamage(damage, target, source, effect) {
-			if (source === this.effectData.target && target.species.id === 'honchkrowmega' && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (
+				source === this.effectData.target && target.species.id === 'honchkrowmega' &&
+				damage >= target.hp && effect && effect.effectType === 'Move'
+			) {
 				this.add('-ability', source, 'Orderly Target');
 				return target.hp - 1;
 			}
@@ -990,14 +993,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
-			if (this.effectData.target.baseSpecies.baseSpecies !== 'Cherrim' && this.effectData.target.species.name !== 'Meganium-Mega') return;
+			if (
+				this.effectData.target.baseSpecies.baseSpecies !== 'Cherrim' &&
+				this.effectData.target.species.name !== 'Meganium-Mega'
+			) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
-			if (this.effectData.target.baseSpecies.baseSpecies !== 'Cherrim' && this.effectData.target.species.name !== 'Meganium-Mega') return;
+			if (
+				this.effectData.target.baseSpecies.baseSpecies !== 'Cherrim' &&
+				this.effectData.target.species.name !== 'Meganium-Mega'
+			) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
@@ -1060,7 +1069,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onResidual(side) {
 				if (this.effectData.duration > 1) {
 					this.add('-message', `There are ${this.effectData.duration} turns left of Volcanic Singe!`);
-				} else if (this.effectData.duration = 1) {
+				} else if (this.effectData.duration === 1) {
 					this.add('-message', `There is one turn left of Volcanic Singe!`);
 				}
 			},
@@ -1275,7 +1284,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Solar Power if user's Sp. Atk > Spe. Chlorophyll if user's Spe >= Sp. Atk.",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if ((pokemon.getStat('spa', false, true) > pokemon.getStat('spe', false, true)) && ['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (
+				(pokemon.getStat('spa', false, true) > pokemon.getStat('spe', false, true)) &&
+				['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())
+			) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1288,7 +1300,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onModifySpe(spe, pokemon) {
-			if ((pokemon.getStat('spe', false, true) >= pokemon.getStat('spa', false, true)) && ['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (
+				(pokemon.getStat('spe', false, true) >= pokemon.getStat('spa', false, true)) &&
+				['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())
+			) {
 				return this.chainModify(2);
 			}
 		},
@@ -1458,7 +1473,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMovePriority: -2,
 		onModifyMove(move, attacker) {
 			if (attacker.status) return;
-			if (attacker.volatiles['attract'] || attacker.volatiles['confusion'] || attacker.volatiles['disable'] || attacker.volatiles['encore'] || attacker.volatiles['healblock'] || attacker.volatiles['taunt'] || attacker.volatiles['torment']) return;
+			if (
+				attacker.volatiles['attract'] || attacker.volatiles['confusion'] || attacker.volatiles['disable'] ||
+				attacker.volatiles['encore'] || attacker.volatiles['healblock'] || attacker.volatiles['taunt'] ||
+				attacker.volatiles['torment']
+			) return;
 			if (move.secondaries) {
 				this.debug('maximizing secondary chance');
 				for (const secondary of move.secondaries) {
@@ -1471,4 +1490,4 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 		num: -1044,
 	},
-}
+};
