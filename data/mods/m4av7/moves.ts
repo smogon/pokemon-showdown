@@ -22,16 +22,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSetStatus(status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
-						for (const target of this.getAllActive()) {
-							if (target.hasAbility('downtoearth')) {
+						for (const pokemon of this.getAllActive()) {
+							if (pokemon.hasAbility('downtoearth')) {
 								return;
 							}
 						}
 						this.add('-activate', target, 'move: Electric Terrain');
 					}
-					for (const target of this.getAllActive()) {
-						if (target.hasAbility('downtoearth')) {
-							this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.hasAbility('downtoearth')) {
+							this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 							return;
 						}
 					}
@@ -42,9 +42,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
 					this.add('-activate', target, 'move: Electric Terrain');
-					for (const target of this.getAllActive()) {
-						if (target.hasAbility('downtoearth')) {
-							this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.hasAbility('downtoearth')) {
+							this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 							return;
 						}
 					}
@@ -116,9 +116,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					return;
 				}
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
-						this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
+						this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 						return;
 					}
 				}
@@ -262,16 +262,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSetStatus(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
-					for (const target of this.getAllActive()) {
-						if (target.hasAbility('downtoearth')) {
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.hasAbility('downtoearth')) {
 							return;
 						}
 					}
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
-						this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
+						this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 						return;
 					}
 				}
@@ -280,9 +280,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryAddVolatile(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
-					for (const target of this.getAllActive()) {
-						if (target.hasAbility('downtoearth')) {
-							this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.hasAbility('downtoearth')) {
+							this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 							return;
 						}
 					}
@@ -676,7 +676,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualOrder: 17,
 			onEnd(pokemon, effect) {
 				if (effect?.effectType === 'Ability') {
-				this.add('-end', pokemon, 'Heal Block', '[silent]');
+					this.add('-end', pokemon, 'Heal Block', '[silent]');
 				} else {
 					this.add('-end', pokemon, 'move: Heal Block');
 				}
@@ -717,9 +717,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else if (this.field.isTerrain('acidicterrain')) {
 				newType = 'Poison';
 			}
-			for (const target of this.getAllActive()) {
-				if (target.hasAbility('downtoearth')) {
-					this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.hasAbility('downtoearth')) {
+					this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 					newType = 'Normal';
 				}
 			}
@@ -757,8 +757,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onModifyMove(move, source, target) {
 			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
 						return;
 					}
 				}
@@ -783,9 +783,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
-						this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
+						this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 						success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 						if (success && target.side !== source.side) {
 							target.staleness = 'external';
@@ -821,8 +821,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {contact: 1, protect: 1, mystery: 1},
 		onModifyPriority(priority, source, target, move) {
 			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
 						return;
 					}
 				}
@@ -885,9 +885,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else if (this.field.isTerrain('acidicterrain')) {
 				move = 'sludgebomb';
 			}
-			for (const target of this.getAllActive()) {
-				if (target.hasAbility('downtoearth')) {
-					this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.hasAbility('downtoearth')) {
+					this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 					move = 'triattack';
 				}
 			}
@@ -912,8 +912,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon, target) {
 			if (this.field.isTerrain('electricterrain') && target.isGrounded()) {
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
 						return;
 					}
 				}
@@ -1110,8 +1110,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 			if (this.field.isTerrain('grassyterrain')) {
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('arenarock')) {
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('arenarock')) {
 						return success;
 					}
 				}
