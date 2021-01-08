@@ -1248,13 +1248,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	partman: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('PartMan')}|${[`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`][this.random(2)]}`);
+			this.add(`c|${getName('PartMan')}|${[`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`, `Greetings, today we are all gathered here to pay respects to - wait, this is only ${source.side.foe.name}'s funeral. Never mind.`, `__I'm on fiiiiiiiiiiire__`, `/me hugs`, `A SACRIFICE FOR SNOM`, `${source.side.name} more like nerd`, `NER`][this.random(8)]}`);
 		},
-		onSwitchOut() {
-			this.add(`c|${getName('PartMan')}|/me flees`);
+		onSwitchOut(source) {
+			this.add(`c|${getName('PartMan')}|Hi ${source.side.name}, I'm PartMan!`);
+			this.add(`c|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
+			this.add(`c|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
+			this.add(`c|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PartMan')}|B-booli. >.<`);
+			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'That hurt me in my meow-meow. ;-;', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:'][this.random(6)]}`);
 		},
 	},
 	peapodc: {
