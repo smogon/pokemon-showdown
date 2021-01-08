@@ -78,7 +78,7 @@
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.0",
     "mocha": "^8.2.0",
-    "smogon": "^1.1.3",
+    "smogon": "^1.4.0",
     "typescript": "^4.1.0"
   }
 }
