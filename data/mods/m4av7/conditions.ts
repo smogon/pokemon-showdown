@@ -1,5 +1,3 @@
-'use strict';
-
 export const Conditions: {[k: string]: ConditionData} = {
 	acidicterrain: {
 		name: 'Acidic Terrain',
@@ -27,9 +25,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onModifyMovePriority: -5,
 		onModifyMove(move, source, target) {
 			if (move.type === 'Poison' && target.isGrounded() && !target.isSemiInvulnerable() && target.hasType('Steel')) {
-				for (const target of this.getAllActive()) {
-					if (target.hasAbility('downtoearth')) {
-						this.add('-message', `${target.name} suppresses the effects of the terrain!`);
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('downtoearth')) {
+						this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 						return;
 					}
 				}
@@ -53,7 +51,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onEnd() {
 			this.add('-fieldend', 'move: Acidic Terrain');
 		},
- 	},
+	},
 	desertgales: {
 		name: 'Desert Gales',
 		effectType: 'Weather',
