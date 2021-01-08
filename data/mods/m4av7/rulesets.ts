@@ -59,7 +59,7 @@ export const Formats: {[k: string]: FormatData} = {
 									"; Mega Mimikyu has two forms! If its Disguise is busted, it will Mega Evolve into Mimikyu-Busted-Mega. /dt for info"
 								); 
 							}
-							let txt = new String(mega.name + " (" + types +
+							const txt = new String(mega.name + " (" + types +
 							"); Ability: " + mega.abilities[0] + " (" + this.dex.getAbility(mega.abilities[0]).shortDesc +
 							"); Stats: " + baseStats.hp +
 							" HP / " + baseStats.atk +
@@ -102,7 +102,8 @@ export const Formats: {[k: string]: FormatData} = {
 						species = this.dex.getSpecies("Necrozma-Ultra");
 						typeTable = typeTable.filter(type => species.types.includes(type));
 					}
-					if (item.id === "mimikyunite" && species.baseSpecies === "Mimikyu") { //Mega Mimikyu is banned from Fairy Mono and this enforces that
+					if (item.id === "mimikyunite" && species.baseSpecies === "Mimikyu") {
+						//Mega Mimikyu is banned from Fairy Mono and this enforces that
 						species = this.dex.getSpecies("Mimikyu-Busted-Mega");
 						typeTable = typeTable.filter(type => species.types.includes(type));
 					} 
