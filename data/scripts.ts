@@ -297,7 +297,7 @@ export const Scripts: BattleScriptsData = {
 		return true;
 	},
 	/** NOTE: includes single-target moves */
-	trySpreadMoveHit(targets, pokemon, move) {
+	trySpreadMoveHit(targets, pokemon, move, notActive) {
 		if (targets.length > 1 && !move.smartTarget) move.spreadHit = true;
 
 		const moveSteps: ((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) =>
@@ -335,7 +335,7 @@ export const Scripts: BattleScriptsData = {
 			[moveSteps[2], moveSteps[4]] = [moveSteps[4], moveSteps[2]];
 		}
 
-		this.setActiveMove(move, pokemon, targets[0]);
+		if (!notActive) this.setActiveMove(move, pokemon, targets[0]);
 
 		const hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move) &&
 			this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move) &&
@@ -345,7 +345,7 @@ export const Scripts: BattleScriptsData = {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
 			}
-			return false;
+			return hitResult === this.NOT_FAIL;
 		}
 
 		let atLeastOneFailure!: boolean;
