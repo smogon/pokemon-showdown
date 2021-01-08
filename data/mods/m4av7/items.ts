@@ -1193,4 +1193,4 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Lurantis, this item allows it to Mega Evolve in battle.",
 	},
-}
+};
