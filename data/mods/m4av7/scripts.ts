@@ -262,6 +262,6 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 				this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
 			}
 			return true;
-		}
-	}
+		},
+	},
 };
