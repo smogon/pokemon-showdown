@@ -381,7 +381,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	sootguard: {
 		shortDesc: "This Pokémon receives 3/4 damage from neutrally effective attacks.",
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod = 0) {
+			if (target.getMoveHitData(move).typeMod === 0) {
 				this.debug('Soot Guard neutralize');
 				return this.chainModify(0.75);
 			}
