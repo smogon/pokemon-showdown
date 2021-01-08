@@ -64,7 +64,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 		encounters: [
 			{generation: 6, level: 30},
 		],
-  },
+	},
 	sawsbuckautumn: {
 		learnset: {
 			aromatherapy: ["7L28", "6L28", "5L28"],
@@ -128,7 +128,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 		encounters: [
 			{generation: 6, level: 30},
 		],
-  },
+	},
 	sawsbuckwinter: {
 		learnset: {
 			aromatherapy: ["7L28", "6L28", "5L28"],
@@ -192,5 +192,5 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 		encounters: [
 			{generation: 6, level: 30},
 		],
-  },
+	},
 };
