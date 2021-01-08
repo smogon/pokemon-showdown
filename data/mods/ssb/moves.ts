@@ -265,7 +265,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {reflectable: 1, snatch: 1},
+		flags: {snatch: 1},
 		volatileStatus: 'lookingcool',
 		onTryMove(target) {
 			if (target.volatiles['lookingcool']) return false;
