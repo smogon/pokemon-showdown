@@ -909,7 +909,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	toxic: {
 		inherit: true,
 		onPrepareHit(target, source, move) {
-			source.addVolatile('toxic');
+			if (source.hasType('Poison')) source.addVolatile('toxic');
 		},
 		condition: {
 			noCopy: true,
