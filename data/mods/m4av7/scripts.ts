@@ -1,5 +1,5 @@
 export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
-	init: function () {
+	init() {
 		this.modData('Learnsets', 'dragonite').learnset.playrough = ['7L1'];
 		this.modData('Learnsets', 'goodra').learnset.gigadrain = ['7L1'];
 		this.modData('Learnsets', 'goodra').learnset.drainpunch = ['7L1'];
