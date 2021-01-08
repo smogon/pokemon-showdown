@@ -4281,7 +4281,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1},
+		flags: {authentic: 1, protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4817,7 +4817,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -7,
-		flags: {protect: 1, reflectable: 1},
+		flags: {authentic: 1, protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
