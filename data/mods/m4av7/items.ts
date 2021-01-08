@@ -766,7 +766,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		megaEvolves: "Mimikyu",
 		itemUser: ["Mimikyu"],
 		onTakeItem(item, source) {
-			const pokemon = this.effectData.target;
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
