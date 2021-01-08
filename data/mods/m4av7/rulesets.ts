@@ -38,43 +38,40 @@ export const Formats: {[k: string]: FormatData} = {
 		},
 	},
 	megahintmod: {
-		effectType: 'Rule', 
-		name: 'Mega Hint Mod', 
-		desc: 'At the start of a battle, gives each player information about the potential Mega in their party', 
+		effectType: 'Rule',
+		name: 'Mega Hint Mod',
+		desc: 'At the start of a battle, gives each player information about the potential Mega in their party',
 		onBegin() {
-			this.add('-message', 'Your Mega Evolution this match is:'); 
-			const allPokemon = this.p1.pokemon.concat(this.p2.pokemon); 
-				for (const pokemon of allPokemon) {
-					if (pokemon.canMegaEvo) {
-							
-							const mega = this.dex.getSpecies(pokemon.canMegaEvo); 
-							const baseStats = mega.baseStats; 	
-							let types = new String(mega.types[0]); 
-							if (mega.types[1]) {
-								types = types.concat("/" + mega.types[1])
-							}
-							let msg = new String(" Spe"); 
-							if (mega.name === "Mimikyu-Mega") {
-								msg = msg.concat(
-									"; Mega Mimikyu has two forms! If its Disguise is busted, it will Mega Evolve into Mimikyu-Busted-Mega. /dt for info"
-								); 
-							}
-							const txt = new String(mega.name + " (" + types +
-							"); Ability: " + mega.abilities[0] + " (" + this.dex.getAbility(mega.abilities[0]).shortDesc +
-							"); Stats: " + baseStats.hp +
-							" HP / " + baseStats.atk +
-							" Atk / " + baseStats.def +
-							" Def / " + baseStats.spa +
-							" SpA / " + baseStats.spd +
-							" SpD / " + baseStats.spe + msg); 
-							this.hint(txt, true, pokemon.side); 
-						
-					}
+			this.add('-message', 'Your Mega Evolution this match is:');
+			const allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (const pokemon of allPokemon) {
+				if (pokemon.canMegaEvo) {
+						const mega = this.dex.getSpecies(pokemon.canMegaEvo);
+						const baseStats = mega.baseStats;
+						let types = new String(mega.types[0]);
+						if (mega.types[1]) {
+							types = types.concat("/" + mega.types[1]);
+						}
+						let msg = new String(" Spe");
+						if (mega.name === "Mimikyu-Mega") {
+							msg = msg.concat(
+								"; Mega Mimikyu has two forms! If its Disguise is busted, it will Mega Evolve into Mimikyu-Busted-Mega. /dt for info"
+							);
+						}
+						const txt = new String(mega.name + " (" + types +
+						"); Ability: " + mega.abilities[0] + " (" + this.dex.getAbility(mega.abilities[0]).shortDesc +
+						"); Stats: " + baseStats.hp +
+						" HP / " + baseStats.atk +
+						" Atk / " + baseStats.def +
+						" Def / " + baseStats.spa +
+						" SpA / " + baseStats.spd +
+						" SpD / " + baseStats.spe + msg);
+						this.hint(txt, true, pokemon.side);
+				}
 			}
-			this.add('-message', 'Use the command /dt for more information!'); 
+			this.add('-message', 'Use the command /dt for more information!');
 		},
 	},
-	
 	sametypeclause: {
 		effectType: 'ValidatorRule',
 		name: 'Same Type Clause',
@@ -92,7 +89,7 @@ export const Formats: {[k: string]: FormatData} = {
 				} else {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
-				//if (this.gen >= 7) {
+				// if (this.gen >= 7) {
 					const item = this.dex.getItem(set.item);
 					if (item.megaStone && species.baseSpecies === item.megaEvolves) {
 						species = this.dex.getSpecies(item.megaStone);
@@ -103,11 +100,11 @@ export const Formats: {[k: string]: FormatData} = {
 						typeTable = typeTable.filter(type => species.types.includes(type));
 					}
 					if (item.id === "mimikyunite" && species.baseSpecies === "Mimikyu") {
-						//Mega Mimikyu is banned from Fairy Mono and this enforces that
+						// Mega Mimikyu is banned from Fairy Mono and this enforces that
 						species = this.dex.getSpecies("Mimikyu-Busted-Mega");
 						typeTable = typeTable.filter(type => species.types.includes(type));
 					} 
-				//}
+				// }
 				if (!typeTable.length) return [`Your team must share a type.`];
 			}
 		},
