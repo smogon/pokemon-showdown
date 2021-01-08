@@ -885,9 +885,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else if (this.field.isTerrain('acidicterrain')) {
 				move = 'sludgebomb';
 			}
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.hasAbility('downtoearth')) {
-					this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
+			for (const downtoearth of this.getAllActive()) {
+				if (downtoearth.hasAbility('downtoearth')) {
+					this.add('-message', `${downtoearth.name} suppresses the effects of the terrain!`);
 					move = 'triattack';
 				}
 			}
@@ -912,8 +912,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon, target) {
 			if (this.field.isTerrain('electricterrain') && target.isGrounded()) {
-				for (const pokemon of this.getAllActive()) {
-					if (pokemon.hasAbility('downtoearth')) {
+				for (const downtoearth of this.getAllActive()) {
+					if (downtoearth.hasAbility('downtoearth')) {
 						return;
 					}
 				}
