@@ -522,7 +522,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.hasType('Poison') && !this.field.pseudoWeather.stickyresidues) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasType('Poison') || pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) {
+				} else if (
+					pokemon.hasType('Steel') || pokemon.hasType('Poison') || pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')
+				) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1196,7 +1198,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
-				if (this.field.pseudoWeather.stickyresidues && (condition === 'spikes' || condition === 'toxicspikes' || condition === 'stealthrock' || condition === 'stickyweb' || condition === 'gmaxsteelsurge')) continue;
+				if (
+					this.field.pseudoWeather.stickyresidues &&
+					(condition === 'spikes' || condition === 'toxicspikes' || condition === 'stealthrock' ||
+					condition === 'stickyweb' || condition === 'gmaxsteelsurge')
+				) continue;
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
 				}
@@ -1214,7 +1220,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
-				if (this.field.pseudoWeather.stickyresidues && (condition === 'spikes' || condition === 'toxicspikes' || condition === 'stealthrock' || condition === 'stickyweb' || condition === 'gmaxsteelsurge')) continue;
+				if (
+					this.field.pseudoWeather.stickyresidues &&
+					(condition === 'spikes' || condition === 'toxicspikes' || condition === 'stealthrock' ||
+					condition === 'stickyweb' || condition === 'gmaxsteelsurge')
+				) continue;
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
 				}
@@ -1258,7 +1268,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let success = false;
 			for (const id of sideConditions) {
 				const effectName = this.dex.getEffect(id).name;
-				if (this.field.pseudoWeather.stickyresidues && (id === 'spikes' || id === 'toxicspikes' || id === 'stealthrock' || id === 'stickyweb' || id === 'gmaxsteelsurge')) continue;
+				if (
+					this.field.pseudoWeather.stickyresidues &&
+					(id === 'spikes' || id === 'toxicspikes' || id === 'stealthrock' ||
+					id === 'stickyweb' || id === 'gmaxsteelsurge')
+				) continue;
 				if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
 					[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
 						targetSide.sideConditions[id], sourceSide.sideConditions[id],
