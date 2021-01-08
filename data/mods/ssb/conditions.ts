@@ -1660,7 +1660,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	trickster: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Trickster')}|(¤﹏¤).`);
+			this.add(`c|${getName('Trickster')}|(¤﹏¤)`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Trickster')}|(︶︹︺)`);

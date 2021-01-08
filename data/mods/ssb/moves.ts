@@ -754,7 +754,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			});
 			this.add('-start', source, 'move: Hat of Wisdom');
 			source.switchFlag = 'hatofwisdom' as ID;
-			return null;
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
@@ -4274,63 +4274,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Curse + Mean Look.",
+		desc: "The user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
+		shortDesc: "Curses the target for 1/2 HP and traps it.",
 		name: "Tsukuyomi",
 		isNonstandard: "Custom",
 		gen: 8,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1},
-		isFutureMove: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Dark Void', target);
-			if (source.hasType('Ghost')) {
-				this.add('-anim', source, 'Curse', target);
-			} else {
-				this.add('-anim', source, 'Curse', source);
-			}
+			this.add('-anim', source, 'Curse', target);
 		},
-		volatileStatus: 'curse',
-		onModifyMove(move, source, target) {
-			if (!source.hasType('Ghost')) {
-				move.target = move.nonGhostTarget as MoveTarget;
-			}
-		},
-		onTryHit(target, source, move) {
-			if (!source.hasType('Ghost')) {
-				delete move.volatileStatus;
-				move.onHit = function (t, s, m) {
-					s.side.foe.active[0].addVolatile('trapped', s, m, 'trapper');
-				};
-				move.self = {boosts: {spe: -1, atk: 1, def: 1}};
-			} else if (move.volatileStatus && target.volatiles['curse']) {
-				return false;
-			}
-		},
-		onHit(target, source, move) {
+		onHit(pokemon, source, move) {
+			this.add(`c|${getName('Segmr')}|I don't like naruto actually let someone else write this message plz.`);
 			this.directDamage(source.maxhp / 2, source, source);
-			source.side.foe.active[0].addVolatile('trapped', source, move, 'trapper');
-			if (source.name === 'Segmr' && !source.illusion) {
-				this.add(`c|${getName('Segmr')}|I don't like naruto actually let someone else write this message plz.`);
-			}
-		},
-		condition: {
-			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'Curse', '[of] ' + source);
-			},
-			onResidualOrder: 10,
-			onResidual(pokemon) {
-				this.damage(pokemon.baseMaxhp / 4);
-			},
+			pokemon.addVolatile('curse');
+			pokemon.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		nonGhostTarget: "self",
 	},
 
 	// sejesensei
@@ -4843,8 +4810,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Curses the target and blocks it from healing.",
-		shortDesc: "Curses the target and blocks it from healing.",
+		desc: "The user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
+		shortDesc: "Curses target for 1/2 HP & blocks it from healing.",
 		name: "Soul-Shattering Stare",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4859,14 +4826,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Trick-or-Treat', source);
 		},
 		onHit(pokemon, source) {
-			pokemon.addVolatile('healblock');
 			this.directDamage(source.maxhp / 2, source, source);
 			pokemon.addVolatile('curse');
+			pokemon.addVolatile('healblock');
 		},
 		secondary: null,
-		target: "randomNormal",
+		target: "normal",
 		type: "Ghost",
-		contestType: "Tough",
 	},
 
 	// Vexen
