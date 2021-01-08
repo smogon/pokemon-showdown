@@ -10419,7 +10419,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (move.isMax && move.breaksProtect) return;
 				/** moves blocked by Max Guard but not Protect */
 				const overrideBypassProtect = [
-					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'teatime', 'transform',
+					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'shadowforce', 'teatime', 'transform',
 				];
 				const blockedByMaxGuard = (this.dex.getMove(move.id).flags['protect'] ||
 						move.isZ || move.isMax || overrideBypassProtect.includes(move.id));
