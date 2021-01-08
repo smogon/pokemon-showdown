@@ -1800,4 +1800,4 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		zMove: {effect: 'curse'},
 		contestType: "Tough",
 	},
-}
+};
