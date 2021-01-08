@@ -7195,6 +7195,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual() {
 				this.eachEvent('Terrain');
 			},
+			onTerrainPriority: 1,
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
