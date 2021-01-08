@@ -702,6 +702,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.accuracy = true;
 				move.target = "self";
 				move.flags.protect = 0;
+				move.flags.authentic = 1;
 			}
 		},
 		onHit(target, pokemon) {
@@ -709,7 +710,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.volatiles['brilliant']) pokemon.removeVolatile('brilliant');
 		},
 		secondary: null,
-		infiltrates: true,
 		target: "normal",
 		type: "Fairy",
 	},
