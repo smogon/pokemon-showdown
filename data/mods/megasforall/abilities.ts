@@ -339,7 +339,20 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	trashcompactor: {
 		desc: "This Pokémon is immune to all entry hazards. If it lands on any type of entry hazard, it clears the hazard and Stockpiles 1.",
 		shortDesc: "Hazard immunity. Clears hazards, Stockpiles 1 if switched in on them.",
-		// mega code handled in formats.ts
+		onAfterMega(pokemon) {
+			let activated = false;
+			for (const sideCondition of ['gmaxsteelsurge', 'spikes', 'stealthrock', 'stickyweb', 'toxicspikes']) {
+				if (pokemon.side.getSideCondition(sideCondition) && !this.field.getPseudoWeather('stickyresidues')) {
+					if (!activated) {
+						this.add('-activate', pokemon, 'ability: Trash Compactor');
+						activated = true;
+						this.useMove('stockpile', pokemon);
+					}
+					pokemon.side.removeSideCondition(sideCondition);
+					this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name, '[from] Ability: Trash Compactor', '[of] ' + pokemon);
+				}
+			}
+		},
 		name: "Trash Compactor",
 		rating: 5,
 		num: -1007,
@@ -347,13 +360,17 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	tempestuous: {
 		desc: "When replacing a fainted party member, this Pokémon's Special Defense is boosted, and it charges power to double the power of its Electric-type move on its first turn.",
 		shortDesc: "Gains the effect of Charge when replacing a fainted ally.",
-		// mega code handled in formats.ts
+		onAfterMega(pokemon) {
+			if (!pokemon.side.faintedLastTurn) return;
+			this.boost({spd: 1}, pokemon);
+			this.add('-activate', pokemon, 'move: Charge');
+			pokemon.addVolatile('charge');
+		},
 		onStart(pokemon) {
-			if (pokemon.side.faintedThisTurn) {
-				this.boost({spd: 1}, pokemon);
-				this.add('-activate', pokemon, 'move: Charge');
-				pokemon.addVolatile('charge');
-			}
+			if (!pokemon.side.faintedThisTurn) return;
+			this.boost({spd: 1}, pokemon);
+			this.add('-activate', pokemon, 'move: Charge');
+			pokemon.addVolatile('charge');
 		},
 		name: "Tempestuous",
 		rating: 3,

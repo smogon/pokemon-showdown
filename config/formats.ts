@@ -517,27 +517,6 @@ export const Formats: FormatList = [
 			'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base', 'Zygarde-Complete', 'Calyrex-Ice', 'Calyrex-Shadow',
 			'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
-		onAfterMega(pokemon) {
-			if (pokemon.hasAbility('tempestuous') && pokemon.side.faintedLastTurn) {
-				this.boost({spd: 1}, pokemon);
-				this.add('-activate', pokemon, 'move: Charge');
-				pokemon.addVolatile('charge');
-			}
-			if (pokemon.hasAbility('trashcompactor')) {
-				let activated = false;
-				for (const sideCondition of ['gmaxsteelsurge', 'spikes', 'stealthrock', 'stickyweb', 'toxicspikes']) {
-					if (pokemon.side.getSideCondition(sideCondition) && !this.field.getPseudoWeather('stickyresidues')) {
-						if (!activated) {
-							this.add('-activate', pokemon, 'ability: Trash Compactor');
-							activated = true;
-							this.useMove('stockpile', pokemon);
-						}
-						pokemon.side.removeSideCondition(sideCondition);
-						this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name, '[from] Ability: Trash Compactor', '[of] ' + pokemon);
-					}
-				}
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Double Trouble",
