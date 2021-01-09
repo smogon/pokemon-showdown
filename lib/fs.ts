@@ -26,7 +26,6 @@ import * as pathModule from 'path';
 import {ReadStream, WriteStream} from './streams';
 
 const ROOT_PATH = pathModule.resolve(__dirname, '..');
-const DEFAULT_THROTTLE = 5 * 1000; // 5 seconds
 
 interface PendingUpdate {
 	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle
