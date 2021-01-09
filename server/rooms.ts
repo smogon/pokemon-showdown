@@ -1143,7 +1143,7 @@ export class GlobalRoomState {
 			JSON.stringify(this.settingsList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
-		));
+		), {throttle: 5000});
 	}
 
 	writeNumRooms() {

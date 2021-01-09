@@ -286,7 +286,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	saveRoomPunishments() {
@@ -302,7 +302,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	getEntry(entryId: string) {
