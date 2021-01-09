@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-
-export const Learnsets: {[k: string]: LearnsetData} = {
+export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	sawsbucksummer: {
 		learnset: {
 			aromatherapy: ["7L28", "6L28", "5L28"],

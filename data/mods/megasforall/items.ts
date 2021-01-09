@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: {[itemid: string]: ModdedItemData} = {
 	draconite: {
 		name: "Draconite",
 		spritenum: 586,
@@ -1120,7 +1120,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
-			target.lostItemForDelibird = 'airballoon';
+			(target as any).lostItemForDelibird = this.dex.getItem('airballoon');
 			target.itemData = {id: '', target};
 			this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
 		},

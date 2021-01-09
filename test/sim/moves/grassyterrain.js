@@ -78,4 +78,20 @@ describe('Grassy Terrain', function () {
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.equal(resultMove, 'energyball');
 	});
+
+	it.skip(`should heal by Speed order in the same block as Leftovers`, function () {
+		battle = common.createBattle([[
+			{species: 'rillaboom', ability: 'grassysurge', item: 'leftovers', moves: ['seismictoss']},
+		], [
+			{species: 'alakazam', item: 'focussash', moves: ['seismictoss']},
+		]]);
+
+		battle.makeChoices();
+		const log = battle.getDebugLog();
+		const zamGrassyIndex = log.indexOf('|-heal|p2a: Alakazam|166/251|[from] Grassy Terrain');
+		const rillaGrassyIndex = log.indexOf('|-heal|p1a: Rillaboom|283/341|[from] Grassy Terrain');
+		const rillaLeftoversIndex = log.indexOf('|-heal|p1a: Rillaboom|262/341|[from] item: Leftovers');
+		assert(zamGrassyIndex < rillaGrassyIndex, 'Alakazam should heal from Grassy Terrain before Rillaboom');
+		assert(rillaGrassyIndex < rillaLeftoversIndex, 'Rillaboom should heal from Grassy Terrain before Leftovers');
+	});
 });

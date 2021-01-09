@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: SpeciesData} = {
+export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	butterfree: {
 		inherit: true,
 		otherFormes: ["Butterfree-Gmax", "Butterfree-Mega"],
@@ -778,20 +778,6 @@ export const Pokedex: {[k: string]: SpeciesData} = {
 		inherit: true,
 		otherFormes: ["Garbodor-Gmax", "Garbodor-Mega"],
 		formeOrder: ["Garbodor", "Garbodor-Gmax", "Garbodor-Mega"],
-	},
-	garbodorgmax: {
-		num: 569,
-		name: "Garbodor-Gmax",
-		baseSpecies: "Garbodor",
-		forme: "Gmax",
-		types: ["Poison"],
-		baseStats: {hp: 80, atk: 95, def: 82, spa: 60, spd: 82, spe: 75},
-		abilities: {0: "Stench", 1: "Weak Armor", H: "Aftermath"},
-		heightm: 21,
-		weightkg: 0,
-		color: "Green",
-		eggGroups: ["Mineral"],
-		isGigantamax: "G-Max Malodor",
 	},
 	garbodormega: {
 		num: 569,
