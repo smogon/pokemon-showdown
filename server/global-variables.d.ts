@@ -16,8 +16,6 @@ import {Tournaments as TournamentsType} from './tournaments';
 
 import {Dex as DexType} from '../sim/dex';
 
-import type {PendingUpdate} from '../lib/fs';
-
 declare global {
 	namespace NodeJS {
 		interface Global {
