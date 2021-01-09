@@ -568,11 +568,10 @@ export const commands: ChatCommands = {
 	},
 	roomeventshelp() {
 		this.sendReply(
-			`|html|<details class="readmore"><summary>Commands to manage room events.</summary>` +
-			`<code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
+			`|html|<details class="readmore"><summary><code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
 			`<code>/roomevents add [event name] | [event date/time] | [event description]</code>: adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # &<br />` +
 			`<code>/roomevents start [event name]</code>: declares to the room that the event has started. Requires: @ # &<br />` +
-			`<code>/roomevents remove [event name]</code>: deletes an event. Requires: @ # &<br />` +
+			`<code>/roomevents remove [event name]</code>: deletes an event. Requires: @ # &</summary>` +
 			`<code>/roomevents rename [old event name] | [new name]</code>: renames an event. Requires: @ # &<br />` +
 			`<code>/roomevents addalias [alias] | [event name]</code>: adds an alias for the event. Requires: @ # &<br />` +
 			`<code>/roomevents removealias [alias]</code>: removes an event alias. Requires: @ # &<br />` +
