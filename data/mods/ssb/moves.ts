@@ -701,7 +701,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!source.volatiles['brilliant']) {
 				move.accuracy = true;
 				move.target = "self";
-				move.flags.protect = 0;
+				delete move.flags.protect;
 				move.flags.authentic = 1;
 			}
 		},
