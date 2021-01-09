@@ -28,7 +28,7 @@ import {ReadStream, WriteStream} from './streams';
 const ROOT_PATH = pathModule.resolve(__dirname, '..');
 const DEFAULT_THROTTLE = 5 * 1000; // 5 seconds
 
-export interface PendingUpdate {
+interface PendingUpdate {
 	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle
 	pendingDataFetcher: (() => string | Buffer) | null;
 	pendingOptions: AnyObject | null;
@@ -152,7 +152,7 @@ export class FSPath {
 	 * called, if `writeUpdate` is called many times in a short period.
 	 *
 	 * `options.throttle`, if it exists, will make sure updates are not
-	 * written more than once every `options.throttle` milliseconds, else the default is 5 seconds.
+	 * written more than once every `options.throttle` milliseconds.
 	 *
 	 * No synchronous version because there's no risk of race conditions
 	 * with synchronous code; just use `safeWriteSync`.
