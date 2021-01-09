@@ -174,7 +174,7 @@ export class FSPath {
 			return;
 		}
 
-		if (!options.throttle) {
+		if (!throttleTime) {
 			this.writeUpdateNow(dataFetcher, options);
 			return;
 		}
@@ -509,4 +509,3 @@ function getFs(path: string) {
 export const FS = Object.assign(getFs, {
 	FileReadStream,
 });
-
