@@ -55,7 +55,7 @@ try {
 
 export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
-		() => JSON.stringify(tickets)
+		() => JSON.stringify(tickets), {throttle: 5000}
 	);
 }
 

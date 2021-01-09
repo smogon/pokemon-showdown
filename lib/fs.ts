@@ -154,8 +154,6 @@ export class FSPath {
 	 * `options.throttle`, if it exists, will make sure updates are not
 	 * written more than once every `options.throttle` milliseconds, else the default is 5 seconds.
 	 *
-	 * `options.writeNow`, if it exists, will force it to write *right* now. (Pun is absolutely intended)
-	 *
 	 * No synchronous version because there's no risk of race conditions
 	 * with synchronous code; just use `safeWriteSync`.
 	 */
@@ -163,7 +161,7 @@ export class FSPath {
 		if (Config.nofswriting) return;
 		const pendingUpdate: PendingUpdate | undefined = __fsState.pendingUpdates.get(this.path);
 
-		const throttleTime = Date.now() + (options.throttle ? options.throttle : DEFAULT_THROTTLE);
+		const throttleTime = Date.now() + (options.throttle || 0);
 
 		if (pendingUpdate) {
 			pendingUpdate.pendingDataFetcher = dataFetcher;
@@ -176,7 +174,7 @@ export class FSPath {
 			return;
 		}
 
-		if (options.writeNow) {
+		if (!options.throttle) {
 			this.writeUpdateNow(dataFetcher, options);
 			return;
 		}
