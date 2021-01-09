@@ -97,4 +97,110 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 70, atk: 95, def: 90, spa: 55, spd: 85, spe: 55},
 		abilities: {0: "Hyper Cutter", 1: "Intimidate", H: "Sheer Force", S: "Steelworker"},
 	},
+	toxicroak: {
+		inherit: true,
+		baseStats: {hp: 83, atk: 121, def: 75, spa: 86, spd: 75, spe: 110},
+	},
+	noivern: {
+		inherit: true,
+		baseStats: {hp: 85, atk: 70, def: 80, spa: 107, spd: 80, spe: 123},
+		abilities: {0: "Frisk", 1: "Infiltrator", H: "Telepathy", S: "Aerilate"},
+	},
+	weezinggalar: {
+		inherit: true,
+		baseStats: {hp: 75, atk: 90, def: 120, spa: 85, spd: 85, spe: 60},
+	},
+	alcremie: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 60, def: 90, spa: 125, spd: 120, spe: 40},
+		abilities: {0: "Sweet Veil", 1: "Natural Cure", H: "Aroma Veil"},
+	},
+	alcremiegmax: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 60, def: 90, spa: 125, spd: 120, spe: 40},
+		abilities: {0: "Sweet Veil", 1: "Natural Cure", H: "Aroma Veil"},
+	},
+	ninetalesalola: {
+		inherit: true,
+		baseStats: {hp: 75, atk: 45, def: 80, spa: 120, spd: 80, spe: 120},
+		abilities: {0: "Snow Cloak", 1: "Refrigerate", H: "Snow Warning", S: "Pixilate"},
+	},
+	gallade: {
+		inherit: true,
+		baseStats: {hp: 68, atk: 125, def: 65, spa: 65, spd: 115, spe: 110},
+		abilities: {0: "Steadfast", 1: "Mirror Armor", H: "Justified", S: "Shield Dust"},
+	},
+	orbeetle: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 45, def: 120, spa: 100, spd: 130, spe: 90},
+		abilities: {0: "Swarm", 1: "Frisk", H: "Wide Guard", S: "Friend Guard"},
+	},
+	orbeetlegmax: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 45, def: 120, spa: 100, spd: 130, spe: 90},
+		abilities: {0: "Swarm", 1: "Frisk", H: "Wide Guard", S: "Friend Guard"},
+	},
+	goodra: {
+		inherit: true,
+		baseStats: {hp: 110, atk: 60, def: 70, spa: 150, spd: 150, spe: 60},
+		abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey", S: "Thick Fat"},
+	},
+	drampa: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 50, def: 90, spa: 155, spd: 100, spe: 25},
+		abilities: {0: "Berserk", 1: "Sap Sipper", H: "Cloud Nine", S: "Inner Focus"},
+	},
+	keldeo: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 75, def: 80, spa: 135, spd: 80, spe: 120},
+	},
+	keldeoresolute: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 75, def: 80, spa: 135, spd: 80, spe: 120},
+	},
+	blastoise: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 60, def: 125, spa: 65, spd: 125, spe: 75},
+		abilities: {0: "Torrent", 1: "Prankster", H: "Rain Dish"},
+	},
+	blastoisegmax: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 60, def: 125, spa: 65, spd: 125, spe: 75},
+		abilities: {0: "Torrent", 1: "Prankster", H: "Rain Dish"},
+	},
+	marowakalola: {
+		inherit: true,
+		baseStats: {hp: 75, atk: 85, def: 115, spa: 50, spd: 90, spe: 40},
+		abilities: {0: "Cursed Body", 1: "Lightning Rod", H: "Rock Head"},
+	},
+	araquanid: {
+		inherit: true,
+		baseStats: {hp: 68, atk: 80, def: 92, spa: 80, spd: 132, spe: 42},
+	},
+	dhelmise: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 151, def: 113, spa: 66, spd: 90, spe: 50},
+	},
+	snorlax: {
+		inherit: true,
+		abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony", S: "Poison Heal"},
+	},
+	obstagoon: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 105, def: 105, spa: 60, spd: 85, spe: 95},
+	},
+	vikavolt: {
+		inherit: true,
+		abilities: {0: "Levitate", 1: "Electric Surge"},
+	},
+	exeggutor: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 75, def: 95, spa: 125, spd: 95, spe: 45},
+		abilities: {0: "Chlorophyll", 1: "Drought", H: "Harvest"},
+	},
+	exeggutoralola: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 125, def: 95, spa: 75, spd: 95, spe: 45},
+		abilities: {0: "Frisk", 1: "Grassy Surge", H: "Harvest"},
+	},
 };

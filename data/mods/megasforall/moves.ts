@@ -388,7 +388,8 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				if (pokemon.hasType('Poison') && !this.field.getPseudoWeather('stickyresidues')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasType('Poison') || pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasType('Poison') ||
+					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1141,7 +1142,6 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	
 	acidicterrain: {
 		num: 100000,
 		accuracy: true,
@@ -1205,5 +1205,5 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Poison",
- 	},
+	},
 };

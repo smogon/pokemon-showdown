@@ -2074,9 +2074,7 @@ export class TeamValidator {
 		// different learnsets. To prevent a leak, we make them show up as their
 		// base forme, but hardcode their learnsets into Rockruff-Dusk and
 		// Greninja-Ash
-		const baseSpecies = (species.baseSpecies === 'Gastrodon' || species.baseSpecies === 'Pumpkaboo' ||
-			(this.format.mod === 'megasforall' && species.baseSpecies === 'Sawsbuck'));
-		if (baseSpecies && species.forme) {
+		if ((species.baseSpecies === 'Gastrodon' || species.baseSpecies === 'Pumpkaboo') && species.forme) {
 			return this.dex.getSpecies(species.baseSpecies);
 		} else if (species.name === 'Lycanroc-Dusk') {
 			return this.dex.getSpecies('Rockruff-Dusk');

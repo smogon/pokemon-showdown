@@ -21,7 +21,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							if (!this.modData('Learnsets', this.toID(mon)).learnset[this.toID(eventMove)]) {
 								this.modData('Learnsets', this.toID(mon)).learnset[this.toID(eventMove)] = [];
 							}
-							this.modData('Learnsets', this.toID(mon)).learnset[this.toID(eventMove)].push(`8S${index}`)
+							this.modData('Learnsets', this.toID(mon)).learnset[this.toID(eventMove)].push(`8S${index}`);
 						}
 					}
 				}
@@ -50,5 +50,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			{generation: 8, abilities: ["steelworker"], moves: ["followme"], shiny: 1},
 			{generation: 8, abilities: ["hugepower"], moves: ["tackle"], shiny: 1},
 		]);
+		newMoves('toxicroak', ['closecombat', 'thunderpunch']);
+		newMoves('noivern', ['triattack', 'fireblast', 'mysticalfire', 'icywind']);
+		newMoves('weezinggalar', ['recover', 'followme']);
+		newMoves('alcremie', ['reflect', 'moonblast', 'wish', 'willowisp']);
+		newMoves('ninetalesalola', ['hypervoice', 'energyball', 'earthpower']);
+		newMoves('gallade', ['partingshot', 'machpunch', 'sacredsword', 'meteormash']);
+		newMoves('orbeetle', ['thunderbolt', 'icebeam', 'wideguard', 'pollenpuff']);
+		newMoves('goodra', ['heatwave', 'wish', 'calmmind', 'nastyplot']);
+		newMoves('keldeo', ['fakeout', 'calmmind']);
+		newMoves('blastoise', ['thunderwave']);
+		newMoves('marowakalola', ['bodypress']);
+		newMoves('araquanid', ['trickroom', 'helpinghand', 'coaching', 'defog', 'flipturn']);
+		newMoves('dhelmise', ['trickroom']);
+		newMoves('obstagoon', ['fakeout', 'extremespeed']);
+		newMoves('vikavolt', ['powergem']);
+		newMoves('exeggutor', ['focusblast', 'thunder', 'surf']);
+		newMoves('exeggutoralola', ['closecombat', 'zapcannon', 'earthquake']);
 	},
 };
