@@ -541,7 +541,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Double Trouble",
-		desc: `A community-created Pet Mod.`,
+		desc: `Doubles-based metagame where Pokemon are adjusted to become DOU-viable.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657658/">Double Trouble</a>`,
 		],
