@@ -161,7 +161,7 @@ export class FSPath {
 		if (Config.nofswriting) return;
 		const pendingUpdate: PendingUpdate | undefined = __fsState.pendingUpdates.get(this.path);
 
-		const throttleTime = Date.now() + (options.throttle || 0);
+		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
 
 		if (pendingUpdate) {
 			pendingUpdate.pendingDataFetcher = dataFetcher;
