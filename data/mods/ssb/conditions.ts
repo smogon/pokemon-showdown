@@ -1257,7 +1257,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'That hurt me in my meow-meow. ;-;', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:'][this.random(6)]}`);
+			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:'][this.random(5)]}`);
 		},
 	},
 	peapodc: {
