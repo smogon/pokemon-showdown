@@ -189,8 +189,7 @@ export class FSPath {
 	}
 
 	writeUpdateNow(dataFetcher: () => string | Buffer, options: AnyObject) {
-		// @ts-ignore
-		const throttleTime = Date.now() + (options.throttle ? options.throttle : DEFAULT_THROTTLE);
+		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
 		const update = {
 			isWriting: true,
 			pendingDataFetcher: null,
