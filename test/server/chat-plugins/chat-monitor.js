@@ -6,7 +6,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {User, Connection} = require('../../users-utils');
+const {makeUser} = require('../../users-utils');
 
 const chatMonitor = require('../../../.server-dist/chat-plugins/chat-monitor');
 
@@ -52,9 +52,8 @@ describe('Chat monitor', () => {
 	describe('in-room tests', () => {
 		before(() => {
 			this.room = Rooms.get('lobby');
-			this.connection = Connection('127.0.0.1');
-			this.user = User(this.connection);
-			this.user.forceRename("Unit Tester", true);
+			this.user = makeUser("Unit Tester");
+			this.connection = this.user.connections[0];
 			this.user.joinRoom(this.room.roomid, this.connection);
 
 			this.parse = async function (message) {

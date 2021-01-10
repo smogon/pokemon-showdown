@@ -2,9 +2,7 @@
 
 const assert = require('assert').strict;
 
-const userUtils = require('../users-utils');
-const Connection = userUtils.Connection;
-const User = userUtils.User;
+const {makeUser, makeConnection} = require('../users-utils');
 
 describe('Users features', function () {
 	describe('Users', function () {
@@ -26,7 +24,7 @@ describe('Users features', function () {
 		describe('Connection', function () {
 			describe('#onDisconnect', function () {
 				beforeEach(function () {
-					this.connection = new Connection('127.0.0.1');
+					this.connection = makeConnection('127.0.0.1');
 				});
 
 				it('should remove the connection from Users.connections', function () {
@@ -36,7 +34,7 @@ describe('Users features', function () {
 				});
 
 				it('should destroy any user on the connection as well', function () {
-					const user = new User(this.connection);
+					const user = makeUser('', this.connection);
 					const userid = user.id;
 					assert.equal(Users.users.has(userid), true, 'before disconnecting');
 					user.disconnectAll();
@@ -46,20 +44,20 @@ describe('Users features', function () {
 			});
 
 			describe('#joinRoom', function () {
-				let room;
+				let room, connection;
 				beforeEach(function () {
-					this.connection = new Connection('127.0.0.1');
+					connection = makeConnection('127.0.0.1');
 				});
 
 				afterEach(function () {
-					this.connection.destroy();
+					connection.destroy();
 					if (room) room.destroy();
 				});
 
 				it('should join a room if not already present', function () {
 					room = Rooms.createChatRoom('test');
-					this.connection.joinRoom(Rooms.get('test'));
-					assert(this.connection.inRooms.has('test'));
+					connection.joinRoom(Rooms.get('test'));
+					assert(connection.inRooms.has('test'));
 				});
 			});
 
@@ -69,7 +67,7 @@ describe('Users features', function () {
 					if (room) room.destroy();
 				});
 				it('should leave a room that is present', function () {
-					this.connection = new Connection('127.0.0.1');
+					this.connection = makeConnection('127.0.0.1');
 					room = Rooms.createChatRoom('test');
 					this.connection.joinRoom(room);
 					this.connection.leaveRoom(room);
@@ -79,8 +77,8 @@ describe('Users features', function () {
 		});
 		describe('User', function () {
 			it('should store IP addresses after disconnect', () => {
-				const conn = new Connection('127.0.0.1');
-				const user = new User(conn);
+				const conn = makeConnection('127.0.0.1');
+				const user = makeUser('', conn);
 				assert.deepEqual(['127.0.0.1'], user.ips);
 				user.onDisconnect(conn);
 				assert.deepEqual(['127.0.0.1'], user.ips);
@@ -89,9 +87,9 @@ describe('Users features', function () {
 			describe('#disconnectAll', function () {
 				for (const totalConnections of [1, 2]) {
 					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
-						const user = new User();
+						const user = makeUser();
 						let iterations = totalConnections;
-						while (--iterations) user.mergeConnection(new Connection());
+						while (--iterations) user.mergeConnection(makeConnection());
 
 						user.disconnectAll();
 						assert.equal(user.connections.length, 0);
@@ -99,9 +97,9 @@ describe('Users features', function () {
 					});
 
 					it('should unref all ' + totalConnections + ' connection(s)', function () {
-						const user = new User();
+						const user = makeUser();
 						let iterations = totalConnections;
-						while (--iterations) user.mergeConnection(new Connection());
+						while (--iterations) user.mergeConnection(makeConnection());
 
 						const connections = user.connections.slice();
 
@@ -112,9 +110,9 @@ describe('Users features', function () {
 					});
 
 					it('should clear `user` property for all ' + totalConnections + ' connection(s)', function () {
-						const user = new User();
+						const user = makeUser();
 						let iterations = totalConnections;
-						while (--iterations) user.mergeConnection(new Connection());
+						while (--iterations) user.mergeConnection(makeConnection());
 						const connections = user.connections.slice();
 
 						user.disconnectAll();
@@ -133,16 +131,18 @@ describe('Users features', function () {
 
 				it('should disconnect every user at that IP', async function () {
 					Punishments.sharedIps = new Map();
-					const users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
-					await Punishments.ban(users[0]);
-					assert.equal(users[0].connected, false);
-					assert.equal(users[1].connected, false);
+					const user1 = makeUser('', '192.168.1.1');
+					const user2 = makeUser('', '192.168.1.1');
+					await Punishments.ban(user1);
+					assert.equal(user1.connected, false);
+					assert.equal(user2.connected, false);
 				});
 
 				it('should not disconnect users at other IPs', async function () {
-					const users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
-					await Punishments.ban(users[0]);
-					assert.equal(users[1].connected, true);
+					const user1 = makeUser('', '192.168.1.1');
+					const user2 = makeUser('', '192.168.1.2');
+					await Punishments.ban(user1);
+					assert.equal(user2.connected, true);
 				});
 			});
 
@@ -158,11 +158,11 @@ describe('Users features', function () {
 					}
 				});
 				it(`should allow 'u' permissions on lower ranked users`, function () {
-					const user = new User();
+					const user = makeUser();
 					user.tempGroup = '@';
 					assert.equal(user.can('globalban', user), false, 'targeting self');
 
-					const target = new User();
+					const target = makeUser();
 					target.tempGroup = ' ';
 					assert.equal(user.can('globalban', target), true, 'targeting lower rank');
 					target.tempGroup = '@';
@@ -172,8 +172,7 @@ describe('Users features', function () {
 				});
 				it(`should not allow users to demote themselves`, function () {
 					room = Rooms.createChatRoom("test");
-					const user = new User();
-					user.forceRename("User", true);
+					const user = makeUser("User");
 					user.joinRoom(room);
 					for (const group of [' ', '+', '@']) {
 						room.auth.set(user.id, group);

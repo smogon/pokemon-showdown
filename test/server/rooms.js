@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {User} = require('../users-utils');
+const {makeUser} = require('../users-utils');
 
 describe('Rooms features', function () {
 	describe('Rooms', function () {
@@ -24,7 +24,7 @@ describe('Rooms features', function () {
 				const Hangman = require('../../.server-dist/chat-plugins/hangman').Hangman;
 				const UNO = require('../../.server-dist/chat-plugins/uno').UNO;
 				const room = Rooms.createChatRoom('r/relationshipadvice');
-				const game = new Hangman(room, new User(), 'There\'s a lot of red flags here');
+				const game = new Hangman(room, makeUser(), 'There\'s a lot of red flags here');
 				room.game = game;
 				assert.equal(room.getGame(Hangman), game);
 				assert.equal(room.getGame(UNO), null);
@@ -47,8 +47,8 @@ describe('Rooms features', function () {
 		});
 
 		it('should allow two users to join the battle', function () {
-			const p1 = new User();
-			const p2 = new User();
+			const p1 = makeUser();
+			const p2 = makeUser();
 			const options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
 			for (const option of options) {
 				room = Rooms.createBattle('customgame', Object.assign({
@@ -64,8 +64,8 @@ describe('Rooms features', function () {
 		it('should copy auth from tournament', function () {
 			parent = Rooms.createChatRoom('parentroom', '', {});
 			parent.auth.get = () => '%';
-			const p1 = new User();
-			const p2 = new User();
+			const p1 = makeUser();
+			const p2 = makeUser();
 			const options = {
 				p1,
 				p2,
@@ -79,18 +79,16 @@ describe('Rooms features', function () {
 				},
 			};
 			room = Rooms.createBattle('customgame', options);
-			assert.equal(room.auth.get(new User().id), '%');
+			assert.equal(room.auth.get(makeUser().id), '%');
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
 			parent = Rooms.createChatRoom('parentroom2', '', {});
 			parent.auth.get = () => '%';
-			const p1 = new User();
-			const p2 = new User();
-			const roomStaff = new User();
-			roomStaff.forceRename("Room auth", true);
-			const administrator = new User();
-			administrator.forceRename("Admin", true);
+			const p1 = makeUser();
+			const p2 = makeUser();
+			const roomStaff = makeUser("Room auth");
+			const administrator = makeUser("Admin");
 			administrator.tempGroup = '~';
 			const options = {
 				p1,
@@ -148,7 +146,7 @@ describe('Rooms features', function () {
 
 			it("should move the users and their connections", async function () {
 				room = Rooms.createChatRoom("test", "Test");
-				const user = new User();
+				const user = makeUser();
 				user.joinRoom(room);
 				await room.rename("Test2");
 				assert.equal(user.inRooms.has("test"), false);

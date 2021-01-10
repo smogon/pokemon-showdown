@@ -8,16 +8,7 @@
 const assert = require('assert').strict;
 const moderation = require('../../../.server-dist/chat-commands/moderation');
 
-const userUtils = require('../../users-utils');
-const User = userUtils.User;
-const Connection = userUtils.Connection;
-
-function makeUser(name, ip) {
-	const user = new User(new Connection(ip));
-	user.forceRename(name, true);
-	Users.users.set(user.id, user);
-	return user;
-}
+const {makeUser} = require('../../users-utils');
 
 describe('room promotions', () => {
 	before(() => {
