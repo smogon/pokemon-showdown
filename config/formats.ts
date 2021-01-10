@@ -588,7 +588,6 @@ export const Formats: FormatList = [
 				publ: 30,
 				pu: 40,
 				nfe: 40,
-				lcuber: 40,
 				lc: 40,
 			};
 			let tier = this.toID(species.tier) || 'ou';

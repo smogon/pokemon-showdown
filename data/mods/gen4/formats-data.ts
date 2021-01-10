@@ -1165,7 +1165,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	meditite: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	medicham: {
 		randomBattleMoves: ["bulletpunch", "fakeout", "highjumpkick", "icepunch", "psychocut", "thunderpunch", "trick"],

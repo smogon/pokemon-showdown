@@ -251,7 +251,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	vulpix: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	vulpixalola: {
 		tier: "LC",
@@ -743,7 +743,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	tangela: {
 		tier: "PU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	tangrowth: {
 		randomBattleMoves: ["earthquake", "gigadrain", "hiddenpowerfire", "knockoff", "leafstorm", "rockslide", "sleeppowder", "synthesis"],
@@ -806,7 +806,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["aerialace", "brickbreak", "bugbite", "knockoff", "roost", "swordsdance", "uturn"],
 		randomDoubleBattleMoves: ["aerialace", "brickbreak", "bugbite", "feint", "knockoff", "protect", "swordsdance", "uturn"],
 		tier: "PU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	scizor: {
 		randomBattleMoves: ["bugbite", "bulletpunch", "knockoff", "pursuit", "superpower", "swordsdance", "uturn"],
@@ -943,7 +943,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	porygon: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	porygon2: {
 		randomBattleMoves: ["discharge", "icebeam", "recover", "toxic", "triattack"],
@@ -1204,7 +1204,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	aipom: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	ambipom: {
 		randomBattleMoves: ["fakeout", "knockoff", "lowkick", "return", "seedbomb", "switcheroo", "uturn"],
@@ -1222,7 +1222,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	yanma: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	yanmega: {
 		randomBattleMoves: ["airslash", "bugbuzz", "gigadrain", "protect", "uturn"],
@@ -1239,7 +1239,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	murkrow: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	honchkrow: {
 		randomBattleMoves: ["bravebird", "heatwave", "pursuit", "roost", "suckerpunch", "superpower"],
@@ -1248,7 +1248,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	misdreavus: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	mismagius: {
 		randomBattleMoves: ["dazzlinggleam", "destinybond", "nastyplot", "painsplit", "shadowball", "substitute", "taunt", "thunderbolt", "willowisp"],
@@ -1294,7 +1294,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	gligar: {
 		randomBattleMoves: ["defog", "earthquake", "knockoff", "roost", "stealthrock", "toxic", "uturn"],
 		tier: "UU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	gliscor: {
 		randomBattleMoves: ["earthquake", "knockoff", "protect", "roost", "stealthrock", "taunt", "toxic", "uturn"],
@@ -1337,7 +1337,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	sneasel: {
 		tier: "NU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	weavile: {
 		randomBattleMoves: ["iceshard", "iciclecrash", "knockoff", "lowkick", "pursuit", "swordsdance"],
@@ -1633,7 +1633,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	wingull: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	pelipper: {
 		randomBattleMoves: ["defog", "hurricane", "hydropump", "knockoff", "roost", "scald", "uturn"],
@@ -1798,7 +1798,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	meditite: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	medicham: {
 		randomBattleMoves: ["bulletpunch", "drainpunch", "highjumpkick", "icepunch", "zenheadbutt"],
@@ -1934,7 +1934,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	trapinch: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	vibrava: {
 		tier: "NFE",
@@ -2492,7 +2492,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	drifloon: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	drifblim: {
 		randomBattleMoves: ["acrobatics", "destinybond", "hex", "shadowball", "substitute", "willowisp"],
@@ -3210,7 +3210,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gothita: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	gothorita: {
 		tier: "NFE",
@@ -3801,7 +3801,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	swirlix: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	slurpuff: {
 		randomBattleMoves: ["bellydrum", "drainpunch", "playrough", "return"],
@@ -4146,7 +4146,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	cutiefly: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	ribombee: {
 		randomBattleMoves: ["bugbuzz", "hiddenpowerfire", "moonblast", "quiverdance", "roost"],
