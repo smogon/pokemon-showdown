@@ -1023,7 +1023,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			status: 'tox',
 		},
-		secondary: null,
 		target: 'normal',
 		type: 'Flying',
 	},
