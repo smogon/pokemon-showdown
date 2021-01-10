@@ -49,7 +49,6 @@ export class RoomGamePlayer {
 		if (!this.id) return;
 		const user = Users.getExact(this.id);
 		if (user && !this.game.isSubGame) {
-			delete this.game.playerTable[user.id];
 			user.updateSearch();
 		}
 		this.id = '';

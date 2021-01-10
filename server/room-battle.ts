@@ -131,7 +131,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 			for (const connection of user.connections) {
 				Sockets.channelMove(connection.worker, this.game.roomid, 0, connection.socketid);
 			}
-			delete this.game.playerTable[this.id];
 			user.updateSearch();
 		}
 		this.id = '';
