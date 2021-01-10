@@ -98,7 +98,9 @@ class WorkerStream extends ObjectReadWriteStream {
 	moveToChannel(roomid, channelid, socketid) {
 		socketid = +socketid;
 		if (!this.rooms.has(roomid)) {
-			throw new Error(`Attempted to move socket ${socketid} to channel ${channelid} of nonexistent room ${roomid}`);
+			// happens when destroying rooms
+			// throw new Error(`Attempted to move socket ${socketid} to channel ${channelid} of nonexistent room ${roomid}`);
+			return;
 		}
 
 		if (!this.roomChannels.has(roomid)) {
