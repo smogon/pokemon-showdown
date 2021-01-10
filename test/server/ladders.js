@@ -55,6 +55,9 @@ describe('Matchmaker', function () {
 		addSearch(this.p1);
 		addSearch(this.p2);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
 	});
 
 	it('should matchmake users within a reasonable rating range', function () {
@@ -78,6 +81,9 @@ describe('Matchmaker', function () {
 		s2.rating = 1000;
 		Ladders.Ladder.periodicMatch();
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
 	});
 
 	it('should create a new battle room after matchmaking', function () {
