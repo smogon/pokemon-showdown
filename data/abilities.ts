@@ -2963,8 +2963,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onTryEatItemPriority: -1,
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			this.add('-activate', pokemon, 'ability: Ripen');
+			itemData.ripe = true;
 		},
 		onEatItem(item, pokemon) {
 			const weakenBerries = [

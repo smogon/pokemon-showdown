@@ -1544,7 +1544,7 @@ export class Pokemon {
 		const item = this.getItem();
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
-			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
+			(force || this.battle.runEvent('TryEatItem', this, null, item, this.itemData))
 		) {
 			this.battle.add('-enditem', this, item, '[eat]');
 

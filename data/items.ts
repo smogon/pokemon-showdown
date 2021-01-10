@@ -118,7 +118,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -1537,7 +1537,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat() { },
@@ -1681,7 +1681,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -2413,7 +2413,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -2587,7 +2587,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.damage(source.baseMaxhp / (this.effectData.ripe ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -3152,7 +3152,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -3736,7 +3736,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -4686,7 +4686,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.damage(source.baseMaxhp / (this.effectData.ripe ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -5016,7 +5016,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -6763,7 +6763,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -6880,7 +6880,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
@@ -6946,7 +6946,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
+		onTryEatItem(itemData, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {

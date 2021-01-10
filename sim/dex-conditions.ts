@@ -1,5 +1,6 @@
 import {BasicEffect} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
+import type {EffectState} from './pokemon';
 
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
@@ -89,7 +90,7 @@ export interface EventMethods {
 	onTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
-	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onTryEatItem?: boolean | ((this: Battle, data: EffectState, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onTryHeal() is run with two different sets of arguments */
 	onTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -190,7 +191,7 @@ export interface EventMethods {
 	onAllyTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
-	onAllyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onAllyTryEatItem?: boolean | ((this: Battle, data: EffectState, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onAllyTryHeal() is run with two different sets of arguments */
 	onAllyTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -293,7 +294,7 @@ export interface EventMethods {
 	onFoeTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
-	onFoeTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onFoeTryEatItem?: boolean | ((this: Battle, data: EffectState, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onFoeTryHeal() is run with two different sets of arguments */
 	onFoeTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -398,7 +399,7 @@ export interface EventMethods {
 	onSourceTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
-	onSourceTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onSourceTryEatItem?: boolean | ((this: Battle, data: EffectState, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onSourceTryHeal() is run with two different sets of arguments */
 	onSourceTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -501,7 +502,7 @@ export interface EventMethods {
 	onAnyTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
-	onAnyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onAnyTryEatItem?: boolean | ((this: Battle, data: EffectState, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onAnyTryHeal() is run with two different sets of arguments */
 	onAnyTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
