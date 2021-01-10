@@ -1019,7 +1019,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyPriority(priority, source) {
 			if (source.activeMoveActions < 1) return priority + 3;
 		},
-		status: 'tox',
+		secondary: {
+			chance: 100,
+			status: 'tox',
+		},
 		secondary: null,
 		target: 'normal',
 		type: 'Flying',

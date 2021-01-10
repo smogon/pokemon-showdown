@@ -2017,6 +2017,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return this.chainModify(0.5);
 		},
 	},
+	// Kipkluif, needs to end in mod to not trigger aelita/andrew's effect
+	degeneratormod: {
+		onBeforeSwitchOut(pokemon) {
+			let alreadyAdded = false;
+			for (const source of this.effectData.sources) {
+				if (!source.hp || source.volatiles['gastroacid']) continue;
+				if (!alreadyAdded) {
+					const foe = pokemon.side.foe.active[0];
+					if (foe) this.add('-activate', foe, 'ability: Degenerator');
+					alreadyAdded = true;
+				}
+				this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
+			}
+		},
+	},
 	// For ravioliqueen
 	haunting: {
 		name: 'Haunting',

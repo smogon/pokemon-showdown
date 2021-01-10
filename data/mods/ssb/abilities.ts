@@ -1225,29 +1225,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "While this Pokemon is active, foes that switch out lose 1/3 of their maximum HP, rounded down. This damage will never cause a Pokemon to faint, and will instead leave them at 1 HP.",
 		shortDesc: "While this Pokemon is active, foes that switch out lose 1/3 of their maximum HP.",
 		onStart(pokemon) {
-			pokemon.side.foe.addSideCondition('degenerator', pokemon);
-			const data = pokemon.side.foe.getSideConditionData('degenerator');
+			pokemon.side.foe.addSideCondition('degeneratormod', pokemon);
+			const data = pokemon.side.foe.getSideConditionData('degeneratormod');
 			if (!data.sources) {
 				data.sources = [];
 			}
 			data.sources.push(pokemon);
 		},
 		onEnd(pokemon) {
-			pokemon.side.foe.removeSideCondition('degenerator');
-		},
-		condition: {
-			onBeforeSwitchOut(pokemon) {
-				let alreadyAdded = false;
-				for (const source of this.effectData.sources) {
-					if (!source.hp || source.volatiles['gastroacid']) continue;
-					if (!alreadyAdded) {
-						const foe = pokemon.side.foe.active[0];
-						if (foe) this.add('-activate', foe, 'ability: Degenerator');
-						alreadyAdded = true;
-					}
-					this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
-				}
-			},
+			pokemon.side.foe.removeSideCondition('degeneratormod');
 		},
 		name: "Degenerator",
 		isNonstandard: "Custom",
@@ -1950,7 +1936,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Overasked Clause",
 		isPermanent: true,
 		onHit(target, source, move) {
-			if (target.getMoveHitData(move).typeMod < 0) {
+			if (target.runEffectiveness(move) < 0) {
 				if (!target.hp) return;
 				if (target.species.id.includes('aggron') && !target.illusion && !target.transformed) {
 					this.boost({atk: 1}, target);
