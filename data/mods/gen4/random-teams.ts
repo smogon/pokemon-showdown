@@ -618,8 +618,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		const levelScale: {[k: string]: number} = {
-			AG: 76,
-			Uber: 78,
+			AG: 74,
+			Uber: 76,
 			OU: 80,
 			'(OU)': 82,
 			UUBL: 82,
