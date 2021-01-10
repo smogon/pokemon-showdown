@@ -27,7 +27,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			spd: 85,
 			spe: 85,
 		};
-		let ivs = {
+		let ivs: SparseStatsTable = {
 			hp: 31,
 			atk: 31,
 			def: 31,
@@ -52,7 +52,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		// These moves can be used even if we aren't setting up to use them:
 		const SetupException = ['suckerpunch', 'dracometeor', 'overheat'];
-		const counterAbilities = ['Adaptability', 'Hustle', 'Iron Fist', 'Skill Link'];
 
 		// Give recovery moves priority over certain other defensive status moves
 		const recoveryMoves = ['healorder', 'milkdrink', 'moonlight', 'morningsun', 'painsplit', 'recover', 'rest', 'roost', 'slackoff', 'softboiled', 'synthesis', 'wish'];
@@ -381,7 +380,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				}
 
 				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if ((hasType['Bug'] && !counter['Bug'] && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))) ||
+				if (!rejected && !['judgment', 'sleeptalk'].includes(moveid) && (counter['physicalsetup'] + counter['specialsetup'] < 2 &&
+					(!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)
+				) && (
+					(!counter.stab && !counter['damage'] && (species.types.length > 1 || (species.types[0] !== 'Normal' && species.types[0] !== 'Psychic') || !hasMove['icebeam'] || species.baseStats.spa >= species.baseStats.spd)) ||
+					(hasType['Bug'] && !counter['Bug'] && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))) ||
 					(hasType['Dark'] && (!counter['Dark'] || (counter['Dark'] === 1 && hasMove['pursuit'])) && movePool.includes('suckerpunch') && counter.setupType !== 'Special') ||
 					(hasType['Dragon'] && !counter['Dragon']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
@@ -394,16 +397,16 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					(hasType['Rock'] && !counter['Rock'] && (movePool.includes('headsmash') || movePool.includes('stoneedge'))) ||
 					(hasType['Steel'] && !counter['Steel'] && movePool.includes('meteormash')) ||
 					(hasType['Water'] && !counter['Water'] && (hasMove['raindance'] || !hasType['Ice'] || !counter['Ice'])) ||
-					((hasAbility['Adaptability'] && !counter.setupType && species.types.length > 1 && (!counter[species.types[0]] || !counter[species.types[1]])) ||
+					(hasAbility['Adaptability'] && !counter.setupType && species.types.length > 1 && (!counter[species.types[0]] || !counter[species.types[1]])) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (species.baseSpecies === 'Arceus' && movePool.includes('recover'))))) ||
-					(species.requiredMove && movePool.includes(toID(species.requiredMove)))) &&
-					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
+					(species.requiredMove && movePool.includes(toID(species.requiredMove)))
+				)) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'judgment' && !recoveryMoves.includes(moveid) && moveid !== 'sleeptalk') {
-						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;
+					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
+						if (move.category === 'Status' || !hasType[move.type] || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
 
@@ -429,33 +432,13 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					moves.splice(i, 1);
 					break;
 				}
-			}
-			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool']) && species.name !== 'Shuckle' && species.name !== 'Smeargle') {
-				// Move post-processing:
-				if (counter.damagingMoves.length === 0) {
-					// A set shouldn't have no attacking moves
-					moves.splice(this.random(moves.length), 1);
-				} else if (counter.damagingMoves.length === 1) {
-					// In most cases, a set shouldn't have no STAB
-					const damagingid = counter.damagingMoves[0].id;
-					if (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower'])) {
-						let replace = false;
-						if (!counter.damagingMoves[0].damage && species.name !== 'Blissey' && species.name !== 'Porygon2') {
-							replace = true;
-						}
-						if (replace) moves.splice(counter.damagingMoveIndex[damagingid], 1);
-					}
-				} else if (!counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage && species.name !== 'Blissey' && species.name !== 'Clefable' && species.name !== 'Porygon2') {
-					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
-					const rejectableMoves = [];
-					const baseDiff = movePool.length - availableHP;
-					for (const move of counter.damagingMoves) {
-						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || move.id === 'hiddenpower')) {
-							rejectableMoves.push(counter.damagingMoveIndex[move.id]);
-						}
-					}
-					if (rejectableMoves.length) {
-						moves.splice(this.sample(rejectableMoves), 1);
+
+				// Handle Hidden Power IVs
+				if (moveid === 'hiddenpower') {
+					const HPivs = this.dex.getType(move.type).HPivs;
+					let iv: StatName;
+					for (iv in HPivs) {
+						ivs[iv] = HPivs[iv];
 					}
 				}
 			}
@@ -481,9 +464,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			let rejectAbility: boolean;
 			do {
 				rejectAbility = false;
-				if (counterAbilities.includes(ability)) {
-					// Adaptability, Hustle, Iron Fist, Skill Link
-					rejectAbility = !counter[toID(ability)];
+				if (['Anger Point', 'Ice Body', 'Steadfast'].includes(ability)) {
+					rejectAbility = true;
 				} else if (ability === 'Blaze') {
 					rejectAbility = !counter['Fire'];
 				} else if (ability === 'Chlorophyll') {
@@ -494,6 +476,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					rejectAbility = !hasMove['rest'];
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
+				} else if (ability === 'Hustle') {
+					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Mold Breaker') {
 					rejectAbility = !hasMove['earthquake'];
 				} else if (ability === 'Overgrow') {
@@ -503,9 +487,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				} else if (ability === 'Sand Veil') {
 					rejectAbility = !teamDetails['sand'];
 				} else if (ability === 'Serene Grace') {
-					rejectAbility = !counter['serenegrace'] || species.id === 'chansey' || species.id === 'blissey';
+					rejectAbility = !counter['serenegrace'] || species.id === 'blissey';
 				} else if (ability === 'Simple') {
 					rejectAbility = !counter.setupType && !hasMove['cosmicpower'];
+				} else if (ability === 'Skill Link') {
+					rejectAbility = !counter['skilllink'];
 				} else if (ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Solar Power') {
@@ -632,37 +618,32 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		const levelScale: {[k: string]: number} = {
-			LC: 87,
-			NFE: 85,
-			NU: 83,
-			NUBL: 81,
-			UU: 79,
-			UUBL: 77,
-			OU: 75,
-			Uber: 71,
-			AG: 71,
+			AG: 76,
+			Uber: 78,
+			OU: 80,
+			'(OU)': 82,
+			UUBL: 82,
+			UU: 84,
+			NUBL: 86,
+			NU: 88,
 		};
 		const customScale: {[k: string]: number} = {
-			Delibird: 99, Ditto: 99, 'Farfetch\u2019d': 99, Unown: 99,
+			Delibird: 100, Ditto: 100, 'Farfetch\u2019d': 100, Unown: 100,
 		};
-		const tier = species.tier;
-		let level = levelScale[tier] || 75;
+		let level = levelScale[species.tier] || (species.nfe ? 90 : 80);
 		if (customScale[species.name]) level = customScale[species.name];
 
 		// Prepare optimal HP
-		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + (ivs.hp || 31) + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 		if (hasMove['substitute'] && item === 'Sitrus Berry') {
 			// Two Substitutes should activate Sitrus Berry
 			while (hp % 4 > 0) {
 				evs.hp -= 4;
-				hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				hp = Math.floor(Math.floor(2 * species.baseStats.hp + (ivs.hp || 31) + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			}
 		} else if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
 			// Belly Drum should activate Sitrus Berry
 			if (hp % 2 > 0) evs.hp -= 4;
-		} else if (hasMove['substitute'] && hasMove['reversal']) {
-			// Reversal users should be able to use four Substitutes
-			if (hp % 4 === 0) evs.hp -= 4;
 		} else {
 			// Maximize number of Stealth Rock switch-ins
 			const srWeakness = this.dex.getEffectiveness('Rock', species);
@@ -672,12 +653,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		// Minimize confusion damage
 		if (!counter['Physical'] && !hasMove['transform']) {
 			evs.atk = 0;
-			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 28 : 0;
+			ivs.atk = hasMove['hiddenpower'] ? (ivs.atk || 31) - 28 : 0;
 		}
 
-		if (hasMove['gyroball'] || hasMove['trickroom']) {
+		if (hasMove['gyroball'] || hasMove['metalburst'] || hasMove['trickroom']) {
 			evs.spe = 0;
-			ivs.spe = hasMove['hiddenpower'] ? ivs.spe - 28 : 0;
+			ivs.spe = hasMove['hiddenpower'] ? (ivs.spe || 31) - 28 : 0;
 		}
 
 		return {

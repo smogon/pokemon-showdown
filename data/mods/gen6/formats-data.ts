@@ -3418,7 +3418,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	virizion: {
-		randomBattleMoves: ["calmmind", "closecombat", "focusblast", "gigadrain", "hiddenpowerice", "leafblade", "stoneedge", "substitute", "swordsdance"],
+		randomBattleMoves: ["closecombat", "leafblade", "stoneedge", "swordsdance", "zenheadbutt"],
 		randomDoubleBattleMoves: ["closecombat", "leafblade", "protect", "stoneedge", "swordsdance", "synthesis", "taunt"],
 		tier: "RU",
 		doublesTier: "(DUU)",
