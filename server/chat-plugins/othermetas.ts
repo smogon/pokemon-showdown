@@ -14,7 +14,7 @@ interface StoneDeltas {
 	type?: string;
 }
 
-type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC Uber' | 'LC';
+type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC';
 
 function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	let dex = Dex;
@@ -365,7 +365,6 @@ export const commands: ChatCommands = {
 			PUBL: 30,
 			PU: 40,
 			NFE: 40,
-			'LC Uber': 40,
 			LC: 40,
 		};
 		let tier = species.tier;

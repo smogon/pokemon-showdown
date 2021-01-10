@@ -156,10 +156,6 @@ export const Tags: {[id: string]: TagData} = {
 		name: "NFE",
 		pokemonFilter: species => species.tier === 'NFE',
 	},
-	lcuber: {
-		name: "LC Uber",
-		pokemonFilter: species => species.doublesTier === 'LC Uber',
-	},
 	lc: {
 		name: "LC",
 		pokemonFilter: species => species.doublesTier === 'LC',
