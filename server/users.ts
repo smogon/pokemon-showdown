@@ -1341,7 +1341,7 @@ export class User extends Chat.MessageContext {
 		// cancel tour challenges
 		// no need for a popup because users can't change their name while in a tournament anyway
 		for (const game of this.getGames()) {
-			(game as Tournament)?.cancelChallenge(this);
+			(game as any)?.cancelChallenge(this);
 		}
 	}
 	updateReady(connection: Connection | null = null) {
