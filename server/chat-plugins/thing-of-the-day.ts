@@ -187,7 +187,7 @@ class OtdHandler {
 
 		const nomObj = {
 			nomination: nomination,
-			name: toID(user),
+			name: user.name,
 			userids: user.previousIDs.concat(user.id),
 			ips: user.ips.slice(),
 		};
@@ -230,7 +230,7 @@ class OtdHandler {
 		const entries = [];
 
 		for (const value of this.nominations.values()) {
-			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
+			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${Utils.escapeHTML(value.name)})</i></li>`);
 		}
 
 		if (entries.length > 20) {
