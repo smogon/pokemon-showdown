@@ -1583,6 +1583,8 @@ export class Pokemon {
 		}
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
+			//added by binachier
+			this.lastItem = this.item;
 			this.item = '';
 			this.itemData = {id: '', target: this};
 			this.pendingStaleness = undefined;
