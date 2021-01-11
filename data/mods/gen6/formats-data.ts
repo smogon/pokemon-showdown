@@ -2338,8 +2338,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	wormadamtrash: {
-		randomBattleMoves: ["gyroball", "protect", "stealthrock", "toxic"],
-		randomDoubleBattleMoves: ["gyroball", "protect", "stringshot", "strugglebug"],
+		randomBattleMoves: ["flashcannon", "protect", "stealthrock", "toxic"],
+		randomDoubleBattleMoves: ["flashcannon", "protect", "stringshot", "strugglebug"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
