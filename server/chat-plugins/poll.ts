@@ -697,7 +697,7 @@ export const pages: PageTable = {
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
-			buf += `${button}<br />${Poll.generateResults(poll, room, true)}`;
+			buf += `${button}<br />${Poll.generateResults(poll, room, false)}`;
 		}
 		buf += `<hr />`;
 		return buf;

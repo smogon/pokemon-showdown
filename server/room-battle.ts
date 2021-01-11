@@ -709,6 +709,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		let disconnected = false;
 		try {
 			for await (const next of this.stream) {
+				if (!this.room) return; // room deleted in the middle of simulation
 				this.receive(next.split('\n'));
 			}
 		} catch (err) {

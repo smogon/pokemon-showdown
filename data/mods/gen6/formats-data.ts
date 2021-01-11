@@ -649,7 +649,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	tangela: {
 		tier: "PU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	tangrowth: {
 		randomBattleMoves: ["earthquake", "gigadrain", "hiddenpowerfire", "knockoff", "leafstorm", "rockslide", "sleeppowder", "synthesis"],
@@ -712,7 +712,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["aerialace", "brickbreak", "bugbite", "knockoff", "quickattack", "roost", "swordsdance", "uturn"],
 		randomDoubleBattleMoves: ["aerialace", "brickbreak", "bugbite", "feint", "knockoff", "protect", "quickattack", "swordsdance", "uturn"],
 		tier: "NU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	scizor: {
 		randomBattleMoves: ["bugbite", "bulletpunch", "knockoff", "pursuit", "superpower", "swordsdance", "uturn"],
@@ -1127,7 +1127,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	yanma: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	yanmega: {
 		randomBattleMoves: ["airslash", "bugbuzz", "gigadrain", "protect", "uturn"],
@@ -1144,7 +1144,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	murkrow: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	honchkrow: {
 		randomBattleMoves: ["bravebird", "heatwave", "pursuit", "roost", "substitute", "suckerpunch", "superpower"],
@@ -1154,7 +1154,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	misdreavus: {
 		tier: "PU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	mismagius: {
 		randomBattleMoves: ["dazzlinggleam", "destinybond", "nastyplot", "painsplit", "shadowball", "substitute", "taunt", "thunderbolt", "willowisp"],
@@ -1199,7 +1199,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	gligar: {
 		randomBattleMoves: ["defog", "earthquake", "knockoff", "roost", "stealthrock", "toxic", "uturn"],
 		tier: "UU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	gliscor: {
 		randomBattleMoves: ["earthquake", "knockoff", "protect", "roost", "stealthrock", "taunt", "toxic", "uturn"],
@@ -1242,7 +1242,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	sneasel: {
 		tier: "RU",
-		doublesTier: "LC Uber",
+		doublesTier: "NFE",
 	},
 	weavile: {
 		randomBattleMoves: ["iceshard", "iciclecrash", "knockoff", "lowkick", "pursuit", "swordsdance"],
@@ -1704,7 +1704,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	meditite: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	medicham: {
 		randomBattleMoves: ["bulletpunch", "drainpunch", "highjumpkick", "icepunch", "zenheadbutt"],
@@ -2338,8 +2338,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	wormadamtrash: {
-		randomBattleMoves: ["gyroball", "protect", "stealthrock", "toxic"],
-		randomDoubleBattleMoves: ["gyroball", "protect", "stringshot", "strugglebug"],
+		randomBattleMoves: ["flashcannon", "protect", "stealthrock", "toxic"],
+		randomDoubleBattleMoves: ["flashcannon", "protect", "stringshot", "strugglebug"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
@@ -2396,7 +2396,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	drifloon: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	drifblim: {
 		randomBattleMoves: ["acrobatics", "destinybond", "hex", "shadowball", "substitute", "willowisp"],
@@ -3418,7 +3418,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	virizion: {
-		randomBattleMoves: ["calmmind", "closecombat", "focusblast", "gigadrain", "hiddenpowerice", "leafblade", "stoneedge", "substitute", "swordsdance"],
+		randomBattleMoves: ["closecombat", "leafblade", "stoneedge", "swordsdance", "zenheadbutt"],
 		randomDoubleBattleMoves: ["closecombat", "leafblade", "protect", "stoneedge", "swordsdance", "synthesis", "taunt"],
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -3696,7 +3696,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	swirlix: {
-		tier: "LC Uber",
+		tier: "NFE",
 	},
 	slurpuff: {
 		randomBattleMoves: ["bellydrum", "calmmind", "dazzlinggleam", "drainpunch", "flamethrower", "playrough", "return", "surf"],

@@ -502,7 +502,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Megas For All",
-		desc: `Almost every Pokemon has a Mega Evolution.`,
+		desc: `Almost every Pok&eacute;mon has a Mega Evolution.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3671140/">Megas For All</a>`,
 		],
@@ -520,7 +520,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Double Trouble",
-		desc: `Doubles-based metagame where Pokemon are adjusted to become DOU-viable.`,
+		desc: `Doubles-based metagame where Pok&eacute;mon are adjusted to become DOU-viable.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657658/">Double Trouble</a>`,
 		],
@@ -588,7 +588,6 @@ export const Formats: FormatList = [
 				publ: 30,
 				pu: 40,
 				nfe: 40,
-				lcuber: 40,
 				lc: 40,
 			};
 			let tier = this.toID(species.tier) || 'ou';
@@ -809,9 +808,10 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', '!Obtainable Abilities', 'Species Clause', 'Nickname Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
-			'Buzzwole', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Keldeo', 'Kyogre',
-			'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza',
-			'Regigigas', 'Reshiram', 'Shedinja', 'Solgaleo', 'Urshifu', 'Urshifu-Rapid-Strike', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base',
+			'Buzzwole', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Ho-Oh', 'Kartana', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Urshifu-Base',
+			'Urshifu-Rapid-Strike', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zeraora', 'Zygarde-Base',
 			'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero',
 			'Moody', 'Neutralizing Gas', 'Parental Bond', 'Power Construct', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
 			'Baton Pass',
@@ -1057,10 +1057,10 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Kartana', 'Kyogre', 'Kyurem-Black',
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black',
 			'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Regieleki', 'Regigigas',
 			'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Pure Power', 'Shadow Tag', 'Simple', 'Unaware', 'Water Bubble',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Pure Power', 'Shadow Tag', 'Simple', 'Water Bubble',
 			'Baton Pass', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
 		],
 		restricted: ['Blaziken', 'Butterfree', 'Torkoal', 'Toxtricity'],
