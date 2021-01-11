@@ -1333,4 +1333,28 @@ export const commands: ChatCommands = {
 		const [type, userid] = target.split(',').map(toID);
 		return this.parse(`/j view-logsaccess-${type || 'all'}${userid ? `-${userid}` : ''}`);
 	},
+	gcsearch: 'groupchatsearch',
+	async groupchatsearch(target, room, user) {
+		this.checkCan('lock');
+		target = target.toLowerCase().replace(/[^a-z0-9-]+/g, '');
+		if (!target) return this.parse(`/help groupchatsearch`);
+		if (target.length < 3) {
+			return this.errorReply(`Too short of a search term.`);
+		}
+		const files = await FS(`logs/chat`).readdir();
+		const buffer = [];
+		for (const roomid of files) {
+			if (roomid.startsWith('groupchat-') && roomid.includes(target)) {
+				buffer.push(roomid);
+			}
+		}
+		Utils.sortBy(buffer, roomid => !!Rooms.get(roomid));
+		return this.sendReplyBox(
+			`Groupchats with a roomid matching '${target}': ` +
+			(buffer.length ? buffer.map(id => `<a href="/view-chatlog-${id}">${id}</a>`).join('; ') : 'None found.')
+		);
+	},
+	groupchatsearchhelp: [
+		`/groupchatsearch [target] - Searches for logs of groupchats with names containing the [target]. Requires: % @ &`,
+	],
 };
