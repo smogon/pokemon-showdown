@@ -167,7 +167,7 @@ export class Poll extends MinorActivity {
 			this.answers.get(option)!.votes++;
 		}
 		delete this.pendingVotes[userid];
-		this.totalVotes++;
+		this.totalVotes += selected.length;
 
 		this.update();
 		this.save();
@@ -226,7 +226,10 @@ export class Poll extends MinorActivity {
 		const iconText = options.isQuiz ?
 			`<i class="fa fa-question"></i> ${room.tr`Quiz`}` :
 			`<i class="fa fa-bar-chart"></i> ${room.tr`Poll`}`;
-		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes} ${room.tr`votes`}</small>`;
+
+		const voters = Object.keys(options.voters || {});
+		let icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> `;
+		icon += `<small>${options.totalVotes} ${room.tr`votes`} ${options.multiPoll && voters.length ? `(${Chat.count(voters.length, 'voters')})` : ''}</small>`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question, options.supportHTML)}</strong></p>`;
 		const answers = Poll.getAnswers(options.answers);
 
