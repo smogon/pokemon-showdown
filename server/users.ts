@@ -671,7 +671,7 @@ export class User extends Chat.MessageContext {
 			for (const game of this.getGames()) {
 				if (game.ended) continue;
 				if (game.allowRenames || !this.named) continue;
-				this.popup(`You can't change your name right now because you're in ${room.game.title}, which doesn't allow renaming.`);
+				this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
 				return false;
 			}
 		}
