@@ -768,7 +768,16 @@ export const commands: ChatCommands = {
 			introMessage: `` +
 				`<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
 			staffMessage: `` +
-				`<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/roomsettings">Room Settings</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
+				(
+					`<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p>` +
+					`<p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p>` +
+					`<p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | ` +
+					`<button class="button" name="send" value="/roomsettings">Room Settings</button> | ` +
+					`<button class="button" name="send" value="/tournaments help">Tournaments</button> | ` +
+					`<button class="button" name="send" value="/deletegroupchat ${roomid}">Delete groupchat</button></p>` +
+					`<p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p>` +
+					`<p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`
+				),
 		});
 		if (!targetRoom) {
 			return this.errorReply(`An unknown error occurred while trying to create the room '${title}'.`);
@@ -835,11 +844,15 @@ export const commands: ChatCommands = {
 	deletegroupchat: 'deleteroom',
 	dgc: 'deleteroom',
 	deleteroom(target, room, user, connection, cmd) {
-		room = this.requireRoom();
+		const isGroupchat = ['deletegroupchat', 'dgc'].includes(cmd);
 		const roomid = target.trim();
+		if (isGroupchat && roomid) {
+			room = this.room = Rooms.get(roomid) as Room | null;
+		}
+		room = this.requireRoom();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (!room.settings.isPersonal || !['deletegroupchat', 'dgc'].includes(cmd)) {
+			if (!room.settings.isPersonal || !isGroupchat) {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
