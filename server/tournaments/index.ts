@@ -390,7 +390,7 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		const gameCount = [...Rooms.rooms.values()].filter(r => !(r.game && r.game.playerTable[user.id])).length;
+		const gameCount = user.getGames().length;
 		if (gameCount > 4) {
 			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
 			return;

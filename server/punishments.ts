@@ -955,7 +955,7 @@ export const Punishments = new class {
 		const punishment = ['BATTLEBAN', id, expireTime, ...reason] as Punishment;
 
 		// Handle tournaments the user was in before being battle banned
-		for (const room of user.getRooms()) {
+		for (const room of Rooms.rooms.values()) {
 			const game = room.getGame(Tournaments.Tournament);
 			if (!game || !user.inGame(room)) continue;
 			if (game.isTournamentStarted) {

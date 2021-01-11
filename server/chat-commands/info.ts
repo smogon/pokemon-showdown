@@ -252,12 +252,12 @@ export const commands: ChatCommands = {
 			const inPlayerTable = targetUser.inGame(curRoom);
 			const hasPlayerSymbol = curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL;
 			const canSeeRoom = canViewAlts || user === targetUser || !curRoom.settings.isPrivate;
-			return (inPlayerTable || hasPlayerSymbol) && canSeeRoom;
+			return (inPlayerTable || hasPlayerSymbol) && canSeeRoom && !targetUser.inRoom(curRoom);
 		});
 		if (gameRooms.length) {
 			buf += `<br />Recent games: ${gameRooms.map(curRoom => {
 				const shortId = curRoom.roomid.startsWith('battle-') ? curRoom.roomid.slice(7) : curRoom.roomid;
-				return Utils.html`<a href="/${curRoom.title}">${shortId}</a>`;
+				return Utils.html`<a href="/${curRoom.roomid}">${shortId}</a>`;
 			}).join(' | ')}`;
 		}
 

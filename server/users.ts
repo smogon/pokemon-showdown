@@ -579,8 +579,8 @@ export class User extends Chat.MessageContext {
 		if (roomid) {
 			return Rooms.get(roomid)!.onUpdateIdentity(this);
 		}
-		for (const inRoomID of this.getRooms()) {
-			Rooms.get(inRoomID)!.onUpdateIdentity(this);
+		for (const room of this.getRooms()) {
+			room.onUpdateIdentity(this);
 		}
 	}
 	async validateToken(token: string, name: string, userid: ID, connection: Connection) {
@@ -668,9 +668,9 @@ export class User extends Chat.MessageContext {
 	async rename(name: string, token: string, newlyRegistered: boolean, connection: Connection) {
 		let userid = toID(name);
 		if (userid !== this.id) {
-			for (const room of Rooms.rooms.values()) {
-				if (!room || !room.game || room.game.ended) continue;
-				if (room.game.allowRenames || !this.named) continue;
+			for (const game of this.getGames()) {
+				if (game.ended) continue;
+				if (game.allowRenames || !this.named) continue;
 				this.popup(`You can't change your name right now because you're in ${room.game.title}, which doesn't allow renaming.`);
 				return false;
 			}
@@ -867,10 +867,12 @@ export class User extends Chat.MessageContext {
 			connection.send(this.getUpdateuserText());
 		}
 		for (const room of Rooms.rooms.values()) {
-			if (!(oldid in room.users)) continue;
-			room.onRename(this, oldid, joining);
-			if (!room.game || !this.inGame(room)) continue;
-			room.game.onRename(this, oldid, joining, isForceRenamed);
+			if (oldid in room.users) {
+				room.onRename(this, oldid, joining);
+			}
+			if (room.game && (oldid in room.users || oldid in room.game.playerTable)) {
+				room.game.onRename(this, oldid, joining, isForceRenamed);
+			}
 		}
 		if (isForceRenamed) this.trackRename = oldname;
 		return true;
@@ -1338,9 +1340,8 @@ export class User extends Chat.MessageContext {
 		}
 		// cancel tour challenges
 		// no need for a popup because users can't change their name while in a tournament anyway
-		for (const room of Rooms.rooms.values()) {
-			// @ts-ignore Tournaments aren't TS'd yet
-			if (room.game && room.game.cancelChallenge) room.game.cancelChallenge(this);
+		for (const game of this.getGames()) {
+			(game as Tournament)?.cancelChallenge(this);
 		}
 	}
 	updateReady(connection: Connection | null = null) {
@@ -1485,8 +1486,7 @@ export class User extends Chat.MessageContext {
 	}
 	destroy() {
 		// deallocate user
-		for (const room of Rooms.rooms.values()) {
-			const game = room.game;
+		for (const game of this.getGames()) {
 			if (!game || game.ended) continue;
 			if (game.forfeit) game.forfeit(this);
 		}
