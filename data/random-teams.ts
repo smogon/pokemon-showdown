@@ -463,7 +463,7 @@ export class RandomTeams {
 		];
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
-		for (const [k, moveId] of moves.entries()) {
+		for (const moveId of moves) {
 			let move = this.dex.getMove(moveId);
 			if (move.id === 'naturepower') {
 				if (this.gen === 5) move = this.dex.getMove('earthquake');
