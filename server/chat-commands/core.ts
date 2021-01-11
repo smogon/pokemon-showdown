@@ -1592,8 +1592,7 @@ export const commands: ChatCommands = {
 
 			const targetRoom = Rooms.get(target);
 			if (!targetRoom || (
-				targetRoom.settings.isPrivate && !user.inRoom(targetRoom) &&
-				!(targetRoom.game && !user.inGame(targetRoom))
+				targetRoom.settings.isPrivate && !user.inRoom(targetRoom) && !user.inGame(targetRoom)
 			)) {
 				const roominfo = {id: target, error: 'not found or access denied'};
 				connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
