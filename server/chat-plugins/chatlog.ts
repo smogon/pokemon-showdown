@@ -1336,8 +1336,7 @@ export const commands: ChatCommands = {
 	gcsearch: 'groupchatsearch',
 	async groupchatsearch(target, room, user) {
 		this.checkCan('lock');
-		// eslint-disable-next-line no-useless-escape
-		target = target.toLowerCase().replace(/[^a-z0-9\-]+/g, '');
+		target = target.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 		if (!target) return this.parse(`/help groupchatsearch`);
 		if (target.length < 3) {
 			return this.errorReply(`Too short of a search term.`);
