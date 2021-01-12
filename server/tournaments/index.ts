@@ -2055,7 +2055,7 @@ const commands: ChatCommands = {
 				room = this.requireRoom();
 				this.checkCan('announce', null, room);
 				const num = parseInt(target);
-				if (!target || !this.meansNo(target) || isNaN(num)) return this.parse(`/help tour settings`);
+				if (!target || (!this.meansNo(target) && isNaN(num))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
 				if (!room.settings.tournaments) room.settings.tournaments = {};
 				if (this.meansNo(target)) {
