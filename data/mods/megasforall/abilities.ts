@@ -763,7 +763,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						}
 					} else {
 						this.add('-message', `${target.name} suddenly exploded!`);
-						this.useMove('explosion', target, source, "[from] ability: Alchemist", "[of] " + source);
+						this.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
 					}
 				} else {
 					this.add('-ability', source, 'Alchemist');
