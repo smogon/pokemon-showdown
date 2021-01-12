@@ -338,6 +338,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('brouha')}|sobL`);
 		},
 	},
+	buffy: {
+		noCopy: true,
+		// No quotes requested
+	},
 	cake: {
 		noCopy: true,
 		innateName: "h",
@@ -402,10 +406,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return false;
 			}
 		},
-	},
-	celestial: {
-		noCopy: true,
-		// No quotes requested
 	},
 	celine: {
 		noCopy: true,
@@ -1257,7 +1257,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:'][this.random(5)]}`);
+			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:', '/html <img src="https://allyourmeme.com/wp-content/uploads/2019/05/damn-it-hurts-right-in-my-meow-meow.jpeg" height=50% width=50% />'][this.random(6)]}`);
 		},
 	},
 	peapodc: {
@@ -1930,30 +1930,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
-	// Custom status for A Quag To The Past's signature move
-	bounty: {
-		name: 'bounty',
-		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
-			if (sourceEffect.effectType === 'Ability') {
-				this.add('-start', target, 'bounty', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
-			} else {
-				this.add('-start', target, 'bounty');
-			}
-		},
-		onSwitchIn(pokemon) {
-			if (pokemon.status === 'bounty') {
-				this.add('-start', pokemon, 'bounty');
-			}
-		},
-		onFaint(target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
-			if (source) {
-				this.add('-activate', target, 'ability: Bounty');
-				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
-			}
-		},
-	},
 	// Brilliant Condition for Arcticblast
 	brilliant: {
 		name: 'Brilliant',
@@ -2057,7 +2033,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			pokemon.addVolatile('wistfulthinking');
 		},
 	},
-	// boost for LittEleven's move
+	// focus punch effect for litt's move
 	nexthuntcheck: {
 		duration: 1,
 		onStart(pokemon) {

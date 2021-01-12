@@ -316,6 +316,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Carefree');
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -326,6 +327,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Carefree');
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
@@ -396,6 +398,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Magic Hat');
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -406,6 +409,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Magic Hat');
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
@@ -504,6 +508,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Buffy
+	speedcontrol: {
+		onStart(pokemon) {
+			this.boost({spe: 1}, pokemon);
+		},
+		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+		name: "Speed Control",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// cant say
 	ragequit: {
 		desc: "If a Pokemon with this ability uses a move that misses or fails, the Pokemon faints and reduces the foe's Attack and Special Attack by 2 stages",
@@ -518,17 +533,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
-	// Celestial
-	speedcontrol: {
-		onStart(pokemon) {
-			this.boost({spe: 1}, pokemon);
-		},
-		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
-		name: "Speed Control",
 		isNonstandard: "Custom",
 		gen: 8,
 	},

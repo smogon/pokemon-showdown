@@ -174,6 +174,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Kinetosis',
 		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	Buffy: {
+		species: 'Dragonite', ability: 'Speed Control', item: 'Metal Coat', gender: '',
+		moves: ['Swords Dance', 'Thousand Arrows', 'Double Iron Bash'],
+		signatureMove: 'Pandora\'s Box',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: 2,
+	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
 		moves: ['Haze', 'Ingrain', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Refresh', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
@@ -185,12 +191,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Quiver Dance', 'Roost', 'Will-O-Wisp'],
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
-	},
-	Celestial: {
-		species: 'Dragonite', ability: 'Speed Control', item: 'Metal Coat', gender: '',
-		moves: ['Swords Dance', 'Thousand Arrows', 'Double Iron Bash'],
-		signatureMove: 'Pandora\'s Box',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: 2,
 	},
 	Celine: {
 		species: 'Lucario', ability: 'Guardian Armor', item: 'Leftovers', gender: 'F',

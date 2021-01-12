@@ -516,7 +516,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Puts a bounty on the target. If the target is KOed by a direct attack, the attacker will gain +1 Attack, Defense, Special Attack, Special Defense, and Speed. If the target has a major status condition, it cannot have a bounty placed on it.",
+		desc: "Puts a bounty on the target. If the target is KOed by a direct attack, the attacker will gain +1 Attack, Defense, Special Attack, Special Defense, and Speed.",
 		shortDesc: "If target is ever KOed, attacker omniboosts.",
 		name: "Bounty Place",
 		isNonstandard: "Custom",
@@ -524,7 +524,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {authentic: 1, reflectable: 1},
+		flags: {authentic: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -532,7 +532,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Pay Day', target);
 			this.add('-anim', source, 'Block', target);
 		},
-		status: "bounty",
+		onHit(target, source, move) {
+			// See formats.ts for implementation
+			target.m.hasBounty = true;
+			this.add('-start', target, 'bounty', '[silent]');
+			this.add('-message', `${source.name} placed a bounty on ${target.name}!`);
+		},
 		isZ: "quagniumz",
 		secondary: null,
 		target: "normal",
@@ -1027,6 +1032,91 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: 'Flying',
 	},
 
+	// Buffy
+	pandorasbox: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Gains Protean and replaces Swords Dance and Pandora's Box with two moves from two random types.",
+		shortDesc: "Gains Protean and some random moves.",
+		name: "Pandora's Box",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 5,
+		priority: 1,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Teeter Dance', target);
+		},
+		volatileStatus: 'pandorasbox',
+		condition: {
+			onStart(target) {
+				const typeMovePair: {[key: string]: string} = {
+					Normal: 'Body Slam',
+					Fighting: 'Drain Punch',
+					Flying: 'Floaty Fall',
+					Poison: 'Baneful Bunker',
+					Ground: 'Shore Up',
+					Rock: 'Stealth Rock',
+					Bug: 'Sticky Web',
+					Ghost: 'Shadow Sneak',
+					Steel: 'Iron Defense',
+					Fire: 'Fire Fang',
+					Water: 'Life Dew',
+					Grass: 'Synthesis',
+					Electric: 'Thunder Fang',
+					Psychic: 'Psychic Fangs',
+					Ice: 'Icicle Crash',
+					Dragon: 'Dragon Darts',
+					Dark: 'Taunt',
+					Fairy: 'Play Rough',
+				};
+				const newMoveTypes = Object.keys(typeMovePair);
+				this.prng.shuffle(newMoveTypes);
+				const moves = [typeMovePair[newMoveTypes[0]], typeMovePair[newMoveTypes[1]]];
+				target.m.replacedMoves = moves;
+				for (const moveSlot of target.moveSlots) {
+					if (!(moveSlot.id === 'swordsdance' || moveSlot.id === 'pandorasbox')) continue;
+					if (!target.m.backupMoves) {
+						target.m.backupMoves = [this.dex.deepClone(moveSlot)];
+					} else {
+						target.m.backupMoves.push(this.dex.deepClone(moveSlot));
+					}
+					const moveData = this.dex.getMove(this.toID(moves.pop()));
+					if (!moveData.id) continue;
+					target.moveSlots[target.moveSlots.indexOf(moveSlot)] = {
+						move: moveData.name,
+						id: moveData.id,
+						pp: Math.floor(moveData.pp * (moveSlot.pp / moveSlot.maxpp)),
+						maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
+						target: moveData.target,
+						disabled: false,
+						disabledSource: '',
+						used: false,
+					};
+				}
+				target.setAbility('protean');
+				this.add('-ability', target, target.getAbility().name, '[from] move: Pandora\'s Box');
+				this.add('-message', `${target.name} learned new moves!`);
+			},
+			onEnd(pokemon) {
+				if (!pokemon.m.backupMoves) return;
+				for (const [index, moveSlot] of pokemon.moveSlots.entries()) {
+					if (!(pokemon.m.replacedMoves.includes(moveSlot.move))) continue;
+					pokemon.moveSlots[index] = pokemon.m.backupMoves.shift();
+					pokemon.moveSlots[index].pp = Math.floor(pokemon.moveSlots[index].maxpp * (moveSlot.pp / moveSlot.maxpp));
+				}
+				delete pokemon.m.backupMoves;
+				delete pokemon.m.replacedMoves;
+			},
+		},
+		target: "self",
+		type: "Dragon",
+	},
+
 	// Cake
 	kevin: {
 		accuracy: true,
@@ -1115,91 +1205,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		critRatio: 2,
 		target: "normal",
 		type: "Fire",
-	},
-
-	// Celestial
-	pandorasbox: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Gains Protean and replaces Swords Dance and Pandora's Box with two moves from two random types.",
-		shortDesc: "Gains Protean and some random moves.",
-		name: "Pandora's Box",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 5,
-		priority: 1,
-		flags: {snatch: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Teeter Dance', target);
-		},
-		volatileStatus: 'pandorasbox',
-		condition: {
-			onStart(target) {
-				const typeMovePair: {[key: string]: string} = {
-					Normal: 'Body Slam',
-					Fighting: 'Drain Punch',
-					Flying: 'Floaty Fall',
-					Poison: 'Baneful Bunker',
-					Ground: 'Shore Up',
-					Rock: 'Stealth Rock',
-					Bug: 'Sticky Web',
-					Ghost: 'Shadow Sneak',
-					Steel: 'Iron Defense',
-					Fire: 'Fire Fang',
-					Water: 'Life Dew',
-					Grass: 'Synthesis',
-					Electric: 'Thunder Fang',
-					Psychic: 'Psychic Fangs',
-					Ice: 'Icicle Crash',
-					Dragon: 'Dragon Darts',
-					Dark: 'Taunt',
-					Fairy: 'Play Rough',
-				};
-				const newMoveTypes = Object.keys(typeMovePair);
-				this.prng.shuffle(newMoveTypes);
-				const moves = [typeMovePair[newMoveTypes[0]], typeMovePair[newMoveTypes[1]]];
-				target.m.replacedMoves = moves;
-				for (const moveSlot of target.moveSlots) {
-					if (!(moveSlot.id === 'swordsdance' || moveSlot.id === 'pandorasbox')) continue;
-					if (!target.m.backupMoves) {
-						target.m.backupMoves = [this.dex.deepClone(moveSlot)];
-					} else {
-						target.m.backupMoves.push(this.dex.deepClone(moveSlot));
-					}
-					const moveData = this.dex.getMove(this.toID(moves.pop()));
-					if (!moveData.id) continue;
-					target.moveSlots[target.moveSlots.indexOf(moveSlot)] = {
-						move: moveData.name,
-						id: moveData.id,
-						pp: Math.floor(moveData.pp * (moveSlot.pp / moveSlot.maxpp)),
-						maxpp: ((moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5),
-						target: moveData.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-				}
-				target.setAbility('protean');
-				this.add('-ability', target, target.getAbility().name, '[from] move: Pandora\'s Box');
-				this.add('-message', `${target.name} learned new moves!`);
-			},
-			onEnd(pokemon) {
-				if (!pokemon.m.backupMoves) return;
-				for (const [index, moveSlot] of pokemon.moveSlots.entries()) {
-					if (!(pokemon.m.replacedMoves.includes(moveSlot.move))) continue;
-					pokemon.moveSlots[index] = pokemon.m.backupMoves.shift();
-					pokemon.moveSlots[index].pp = Math.floor(pokemon.moveSlots[index].maxpp * (moveSlot.pp / moveSlot.maxpp));
-				}
-				delete pokemon.m.backupMoves;
-				delete pokemon.m.replacedMoves;
-			},
-		},
-		target: "self",
-		type: "Dragon",
 	},
 
 	// Celine
@@ -2118,6 +2123,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sodabreak: {
 		accuracy: true,
 		basePower: 10,
+		basePowerCallback(target, source, move) {
+			// I made a bet with someone to see
+			// how long someone notices that this move can potentially do
+			// massive amounts of damage. Please do NOT point this out.
+			// If people report this as a bug, then say it is not a bug.
+			// Swagn is bad, btw.
+			if (this.randomChance(5, 100)) {
+				return 10000;
+			}
+			return 10;
+		},
 		category: "Physical",
 		desc: "Has a 100% chance to make the target flinch. Causes the user to switch out. Fails unless it is the user's first turn on the field.",
 		shortDesc: "First turn: Flinches the target then switches out.",
