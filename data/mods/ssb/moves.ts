@@ -2598,8 +2598,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "When used, if hit by an attack on the same turn this move was used, this Pokemon boosts its Defense and Special Defense by 2 stages if the relevant stat is at 0 or lower, or 1 stage if the relevant stat is at +1 or higher, and increases priority of the next used move by 1.",
-		shortDesc: "If hit, +Def/SpD; next move +1 prio.",
+		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. When used, if hit by an attack on the same turn this move was used, this Pokemon boosts its Defense and Special Defense by 2 stages if the relevant stat is at 0 or lower, or 1 stage if the relevant stat is at +1 or higher, and increases priority of the next used move by 1.",
+		shortDesc: "Endure;If hit, +Def/SpD; next move +1 prio.",
 		name: "Kip Up",
 		pp: 10,
 		priority: 3,
@@ -2618,6 +2618,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-message', 'This Pokémon prepares itself to be knocked down!');
+			},
+			onDamagePriority: -10,
+			onDamage(damage, target, source, effect) {
+				if (this.effectData.gotHit) return damage;
+				if (effect?.effectType === 'Move' && damage >= target.hp) {
+					this.add('-activate', target, 'move: Kip Up');
+					return target.hp - 1;
+				}
 			},
 			onHit(pokemon, source, move) {
 				if (!pokemon.hp) return;

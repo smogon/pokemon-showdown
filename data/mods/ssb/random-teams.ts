@@ -49,7 +49,7 @@ export const ssbSets: SSBSets = {
 	},
 	Aelita: {
 		species: 'Zygarde', ability: 'Scyphozoa', item: 'Focus Sash', gender: 'F',
-		moves: ['Rest', 'Sleep Talk', 'Thousand Arrows'],
+		moves: ['Protect', 'Leech Seed', 'Thousand Arrows'],
 		signatureMove: 'XANA\'s Keys To Lyoko',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful',
 	},
