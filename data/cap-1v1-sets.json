@@ -19,18 +19,18 @@
 		"nature": "Jolly",
 		"moves": ["Fire Lash", "Yawn", "Wish", "Protect"]
 	}, {
-		"item": "Choice Band",
+		"item": "Life Orb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "atk": 252, "spe": 224},
 		"nature": "Jolly",
-		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Trick"]
+		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Taunt"]
 	}, {
-		"item": "Choice Specs",
+		"item": "Power Herb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "spa": 252, "spe": 224},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
-		"moves": ["Draco Meteor", "Overheat", "Dazzling Gleam", "Trick"]
+		"moves": ["Draco Meteor", "Overheat", "Meteor Beam", "Taunt"]
 	}],
 	"Aurumoth": [{
 		"item": "Choice Scarf",
@@ -168,7 +168,7 @@
 		"ability": "Iron Fist",
 		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
-		"moves": ["Shadow Strike", "Meteor Mash", "Earthquake", ["Trick", "Ice Punch"]]
+		"moves": ["Poltergeist", "Meteor Mash", "Earthquake", ["Trick", "Ice Punch"]]
 	}, {
 		"item": "Shuca Berry",
 		"ability": "Frisk",
@@ -196,7 +196,7 @@
 		"ability": "Neutralizing Gas",
 		"evs": {"hp": 4, "atk": 252, "spe": 252},
 		"nature": "Adamant",
-		"moves": ["Outrage", "Earthquake", "Firt Impression", "Close Combat"]
+		"moves": ["Outrage", "Earthquake", "First Impression", "Close Combat"]
 	}, {
 		"item": "Choice Scarf",
 		"ability": "Neutralizing Gas",
@@ -347,7 +347,7 @@
 		"ability": "Compound Eyes",
 		"evs": {"hp": 16, "atk": 252, "spe": 240},
 		"nature": "Jolly",
-		"moves": ["Icicle Crash", "Leech Life", "Stone Edge", "Earthquake"]
+		"moves": ["Triple Axel", "Leech Life", "Stone Edge", "Earthquake"]
 	}, {
 		"item": "Choice Specs",
 		"ability": "Compound Eyes",
@@ -377,14 +377,14 @@
 		"evs": {"hp": 116, "spa": 240, "spe": 152},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
-		"moves": ["Overheat", "Surf", "Power Gem", "Flamethrower"]
+		"moves": ["Overheat", "Surf", "Power Gem", "Scorching Sands"]
 	}, {
 		"item": "Choice Specs",
 		"ability": "Analytic",
 		"evs": {"hp": 248, "def": 56, "spa": 192, "spd": 12},
 		"nature": "Quiet",
 		"ivs": {"atk": 0, "spe": 0},
-		"moves": [["Flamethrower", "Overheat"], "Surf", "Power Gem", "Hyper Beam"]
+		"moves": [["Flamethrower", "Overheat"], "Surf", "Power Gem", "Scorching Sands"]
 	}],
 	"Voodoom": [{
 		"item": "Choice Specs",
