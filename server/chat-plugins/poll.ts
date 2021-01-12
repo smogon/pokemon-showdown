@@ -135,7 +135,9 @@ export class Poll extends MinorActivity {
 		if (!this.pendingVotes[userid]) {
 			this.pendingVotes[userid] = [];
 		}
-		this.pendingVotes[userid].push(option);
+		if (!this.pendingVotes[userid].includes(option)) {
+			this.pendingVotes[userid].push(option);
+		}
 		this.updateFor(user);
 		this.save();
 	}
