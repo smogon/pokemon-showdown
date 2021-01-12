@@ -3196,7 +3196,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Never-Ending Nightmare', target);
 		},
 		onHit() {
-			this.add(`c|${getName('Notater517')}|For more phantasmic music, check out [[this link <https://www.youtube.com/watch?v=dQw4w9WgXcQ>]].`);
+			this.add(`c|${getName('Notater517')}|/html For more phantasmic music, check out <a href = "http://spo.ink/tunes">this link.</a>`);
 		},
 		self: {
 			volatileStatus: 'mustrecharge',
