@@ -46,10 +46,6 @@ interface MafiaLogTable {
 type MafiaLogSection = 'leaderboard' | 'mvps' | 'hosts' | 'plays' | 'leavers';
 type MafiaLog = {[section in MafiaLogSection]: MafiaLogTable};
 
-interface MafiaHostBans {
-	[userid: string]: number;
-}
-
 interface MafiaRole {
 	name: string;
 	safeName: string;
@@ -97,7 +93,6 @@ import {FS} from '../../lib/fs';
 
 const DATA_FILE = 'config/chat-plugins/mafia-data.json';
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
-const BANS_FILE = 'config/chat-plugins/mafia-bans.json';
 
 // see: https://play.pokemonshowdown.com/fx/
 const VALID_IMAGES = [
@@ -106,7 +101,9 @@ const VALID_IMAGES = [
 
 let MafiaData: MafiaData = Object.create(null);
 let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
-let hostBans: MafiaHostBans = Object.create(null);
+
+Punishments.roomPunishmentTypes.set('GAMEBAN', 'banned from playing games');
+Punishments.roomPunishmentTypes.set('HOSTBAN', 'banned from hosting games');
 
 const hostQueue: ID[] = [];
 
@@ -178,26 +175,6 @@ for (const section of tables) {
 	}
 }
 writeFile(LOGS_FILE, logs);
-
-// Load bans
-hostBans = readFile(BANS_FILE) || Object.create(null);
-
-for (const userid in hostBans) {
-	if (hostBans[userid] < Date.now()) {
-		delete hostBans[userid];
-	}
-}
-writeFile(BANS_FILE, hostBans);
-
-function isHostBanned(userid: ID) {
-	if (!(userid in hostBans)) return false;
-	if (hostBans[userid] < Date.now()) {
-		delete hostBans[userid];
-		writeFile(BANS_FILE, hostBans);
-		return false;
-	}
-	return true;
-}
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	game: MafiaTracker;
@@ -384,6 +361,30 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (const conn of user.connections) {
 			void Chat.resolvePage(`view-mafia-${this.room.roomid}`, user, conn);
 		}
+	}
+
+	static isGameBanned(user: User) {
+		return Punishments.getRoomPunishType(Rooms.get('mafia')!, toID(user)) === 'GAMEBAN';
+	}
+
+	static gameBan(room: Room, user: User, reason: string, duration: number) {
+		Punishments.roomPunish(room, user, ['GAMEBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
+	}
+
+	static ungameBan(room: Room, user: User) {
+		Punishments.roomUnpunish(room, toID(user), 'GAMEBAN', false);
+	}
+
+	static isHostBanned(user: User) {
+		return Punishments.getRoomPunishType(Rooms.get('mafia')!, toID(user)) === 'HOSTBAN' || this.isGameBanned(user);
+	}
+
+	static hostBan(room: Room, user: User, reason: string, duration: number) {
+		Punishments.roomPunish(room, user, ['HOSTBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
+	}
+
+	static unhostBan(room: Room, user: User) {
+		Punishments.roomUnpunish(room, toID(user), 'HOSTBAN', false);
 	}
 
 	makePlayer(user: User) {
@@ -2027,7 +2028,7 @@ export const commands: ChatCommands = {
 				while ((hostid = hostQueue.shift())) {
 					this.splitTarget(hostid, true);
 					if (!this.targetUser || !this.targetUser.connected ||
-						!room.users[this.targetUser.id] || isHostBanned(this.targetUser.id)) {
+						!room.users[this.targetUser.id] || MafiaTracker.isHostBanned(this.targetUser)) {
 						skipped.push(hostid);
 						this.targetUser = null;
 					} else {
@@ -2058,7 +2059,7 @@ export const commands: ChatCommands = {
 			if (!room.users[this.targetUser.id]) {
 				return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
 			}
-			if (room.roomid === 'mafia' && isHostBanned(this.targetUser.id)) {
+			if (room.roomid === 'mafia' && MafiaTracker.isHostBanned(this.targetUser)) {
 				return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
 			}
 
@@ -2103,7 +2104,9 @@ export const commands: ChatCommands = {
 					return this.errorReply(`User ${targetUserID} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${targetUserID}`);
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
-				if (isHostBanned(targetUserID)) return this.errorReply(`User ${targetUserID} is banned from hosting games.`);
+				if (targetUser && MafiaTracker.isHostBanned(targetUser)) {
+					 return this.errorReply(`User ${targetUserID} is banned from hosting games.`);
+				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
 				break;
@@ -2157,6 +2160,7 @@ export const commands: ChatCommands = {
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 
 			this.checkChat(null, targetRoom);
+			if (MafiaTracker.isGameBanned(user)) return this.errorReply(`You are banned from playing games.`);
 			game.join(user);
 		},
 		joinhelp: [`/mafia join - Join the game.`],
@@ -2641,7 +2645,7 @@ export const commands: ChatCommands = {
 						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole!.role.name}`);
 					}
 				} else {
-					user.sendTo(this.room, `|error|${targetUsername} is not a player.`);
+					this.errorReply(`${targetUsername} is not a player.`);
 				}
 			}
 		},
@@ -2711,6 +2715,10 @@ export const commands: ChatCommands = {
 			if (!toID(args.join(''))) return this.parse('/help mafia revive');
 			let didSomething = false;
 			for (const targetUsername of args) {
+				const targetUser = Users.get(toID(targetUsername));
+				if (targetUser && MafiaTracker.isGameBanned(targetUser)) {
+					return this.errorReply(`User ${targetUser.id} is banned from playing games.`);
+				}
 				if (game.revive(user, toID(targetUsername), cmd === 'forceadd')) didSomething = true;
 			}
 			if (didSomething) game.logAction(user, `added players`);
@@ -3108,7 +3116,7 @@ export const commands: ChatCommands = {
 						return user.sendTo(targetRoom, `|error|You have not requested to be subbed out.`);
 					}
 					game.requestedSub.splice(game.requestedSub.indexOf(user.id), 1);
-					user.sendTo(room, `|error|You have cancelled your request to sub out.`);
+					this.errorReply(`You have cancelled your request to sub out.`);
 					game.playerTable[user.id].updateHtmlRoom();
 				} else {
 					this.checkChat(null, targetRoom);
@@ -3559,52 +3567,83 @@ export const commands: ChatCommands = {
 			`/mafia [hostlogs|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ # &`,
 		],
 
-		unhostban: 'hostban',
+		gameban: 'hostban',
 		hostban(target, room, user, connection, cmd) {
+			if (!target) return this.parse('/help mafia hostban');
 			room = this.requireRoom('mafia' as RoomID);
-			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			this.checkCan('warn', null, room);
 
-			const [targetUser, durationString] = this.splitOne(target);
-			const targetUserID = toID(targetUser);
-			const duration = parseInt(durationString);
-
-			if (!targetUserID) return this.errorReply(`User not found.`);
-			this.checkCan('mute', null, room);
-
-			const isUnban = (cmd.startsWith('un'));
-			if (isHostBanned(targetUserID) === !isUnban) {
-				return this.errorReply(`${targetUser} is ${isUnban ? 'not' : 'already'} banned from hosting games.`);
-			}
-
-			if (isUnban) {
-				delete hostBans[targetUserID];
-				this.modlog(`MAFIAUNHOSTBAN`, null, `${targetUserID}`);
+			target = this.splitTarget(target, false);
+			const [string1, string2] = this.splitOne(target);
+			let duration, reason;
+			if (parseInt(string1)) {
+				duration = parseInt(string1);
+				reason = string2;
+			} else if (parseInt(string2)) {
+				duration = parseInt(string2);
+				reason = string1;
 			} else {
-				if (isNaN(duration) || duration < 1) return this.parse('/help mafia hostban');
-				if (duration > 7) return this.errorReply(`Bans cannot be longer than 7 days.`);
-
-				hostBans[targetUserID] = Date.now() + 1000 * 60 * 60 * 24 * duration;
-				this.modlog(`MAFIAHOSTBAN`, null, `${targetUserID}, for ${duration} days.`);
-				const queueIndex = hostQueue.indexOf(targetUserID);
-				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
+				reason = string1;
 			}
-			writeFile(BANS_FILE, hostBans);
-			room.add(`${targetUser} was ${isUnban ? 'un' : ''}banned from hosting games${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
+
+			if (!duration) duration = 2;
+			if (!reason) reason = '';
+			if (reason.length > 300) {
+				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+			}
+
+			const targetUser = this.targetUser;
+			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+
+			const punishment = Punishments.getRoomPunishType(room, this.targetUsername);
+			if (punishment) {
+				if (punishment === `${this.cmd.toUpperCase()}`) {
+					return this.errorReply(`User '${this.targetUsername}' is already ${this.cmd}ned in this room.`);
+				} else if (punishment === 'GAMEBAN') {
+					return this.errorReply(`User '${this.targetUsername}' is already gamebanned in this room, which also means they can't host.`);
+				} else {
+					user.sendTo(room, `User '${this.targetUsername}' is already hostbanned in this room, but they will now be gamebanned.`);
+					this.parse(`/mafia unhostban ${this.targetUsername}`);
+				}
+			}
+
+			if (cmd === 'hostban') MafiaTracker.hostBan(room, targetUser, reason, duration);
+			else MafiaTracker.gameBan(room, targetUser, reason, duration);
+
+			this.modlog(cmd.toUpperCase(), targetUser, reason);
+			this.privateModAction(`${targetUser.name} was banned from ${cmd === 'hostban' ? 'hosting' : 'playing'} games by ${user.name}.`);
 		},
 		hostbanhelp: [
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # &`,
-			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ # &`,
-			`/mafia hostbans - Checks current hostbans. Requires % @ # &`,
+			`/mafia (un)hostban [user], [reason], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # &`,
+			`/mafia (un)gameban [user], [reason], [duration] - Ban a user from playing games for [duration] days. Requires % @ # &`,
 		],
 
-		hostbans(target, room) {
+		ban: 'gamebanhelp',
+		banhelp: 'gamebanhelp',
+		gamebanhelp() {
+			this.parse('/mafia hostbanhelp');
+		},
+
+		ungameban: 'unhostban',
+		unhostban(target, room, user, connection, cmd) {
+			if (!target) return this.parse('/help mafia hostban');
 			room = this.requireRoom('mafia' as RoomID);
-			this.checkCan('mute', null, room);
-			let buf = 'Hostbanned users:';
-			for (const [id, date] of Object.entries(hostBans)) {
-				buf += `<br/>${id}: for ${Chat.toDurationString(date - Date.now())}`;
+			this.checkCan('warn', null, room);
+
+			this.splitTarget(target, false);
+			const targetUser = this.targetUser;
+			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+			if (!MafiaTracker.isGameBanned(targetUser) && cmd === 'ungameban') {
+				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing games.`);
+			} else if (Punishments.getRoomPunishType(room, this.targetUsername) !== 'HOSTBAN' && cmd === 'unhostban') {
+				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting games.`);
 			}
-			return this.sendReplyBox(buf);
+
+			if (cmd === 'unhostban') MafiaTracker.unhostBan(room, targetUser);
+			else MafiaTracker.ungameBan(room, targetUser);
+
+			this.privateModAction(`${targetUser.name} was unbanned from ${cmd === 'unhostban' ? 'hosting' : 'playing'} games by ${user.name}.`);
+			this.modlog(cmd.toUpperCase(), targetUser, null, {noip: 1, noalts: 1});
 		},
 
 		overwriterole: 'addrole',
@@ -4005,7 +4044,7 @@ export const commands: ChatCommands = {
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
 			`/mafia [hostlogs|playlogs] - View the host logs or play logs for the current or last month. Requires % @ # &`,
 			`/mafia (un)hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # &`,
-			`/mafia hostbans - Checks current hostbans. Requires % @ # &`,
+			`/mafia (un)gameban [user], [duration] - Ban a user from playing games for [duration] days. Requires % @ # &`,
 		].join('<br/>');
 		buf += `</details>`;
 
