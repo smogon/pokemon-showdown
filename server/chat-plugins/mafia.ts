@@ -3035,7 +3035,9 @@ export const commands: ChatCommands = {
 		playerroles(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(MafiaTracker);
-			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) return this.errorReply(`Only the host can view roles.`);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) {
+				return this.errorReply(`Only the host can view roles.`);
+			}
 			if (!game.started) return this.errorReply(`The game has not started.`);
 			const players = [...Object.values(game.playerTable), ...Object.values(game.dead)];
 			this.sendReplyBox(players.map(
