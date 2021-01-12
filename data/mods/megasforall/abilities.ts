@@ -1,10 +1,10 @@
 export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
-	gravitas: {
+	gravitation: {
 		shortDesc: "On switch-in, this Pokémon summons Gravity.",
 		onStart(source) {
 			this.field.addPseudoWeather('gravity');
 		},
-		name: "Gravitas",
+		name: "Gravitation",
 		rating: 4,
 		num: -1001,
 	},
