@@ -135,9 +135,10 @@ export class Poll extends MinorActivity {
 		if (!this.pendingVotes[userid]) {
 			this.pendingVotes[userid] = [];
 		}
-		if (!this.pendingVotes[userid].includes(option)) {
-			this.pendingVotes[userid].push(option);
+		if (this.pendingVotes[userid].includes(option)) {
+			throw new Chat.ErrorMessage(this.room.tr`That option is already selected.`);
 		}
+		this.pendingVotes[userid].push(option);
 		this.updateFor(user);
 		this.save();
 	}
@@ -145,7 +146,7 @@ export class Poll extends MinorActivity {
 		const userid = user.id;
 		const pendingVote = this.pendingVotes[userid];
 		if (!pendingVote || !pendingVote.includes(option)) {
-			return user.sendTo(this.room, this.room.tr`That option is not selected.`);
+			throw new Chat.ErrorMessage(this.room.tr`That option is not selected.`);
 		}
 		pendingVote.splice(pendingVote.indexOf(option), 1);
 		this.updateFor(user);
@@ -158,10 +159,10 @@ export class Poll extends MinorActivity {
 
 		if (userid in this.voters || ip in this.voterIps) {
 			delete this.pendingVotes[userid];
-			return user.sendTo(this.room, this.room.tr`You have already voted for this poll.`);
+			throw new Chat.ErrorMessage(this.room.tr`You have already voted for this poll.`);
 		}
 		const selected = this.pendingVotes[userid];
-		if (!selected) return user.sendTo(this.room, this.room.tr`No options selected.`);
+		if (!selected) throw new Chat.ErrorMessage(this.room.tr`No options selected.`);
 
 		this.voters[userid] = selected;
 		this.voterIps[ip] = selected;
