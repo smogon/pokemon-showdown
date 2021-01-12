@@ -77,7 +77,7 @@ export const Aliases: {[alias: string]: string} = {
 	mmx: "Mewtwo-Mega-X",
 	mmy: "Mewtwo-Mega-Y",
 	zardx: "Charizard-Mega-X",
-	zardy: "Charizard-Mega-y",
+	zardy: "Charizard-Mega-Y",
 
 	// Pokéstar Studios
 	blackdoor: "Pokestar Black-Door",
@@ -563,7 +563,7 @@ export const Aliases: {[alias: string]: string} = {
 	tr17amnesia: "TR17",
 	tr18leechlife: "TR18",
 	tr19triattack: "TR19",
-	tr20substitue: "TR20",
+	tr20substitute: "TR20",
 	tr21reversal: "TR21",
 	tr22sludgebomb: "TR22",
 	tr23spikes: "TR23",

@@ -162,4 +162,21 @@ describe("Dynamax", function () {
 		battle.makeChoices('move splash', 'move gravity'); // will throw an error if Feebas is forced to use Struggle by Imprison
 		battle.makeChoices('move splash', 'auto'); // will throw an error if Feebas is forced to use Struggle by Gravity
 	});
+
+	it.skip(`should not remove the variable to Dynamax on forced switches`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'ejectpack', moves: ['ironhead']},
+			{species: 'audino', item: 'ejectpack', moves: ['sleeptalk']},
+		], [
+			{species: 'vikavolt', moves: ['stickyweb']},
+			{species: 'incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move ironhead dynamax', 'switch 2');
+		battle.makeChoices('switch 2'); // Eject Pack to Audino
+		battle.makeChoices('switch 2'); // Eject Pack back to Wynaut, to Dynamax
+		const wynaut = battle.p1.active[0];
+		assert.statStage(wynaut, 'def', 0, 'Wynaut should not have used Max Steelspike this turn.');
+		assert(wynaut.volatiles['dynamax'], 'Wynaut should be currently Dynamaxed.');
+	});
 });

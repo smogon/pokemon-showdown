@@ -103,6 +103,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
 
 		let move = this.dex.getActiveMove(moveOrMoveName);
+		pokemon.lastMoveUsed = move;
 
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;

@@ -279,6 +279,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			// if there are no valid targets, randomly choose one later
 			target.volatiles[effect.id].targetLoc = this.getTargetLoc(moveTarget || target, target);
 			this.attrLastMove('[still]');
+			// Run side-effects normally associated with hitting (e.g., Protean, Libero)
+			this.runEvent('PrepareHit', target, source, effect);
 		},
 		onEnd(target) {
 			target.removeVolatile(this.effectData.move);
@@ -374,7 +376,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
-			this.trySpreadMoveHit([target], data.source, hitMove);
+			this.trySpreadMoveHit([target], data.source, hitMove, true);
 		},
 	},
 	healreplacement: {

@@ -547,7 +547,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	cursedbody: {
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['disable']) return;
-			if (!move.isFutureMove) {
+			if (!move.isMax && !move.isFutureMove) {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('disable', this.effectData.target);
 				}
@@ -1644,7 +1644,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Inner Focus');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
 			}
 		},
 		name: "Inner Focus",
@@ -2291,7 +2291,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-		// TODO Will abilities that already started start again? (Intimidate seems like a good test case)
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityData.ending = false;
@@ -2306,14 +2305,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onEnd(source) {
+			this.add('-end', source, 'ability: Neutralizing Gas');
+
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
 			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
-			// (If your tackling this, do note extreme weathers have the same issue)
+			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
+			if (source.abilityData.ending) return;
 			source.abilityData.ending = true;
-			for (const pokemon of this.getAllActive()) {
+			const sortedActive = this.getAllActive();
+			this.speedSort(sortedActive);
+			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
@@ -2383,7 +2387,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Oblivious');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
 			}
 		},
 		name: "Oblivious",
@@ -2442,7 +2446,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Own Tempo');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
 			}
 		},
 		name: "Own Tempo",
@@ -2514,7 +2518,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (!move.flags['contact']) return;
+			if (!move.flags['contact'] || source.hasItem('protectivepads')) return;
 
 			let announced = false;
 			for (const pokemon of [target, source]) {
@@ -3154,7 +3158,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate') {
 				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Scrappy');
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
 		name: "Scrappy",
@@ -3676,7 +3680,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
-		onDamagePriority: -100,
+		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add('-ability', target, 'Sturdy');
@@ -4065,6 +4069,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	unnerve: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.effectData.unnerved = true;
+		},
+		onStart(pokemon) {
+			if (this.effectData.unnerved) return;
+			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.effectData.unnerved = true;
 		},
 		onFoeTryEatItem: false,
 		name: "Unnerve",

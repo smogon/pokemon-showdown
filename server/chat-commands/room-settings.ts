@@ -180,7 +180,7 @@ export const commands: ChatCommands = {
 		} else {
 			this.checkCan('makeroom');
 		}
-		if (room.tour && !room.tour.modjoin) {
+		if (room.tour && !room.tour.allowModjoin) {
 			return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
 		}
 		if (target === 'player') target = Users.PLAYER_SYMBOL;
@@ -301,7 +301,8 @@ export const commands: ChatCommands = {
 			if (rank && rank !== 'whitelist' && !Config.groupsranking.includes(rank as EffectiveGroupSymbol)) {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
-			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
+			const validPerms = Users.Auth.supportedRoomPermissions(room);
+			if (!validPerms.some(p => p === perm || p.startsWith(`${perm} `))) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
 			if (!room.auth.atLeast(user, '#')) {

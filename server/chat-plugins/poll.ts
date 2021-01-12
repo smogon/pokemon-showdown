@@ -135,7 +135,9 @@ export class Poll extends MinorActivity {
 		if (!this.pendingVotes[userid]) {
 			this.pendingVotes[userid] = [];
 		}
-		this.pendingVotes[userid].push(option);
+		if (!this.pendingVotes[userid].includes(option)) {
+			this.pendingVotes[userid].push(option);
+		}
 		this.updateFor(user);
 		this.save();
 	}
@@ -226,8 +228,8 @@ export class Poll extends MinorActivity {
 		const iconText = options.isQuiz ?
 			`<i class="fa fa-question"></i> ${room.tr`Quiz`}` :
 			`<i class="fa fa-bar-chart"></i> ${room.tr`Poll`}`;
-		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes} ${room.tr`votes`}</small>`;
-		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question)}</strong></p>`;
+		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes || 0} ${room.tr`votes`}</small>`;
+		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question, options.supportHTML)}</strong></p>`;
 		const answers = Poll.getAnswers(options.answers);
 
 		// indigo, blue, green
@@ -237,8 +239,8 @@ export class Poll extends MinorActivity {
 			const chosen = choice?.includes(num);
 			const percentage = Math.round((answer.votes * 100) / (options.totalVotes || 1));
 			const answerMarkup = options.isQuiz ?
-				`<span style="color:${answer.correct ? 'green' : 'red'};">${answer.correct ? '' : '<s>'}${this.getAnswerMarkup(answer)}${answer.correct ? '' : '</s>'}</span>` :
-				this.getAnswerMarkup(answer);
+				`<span style="color:${answer.correct ? 'green' : 'red'};">${answer.correct ? '' : '<s>'}${this.getAnswerMarkup(answer, options.supportHTML)}${answer.correct ? '' : '</s>'}</span>` :
+				this.getAnswerMarkup(answer, options.supportHTML);
 			output += `<div style="margin-top: 3px">${num}. <strong>${chosen ? '<em>' : ''}${answerMarkup}${chosen ? '</em>' : ''}</strong> <small>(${answer.votes} vote${answer.votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[num % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
 		}
 		if (!choice && !ended) {
@@ -694,7 +696,7 @@ export const pages: PageTable = {
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
-			buf += `${button}<br />${Poll.generateResults(poll, room, true)}`;
+			buf += `${button}<br />${Poll.generateResults(poll, room, false)}`;
 		}
 		buf += `<hr />`;
 		return buf;

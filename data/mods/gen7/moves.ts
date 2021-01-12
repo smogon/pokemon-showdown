@@ -304,6 +304,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual() {
 				this.eachEvent('Terrain');
 			},
+			onTerrainPriority: 1,
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
@@ -909,7 +910,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	toxic: {
 		inherit: true,
 		onPrepareHit(target, source, move) {
-			source.addVolatile('toxic');
+			if (source.hasType('Poison')) source.addVolatile('toxic');
 		},
 		condition: {
 			noCopy: true,

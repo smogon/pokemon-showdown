@@ -1641,7 +1641,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-			shortDesc: "Deals double damage. The user faints.",
+			shortDesc: "Target's Def halved during damage. User faints.",
 		},
 		gen3: {
 			desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
@@ -3088,7 +3088,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	jawlock: {
 		name: "Jaw Lock",
-		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents both user and target from switching out.",
 	},
 	judgment: {
@@ -5073,7 +5073,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-			shortDesc: "Deals double damage. The user faints.",
+			shortDesc: "Target's Def halved during damage. User faints.",
 		},
 		gen3: {
 			desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",

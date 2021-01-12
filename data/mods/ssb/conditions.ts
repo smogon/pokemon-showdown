@@ -757,8 +757,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('INStruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
-		desc: "Upon fainting, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
-		shortDesc: "Upon fainting, deal 50% of their max HP to all foes that this Pokemon contacted.",
+		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
+		shortDesc: "Upon foe KOing user, deal 50% of their max HP to all foes that this Pokemon contacted.",
 		// Extinction Level Event Innate
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
@@ -1620,6 +1620,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('The Immortal')}|ban stall`);
 		},
 	},
+	thewaffleman: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('thewaffleman')}|Whats Good Youtube its your boy thewaffleman`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('thewaffleman')}|Never Gonna Give You Up`);
+		},
+		onFaint() {
+			this.add(`c|${getName('thewaffleman')}|coyg`);
+		},
+	},
 	tiki: {
 		noCopy: true,
 		onStart() {
@@ -1708,20 +1720,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c|${getName('vooper')}|I guess Kung Fu isn't for everyone...`);
-		},
-	},
-	xjoelituh: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('xJoelituh')}|Hey, how can I help you?`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('xJoelituh')}|Hold on, I need a second opinion.`);
-		},
-		onFaint() {
-			let str = '';
-			for (let x = 0; x < 10; x++) str += String.fromCharCode(48 + this.random(79));
-			this.add(`c|${getName('xJoelituh')}|${str} ok`);
 		},
 	},
 	yuki: {
@@ -2014,7 +2012,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', 'The Storm Surge receded.');
 		},
 		onModifySpe() {
-			return this.chainModify(0.25);
+			return this.chainModify(0.5);
 		},
 	},
 	// For ravioliqueen
@@ -2187,7 +2185,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				for (const key of keys) {
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
-						this.add('-sideend', target.side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
+						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
 					}
 				}
 			}

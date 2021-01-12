@@ -661,7 +661,6 @@ export class Pokemon {
 
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		let targets: Pokemon[] = [];
-		let pressureTargets;
 
 		switch (move.target) {
 		case 'all':
@@ -712,23 +711,27 @@ export class Pokemon {
 			} else {
 				targets.push(target);
 			}
-			if (target.fainted) {
+			if (target.fainted && !move.isFutureMove) {
 				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
 			}
-
-			// Resolve apparent targets for Pressure.
-			if (move.pressureTarget) {
-				// At the moment, this is the only supported target.
-				if (move.pressureTarget === 'foeSide') {
-					pressureTargets = this.foes();
-				}
-			}
 		}
 
-		return {targets, pressureTargets: pressureTargets || targets};
+		// Resolve apparent targets for Pressure.
+		let pressureTargets = targets;
+		switch (move.pressureTarget) {
+		case 'foeSide':
+			pressureTargets = this.foes();
+			break;
+		case 'self':
+			pressureTargets = [];
+			break;
+		// At the moment, there are no other supported targets.
+		}
+
+		return {targets, pressureTargets};
 	}
 
 	ignoringAbility() {

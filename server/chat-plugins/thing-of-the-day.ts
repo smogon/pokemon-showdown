@@ -230,7 +230,7 @@ class OtdHandler {
 		const entries = [];
 
 		for (const value of this.nominations.values()) {
-			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
+			entries.push(Utils.html`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
 		}
 
 		if (entries.length > 20) {
