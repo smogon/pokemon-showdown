@@ -1539,7 +1539,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
 				}
 				if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
-					throw new Chat.ErrorMessage(${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+					throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
 				}
 			}
 		}
@@ -2702,8 +2702,9 @@ export const commands: ChatCommands = {
 				const targetUser = Users.get(toID(targetUsername));
 				if (targetUser && MafiaTracker.isGameBanned(targetUser)) {
 					return this.errorReply(`User ${targetUser.id} is banned from playing games.`);
+				} else if (game.revive(user, toID(targetUsername), cmd === 'forceadd')) {
+					didSomething = true;
 				}
-				if (game.revive(user, toID(targetUsername), cmd === 'forceadd')) didSomething = true;
 			}
 			if (didSomething) game.logAction(user, `added players`);
 		},
