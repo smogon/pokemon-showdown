@@ -361,6 +361,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
 
+		if (move.ohko && !target.hp) this.add('-ohko');
+
 		if (!damage && damage !== 0) return damage;
 
 		this.eachEvent('Update');
