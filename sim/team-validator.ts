@@ -471,7 +471,8 @@ export class TeamValidator {
 			}
 		}
 
-		if (ruleTable.has('obtainableformes') && (dex.gen <= 7 || this.format.id.includes('nationaldex'))) {
+		if (ruleTable.has('obtainableformes')) {
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
 			if (item.megaEvolves === species.name) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 				tierSpecies = dex.getSpecies(item.megaStone);
@@ -479,7 +480,7 @@ export class TeamValidator {
 				tierSpecies = dex.getSpecies('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
 				tierSpecies = dex.getSpecies('Kyogre-Primal');
-			} else if (species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
 				tierSpecies = dex.getSpecies('Rayquaza-Mega');
 			}
 		}
@@ -1862,7 +1863,7 @@ export class TeamValidator {
 			} else if (lsetData.learnset['sketch']) {
 				if (move.noSketch || move.isZ || move.isMax) {
 					cantLearnReason = `can't be Sketched.`;
-				} else if (move.gen > 7 && !this.format.id.includes('nationaldex')) {
+				} else if (move.gen > 7 && !ruleTable.has('standardnatdex')) {
 					cantLearnReason = `can't be Sketched because it's a Gen 8 move and Sketch isn't available in Gen 8.`;
 				} else {
 					if (!lset) sketch = true;
