@@ -1526,8 +1526,12 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...user.previousIDs]) {
 			if (this.playerTable[id] || this.dead[id]) throw new Chat.ErrorMessage(`${targetString} already in the game.`);
-			if (!force && this.played.includes(id)) throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
-			if (MafiaTracker.isGameBanned(room, user)) throw new Chat.ErrorMessage(`${self ? `You are` : `${user.id} is`} banned from joining mafia games.`);
+			if (!force && this.played.includes(id)) {
+				throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
+			}
+			if (MafiaTracker.isGameBanned(room, user)) {
+				throw new Chat.ErrorMessage(`${self ? `You are` : `${user.id} is`} banned from joining mafia games.`);
+			}
 			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
 			if (this.cohostids.includes(id)) throw new Chat.ErrorMessage(`${targetString} a cohost.`);
 		}
