@@ -1319,11 +1319,12 @@ export class Battle {
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
 		pokemon.previouslySwitchedIn++;
 
-		this.queue.insertChoice({choice: 'runUnnerve', pokemon});
 		if (isDrag && this.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+			this.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
 			this.runSwitch(pokemon);
 		} else {
+			this.queue.insertChoice({choice: 'runUnnerve', pokemon});
 			this.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
