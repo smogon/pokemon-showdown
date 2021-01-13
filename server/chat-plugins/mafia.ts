@@ -102,8 +102,8 @@ const VALID_IMAGES = [
 let MafiaData: MafiaData = Object.create(null);
 let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
 
-Punishments.roomPunishmentTypes.set('GAMEBAN', 'banned from playing games');
-Punishments.roomPunishmentTypes.set('HOSTBAN', 'banned from hosting games');
+Punishments.roomPunishmentTypes.set('MAFIAGAMEBAN', 'banned from playing mafia games');
+Punishments.roomPunishmentTypes.set('MAFIAHOSTBAN', 'banned from hosting mafia games');
 
 const hostQueue: ID[] = [];
 
@@ -334,9 +334,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendHTML(this.roomWindow());
 	}
 
-	join(user: User) {
+	join(room: Room, user: User) {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
-		this.canJoin(user, true);
+		this.canJoin(room, user, true);
 		if (this.playerCount >= this.playerCap) return user.sendTo(this.room, `|error|The game of ${this.title} is full.`);
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		if (this.subs.includes(user.id)) this.subs.splice(this.subs.indexOf(user.id), 1);
@@ -362,28 +362,28 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 	}
 
-	static isGameBanned(user: User) {
-		return Punishments.getRoomPunishType(Rooms.get('mafia')!, toID(user)) === 'GAMEBAN';
+	static isGameBanned(room: Room, user: User) {
+		return Punishments.getRoomPunishType(room, toID(user)) === 'MAFIAGAMEBAN';
 	}
 
 	static gameBan(room: Room, user: User, reason: string, duration: number) {
-		Punishments.roomPunish(room, user, ['GAMEBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
+		Punishments.roomPunish(room, user, ['MAFIAGAMEBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
 	}
 
 	static ungameBan(room: Room, user: User) {
-		Punishments.roomUnpunish(room, toID(user), 'GAMEBAN', false);
+		Punishments.roomUnpunish(room, toID(user), 'MAFIAGAMEBAN', false);
 	}
 
-	static isHostBanned(user: User) {
-		return Punishments.getRoomPunishType(Rooms.get('mafia')!, toID(user)) === 'HOSTBAN' || this.isGameBanned(user);
+	static isHostBanned(room: Room, user: User) {
+		return Punishments.getRoomPunishType(room, toID(user)) === 'MAFIAHOSTBAN' || this.isGameBanned(room, user);
 	}
 
 	static hostBan(room: Room, user: User, reason: string, duration: number) {
-		Punishments.roomPunish(room, user, ['HOSTBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
+		Punishments.roomPunish(room, user, ['MAFIAHOSTBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
 	}
 
 	static unhostBan(room: Room, user: User) {
-		Punishments.roomUnpunish(room, toID(user), 'HOSTBAN', false);
+		Punishments.roomUnpunish(room, toID(user), 'MAFIAHOSTBAN', false);
 	}
 
 	makePlayer(user: User) {
@@ -1052,7 +1052,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.updatePlayers();
 	}
 
-	revive(user: User, toRevive: string, force = false) {
+	revive(room: Room, user: User, toRevive: string, force = false) {
 		if (this.phase === 'IDEApicking') {
 			return user.sendTo(this.room, `|error|You cannot add or remove players while IDEA roles are being picked.`);
 		}
@@ -1088,7 +1088,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			const targetUser = Users.get(toRevive);
 			if (!targetUser) return;
-			this.canJoin(targetUser, false, force);
+			this.canJoin(room, targetUser, false, force);
 			const player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -1520,16 +1520,14 @@ class MafiaTracker extends Rooms.RoomGame {
 		return output;
 	}
 
-	canJoin(user: User, self = false, force = false) {
+	canJoin(room: Room, user: User, self = false, force = false) {
 		if (!user || !user.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.id} is`;
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...user.previousIDs]) {
-			if (this.playerTable[id] || this.dead[id]) {
-				throw new Chat.ErrorMessage(`${targetString} already in the game.`);
-			} else if (!force && this.played.includes(id)) {
-				throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
-			}
+			if (this.playerTable[id] || this.dead[id]) throw new Chat.ErrorMessage(`${targetString} already in the game.`);
+			if (!force && this.played.includes(id)) throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
+			if (MafiaTracker.isGameBanned(room, user)) throw new Chat.ErrorMessage(`${self ? `You are` : `${user.id} is`} banned from joining mafia games.`);
 			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
 			if (this.cohostids.includes(id)) throw new Chat.ErrorMessage(`${targetString} a cohost.`);
 		}
@@ -2022,7 +2020,7 @@ export const commands: ChatCommands = {
 				while ((hostid = hostQueue.shift())) {
 					this.splitTarget(hostid, true);
 					if (!this.targetUser || !this.targetUser.connected ||
-						!room.users[this.targetUser.id] || MafiaTracker.isHostBanned(this.targetUser)) {
+						!room.users[this.targetUser.id] || MafiaTracker.isHostBanned(room, this.targetUser)) {
 						skipped.push(hostid);
 						this.targetUser = null;
 					} else {
@@ -2053,8 +2051,8 @@ export const commands: ChatCommands = {
 			if (!room.users[this.targetUser.id]) {
 				return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
 			}
-			if (room.roomid === 'mafia' && MafiaTracker.isHostBanned(this.targetUser)) {
-				return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
+			if (MafiaTracker.isHostBanned(room, this.targetUser)) {
+				return this.errorReply(`${this.targetUser.name} is banned from hosting mafia games.`);
 			}
 
 			const targetUser = this.targetUser;
@@ -2098,8 +2096,8 @@ export const commands: ChatCommands = {
 					return this.errorReply(`User ${targetUserID} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${targetUserID}`);
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
-				if (targetUser && MafiaTracker.isHostBanned(targetUser)) {
-					 return this.errorReply(`User ${targetUserID} is banned from hosting games.`);
+				if (targetUser && MafiaTracker.isHostBanned(room, targetUser)) {
+					 return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
 				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
@@ -2154,8 +2152,7 @@ export const commands: ChatCommands = {
 			const game = this.requireGame(MafiaTracker);
 
 			this.checkChat(null, targetRoom);
-			if (MafiaTracker.isGameBanned(user)) return this.errorReply(`You are banned from playing games.`);
-			game.join(user);
+			game.join(this.room, user);
 		},
 		joinhelp: [`/mafia join - Join the game.`],
 
@@ -2583,7 +2580,7 @@ export const commands: ChatCommands = {
 					game.eliminate(player, cmd);
 					game.logAction(user, `killed ${player.name}`);
 				} else {
-					user.sendTo(this.room, `|error|${targetUsername} is not a living player.`);
+					this.errorReply(`${targetUsername} is not a living player.`);
 				}
 			}
 		},
@@ -2699,10 +2696,7 @@ export const commands: ChatCommands = {
 			if (!toID(args.join(''))) return this.parse('/help mafia revive');
 			let didSomething = false;
 			for (const targetUsername of args) {
-				const targetUser = Users.get(toID(targetUsername));
-				if (targetUser && MafiaTracker.isGameBanned(targetUser)) {
-					return this.errorReply(`User ${targetUser.id} is banned from playing games.`);
-				} else if (game.revive(user, toID(targetUsername), cmd === 'forceadd')) {
+				if (game.revive(this.room, user, toID(targetUsername), cmd === 'forceadd')) {
 					didSomething = true;
 				}
 			}
@@ -3094,7 +3088,7 @@ export const commands: ChatCommands = {
 					this.checkChat(null, targetRoom);
 					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
 					if (game.played.includes(user.id)) return this.errorReply(`You cannot sub back into the game.`);
-					game.canJoin(user, true);
+					game.canJoin(this.room, user, true);
 					game.subs.push(user.id);
 					game.nextSub();
 					// Update spectator's view
@@ -3173,7 +3167,7 @@ export const commands: ChatCommands = {
 
 				const targetUser = Users.get(toSubIn);
 				if (!targetUser) return this.errorReply(`The user "${toSubIn}" was not found.`);
-				game.canJoin(targetUser, false, cmd === 'forcesub');
+				game.canJoin(this.room, targetUser, false, cmd === 'forcesub');
 				if (game.subs.includes(targetUser.id)) {
 					game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 				}
@@ -3537,7 +3531,7 @@ export const commands: ChatCommands = {
 		gameban: 'hostban',
 		hostban(target, room, user, connection, cmd) {
 			if (!target) return this.parse('/help mafia hostban');
-			room = this.requireRoom('mafia' as RoomID);
+			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
 			target = this.splitTarget(target, false);
@@ -3546,10 +3540,8 @@ export const commands: ChatCommands = {
 			if (parseInt(string1)) {
 				duration = parseInt(string1);
 				reason = string2;
-			} else if (parseInt(string2)) {
-				duration = parseInt(string2);
-				reason = string1;
 			} else {
+				duration = parseInt(string2);
 				reason = string1;
 			}
 
@@ -3566,7 +3558,7 @@ export const commands: ChatCommands = {
 			if (punishment) {
 				if (punishment === `${this.cmd.toUpperCase()}`) {
 					return this.errorReply(`User '${this.targetUsername}' is already ${this.cmd}ned in this room.`);
-				} else if (punishment === 'GAMEBAN') {
+				} else if (punishment === 'MAFIAGAMEBAN') {
 					return this.errorReply(`User '${this.targetUsername}' is already gamebanned in this room, which also means they can't host.`);
 				} else {
 					user.sendTo(room, `User '${this.targetUsername}' is already hostbanned in this room, but they will now be gamebanned.`);
@@ -3574,11 +3566,14 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			if (cmd === 'hostban') MafiaTracker.hostBan(room, targetUser, reason, duration);
-			else MafiaTracker.gameBan(room, targetUser, reason, duration);
+			if (cmd === 'hostban') {
+				MafiaTracker.hostBan(room, targetUser, reason, duration);
+			} else {
+				MafiaTracker.gameBan(room, targetUser, reason, duration);
+			}
 
-			this.modlog(cmd.toUpperCase(), targetUser, reason);
-			this.privateModAction(`${targetUser.name} was banned from ${cmd === 'hostban' ? 'hosting' : 'playing'} games by ${user.name}.`);
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, reason);
+			this.privateModAction(`${targetUser.name} was banned from ${cmd === 'hostban' ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
 		},
 		hostbanhelp: [
 			`/mafia (un)hostban [user], [reason], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # &`,
@@ -3594,23 +3589,23 @@ export const commands: ChatCommands = {
 		ungameban: 'unhostban',
 		unhostban(target, room, user, connection, cmd) {
 			if (!target) return this.parse('/help mafia hostban');
-			room = this.requireRoom('mafia' as RoomID);
+			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
 			this.splitTarget(target, false);
 			const targetUser = this.targetUser;
 			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-			if (!MafiaTracker.isGameBanned(targetUser) && cmd === 'ungameban') {
-				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing games.`);
+			if (!MafiaTracker.isGameBanned(room, targetUser) && cmd === 'ungameban') {
+				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing mafia games.`);
 			} else if (Punishments.getRoomPunishType(room, this.targetUsername) !== 'HOSTBAN' && cmd === 'unhostban') {
-				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting games.`);
+				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting mafia games.`);
 			}
 
 			if (cmd === 'unhostban') MafiaTracker.unhostBan(room, targetUser);
 			else MafiaTracker.ungameBan(room, targetUser);
 
-			this.privateModAction(`${targetUser.name} was unbanned from ${cmd === 'unhostban' ? 'hosting' : 'playing'} games by ${user.name}.`);
-			this.modlog(cmd.toUpperCase(), targetUser, null, {noip: 1, noalts: 1});
+			this.privateModAction(`${targetUser.name} was unbanned from ${cmd === 'unhostban' ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, null, {noip: 1, noalts: 1});
 		},
 
 		overwriterole: 'addrole',
