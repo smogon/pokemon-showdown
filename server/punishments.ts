@@ -1599,6 +1599,16 @@ export const Punishments = new class {
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
+	isBlacklistedSharedIp(ip: string) {
+		const num = IPTools.ipToNumber(ip);
+		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
+			const range = IPTools.stringToRange(blacklisted);
+			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
+			if (IPTools.checkPattern([range], num)) return reason;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns an array of all room punishments associated with a user.
 	 *
