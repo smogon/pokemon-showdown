@@ -1382,18 +1382,17 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help helpticket unban');
 
 			this.checkCan('lock');
-			let targetUser: User | ID | null = Users.get(target);
-			if (!targetUser) targetUser = toID(target);
-			const banned = HelpTicket.checkBanned(targetUser);
-			const userObjectExists = typeof targetUser === 'object';
+			target = toID(target);
+			let targetID: ID = Users.get(target)?.id || target as ID;
+			const banned = HelpTicket.checkBanned(targetID);
 			if (!banned) {
 				return this.errorReply(this.tr`${target} is not ticket banned.`);
 			}
 
-			const affected = HelpTicket.unban(targetUser);
+			const affected = HelpTicket.unban(targetID);
 			this.addModAction(`${affected} was ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", toID(target));
-			if (typeof targetUser === 'object') (targetUser as User).popup(`${user.name} has ticket unbanned you.`);
+			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);
 		},
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
