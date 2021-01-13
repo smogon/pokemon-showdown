@@ -1203,8 +1203,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// KingSwordYT
 	bambookingdom: {
-		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using physical moves against this Pokemon lose 1/8 of their maximum HP. Pokemon using special moves against this Pokemon lose 1/16 of their maximum HP. Attacking moves used by this Pokemon have their priority set to -7.",
-		shortDesc: "+1 Def/SpD. -7 priority on attacks. 1/8 recoil hit by phys, 1/16 hit by spec.",
+		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using direct attacks against this Pokemon lose 1/16 of their maximum HP. Attacking moves used by this Pokemon have their priority set to -7.",
+		shortDesc: "+1 Def/SpD. -7 priority on attacks. 1/16 hit by moves.",
 		name: "Bamboo Kingdom",
 		onStart(pokemon) {
 			this.boost({def: 1, spd: 1}, pokemon);
@@ -1213,12 +1213,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move?.category !== 'Status') return -7;
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical') {
-				this.damage(source.baseMaxhp / 8, source, target);
-			}
-			if (move.category === 'Special') {
-				this.damage(source.baseMaxhp / 16, source, target);
-			}
+			this.damage(source.baseMaxhp / 16, source, target);
 		},
 		isNonstandard: "Custom",
 		gen: 8,
