@@ -2058,7 +2058,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Hydro
 	hydrostatics: {
 		accuracy: 100,
-		basePower: 50,
+		basePower: 75,
 		category: "Special",
 		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage and a 50% chance to paralyze the target. This move combines Water in its type effectiveness against the target.",
 		shortDesc: "70% +1 SpA; 50% par; +Water in type effect.",
@@ -2087,10 +2087,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			status: 'par',
 		}],
 		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Water', type);
+			return typeMod + this.dex.getEffectiveness('Electric', type);
 		},
 		target: "normal",
-		type: "Electric",
+		type: "Water",
 	},
 
 	// Inactive
