@@ -354,7 +354,6 @@ export const commands: ChatCommands = {
 			const targetRoom = roomid ? Rooms.search(roomid) : room;
 			if (!targetRoom) return this.errorReply(`Invalid room.`);
 			this.room = room = targetRoom;
-			room = targetRoom;
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 			if (!room.minorActivityQueue) {
