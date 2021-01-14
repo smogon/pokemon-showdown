@@ -229,7 +229,7 @@
         "ability": ["Strong Jaw"],
         "evs": {"atk": 252, "def": 4, "spe": 252},
         "nature": "Jolly",
-        "moves": [["Fishious Rend"], ["Outrage"], ["Sleep Talk"]]
+        "moves": [["Fishious Rend"], ["Outrage"], ["Sleep Talk"], ["Rest"]]
       },
       {
         "species": "Dracovish",
