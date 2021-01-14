@@ -5920,4 +5920,63 @@ export const MovesText = {
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Bite move.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 	},
+	vengefulspirit: {
+		name: "Vengeful Spirit",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits two turns after being used.",
+		descGen4: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
+		descGen2: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move is already in effect for the target's position.",
+
+		start: "  [POKEMON] foresaw an attack!",
+		activate: "  [TARGET] took the Vengeful Spirit attack!",
+	},
+	tsunami: {
+		name: "Tsunami",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
+	},
+	nebulaburst: {
+		name: "Nebula Burst",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
+	},
+	spiritcalling: {
+		name: "Spirit Calling",
+		desc: "Hits one time for the user and one time for each unfainted Pokemon without a major status condition in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Special Attack; each hit is considered to come from the user.",
+		shortDesc: "All healthy allies aid in damaging the target.",
+
+		activate: "  [NAME]'s attack!", // past gen only
+	},
+	pressurepoint: {
+		name: "Pressure Point",
+		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
+		shortDesc: "For 5 turns, the foe(s) is prevented from healing.",
+		descGen7: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected. Relevant Z-Powered moves can still be selected and executed during this effect.",
+		descGen6: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
+		descGen4: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing moves are unusable, move effects that grant healing will not heal, but Abilities and items will continue to heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain under the effect. Pain Split is unaffected.",
+
+		start: "  [POKEMON] was prevented from healing!",
+		end: "  [POKEMON]'s Heal Block wore off!",
+		cant: "[POKEMON] can't use [MOVE] because of Heal Block!",
+	},
+	solarhymn: {
+		name: "Solar Hymn",
+		desc: "Has a 10% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "10% chance to raise the user's Special Attack by 1.",
+	},
+	heartbreak: {
+		name: "Heart Break",
+		desc: "Power doubles if the target is infatuated.",
+		shortDesc: "Power doubles if the target is infatuated.",
+	},
+	harmonioussinging: {
+		name: "Harmonious Singing",
+		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
+		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
+	},
+	wingwind: {
+		name: "Wing Wind",
+		desc: "Has a 10% chance to lower the target's Special Defense by 2 stage.",
+		shortDesc: "10% chance to lower the target's Sp. Def by 2.",
+	},
 };

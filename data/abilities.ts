@@ -4477,7 +4477,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -2,
 	},
 	rebound: {
-		isNonstandard: "CAP",
 		name: "Rebound",
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
@@ -4509,7 +4508,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -3,
 	},
 	persistent: {
-		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 3,
@@ -5045,7 +5043,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 1034,
 	},
-    magicalarcher: {
+    mythicarcher: {
 		onModifyMovePriority: 22,
 		onModifyMove(move) {
 			if (move.category === "Physical" && !move.flags['contact']) {
@@ -5059,7 +5057,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(1.1);
 			}
 		},
-		name: "Magical Archer",
+		name: "Mythic Archer",
 		rating: 3,
 		num: 1035,
 	},
@@ -5151,4 +5149,30 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 1038,
 	},
+	scavenger: {
+		name: "Scavenger",
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			// console.log("lastItem: "+this.dex.getItem(pokemon.lastItem));
+			// console.log("currentItem: "+this.dex.getItem(pokemon.item));
+			if (this.randomChance(1, 2)) {
+				if (pokemon.hp && !pokemon.item && this.dex.getItem(pokemon.lastItem)) {
+					pokemon.setItem(pokemon.lastItem);
+					pokemon.lastItem = '';
+					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Scavenger');
+				}
+			}
+		},
+		rating: 2.5,
+		num: 1039,
+	},
+	hideandseek: {
+        onStart(pokemon) {
+            this.useMove("substitute", pokemon);
+        },
+        name: "Hide and Seek",
+        rating: 2,
+        num: 1040,
+    },
 };

@@ -1620,8 +1620,8 @@ export const AbilitiesText = {
         name: "Parasite",
         shortDesc: "Holder gains 1.3x HP from draining moves/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
     },
-	magicalarcher: {
-        name: "Magical Archer",
+	mythicarcher: {
+        name: "Mythic Archer",
         shortDesc: "Changes Physical Non-Contact moves to special.",
     },
 	enthusiasm: {

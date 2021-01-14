@@ -9292,8 +9292,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterHit(target, source) {
 			if (source.hp) {
 				const item = target.takeItem();
+				// console.log("from knockoff - target.item: "+item);
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+					// console.log("from knockoff - target.item after knockoff: "+target.takeItem);
 				}
 			}
 		},
@@ -9302,36 +9304,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	// knockoff: {
-		// num: 282,
-		// accuracy: 100,
-		// basePower: 65,
-		// category: "Physical",
-		// name: "Knock Off",
-		// pp: 20,
-		// priority: 0,
-		// flags: {contact: 1, protect: 1, mirror: 1},
-		// onBasePower(basePower, source, target, move) {
-			// const item = target.getItem();
-			// if (!this.singleEvent('TakeItem', item, target.itemData, target, target, move, item)) return;
-			// if (item.id) {
-				// return this.chainModify(1.5);
-			// }
-		// },
-		// onAfterHit(target, source) {
-			// if (source.hp) {
-				// target.lastItem = target.takeItem();
-				// const item = target.takeItem();
-				// if (item) {
-					// this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
-				// }
-			// }
-		// },
-		// secondary: null,
-		// target: "normal",
-		// type: "Dark",
-		// contestType: "Clever",
-	// },
 	landswrath: {
 		num: 616,
 		accuracy: 100,
@@ -21669,7 +21641,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "self",
-		type: "Dragon",
+		type: "Normal",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
@@ -21687,5 +21659,231 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 		contestType: "Tough",
+	},
+	vengefulspirit: {
+		num: 934,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		name: "Vengeful Spirit",
+		pp: 10,
+		priority: 0,
+		flags: {future: 1},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 3,
+				move: 'vengefulspirit',
+				source: source,
+				moveData: {
+					id: 'vengefulspirit',
+					name: "Vengeful Spirit",
+					accuracy: 100,
+					basePower: 120,
+					category: "Physical",
+					priority: 0,
+					flags: {future: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Ghost',
+				},
+			});
+			this.add('-start', source, 'move: Vengeful Spirit');
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		contestType: "Clever",
+	},
+	tsunami: {
+		num: 935,
+		accuracy: 90,
+		basePower: 130,
+		category: "Special",
+		name: "Tsunami",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+		contestType: "Beautiful",
+	},
+	nebulaburst: {
+		num: 936,
+		accuracy: 100,
+		basePower: 150,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower * pokemon.hp / pokemon.maxhp;
+		},
+		category: "Special",
+		name: "Nebula Burst",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, expert: 1},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Cosmic",
+		contestType: "Beautiful",
+	},
+	spiritcalling: {
+		num: 937,
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback(pokemon, target, move) {
+			return 5 + Math.floor(move.allies!.shift()!.species.baseStats.spa / 10);
+		},
+		category: "Special",
+		name: "Spirit Calling",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, mystery: 1},
+		onModifyMove(move, pokemon) {
+			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || !ally.fainted && !ally.status);
+			move.multihit = move.allies.length;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		contestType: "Clever",
+	},
+	pressurepoint: {
+		num: 938,
+		accuracy: 100,
+		basePower: 50,
+		category: "Physical",
+		name: "Pressure Point",
+		pp: 8,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		volatileStatus: 'healblock',
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
+					return 7;
+				}
+				return 5;
+			},
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'move: Heal Block');
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.dex.getMove(moveSlot.id).flags['heal']) {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onBeforeMovePriority: 6,
+			onBeforeMove(pokemon, target, move) {
+				if (move.flags['heal'] && !move.isZ && !move.isMax) {
+					this.add('cant', pokemon, 'move: Heal Block', move);
+					return false;
+				}
+			},
+			onResidualOrder: 17,
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'move: Heal Block');
+			},
+			onTryHeal(damage, target, source, effect) {
+				if ((effect?.id === 'zpower') || this.effectData.isZ) return damage;
+				return false;
+			},
+		},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Psychic",
+		zMove: {boost: {spa: 2}},
+		contestType: "Clever",
+	},
+	solarhymn: {
+		num: 939,
+		accuracy: 90,
+		basePower: 100,
+		category: "Special",
+		name: "Solar Hymn",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		secondary: {
+			chance: 10,
+			self: {
+				boosts: {
+					spa: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Light",
+		contestType: "Cool",
+	},
+	heartbreak: {
+		num: 940,
+		accuracy: 100,
+		basePower: 65,
+		basePowerCallback(pokemon, target, move) {
+			if (target.volatiles['attract']) return move.basePower * 2;
+			return move.basePower;
+		},
+		category: "Physical",
+		name: "Heart Break",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		zMove: {basePower: 160},
+		contestType: "Clever",
+	},
+	harmonioussinging: {
+		num: 941,
+		accuracy: 90,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return 20 * move.hit;
+		},
+		category: "Special",
+		name: "Harmonious Singing",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, sound: 1, authentic: 1},
+		multihit: 3,
+		multiaccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+		zMove: {basePower: 120},
+		maxMove: {basePower: 140},
+	},
+	wingwind: {
+		num: 942,
+		accuracy: 90,
+		basePower: 80,
+		category: "Special",
+		name: "Wing Wind",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spd: -2,
+			},
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
 	},
 };
