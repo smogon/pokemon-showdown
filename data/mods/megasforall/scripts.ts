@@ -34,7 +34,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("talonflame", ["scorchingsands"]);
 		newMoves("staraptor", ["roleplay", "superfang"]);
 		newMoves("bibarel", ["fly"]);
-		newMoves("kricketune", ["drainpunch", "dualwingbeat", "firstimpression", "powertrip", "tripleaxel", "uturn"]);
+		newMoves("kricketune", ["closecombat", "drainpunch", "dualwingbeat", "firstimpression", "powertrip", "tripleaxel", "uturn"]);
 		newMoves("mismagius", ["sludgebomb", "sludgewave", "toxicspikes", "poisonfang", "partingshot", "fling"]);
 		newMoves("murkrow", ["partingshot"]);
 		newMoves("honchkrow", ["partingshot", "dualwingbeat"]);

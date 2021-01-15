@@ -1,10 +1,10 @@
 export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
-	gravitas: {
+	gravitation: {
 		shortDesc: "On switch-in, this Pokémon summons Gravity.",
 		onStart(source) {
 			this.field.addPseudoWeather('gravity');
 		},
-		name: "Gravitas",
+		name: "Gravitation",
 		rating: 4,
 		num: -1001,
 	},
@@ -763,7 +763,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						}
 					} else {
 						this.add('-message', `${target.name} suddenly exploded!`);
-						this.useMove('explosion', source, target, this.dex.getAbility('alchemist'));
+						this.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
 					}
 				} else {
 					this.add('-ability', source, 'Alchemist');
