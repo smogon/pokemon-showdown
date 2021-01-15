@@ -5979,4 +5979,14 @@ export const MovesText = {
 		desc: "Has a 10% chance to lower the target's Special Defense by 2 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def by 2.",
 	},
+	mythicarrows: {
+		name: "Mythic Arrows",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
+	planetarywrath: {
+		name: "Planetary Wrath",
+		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move's type is the pokemon's second type.",
+		shortDesc: "Physical if user's Atk > Sp. Atk. Ignores Abilities. Uses pokemon second type.",
+	},
 };

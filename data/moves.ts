@@ -21886,4 +21886,44 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+	mythicarrows: {
+		num: 943,
+		accuracy: 95,
+		basePower: 90,
+		category: "Physical",
+		name: "Mythic Arrows",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		critRatio: 2,
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+	},
+	planetarywrath: {
+		num: 944,
+		accuracy: 95,
+		basePower: 95,
+		category: "Special",
+		name: "Planetary Wrath",
+		pp: 35,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyType(move, pokemon) {
+			if (pokemon.getTypes()[1]) {
+				move.type = pokemon.getTypes()[1];
+				console.log("move.type: "+move.type);
+			} else {
+				return false;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Tough",
+	},
 };

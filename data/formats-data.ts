@@ -6270,6 +6270,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	corchi: {
 		tier: "OU",
 	},
+	wahgon: {
+		tier: "LC",
+	},
 	caravagon: {
 		tier: "OU",
 	},
@@ -6278,5 +6281,29 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	spiritute: {
 		tier: "None",
+	},
+	smackafaun: {
+		tier: "OU",
+	},
+	cervumis: {
+		tier: "OU",
+	},
+	kamisparce: {
+		tier: "OU",
+	},
+	femori: {
+		tier: "OU",
+	},
+	kyteroids: {
+		tier: "OU",
+	},
+	aracnicold: {
+		tier: "OU",
+	},
+	plesiolith: {
+		tier: "OU",
+	},
+	terraloosa: {
+		tier: "OU",
 	},
 };
