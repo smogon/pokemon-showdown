@@ -1026,13 +1026,6 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 			this.sendRoom(`|raw|<strong>The hint has been changed to:</strong> ${Chat.formatText(this.game.questions[num].hint)}`);
 		}
 	}
-
-	destroy() {
-		const user = Users.getExact(this.id);
-		if (user) {
-			user.updateSearch();
-		}
-	}
 }
 
 const ScavengerCommands: ChatCommands = {

@@ -262,8 +262,6 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.room.pokeExpireTimer();
 		for (const ticketGameUser of Object.values(this.playerTable)) {
 			this.removePlayer(ticketGameUser);
-			const user = Users.get(ticketGameUser.id);
-			if (user) user.updateSearch();
 		}
 		if (!this.involvedStaff.size) {
 			if (staff?.isStaff && staff.id !== this.ticket.userid) {

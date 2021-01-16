@@ -402,19 +402,13 @@ class Ladder extends LadderStore {
 		return userSearches;
 	}
 	static updateSearch(user: User, connection: Connection | null = null) {
-		let games: {[k: string]: string} | null = {};
-		let atLeastOne = false;
-		for (const curRoom of Rooms.rooms.values()) {
-			const game = curRoom.game;
-			if (!game || !game.playerTable[user.id]) continue;
-			games[curRoom.roomid] = game.title + (game.allowRenames ? '' : '*');
-			atLeastOne = true;
-		}
-		if (!atLeastOne) games = null;
-		const searching = Ladders.getSearches(user);
+		const gamesEntries = user.getGames().map(game => (
+			[game.room.roomid, game.title + (game.allowRenames ? '' : '*')]
+		));
+
 		(connection || user).send(`|updatesearch|` + JSON.stringify({
-			searching,
-			games,
+			searching: Ladders.getSearches(user),
+			games: gamesEntries.length ? Object.fromEntries(gamesEntries) : null,
 		}));
 	}
 	hasSearch(user: User) {

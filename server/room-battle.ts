@@ -114,7 +114,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.connected = true;
 
 		if (user) {
-			user.updateSearch();
+			user.updateGames();
 			for (const connection of user.connections) {
 				if (connection.inRooms.has(game.roomid)) {
 					Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
@@ -131,7 +131,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 			for (const connection of user.connections) {
 				Sockets.channelMove(connection.worker, this.game.roomid, 0, connection.socketid);
 			}
-			user.updateSearch();
+			user.updateGames();
 		}
 		this.id = '';
 		this.connected = false;

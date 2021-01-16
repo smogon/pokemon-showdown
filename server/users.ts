@@ -875,6 +875,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 		if (isForceRenamed) this.trackRename = oldname;
+		this.updateGames();
 		return true;
 	}
 	getUpdateuserText() {
@@ -1348,7 +1349,11 @@ export class User extends Chat.MessageContext {
 		Ladders.updateSearch(this, connection);
 		Ladders.updateChallenges(this, connection);
 	}
-	updateSearch(connection: Connection | null = null) {
+	/**
+	 * Tells the client what games the user is currently in, and what
+	 * formats the user is searching for games in.
+	 */
+	updateGames(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
 	}
 	/**

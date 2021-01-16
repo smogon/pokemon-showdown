@@ -42,16 +42,19 @@ export class RoomGamePlayer {
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
 		if (user && !this.game.isSubGame) {
-			user.updateSearch();
+			user.updateGames();
 		}
 	}
 	unlinkUser() {
 		if (!this.id) return;
 		const user = Users.getExact(this.id);
-		if (user && !this.game.isSubGame) {
-			user.updateSearch();
-		}
 		this.id = '';
+		if (user && !this.game.isSubGame) {
+			user.updateGames();
+		}
+	}
+	getUser() {
+		return Users.getExact(this.id);
 	}
 	destroy() {
 		this.unlinkUser();
@@ -184,10 +187,12 @@ export class RoomGame {
 		if (!this.allowRenames) return false;
 		const playerIndex = this.players.indexOf(player);
 		if (playerIndex < 0) return false;
+		const user = player.getUser();
 		if (player.id) delete this.playerTable[player.id];
 		this.players.splice(playerIndex, 1);
 		player.destroy();
 		this.playerCount--;
+		user?.updateGames();
 		return true;
 	}
 
@@ -277,7 +282,7 @@ export class RoomGame {
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!user.inGame(this.room) && !this.isSubGame) {
-				user.updateSearch();
+				user.updateGames();
 			}
 			return;
 		}
