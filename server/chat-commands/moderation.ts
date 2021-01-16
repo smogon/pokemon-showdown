@@ -1565,8 +1565,13 @@ export const commands: ChatCommands = {
 
 	nl: 'namelock',
 	forcenamelock: 'namelock',
+	weeknamelock: 'namelock',
+	wnl: 'namelock',
+	forceweeknamelock: 'namelock',
 	async namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
+		const week = cmd.includes('w');
+		const force = cmd.includes('force');
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -1574,7 +1579,7 @@ export const commands: ChatCommands = {
 		if (!targetUser) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
-		if (targetUser.id !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
+		if (targetUser.id !== toID(this.inputUsername) && !force) {
 			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
 		this.checkCan('forcerename', targetUser);
@@ -1590,15 +1595,16 @@ export const commands: ChatCommands = {
 			publicReason = target.substr(0, privateIndex).trim();
 		}
 		const reasonText = publicReason ? ` (${publicReason})` : `.`;
-		this.privateGlobalModAction(`${targetUser.name} was namelocked by ${user.name}${reasonText}`);
-		this.globalModlog("NAMELOCK", targetUser, target ? `${publicReason} ${privateReason}` : ``);
+		this.privateGlobalModAction(`${targetUser.name} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
+		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser, target ? `${publicReason} ${privateReason}` : ``);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {
 			Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
 		Ladders.cancelSearches(targetUser);
-		await Punishments.namelock(targetUser, null, null, false, publicReason);
+		const duration = week ? 7 * 24 * 60 * 60 * 1000 : 48 * 60 * 60 * 1000;
+		await Punishments.namelock(targetUser, Date.now() + duration, null, false, publicReason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room?.battle) this.parse('/savereplay forpunishment');
