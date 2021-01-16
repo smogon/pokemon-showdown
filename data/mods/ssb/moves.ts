@@ -2851,8 +2851,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "If this Pokemon does not take damage this turn, it switches out to another Pokemon in the party and gives it a boost corresponding to its highest stat. Fails otherwise.",
-		shortDesc: "Focus: switch out, next Pokemon Beast Boosts.",
+		desc: "If this Pokemon does not take damage this turn, it switches out to another Pokemon in the party and gives it a +2 boost corresponding to its highest stat. Fails otherwise.",
+		shortDesc: "Focus: switch out, next Pokemon +2 Beast Boost.",
 		name: "/nexthunt",
 		pp: 10,
 		priority: -6,
@@ -2901,7 +2901,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						bestStat = target.storedStats[s];
 					}
 				}
-				this.boost({[statName]: 1}, target, null, this.dex.getActiveMove('/nexthunt'));
+				this.boost({[statName]: 2}, target, null, this.dex.getActiveMove('/nexthunt'));
 			},
 		},
 		selfSwitch: true,
