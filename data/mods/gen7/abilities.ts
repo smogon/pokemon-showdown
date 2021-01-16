@@ -66,6 +66,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onBoost() {},
 	},
+	soundproof: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Soundproof');
+				return null;
+			}
+		},
+	},
 	technician: {
 		inherit: true,
 		onBasePowerPriority: 19,

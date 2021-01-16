@@ -3463,7 +3463,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	soundproof: {
 		onTryHit(target, source, move) {
-			if (move.target !== 'self' && move.flags['sound']) {
+			if (target !== source && move.flags['sound']) {
 				this.add('-immune', target, '[from] ability: Soundproof');
 				return null;
 			}
