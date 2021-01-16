@@ -1486,7 +1486,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: 'Ghost Spores',
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
-				source.addVolatile('curse');
+				source.addVolatile('curse', target);
 			} else {
 				source.addVolatile('leechseed', target);
 			}
