@@ -41,17 +41,12 @@ export class RoomGamePlayer {
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
-		if (user && !this.game.isSubGame) {
-			user.updateGames();
-		}
 	}
 	unlinkUser() {
 		if (!this.id) return;
 		const user = Users.getExact(this.id);
 		this.id = '';
-		if (user && !this.game.isSubGame) {
-			user.updateGames();
-		}
+		if (!this.game.isSubGame) user?.updateGames();
 	}
 	getUser() {
 		return Users.getExact(this.id);
@@ -143,16 +138,19 @@ export class RoomGame {
 
 	addPlayer(user: User | string | null = null, ...rest: any[]) {
 		if (typeof user !== 'string' && user) {
-			if (user.inGame(this.room)) return null;
+			if (user.id in this.playerTable) throw new Chat.ErrorMessage(`You (${user.name}) are already a player in this game.`);
 		}
-		if (this.playerCap > 0 && this.playerCount >= this.playerCap) return null;
+		if (this.playerCap > 0 && this.playerCount >= this.playerCap) {
+			throw new Chat.ErrorMessage(`This game is already at its player cap of ${this.playerCap}.`);
+		}
 		const player = this.makePlayer(user, ...rest);
-		if (!player) return null;
+		if (!player) throw new Error(`Unable to create player`);
 		if (typeof user === 'string') user = null;
 		this.players.push(player);
 		if (user) {
 			this.playerTable[user.id] = player;
 			this.playerCount++;
+			if (!this.isSubGame) user.updateGames();
 		}
 		return player;
 	}
@@ -192,7 +190,7 @@ export class RoomGame {
 		this.players.splice(playerIndex, 1);
 		player.destroy();
 		this.playerCount--;
-		user?.updateGames();
+		if (!this.isSubGame) user?.updateGames();
 		return true;
 	}
 
@@ -281,9 +279,7 @@ export class RoomGame {
 	 */
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!user.inGame(this.room) && !this.isSubGame) {
-				user.updateGames();
-			}
+			if (!this.isSubGame) user.updateGames();
 			return;
 		}
 		if (!(oldUserid in this.playerTable)) return;

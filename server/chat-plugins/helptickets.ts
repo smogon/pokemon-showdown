@@ -112,7 +112,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (!this.ticket.open) return false;
 		if (!user.isStaff || user.id === this.ticket.userid) {
 			if (this.emptyRoom) this.emptyRoom = false;
-			this.addPlayer(user);
+			if (!user.inGame(this.room)) this.addPlayer(user);
 			if (this.ticket.offline) {
 				delete this.ticket.offline;
 				writeTickets();

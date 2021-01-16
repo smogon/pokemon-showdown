@@ -141,11 +141,7 @@ export class Blackjack extends Rooms.RoomGame {
 	joinGame(user: User) {
 		if (!user.named) return this.errorMessage(user, `You must first choose a name to play Blackjack.`);
 		if (this.state === 'started') return this.errorMessage(user, `Blackjack has already started.`);
-		const joined = this.addPlayer(user);
-		if (!joined) {
-			this.errorMessage(user, `You are already in this game.`);
-			return false;
-		}
+		this.addPlayer(user);
 
 		this.sendInvite();
 

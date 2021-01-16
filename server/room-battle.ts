@@ -114,7 +114,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.connected = true;
 
 		if (user) {
-			user.updateGames();
 			for (const connection of user.connections) {
 				if (connection.inRooms.has(game.roomid)) {
 					Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
@@ -1006,9 +1005,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	 * an inputlog (so the player isn't recreated)
 	 */
 	addPlayer(user: User | null, team: string | null, rating = 0) {
-		// TypeScript bug: no `T extends RoomGamePlayer`
 		const player = super.addPlayer(user) as RoomBattlePlayer;
-		if (!player) return null;
 		const slot = player.slot;
 		this[slot] = player;
 

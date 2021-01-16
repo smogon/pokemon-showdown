@@ -467,24 +467,18 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	joinGame(user: User) {
 		if (this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId) {
-			return user.sendTo(
-				this.room,
-				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
-			);
+			throw new Chat.ErrorMessage("You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!");
 		}
 		if (!Config.noipchecks && user.ips.some(ip => this.joinedIps.includes(ip))) {
-			return user.sendTo(this.room, "You already have one alt in the hunt.");
+			throw new Chat.ErrorMessage("You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;
-		if (this.addPlayer(user)) {
-			this.cacheUserIps(user);
-			delete this.leftHunt[user.id];
-			user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
-			this.onSendQuestion(user);
-			return true;
-		}
-		user.sendTo(this.room, "You have already joined the hunt.");
-		return false;
+		this.addPlayer(user);
+		this.cacheUserIps(user);
+		delete this.leftHunt[user.id];
+		user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+		this.onSendQuestion(user);
+		return true;
 	}
 
 	cacheUserIps(user: User | FakeUser) {
