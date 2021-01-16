@@ -369,7 +369,6 @@ export const commands: ChatCommands = {
 			} else {
 				const slot = parseInt(slotString);
 				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
-				if (!curRoom) return this.errorReply(this.tr`Room "${roomid}" not found.`);
 				if (isNaN(slot)) {
 					return this.errorReply(this.tr`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
 				}
