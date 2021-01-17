@@ -1,6 +1,6 @@
 export const Items: {[itemid: string]: ModdedItemData} = {
-	draconite: {
-		name: "Draconite",
+	dragonitite: {
+		name: "Dragonitite",
 		spritenum: 586,
 		megaStone: "Dragonite-Mega",
 		megaEvolves: "Dragonite",
