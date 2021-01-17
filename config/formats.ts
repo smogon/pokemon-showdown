@@ -73,7 +73,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Baton Pass'],
+		banlist: ['AG', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 8] UU",
