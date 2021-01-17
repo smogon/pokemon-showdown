@@ -215,7 +215,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		weightkg: 210,
 		color: "Brown",
 		eggGroups: ["Water 1", "Dragon"],
-		requiredItem: "Draconite",
+		requiredItem: "Dragonitite",
 	},
 	meganium: {
 		inherit: true,
