@@ -2154,7 +2154,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const p1status = source.status;
 			const p1statusData = source.statusData ? source.statusData : false;
 			const p1item = source.item;
-			const p1canZmove = source.m.zMoveUsed;
+			const p1canZmove = source.m;
 			const p1moveslotpp = [];
 			for (const [, moveSlot] of source.moveSlots.entries()) {
 				p1moveslotpp.push(moveSlot.pp);
@@ -2165,7 +2165,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const p2status = target.status;
 			const p2statusData = target.statusData ? target.statusData : false;
 			const p2item = target.item;
-			const p2canZmove = target.m.zMoveUsed;
+			const p2canZmove = target.m;
 			const p2moveslotpp = [];
 			for (const [, moveSlot] of target.moveSlots.entries()) {
 				p2moveslotpp.push(moveSlot.pp);
@@ -2186,7 +2186,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.status = p1status;
 			if (p1statusData) target.statusData = p1statusData;
 			target.item = p1item;
-			target.m.zMoveUsed = p1canZmove;
+			target.m = p1canZmove;
 			target.canDynamax = false;
 			for (const [j, moveSlot] of target.moveSlots.entries()) {
 				moveSlot.pp = p1moveslotpp[j];
@@ -2207,7 +2207,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.status = p2status;
 			if (p2statusData) source.statusData = p2statusData;
 			source.item = p2item;
-			source.m.zMoveUsed = p2canZmove;
+			source.m = p2canZmove;
 			source.canDynamax = false;
 			for (const [j, moveSlot] of source.moveSlots.entries()) {
 				moveSlot.pp = p2moveslotpp[j];
