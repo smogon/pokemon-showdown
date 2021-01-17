@@ -784,7 +784,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					let collateral = this.clampIntRange(foe.baseMaxhp / 2, 1);
 					this.add('-message', `${foe.name} became insane and attacked themselves!`);
 					if (collateral >= foe.hp) collateral = foe.hp - 1;
-					this.directDamage(collateral, foe);
+					foe.hp = foe.hp - collateral;
+					if (foe === source) {
+						this.add('-damage', foe, foe.getHealth);
+					}
 				}
 			}
 		},

@@ -2133,7 +2133,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 3,
-		flags: {},
+		flags: {authentic: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2244,7 +2244,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			const potential = [];
 			for (const foes of target.side.pokemon) {
-				if (foes.fainted || foes.m.marked || !foes.m.revealed) continue;
+				if (foes.fainted || foes.m.marked) continue;
 				potential.push(foes);
 			}
 			if (!potential.length) return;
