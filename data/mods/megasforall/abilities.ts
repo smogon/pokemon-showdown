@@ -899,7 +899,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		num: -1026,
 	},
 	diamonddust: {
-		shortDesc: "During hail, this Pokémon is immune to all Rock-type attacks and Stealth Rock.",
 		desc: "On switch-in, this Pokémon summons Diamond Dust for 5 turns. During the effect, Pokémon are immune to all Rock-type attacks and Stealth Rock; Weather Ball becomes an Ice-type move, and its base power is 100; and other weather-related moves and Abilities behave as they do in Hail.",
 		shortDesc: "5 turns: all Pokémon are immune to Rock; counts as hail.",
 		onStart(source) {
