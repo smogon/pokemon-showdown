@@ -402,7 +402,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			let rejectAbility: boolean;
 			do {
 				rejectAbility = false;
-				if (['Anger Point', 'Gluttony', 'Inner Focus', 'Moody', 'Sand Veil', 'Snow Cloak', 'Steadfast'].includes(ability)) {
+				if (['Anger Point', 'Gluttony', 'Moody', 'Sand Veil', 'Snow Cloak', 'Steadfast'].includes(ability)) {
 					rejectAbility = true;
 				} else if (['Analytic', 'Download', 'Hyper Cutter'].includes(ability)) {
 					rejectAbility = species.nfe;
