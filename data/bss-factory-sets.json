@@ -229,7 +229,7 @@
         "ability": ["Strong Jaw"],
         "evs": {"atk": 252, "def": 4, "spe": 252},
         "nature": "Jolly",
-        "moves": [["Fishious Rend"], ["Outrage"], ["Sleep Talk"]]
+        "moves": [["Fishious Rend"], ["Outrage"], ["Sleep Talk"], ["Dive"]]
       },
       {
         "species": "Dracovish",
@@ -981,7 +981,7 @@
         "ability": ["Prankster"],
         "evs": {"hp": 252, "atk": 252, "spd": 4},
         "nature": "Adamant",
-        "moves": [["Trick"], ["Spirit Break"], ["Sucker Punch"], ["Substitute", "Light Screen", "Reflect"]]
+        "moves": [["Trick"], ["Spirit Break"], ["Sucker Punch"], ["Light Screen", "Reflect"]]
       },
       {
         "species": "Grimmsnarl",
@@ -1953,7 +1953,7 @@
     "sets": [
       {
         "species": "Milotic",
-        "item": ["Flame Orb", "Sitrus Berry", "Leftovers"],
+        "item": ["Flame Orb"],
         "ability": ["Marvel Scale"],
         "evs": {"hp": 252, "def": 252, "spd": 4},
         "nature": "Bold",
