@@ -1641,10 +1641,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	toxtricity: {
 		inherit: true,
 		otherFormes: [
-			"Toxtricity-Low-Key", "Toxtricity-Mega", "Toxtricity-Low-Key-Mega"
+			"Toxtricity-Low-Key", "Toxtricity-Mega", "Toxtricity-Low-Key-Mega",
 		],
 		formeOrder: [
-			"Toxtricity", "Toxtricity-Low-Key", "Toxtricity-Mega", "Toxtricity-Low-Key-Mega"
+			"Toxtricity", "Toxtricity-Low-Key", "Toxtricity-Mega", "Toxtricity-Low-Key-Mega",
 		],
 	},
 	toxtricitymega: {
