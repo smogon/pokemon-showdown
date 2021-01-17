@@ -1065,7 +1065,9 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 	solarbeam: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target) {
-			if (['raindance', 'primordialsea', 'sandstorm', 'desertgales', 'hail', 'diamonddust'].includes(pokemon.effectiveWeather())) {
+			if (
+				['raindance', 'primordialsea', 'sandstorm', 'desertgales', 'hail', 'diamonddust'].includes(pokemon.effectiveWeather())
+			) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -1074,7 +1076,9 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 	solarblade: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target) {
-			if (['raindance', 'primordialsea', 'sandstorm', 'desertgales', 'hail', 'diamonddust'].includes(pokemon.effectiveWeather())) {
+			if (
+				['raindance', 'primordialsea', 'sandstorm', 'desertgales', 'hail', 'diamonddust'].includes(pokemon.effectiveWeather())
+			) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
