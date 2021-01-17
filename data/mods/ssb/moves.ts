@@ -2145,6 +2145,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			this.queue.cancelMove(target);
+
+			this.add('-message', `${source.name} and ${target.name} have switched places!`);
+
 			// No Regerts
 			const set = source.set;
 			const p1hp = source.hp;
