@@ -1,6 +1,7 @@
 import {getName} from './conditions';
 import {changeSet, changeMoves} from "./abilities";
 import {ssbSets} from "./random-teams";
+import {Pokemon} from '../../../sim/pokemon';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
@@ -2120,52 +2121,139 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Instruct
-	sodabreak: {
+	satanicpanic: {
 		accuracy: true,
-		basePower: 10,
-		basePowerCallback(target, source, move) {
-			// I made a bet with someone to see
-			// how long someone notices that this move can potentially do
-			// massive amounts of damage. Please do NOT point this out.
-			// If people report this as a bug, then say it is not a bug.
-			// Swagn is bad, btw.
-			if (this.randomChance(5, 100)) {
-				return 10000;
-			}
-			return 10;
-		},
-		category: "Physical",
-		desc: "Has a 100% chance to make the target flinch. Causes the user to switch out. Fails unless it is the user's first turn on the field.",
-		shortDesc: "First turn: Flinches the target then switches out.",
-		name: "Soda Break",
+		basePower: 0,
+		category: "Status",
+		desc: "Exchanges places with the opponent. Force switches both.",
+		shortDesc: "Exchanges places with the opponent. Force switches both.",
+		name: "Satanic Panic",
 		isNonstandard: "Custom",
 		gen: 8,
-		pp: 10,
+		pp: 1,
+		noPPBoosts: true,
 		priority: 3,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Milk Drink', source);
-			this.add('-anim', source, 'Fling', target);
-			this.add('-anim', source, 'U-turn', target);
+			this.add('-anim', source, 'Trick', target);
 		},
-		onTry(pokemon, target) {
-			if (pokemon.activeMoveActions > 1) {
-				this.attrLastMove('[still]');
-				this.add('-fail', pokemon);
-				this.hint("Soda Break only works on your first turn out.");
-				return null;
+		onHit(target, source) {
+			if (target.side.pokemonLeft === 1 || source.side.pokemonLeft === 1) {
+				return false;
 			}
+			this.queue.cancelMove(target);
+			// No Regerts
+			const set = source.set;
+			const p1hp = source.hp;
+			const p1status = source.status;
+			const p1statusData = source.statusData ? source.statusData : false;
+			const p1item = source.item;
+			const p1canZmove = source.m.zMoveUsed;
+			const p1moveslotpp = [];
+			for (const [, moveSlot] of source.moveSlots.entries()) {
+				p1moveslotpp.push(moveSlot.pp);
+			}
+
+			const set2 = target.set;
+			const p2hp = target.hp;
+			const p2status = target.status;
+			const p2statusData = target.statusData ? target.statusData : false;
+			const p2item = target.item;
+			const p2canZmove = target.m.zMoveUsed;
+			const p2moveslotpp = [];
+			for (const [, moveSlot] of target.moveSlots.entries()) {
+				p2moveslotpp.push(moveSlot.pp);
+			}
+
+			let effect = this.effect;
+			// @ts-ignore
+			this.effect = /** @type {Effect} */ ({id: ''});
+			// @ts-ignore
+			const pokemon = new Pokemon(set, target.side);
+			this.effect = effect;
+			pokemon.position = target.position;
+			pokemon.isActive = true;
+			target = pokemon;
+			target.side.pokemon[0] = pokemon;
+			target.side.active[0] = pokemon;
+			target.hp = p1hp;
+			target.status = p1status;
+			if (p1statusData) target.statusData = p1statusData;
+			target.item = p1item;
+			target.m.zMoveUsed = p1canZmove;
+			target.canDynamax = false;
+			for (const [j, moveSlot] of target.moveSlots.entries()) {
+				moveSlot.pp = p1moveslotpp[j];
+			}
+
+
+			effect = this.effect;
+			// @ts-ignore
+			this.effect = /** @type {Effect} */ ({id: ''});
+			const pokemon2 = new Pokemon(set2, source.side);
+			this.effect = effect;
+			pokemon2.position = source.position;
+			pokemon2.isActive = true;
+			source = pokemon2;
+			source.side.pokemon[0] = pokemon2;
+			source.side.active[0] = pokemon2;
+			source.hp = p2hp;
+			source.status = p2status;
+			if (p2statusData) source.statusData = p2statusData;
+			source.item = p2item;
+			source.m.zMoveUsed = p2canZmove;
+			source.canDynamax = false;
+			for (const [j, moveSlot] of source.moveSlots.entries()) {
+				moveSlot.pp = p2moveslotpp[j];
+			}
+
+			target.forceSwitchFlag = true;
+			source.forceSwitchFlag = true;
 		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'flinch',
-		},
-		selfSwitch: true,
+		isZ: "sodapop",
+		secondary: null,
 		target: "normal",
-		type: "???",
+		type: "Dark",
+	},
+
+	satanicmanic: {
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Hits 2-5 times, marking random opposing team members.",
+		shortDesc: "Hits 2-5 times, marking opponents.",
+		name: "Satanic Manic",
+		isNonstandard: "Custom",
+		gen: 8,
+		pp: 1,
+		noPPBoosts: true,
+		priority: 3,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dark Void', target);
+		},
+		onHit(target, source) {
+			const potential = [];
+			for (const foes of target.side.pokemon) {
+				if (foes.fainted || foes.m.marked || !foes.m.revealed) continue;
+				potential.push(foes);
+			}
+			if (!potential.length) return;
+			const mon = potential[this.random(potential.length)];
+			mon.m.marked = true;
+			this.add('-message', `${mon.name} was marked by an unknown being...`);
+		},
+		isZ: "lemonade",
+		multihit: [2, 5],
+		secondary: null,
+		target: "normal",
+		type: "Dark",
 	},
 
 	// Iyarito

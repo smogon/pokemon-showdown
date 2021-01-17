@@ -1354,6 +1354,7 @@ export const Formats: FormatList = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
+			pokemon.m.revealed = true;
 			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.getSpecies(name).exists || this.dex.getMove(name).exists || this.dex.getAbility(name).exists) {
 				// Certain pokemon have volatiles named after their id
