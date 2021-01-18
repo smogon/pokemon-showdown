@@ -106,7 +106,7 @@ export class YoutubeInterface {
 		const id = this.getId(link);
 		const {name, description, icon, videos, subs, views, username} = await this.get(id);
 		// credits bumbadadabum for most of the html
-		let buf = `<table style="margin:0px;"><tr>`;
+		let buf = `<div class="infobox"><table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
 		buf += `<div style="padding:5px;background:white;border:1px solid black;margin:auto;max-width:100px;max-height:100px;">`;
 		buf += `<a href="${ROOT}channel/${id}"><img src="${icon}" width=100px height=100px/></a>`;
@@ -118,9 +118,9 @@ export class YoutubeInterface {
 		buf += `<p style="margin-left: 5px; font-size:9pt;color:white;">`;
 		buf += `${description.slice(0, 400).replace(/\n/g, ' ')}${description.length > 400 ? '(...)' : ''}</p>`;
 		if (username) {
-			buf += `<p style="text-align:left;font-style:italic;color:white;">PS username: ${username}</p></td></tr></table>`;
+			buf += `<p style="text-align:left;font-style:italic;color:white;">PS username: ${username}</p></td></tr></table></div>`;
 		} else {
-			buf += '</td></tr></table>';
+			buf += '</td></tr></table></div>';
 		}
 		return buf;
 	}
@@ -282,7 +282,7 @@ export class YoutubeInterface {
 				const room = Rooms.get('youtube');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await YouTube.randChannel();
-				room.add(`|html|<div class="infobox">${res}</div>`).update();
+				room.add(`|html|${res}</div>`).update();
 			})();
 		}, interval);
 		return this.interval;
@@ -394,7 +394,7 @@ export const commands: ChatCommands = {
 		target = toID(target);
 		this.runBroadcast();
 		const data = await YouTube.randChannel(target);
-		return this.sendReplyBox(data);
+		return this.sendReply(`|html|${data}`);
 	},
 	randchannelhelp: [`/randchannel - View data of a random channel from the YouTube database.`],
 
@@ -431,7 +431,7 @@ export const commands: ChatCommands = {
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
 			const data = await YouTube.generateChannelDisplay(channel);
 			this.runBroadcast();
-			return this.sendReplyBox(data);
+			return this.sendReply(`|html|${data}`);
 		},
 		channelhelp: [
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
