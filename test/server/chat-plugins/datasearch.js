@@ -30,4 +30,60 @@ describe("Datasearch Plugin", () => {
 		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
 		assert(moveSearch.results.includes('U-turn'));
 	});
+
+	it('should not return pivot moves', async () => {
+		const cmd = 'ms';
+		const target = '!pivot';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert.false(moveSearch.results.includes('U-turn'));
+	});
+
+	it('should error', async () => {
+		const cmd = 'ms';
+		const target = 'pivot|!pivot';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert(moveSearch.error);
+	});
+
+	it('should return recoil moves', async () => {
+		const cmd = 'ms';
+		const target = 'recoil';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert(moveSearch.results.includes('Brave Bird'));
+	});
+
+	it('should not return recoil moves', async () => {
+		const cmd = 'ms';
+		const target = '!recoil';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert.false(moveSearch.results.includes('Brave Bird'));
+	});
+
+	it('should return recovery moves', async () => {
+		const cmd = 'ms';
+		const target = 'recovery';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert(moveSearch.results.includes('Absorb'));
+	});
+
+	it('should not return recovery moves', async () => {
+		const cmd = 'ms';
+		const target = '!recovery';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert.false(moveSearch.results.includes('Absorb'));
+	});
+
+	it('should return zrecovery moves', async () => {
+		const cmd = 'ms';
+		const target = 'zrecovery';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert(moveSearch.results.includes('Belly Drum'));
+	});
+
+	it('should not return zrecovery moves', async () => {
+		const cmd = 'ms';
+		const target = '!zrecovery';
+		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
+		assert.false(moveSearch.results.includes('Belly Drum'));
+	});
 });

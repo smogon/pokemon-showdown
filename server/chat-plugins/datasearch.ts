@@ -34,7 +34,7 @@ interface MoveOrGroup {
 	contestTypes: {[k: string]: boolean};
 	flags: {[k: string]: boolean};
 	gens: {[k: string]: boolean};
-	recovery: {[k: string]: boolean};
+	other: {[k: string]: boolean};
 	mon: {[k: string]: boolean};
 	property: {[k: string]: {[k in Direction]: number}};
 	boost: {[k: string]: boolean};
@@ -43,9 +43,7 @@ interface MoveOrGroup {
 	status: {[k: string]: boolean};
 	volatileStatus: {[k: string]: boolean};
 	targets: {[k: string]: boolean};
-	recoil: boolean;
 	skip: boolean;
-	pivot: boolean;
 	multihit: boolean;
 }
 
@@ -1214,9 +1212,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	let maxGen = 0;
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
-			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
-			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false,
-			pivot: false, multihit: false,
+			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, other: {}, mon: {}, property: {},
+			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, skip: false, multihit: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
@@ -1351,18 +1348,18 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (target === 'recovery') {
-				if (!orGroup.recovery['recovery']) {
-					orGroup.recovery["recovery"] = true;
-				} else if ((orGroup.recovery['recovery'] && isNotSearch) || (!orGroup.recovery['recovery'] && !isNotSearch)) {
+				if (orGroup.other.recovery === undefined) {
+					orGroup.other.recovery = !isNotSearch;
+				} else if ((orGroup.other.recovery && isNotSearch) || (!orGroup.other.recovery && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include recovery moves.'};
 				}
 				continue;
 			}
 
 			if (target === 'recoil') {
-				if (!orGroup.recoil) {
-					orGroup.recoil = true;
-				} else if ((orGroup.recoil && isNotSearch) || (!orGroup.recoil && !isNotSearch)) {
+				if (orGroup.other.recoil === undefined) {
+					orGroup.other.recoil = !isNotSearch;
+				} else if ((orGroup.other.recoil && isNotSearch) || (!orGroup.other.recoil && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include recoil moves.'};
 				}
 				continue;
@@ -1376,18 +1373,18 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (target === 'zrecovery') {
-				if (!orGroup.recovery['zrecovery']) {
-					orGroup.recovery["zrecovery"] = !isNotSearch;
-				} else if ((orGroup.recovery['zrecovery'] && isNotSearch) || (!orGroup.recovery['zrecovery'] && !isNotSearch)) {
+				if (orGroup.other.zrecovery === undefined) {
+					orGroup.other.zrecovery = !isNotSearch;
+				} else if ((orGroup.other.zrecovery && isNotSearch) || (!orGroup.other.zrecovery && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include z-recovery moves.'};
 				}
 				continue;
 			}
 
 			if (target === 'pivot') {
-				if (!orGroup.pivot) {
-					orGroup.pivot = true;
-				} else if ((orGroup.pivot && isNotSearch) || (!orGroup.pivot && !isNotSearch)) {
+				if (orGroup.other.pivot === undefined) {
+					orGroup.other.pivot = !isNotSearch;
+				} else if ((orGroup.other.pivot && isNotSearch) || (!orGroup.other.pivot && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include pivot moves.'};
 				}
 				continue;
@@ -1728,21 +1725,22 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (alts.gens[String(move.gen)]) continue;
 				if (Object.values(alts.gens).includes(false) && alts.gens[String(move.gen)] !== false) continue;
 			}
-			for (const recoveryType in alts.recovery) {
+			for (const recoveryType in alts.other) {
 				let hasRecovery = false;
 				if (recoveryType === "recovery") {
 					hasRecovery = !!move.drain || !!move.flags.heal;
 				} else if (recoveryType === "zrecovery") {
 					hasRecovery = (move.zMove?.effect === 'heal');
 				}
-				if (hasRecovery === alts.recovery[recoveryType]) {
+				if (hasRecovery === alts.other[recoveryType]) {
 					matched = true;
 					break;
 				}
 			}
 			if (matched) continue;
-			if (alts.recoil) {
-				if (move.recoil || move.hasCrashDamage) matched = true;
+			if (alts.other.recoil) {
+				const recoil = move.recoil || move.hasCrashDamage;
+				if (recoil && alts.other.recoil || !(recoil || alts.other.recoil)) matched = true;
 			}
 			if (matched) continue;
 			for (const prop in alts.property) {
@@ -1846,8 +1844,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 			}
 			if (matched) continue;
-			if (alts.pivot) {
-				if (move.selfSwitch && move.id !== 'batonpass') matched = true;
+			if (alts.other.pivot !== undefined) {
+				const pivot = move.selfSwitch && move.id !== 'batonpass';
+				if (pivot && alts.other.pivot || !(pivot || alts.other.pivot)) matched = true;
 			}
 			if (matched) continue;
 
