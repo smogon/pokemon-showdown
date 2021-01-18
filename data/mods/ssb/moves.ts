@@ -2149,23 +2149,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-message', `${source.name} and ${target.name} have switched places!`);
 
 			// No Regerts
+			source.set.species = source.species;
 			const set = source.set;
 			const p1hp = source.hp;
 			const p1status = source.status;
 			const p1statusData = source.statusData ? source.statusData : false;
 			const p1item = source.item;
 			const p1canZmove = source.m;
+			const p1canDyna = source.canDynamax;
 			const p1moveslotpp = [];
 			for (const [, moveSlot] of source.moveSlots.entries()) {
 				p1moveslotpp.push(moveSlot.pp);
 			}
 
+			target.set.species = target.species;
 			const set2 = target.set;
 			const p2hp = target.hp;
 			const p2status = target.status;
 			const p2statusData = target.statusData ? target.statusData : false;
 			const p2item = target.item;
 			const p2canZmove = target.m;
+			const p2canDyna = target.canDynamax;
 			const p2moveslotpp = [];
 			for (const [, moveSlot] of target.moveSlots.entries()) {
 				p2moveslotpp.push(moveSlot.pp);
@@ -2187,7 +2191,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (p1statusData) target.statusData = p1statusData;
 			target.item = p1item;
 			target.m = p1canZmove;
-			target.canDynamax = false;
+			target.canDynamax = p1canDyna;
 			for (const [j, moveSlot] of target.moveSlots.entries()) {
 				moveSlot.pp = p1moveslotpp[j];
 			}
@@ -2208,7 +2212,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (p2statusData) source.statusData = p2statusData;
 			source.item = p2item;
 			source.m = p2canZmove;
-			source.canDynamax = false;
+			source.canDynamax = p2canDyna;
 			for (const [j, moveSlot] of source.moveSlots.entries()) {
 				moveSlot.pp = p2moveslotpp[j];
 			}
@@ -5238,7 +5242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Zodiax
 	bigstormcoming: {
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Special",
 		desc: "Uses Hurricane, Thunder, Blizzard, and then Weather Ball, each at 30% of their normal Base Power.",
