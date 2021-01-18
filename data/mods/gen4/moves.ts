@@ -165,13 +165,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		recoil: [1, 3],
 	},
-	brickbreak: {
-		inherit: true,
-		onTryHit(pokemon) {
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
-		},
-	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
