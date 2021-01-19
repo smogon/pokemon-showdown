@@ -282,7 +282,7 @@ export class YoutubeInterface {
 				const room = Rooms.get('youtube');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await YouTube.randChannel();
-				room.add(`|html|<div class="infobox">${res}</div>`).update();
+				room.add(`|html|${res}`).update();
 			})();
 		}, interval);
 		return this.interval;
@@ -394,7 +394,7 @@ export const commands: ChatCommands = {
 		target = toID(target);
 		this.runBroadcast();
 		const data = await YouTube.randChannel(target);
-		return this.sendReplyBox(data);
+		return this.sendReply(`|html|${data}`);
 	},
 	randchannelhelp: [`/randchannel - View data of a random channel from the YouTube database.`],
 
@@ -431,7 +431,7 @@ export const commands: ChatCommands = {
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
 			const data = await YouTube.generateChannelDisplay(channel);
 			this.runBroadcast();
-			return this.sendReplyBox(data);
+			return this.sendReply(`|html|${data}`);
 		},
 		channelhelp: [
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
