@@ -487,7 +487,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					(hasType['Grass'] && !counter['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
-					(hasType['Normal'] && (movePool.includes('boomburst') || hasAbility['Guts'] && movePool.includes('facade'))) ||
+					(hasType['Normal'] && movePool.includes('facade')) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && counter.stab < species.types.length) ||
 					(hasType['Rock'] && !counter['Rock'] && !hasType['Fairy'] && (hasAbility['Rock Head'] || counter.setupType === 'Physical')) ||
 					(hasType['Steel'] && !counter['Steel'] && (hasAbility['Technician'] || movePool.includes('meteormash'))) ||
