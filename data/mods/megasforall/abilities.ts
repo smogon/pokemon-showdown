@@ -931,7 +931,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	lusterswap: {
 		shortDesc: "On entry, this Pokémon's type changes to match its first move that's super effective against an adjacent opponent.",
 		onStart(pokemon) {
-			const possibleTargets = pokemon.side.getFoeActive().filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
+			const possibleTargets = pokemon.foes().filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
 			while (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
