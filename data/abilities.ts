@@ -4515,16 +4515,73 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	timereverse: {
         onStart(pokemon) {
+			// if (pokemon.side.faintedThisTurn) {
+				// console.log("ability détecte qu'un pote est KO au tour d'avant");
+			// }
             this.useMove("lazyencore", pokemon);
         },
         name: "Time Reverse",
         rating: 2,
         num: 1000,
     },
+	// timereverse: {
+        // condition: {
+            // duration: 1,
+            // noCopy: true, // doesn't get copied by Z-Baton Pass
+            // onStart(target) {
+                // const noEncore = [
+                    // 'assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
+                // ];
+                // let move: Move | ActiveMove | null = target.lastMove;
+                // if (!move || target.volatiles['dynamax']) return false;
+
+                // if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+                // const moveIndex = target.moves.indexOf(move.id);
+                // if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+                    ////it failed
+                    // return false;
+                // }
+                // this.effectData.move = move.id;
+                // this.add('-start', target, 'Encore');
+                // if (!this.queue.willMove(target)) {
+                    // this.effectData.duration++;
+                // }
+            // },
+            // onOverrideAction(pokemon, target, move) {
+                // if (move.id !== this.effectData.move) return this.effectData.move;
+            // },
+			// onResidualOrder: 13,
+            // onResidual(target) {
+                // if (target.moves.includes(this.effectData.move) &&
+                    // target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
+                    ////early termination if you run out of PP
+                    // target.removeVolatile('lazyencore');
+                // }
+            // },
+            // onEnd(target) {
+                // this.add('-end', target, 'Encore');
+            // },
+            // onDisableMove(pokemon) {
+                // if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+                    // return;
+                // }
+                // for (const moveSlot of pokemon.moveSlots) {
+                    // if (moveSlot.id !== this.effectData.move) {
+                        // pokemon.disableMove(moveSlot.id);
+                    // }
+                // }
+            // },
+        // },
+        // name: "Time Reverse",
+        // rating: 2,
+        // num: 1000,
+    // },
 	daunt: {
         onStart(pokemon) {
+			console.log("daunt-pokemon: "+JSON.stringify(pokemon));
             let activated = false;
             for (const target of pokemon.side.foe.active) {
+				console.log("pokemon.side.foe.active: "+pokemon.side.foe.active);
                 if (!target || !this.isAdjacent(target, pokemon)) continue;
                 if (!activated) {
                     this.add('-ability', pokemon, 'Daunt', 'boost');
@@ -5175,4 +5232,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         rating: 2,
         num: 1040,
     },
+	orchestral: {
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Orchestral boost');
+				return this.chainModify([0x14CD, 0x1000]);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['sound']) {
+				this.debug('Orchestral weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		name: "Orchestral",
+		rating: 3.5,
+		num: 1040,
+	},
 };

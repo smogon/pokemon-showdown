@@ -5987,6 +5987,16 @@ export const MovesText = {
 	planetarywrath: {
 		name: "Planetary Wrath",
 		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move's type is the pokemon's second type.",
-		shortDesc: "Physical if user's Atk > Sp. Atk. Ignores Abilities. Uses pokemon second type.",
+		shortDesc: "Uses users Secondary Type, Physical if user's Atk > Sp. Atk.",
+	},
+	symphonicflare: {
+		name: "Symphonic Flare",
+		desc: "Has a 10% chance to flinch the target.",
+		shortDesc: "10% chance to flinch the target.",
+	},
+	ragnarok: {
+		name: "Ragnarok",
+		desc: "This move's type is the pokemon's first type. Applies Perish Song.",
+		shortDesc: "Uses users First Type, Applies Perish Song.",
 	},
 };

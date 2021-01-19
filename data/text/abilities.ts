@@ -1678,4 +1678,9 @@ export const AbilitiesText = {
 		name: "Divine Guard",
 		shortDesc: "This Pokemon can only be damaged by notveryeffective moves and indirect damage.",
 	},
+	orchestral: {
+		name: "Orchestral",
+		desc: "This Pokemon's sound-based moves have their power multiplied by 1.3. This Pokemon takes halved damage from sound-based moves.",
+		shortDesc: "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3x power.",
+	},
 };
