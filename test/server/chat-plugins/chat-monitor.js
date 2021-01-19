@@ -6,7 +6,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {User, Connection} = require('../../users-utils');
+const {makeUser} = require('../../users-utils');
 
 const chatMonitor = require('../../../.server-dist/chat-plugins/chat-monitor');
 
@@ -20,6 +20,11 @@ describe('Chat monitor', () => {
 		it('should use word boundaries for URL shortener regexes', () => {
 			const regex = chatMonitor.generateRegex('bit.ly/', false, true);
 			assert(String(regex).startsWith('/\\b'));
+		});
+
+		it('should correctly strip word boundaries', () => {
+			const regex = /\btest\b/iu;
+			assert.deepEqual(chatMonitor.stripWordBoundaries(regex), /test/iu);
 		});
 
 		describe('evasion regexes', () => {
@@ -47,9 +52,8 @@ describe('Chat monitor', () => {
 	describe('in-room tests', () => {
 		before(() => {
 			this.room = Rooms.get('lobby');
-			this.connection = Connection('127.0.0.1');
-			this.user = User(this.connection);
-			this.user.forceRename("Unit Tester", true);
+			this.user = makeUser("Unit Tester");
+			this.connection = this.user.connections[0];
 			this.user.joinRoom(this.room.roomid, this.connection);
 
 			this.parse = async function (message) {
@@ -115,6 +119,22 @@ describe('Chat monitor', () => {
 
 			await this.parse("mild slur");
 			assert.notEqual(this.room.log.log.pop(), "mild slur");
+		});
+
+		it('should prevent banwords and evasion banwords from being used in usernames', () => {
+			chatMonitor.addFilter({
+				word: 'nameslur',
+				list: 'warn',
+			});
+
+			chatMonitor.addFilter({
+				word: 'strongnameslur',
+				list: 'evasion',
+			});
+
+			assert.equal(Chat.namefilter('anameslurtest', this.user), '');
+			assert.equal(Chat.namefilter('strongnameslur', this.user), '');
+			assert.equal(Chat.namefilter('stroñgñameslur', this.user), '');
 		});
 	});
 });

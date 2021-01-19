@@ -286,7 +286,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	saveRoomPunishments() {
@@ -302,7 +302,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	getEntry(entryId: string) {
@@ -896,7 +896,8 @@ export const Punishments = new class {
 		}
 		const waitTime = Math.min(timeLeft, MAX_PUNISHMENT_TIMER_LENGTH);
 		user.punishmentTimer = setTimeout(() => {
-			Punishments.checkPunishmentTime(user, punishment);
+			// make sure we're not referencing a pre-hotpatch Punishments instance
+			global.Punishments.checkPunishmentTime(user, punishment);
 		}, waitTime);
 	}
 	async namelock(
@@ -1596,6 +1597,16 @@ export const Punishments = new class {
 		if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
 
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
+	}
+
+	isBlacklistedSharedIp(ip: string) {
+		const num = IPTools.ipToNumber(ip);
+		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
+			const range = IPTools.stringToRange(blacklisted);
+			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
+			if (IPTools.checkPattern([range], num)) return reason;
+		}
+		return false;
 	}
 
 	/**

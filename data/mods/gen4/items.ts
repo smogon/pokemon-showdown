@@ -16,6 +16,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	brightpowder: {
+		inherit: true,
+		onModifyAccuracyPriority: 5,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('brightpowder - decreasing accuracy');
+			return accuracy * 0.9;
+		},
+	},
 	choiceband: {
 		inherit: true,
 		onStart() { },
@@ -139,6 +148,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	laxincense: {
+		inherit: true,
+		onModifyAccuracyPriority: 5,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('lax incense - decreasing accuracy');
+			return accuracy * 0.9;
+		},
+	},
 	lifeorb: {
 		inherit: true,
 		onModifyDamage() {},
@@ -235,6 +253,20 @@ export const Items: {[k: string]: ModdedItemData} = {
 			},
 		},
 	},
+	micleberry: {
+		inherit: true,
+		condition: {
+			duration: 2,
+			onSourceModifyAccuracyPriority: 3,
+			onSourceModifyAccuracy(accuracy, target, source) {
+				this.add('-enditem', source, 'Micle Berry');
+				source.removeVolatile('micleberry');
+				if (typeof accuracy === 'number') {
+					return accuracy * 1.2;
+				}
+			},
+		},
+	},
 	razorfang: {
 		inherit: true,
 		onModifyMove(move) {
@@ -263,6 +295,25 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {
 				return this.chainModify(2);
+			}
+		},
+	},
+	widelens: {
+		inherit: true,
+		onSourceModifyAccuracyPriority: 4,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy === 'number') {
+				return accuracy * 1.1;
+			}
+		},
+	},
+	zoomlens: {
+		inherit: true,
+		onSourceModifyAccuracyPriority: 4,
+		onSourceModifyAccuracy(accuracy, target) {
+			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
+				this.debug('Zoom Lens boosting accuracy');
+				return accuracy * 1.2;
 			}
 		},
 	},

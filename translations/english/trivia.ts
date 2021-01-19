@@ -173,5 +173,6 @@ export const translations: Translations = {
 		"You are not a player in the current round of Mastermind.": "",
 		"There is a Mastermind game in progress, and it is in its ${game.phase} phase.": "",
 		"Players": "",
+		"Kicking ${user.name} would leave this game of Mastermind without enough players to reach ${this.numFinalists} finalists.": "",
 	},
 };

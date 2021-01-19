@@ -411,12 +411,18 @@ export const commands: ChatCommands = {
 	joim: 'join',
 	j: 'join',
 	async join(target, room, user, connection) {
+		target = target.trim();
 		if (!target) return this.parse('/help join');
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
 		if (target.startsWith(`${Config.routes.replays}/`)) target = `battle-${target.slice(Config.routes.replays.length + 1)}`;
 		if (target.startsWith('psim.us/')) target = target.slice(8);
+		// isn't in tryJoinRoom so you can still join your own battles / gameRooms etc
+		const numRooms = [...Rooms.rooms.values()].filter(r => user.id in r.users).length;
+		if (!user.can('altsself') && !target.startsWith('view-') && numRooms >= 50) {
+			return connection.sendTo(target as RoomID, `|noinit||You can only join 50 rooms at a time.`);
+		}
 		const ret = await user.tryJoinRoom(target as RoomID, connection);
 		if (ret === Rooms.RETRY_AFTER_LOGIN) {
 			connection.sendTo(
@@ -1559,31 +1565,46 @@ export const commands: ChatCommands = {
 
 	nl: 'namelock',
 	forcenamelock: 'namelock',
+	weeknamelock: 'namelock',
+	wnl: 'namelock',
+	forceweeknamelock: 'namelock',
 	async namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
+		const week = cmd.includes('w');
+		const force = cmd.includes('force');
 
-		const reason = this.splitTarget(target);
+		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
 
 		if (!targetUser) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
-		if (targetUser.id !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
+		if (targetUser.id !== toID(this.inputUsername) && !force) {
 			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
 		this.checkCan('forcerename', targetUser);
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 
-		const reasonText = reason ? ` (${reason})` : `.`;
-		this.privateGlobalModAction(`${targetUser.name} was namelocked by ${user.name}${reasonText}`);
-		this.globalModlog("NAMELOCK", targetUser, reasonText);
+		let privateReason = '';
+		let publicReason = target;
+		const targetLowercase = target.toLowerCase();
+		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
+			const privateIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
+			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			privateReason = `(PROOF: ${target.substr(privateIndex + bump, target.length).trim()}) `;
+			publicReason = target.substr(0, privateIndex).trim();
+		}
+		const reasonText = publicReason ? ` (${publicReason})` : `.`;
+		this.privateGlobalModAction(`${targetUser.name} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
+		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser, target ? `${publicReason} ${privateReason}` : ``);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {
 			Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
 		Ladders.cancelSearches(targetUser);
-		await Punishments.namelock(targetUser, null, null, false, reason);
+		const duration = week ? 7 * 24 * 60 * 60 * 1000 : 48 * 60 * 60 * 1000;
+		await Punishments.namelock(targetUser, Date.now() + duration, null, false, publicReason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room?.battle) this.parse('/savereplay forpunishment');
@@ -1623,6 +1644,7 @@ export const commands: ChatCommands = {
 	hidelines: 'hidetext',
 	hlines: 'hidetext',
 	cleartext: 'hidetext',
+	ctext: 'hidetext',
 	clearaltstext: 'hidetext',
 	clearlines: 'hidetext',
 	forcecleartext: 'hidetext',
@@ -1630,7 +1652,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse(`/help hidetext`);
 		room = this.requireRoom();
 		const hasLineCount = cmd.includes('lines');
-		const hideRevealButton = cmd.includes('clear');
+		const hideRevealButton = cmd.includes('clear') || cmd === 'ctext';
 		target = this.splitTarget(target);
 		let lineCount = 0;
 		if (/^[0-9]+\s*(,|$)/.test(target)) {

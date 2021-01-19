@@ -707,6 +707,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		let disconnected = false;
 		try {
 			for await (const next of this.stream) {
+				if (!this.room) return; // room deleted in the middle of simulation
 				this.receive(next.split('\n'));
 			}
 		} catch (err) {
@@ -1096,6 +1097,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		this.room.send(`|title|${this.room.title}`);
 		this.room.add(`|gametype|${this.gameType}`);
+		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
+		if (suspectTest) {
+			const format = Dex.getFormat(this.format);
+			this.room.add(
+				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
+				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
+			).update();
+		}
 	}
 
 	clearPlayers() {

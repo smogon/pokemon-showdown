@@ -56,4 +56,39 @@ describe('Sturdy', function () {
 		battle.makeChoices('move sleeptalk', 'move fusionflare');
 		assert.fainted(battle.p1.active[0]);
 	});
+
+	it(`should trigger before Focus Sash`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", moves: ['tackle']},
+		], [
+			{species: "Stufful", level: 1, ability: 'sturdy', item: 'focussash', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		assert.holdsItem(battle.p2.active[0]);
+	});
+
+	it(`should not trigger when the user also uses Endure`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", moves: ['tackle']},
+		], [
+			{species: "Stufful", level: 1, ability: 'sturdy', moves: ['endure']},
+		]]);
+
+		battle.makeChoices();
+		const sturdyIndex = battle.getDebugLog().indexOf('|-ability|p2a: Stufful|Sturdy');
+		assert.equal(sturdyIndex, -1, 'Sturdy should not activate.');
+	});
+
+	it(`should not trigger when the user is damaged to 1 HP from False Swipe`, function () {
+		battle = common.createBattle([[
+			{species: "Wynaut", moves: ['falseswipe']},
+		], [
+			{species: "Stufful", level: 1, ability: 'sturdy', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		const sturdyIndex = battle.getDebugLog().indexOf('|-ability|p2a: Stufful|Sturdy');
+		assert.equal(sturdyIndex, -1, 'Sturdy should not activate.');
+	});
 });
