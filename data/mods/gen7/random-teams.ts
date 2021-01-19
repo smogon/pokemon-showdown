@@ -520,7 +520,7 @@ export class RandomGen7Teams extends RandomTeams {
 					(hasType['Grass'] && !counter['Grass'] && (species.baseStats.atk >= 100 || movePool.includes('leafstorm'))) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !hasAbility['Refrigerate'] && (!counter['Ice'] || movePool.includes('iciclecrash') || (hasAbility['Snow Warning'] && movePool.includes('blizzard')))) ||
-					(hasType['Normal'] && (movePool.includes('boomburst') || hasAbility['Guts'] && movePool.includes('facade'))) ||
+					(hasType['Normal'] && movePool.includes('facade')) ||
 					(hasType['Poison'] && !counter['Poison'] && (counter.setupType || hasAbility['Adaptability'] || hasAbility['Sheer Force'] || movePool.includes('gunkshot'))) ||
 					(hasType['Psychic'] && !counter['Psychic'] && (hasAbility['Psychic Surge'] || movePool.includes('psychicfangs') || !hasType['Flying'] && !hasAbility['Pixilate'] && counter.stab < species.types.length)) ||
 					(hasType['Rock'] && !counter['Rock'] && !hasType['Fairy'] && (counter.setupType === 'Physical' || species.baseStats.atk >= 105 || hasAbility['Rock Head'])) ||
