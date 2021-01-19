@@ -1,6 +1,6 @@
 export const Items: {[itemid: string]: ModdedItemData} = {
-	draconite: {
-		name: "Draconite",
+	dragonitite: {
+		name: "Dragonitite",
 		spritenum: 586,
 		megaStone: "Dragonite-Mega",
 		megaEvolves: "Dragonite",
@@ -1192,5 +1192,47 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -1071,
 		gen: 8,
 		desc: "If held by a Lurantis, this item allows it to Mega Evolve in battle.",
+	},
+	exploudite: {
+		name: "Exploudite",
+		spritenum: 578,
+		megaStone: "Exploud-Mega",
+		megaEvolves: "Exploud",
+		itemUser: ["Exploud"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1072,
+		gen: 8,
+		desc: "If held by an Exploud, this item allows it to Mega Evolve in battle.",
+	},
+	noivernite: {
+		name: "Noivernite",
+		spritenum: 578,
+		megaStone: "Noivern-Mega",
+		megaEvolves: "Noivern",
+		itemUser: ["Noivern"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1073,
+		gen: 8,
+		desc: "If held by a Noivern, this item allows it to Mega Evolve in battle.",
+	},
+	toxtricitite: {
+		name: "Toxtricitite",
+		spritenum: 578,
+		megaStone: "Toxtricity-Mega",
+		megaEvolves: "Toxtricity",
+		itemUser: ["Toxtricity"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1074,
+		gen: 8,
+		desc: "If held by a Toxtricity, this item allows it to Mega Evolve in battle.",
 	},
 };

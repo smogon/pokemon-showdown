@@ -19,7 +19,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("rillaboom", ["junglehealing", "toxic"]);
 		newMoves("cinderace", ["energyball"]);
 		newMoves("inteleon", ["taunt", "firstimpression", "encore", "pursuit"]);
-		newMoves("klinklang", ["rapidspin"]);
+		newMoves("klinklang", ["overheat", "rapidspin"]);
 		newMoves("garbodor", ["stealthrock", "knockoff"]);
 		newMoves("jolteon", ["calmmind"]);
 		newMoves("flareon", ["burnup", "morningsun"]);
@@ -55,14 +55,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("regice", ["teleport", "freezedry"]);
 		newMoves("magcargo", ["firelash", "energyball"]);
 		newMoves("bastiodon", ["earthpower"]);
-		newMoves("leavanny", ["appleacid", "lunge", "quiverdance"]);
+		newMoves("leavanny", ["appleacid", "lunge", "thunderouskick", "quiverdance"]);
 		newMoves("parasect", ["junglehealing", "taunt"]);
 		newMoves("samurott", ["flipturn", "psychocut", "slackoff"]);
 		newMoves("meowstic", ["brickbreak", "foulplay", "knockoff", "partingshot", "pursuit"]);
 		newMoves("meowsticf", ["dazzlinggleam", "drainingkiss", "moonblast", "mysticalfire"]);
-		newMoves("starmie", [
-			"calmmind", "doomdesire", "futuresight", "followme", "lusterpurge", "moonblast", "moonlight", "photongeyser", "prismaticlaser", "storedpower",
-		]);
+		newMoves("starmie", ["calmmind", "futuresight", "followme", "moonblast", "photongeyser", "storedpower"]);
 		newMoves("delibird", ["celebrate", "healingwish", "roost", "swordsdance", "uturn", "wish"]);
 		newMoves("sawsbuck", ["moonblast", "petalblizzard", "playrough"]);
 		newMoves("sawsbucksummer", ["flameburst", "flamethrower", "growth", "leafstorm", "overheat"]);
@@ -71,6 +69,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("flygon", ["extremespeed", "flashcannon", "ironhead"]);
 		newMoves("drapion", ["shoreup"]);
 		newMoves("lurantis", ["moonblast", "moonlight", "playrough", "silverwind"]);
+		newMoves("exploud", ["clangingscales", "dragonpulse", "snarl"]);
+		newMoves("noivern", ["encore"]);
+		newMoves("toxtricity", ["frustration", "gearup", "hiddenpower"]);
+		newMoves("toxtricitylowkey", ["hiddenpower", "return", "slackoff"]);
 	},
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
@@ -125,6 +127,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		if (item.name === "Sawsbuckite" && pokemon.baseSpecies.name === "Sawsbuck-Winter") {
 			return "Sawsbuck-Winter-Mega";
+		}
+		if (item.name === "Toxtricitite" && pokemon.baseSpecies.name === "Toxtricity-Low-Key") {
+			return "Toxtricity-Low-Key-Mega";
 		}
 		if (item.megaEvolves !== pokemon.baseSpecies.name || item.megaStone === pokemon.species.name) {
 			return null;
