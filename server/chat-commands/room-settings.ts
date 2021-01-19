@@ -699,8 +699,8 @@ export const commands: ChatCommands = {
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
-		if (!user.autoconfirmed) {
-			return this.errorReply("You must be autoconfirmed to make a groupchat.");
+		if (!user.trusted) {
+			return this.errorReply("You must be trusted (public room driver or global voice) to make a groupchat.");
 		}
 
 		const groupchatbanned = Punishments.isGroupchatBanned(user);
