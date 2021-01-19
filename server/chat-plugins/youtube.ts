@@ -282,7 +282,7 @@ export class YoutubeInterface {
 				const room = Rooms.get('youtube');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await YouTube.randChannel();
-				room.add(`|html|${res}</div>`).update();
+				room.add(`|html|${res}`).update();
 			})();
 		}, interval);
 		return this.interval;
