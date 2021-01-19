@@ -351,9 +351,7 @@ export const commands: ChatCommands = {
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
 			const [slotString, roomid, update] = target.split(',').map(i => i.trim());
-			const targetRoom = roomid ? Rooms.search(roomid) : room;
-			if (!targetRoom) return this.errorReply(`Invalid room.`);
-			this.room = room = targetRoom;
+			this.room = room;
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 			if (!room.minorActivityQueue) {
