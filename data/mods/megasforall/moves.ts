@@ -392,9 +392,9 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
-					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
+					pokemon.trySetStatus('tox', pokemon.side.getFoeActive()[0]);
 				} else {
-					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+					pokemon.trySetStatus('psn', pokemon.side.getFoeActive()[0]);
 				}
 			},
 		},
@@ -752,10 +752,11 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 				];
 				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const foe = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
 				for (const targetCondition of removeTarget) {
-					if (source.side.foe.removeSideCondition(targetCondition)) {
+					if (foe.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
-						this.add('-sideend', source.side.foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+						this.add('-sideend', foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
 						success = true;
 					}
 				}
@@ -821,7 +822,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				this.add('-message', `Sticky residues keep hazards stuck to the field!`);
 			}
 			const sourceSide = source.side;
-			const targetSide = source.side.foe;
+			const targetSide = Array.isArray(source.side.foe) ? source.side.foe[0] : source.side.foe;
 			const sideConditions = [
 				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];

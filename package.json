@@ -12,6 +12,8 @@
     "permessage-deflate": "^0.1.7",
     "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^3.0.6",
     "sucrase": "^3.15.0"
   },
   "optionalDependencies": {

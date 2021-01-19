@@ -297,7 +297,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "Summons hail on switch-in. Changes weather to rain if the foe has a supereffective or OHKO move.",
 		onStart(source) {
 			this.field.setWeather('hail');
-			for (const target of source.side.foe.active) {
+			for (const target of source.side.getFoeActive()) {
 				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
@@ -316,7 +316,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onAnySwitchIn(pokemon) {
 			const source = this.effectData.target;
 			if (pokemon === source) return;
-			for (const target of source.side.foe.active) {
+			for (const target of source.side.getFoeActive()) {
 				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
@@ -931,7 +931,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	lusterswap: {
 		shortDesc: "On entry, this Pokémon's type changes to match its first move that's super effective against an adjacent opponent.",
 		onStart(pokemon) {
-			const possibleTargets = pokemon.side.foe.active.filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
+			const possibleTargets = pokemon.side.getFoeActive().filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
 			while (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
@@ -1155,7 +1155,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let totalatk = 0;
 			let totalspa = 0;
-			for (const target of pokemon.side.foe.active) {
+			for (const target of pokemon.side.getFoeActive()) {
 				if (!target || target.fainted) continue;
 				totalatk += target.getStat('atk', false, true);
 				totalspa += target.getStat('spa', false, true);
