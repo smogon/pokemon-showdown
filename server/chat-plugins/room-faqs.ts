@@ -120,6 +120,12 @@ export const commands: ChatCommands = {
 
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
+		if (!this.broadcasting && user.can('ban', null, room, 'rfaq')) {
+			const arg = roomFaqs[room.roomid][topic];
+			this.sendReplyBox(
+				Utils.html`<code>/addfaq ${topic}, ${arg} </code>`
+			);
+		}
 	},
 	roomfaqhelp: [
 		`/roomfaq - Shows the list of all available FAQ topics`,
