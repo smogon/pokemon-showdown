@@ -334,9 +334,9 @@ class Mafia extends Rooms.RoomGame {
 		this.sendHTML(this.roomWindow());
 	}
 
-	join(room: Room, user: User) {
+	join(user: User) {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
-		this.canJoin(room, user, true);
+		this.canJoin(user, true);
 		if (this.playerCount >= this.playerCap) return user.sendTo(this.room, `|error|The game of ${this.title} is full.`);
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		if (this.subs.includes(user.id)) this.subs.splice(this.subs.indexOf(user.id), 1);
@@ -375,7 +375,8 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	static isHostBanned(room: Room, user: User) {
-		return Punishments.getRoomPunishType(room, toID(user)) === 'MAFIAHOSTBAN' || this.isGameBanned(room, user);
+		const punishment = Punishments.getRoomPunishType(room, toID(user));
+		return punishment === 'MAFIAHOSTBAN' || punishment === 'MAFIAGAMEBAN';
 	}
 
 	static hostBan(room: Room, user: User, reason: string, duration: number) {
@@ -1052,7 +1053,7 @@ class Mafia extends Rooms.RoomGame {
 		this.updatePlayers();
 	}
 
-	revive(room: Room, user: User, toRevive: string, force = false) {
+	revive(user: User, toRevive: string, force = false) {
 		if (this.phase === 'IDEApicking') {
 			return user.sendTo(this.room, `|error|You cannot add or remove players while IDEA roles are being picked.`);
 		}
@@ -1088,7 +1089,7 @@ class Mafia extends Rooms.RoomGame {
 		} else {
 			const targetUser = Users.get(toRevive);
 			if (!targetUser) return;
-			this.canJoin(room, targetUser, false, force);
+			this.canJoin(targetUser, false, force);
 			const player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -1520,7 +1521,7 @@ class Mafia extends Rooms.RoomGame {
 		return output;
 	}
 
-	canJoin(room: Room, user: User, self = false, force = false) {
+	canJoin(user: User, self = false, force = false) {
 		if (!user || !user.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.id} is`;
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
@@ -1529,7 +1530,7 @@ class Mafia extends Rooms.RoomGame {
 			if (!force && this.played.includes(id)) {
 				throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
 			}
-			if (Mafia.isGameBanned(room, user)) {
+			if (Mafia.isGameBanned(this.room, user)) {
 				throw new Chat.ErrorMessage(`${self ? `You are` : `${user.id} is`} banned from joining mafia games.`);
 			}
 			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
@@ -2156,7 +2157,7 @@ export const commands: ChatCommands = {
 			const game = this.requireGame(Mafia);
 
 			this.checkChat(null, targetRoom);
-			game.join(this.room, user);
+			game.join(user);
 		},
 		joinhelp: [`/mafia join - Join the game.`],
 
@@ -2700,7 +2701,7 @@ export const commands: ChatCommands = {
 			if (!toID(args.join(''))) return this.parse('/help mafia revive');
 			let didSomething = false;
 			for (const targetUsername of args) {
-				if (game.revive(this.room, user, toID(targetUsername), cmd === 'forceadd')) {
+				if (game.revive(user, toID(targetUsername), cmd === 'forceadd')) {
 					didSomething = true;
 				}
 			}
@@ -3092,7 +3093,7 @@ export const commands: ChatCommands = {
 					this.checkChat(null, targetRoom);
 					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
 					if (game.played.includes(user.id)) return this.errorReply(`You cannot sub back into the game.`);
-					game.canJoin(this.room, user, true);
+					game.canJoin(user, true);
 					game.subs.push(user.id);
 					game.nextSub();
 					// Update spectator's view
@@ -3171,7 +3172,7 @@ export const commands: ChatCommands = {
 
 				const targetUser = Users.get(toSubIn);
 				if (!targetUser) return this.errorReply(`The user "${toSubIn}" was not found.`);
-				game.canJoin(this.room, targetUser, false, cmd === 'forcesub');
+				game.canJoin(targetUser, false, cmd === 'forcesub');
 				if (game.subs.includes(targetUser.id)) {
 					game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 				}
