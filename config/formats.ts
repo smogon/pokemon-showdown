@@ -139,6 +139,25 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 8] LC UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660866/">LC UU</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['[Gen 8] LC'],
+		banlist: [
+			// LC OU
+			'Abra', 'Archen', 'Chinchou', 'Dewpider', 'Diglett', 'Drilbur', 'Dwebble', 'Ferroseed', 'Foongus', 'Grookey',
+			'Koffing', 'Magnemite', 'Mareanie', 'Mienfoo', 'Mudbray', 'Onix', 'Pawniard', 'Ponyta', 'Ponyta-Galar',
+			'Porygon', 'Scorbunny', 'Scraggy', 'Spritzee', 'Staryu', 'Timburr', 'Trapinch', 'Tyrunt', 'Vullaby', 'Vulpix',
+			// LC BL
+			'Farfetch\u2019d-Galar', 'Shellder', 'Wingull',
+		],
+	},
+	{
 		name: "[Gen 8] Monotype",
 		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
