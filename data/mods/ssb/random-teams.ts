@@ -92,7 +92,7 @@ export const ssbSets: SSBSets = {
 	},
 	Andrew: {
 		species: 'Spectrier', ability: 'Neutralizing Gas', item: 'Choice Specs', gender: 'M',
-		moves: ['Astral Barrage', 'Moonblast', 'Aura Sphere'],
+		moves: ['Moongeist Beam', 'Pollen Puff', 'Trick'],
 		signatureMove: 'Whammer Jammer',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},

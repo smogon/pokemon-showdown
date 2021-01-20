@@ -148,7 +148,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Andrew')}|purple sus`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Andrew')}|EasyOnTheHills is impostor! He vented in front of me in admin! Vote him out next!`);
+			this.add(`c|${getName('Andrew')}|tidal otter is impostor! He vented in front of me in admin! Vote him out next!`);
 		},
 	},
 	annika: {
