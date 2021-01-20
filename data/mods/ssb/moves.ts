@@ -2149,7 +2149,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-message', `${source.name} and ${target.name} have switched places!`);
 
 			// No Regerts
-			source.set.species = source.species;
+			source.set.species = source.species.name;
 			const set = source.set;
 			const p1hp = source.hp;
 			const p1status = source.status;
@@ -2162,7 +2162,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				p1moveslotpp.push(moveSlot.pp);
 			}
 
-			target.set.species = target.species;
+			target.set.species = target.species.name;
 			const set2 = target.set;
 			const p2hp = target.hp;
 			const p2status = target.status;
