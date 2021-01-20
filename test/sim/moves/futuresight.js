@@ -76,17 +76,17 @@ describe('Future Sight', function () {
 
 	it(`should be able to set Future Sight against an empty target slot`, function () {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['futuresight']},
-		], [
 			{species: "Shedinja", moves: ['finalgambit']},
 			{species: "Roggenrola", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
 		]]);
 
+		battle.makeChoices('auto', 'move future sight');
+		battle.makeChoices('switch 2');
 		battle.makeChoices();
-		battle.makeChoices('', 'switch 2');
 		battle.makeChoices();
-		battle.makeChoices();
-		const roggenrola = battle.p2.active[0];
+		const roggenrola = battle.p1.active[0];
 		assert.false.fullHP(roggenrola);
 	});
 
