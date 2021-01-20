@@ -795,7 +795,7 @@ export const ssbSets: SSBSets = {
 	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
-		moves: ['Quick Attack'],
+		moves: ['Quick Attack', 'Agility'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
 	},
@@ -808,14 +808,14 @@ export const ssbSets: SSBSets = {
 	},
 	'yuki-Dancer': {
 		species: 'Pikachu-Pop-Star', ability: 'Dancer', item: 'Light Ball', gender: 'F',
-		moves: ['Fiery Dance', 'Revelation Dance', 'Lunar Dance'],
+		moves: ['Fiery Dance', 'Revelation Dance', 'Quiver Dance'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: 'yuki',
 	},
 	'yuki-Ninja': {
 		species: 'Pikachu-Libre', ability: 'White Smoke', item: 'Light Ball', gender: 'F',
-		moves: ['Water Shuriken', 'Acrobatics', 'Toxic'],
+		moves: ['Water Shuriken', 'Frost Breath', 'Toxic'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: 'yuki',
@@ -828,8 +828,8 @@ export const ssbSets: SSBSets = {
 		skip: 'yuki',
 	},
 	'yuki-Jester': {
-		species: 'Pikachu-Belle', ability: 'Tangled Feet', item: 'Light Ball', gender: 'F',
-		moves: ['Present', 'Metronome', 'Teeter Dance'],
+		species: 'Pikachu-Belle', ability: 'Weak Armor', item: 'Light Ball', gender: 'F',
+		moves: ['Fire Blast', 'Thunder', 'Blizzard'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: 'yuki',

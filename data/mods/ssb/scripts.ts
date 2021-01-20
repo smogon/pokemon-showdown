@@ -28,6 +28,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
 		}
 
+		this.add('-ability', pokemon, `${pokemon.getAbility().name}`);
+
 		return true;
 	},
 
