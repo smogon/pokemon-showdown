@@ -150,7 +150,7 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] LC'],
 		banlist: [
 			// LC OU
-			'Abra', 'Archen', 'Chinchou', 'Dewpider', 'Diglett', 'Drilbur', 'Dwebble', 'Ferroseed', 'Foongus', 'Grookey',
+			'Abra', 'Archen', 'Chinchou', 'Dewpider', 'Diglett-Base', 'Drilbur', 'Dwebble', 'Ferroseed', 'Foongus', 'Grookey',
 			'Koffing', 'Magnemite', 'Mareanie', 'Mienfoo', 'Mudbray', 'Onix', 'Pawniard', 'Ponyta', 'Ponyta-Galar',
 			'Porygon', 'Scorbunny', 'Scraggy', 'Spritzee', 'Staryu', 'Timburr', 'Trapinch', 'Tyrunt', 'Vullaby', 'Vulpix',
 			// LC BL
