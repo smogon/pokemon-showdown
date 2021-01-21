@@ -1383,7 +1383,7 @@ export const commands: ChatCommands = {
 
 			this.checkCan('lock');
 			target = toID(target);
-			let targetID: ID = Users.get(target)?.id || target as ID;
+			const targetID: ID = Users.get(target)?.id || target as ID;
 			const banned = HelpTicket.checkBanned(targetID);
 			if (!banned) {
 				return this.errorReply(this.tr`${target} is not ticket banned.`);
