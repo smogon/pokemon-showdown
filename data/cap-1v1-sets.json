@@ -98,7 +98,7 @@
 	}],
 	"Equilibra": [{
 		"item": "Choice Scarf",
-		"ability": ["Bulletproof", "Levitate"],
+		"ability": "Levitate",
 		"evs": {"hp": 24, "spa": 252, "spd": 4, "spe": 228},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
