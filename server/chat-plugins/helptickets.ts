@@ -397,7 +397,7 @@ export class HelpTicket extends Rooms.RoomGame {
 				`${punished !== userid ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
 			);
 		}
-		return `You are banned from creating tickets.`;
+		return `You are banned from creating help tickets.`;
 	}
 }
 
