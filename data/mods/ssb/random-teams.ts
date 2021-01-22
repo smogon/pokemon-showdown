@@ -360,7 +360,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 	INStruct: {
-		species: 'Riolu', ability: 'Truant', item: ['Soda Pop', 'Lemonade'], gender: '',
+		species: 'Riolu', ability: 'Truant', item: 'Soda Pop', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
 		signatureMove: 'Fake Out',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
@@ -516,7 +516,7 @@ export const ssbSets: SSBSets = {
 	},
 	Notater517: {
 		species: 'Jellicent', ability: 'Last-Minute Lag', item: 'Leftovers', gender: 'M',
-		moves: ['Hydro Cannon', 'Blast Burn', 'Toxic Spikes'],
+		moves: ['Hydro Cannon', 'Blast Burn', ['Toxic Spikes', 'Recover']],
 		signatureMove: 'Techno Tuber Transmission',
 		evs: {hp: 236, spa: 252, spe: 20}, ivs: {atk: 0}, nature: 'Modest',
 	},

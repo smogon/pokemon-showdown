@@ -31,19 +31,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		zMove: "Satanic Panic",
 		zMoveFrom: "Fake Out",
 		itemUser: ["Riolu"],
-		gen: 8,
+		gen: 1,
 		desc: "If held by a Riolu with Fake Out, it can use Satanic Panic.",
-	},
-
-	lemonade: {
-		name: "Lemonade",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Satanic Manic",
-		zMoveFrom: "Fake Out",
-		itemUser: ["Riolu"],
-		gen: 8,
-		desc: "If held by a Riolu with Fake Out, it can use Satanic Manic.",
 	},
 
 	// Kalalokki

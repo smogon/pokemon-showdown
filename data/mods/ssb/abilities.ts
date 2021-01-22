@@ -46,9 +46,11 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.hp = Math.round(newMaxHP * percent);
 	pokemon.maxhp = newMaxHP;
 	context.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-	let item = newSet.item;
-	if (typeof item !== 'string') item = item[context.random(item.length)];
-	if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
+	if (pokemon.item) {
+		let item = newSet.item;
+		if (typeof item !== 'string') item = item[context.random(item.length)];
+		if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
+	}
 	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 	pokemon.moveSlots = newMoves;
 	// @ts-ignore Necessary so pokemon doesn't get 8 moves
@@ -1461,6 +1463,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				} else {
 					if (!move.secondaries) move.secondaries = [];
 					move.secondaries.push({chance: 100, volatileStatus: 'mustrecharge'});
+				}
+			}
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				if (pokemon.volatiles['mustrecharge']) {
+					this.add('-ability', pokemon, 'Last Minute Lag');
+					this.add('-end', pokemon, 'mustrecharge');
+					delete pokemon.volatiles['mustrecharge'];
 				}
 			}
 		},

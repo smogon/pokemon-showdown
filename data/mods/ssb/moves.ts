@@ -1820,21 +1820,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onModifyMove(move, pokemon) {
-			move.type = pokemon.types[1];
-		},
-		onTryHit(pokemon, target, move) {
-			// will shatter screens through sub, before you hit
-			if (target.runImmunity(move.type)) {
-				target.side.removeSideCondition('reflect');
-				target.side.removeSideCondition('lightscreen');
-				target.side.removeSideCondition('auroraveil');
-				target.side.removeSideCondition('safeguard');
+			move.type = pokemon.types[1] || "Normal";
+			if (!move.secondaries) move.secondaries = [];
+			if (move.type === 'Rock') {
+				move.secondaries.push({
+					chance: 100,
+					volatileStatus: 'smackdown',
+				});
+			} else if (move.type === 'Fire') {
+				move.secondaries.push({
+					chance: 10,
+					status: 'brn',
+				});
+			} else if (move.type === 'Steel') {
+				move.secondaries.push({
+					chance: 10,
+					volatileStatus: 'flinch',
+				});
+			} else if (move.type === 'Electric') {
+				move.secondaries.push({
+					chance: 10,
+					status: 'par',
+				});
+			} else if (move.type === 'Psychic') {
+				move.secondaries.push({
+					chance: 100,
+					boosts: {spe: -1},
+				});
 			}
-			if (move.type === 'Rock') move.volatileStatus = 'smackdown';
-			if (this.random(10)) {
-				if (move.type === 'Fire') move.status = 'brn' as ID;
-				if (move.type === 'Steel') move.volatileStatus = 'flinch';
-				if (move.type === 'Electric') move.status = 'par' as ID;
+		},
+		onTryHit(pokemon, move) {
+			// will shatter screens through sub, before you hit
+			if (pokemon.runImmunity(move.type)) {
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+				pokemon.side.removeSideCondition('auroraveil');
 			}
 		},
 		onPrepareHit(target, source) {
@@ -2125,7 +2145,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Exchanges places with the opponent. Force switches both.",
+		desc: "Exchanges places with the opponent, and then forcibly switches both. This move fails if either side has only one Pokemon left.",
 		shortDesc: "Exchanges places with the opponent. Force switches both.",
 		name: "Satanic Panic",
 		isNonstandard: "Custom",
@@ -2149,36 +2169,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-message', `${source.name} and ${target.name} have switched places!`);
 
 			// No Regerts
-			source.set.species = source.species.name;
 			const set = source.set;
+			set.species = source.species.name;
+			set.ability = source.ability;
 			const p1hp = source.hp;
 			const p1status = source.status;
 			const p1statusData = source.statusData ? source.statusData : false;
 			const p1item = source.item;
 			const p1canZmove = source.m;
 			const p1canDyna = source.canDynamax;
-			const p1moveslotpp = [];
-			for (const [, moveSlot] of source.moveSlots.entries()) {
-				p1moveslotpp.push(moveSlot.pp);
-			}
+			const p1moveslots = source.baseMoveSlots;
 
-			target.set.species = target.species.name;
 			const set2 = target.set;
+			set2.species = target.species.name;
+			set2.ability = target.ability;
 			const p2hp = target.hp;
 			const p2status = target.status;
 			const p2statusData = target.statusData ? target.statusData : false;
 			const p2item = target.item;
 			const p2canZmove = target.m;
 			const p2canDyna = target.canDynamax;
-			const p2moveslotpp = [];
-			for (const [, moveSlot] of target.moveSlots.entries()) {
-				p2moveslotpp.push(moveSlot.pp);
-			}
+			const p2moveslots = target.baseMoveSlots;
 
 			let effect = this.effect;
 			// @ts-ignore
 			this.effect = /** @type {Effect} */ ({id: ''});
-			// @ts-ignore
 			const pokemon = new Pokemon(set, target.side);
 			this.effect = effect;
 			pokemon.position = target.position;
@@ -2192,9 +2207,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.item = p1item;
 			target.m = p1canZmove;
 			target.canDynamax = p1canDyna;
-			for (const [j, moveSlot] of target.moveSlots.entries()) {
-				moveSlot.pp = p1moveslotpp[j];
-			}
+			target.baseMoveSlots = p1moveslots;
 
 
 			effect = this.effect;
@@ -2213,51 +2226,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.item = p2item;
 			source.m = p2canZmove;
 			source.canDynamax = p2canDyna;
-			for (const [j, moveSlot] of source.moveSlots.entries()) {
-				moveSlot.pp = p2moveslotpp[j];
-			}
+			source.baseMoveSlots = p2moveslots;
 
 			target.forceSwitchFlag = true;
 			source.forceSwitchFlag = true;
 		},
 		isZ: "sodapop",
-		secondary: null,
-		target: "normal",
-		type: "Dark",
-	},
-
-	satanicmanic: {
-		accuracy: true,
-		basePower: 10,
-		category: "Physical",
-		desc: "Hits 2-5 times, marking random opposing team members.",
-		shortDesc: "Hits 2-5 times, marking opponents.",
-		name: "Satanic Manic",
-		isNonstandard: "Custom",
-		gen: 8,
-		pp: 1,
-		noPPBoosts: true,
-		priority: 3,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dark Void', target);
-		},
-		onHit(target, source) {
-			const potential = [];
-			for (const foes of target.side.pokemon) {
-				if (foes.fainted || foes.m.marked) continue;
-				potential.push(foes);
-			}
-			if (!potential.length) return;
-			const mon = potential[this.random(potential.length)];
-			mon.m.marked = true;
-			this.add('-message', `${mon.name} was marked by an unknown being...`);
-		},
-		isZ: "lemonade",
-		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
 		type: "Dark",
