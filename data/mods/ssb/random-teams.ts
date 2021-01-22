@@ -243,7 +243,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
 	Emeri: {
-		species: 'Flygon', ability: 'Draco Voice', item: 'Throat Spray', gender: 'M',
+		species: 'Flygon', ability: 'Drake Skin', item: 'Throat Spray', gender: 'M',
 		moves: ['Boomburst', 'Earth Power', 'Agility'],
 		signatureMove: 'Forced Landing',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
