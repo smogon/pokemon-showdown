@@ -73,7 +73,9 @@ To become an Administrator, create a file named `config/usergroups.csv` containi
 
     USER,&
 
-Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
+Replace `USER` with the user ID that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
+
+PS user IDs are usernames, converted to lowercase and with all non-alphanumeric characters removed. This means that `Pikachu #025` becomes `pikachu025`, and `p!kachu!!!` becomes `pkachu`.
 
 This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 
