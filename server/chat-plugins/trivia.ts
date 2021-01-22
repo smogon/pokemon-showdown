@@ -40,6 +40,7 @@ const ALL_CATEGORIES: {[k: string]: string} = {
  */
 const CATEGORY_ALIASES: {[k: string]: ID} = {
 	poke: 'pokemon' as ID,
+	subcat1: 'subcat' as ID,
 };
 
 const MODES: {[k: string]: string} = {
