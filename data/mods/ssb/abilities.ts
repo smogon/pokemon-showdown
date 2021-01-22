@@ -46,9 +46,11 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.hp = Math.round(newMaxHP * percent);
 	pokemon.maxhp = newMaxHP;
 	context.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-	let item = newSet.item;
-	if (typeof item !== 'string') item = item[context.random(item.length)];
-	if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
+	if (pokemon.item) {
+		let item = newSet.item;
+		if (typeof item !== 'string') item = item[context.random(item.length)];
+		if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
+	}
 	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 	pokemon.moveSlots = newMoves;
 	// @ts-ignore Necessary so pokemon doesn't get 8 moves
@@ -316,6 +318,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Carefree');
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -326,6 +329,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Carefree');
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
@@ -396,6 +400,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Magic Hat');
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -406,6 +411,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Magic Hat');
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
@@ -504,6 +510,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Buffy
+	speedcontrol: {
+		onStart(pokemon) {
+			this.boost({spe: 1}, pokemon);
+		},
+		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+		name: "Speed Control",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// cant say
 	ragequit: {
 		desc: "If a Pokemon with this ability uses a move that misses or fails, the Pokemon faints and reduces the foe's Attack and Special Attack by 2 stages",
@@ -518,17 +535,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
-	// Celestial
-	speedcontrol: {
-		onStart(pokemon) {
-			this.boost({spe: 1}, pokemon);
-		},
-		desc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
-		name: "Speed Control",
 		isNonstandard: "Custom",
 		gen: 8,
 	},
@@ -623,15 +629,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Emeri
-	dracovoice: {
-		desc: "This Pokemon's sound-based moves become Dragon-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's sound-based moves become Dragon type.",
-		name: "Draco Voice",
+	drakeskin: {
+		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
+		name: "Drake Skin",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Dragon';
+				// @ts-ignore
+				move.drakeskinBoosted = true;
 			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			// @ts-ignore
+			if (move.drakeskinBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1095,13 +1111,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Jho
 	venomize: {
-		desc: "This Pokemon's sound-based moves become Poison-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's sound-based moves become Poison type.",
+		desc: "This Pokemon's Normal-type moves become Poison-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Poison type and have 1.2x power.",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Poison';
+				// @ts-ignore
+				move.venomizeBoosted = true;
 			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			// @ts-ignore
+			if (move.venomizeBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
 		name: "Venomize",
 		isNonstandard: "Custom",
@@ -1199,8 +1225,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// KingSwordYT
 	bambookingdom: {
-		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using physical moves against this Pokemon lose 1/8 of their maximum HP. Pokemon using special moves against this Pokemon lose 1/16 of their maximum HP. Attacking moves used by this Pokemon have their priority set to -7.",
-		shortDesc: "+1 Def/SpD. -7 priority on attacks. 1/8 recoil hit by phys, 1/16 hit by spec.",
+		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using direct attacks against this Pokemon lose 1/16 of their maximum HP. Attacking moves used by this Pokemon have their priority set to -7.",
+		shortDesc: "+1 Def/SpD. -7 priority on attacks. 1/16 hit by moves.",
 		name: "Bamboo Kingdom",
 		onStart(pokemon) {
 			this.boost({def: 1, spd: 1}, pokemon);
@@ -1209,12 +1235,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move?.category !== 'Status') return -7;
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical') {
-				this.damage(source.baseMaxhp / 8, source, target);
-			}
-			if (move.category === 'Special') {
-				this.damage(source.baseMaxhp / 16, source, target);
-			}
+			this.damage(source.baseMaxhp / 16, source, target);
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1225,29 +1246,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "While this Pokemon is active, foes that switch out lose 1/3 of their maximum HP, rounded down. This damage will never cause a Pokemon to faint, and will instead leave them at 1 HP.",
 		shortDesc: "While this Pokemon is active, foes that switch out lose 1/3 of their maximum HP.",
 		onStart(pokemon) {
-			pokemon.side.foe.addSideCondition('degenerator', pokemon);
-			const data = pokemon.side.foe.getSideConditionData('degenerator');
+			pokemon.side.foe.addSideCondition('degeneratormod', pokemon);
+			const data = pokemon.side.foe.getSideConditionData('degeneratormod');
 			if (!data.sources) {
 				data.sources = [];
 			}
 			data.sources.push(pokemon);
 		},
 		onEnd(pokemon) {
-			pokemon.side.foe.removeSideCondition('degenerator');
-		},
-		condition: {
-			onBeforeSwitchOut(pokemon) {
-				let alreadyAdded = false;
-				for (const source of this.effectData.sources) {
-					if (!source.hp || source.volatiles['gastroacid']) continue;
-					if (!alreadyAdded) {
-						const foe = pokemon.side.foe.active[0];
-						if (foe) this.add('-activate', foe, 'ability: Degenerator');
-						alreadyAdded = true;
-					}
-					this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
-				}
-			},
+			pokemon.side.foe.removeSideCondition('degeneratormod');
 		},
 		name: "Degenerator",
 		isNonstandard: "Custom",
@@ -1479,6 +1486,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				if (pokemon.volatiles['mustrecharge']) {
+					this.add('-ability', pokemon, 'Last Minute Lag');
+					this.add('-end', pokemon, 'mustrecharge');
+					delete pokemon.volatiles['mustrecharge'];
+				}
+			}
+		},
 		name: "Last-Minute Lag",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1501,7 +1517,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: 'Ghost Spores',
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
-				source.addVolatile('curse');
+				source.addVolatile('curse', target);
 			} else {
 				source.addVolatile('leechseed', target);
 			}
@@ -1950,7 +1966,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Overasked Clause",
 		isPermanent: true,
 		onHit(target, source, move) {
-			if (target.getMoveHitData(move).typeMod < 0) {
+			if (target.runEffectiveness(move) < 0) {
 				if (!target.hp) return;
 				if (target.species.id.includes('aggron') && !target.illusion && !target.transformed) {
 					this.boost({atk: 1}, target);

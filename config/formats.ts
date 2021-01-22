@@ -1391,6 +1391,15 @@ export const Formats: FormatList = [
 			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
+			if (pokemon.m.hasBounty) this.add('-start', pokemon, 'bounty', '[silent]');
+		},
+		onFaint(target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
+			if (!target.m.hasBounty) return;
+			if (source) {
+				this.add('-message', `${source.name} received the bounty!`);
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
+			}
 		},
 	},
 	{
