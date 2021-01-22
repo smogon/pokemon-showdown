@@ -478,7 +478,7 @@ export class ModdedDex {
 		}
 		if (id && this.data.Moves.hasOwnProperty(id)) {
 			const moveData = this.data.Moves[id];
-			const moveTextData = this.getDescs('Moves', id, moveData);
+			const moveTextData = this.getDescs('Moves', id.startsWith('hiddenpower') ? 'hiddenpower' : id, moveData);
 			move = new DataMove({name}, moveData, moveTextData);
 			if (move.gen > this.gen) {
 				(move as any).isNonstandard = 'Future';
