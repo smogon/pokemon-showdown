@@ -2207,6 +2207,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.item = p1item;
 			target.m = p1canZmove;
 			target.canDynamax = p1canDyna;
+			// @ts-ignore
 			target.baseMoveSlots = p1moveslots;
 
 
@@ -2226,6 +2227,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.item = p2item;
 			source.m = p2canZmove;
 			source.canDynamax = p2canDyna;
+			// @ts-ignore
 			source.baseMoveSlots = p2moveslots;
 
 			target.forceSwitchFlag = true;
