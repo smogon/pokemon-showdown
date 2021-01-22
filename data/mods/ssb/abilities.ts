@@ -640,11 +640,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Dragon';
+				// @ts-ignore
 				move.drakeskinBoosted = true;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
+			// @ts-ignore
 			if (move.drakeskinBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
 		isNonstandard: "Custom",
@@ -1118,11 +1120,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Poison';
+				// @ts-ignore
 				move.venomizeBoosted = true;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
+			// @ts-ignore
 			if (move.venomizeBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
 		name: "Venomize",

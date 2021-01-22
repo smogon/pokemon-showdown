@@ -1849,7 +1849,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				});
 			}
 		},
-		onTryHit(pokemon, move) {
+		onTryHit(pokemon, source, move) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity(move.type)) {
 				pokemon.side.removeSideCondition('reflect');
