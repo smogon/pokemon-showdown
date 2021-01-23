@@ -1619,7 +1619,7 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
 		banlist: [
 			'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scraggy', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma',
-			'Sand Rush', 'Berry Juice', 'Soul Dew', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger',
+			'Sand Rush', 'Sand Veil', 'Berry Juice', 'Soul Dew', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger',
 		],
 	},
 
@@ -1792,7 +1792,7 @@ export const Formats: FormatList = [
 		banlist: [
 			'Aipom', 'Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon',
 			'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Trapinch', 'Vulpix-Base', 'Wingull', 'Yanma',
-			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
+			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Sticky Web',
 		],
 	},
 	{
@@ -2623,7 +2623,7 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
 		banlist: [
 			'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma',
-			'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Sonic Boom',
+			'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Sonic Boom', 'Swagger',
 		],
 	},
 	{
