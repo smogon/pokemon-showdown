@@ -79,6 +79,15 @@ describe('Inverse Battle', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it('should not affect move-based immunities', function () {
+		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'guts', moves: ['earthquake']}]});
+		battle.setPlayer('p2', {team: [{species: "Klefki", ability: 'prankster', moves: ['magnetrise']}]});
+		battle.makeChoices('move earthquake', 'move magnetrise');
+		battle.makeChoices('move earthquake', 'move magnetrise');
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+	});
+
 	it('should not affect the type effectiveness of Freeze Dry on Water-type Pokemon', function () {
 		battle.setPlayer('p1', {team: [{species: "Lapras", ability: 'waterabsorb', moves: ['freezedry']}]});
 		battle.setPlayer('p2', {team: [{species: "Floatzel", ability: 'waterveil', moves: ['aquajet']}]});
