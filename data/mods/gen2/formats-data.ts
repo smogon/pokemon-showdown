@@ -142,7 +142,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	wigglytuff: {
-		randomBattleMoves: ["bodyslam", "charm", "curse", "doubleedge", "rest", "sleeptalk", "thunder", "thunderwave"],
+		randomBattleMoves: ["bodyslam", "charm", "curse", "doubleedge", "fireblast", "rest", "sleeptalk", "thunderwave"],
 		tier: "NU",
 	},
 	zubat: {
@@ -821,7 +821,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	delibird: {
-		randomBattleMoves: ["hiddenpowerflying", "icebeam", "present", "rapidspin", "spikes", "thief"],
+		randomBattleMoves: ["hiddenpowerflying", "icebeam", "present", "spikes", "thief"],
 		tier: "NU",
 	},
 	mantine: {
@@ -877,7 +877,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	tyranitar: {
-		randomBattleMoves: ["crunch", "curse", "dynamicpunch", "earthquake", "fireblast", "pursuit", "rest", "roar", "rockslide", "screech", "surf"],
+		randomBattleMoves: ["crunch", "curse", "earthquake", "fireblast", "pursuit", "rest", "rockslide", "screech", "surf"],
 		tier: "OU",
 	},
 	lugia: {
