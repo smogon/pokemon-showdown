@@ -1474,8 +1474,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Notater517
 	lastminutelag: {
-		desc: "This Pokemon applies the Recharge status to the opposing Pokemon if this Pokemon needs to recharge.",
-		shortDesc: "Applies Recharge volatile to the opposing Pokemon if this Pokemon has it.",
+		desc: "This Pokemon applies the Recharge status to the opposing Pokemon if this Pokemon needs to recharge. If this Pokemon KOs an opposing Pokemon with a recharge move, then the user does not need to recharge.",
+		shortDesc: "Gives Recharge to the opposing Pokemon if this Pokemon has it. KO: No recharge.",
 		onModifyMove(move, pokemon, target) {
 			if (move.self?.volatileStatus === 'mustrecharge') {
 				if (!move.volatileStatus) {
@@ -1966,7 +1966,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Overasked Clause",
 		isPermanent: true,
 		onHit(target, source, move) {
-			if (target.runEffectiveness(move) < 0) {
+			if (target.getMoveHitData(move).typeMod < 0) {
 				if (!target.hp) return;
 				if (target.species.id.includes('aggron') && !target.illusion && !target.transformed) {
 					this.boost({atk: 1}, target);
