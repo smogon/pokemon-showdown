@@ -56,7 +56,7 @@ export const Formats: {[k: string]: FormatData} = {
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
 			'Magearna', 'Marshadow', 'Zeraora',
-			'Zarude',
+			'Meltan', 'Melmetal', 'Zarude',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
@@ -95,7 +95,7 @@ export const Formats: {[k: string]: FormatData} = {
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
 			'Magearna', 'Marshadow', 'Zeraora',
-			'Zarude',
+			'Meltan', 'Melmetal', 'Zarude',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
