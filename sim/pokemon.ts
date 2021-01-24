@@ -386,6 +386,7 @@ export class Pokemon {
 		this.maybeDisabled = false;
 
 		this.illusion = null;
+		this.masquerade = null;
 		this.transformed = false;
 
 		this.fainted = false;
