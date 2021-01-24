@@ -58,26 +58,26 @@ export const Formats: {[k: string]: FormatData} = {
 			'Magearna', 'Marshadow', 'Zeraora',
 			'Zarude',
 		],
+		restricted: [
+			'Mewtwo',
+			'Lugia', 'Ho-Oh',
+			'Kyogre', 'Groudon', 'Rayquaza',
+			'Dialga', 'Palkia', 'Giratina',
+			'Reshiram', 'Zekrom', 'Kyurem',
+			'Xerneas', 'Yveltal', 'Zygarde',
+			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
+			'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
+		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
 		onValidateTeam(team) {
-			const legends = [
-				'Mewtwo',
-				'Lugia', 'Ho-Oh',
-				'Kyogre', 'Groudon', 'Rayquaza',
-				'Dialga', 'Palkia', 'Giratina',
-				'Reshiram', 'Zekrom', 'Kyurem',
-				'Xerneas', 'Yveltal', 'Zygarde',
-				'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
-				'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
-			];
 			let n = 0;
 			for (const set of team) {
-				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
-				if (legends.includes(baseSpecies)) n++;
+				const species = this.dex.getSpecies(set.species);
+				if (this.ruleTable.isRestrictedSpecies(species)) n++;
 				if (n > 2) return [`You can only use up to two restricted legendary Pok\u00E9mon.`];
 			}
 		},
