@@ -1235,4 +1235,46 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Toxtricity, this item allows it to Mega Evolve in battle.",
 	},
+	cacturnite: {
+		name: "Cacturnite",
+		spritenum: 578,
+		megaStone: "Cacturne-Mega",
+		megaEvolves: "Cacturne",
+		itemUser: ["Cacturne"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1075,
+		gen: 8,
+		desc: "If held by a Cacturne, this item allows it to Mega Evolve in battle.",
+	},
+	hawluchanite: {
+		name: "Hawluchanite",
+		spritenum: 578,
+		megaStone: "Hawlucha-Mega",
+		megaEvolves: "Hawlucha",
+		itemUser: ["Hawlucha"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1076,
+		gen: 8,
+		desc: "If held by a Hawlucha, this item allows it to Mega Evolve in battle.",
+	},
+	araquanite: {
+		name: "Araquanite",
+		spritenum: 578,
+		megaStone: "Araquanid-Mega",
+		megaEvolves: "Araquanid",
+		itemUser: ["Araquanid"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1077,
+		gen: 8,
+		desc: "If held by an Araquanid, this item allows it to Mega Evolve in battle.",
+	},
 };

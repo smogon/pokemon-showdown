@@ -1593,6 +1593,88 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: -1045,
 	},
+	coupdegrass: {
+		desc: "This Pokémon moves first in its priority bracket when its target has 1/2 or less of its maximum HP, rounded down. Does not affect moves that have multiple targets.",
+		shortDesc: "This Pokémon moves first in its priority bracket when its target has 1/2 or less HP.",
+		onUpdate(pokemon) {
+			const action = this.queue.willMove(pokemon);
+			if (!action) return;
+			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			if (!target) return;
+			if (target.hp <= target.maxhp / 2) {
+				pokemon.addVolatile('coupdegrass');
+			}
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				const action = this.queue.willMove(pokemon);
+				if (action) {
+					this.add('-ability', pokemon, 'Coup de Grass');
+					this.add('-message', `${pokemon.name} prepared to move immediately!`);
+				}
+			},
+			onModifyPriority(priority) {
+				return priority + 0.1;
+			},
+		},
+		name: "Coup de Grass",
+		rating: 3,
+		num: -1046,
+	},
+	masquerade: {
+		desc: "This Pokémon inherits the Ability of the last unfainted Pokemon in its party until it takes direct damage from another Pokémon's attack. Abilities that cannot be copied are \"No Ability\", As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		shortDesc: "Inherits the Ability of the last party member. Wears off when attacked.",
+		onStart(pokemon) {
+			pokemon.addVolatile('masquerade');
+		},
+		condition: {
+			onStart(pokemon) {
+				let masquerade = null;
+				let i;
+				for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+					if (!pokemon.side.pokemon[i]) continue;
+					if (!pokemon.side.pokemon[i].fainted) break;
+				}
+				if (!pokemon.side.pokemon[i]) return;
+				if (pokemon === pokemon.side.pokemon[i]) return;
+				masquerade = pokemon.side.pokemon[i];
+				const additionalBannedAbilities = [
+					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+				];
+				if (masquerade.getAbility().isPermanent || additionalBannedAbilities.includes(masquerade.ability)) {
+					pokemon.setAbility('masquerade');
+					pokemon.removeVolatile('masquerade');
+					return;
+				}
+				pokemon.setAbility(masquerade.ability);
+				this.add('-ability', pokemon, 'Masquerade');
+				this.add('-message', `${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
+				this.add('-ability', pokemon, this.dex.getAbility(pokemon.ability).name);
+			},
+			onDamagingHit(damage, target, source, move) {
+				target.setAbility('masquerade');
+				target.removeVolatile('masquerade');
+				this.add('-ability', target, 'Masquerade');
+				this.add('-message', `${target.name}'s Masquerade wore off!`);
+			},
+		},
+		name: "Masquerade",
+		rating: 3,
+		num: -1047,
+	},
+	bodyofwater: {
+		desc: "When this Pokémon uses a Water-type attack, damage is calculated using the user's Defense stat as its Attack or its Special Defense as its Special Attack, including stat stage changes. Other effects that modify the Attack and Special Attack stats are used as normal.",
+		shortDesc: "Water-type attacks use Def as Atk and Sp. Def as Sp. Atk in damage calculation.",
+		name: "Body of Water",
+		onModifyMove(move, attacker) {
+			if (move.type === 'Water') {
+				move.useSourceDefensiveAsOffensive = true;
+			}
+		},
+		rating: 3.5,
+		num: -1048,
+	},
 	stickyresidues: {
 		desc: "On switch-in, this Pokémon summons sticky residues that prevent hazards from being cleared or moved by Court Change for five turns. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
 		shortDesc: "On switch-in, this Pokémon summons sticky residues that prevent hazards from being cleared or moved by Court Change for five turns.",
