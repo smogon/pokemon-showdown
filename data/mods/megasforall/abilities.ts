@@ -1658,12 +1658,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				this.add('-ability', target, 'Masquerade');
 				this.add('-message', `${target.name}'s Masquerade wore off!`);
 			},
-			onFaint(pokemon) {
-				pokemon.setAbility('masquerade');
-				pokemon.removeVolatile('masquerade');
-				this.add('-ability', pokemon, 'Masquerade');
-				this.add('-message', `${pokemon.name}'s Masquerade wore off!`);
-			},
 		},
 		name: "Masquerade",
 		rating: 3,
