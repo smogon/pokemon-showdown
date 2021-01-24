@@ -311,7 +311,6 @@ interface ModdedBattlePokemon {
 	/** TODO: remove, completely meaningless */
 	inherit?: true;
 	lostItemForDelibird?: Item | null;
-	masquerade?: Item | null;
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number;
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number;
 	getAbility?: (this: Pokemon) => Ability;
