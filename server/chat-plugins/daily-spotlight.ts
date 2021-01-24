@@ -218,7 +218,7 @@ export const commands: ChatCommands = {
 		const html = await renderSpotlight(description, image);
 
 		this.sendReplyBox(html);
-		if (!this.broadcasting && user.can('ban', null, room, 'rfaq')) {
+		if (!this.broadcasting && user.can('ban', null, room, 'daily')) {
 			const code = Utils.escapeHTML(description).replace(/\n/g, '<br />');
 			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/setdaily ${key},${image},${code} </code></details>`);
 		}
