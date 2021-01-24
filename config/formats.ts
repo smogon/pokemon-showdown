@@ -2462,7 +2462,7 @@ export const Formats: FormatList = [
 			battle: 1,
 		},
 		ruleset: ['Standard', 'Baton Pass Clause', 'Swagger Clause'],
-		banlist: ['Uber', 'Cottonee', 'Whimsicott', 'Focus Sash', 'Soul Dew', 'Perish Song'],
+		banlist: ['Uber', 'Cottonee', 'Kyurem-Black', 'Whimsicott', 'Focus Sash', 'Soul Dew', 'Perish Song'],
 		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
 	},
 	{
