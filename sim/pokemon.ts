@@ -115,7 +115,6 @@ export class Pokemon {
 	maybeDisabled: boolean;
 
 	illusion: Pokemon | null;
-	masquerade: Pokemon | null;
 	transformed: boolean;
 
 	maxhp: number;
@@ -386,7 +385,6 @@ export class Pokemon {
 		this.maybeDisabled = false;
 
 		this.illusion = null;
-		this.masquerade = null;
 		this.transformed = false;
 
 		this.fainted = false;
