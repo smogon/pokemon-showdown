@@ -16,7 +16,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("lycanroc", ["extremespeed", "spikes"]);
 		newMoves("raichu", ["highjumpkick"]);
 		newMoves("clefable", ["hex", "nastyplot", "shadowsneak", "willowisp"]);
-		newMoves("rillaboom", ["junglehealing", "toxic"]);
+		newMoves("rillaboom", ["toxic"]);
 		newMoves("cinderace", ["energyball"]);
 		newMoves("inteleon", ["taunt", "firstimpression", "encore", "pursuit"]);
 		newMoves("klinklang", ["overheat", "rapidspin"]);
@@ -49,7 +49,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("eelektross", ["recover", "scald"]);
 		newMoves("dragalge", ["acidspray", "gastroacid", "roost", "terrainpulse"]);
 		newMoves("dhelmise", ["flipturn", "superpower"]);
-		newMoves("meganium", ["calmmind", "dragondance", "solarblade", "weatherball"]);
+		newMoves("meganium", ["calmmind", "dragondance", "rockslide", "solarblade", "weatherball"]);
 		newMoves("typhlosion", ["explosion", "headcharge", "honeclaws", "morningsun", "rapidspin"]);
 		newMoves("feraligatr", ["darkpulse", "firefang", "suckerpunch", "thunderfang"]);
 		newMoves("regice", ["teleport", "freezedry"]);
@@ -73,6 +73,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("noivern", ["encore"]);
 		newMoves("toxtricity", ["frustration", "gearup", "hiddenpower"]);
 		newMoves("toxtricitylowkey", ["hiddenpower", "return", "slackoff"]);
+		newMoves("cacturne", ["assurance", "knockoff", "strengthsap"]);
+		newMoves("hawlucha", ["partingshot", "stormthrow"]);
+		newMoves("araquanid", ["hypnosis", "lifedew", "painsplit", "purify"]);
 	},
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
