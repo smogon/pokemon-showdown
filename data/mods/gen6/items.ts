@@ -1,7 +1,6 @@
 export const Items: {[k: string]: ModdedItemData} = {
 	aguavberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -18,10 +17,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	bigroot: {
-		inherit: true,
-		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
-	},
 	cornnberry: {
 		inherit: true,
 		isNonstandard: null,
@@ -30,19 +25,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	energypowder: {
-		name: "Energy Powder",
-		spritenum: 123,
-		fling: {
-			basePower: 30,
-		},
-		num: 34,
-		gen: 2,
-		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
-	},
 	figyberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -57,7 +41,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	iapapaberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -88,17 +71,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
-	lightclay: {
-		inherit: true,
-		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
-	},
 	machobrace: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	magoberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -163,7 +141,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	souldew: {
 		inherit: true,
-		desc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 		onBasePower() {},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
@@ -188,7 +165,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	wikiberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
