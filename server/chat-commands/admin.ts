@@ -297,7 +297,7 @@ export const commands: ChatCommands = {
 		if (!targetConnections.length) {
 			// no connection has requested it - verify that we share a room
 			this.checkPMHTML(targetUser);
-			targetConnections = [targetUser.connections[0]];
+			targetConnections = targetUser.connections;
 		}
 
 		content = this.checkHTML(content);

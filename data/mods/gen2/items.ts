@@ -3,36 +3,68 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	blackbelt: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Fighting') {
+				return damage * 1.1;
+			}
+		},
+	},
+	blackglasses: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Dark') {
+				return damage * 1.1;
+			}
+		},
+	},
 	brightpowder: {
 		inherit: true,
-		desc: "An attack against the holder has its accuracy out of 255 lowered by 20.",
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy - 20;
 		},
 	},
+	charcoal: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Fire') {
+				return damage * 1.1;
+			}
+		},
+	},
 	dragonfang: {
 		inherit: true,
-		desc: "No competitive use.",
 		onBasePower() {},
 	},
 	dragonscale: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Dragon') {
-				return basePower * 1.1;
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Dragon') {
+				return damage * 1.1;
 			}
 		},
-		desc: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
 	},
 	focusband: {
 		inherit: true,
-		desc: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
 		onDamage(damage, target, source, effect) {
 			if (this.randomChance(30, 256) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add('-activate', target, 'item: Focus Band');
 				return target.hp - 1;
+			}
+		},
+	},
+	hardstone: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Rock') {
+				return damage * 1.1;
 			}
 		},
 	},
@@ -61,7 +93,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	luckypunch: {
 		inherit: true,
-		desc: "If held by a Chansey, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio(critRatio, user) {
 			if (user.species.name === 'Chansey') {
@@ -69,25 +100,112 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	magnet: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Electric') {
+				return damage * 1.1;
+			}
+		},
+	},
+	metalcoat: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Steel') {
+				return damage * 1.1;
+			}
+		},
+	},
 	metalpowder: {
 		inherit: true,
-		desc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
 		// In Gen 2 this happens in stat calculation directly.
 		onModifyDef() {},
 		onModifySpD() {},
 	},
+	miracleseed: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Grass') {
+				return damage * 1.1;
+			}
+		},
+	},
+	mysticwater: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Water') {
+				return damage * 1.1;
+			}
+		},
+	},
+	nevermeltice: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Ice') {
+				return damage * 1.1;
+			}
+		},
+	},
+	poisonbarb: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Poison') {
+				return damage * 1.1;
+			}
+		},
+	},
 	quickclaw: {
 		inherit: true,
-		desc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
 		onFractionalPriority(priority, pokemon) {
 			if (this.randomChance(60, 256)) {
 				return 0.1;
 			}
 		},
 	},
+	sharpbeak: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Flying') {
+				return damage * 1.1;
+			}
+		},
+	},
+	silverpowder: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Bug') {
+				return damage * 1.1;
+			}
+		},
+	},
+	softsand: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Ground') {
+				return damage * 1.1;
+			}
+		},
+	},
+	spelltag: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Ghost') {
+				return damage * 1.1;
+			}
+		},
+	},
 	stick: {
 		inherit: true,
-		desc: "If held by a Farfetch\u2019d, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio(critRatio, user) {
 			if (user.species.id === 'farfetchd') {
@@ -99,6 +217,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
 		onModifyAtk() {},
+	},
+	twistedspoon: {
+		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Psychic') {
+				return damage * 1.1;
+			}
+		},
 	},
 	berserkgene: {
 		inherit: true,
@@ -138,10 +265,22 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	pinkbow: {
 		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Normal') {
+				return damage * 1.1;
+			}
+		},
 		isNonstandard: null,
 	},
 	polkadotbow: {
 		inherit: true,
+		onBasePower() {},
+		onModifyDamage(damage, source, target, move) {
+			if (move?.type === 'Normal') {
+				return damage * 1.1;
+			}
+		},
 		isNonstandard: null,
 	},
 	przcureberry: {
