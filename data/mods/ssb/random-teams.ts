@@ -445,8 +445,8 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Lamp: {
-		species: 'Lampent', ability: 'Candlewax', item: 'Eviolite', gender: 'M',
-		moves: ['Nasty Plot', 'Searing Shot', 'Strength Sap'],
+		species: 'Lampent', ability: 'Soul Heart', item: 'Eviolite', gender: 'M',
+		moves: ['Nasty Plot', 'Searing Shot', 'Recover'],
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
