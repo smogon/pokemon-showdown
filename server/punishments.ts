@@ -1666,7 +1666,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.startsWith('#')) return;
+			if (id !== '#rangelock' && id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (entry) {
