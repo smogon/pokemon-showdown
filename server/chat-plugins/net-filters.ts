@@ -12,7 +12,7 @@ import {Utils} from '../../lib/utils';
 import {Config} from '../config-loader';
 
 const PATH = "config/chat-plugins/net.json";
-const MAX_PROCESSES = Config.netfilterprocesses || 1;
+const NUM_PROCESSES = Config.netfilterprocesses || 1;
 const PM_TIMEOUT = 2 * 60 * 60 * 1000; // training can be _really_ slow
 const WHITELIST = ["mia"];
 
@@ -52,7 +52,8 @@ export class NeuralNetChecker {
 		if (!iterations) iterations = 100;
 		const now = Date.now();
 		await FS(PATH).copyFile(PATH + '.backup');
-		this.model?.train(data, {iterations});
+		if (!this.model) return;
+		this.model.train(data, {iterations});
 		this.save();
 		return Date.now() - now; // time data is helpful for training
 	}
@@ -162,7 +163,7 @@ if (!PM.isParentProcess) {
 	// otherwise, we use the PM for interfacing with the network
 	net = new NeuralNetChecker(PATH);
 } else {
-	PM.spawn(MAX_PROCESSES);
+	PM.spawn(NUM_PROCESSES);
 }
 
 export const commands: ChatCommands = {
