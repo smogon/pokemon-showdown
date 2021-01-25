@@ -29,6 +29,7 @@ export const Aliases: {[alias: string]: string} = {
 	cc1v1: "[Gen 8] Challenge Cup 1v1",
 	cc2v2: "[Gen 8] Challenge Cup 2v2",
 	hc: "[Gen 8] Hackmons Cup",
+	hackmons: "[Gen 8] Pure Hackmons",
 	monorandom: "[Gen 8] Monotype Random Battle",
 	bf: "[Gen 7] Battle Factory",
 	bssf: "[Gen 7] BSS Factory",
