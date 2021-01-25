@@ -28,6 +28,15 @@ interface TrainingLine {
 	output: string;
 }
 
+function modelExists() {
+	try {
+		require.resolve('brain.js');
+	} catch (e) {
+		return false;
+	}
+	return true;
+}
+
 export class NeuralNetChecker {
 	model: import('brain.js').recurrent.LSTM | null;
 	constructor(path?: string) {
@@ -84,6 +93,7 @@ export class NeuralNetChecker {
 }
 
 function checkAllowed(context: CommandContext) {
+	if (!modelExists()) throw new Chat.ErrorMessage(`Net filters are disabled - install brain.js to use them.`);
 	const user = context.user;
 	if (WHITELIST.includes(user.id)) return true;
 	return context.canUseConsole();
@@ -102,6 +112,7 @@ export const hits: {[roomid: string]: {[userid: string]: number}} = (() => {
 })();
 
 export const chatfilter: ChatFilter = function (message, user, room) {
+	if (!modelExists()) return;
 	// not awaited as so to not hold up the filters (additionally we can wait on this)
 	void (async () => {
 		if (!room || room.persist || room.roomid.startsWith('help-')) return;
@@ -119,7 +130,6 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 			}
 		}
 	})();
-	return undefined;
 };
 
 export const PM = new QueryProcessManager<NetQuery, any>(module, query => {
