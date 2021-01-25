@@ -52,7 +52,7 @@ export class NeuralNetChecker {
 		if (!iterations) iterations = 100;
 		const now = Date.now();
 		await FS(PATH).copyFile(PATH + '.backup');
-		if (!this.model) return;
+		if (!this.model) throw new Error(`Attempting to train with no model installed`);
 		this.model.train(data, {iterations});
 		this.save();
 		return Date.now() - now; // time data is helpful for training
