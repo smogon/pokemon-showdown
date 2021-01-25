@@ -569,7 +569,10 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 6] Gen-NEXT OU",
+		name: "[Gen 6] NEXT OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3476151/">Gen-NEXT Development Thread</a>`,
+		],
 
 		mod: 'gennext',
 		searchShow: false,
