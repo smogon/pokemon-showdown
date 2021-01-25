@@ -97,7 +97,12 @@ function solveRPN(rpn: string[]) {
 			if (!resultStack.length) throw new SyntaxError(`Unknown syntax error`);
 			resultStack.push(-resultStack.pop()!);
 		} else if (!"^%*/+-".includes(token)) {
-			let num = Number(token);
+			let num;
+			if (token.endsWith('h')) {
+			num = Number("0x" + token.slice(0, -1)); //replacing h with 0x
+			} else { 
+			num = Number(token); 
+			}
 			if (isNaN(num) && token.toUpperCase() in Math) {
 				// @ts-ignore
 				num = Math[token.toUpperCase()];
@@ -141,7 +146,7 @@ export const commands: ChatCommands = {
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
 		let base = 10;
-		if (target.includes('0x')) {
+		if (target.includes('0x') || target.includes('h')) {
 			base = 16;
 		} else if (target.includes('0o')) {
 			base = 8;
@@ -151,7 +156,7 @@ export const commands: ChatCommands = {
 
 		const baseMatchResult = (/\b(?:in|to)\s+([a-zA-Z]+)\b/).exec(target);
 		if (baseMatchResult) {
-			switch (toID(baseMatchResult[1])) {
+			switch (toID(baseMatchResult[1])) {				
 			case 'decimal': case 'dec': base = 10; break;
 			case 'hexadecimal': case 'hex': base = 16; break;
 			case 'octal': case 'oct': base = 8; break;
