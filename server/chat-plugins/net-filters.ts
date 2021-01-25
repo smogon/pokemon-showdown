@@ -131,6 +131,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 			}
 		}
 	})();
+	return undefined;
 };
 
 export const PM = new QueryProcessManager<NetQuery, any>(module, query => {
