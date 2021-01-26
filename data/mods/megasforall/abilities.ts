@@ -1625,38 +1625,68 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	masquerade: {
 		desc: "This Pokémon inherits the Ability of the last unfainted Pokemon in its party until it takes direct damage from another Pokémon's attack. Abilities that cannot be copied are \"No Ability\", As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
 		shortDesc: "Inherits the Ability of the last party member. Wears off when attacked.",
-		onStart(pokemon) {
+		// the same thing happens manually onAfterMega and onSwitchIn, but it should not happen every time the Ability starts
+		onAfterMega(pokemon) {
 			pokemon.addVolatile('masquerade');
-		},
-		condition: {
-			onStart(pokemon) {
-				let masquerade = null;
-				let i;
-				for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
-					if (!pokemon.side.pokemon[i]) continue;
-					if (!pokemon.side.pokemon[i].fainted) break;
-				}
-				if (!pokemon.side.pokemon[i]) return;
-				if (pokemon === pokemon.side.pokemon[i]) return;
-				masquerade = pokemon.side.pokemon[i];
+			let i;
+			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+				if (!pokemon.side.pokemon[i]) continue;
 				const additionalBannedAbilities = [
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 				];
-				if (masquerade.getAbility().isPermanent || additionalBannedAbilities.includes(masquerade.ability)) {
-					pokemon.setAbility('masquerade');
-					pokemon.removeVolatile('masquerade');
-					return;
+				if (
+					pokemon.side.pokemon[i].fainted ||
+					pokemon.side.pokemon[i].getAbility().isPermanent || additionalBannedAbilities.includes(pokemon.side.pokemon[i].ability)
+				) {
+					continue;
+				} else {
+					break;
 				}
-				pokemon.setAbility(masquerade.ability);
-				this.add('-ability', pokemon, 'Masquerade');
-				this.add('-message', `${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
-				this.add('-ability', pokemon, this.dex.getAbility(pokemon.ability).name);
-			},
+			}
+			if (!pokemon.side.pokemon[i]) return;
+			if (pokemon === pokemon.side.pokemon[i]) return;
+			const masquerade = pokemon.side.pokemon[i];
+			this.add('-ability', pokemon, 'Masquerade');
+			pokemon.setAbility(masquerade.ability);
+			this.add('-message', `${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
+			this.add('-ability', pokemon, this.dex.getAbility(pokemon.ability).name, '[silent]');
+		},
+		onSwitchIn(pokemon) {
+			pokemon.addVolatile('masquerade');
+			let i;
+			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+				if (!pokemon.side.pokemon[i]) continue;
+				const additionalBannedAbilities = [
+					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+				];
+				if (
+					pokemon.side.pokemon[i].fainted ||
+					pokemon.side.pokemon[i].getAbility().isPermanent || additionalBannedAbilities.includes(pokemon.side.pokemon[i].ability)
+				) {
+					continue;
+				} else {
+					break;
+				}
+			}
+			if (!pokemon.side.pokemon[i]) return;
+			if (pokemon === pokemon.side.pokemon[i]) return;
+			const masquerade = pokemon.side.pokemon[i];
+			this.add('-ability', pokemon, 'Masquerade');
+			pokemon.setAbility(masquerade.ability);
+			this.add('-message', `${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
+			this.add('-ability', pokemon, this.dex.getAbility(pokemon.ability).name, '[silent]');
+		},
+		condition: {
 			onDamagingHit(damage, target, source, move) {
-				target.setAbility('masquerade');
 				target.removeVolatile('masquerade');
-				this.add('-ability', target, 'Masquerade');
-				this.add('-message', `${target.name}'s Masquerade wore off!`);
+			},
+			onFaint(pokemon) {
+				pokemon.removeVolatile('masquerade');
+			},
+			onEnd(pokemon) {
+				this.add('-ability', pokemon, 'Masquerade');
+				this.add('-message', `${pokemon.name}'s Masquerade wore off!`);
+				pokemon.setAbility('masquerade');
 			},
 		},
 		name: "Masquerade",

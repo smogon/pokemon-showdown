@@ -27,7 +27,10 @@ export const Formats: {[k: string]: FormatData} = {
 				if (target.species.forme.startsWith('Mega') || target.species.forme.startsWith('Ultra')) {
 					this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[silent]');
 				} else {
-					this.add('-end', target, 'typechange', '[silent]');
+					const types = target.baseSpecies.types;
+					if (target.getTypes().join() === types.join()) {
+						this.add('-end', target, 'typechange', '[silent]');
+					}
 				}
 			}
 		},
