@@ -46,7 +46,7 @@ export const Formats: {[k: string]: FormatData} = {
 	minimalgbu: {
 		effectType: 'ValidatorRule',
 		name: 'Minimal GBU',
-		desc: "The standard ruleset for official tournaments, but without Restricted Legendary bans",
+		desc: "The standard ruleset for official tournaments, but two Restricted Legendaries are allowed",
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Battle Bond',
 			'Mew',
@@ -56,7 +56,7 @@ export const Formats: {[k: string]: FormatData} = {
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
 			'Magearna', 'Marshadow', 'Zeraora',
-			'Zarude',
+			'Meltan', 'Melmetal', 'Zarude',
 		],
 		restricted: [
 			'Mewtwo',
@@ -79,6 +79,45 @@ export const Formats: {[k: string]: FormatData} = {
 				const species = this.dex.getSpecies(set.species);
 				if (this.ruleTable.isRestrictedSpecies(species)) n++;
 				if (n > 2) return [`You can only use up to two restricted legendary Pok\u00E9mon.`];
+			}
+		},
+	},
+	singlerestrictedgbu: {
+		effectType: 'ValidatorRule',
+		name: 'Single Restricted GBU',
+		desc: "The standard ruleset for official tournaments, but one Restricted Legendary is allowed",
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: ['Battle Bond',
+			'Mew',
+			'Celebi',
+			'Jirachi', 'Deoxys',
+			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
+			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
+			'Diancie', 'Hoopa', 'Volcanion',
+			'Magearna', 'Marshadow', 'Zeraora',
+			'Meltan', 'Melmetal', 'Zarude',
+		],
+		restricted: [
+			'Mewtwo',
+			'Lugia', 'Ho-Oh',
+			'Kyogre', 'Groudon', 'Rayquaza',
+			'Dialga', 'Palkia', 'Giratina',
+			'Reshiram', 'Zekrom', 'Kyurem',
+			'Xerneas', 'Yveltal', 'Zygarde',
+			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
+			'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
+		],
+		onValidateSet(set, format) {
+			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
+				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
+			}
+		},
+		onValidateTeam(team) {
+			let n = 0;
+			for (const set of team) {
+				const species = this.dex.getSpecies(set.species);
+				if (this.ruleTable.isRestrictedSpecies(species)) n++;
+				if (n > 1) return [`You can only use up to one restricted legendary Pok\u00E9mon.`];
 			}
 		},
 	},
