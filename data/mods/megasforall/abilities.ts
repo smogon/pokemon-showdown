@@ -1628,7 +1628,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		// the same thing happens manually onAfterMega and onSwitchIn, but it should not happen every time the Ability starts
 		onAfterMega(pokemon) {
 			pokemon.addVolatile('masquerade');
-			let masquerade;
 			let i;
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
@@ -1646,7 +1645,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			}
 			if (!pokemon.side.pokemon[i]) return;
 			if (pokemon === pokemon.side.pokemon[i]) return;
-			masquerade = pokemon.side.pokemon[i];
+			const masquerade = pokemon.side.pokemon[i];
 			this.add('-ability', pokemon, 'Masquerade');
 			pokemon.setAbility(masquerade.ability);
 			this.add('-message', `${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
@@ -1654,7 +1653,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		onSwitchIn(pokemon) {
 			pokemon.addVolatile('masquerade');
-			let masquerade;
 			let i;
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
@@ -1672,7 +1670,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			}
 			if (!pokemon.side.pokemon[i]) return;
 			if (pokemon === pokemon.side.pokemon[i]) return;
-			masquerade = pokemon.side.pokemon[i];
+			const masquerade = pokemon.side.pokemon[i];
 			this.add('-ability', pokemon, 'Masquerade');
 			pokemon.setAbility(masquerade.ability);
 			this.add('-message', `${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
