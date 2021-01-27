@@ -2094,7 +2094,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Minior-Blue", "[of] " + target);
+				this.add('message', 'Minior is translucent!');
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -2556,6 +2556,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.queue.cancelMove(pokemon);
 			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
 			this.hint(`Your move was aborted due to dynamax. Cheater.`);
+		},
+	},
+	echoedvoiceclone: {
+		duration: 2,
+		onStart() {
+			this.effectData.multiplier = 1;
+		},
+		onRestart() {
+			if (this.effectData.duration !== 2) {
+				this.effectData.duration = 2;
+				if (this.effectData.multiplier < 5) {
+					this.effectData.multiplier++;
+				}
+			}
 		},
 	},
 };

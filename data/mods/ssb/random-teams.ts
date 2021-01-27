@@ -510,7 +510,7 @@ export const ssbSets: SSBSets = {
 	},
 	Nol: {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
-		moves: ['Shadow Ball', 'Flamethrower', 'Trick Room'],
+		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
 		signatureMove: 'Mad Hacks',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', shiny: true,
 	},

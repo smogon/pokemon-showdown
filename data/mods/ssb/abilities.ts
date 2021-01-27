@@ -901,34 +901,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.refrigerateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
-		onStart(pokemon) {
-			pokemon.addVolatile('ic3peak');
-		},
-		condition: {
-			onStart(pokemon) {
-				this.effectData.numConsecutive = 0;
-				this.effectData.lastMove = '';
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (!pokemon.hasAbility('ic3peak')) {
-					pokemon.removeVolatile('ic3peak');
-					return;
+		onModifyMovePriority: -2,
+		onModifyMove(move, attacker) {
+			if (move.refrigerateBoosted) return;
+			move.onTry = function() {
+				this.field.addPseudoWeather('echoedvoiceclone');
+				this.field.pseudoWeather.echoedvoiceclone.lastmove = move.name;
+			};
+			move.basePowerCallback = function(pokemon, target, move) {
+				if (this.field.pseudoWeather.echoedvoiceclone) {
+					if (this.field.pseudoWeather.echoedvoiceclone.lastmove === move.name) {
+						return move.basePower * this.field.pseudoWeather.echoedvoiceclone.multiplier;
+					} else {
+						this.field.removePseudoWeather('echoedvoiceclone');
+					}
 				}
-				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectData.numConsecutive++;
-				} else {
-					this.effectData.numConsecutive = 0;
-				}
-				this.effectData.lastMove = move.id;
-			},
-			onBasePowerPriority: 24,
-			onBasePower(basePower, pokemon, target, move) {
-				if (move.refrigerateBoosted) return;
-				const dmgMod = [1, 2, 3, 4, 5];
-				const numConsecutive = this.effectData.numConsecutive > 4 ? 4 : this.effectData.numConsecutive;
-				return this.chainModify(dmgMod[numConsecutive]);
-			},
+				return move.basePower;
+			};
 		},
 		isNonstandard: "Custom",
 		gen: 8,

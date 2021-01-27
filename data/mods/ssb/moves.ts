@@ -1319,8 +1319,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "If the target Pokemon is evolved, this move will reduce the target to its first-stage form. If the target Pokemon is single-stage or is already in its first-stage form, this move deals 1.5x damage. Hits Ghost types.",
-		shortDesc: "Devolves evolved mons; 1.5x dmg to LC.",
+		desc: "If the target Pokemon is evolved, this move will reduce the target to its first-stage form. If the target Pokemon is single-stage or is already in its first-stage form, this move lowers all of the opponent's stats by 1. Hits Ghost types.",
+		shortDesc: "Devolves evolved mons;-1 all stats to LC.",
 		name: "Devolution Beam",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1333,12 +1333,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Psywave', target);
-		},
-		onBasePower(damage, source, target) {
-			let species = target.species;
-			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
-			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
-			if (isSingleStage) return this.chainModify(1.5);
 		},
 		onHit(target, source, move) {
 			let species = target.species;
@@ -1353,6 +1347,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.formeChange(prevo, this.effect);
 				target.canMegaEvo = null;
 				target.setAbility(ability);
+			} else {
+				this.boost({atk: -1, def: -1, spa: -1, spd: -1, spe: -1}, target, source);
 			}
 		},
 		secondary: null,
@@ -1551,8 +1547,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 120,
 		category: "Physical",
-		desc: "Paralyzes target, and take 40% recoil. If the user is fire-type, it burns the target and take 33% recoil.",
-		shortDesc: "Par + 40% recoil. Fire: burn + 33% recoil.",
+		desc: "Has a 25% chance to paralyze the target, and take 40% recoil. If the user is fire-type, it has a 25% chance to burn the target and take 33% recoil.",
+		shortDesc: "25% Par + 40% recoil.Fire: 25% burn + 33% recoil.",
 		name: "Epic Rage",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1568,14 +1564,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyMove(move, pokemon) {
 			if (!pokemon.types.includes('Fire')) return;
 			move.secondaries = [{
-				chance: 100,
+				chance: 25,
 				status: 'brn',
 			}];
 			move.recoil = [33, 100];
 		},
 		recoil: [4, 10],
 		secondary: {
-			chance: 100,
+			chance: 25,
 			status: "par",
 		},
 		target: "normal",
@@ -3234,8 +3230,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Defense, Special Attack, and Special Defense by 1 stage.",
-		shortDesc: "Raises the user's Defense, Sp. Atk, Sp. Def by 1.",
+		desc: "Raises the user's Defense, Special Attack, and Special Defense by 1 stage. Sets Trick Room.",
+		shortDesc: "+1 Def/Spa/Spd. Sets Trick Room.",
 		name: "Mad Hacks",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3247,6 +3243,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Acupressure', source);
+		},
+		onHit(target, source) {
+			this.field.addPseudoWeather('trickroom');
 		},
 		boosts: {
 			def: 1,
