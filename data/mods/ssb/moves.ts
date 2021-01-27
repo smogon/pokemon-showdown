@@ -3612,6 +3612,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, pokemon, move) {
 			target.addVolatile('trapped', pokemon, move, 'trapper');
+			pokemon.addVolatile('trapped', target, move, 'trapper');
 			pokemon.addVolatile('imprison', pokemon, move);
 			if (!pokemon.transformInto(target)) {
 				return false;
