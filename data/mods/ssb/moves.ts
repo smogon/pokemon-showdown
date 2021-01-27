@@ -3612,11 +3612,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, pokemon, move) {
 			target.addVolatile('trapped', pokemon, move, 'trapper');
-			pokemon.addVolatile('trapped', target, move, 'trapper');
 			pokemon.addVolatile('imprison', pokemon, move);
 			if (!pokemon.transformInto(target)) {
 				return false;
 			}
+			pokemon.addVolatile('trapped', target, move, 'trapper');
 			pokemon.addVolatile('ghostof1v1past', pokemon);
 			pokemon.volatiles['ghostof1v1past'].targetPokemon = target;
 		},
