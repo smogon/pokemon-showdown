@@ -4854,7 +4854,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (successes === 1) {
 				this.add(`c|${getName('tiki')}|truly a dumpster fire`);
-			} else if (successes >= 3) {
+			} else if (successes >= 4) {
 				this.add(`c|${getName('tiki')}|whos ${source.side.foe.name}?`);
 			}
 		},
