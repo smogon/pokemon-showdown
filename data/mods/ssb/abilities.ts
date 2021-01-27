@@ -904,11 +904,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMovePriority: -2,
 		onModifyMove(move, attacker) {
 			if (move.refrigerateBoosted) return;
-			move.onTry = function() {
+			move.onTry = function () {
 				this.field.addPseudoWeather('echoedvoiceclone');
 				this.field.pseudoWeather.echoedvoiceclone.lastmove = move.name;
 			};
-			move.basePowerCallback = function(pokemon, target, move) {
+			// eslint-disable-next-line @typescript-eslint/no-shadow
+			move.basePowerCallback = function (pokemon, target, move) {
 				if (this.field.pseudoWeather.echoedvoiceclone) {
 					if (this.field.pseudoWeather.echoedvoiceclone.lastmove === move.name) {
 						return move.basePower * this.field.pseudoWeather.echoedvoiceclone.multiplier;

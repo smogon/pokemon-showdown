@@ -3735,12 +3735,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
 			const bp = move.basePower + 20 * pokemon.positiveBoosts();
-			if (bp >= 140) return 140;
 			return bp;
 		},
 		category: "Special",
-		desc: "Randomly raises a stat (other than evasion and accuracy) by 1 before attacking. + 20 power for each of the user's stat boosts. Base Power maxes out at 140, regardless of boosts. Sound based move.",
-		shortDesc: "1 random boost, then attacks. +20 pow/boost.",
+		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0. User raises 2 random stats by 1 if it has less than 8 positive stat changes.",
+		shortDesc: "+20 power/boost. +1 2 random stats < 8 boosts.",
 		name: "Croak",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3752,19 +3751,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Splash', source);
-			const stats: BoostName[] = [];
-			let stat: BoostName;
-			const exclude: string[] = ['accuracy', 'evasion'];
-			for (stat in source.boosts) {
-				if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-					stats.push(stat);
+			if (source.positiveBoosts() < 8) {
+				const stats: BoostName[] = [];
+				let stat: BoostName;
+				const exclude: string[] = ['accuracy', 'evasion'];
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+						stats.push(stat);
+					}
 				}
-			}
-			if (stats.length) {
-				const randomStat = this.sample(stats);
-				const boost: SparseBoostsTable = {};
-				boost[randomStat] = 1;
-				this.boost(boost, source, source, move);
+				if (stats.length) {
+					let randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					if (stats.length > 1) {
+						stats.splice(stats.indexOf(randomStat), 1);
+						randomStat = this.sample(stats);
+						boost[randomStat] = 1;
+					}
+					this.boost(boost, source, source, move);
+				}
 			}
 			this.add('-anim', source, 'Hyper Voice', source);
 		},
@@ -4824,8 +4830,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "40% chance of setting up a layer of spikes. 40% chance of using Heal Bell. 40% chance of using Leech Seed. 40% chance of using Tailwind. 40% chance of using Octolock.",
-		shortDesc: "5 independent chances of rolling different effects.",
+		desc: "Randomly uses 1-5 different support moves.",
+		shortDesc: "Uses 1-5 support moves.",
 		name: "Right. On. Cue!",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4833,35 +4839,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1},
 		onHit(target, source) {
-			let effects = 0;
-			if (this.randomChance(4, 10)) {
-				this.useMove('Spikes', source, target);
-				effects++;
+			const supportMoves = [
+				'Wish', 'Heal Bell', 'Defog', 'Spikes', 'Taunt', 'Torment',
+				'Haze', 'Encore', 'Reflect', 'Light Screen', 'Sticky Web', 'Acupressure',
+				'Gastro Acid', 'Hail', 'Heal Block', 'Spite', 'Parting Shot', 'Trick Room',
+			];
+			const randomTurns = this.random(5) + 1;
+			let successes = 0;
+			for (let x = 1; x <= randomTurns; x++) {
+				const randomMove = this.sample(supportMoves);
+				supportMoves.splice(supportMoves.indexOf(randomMove), 1);
+				this.useMove(randomMove, target);
+				successes++;
 			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Heal Bell', source);
-				effects++;
-			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Leech Seed', source, target);
-				effects++;
-			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Tailwind', source, target);
-				effects++;
-			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Octolock', source);
-				effects++;
-			}
-			if (effects <= 0) {
+			if (successes === 1) {
 				this.add(`c|${getName('tiki')}|truly a dumpster fire`);
-			} else if (effects >= 3) {
+			} else if (successes >= 3) {
 				this.add(`c|${getName('tiki')}|whos ${source.side.foe.name}?`);
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 
