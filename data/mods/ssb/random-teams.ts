@@ -747,7 +747,7 @@ export const ssbSets: SSBSets = {
 	},
 	thewaffleman: {
 		species: 'Mr. Rime', ability: 'Prankster', item: 'Kasib Berry', gender: 'M',
-		moves: ['Iron Defense', 'Slack Off', 'Focus Blast'],
+		moves: ['Cotton Guard', 'Slack Off', 'Focus Blast'],
 		signatureMove: 'Ice Press',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},

@@ -4929,7 +4929,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Trick-or-Treat', source);
 		},
 		onHit(pokemon, source) {
-			this.directDamage(source.maxhp / 2, source, source);
+			this.directDamage(source.maxhp / 4, source, source);
 			pokemon.addVolatile('curse');
 			pokemon.addVolatile('healblock');
 		},
