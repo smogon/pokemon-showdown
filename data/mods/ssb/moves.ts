@@ -2146,7 +2146,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Exchanges places with the opponent, and then forcibly switches both. This move fails if either side has only one Pokemon left.",
-		shortDesc: "Exchanges places with the opponent. Force switches both.",
+		shortDesc: "Trades places with the target. Force switches both.",
 		name: "Satanic Panic",
 		isNonstandard: "Custom",
 		gen: 8,
