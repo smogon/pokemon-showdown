@@ -2587,7 +2587,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -4686,7 +4686,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
 				}
 			}
 		},
