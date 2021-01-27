@@ -3412,7 +3412,6 @@ export const commands: ChatCommands = {
 			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
 		],
 
-		
 		winfaction: 'win',
 		unwinfaction: 'win',
 		unwin: 'win',
@@ -3443,7 +3442,7 @@ export const commands: ChatCommands = {
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
 
 			let toGiveTo = [];
-			let buf = `${points < 0 ? points * -1: points} point${Chat.plural(points, 's were', ' was')} ${points <= 0 ? 'taken from ' : 'awarded to '} `;
+			let buf = `${points < 0 ? points * -1 : points} point${Chat.plural(points, 's were', ' was')} ${points <= 0 ? 'taken from ' : 'awarded to '} `;
 			if (cmd === 'winfaction' || cmd === 'unwinfaction') {
 				const game = this.requireGame(Mafia);
 				for (let faction of args) {
