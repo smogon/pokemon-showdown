@@ -2166,12 +2166,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.queue.cancelMove(target);
 
-			this.add('-message', `${source.name} and ${target.name} have switched places!`);
-
 			// No Regerts
 			const set = source.set;
 			set.species = source.species.name;
 			set.ability = source.ability;
+			const p1abilData = source.abilityData;
 			const p1hp = source.hp;
 			const p1status = source.status;
 			const p1statusData = source.statusData ? source.statusData : false;
@@ -2183,6 +2182,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const set2 = target.set;
 			set2.species = target.species.name;
 			set2.ability = target.ability;
+			const p2abilData = target.abilityData;
 			const p2hp = target.hp;
 			const p2status = target.status;
 			const p2statusData = target.statusData ? target.statusData : false;
@@ -2190,6 +2190,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const p2canZmove = target.m;
 			const p2canDyna = target.canDynamax;
 			const p2moveslots = target.baseMoveSlots;
+
+			source.addVolatile('gastroacid');
+			target.addVolatile('gastroacid');
 
 			let effect = this.effect;
 			// @ts-ignore
@@ -2209,6 +2212,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.canDynamax = p1canDyna;
 			// @ts-ignore
 			target.baseMoveSlots = p1moveslots;
+			target.abilityData = p1abilData;
 
 
 			effect = this.effect;
@@ -2229,9 +2233,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.canDynamax = p2canDyna;
 			// @ts-ignore
 			source.baseMoveSlots = p2moveslots;
+			source.abilityData = p2abilData;
 
 			target.forceSwitchFlag = true;
 			source.forceSwitchFlag = true;
+			this.add('-message', `${source.name} and ${target.name} have switched places!`);
 		},
 		isZ: "sodapop",
 		secondary: null,

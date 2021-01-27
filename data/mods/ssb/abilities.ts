@@ -486,8 +486,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// brouha
 	turbulence: {
-		desc: "While this Pokemon is on the field, all entry hazards and terrains are removed at the end of each turn, non-Flying-type Pokemon lose 6% of their HP, rounded down, at the end of each turn, and Flying-type Pokemon have their Defense multiplied by 1.5x.",
-		shortDesc: "Flying get 1.5x Def. End of each turn: clears terrain/hazards, non-Flying lose 6% HP.",
+		desc: "While this Pokemon is on the field, all entry hazards and terrains are removed at the end of each turn, non-Flying-type Pokemon lose 6% of their HP, rounded down, at the end of each turn.",
+		shortDesc: "End of each turn: clears terrain/hazards, non-Flying lose 6% HP.",
 		onStart(source) {
 			this.field.setWeather('turbulence');
 		},
@@ -1257,20 +1257,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.side.foe.removeSideCondition('degeneratormod');
 		},
 		name: "Degenerator",
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
-	// Lamp
-	candlewax: {
-		desc: "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints. This Pokemon is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. The effects of Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
-		shortDesc: "Soul-Heart + Levitate.",
-		onAnyFaintPriority: 1,
-		onAnyFaint() {
-			this.boost({spa: 1}, this.effectData.target);
-		},
-		// airborneness implemented in scripts.ts:Pokemon#isGrounded
-		name: "Candlewax",
 		isNonstandard: "Custom",
 		gen: 8,
 	},

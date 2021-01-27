@@ -2153,12 +2153,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Turbulence',
 		effectType: 'Weather',
 		duration: 0,
-		onModifyDefPriority: 10,
-		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Flying') && this.field.isWeather('turbulence')) {
-				return this.modify(def, 1.5);
-			}
-		},
 		onStart(battle, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
