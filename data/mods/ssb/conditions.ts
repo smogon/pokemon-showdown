@@ -669,6 +669,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c|${getName('Gimmick')}|I did nothing wrong (but I got on the blacklist)`);
 		},
+		// Unburden Innate
+		onAfterUseItem(item, pokemon) {
+			if (pokemon !== this.effectData.target) return;
+			pokemon.addVolatile('unburden');
+		},
+		onTakeItem(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('unburden');
+		},
+		desc: "If this Pokemon loses its held item for any reason, its Speed is doubled. This boost is lost if it switches out or gains a new item or Ability.",
+		shortDesc: "Speed is doubled on held item loss; boost is lost if it switches, gets new item/Ability.",
 	},
 	gmars: {
 		noCopy: true,
@@ -1810,7 +1823,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	heavyhailstorm: {
 		name: 'HeavyHailstorm',
 		effectType: 'Weather',
-		duration: 3,
+		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
 			if (move.type === 'Steel' && move.category !== 'Status') {
@@ -1845,9 +1858,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					status: 'frz',
 				});
 			}
-		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 		onResidualOrder: 1,
 		onResidual() {

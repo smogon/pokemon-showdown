@@ -278,6 +278,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Alpha
+	iceage: {
+		desc: "The weather becomes an extremely heavy hailstorm lasting for 3 turns that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
+		shortDesc: "Steel fail. 1.5x Ice. Moves have freeze chance.",
+		onStart(source) {
+			this.field.setWeather('heavyhailstorm');
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('iceage')) {
+					this.field.weatherData.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		name: "Ice Age",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Annika
 	overprotective: {
 		desc: "If this Pokemon is the last unfainted team member, its Speed is raised by 1 stage.",

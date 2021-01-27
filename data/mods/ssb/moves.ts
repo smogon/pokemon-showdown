@@ -356,10 +356,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Alpha
 	blisteringiceage: {
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The weather becomes an extremely heavy hailstorm lasting for 3 turns that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
-		shortDesc: "3 turns. Heavy Hailstorm. Steel fail. 1.5x Ice.",
+		basePower: 190,
+		category: "Special",
+		desc: "User's ability becomes Ice Age, and the weather becomes an extremely heavy hailstorm lasting for 3 turns that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
+		shortDesc: "User's ability becomes Ice Age.",
 		name: "Blistering Ice Age",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -375,10 +375,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', target, 'Subzero Slammer', target);
 			this.add('-anim', source, 'Subzero Slammer', source);
 		},
+		onAfterMove(source) {
+			source.baseAbility = 'iceage' as ID;
+			source.setAbility('iceage');
+			this.add('-ability', source, source.getAbility().name, '[from] move: Blistering Ice Age');
+		},
 		isZ: "caioniumz",
 		secondary: null,
-		weather: 'heavyhailstorm',
-		target: "all",
+		target: "normal",
 		type: "Ice",
 	},
 
