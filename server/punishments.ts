@@ -955,16 +955,15 @@ export const Punishments = new class {
 		const punishment = ['BATTLEBAN', id, expireTime, ...reason] as Punishment;
 
 		// Handle tournaments the user was in before being battle banned
-		for (const games of user.games.keys()) {
-			const game = Rooms.get(games)!.getGame(Tournaments.Tournament);
-			if (!game) continue; // this should never happen
+		for (const room of Rooms.rooms.values()) {
+			const game = room.getGame(Tournaments.Tournament);
+			if (!game || !user.inGame(room)) continue;
 			if (game.isTournamentStarted) {
 				game.disqualifyUser(user.id, null, null);
 			} else if (!game.isTournamentStarted) {
 				game.removeUser(user.id);
 			}
 		}
-
 		return Punishments.roomPunish("battle", user, punishment);
 	}
 	unbattleban(userid: string) {
@@ -1007,8 +1006,7 @@ export const Punishments = new class {
 		const groupchatsCreated = [];
 		const targetUser = Users.get(user);
 		if (targetUser) {
-			for (const roomid of targetUser.inRooms || []) {
-				const targetRoom = Rooms.get(roomid);
+			for (const targetRoom of targetUser.getRooms()) {
 				if (!targetRoom?.roomid.startsWith('groupchat-')) continue;
 				if (targetRoom.game && targetRoom.game.removeBannedUser) {
 					targetRoom.game.removeBannedUser(targetUser);
@@ -1351,8 +1349,8 @@ export const Punishments = new class {
 
 	checkName(user: User, userid: string, registered: boolean) {
 		if (userid.startsWith('guest')) return;
-		for (const roomid of user.inRooms) {
-			Punishments.checkNewNameInRoom(user, userid, roomid);
+		for (const room of user.getRooms()) {
+			Punishments.checkNewNameInRoom(user, userid, room.roomid);
 		}
 		let punishment = Punishments.userids.get(userid);
 		const battleban = Punishments.isBattleBanned(user);

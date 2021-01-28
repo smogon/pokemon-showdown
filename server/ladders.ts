@@ -97,8 +97,8 @@ class Ladder extends LadderStore {
 			connection.popup(`You are barred from starting any new games until your battle ban expires.`);
 			return null;
 		}
-		const gameCount = user.games.size;
-		if (Monitor.countConcurrentBattle(gameCount, connection)) {
+		const games = user.getGames();
+		if (Monitor.countConcurrentBattle(games.length, connection)) {
 			return null;
 		}
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
@@ -402,29 +402,13 @@ class Ladder extends LadderStore {
 		return userSearches;
 	}
 	static updateSearch(user: User, connection: Connection | null = null) {
-		let games: {[k: string]: string} | null = {};
-		let atLeastOne = false;
-		for (const roomid of user.games) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				Monitor.warn(`while searching, room ${roomid} expired for user ${user.id} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
-				user.games.delete(roomid);
-				continue;
-			}
-			const game = room.game;
-			if (!game) {
-				Monitor.warn(`while searching, room ${roomid} has no game for user ${user.id} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
-				user.games.delete(roomid);
-				continue;
-			}
-			games[roomid] = game.title + (game.allowRenames ? '' : '*');
-			atLeastOne = true;
-		}
-		if (!atLeastOne) games = null;
-		const searching = Ladders.getSearches(user);
+		const gamesEntries = user.getGames().map(game => (
+			[game.room.roomid, game.title + (game.allowRenames ? '' : '*')]
+		));
+
 		(connection || user).send(`|updatesearch|` + JSON.stringify({
-			searching,
-			games,
+			searching: Ladders.getSearches(user),
+			games: gamesEntries.length ? Object.fromEntries(gamesEntries) : null,
 		}));
 	}
 	hasSearch(user: User) {

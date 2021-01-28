@@ -510,7 +510,7 @@ export const commands: ChatCommands = {
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
-		if (!(targetUser.id in room.users) && !globalWarn) {
+		if (!targetUser.inRoom(room) && !globalWarn) {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.roomid}.`);
 		}
 		if (publicReason.length > MAX_REASON_LENGTH) {
@@ -578,10 +578,10 @@ export const commands: ChatCommands = {
 		if (targetRoom.settings.isPrivate || targetRoom.settings.isPersonal) {
 			return this.errorReply(`The room "${target}" is not public.`);
 		}
-		if (targetUser.inRooms.has(targetRoom.roomid)) {
+		if (targetUser.inRoom(targetRoom)) {
 			return this.errorReply(`User ${targetUser.name} is already in the room ${targetRoom.title}!`);
 		}
-		if (!targetUser.inRooms.has(room.roomid)) {
+		if (!targetUser.inRoom(targetRoom)) {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.roomid}.`);
 		}
 		targetUser.leaveRoom(room.roomid);
@@ -623,7 +623,7 @@ export const commands: ChatCommands = {
 			return this.addModAction(`${targetUser.name} would be muted by ${user.name} ${problem}. (${target})`);
 		}
 
-		if (targetUser.id in room.users) {
+		if (targetUser.inRoom(room)) {
 			targetUser.popup(`|modal|${user.name} has muted you in ${room.roomid} for ${Chat.toDurationString(muteDuration)}. ${target}`);
 		}
 		this.addModAction(`${targetUser.name} was muted by ${user.name} for ${Chat.toDurationString(muteDuration)}.${(target ? ` (${target})` : ``)}`);
@@ -717,7 +717,7 @@ export const commands: ChatCommands = {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} ${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was roombanned from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
-		if (targetUser.id in room.users || user.can('lock')) {
+		if (targetUser.inRoom(room) || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
 				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
@@ -1814,7 +1814,7 @@ export const commands: ChatCommands = {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ''} was blacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
-		if (targetUser.id in room.users || user.can('lock')) {
+		if (targetUser.inRoom(room) || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Utils.escapeHTML(user.name)} has blacklisted you from the room ${room.roomid}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Utils.escapeHTML(target)}</p>` +
 				`<p>To appeal the ban, PM the staff member that blacklisted you${room.persist ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
