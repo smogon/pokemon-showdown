@@ -370,8 +370,8 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
-			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				return this.parse(`/ar view keys`);
+			for (const p of pages) {
+				this.refreshPage(`autofilter-${room.roomid}-${p}`);
 			}
 		},
 		ignore(target, room, user) {
