@@ -668,12 +668,12 @@ export class User extends Chat.MessageContext {
 	 */
 	async rename(name: string, token: string, newlyRegistered: boolean, connection: Connection) {
 		let userid = toID(name);
-		if (userid !== this.id) {
+		if (userid !== this.id && this.named) {
 			for (const game of this.getGames()) {
-				if (game.ended) continue;
-				if (game.allowRenames || !this.named) continue;
-				this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
-				return false;
+				if (!game.allowRenames) {
+					this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
+					return false;
+				}
 			}
 		}
 
@@ -1028,8 +1028,8 @@ export class User extends Chat.MessageContext {
 	getGames() {
 		const games: RoomGame[] = [];
 		for (const curRoom of Rooms.rooms.values()) {
-			if (this.inGame(curRoom)) {
-				games.push(curRoom.game!);
+			if (curRoom.game && this.id in curRoom.game.playerTable && !curRoom.game.ended) {
+				games.push(curRoom.game);
 			}
 		}
 		return games;
@@ -1343,7 +1343,7 @@ export class User extends Chat.MessageContext {
 		// cancel tour challenges
 		// no need for a popup because users can't change their name while in a tournament anyway
 		for (const game of this.getGames()) {
-			(game as any)?.cancelChallenge?.(this);
+			(game as any).cancelChallenge?.(this);
 		}
 	}
 	updateReady(connection: Connection | null = null) {
@@ -1493,8 +1493,7 @@ export class User extends Chat.MessageContext {
 	destroy() {
 		// deallocate user
 		for (const game of this.getGames()) {
-			if (!game || game.ended) continue;
-			if (game.forfeit) game.forfeit(this);
+			game.forfeit?.(this);
 		}
 		this.clearChatQueue();
 		this.destroyPunishmentTimer();
