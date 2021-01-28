@@ -50,7 +50,7 @@ import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPerm
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
-const CONNECTION_EXPIRY_TIME = 3 * 60 * MINUTES;
+const CONNECTION_EXPIRY_TIME = 24 * 60 * MINUTES;
 
 import type {StreamWorker} from '../lib/process-manager';
 
