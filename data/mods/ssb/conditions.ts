@@ -754,17 +754,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('INStruct')}|lets drink to a great time!`);
+			this.add(`c|${getName('instruct')}|lets drink to a great time!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('INStruct')}|ya know, why __do__ you always flood my dms?`);
-			this.add(`c|${getName('INStruct')}|whatever im just gonna go get some more coke`);
+			this.add(`c|${getName('Swagn')}|Hey, instruct. Here's those 15,000 walls of text you ordered. :3`);
+			this.add(`c|${getName('instruct')}|ya know, why __do__ you always flood my dms?`);
+			this.add(`c|${getName('instruct')}|whatever im just gonna go get some more coke`);
 		},
 		onFaint() {
-			this.add(`c|${getName('INStruct')}|wait did we run out of coca-cola?`);
-			this.add(`c|${getName('INStruct')}|laaaaaaaaaaame`);
-			this.add(`c|${getName('INStruct')}|yall suck im going home`);
+			this.add(`c|${getName('instruct')}|wait did we run out of coca-cola?`);
+			this.add(`c|${getName('instruct')}|laaaaaaaaaaame`);
+			this.add(`c|${getName('instruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
 		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",

@@ -2140,7 +2140,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
-	// Instruct
+	// instruct
 	satanicpanic: {
 		accuracy: true,
 		basePower: 0,
