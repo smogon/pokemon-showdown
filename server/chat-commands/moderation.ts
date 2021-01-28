@@ -1625,7 +1625,7 @@ export const commands: ChatCommands = {
 		if (!targetUser && !force) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
-		if (targetUser?.id !== toID(this.inputUsername) && !force) {
+		if (targetUser && targetUser.id !== toID(this.inputUsername) && !force) {
 			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
 		this.checkCan('forcerename', userid);
@@ -1640,7 +1640,7 @@ export const commands: ChatCommands = {
 			publicReason = target.substr(0, privateIndex).trim();
 		}
 		const reasonText = publicReason ? ` (${publicReason})` : `.`;
-		this.privateGlobalModAction(`${targetUser.name} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
+		this.privateGlobalModAction(`${targetUser?.name || userid} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
 		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, target ? `${publicReason} ${privateReason}` : ``);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
@@ -1652,7 +1652,7 @@ export const commands: ChatCommands = {
 			targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		}
 		const duration = week ? 7 * 24 * 60 * 60 * 1000 : 48 * 60 * 60 * 1000;
-		await Punishments.namelock(targetUser, Date.now() + duration, null, false, publicReason);
+		await Punishments.namelock(userid, Date.now() + duration, null, false, publicReason);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room?.battle) this.parse('/savereplay forpunishment');
 
