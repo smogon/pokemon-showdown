@@ -949,19 +949,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// grimAuxiliatrix
 	aluminumalloy: {
-		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages. -1 Speed, +1 Def/Sp.Def when hit with a Water-type attacking move or switching into rain.",
+		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages. -1 Speed, +1 Def/Sp.Def when hit with a Water-type attacking move, switching into rain or starting rain while this Pokemon is on the field.",
 		shortDesc: "Regenerator+Clear Body.+1 def/spd,-1 spe in rain/hit by water",
 		name: "Aluminum Alloy",
 		onSwitchIn(pokemon) {
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
-				this.add('-message', `grimAuxiliatrix is rusting...`);
+				this.add('-message', `${pokemon.name} is rusting...`);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
 				this.boost({def: 1, spd: 1, spe: -1}, target, target);
-				this.add('-message', `grimAuxiliatrix is rusting...`);
+				this.add('-message', `${target.name} is rusting...`);
+			}
+		},
+		onAnyWeatherStart() {
+			const pokemon = this.effectData.target;
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
+				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
+				this.add('-message', `${pokemon.name} is rusting...`);
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -2227,18 +2234,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Modified various abilities to support Alpha's move & pilo's abiility
 	deltastream: {
 		inherit: true,
-		desc: "On switch-in, the weather becomes strong winds that remove the weaknesses of the Flying type from Flying-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Desolate Land, Heavy Hailstorm, or Primordial Sea.",
-		shortDesc: "On switch-in, strong winds begin until this Ability is not active in battle.",
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'deltastream' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 	},
 	desolateland: {
 		inherit: true,
-		desc: "On switch-in, the weather becomes extremely harsh sunlight that prevents damaging Water-type moves from executing, in addition to all the effects of Sunny Day. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Heavy Hailstorm, or Primordial Sea.",
-		shortDesc: "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'desolateland' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+	},
+	primordialsea: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 	},
 	forecast: {

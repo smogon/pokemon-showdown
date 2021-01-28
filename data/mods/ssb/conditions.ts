@@ -1838,8 +1838,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'Heavy Hailstorm');
-			this.effectData.source = source;
+			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'The hail became extremely chilling!');
 		},
 		onModifyMove(move, pokemon, target) {
@@ -1858,8 +1857,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Heavy Hailstorm', '[upkeep]');
-			this.add('-message', 'Hail is crashing down.');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
@@ -1869,7 +1867,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-			this.add('-message', 'The Hail ended.');
 		},
 	},
 	// Forever Winter Hail support for piloswine gripado
@@ -1878,11 +1875,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		effectType: 'Weather',
 		duration: 0,
 		onStart(battle, source, effect) {
-			if (effect?.effectType === 'Ability') {
-				this.add('-weather', 'Winter Hail', '[from] ability: ' + effect, '[of] ' + source);
-			} else {
-				this.add('-weather', 'Winter Hail');
-			}
+			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
@@ -1890,8 +1883,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Winter Hail', '[upkeep]');
-			this.add('-message', 'Hail is crashing down.');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
@@ -1900,7 +1892,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-			this.add('-message', 'The Hail ended.');
 		},
 	},
 	raindrop: {
