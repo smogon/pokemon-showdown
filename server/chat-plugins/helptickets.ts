@@ -362,27 +362,40 @@ export class HelpTicket extends Rooms.RoomGame {
 		user = toID(user);
 		return Punishments.roomUnpunish('staff', user, 'TICKETBAN');
 	}
-	static checkBanned(user: User) {
+	static checkBanned(user: User | ID) {
 		const staffRoom = Rooms.get('staff');
 		if (!staffRoom) return;
-		const punishment = Punishments.getRoomPunishType(staffRoom, user.id);
-		if (punishment === 'TICKETBAN') {
-			return `You are banned from creating tickets.`;
+		const ips = [];
+		if (typeof user === 'object') {
+			ips.push(...(user as User).ips);
+			ips.unshift((user as User).latestIp);
+			user = (user as User).id;
+		}
+		const punishment = Punishments.roomUserids.get('staff')?.get(user);
+		if (punishment?.[0] === 'TICKETBAN') {
+			return punishment;
 		}
 		// skip if the user is autoconfirmed and on a shared ip
-		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
+		// [0] is forced to be the latestIp
+		if (Punishments.sharedIps.has(ips[0])) return false;
 
-		for (const ip of user.ips) {
+		for (const ip of ips) {
 			const curPunishment = Punishments.roomIps.get('staff')?.get(ip);
 			if (curPunishment && curPunishment[0] === 'TICKETBAN') {
-				const [, userid,, reason] = curPunishment;
-				return (
-					`You are banned from creating help tickets` +
-					`${userid !== user.id ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
-				);
+				return curPunishment;
 			}
 		}
 		return false;
+	}
+	static getBanMessage(userid: ID, punishment: Punishment) {
+		if (userid !== punishment[0]) {
+			const [, punished,, reason] = punishment;
+			return (
+				`You are banned from creating help tickets` +
+				`${punished !== userid ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
+			);
+		}
+		return `You are banned from creating help tickets.`;
 	}
 }
 
@@ -605,8 +618,10 @@ export const pages: PageTable = {
 			this.title = this.tr`Request Help`;
 			let buf = `<div class="pad"><h2>${this.tr`Request help from global staff`}</h2>`;
 
-			const banMsg = HelpTicket.checkBanned(user);
-			if (banMsg) return connection.popup(banMsg);
+			const ticketBan = HelpTicket.checkBanned(user);
+			if (ticketBan) {
+				return connection.popup(HelpTicket.getBanMessage(user.id, ticketBan));
+			}
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
@@ -1096,8 +1111,10 @@ export const commands: ChatCommands = {
 				return this.popupReply(this.tr`Global staff can't make tickets. They can only use the form for reference.`);
 			}
 			if (!user.named) return this.popupReply(this.tr`You need to choose a username before doing this.`);
-			const banMsg = HelpTicket.checkBanned(user);
-			if (banMsg) return this.popupReply(banMsg);
+			const ticketBan = HelpTicket.checkBanned(user);
+			if (ticketBan) {
+				return this.popupReply(HelpTicket.getBanMessage(user.id, ticketBan));
+			}
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
@@ -1364,17 +1381,17 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help helpticket unban');
 
 			this.checkCan('lock');
-			const targetUser = Users.get(target, true);
-			if (!targetUser) return this.errorReply(`User not found.`);
-			const banned = HelpTicket.checkBanned(targetUser);
+			target = toID(target);
+			const targetID: ID = Users.get(target)?.id || target as ID;
+			const banned = HelpTicket.checkBanned(targetID);
 			if (!banned) {
-				return this.errorReply(this.tr`${targetUser ? targetUser.name : target} is not ticket banned.`);
+				return this.errorReply(this.tr`${target} is not ticket banned.`);
 			}
 
-			const affected = HelpTicket.unban(targetUser);
+			const affected = HelpTicket.unban(targetID);
 			this.addModAction(`${affected} was ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", toID(target));
-			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
+			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);
 		},
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
