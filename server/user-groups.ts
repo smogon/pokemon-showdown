@@ -121,7 +121,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		const symbol = auth.getEffectiveSymbol(user);
 
-		let targetSymbol = target as GroupSymbol;
+		let targetSymbol = target as GroupSymbol | string;
 		const targetID = toID(target);
 		// if it's there after a toID, probably not a symbol
 		if (targetID) {
@@ -164,7 +164,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				jurisdiction = 'u';
 			}
 		}
-		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol);
+		return Auth.hasJurisdiction(symbol, jurisdiction, targetSymbol as GroupSymbol);
 	}
 	static atLeast(symbol: EffectiveGroupSymbol, symbol2: EffectiveGroupSymbol) {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
