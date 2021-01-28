@@ -336,8 +336,14 @@ export const commands: ChatCommands = {
 	permissions: {
 		clear: 'set',
 		set(target, room, user) {
+			let [perm, rank, roomid] = target.split(',').map(item => item.trim().toLowerCase());
+			if (roomid) {
+				const tarRoom = Rooms.search(roomid);
+				if (!tarRoom) return this.errorReply(`Room not found.`);
+				room = tarRoom;
+				this.room = room;
+			}
 			room = this.requireRoom();
-			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (rank === 'default') rank = '';
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
@@ -374,22 +380,13 @@ export const commands: ChatCommands = {
 
 			if (!rank) rank = `default`;
 			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
+			this.refreshPage(`permissions-${room.roomid}`);
 			return this.privateModAction(`${user.name} set the required rank for ${perm} to ${rank}.`);
 		},
 		sethelp: [
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
 			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
-
-		clickset(target, room, user) {
-			const [roomid, newTarget] = Utils.splitFirst(target, ',');
-			this.room = Rooms.get(roomid) || null;
-			if (!this.room) return this.errorReply(`must specify roomid`);
-			this.pmTarget = null;
-			void this.parse(`/permissions set ${newTarget}`);
-			return this.parse(`/join view-permissions-${this.room.roomid}`);
-		},
-
 		view(target, room, user) {
 			room = this.requireRoom();
 			return this.parse(`/join view-permissions-${room.roomid}`);
@@ -1562,7 +1559,7 @@ export const pages: PageTable = {
 	permissions(args, user, connection) {
 		this.title = `[Permissions]`;
 		const room = this.requireRoom();
-		if (!room.auth.atLeast(user, '%')) return `<h2>Access denied.</h2>`;
+		this.checkCan('mute', null, room);
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
 		const permissions = room.settings.permissions || {};
@@ -1579,7 +1576,7 @@ export const pages: PageTable = {
 				buf += roomGroups.map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
-						Utils.html`<button class="button" name="send" value="/permissions clickset ${room.roomid}, ${permission}, ${group}">${group}</button>`
+						Utils.html`<button class="button" name="send" value="/permissions set ${permission}, ${group}, ${room.roomid}">${group}</button>`
 				)).join(' ');
 			} else {
 				buf += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${requiredRank}</button>`;
