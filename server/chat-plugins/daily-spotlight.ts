@@ -1,4 +1,5 @@
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
@@ -217,6 +218,10 @@ export const commands: ChatCommands = {
 		const html = await renderSpotlight(description, image);
 
 		this.sendReplyBox(html);
+		if (!this.broadcasting && user.can('ban', null, room, 'daily')) {
+			const code = Utils.escapeHTML(description).replace(/\n/g, '<br />');
+			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/setdaily ${key},${image},${code}</code></details>`);
+		}
 		room.update();
 	},
 	vsl: 'viewspotlights',
@@ -229,10 +234,9 @@ export const commands: ChatCommands = {
 
 	dailyhelp() {
 		this.sendReply(
-			`|html|<details class="readmore"><summary>Daily spotlights plugin:</summary>` +
-			`<code>/daily [name]</code>: shows the daily spotlight.<br />` +
+			`|html|<details class="readmore"><summary><code>/daily [name]</code>: shows the daily spotlight.<br />` +
 			`<code>!daily [name]</code>: shows the daily spotlight to everyone. Requires: + % @ # &<br />` +
-			`<code>/setdaily [name], [image], [description]</code>: sets the daily spotlight. Image can be left out. Requires: % @ # &<br />` +
+			`<code>/setdaily [name], [image], [description]</code>: sets the daily spotlight. Image can be left out. Requires: % @ # &</summary>` +
 			`<code>/queuedaily [name], [image], [description]</code>: queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # &<br />` +
 			`<code>/queuedailyat [name], [queue number], [image], [description]</code>: inserts a daily spotlight into the queue at the specified number (starting from 1). Requires: % @ # &<br />` +
 			`<code>/replacedaily [name], [queue number], [image], [description]</code>: replaces the daily spotlight queued at the specified number. Requires: % @ # &<br />` +

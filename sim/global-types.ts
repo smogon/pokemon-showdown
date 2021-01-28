@@ -74,8 +74,8 @@ type MoveSource = string;
 
 namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
-	"(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC Uber" | "LC";
-	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC Uber" | "LC";
+	"(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC";
+	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
 
@@ -290,7 +290,9 @@ interface BattleScriptsData {
 		this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
 	) => SpreadMoveDamage;
-	trySpreadMoveHit?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean;
+	trySpreadMoveHit?: (
+		this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove, notActive?: boolean
+	) => boolean;
 	useMove?: (
 		this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null,
 		sourceEffect?: Effect | null, zMove?: string, maxMove?: string
@@ -308,6 +310,7 @@ interface ModdedBattleSide {
 interface ModdedBattlePokemon {
 	/** TODO: remove, completely meaningless */
 	inherit?: true;
+	lostItemForDelibird?: Item | null;
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number;
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number;
 	getAbility?: (this: Pokemon) => Ability;
@@ -329,11 +332,12 @@ interface ModdedBattlePokemon {
 	setAbility?: (
 		this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean
 	) => string | false;
-	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean;
+	setItem?: (this: Pokemon, item: string | Item, source?: Pokemon, effect?: Effect) => boolean;
 	setStatus?: (
 		this: Pokemon, status: string | Condition, source: Pokemon | null,
 		sourceEffect: Effect | null, ignoreImmunities: boolean
 	) => boolean;
+	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean;
 	ignoringAbility?: (this: Pokemon) => boolean;
 	ignoringItem?: (this: Pokemon) => boolean;
 
@@ -372,6 +376,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 		this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean
 	) => void;
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
+	nextTurn?: (this: Battle) => void;
 	runMove?: (
 		this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null,
 		zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon
@@ -503,7 +508,7 @@ namespace RandomTeamsTypes {
 		statusCure?: number;
 	}
 	export interface FactoryTeamDetails {
-		megaCount: number;
+		megaCount?: number;
 		zCount?: number;
 		forceResult: boolean;
 		weather?: string;
@@ -513,6 +518,7 @@ namespace RandomTeamsTypes {
 		has: {[k: string]: number};
 		weaknesses: {[k: string]: number};
 		resistances: {[k: string]: number};
+		gigantamax?: boolean;
 	}
 	export interface RandomSet {
 		name: string;
@@ -542,5 +548,6 @@ namespace RandomTeamsTypes {
 		ivs: SparseStatsTable;
 		nature: string;
 		moves: string[];
+		gigantamax?: boolean;
 	}
 }

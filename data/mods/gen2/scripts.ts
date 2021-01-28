@@ -328,9 +328,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage = this.getDamage(pokemon, target, moveData);
 
 			if ((damage || damage === 0) && !target.fainted) {
-				if (move.noFaint && damage >= target.hp) {
-					damage = target.hp - 1;
-				}
 				damage = this.damage(damage, target, pokemon, move);
 				if (!(damage || damage === 0)) {
 					this.debug('damage interrupted');
@@ -579,10 +576,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		let unboosted = false;
 		let noburndrop = false;
 
-		// The move is a critical hit. Several things happen here.
 		if (isCrit) {
-			// Level is doubled for damage calculation.
-			level *= 2;
 			if (!suppressMessages) this.add('-crit', target);
 			// Stat level modifications are ignored if they are neutral to or favour the defender.
 			// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
@@ -625,9 +619,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			defense = typeIndexes[attackerLastType] || 1;
 			level = typeIndexes[defenderLastType] || 1;
-			if (isCrit) {
-				level *= 2;
-			}
 			this.hint("Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.", true);
 		}
 
@@ -654,7 +645,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = Math.floor(damage / 50);
+		if (isCrit) damage *= 2;
+		damage = Math.floor(this.runEvent('ModifyDamage', attacker, defender, move, damage));
+		damage = this.clampIntRange(damage, 1, 997);
 		damage += 2;
 
 		// Weather modifiers

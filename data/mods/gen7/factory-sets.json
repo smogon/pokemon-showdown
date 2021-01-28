@@ -4447,7 +4447,7 @@
 				"species": "Gligar",
 				"item": ["Eviolite"],
 				"ability": ["Immunity"],
-				"evs": {"spa": 252, "def": 156, "spd": 100},
+				"evs": {"hp": 252, "def": 156, "spd": 100},
 				"nature": "Impish",
 				"moves": [["Stealth Rock", "Defog"], ["Earthquake"], ["Toxic", "U-turn", "Knock Off"], ["Roost"]]
 			}]
@@ -5321,7 +5321,7 @@
 				"species": "Tsareena",
 				"item": ["Meadow Plate"],
 				"ability": ["Queenly Majesty"],
-				"evs": {"atk": 252, "Def": 4, "spe": 252},
+				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Rapid Spin"], ["Power Whip"], ["Knock Off"], ["Synthesis"]]
 			}]

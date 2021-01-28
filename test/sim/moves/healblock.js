@@ -215,4 +215,24 @@ describe('Heal Block [Gen 4]', function () {
 		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
+
+	it('should fail indepedently on each target', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'porygon2', moves: ['sleeptalk']},
+			{species: 'marshadow', moves: ['sleeptalk']},
+			{species: 'mew', moves: ['sleeptalk']},
+		], [
+			{species: 'zapdos', moves: ['sleeptalk']},
+			{species: 'skitty', moves: ['healblock']},
+		]]);
+
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move healblock');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move healblock');
+		assert.equal(battle.p2.active[1].moveLastTurnResult, false, 'should fail when fails on all targets');
+		assert.equal(battle.log[battle.lastMoveLine + 1].startsWith('|-fail'), true);
+		assert.equal(battle.log[battle.lastMoveLine + 2].startsWith('|-fail'), true);
+		assert.notEqual(battle.log[battle.lastMoveLine + 3].startsWith('|-fail'), true);
+		battle.makeChoices('move sleeptalk, switch 3', 'move sleeptalk, move healblock');
+		assert.equal(battle.p2.active[1].moveLastTurnResult, true, 'should succeed if succeeds on at least one target');
+	});
 });

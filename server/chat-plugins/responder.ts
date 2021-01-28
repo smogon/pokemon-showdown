@@ -440,12 +440,13 @@ export const pages: PageTable = {
 		const canChange = user.can('ban', null, room);
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
+			if (extra) extra = extra.filter(Boolean);
 			let button = `<button class="button" name="send" value="/join view-autoresponder-${room.roomid}-${type}`;
-			button += `${extra ? `-${extra.join('-')}` : ''}" style="float: right">`;
+			button += `${extra?.length ? `-${extra.join('-')}` : ''}" style="float: right">`;
 			button += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 			return button;
 		};
-		const back = `<br /><a roomid="view-autoresponder-${room.roomid}-">Back to all</a>`;
+		const back = `<br /><a roomid="view-autoresponder-${room.roomid}">Back to all</a>`;
 		switch (args[0]) {
 		case 'stats':
 			args.shift();
