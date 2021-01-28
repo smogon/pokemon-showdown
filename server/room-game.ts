@@ -45,6 +45,7 @@ export class RoomGamePlayer {
 	unlinkUser() {
 		if (!this.id) return;
 		const user = Users.getExact(this.id);
+		delete this.game.playerTable[this.id];
 		this.id = '';
 		if (!this.game.isSubGame) user?.updateGames();
 	}
