@@ -220,6 +220,10 @@ export const Utils = new class Utils {
 		return arr;
 	}
 
+	randomElement<T>(arr: T[]): T {
+		return this.shuffle(arr)[0];
+	}
+
 	/** Forces num to be an integer (between min and max). */
 	clampIntRange(num: any, min?: number, max?: number): number {
 		if (typeof num !== 'number') num = 0;

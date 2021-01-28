@@ -7,7 +7,7 @@ import {FS} from '../../lib/fs';
 
 const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
 
-export let hangmanData: {[roomid: string]: {[question: string]: string[]}} = {};
+export let hangmanData: {[roomid: string]: {[phrase: string]: string[]}} = {};
 
 try {
 	hangmanData = JSON.parse(FS(HANGMAN_FILE).readSync());
@@ -223,27 +223,27 @@ export class Hangman extends Rooms.RoomGame {
 			this.save();
 			throw new Chat.ErrorMessage(`The room ${room} has no saved hangman words.`);
 		}
-		const shuffled = Utils.shuffle(Object.keys(hangmanData[room]))[0];
+		const shuffled = Utils.randomElement(Object.keys(hangmanData[room]));
 		const hints = hangmanData[room][shuffled];
 		return {
 			question: shuffled,
-			hint: Utils.shuffle(hints)[0],
+			hint: Utils.randomElement(hints),
 		};
 	}
 	static validateParams(params: string[]) {
-		const word = params[0].replace(/[^A-Za-z '-]/g, '');
-		if (word.replace(/ /g, '').length < 1) throw new Chat.ErrorMessage("Enter a valid word");
-		if (word.length > 30) throw new Chat.ErrorMessage("Phrase must be less than 30 characters.");
-		if (word.split(' ').some(w => w.length > 20)) {
+		const phrase = params[0].replace(/[^A-Za-z '-]/g, '');
+		if (phrase.replace(/ /g, '').length < 1) throw new Chat.ErrorMessage("Enter a valid word");
+		if (phrase.length > 30) throw new Chat.ErrorMessage("Phrase must be less than 30 characters.");
+		if (phrase.split(' ').some(w => w.length > 20)) {
 			throw new Chat.ErrorMessage("Each word in the phrase must be less than 20 characters.");
 		}
-		if (!/[a-zA-Z]/.test(word)) throw new Chat.ErrorMessage("Word must contain at least one letter.");
+		if (!/[a-zA-Z]/.test(phrase)) throw new Chat.ErrorMessage("Word must contain at least one letter.");
 		let hint;
 		if (params.length > 1) {
 			hint = params.slice(1).join(',').trim();
 			if (hint.length > 150) throw new Chat.ErrorMessage("Hint too long.");
 		}
-		return {word, hint};
+		return {phrase, hint};
 	}
 }
 
@@ -262,9 +262,9 @@ export const commands: ChatCommands = {
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			if (!params) return this.errorReply("No word entered.");
-			const {word, hint} = Hangman.validateParams(params);
+			const {phrase, hint} = Hangman.validateParams(params);
 
-			const game = new Hangman(room, user, word, hint);
+			const game = new Hangman(room, user, phrase, hint);
 			room.game = game;
 			game.display(user, true);
 
@@ -347,14 +347,14 @@ export const commands: ChatCommands = {
 			if (!hangmanData[room.roomid]) hangmanData[room.roomid] = {};
 			if (!target) return this.parse('/help hangman');
 			// validation
-			const args = target.split(',');
-			const {word} = Hangman.validateParams(args);
-			if (!hangmanData[room.roomid][word]) hangmanData[room.roomid][word] = [];
+			const args = target.split(target.includes('|') ? '|' : ',');
+			const {phrase} = Hangman.validateParams(args);
+			if (!hangmanData[room.roomid][phrase]) hangmanData[room.roomid][phrase] = [];
 			args.shift();
-			hangmanData[room.roomid][word].push(...args);
+			hangmanData[room.roomid][phrase].push(...args);
 			Hangman.save();
 			this.privateModAction(`${user.name} added a random hangman with ${Chat.count(args.length, 'hints')}.`);
-			this.modlog(`HANGMAN ADDRANDOM`, null, `${word}: ${args.join(', ')}`);
+			this.modlog(`HANGMAN ADDRANDOM`, null, `${phrase}: ${args.join(', ')}`);
 		},
 		rr: 'removerandom',
 		removerandom(target, room, user) {
