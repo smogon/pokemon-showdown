@@ -22,8 +22,8 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>वैश्विक Administrator</strong> - ये लोग कुछ भी कर सकते हैं, जैसे की इस सन्देश को बदलना",
 
 		"<strong>Room ranks</strong>": "<strong>रूम के पद</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - ये लोग '!' commands का इस्तेमाल कर सकते हैं, जैसे की !groups",
-
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा mute और warn भी कर सकते हैं",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा room ban भी कर सकते हैं",
 		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Moderator जैसा पर केवल Bots के लिए",
@@ -82,7 +82,7 @@ export const translations: Translations = {
 		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>username</em>: room moderador/driver हटाए",
 		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>username</em>: उपयोगकर्ता को room के सभी पदों से हटाए",
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>सन्देश</em>: room में एक बड़ा नीला ऐलान करे",
-		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: room में HTML code के एक डब्बे को प्रसारित करे",
+		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML code</em>: room में HTML code के एक डब्बे को प्रसारित करे",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: room में एक चित्र प्रदर्शित करे",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: room के विविध सेटिंग बदले, जैसे की  modchat, capsfilter आदि",
 

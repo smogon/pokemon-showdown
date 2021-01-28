@@ -97,8 +97,8 @@ class Ladder extends LadderStore {
 			connection.popup(`You are barred from starting any new games until your battle ban expires.`);
 			return null;
 		}
-		const gameCount = user.games.size;
-		if (Monitor.countConcurrentBattle(gameCount, connection)) {
+		const games = user.getGames();
+		if (Monitor.countConcurrentBattle(games.length, connection)) {
 			return null;
 		}
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
@@ -114,51 +114,28 @@ class Ladder extends LadderStore {
 
 		let rating = 0;
 		let valResult;
-		if (isRated && !Ladders.disabled) {
-			const uid = user.id;
-			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)}),
-				this.getRating(uid),
-			]);
-			if (uid !== user.id) {
-				// User feedback for renames handled elsewhere.
-				return null;
-			}
-			if (!rating) rating = 1;
-		} else {
-			if (Ladders.disabled) {
-				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
-				rating = 1;
-			}
-			const validator = TeamValidatorAsync.get(this.formatid);
-			valResult = await validator.validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)});
-		}
+		let removeNicknames = !!(user.locked || user.namelocked);
 
-		if (valResult.charAt(0) !== '1') {
-			connection.popup(
-				`Your team was rejected for the following reasons:\n\n` +
-				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
-			);
-			return null;
-		}
 
 		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
 		let unownWord = '';
 		while (match) {
-			let nickname = match[1];
+			const nickname = match[1];
 			const speciesid = toID(match[2] || match[1]);
 			if (speciesid.length <= 6 && speciesid.startsWith('unown')) {
 				unownWord += speciesid.charAt(5) || 'a';
 			}
 			if (nickname) {
-				nickname = Chat.nicknamefilter(nickname, user);
-				if (!nickname || nickname !== match[1]) {
+				const filtered = Chat.nicknamefilter(nickname, user);
+				if (typeof filtered === 'string' && (!filtered || filtered !== match[1])) {
 					connection.popup(
 						`Your team was rejected for the following reason:\n\n` +
 						`- Your Pokémon has a banned nickname: ${match[1]}`
 					);
 					return null;
+				} else if (filtered === false) {
+					removeNicknames = true;
 				}
 			}
 			match = regex.exec(team);
@@ -172,6 +149,34 @@ class Ladder extends LadderStore {
 				);
 				return null;
 			}
+		}
+
+		if (isRated && !Ladders.disabled) {
+			const uid = user.id;
+			[valResult, rating] = await Promise.all([
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames}),
+				this.getRating(uid),
+			]);
+			if (uid !== user.id) {
+				// User feedback for renames handled elsewhere.
+				return null;
+			}
+			if (!rating) rating = 1;
+		} else {
+			if (Ladders.disabled) {
+				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
+				rating = 1;
+			}
+			const validator = TeamValidatorAsync.get(this.formatid);
+			valResult = await validator.validateTeam(team, {removeNicknames});
+		}
+
+		if (valResult.charAt(0) !== '1') {
+			connection.popup(
+				`Your team was rejected for the following reasons:\n\n` +
+				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
+			);
+			return null;
 		}
 
 		const settings = {...user.battleSettings, team: valResult.slice(1) as string};
@@ -397,29 +402,13 @@ class Ladder extends LadderStore {
 		return userSearches;
 	}
 	static updateSearch(user: User, connection: Connection | null = null) {
-		let games: {[k: string]: string} | null = {};
-		let atLeastOne = false;
-		for (const roomid of user.games) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				Monitor.warn(`while searching, room ${roomid} expired for user ${user.id} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
-				user.games.delete(roomid);
-				continue;
-			}
-			const game = room.game;
-			if (!game) {
-				Monitor.warn(`while searching, room ${roomid} has no game for user ${user.id} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
-				user.games.delete(roomid);
-				continue;
-			}
-			games[roomid] = game.title + (game.allowRenames ? '' : '*');
-			atLeastOne = true;
-		}
-		if (!atLeastOne) games = null;
-		const searching = Ladders.getSearches(user);
+		const gamesEntries = user.getGames().map(game => (
+			[game.room.roomid, game.title + (game.allowRenames ? '' : '*')]
+		));
+
 		(connection || user).send(`|updatesearch|` + JSON.stringify({
-			searching,
-			games,
+			searching: Ladders.getSearches(user),
+			games: gamesEntries.length ? Object.fromEntries(gamesEntries) : null,
 		}));
 	}
 	hasSearch(user: User) {

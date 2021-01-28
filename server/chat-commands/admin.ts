@@ -17,21 +17,6 @@ import {Utils} from '../../lib/utils';
 
 import * as ProcessManager from '../../lib/process-manager';
 
-function getDisabledCommands(table: ChatCommands = Chat.commands): string[] {
-	const disabled = [];
-	for (const k in table) {
-		const handler = table[k];
-		if (Array.isArray(handler) || typeof handler === 'string') continue;
-		if (typeof handler === 'object') {
-			disabled.push(...getDisabledCommands(handler));
-		}
-		if (typeof handler === 'function' && (handler as Chat.AnnotatedChatHandler).disabled) {
-			disabled.push(k);
-		}
-	}
-	return disabled;
-}
-
 function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
 	return new Promise(resolve => {
@@ -44,6 +29,67 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 			resolve([error?.code || 0, stdout, stderr]);
 		});
 	});
+}
+
+/**
+ * @returns {boolean} Whether or not the rebase failed
+ */
+async function updateserver(context: CommandContext, codePath: string) {
+	const exec = (command: string) => bash(command, context, codePath);
+
+	context.sendReply(`Fetching newest version of code in the repository ${codePath}...`);
+
+	let [code, stdout, stderr] = await exec(`git fetch`);
+	if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
+	if (!stdout && !stderr) {
+		context.sendReply(`There were no updates.`);
+		Monitor.updateServerLock = false;
+		return true;
+	}
+
+	[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
+	if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
+	const oldHash = String(stdout).trim();
+
+	[code, stdout, stderr] = await exec(`git stash save "PS /updateserver autostash"`);
+	let stashedChanges = true;
+	if (code) throw new Error(`updateserver: Crash while stashing`);
+	if ((stdout + stderr).includes("No local changes")) {
+		stashedChanges = false;
+	} else if (stderr) {
+		throw new Error(`updateserver: Crash while stashing`);
+	} else {
+		context.sendReply(`Saving changes...`);
+	}
+
+	// errors can occur while rebasing or popping the stash; make sure to recover
+	try {
+		context.sendReply(`Rebasing...`);
+		[code] = await exec(`git rebase --no-autostash FETCH_HEAD`);
+		if (code) {
+			// conflict while rebasing
+			await exec(`git rebase --abort`);
+			throw new Error(`restore`);
+		}
+
+		if (stashedChanges) {
+			context.sendReply(`Restoring saved changes...`);
+			[code] = await exec(`git stash pop`);
+			if (code) {
+				// conflict while popping stash
+				await exec(`git reset HEAD .`);
+				await exec(`git checkout .`);
+				throw new Error(`restore`);
+			}
+		}
+
+		return true;
+	} catch (e) {
+		// failed while rebasing or popping the stash
+		await exec(`git reset --hard ${oldHash}`);
+		if (stashedChanges) await exec(`git stash pop`);
+		return false;
+	}
 }
 
 async function rebuild(context: CommandContext) {
@@ -251,7 +297,7 @@ export const commands: ChatCommands = {
 		if (!targetConnections.length) {
 			// no connection has requested it - verify that we share a room
 			this.checkPMHTML(targetUser);
-			targetConnections = [targetUser.connections[0]];
+			targetConnections = targetUser.connections;
 		}
 
 		content = this.checkHTML(content);
@@ -341,9 +387,7 @@ export const commands: ChatCommands = {
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
-		const version = await Monitor.version();
 
-		let patch = target;
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
@@ -358,7 +402,6 @@ export const commands: ChatCommands = {
 					await this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
-				patch = 'chat';
 				if (lock['chat']) {
 					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
 				}
@@ -367,11 +410,11 @@ export const commands: ChatCommands = {
 				}
 				this.sendReply("Hotpatching chat commands...");
 
-				const disabledCommands = getDisabledCommands();
+				const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
 				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
 					this.errorReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 					this.errorReply(`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`);
-					return this.errorReply(`Currently disabled: ${disabledCommands.map(item => `/${item}`).join(', ')}`);
+					return this.errorReply(`Currently disabled: ${disabledCommands.join(', ')}`);
 				}
 
 				const oldPlugins = Chat.plugins;
@@ -404,7 +447,6 @@ export const commands: ChatCommands = {
 				Chat.loadPluginData(Tournaments, 'tournaments');
 				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
-				patch = 'formats';
 				if (lock['formats']) {
 					return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				}
@@ -433,7 +475,6 @@ export const commands: ChatCommands = {
 				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("DONE. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
-				patch = 'validator';
 				if (lock['validator']) {
 					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 				}
@@ -445,7 +486,6 @@ export const commands: ChatCommands = {
 				void TeamValidatorAsync.PM.respawn();
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
-				patch = 'punishments';
 				if (lock['punishments']) {
 					return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				}
@@ -454,14 +494,12 @@ export const commands: ChatCommands = {
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("DONE");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
-				patch = 'dnsbl';
 				this.sendReply("Hotpatching ip-tools...");
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("DONE");
 			} else if (target === 'modlog') {
-				patch = 'modlog';
 				if (lock['modlog']) {
 					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
@@ -475,11 +513,8 @@ export const commands: ChatCommands = {
 					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
 				}
 
-				const {Modlog} = require('../modlog');
-				Rooms.Modlog = new Modlog(
-					Rooms.MODLOG_PATH || 'logs/modlog',
-					Rooms.MODLOG_DB_PATH || `${__dirname}/../../databases/modlog.db`
-				);
+				const {mainModlog} = require('../modlog');
+				Rooms.Modlog = mainModlog;
 				this.sendReply("Re-initializing modlog streams...");
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;
@@ -493,14 +528,13 @@ export const commands: ChatCommands = {
 		} catch (e) {
 			Rooms.global.notifyRooms(
 				['development', 'staff'] as RoomID[],
-				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch} - but something failed while trying to hot-patch.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
 			);
-			return this.errorReply(`Something failed while trying to hot-patch ${patch}: \n${e.stack}`);
+			return this.errorReply(`Something failed while trying to hot-patch ${target}: \n${e.stack}`);
 		}
-		Monitor.hotpatchVersions[patch] = version;
 		Rooms.global.notifyRooms(
 			['development', 'staff'] as RoomID[],
-			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${patch}`
+			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`
 		);
 	},
 	hotpatchhelp: [
@@ -678,11 +712,11 @@ export const commands: ChatCommands = {
 	lockdown(target, room, user) {
 		this.checkCan('lockdown');
 
-		const disabledCommands = getDisabledCommands();
+		const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
 		if (disabledCommands.length) {
 			this.sendReply(`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`);
 			this.sendReply(`Be aware that restarting will re-enable them.`);
-			this.sendReply(`Currently disabled: ${disabledCommands.map(c => `/${c}`).join(', ')}`);
+			this.sendReply(`Currently disabled: ${disabledCommands.join(', ')}`);
 		}
 		Rooms.global.startLockdown();
 
@@ -842,78 +876,40 @@ export const commands: ChatCommands = {
 
 	async updateserver(target, room, user, connection) {
 		this.canUseConsole();
-		const isPrivate = toID(target) === 'private';
 		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
-		if (isPrivate && (!Config.privatecodepath || !path.isAbsolute(Config.privatecodepath))) {
-			return this.errorReply("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
-		}
 
+		const validPrivateCodePath = Config.privatecodepath && path.isAbsolute(Config.privatecodepath);
+		target = toID(target);
 		Monitor.updateServerLock = true;
 
-		const exec = (command: string) => bash(command, this);
 
-		this.addGlobalModAction(`${user.name} used /updateserver${isPrivate ? ` private` : ``}`);
-		this.sendReply(`Fetching newest version...`);
-
-		let [code, stdout, stderr] = await exec(`git fetch`);
-		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
-		if (!stdout && !stderr) {
-			this.sendReply(`There were no updates.`);
-			Monitor.updateServerLock = false;
-			return;
-		}
-
-		[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
-		if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
-		const oldHash = String(stdout).trim();
-
-		[code, stdout, stderr] = await exec(`git stash save "PS /updateserver autostash"`);
-		let stashedChanges = true;
-		if (code) throw new Error(`updateserver: Crash while stashing`);
-		if ((stdout + stderr).includes("No local changes")) {
-			stashedChanges = false;
-		} else if (stderr) {
-			throw new Error(`updateserver: Crash while stashing`);
+		let success = true;
+		if (target === 'private') {
+			if (!validPrivateCodePath) {
+				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
+			}
+			success = await updateserver(this, Config.privatecodepath);
+			this.addGlobalModAction(`${user.name} used /updateserver private`);
 		} else {
-			this.sendReply(`Saving changes...`);
+			if (target !== 'public' && validPrivateCodePath) {
+				success = await updateserver(this, Config.privatecodepath);
+			}
+			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
+			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
-		// errors can occur while rebasing or popping the stash; make sure to recover
-		try {
-			this.sendReply(`Rebasing...`);
-			[code] = await exec(`git rebase --no-autostash FETCH_HEAD`);
-			if (code) {
-				// conflict while rebasing
-				await exec(`git rebase --abort`);
-				throw new Error(`restore`);
-			}
+		this.sendReply(`Rebuilding...`);
+		await rebuild(this);
+		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
 
-			if (stashedChanges) {
-				this.sendReply(`Restoring saved changes...`);
-				[code] = await exec(`git stash pop`);
-				if (code) {
-					// conflict while popping stash
-					await exec(`git reset HEAD .`);
-					await exec(`git checkout .`);
-					throw new Error(`restore`);
-				}
-			}
-
-			this.sendReply(`Rebuilding...`);
-			await rebuild(this);
-			this.sendReply(`SUCCESSFUL, server updated.`);
-		} catch (e) {
-			// failed while rebasing or popping the stash
-			await exec(`git reset --hard ${oldHash}`);
-			if (stashedChanges) await exec(`git stash pop`);
-			this.sendReply(`Rebuilding...`);
-			await rebuild(this);
-			this.sendReply(`FAILED, old changes restored.`);
-		}
 		Monitor.updateServerLock = false;
 	},
+	updateserverhelp: [
+		`/updateserver - Updates the server's code from its Git repository, including private code if present. Requires: console access`,
+		`/updateserver private - Updates only the server's private code. Requires: console access`,
+	],
 
 	async rebuild(target, room, user, connection) {
 		this.canUseConsole();

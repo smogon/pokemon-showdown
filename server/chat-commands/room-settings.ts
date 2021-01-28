@@ -123,6 +123,49 @@ export const commands: ChatCommands = {
 		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & for all the options`,
 	],
 
+	automodchat(target, room, user) {
+		room = this.requireRoom();
+		if (!target) {
+			if (!room.settings.autoModchat) return this.sendReply(`This room has automodchat OFF.`);
+			const {rank: curRank, time: curTime} = room.settings.autoModchat;
+			return this.sendReply(`Automodchat is currently set to set modchat to ${curRank} after ${curTime} minutes.`);
+		}
+		this.checkCan('declare', null, room);
+		if (this.meansNo(toID(target))) {
+			if (!room.settings.autoModchat) return this.errorReply(`Auto modchat is not set.`);
+			delete room.settings.autoModchat;
+			room.saveSettings();
+			if (room.modchatTimer) clearTimeout(room.modchatTimer); // fallback just in case (should never happen)
+			this.privateModAction(`${user.name} turned off automatic modchat.`);
+			return this.modlog(`AUTOMODCHAT`, null, 'OFF');
+		}
+		let [rawTime, rank] = Utils.splitFirst(target, ',').map(i => i.trim()) as [string, GroupSymbol];
+		if (!rawTime) {
+			return this.parse(`/help automodchat`);
+		}
+		if (!rank) {
+			if (room.settings.autoModchat) {
+				rank = room.settings.autoModchat.rank;
+			} else {
+				return this.parse(`/help automodchat`);
+			}
+		}
+		const validGroups = [...Config.groupsranking as string[], 'trusted'];
+		if (!validGroups.includes(rank)) {
+			return this.errorReply(`Invalid rank.`);
+		}
+		const time = parseInt(rawTime);
+		if (isNaN(time) || time > 480 || time < 5) {
+			return this.errorReply("Invalid duration. Choose a number under 480 (in minutes) and over 5 minutes.");
+		}
+		room.settings.autoModchat = {
+			rank, time, active: false,
+		};
+		this.privateModAction(`${user.name} set automodchat to rank ${rank} and timeout ${time} minutes.`);
+		this.modlog(`AUTOMODCHAT`, null, `${rank}: ${time} minutes`);
+		room.saveSettings();
+	},
+
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
@@ -180,7 +223,7 @@ export const commands: ChatCommands = {
 		} else {
 			this.checkCan('makeroom');
 		}
-		if (room.tour && !room.tour.modjoin) {
+		if (room.tour && !room.tour.allowModjoin) {
 			return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
 		}
 		if (target === 'player') target = Users.PLAYER_SYMBOL;
@@ -307,7 +350,8 @@ export const commands: ChatCommands = {
 			if (rank && rank !== 'whitelist' && !Config.groupsranking.includes(rank as EffectiveGroupSymbol)) {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
-			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
+			const validPerms = Users.Auth.supportedRoomPermissions(room);
+			if (!validPerms.some(p => p === perm || p.startsWith(`${perm} `))) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
 			if (!room.auth.atLeast(user, '#')) {
@@ -690,12 +734,13 @@ export const commands: ChatCommands = {
 	],
 
 	subroomgroupchat: 'makegroupchat',
+	srgc: 'makegroupchat',
 	mgc: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
-		if (!user.autoconfirmed) {
-			return this.errorReply("You must be autoconfirmed to make a groupchat.");
+		if (!user.trusted) {
+			return this.errorReply("You must be trusted (public room driver or global voice) to make a groupchat.");
 		}
 
 		const groupchatbanned = Punishments.isGroupchatBanned(user);
@@ -704,14 +749,14 @@ export const commands: ChatCommands = {
 			return this.errorReply(`You are banned from using groupchats ${expireText}.`);
 		}
 
-		if (cmd === 'subroomgroupchat') {
+		if (cmd === 'subroomgroupchat' || cmd === 'srgc') {
 			if (!user.can('mute', null, room)) {
 				return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
 			}
 			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
 			if (room.settings.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
 		}
-		const parent = cmd === 'subroomgroupchat' ? room.roomid : null;
+		const parent = cmd === 'subroomgroupchat' || cmd === 'srgc' ? room.roomid : null;
 		// this.checkCan('makegroupchat');
 
 		// Title defaults to a random 8-digit number.
@@ -779,6 +824,7 @@ export const commands: ChatCommands = {
 	makegroupchathelp: [
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
+		`Only users who are staff in a public room or global auth can make groupchats.`,
 	],
 	groupchatuptime: 'roomuptime',
 	roomuptime(target, room, user, connection, cmd) {
@@ -877,16 +923,9 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (room.subRooms) {
-			for (const subRoom of room.subRooms.values()) subRoom.parent = null;
-		}
-
 		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
-		room.update(); // |expire| needs to be its own message
-		room.add(`|expire|This room has been deleted.`);
-		this.sendReply(`The room "${title}" was deleted.`);
 		room.update();
-		if (room.roomid === 'lobby') Rooms.lobby = null;
+		room.send(`|expire|This room has been deleted.`);
 		room.destroy();
 	},
 	deleteroomhelp: [
@@ -908,7 +947,7 @@ export const commands: ChatCommands = {
 		}
 		const oldTitle = room.title;
 		const isGroupchat = cmd === 'renamegroupchat';
-		if (!toID(target)) return this.errorReply("Rooms need a title.");
+		if (!toID(target)) return this.parse("/help renameroom");
 		if (room.persist && isGroupchat) return this.errorReply(`This isn't a groupchat.`);
 		if (!room.persist && !isGroupchat) return this.errorReply(`Use /renamegroupchat instead.`);
 		if (isGroupchat) {
@@ -945,7 +984,7 @@ export const commands: ChatCommands = {
 		}
 		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
-	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
+	renameroomhelp: [`/renameroom [new title] - Renames the current room to [new title]. Case-sensitive. Requires &`],
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
@@ -1134,27 +1173,17 @@ export const commands: ChatCommands = {
 		if (!parent.persist) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === parent) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
-		room.parent = parent;
-		if (!parent.subRooms) parent.subRooms = new Map();
-		parent.subRooms.set(room.roomid, room);
+		const settingsList = Rooms.global.settingsList;
 
-		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === parent.title);
-		// can be asserted since we want this to crash if room is null (it should never be)
-		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room!.title);
+		const parentIndex = settingsList.findIndex(r => r.title === parent.title);
+		const index = settingsList.findIndex(r => r.title === room!.title);
 
-		// This is needed to ensure that the main room gets loaded before the subroom.
-		if (mainIdx > subIdx) {
-			const tmp = Rooms.global.settingsList[mainIdx];
-			Rooms.global.settingsList[mainIdx] = Rooms.global.settingsList[subIdx];
-			Rooms.global.settingsList[subIdx] = tmp;
+		// Ensure that the parent room gets loaded before the subroom.
+		if (parentIndex > index) {
+			[settingsList[parentIndex], settingsList[index]] = [settingsList[index], settingsList[parentIndex]];
 		}
 
-		room.settings.parentid = parent.roomid;
-		room.saveSettings();
-
-		for (const userid in room.users) {
-			room.users[userid].updateIdentity(room.roomid);
-		}
+		room.setParent(parent);
 
 		this.modlog('SUBROOM', null, `of ${parent.title}`);
 		return this.addModAction(`This room was set as a subroom of ${parent.title} by ${user.name}.`);
@@ -1169,20 +1198,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
 		}
 
-		const parent = room.parent;
-		if (parent?.subRooms) {
-			parent.subRooms.delete(room.roomid);
-			if (!parent.subRooms.size) parent.subRooms = null;
-		}
-
-		room.parent = null;
-
-		delete room.settings.parentid;
-		room.saveSettings();
-
-		for (const userid in room.users) {
-			room.users[userid].updateIdentity(room.roomid);
-		}
+		room.setParent(null);
 
 		this.modlog('UNSUBROOM');
 		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
