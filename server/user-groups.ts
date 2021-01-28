@@ -123,11 +123,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		let targetSymbol = target as GroupSymbol | string;
 		const targetID = toID(target);
-		// if it's there after a toID, probably not a symbol
 		if (targetID) {
+			// if target's there after a toID, probably not a symbol
 			targetSymbol = auth.get(targetID);
-		}
-		if (typeof target === 'object' && target !== null) {
+		} else if (typeof target === 'object' && target !== null) {
+			// If it's not a sybol and not in room auth (or global auth if there is no room),
+			// then check the user object
 			targetSymbol = (target as User).tempGroup;
 		}
 		if (!targetSymbol || ['whitelist', 'trusted', 'autoconfirmed'].includes(targetSymbol)) {
