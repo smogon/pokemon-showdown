@@ -50,6 +50,7 @@ import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPerm
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
+const CONNECTION_EXPIRY_TIME = 24 * 60 * MINUTES;
 
 import type {StreamWorker} from '../lib/process-manager';
 
@@ -1530,6 +1531,13 @@ function pruneInactive(threshold: number) {
 		}
 		if (!user.connected && (now - user.lastDisconnected) > threshold) {
 			user.destroy();
+		}
+		if (!user.can('addhtml')) {
+			for (const connection of user.connections) {
+				if (now - connection.lastActiveTime > CONNECTION_EXPIRY_TIME) {
+					connection.destroy();
+				}
+			}
 		}
 	}
 }
