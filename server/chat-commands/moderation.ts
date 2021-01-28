@@ -1631,7 +1631,7 @@ export const commands: ChatCommands = {
 		this.checkCan('forcerename', userid);
 		if (targetUser?.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 		let privateReason = '';
-		let publicReason = target;
+		let publicReason = reason;
 		const targetLowercase = target.toLowerCase();
 		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
 			const privateIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
