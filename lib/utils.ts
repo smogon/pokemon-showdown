@@ -257,6 +257,11 @@ export const Utils = new class {
 		return arr;
 	}
 
+	randomElement<T>(arr: T[]): T {
+		const i = Math.floor(Math.random() * arr.length);
+		return arr[i];
+	}
+
 	/** Forces num to be an integer (between min and max). */
 	clampIntRange(num: any, min?: number, max?: number): number {
 		if (typeof num !== 'number') num = 0;
