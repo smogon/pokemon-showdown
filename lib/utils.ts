@@ -221,7 +221,8 @@ export const Utils = new class Utils {
 	}
 
 	randomElement<T>(arr: T[]): T {
-		return this.shuffle(arr)[0];
+		const i = Math.floor(Math.random() * arr.length);
+		return arr[i];
 	}
 
 	/** Forces num to be an integer (between min and max). */
