@@ -719,8 +719,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// fart
 	bipolar: {
-		desc: "When this Pokemon switches in, it changes to two random types and gets corresponding STAB attacks.",
-		shortDesc: "This Pokemon has 2 random types and STAB moves on switch-in.",
+		desc: "If this Pokemon is a Kartana, then when it switches in, it changes to two random types and gets corresponding STAB attacks.",
+		shortDesc: "Kartana: User gains 2 random types and STAB moves on switch-in.",
 		name: "Bipolar",
 		isPermanent: true,
 		onSwitchIn(pokemon) {
