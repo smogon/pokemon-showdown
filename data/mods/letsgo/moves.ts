@@ -50,7 +50,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			let randomMove = '';
 			if (moves.length) {
-				moves.sort((a, b) => a.num! - b.num!);
+				moves.sort((a, b) => a.num - b.num);
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
@@ -87,7 +87,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "User switches out.",
 		priority: -6,
 		selfSwitch: true,
-		onTryHit: true,
+		onTry: true,
 	},
 	zippyzap: {
 		inherit: true,

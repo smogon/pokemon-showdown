@@ -5,14 +5,26 @@
  * @author jetou
  */
 
-// @ts-ignore Needed for FS
-if (!global.Config) global.Config = {nofswriting: false, modlogftsextension: true, usesqlitemodlog: true};
+if (!global.Config) {
+	let hasSQLite = true;
+	try {
+		require.resolve('better-sqlite3');
+	} catch (e) {
+		hasSQLite = false;
+	}
+	global.Config = {
+		nofswriting: false,
+		usesqlitemodlog: hasSQLite,
+		usesqlite: hasSQLite,
+	};
+}
 
-import * as Database from 'better-sqlite3';
-
+import type * as DatabaseType from 'better-sqlite3';
 import {FS} from '../../lib/fs';
 import {Modlog, ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
+
+const Database = Config.usesqlite ? require('better-sqlite3') : null;
 
 type ModlogFormat = 'txt' | 'sqlite';
 
@@ -459,9 +471,9 @@ export function rawifyLog(log: ModlogEntry) {
 export class ModlogConverterSQLite {
 	readonly databaseFile: string;
 	readonly textLogDir: string;
-	readonly isTesting: {files: Map<string, string>, db: Database.Database} | null = null;
+	readonly isTesting: {files: Map<string, string>, db: DatabaseType.Database} | null = null;
 
-	constructor(databaseFile: string, textLogDir: string, isTesting?: Database.Database) {
+	constructor(databaseFile: string, textLogDir: string, isTesting?: DatabaseType.Database) {
 		this.databaseFile = databaseFile;
 		this.textLogDir = textLogDir;
 		if (isTesting || Config.nofswriting) {

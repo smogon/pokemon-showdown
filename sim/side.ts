@@ -4,7 +4,8 @@
  *
  * @license MIT license
  */
-import {RequestState} from './battle';
+import {Utils} from '../lib/utils';
+import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
 import {toID} from './dex';
@@ -53,9 +54,12 @@ export class Side {
 	active: Pokemon[];
 
 	pokemonLeft: number;
+	zMoveUsed: boolean;
+
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
-	zMoveUsed: boolean;
+	/** only used by Gen 1 Counter */
+	lastSelectedMove: ID = '';
 
 	sideConditions: {[id: string]: EffectState};
 	slotConditions: {[id: string]: EffectState}[];
@@ -445,12 +449,16 @@ export class Side {
 
 		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
-			const lockedMoveTarget = pokemon.lastMoveTargetLoc || 0;
+			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
+			const lockedMoveID = toID(lockedMove);
+			if (pokemon.volatiles[lockedMoveID] && pokemon.volatiles[lockedMoveID].targetLoc) {
+				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
+			}
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon,
-				targetLoc: lockedMoveTarget,
-				moveid: toID(lockedMove),
+				targetLoc: lockedMoveTargetLoc,
+				moveid: lockedMoveID,
 			});
 			return true;
 		} else if (!moves.length && !zMove) {
@@ -459,8 +467,8 @@ export class Side {
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (maxMove) {
-			// Dynamaxed; only Taunt and Assault Vest disable Max Guard
-			if (pokemon.maxMoveDisabled(maxMove)) {
+			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
+			if (pokemon.maxMoveDisabled(move)) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
 			}
 		} else if (!zMove) {
@@ -758,17 +766,9 @@ export class Side {
 			);
 		}
 
-		for (let choiceString of choiceStrings) {
-			let choiceType = '';
-			let data = '';
-			choiceString = choiceString.trim();
-			const firstSpaceIndex = choiceString.indexOf(' ');
-			if (firstSpaceIndex >= 0) {
-				data = choiceString.slice(firstSpaceIndex + 1).trim();
-				choiceType = choiceString.slice(0, firstSpaceIndex);
-			} else {
-				choiceType = choiceString;
-			}
+		for (const choiceString of choiceStrings) {
+			let [choiceType, data] = Utils.splitFirst(choiceString.trim(), ' ');
+			data = data.trim();
 
 			switch (choiceType) {
 			case 'move':

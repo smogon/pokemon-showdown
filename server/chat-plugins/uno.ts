@@ -208,8 +208,6 @@ export class UNO extends Rooms.RoomGame {
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!(oldUserid in this.playerTable) || user.id === oldUserid) return false;
 		if (!user.named && !isForceRenamed) {
-			user.games.delete(this.roomid);
-			user.updateSearch();
 			return; // dont set users to their guest accounts.
 		}
 		this.playerTable[user.id] = this.playerTable[oldUserid];
@@ -912,7 +910,7 @@ export const commands: ChatCommands = {
 		`/uno autostart [amount] - sets an auto starting timer for [amount] seconds. Requires: % @ # &`,
 		`/uno end - ends the current game of UNO. Requires: % @ # &`,
 		`/uno start - starts the current game of UNO. Requires: % @ # &`,
-		`/unso disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
+		`/uno disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
 		`/uno hand - displays your own hand.`,
 		`/uno getusers - displays the players still in the game.`,
 		`/uno [spectate|unspectate] - spectate / unspectate the current private UNO game.`,

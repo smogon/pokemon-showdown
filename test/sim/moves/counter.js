@@ -71,6 +71,48 @@ describe('Counter', function () {
 		assert.false.fullHP(battle.p2.active[1]);
 		assert.fullHP(battle.p2.active[0]);
 	});
+
+	it(`[Gen 1] Counter Desync Clause`, function () {
+		// seed chosen so Water Gun succeeds and Pound full paras
+		battle = common.gen(1).createBattle({seed: [1, 2, 3, 6]}, [[
+			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		], [
+			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		]]);
+		battle.makeChoices('move watergun', 'move thunderwave');
+		battle.makeChoices('move pound', 'move counter');
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+
+		// seed chosen so Pound succeeds and Water Gun full paras
+		battle = common.gen(1).createBattle({seed: [1, 2, 3, 6]}, [[
+			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		], [
+			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		]]);
+		battle.makeChoices('move pound', 'move thunderwave');
+		battle.makeChoices('move watergun', 'move counter');
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+
+		battle = common.gen(1).createBattle([[
+			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash']},
+		], [
+			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'splash']},
+		]]);
+		battle.makeChoices('move watergun', 'move splash');
+		battle.makeChoices('move pound', 'move counter');
+		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert.false.fullHP(battle.p1.active[0]);
+
+		battle = common.gen(1).createBattle([[
+			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash']},
+		], [
+			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'splash']},
+		]]);
+		battle.makeChoices('move pound', 'move splash');
+		battle.makeChoices('move watergun', 'move counter');
+		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
 
 describe('Mirror Coat', function () {

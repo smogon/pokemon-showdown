@@ -6,7 +6,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,
-		onTryMove() {},
+		onTry() {},
 	},
 	destinybond: {
 		inherit: true,
@@ -16,6 +16,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	diamondstorm: {
 		inherit: true,
+		self: null,
 		secondary: {
 			chance: 50,
 			self: {
@@ -81,15 +82,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	flyingpress: {
 		inherit: true,
 		basePower: 80,
-	},
-	gastroacid: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['multitype', 'stancechange'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
-		},
 	},
 	leechlife: {
 		inherit: true,
@@ -195,24 +187,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ohko: true,
 	},
-	simplebeam: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['multitype', 'simple', 'stancechange', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
-		},
-	},
-	skillswap: {
-		inherit: true,
-		onTryHit(target, source) {
-			const bannedAbilities = ['illusion', 'multitype', 'stancechange', 'wonderguard'];
-			if (bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
-				return false;
-			}
-		},
-	},
 	stockpile: {
 		inherit: true,
 		condition: {
@@ -290,15 +264,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return null;
 			},
-		},
-	},
-	worryseed: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['insomnia', 'multitype', 'stancechange', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
 		},
 	},
 };

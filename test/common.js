@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+const fs = require('fs');
 const assert = require('./assert');
 const Sim = require('./../.sim-dist');
 const Dex = Sim.Dex;
@@ -102,6 +104,29 @@ class TestTools {
 		}
 
 		return new Sim.Battle(battleOptions);
+	}
+
+	/**
+	 * Saves the log of the given battle as a bare-bones replay file in the `test\replays` directory
+	 * You can view the replay by opening the file in any browser or by dragging and dropping the
+	 * file into a PS! client window.
+	 *
+	 * @param {Sim.Battle} battle
+	 * @param {string} [fileName]
+	 */
+	saveReplay(battle, fileName) {
+		const battleLog = battle.getDebugLog();
+		if (!fileName) fileName = 'test-replay';
+		const filePath = path.resolve(__dirname, `./replays/${fileName}-${Date.now()}.html`);
+		const out = fs.createWriteStream(filePath, {flags: 'a'});
+		out.on('open', () => {
+			out.write(
+				`<!DOCTYPE html>\n` +
+				`<script type="text/plain" class="battle-log-data">${battleLog}</script>\n` +
+				`<script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>\n`
+			);
+			out.end();
+		});
 	}
 }
 

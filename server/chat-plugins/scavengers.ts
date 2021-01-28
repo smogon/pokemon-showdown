@@ -157,7 +157,7 @@ class PlayerLadder extends Ladder {
 	// add the different keys to the history - async for larger leaderboards
 	// FIXME: this is not what "async" means
 	softReset() {
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			for (const u in this.data) {
 				const userData = this.data[u];
 				for (const a in userData) {
@@ -467,24 +467,18 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	joinGame(user: User) {
 		if (this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId) {
-			return user.sendTo(
-				this.room,
-				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
-			);
+			throw new Chat.ErrorMessage("You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!");
 		}
-		if (user.ips.some(ip => this.joinedIps.includes(ip))) {
-			return user.sendTo(this.room, "You already have one alt in the hunt.");
+		if (!Config.noipchecks && user.ips.some(ip => this.joinedIps.includes(ip))) {
+			throw new Chat.ErrorMessage("You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;
-		if (this.addPlayer(user)) {
-			this.cacheUserIps(user);
-			delete this.leftHunt[user.id];
-			user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
-			this.onSendQuestion(user);
-			return true;
-		}
-		user.sendTo(this.room, "You have already joined the hunt.");
-		return false;
+		this.addPlayer(user);
+		this.cacheUserIps(user);
+		delete this.leftHunt[user.id];
+		user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+		this.onSendQuestion(user);
+		return true;
 	}
 
 	cacheUserIps(user: User | FakeUser) {
@@ -578,12 +572,18 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.timerEnd = null;
 		}
 
+		if (minutes === 0) {
+			return 'off';
+		}
+		if (minutes > 24 * 60) { // 24 hours
+			throw new Chat.ErrorMessage(`Time limit must be under 24 hours (you asked for ${Chat.toDurationString(minutes * 60000)}).`);
+		}
 		if (minutes && minutes > 0) {
 			this.timer = setTimeout(() => this.onEnd(), minutes * 60000);
 			this.timerEnd = Date.now() + minutes * 60000;
 		}
 
-		return minutes || 'off';
+		return minutes;
 	}
 
 	choose(user: User, value: string) {
@@ -651,21 +651,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
-	forceWrap(answer: string) {
-		return Utils.escapeHTML(answer.replace(/[^\s]{30,}/g, word => {
-			let lastBreak = 0;
-			let brokenWord = '';
-			for (let i = 1; i < word.length; i++) {
-				if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
-					brokenWord += word.slice(lastBreak, i) + '\u200B';
-					lastBreak = i;
-				}
-			}
-			brokenWord += word.slice(lastBreak);
-			return brokenWord;
-		})).replace(/\u200B/g, '<wbr />');
-	}
-
 	onViewHunt(user: User) {
 		if (this.runEvent('ViewHunt', user)) return;
 
@@ -694,7 +679,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						this.forceWrap(q.answer.join(' ; '))
+						Utils.escapeHTML(Utils.forceWrap(q.answer.join(' ; ')))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
@@ -959,7 +944,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		for (const u of hostArray) {
 			const id = toID(u);
 			const user = Users.getExact(id);
-			if (!allowOffline && (!user || !user.connected || !(user.id in room.users))) continue;
+			if (!allowOffline && (!user || !user.connected || !user.inRoom(room))) continue;
 
 			if (!user) {
 				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
@@ -1035,14 +1020,6 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 			this.sendRoom(`|raw|<strong>The hint has been changed to:</strong> ${Chat.formatText(this.game.questions[num].hint)}`);
 		}
 	}
-
-	destroy() {
-		const user = Users.getExact(this.id);
-		if (user) {
-			user.games.delete(this.game.roomid);
-			user.updateSearch();
-		}
-	}
 }
 
 const ScavengerCommands: ChatCommands = {
@@ -1050,11 +1027,11 @@ const ScavengerCommands: ChatCommands = {
 	 * Player commands
 	 */
 	""() {
-		this.parse("/join scavengers");
+		return this.parse("/join scavengers");
 	},
 
 	guess(target, room, user) {
-		this.parse(`/choose ${target}`);
+		return this.parse(`/choose ${target}`);
 	},
 
 	join(target, room, user) {
@@ -1481,8 +1458,8 @@ const ScavengerCommands: ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
-		const minutes = parseInt(target);
-		if (isNaN(minutes) || minutes <= 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
+		const minutes = (toID(target) === 'off' ? 0 : parseFloat(target));
+		if (isNaN(minutes) || minutes < 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
 			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
 		}
 
@@ -1924,7 +1901,8 @@ const ScavengerCommands: ChatCommands = {
 		const ladder = await Leaderboard.visualize('points') as AnyObject[];
 		this.sendReply(
 			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				const isStaff = room!.auth.has(toID(entry.name));
+				const roomRank = room!.auth.getDirect(toID(entry.name));
+				const isStaff = Users.Auth.atLeast(roomRank, '+');
 				if (isStaff && hideStaff) return '';
 				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Utils.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Utils.escapeHTML(entry.name)}</strong>` : Utils.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>` +
@@ -2312,7 +2290,7 @@ const ScavengerCommands: ChatCommands = {
 			this.privateModAction(`${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.`);
 			this.modlog('SCAV MODSETTINGS IPCHECK', null, setting[target] ? 'ON' : 'OFF');
 
-			this.parse('/scav modsettings update');
+			return this.parse('/scav modsettings update');
 		},
 	},
 
@@ -2419,10 +2397,10 @@ const ScavengerCommands: ChatCommands = {
 			}
 			room.settings.scavSettings.addRecycledHuntsToQueueAutomatically =
 				!room.settings.scavSettings.addRecycledHuntsToQueueAutomatically;
+			this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 			if (params[0] === 'on') {
-				this.parse("/scav queuerecycled");
+				return this.parse("/scav queuerecycled");
 			}
-			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 		}
 	},
 

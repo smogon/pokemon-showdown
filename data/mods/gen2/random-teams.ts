@@ -81,6 +81,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'batonpass':
 					if (!counter.setupType && !counter['speedsetup'] && !hasMove['meanlook']) rejected = true;
 					break;
+				case 'meanlook':
+					if (movePool.includes('perishsong')) rejected = true;
+					break;
 				case 'nightmare':
 					if (!hasMove['lovelykiss'] && !hasMove['sleeppowder']) rejected = true;
 					break;
@@ -116,7 +119,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['rest']) rejected = true;
 					break;
 				case 'rapidspin':
-					if (teamDetails['rapidSpin'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (teamDetails['rapidSpin'] || hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'return':
 					if (hasMove['bodyslam']) rejected = true;
@@ -133,14 +136,20 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				case 'icebeam':
 					if (hasMove['dragonbreath']) rejected = true;
 					break;
+				case 'seismictoss':
+					if (hasMove['rest'] || hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'destinybond':
 					if (hasMove['explosion']) rejected = true;
+					break;
+				case 'pursuit':
+					if (hasMove['crunch'] && hasMove['solarbeam']) rejected = true;
 					break;
 				case 'thief':
 					if (hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
-				case 'pursuit':
-					if (hasMove['crunch'] && movePool.includes('sunnyday')) rejected = true;
+				case 'irontail':
+					if (hasType['Ground'] && movePool.includes('earthquake')) rejected = true;
 					break;
 
 				// Status and illegal move rejections
@@ -152,6 +161,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 				case 'lovelykiss':
 					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'sleeptalk':
+					if (hasMove['curse'] && counter.stab >= 2) rejected = true;
 					break;
 				case 'softboiled':
 					if (movePool.includes('swordsdance')) rejected = true;
@@ -175,7 +187,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && !move.weather && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk'].includes(moveid)) &&
+				if ((!rejected && !isSetup && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'spikes', 'sunnyday'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
@@ -190,10 +202,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					(movePool.includes('megahorn') || hasMove['present'] && movePool.includes('softboiled')) ||
 					(hasMove['rest'] && movePool.includes('sleeptalk') || (hasMove['sleeptalk'] && movePool.includes('rest'))) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam') || (hasMove['solarbeam'] && movePool.includes('sunnyday'))) ||
-					(movePool.includes('spore') || movePool.includes('meanlook') || movePool.includes('milkdrink') || movePool.includes('recover'))
+					(movePool.includes('milkdrink') || movePool.includes('recover') || movePool.includes('spore'))
 				)) {
 					// Reject Status, non-STAB, or low basepower moves
-					if (move.category === 'Status' || !hasType[move.type] || move.basePower < 40 && !move.multihit) {
+					if (move.category === 'Status' || !hasType[move.type] || move.basePower && move.basePower < 40) {
 						rejected = true;
 					}
 				}
@@ -264,15 +276,15 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		}
 
 		const levelScale: {[k: string]: number} = {
-			NU: 77,
-			NUBL: 73,
-			UU: 71,
+			NU: 73,
+			NUBL: 71,
+			UU: 69,
 			UUBL: 67,
 			OU: 65,
 			Uber: 61,
 		};
 		const customScale: {[k: string]: number} = {
-			Ditto: 83, Unown: 83, Wobbuffet: 83,
+			Ditto: 83, Unown: 87, Wobbuffet: 83,
 		};
 		let level = levelScale[species.tier] || 80;
 		if (customScale[species.name]) level = customScale[species.name];

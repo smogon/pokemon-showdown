@@ -142,7 +142,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	wigglytuff: {
-		randomBattleMoves: ["bodyslam", "charm", "curse", "doubleedge", "rest", "sleeptalk", "thunder", "thunderwave"],
+		randomBattleMoves: ["bodyslam", "charm", "curse", "doubleedge", "fireblast", "rest", "sleeptalk", "thunderwave"],
 		tier: "NU",
 	},
 	zubat: {
@@ -194,7 +194,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	persian: {
-		randomBattleMoves: ["bodyslam", "hypnosis", "icebeam", "irontail", "rest", "return", "thunder"],
+		randomBattleMoves: ["bodyslam", "hypnosis", "irontail", "rest", "return", "thunder"],
 		tier: "NU",
 	},
 	psyduck: {
@@ -312,7 +312,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dodrio: {
-		randomBattleMoves: ["doubleedge", "drillpeck", "hiddenpowerground", "quickattack", "substitute"],
+		randomBattleMoves: ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "substitute"],
 		tier: "UU",
 	},
 	seel: {
@@ -536,7 +536,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	umbreon: {
-		randomBattleMoves: ["batonpass", "growth", "hiddenpowerdark", "meanlook", "moonlight", "toxic"],
+		randomBattleMoves: ["batonpass", "growth", "hiddenpowerdark", "meanlook", "moonlight"],
 		tier: "OU",
 	},
 	porygon: {
@@ -821,7 +821,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	delibird: {
-		randomBattleMoves: ["hiddenpowerflying", "icebeam", "present", "rapidspin", "spikes", "thief"],
+		randomBattleMoves: ["hiddenpowerflying", "icebeam", "present", "spikes", "thief"],
 		tier: "NU",
 	},
 	mantine: {
@@ -877,7 +877,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	tyranitar: {
-		randomBattleMoves: ["crunch", "curse", "dynamicpunch", "earthquake", "fireblast", "pursuit", "rest", "roar", "rockslide", "screech", "surf"],
+		randomBattleMoves: ["crunch", "curse", "earthquake", "fireblast", "pursuit", "rest", "rockslide", "screech", "surf"],
 		tier: "OU",
 	},
 	lugia: {

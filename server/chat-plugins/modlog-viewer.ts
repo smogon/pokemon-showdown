@@ -199,16 +199,33 @@ async function getModlog(
 	if (timed) connection.popup(`The modlog query took ${response.duration} ms to complete.`);
 }
 
+const shouldSearchGlobal = ['staff', 'adminlog'];
+
 export const commands: ChatCommands = {
 	ml: 'modlog',
 	punishlog: 'modlog',
 	pl: 'modlog',
 	timedmodlog: 'modlog',
+	mlid: 'modlog',
+	mlip: 'modlog',
+	plid: 'modlog',
+	plip: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		let roomid: ModlogID = (!room || room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: ModlogID = (!room || shouldSearchGlobal.includes(room.roomid) ? 'global' : room.roomid);
+		const onlyPunishments = cmd.startsWith('pl') || cmd.startsWith('punishlog');
 		let lines;
-		const search: ModlogSearch = {};
+		const possibleParam = cmd.slice(2);
 		const targets = target.split(',');
+		const search: ModlogSearch = {};
+
+		switch (possibleParam) {
+		case 'id':
+			targets.unshift(`user='${targets.shift()}'`);
+			break;
+		case 'ip':
+			targets.unshift(`ip=${targets.shift()}`);
+			break;
+		}
 		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
@@ -280,7 +297,7 @@ export const commands: ChatCommands = {
 			search,
 			target.replace(/^\s?([^,=]*),\s?/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
 			lines,
-			(cmd === 'punishlog' || cmd === 'pl'),
+			onlyPunishments,
 			cmd === 'timedmodlog'
 		);
 	},
@@ -303,4 +320,3 @@ export const commands: ChatCommands = {
 		);
 	},
 };
-

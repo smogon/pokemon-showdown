@@ -1,14 +1,13 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import * as child_process from 'child_process';
-import * as util from 'util';
-
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
-import {QueryProcessManager} from '../../lib/process-manager';
+import {QueryProcessManager, exec} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
 import {checkRipgrepAvailability} from '../config-loader';
+
+const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
 
 interface BattleOutcome {
 	lost: string;
@@ -25,8 +24,6 @@ interface BattleSearchResults {
 	totalTies: number;
 	timesBattled: {[k: string]: number};
 }
-
-const execFile = util.promisify(child_process.execFile);
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
@@ -48,10 +45,10 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
 		// in a user's name so the userid can case-insensitively be matched to the name.
-		const regexString = userids.map(id => `(.*("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
+		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await execFile('rg', ['-i', regexString, '--no-line-number', '-tjson', ...files]);
+			output = await exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
 		} catch (error) {
 			return results;
 		}
@@ -363,7 +360,7 @@ export const commands: ChatCommands = {
 	},
 	battlesearchhelp: [
 		'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.',
-		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assuemd to be userids. Requires &`,
+		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`,
 	],
 };
 
@@ -384,7 +381,7 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
-});
+}, BATTLESEARCH_PROCESS_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	// This is a child process!

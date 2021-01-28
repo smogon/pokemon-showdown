@@ -1,0 +1,235 @@
+"use strict";
+
+const {transform} = require("sucrase");
+const fs = require("fs");
+const path = require("path");
+
+let force = false;
+
+function needsSucrase(source, dest, path = "") {
+	if (path.endsWith(".ts")) {
+		if (path.endsWith(".d.ts")) return false;
+		const sourceStat = fs.lstatSync(source + path);
+		try {
+			const destStat = fs.lstatSync(dest + path.slice(0, -2) + "js");
+			return sourceStat.ctimeMs > destStat.ctimeMs;
+		} catch (e) {
+			// dest doesn't exist
+			return true;
+		}
+	}
+	if (!path.includes(".")) {
+		// probably dir
+		try {
+			const files = fs.readdirSync(source + path);
+			for (const file of files) {
+				if (needsSucrase(source, dest, path + "/" + file)) {
+					return true;
+				}
+			}
+		} catch (e) {
+			// not dir
+		}
+		return false;
+	}
+	return false;
+}
+
+// https://github.com/alangpierce/sucrase/blob/master/src/cli.ts
+function findFiles(options) {
+	const outDirPath = options.outDirPath;
+	const srcDirPath = options.srcDirPath;
+	const pathToSource = options.pathToSource || "..";
+
+	const extensions = options.sucraseOptions.transforms.includes("typescript") ?
+		[".ts", ".tsx"] :
+		[".js", ".jsx"];
+
+	if (!fs.existsSync(outDirPath)) {
+		fs.mkdirSync(outDirPath);
+	}
+
+	const outArr = [];
+	for (const child of fs.readdirSync(srcDirPath)) {
+		if (
+			["node_modules", ".git"].includes(child) ||
+			options.excludeDirs.includes(child)
+		) {
+			continue;
+		}
+		const srcChildPath = path.join(srcDirPath, child);
+		const outChildPath = path.join(outDirPath, child);
+		const pathToSourceChild = path.join(pathToSource, "..");
+		if (fs.statSync(srcChildPath).isDirectory()) {
+			const innerOptions = {...options};
+			innerOptions.srcDirPath = srcChildPath;
+			innerOptions.outDirPath = outChildPath;
+			innerOptions.pathToSource = pathToSourceChild;
+			const innerFiles = findFiles(innerOptions);
+			outArr.push(...innerFiles);
+		} else if (extensions.some((ext) => srcChildPath.endsWith(ext))) {
+			const outPath = outChildPath.replace(
+				/\.\w+$/,
+				`.${options.outExtension}`
+			);
+			outArr.push({
+				srcPath: srcChildPath,
+				outPath,
+				pathToSource: pathToSource,
+			});
+		}
+	}
+
+	if (!fs.existsSync(path.join(outDirPath, "sourceMaps"))) {
+		fs.mkdirSync(path.join(outDirPath, "sourceMaps"));
+	}
+
+	return outArr;
+}
+
+function sucrase(src, out, opts, excludeDirs = []) {
+	try {
+		if (!force && src !== "./config" && !needsSucrase(src, out)) {
+			return false;
+		}
+	} catch (e) {}
+	const sucraseOptions = {
+		transforms: ["typescript", "imports"],
+		enableLegacyTypeScriptModuleInterop: true,
+
+		...opts,
+	};
+	const files = findFiles({
+		outDirPath: out,
+		srcDirPath: src,
+		sucraseOptions: sucraseOptions,
+		excludeDirs: ["sourceMaps", ...excludeDirs],
+		outExtension: "js",
+	});
+	for (const file of files) {
+		const sucraseOptionsFile = {
+			...sucraseOptions,
+			sourceMapOptions: {compiledFilename: file.outPath},
+			filePath: path.join(file.pathToSource, file.srcPath),
+		};
+		const code = fs.readFileSync(file.srcPath, "utf-8");
+		const transformed = transform(code, sucraseOptionsFile);
+		transformed.code += `\n //# sourceMappingURL=sourceMaps/${path.basename(
+			file.outPath
+		)}.map`;
+		fs.writeFileSync(
+			path.join(
+				path.dirname(file.outPath),
+				"sourceMaps",
+				path.basename(`${file.outPath}.map`)
+			),
+			JSON.stringify(transformed.sourceMap)
+		);
+		fs.writeFileSync(file.outPath, transformed.code);
+	}
+	return true;
+}
+
+function replace(file, replacements) {
+	fs.lstat(file, function (err, stats) {
+		if (err) throw err;
+		if (stats.isSymbolicLink()) return;
+		if (stats.isFile()) {
+			if (!file.endsWith('.js')) return;
+			fs.readFile(file, "utf-8", function (err, text) {
+				if (err) throw err;
+				let anyMatch = false;
+				for (let i = 0; i < replacements.length; i++) {
+					anyMatch = anyMatch || text.match(replacements[i].regex);
+					if (anyMatch) text = text.replace(replacements[i].regex, replacements[i].replace);
+				}
+				if (!anyMatch) return;
+				fs.writeFile(file, text, function (err) {
+					if (err) throw err;
+				});
+			});
+		} else if (stats.isDirectory()) {
+			fs.readdir(file, function (err, files) {
+				if (err) throw err;
+				for (let i = 0; i < files.length; i++) {
+					replace(path.join(file, files[i]), replacements);
+				}
+			});
+		}
+	});
+}
+
+function copyOverDataJSON(file) {
+	const source = './data/' + file;
+	const dest = './.data-dist/' + file;
+	fs.readFile(source, function (err, text) {
+		if (err) throw err;
+		fs.writeFile(dest, text, function (err) {
+			if (err) throw err;
+		});
+	});
+}
+
+exports.transpile = (doForce) => {
+	if (doForce) force = true;
+	if (sucrase('./config', './.config-dist')) {
+		replace('.config-dist', [
+			{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+		]);
+	}
+
+	if (sucrase('./data', './.data-dist')) {
+		replace('.data-dist', [
+			{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+		]);
+	}
+
+	if (sucrase('./sim', './.sim-dist')) {
+		replace('.sim-dist', [
+			{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
+		]);
+	}
+
+	sucrase('./lib', './.lib-dist');
+
+	if (sucrase('./server', './.server-dist')) {
+		replace('.server-dist', [
+			{regex: /(require\(.*?)(data|lib|sim)/g, replace: `$1.$2-dist`},
+		]);
+	}
+
+	sucrase('./translations', './.translations-dist');
+
+	if (sucrase('./tools/set-import', './tools/set-import', null, ['sets'])) {
+		replace('./tools/set-import/importer.js', [
+			{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+		]);
+	}
+
+	if (sucrase('./tools/modlog', './tools/modlog')) {
+		replace('./tools/modlog/converter.js', [
+			{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
+		]);
+	}
+
+	if (!fs.existsSync('./.data-dist/README.md')) {
+		const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
+			'You should be editing the `.ts` files there and then running `npm run build` or\n' +
+			'`./pokemon-showdown` to force these `.js` files to be recreated.\n';
+		fs.writeFile('./.config-dist/README.md', text.replace('data/', 'config/'), function () {});
+		fs.writeFile('./.data-dist/README.md', text, function () {});
+		fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
+		fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
+		fs.writeFile('./.translations-dist/README.md', text.replace('data/', 'translations/'), function () {});
+		fs.writeFile('./.lib-dist/README.md', text.replace('data/', 'lib/'), function () {});
+	}
+
+	// sucrase doesn't copy JSON over, so we'll have to do it ourselves
+	copyOverDataJSON('bss-factory-sets.json');
+	copyOverDataJSON('cap-1v1-sets.json');
+	copyOverDataJSON('mods/gen7/factory-sets.json');
+	copyOverDataJSON('mods/gen7/bss-factory-sets.json');
+	copyOverDataJSON('mods/gen6/factory-sets.json');
+
+	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+};

@@ -6,7 +6,7 @@
  */
 
 import {Battle} from './battle';
-import * as Data from './dex-data';
+import {Dex} from './dex';
 import {Field} from './field';
 import {Pokemon} from './pokemon';
 import {PRNG} from './prng';
@@ -364,8 +364,8 @@ export const State = new class {
 		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
-				Battle, Field, Side, Pokemon, Data.Condition,
-				Data.Ability, Data.Item, Data.Move, Data.Species,
+				Battle, Field, Side, Pokemon, Dex.Condition,
+				Dex.Ability, Dex.Item, Dex.Move, Dex.Species,
 			]);
 		}
 		return this.REFERABLE.has(obj.constructor);
