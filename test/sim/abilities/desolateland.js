@@ -144,4 +144,14 @@ describe('Desolate Land', function () {
 		battle.makeChoices();
 		assert.false(battle.field.isWeather('desolateland'));
 	});
+
+	it(`should cause Water-type Natural Gift to fail`, function () {
+		battle = common.createBattle([[
+			{species: 'Groudon', item: 'Red Orb', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', moves: ['naturalgift']},
+		]]);
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+	});
 });

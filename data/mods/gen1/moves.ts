@@ -138,6 +138,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	bite: {
 		inherit: true,
+		category: "Physical",
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch',

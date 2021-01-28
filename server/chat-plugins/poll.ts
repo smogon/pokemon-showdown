@@ -135,6 +135,9 @@ export class Poll extends MinorActivity {
 		if (!this.pendingVotes[userid]) {
 			this.pendingVotes[userid] = [];
 		}
+		if (this.pendingVotes[userid].includes(option)) {
+			throw new Chat.ErrorMessage(this.room.tr`That option is already selected.`);
+		}
 		this.pendingVotes[userid].push(option);
 		this.updateFor(user);
 		this.save();
@@ -143,7 +146,7 @@ export class Poll extends MinorActivity {
 		const userid = user.id;
 		const pendingVote = this.pendingVotes[userid];
 		if (!pendingVote || !pendingVote.includes(option)) {
-			return user.sendTo(this.room, this.room.tr`That option is not selected.`);
+			throw new Chat.ErrorMessage(this.room.tr`That option is not selected.`);
 		}
 		pendingVote.splice(pendingVote.indexOf(option), 1);
 		this.updateFor(user);
@@ -156,10 +159,10 @@ export class Poll extends MinorActivity {
 
 		if (userid in this.voters || ip in this.voterIps) {
 			delete this.pendingVotes[userid];
-			return user.sendTo(this.room, this.room.tr`You have already voted for this poll.`);
+			throw new Chat.ErrorMessage(this.room.tr`You have already voted for this poll.`);
 		}
 		const selected = this.pendingVotes[userid];
-		if (!selected) return user.sendTo(this.room, this.room.tr`No options selected.`);
+		if (!selected) throw new Chat.ErrorMessage(this.room.tr`No options selected.`);
 
 		this.voters[userid] = selected;
 		this.voterIps[ip] = selected;
@@ -226,7 +229,7 @@ export class Poll extends MinorActivity {
 		const iconText = options.isQuiz ?
 			`<i class="fa fa-question"></i> ${room.tr`Quiz`}` :
 			`<i class="fa fa-bar-chart"></i> ${room.tr`Poll`}`;
-		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes} ${room.tr`votes`}</small>`;
+		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes || 0} ${room.tr`votes`}</small>`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question, options.supportHTML)}</strong></p>`;
 		const answers = Poll.getAnswers(options.answers);
 
@@ -694,7 +697,7 @@ export const pages: PageTable = {
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
-			buf += `${button}<br />${Poll.generateResults(poll, room, true)}`;
+			buf += `${button}<br />${Poll.generateResults(poll, room, false)}`;
 		}
 		buf += `<hr />`;
 		return buf;

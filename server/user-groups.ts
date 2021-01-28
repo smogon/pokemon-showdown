@@ -75,6 +75,9 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		if (user.locked || user.semilocked) return false;
 		if (group === 'unlocked') return true;
+		if (group === 'whitelist' && this.has(user.id)) {
+			return true;
+		}
 		if (!Config.groups[group]) return false;
 		if (this.get(user.id) === ' ' && group !== ' ') return false;
 		return Auth.atLeast(this.get(user.id), group);

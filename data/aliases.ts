@@ -29,6 +29,7 @@ export const Aliases: {[alias: string]: string} = {
 	cc1v1: "[Gen 8] Challenge Cup 1v1",
 	cc2v2: "[Gen 8] Challenge Cup 2v2",
 	hc: "[Gen 8] Hackmons Cup",
+	hackmons: "[Gen 8] Pure Hackmons",
 	monorandom: "[Gen 8] Monotype Random Battle",
 	bf: "[Gen 7] Battle Factory",
 	bssf: "[Gen 7] BSS Factory",
@@ -77,7 +78,7 @@ export const Aliases: {[alias: string]: string} = {
 	mmx: "Mewtwo-Mega-X",
 	mmy: "Mewtwo-Mega-Y",
 	zardx: "Charizard-Mega-X",
-	zardy: "Charizard-Mega-y",
+	zardy: "Charizard-Mega-Y",
 
 	// Pokéstar Studios
 	blackdoor: "Pokestar Black-Door",
@@ -563,7 +564,7 @@ export const Aliases: {[alias: string]: string} = {
 	tr17amnesia: "TR17",
 	tr18leechlife: "TR18",
 	tr19triattack: "TR19",
-	tr20substitue: "TR20",
+	tr20substitute: "TR20",
 	tr21reversal: "TR21",
 	tr22sludgebomb: "TR22",
 	tr23spikes: "TR23",

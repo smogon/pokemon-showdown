@@ -6,6 +6,7 @@ export interface EventMethods {
 	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterHit?: MoveEventMethods['onAfterHit'];
+	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
@@ -573,6 +574,7 @@ export interface EventMethods {
 	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
+	onTerrainPriority?: number;
 	onTrapPokemonPriority?: number;
 	onTryEatItemPriority?: number;
 	onTryHealPriority?: number;

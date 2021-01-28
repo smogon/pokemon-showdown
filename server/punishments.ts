@@ -286,7 +286,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	saveRoomPunishments() {
@@ -302,7 +302,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	getEntry(entryId: string) {
@@ -1599,6 +1599,16 @@ export const Punishments = new class {
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
+	isBlacklistedSharedIp(ip: string) {
+		const num = IPTools.ipToNumber(ip);
+		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
+			const range = IPTools.stringToRange(blacklisted);
+			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
+			if (IPTools.checkPattern([range], num)) return reason;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns an array of all room punishments associated with a user.
 	 *
@@ -1656,7 +1666,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.startsWith('#')) return;
+			if (id !== '#rangelock' && id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (entry) {

@@ -1395,7 +1395,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondaryPriority: 2,
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status') {
+			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
@@ -1869,6 +1869,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
 			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
@@ -1884,6 +1885,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				if (target.useItem()) {
@@ -2585,7 +2587,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -4684,7 +4686,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -4916,8 +4918,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.category !== 'Status') {
-				this.heal(pokemon.lastDamage / 8, pokemon);
+			if (move.totalDamage) {
+				this.heal(move.totalDamage / 8, pokemon);
 			}
 		},
 		num: 253,

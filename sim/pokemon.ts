@@ -661,7 +661,6 @@ export class Pokemon {
 
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		let targets: Pokemon[] = [];
-		let pressureTargets;
 
 		switch (move.target) {
 		case 'all':
@@ -712,23 +711,27 @@ export class Pokemon {
 			} else {
 				targets.push(target);
 			}
-			if (target.fainted) {
+			if (target.fainted && !move.isFutureMove) {
 				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
 			}
-
-			// Resolve apparent targets for Pressure.
-			if (move.pressureTarget) {
-				// At the moment, this is the only supported target.
-				if (move.pressureTarget === 'foeSide') {
-					pressureTargets = this.foes();
-				}
-			}
 		}
 
-		return {targets, pressureTargets: pressureTargets || targets};
+		// Resolve apparent targets for Pressure.
+		let pressureTargets = targets;
+		switch (move.pressureTarget) {
+		case 'foeSide':
+			pressureTargets = this.foes();
+			break;
+		case 'self':
+			pressureTargets = [];
+			break;
+		// At the moment, there are no other supported targets.
+		}
+
+		return {targets, pressureTargets};
 	}
 
 	ignoringAbility() {
@@ -1934,25 +1937,18 @@ export class Pokemon {
 		}
 		if (this.fainted) return false;
 
-		const negateResult = this.battle.runEvent('NegateImmunity', this, type);
-		let isGrounded;
-		if (type === 'Ground') {
-			isGrounded = this.isGrounded(!negateResult);
-			if (isGrounded === null) {
-				if (message) {
-					this.battle.add('-immune', this, '[from] ability: Levitate');
-				}
-				return false;
-			}
+		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
+		const notImmune = type === 'Ground' ?
+			this.isGrounded(negateImmunity) :
+			negateImmunity || this.battle.dex.getImmunity(type, this);
+		if (notImmune) return true;
+		if (!message) return false;
+		if (notImmune === null) {
+			this.battle.add('-immune', this, '[from] ability: Levitate');
+		} else {
+			this.battle.add('-immune', this);
 		}
-		if (!negateResult) return true;
-		if ((isGrounded === undefined && !this.battle.dex.getImmunity(type, this)) || isGrounded === false) {
-			if (message) {
-				this.battle.add('-immune', this);
-			}
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 	runStatusImmunity(type: string, message?: string) {

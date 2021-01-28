@@ -40,6 +40,7 @@ const ALL_CATEGORIES: {[k: string]: string} = {
  */
 const CATEGORY_ALIASES: {[k: string]: ID} = {
 	poke: 'pokemon' as ID,
+	subcat1: 'subcat' as ID,
 };
 
 const MODES: {[k: string]: string} = {
@@ -1755,7 +1756,7 @@ const triviaCommands: ChatCommands = {
 				triviaData.questions![category]?.some(q => q.question === question) ||
 				triviaData.submissions![category]?.some(q => q.question === question)
 			) {
-				this.errorReply(this.tr`Question "${question}" is already awaiting review.`);
+				this.errorReply(this.tr`Question "${question}" is already awaiting review or in the question database.`);
 				continue;
 			}
 

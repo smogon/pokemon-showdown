@@ -236,6 +236,8 @@ export const commands: ChatCommands = {
 				shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else if (nextSymbol === '#') {
 				this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
+				const logRoom = Rooms.get(room.settings.isPrivate === true ? 'upperstaff' : 'staff');
+				logRoom?.addByUser(user, `<<${room.roomid}>> ${name} was appointed Room Owner by ${user.name}`);
 				this.modlog('ROOM OWNER', userid);
 				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else {
@@ -1608,8 +1610,12 @@ export const commands: ChatCommands = {
 
 	nl: 'namelock',
 	forcenamelock: 'namelock',
+	weeknamelock: 'namelock',
+	wnl: 'namelock',
+	forceweeknamelock: 'namelock',
 	async namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
+		const week = cmd.includes('w');
 		const force = cmd.includes('force');
 
 		const reason = this.splitTarget(target);
@@ -1619,8 +1625,8 @@ export const commands: ChatCommands = {
 		if (!targetUser && !force) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
-		if (targetUser?.id !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
-			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser?.name}. To namelock anyway, use /forcenamelock.`);
+		if (targetUser?.id !== toID(this.inputUsername) && !force) {
+			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
 		this.checkCan('forcerename', userid);
 		if (targetUser?.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
@@ -1634,8 +1640,8 @@ export const commands: ChatCommands = {
 			publicReason = target.substr(0, privateIndex).trim();
 		}
 		const reasonText = publicReason ? ` (${publicReason})` : `.`;
-		this.privateGlobalModAction(`${this.targetUsername} was namelocked by ${user.name}${reasonText}`);
-		this.globalModlog("NAMELOCK", targetUser || userid, target ? `${publicReason} ${privateReason}` : ``);
+		this.privateGlobalModAction(`${targetUser.name} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
+		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, target ? `${publicReason} ${privateReason}` : ``);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
 		if (roomauth.length) {
@@ -1645,7 +1651,8 @@ export const commands: ChatCommands = {
 			Ladders.cancelSearches(targetUser);
 			targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		}
-		await Punishments.namelock(userid, null, null, false, reason);
+		const duration = week ? 7 * 24 * 60 * 60 * 1000 : 48 * 60 * 60 * 1000;
+		await Punishments.namelock(targetUser, Date.now() + duration, null, false, publicReason);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room?.battle) this.parse('/savereplay forpunishment');
 
@@ -1684,6 +1691,7 @@ export const commands: ChatCommands = {
 	hidelines: 'hidetext',
 	hlines: 'hidetext',
 	cleartext: 'hidetext',
+	ctext: 'hidetext',
 	clearaltstext: 'hidetext',
 	clearlines: 'hidetext',
 	forcecleartext: 'hidetext',
@@ -1691,7 +1699,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse(`/help hidetext`);
 		room = this.requireRoom();
 		const hasLineCount = cmd.includes('lines');
-		const hideRevealButton = cmd.includes('clear');
+		const hideRevealButton = cmd.includes('clear') || cmd === 'ctext';
 		target = this.splitTarget(target);
 		let lineCount = 0;
 		if (/^[0-9]+\s*(,|$)/.test(target)) {

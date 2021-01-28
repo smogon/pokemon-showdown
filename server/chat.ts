@@ -233,14 +233,14 @@ export abstract class MessageContext {
 	}
 	meansYes(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true':
+		case 'on': case 'enable': case 'yes': case 'true': case 'allow':
 			return true;
 		}
 		return false;
 	}
 	meansNo(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'off': case 'disable': case 'no': case 'false':
+		case 'off': case 'disable': case 'no': case 'false': case 'disallow': case '0':
 			return true;
 		}
 		return false;
@@ -1610,11 +1610,11 @@ export const Chat = new class {
 	parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
 		Chat.loadPlugins();
 
-		const initialRoomlogLength = room?.log.log.length;
+		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({message, room, user, connection});
 		const result = context.parse();
 
-		if (room && room.log.log.length !== initialRoomlogLength) {
+		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
 			for (const [handler, numMessages] of room.nthMessageHandlers) {
 				if (room.messagesSent % numMessages === 0) handler(room, message);
@@ -1762,7 +1762,8 @@ export const Chat = new class {
 			this.loadPlugin(`chat-plugins/${file}`);
 		}
 		Chat.oldPlugins = {};
-		Utils.sortBy(Chat.filters, filter => filter.priority || 0);
+		// lower priority should run later
+		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));
 	}
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {

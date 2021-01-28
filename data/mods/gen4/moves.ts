@@ -165,13 +165,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		recoil: [1, 3],
 	},
-	brickbreak: {
-		inherit: true,
-		onTryHit(pokemon) {
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
-		},
-	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
@@ -1200,6 +1193,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					target.removeVolatile('substitute');
 					target.addVolatile('substitutebroken');
 					if (target.volatiles['substitutebroken']) target.volatiles['substitutebroken'].move = move.id;
+					if (move.ohko) this.add('-ohko');
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}

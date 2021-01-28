@@ -9,6 +9,7 @@ export const translations: Translations = {
 		"Identifier": "",
 		"Interval": "",
 		"every ${minutes} minute(s)": "",
+		"every ${messages} chat message(s)": "",
 		"Raw text": "",
 		"Remove": "",
 		"Remove all repeats": "",
