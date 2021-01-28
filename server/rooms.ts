@@ -115,6 +115,7 @@ export interface RoomSettings {
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: (PollData | AnnouncementData)[];
 	repeats?: RepeatedPhrase[];
+	autoModchat?: {rank: GroupSymbol, time: number, active: boolean};
 	tournaments?: TournamentRoomSettings;
 
 	scavSettings?: AnyObject;
@@ -181,6 +182,7 @@ export abstract class BasicRoom {
 	userCount: number;
 	active: boolean;
 	muteTimer: NodeJS.Timer | null;
+	modchatTimer: NodeJS.Timer | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
@@ -284,6 +286,7 @@ export abstract class BasicRoom {
 
 		this.active = false;
 		this.muteTimer = null;
+		this.modchatTimer = null;
 
 		this.logUserStatsInterval = null;
 		this.expireTimer = null;
@@ -888,6 +891,7 @@ export abstract class BasicRoom {
 
 		this.users[user.id] = user;
 		this.userCount++;
+		this.checkAutoModchat(user);
 
 		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
@@ -945,7 +949,42 @@ export abstract class BasicRoom {
 			this.reportJoin('l', user.getIdentity(this.roomid), user);
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
+
+
 		return true;
+	}
+
+	runAutoModchat() {
+		if (!this.settings.autoModchat || this.settings.autoModchat.active) return;
+		// they are staff and online
+		const staff = Object.values(this.users).filter(u => this.auth.isStaff(u.id));
+		if (!staff.length) {
+			const {rank, time} = this.settings.autoModchat;
+			this.modchatTimer = setTimeout(() => {
+				this.settings.modchat = rank;
+				this.add(
+					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${Chat.toDurationString(time)},` +
+					` and has had modchat set to ${rank}.</strong></div>`
+				).update();
+				this.modlog({
+					action: 'AUTOMODCHAT ACTIVATE',
+				});
+				// automodchat will always exist
+				this.settings.autoModchat!.active = true;
+			}, time * 60 * 1000);
+		}
+	}
+
+	checkAutoModchat(user: User) {
+		if (this.auth.isStaff(user.id)) {
+			if (this.modchatTimer) {
+				clearTimeout(this.modchatTimer);
+			}
+			if (this.settings.autoModchat?.active) {
+				delete this.settings.modchat;
+				this.settings.autoModchat.active = false;
+			}
+		}
 	}
 
 	destroy(): void {
