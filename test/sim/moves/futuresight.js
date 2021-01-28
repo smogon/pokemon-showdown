@@ -46,7 +46,7 @@ describe('Future Sight', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it.skip(`should not double Stomping Tantrum for exiting normally`, function () {
+	it(`should not double Stomping Tantrum for exiting normally`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['futuresight', 'stompingtantrum']},
 		], [
@@ -60,7 +60,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [19, 23]); // If it were doubled, would be 38-45
 	});
 
-	it.skip(`should not trigger Eject Button`, function () {
+	it(`should not trigger Eject Button`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['futuresight']},
 		], [
@@ -74,22 +74,23 @@ describe('Future Sight', function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip(`should be able to set Future Sight against an empty target slot`, function () {
+	it(`should be able to set Future Sight against an empty target slot`, function () {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['futuresight']},
-		], [
 			{species: "Shedinja", moves: ['finalgambit']},
 			{species: "Roggenrola", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
 		]]);
 
+		battle.makeChoices('auto', 'move future sight');
+		battle.makeChoices('switch 2');
 		battle.makeChoices();
 		battle.makeChoices();
-		battle.makeChoices();
-		const roggenrola = battle.p2.active[0];
+		const roggenrola = battle.p1.active[0];
 		assert.false.fullHP(roggenrola);
 	});
 
-	it.skip(`its damaging hit should not count as copyable for Copycat`, function () {
+	it(`its damaging hit should not count as copyable for Copycat`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
 		], [

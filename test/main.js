@@ -30,6 +30,8 @@ config.watchconfig = false;
 config.nofswriting = true;
 // Test a normal ladder
 config.fakeladder = false;
+// Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
+config.loglevel = 3;
 
 require('./../.lib-dist/process-manager').disabled = true;
 

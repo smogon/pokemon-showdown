@@ -6,7 +6,7 @@ type GroupSymbol = import('./user-groups').GroupSymbol;
 type AuthLevel = import('./user-groups').AuthLevel;
 
 /** not actually guaranteed to be one of these */
-type PunishType = '#chatfilter' | '#hostfilter' | '#dnsbl' | '#ipban';
+type PunishType = '#hostfilter' | '#dnsbl' | '#ipban';
 
 // Chat
 type CommandContext = Chat.CommandContext;
@@ -16,6 +16,7 @@ type ChatCommands = Chat.ChatCommands;
 type SettingsHandler = Chat.SettingsHandler;
 type ChatFilter = Chat.ChatFilter;
 type NameFilter = Chat.NameFilter;
+type NicknameFilter = Chat.NicknameFilter;
 type StatusFilter = Chat.StatusFilter;
 type LoginFilter = Chat.LoginFilter;
 namespace Chat {
@@ -27,6 +28,7 @@ namespace Chat {
 	export type ChatHandler = import('./chat').ChatHandler;
 	export type ChatFilter = import('./chat').ChatFilter;
 	export type NameFilter = import('./chat').NameFilter;
+	export type NicknameFilter = import('./chat').NicknameFilter;
 	export type StatusFilter = import('./chat').StatusFilter;
 	export type LoginFilter = import('./chat').LoginFilter;
 	export type PunishmentFilter = import('./chat').PunishmentFilter;

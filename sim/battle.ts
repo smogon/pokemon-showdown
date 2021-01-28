@@ -12,9 +12,6 @@ import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {Utils} from '../lib/utils';
-import {FS} from '../lib/fs';
-
-const suspectTests = JSON.parse(FS('../config/suspects.json').readIfExistsSync() || "{}");
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -621,6 +618,18 @@ export class Battle {
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
 		const handlers = this.findEventHandlers(target, eventid, effectSource);
+		if (onEffect) {
+			if (!sourceEffect) throw new Error("onEffect passed without an effect");
+			// @ts-ignore - dynamic lookup
+			const callback = sourceEffect[`on${eventid}`];
+			if (callback !== undefined) {
+				if (Array.isArray(target)) throw new Error("");
+				handlers.unshift(this.resolvePriority({
+					effect: sourceEffect, callback, state: {}, end: null, effectHolder: target,
+				}, `on${eventid}`));
+			}
+		}
+
 		if (eventid === 'Invulnerability' || eventid === 'TryHit' || eventid === 'DamagingHit') {
 			handlers.sort(Battle.compareLeftToRightOrder);
 		} else if (fastExit) {
@@ -641,18 +650,6 @@ export class Battle {
 		const parentEvent = this.event;
 		this.event = {id: eventid, target, source, effect: sourceEffect, modifier: 1};
 		this.eventDepth++;
-
-		if (onEffect) {
-			if (!sourceEffect) throw new Error("onEffect passed without an effect");
-			// @ts-ignore - dynamic lookup
-			const callback = sourceEffect[`on${eventid}`];
-			if (callback !== undefined) {
-				if (Array.isArray(target)) throw new Error("");
-				handlers.unshift(this.resolvePriority({
-					effect: sourceEffect, callback, state: {}, end: null, effectHolder: target,
-				}, `on${eventid}`));
-			}
-		}
 
 		let targetRelayVars = [];
 		if (Array.isArray(target)) {
@@ -1257,15 +1254,17 @@ export class Battle {
 		const unfaintedActive = oldActive?.hp ? oldActive : null;
 		if (unfaintedActive) {
 			oldActive.beingCalledBack = true;
+			let switchCopyFlag = false;
 			if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
-				oldActive.switchCopyFlag = true;
+				switchCopyFlag = true;
 			}
-			if (!oldActive.switchCopyFlag && !isDrag) {
+			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
 				this.runEvent('BeforeSwitchOut', oldActive);
 				if (this.gen >= 5) {
 					this.eachEvent('Update');
 				}
 			}
+			oldActive.skipBeforeSwitchOutEventFlag = false;
 			if (!this.runEvent('SwitchOut', oldActive)) {
 				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
@@ -1292,8 +1291,7 @@ export class Battle {
 			if (this.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
 			}
-			if (oldActive.switchCopyFlag) {
-				oldActive.switchCopyFlag = false;
+			if (switchCopyFlag) {
 				pokemon.copyVolatileFrom(oldActive);
 			}
 			if (newMove) pokemon.lastMove = newMove;
@@ -1321,11 +1319,12 @@ export class Battle {
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
 		pokemon.previouslySwitchedIn++;
 
-		this.queue.insertChoice({choice: 'runUnnerve', pokemon});
 		if (isDrag && this.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+			this.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
 			this.runSwitch(pokemon);
 		} else {
+			this.queue.insertChoice({choice: 'runUnnerve', pokemon});
 			this.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
@@ -1424,13 +1423,17 @@ export class Battle {
 			for (const pokemon of side.active) {
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
-				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
-				pokemon.hurtThisTurn = false;
-				pokemon.statsRaisedThisTurn = false;
-				pokemon.statsLoweredThisTurn = false;
+				if (this.turn !== 1) {
+					pokemon.usedItemThisTurn = false;
+					pokemon.statsRaisedThisTurn = false;
+					pokemon.statsLoweredThisTurn = false;
+					// It shouldn't be possible in a normal battle for a Pokemon to be damaged before turn 1's move selection
+					// However, this could be potentially relevant in certain OMs
+					pokemon.hurtThisTurn = null;
+				}
 
 				pokemon.maybeDisabled = false;
 				for (const moveSlot of pokemon.moveSlots) {
@@ -1532,7 +1535,7 @@ export class Battle {
 		this.makeRequest('move');
 	}
 
-	private maybeTriggerEndlessBattleClause(
+	maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
 		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
@@ -1622,10 +1625,6 @@ export class Battle {
 		if (this.rated) {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
-			// Suspect test notice
-			if (suspectTests[format.id]) {
-				this.add('html', `<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTests[format.id].suspect}! For information on how to participate check out the <a href="${suspectTests[format.id].url}">suspect thread</a>.</strong></div>`);
-			}
 		}
 
 		if (format.onBegin) format.onBegin.call(this);
@@ -1768,7 +1767,7 @@ export class Battle {
 					retVals[i] = 0;
 					continue;
 				}
-				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
+				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage, true);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
 					retVals[i] = curDamage === true ? undefined : targetDamage;
@@ -1785,7 +1784,7 @@ export class Battle {
 			}
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
-			if (targetDamage !== 0) target.hurtThisTurn = true;
+			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
 			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
 
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
@@ -2533,6 +2532,7 @@ export class Battle {
 
 	runAction(action: Action) {
 		const pokemonOriginalHP = action.pokemon?.hp;
+		let residualPokemon: (readonly [Pokemon, number])[] = [];
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
@@ -2648,13 +2648,8 @@ export class Battle {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			const residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
+			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.residualEvent('Residual');
-			for (const [pokemon, originalHP] of residualPokemon) {
-				if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && originalHP > pokemon.maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
-			}
 			this.add('upkeep');
 			break;
 		}
@@ -2700,6 +2695,12 @@ export class Battle {
 
 		if (this.gen >= 5) {
 			this.eachEvent('Update');
+			for (const [pokemon, originalHP] of residualPokemon) {
+				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
+				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
+					this.runEvent('EmergencyExit', pokemon);
+				}
+			}
 		}
 
 		if (action.choice === 'runSwitch') {
@@ -2719,6 +2720,18 @@ export class Battle {
 					pokemon.switchFlag = false;
 				}
 				switches[i] = false;
+			} else if (switches[i]) {
+				for (const pokemon of this.sides[i].active) {
+					if (pokemon.switchFlag && !pokemon.skipBeforeSwitchOutEventFlag) {
+						this.runEvent('BeforeSwitchOut', pokemon);
+						pokemon.skipBeforeSwitchOutEventFlag = true;
+						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						if (this.ended) return true;
+						if (pokemon.fainted) {
+							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
+						}
+					}
+				}
 			}
 		}
 
@@ -3242,7 +3255,7 @@ export class Battle {
 		throw new UnimplementedError('tryPrimaryHitEvent');
 	}
 
-	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean {
+	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove, notActive?: boolean): boolean {
 		throw new UnimplementedError('trySpreadMoveHit');
 	}
 

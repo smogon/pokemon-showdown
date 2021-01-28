@@ -103,6 +103,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
 
 		let move = this.dex.getActiveMove(moveOrMoveName);
+		pokemon.lastMoveUsed = move;
 
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
@@ -245,7 +246,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		let naturalImmunity = false;
 		let accPass = true;
 
-		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move) &&
+			this.runEvent('PrepareHit', pokemon, target, move);
 		if (!hitResult) {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
@@ -253,7 +255,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		}
-		this.runEvent('PrepareHit', pokemon, target, move);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return false;
@@ -443,7 +444,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
 
-		if (move.ohko) this.add('-ohko');
+		if (move.ohko && !target.hp) this.add('-ohko');
 
 		if (!damage && damage !== 0) return damage;
 

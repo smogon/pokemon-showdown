@@ -19,9 +19,10 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Come i Global Voice, e possono lockare gli utenti e controllare i loro alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Come i Global Driver, e possono bannare globalmente gli utenti",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Come i Global Moderator, ma il simbolo specifica che l'utente è un bot",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio e promuovere globalmente gli utenti",
 
 		"<strong>Room ranks</strong>": "<strong>Ruoli della Room</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Non hanno alcun poter eccezion fatta per un simbolo",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Possono utilizzare i comandi con !, come !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Come i Voice, e possono mutare gli utenti",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Come i Driver, e possono bannare gli utenti dalla room",
@@ -39,7 +40,7 @@ export const translations: Translations = {
 		"DATA COMMANDS": "COMANDI PER I DATI",
 		"DRIVER COMMANDS": "COMANDI PER I DRIVER",
 		"MODERATOR COMMANDS": "COMANDI PER I MODERATORI",
-		"ADMIN COMMANDS": "COMANDI PER I AMMINISTRATORI",
+		"ADMIN COMMANDS": "COMANDI PER GLI AMMINISTRATORI",
 
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(sostituisci / con ! per mostrare in room un comando. L'operazione richiede i seguenti rank: + % @ # &)",
 
@@ -78,7 +79,7 @@ export const translations: Translations = {
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>intro</em>: imposta l'introduzione della room che verr&agrave; mostrata a tutti gli utenti quando entrano in room",
 		"- /rules <em>rules link</em>: set the room rules link seen when using /rules": "- /rules <em>link delle regole</em>: imposta il link delle regole della room che si visualizza quando si usa /rules",
 		"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver": "- /roommod, /roomdriver <em>nome utente</em>: promuove l'utente a moderatore/driver della room",
-		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>nome utente</em>: rimuove il room moderator / driver dall'utente",
+		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>nome utente</em>: rimuove il room moderator/driver dall'utente",
 		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>nome utente</em>: rimuove tutti i ruoli della room da un utente",
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>messaggio</em>: dichiara un messaggio in room in colore blu, visibile a tutti gli utenti",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>codice HTML</em>: pubblica in room una casella contenente il codice HTML",
@@ -108,7 +109,7 @@ export const translations: Translations = {
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Sei ${lockType} e non puoi parlare in chat. ${lockExpiration}",
 		"Get help with [TN: your lock]this": "Richiedi aiuto con questo",
 		"You are muted and cannot talk in this room.": "Sei mutato e non puoi parlare in questa room.",
-		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "Poiché la chat moderata è attiva, devi essere registrato da almeno una settimana e aver vinto una battaglia in ladder.",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "Poiché la chat moderata è attiva, devi essere registrato da almeno una settimana e aver vinto una lotta in ladder.",
 		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "Poiché la chat moderata è attiva, il tuo account deve essere staff in una room pubblica o avere un rank globale per parlare in questa room.",
 		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "Poiché la chat moderata è attiva, devi avere il rank di ${groupName} o superiore per parlare in questa room.",
 		"Your message can't be blank.": "Il tuo messaggio non può essere vuoto.",

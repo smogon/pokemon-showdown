@@ -21,6 +21,15 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
+interface Attacker {
+	source: Pokemon;
+	damage: number;
+	thisTurn: boolean;
+	move?: ID;
+	position?: number;
+	damageValue?: (number | boolean | undefined);
+}
+
 export interface EffectState {
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
@@ -129,12 +138,13 @@ export class Pokemon {
 	 */
 	switchFlag: ID | boolean;
 	forceSwitchFlag: boolean;
-	switchCopyFlag: boolean;
+	skipBeforeSwitchOutEventFlag: boolean;
 	draggedIn: number | null;
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
 
 	lastMove: ActiveMove | null;
+	lastMoveUsed: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
 	statsRaisedThisTurn: boolean;
@@ -193,10 +203,15 @@ export class Pokemon {
 	 * always be overwritten by a move action before the end of that turn.
 	 */
 	moveThisTurnResult: boolean | null | undefined;
-	/** used for Assurance check */
-	hurtThisTurn: boolean;
+	/**
+	 * The undynamaxed HP value this Pokemon was reduced to by damage this turn,
+	 * or false if it hasn't taken damage yet this turn
+	 *
+	 * Used for Assurance, Emergency Exit, and Wimp Out
+	 */
+	hurtThisTurn: number | null;
 	lastDamage: number;
-	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID}[];
+	attackedBy: Attacker[];
 
 	isActive: boolean;
 	activeTurns: number;
@@ -383,16 +398,17 @@ export class Pokemon {
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
-		this.switchCopyFlag = false;
+		this.skipBeforeSwitchOutEventFlag = false;
 		this.draggedIn = null;
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
 
 		this.lastMove = null;
+		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 		this.statsRaisedThisTurn = false;
 		this.statsLoweredThisTurn = false;
-		this.hurtThisTurn = false;
+		this.hurtThisTurn = null;
 		this.lastDamage = 0;
 		this.attackedBy = [];
 
@@ -645,7 +661,6 @@ export class Pokemon {
 
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		let targets: Pokemon[] = [];
-		let pressureTargets;
 
 		switch (move.target) {
 		case 'all':
@@ -696,23 +711,27 @@ export class Pokemon {
 			} else {
 				targets.push(target);
 			}
-			if (target.fainted) {
+			if (target.fainted && !move.isFutureMove) {
 				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
 			}
-
-			// Resolve apparent targets for Pressure.
-			if (move.pressureTarget) {
-				// At the moment, this is the only supported target.
-				if (move.pressureTarget === 'foeSide') {
-					pressureTargets = this.foes();
-				}
-			}
 		}
 
-		return {targets, pressureTargets: pressureTargets || targets};
+		// Resolve apparent targets for Pressure.
+		let pressureTargets = targets;
+		switch (move.pressureTarget) {
+		case 'foeSide':
+			pressureTargets = this.foes();
+			break;
+		case 'self':
+			pressureTargets = [];
+			break;
+		// At the moment, there are no other supported targets.
+		}
+
+		return {targets, pressureTargets};
 	}
 
 	ignoringAbility() {
@@ -765,19 +784,31 @@ export class Pokemon {
 	}
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
-		if (!damage) damage = 0;
+		const damageNumber = (typeof damage === 'number') ? damage : 0;
 		move = this.battle.dex.getMove(move);
 		this.attackedBy.push({
 			source,
-			damage,
+			damage: damageNumber,
 			move: move.id,
 			thisTurn: true,
+			position: source.position,
+			damageValue: damage,
 		});
 	}
 
 	getLastAttackedBy() {
 		if (this.attackedBy.length === 0) return undefined;
 		return this.attackedBy[this.attackedBy.length - 1];
+	}
+
+	getLastDamagedBy(filterOutSameSide: boolean) {
+		const damagedBy: Attacker[] = this.attackedBy.filter(
+			(attacker) =>
+			  typeof attacker.damageValue === 'number' &&
+			  (filterOutSameSide === undefined || this.side !== attacker.source.side)
+		  );
+		if (damagedBy.length === 0) return undefined;
+		return damagedBy[damagedBy.length - 1];
 	}
 
 	/**
@@ -835,7 +866,9 @@ export class Pokemon {
 			}
 			let disabled = moveSlot.disabled;
 			if (this.volatiles['dynamax']) {
-				disabled = this.maxMoveDisabled(this.battle.dex.getMove(moveSlot.id));
+				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
+				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
+				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
 				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
@@ -861,8 +894,11 @@ export class Pokemon {
 		return hasValidMove ? moves : [];
 	}
 
-	maxMoveDisabled(move: Move) {
-		return !!(move.category === 'Status' && (this.hasItem('assaultvest') || this.volatiles['taunt']));
+	/** This should be passed the base move and not the corresponding max move so we can check how much PP is left. */
+	maxMoveDisabled(baseMove: Move | string) {
+		baseMove = this.battle.dex.getMove(baseMove);
+		if (!this.getMoveData(baseMove.id)?.pp) return true;
+		return !!(baseMove.category === 'Status' && (this.hasItem('assaultvest') || this.volatiles['taunt']));
 	}
 
 	getDynamaxRequest(skipChecks?: boolean) {
@@ -884,7 +920,7 @@ export class Pokemon {
 			const move = this.battle.dex.getMove(moveSlot.id);
 			const maxMove = this.battle.getMaxMove(move, this);
 			if (maxMove) {
-				if (this.maxMoveDisabled(maxMove)) {
+				if (this.maxMoveDisabled(move)) {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
 				} else {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
@@ -940,7 +976,7 @@ export class Pokemon {
 			if (this.trapped) data.trapped = true;
 		}
 
-		if (!lockedMove) {
+		if (!lockedMove || lockedMove === 'struggle') {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
@@ -1286,11 +1322,12 @@ export class Pokemon {
 		}
 
 		this.lastMove = null;
+		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 
 		this.lastDamage = 0;
 		this.attackedBy = [];
-		this.hurtThisTurn = false;
+		this.hurtThisTurn = null;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
@@ -1371,7 +1408,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = (isHidden || true);
-				moveSlot.disabledSource = (sourceEffect ? sourceEffect.fullname : '');
+				moveSlot.disabledSource = (sourceEffect?.fullname || moveSlot.move);
 			}
 		}
 	}
@@ -1499,8 +1536,8 @@ export class Pokemon {
 	}
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
-		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
+		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -1900,25 +1937,18 @@ export class Pokemon {
 		}
 		if (this.fainted) return false;
 
-		const negateResult = this.battle.runEvent('NegateImmunity', this, type);
-		let isGrounded;
-		if (type === 'Ground') {
-			isGrounded = this.isGrounded(!negateResult);
-			if (isGrounded === null) {
-				if (message) {
-					this.battle.add('-immune', this, '[from] ability: Levitate');
-				}
-				return false;
-			}
+		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
+		const notImmune = type === 'Ground' ?
+			this.isGrounded(negateImmunity) :
+			negateImmunity || this.battle.dex.getImmunity(type, this);
+		if (notImmune) return true;
+		if (!message) return false;
+		if (notImmune === null) {
+			this.battle.add('-immune', this, '[from] ability: Levitate');
+		} else {
+			this.battle.add('-immune', this);
 		}
-		if (!negateResult) return true;
-		if ((isGrounded === undefined && !this.battle.dex.getImmunity(type, this)) || isGrounded === false) {
-			if (message) {
-				this.battle.add('-immune', this);
-			}
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 	runStatusImmunity(type: string, message?: string) {

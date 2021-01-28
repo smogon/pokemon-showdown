@@ -95,6 +95,10 @@ export interface MoveEventMethods {
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
 	onAfterMove?: CommonHandlers['VoidSourceMove'];
+	onDamagePriority?: number;
+	onDamage?: (
+		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
+	) => number | boolean | null | void;
 
 	/* Invoked by the global BasePower event (onEffect = true) */
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
@@ -109,11 +113,13 @@ export interface MoveEventMethods {
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyTarget?: (this: Battle, relayVar: any, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
+	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean |
+	 null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
@@ -210,8 +216,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: string;
 	noDamageVariance?: boolean;
-	/** False Swipe */
-	noFaint?: boolean;
 	nonGhostTarget?: string;
 	pressureTarget?: string;
 	spreadModifier?: number;
@@ -240,7 +244,11 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: string;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {inherit: true};
+export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+	inherit: true,
+	igniteBoosted?: boolean,
+	gen?: number,
+};
 
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';

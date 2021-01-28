@@ -449,12 +449,16 @@ export class Side {
 
 		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
-			const lockedMoveTarget = pokemon.lastMoveTargetLoc || 0;
+			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
+			const lockedMoveID = toID(lockedMove);
+			if (pokemon.volatiles[lockedMoveID] && pokemon.volatiles[lockedMoveID].targetLoc) {
+				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
+			}
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon,
-				targetLoc: lockedMoveTarget,
-				moveid: toID(lockedMove),
+				targetLoc: lockedMoveTargetLoc,
+				moveid: lockedMoveID,
 			});
 			return true;
 		} else if (!moves.length && !zMove) {
@@ -463,8 +467,8 @@ export class Side {
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (maxMove) {
-			// Dynamaxed; only Taunt and Assault Vest disable Max Guard
-			if (pokemon.maxMoveDisabled(maxMove)) {
+			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
+			if (pokemon.maxMoveDisabled(move)) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
 			}
 		} else if (!zMove) {

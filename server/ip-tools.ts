@@ -177,7 +177,10 @@ export const IPTools = new class {
 		const aParts = a.split('.');
 		const bParts = b.split('.');
 		while (diff === 0) {
-			diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
+			const aPart = parseInt(aParts[i]);
+			const bPart = parseInt(bParts[i]);
+			if (isNaN(aPart) || isNaN(bPart)) throw new Error("Invalid IP passed to IPTools.ipSort.");
+			diff = aPart - bPart;
 			i++;
 		}
 		return diff;
@@ -217,7 +220,7 @@ export const IPTools = new class {
 	/**
 	 * Proxy and host management functions
 	 */
-	ranges: AddressRange[] = [];
+	ranges: (AddressRange & {host: string})[] = [];
 	singleIPOpenProxies: Set<string> = new Set();
 	proxyHosts: Set<string> = new Set();
 	residentialHosts: Set<string> = new Set();
@@ -430,7 +433,7 @@ export const IPTools = new class {
 		}
 	}
 
-	addRange(range: AddressRange) {
+	addRange(range: AddressRange & {host: string}) {
 		if (IPTools.getRange(range.minIP, range.maxIP)) {
 			IPTools.removeRange(range.minIP, range.maxIP);
 		}
@@ -603,7 +606,7 @@ export const IPTools = new class {
 	}
 };
 
-const telstraRange: AddressRange = {
+const telstraRange: AddressRange & {host: string} = {
 	minIP: IPTools.ipToNumber("101.160.0.0"),
 	maxIP: IPTools.ipToNumber("101.191.255.255"),
 	host: 'telstra.net?/res',
