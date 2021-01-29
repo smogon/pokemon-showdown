@@ -1669,13 +1669,8 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 		void FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
 	}
 
-	const startTime = Date.now();
 	for (const line of lines) {
 		if (user.chat(line, room, connection) === false) break;
-	}
-	const deltaTime = Date.now() - startTime;
-	if (deltaTime > 1000) {
-		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
 }
 
