@@ -12,7 +12,6 @@
  * @license MIT
  */
 import {Utils} from '../lib/utils';
-import {calculateElo} from './elo';
 
 export class LadderStore {
 	formatid: string;
@@ -81,8 +80,8 @@ export class LadderStore {
 
 		// calculate new Elo scores and display to room while loginserver updates the ladder
 		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1!.id), this.getRating(p2!.id)])).map(Math.round);
-		const p1NewElo = Math.round(calculateElo(p1OldElo, p1score, p2OldElo));
-		const p2NewElo = Math.round(calculateElo(p2OldElo, 1 - p1score, p1OldElo));
+		const p1NewElo = Math.round(this.calculateElo(p1OldElo, p1score, p2OldElo));
+		const p2NewElo = Math.round(this.calculateElo(p2OldElo, 1 - p1score, p1OldElo));
 
 		room.update();
 		room.send(`||Ladder updating...`);
@@ -140,5 +139,38 @@ export class LadderStore {
 	// eslint-disable-next-line @typescript-eslint/require-await
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
+	}
+
+	/**
+	 * Calculates Elo for quick display, matching the formula on loginserver
+	 */
+	// see lib/ntbb-ladder.lib.php in the pokemon-showdown-client repo for the login server implementation
+	// *intentionally* different from calculation in ladders-local, due to the high activity on the main server
+	private calculateElo(previousUserElo: number, score: number, foeElo: number): number {
+		// The K factor determines how much your Elo changes when you win or
+		// lose games. Larger K means more change.
+		// In the "original" Elo, K is constant, but it's common for K to
+		// get smaller as your rating goes up
+		let K = 50;
+
+		// dynamic K-scaling (optional)
+		if (previousUserElo < 1100) {
+			if (score < 0.5) {
+				K = 20 + (previousUserElo - 1000) * 30 / 100;
+			} else if (score > 0.5) {
+				K = 80 - (previousUserElo - 1000) * 30 / 100;
+			}
+		} else if (previousUserElo > 1300) {
+			K = 40;
+		} else if (previousUserElo > 1600) {
+			K = 32;
+		}
+
+		// main Elo formula
+		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
+
+		const newElo = previousUserElo + K * (score - E);
+
+		return Math.max(newElo, 1000);
 	}
 }

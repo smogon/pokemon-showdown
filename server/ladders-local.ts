@@ -15,7 +15,6 @@
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
-import {calculateElo} from './elo';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -173,7 +172,7 @@ export class LadderStore {
 	updateRow(row: LadderRow, score: number, foeElo: number) {
 		let elo = row[1];
 
-		elo = calculateElo(elo, score, foeElo);
+		elo = this.calculateElo(elo, score, foeElo);
 
 		row[1] = elo;
 		if (score > 0.6) {
@@ -311,5 +310,36 @@ export class LadderStore {
 			}
 		}
 		return Promise.all(ratings);
+	}
+
+	/**
+	 * Calculates Elo based on a match result
+	 */
+	private calculateElo(previousUserElo: number, score: number, foeElo: number): number {
+		// The K factor determines how much your Elo changes when you win or
+		// lose games. Larger K means more change.
+		// In the "original" Elo, K is constant, but it's common for K to
+		// get smaller as your rating goes up
+		let K = 50;
+
+		// dynamic K-scaling (optional)
+		if (previousUserElo < 1200) {
+			if (score < 0.5) {
+				K = 10 + (previousUserElo - 1000) * 40 / 200;
+			} else if (score > 0.5) {
+				K = 90 - (previousUserElo - 1000) * 40 / 200;
+			}
+		} else if (previousUserElo > 1350 && previousUserElo <= 1600) {
+			K = 40;
+		} else {
+			K = 32;
+		}
+
+		// main Elo formula
+		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
+
+		const newElo = previousUserElo + K * (score - E);
+
+		return Math.max(newElo, 1000);
 	}
 }
