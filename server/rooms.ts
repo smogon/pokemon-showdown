@@ -542,7 +542,7 @@ export abstract class BasicRoom {
 		Rooms.global.writeChatRoomData();
 	}
 	checkModjoin(user: User) {
-		if (user.inRoom(this)) return true;
+		if (user.id in this.users) return true;
 		if (!this.settings.modjoin) return true;
 		// users with a room rank can always join
 		if (this.auth.has(user.id)) return true;
@@ -617,7 +617,7 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (user && successUserid && user.inRoom(this)) {
+		if (user && successUserid && userid in this.users) {
 			user.updateIdentity();
 			if (notifyText) user.popup(notifyText);
 		}
@@ -975,7 +975,7 @@ export abstract class BasicRoom {
 	onLeave(user: User) {
 		if (!user) return false; // ...
 
-		if (!user.inRoom(this)) {
+		if (!(user.id in this.users)) {
 			Monitor.crashlog(new Error(`user ${user.id} already left`));
 			return false;
 		}
@@ -1727,7 +1727,7 @@ export class GameRoom extends BasicRoom {
 		return this.log.getScrollback(channel);
 	}
 	getLogForUser(user: User) {
-		if (!user.inGame(this)) return this.getLog();
+		if (!(user.id in this.game.playerTable)) return this.getLog();
 		// @ts-ignore
 		return this.getLog(this.game.playerTable[user.id].num);
 	}

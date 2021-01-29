@@ -96,7 +96,7 @@ export const LogReader = new class {
 				// you are authed in the room
 				(room.auth.has(user.id) && user.can('mute', null, room)) ||
 				// you are staff and currently in the room
-				(isStaff && user.inRoom(room))
+				(isStaff && user.inRooms.has(room.roomid))
 			);
 			if (!isUpperStaff && !forceShow) {
 				if (!isStaff) continue;

@@ -23,8 +23,8 @@ export function getCommonBattles(
 	for (const curRoom of Rooms.rooms.values()) {
 		if (!curRoom.battle) continue;
 		if (
-			(user1?.inRoom(curRoom) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
-			(user2?.inRoom(curRoom) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
+			(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
+			(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
 		) {
 			if (connection) void curRoom.uploadReplay(connection.user, connection, "forpunishment");
 			battles.push(curRoom.roomid);
@@ -120,10 +120,12 @@ export const commands: ChatCommands = {
 		let publicrooms = ``;
 		let hiddenrooms = ``;
 		let privaterooms = ``;
-		for (const targetRoom of targetUser.getRooms()) {
+		for (const roomid of targetUser.inRooms) {
+			const targetRoom = Rooms.get(roomid)!;
+
 			const authSymbol = targetRoom.auth.getDirect(targetUser.id).trim();
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
-			const output = `${authSymbol}<a href="/${targetRoom.roomid}"${battleTitle}>${targetRoom.roomid}</a>`;
+			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.settings.isPrivate === true) {
 				if (targetRoom.settings.modjoin === '~') continue;
 				if (privaterooms) privaterooms += ` | `;
@@ -143,7 +145,7 @@ export const commands: ChatCommands = {
 		}
 		const canViewAlts = (user === targetUser ? user.can('altsself') : user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
-			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.inRoom(room));
+			(room && room.settings.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += `<br />`;
 
@@ -248,16 +250,21 @@ export const commands: ChatCommands = {
 			buf += `<br />Secret rooms: ${privaterooms}`;
 		}
 
-		const gameRooms = [...Rooms.rooms.values()].filter(curRoom => {
-			const inPlayerTable = targetUser.inGame(curRoom);
+		const gameRooms = [];
+		for (const curRoom of Rooms.rooms.values()) {
+			if (!curRoom.game) continue;
+			const inPlayerTable = targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid);
 			const hasPlayerSymbol = curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL;
 			const canSeeRoom = canViewAlts || user === targetUser || !curRoom.settings.isPrivate;
-			return (inPlayerTable || hasPlayerSymbol) && canSeeRoom && !targetUser.inRoom(curRoom);
-		});
+
+			if ((inPlayerTable || hasPlayerSymbol) && canSeeRoom) {
+				gameRooms.push(curRoom.roomid);
+			}
+		}
 		if (gameRooms.length) {
-			buf += `<br />Recent games: ${gameRooms.map(curRoom => {
-				const shortId = curRoom.roomid.startsWith('battle-') ? curRoom.roomid.slice(7) : curRoom.roomid;
-				return Utils.html`<a href="/${curRoom.roomid}">${shortId}</a>`;
+			buf += `<br />Recent games: ${gameRooms.map(id => {
+				const shortId = id.startsWith('battle-') ? id.slice(7) : id;
+				return Utils.html`<a href="/${id}">${shortId}</a>`;
 			}).join(' | ')}`;
 		}
 
@@ -436,7 +443,7 @@ export const commands: ChatCommands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
-				if (targetRoom && !curUser.inRoom(targetRoom)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 			if (results.length > 100 && !isAll) {
@@ -449,7 +456,7 @@ export const commands: ChatCommands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestIp.startsWith(ip)) continue;
-				if (targetRoom && !curUser.inRoom(targetRoom)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 			if (results.length > 100 && !isAll) {
@@ -459,7 +466,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
 				if (curUser.latestIp !== ip) continue;
-				if (targetRoom && !curUser.inRoom(targetRoom)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 		}
@@ -523,7 +530,7 @@ export const commands: ChatCommands = {
 		const user1 = this.targetUser;
 		const user2 = Users.get(target);
 		if (!user1 || !user2 || user1 === user2) return this.parse(`/help checkchallenges`);
-		if (!user1.inRoom(room) || !user2.inRoom(room)) {
+		if (!(user1.id in room.users) || !(user2.id in room.users)) {
 			return this.errorReply(`Both users must be in this room.`);
 		}
 		const challenges = [];

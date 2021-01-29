@@ -112,7 +112,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (!this.ticket.open) return false;
 		if (!user.isStaff || user.id === this.ticket.userid) {
 			if (this.emptyRoom) this.emptyRoom = false;
-			if (!user.inGame(this.room)) this.addPlayer(user);
+			this.addPlayer(user);
 			if (this.ticket.offline) {
 				delete this.ticket.offline;
 				writeTickets();
@@ -202,7 +202,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	forfeit(user: User) {
-		if (!user.inGame(this.room)) return;
+		if (!(user.id in this.playerTable)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;
 		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
@@ -262,6 +262,8 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.room.pokeExpireTimer();
 		for (const ticketGameUser of Object.values(this.playerTable)) {
 			this.removePlayer(ticketGameUser);
+			const user = Users.get(ticketGameUser.id);
+			if (user) user.updateSearch();
 		}
 		if (!this.involvedStaff.size) {
 			if (staff?.isStaff && staff.id !== this.ticket.userid) {
@@ -1255,7 +1257,7 @@ export const commands: ChatCommands = {
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);
-			if (!user.inGame(ticketGame.room)) {
+			if (!(user.id in ticketGame.playerTable)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
 			}

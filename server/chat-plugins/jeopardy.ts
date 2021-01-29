@@ -766,10 +766,13 @@ export const commands: ChatCommands = {
 			const game = this.requireGame(Jeopardy);
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const targetUser = Users.get(target);
-			if (!targetUser) return this.errorReply(`User "${target}" not found.`);
+			if (!targetUser) return this.errorReply("User '" + target + "' not found.");
 			if (game.host.id === targetUser.id) return this.errorReply("You can't add yourself to the game.");
-			game.addPlayer(targetUser);
-			game.update();
+			if (game.addPlayer(targetUser)) {
+				game.update();
+			} else {
+				this.errorReply("Unable to add '" + target + "' to the game.");
+			}
 		},
 
 		incorrect: 'correct',

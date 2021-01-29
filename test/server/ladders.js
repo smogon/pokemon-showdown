@@ -27,9 +27,11 @@ describe('Matchmaker', function () {
 	beforeEach(function () {
 		this.p1 = makeUser('Morfent', '192.168.0.1');
 		this.p1.battleSettings.team = 'Gengar||||lick||252,252,4,,,|||||';
+		Users.users.set(this.p1.id, this.p1);
 
 		this.p2 = makeUser('Mrofnet', '192.168.0.2');
 		this.p2.battleSettings.team = 'Gengar||||lick||252,252,4,,,|||||';
+		Users.users.set(this.p2.id, this.p2);
 	});
 
 	afterEach(function () {
@@ -50,23 +52,12 @@ describe('Matchmaker', function () {
 	});
 
 	it('should matchmake users when appropriate', function () {
-		assert.equal(this.p1.getGames().length, 0);
-		assert.equal(this.p2.getGames().length, 0);
-
-		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 		addSearch(this.p1);
 		addSearch(this.p2);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 
-		const p1games = this.p1.getGames();
-		assert.equal(p1games.length, 1);
-		const p2games = this.p2.getGames();
-		assert.equal(p2games.length, 1);
-
-		assert.equal(p1games[0], p2games[0]);
-		assert.equal(p1games[0].room.battle, p1games[0]);
-
-		p1games[0].room.destroy();
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
 	});
 
 	it('should matchmake users within a reasonable rating range', function () {
@@ -91,7 +82,18 @@ describe('Matchmaker', function () {
 		Ladders.Ladder.periodicMatch();
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 
-		this.p1.getGames()[0].room.destroy();
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
+	});
+
+	it('should create a new battle room after matchmaking', function () {
+		assert.equal(this.p1.games.size, 0);
+		addSearch(this.p1);
+		addSearch(this.p2);
+		assert.equal(this.p1.games.size, 1);
+		for (const roomid of this.p1.games) {
+			assert(Rooms.get(roomid).battle);
+		}
 	});
 
 	it('should cancel search on disconnect', function () {
