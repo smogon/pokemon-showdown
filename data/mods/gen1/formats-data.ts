@@ -388,7 +388,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	graveler: {
 		randomBattleMoves: ["bodyslam", "earthquake", "rockslide", "explosion"],
-		tier: "UU",
+		tier: "NFE",
 	},
 	golem: {
 		randomBattleMoves: ["explosion", "bodyslam", "earthquake", "rockslide"],
