@@ -467,18 +467,24 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	joinGame(user: User) {
 		if (this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId) {
-			throw new Chat.ErrorMessage("You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!");
+			return user.sendTo(
+				this.room,
+				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
+			);
 		}
 		if (!Config.noipchecks && user.ips.some(ip => this.joinedIps.includes(ip))) {
-			throw new Chat.ErrorMessage("You already have one alt in the hunt.");
+			return user.sendTo(this.room, "You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;
-		this.addPlayer(user);
-		this.cacheUserIps(user);
-		delete this.leftHunt[user.id];
-		user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
-		this.onSendQuestion(user);
-		return true;
+		if (this.addPlayer(user)) {
+			this.cacheUserIps(user);
+			delete this.leftHunt[user.id];
+			user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+			this.onSendQuestion(user);
+			return true;
+		}
+		user.sendTo(this.room, "You have already joined the hunt.");
+		return false;
 	}
 
 	cacheUserIps(user: User | FakeUser) {
@@ -944,7 +950,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		for (const u of hostArray) {
 			const id = toID(u);
 			const user = Users.getExact(id);
-			if (!allowOffline && (!user || !user.connected || !user.inRoom(room))) continue;
+			if (!allowOffline && (!user || !user.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
 				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
@@ -1018,6 +1024,14 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 		this.game.runEvent('NotifyChange', this, num);
 		if (num === this.currentQuestion) {
 			this.sendRoom(`|raw|<strong>The hint has been changed to:</strong> ${Chat.formatText(this.game.questions[num].hint)}`);
+		}
+	}
+
+	destroy() {
+		const user = Users.getExact(this.id);
+		if (user) {
+			user.games.delete(this.game.roomid);
+			user.updateSearch();
 		}
 	}
 }
