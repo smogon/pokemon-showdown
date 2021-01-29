@@ -484,6 +484,7 @@ export class CommandContext extends MessageContext {
 			this.user.setStatusType('online');
 		}
 
+		const start = Date.now();
 		try {
 			if (this.handler) {
 				if (this.handler.disabled) {
@@ -536,6 +537,7 @@ export class CommandContext extends MessageContext {
 					this.sendChatMessage(resolvedMessage);
 				}
 				this.update();
+				Chat.logSlowMessage(start, this);
 				if (resolvedMessage === false) return false;
 			}).catch(err => {
 				if (err.name?.endsWith('ErrorMessage')) {
@@ -558,6 +560,7 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
+			Chat.logSlowMessage(start, this);
 		}
 
 		this.update();
@@ -1633,16 +1636,10 @@ export const Chat = new class {
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
 			void result.then(() => {
-				const timeUsed = Date.now() - start;
-				if (timeUsed > 3000) {
-					this.logSlowMessage(timeUsed, context);
-				}
+				this.logSlowMessage(start, context);
 			});
 		} else {
-			const timeUsed = Date.now() - start;
-			if (timeUsed > 1000) {
-				this.logSlowMessage(timeUsed, context);
-			}
+			this.logSlowMessage(start, context);
 		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
@@ -1653,13 +1650,18 @@ export const Chat = new class {
 
 		return result;
 	}
-	logSlowMessage(timeUsed: number, context: CommandContext) {
-		const logRoom = Rooms.get('slowlog');
+	logSlowMessage(start: number, context: CommandContext) {
+		const timeUsed = Date.now() - start;
+		if (timeUsed < 1000) return;
+		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
+
 		const logMessage = (
 			`[slow] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
 			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
 			`${context.message.replace(/\n/ig, ' ')}`
 		);
+
+		const logRoom = Rooms.get('slowlog');
 		if (logRoom) {
 			logRoom.add(`|c|&|/log ` + logMessage).update();
 		} else {
