@@ -127,6 +127,7 @@ import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
+import { Monitor } from './monitor';
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
@@ -1629,8 +1630,21 @@ export const Chat = new class {
 
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({message, room, user, connection});
+		const start = Date.now();
 		const result = context.parse();
-
+		if (typeof result?.then === 'function') {
+			void result.then(() => {
+				const delta = Date.now() - start;
+				if (delta > 3000) {
+					this.logSlowMessage(delta, context);
+				}
+			});
+		} else {
+			const delta = Date.now() - start;
+			if (delta > 1000) {
+				this.logSlowMessage(delta, context);
+			}
+		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
 			for (const [handler, numMessages] of room.nthMessageHandlers) {
@@ -1639,6 +1653,19 @@ export const Chat = new class {
 		}
 
 		return result;
+	}
+	logSlowMessage(deltaTime: number, context: CommandContext) {
+		const logRoom = Rooms.get('slowlog');
+		const logMessage = (
+			`[slow] ${deltaTime}ms - ${context.user.name} (${context.connection.ip}): ` +
+			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
+			`${context.message.replace(/\n/ig, ' ')}`
+		);
+		if (logRoom) {
+			logRoom.add(`|c|&|/log ` + logMessage).update();
+		} else {
+			Monitor.warn(logMessage);
+		}
 	}
 	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
