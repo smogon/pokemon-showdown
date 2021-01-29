@@ -1634,15 +1634,15 @@ export const Chat = new class {
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
 			void result.then(() => {
-				const delta = Date.now() - start;
-				if (delta > 3000) {
-					this.logSlowMessage(delta, context);
+				const timeUsed = Date.now() - start;
+				if (timeUsed > 3000) {
+					this.logSlowMessage(timeUsed, context);
 				}
 			});
 		} else {
-			const delta = Date.now() - start;
-			if (delta > 1000) {
-				this.logSlowMessage(delta, context);
+			const timeUsed = Date.now() - start;
+			if (timeUsed > 1000) {
+				this.logSlowMessage(timeUsed, context);
 			}
 		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
