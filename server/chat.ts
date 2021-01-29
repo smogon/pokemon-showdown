@@ -484,6 +484,7 @@ export class CommandContext extends MessageContext {
 			this.user.setStatusType('online');
 		}
 
+		const start = Date.now();
 		try {
 			if (this.handler) {
 				if (this.handler.disabled) {
@@ -532,6 +533,12 @@ export class CommandContext extends MessageContext {
 		if (message && typeof (message as any).then === 'function') {
 			this.update();
 			return (message as Promise<string | boolean | void>).then(resolvedMessage => {
+				if (this.pmTarget) { // other logging handled externally
+					const timeUsed = Date.now() - start;
+					if (timeUsed > 1000) {
+						Chat.logSlowMessage(timeUsed, this);
+					}
+				}
 				if (resolvedMessage && resolvedMessage !== true) {
 					this.sendChatMessage(resolvedMessage);
 				}
@@ -557,6 +564,12 @@ export class CommandContext extends MessageContext {
 				return false;
 			});
 		} else if (message && message !== true) {
+			if (this.pmTarget) { // other logging handled elsewhere
+				const timeUsed = Date.now() - start;
+				if (timeUsed > 1000) {
+					Chat.logSlowMessage(timeUsed, this);
+				}
+			}
 			this.sendChatMessage(message as string);
 		}
 
