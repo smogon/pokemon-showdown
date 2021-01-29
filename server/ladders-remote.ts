@@ -12,6 +12,7 @@
  * @license MIT
  */
 import {Utils} from '../lib/utils';
+import { calculateElo } from './elo';
 
 export class LadderStore {
 	formatid: string;
@@ -70,25 +71,48 @@ export class LadderStore {
 		const formatid = this.formatid;
 		const p1 = Users.getExact(p1name);
 		const p2 = Users.getExact(p2name);
-		room.update();
-		room.send(`||Ladder updating...`);
-		const [data, error] = await LoginServer.request('ladderupdate', {
+
+		
+		const updatePromise = LoginServer.request('ladderupdate', {
 			p1: p1name,
 			p2: p2name,
 			score: p1score,
 			format: formatid,
 		});
+
+
+		// calculate new Elo scores and display to room while loginserver updates the ladder
+		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1!.id), this.getRating(p2!.id)])).map(Math.round);
+		const p1NewElo = Math.round(calculateElo(p1OldElo, p1score, p2OldElo));
+		const p2NewElo = Math.round(calculateElo(p2OldElo, 1 - p1score, p1OldElo));
+
+		room.update();
+		room.send(`||Ladder updating...`);
+
+		const p1Act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
+		let p1Reasons = `${p1NewElo - p1OldElo} for ${p1Act}`;
+		if (!p1Reasons.startsWith('-')) p1Reasons = '+' + p1Reasons;
+		room.addRaw(Utils.html`${p1name}'s rating: ${p1OldElo} &rarr; <strong>${p1NewElo}</strong><br />(${p1Reasons})`);
+
+		const p2Act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
+		let p2Reasons = `${p2NewElo - p2OldElo} for ${p2Act}`;
+		if (!p2Reasons.startsWith('-'))	p2Reasons = '+' + p2Reasons;
+		room.addRaw(Utils.html`${p2name}'s rating: ${p2OldElo} &rarr; <strong>${p2NewElo}</strong><br />(${p2Reasons})`);
+
+		room.rated = Math.min(p1NewElo, p2NewElo);
+
+		if (p1) p1.mmrCache[formatid] = +p1NewElo;
+		if (p2) p2.mmrCache[formatid] = +p2NewElo;
+
+		room.update();
+
+
+		const [data, error] = await updatePromise;
 		let problem = false;
 
 		if (error) {
-			if (error.message === 'stream interrupt') {
-				room.add(`||Ladder updated, but score could not be retrieved.`);
-			} else {
-				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
-			}
 			problem = true;
 		} else if (!room.battle) {
-			Monitor.warn(`room expired before ladder update was received`);
 			problem = true;
 		} else if (!data) {
 			room.add(`|error|Unexpected response ${data} from ladder server.`);
@@ -108,37 +132,7 @@ export class LadderStore {
 			return [p1score, null, null];
 		}
 
-		let p1rating;
-		let p2rating;
-		try {
-			p1rating = data!.p1rating;
-			p2rating = data!.p2rating;
-
-			let oldelo = Math.round(p1rating.oldelo);
-			let elo = Math.round(p1rating.elo);
-			let act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
-			let reasons = `${elo - oldelo} for ${act}`;
-			if (!reasons.startsWith('-')) reasons = '+' + reasons;
-			room.addRaw(Utils.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
-			let minElo = elo;
-
-			oldelo = Math.round(p2rating.oldelo);
-			elo = Math.round(p2rating.elo);
-			act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
-			reasons = `${elo - oldelo} for ${act}`;
-			if (!reasons.startsWith('-')) reasons = '+' + reasons;
-			room.addRaw(Utils.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
-			if (elo < minElo) minElo = elo;
-			room.rated = minElo;
-
-			if (p1) p1.mmrCache[formatid] = +p1rating.elo;
-			if (p2) p2.mmrCache[formatid] = +p2rating.elo;
-			room.update();
-		} catch (e) {
-			room.addRaw(`There was an error calculating rating changes.`);
-			room.update();
-		}
-		return [p1score, p1rating, p2rating];
+		return [p1score, data!.p1rating, data!.p2rating];
 	}
 
 	/**
