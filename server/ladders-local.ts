@@ -15,7 +15,7 @@
 
 import {FS} from '../lib/fs';
 import {Utils} from '../lib/utils';
-import { calculateElo } from './elo';
+import {calculateElo} from './elo';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).

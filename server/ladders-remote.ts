@@ -12,7 +12,7 @@
  * @license MIT
  */
 import {Utils} from '../lib/utils';
-import { calculateElo } from './elo';
+import {calculateElo} from './elo';
 
 export class LadderStore {
 	formatid: string;
@@ -72,14 +72,12 @@ export class LadderStore {
 		const p1 = Users.getExact(p1name);
 		const p2 = Users.getExact(p2name);
 
-		
-		const updatePromise = LoginServer.request('ladderupdate', {
+		const ladderUpdatePromise = LoginServer.request('ladderupdate', {
 			p1: p1name,
 			p2: p2name,
 			score: p1score,
 			format: formatid,
 		});
-
 
 		// calculate new Elo scores and display to room while loginserver updates the ladder
 		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1!.id), this.getRating(p2!.id)])).map(Math.round);
@@ -107,7 +105,7 @@ export class LadderStore {
 		room.update();
 
 
-		const [data, error] = await updatePromise;
+		const [data, error] = await ladderUpdatePromise;
 		let problem = false;
 
 		if (error) {
