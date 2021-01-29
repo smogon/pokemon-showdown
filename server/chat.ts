@@ -1654,10 +1654,10 @@ export const Chat = new class {
 
 		return result;
 	}
-	logSlowMessage(deltaTime: number, context: CommandContext) {
+	logSlowMessage(timeUsed: number, context: CommandContext) {
 		const logRoom = Rooms.get('slowlog');
 		const logMessage = (
-			`[slow] ${deltaTime}ms - ${context.user.name} (${context.connection.ip}): ` +
+			`[slow] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
 			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
 			`${context.message.replace(/\n/ig, ' ')}`
 		);
