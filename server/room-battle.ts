@@ -730,12 +730,18 @@ export class RoomBattle extends RoomGames.RoomGame {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
-		case 'requesteddata':
+		case 'reseeded': {
 			lines = lines.slice(1);
 			const [resolver] = this.dataResolvers!.shift()!;
 			resolver(lines);
-			break;
-
+		}
+		break;
+		case 'requesteddata': {
+			lines = lines.slice(1);
+			const [resolver] = this.dataResolvers!.shift()!;
+			resolver(lines);
+		}
+		break;
 		case 'update':
 			for (const line of lines.slice(1)) {
 				if (line.startsWith('|turn|')) {
@@ -1154,6 +1160,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const result = await logPromise;
 		return result;
 	}
+	async reseed(newSeed?: [number, number, number, number]) {
+		void this.stream.write(`>reseed ${newSeed ? JSON.stringify(newSeed) : ""}`);
+		const result = await new Promise<string[]>((resolve, reject) => {
+			if (!this.dataResolvers) this.dataResolvers = [];
+			this.dataResolvers.push([resolve, reject]);
+		});
+		return JSON.parse(result[0]);
+	}
 }
 
 export class RoomBattleStream extends BattleStream {
@@ -1202,6 +1216,12 @@ export class RoomBattleStream extends BattleStream {
 		case 'chat':
 			this.battle.inputLog.push(`>chat ${message}`);
 			this.battle.add('chat', `${message}`);
+			break;
+		case 'reseed':
+			const oldSeed = this.battle.prng.seed.slice();
+			const newSeed = this.battle.reseed(message ? JSON.parse(message) : undefined);
+			this.push(`reseeded\n${JSON.stringify(newSeed)}`);
+			this.battle.inputLog.push(`>reseed ${oldSeed}|${newSeed}`);
 			break;
 		case 'requestlog':
 			this.push(`requesteddata\n${this.battle.inputLog.join('\n')}`);

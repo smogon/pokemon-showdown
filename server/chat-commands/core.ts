@@ -965,6 +965,26 @@ export const commands: ChatCommands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],
 
+	async reseedbattle(target, room, user) {
+		room = this.requireRoom();
+		if (!room.battle) return this.errorReply(`This command can only be used in battle.`);
+		if (room.auth.get(user.id) !== Users.HOST_SYMBOL) {
+			this.canUseConsole();
+		}
+		let seed;
+		if (target) {
+			const parts = target.split(',').map(parseInt);
+			if (target.length !== 4) return this.errorReply(`Invalid seed length - must be 4.`);
+			if (parts.some(i => isNaN(i))) {
+				return this.errorReply(`Invalid seed - must be all numbers`);
+			}
+			seed = parts as [number, number, number, number];
+		}
+		const newSeed = await room.battle.reseed(seed);
+		room.addByUser(user, `${user.name} reseeded this battle`).update();
+		return this.sendReply(`The new battle seed is ${JSON.stringify(newSeed)}`);
+	},
+
 	showteam: 'showset',
 	async showset(target, room, user, connection, cmd) {
 		this.checkChat();

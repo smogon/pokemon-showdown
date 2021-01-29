@@ -286,6 +286,12 @@ export class Battle {
 		this.prng = new PRNG(this.prng.startingSeed);
 	}
 
+	reseed(newSeed?: [number, number, number, number]) {
+		this.prng = new PRNG(newSeed);
+		(this.prngSeed as any) = this.prng;
+		return this.prng.seed;
+	}
+
 	suppressingAttackEvents(target?: Pokemon) {
 		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
 			this.activeMove && this.activeMove.ignoreAbility;
