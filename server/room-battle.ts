@@ -734,14 +734,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 			lines = lines.slice(1);
 			const [resolver] = this.dataResolvers!.shift()!;
 			resolver(lines);
+			break;
 		}
-		break;
 		case 'requesteddata': {
 			lines = lines.slice(1);
 			const [resolver] = this.dataResolvers!.shift()!;
 			resolver(lines);
+			break;
 		}
-		break;
 		case 'update':
 			for (const line of lines.slice(1)) {
 				if (line.startsWith('|turn|')) {
