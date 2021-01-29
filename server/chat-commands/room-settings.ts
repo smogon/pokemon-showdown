@@ -1473,6 +1473,24 @@ export const commands: ChatCommands = {
 		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # &`,
 		`/resettierdisplay - resets the current room's tier display. Requires: # &`,
 	],
+
+	roomdetailsmod(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('declare', null, room);
+		target = toID(target);
+		const mods = Object.keys(Dex.dexes);
+		if (!target || !mods.includes(target)) {
+			this.errorReply(`Invalid mod. Valid mods: ${mods.join(', ')}`);
+			return this.parse(`/help roomdetailsmod`);
+		}
+		room.settings.detailsMod = target;
+		room.saveSettings();
+		this.modlog(`DEFAULTDETAILSGEN`, null, target);
+		this.privateModAction(`${user.name} set this room's default /details mod to ${target}`);
+	},
+	roomdetailsmodhelp: [
+		`/roomdetailsmod [mod] - Sets this room's default /details mod to [mod]. Requires: # &`,
+	],
 };
 
 export const roomSettings: SettingsHandler[] = [

@@ -593,7 +593,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		}
-		let dex = Dex;
+		let dex = room?.settings.detailsMod ? Dex.mod(room.settings.detailsMod) : Dex;
 		let format: Format | null = null;
 		if (sep[1] && toID(sep[1]) in Dex.dexes) {
 			dex = Dex.mod(toID(sep[1]));
