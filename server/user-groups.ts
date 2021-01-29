@@ -126,10 +126,13 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (targetID) {
 			// if target's there after a toID, probably not a symbol
 			targetSymbol = auth.get(targetID);
-		} else if (typeof target === 'object' && target !== null) {
-			// If it's not a sybol and not in room auth (or global auth if there is no room),
-			// then check the user object
-			targetSymbol = (target as User).tempGroup;
+		}
+		if (typeof target === 'object' && target !== null) {
+			const tempGroup = (target as User).tempGroup;
+			if (!room || Auth.getGroup(tempGroup).rank > Auth.getGroup(targetSymbol as GroupSymbol).rank) {
+				// only override room auth with tempGroup if the tempGroup is higher
+				targetSymbol = tempGroup;
+			}
 		}
 		if (!targetSymbol || ['whitelist', 'trusted', 'autoconfirmed'].includes(targetSymbol)) {
 			targetSymbol = Auth.defaultSymbol();
