@@ -45,7 +45,7 @@ export type ModlogID = RoomID | 'global';
 
 interface ModlogResults {
 	results: ModlogEntry[];
-	duration?: number;
+	duration: number;
 }
 
 interface ModlogTextQuery {
@@ -399,6 +399,7 @@ export class Modlog {
 		maxLines = 20,
 		onlyPunishments = false,
 	): Promise<ModlogResults> {
+		const startTime = Date.now();
 		const rooms = (roomid === 'public' ?
 			[...Rooms.rooms.values()]
 				.filter(room => !room.settings.isPrivate && !room.settings.isPersonal)
@@ -406,12 +407,13 @@ export class Modlog {
 			[roomid]);
 
 		const query = this.prepareSearch(rooms, maxLines, onlyPunishments, search);
-		const response = await PM.query(query);
+		const results = await PM.query(query);
 
-		if (response.duration > LONG_QUERY_DURATION) {
-			Monitor.log(`Long modlog query took ${response.duration} ms to complete: ${JSON.stringify(query)}`);
+		const duration = Date.now() - startTime;
+		if (duration > LONG_QUERY_DURATION) {
+			Monitor.log(`Long modlog query took ${duration} ms to complete: ${JSON.stringify(query)}`);
 		}
-		return {results: response, duration: response.duration};
+		return {results, duration};
 	}
 
 	prepareSearch(rooms: ModlogID[], maxLines: number, onlyPunishments: boolean, search: ModlogSearch) {
