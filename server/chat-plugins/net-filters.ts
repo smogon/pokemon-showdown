@@ -6,7 +6,7 @@
  * @author mia-pi-git
  */
 
-import {QueryProcessManager, QueryProcessWrapper} from '../../lib/process-manager';
+import {QueryProcessManager} from '../../lib/process-manager';
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {Config} from '../config-loader';
@@ -83,7 +83,9 @@ export class NeuralNetChecker {
 		// do the training in its own process
 		const result = await PM.queryTemporaryProcess({type: 'train', data});
 		// load it into the main process that we're querying
-		await PM.query({type: 'load', data: PATH});
+		for (const process of PM.processes) {
+			process.query({type: 'load', data: PATH});
+		}
 		return result;
 	}
 }
