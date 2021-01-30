@@ -411,7 +411,7 @@ export class Modlog {
 
 		const duration = Date.now() - startTime;
 		if (duration > LONG_QUERY_DURATION) {
-			Monitor.log(`Long modlog query took ${duration} ms to complete: ${JSON.stringify(query)}`);
+			Monitor.slow(`[slow modlog] ${duration}ms - ${JSON.stringify(query)}`);
 		}
 		return {results, duration};
 	}
