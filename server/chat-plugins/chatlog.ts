@@ -1103,7 +1103,7 @@ export const pages: PageTable = {
 			if (roomid.startsWith('wcop')) {
 				return this.errorReply("WCOP team discussions are super secret.");
 			}
-			if (UPPER_STAFF_ROOMS.includes(roomid) && !user.inRoom(roomid)) {
+			if (UPPER_STAFF_ROOMS.includes(roomid) && !user.inRooms.has(roomid)) {
 				return this.errorReply("Upper staff rooms are super secret.");
 			}
 		}
