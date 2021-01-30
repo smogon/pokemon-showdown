@@ -378,10 +378,10 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
  * A ProcessManager wraps a query function: A function that takes a
  * string and returns a string or Promise<string>.
  */
-export abstract class ProcessManager {
-	processes: ProcessWrapper[] = [];
-	releasingProcesses: ProcessWrapper[] = [];
-	crashedProcesses: ProcessWrapper[] = [];
+export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> {
+	processes: T[] = [];
+	releasingProcesses: T[] = [];
+	crashedProcesses: T[] = [];
 	readonly module: NodeJS.Module;
 	readonly filename: string;
 	readonly basename: string;
@@ -409,7 +409,7 @@ export abstract class ProcessManager {
 		}
 		return lowestLoad;
 	}
-	releaseCrashed(process: ProcessWrapper) {
+	releaseCrashed(process: T) {
 		const index = this.processes.indexOf(process);
 
 		// The process was shut down sanely, not crashed
@@ -476,8 +476,8 @@ export abstract class ProcessManager {
 		return unspawned;
 	}
 	abstract listen(): void;
-	abstract createProcess(): ProcessWrapper;
-	destroyProcess(process: ProcessWrapper) {}
+	abstract createProcess(): T;
+	destroyProcess(process: T) {}
 	destroy() {
 		const index = processManagers.indexOf(this);
 		if (index >= 0) processManagers.splice(index, 1);
@@ -485,7 +485,7 @@ export abstract class ProcessManager {
 	}
 }
 
-export class QueryProcessManager<T = string, U = string> extends ProcessManager {
+export class QueryProcessManager<T = string, U = string> extends ProcessManager<QueryProcessWrapper<T, U>> {
 	_query: (input: T) => U | Promise<U>;
 	timeout: number;
 
@@ -500,7 +500,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 		processManagers.push(this);
 	}
 	async query(input: T) {
-		const process = this.acquire() as QueryProcessWrapper<T, U>;
+		const process = this.acquire();
 
 		if (!process) return this._query(input);
 
@@ -545,7 +545,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 	}
 }
 
-export class StreamProcessManager extends ProcessManager {
+export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 	/* taskid: stream used only in child process */
 	activeStreams: Map<string, Streams.ObjectReadWriteStream<string>>;
 	_createStream: () => Streams.ObjectReadWriteStream<string>;
@@ -558,7 +558,7 @@ export class StreamProcessManager extends ProcessManager {
 		processManagers.push(this);
 	}
 	createStream() {
-		const process = this.acquire() as StreamProcessWrapper;
+		const process = this.acquire();
 		if (!process) return this._createStream();
 		return process.createStream();
 	}
@@ -629,7 +629,7 @@ export class StreamProcessManager extends ProcessManager {
 	}
 }
 
-export class RawProcessManager extends ProcessManager {
+export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 	/** full list of processes - parent process only */
 	workers: StreamWorker[] = [];
 	/** if spawning 0 worker processes, the worker is instead stored here in the parent process */
