@@ -80,7 +80,7 @@ export class NeuralNetChecker {
 		return result;
 	}
 	static async train(data: TrainingLine[]) {
-		// do the training in a separate process (which we never add to PM.processes so it doesn't get pinged for other requests)
+		// do the training in its own process
 		const result = await PM.queryTemporaryProcess({type: 'train', data});
 		// load it into the main process that we're querying
 		await PM.query({type: 'load', data: PATH});
