@@ -10,6 +10,7 @@ import {QueryProcessManager, QueryProcessWrapper} from '../../lib/process-manage
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
 import {Config} from '../config-loader';
+import {Repl} from '../../lib/repl';
 
 const PATH = "config/chat-plugins/net.json";
 const NUM_PROCESSES = Config.netfilterprocesses || 1;
@@ -101,6 +102,7 @@ function checkAllowed(context: CommandContext) {
 }
 
 export let net: NeuralNetChecker | null = null;
+export let disabled = false;
 
 export const hits: {[roomid: string]: {[userid: string]: number}} = (() => {
 	const cache = Object.create(null);
@@ -113,7 +115,7 @@ export const hits: {[roomid: string]: {[userid: string]: number}} = (() => {
 })();
 
 export const chatfilter: ChatFilter = function (message, user, room) {
-	if (!modelExists()) return;
+	if (disabled || !modelExists()) return;
 	// not awaited as so to not hold up the filters (additionally we can wait on this)
 	void (async () => {
 		if (!room || room.persist || room.roomid.startsWith('help-')) return;
@@ -163,6 +165,7 @@ if (!PM.isParentProcess) {
 	// we only want to spawn one network, when it's the subprocess
 	// otherwise, we use the PM for interfacing with the network
 	net = new NeuralNetChecker(PATH);
+	Repl.start('net-filters', cmd => eval(cmd));
 } else {
 	PM.spawn(NUM_PROCESSES);
 }
@@ -220,6 +223,23 @@ export const commands: ChatCommands = {
 			checkAllowed(this);
 			const result = await PM.query({type: 'run', data: target});
 			return this.sendReply(`Result for '${target}': ${result}`);
+		},
+		enable: 'disable',
+		disable(target, room, user, connection, cmd) {
+			checkAllowed(this);
+			let logMessage;
+			if (cmd === 'disable') {
+				if (disabled) return this.errorReply(`Net filters are already disabled.`);
+				disabled = true;
+				this.globalModlog(`NETFILTER DISABLE`, null);
+				logMessage = `${user.name} disabled the net filters`;
+			} else {
+				if (!disabled) return this.errorReply(`The net filters are already enabled`);
+				disabled = false;
+				this.globalModlog(`NETFILTER ENABLE`, null);
+				logMessage = `${user.name} enabled the net filters`;
+			}
+			this.privateGlobalModAction(logMessage);
 		},
 	},
 };
