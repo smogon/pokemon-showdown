@@ -258,7 +258,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	politoed: {
-		randomBattleMoves: ["encore", "focusblast", "hiddenpowergrass", "hypnosis", "icebeam", "perishsong", "protect", "scald", "toxic"],
+		randomBattleMoves: ["encore", "focusblast", "hiddenpowergrass", "hypnosis", "icebeam", "protect", "scald", "toxic"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -409,7 +409,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	hypno: {
-		randomBattleMoves: ["foulplay", "protect", "psychic", "seismictoss", "thunderwave", "toxic", "wish"],
+		randomBattleMoves: ["foulplay", "protect", "psychic", "thunderwave", "toxic", "wish"],
 		tier: "(NU)",
 		doublesTier: "DUU",
 	},
@@ -722,7 +722,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dragonair: {
-		randomBattleMoves: ["dragondance", "fireblast", "outrage", "rest", "sleeptalk"],
+		randomBattleMoves: ["dragondance", "outrage", "rest", "sleeptalk", "waterfall"],
 		tier: "NFE",
 	},
 	dragonite: {
@@ -901,12 +901,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	quagsire: {
-		randomBattleMoves: ["curse", "earthquake", "encore", "recover", "scald", "toxic", "waterfall"],
+		randomBattleMoves: ["earthquake", "encore", "recover", "scald", "toxic"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	murkrow: {
-		randomBattleMoves: ["calmmind", "darkpulse", "featherdance", "roost", "substitute"],
+		randomBattleMoves: ["foulplay", "roost", "taunt", "thunderwave", "toxic"],
 		tier: "NFE",
 	},
 	honchkrow: {
@@ -1577,7 +1577,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	tropius: {
-		randomBattleMoves: ["airslash", "leechseed", "protect", "roost", "substitute", "toxic"],
+		randomBattleMoves: ["airslash", "leechseed", "protect", "substitute", "toxic"],
 		tier: "(NU)",
 		doublesTier: "DUU",
 	},
@@ -1705,7 +1705,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	jirachi: {
-		randomBattleMoves: ["bodyslam", "calmmind", "firepunch", "icepunch", "ironhead", "psychic", "substitute", "thunder", "uturn", "wish"],
+		randomBattleMoves: ["bodyslam", "firepunch", "icepunch", "ironhead", "substitute", "uturn", "wish"],
 		tier: "OU",
 		doublesTier: "DUber",
 	},
@@ -2591,7 +2591,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	eelektross: {
-		randomBattleMoves: ["aquatail", "drainpunch", "flamethrower", "gigadrain", "hiddenpowerice", "superpower", "thunderbolt", "thunderpunch", "uturn"],
+		randomBattleMoves: ["flamethrower", "gigadrain", "hiddenpowerice", "superpower", "thunderbolt", "uturn"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
