@@ -22,7 +22,7 @@ const MAX_TOPUSERS = 100;
 
 const CHATLOG_PM_TIMEOUT = 1 * 60 * 60 * 1000; // 1 hour
 
-const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog'];
+const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog', 'slowlog'];
 
 interface ChatlogSearch {
 	raw?: boolean;
@@ -1103,7 +1103,7 @@ export const pages: PageTable = {
 			if (roomid.startsWith('wcop')) {
 				return this.errorReply("WCOP team discussions are super secret.");
 			}
-			if (UPPER_STAFF_ROOMS.includes(roomid)) {
+			if (UPPER_STAFF_ROOMS.includes(roomid) && !user.inRoom(roomid)) {
 				return this.errorReply("Upper staff rooms are super secret.");
 			}
 		}
