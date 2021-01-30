@@ -19025,7 +19025,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
-			onModifyMove(move) {
+			onModifyMove(move, pokemon) {
 				if (move.secondaries && move.id !== 'secretpower') {
 					this.debug('doubling secondary chance');
 					for (const secondary of move.secondaries) {
