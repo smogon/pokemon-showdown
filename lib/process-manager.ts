@@ -445,29 +445,39 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		}
 	}
 	unspawn() {
-		const released = [];
-		const processes = this.processes;
-		this.processes = [];
-		for (const process of processes) {
-			this.destroyProcess(process);
-			released.push(process.release().then(() => {
-				const index = this.releasingProcesses.indexOf(process);
-				if (index >= 0) {
-					this.releasingProcesses.splice(index, 1);
-				}
-			}));
-		}
-		this.releasingProcesses = this.releasingProcesses.concat(processes);
-		return Promise.all(released);
+		return Promise.all([...this.processes].map(
+			process => this.unspawnOne(process)
+		));
+	}
+	async unspawnOne(process: T | null) {
+		if (!process) return;
+		this.destroyProcess(process);
+		const processIndex = this.processes.indexOf(process);
+		if (!processIndex) throw new Error('Process inactive');
+		this.processes.splice(this.processes.indexOf(process), 1);
+		this.releasingProcesses.push(process);
+
+		await process.release();
+
+		const index = this.releasingProcesses.indexOf(process);
+		if (index < 0) return; // can happen if process crashed while releasing
+		this.releasingProcesses.splice(index, 1);
 	}
 	spawn(count = 1, force?: boolean) {
 		if (!this.isParentProcess) return;
 		if (disabled && !force) return;
-		while (this.processes.length < count) {
-			const process = this.createProcess();
-			process.process.on('disconnect', () => this.releaseCrashed(process));
-			this.processes.push(process);
+		const spawnCount = count - this.processes.length;
+		for (let i = 0; i < spawnCount; i++) {
+			this.spawnOne(force);
 		}
+	}
+	spawnOne(force?: boolean) {
+		if (!this.isParentProcess) throw new Error('Must use in parent process');
+		if (disabled && !force) return null;
+		const process = this.createProcess();
+		process.process.on('disconnect', () => this.releaseCrashed(process));
+		this.processes.push(process);
+		return process;
 	}
 	respawn(count: number | null = null) {
 		if (count === null) count = this.processes.length;
@@ -499,9 +509,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 
 		processManagers.push(this);
 	}
-	async query(input: T) {
-		const process = this.acquire();
-
+	async query(input: T, process = this.acquire()) {
 		if (!process) return this._query(input);
 
 		const timeout = setTimeout(() => {
@@ -515,6 +523,12 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 		const result = await process.query(input);
 
 		clearTimeout(timeout);
+		return result;
+	}
+	queryTemporaryProcess(input: T, force?: boolean) {
+		const process = this.spawnOne(force);
+		const result = this.query(input, process);
+		void this.unspawnOne(process);
 		return result;
 	}
 	createProcess() {
