@@ -135,6 +135,15 @@ export const Monitor = new class {
 		if (Config.loglevel <= 2) console.log(text);
 	}
 
+	slow(text: string) {
+		const logRoom = Rooms.get('slowlog');
+		if (logRoom) {
+			logRoom.add(`|c|&|/log ${text}`).update();
+		} else {
+			this.warn(text);
+		}
+	}
+
 	/*********************************************************
 	 * Resource Monitor
 	 *********************************************************/
