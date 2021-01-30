@@ -523,12 +523,12 @@ export abstract class BasicRoom {
 			if (!this.minorActivityQueue.length) this.clearMinorActivityQueue();
 		}
 	}
-	setMinorActivity(activity: MinorActivity | null): void {
+	setMinorActivity(activity: MinorActivity | null, noDisplay = false): void {
 		this.minorActivity?.endTimer();
 		this.minorActivity = activity;
 		if (this.minorActivity) {
 			this.minorActivity.save();
-			this.minorActivity.display();
+			if (!noDisplay) this.minorActivity.display();
 		} else {
 			delete this.settings.minorActivity;
 			this.saveSettings();
