@@ -1653,17 +1653,12 @@ export const Chat = new class {
 		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
 
 		const logMessage = (
-			`[slow] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
+			`[slow command] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
 			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
 			`${context.message.replace(/\n/ig, ' ')}`
 		);
 
-		const logRoom = Rooms.get('slowlog');
-		if (logRoom) {
-			logRoom.add(`|c|&|/log ` + logMessage).update();
-		} else {
-			Monitor.warn(logMessage);
-		}
+		Monitor.slow(logMessage);
 	}
 	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
