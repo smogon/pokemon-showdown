@@ -79,15 +79,9 @@ export class NeuralNetChecker {
 		// acceptable to drop since training is very slow
 		return result;
 	}
-	static trainingProcesses: QueryProcessWrapper[] = [];
 	static async train(data: TrainingLine[]) {
-		const process = PM.createProcess();
-		this.trainingProcesses.push(process);
 		// do the training in a separate process (which we never add to PM.processes so it doesn't get pinged for other requests)
-		const result = await process.query({type: 'train', data});
-		// kill process
-		this.trainingProcesses.splice(this.trainingProcesses.indexOf(process), 1);
-		process.destroy();
+		const result = await PM.queryTemporaryProcess({type: 'train', data});
 		// load it into the main process that we're querying
 		await PM.query({type: 'load', data: PATH});
 		return result;
@@ -165,6 +159,7 @@ if (!PM.isParentProcess) {
 	// we only want to spawn one network, when it's the subprocess
 	// otherwise, we use the PM for interfacing with the network
 	net = new NeuralNetChecker(PATH);
+	// eslint-disable-next-line no-eval
 	Repl.start('net-filters', cmd => eval(cmd));
 } else {
 	PM.spawn(NUM_PROCESSES);
