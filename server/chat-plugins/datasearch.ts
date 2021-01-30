@@ -2482,7 +2482,7 @@ function runSearch(query: {target: string, cmd: string, canAll: boolean, message
  * Process manager
  *********************************************************/
 
-export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
+export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));
@@ -2501,7 +2501,7 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, q
 		case 'learn':
 			return runLearn(query.target, query.message, query.canAll, query.message);
 		default:
-			return null;
+			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
 	} catch (err) {
 		Monitor.crashlog(err, 'A search query', query);

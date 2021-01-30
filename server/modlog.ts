@@ -467,23 +467,23 @@ export class Modlog {
 	}
 }
 
-// if I don't do this TypeScript thinks that (ModlogResult | undefined)[] is a function
-// and complains about an "nexpected newline between function name and paren"
-// even though it's a type not a function...
-type ModlogResult = ModlogEntry | undefined;
-
 export const mainModlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
 
 // the ProcessManager only accepts text queries at this time
 // SQL support is to be determined
-export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
+export const PM = new QueryProcessManager<ModlogTextQuery, ModlogEntry[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
 		if (Config.debugmodlogprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(data));
 		}
-		const results = await mainModlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
-		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
+		const lines = await mainModlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = [];
+		for (const [i, line] of lines.entries()) {
+			const result = parseModlog(line, lines[i + 1]);
+			if (result) results.push(result);
+		}
+		return results;
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
 		return [];

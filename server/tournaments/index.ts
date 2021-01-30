@@ -1436,7 +1436,7 @@ const commands: ChatCommands = {
 				return;
 			}
 			const result = await TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.battleSettings.team);
-			if (result.charAt(0) === '1') {
+			if (result.startsWith('1')) {
 				connection.popup("Your team is valid for this tournament.");
 			} else {
 				const formatName = Dex.getFormat(tournament.baseFormat).name;

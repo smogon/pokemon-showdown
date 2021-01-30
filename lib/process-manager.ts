@@ -102,10 +102,10 @@ interface ProcessWrapper {
 }
 
 /** Wraps the process object in the PARENT process. */
-export class QueryProcessWrapper implements ProcessWrapper {
+export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 	process: ChildProcess;
 	taskId: number;
-	pendingTasks: Map<number, (resp: string) => void>;
+	pendingTasks: Map<number, (resp: U) => void>;
 	pendingRelease: Promise<void> | null;
 	resolveRelease: (() => void) | null;
 	debug?: string;
@@ -149,7 +149,7 @@ export class QueryProcessWrapper implements ProcessWrapper {
 		return this.pendingTasks.size;
 	}
 
-	query(input: any): Promise<any> {
+	query(input: T): Promise<U> {
 		this.taskId++;
 		const taskId = this.taskId;
 		this.process.send(`${taskId}\n${JSON.stringify(input)}`);
@@ -178,7 +178,7 @@ export class QueryProcessWrapper implements ProcessWrapper {
 		this.process.disconnect();
 		for (const resolver of this.pendingTasks.values()) {
 			// maybe we should track reject functions too...
-			resolver('');
+			resolver('' as any);
 		}
 		this.pendingTasks.clear();
 		if (this.resolveRelease) {
@@ -500,7 +500,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 		processManagers.push(this);
 	}
 	async query(input: T) {
-		const process = this.acquire() as QueryProcessWrapper;
+		const process = this.acquire() as QueryProcessWrapper<T, U>;
 
 		if (!process) return this._query(input);
 
@@ -518,7 +518,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 		return result;
 	}
 	createProcess() {
-		return new QueryProcessWrapper(this.filename);
+		return new QueryProcessWrapper<T, U>(this.filename);
 	}
 	listen() {
 		if (this.isParentProcess) return;
