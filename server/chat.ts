@@ -484,7 +484,6 @@ export class CommandContext extends MessageContext {
 			this.user.setStatusType('online');
 		}
 
-		const start = Date.now();
 		try {
 			if (this.handler) {
 				if (this.handler.disabled) {
@@ -537,7 +536,6 @@ export class CommandContext extends MessageContext {
 					this.sendChatMessage(resolvedMessage);
 				}
 				this.update();
-				Chat.logSlowMessage(start, this);
 				if (resolvedMessage === false) return false;
 			}).catch(err => {
 				if (err.name?.endsWith('ErrorMessage')) {
@@ -560,7 +558,6 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
-			Chat.logSlowMessage(start, this);
 		}
 
 		this.update();
