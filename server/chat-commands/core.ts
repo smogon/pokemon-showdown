@@ -498,7 +498,7 @@ export const commands: ChatCommands = {
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
-	async msg(target, room, user, connection) {
+	msg(target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
 		if (!target.includes(',')) {
 			this.errorReply(this.tr`You forgot the comma.`);
@@ -524,7 +524,9 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		await this.parse(target);
+		// this is to ensure slow commands in pm are logged
+		// but also are not duplicated - a normal `return this.parse(...)` creates dupe messages
+		return Promise.resolve(this.parse(target)).then(() => {});
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
