@@ -84,7 +84,7 @@ export class NeuralNetChecker {
 		const result = await PM.queryTemporaryProcess({type: 'train', data});
 		// load it into the main process that we're querying
 		for (const process of PM.processes) {
-			process.query({type: 'load', data: PATH});
+			await process.query({type: 'load', data: PATH});
 		}
 		return result;
 	}
