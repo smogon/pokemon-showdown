@@ -23,7 +23,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Quagsire with Scorching Sands, it can use Bounty Place.",
 	},
 
-	// INStruct
+	// instruct
 	sodapop: {
 		name: "Soda Pop",
 		isNonstandard: "Custom",

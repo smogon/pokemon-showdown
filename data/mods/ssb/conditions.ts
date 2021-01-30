@@ -1,9 +1,6 @@
 import {FS} from '../../../lib/fs';
 import {toID} from '../../../sim/dex-data';
 
-// Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail'];
-
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
 const usergroups: {[userid: string]: string} = {};
@@ -669,6 +666,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c|${getName('Gimmick')}|I did nothing wrong (but I got on the blacklist)`);
 		},
+		// Unburden Innate
+		onAfterUseItem(item, pokemon) {
+			if (pokemon !== this.effectData.target) return;
+			pokemon.addVolatile('unburden');
+		},
+		onTakeItem(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('unburden');
+		},
+		desc: "If this Pokemon loses its held item for any reason, its Speed is doubled. This boost is lost if it switches out or gains a new item or Ability.",
+		shortDesc: "Speed is doubled on held item loss; boost is lost if it switches, gets new item/Ability.",
 	},
 	gmars: {
 		noCopy: true,
@@ -744,17 +754,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('INStruct')}|lets drink to a great time!`);
+			this.add(`c|${getName('instruct')}|lets drink to a great time!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('INStruct')}|ya know, why __do__ you always flood my dms?`);
-			this.add(`c|${getName('INStruct')}|whatever im just gonna go get some more coke`);
+			this.add(`c|${getName('Swagn')}|Hey, instruct. Here's those 15,000 walls of text you ordered. :3`);
+			this.add(`c|${getName('instruct')}|ya know, why __do__ you always flood my dms?`);
+			this.add(`c|${getName('instruct')}|whatever im just gonna go get some more coke`);
 		},
 		onFaint() {
-			this.add(`c|${getName('INStruct')}|wait did we run out of coca-cola?`);
-			this.add(`c|${getName('INStruct')}|laaaaaaaaaaame`);
-			this.add(`c|${getName('INStruct')}|yall suck im going home`);
+			this.add(`c|${getName('instruct')}|wait did we run out of coca-cola?`);
+			this.add(`c|${getName('instruct')}|laaaaaaaaaaame`);
+			this.add(`c|${getName('instruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
 		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
@@ -1810,7 +1820,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	heavyhailstorm: {
 		name: 'HeavyHailstorm',
 		effectType: 'Weather',
-		duration: 3,
+		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
 			if (move.type === 'Steel' && move.category !== 'Status') {
@@ -1828,8 +1838,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'Heavy Hailstorm');
-			this.effectData.source = source;
+			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'The hail became extremely chilling!');
 		},
 		onModifyMove(move, pokemon, target) {
@@ -1846,13 +1855,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				});
 			}
 		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Heavy Hailstorm', '[upkeep]');
-			this.add('-message', 'Hail is crashing down.');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
@@ -1862,7 +1867,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-			this.add('-message', 'The Hail ended.');
 		},
 	},
 	// Forever Winter Hail support for piloswine gripado
@@ -1871,11 +1875,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		effectType: 'Weather',
 		duration: 0,
 		onStart(battle, source, effect) {
-			if (effect?.effectType === 'Ability') {
-				this.add('-weather', 'Winter Hail', '[from] ability: ' + effect, '[of] ' + source);
-			} else {
-				this.add('-weather', 'Winter Hail');
-			}
+			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
@@ -1883,8 +1883,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Winter Hail', '[upkeep]');
-			this.add('-message', 'Hail is crashing down.');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
@@ -1893,7 +1892,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-			this.add('-message', 'The Hail ended.');
 		},
 	},
 	raindrop: {
@@ -2084,7 +2082,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Minior-Blue", "[of] " + target);
+				this.add('message', 'Minior is translucent!');
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -2153,12 +2151,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Turbulence',
 		effectType: 'Weather',
 		duration: 0,
-		onModifyDefPriority: 10,
-		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Flying') && this.field.isWeather('turbulence')) {
-				return this.modify(def, 1.5);
-			}
-		},
 		onStart(battle, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
@@ -2552,6 +2544,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.queue.cancelMove(pokemon);
 			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
 			this.hint(`Your move was aborted due to dynamax. Cheater.`);
+		},
+	},
+	echoedvoiceclone: {
+		duration: 2,
+		onStart() {
+			this.effectData.multiplier = 1;
+		},
+		onRestart() {
+			if (this.effectData.duration !== 2) {
+				this.effectData.duration = 2;
+				if (this.effectData.multiplier < 5) {
+					this.effectData.multiplier++;
+				}
+			}
 		},
 	},
 };

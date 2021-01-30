@@ -359,7 +359,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Paranoia',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	INStruct: {
+	instruct: {
 		species: 'Riolu', ability: 'Truant', item: 'Soda Pop', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
 		signatureMove: 'Fake Out',
@@ -445,8 +445,8 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Lamp: {
-		species: 'Lampent', ability: 'Candlewax', item: 'Eviolite', gender: 'M',
-		moves: ['Nasty Plot', 'Searing Shot', 'Strength Sap'],
+		species: 'Lampent', ability: 'Soul Heart', item: 'Eviolite', gender: 'M',
+		moves: ['Nasty Plot', 'Searing Shot', 'Recover'],
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
@@ -510,7 +510,7 @@ export const ssbSets: SSBSets = {
 	},
 	Nol: {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
-		moves: ['Shadow Ball', 'Flamethrower', 'Trick Room'],
+		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
 		signatureMove: 'Mad Hacks',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', shiny: true,
 	},
@@ -747,7 +747,7 @@ export const ssbSets: SSBSets = {
 	},
 	thewaffleman: {
 		species: 'Mr. Rime', ability: 'Prankster', item: 'Kasib Berry', gender: 'M',
-		moves: ['Iron Defense', 'Slack Off', 'Focus Blast'],
+		moves: ['Cotton Guard', 'Slack Off', 'Focus Blast'],
 		signatureMove: 'Ice Press',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},

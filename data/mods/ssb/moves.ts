@@ -356,10 +356,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Alpha
 	blisteringiceage: {
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The weather becomes an extremely heavy hailstorm lasting for 3 turns that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
-		shortDesc: "3 turns. Heavy Hailstorm. Steel fail. 1.5x Ice.",
+		basePower: 190,
+		category: "Special",
+		desc: "User's ability becomes Ice Age, and the weather becomes an extremely heavy hailstorm that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
+		shortDesc: "Weather: Steel fail. 1.5x Ice.",
 		name: "Blistering Ice Age",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -375,10 +375,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', target, 'Subzero Slammer', target);
 			this.add('-anim', source, 'Subzero Slammer', source);
 		},
+		onAfterMove(source) {
+			source.baseAbility = 'iceage' as ID;
+			source.setAbility('iceage');
+			this.add('-ability', source, source.getAbility().name, '[from] move: Blistering Ice Age');
+		},
 		isZ: "caioniumz",
 		secondary: null,
-		weather: 'heavyhailstorm',
-		target: "all",
+		target: "normal",
 		type: "Ice",
 	},
 
@@ -1315,8 +1319,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "If the target Pokemon is evolved, this move will reduce the target to its first-stage form. If the target Pokemon is single-stage or is already in its first-stage form, this move deals 1.5x damage. Hits Ghost types.",
-		shortDesc: "Devolves evolved mons; 1.5x dmg to LC.",
+		desc: "If the target Pokemon is evolved, this move will reduce the target to its first-stage form. If the target Pokemon is single-stage or is already in its first-stage form, this move lowers all of the opponent's stats by 1. Hits Ghost types.",
+		shortDesc: "Devolves evolved mons;-1 all stats to LC.",
 		name: "Devolution Beam",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1329,12 +1333,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Psywave', target);
-		},
-		onBasePower(damage, source, target) {
-			let species = target.species;
-			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
-			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
-			if (isSingleStage) return this.chainModify(1.5);
 		},
 		onHit(target, source, move) {
 			let species = target.species;
@@ -1349,6 +1347,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.formeChange(prevo, this.effect);
 				target.canMegaEvo = null;
 				target.setAbility(ability);
+			} else {
+				this.boost({atk: -1, def: -1, spa: -1, spd: -1, spe: -1}, target, source);
 			}
 		},
 		secondary: null,
@@ -1547,8 +1547,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 120,
 		category: "Physical",
-		desc: "Paralyzes target, and take 40% recoil. If the user is fire-type, it burns the target and take 33% recoil.",
-		shortDesc: "Par + 40% recoil. Fire: burn + 33% recoil.",
+		desc: "Has a 25% chance to paralyze the target, and take 40% recoil. If the user is fire-type, it has a 25% chance to burn the target and take 33% recoil.",
+		shortDesc: "25% Par + 40% recoil.Fire: 25% burn + 33% recoil.",
 		name: "Epic Rage",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -1564,14 +1564,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyMove(move, pokemon) {
 			if (!pokemon.types.includes('Fire')) return;
 			move.secondaries = [{
-				chance: 100,
+				chance: 25,
 				status: 'brn',
 			}];
 			move.recoil = [33, 100];
 		},
 		recoil: [4, 10],
 		secondary: {
-			chance: 100,
+			chance: 25,
 			status: "par",
 		},
 		target: "normal",
@@ -2140,13 +2140,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
-	// Instruct
+	// instruct
 	satanicpanic: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Exchanges places with the opponent, and then forcibly switches both. This move fails if either side has only one Pokemon left.",
-		shortDesc: "Exchanges places with the opponent. Force switches both.",
+		shortDesc: "Trades places with the target. Force switches both.",
 		name: "Satanic Panic",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -2166,12 +2166,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.queue.cancelMove(target);
 
-			this.add('-message', `${source.name} and ${target.name} have switched places!`);
-
 			// No Regerts
 			const set = source.set;
 			set.species = source.species.name;
 			set.ability = source.ability;
+			const p1abilData = source.abilityData;
 			const p1hp = source.hp;
 			const p1status = source.status;
 			const p1statusData = source.statusData ? source.statusData : false;
@@ -2183,6 +2182,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const set2 = target.set;
 			set2.species = target.species.name;
 			set2.ability = target.ability;
+			const p2abilData = target.abilityData;
 			const p2hp = target.hp;
 			const p2status = target.status;
 			const p2statusData = target.statusData ? target.statusData : false;
@@ -2190,6 +2190,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const p2canZmove = target.m;
 			const p2canDyna = target.canDynamax;
 			const p2moveslots = target.baseMoveSlots;
+
+			source.addVolatile('gastroacid');
+			target.addVolatile('gastroacid');
 
 			let effect = this.effect;
 			// @ts-ignore
@@ -2209,6 +2212,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.canDynamax = p1canDyna;
 			// @ts-ignore
 			target.baseMoveSlots = p1moveslots;
+			target.abilityData = p1abilData;
 
 
 			effect = this.effect;
@@ -2229,9 +2233,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.canDynamax = p2canDyna;
 			// @ts-ignore
 			source.baseMoveSlots = p2moveslots;
+			source.abilityData = p2abilData;
 
 			target.forceSwitchFlag = true;
 			source.forceSwitchFlag = true;
+			this.add('-message', `${source.name} and ${target.name} have switched places!`);
 		},
 		isZ: "sodapop",
 		secondary: null,
@@ -3224,8 +3230,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Defense, Special Attack, and Special Defense by 1 stage.",
-		shortDesc: "Raises the user's Defense, Sp. Atk, Sp. Def by 1.",
+		desc: "Raises the user's Defense, Special Attack, and Special Defense by 1 stage. Sets Trick Room.",
+		shortDesc: "+1 Def/Spa/Spd. Sets Trick Room.",
 		name: "Mad Hacks",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3237,6 +3243,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Acupressure', source);
+		},
+		onHit(target, source) {
+			this.field.addPseudoWeather('trickroom');
 		},
 		boosts: {
 			def: 1,
@@ -3607,6 +3616,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!pokemon.transformInto(target)) {
 				return false;
 			}
+			pokemon.addVolatile('trapped', target, move, 'trapper');
 			pokemon.addVolatile('ghostof1v1past', pokemon);
 			pokemon.volatiles['ghostof1v1past'].targetPokemon = target;
 		},
@@ -3726,12 +3736,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
 			const bp = move.basePower + 20 * pokemon.positiveBoosts();
-			if (bp >= 140) return 140;
 			return bp;
 		},
 		category: "Special",
-		desc: "Randomly raises a stat (other than evasion and accuracy) by 1 before attacking. + 20 power for each of the user's stat boosts. Base Power maxes out at 140, regardless of boosts. Sound based move.",
-		shortDesc: "1 random boost, then attacks. +20 pow/boost.",
+		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0. User raises 2 random stats by 1 if it has less than 8 positive stat changes.",
+		shortDesc: "+20 power/boost. +1 2 random stats < 8 boosts.",
 		name: "Croak",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -3743,19 +3752,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Splash', source);
-			const stats: BoostName[] = [];
-			let stat: BoostName;
-			const exclude: string[] = ['accuracy', 'evasion'];
-			for (stat in source.boosts) {
-				if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
-					stats.push(stat);
+			if (source.positiveBoosts() < 8) {
+				const stats: BoostName[] = [];
+				let stat: BoostName;
+				const exclude: string[] = ['accuracy', 'evasion'];
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
+						stats.push(stat);
+					}
 				}
-			}
-			if (stats.length) {
-				const randomStat = this.sample(stats);
-				const boost: SparseBoostsTable = {};
-				boost[randomStat] = 1;
-				this.boost(boost, source, source, move);
+				if (stats.length) {
+					let randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					if (stats.length > 1) {
+						stats.splice(stats.indexOf(randomStat), 1);
+						randomStat = this.sample(stats);
+						boost[randomStat] = 1;
+					}
+					this.boost(boost, source, source, move);
+				}
 			}
 			this.add('-anim', source, 'Hyper Voice', source);
 		},
@@ -4815,8 +4831,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "40% chance of setting up a layer of spikes. 40% chance of using Heal Bell. 40% chance of using Leech Seed. 40% chance of using Tailwind. 40% chance of using Octolock.",
-		shortDesc: "5 independent chances of rolling different effects.",
+		desc: "Randomly uses 1-5 different support moves.",
+		shortDesc: "Uses 1-5 support moves.",
 		name: "Right. On. Cue!",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4824,35 +4840,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1},
 		onHit(target, source) {
-			let effects = 0;
-			if (this.randomChance(4, 10)) {
-				this.useMove('Spikes', source, target);
-				effects++;
+			const supportMoves = [
+				'Wish', 'Heal Bell', 'Defog', 'Spikes', 'Taunt', 'Torment',
+				'Haze', 'Encore', 'Reflect', 'Light Screen', 'Sticky Web', 'Acupressure',
+				'Gastro Acid', 'Hail', 'Heal Block', 'Spite', 'Parting Shot', 'Trick Room',
+			];
+			const randomTurns = this.random(5) + 1;
+			let successes = 0;
+			for (let x = 1; x <= randomTurns; x++) {
+				const randomMove = this.sample(supportMoves);
+				supportMoves.splice(supportMoves.indexOf(randomMove), 1);
+				this.useMove(randomMove, target);
+				successes++;
 			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Heal Bell', source);
-				effects++;
-			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Leech Seed', source, target);
-				effects++;
-			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Tailwind', source, target);
-				effects++;
-			}
-			if (this.randomChance(4, 10)) {
-				this.useMove('Octolock', source);
-				effects++;
-			}
-			if (effects <= 0) {
+			if (successes === 1) {
 				this.add(`c|${getName('tiki')}|truly a dumpster fire`);
-			} else if (effects >= 3) {
+			} else if (successes >= 4) {
 				this.add(`c|${getName('tiki')}|whos ${source.side.foe.name}?`);
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 
@@ -4907,8 +4915,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
-		shortDesc: "Curses target for 1/2 HP & blocks it from healing.",
+		desc: "The user loses 1/4 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
+		shortDesc: "Curses target for 1/4 HP & blocks it from healing.",
 		name: "Soul-Shattering Stare",
 		isNonstandard: "Custom",
 		gen: 8,
@@ -4923,7 +4931,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Trick-or-Treat', source);
 		},
 		onHit(pokemon, source) {
-			this.directDamage(source.maxhp / 2, source, source);
+			this.directDamage(source.maxhp / 4, source, source);
 			pokemon.addVolatile('curse');
 			pokemon.addVolatile('healblock');
 		},

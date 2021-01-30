@@ -278,6 +278,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Alpha
+	iceage: {
+		desc: "The weather becomes an extremely heavy hailstorm that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
+		shortDesc: "Weather: Steel fail. 1.5x Ice.",
+		onStart(source) {
+			this.field.setWeather('heavyhailstorm');
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('iceage')) {
+					this.field.weatherData.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		name: "Ice Age",
+		isNonstandard: "Custom",
+		gen: 8,
+	},
+
 	// Annika
 	overprotective: {
 		desc: "If this Pokemon is the last unfainted team member, its Speed is raised by 1 stage.",
@@ -486,8 +512,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// brouha
 	turbulence: {
-		desc: "While this Pokemon is on the field, all entry hazards and terrains are removed at the end of each turn, non-Flying-type Pokemon lose 6% of their HP, rounded down, at the end of each turn, and Flying-type Pokemon have their Defense multiplied by 1.5x.",
-		shortDesc: "Flying get 1.5x Def. End of each turn: clears terrain/hazards, non-Flying lose 6% HP.",
+		desc: "While this Pokemon is on the field, all entry hazards and terrains are removed at the end of each turn, non-Flying-type Pokemon lose 6% of their HP, rounded down, at the end of each turn.",
+		shortDesc: "End of each turn: clears terrain/hazards, non-Flying lose 6% HP.",
 		onStart(source) {
 			this.field.setWeather('turbulence');
 		},
@@ -693,8 +719,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// fart
 	bipolar: {
-		desc: "When this Pokemon switches in, it changes to two random types and gets corresponding STAB attacks.",
-		shortDesc: "This Pokemon has 2 random types and STAB moves on switch-in.",
+		desc: "If this Pokemon is a Kartana, then when it switches in, it changes to two random types and gets corresponding STAB attacks.",
+		shortDesc: "Kartana: User gains 2 random types and STAB moves on switch-in.",
 		name: "Bipolar",
 		isPermanent: true,
 		onSwitchIn(pokemon) {
@@ -875,34 +901,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.refrigerateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
-		onStart(pokemon) {
-			pokemon.addVolatile('ic3peak');
-		},
-		condition: {
-			onStart(pokemon) {
-				this.effectData.numConsecutive = 0;
-				this.effectData.lastMove = '';
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (!pokemon.hasAbility('ic3peak')) {
-					pokemon.removeVolatile('ic3peak');
-					return;
+		onModifyMovePriority: -2,
+		onModifyMove(move, attacker) {
+			if (move.refrigerateBoosted) return;
+			move.onTry = function () {
+				this.field.addPseudoWeather('echoedvoiceclone');
+				this.field.pseudoWeather.echoedvoiceclone.lastmove = move.name;
+			};
+			// eslint-disable-next-line @typescript-eslint/no-shadow
+			move.basePowerCallback = function (pokemon, target, move) {
+				if (this.field.pseudoWeather.echoedvoiceclone) {
+					if (this.field.pseudoWeather.echoedvoiceclone.lastmove === move.name) {
+						return move.basePower * this.field.pseudoWeather.echoedvoiceclone.multiplier;
+					} else {
+						this.field.removePseudoWeather('echoedvoiceclone');
+					}
 				}
-				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectData.numConsecutive++;
-				} else {
-					this.effectData.numConsecutive = 0;
-				}
-				this.effectData.lastMove = move.id;
-			},
-			onBasePowerPriority: 24,
-			onBasePower(basePower, pokemon, target, move) {
-				if (move.refrigerateBoosted) return;
-				const dmgMod = [1, 2, 3, 4, 5];
-				const numConsecutive = this.effectData.numConsecutive > 4 ? 4 : this.effectData.numConsecutive;
-				return this.chainModify(dmgMod[numConsecutive]);
-			},
+				return move.basePower;
+			};
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -933,19 +949,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// grimAuxiliatrix
 	aluminumalloy: {
-		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages. -1 Speed, +1 Def/Sp.Def when hit with a Water-type attacking move or switching into rain.",
+		desc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out, and other Pokemon cannot lower this Pokemon's stat stages. -1 Speed, +1 Def/Sp.Def when hit with a Water-type attacking move, switching into rain or starting rain while this Pokemon is on the field.",
 		shortDesc: "Regenerator+Clear Body.+1 def/spd,-1 spe in rain/hit by water",
 		name: "Aluminum Alloy",
 		onSwitchIn(pokemon) {
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
-				this.add('-message', `grimAuxiliatrix is rusting...`);
+				this.add('-message', `${pokemon.name} is rusting...`);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
 				this.boost({def: 1, spd: 1, spe: -1}, target, target);
-				this.add('-message', `grimAuxiliatrix is rusting...`);
+				this.add('-message', `${target.name} is rusting...`);
+			}
+		},
+		onAnyWeatherStart() {
+			const pokemon = this.effectData.target;
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
+				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
+				this.add('-message', `${pokemon.name} is rusting...`);
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -1257,20 +1280,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.side.foe.removeSideCondition('degeneratormod');
 		},
 		name: "Degenerator",
-		isNonstandard: "Custom",
-		gen: 8,
-	},
-
-	// Lamp
-	candlewax: {
-		desc: "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints. This Pokemon is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. The effects of Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
-		shortDesc: "Soul-Heart + Levitate.",
-		onAnyFaintPriority: 1,
-		onAnyFaint() {
-			this.boost({spa: 1}, this.effectData.target);
-		},
-		// airborneness implemented in scripts.ts:Pokemon#isGrounded
-		name: "Candlewax",
 		isNonstandard: "Custom",
 		gen: 8,
 	},
@@ -2225,18 +2234,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Modified various abilities to support Alpha's move & pilo's abiility
 	deltastream: {
 		inherit: true,
-		desc: "On switch-in, the weather becomes strong winds that remove the weaknesses of the Flying type from Flying-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Desolate Land, Heavy Hailstorm, or Primordial Sea.",
-		shortDesc: "On switch-in, strong winds begin until this Ability is not active in battle.",
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'deltastream' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 	},
 	desolateland: {
 		inherit: true,
-		desc: "On switch-in, the weather becomes extremely harsh sunlight that prevents damaging Water-type moves from executing, in addition to all the effects of Sunny Day. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream, Heavy Hailstorm, or Primordial Sea.",
-		shortDesc: "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'desolateland' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+	},
+	primordialsea: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
 		},
 	},
 	forecast: {
