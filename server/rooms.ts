@@ -118,7 +118,7 @@ export interface RoomSettings {
 	repeats?: RepeatedPhrase[];
 	autoModchat?: {rank: GroupSymbol, time: number, active: boolean};
 	tournaments?: TournamentRoomSettings;
-	detailsMod?: string;
+	defaultDataMod?: string;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];

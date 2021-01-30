@@ -1483,7 +1483,7 @@ export const commands: ChatCommands = {
 			this.errorReply(`Invalid mod. Valid mods: ${mods.join(', ')}`);
 			return this.parse(`/help roomdetailsmod`);
 		}
-		room.settings.detailsMod = target;
+		room.settings.defaultDataMod = target;
 		room.saveSettings();
 		this.modlog(`DEFAULTDETAILSGEN`, null, target);
 		this.privateModAction(`${user.name} set this room's default /details mod to ${target}`);
