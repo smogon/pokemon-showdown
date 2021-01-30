@@ -498,7 +498,7 @@ export const commands: ChatCommands = {
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
-	msg(target, room, user, connection) {
+	async msg(target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
 		if (!target.includes(',')) {
 			this.errorReply(this.tr`You forgot the comma.`);
@@ -524,7 +524,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		return this.parse(target);
+		await this.parse(target);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
