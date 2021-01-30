@@ -1327,7 +1327,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (target === 'natdex') {
-				nationalSearch = true;
+				nationalSearch = !isNotSearch;
 				orGroup.skip = true;
 				continue;
 			}
