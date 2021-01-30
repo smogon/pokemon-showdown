@@ -19029,6 +19029,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (move.secondaries && move.id !== 'secretpower') {
 					this.debug('doubling secondary chance');
 					for (const secondary of move.secondaries) {
+						if (pokemon.hasAbility('serenegrace') && secondary.volatileStatus === 'flinch') continue;
 						if (secondary.chance) secondary.chance *= 2;
 					}
 					if (move.self?.chance) move.self.chance *= 2;
