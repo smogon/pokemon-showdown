@@ -52,7 +52,7 @@ export class NeuralNetChecker {
 		// 100 has good perf but is still effective
 		if (!iterations) iterations = 100;
 		const now = Date.now();
-		await FS(PATH).copyFile(PATH + '.backup');
+		if (FS(PATH).existsSync()) await FS(PATH).copyFile(PATH + '.backup');
 		if (!this.model) throw new Error(`Attempting to train with no model installed`);
 		this.model.train(data, {iterations});
 		this.save();
@@ -83,8 +83,8 @@ export class NeuralNetChecker {
 		// do the training in its own process
 		const result = await PM.queryTemporaryProcess({type: 'train', data});
 		// load it into the main process that we're querying
-		for (const process of PM.processes) {
-			await process.query({type: 'load', data: PATH});
+		for (const sub of PM.processes) {
+			await sub.query({type: 'load', data: PATH});
 		}
 		return result;
 	}
@@ -110,7 +110,7 @@ export const hits: {[roomid: string]: {[userid: string]: number}} = (() => {
 	return cache;
 })();
 
-export const chatfilter: ChatFilter = function (message, user, room) {
+export const chatfilter: ChatFilter = function (message, user, room, connection) {
 	if (disabled || !modelExists()) return;
 	// not awaited as so to not hold up the filters (additionally we can wait on this)
 	void (async () => {
@@ -126,6 +126,9 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 					`|c|&|/log [ERPMonitor] Suspicious messages detected in <<${room.roomid}>>`
 				).update();
 				hits[room.roomid][user.id] = 0; // so they can't spam messages
+				if ('uploadReplay' in (room as GameRoom)) {
+					void (room as GameRoom).uploadReplay(user, connection, "silent");
+				}
 			}
 		}
 	})();
@@ -158,11 +161,23 @@ export const PM = new QueryProcessManager<NetQuery, any>(module, query => {
 
 if (!PM.isParentProcess) {
 	global.Config = Config;
+
+	global.Monitor = {
+		crashlog(error: Error, source = 'A netfilter process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			Monitor.crashlog(err, 'A net filter child process');
+		}
+	});
 	// we only want to spawn one network, when it's the subprocess
 	// otherwise, we use the PM for interfacing with the network
 	net = new NeuralNetChecker(PATH);
 	// eslint-disable-next-line no-eval
-	Repl.start('net-filters', cmd => eval(cmd));
+	Repl.start('netfilters', cmd => eval(cmd));
 } else {
 	PM.spawn(NUM_PROCESSES);
 }
@@ -185,7 +200,7 @@ export const commands: ChatCommands = {
 		async train(target, room, user) {
 			checkAllowed(this);
 			const data: TrainingLine[] = [];
-			const parts = target.split('\n');
+			const parts = target.split('\n').filter(Boolean);
 			for (const line of parts) {
 				const [input, output] = Utils.splitFirst(line, '|');
 				if (!['ok', 'flag'].some(i => output === i)) {
@@ -194,13 +209,13 @@ export const commands: ChatCommands = {
 				if (!input.trim()) {
 					return this.errorReply(`Malformed line: ${line} - input must be a string`);
 				}
-				data.push({input, output});
+				data.push({input, output: `|${output}`});
 			}
 			if (!data.length) {
 				return this.errorReply(`You need to provide some sort of data`);
 			}
 			this.sendReply(`Initiating training...`);
-			const results = await NeuralNetChecker.train(data);
+			const results = await NeuralNetChecker.train(data.filter(Boolean));
 			this.sendReply(`Training completed in ${Chat.toDurationString(results)}`);
 			this.privateGlobalModAction(`${user.name} trained the net filters on ${Chat.count(data.length, 'lines')}`);
 			this.stafflog(`${data.map(i => `(lines: '${i.input}' => '${i.output}'`).join('; ')})`);
