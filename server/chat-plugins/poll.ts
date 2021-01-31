@@ -667,6 +667,6 @@ for (const room of Rooms.rooms.values()) {
 		room.saveSettings();
 	}
 	if (room.settings.minorActivity?.activityid === 'poll') {
-		room.setMinorActivity(new Poll(room, room.settings.minorActivity));
+		room.setMinorActivity(new Poll(room, room.settings.minorActivity), true);
 	}
 }
