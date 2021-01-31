@@ -83,7 +83,7 @@ export function visualize(value: any, depth = 0): string {
 	}
 	if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
 		if (depth && value instanceof Function) return `Function`;
-			return `${value}`;
+		return `${value}`;
 	}
 	let constructor = '';
 	if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
@@ -124,10 +124,10 @@ export function visualize(value: any, depth = 0): string {
 		if (depth > 2 || (depth && constructor)) {
 			buf = '...';
 			break;
-	}
-	if (buf) buf += `, `;
-	let displayedKey = key;
-	if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
+		}
+		if (buf) buf += `, `;
+		let displayedKey = key;
+		if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
 		buf += `${displayedKey}: ` + visualize(value[key], depth + 1);
 	}
 	if (constructor && !buf && constructor !== 'null') return constructor;
@@ -353,4 +353,11 @@ export function waitUntil(time: number): Promise<void> {
 }
 
 // backwards compatibility
-export const Utils = module.exports;
+export const Utils = {
+	waitUntil, html, escapeHTML,
+	compare, sortBy, levenshtein,
+	shuffle, deepClone, clearRequireCache,
+	randomElement, forceWrap, splitFirst,
+	stripHTML, visualize, getString,
+	escapeRegex,
+};
