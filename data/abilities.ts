@@ -1301,7 +1301,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	gulpmissile: {
 		onDamagingHit(damage, target, source, move) {
-			if (target.transformed || target.isSemiInvulnerable()) return;
+			if (!source.hp || target.transformed || target.isSemiInvulnerable()) return;
 			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
 				this.damage(source.baseMaxhp / 4, source, target);
 				if (target.species.id === 'cramorantgulping') {
