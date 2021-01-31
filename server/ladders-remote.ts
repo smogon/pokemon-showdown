@@ -83,9 +83,6 @@ export class LadderStore {
 		const p1NewElo = Math.round(this.calculateElo(p1OldElo, p1score, p2OldElo));
 		const p2NewElo = Math.round(this.calculateElo(p2OldElo, 1 - p1score, p1OldElo));
 
-		room.update();
-		room.send(`||Ladder updating...`);
-
 		const p1Act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
 		let p1Reasons = `${p1NewElo - p1OldElo} for ${p1Act}`;
 		if (!p1Reasons.startsWith('-')) p1Reasons = '+' + p1Reasons;
