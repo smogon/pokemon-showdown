@@ -566,7 +566,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
-			return this.chainModify([0x0F1C, 0x1000]);
+			return this.chainModify([0x0E66, 0x1000]);
 		},
 		num: 213,
 		gen: 2,
@@ -2800,7 +2800,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
-			return this.chainModify([0x0F1C, 0x1000]);
+			return this.chainModify([0x0E66, 0x1000]);
 		},
 		num: 255,
 		gen: 3,
