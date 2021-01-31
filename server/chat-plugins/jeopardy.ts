@@ -1,4 +1,4 @@
-import {Utils} from '../../lib/utils';
+import * as Utils from '../../lib/utils';
 
 const BACKGROUND_COLOR = "#0000FF";
 const HEIGHT = 40;

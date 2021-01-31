@@ -1,4 +1,4 @@
-import {Utils} from '../../lib/utils';
+import {Utils, FS} from '../../lib';
 
 interface MafiaData {
 	// keys for all of these are IDs
@@ -88,8 +88,6 @@ interface MafiaIDEAPlayerData {
 	originalChoices: string[];
 	picks: {[choice: string]: string | null};
 }
-
-import {FS} from '../../lib/fs';
 
 const DATA_FILE = 'config/chat-plugins/mafia-data.json';
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';

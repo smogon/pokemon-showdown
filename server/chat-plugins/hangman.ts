@@ -2,8 +2,7 @@
 * Hangman chat plugin
 * By bumbadadabum and Zarel. Art by crobat.
 */
-import {Utils} from '../../lib/utils';
-import {FS} from '../../lib/fs';
+import {FS, Utils} from '../../lib';
 
 const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
 

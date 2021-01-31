@@ -14,7 +14,7 @@
  */
 
 /* eslint no-else-return: "error" */
-import {Utils} from '../../lib/utils';
+import * as Utils from '../../lib/utils';
 import type {UserSettings} from '../users';
 
 const avatarTable = new Set([

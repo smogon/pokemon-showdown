@@ -6,7 +6,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../../lib/utils';
+import * as Utils from '../../lib/utils';
 import type {EffectiveGroupSymbol, RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
