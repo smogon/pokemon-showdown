@@ -1,11 +1,14 @@
 /*
-* Hangman chat plugin
-* By bumbadadabum and Zarel. Art by crobat.
-*/
+ * Hangman chat plugin
+ * By bumbadadabum and Zarel. Art by crobat.
+ */
+
 import {Utils} from '../../lib/utils';
 import {FS} from '../../lib/fs';
 
 const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
+
+const DIACRITICS_AFTER_UNDERSCORE = /_[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/g;
 
 export let hangmanData: {[roomid: string]: {[phrase: string]: string[]}} = {};
 
@@ -162,6 +165,7 @@ export class Hangman extends Rooms.RoomGame {
 				(match, offset) => `<font color="#7af87a">${word.substr(offset, match.length)}</font>`
 			);
 		}
+		wordString = wordString.replace(DIACRITICS_AFTER_UNDERSCORE, '_');
 
 		if (this.hint) output += Utils.html`<div>(Hint: ${this.hint})</div>`;
 		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
@@ -231,11 +235,14 @@ export class Hangman extends Rooms.RoomGame {
 		};
 	}
 	static validateParams(params: string[]) {
-		const phrase = params[0].replace(/[^A-Za-z '-]/g, '');
-		if (phrase.replace(/ /g, '').length < 1) throw new Chat.ErrorMessage("Enter a valid word");
-		if (phrase.length > 30) throw new Chat.ErrorMessage("Phrase must be less than 30 characters.");
+		// NFD splits diacritics apart from letters, allowing the letters to be guessed
+		// underscore is used to signal "letter hasn't been guessed yet", so replace it with Japanese underscore as a workaround
+		const phrase = params[0].normalize('NFD').trim().replace(/_/g, '\uFF3F');
+
+		if (!phrase.length) throw new Chat.ErrorMessage("Enter a valid word");
+		if (phrase.length > 30) throw new Chat.ErrorMessage("Phrase must be less than 30 characters long.");
 		if (phrase.split(' ').some(w => w.length > 20)) {
-			throw new Chat.ErrorMessage("Each word in the phrase must be less than 20 characters.");
+			throw new Chat.ErrorMessage("Each word in the phrase must be less than 20 characters long.");
 		}
 		if (!/[a-zA-Z]/.test(phrase)) throw new Chat.ErrorMessage("Word must contain at least one letter.");
 		let hint;
