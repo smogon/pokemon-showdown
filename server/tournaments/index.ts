@@ -1,7 +1,7 @@
 
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
-import * as Utils from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;

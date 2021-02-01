@@ -1,4 +1,4 @@
-import * as Utils from '../../lib/utils';
+import {Utils} from '../../lib';
 
 interface ElimTree {
 	root: ElimNode;
