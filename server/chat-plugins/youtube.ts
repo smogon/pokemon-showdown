@@ -577,6 +577,15 @@ export const commands: ChatCommands = {
 			const game = this.requireGame(GroupWatch);
 			game.start();
 		},
+		groupwatches() {
+			let buf = `<strong>Ongoing groupwatches:</strong><br />`;
+			for (const curRoom of Rooms.rooms.values()) {
+				if (!curRoom.getGame(GroupWatch)) continue;
+				buf += `<button class="button" name="send" value="/j ${curRoom.roomid}">${curRoom.title}</button>`;
+			}
+			this.runBroadcast();
+			this.sendReplyBox(buf);
+		},
 	},
 	youtubehelp: [
 		`YouTube commands:`,

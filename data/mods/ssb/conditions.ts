@@ -677,8 +677,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onEnd(pokemon) {
 			pokemon.removeVolatile('unburden');
 		},
-		desc: "If this Pokemon loses its held item for any reason, its Speed is doubled. This boost is lost if it switches out or gains a new item or Ability.",
-		shortDesc: "Speed is doubled on held item loss; boost is lost if it switches, gets new item/Ability.",
+		innateName: "Unburden",
+		desc: "If this Pokemon loses its held item for any reason, its Speed is doubled. This boost is lost if it switches out or gains a new item.",
+		shortDesc: "Speed is doubled on held item loss; boost is lost if it switches or gets new item.",
 	},
 	gmars: {
 		noCopy: true,

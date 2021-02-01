@@ -390,7 +390,8 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (user.getGames().length > 4) {
+		const gameCount = user.games.size;
+		if (gameCount > 4) {
 			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
 			return;
 		}

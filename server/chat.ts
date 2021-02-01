@@ -471,7 +471,7 @@ export class CommandContext extends MessageContext {
 			this.handler = parsedCommand.handler;
 		}
 
-		if (this.room && !this.user.inRoom(this.room)) {
+		if (this.room && !(this.user.id in this.room.users)) {
 			if (this.room.roomid === 'lobby') {
 				this.room = null;
 			} else {
@@ -973,7 +973,7 @@ export class CommandContext extends MessageContext {
 						this.tr`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
 				}
-				if (!user.inRoom(room)) {
+				if (!(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
 					return null;
 				}
@@ -1091,7 +1091,7 @@ export class CommandContext extends MessageContext {
 		if (!targetUser || !targetUser.connected) {
 			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
 		}
-		if (!(this.room && targetUser.inRoom(this.room)) && !this.user.can('addhtml')) {
+		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
 		if (targetUser.settings.blockPMs &&
@@ -1652,17 +1652,12 @@ export const Chat = new class {
 		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
 
 		const logMessage = (
-			`[slow] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
+			`[slow command] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
 			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
 			`${context.message.replace(/\n/ig, ' ')}`
 		);
 
-		const logRoom = Rooms.get('slowlog');
-		if (logRoom) {
-			logRoom.add(`|c|&|/log ` + logMessage).update();
-		} else {
-			Monitor.warn(logMessage);
-		}
+		Monitor.slow(logMessage);
 	}
 	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;

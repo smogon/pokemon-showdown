@@ -6,6 +6,7 @@ data/text/ @Marty-D
 databases/ @monsanto
 server/chat-plugins/hosts.ts @AnnikaCodes
 server/chat-plugins/mafia.ts @HoeenCoder
+server/chat-plugins/net-filters.ts @mia-pi-git
 server/chat-plugins/othermetas.ts @KrisXV @TheImmortal
 server/chat-plugins/quotes.ts @mia-pi-git @KrisXV
 server/chat-plugins/random-battles.ts @KrisXV @TheImmortal
