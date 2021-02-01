@@ -950,7 +950,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		query.append(`VALUES (`);
 		query.append(SQL`${roomid}, ${winner}, ${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team}, `);
 		query.append(SQL`${logData.p2team}, ${logData.log}, ${logData.inputLog}, `);
-		query.append(SQL`${logData.turns}, ${this.endType}, ${Date.now()}, ${Dex.getFormat(this.format).id}, `);
+		query.append(SQL`${logData.turns}, ${this.endType}, ${new Date()}, ${Dex.getFormat(this.format).id}, `);
 		query.append(SQL`${logData.ladderError}, ${logData.seed}, ${logData.score}, ${logData.p1rating}, ${logData.p2rating}`);
 		query.append(`)`);
 
