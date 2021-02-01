@@ -55,7 +55,7 @@ export class NeuralNetChecker {
 		if (path) this.load(path);
 	}
 	async train(data: TrainingLine[], iterations?: number) {
-		// 100 has good perf but is still effective
+		// 200 has good perf but is still effective
 		if (!iterations) iterations = 200;
 		const now = Date.now();
 		if (FS(PATH).existsSync()) await FS(PATH).copyFile(PATH + '.backup');
