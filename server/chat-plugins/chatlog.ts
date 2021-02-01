@@ -1053,7 +1053,6 @@ export class DatabaseLogSearcher extends Searcher {
 		query.append(` OR `);
 		query.append(SQL`(p1id = ${userids[1]} AND p2id = ${userids[0]})`);
 		const response = await this.database.query(query);
-		if (!response) throw new Error(`Null statement from log db`);
 		return response.map(row => (
 			`${row.format}-${row.roomid}`
 		));

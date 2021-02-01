@@ -16,7 +16,7 @@ export class PostgresDatabase {
 	}
 	async query(statement: string | SQLStatement, values?: any[]) {
 		if (!this.pool) {
-			return null;
+			throw new Error(`Attempting to use postgres without 'pg' installed`);
 		}
 		const result = await this.pool.query(statement, values);
 		return result?.rows as any[];

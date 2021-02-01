@@ -933,6 +933,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	}
 	static logDatabase = new PostgresDatabase();
 	async logPostgres(logData: AnyObject) {
+		if (!Config.usepostgres) return null;
 		const roomid = Number(this.room.roomid.split('-')[2]);
 		const winner = toID(logData.winner);
 		const {p1, p2} = logData;

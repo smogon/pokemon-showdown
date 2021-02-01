@@ -120,7 +120,6 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 		const results: {[k: string]: BattleSearchResults} = {};
 		// format
 		const rows = await this.database.query(query);
-		if (!rows) throw new Error(`Null database response`);
 
 		for (const row of rows) {
 			if (turnLimit && row.turns > turnLimit) continue;
@@ -171,7 +170,6 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 		const rows = await this.database.query(
 			`SELECT date FROM battle_logs`
 		);
-		if (!rows) throw new Error(`Null response from db`);
 		const months: string[] = [];
 		for (const {date} of rows) {
 			const [day] = toDate(date).split(' ');
@@ -183,7 +181,6 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 	async listTiers(month: string) {
 		const results: string[] = [];
 		const rows = await this.database.query(`SELECT format, date FROM battle_logs`);
-		if (!rows) throw new Error(`Null response from DB`);
 		for (const {date, format} of rows) {
 			const [day] = toDate(date).split(' ');
 			if (!day.includes(month) || results.includes(format)) continue;
