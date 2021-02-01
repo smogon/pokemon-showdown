@@ -111,7 +111,7 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 			query.append(SQL`WHERE (p1id = ${userids[0]} OR p2id = ${userids[0]})`);
 		} else {
 			const [id1, id2] = userids;
-			query.append(SQL`WHERE (p1id = ${id1} OR p2id = ${id1}) AND (p1id = ${id2} OR p2id = ${id2})`);
+			query.append(SQL`WHERE (p1id = ${id1} AND p2id = ${id2}) OR (p1id = ${id2} AND p2id = ${id1})`);
 		}
 		query.append(SQL` AND format = ${tierid}`);
 		if (turnLimit) {

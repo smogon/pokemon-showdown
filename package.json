@@ -45,7 +45,7 @@
       "pre-push": "npm run lint"
     }
   },
-  "bin": "pokemon-showdown",
+  "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",

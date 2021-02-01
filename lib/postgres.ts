@@ -19,6 +19,6 @@ export class PostgresDatabase {
 			throw new Error(`Attempting to use postgres without 'pg' installed`);
 		}
 		const result = await this.pool.query(statement, values);
-		return result?.rows as any[];
+		return result?.rows;
 	}
 }

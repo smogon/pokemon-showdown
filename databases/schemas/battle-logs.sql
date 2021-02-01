@@ -23,3 +23,6 @@ CREATE TABLE battle_logs (
 	p2rating INTEGER,
    PRIMARY KEY(roomid)
 );
+
+CREATE INDEX sharedbattles_index ON battle_logs(p1id, p2id);
+CREATE INDEX battlesearch_index ON battle_logs(p1id, p2id, format);
