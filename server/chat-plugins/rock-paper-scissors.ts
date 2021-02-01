@@ -2,7 +2,7 @@
  * Rock Paper Scissors plugin by Mia
  * @author mia-pi-git
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 const MAX_ROUNDS = 500;
 const TIMEOUT = 10 * 1000;

@@ -8,7 +8,7 @@
  */
 
 import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {

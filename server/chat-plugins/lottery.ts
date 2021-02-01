@@ -1,7 +1,6 @@
 const LOTTERY_FILE = 'config/chat-plugins/lottery.json';
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 
 const lotteriesContents = FS(LOTTERY_FILE).readIfExistsSync();
 const lotteries: {

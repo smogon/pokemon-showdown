@@ -1,5 +1,4 @@
-import {Utils} from '../../lib/utils';
-import {FS} from '../../lib/fs';
+import {FS, Utils} from '../../lib';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
 const MAX_QUOTES = 200;

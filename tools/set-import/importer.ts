@@ -5,7 +5,7 @@ import * as util from 'util';
 
 import * as smogon from 'smogon';
 
-import * as Streams from '../../lib/streams';
+import {Streams} from '../../lib';
 import {Dex, toID} from '../../sim/dex';
 import {TeamValidator} from '../../sim/team-validator';
 Dex.includeModData();

@@ -5,11 +5,7 @@
  * @license MIT
  */
 
-import {FS} from "../../lib/fs";
-import {Utils} from '../../lib/utils';
-import * as Dashycode from '../../lib/dashycode';
-import {QueryProcessManager, exec} from "../../lib/process-manager";
-import {Repl} from '../../lib/repl';
+import {Utils, FS, Dashycode, ProcessManager, Repl} from '../../lib';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
 import {Chat} from '../chat';
@@ -861,7 +857,7 @@ export class RipgrepLogSearcher extends Searcher {
 			if (args) {
 				options.push(...args);
 			}
-			const {stdout} = await exec(['rg', ...options], {
+			const {stdout} = await ProcessManager.exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
 				cwd: `${__dirname}/../../`,
 			});
@@ -1010,7 +1006,7 @@ export class RipgrepLogSearcher extends Searcher {
 		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		const results: string[] = [];
 		try {
-			const {stdout} = await exec(['rg', '-e', regexString, '-i', '-tjson', 'logs/', '-P']);
+			const {stdout} = await ProcessManager.exec(['rg', '-e', regexString, '-i', '-tjson', 'logs/', '-P']);
 			for (const line of stdout.split('\n')) {
 				const [name] = line.split(':');
 				const battleName = name.split('/').pop()!;
@@ -1025,7 +1021,7 @@ export class RipgrepLogSearcher extends Searcher {
 
 export const LogSearcher: Searcher = new (Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher)();
 
-export const PM = new QueryProcessManager<AnyObject, any>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module, async data => {
 	try {
 		const {date, search, roomid, limit, queryType} = data;
 		switch (queryType) {

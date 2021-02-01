@@ -1,5 +1,4 @@
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {getCommonBattles} from '../chat-commands/info';
 import type {Punishment} from '../punishments';
 

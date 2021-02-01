@@ -7,7 +7,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 type Deck =
 	'A♥' | 'A♦' | 'A♣' | 'A♠' | '2♥' | '2♦' | '2♣' | '2♠' | '3♥' | '3♦' | '3♣' | '3♠' | '4♥' | '4♦' | '4♣' |

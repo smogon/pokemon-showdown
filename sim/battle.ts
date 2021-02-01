@@ -11,7 +11,7 @@ import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {

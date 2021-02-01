@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface RoomEvent {
 	eventName: string;

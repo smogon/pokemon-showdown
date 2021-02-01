@@ -8,9 +8,7 @@
  * @license MIT
  */
 
-import {FS} from '../lib/fs';
-import {QueryProcessManager, exec} from '../lib/process-manager';
-import {Repl} from '../lib/repl';
+import {ProcessManager, FS, Repl} from '../lib';
 import type * as Database from 'better-sqlite3';
 import {checkRipgrepAvailability} from './config-loader';
 
@@ -369,7 +367,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await exec(['rg', ...options], {cwd: `${__dirname}/../`});
+			output = await ProcessManager.exec(['rg', ...options], {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
@@ -471,7 +469,7 @@ export const mainModlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
 
 // the ProcessManager only accepts text queries at this time
 // SQL support is to be determined
-export const PM = new QueryProcessManager<ModlogTextQuery, ModlogEntry[]>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<ModlogTextQuery, ModlogEntry[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
 		if (Config.debugmodlogprocesses && process.send) {

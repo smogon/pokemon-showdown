@@ -8,8 +8,7 @@
  * @license MIT license
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {ScavMods, TwistEvent} from './scavenger-games.js';
 import {ChatHandler} from '../chat';
 

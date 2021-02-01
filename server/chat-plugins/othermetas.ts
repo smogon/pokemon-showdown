@@ -5,7 +5,7 @@
  * @author Kris
 */
 
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};

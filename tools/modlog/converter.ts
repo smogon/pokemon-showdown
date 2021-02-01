@@ -20,7 +20,7 @@ if (!global.Config) {
 }
 
 import type * as DatabaseType from 'better-sqlite3';
-import {FS} from '../../lib/fs';
+import {FS} from '../../lib';
 import {Modlog, ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
 

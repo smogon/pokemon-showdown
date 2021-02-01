@@ -1,4 +1,4 @@
-import {FS} from '../../../lib/fs';
+import {FS} from '../../../lib';
 import {toID} from '../../../sim/dex-data';
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat

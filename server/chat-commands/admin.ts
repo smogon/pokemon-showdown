@@ -12,10 +12,7 @@
 
 import * as path from 'path';
 import * as child_process from 'child_process';
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
-
-import * as ProcessManager from '../../lib/process-manager';
+import {FS, Utils, ProcessManager} from '../../lib';
 
 function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);

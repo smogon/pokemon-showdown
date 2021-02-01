@@ -8,8 +8,7 @@
  * @license MIT
  */
 
-import {QueryProcessManager} from '../../lib/process-manager';
-import {Utils} from '../../lib/utils';
+import {ProcessManager, Utils} from '../../lib';
 import {TeamValidator} from '../../sim/team-validator';
 
 interface DexOrGroup {
@@ -2482,7 +2481,7 @@ function runSearch(query: {target: string, cmd: string, canAll: boolean, message
  * Process manager
  *********************************************************/
 
-export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, query => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));

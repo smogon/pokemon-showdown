@@ -15,12 +15,10 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
-import {crashlogger} from '../lib/crashlogger';
-import {RawProcessManager, StreamWorker} from '../lib/process-manager';
+import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
 import {IPTools} from './ip-tools';
-import {Repl} from '../lib/repl';
-import * as Streams from './../lib/streams';
 
+type StreamWorker = ProcessManager.StreamWorker;
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
 export const Sockets = new class {
@@ -548,7 +546,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
  * Process manager
  *********************************************************/
 
-export const PM = new RawProcessManager({
+export const PM = new ProcessManager.RawProcessManager({
 	module,
 	setupChild: () => new ServerStream(Config),
 	isCluster: true,

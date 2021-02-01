@@ -3,10 +3,8 @@
  * Written by Kris with inspiration from sirDonovan and The Immortal
  */
 
-import {FS} from "../../lib/fs";
+import {FS, Utils} from "../../lib";
 import {SSBSet, ssbSets} from "../../data/mods/ssb/random-teams";
-import {Utils} from "../../lib/utils";
-
 const GEN_NAMES: {[k: string]: string} = {
 	gen1: '[Gen 1]', gen2: '[Gen 2]', gen3: '[Gen 3]', gen4: '[Gen 4]', gen5: '[Gen 5]', gen6: '[Gen 6]', gen7: '[Gen 7]',
 };

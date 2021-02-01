@@ -11,11 +11,8 @@
  * @license MIT
  */
 
+import {FS, Repl, ProcessManager, Utils} from '../lib';
 import {execSync} from "child_process";
-import {FS} from "../lib/fs";
-import {Utils} from '../lib/utils';
-import {StreamProcessManager} from "../lib/process-manager";
-import {Repl} from "../lib/repl";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 
@@ -1270,7 +1267,7 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new StreamProcessManager(module, () => new RoomBattleStream());
+export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream());
 
 if (!PM.isParentProcess) {
 	// This is a child process!

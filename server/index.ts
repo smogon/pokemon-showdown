@@ -70,7 +70,7 @@ try {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
-import {FS} from '../lib/fs';
+import {FS, Repl} from '../lib';
 
 /*********************************************************
  * Load configuration
@@ -184,7 +184,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import {Repl} from '../lib/repl';
 // eslint-disable-next-line no-eval
 Repl.start('app', cmd => eval(cmd));
 

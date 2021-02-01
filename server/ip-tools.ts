@@ -19,7 +19,7 @@ const HOSTS_FILE = 'config/hosts.csv';
 const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
-import {FS} from '../lib/fs';
+import {FS} from '../lib';
 
 export interface AddressRange {
 	minIP: number;

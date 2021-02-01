@@ -121,8 +121,7 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available

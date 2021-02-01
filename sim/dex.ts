@@ -39,7 +39,7 @@ import {Ability} from './dex-abilities';
 import {Species} from './dex-species';
 import {Format, RuleTable, mergeFormatLists, ComplexBan, ComplexTeamBan} from './dex-formats';
 import {PRNG, PRNGSeed} from './prng';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
