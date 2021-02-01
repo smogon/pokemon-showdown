@@ -1484,7 +1484,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Notater517
 	lastminutelag: {
 		desc: "This Pokemon applies the Recharge status to the opposing Pokemon if this Pokemon needs to recharge. If this Pokemon KOs an opposing Pokemon with a recharge move, then the user does not need to recharge.",
-		shortDesc: "Gives Recharge to the opposing Pokemon if this Pokemon has it. KO: No recharge.",
+		shortDesc: "Gives Recharge to the target if this Pokemon has it. KO: No recharge.",
 		onModifyMove(move, pokemon, target) {
 			if (move.self?.volatileStatus === 'mustrecharge') {
 				if (!move.volatileStatus) {
@@ -1501,6 +1501,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-ability', pokemon, 'Last Minute Lag');
 					this.add('-end', pokemon, 'mustrecharge');
 					delete pokemon.volatiles['mustrecharge'];
+					this.hint('It may look like this Pokemon is going to recharge next turn, but it will not recharge.');
 				}
 			}
 		},
