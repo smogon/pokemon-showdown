@@ -6,9 +6,7 @@
  * @author mia-pi-git
  */
 
-import {Net} from '../../lib/net';
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib';
+import {Utils, FS, Net} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
@@ -559,6 +557,7 @@ export const commands: ChatCommands = {
 				`|c|~|/uhtml ${gameRoom.roomid},` +
 				`<button class="button" name="send" value="/j ${gameRoom.roomid}">Join the ongoing group watch!</button>`
 			);
+			room.send(`|tempnotify|youtube|New groupwatch - ${title}!`);
 			this.update();
 			user.joinRoom(gameRoom);
 		},
