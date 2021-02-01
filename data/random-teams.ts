@@ -506,6 +506,9 @@ export class RandomTeams {
 				if (move.flags['bite']) counter['strongjaw']++;
 				if (move.flags['punch']) counter['ironfist']++;
 				if (move.flags['sound']) counter['sound']++;
+				if (move.priority !== 0 || (moveid === 'grassyglide' && hasAbility['Grassy Surge'])) {
+					counter['priority']++;
+				}
 				counter.damagingMoves.push(move);
 			}
 			// Moves with secondary effects:
@@ -517,10 +520,6 @@ export class RandomTeams {
 			}
 			// Moves with low accuracy:
 			if (move.accuracy && move.accuracy !== true && move.accuracy < 90) counter['inaccurate']++;
-			// Moves with non-zero priority:
-			if (move.category !== 'Status' && (move.priority !== 0 || (moveid === 'grassyglide' && hasAbility['Grassy Surge']))) {
-				counter['priority']++;
-			}
 
 			// Moves that change stats:
 			if (RecoveryMove.includes(moveid)) counter['recovery']++;
@@ -828,7 +827,7 @@ export class RandomTeams {
 					if (hasMove['powerwhip']) rejected = true;
 					break;
 				case 'gigadrain':
-					if (hasMove['uturn'] || hasType['Poison'] && !counter['Poison']) rejected = true;
+					if ((!counter.setupType && hasMove['uturn']) || hasType['Poison'] && !counter['Poison']) rejected = true;
 					break;
 				case 'leafblade':
 					if ((hasMove['leafstorm'] || movePool.includes('leafstorm')) && counter.setupType !== 'Physical') rejected = true;
@@ -865,9 +864,6 @@ export class RandomTeams {
 					break;
 				case 'hammerarm':
 					if (hasMove['fakeout']) rejected = true;
-					break;
-				case 'seismictoss':
-					if (hasMove['protect'] && hasType['Water']) rejected = true;
 					break;
 				case 'stormthrow':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -998,7 +994,7 @@ export class RandomTeams {
 
 				// Pokemon should have moves that benefit their types, stats, or ability
 				if (!rejected && !move.damage && !isSetup && !move.weather && !move.stallingMove &&
-					(isDoubles || (!['facade', 'lightscreen', 'reflect', 'sleeptalk', 'spore', 'substitute', 'switcheroo', 'teleport', 'toxic', 'trick', 'whirlpool'].includes(moveid) && (move.category !== 'Status' || !move.flags.heal))) &&
+					(isDoubles || (!['facade', 'lightscreen', 'reflect', 'sleeptalk', 'spore', 'substitute', 'switcheroo', 'teleport', 'toxic', 'trick'].includes(moveid) && (move.category !== 'Status' || !move.flags.heal))) &&
 					(!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || (counter[counter.setupType] + counter.Status > 3 && !counter.hazards)) &&
 				(
 					(!counter.stab && counter['physicalpool'] + counter['specialpool'] > 0) ||
@@ -1019,7 +1015,7 @@ export class RandomTeams {
 					(hasType['Psychic'] && !counter['Psychic'] && !hasType['Ghost'] && !hasType['Steel'] && (hasAbility['Psychic Surge'] || counter.setupType || movePool.includes('psychicfangs'))) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 80) ||
 					((hasType['Steel'] || hasAbility['Steelworker']) && (!counter['Steel'] || (hasMove['bulletpunch'] && counter.stab < 2)) && species.baseStats.atk >= 95) ||
-					(hasType['Water'] && ((!counter['Water'] && !hasMove['hypervoice']) || movePool.includes('hypervoice'))) ||
+					(hasType['Water'] && ((!counter['Water'] && !hasMove['hypervoice']) || movePool.includes('hypervoice') || (hasAbility['Huge Power'] && movePool.includes('aquajet')))) ||
 					((hasAbility['Moody'] || hasMove['wish']) && movePool.includes('protect')) ||
 					(((hasMove['lightscreen'] && movePool.includes('reflect')) || (hasMove['reflect'] && movePool.includes('lightscreen'))) && !teamDetails.screens) ||
 					((movePool.includes('morningsun') || movePool.includes('recover') || movePool.includes('roost') || movePool.includes('slackoff') || movePool.includes('softboiled')) &&
@@ -1215,9 +1211,7 @@ export class RandomTeams {
 				}
 			} while (rejectAbility);
 
-			if (species.name === 'Azumarill' && !isDoubles) {
-				ability = 'Sap Sipper';
-			} else if (forme === 'Copperajah' && gmax) {
+			if (forme === 'Copperajah' && gmax) {
 				ability = 'Heavy Metal';
 			} else if (hasAbility['Guts'] && (hasMove['facade'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
