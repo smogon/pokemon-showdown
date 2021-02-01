@@ -165,6 +165,10 @@ export const commands: ChatCommands = {
 		this.modlog(`AUTOMODCHAT`, null, `${rank}: ${time} minutes`);
 		room.saveSettings();
 	},
+	automodchathelp: [
+		`/automodchat [number], [rank] - Sets modchat [rank] to automatically turn on after [number] minutes. [number] must be between 5 and 480. Requires: # &`,
+		`/automodchat off - Turns off automodchat.`,
+	],
 
 	ionext() {
 		this.errorReply(`"ionext" is an outdated feature. Hidden battles now have password-protected URLs, making them fully secure against eavesdroppers.`);
