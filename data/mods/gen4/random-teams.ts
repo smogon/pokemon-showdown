@@ -51,7 +51,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// These moves can be used even if we aren't setting up to use them:
-		const SetupException = ['suckerpunch', 'dracometeor', 'overheat'];
+		const SetupException = ['dracometeor', 'overheat'];
 
 		// Give recovery moves priority over certain other defensive status moves
 		const recoveryMoves = ['healorder', 'milkdrink', 'moonlight', 'morningsun', 'painsplit', 'recover', 'rest', 'roost', 'slackoff', 'softboiled', 'synthesis', 'wish'];
