@@ -22,7 +22,8 @@ interface NetQuery {
 	type: "run" | "train" | "save" | "load" | 'trainfrom';
 	options?: AnyObject;
 }
-type Model = import('brain.js').recurrent.LSTM;
+// @ts-ignore
+type LSTM = import('brain.js').recurrent.LSTM;
 
 interface TrainingLine {
 	input: string;
@@ -44,7 +45,7 @@ function toRoomID(room: RoomID | Room) {
 }
 
 export class NeuralNetChecker {
-	model: Model | null;
+	model: LSTM | null;
 	constructor(path?: string) {
 		try {
 			this.model = new (require('brain.js').recurrent.LSTM)();
