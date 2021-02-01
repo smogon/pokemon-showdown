@@ -90,7 +90,8 @@ function parseMathematicalExpression(infix: string) {
 	return outputQueue;
 }
 
-function solveRPN(rpn: string[]) {
+function solveRPN(rpn: string[]): [result: number, base: number] {
+	let base = 10;
 	const resultStack: number[] = [];
 	for (let token of rpn) {
 		if (token === 'negative') {
@@ -107,6 +108,9 @@ function solveRPN(rpn: string[]) {
 				// Convert b suffix for binary to 0b prefix
 				token = `0b${token.slice(0, -1)}`;
 			}
+			if (token.startsWith('0x')) base = 16;
+			if (token.startsWith('0b')) base = 2;
+			if (token.startsWith('0o')) base = 8;
 			let num = Number(token);
 			if (isNaN(num) && token.toUpperCase() in Math) {
 				// @ts-ignore
@@ -143,22 +147,15 @@ function solveRPN(rpn: string[]) {
 		}
 	}
 	if (resultStack.length !== 1) throw new SyntaxError(`Unknown syntax error`);
-	return resultStack.pop();
+	return [resultStack.pop()!, base];
 }
 
 export const commands: ChatCommands = {
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
-		let base = 10;
-		if (target.includes('0x') || target.includes('h')) {
-			base = 16;
-		} else if (target.includes('o')) {
-			base = 8;
-		} else if (target.includes('b')) {
-			base = 2;
-		}
 
+		let base = 0;
 		const baseMatchResult = (/\b(?:in|to)\s+([a-zA-Z]+)\b/).exec(target);
 		if (baseMatchResult) {
 			switch (toID(baseMatchResult[1])) {
@@ -174,7 +171,8 @@ export const commands: ChatCommands = {
 
 		if (!this.runBroadcast()) return;
 		try {
-			const result = solveRPN(parseMathematicalExpression(expression));
+			const [result, inferredBase] = solveRPN(parseMathematicalExpression(expression));
+			if (!base) base = inferredBase;
 			let baseResult = '';
 			if (result && base !== 10) {
 				baseResult = `${BASE_PREFIXES[base]}${result.toString(base).toUpperCase()}`;
