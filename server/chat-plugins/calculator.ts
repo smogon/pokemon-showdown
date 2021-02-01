@@ -92,11 +92,21 @@ function parseMathematicalExpression(infix: string) {
 
 function solveRPN(rpn: string[]) {
 	const resultStack: number[] = [];
-	for (const token of rpn) {
+	for (let token of rpn) {
 		if (token === 'negative') {
 			if (!resultStack.length) throw new SyntaxError(`Unknown syntax error`);
 			resultStack.push(-resultStack.pop()!);
 		} else if (!"^%*/+-".includes(token)) {
+			if (token.endsWith('h')) {
+				// Convert h suffix for hexadecimal to 0x prefix
+				token = `0x${token.slice(0, -1)}`;
+			} else if (token.endsWith('o')) {
+				// Convert o suffix for octal to 0o prefix
+				token = `0o${token.slice(0, -1)}`;
+			} else if (token.endsWith('b')) {
+				// Convert b suffix for binary to 0b prefix
+				token = `0b${token.slice(0, -1)}`;
+			}
 			let num = Number(token);
 			if (isNaN(num) && token.toUpperCase() in Math) {
 				// @ts-ignore
@@ -141,11 +151,11 @@ export const commands: ChatCommands = {
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
 		let base = 10;
-		if (target.includes('0x')) {
+		if (target.includes('0x') || target.includes('h')) {
 			base = 16;
-		} else if (target.includes('0o')) {
+		} else if (target.includes('o')) {
 			base = 8;
-		} else if (target.includes('0b')) {
+		} else if (target.includes('b')) {
 			base = 2;
 		}
 
