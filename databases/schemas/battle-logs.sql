@@ -1,3 +1,5 @@
+CREATE TYPE end_types AS enum('forfeit', 'normal', 'forced');
+
 CREATE TABLE battle_logs (
    roomid INTEGER NOT NULL,
    winner TEXT NOT NULL,
@@ -11,7 +13,7 @@ CREATE TABLE battle_logs (
    log TEXT[] NOT NULL,
    inputLog TEXT[] NOT NULL,
    turns SMALLINT NOT NULL,
-   endType TEXT NOT NULL,
+   endType end_types NOT NULL,
    date TIMESTAMP NOT NULL,
    format TEXT NOT NULL,
 	ladderError BOOLEAN NOT NULL,
