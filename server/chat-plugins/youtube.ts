@@ -8,7 +8,7 @@
 
 import {Net} from '../../lib/net';
 import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';

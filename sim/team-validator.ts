@@ -8,7 +8,7 @@
  */
 
 import {Dex, toID} from './dex';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!

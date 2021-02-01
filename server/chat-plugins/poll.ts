@@ -2,7 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 const MINUTES = 60000;
 

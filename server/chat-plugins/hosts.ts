@@ -4,7 +4,7 @@
  * Original /adddatacenters command written by Zarel
  */
 
-import {Utils} from "../../lib/utils";
+import {Utils} from "../../lib";
 import {AddressRange} from "../ip-tools";
 import {GlobalPermission} from "../user-groups";
 

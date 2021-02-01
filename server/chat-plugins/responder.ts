@@ -7,8 +7,7 @@
  * @author mia-pi-git
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 

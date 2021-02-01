@@ -8,7 +8,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 /* eslint no-else-return: "error" */
 
