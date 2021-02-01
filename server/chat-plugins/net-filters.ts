@@ -40,7 +40,7 @@ function modelExists() {
 }
 
 function toRoomID(room: RoomID | Room) {
-	return ("" + room).toLowerCase().replace(/[^a-z0-9\-]+/g, '');
+	return ("" + room).toLowerCase().replace(/[^a-z0-9-]+/g, '');
 }
 
 export class NeuralNetChecker {
