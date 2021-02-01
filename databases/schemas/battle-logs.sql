@@ -26,3 +26,5 @@ CREATE TABLE battle_logs (
 
 CREATE INDEX sharedbattles_index ON battle_logs(p1id, p2id);
 CREATE INDEX battlesearch_index ON battle_logs(p1id, p2id, format);
+CREATE INDEX month_index ON battle_logs(date, format);
+CREATE INDEX date_index ON battle_logs(date);

@@ -168,7 +168,7 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 	}
 	async listMonths() {
 		const rows = await this.database.query(
-			`SELECT date FROM battle_logs`
+			`SELECT DISTINCT date FROM battle_logs`
 		);
 		const months: string[] = [];
 		for (const {date} of rows) {
@@ -180,7 +180,7 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 	}
 	async listTiers(month: string) {
 		const results: string[] = [];
-		const rows = await this.database.query(`SELECT format, date FROM battle_logs`);
+		const rows = await this.database.query(`SELECT DISTINCT format, date FROM battle_logs`);
 		for (const {date, format} of rows) {
 			const [day] = toDate(date).split(' ');
 			if (!day.includes(month) || results.includes(format)) continue;
