@@ -189,17 +189,17 @@ export function splitFirst(str: string, delimiter: string): [string, string];
 export function splitFirst(str: string, delimiter: string, limit: 2): [string, string, string];
 export function splitFirst(str: string, delimiter: string, limit: 3): [string, string, string, string];
 export function splitFirst(str: string, delimiter: string, limit: number): string[];
-	/**
-	 * Like string.split(delimiter), but only recognizes the first `limit`
-	 * delimiters (default 1).
-	 *
-	 * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
-	 *
-	 * `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
-	 *
-	 * Returns an array of length exactly limit + 1.
-	 *
-	 */
+/**
+* Like string.split(delimiter), but only recognizes the first `limit`
+* delimiters (default 1).
+*
+* `"1 2 3 4".split(" ", 2) => ["1", "2"]`
+*
+* `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
+*
+* Returns an array of length exactly limit + 1.
+*
+*/
 export function splitFirst(str: string, delimiter: string, limit = 1) {
 	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
@@ -323,7 +323,7 @@ export function levenshtein(s: string, t: string, l: number): number {
 		const si = s.charAt(i - 1);
 
 		// Step 4
-			for (let j = 1; j <= m; j++) {
+		for (let j = 1; j <= m; j++) {
 			// Check the jagged ld total so far
 			if (i === j && d[i][j] > 4) return n;
 
