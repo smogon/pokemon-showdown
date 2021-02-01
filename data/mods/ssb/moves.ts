@@ -3593,7 +3593,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Imprisons and traps the target, and then transforms into them. The user faints if the target faints.",
+		desc: "Imprisons and traps the target, and then transforms into them. The user will be trapped after the use of this move. The user faints if the target faints.",
 		shortDesc: "Trap + ImprisonForm. Faints if the target faints.",
 		name: "Ghost of 1v1 Past",
 		isNonstandard: "Custom",
