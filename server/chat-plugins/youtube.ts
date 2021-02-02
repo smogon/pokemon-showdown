@@ -473,6 +473,14 @@ export const commands: ChatCommands = {
 				if (!YouTube.interval) return this.errorReply(`The YouTube plugin is not currently running an interval.`);
 				return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime * 60 * 1000)}.`);
 			}
+			if (this.meansNo(target)) {
+				if (!YouTube.interval) return this.errorReply(`The interval is not currently running`);
+				clearInterval(YouTube.interval);
+				delete YouTube.data.intervalTime;
+				YouTube.save();
+				this.privateModAction(`${user.name} turned off the YouTube interval`);
+				return this.modlog(`YOUTUBE INTERVAL`, null, 'OFF');
+			}
 			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
 			YouTube.runInterval(target);
