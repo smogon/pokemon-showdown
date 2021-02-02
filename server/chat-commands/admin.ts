@@ -1004,19 +1004,8 @@ export const commands: ChatCommands = {
 		[cmd, target] = Utils.splitFirst(target, ' ');
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 		const targets = target.split(',');
-		function getPlayer(input: string) {
-			const player = battle.playerTable[toID(input)];
-			if (player) return player.slot;
-			if (input.includes('1')) return 'p1';
-			if (input.includes('2')) return 'p2';
-			return 'p3';
-		}
-		function getPokemon(input: string) {
-			if (/^[0-9]+$/.test(input.trim())) {
-				return `.pokemon[${(parseInt(input) - 1)}]`;
-			}
-			return `.pokemon.find(p => p.baseSpecies.id==='${toID(input)}' || p.species.id==='${toID(input)}')`;
-		}
+		if (targets.length === 1 && targets[0] === '') targets.pop();
+		let player, pokemon, move, stat, value;
 		switch (cmd) {
 		case 'hp':
 		case 'h':
@@ -1024,8 +1013,9 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
+			[player, pokemon, value] = targets.map(toID);
 			void battle.stream.write(
-				`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.sethp(${parseInt(targets[2])});if (p.isActive)battle.add('-damage',p,p.getHealth);`
+				`>eval let p=pokemon('${player}', '${pokemon}');p.sethp(${parseInt(value)});if (p.isActive)battle.add('-damage',p,p.getHealth);`
 			);
 			break;
 		case 'status':
@@ -1034,8 +1024,9 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
+			[player, pokemon, value] = targets.map(toID);
 			void battle.stream.write(
-				`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.setStatus('${toID(targets[2])}');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}`
+				`>eval let pl=player('${player}');let p=pokemon(pl,'${pokemon}');p.setStatus('${value}');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}`
 			);
 			break;
 		case 'pp':
@@ -1043,8 +1034,9 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
+			[player, pokemon, move, value] = targets.map(toID);
 			void battle.stream.write(
-				`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.getMoveData('${toID(targets[2])}').pp = ${parseInt(targets[3])};`
+				`>eval pokemon('${player}','${pokemon}').getMoveData('${move}').pp = ${parseInt(value)};`
 			);
 			break;
 		case 'boost':
@@ -1053,8 +1045,9 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
+			[player, pokemon, stat, value] = targets.map(toID);
 			void battle.stream.write(
-				`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};battle.boost({${toID(targets[2])}:${parseInt(targets[3])}},p)`
+				`>eval let p=pokemon('${player}','${pokemon}');battle.boost({${stat}:${parseInt(value)}},p)`
 			);
 			break;
 		case 'volatile':
@@ -1063,8 +1056,9 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
+			[player, pokemon, value] = targets.map(toID);
 			void battle.stream.write(
-				`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.addVolatile('${toID(targets[2])}')`
+				`>eval pokemon('${player}','${pokemon}').addVolatile('${value}')`
 			);
 			break;
 		case 'sidecondition':
@@ -1073,7 +1067,8 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			void battle.stream.write(`>eval let p=${getPlayer(targets[0])}.addSideCondition('${toID(targets[1])}', 'debug')`);
+			[player, value] = targets.map(toID);
+			void battle.stream.write(`>eval player('${player}').addSideCondition('${value}', 'debug')`);
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
@@ -1081,7 +1076,8 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			void battle.stream.write(`>eval battle.field.addPseudoWeather('${toID(targets[0])}', 'debug')`);
+			[value] = targets.map(toID);
+			void battle.stream.write(`>eval battle.field.addPseudoWeather('${value}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':
@@ -1089,7 +1085,8 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			void battle.stream.write(`>eval battle.field.setWeather('${toID(targets[0])}', 'debug')`);
+			[value] = targets.map(toID);
+			void battle.stream.write(`>eval battle.field.setWeather('${value}', 'debug')`);
 			break;
 		case 'terrain':
 		case 't':
@@ -1097,10 +1094,10 @@ export const commands: ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			void battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
+			[value] = targets.map(toID);
+			void battle.stream.write(`>eval battle.field.setTerrain('${value}', 'debug')`);
 			break;
 		case 'reseed':
-			if (targets.length === 1 && targets[0] === '') targets.pop();
 			if (targets.length !== 0) {
 				if (targets.length !== 4) {
 					this.errorReply("Seed must have 4 parts");
