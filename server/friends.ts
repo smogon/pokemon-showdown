@@ -61,12 +61,17 @@ export function sendPM(message: string, to: string, from = '&') {
 export class FriendsDatabase {
 	file: string;
 	cache: Cache<Set<string>>;
+	/** Separate process, made to be used for when it's not the main db file */
+	process?: FriendsProcess;
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
 		this.cache = new Cache<Set<string>>(async user => {
 			const data = await this.getFriends(user as ID);
 			return new Set(data.map(f => f.friend));
 		});
+		if (file !== DEFAULT_FILE) {
+			this.process = PM.createProcess(file);
+		}
 	}
 	getFriends(userid: ID): Promise<AnyObject[]> {
 		return this.all('get', [userid, MAX_FRIENDS]);
@@ -102,7 +107,7 @@ export class FriendsDatabase {
 		return this.query({statement, data, type: 'get'});
 	}
 	private async query(input: DatabaseRequest) {
-		const process = PM.acquire() as FriendsProcess | null;
+		const process = this.process || PM.acquire() as FriendsProcess | null;
 		if (!process) throw new Error(`Missing friends process`);
 		const result = await process.query(input);
 		if (result.error) {
