@@ -968,9 +968,7 @@ export const commands: ChatCommands = {
 	async reseedbattle(target, room, user) {
 		room = this.requireRoom();
 		if (!room.battle) return this.errorReply(`This command can only be used in battle.`);
-		if (room.auth.get(user.id) !== Users.HOST_SYMBOL) {
-			this.canUseConsole();
-		}
+		this.checkCan('editbattle');
 		let seed;
 		if (target) {
 			const parts = target.split(',').map(parseInt);
