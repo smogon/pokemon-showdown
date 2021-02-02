@@ -2598,9 +2598,9 @@ export const commands: ChatCommands = {
 
 		const gamesCommands = [
 			"<strong>Game commands:</strong>",
-			"- /scav game create <em>[kogames | pointrally | scavengergames | jumpstart | teamscavs]</em>: starts a new scripted scavenger game. (Requires: % @ * # &)",
+			"- /scav game create <em>[kogames | pointrally | scavengergames | jumpstart | teamscavs]</em>: Start a new scripted scavenger game. (Requires: % @ * # &)",
 			"- /scav game end: End the current scavenger game. (Requires: % @ * # &)",
-			"- /scav game kick <em>[user]</em>: Kicks the user from the current scavenger game. (Requires: % @ * # &)",
+			"- /scav game kick <em>[user]</em>: Kick the user from the current scavenger game. (Requires: % @ * # &)",
 			"- /scav game score: Show the current scoreboard for any game with a leaderboard.",
 			"- /scav game rank <em>[user]</em>: Show a user's rank in the current scavenger game leaderboard.",
 		].join('<br />');
