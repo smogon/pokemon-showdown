@@ -24,7 +24,7 @@ To reload chat commands:
 */
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
-import {FriendsDatabase} from './friends';
+import {FriendsDatabase, PM} from './friends';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 
@@ -1415,6 +1415,7 @@ export const Chat = new class {
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new FriendsDatabase();
+	readonly PM = PM;
 
 	readonly multiLinePattern = new PatternTester();
 

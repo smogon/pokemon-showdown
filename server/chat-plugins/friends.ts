@@ -67,13 +67,14 @@ export const Friends = new class {
 			offline: [],
 		};
 		const loginTimes: {[k: string]: number} = {};
-		for (const {friend: friendID, last_login, allowing_login} of [...friends].sort()) {
+		for (const {friend: friendID, last_login, allowing_login: hideLogin} of [...friends].sort()) {
 			const friend = Users.get(friendID);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
 			} else {
 				categorized.offline.push(friendID);
-				if (!allowing_login) {
+				// hidelogin - 1 to disable it being visible
+				if (!hideLogin) {
 					loginTimes[friendID] = last_login;
 				}
 			}
@@ -275,7 +276,11 @@ export const commands: ChatCommands = {
 			if (connection.openPages?.has('friends-received')) {
 				this.parse(`/j view-friends-received`);
 			}
-			if (targetUser) sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
+			if (targetUser) {
+				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
+				sendPM(`/uhtmlchange sent,`, targetUser.id);
+				sendPM(`/uhtmlchange undo,`, targetUser.id);
+			}
 		},
 		deny: 'reject',
 		async reject(target, room, user, connection) {

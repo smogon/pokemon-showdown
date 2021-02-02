@@ -3,12 +3,9 @@
  * @author mia-pi-git
  */
 import * as Database from 'better-sqlite3';
-import {Utils} from '../lib/utils';
-import {FS} from '../lib/fs';
-import {ProcessManager, ProcessWrapper, ChildProcess} from '../lib/process-manager';
+import {Utils, FS, ProcessManager, Repl, Cache} from '../lib';
 import * as child_process from 'child_process';
 import {Config} from './config-loader';
-import {Cache} from '../lib/cache';
 import * as path from 'path';
 
 /** Max friends per user */
@@ -29,6 +26,18 @@ export interface DatabaseResult {
 	error?: string;
 	result?: any;
 }
+
+/** Like Chat.ErrorMessage, but made for the subprocess so we can throw errors to the user not using errorMessage
+ * because errorMessage crashes when imported (plus we have to spawn dex, etc, all unnecessary - this is easier)
+ */
+export class FailureMessage extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'FailureMessage';
+		Error.captureStackTrace(this, FailureMessage);
+	}
+}
+
 
 export function sendPM(message: string, to: string, from = '&') {
 	const senderID = toID(to);
@@ -51,48 +60,51 @@ export function sendPM(message: string, to: string, from = '&') {
 
 export class FriendsDatabase {
 	file: string;
-	process: FriendsProcess;
 	cache: Cache<Set<string>>;
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
-		this.process = PM.createProcess(this.file);
 		this.cache = new Cache<Set<string>>(async user => {
 			const data = await this.getFriends(user as ID);
 			return new Set(data.map(f => f.friend));
 		});
 	}
 	getFriends(userid: ID): Promise<AnyObject[]> {
-		const data = [userid, MAX_FRIENDS];
-		return this.query({
-			statement: 'get', type: 'all', data,
-		});
+		return this.all('get', [userid, MAX_FRIENDS]);
 	}
 	async getRequests(user: User) {
 		const sent: Set<string> = new Set();
 		const received: Set<string> = new Set();
 		if (user.settings.blockFriendRequests) {
 			// delete any pending requests that may have been sent to them while offline and return
-			await this.query({
-				statement: 'deleteRequest', type: 'run', data: [user.id],
-			});
+			await this.run('deleteRequest', [user.id]);
 			return {sent, received};
 		}
-		const sentResults = await this.query({
-			statement: 'getSent', type: 'all', data: [user.id],
-		});
+		const sentResults = await this.all('getSent', [user.id]);
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
-		const receivedResults = await this.query({
-			statement: 'getReceived', data: [user.id], type: 'all',
-		});
+		const receivedResults = await this.all('getReceived', [user.id]);
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
 		return {sent, received};
 	}
+	all(statement: string, data: any[] | AnyObject) {
+		return this.query({type: 'all', data, statement});
+	}
+	transaction(statement: string, data: any[] | AnyObject) {
+		return this.query({data, statement, type: 'transaction'});
+	}
+	run(statement: string, data: any[] | AnyObject) {
+		return this.query({statement, data, type: 'run'});
+	}
+	get(statement: string, data: any[] | AnyObject) {
+		return this.query({statement, data, type: 'get'});
+	}
 	private async query(input: DatabaseRequest) {
-		const result = await this.process.query(input);
+		const process = PM.acquire() as FriendsProcess | null;
+		if (!process) throw new Error(`Missing friends process`);
+		const result = await process.query(input);
 		if (result.error) {
 			throw new Chat.ErrorMessage(result.error);
 		}
@@ -103,7 +115,7 @@ export class FriendsDatabase {
 		if (receiver?.settings.blockFriendRequests) {
 			throw new Chat.ErrorMessage(`${receiver.name} is blocking friend requests.`);
 		}
-		let buf = Utils.html`/raw <button class="button" name="send" value="/friends accept ${user.id}">Accept</button> | `;
+		let buf = Utils.html`/uhtml sent,<button class="button" name="send" value="/friends accept ${user.id}">Accept</button> | `;
 		buf += Utils.html`<button class="button" name="send" value="/friends reject ${user.id}">Deny</button><br /> `;
 		buf += `<small>(You can also stop this user from sending you friend requests with <code>/ignore</code>)</small>`;
 		const disclaimer = (
@@ -111,13 +123,13 @@ export class FriendsDatabase {
 			`and you will be notified when they do, unless you opt out of receiving them.</small>`
 		);
 		if (receiver?.settings.blockFriendRequests) {
-			throw new Chat.ErrorMessage(`This user is blocking friend requests.`);
+			throw new FailureMessage(`This user is blocking friend requests.`);
 		}
 		if (receiver?.settings.blockPMs) {
-			throw new Chat.ErrorMessage(`This user is blocking PMs, and cannot be friended right now.`);
+			throw new FailureMessage(`This user is blocking PMs, and cannot be friended right now.`);
 		}
 
-		const result = await this.query({type: 'transaction', data: [user.id, receiverID], statement: 'send'});
+		const result = await this.transaction('send', [user.id, receiverID]);
 		if (receiver) {
 			sendPM(`/text ${Utils.escapeHTML(user.name)} sent you a friend request!`, receiver.id);
 			sendPM(buf, receiver.id);
@@ -125,68 +137,58 @@ export class FriendsDatabase {
 		}
 		sendPM(`/nonotify You sent a friend request to ${receiver?.connected ? receiver.name : receiverID}!`, user.id);
 		sendPM(
-			`/raw <button class="button" name="send" value="/friends undorequest ${Utils.escapeHTML(receiverID)}">` +
+			`/uhtml undo,<button class="button" name="send" value="/friends undorequest ${Utils.escapeHTML(receiverID)}">` +
 			`<i class="fa fa-undo"></i> Undo</button>`, user.id
 		);
 		sendPM(disclaimer, user.id);
 		return result;
 	}
 	async removeRequest(receiverID: ID, senderID: ID) {
-		if (!senderID) throw new Chat.ErrorMessage(`Invalid sender username.`);
-		if (!receiverID) throw new Chat.ErrorMessage(`Invalid receiver username.`);
+		if (!senderID) throw new FailureMessage(`Invalid sender username.`);
+		if (!receiverID) throw new FailureMessage(`Invalid receiver username.`);
 
-		return this.query({
-			statement: 'deleteRequest', data: [senderID, receiverID], type: 'run',
-		});
+		return this.run('deleteRequest', [senderID, receiverID]);
 	}
 	async approveRequest(receiverID: ID, senderID: ID) {
-		return this.query({type: 'transaction', data: [senderID, receiverID], statement: 'accept'});
+		return this.transaction('accept', [senderID, receiverID]);
 	}
 	async removeFriend(userid: ID, friendID: ID) {
-		if (!friendID || !userid) throw new Chat.ErrorMessage(`Invalid usernames supplied.`);
+		if (!friendID || !userid) throw new FailureMessage(`Invalid usernames supplied.`);
 
-		const result = await this.query({
-			statement: 'delete', type: 'run', data: {user1: userid, user2: friendID},
-		});
+		const result = await this.run('delete', {user1: userid, user2: friendID});
 		if (result.changes < 1) {
-			throw new Chat.ErrorMessage(`You do not have ${friendID} friended.`);
+			throw new FailureMessage(`You do not have ${friendID} friended.`);
 		}
 	}
 	writeLogin(user: ID) {
-		return this.query({
-			statement: 'login', type: 'run', data: [user, Date.now(), Date.now()],
-		});
+		return this.run('login', [user, Date.now(), Date.now()]);
 	}
 	hideLoginData(id: ID) {
-		return this.query({
-			statement: 'hideLogin', type: 'run', data: [id, Date.now()],
-		});
+		return this.run('hideLogin', [id, Date.now()]);
 	}
 	allowLoginData(id: ID) {
-		return this.query({
-			statement: 'showLogin', type: 'run', data: [id],
-		});
+		return this.run('showLogin', [id]);
 	}
 	async getLastLogin(userid: ID) {
-		const result = await this.query({statement: 'checkLastLogin', type: 'get', data: [userid]});
+		const result = await this.get('checkLastLogin', [userid]);
 		return parseInt(result['last_login']);
 	}
 	getSettings(userid: ID) {
-		return this.query({statement: 'getSettings', type: 'get', data: [userid]});
+		return this.get('getSettings', [userid]);
 	}
 	setHideList(userid: ID, setting: boolean) {
 		const num = setting ? 1 : 0;
 		// name, send_login_data, last_login, public_list
-		return this.query({statement: 'toggleList', type: 'run', data: [userid, num, num]});
+		return this.run('toggleList', [userid, num, num]);
 	}
 }
 
 const statements: {[k: string]: Database.Statement} = {};
 const transactions: {[k: string]: Database.Transaction} = {};
 
-class FriendsProcess implements ProcessWrapper {
+class FriendsProcess implements ProcessManager.ProcessWrapper {
 	filename: string;
-	process: ChildProcess;
+	process: ProcessManager.ChildProcess;
 	requests: Map<number, (...args: any) => any>;
 	constructor(filename: string) {
 		this.filename = filename;
@@ -231,14 +233,14 @@ class FriendsProcess implements ProcessWrapper {
 	}
 }
 
-export class FriendsProcessManager extends ProcessManager {
+export class FriendsProcessManager extends ProcessManager.ProcessManager {
 	processes: FriendsProcess[];
 	constructor() {
 		super(module);
 		this.processes = [];
 		this.listen();
 	}
-	createProcess(file: string) {
+	createProcess(file: string = DEFAULT_FILE) {
 		const process = new FriendsProcess(file);
 		this.processes.push(process);
 		return process;
@@ -314,17 +316,17 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			const friends = statements.countFriends.get(senderID, senderID)['num'];
 			const totalRequests = statements.countRequests.get(senderID, senderID)['num'];
 			if (friends >= MAX_FRIENDS) {
-				throw new Chat.ErrorMessage(`You are at the maximum number of friends.`);
+				throw new FailureMessage(`You are at the maximum number of friends.`);
 			}
 			const existingFriendship = statements.findFriendship.all({user1: senderID, user2: receiverID});
 			if (existingFriendship.length) {
-				throw new Chat.ErrorMessage(`You are already friends with '${receiverID}'.`);
+				throw new FailureMessage(`You are already friends with '${receiverID}'.`);
 			}
 			if (hasSentRequest) {
-				throw new Chat.ErrorMessage(`You have already sent a friend request to '${receiverID}'.`);
+				throw new FailureMessage(`You have already sent a friend request to '${receiverID}'.`);
 			}
 			if (totalRequests >= MAX_REQUESTS) {
-				throw new Chat.ErrorMessage(
+				throw new FailureMessage(
 					`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
 				);
 			}
@@ -359,9 +361,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	},
 };
 
+export const PM = new FriendsProcessManager();
+
 let database: Database.Database;
 // if friends.database exists, Config.usesqlite is on.
-if (process.send) {
+if (!PM.isParentProcess) {
 	global.Config = (require as any)('./config-loader').Config;
 	if (Config.usesqlite) {
 		const file = process.env.filename as string || DEFAULT_FILE;
@@ -415,6 +419,8 @@ if (process.send) {
 			Monitor.crashlog(err, 'A friends child process');
 		}
 	});
+	// eslint-disable-next-line no-eval
+	Repl.start('friends', cmd => eval(cmd));
 
 	const send = (task: string, res: any) => process.send!(`${task}\n${JSON.stringify(res)}`);
 
@@ -442,7 +448,7 @@ if (process.send) {
 				break;
 			}
 		} catch (e) {
-			if (!e.name.endsWith('ErrorMessage')) {
+			if (!e.name.endsWith('FailureMessage')) {
 				Monitor.crashlog(e, 'A friends database process', query);
 				return send(task, {error: `Sorry! The database crashed. We've been notified and will fix this.`});
 			}
@@ -452,6 +458,6 @@ if (process.send) {
 		if (result.result) result = result.result;
 		return send(task, {result} || {error: 'Unknown error in database query.'});
 	});
+} else {
+	PM.spawn(Config.friendsprocesses || 2);
 }
-
-export const PM = new FriendsProcessManager();
