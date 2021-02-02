@@ -85,7 +85,10 @@ export class NeuralNetChecker {
 	}
 	static parseChatLine(line: string) {
 		const parts = Utils.splitFirst(line, '|', 4).map(i => i.trim());
-		if (parts[1] !== 'c' || parts[3].startsWith('/') || parts[3].startsWith('!') || parts[3].length < 3) {
+		if (
+			parts[1] !== 'c' || (parts[3].startsWith('/') && !parts[3].startsWith('/me')) ||
+			parts[3].startsWith('!') || parts[3].length < 3
+		) {
 			return null;
 		}
 		return this.sanitizeLine(parts[3]);
