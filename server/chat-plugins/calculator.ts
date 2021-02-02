@@ -90,7 +90,7 @@ function parseMathematicalExpression(infix: string) {
 	return outputQueue;
 }
 
-function solveRPN(rpn: string[]): [result: number, base: number] {
+function solveRPN(rpn: string[]): [number, number] {
 	let base = 10;
 	const resultStack: number[] = [];
 	for (let token of rpn) {
