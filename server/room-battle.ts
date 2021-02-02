@@ -11,7 +11,7 @@
  * @license MIT
  */
 
-import {FS, Repl, ProcessManager, Utils} from '../lib';
+import {FS, Repl, ProcessManager} from '../lib';
 import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
@@ -1197,85 +1197,6 @@ export class RoomBattleStream extends BattleStream {
 		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
 			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk}`);
-		}
-	}
-
-	_writeLine(type: string, message: string) {
-		switch (type) {
-		case 'chat-inputlogonly':
-			this.battle.inputLog.push(`>chat ${message}`);
-			break;
-		case 'chat':
-			this.battle.inputLog.push(`>chat ${message}`);
-			this.battle.add('chat', `${message}`);
-			break;
-		case 'requestlog':
-			this.push(`requesteddata\n${this.battle.inputLog.join('\n')}`);
-			break;
-		case 'eval':
-			const battle = this.battle;
-			battle.inputLog.push(`>${type} ${message}`);
-			message = message.replace(/\f/g, '\n');
-			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
-			try {
-				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
-				const p1 = battle.sides[0];
-				const p2 = battle.sides[1];
-				const p3 = battle.sides[2];
-				const p4 = battle.sides[3];
-				const p1active = p1?.active[0];
-				const p2active = p2?.active[0];
-				const p3active = p3?.active[0];
-				const p4active = p4?.active[0];
-				const toID = battle.toID;
-				const player = (input: string) => {
-					input = toID(input);
-					if (/^p[1-9]$/.test(input)) return battle.sides[parseInt(input.slice(1)) - 1];
-					if (/^[1-9]$/.test(input)) return battle.sides[parseInt(input) - 1];
-					for (const side of battle.sides) {
-						if (toID(side.name) === input) return side;
-					}
-					return null;
-				};
-				const pokemon = (side: string | Side, input: string) => {
-					if (typeof side === 'string') side = player(side)!;
-
-					input = toID(input);
-					if (/^[1-9]$/.test(input)) return side.pokemon[parseInt(input) - 1];
-					return side.pokemon.find(p => p.baseSpecies.id === input || p.species.id === input);
-				};
-				let result = eval(message);
-				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
-
-				if (result?.then) {
-					result.then((unwrappedResult: any) => {
-						unwrappedResult = Utils.visualize(unwrappedResult);
-						battle.add('', 'Promise -> ' + unwrappedResult);
-						battle.sendUpdates();
-					}, (error: Error) => {
-						battle.add('', '<<< error: ' + error.message);
-						battle.sendUpdates();
-					});
-				} else {
-					result = Utils.visualize(result);
-					result = result.replace(/\n/g, '\n||');
-					battle.add('', '<<< ' + result);
-				}
-			} catch (e) {
-				battle.add('', '<<< error: ' + e.message);
-			}
-			break;
-		case 'requestteam':
-			message = message.trim();
-			const slotNum = parseInt(message.slice(1)) - 1;
-			if (isNaN(slotNum) || slotNum < 0) {
-				throw new Error(`Team requested for slot ${message}, but that slot does not exist.`);
-			}
-			const side = this.battle.sides[slotNum];
-			const team = Dex.packTeam(side.team);
-			this.push(`requesteddata\n${team}`);
-			break;
-		default: super._writeLine(type, message);
 		}
 	}
 }
