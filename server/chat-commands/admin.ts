@@ -1099,6 +1099,22 @@ export const commands: ChatCommands = {
 			}
 			void battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
 			break;
+		case 'reseed':
+			if (targets.length === 1 && targets[0] === '') targets.pop();
+			if (targets.length !== 0) {
+				if (targets.length !== 4) {
+					this.errorReply("Seed must have 4 parts");
+					return this.parse('/help editbattle');
+				}
+				// this just tests for a 5-digit number, close enough to uint16
+				if (!targets.every(val => /^[0-9]{1,5}$/.test(val))) {
+					this.errorReply("Seed parts much be unsigned 16-bit integers");
+					return this.parse('/help editbattle');
+				}
+			}
+			void battle.stream.write(`>reseed ${targets.join(',')}`);
+			if (targets.length) this.sendReply(`Reseeded to ${targets.join(',')}`);
+			break;
 		default:
 			this.errorReply(`Unknown editbattle command: ${cmd}`);
 			return this.parse('/help editbattle');
@@ -1114,6 +1130,7 @@ export const commands: ChatCommands = {
 		`/editbattle fieldcondition [fieldcondition]`,
 		`/editbattle weather [weather]`,
 		`/editbattle terrain [terrain]`,
+		`/editbattle reseed [optional seed]`,
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
 	],
