@@ -2551,12 +2551,12 @@ export const commands: ChatCommands = {
 			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
 			"- /scavladder (or /scav top): View the current bimonthly scavengers leaderboard.",
 			"- /scavrank <em>[user]</em>: View the rank of the user on the monthly scavenger leaderboard. Defaults to the user if no name is provided.",
-			"For a more in-depth overview, use /roomhelp staff."
+			"For a more in-depth overview, use /roomhelp staff.",
 		].join('<br />');
 		const staffCommands = [
 			"<strong>Staff and auth commands:</strong>",
 			"As a <strong>room voice (+)</strong>, you can use the following Scavengers commands, on top of the regular commands (see /scavhelp):",
-			"- /scav edithunt <em>[question number]<\em>, <em>[hint | answer]</em>, <em>[value]</em>: Edit the ongoing scavenger hunt. Only the host(s) can edit the hunt.",
+			"- /scav edithunt <em>[question number]</em>, <em>[hint | answer]</em>, <em>[value]</em>: Edit the ongoing scavenger hunt. Only the host(s) can edit the hunt.",
 			"- /scav addhint <em>[question number]</em>, <em>[value]</em>: Add a hint to a question in the ongoing scavenger hunt. Only the host(s) can add a hint.",
 			"- /scav edithint <em>[question number]</em>, <em>[hint number]</em>, <em>[value]</em>: Edit a hint to a question in the ongoing scavenger hunt. Only the host(s) can edit a hint.",
 			"- /scav removehint <em>[question number]</em>, <em>[hint number]<e/m> (or /scav deletehint): Remove a hint from a question in the current scavenger hunt. Only the host(s) can remove a hint.",
@@ -2572,7 +2572,7 @@ export const commands: ChatCommands = {
 			"- /nexthunt: Start the next hunt in the queue.",
 			"- /viewhunt: View the ongoing scavenger hunt. As a host, you can also view the hunt in its entirety.",
 			"- /inherithunt: Become the staff host, gaining staff permissions to the current hunt.",
-			"- /scav games create <em>[game mode]</em>: start a game of the given mode.", 
+			"- /scav games create <em>[game mode]</em>: start a game of the given mode.",
 			"&nbsp;&nbsp;&nbsp;&nbsp;Game modes include: Jump Start, Point Rally, KO games, Scav games and team scavs.",
 			"- /scav games end: End the game of the given type.",
 			"- /starttwist(hunt / practice / official / mini /unrated) <em>[twist]</em> | <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | … : Create and start a new scavenger hunt that uses a specified twist mode. This can be used inside a scavenger game mode.",
@@ -2593,7 +2593,7 @@ export const commands: ChatCommands = {
 			"- /scav setblitz <em>[value]</em> ...: Set the blitz award to the given value.",
 			"- /scav settwist <em>[twist name]</em>: Set the default twist mode for all official hunts.",
 			"- /scav resettwist: Reset the default twist mode for all official hunts to nothing.",
-			"- /scav modsettings: Allow or disallow miscellaneous room settings"
+			"- /scav modsettings: Allow or disallow miscellaneous room settings",
 		].join('<br />');
 
 		const gamesCommands = [
