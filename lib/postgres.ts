@@ -7,11 +7,9 @@
 import type {Pool} from 'pg';
 import type {SQLStatement} from 'sql-template-strings';
 
-const DEFAULT_CONFIG = 'Config' in global ? Config.usepostgres : null;
-
 export class PostgresDatabase {
 	private pool: Pool;
-	constructor(config = DEFAULT_CONFIG) {
+	constructor(config = PostgresDatabase.getConfig()) {
 		this.pool = config ? new (require('pg').Pool)(config) : null!;
 	}
 	async query(statement: string | SQLStatement, values?: any[]) {
@@ -20,5 +18,13 @@ export class PostgresDatabase {
 		}
 		const result = await this.pool.query(statement, values);
 		return result?.rows;
+	}
+	static getConfig() {
+		let config: AnyObject = {};
+		try {
+			config = require('../config/config').usepostgres;
+			if (!config) throw new Error('');
+		} catch (e) {}
+		return config;
 	}
 }

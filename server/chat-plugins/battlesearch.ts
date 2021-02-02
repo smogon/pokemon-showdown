@@ -167,22 +167,19 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 		return results;
 	}
 	async listMonths() {
-		const rows = await this.database.query(
-			`SELECT DISTINCT date FROM battle_logs`
-		);
+		const rows = await this.database.query(`SELECT date FROM battledata`);
 		const months: string[] = [];
 		for (const {date} of rows) {
-			const [day] = toDate(date).split(' ');
-			const month = day.slice(0, -3);
+			const month = Chat.toTimestamp(date).split(' ')[0].slice(0, -3);
 			if (!months.includes(month)) months.push(month);
 		}
 		return months;
 	}
 	async listTiers(month: string) {
 		const results: string[] = [];
-		const rows = await this.database.query(`SELECT DISTINCT format, date FROM battle_logs`);
+		const rows = await this.database.query(`SELECT format, date FROM battledata`);
 		for (const {date, format} of rows) {
-			const [day] = toDate(date).split(' ');
+			const [day] = Chat.toTimestamp(date).split(' ');
 			if (!day.includes(month) || results.includes(format)) continue;
 			results.push(format);
 		}
