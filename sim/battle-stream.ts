@@ -141,7 +141,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			break;
 		case 'eval':
 			const battle = this.battle!;
+
+			// n.b. this will usually but not always work - if you eval code that also affects the inputLog,
+			// replaying the inputlog would double-play the change.
 			battle.inputLog.push(`>${type} ${message}`);
+
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {
