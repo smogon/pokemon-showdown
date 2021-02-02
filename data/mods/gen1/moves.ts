@@ -668,6 +668,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		heal: null,
 		onHit(target) {
+			if (target.hp === target.maxhp) return false;
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
 				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
@@ -775,6 +776,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		heal: null,
 		onHit(target) {
+			if (target.hp === target.maxhp) return false;
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
 				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
