@@ -453,7 +453,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		if (!process) return;
 		this.destroyProcess(process);
 		const processIndex = this.processes.indexOf(process);
-		if (!processIndex) throw new Error('Process inactive');
+		if (processIndex < 0) throw new Error('Process inactive');
 		this.processes.splice(this.processes.indexOf(process), 1);
 		this.releasingProcesses.push(process);
 
