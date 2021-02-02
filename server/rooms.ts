@@ -956,6 +956,7 @@ export abstract class BasicRoom {
 			this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + oldid, user);
 		}
 		this.minorActivity?.onRename?.(user, oldid, joining);
+		this.checkAutoModchat(user);
 		return true;
 	}
 	/**
@@ -984,7 +985,7 @@ export abstract class BasicRoom {
 			this.reportJoin('l', user.getIdentity(this.roomid), user);
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
-
+		this.runAutoModchat();
 
 		return true;
 	}
