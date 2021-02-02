@@ -22,7 +22,7 @@ interface NetQuery {
 	type: "run" | "train" | "save" | "load" | 'trainfrom';
 	options?: AnyObject;
 }
-// @ts-ignore
+// @ts-ignore in case the optional dependency is not installed
 type LSTM = import('brain.js').recurrent.LSTM;
 
 interface TrainingLine {
