@@ -2551,7 +2551,7 @@ export const commands: ChatCommands = {
 			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
 			"- /scavladder (or /scav top): View the current bimonthly scavengers leaderboard.",
 			"- /scavrank <em>[user]</em>: View the rank of the user on the monthly scavenger leaderboard. Defaults to the user if no name is provided.",
-			"For a more in-depth overview, use /roomhelp staff.",
+			"For a more in-depth overview, use /scavhelp staff.",
 		].join('<br />');
 		const staffCommands = [
 			"<strong>Staff and auth commands:</strong>",
