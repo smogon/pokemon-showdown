@@ -7,10 +7,10 @@
  */
 
 import {QueryProcessManager} from '../../lib/process-manager';
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib/';
 import {Config} from '../config-loader';
 import {Repl} from '../../lib/repl';
+import {linkRegex} from '../chat-formatter';
 
 const PATH = "config/chat-plugins/net.json";
 const NUM_PROCESSES = Config.netfilterprocesses || 1;
@@ -18,10 +18,12 @@ const PM_TIMEOUT = 2 * 60 * 60 * 1000; // training can be _really_ slow
 const WHITELIST = ["mia"];
 
 interface NetQuery {
-	data: string | TrainingLine[];
-	type: "run" | "train" | "save" | "load";
+	data: string | TrainingLine[] | AnyObject;
+	type: "run" | "train" | "save" | "load" | 'trainfrom';
 	options?: AnyObject;
 }
+// @ts-ignore in case the optional dependency is not installed
+type LSTM = import('brain.js').recurrent.LSTM;
 
 interface TrainingLine {
 	input: string;
@@ -38,8 +40,12 @@ function modelExists() {
 	return true;
 }
 
+function toRoomID(room: RoomID | Room) {
+	return ("" + room).toLowerCase().replace(/[^a-z0-9-]+/g, '');
+}
+
 export class NeuralNetChecker {
-	model: import('brain.js').recurrent.LSTM | null;
+	model: LSTM | null;
 	constructor(path?: string) {
 		try {
 			this.model = new (require('brain.js').recurrent.LSTM)();
@@ -49,14 +55,40 @@ export class NeuralNetChecker {
 		if (path) this.load(path);
 	}
 	async train(data: TrainingLine[], iterations?: number) {
-		// 100 has good perf but is still effective
-		if (!iterations) iterations = 100;
+		// 200 has good perf but is still effective
+		if (!iterations) iterations = 200;
 		const now = Date.now();
 		if (FS(PATH).existsSync()) await FS(PATH).copyFile(PATH + '.backup');
 		if (!this.model) throw new Error(`Attempting to train with no model installed`);
-		this.model.train(data, {iterations});
+		for (const line of data) {
+			try {
+				this.model.train([line], {iterations});
+			} catch (e) {
+				Monitor.crashlog(e, "a netfilter training process", {
+					line: JSON.stringify(line),
+				});
+				process.exit();
+			}
+		}
 		this.save();
 		return Date.now() - now; // time data is helpful for training
+	}
+	static sanitizeChatLines(content: string, result: string): TrainingLine[] {
+		return content.split('\n').map(line => {
+			const message = this.parseChatLine(line);
+			if (!message) return null;
+			return {output: `|${result}`, input: message};
+		}).filter(Boolean) as TrainingLine[];
+	}
+	static sanitizeLine(content: string) {
+		return content.replace(linkRegex, '').replace(/<<[a-z0-9-]+>>/ig, '');
+	}
+	static parseChatLine(line: string) {
+		const parts = Utils.splitFirst(line, '|', 4).map(i => i.trim());
+		if (parts[1] !== 'c' || parts[3].startsWith('/') || parts[3].startsWith('!') || parts[3].length < 3) {
+			return null;
+		}
+		return this.sanitizeLine(parts[3]);
 	}
 	save(path = PATH) {
 		if (!this.model) return {};
@@ -135,7 +167,7 @@ export const chatfilter: ChatFilter = function (message, user, room, connection)
 	return undefined;
 };
 
-export const PM = new QueryProcessManager<NetQuery, any>(module, query => {
+export const PM = new QueryProcessManager<NetQuery, any>(module, async query => {
 	if (!net) throw new Error("Neural net not intialized");
 	const {data, type, options} = query;
 	switch (type) {
@@ -156,6 +188,12 @@ export const PM = new QueryProcessManager<NetQuery, any>(module, query => {
 			return e.message;
 		}
 		return 'success';
+	case 'trainfrom':
+		const {path: targetPath, result} = data as AnyObject;
+		const content = FS(targetPath).readSync();
+		const lines = NeuralNetChecker.sanitizeChatLines(content, result);
+		const time = await net.train(lines);
+		return [time, lines.length];
 	}
 }, PM_TIMEOUT);
 
@@ -252,6 +290,29 @@ export const commands: ChatCommands = {
 				logMessage = `${user.name} enabled the net filters`;
 			}
 			this.privateGlobalModAction(logMessage);
+		},
+		async trainfrom(target, room, user) {
+			checkAllowed(this);
+			let [roomid, date, result] = Utils.splitFirst(target, ',', 2).map(i => i.trim());
+			roomid = toRoomID(roomid as RoomID);
+			if (!FS('logs/chat/' + roomid.toLowerCase()).existsSync()) {
+				return this.errorReply(`Logs for that roomid not found.`);
+			}
+			if (!/\b[0-9]{4}-[0-9]{2}-[0-9]{2}\b/ig.test(date)) {
+				return this.errorReply(`Invalid date`);
+			}
+			if (!['ok', 'flag'].includes(toID(result))) {
+				return this.errorReply(`Invalid output`);
+			}
+			const targetPath = FS(`logs/chat/${roomid}/${date.slice(0, -3)}/${date}.txt`);
+			if (!targetPath.existsSync()) return this.errorReply(`Logs for that date not found`);
+			this.sendReply(`Initating training...`);
+			const response = await PM.query({data: {path: targetPath.path, result}, type: 'trainfrom'});
+			this.sendReply(`Training completed in ${Chat.toDurationString(response[0])}`);
+			this.privateGlobalModAction(
+				`${user.name} trained the net filters on logs from ${roomid} (${date} - ${Chat.count(response[1], 'lines')})`
+			);
+			this.stafflog(`Result: ${result} | Time: ${response[0]}ms`);
 		},
 	},
 };
