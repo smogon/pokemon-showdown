@@ -255,6 +255,7 @@ export class UNO extends Rooms.RoomGame {
 		this.discards.push(...this.playerTable[userid].hand);
 
 		this.removePlayer(this.playerTable[userid]);
+		this.nextTurn();
 		return name;
 	}
 
