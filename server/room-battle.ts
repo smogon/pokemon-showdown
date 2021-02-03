@@ -1196,7 +1196,7 @@ export class RoomBattleStream extends BattleStream {
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk}`);
+			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk.replace(/\n/ig, ' | ')}`);
 		}
 	}
 }
@@ -1216,6 +1216,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`SLOW\n${text}`);
 		},
 	};
 	global.__version = {head: ''};

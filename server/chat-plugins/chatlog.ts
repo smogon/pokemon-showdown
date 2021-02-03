@@ -1022,20 +1022,30 @@ export class RipgrepLogSearcher extends Searcher {
 export const LogSearcher: Searcher = new (Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher)();
 
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module, async data => {
+	const start = Date.now();
 	try {
+		let result: any;
 		const {date, search, roomid, limit, queryType} = data;
 		switch (queryType) {
 		case 'linecount':
-			return LogSearcher.searchLinecounts(roomid, date, search);
+			result = await LogSearcher.searchLinecounts(roomid, date, search);
+			break;
 		case 'search':
-			return LogSearcher.searchLogs(roomid, search, limit, date);
+			result = await LogSearcher.searchLogs(roomid, search, limit, date);
+			break;
 		case 'sharedsearch':
-			return LogSearcher.getSharedBattles(search);
+			result = await LogSearcher.getSharedBattles(search);
 		case 'battlesearch':
-			return LogReader.findBattleLog(roomid, search);
+			result = await LogReader.findBattleLog(roomid, search);
+			break;
 		default:
 			return LogViewer.error(`Config.chatlogreader is not configured.`);
 		}
+		const elapsedTime = Date.now() - start;
+		if (elapsedTime > 3000) {
+			Monitor.slow(`[Slow chatlog query]: ${elapsedTime}ms: ${JSON.stringify(data)}`);
+		}
+		return result;
 	} catch (e) {
 		if (e.name?.endsWith('ErrorMessage')) {
 			return LogViewer.error(e.message);
@@ -1052,6 +1062,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A chatlog search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`SLOW\n${text}`);
 		},
 	};
 	global.Dex = Dex;

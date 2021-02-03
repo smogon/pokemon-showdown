@@ -124,6 +124,11 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 				throw error;
 			}
 
+			if (message.startsWith(`SLOW\n`)) {
+				Monitor.slow(message.slice(5));
+				return;
+			}
+
 			if (message.startsWith('DEBUG\n')) {
 				this.debug = message.slice(6);
 				return;
@@ -211,6 +216,11 @@ export class StreamProcessWrapper implements ProcessWrapper {
 				const error = new Error();
 				error.stack = message.slice(6);
 				throw error;
+			}
+
+			if (message.startsWith(`SLOW\n`)) {
+				Monitor.slow(message.slice(5));
+				return;
 			}
 
 			if (message.startsWith('DEBUG\n')) {
