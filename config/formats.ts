@@ -597,15 +597,15 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		// searchShow: false,
-		ruleset: ['Standard', 'Dynamax Clause'],
+		ruleset: ['Standard', 'Dynamax Clause', '2 Ability Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black',
-			'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regieleki', 'Regigigas',
-			'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Power Construct', 'Pure Power', 'Shadow Tag', 'Simple', 'Water Bubble',
+			'Blaziken', 'Butterfree', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Combusken', 'Cresselia', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Giratina',
+			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regieleki', 'Regigigas', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Toxtricity',
+			'Torkoal', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Power Construct', 'Pure Power', 'Shadow Tag', 'Simple', 'Unburden', 'Water Bubble',
 			'Baton Pass', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
 		],
-		restricted: ['Blaziken', 'Butterfree', 'Torkoal', 'Toxtricity'],
 		getEvoFamily(speciesid) {
 			let species = Dex.getSpecies(speciesid);
 			while (species.prevo) {
@@ -621,7 +621,7 @@ export const Formats: FormatList = [
 					const pokemon = this.dex.getSpecies(speciesid);
 					if (pokemon.isNonstandard || unreleased(pokemon)) continue;
 					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
-					if (this.ruleTable.isRestrictedSpecies(pokemon)) continue;
+					if (this.ruleTable.isBannedSpecies(pokemon)) continue;
 
 					for (const key of Object.values(pokemon.abilities)) {
 						const abilityId = this.dex.toID(key);
