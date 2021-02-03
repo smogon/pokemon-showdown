@@ -103,7 +103,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		if (!tier) return {e: `Please provide a valid tier.`};
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
 		if (['Mono', 'LC'].includes(TIERS[toID(tier)]) && genNum < 7) {
-			return {e: `That tier is not included for that generation of Battle Factory.`};
+			return {e: `${TIERS[toID(tier)]} is not included in [Gen ${genNum}] Battle Factory.`};
 		}
 		const t = statsFile[TIERS[toID(tier)]];
 		if (!(species.id in t)) {
