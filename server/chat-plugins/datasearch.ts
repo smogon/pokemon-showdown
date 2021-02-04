@@ -1727,7 +1727,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (alts.gens[String(move.gen)]) continue;
 				if (Object.values(alts.gens).includes(false) && alts.gens[String(move.gen)] !== false) continue;
 			}
-			if (!zrecoveryUndefined || recoveryUndefined === false) {
+			if (!zrecoveryUndefined || !recoveryUndefined) {
 			  for (const recoveryType in alts.other) {
 				 let hasRecovery = false;
 				 if (recoveryType === "recovery") {
