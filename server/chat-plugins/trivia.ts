@@ -2034,7 +2034,7 @@ const triviaCommands: ChatCommands = {
 		}
 
 		const list = triviaData.questions![category];
-		if (!list.length) {
+		if (!list?.length) {
 			buffer += `<tr><td>${this.tr`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
 			return this.sendReply(buffer);
 		}
