@@ -385,7 +385,11 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		});
 	}
 	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT);
+}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
+	if (message.startsWith('SLOW\n')) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -396,7 +400,7 @@ if (!PM.isParentProcess) {
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 		slow(text: string) {
-			process.send!(`SLOW\n${text}`);
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	process.on('uncaughtException', err => {

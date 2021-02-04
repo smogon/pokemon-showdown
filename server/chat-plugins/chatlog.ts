@@ -1053,7 +1053,11 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module,
 		Monitor.crashlog(e, 'A chatlog search query', data);
 		return LogViewer.error(`Sorry! Your chatlog search crashed. We've been notified and will fix this.`);
 	}
-}, CHATLOG_PM_TIMEOUT);
+}, CHATLOG_PM_TIMEOUT, message => {
+	if (message.startsWith(`SLOW\n`)) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -1064,7 +1068,7 @@ if (!PM.isParentProcess) {
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 		slow(text: string) {
-			process.send!(`SLOW\n${text}`);
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	global.Dex = Dex;

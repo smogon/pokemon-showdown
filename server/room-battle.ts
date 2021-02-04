@@ -1205,7 +1205,14 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream());
+export const PM = new ProcessManager.StreamProcessManager(module,
+	() => new RoomBattleStream(),
+	message => {
+		if (message.startsWith(`SLOW\n`)) {
+			Monitor.slow(message.slice(5));
+		}
+	},
+);
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -1218,7 +1225,7 @@ if (!PM.isParentProcess) {
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 		slow(text: string) {
-			process.send!(`SLOW\n${text}`);
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	global.__version = {head: ''};
