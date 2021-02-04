@@ -21,18 +21,7 @@ const SPECIAL_CATEGORIES: {[k: string]: string} = {
 	subcat5: 'Sub-Category 5',
 };
 
-const ALL_CATEGORIES: {[k: string]: string} = {
-	ae: 'Arts and Entertainment',
-	misc: 'Miscellaneous',
-	pokemon: 'Pok\u00E9mon',
-	sg: 'Science and Geography',
-	sh: 'Society and Humanities',
-	subcat: 'Sub-Category 1',
-	subcat2: 'Sub-Category 2',
-	subcat3: 'Sub-Category 3',
-	subcat4: 'Sub-Category 4',
-	subcat5: 'Sub-Category 5',
-};
+const ALL_CATEGORIES: {[k: string]: string} = {...SPECIAL_CATEGORIES, ...MAIN_CATEGORIES};
 
 /**
  * Aliases for keys in the ALL_CATEGORIES object.
