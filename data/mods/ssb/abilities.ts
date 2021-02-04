@@ -382,23 +382,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Archas
 	indomitable: {
 		desc: "This Pokemon cures itself if it is confused or has a major status condition. Single use.",
-		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'confusion' && !this.effectData.indomitableActivated) {
-				this.effectData.indomitableActivated = true;
-				return null;
-			}
-		},
-		onSetStatus(status, target, source, effect) {
-			if (!target.status) return;
-			if (this.effectData.indomitableActivated) return;
-			this.add('-immune', target, '[from] ability: Indomitable');
-			this.effectData.indomitableActivated = true;
-			return false;
-		},
 		onUpdate(pokemon) {
 			if ((pokemon.status || pokemon.volatiles['confusion']) && !this.effectData.indomitableActivated) {
 				this.add('-activate', pokemon, 'ability: Indomitable');
 				pokemon.cureStatus();
+				pokemon.removeVolatile('confusion');
 				this.effectData.indomitableActivated = true;
 			}
 		},
@@ -2086,8 +2074,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Volco
 	speedrunning: {
-		desc: "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints. Moves used by this Pokemon that are 60 Base Power or lower gain an additional 25 Base Power. No moves can defrost a frozen Pokemon while this Pokemon is active.",
-		shortDesc: "Soul Heart + Weak moves get +25 BP. Moves cannot defrost, only natural thaws.",
+		desc: "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints. Moves used by this Pokemon that are 60 Base Power or lower gain an additional 25 Base Power. No moves can defrost a frozen Pokemon while this Pokemon is active. However, using a move that would defrost will still go through freeze.",
+		shortDesc: "Soul Heart + Weak moves get +25 BP. Moves can't defrost. Defrost moves go thru frz.",
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
 			this.boost({spa: 1}, this.effectData.target);
