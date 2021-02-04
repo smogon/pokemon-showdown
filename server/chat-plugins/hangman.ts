@@ -225,6 +225,9 @@ export class Hangman extends Rooms.RoomGame {
 			this.save();
 			throw new Chat.ErrorMessage(`The room ${room} has no saved hangman words.`);
 		}
+		if (!Object.keys(hangmanData[room]).length) {
+			throw new Chat.ErrorMessage(`The room ${room} has no saved hangman words.`);
+		}
 		const shuffled = Utils.randomElement(Object.keys(hangmanData[room]));
 		const hints = hangmanData[room][shuffled];
 		return {
