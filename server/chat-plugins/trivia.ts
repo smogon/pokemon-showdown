@@ -14,6 +14,8 @@ const MAIN_CATEGORIES: {[k: string]: string} = {
 
 const SPECIAL_CATEGORIES: {[k: string]: string} = {
 	misc: 'Miscellaneous',
+	event: 'Event',
+	eventused: 'Event (used)',
 	subcat: 'Sub-Category 1',
 	subcat2: 'Sub-Category 2',
 	subcat3: 'Sub-Category 3',
@@ -70,6 +72,9 @@ const LIMBO_PHASE = 'limbo';
 
 const MASTERMIND_ROUNDS_PHASE = 'rounds';
 const MASTERMIND_FINALS_PHASE = 'finals';
+
+const MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY = 'event';
+const MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY = 'eventused';
 
 const MINIMUM_PLAYERS = 3;
 const START_TIMEOUT = 30 * 1000;
@@ -405,6 +410,7 @@ export class Trivia extends Rooms.RoomGame {
 	curQuestion: string;
 	curAnswers: string[];
 	askedAt: number[];
+	hasModifiedData: boolean;
 	constructor(
 		room: Room, mode: string, category: string,
 		length: string, questions: TriviaQuestion[], creator: string,
@@ -446,6 +452,7 @@ export class Trivia extends Rooms.RoomGame {
 		this.curQuestion = '';
 		this.curAnswers = [];
 		this.askedAt = [];
+		this.hasModifiedData = false;
 
 		this.init();
 	}
@@ -510,6 +517,7 @@ export class Trivia extends Rooms.RoomGame {
 
 	destroy() {
 		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
+		if (this.hasModifiedData) writeTriviaData();
 		this.phaseTimeout = null;
 		this.kickedUsers.clear();
 		super.destroy();
@@ -696,6 +704,24 @@ export class Trivia extends Rooms.RoomGame {
 		this.curAnswers = question.answers;
 		this.sendQuestion(question);
 		this.setTallyTimeout();
+
+		// Move question categories if needed
+		if (question.category === MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY) {
+			if (!triviaData.questions![MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY]) {
+				triviaData.questions![MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY] = [];
+			}
+
+			triviaData.questions![MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY].push({
+				...question,
+				category: MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY,
+			});
+
+			const questionIndex = triviaData.questions![MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY]
+				.findIndex(q => q.question === this.curQuestion);
+			triviaData.questions![MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY].splice(questionIndex, 1);
+
+			this.hasModifiedData = true;
+		}
 	}
 
 	setTallyTimeout() {
@@ -817,7 +843,7 @@ export class Trivia extends Rooms.RoomGame {
 		triviaData.history.push(this.game);
 		if (triviaData.history.length > 10) triviaData.history.shift();
 
-		writeTriviaData();
+		this.hasModifiedData = true;
 		this.destroy();
 	}
 
