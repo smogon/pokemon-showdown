@@ -230,15 +230,9 @@ async function handleQuery(query: NetQuery) {
 	}
 }
 
-export const processes = {
-	// this one runs longer because training is SLOW
-	training: new ProcessManager.QueryProcessManager(module, handleQuery, PM_TIMEOUT),
-	// this one is fine
-	main: new ProcessManager.QueryProcessManager(module, handleQuery),
-}
-
-const PM = processes.main;
-const PMTraining = process.training;
+const PM = new ProcessManager.QueryProcessManager(module, handleQuery),
+// this one runs longer because training is SLOW
+const PMTraining = new ProcessManager.QueryProcessManager(module, handleQuery, PM_TIMEOUT),
 if (!PM.isParentProcess) {
 	global.Config = Config;
 
