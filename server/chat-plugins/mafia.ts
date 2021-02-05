@@ -699,7 +699,7 @@ class Mafia extends Rooms.RoomGame {
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self lynching is not allowed.`);
 		const hammering = this.hammerCount - 1 <= (this.lynches[target] ? this.lynches[target].count : 0);
 		if (target === player.id && !hammering && this.selfEnabled === 'hammer') {
-			return this.sendUser(userid, `|error|You may only lynch yourself when you placing the hammer vote.`);
+			return this.sendUser(userid, `|error|You may only lynch yourself when placing the hammer vote.`);
 		}
 		if (player.hammerRestriction !== null) {
 			this.sendUser(userid, `${this.hammerCount - 1} <= ${(this.lynches[target] ? this.lynches[target].count : 0)}`);
