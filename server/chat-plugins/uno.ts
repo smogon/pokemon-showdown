@@ -246,7 +246,6 @@ export class UNO extends Rooms.RoomGame {
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 
-			if (this.timer) clearTimeout(this.timer);
 		}
 		if (this.awaitUno === userid) this.awaitUno = null;
 
@@ -906,7 +905,7 @@ export const commands: ChatCommands = {
 	},
 
 	unohelp: [
-		`/uno create [player cap] - creates a new UNO game with an optional player cap (default player cap at 12). Use the command [createpublic] to force a public game or [createprivate] to force a private game. Requires: % @ # &`,
+		`/uno create [player caca] - creates a new UNO game with an optional player cap (default player cap at 12). Use the command [createpublic] to force a public game or [createprivate] to force a private game. Requires: % @ # &`,
 		`/uno setcap [player cap] - adjusts the player cap of the current UNO game. Requires: % @ # &`,
 		`/uno timer [amount] - sets an auto disqualification timer for [amount] seconds. Requires: % @ # &`,
 		`/uno autostart [amount] - sets an auto starting timer for [amount] seconds. Requires: % @ # &`,
