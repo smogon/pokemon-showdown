@@ -103,9 +103,9 @@ export class NeuralNetChecker {
 		return this.sanitizeLine(parts[3]);
 	}
 	static async query(opts: NetQuery) {
-		const PM = ['trainfrom', 'train'].includes(opts.type) ? processes.training : processes.main;
-		if (!PM.isParentProcess) throw new Error(`not parent process`);
-		const result = await PM.query(opts);
+		const process = ['trainfrom', 'train'].includes(opts.type) ? PMTraining : PM;
+		if (!process.isParentProcess) throw new Error(`not parent process`);
+		const result = await process.query(opts);
 		if (result?.error) throw new Chat.ErrorMessage(result.error);
 		return result;
 	}
@@ -134,11 +134,11 @@ export class NeuralNetChecker {
 		// do the training in its own process
 		const result = await NeuralNetChecker.query({type: 'train', data});
 		// load it into the main process that we're querying
-		for (const k in processes) {
-			const PM = processes[k as keyof typeof processes];
-			for (const sub of PM.processes) {
-				await sub.query({type: 'load', data: PATH});
-			}
+		for (const sub of PM.processes) {
+			await sub.query({type: 'load', data: PATH});
+		}
+		for (const sub of PMTraining.processes) {
+			await sub.query({type: 'load', data: PATH});
 		}
 		return result;
 	}
@@ -230,14 +230,15 @@ async function handleQuery(query: NetQuery) {
 	}
 }
 
-const PM = new ProcessManager.QueryProcessManager(module, handleQuery),
+const PM = new ProcessManager.QueryProcessManager(module, handleQuery);
 // this one runs longer because training is SLOW
-const PMTraining = new ProcessManager.QueryProcessManager(module, handleQuery, PM_TIMEOUT),
+const PMTraining = new ProcessManager.QueryProcessManager(module, handleQuery, PM_TIMEOUT);
+
 if (!PM.isParentProcess) {
 	global.Config = Config;
 
 	global.Monitor = {
-		crashlog(error: Error, source = `A netfilter ${k} process`, details: AnyObject | null = null) {
+		crashlog(error: Error, source = `A netfilter process`, details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
@@ -251,7 +252,7 @@ if (!PM.isParentProcess) {
 	// otherwise, we use the PM for interfacing with the network
 	net = new NeuralNetChecker(PATH);
 	// eslint-disable-next-line no-eval
-	Repl.start(`netfilters-${k}-${process.pid}`, cmd => eval(cmd));
+	Repl.start(`netfilters-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(NUM_PROCESSES.main);
 	PMTraining.spawn(NUM_PROCESSES.training);
@@ -352,8 +353,7 @@ export const commands: ChatCommands = {
 		stop(target, room, user) {
 			checkAllowed(this);
 			let count = 0;
-			const PM = processes.training;
-			const running = PM.processes.filter(p => p.load > 0);
+			const running = PMTraining.processes.filter(p => p.load > 0);
 			if (!running.length) {
 				return this.errorReply(`No train tasks are pending`);
 			}
@@ -363,14 +363,9 @@ export const commands: ChatCommands = {
 					subProcess.pendingTasks.delete(task);
 					count++;
 				}
-				// kill is done here to ensure the process is actually killed right now
-				// fsr the disconnect() done in destroy doesn't stop the running task
-				subProcess.destroy();
-				subProcess.process.removeAllListeners('disconnect'); // if we don't do this it thinks it's a crash
-				subProcess.process.kill();
-				PM.processes.splice(PM.processes.indexOf(subProcess), 1);
+				PMTraining.destroyProcess(subProcess);
 			}
-			PM.spawn(NUM_PROCESSES['training']);
+			PMTraining.spawn(NUM_PROCESSES['training']);
 			this.privateGlobalModAction(`${user.name} used /netfilter stop`);
 			this.stafflog(`(cancelled ${Chat.count(count, "ongoing netfilter train processes", 'ongoing netfilter training process')})`);
 		},
