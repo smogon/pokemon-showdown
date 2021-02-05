@@ -250,12 +250,12 @@ export class NetProcessManager extends ProcessManager.QueryProcessManager<NetQue
 
 			if (taskId.startsWith('EVAL')) {
 				// eslint-disable-next-line no-eval
-				process.send!(`${taskId}-${process.pid}\n` + eval(message));
+				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
 
 			void Promise.resolve(this._query(JSON.parse(message))).then(
-				response => process.send!(`${taskId}-${process.pid}\n${JSON.stringify(response)}`)
+				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
 			);
 		});
 		process.on('disconnect', () => {
