@@ -237,30 +237,30 @@ export const processes = {
 	main: new ProcessManager.QueryProcessManager(module, handleQuery),
 }
 
-for (const k in processes) {
-	const PM = processes[k as keyof typeof processes];
-	if (!PM.isParentProcess) {
-		global.Config = Config;
+const PM = processes.main;
+const PMTraining = process.training;
+if (!PM.isParentProcess) {
+	global.Config = Config;
 
-		global.Monitor = {
-			crashlog(error: Error, source = `A netfilter ${k} process`, details: AnyObject | null = null) {
-				const repr = JSON.stringify([error.name, error.message, source, details]);
-				process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-			},
-		};
-		process.on('uncaughtException', err => {
-			if (Config.crashguard) {
-				Monitor.crashlog(err, 'A net filter child process');
-			}
-		});
-		// we only want to spawn one network, when it's the subprocess
-		// otherwise, we use the PM for interfacing with the network
-		net = new NeuralNetChecker(PATH);
-		// eslint-disable-next-line no-eval
-		Repl.start(`netfilters-${k}-${process.pid}`, cmd => eval(cmd));
-	} else {
-		PM.spawn(NUM_PROCESSES[k as keyof typeof processes]);
-	}
+	global.Monitor = {
+		crashlog(error: Error, source = `A netfilter ${k} process`, details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			Monitor.crashlog(err, 'A net filter child process');
+		}
+	});
+	// we only want to spawn one network, when it's the subprocess
+	// otherwise, we use the PM for interfacing with the network
+	net = new NeuralNetChecker(PATH);
+	// eslint-disable-next-line no-eval
+	Repl.start(`netfilters-${k}-${process.pid}`, cmd => eval(cmd));
+} else {
+	PM.spawn(NUM_PROCESSES.main);
+	PMTraining.spawn(NUM_PROCESSES.training);
 }
 
 export const commands: ChatCommands = {
