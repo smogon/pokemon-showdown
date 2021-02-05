@@ -230,84 +230,11 @@ async function handleQuery(query: NetQuery) {
 	}
 }
 
-export class NetProcessManager extends ProcessManager.QueryProcessManager<NetQuery, any> {
-	processes: NetProcessWrapper[];
-	constructor(module: NodeJS.Module, timeout?: number) {
-		super(module, handleQuery, timeout);
-		this.processes = [];
-	}
-	createProcess() {
-		return new NetProcessWrapper(__filename);
-	}
-	listen() {
-		if (this.isParentProcess) return;
-		// child process
-		process.on('message', (message: string) => {
-			const nlLoc = message.indexOf('\n');
-			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
-			const taskId = message.slice(0, nlLoc);
-			message = message.slice(nlLoc + 1);
-
-			if (taskId.startsWith('EVAL')) {
-				// eslint-disable-next-line no-eval
-				process.send!(`${taskId}\n` + eval(message));
-				return;
-			}
-
-			void Promise.resolve(this._query(JSON.parse(message))).then(
-				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
-			);
-		});
-		process.on('disconnect', () => {
-			process.exit();
-		});
-	}
-}
-
-/** Wraps the process object in the PARENT process. */
-export class NetProcessWrapper extends ProcessManager.QueryProcessWrapper<NetQuery, any> {
-	constructor(file: string) {
-		super(file);
-		// ignore previous message handler set on super() call
-		this.process.removeAllListeners('message');
-		this.listen();
-	}
-	kill() {
-		this.destroy();
-		this.process.removeAllListeners('disconnect'); // if we don't do this it thinks it's a crash
-		this.process.kill();
-	}
-	listen() {
-		this.process.on('message', (message: string) => {
-			if (message.startsWith('THROW\n')) {
-				const error = new Error();
-				error.stack = message.slice(6);
-				throw error;
-			}
-
-			if (message.startsWith('DEBUG\n')) {
-				this.debug = message.slice(6);
-				return;
-			}
-
-			const nlLoc = message.indexOf('\n');
-			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
-			const taskId = parseInt(message.slice(0, nlLoc));
-			const resolve = this.pendingTasks.get(taskId);
-			if (!resolve) return;
-			this.pendingTasks.delete(taskId);
-			resolve(JSON.parse(message.slice(nlLoc + 1)));
-
-			if (this.resolveRelease && !this.load) this.destroy();
-		});
-	}
-}
-
 export const processes = {
 	// this one runs longer because training is SLOW
-	training: new NetProcessManager(module, PM_TIMEOUT),
+	training: new ProcessManager.QueryProcessManager(module, handleQuery, PM_TIMEOUT),
 	// this one is fine
-	main: new NetProcessManager(module),
+	main: new ProcessManager.QueryProcessManager(module, handleQuery),
 }
 
 for (const k in processes) {
@@ -444,7 +371,9 @@ export const commands: ChatCommands = {
 				}
 				// kill is done here to ensure the process is actually killed right now
 				// fsr the disconnect() done in destroy doesn't stop the running task
-				subProcess.kill();
+				subProcess.destroy();
+				subProcess.process.removeAllListeners('disconnect'); // if we don't do this it thinks it's a crash
+				subProcess.process.kill();
 				PM.processes.splice(PM.processes.indexOf(subProcess), 1);
 			}
 			PM.spawn(NUM_PROCESSES['training']);
