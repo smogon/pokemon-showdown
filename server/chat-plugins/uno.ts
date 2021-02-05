@@ -245,9 +245,6 @@ export class UNO extends Rooms.RoomGame {
 				this.topCard.changedColor = this.discards[1].changedColor || this.discards[1].color;
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
-
-			if (this.timer) clearTimeout(this.timer);
-			this.nextTurn();
 		}
 		if (this.awaitUno === userid) this.awaitUno = null;
 
