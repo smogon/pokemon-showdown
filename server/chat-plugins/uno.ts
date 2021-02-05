@@ -247,7 +247,6 @@ export class UNO extends Rooms.RoomGame {
 			}
 
 			if (this.timer) clearTimeout(this.timer);
-			this.nextTurn();
 		}
 		if (this.awaitUno === userid) this.awaitUno = null;
 
