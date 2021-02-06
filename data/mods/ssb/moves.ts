@@ -3410,7 +3410,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Wistful Thinking');
+				this.add('-start', pokemon, 'move: Wistful Thinking');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 5,
