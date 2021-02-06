@@ -848,8 +848,8 @@ export const commands: ChatCommands = {
 		'c': 'cards',
 		cards(target, room, user) {
 			const game = this.requireGame(UNO);
-			const players = `<strong>Players (${game.playerCount}):</strong></p>${game.getPlayers(true)}`;
 			if (!this.runBroadcast()) return false;
+			const players = `<strong>Players (${game.playerCount}):</strong></p>${game.getPlayers(true)}`;
 			this.sendReplyBox(`<tr><td colspan="2" style="vertical-align: top; padding: 0px 5px 5px 5px"><div style="overflow-y: scroll">${players}</div></td></tr></table>`);
 		},
 
