@@ -32,6 +32,7 @@ export interface MinorActivityData {
 	totalVotes?: number;
 	isQuiz?: boolean;
 	answers: string[] | {name: string, votes: number, correct?: boolean}[];
+	class?: MinorActivity;
 }
 
 // globally Rooms.MinorActivity
@@ -95,7 +96,10 @@ export abstract class MinorActivity {
 			});
 
 			if (!MinorActivityClass) {
-				if (pollData.activityid === 'poll') throw new Error('No minorActivity class provided');
+				// hacky fix to make poll queues work with timers
+				const Poll = pollData.class;
+				// @ts-ignore
+				if (pollData.activityid === 'poll') room.setMinorActivity(new Poll(room, pollData));
 			} else {
 				room.setMinorActivity(new MinorActivityClass(room, pollData));
 			}
