@@ -1035,6 +1035,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module,
 			break;
 		case 'sharedsearch':
 			result = await LogSearcher.getSharedBattles(search);
+			break;
 		case 'battlesearch':
 			result = await LogReader.findBattleLog(roomid, search);
 			break;
