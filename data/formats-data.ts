@@ -6073,7 +6073,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 74,
 		randomDoubleBattleMoves: ["darkpulse", "nastyplot", "protect", "shadowball"],
 		randomDoubleBattleLevel: 78,
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	calyrex: {
